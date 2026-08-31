@@ -43,6 +43,30 @@ static func assemble(catalog: Catalog, ship_id: String) -> AssembledShip:
 	return assembled
 
 
+static func assemble_owned(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
+	if owned == null or owned.id.is_empty():
+		push_error("Cannot assemble invalid owned ship.")
+		return AssembledShip.new()
+
+	var template := catalog.get_ship(owned.template_id)
+	var assembled := AssembledShip.new()
+	assembled.id = owned.id
+	assembled.name = owned.name
+	assembled.maker = str(template.get("maker", ""))
+	assembled.chassis = catalog.get_chassis(owned.chassis_id)
+	assembled.engine = catalog.get_engine(owned.engine_id)
+
+	if not owned.armour_id.is_empty():
+		assembled.armour = catalog.get_armour(owned.armour_id)
+
+	var weapons: Variant = template.get("weapons", [])
+	if typeof(weapons) == TYPE_ARRAY:
+		assembled.weapons = weapons
+
+	assembled.stats = _derive_stats(assembled)
+	return assembled
+
+
 static func _derive_stats(ship: AssembledShip) -> ShipStats:
 	var stats := ShipStats.new()
 

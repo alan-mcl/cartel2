@@ -1,0 +1,32 @@
+[
+  {
+    "id": "proxima_habitat_terminal",
+    "name": "Proxima Habitat Terminal",
+    "kind": "terminal",
+    "short_desc": "The central terminal on Proxima Habitat. Docking lanes and customs."
+  },
+  {
+    "id": "davidsons",
+    "name": "Davidsons",
+    "kind": "landmark",
+    "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes."
+  },
+  {
+    "id": "skyedge_space_ships",
+    "name": "Skyedge Space Ships",
+    "kind": "merchant",
+    "short_desc": "Scout ship showroom. Sales counter is closed in this prototype."
+  },
+  {
+    "id": "habitat_workshop",
+    "name": "Habitat Workshop",
+    "kind": "workshop",
+    "short_desc": "Outfitting bays for chassis, engines, and armour. Select a docked ship to modify its loadout."
+  },
+  {
+    "id": "bela_habitat_terminal",
+    "name": "Bela Orbital Terminal",
+    "kind": "terminal",
+    "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean."
+  }
+]

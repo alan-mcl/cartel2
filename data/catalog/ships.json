@@ -7,5 +7,14 @@
     "engine": "mark_3_fusion",
     "armour": null,
     "weapons": []
+  },
+  {
+    "id": "pegasus_p101",
+    "name": "Pegasus P101",
+    "maker": "GVW Corp",
+    "chassis": "pegasus_chassis",
+    "engine": "mark_1_fusion",
+    "armour": "chitanium_5mm",
+    "weapons": []
   }
 ]

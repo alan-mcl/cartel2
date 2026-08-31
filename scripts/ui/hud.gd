@@ -20,6 +20,10 @@ var _assembled_ship: AssembledShip
 func bind(session: PrototypeSession, player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
 	_session = session
 	_player = player
+	set_assembled_ship(assembled_ship)
+
+
+func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 	_assembled_ship = assembled_ship
 	refresh()
 
@@ -44,6 +48,10 @@ func set_motion(speed: float, heading_deg: float, boosting: bool) -> void:
 
 
 func set_target(target: Interactable) -> void:
+	if _session != null and _session.docked:
+		_target.text = "Target: Docked"
+		return
+
 	if target and target.can_interact():
 		_target.text = "Target: %s" % target.get_title()
 	else:

@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cartel_player_ship"]
+[gd_scene load_steps=6 format=3 uid="uid://cartel_player_ship"]
 
 [ext_resource type="Script" path="res://scripts/presentation/player_ship.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/presentation/follow_camera.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ships/chassis/flare_on_chassis.svg" id="3"]
+[ext_resource type="Texture2D" path="res://assets/ships/fx/thrust.svg" id="4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ship"]
 radius = 10.0
@@ -22,14 +24,15 @@ shape = SubResource("CapsuleShape2D_ship")
 
 [node name="Visual" type="Node2D" parent="."]
 
-[node name="Hull" type="Polygon2D" parent="Visual"]
-color = Color(0.37, 0.88, 1, 1)
-polygon = PackedVector2Array(0, -18, 12, 14, 0, 8, -12, 14)
+[node name="Hull" type="Sprite2D" parent="Visual"]
+texture = ExtResource("3")
+centered = true
 
-[node name="ThrustFlame" type="Polygon2D" parent="Visual"]
+[node name="ThrustFlame" type="Sprite2D" parent="Visual"]
 visible = false
-color = Color(1, 0.55, 0.2, 0.85)
-polygon = PackedVector2Array(-6, 16, 0, 28, 6, 16)
+position = Vector2(0, 18)
+texture = ExtResource("4")
+centered = true
 
 [node name="InteractSensor" type="Area2D" parent="."]
 collision_layer = 0

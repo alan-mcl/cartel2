@@ -7,5 +7,14 @@
     "thrust": 2080.0,
     "max_speed": 680.0,
     "boost_multiplier": 1.85
+  },
+  {
+    "id": "mark_1_fusion",
+    "name": "Mark 1 Fusion",
+    "maker": "Bayes Inc",
+    "mass": 2.4,
+    "thrust": 1200.0,
+    "max_speed": 420.0,
+    "boost_multiplier": 1.4
   }
 ]

@@ -1,6 +1,8 @@
 extends Node2D
 
-@export var star_count: int = 420
+const STARS_FAR_PATH := "res://assets/space/stars_far.png"
+const STARS_NEAR_PATH := "res://assets/space/stars_near.png"
+
 @export var spread: float = 9000.0
 @export var parallax_far: float = 0.08
 @export var parallax_near: float = 0.22
@@ -11,16 +13,10 @@ var _camera: Camera2D
 
 
 func _ready() -> void:
-	_far_layer = Node2D.new()
-	_far_layer.name = "FarStars"
+	_far_layer = _make_star_layer(STARS_FAR_PATH, "FarStars", 1.0)
+	_near_layer = _make_star_layer(STARS_NEAR_PATH, "NearStars", 1.15)
 	add_child(_far_layer)
-
-	_near_layer = Node2D.new()
-	_near_layer.name = "NearStars"
 	add_child(_near_layer)
-
-	_spawn_stars(_far_layer, star_count, 0.6, 1.4, Color(0.55, 0.62, 0.78, 0.55))
-	_spawn_stars(_near_layer, int(star_count * 0.45), 1.0, 2.2, Color(0.85, 0.9, 1.0, 0.85))
 
 
 func bind_camera(camera: Camera2D) -> void:
@@ -35,17 +31,26 @@ func _process(_delta: float) -> void:
 	_near_layer.position = _camera.global_position * parallax_near
 
 
-func _spawn_stars(parent: Node2D, count: int, min_size: float, max_size: float, color: Color) -> void:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 90210
+func _make_star_layer(texture_path: String, layer_name: String, scale_multiplier: float) -> Node2D:
+	var layer := Node2D.new()
+	layer.name = layer_name
 
-	for i in count:
-		var star := ColorRect.new()
-		var size := rng.randf_range(min_size, max_size)
-		star.size = Vector2(size, size)
-		star.color = color
-		star.position = Vector2(
-			rng.randf_range(-spread, spread),
-			rng.randf_range(-spread, spread)
-		)
-		parent.add_child(star)
+	var texture := load(texture_path) as Texture2D
+	if texture == null:
+		push_error("Failed to load starfield texture: %s" % texture_path)
+		return layer
+
+	var tile_size := Vector2(texture.get_width(), texture.get_height()) * scale_multiplier
+	var cols := int(ceil(spread * 2.0 / tile_size.x)) + 1
+	var rows := int(ceil(spread * 2.0 / tile_size.y)) + 1
+
+	for x in range(cols):
+		for y in range(rows):
+			var sprite := Sprite2D.new()
+			sprite.texture = texture
+			sprite.centered = false
+			sprite.scale = Vector2.ONE * scale_multiplier
+			sprite.position = Vector2(-spread + x * tile_size.x, -spread + y * tile_size.y)
+			layer.add_child(sprite)
+
+	return layer

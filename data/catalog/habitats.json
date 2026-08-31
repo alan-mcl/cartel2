@@ -1,0 +1,24 @@
+[
+  {
+    "id": "proxima_habitat",
+    "name": "Proxima Habitat",
+    "short_desc": "Orbital city hub. Most travellers never go dirtside.",
+    "default_building": "proxima_habitat_terminal",
+    "buildings": [
+      "proxima_habitat_terminal",
+      "davidsons",
+      "skyedge_space_ships",
+      "habitat_workshop"
+    ]
+  },
+  {
+    "id": "bela_orbital_habitat",
+    "name": "Bela Orbital Habitat",
+    "short_desc": "Resort orbital city above Bela's endless oceans.",
+    "default_building": "bela_habitat_terminal",
+    "buildings": [
+      "bela_habitat_terminal",
+      "habitat_workshop"
+    ]
+  }
+]

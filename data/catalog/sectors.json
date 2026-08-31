@@ -1,0 +1,24 @@
+[
+  {
+    "id": "proxima",
+    "name": "Proxima Sector",
+    "orbit_name": "Proxima near orbit",
+    "play_bounds": 3500,
+    "spawn": { "x": -400, "y": -150 },
+    "objective": "Investigate the wreck near Beacon 3",
+    "mappings": [
+      { "target": "bela", "solution": 42, "label": "Bela Sector" }
+    ]
+  },
+  {
+    "id": "bela",
+    "name": "Bela Sector",
+    "orbit_name": "Bela near orbit",
+    "play_bounds": 3200,
+    "spawn": { "x": 200, "y": -100 },
+    "objective": "Explore Bela orbit or return through the jump gate",
+    "mappings": [
+      { "target": "proxima", "solution": -34458, "label": "Proxima Sector" }
+    ]
+  }
+]

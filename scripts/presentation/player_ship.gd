@@ -3,12 +3,15 @@ extends CharacterBody2D
 signal interaction_target_changed(interactable: Interactable)
 signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 
+const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
+
 @export var ship_id: String = "flare_on_ss"
 
 var assembled_ship: AssembledShip
 var motion := ShipMotion.new()
 
-@onready var _thrust_flame: Polygon2D = $Visual/ThrustFlame
+@onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
+@onready var _hull: Sprite2D = $Visual/Hull
 @onready var _interact_area: Area2D = $InteractSensor
 
 var _focused_interactables: Array[Interactable] = []
@@ -17,6 +20,30 @@ var _current_target: Interactable = null
 
 func configure(ship: AssembledShip) -> void:
 	assembled_ship = ship
+	_apply_hull_visual()
+
+
+func _apply_hull_visual() -> void:
+	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
+		return
+
+	var sprite_path := str(assembled_ship.chassis.get("sprite", ""))
+	if sprite_path.is_empty():
+		push_error("Chassis '%s' is missing sprite path." % str(assembled_ship.chassis.get("id", "")))
+	else:
+		var texture := load(sprite_path) as Texture2D
+		if texture == null:
+			push_error("Failed to load chassis sprite: %s" % sprite_path)
+		else:
+			_hull.texture = texture
+
+	var color_text := str(assembled_ship.chassis.get("hull_color", "#ffffff"))
+	_hull.modulate = Color.html(color_text)
+
+
+func freeze_motion() -> void:
+	velocity = Vector2.ZERO
+	motion.velocity = Vector2.ZERO
 
 
 func get_stats() -> ShipStats:
@@ -28,13 +55,27 @@ func get_stats() -> ShipStats:
 func _ready() -> void:
 	add_to_group("player")
 
+	var thrust_texture := load(THRUST_SPRITE) as Texture2D
+	if _thrust_flame and thrust_texture:
+		_thrust_flame.texture = thrust_texture
+
 	_interact_area.area_entered.connect(_on_interact_area_entered)
 	_interact_area.area_exited.connect(_on_interact_area_exited)
 
 	for child in get_tree().get_nodes_in_group("interactable"):
-		var interactable := child as Interactable
-		if interactable:
-			interactable.focus_changed.connect(_on_interactable_focus_changed)
+		_register_interactable(child as Interactable)
+
+
+func register_world_interactables() -> void:
+	for node in get_tree().get_nodes_in_group("interactable"):
+		_register_interactable(node as Interactable)
+
+
+func _register_interactable(interactable: Interactable) -> void:
+	if interactable == null:
+		return
+	if not interactable.focus_changed.is_connected(_on_interactable_focus_changed):
+		interactable.focus_changed.connect(_on_interactable_focus_changed)
 
 
 func _physics_process(delta: float) -> void:

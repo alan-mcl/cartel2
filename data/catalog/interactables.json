@@ -1,0 +1,72 @@
+[
+  {
+    "id": "proxima_habitat",
+    "title": "Proxima Habitat",
+    "inspect_text": "Orbital city hub. Docking lanes are open; customs wave you through on transponder.",
+    "kind": "dock",
+    "dock_location_id": "proxima_habitat"
+  },
+  {
+    "id": "proxima_jump_gate",
+    "title": "Proxima Jump Gate",
+    "inspect_text": "Unspace translation ring. Select a known route to translate.",
+    "kind": "translate"
+  },
+  {
+    "id": "beacon_1",
+    "title": "Beacon 1",
+    "inspect_text": "Nav marker: inner orbit lane. Traffic is light.",
+    "kind": "inspect"
+  },
+  {
+    "id": "beacon_2",
+    "title": "Beacon 2",
+    "inspect_text": "Nav marker: mid orbit. Freight tugs pass here on the hour.",
+    "kind": "inspect"
+  },
+  {
+    "id": "beacon_3",
+    "title": "Beacon 3",
+    "inspect_text": "Nav marker: outer orbit. Something dark is drifting nearby — check your scanner.",
+    "kind": "inspect"
+  },
+  {
+    "id": "proxima_wreck",
+    "title": "Derelict Wreck",
+    "inspect_text": "Broken scout hull. Transponder dead. Salvage looks viable.",
+    "kind": "salvage",
+    "salvage_reward": 850
+  },
+  {
+    "id": "bela_habitat",
+    "title": "Bela Orbital Habitat",
+    "inspect_text": "Resort orbital city. Docking lanes are open; the water-world gleams below.",
+    "kind": "dock",
+    "dock_location_id": "bela_orbital_habitat"
+  },
+  {
+    "id": "bela_jump_gate",
+    "title": "Bela Jump Gate",
+    "inspect_text": "Unspace translation ring. Known routes lead back toward Proxima and beyond.",
+    "kind": "translate"
+  },
+  {
+    "id": "bela_beacon_1",
+    "title": "Beacon 1",
+    "inspect_text": "Nav marker: resort approach lane. Yacht traffic is steady.",
+    "kind": "inspect"
+  },
+  {
+    "id": "bela_beacon_2",
+    "title": "Beacon 2",
+    "inspect_text": "Nav marker: outer lagoon orbit. A drifting pleasure craft passes by.",
+    "kind": "inspect"
+  },
+  {
+    "id": "santa_margarita_wreck",
+    "title": "Drift Wreck",
+    "inspect_text": "Capsized pleasure skiff. Salvage looks viable if you can reach it.",
+    "kind": "salvage",
+    "salvage_reward": 420
+  }
+]

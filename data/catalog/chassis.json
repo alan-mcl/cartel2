@@ -6,6 +6,19 @@
     "mass": 3.2,
     "hits": 18,
     "max_load": 6.0,
-    "maneuver": "high"
+    "maneuver": "high",
+    "hull_color": "#5ee0ff",
+    "sprite": "res://assets/ships/chassis/flare_on_chassis.svg"
+  },
+  {
+    "id": "pegasus_chassis",
+    "name": "Pegasus Chassis",
+    "maker": "GVW Corp",
+    "mass": 8.5,
+    "hits": 28,
+    "max_load": 24.0,
+    "maneuver": "low",
+    "hull_color": "#b8a878",
+    "sprite": "res://assets/ships/chassis/pegasus_chassis.svg"
   }
 ]

@@ -3,7 +3,7 @@ class_name Interactable
 
 signal focus_changed(interactable: Interactable, focused: bool)
 
-@export var definition: InteractableDef
+var definition: InteractableDef = null
 
 var is_focused: bool = false
 var is_consumed: bool = false
@@ -19,13 +19,11 @@ func _ready() -> void:
 
 
 func get_title() -> String:
-	return definition.title if definition else "Unknown"
+	return definition.title if definition != null else "Unknown"
 
 
 func can_interact() -> bool:
 	if definition == null or is_consumed:
-		return false
-	if definition.kind == InteractableDef.Kind.SALVAGE and is_consumed:
 		return false
 	return true
 
@@ -35,7 +33,7 @@ func interact(session: PrototypeSession) -> String:
 		return ""
 
 	if definition.kind == InteractableDef.Kind.SALVAGE:
-		if session.salvaged_wreck:
+		if session.is_salvaged(definition.id):
 			return session.inspect(definition)
 		if session.salvage(definition):
 			is_consumed = true
@@ -78,10 +76,15 @@ func _update_prompt() -> void:
 	if is_consumed:
 		_prompt.text = ""
 	elif is_focused and definition != null:
-		if definition.kind == InteractableDef.Kind.SALVAGE:
-			_prompt.text = "[E] Salvage %s" % definition.title
-		else:
-			_prompt.text = "[E] Inspect %s" % definition.title
+		match definition.kind:
+			InteractableDef.Kind.SALVAGE:
+				_prompt.text = "[E] Salvage %s" % definition.title
+			InteractableDef.Kind.DOCK:
+				_prompt.text = "[E] Dock %s" % definition.title
+			InteractableDef.Kind.TRANSLATE:
+				_prompt.text = "[E] Translate via %s" % definition.title
+			_:
+				_prompt.text = "[E] Inspect %s" % definition.title
 	else:
 		_prompt.text = ""
 
