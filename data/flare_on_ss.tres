@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShipStats" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/ship_stats.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+forward_thrust = 520.0
+reverse_thrust = 320.0
+boost_multiplier = 1.85
+rotation_speed = 3.2
+max_speed = 680.0
+boost_max_speed = 980.0
+linear_damp = 0.35

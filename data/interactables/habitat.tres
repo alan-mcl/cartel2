@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="InteractableDef" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/interactable_def.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "habitat"
+title = "Proxima Habitat"
+inspect_text = "Orbital city hub. Docking lanes are open; customs wave you through on transponder."
+kind = 0

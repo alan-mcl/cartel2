@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://cartel_wreck"]
+
+[ext_resource type="PackedScene" uid="uid://cartel_interactable" path="res://scenes/world/interactable_marker.tscn" id="1"]
+[ext_resource type="Resource" path="res://data/interactables/wreck.tres" id="2"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_wreck"]
+points = PackedVector2Array(-45, -20, 50, -5, 35, 25, -30, 30, -55, 5)
+
+[node name="Wreck" type="Node2D"]
+
+[node name="Body" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+shape = SubResource("ConvexPolygonShape2D_wreck")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Hull" type="Polygon2D" parent="Visual"]
+color = Color(0.85, 0.35, 0.22, 1)
+polygon = PackedVector2Array(-45, -20, 50, -5, 35, 25, -30, 30, -55, 5)
+
+[node name="Crack" type="Line2D" parent="Visual"]
+width = 2.0
+default_color = Color(0.15, 0.08, 0.05, 1)
+points = PackedVector2Array(-20, -10, 5, 0, 20, 15)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -70.0
+offset_top = -55.0
+offset_right = 70.0
+offset_bottom = -27.0
+theme_override_colors/font_color = Color(1, 0.55, 0.35, 1)
+text = "Derelict Wreck"
+horizontal_alignment = 1
+
+[node name="Interactable" parent="." instance=ExtResource("1")]
+definition = ExtResource("2")
+
+[node name="Visual" parent="Interactable"]
+visible = false
+
+[node name="Marker" type="Polygon2D" parent="Interactable"]
+color = Color(1, 0.55, 0.35, 0.45)
+polygon = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)

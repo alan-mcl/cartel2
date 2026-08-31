@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cartel_debris"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_rock"]
+points = PackedVector2Array(-28, -18, 24, -22, 32, 12, -8, 28, -34, 8)
+
+[node name="DebrisRock" type="StaticBody2D"]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("ConvexPolygonShape2D_rock")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.45, 0.48, 0.52, 1)
+polygon = PackedVector2Array(-28, -18, 24, -22, 32, 12, -8, 28, -34, 8)

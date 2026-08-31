@@ -1,0 +1,86 @@
+[gd_scene load_steps=13 format=3 uid="uid://cartel_main"]
+
+[ext_resource type="Script" path="res://scripts/presentation/main.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/presentation/starfield.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_player_ship" path="res://scenes/player_ship.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cartel_hud" path="res://scenes/hud.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://cartel_pause" path="res://scenes/pause_overlay.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://cartel_habitat" path="res://scenes/world/habitat.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://cartel_jump_gate" path="res://scenes/world/jump_gate.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://cartel_beacon" path="res://scenes/world/beacon.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://cartel_beacon2" path="res://scenes/world/beacon_2.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://cartel_beacon3" path="res://scenes/world/beacon_3.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://cartel_wreck" path="res://scenes/world/wreck.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://cartel_debris" path="res://scenes/world/debris_rock.tscn" id="12"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="PlanetLimb" type="Polygon2D" parent="World"]
+color = Color(0.08, 0.1, 0.16, 0.85)
+polygon = PackedVector2Array(-3200, 2200, -1800, 1200, -800, 1400, -400, 2000, -600, 2800, -1400, 3200, -3400, 3200)
+
+[node name="DustRing" type="Line2D" parent="World"]
+width = 2.0
+default_color = Color(0.35, 0.38, 0.45, 0.35)
+points = PackedVector2Array(3500, 0, 2474.87, 2474.87, 0, 3500, -2474.87, 2474.87, -3500, 0, -2474.87, -2474.87, 0, -3500, 2474.87, -2474.87, 3500, 0)
+
+[node name="Habitat" parent="World" instance=ExtResource("6")]
+position = Vector2(-1200, -350)
+
+[node name="JumpGate" parent="World" instance=ExtResource("7")]
+position = Vector2(1500, 650)
+
+[node name="Beacon1" parent="World" instance=ExtResource("8")]
+position = Vector2(-700, 850)
+
+[node name="Label" parent="World/Beacon1"]
+text = "Beacon 1"
+
+[node name="Beacon2" parent="World" instance=ExtResource("9")]
+position = Vector2(350, -950)
+
+[node name="Beacon3" parent="World" instance=ExtResource("10")]
+position = Vector2(1050, -250)
+
+[node name="Wreck" parent="World" instance=ExtResource("11")]
+position = Vector2(1380, -420)
+
+[node name="Debris1" parent="World" instance=ExtResource("12")]
+position = Vector2(-300, 200)
+rotation = 0.4
+
+[node name="Debris2" parent="World" instance=ExtResource("12")]
+position = Vector2(600, 300)
+rotation = -0.8
+scale = Vector2(1.3, 1.3)
+
+[node name="Debris3" parent="World" instance=ExtResource("12")]
+position = Vector2(-200, -600)
+rotation = 1.1
+
+[node name="Debris4" parent="World" instance=ExtResource("12")]
+position = Vector2(900, -700)
+rotation = -0.3
+scale = Vector2(0.85, 0.85)
+
+[node name="Debris5" parent="World" instance=ExtResource("12")]
+position = Vector2(200, 700)
+rotation = 2.0
+
+[node name="Debris6" parent="World" instance=ExtResource("12")]
+position = Vector2(-950, 100)
+rotation = -1.4
+scale = Vector2(1.15, 1.15)
+
+[node name="PlayerShip" parent="." instance=ExtResource("3")]
+position = Vector2(-400, -150)
+
+[node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="PauseOverlay" parent="." instance=ExtResource("5")]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://cartel_beacon2"]
+
+[ext_resource type="PackedScene" uid="uid://cartel_interactable" path="res://scenes/world/interactable_marker.tscn" id="1"]
+[ext_resource type="Resource" path="res://data/interactables/beacon_2.tres" id="2"]
+
+[node name="Beacon" type="Node2D"]
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Pole" type="Line2D" parent="Visual"]
+width = 4.0
+default_color = Color(0.35, 0.9, 0.95, 1)
+points = PackedVector2Array(0, 20, 0, -20)
+
+[node name="Pulse" type="Polygon2D" parent="Visual"]
+color = Color(0.35, 0.9, 0.95, 0.85)
+polygon = PackedVector2Array(-10, -28, 10, -28, 0, -8)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -60.0
+offset_top = 24.0
+offset_right = 60.0
+offset_bottom = 52.0
+text = "Beacon 2"
+horizontal_alignment = 1
+
+[node name="Interactable" parent="." instance=ExtResource("1")]
+definition = ExtResource("2")
+
+[node name="Visual" parent="Interactable"]
+visible = false
+
+[node name="Marker" type="Polygon2D" parent="Interactable"]
+color = Color(0.35, 0.9, 0.95, 0.35)
+polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
