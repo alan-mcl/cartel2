@@ -1,0 +1,11 @@
+[
+  {
+    "id": "flare_on_ss",
+    "name": "Flare-ON SS",
+    "maker": "Holt-Winters Corp",
+    "chassis": "flare_on_chassis",
+    "engine": "mark_3_fusion",
+    "armour": null,
+    "weapons": []
+  }
+]

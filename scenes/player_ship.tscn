@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cartel_player_ship"]
+[gd_scene load_steps=4 format=3 uid="uid://cartel_player_ship"]
 
 [ext_resource type="Script" path="res://scripts/presentation/player_ship.gd" id="1"]
-[ext_resource type="Resource" path="res://data/flare_on_ss.tres" id="2"]
-[ext_resource type="Script" path="res://scripts/presentation/follow_camera.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/presentation/follow_camera.gd" id="2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ship"]
 radius = 10.0
@@ -15,7 +14,7 @@ radius = 120.0
 collision_layer = 1
 collision_mask = 2
 script = ExtResource("1")
-stats = ExtResource("2")
+ship_id = "flare_on_ss"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5707963267948966
@@ -40,4 +39,4 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_sensor")
 
 [node name="FollowCamera" type="Camera2D" parent="."]
-script = ExtResource("3")
+script = ExtResource("2")

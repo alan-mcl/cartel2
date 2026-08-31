@@ -1,20 +1,31 @@
 extends Node2D
 
 @export var play_bounds: float = 3500.0
+@export var player_ship_id: String = "flare_on_ss"
 
 var session := PrototypeSession.new()
+var catalog := Catalog.load_default()
+var player_ship: AssembledShip
 
 @onready var _player: CharacterBody2D = $PlayerShip
 @onready var _hud: CanvasLayer = $HUD
 @onready var _pause: CanvasLayer = $PauseOverlay
 @onready var _starfield: Node2D = $Starfield
 @onready var _camera: Camera2D = $PlayerShip/FollowCamera
-@onready var _hint: Label = $HUD/Root/Margin/VBox/HintLabel
 @onready var _wreck: Interactable = $World/Wreck/Interactable
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+	player_ship = ShipAssembler.assemble(catalog, player_ship_id)
+	if player_ship.name.is_empty():
+		push_error("Failed to assemble player ship '%s'." % player_ship_id)
+		return
+
+	session.last_log = "%s ready. Thrusters online." % player_ship.name
+	_player.configure(player_ship)
+
 	session.changed.connect(_on_session_changed)
 	_player.interaction_target_changed.connect(_on_interaction_target_changed)
 	_player.motion_changed.connect(_on_motion_changed)
@@ -22,7 +33,7 @@ func _ready() -> void:
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
 
-	_hud.bind(session, _player)
+	_hud.bind(session, _player, player_ship)
 	_pause.visible = false
 	_on_session_changed()
 

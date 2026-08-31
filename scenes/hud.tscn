@@ -35,6 +35,11 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.95, 0.9)
 text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · E interact · Esc pause"
 
+[node name="ShipLabel" type="Label" parent="Root/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.92, 1, 1)
+text = "Ship: Flare-ON SS · Flare-ON Chassis · Mark 3 Fusion"
+
 [node name="StatsRow" type="HBoxContainer" parent="Root/Margin/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 24

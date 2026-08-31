@@ -1,0 +1,11 @@
+[
+  {
+    "id": "mark_3_fusion",
+    "name": "Mark 3 Fusion",
+    "maker": "Bayes Inc",
+    "mass": 1.8,
+    "thrust": 2080.0,
+    "max_speed": 680.0,
+    "boost_multiplier": 1.85
+  }
+]

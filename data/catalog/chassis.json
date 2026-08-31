@@ -1,0 +1,11 @@
+[
+  {
+    "id": "flare_on_chassis",
+    "name": "Flare-ON Chassis",
+    "maker": "Holt-Winters Corp",
+    "mass": 3.2,
+    "hits": 18,
+    "max_load": 6.0,
+    "maneuver": "high"
+  }
+]

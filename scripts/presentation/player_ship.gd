@@ -3,8 +3,9 @@ extends CharacterBody2D
 signal interaction_target_changed(interactable: Interactable)
 signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 
-@export var stats: ShipStats
+@export var ship_id: String = "flare_on_ss"
 
+var assembled_ship: AssembledShip
 var motion := ShipMotion.new()
 
 @onready var _thrust_flame: Polygon2D = $Visual/ThrustFlame
@@ -14,10 +15,18 @@ var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
 
 
+func configure(ship: AssembledShip) -> void:
+	assembled_ship = ship
+
+
+func get_stats() -> ShipStats:
+	if assembled_ship == null:
+		return ShipStats.new()
+	return assembled_ship.stats
+
+
 func _ready() -> void:
 	add_to_group("player")
-	if stats == null:
-		stats = preload("res://data/flare_on_ss.tres")
 
 	_interact_area.area_entered.connect(_on_interact_area_entered)
 	_interact_area.area_exited.connect(_on_interact_area_exited)
@@ -29,6 +38,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var stats := get_stats()
+	if stats.max_speed <= 0.0:
+		return
+
 	var thrust := Input.is_action_pressed("thrust")
 	var reverse := Input.is_action_pressed("reverse")
 	var rotate_left := Input.is_action_pressed("rotate_left")

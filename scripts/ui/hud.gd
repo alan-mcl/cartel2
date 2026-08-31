@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+@onready var _ship: Label = $Root/Margin/VBox/ShipLabel
 @onready var _speed: Label = $Root/Margin/VBox/StatsRow/SpeedLabel
 @onready var _heading: Label = $Root/Margin/VBox/StatsRow/HeadingLabel
 @onready var _boost: Label = $Root/Margin/VBox/StatsRow/BoostLabel
@@ -13,17 +14,22 @@ extends CanvasLayer
 
 var _session: PrototypeSession
 var _player: CharacterBody2D
+var _assembled_ship: AssembledShip
 
 
-func bind(session: PrototypeSession, player: CharacterBody2D) -> void:
+func bind(session: PrototypeSession, player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
 	_session = session
 	_player = player
+	_assembled_ship = assembled_ship
 	refresh()
 
 
 func refresh() -> void:
 	if _session == null:
 		return
+
+	if _assembled_ship != null:
+		_ship.text = "Ship: %s" % _assembled_ship.get_summary()
 
 	_location.text = "Location: %s" % _session.location_name
 	_objective.text = "Objective: %s" % _session.objective

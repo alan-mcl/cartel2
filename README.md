@@ -39,11 +39,45 @@ Or open `project.godot` in the Godot editor and press **F5**.
 ## Project layout
 
 ```
-scripts/gameplay/     Ship motion/state (no Nodes)
+scripts/gameplay/     Ship motion/state, JSON catalog loader, assembler
 scripts/presentation/ Godot integration (ship, camera, world)
 scripts/ui/           HUD and pause overlay
 scenes/               Main scene and world objects
-data/                 Ship stats and interactable definitions
+data/catalog/         JSON ship/component catalogs
+data/interactables/   Interactable definitions (Godot resources)
+```
+
+## Ship data (JSON)
+
+The player ship is assembled at runtime from JSON catalogs under `data/catalog/`:
+
+| File | Contents |
+|------|----------|
+| `chassis.json` | Hull frames: mass, hits, cargo, maneuver class |
+| `engines.json` | Engines: mass, thrust, max speed, boost multiplier |
+| `armour.json` | Armour plates: mass, hits |
+| `ships.json` | Ship loadouts: references to chassis, engine, armour, weapons |
+
+The prototype player ship is `flare_on_ss` in `ships.json`, composed of:
+
+- **Chassis:** `flare_on_chassis`
+- **Engine:** `mark_3_fusion`
+- **Armour:** none
+
+Flight stats are derived at runtime by `ShipAssembler` from those modules. To experiment, edit a module's stats in JSON or change the loadout ids in `ships.json`, then relaunch.
+
+Example loadout entry:
+
+```json
+{
+  "id": "flare_on_ss",
+  "name": "Flare-ON SS",
+  "maker": "Holt-Winters Corp",
+  "chassis": "flare_on_chassis",
+  "engine": "mark_3_fusion",
+  "armour": null,
+  "weapons": []
+}
 ```
 
 ## Placeholders
@@ -52,6 +86,7 @@ data/                 Ship stats and interactable definitions
 - Jump gate is inspect-only (no Unspace travel).
 - Single salvage interaction; no economy simulation.
 - No save/load.
+- Weapons slot exists in ship JSON but has no weapon catalog yet.
 
 ## Next gameplay improvements
 
