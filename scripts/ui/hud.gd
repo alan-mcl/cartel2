@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var _credits: Label = $Root/Margin/VBox/CreditsLabel
 @onready var _log: Label = $Root/Margin/VBox/LogLabel
 @onready var _boundary: Label = $Root/Margin/VBox/BoundaryLabel
+@onready var _hull: Label = $Root/Margin/VBox/HullLabel
 @onready var _hint: Label = $Root/Margin/VBox/HintLabel
 
 var _session: PrototypeSession
@@ -40,6 +41,13 @@ func refresh() -> void:
 	_credits.text = "Credits: d%d" % _session.credits
 	_log.text = _session.last_log
 
+	if _hull != null:
+		if _session.in_unspace and _session.max_hull > 0.0:
+			_hull.visible = true
+			_hull.text = "Hull: %d / %d" % [int(_session.hull), int(_session.max_hull)]
+		else:
+			_hull.visible = false
+
 
 func set_motion(speed: float, heading_deg: float, boosting: bool) -> void:
 	_speed.text = "Speed: %.0f" % speed
@@ -58,10 +66,13 @@ func set_target(target: Interactable) -> void:
 		_target.text = "Target: none"
 
 
-func set_boundary_warning(active: bool) -> void:
+func set_boundary_warning(active: bool, in_unspace: bool = false) -> void:
 	_boundary.visible = active
 	if active:
-		_boundary.text = "Warning: drifting toward dust ring edge"
+		if in_unspace:
+			_boundary.text = "Warning: drifting toward 4-space boundary"
+		else:
+			_boundary.text = "Warning: drifting toward dust ring edge"
 
 
 func _ready() -> void:

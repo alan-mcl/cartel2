@@ -18,6 +18,15 @@ var building_id: String = ""
 var owned_ships: Array[OwnedShip] = []
 var current_ship_id: String = ""
 
+var in_unspace: bool = false
+var unspace_n: int = 0
+var unspace_world_id: String = ""
+var pending_destination_id: String = ""
+var hull: float = 0.0
+var max_hull: float = 0.0
+
+var _hull_stress_cooldown: float = 0.0
+
 
 func load_player(catalog: Catalog) -> void:
 	var player_data := catalog.get_player()
@@ -55,6 +64,10 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 		return false
 
 	sector_id = new_sector_id
+	in_unspace = false
+	unspace_n = 0
+	unspace_world_id = ""
+	pending_destination_id = ""
 	location_name = str(sector.get("orbit_name", new_sector_id))
 	objective = str(sector.get("objective", ""))
 
@@ -63,6 +76,90 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 
 	changed.emit()
 	return true
+
+
+func enter_unspace(
+	catalog: Catalog,
+	destination_id: String,
+	n: int,
+	assembled_ship: AssembledShip
+) -> bool:
+	var dest := catalog.get_sector(destination_id)
+	if dest.is_empty():
+		return false
+
+	var unspace := catalog.get_unspace_for_n(n)
+	if unspace.is_empty():
+		return false
+
+	pending_destination_id = destination_id
+	in_unspace = true
+	unspace_n = n
+	unspace_world_id = str(unspace.get("id", ""))
+	_init_hull_from_ship(assembled_ship)
+
+	location_name = str(unspace.get("orbit_name", "4-space"))
+	objective = "Navigate to the exit portal en route to %s" % str(dest.get("name", destination_id))
+	last_log = "Translated into %d-space. Find the exit portal." % n
+	changed.emit()
+	return true
+
+
+func arrive_from_unspace(catalog: Catalog) -> bool:
+	if not in_unspace or pending_destination_id.is_empty():
+		return false
+
+	var dest_id := pending_destination_id
+	in_unspace = false
+	unspace_n = 0
+	unspace_world_id = ""
+	pending_destination_id = ""
+
+	if not enter_sector(catalog, dest_id):
+		return false
+
+	hull = max_hull
+	last_log = "Emergence complete. Welcome to %s." % location_name
+	changed.emit()
+	return true
+
+
+func apply_hull_stress(amount: float, delta: float) -> void:
+	if not in_unspace or max_hull <= 0.0:
+		return
+
+	_hull_stress_cooldown -= delta
+	if _hull_stress_cooldown > 0.0:
+		return
+
+	_hull_stress_cooldown = 0.45
+	hull = max(0.0, hull - amount)
+	last_log = "N-space shear stressing hull. (%d/%d)" % [int(hull), int(max_hull)]
+	changed.emit()
+
+
+func get_unspace_spawn(catalog: Catalog) -> Vector2:
+	var unspace := catalog.get_unspace(unspace_world_id)
+	if unspace.is_empty():
+		return Vector2.ZERO
+
+	var spawn: Dictionary = unspace.get("spawn", {})
+	return Vector2(float(spawn.get("x", 0.0)), float(spawn.get("y", 0.0)))
+
+
+func get_spawn_position(catalog: Catalog) -> Vector2:
+	if in_unspace:
+		return get_unspace_spawn(catalog)
+	return get_sector_spawn(catalog)
+
+
+func _init_hull_from_ship(assembled_ship: AssembledShip) -> void:
+	if assembled_ship == null or assembled_ship.chassis.is_empty():
+		max_hull = 18.0
+	else:
+		max_hull = float(assembled_ship.chassis.get("hits", 18.0))
+	hull = max_hull
+	_hull_stress_cooldown = 0.0
 
 
 func get_sector_spawn(catalog: Catalog) -> Vector2:

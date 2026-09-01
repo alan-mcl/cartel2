@@ -16,6 +16,7 @@ var motion := ShipMotion.new()
 
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
+var _shear_hazards: Array[NspaceHazard] = []
 
 
 func configure(ship: AssembledShip) -> void:
@@ -44,6 +45,37 @@ func _apply_hull_visual() -> void:
 func freeze_motion() -> void:
 	velocity = Vector2.ZERO
 	motion.velocity = Vector2.ZERO
+
+
+func enter_shear(hazard: NspaceHazard) -> void:
+	if hazard != null and hazard not in _shear_hazards:
+		_shear_hazards.append(hazard)
+
+
+func exit_shear(hazard: NspaceHazard) -> void:
+	_shear_hazards.erase(hazard)
+
+
+func apply_shear_forces(session: PrototypeSession, delta: float) -> void:
+	if _shear_hazards.is_empty():
+		return
+
+	for hazard in _shear_hazards:
+		if hazard == null or not is_instance_valid(hazard):
+			continue
+
+		var offset := global_position - hazard.global_position
+		if offset.length_squared() < 0.001:
+			offset = Vector2.RIGHT
+		var direction := offset.normalized()
+		motion.velocity += direction * hazard.get_shear_strength() * delta
+
+		if session != null:
+			session.apply_hull_stress(hazard.get_hull_stress(), delta)
+
+	# Slight slowdown at zero hull — not lethal
+	if session != null and session.hull <= 0.0:
+		motion.velocity *= 0.985
 
 
 func get_stats() -> ShipStats:
@@ -90,6 +122,10 @@ func _physics_process(delta: float) -> void:
 	var boost := Input.is_action_pressed("boost")
 
 	motion.step(stats, delta, thrust, reverse, rotate_left, rotate_right, boost)
+
+	var session: PrototypeSession = get_parent().session if get_parent() != null else null
+	if session != null and session.in_unspace:
+		apply_shear_forces(session, delta)
 
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity

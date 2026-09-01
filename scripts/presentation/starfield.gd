@@ -10,6 +10,7 @@ const STARS_NEAR_PATH := "res://assets/space/stars_near.png"
 var _far_layer: Node2D
 var _near_layer: Node2D
 var _camera: Camera2D
+var _tint: Color = Color.WHITE
 
 
 func _ready() -> void:
@@ -17,10 +18,27 @@ func _ready() -> void:
 	_near_layer = _make_star_layer(STARS_NEAR_PATH, "NearStars", 1.15)
 	add_child(_far_layer)
 	add_child(_near_layer)
+	_apply_tint()
 
 
 func bind_camera(camera: Camera2D) -> void:
 	_camera = camera
+
+
+func set_tint(color: Color) -> void:
+	_tint = color
+	_apply_tint()
+
+
+func reset_tint() -> void:
+	set_tint(Color.WHITE)
+
+
+func _apply_tint() -> void:
+	if _far_layer != null:
+		_far_layer.modulate = _tint
+	if _near_layer != null:
+		_near_layer.modulate = _tint
 
 
 func _process(_delta: float) -> void:

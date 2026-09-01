@@ -1,7 +1,7 @@
 class_name InteractableDef
 extends RefCounted
 
-enum Kind { INSPECT, SALVAGE, DOCK, TRANSLATE }
+enum Kind { INSPECT, SALVAGE, DOCK, TRANSLATE, ARRIVE }
 
 var id: String = ""
 var title: String = ""
@@ -30,5 +30,7 @@ static func _parse_kind(kind_name: String) -> Kind:
 			return Kind.DOCK
 		"translate":
 			return Kind.TRANSLATE
+		"arrive":
+			return Kind.ARRIVE
 		_:
 			return Kind.INSPECT

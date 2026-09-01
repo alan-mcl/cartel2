@@ -9,6 +9,7 @@ const BUILDINGS_PATH := "res://data/catalog/buildings.json"
 const HABITATS_PATH := "res://data/catalog/habitats.json"
 const INTERACTABLES_PATH := "res://data/catalog/interactables.json"
 const SECTORS_PATH := "res://data/catalog/sectors.json"
+const UNSPACES_PATH := "res://data/catalog/unspaces.json"
 const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
 
@@ -20,6 +21,7 @@ var buildings_by_id: Dictionary = {}
 var habitats_by_id: Dictionary = {}
 var interactables_by_id: Dictionary = {}
 var sectors_by_id: Dictionary = {}
+var unspaces_by_id: Dictionary = {}
 var worlds_by_id: Dictionary = {}
 var player_data: Dictionary = {}
 
@@ -39,6 +41,7 @@ func load_all() -> void:
 	habitats_by_id = _load_indexed_array(HABITATS_PATH)
 	interactables_by_id = _load_indexed_array(INTERACTABLES_PATH)
 	sectors_by_id = _load_indexed_array(SECTORS_PATH)
+	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
 
@@ -73,6 +76,20 @@ func get_interactable(id: String) -> Dictionary:
 
 func get_sector(id: String) -> Dictionary:
 	return _require(sectors_by_id, id, "sector")
+
+
+func get_unspace(id: String) -> Dictionary:
+	return _require(unspaces_by_id, id, "unspace")
+
+
+func get_unspace_for_n(n: int) -> Dictionary:
+	for entry in unspaces_by_id.values():
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if int(entry.get("n", 0)) == n:
+			return entry
+	push_error("Unknown unspace depth n=%d" % n)
+	return {}
 
 
 func get_world(sector_id: String) -> Dictionary:

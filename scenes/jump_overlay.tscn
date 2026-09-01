@@ -23,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="VBoxContainer" parent="Dim/Center"]
-custom_minimum_size = Vector2(560, 0)
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
@@ -36,12 +36,24 @@ horizontal_alignment = 1
 [node name="DescriptionLabel" type="Label" parent="Dim/Center/Panel"]
 layout_mode = 2
 autowrap_mode = 3
-text = "Select a known Unspace route to translate."
+text = "Select a destination, then confirm translation depth."
 horizontal_alignment = 1
 
 [node name="RouteList" type="VBoxContainer" parent="Dim/Center/Panel"]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="SolutionLabel" type="Label" parent="Dim/Center/Panel"]
+layout_mode = 2
+autowrap_mode = 3
+theme_override_colors/font_color = Color(0.55, 0.92, 1, 1)
+text = "No destination selected."
+horizontal_alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="Dim/Center/Panel"]
+layout_mode = 2
+disabled = true
+text = "Translate via 4-space"
 
 [node name="CancelButton" type="Button" parent="Dim/Center/Panel"]
 layout_mode = 2

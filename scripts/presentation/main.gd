@@ -8,6 +8,8 @@ var play_bounds: float = 3500.0
 var _world_loader := WorldLoader.new()
 var _translate_gate_title: String = ""
 
+const UNSPACE_TINT := Color(0.78, 0.58, 1.0, 1.0)
+
 @onready var _world: Node2D = $World
 @onready var _player: CharacterBody2D = $PlayerShip
 @onready var _hud: CanvasLayer = $HUD
@@ -50,7 +52,7 @@ func _ready() -> void:
 	_location.visible = false
 	_jump.visible = false
 
-	_load_current_sector(false)
+	_load_current_space(false)
 	_on_session_changed()
 
 
@@ -59,7 +61,7 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	var distance := _player.global_position.length()
-	_hud.set_boundary_warning(distance > play_bounds)
+	_hud.set_boundary_warning(distance > play_bounds, session.in_unspace)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -75,7 +77,10 @@ func try_interact(target: Interactable) -> void:
 		InteractableDef.Kind.DOCK:
 			_dock_at(target.definition.dock_location_id)
 		InteractableDef.Kind.TRANSLATE:
-			_open_jump_overlay(target.definition.title)
+			if not session.in_unspace:
+				_open_jump_overlay(target.definition.title)
+		InteractableDef.Kind.ARRIVE:
+			_arrive_from_unspace()
 		_:
 			var result := target.interact(session)
 			if result.is_empty():
@@ -85,17 +90,36 @@ func try_interact(target: Interactable) -> void:
 			_world_loader.apply_salvage_visuals(session)
 
 
+func _load_current_space(place_player: bool = true) -> void:
+	if session.in_unspace:
+		_load_unspace(place_player)
+	else:
+		_load_current_sector(place_player)
+
+
 func _load_current_sector(place_player: bool = true) -> void:
 	play_bounds = _world_loader.load_sector(_world, catalog, session, session.sector_id)
+	_starfield.reset_tint()
+	_finalize_world_load(place_player)
+
+
+func _load_unspace(place_player: bool = true) -> void:
+	play_bounds = _world_loader.load_unspace(_world, catalog, session, session.unspace_world_id)
+	if _starfield.has_method("set_tint"):
+		_starfield.set_tint(UNSPACE_TINT)
+	_finalize_world_load(place_player)
+
+
+func _finalize_world_load(place_player: bool = true) -> void:
 	if _player.has_method("register_world_interactables"):
 		_player.register_world_interactables()
 	if place_player:
-		_player.global_position = session.get_sector_spawn(catalog)
+		_player.global_position = session.get_spawn_position(catalog)
 	_player.freeze_motion()
 
 
 func _open_jump_overlay(gate_title: String) -> void:
-	if session.docked:
+	if session.docked or session.in_unspace:
 		return
 
 	_translate_gate_title = gate_title
@@ -105,16 +129,28 @@ func _open_jump_overlay(gate_title: String) -> void:
 	_on_interaction_target_changed(_player.get_current_target())
 
 
-func _on_jump_requested(target_sector_id: String) -> void:
+func _on_jump_requested(target_sector_id: String, n: int) -> void:
 	if target_sector_id.is_empty():
 		return
 
-	if not session.enter_sector(catalog, target_sector_id):
+	if not session.enter_unspace(catalog, target_sector_id, n, player_ship):
+		return
+
+	_load_unspace(true)
+	_jump.close()
+	get_tree().paused = false
+	_on_session_changed()
+	_on_interaction_target_changed(_player.get_current_target())
+
+
+func _arrive_from_unspace() -> void:
+	if not session.in_unspace:
+		return
+
+	if not session.arrive_from_unspace(catalog):
 		return
 
 	_load_current_sector(true)
-	_jump.close()
-	get_tree().paused = false
 	_on_session_changed()
 	_on_interaction_target_changed(_player.get_current_target())
 

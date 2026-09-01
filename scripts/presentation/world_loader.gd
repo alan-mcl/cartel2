@@ -7,6 +7,7 @@ const SCENES := {
 	"beacon": "res://scenes/world/beacon.tscn",
 	"wreck": "res://scenes/world/wreck.tscn",
 	"debris": "res://scenes/world/debris_rock.tscn",
+	"hazard": "res://scenes/world/hazard.tscn",
 }
 
 var spawned_by_id: Dictionary = {}
@@ -32,16 +33,29 @@ func load_sector(
 
 	_spawn_dust_ring(world_root, play_bounds)
 
-	var entities: Variant = world_data.get("entities", [])
-	if typeof(entities) != TYPE_ARRAY:
-		return play_bounds
+	return _spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
 
-	for entity_variant in entities:
-		if typeof(entity_variant) != TYPE_DICTIONARY:
-			continue
-		_spawn_entity(world_root, entity_variant, catalog, session)
 
-	return play_bounds
+func load_unspace(
+	world_root: Node2D,
+	catalog: Catalog,
+	session: PrototypeSession,
+	unspace_id: String
+) -> float:
+	clear_world(world_root)
+
+	var unspace := catalog.get_unspace(unspace_id)
+	var play_bounds := float(unspace.get("play_bounds", 4000.0))
+	var world_id := str(unspace.get("world_id", unspace_id))
+	var world_data := catalog.get_world(world_id)
+
+	_spawn_dust_ring(
+		world_root,
+		play_bounds,
+		Color(0.55, 0.25, 0.75, 0.42)
+	)
+
+	return _spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
 
 
 func apply_salvage_visuals(session: PrototypeSession) -> void:
@@ -51,11 +65,34 @@ func apply_salvage_visuals(session: PrototypeSession) -> void:
 			node.apply_salvage_state(session)
 
 
-func _spawn_dust_ring(world_root: Node2D, radius: float) -> void:
+func _spawn_world_entities(
+	world_root: Node2D,
+	world_data: Dictionary,
+	catalog: Catalog,
+	session: PrototypeSession,
+	fallback_bounds: float
+) -> float:
+	var entities: Variant = world_data.get("entities", [])
+	if typeof(entities) != TYPE_ARRAY:
+		return fallback_bounds
+
+	for entity_variant in entities:
+		if typeof(entity_variant) != TYPE_DICTIONARY:
+			continue
+		_spawn_entity(world_root, entity_variant, catalog, session)
+
+	return fallback_bounds
+
+
+func _spawn_dust_ring(
+	world_root: Node2D,
+	radius: float,
+	color: Color = Color(0.35, 0.38, 0.45, 0.35)
+) -> void:
 	var ring := Line2D.new()
 	ring.name = "DustRing"
 	ring.width = 2.0
-	ring.default_color = Color(0.35, 0.38, 0.45, 0.35)
+	ring.default_color = color
 
 	var points := PackedVector2Array()
 	var segments := 8
@@ -97,6 +134,8 @@ func _spawn_entity(
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
+	elif kind == "hazard" and instance is NspaceHazard:
+		instance.configure(entity)
 	elif instance is WorldObject:
 		instance.configure(entity, catalog, session)
 	elif instance.has_method("configure"):

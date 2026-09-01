@@ -83,6 +83,8 @@ func _update_prompt() -> void:
 				_prompt.text = "[E] Dock %s" % definition.title
 			InteractableDef.Kind.TRANSLATE:
 				_prompt.text = "[E] Translate via %s" % definition.title
+			InteractableDef.Kind.ARRIVE:
+				_prompt.text = "[E] Emerge via %s" % definition.title
 			_:
 				_prompt.text = "[E] Inspect %s" % definition.title
 	else:

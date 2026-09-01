@@ -7,7 +7,7 @@
     "spawn": { "x": -400, "y": -150 },
     "objective": "Investigate the wreck near Beacon 3",
     "mappings": [
-      { "target": "bela", "solution": 42, "label": "Bela Sector" }
+      { "target": "bela", "solution": 42, "n": 4, "label": "Bela Sector" }
     ]
   },
   {
@@ -18,7 +18,7 @@
     "spawn": { "x": 200, "y": -100 },
     "objective": "Explore Bela orbit or return through the jump gate",
     "mappings": [
-      { "target": "proxima", "solution": -34458, "label": "Proxima Sector" }
+      { "target": "proxima", "solution": -34458, "n": 4, "label": "Proxima Sector" }
     ]
   }
 ]

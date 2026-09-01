@@ -68,5 +68,23 @@
     "inspect_text": "Capsized pleasure skiff. Salvage looks viable if you can reach it.",
     "kind": "salvage",
     "salvage_reward": 420
+  },
+  {
+    "id": "unspace_exit",
+    "title": "Exit Portal",
+    "inspect_text": "Stabilised portal leading back toward 3-space. Translate through to complete the jump.",
+    "kind": "arrive"
+  },
+  {
+    "id": "n4_entry_beacon",
+    "title": "Entry Drift",
+    "inspect_text": "Translation wake from 3-space. The exit portal lies deeper in the shear field.",
+    "kind": "inspect"
+  },
+  {
+    "id": "n4_shear_beacon",
+    "title": "Shear Marker",
+    "inspect_text": "Nav marker: N-space shear intensifies ahead. Stay sharp.",
+    "kind": "inspect"
   }
 ]

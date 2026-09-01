@@ -1,22 +1,29 @@
 extends CanvasLayer
 
-signal jump_requested(target_sector_id: String)
+signal jump_requested(target_sector_id: String, n: int)
 signal cancelled
 
 @onready var _title: Label = $Dim/Center/Panel/TitleLabel
 @onready var _description: Label = $Dim/Center/Panel/DescriptionLabel
 @onready var _route_list: VBoxContainer = $Dim/Center/Panel/RouteList
+@onready var _solution_label: Label = $Dim/Center/Panel/SolutionLabel
+@onready var _confirm_button: Button = $Dim/Center/Panel/ConfirmButton
 @onready var _cancel_button: Button = $Dim/Center/Panel/CancelButton
 @onready var _hint: Label = $Dim/Center/Panel/HintLabel
 
 var _catalog: Catalog
 var _session: PrototypeSession
 var _gate_title: String = ""
+var _selected_target_id: String = ""
+var _selected_n: int = 4
+var _selected_solution: int = 0
+var _selected_label: String = ""
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
+	_confirm_button.pressed.connect(_on_confirm_pressed)
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 
 
@@ -27,17 +34,19 @@ func bind(catalog: Catalog, session: PrototypeSession) -> void:
 
 func open(gate_title: String) -> void:
 	_gate_title = gate_title
+	_selected_target_id = ""
 	visible = true
 	_refresh()
 
 
 func close() -> void:
 	visible = false
+	_selected_target_id = ""
 
 
 func _refresh() -> void:
 	_title.text = _gate_title
-	_description.text = "Select a known Unspace route to translate."
+	_description.text = "Select a destination, then confirm translation depth."
 
 	_clear_container(_route_list)
 
@@ -62,15 +71,41 @@ func _refresh() -> void:
 		var label := str(mapping.get("label", target_sector.get("name", target_id)))
 
 		var button := Button.new()
-		button.text = "Translate to %s" % label
-		button.pressed.connect(_on_route_pressed.bind(target_id))
+		var prefix := "> " if target_id == _selected_target_id else ""
+		button.text = "%s%s" % [prefix, label]
+		button.pressed.connect(_on_route_pressed.bind(mapping))
 		_route_list.add_child(button)
 
+	_update_selection_ui()
 	_hint.text = "Esc or Cancel to stay in orbit"
 
 
-func _on_route_pressed(target_sector_id: String) -> void:
-	jump_requested.emit(target_sector_id)
+func _on_route_pressed(mapping: Dictionary) -> void:
+	_selected_target_id = str(mapping.get("target", ""))
+	_selected_n = int(mapping.get("n", 4))
+	_selected_solution = int(mapping.get("solution", 0))
+	_selected_label = str(mapping.get("label", _selected_target_id))
+	_refresh()
+
+
+func _update_selection_ui() -> void:
+	if _selected_target_id.is_empty():
+		_solution_label.text = "No destination selected."
+		_confirm_button.disabled = true
+		return
+
+	_solution_label.text = (
+		"Route: %s via %d-space (known solution %d). Shallow transit — slower, safer."
+		% [_selected_label, _selected_n, _selected_solution]
+	)
+	_confirm_button.disabled = false
+	_confirm_button.text = "Translate via %d-space" % _selected_n
+
+
+func _on_confirm_pressed() -> void:
+	if _selected_target_id.is_empty():
+		return
+	jump_requested.emit(_selected_target_id, _selected_n)
 
 
 func _on_cancel_pressed() -> void:
