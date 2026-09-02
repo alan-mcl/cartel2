@@ -102,7 +102,7 @@ Dock and jump-route selection set `get_tree().paused = true` until the overlay c
 1. `[E]` at habitat → `session.dock(catalog, habitat_id)` → **HabitatScreen**.
 2. Visit buildings from catalog list; **Proxima Exchange** for commodity buy/sell; **Shipyard** → **Open Assembly** for engine/armour fitting.
 3. Chassis is **fixed** per ship; engines and armour install from **spare_parts** inventory (buy at yard, sell spares back).
-4. Undock: **Back to Space** → pick a parked ship → `session.undock` → resume flight.
+4. Undock: **Terminal** → select docked ship → **Undock** → resume flight.
 
 Ships parked at a habitat **stay there when jumping sectors** (only the aboard ship travels).
 

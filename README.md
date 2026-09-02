@@ -32,7 +32,7 @@ The game opens at the **main menu**. Choose **New Game** to enter your pilot nam
 | Back (habitat UI) | Escape |
 | Save / Load | Pause menu (in flight) or Save on habitat footer |
 | Quit to menu | Pause menu or Menu on habitat footer |
-| Undock | Back to Space on habitat footer |
+| Undock | Terminal: select docked ship, then Undock |
 
 ## Prototype loop
 
@@ -40,7 +40,7 @@ The game opens at the **main menu**. Choose **New Game** to enter your pilot nam
 2. **New Game:** enter pilot name and callsign; begin docked at **Proxima Habitat** with **Flare-ON SS** and **Pegasus P101** parked there.
 3. Visit buildings from the habitat screen — **Terminal**, **Davidsons** (flavour), **Proxima Exchange** (buy/sell commodities), **Shipyard** (parts + assembly).
 4. At the **Shipyard**, buy spare engines/armour, install on docked ships (chassis is fixed), inspect live stats.
-5. **Back to Space** — choose a ship to launch into **Proxima Sector** orbit.
+5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit.
 6. Fly toward **Beacon 3** and salvage the **Derelict Wreck** (+d850).
 7. Fly to the **Jump Gate**, pick **Bela Sector**, confirm **4-space** translation.
 8. Navigate **4-space** to the **Exit Portal**, then `[E]` to emerge in Bela orbit.

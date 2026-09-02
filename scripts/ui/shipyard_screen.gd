@@ -4,17 +4,22 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 
 @onready var _title: Label = $Layout/Header/HeaderBox/Title
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
-@onready var _ship_list: VBoxContainer = $Layout/Body/Split/Left/ShipList
+@onready var _ship_item_list: ItemList = $Layout/Body/Split/Left/ShipItemList
 @onready var _ship_detail: VBoxContainer = $Layout/Body/Split/Left/ShipDetail
+@onready var _ship_art_host: VBoxContainer = $Layout/Body/Split/Left/ShipDetail/ShipArtHost
+@onready var _ship_detail_body: VBoxContainer = $Layout/Body/Split/Left/ShipDetail/ShipDetailBody
 @onready var _parts_list: VBoxContainer = $Layout/Body/Split/Right/PartsList
 @onready var _part_detail: VBoxContainer = $Layout/Body/Split/Right/PartDetail
-@onready var _actions: HBoxContainer = $Layout/Body/Split/Right/Actions
 @onready var _log: Label = $Layout/Footer/FooterBox/Log
 
 var _context: UiContext
 var _selected_ship_id: String = ""
 var _selected_part_id: String = ""
 var _selected_part_category: String = ""
+
+var _ship_ids: PackedStringArray = PackedStringArray()
+var _suppress_ship_select: bool = false
+var _ship_art_frame: PanelContainer
 
 
 func _ready() -> void:
@@ -23,6 +28,7 @@ func _ready() -> void:
 	$Layout/Body/Split/Right/Actions/SellButton.pressed.connect(_on_sell_pressed)
 	$Layout/Body/Split/Right/Actions/InstallButton.pressed.connect(_on_install_pressed)
 	$Layout/Body/Split/Right/Actions/RemoveButton.pressed.connect(_on_remove_pressed)
+	_ship_item_list.item_selected.connect(_on_ship_item_selected)
 
 
 func bind(context: UiContext) -> void:
@@ -68,26 +74,37 @@ func handle_back() -> bool:
 
 
 func _rebuild_ship_list() -> void:
-	for child in _ship_list.get_children():
-		child.queue_free()
+	_ship_ids.clear()
+	_ship_item_list.clear()
 
 	var ships := _context.session.ships_at(_context.session.habitat_id)
 	if _selected_ship_id.is_empty() and not ships.is_empty():
 		_selected_ship_id = ships[0].id
 
-	var heading := _section_label("DOCKED SHIPS")
-	_ship_list.add_child(heading)
-
 	for ship in ships:
-		var button := Button.new()
-		var prefix := "> " if ship.id == _selected_ship_id else ""
-		button.text = "%s%s" % [prefix, ship.name]
-		button.pressed.connect(_on_ship_selected.bind(ship.id))
-		_ship_list.add_child(button)
+		_ship_ids.append(ship.id)
+		_ship_item_list.add_item(ship.name)
+
+	if not _ship_ids.has(_selected_ship_id):
+		_selected_ship_id = _ship_ids[0] if not _ship_ids.is_empty() else ""
+
+	_select_item_by_id(_ship_item_list, _ship_ids, _selected_ship_id)
+
+
+func _on_ship_item_selected(index: int) -> void:
+	if _suppress_ship_select:
+		return
+	if index < 0 or index >= _ship_ids.size():
+		return
+	_selected_ship_id = _ship_ids[index]
+	_rebuild_ship_detail()
+	_update_actions()
 
 
 func _rebuild_ship_detail() -> void:
-	for child in _ship_detail.get_children():
+	for child in _ship_art_host.get_children():
+		child.queue_free()
+	for child in _ship_detail_body.get_children():
 		child.queue_free()
 
 	var ship := _context.session.get_owned_ship(_selected_ship_id)
@@ -96,37 +113,42 @@ func _rebuild_ship_detail() -> void:
 
 	var assembled := ShipAssembly.preview_stats(_context.catalog, ship)
 	var stats := ShipAssembly.get_stat_block(_context.catalog, ship)
+	var chassis_data := _context.catalog.get_chassis(ship.chassis_id)
+
+	_ship_art_frame = LOCATION_ART.instantiate()
+	_ship_art_host.add_child(_ship_art_frame)
+	_ship_art_frame.set_art_path(str(chassis_data.get("sprite", "")), ship.name)
 
 	var summary := Label.new()
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	summary.text = assembled.get_summary()
-	_ship_detail.add_child(summary)
+	_ship_detail_body.add_child(summary)
 
 	var chassis := Label.new()
 	chassis.text = "Chassis (fixed): %s" % str(assembled.chassis.get("name", ship.chassis_id))
 	chassis.theme_type_variation = &"Numeric"
-	_ship_detail.add_child(chassis)
+	_ship_detail_body.add_child(chassis)
 
 	var engine := Label.new()
 	engine.text = "Engine: %s" % str(assembled.engine.get("name", ship.engine_id))
-	_ship_detail.add_child(engine)
+	_ship_detail_body.add_child(engine)
 
 	var armour_text := "None"
 	if not ship.armour_id.is_empty():
 		armour_text = str(assembled.armour.get("name", ship.armour_id))
 	var armour := Label.new()
 	armour.text = "Armour: %s" % armour_text
-	_ship_detail.add_child(armour)
+	_ship_detail_body.add_child(armour)
 
 	if not stats.is_empty():
 		var stats_heading := _section_label("STATS")
-		_ship_detail.add_child(stats_heading)
+		_ship_detail_body.add_child(stats_heading)
 
 		for key in ["mass", "thrust", "max_speed", "boost_max_speed", "maneuver", "armour_hits"]:
 			if stats.has(key):
 				var row := Label.new()
 				row.text = "%s: %s" % [key, str(stats[key])]
-				_ship_detail.add_child(row)
+				_ship_detail_body.add_child(row)
 
 
 func _rebuild_parts_list() -> void:
@@ -202,9 +224,14 @@ func _update_actions() -> void:
 	remove.disabled = ship == null or ship.armour_id.is_empty()
 
 
-func _on_ship_selected(ship_id: String) -> void:
-	_selected_ship_id = ship_id
-	refresh()
+func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
+	_suppress_ship_select = true
+	var index := ids.find(target_id)
+	if index >= 0:
+		list.select(index)
+	else:
+		list.deselect_all()
+	_suppress_ship_select = false
 
 
 func _on_part_selected(part_id: String, category: String) -> void:

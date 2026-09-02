@@ -1,0 +1,1763 @@
+Ship Construction Data Model Specification
+1. Purpose
+
+The ship construction model defines how individual ships are assembled from a fixed chassis and a configurable collection of installed modules.
+
+The design goal is a system closer to Elite Dangerous than a physical ship-construction simulator: the chassis establishes a generous set of mounting opportunities and engineering limits, while the player configures the ship by installing modules. The resulting ship is evaluated against a collection of physical and operational resource budgets.
+
+The model should support:
+
+multiple ship chassis with meaningfully different capabilities;
+manufacturer-specific ship designs and equipment;
+configurable propulsion, weapons, protection, systems, cargo and passenger accommodation;
+generous mount availability rather than rigid "fill every slot" designs;
+static engineering constraints such as mass and volume;
+infrastructure budgets such as power generation, compute and life support;
+dynamic resource demand during flight;
+resource contention between systems, particularly during combat;
+consumable resources such as fuel and ammunition;
+ship configurations that are specialised for different roles without requiring different chassis;
+data-driven catalogues that can be edited independently of gameplay code.
+
+The construction model should remain understandable to the player. The underlying simulation may be reasonably rich, but the player-facing representation should reduce to a small number of clear constraints and trade-offs.
+
+The current prototype has a simpler model in which an owned ship consists of a chassis, engine and optional armour, with derived flight statistics assembled from those modules. This specification replaces that narrow model with a general module and resource architecture. Existing ships.json templates remain useful as a starting point for manufacturer configurations.
+
+2. Design principles
+2.1 Chassis defines the envelope
+
+A chassis is the physical ship platform. It establishes the fundamental capabilities and constraints within which the ship can be configured.
+
+The chassis controls things such as:
+
+structural mass limit;
+internal volume;
+manoeuvring characteristics;
+available mount categories;
+weapon hardpoints;
+baseline hull integrity;
+potentially crew/passenger accommodations or other fixed characteristics.
+
+The chassis does not prescribe a single configuration.
+
+A Pegasus might have three light weapon hardpoints, for example, without implying that a normal Pegasus should carry three weapons. A scout configuration might use one, a combat configuration all three, and a passenger configuration none.
+
+2.2 Modules provide capabilities
+
+Modules are installed into chassis mounts or consume internal capacity.
+
+A module may:
+
+consume mass;
+consume volume;
+provide a resource capacity;
+consume a resource;
+generate a resource;
+provide a capability;
+occupy one or more mounts;
+require another module or capability;
+provide a dynamic demand while operating;
+provide storage for a consumable.
+
+Modules should be declarative wherever possible.
+
+The assembler should derive ship capabilities by aggregating module properties rather than containing knowledge of individual module types.
+
+2.3 Slots are permissions, not necessarily optimisation targets
+
+Mounts should not be treated as conventional inventory slots where the player is expected to fill every available position.
+
+A mount means:
+
+this chassis is physically capable of installing equipment of this category.
+
+Unused mounts are completely normal.
+
+A ship with:
+
+Light weapon mounts: 1 / 3
+
+is not incomplete. It is simply using one of three available hardpoints.
+
+2.4 Budgets are more important than slots
+
+Mounts are only one constraint.
+
+Most interesting ship design decisions should arise from resource budgets:
+
+mass;
+volume;
+power;
+compute;
+thermal capacity;
+life support;
+cargo;
+fuel;
+ammunition.
+
+This allows generous chassis architectures without producing trivial "fill every slot" optimisation.
+
+2.5 Static fitting and dynamic operation are different
+
+A ship must distinguish between:
+
+whether equipment can be installed;
+whether equipment can operate;
+how long the ship can continue operating it.
+
+For example, a laser can be installed even if firing it simultaneously with shields and ECM exceeds the ship's normal power budget.
+
+That configuration is valid. During flight, power management determines which systems receive power.
+
+3. Ship architecture
+
+The conceptual structure is:
+
+Chassis
+  |
+  +-- static envelope
+  |     +-- mass limit
+  |     +-- volume
+  |     +-- mounts
+  |     +-- structural properties
+  |
+  +-- installed modules
+        |
+        +-- propulsion
+        +-- power
+        +-- computing
+        +-- thermal
+        +-- life support
+        +-- protection
+        +-- weapons
+        +-- sensors / communications
+        +-- cargo
+        +-- passenger accommodation
+        +-- specialist equipment
+
+An assembled ship therefore consists of:
+
+Ship
+├── chassis
+├── installed modules
+├── resource inventories
+├── current operating state
+└── derived statistics
+
+The chassis and installed modules are persistent configuration.
+
+Current operating state is transient and should generally be saved only where necessary to resume a flight.
+
+4. Mount categories
+
+Mount categories should remain relatively broad. The purpose is to express physical compatibility without creating dozens of arbitrary slot types.
+
+4.1 Propulsion mounts
+main_engine
+
+Primary propulsion.
+
+A chassis defines how many main engines it can accommodate.
+
+Example:
+
+{
+  "main_engine": 1
+}
+
+A small ship will generally have one.
+
+maneuver
+
+Manoeuvring / attitude-control equipment.
+
+This may eventually represent RCS, reaction-control systems or equivalent technology.
+
+{
+  "maneuver": 2
+}
+
+The exact implementation of manoeuvring equipment can remain flexible.
+
+4.2 Power mounts
+power
+
+Primary power generation equipment.
+
+Typically one major power plant, although larger ships may have multiple.
+
+Example:
+
+{
+  "power": 1
+}
+
+Power modules generate the ship's available operating power.
+
+4.3 System mounts
+system
+
+Generic internal systems.
+
+Examples:
+
+computer core;
+life-support system;
+sensor suite;
+communications system;
+navigation system;
+power-management system;
+ECM;
+thermal-management equipment.
+
+A generic system mount deliberately avoids requiring a dedicated slot category for every subsystem.
+
+4.4 Weapon mounts
+
+Weapon mounts are typed by scale.
+
+light_weapon
+
+Small weapon hardpoint.
+
+medium_weapon
+
+Medium weapon hardpoint.
+
+heavy_weapon
+
+Heavy weapon hardpoint.
+
+A weapon declares which mount class it requires.
+
+A weapon may optionally support multiple classes.
+
+For example:
+
+{
+  "mount": "light_weapon"
+}
+
+or, if eventually desired:
+
+{
+  "mounts": ["light_weapon", "medium_weapon"]
+}
+
+The initial implementation should probably use a single required mount category.
+
+4.5 Utility mounts
+utility
+
+External or dedicated equipment that does not belong to the weapon system.
+
+Potential examples:
+
+salvage equipment;
+mining equipment;
+specialised sensors;
+tractor systems;
+docking equipment;
+exploration equipment;
+communications equipment.
+
+Utility mounts are deliberately generic.
+
+5. Equipment without dedicated mounts
+
+Not every piece of equipment should consume a mount.
+
+Internal equipment such as:
+
+cargo bays;
+passenger cabins;
+fuel tanks;
+ammunition magazines;
+workshops;
+additional storage;
+some life-support equipment;
+
+can instead consume the chassis's internal mass and volume envelope.
+
+This is important because it makes internal space a genuine design resource.
+
+A player might therefore choose between:
+
+large cargo bay
+
+and:
+
+larger life-support system
++ passenger cabin
++ additional fuel
+
+without requiring arbitrary cargo/passenger/system slots.
+
+Some modules may still require a generic system mount if their physical installation warrants it.
+
+6. Resource model
+
+Resources fall into four broad categories.
+
+6.1 Physical envelope
+
+These are properties of the physical ship.
+
+mass
+
+Total mass of the configured ship.
+
+The chassis establishes the structural/design mass limit.
+
+Installed modules, fuel, ammunition and cargo contribute to actual mass.
+
+The eventual model should distinguish between:
+
+dry_mass
+loaded_mass
+
+where useful.
+
+volume
+
+Internal physical volume consumed by installed equipment and stored materials.
+
+The chassis establishes available internal volume.
+
+Volume is independent of mass.
+
+A module can therefore be:
+
+light but bulky;
+dense but heavy;
+both;
+neither.
+7. Infrastructure budgets
+
+Infrastructure modules create capacities that other equipment consumes.
+
+7.1 Power generation
+
+power_generation
+
+Measured in a consistent unit such as MW.
+
+Power plants provide generation capacity.
+
+Example:
+
+Fusion Plant Mk II
+power_generation: 50
+7.2 Power distribution
+
+power_distribution
+
+Represents the amount of generated power that the ship's distribution system can effectively deliver.
+
+Initially this may be combined with the power plant to avoid unnecessary complexity.
+
+The model should nevertheless leave room for a future distinction between:
+
+power_generation
+power_distribution
+
+because a larger reactor need not automatically imply a proportionally larger distribution network.
+
+7.3 Compute
+
+compute_capacity
+
+Represents available onboard computing resources.
+
+Computer cores provide capacity.
+
+Systems such as:
+
+sensors;
+ECM;
+targeting;
+navigation;
+communications;
+
+may consume compute while operating.
+
+7.4 Thermal dissipation
+
+heat_dissipation
+
+Represents how quickly the ship can remove waste heat.
+
+Radiators or thermal-management systems provide dissipation.
+
+Unlike power, heat should have a persistent operating state.
+
+A system may generate more heat than the ship can immediately dissipate, causing accumulated heat to rise.
+
+7.5 Life-support capacity
+
+life_support_capacity
+
+Represents the number of people the ship can support.
+
+This is distinct from the number of passenger berths.
+
+A ship might have:
+
+Passenger accommodation: 8
+Life-support capacity:    6
+
+and therefore be unable to operate with all eight passengers until its life-support system is upgraded.
+
+Alternatively, passenger modules may themselves include some life-support capacity.
+
+The exact division should remain configurable.
+
+8. Storage budgets
+8.1 Cargo capacity
+
+cargo_capacity
+
+Measured in tonnes or another consistent mass unit.
+
+Cargo bays create cargo capacity.
+
+Cargo itself also contributes to ship mass.
+
+Cargo capacity should therefore be derived from installed cargo equipment rather than being an inherent property of every chassis.
+
+A chassis may have unused internal volume but zero cargo capacity until a cargo module is installed.
+
+8.2 Fuel capacity
+
+fuel_capacity
+
+Represents the maximum stored propulsion/power fuel.
+
+Fuel is an inventory resource.
+
+Current fuel contributes to ship mass.
+
+The exact fuel type should remain abstract initially, allowing the game to introduce different fuels later without redesigning the ship architecture.
+
+8.3 Ammunition capacity
+
+ammunition_capacity
+
+Represents the amount of physical ammunition the ship can carry.
+
+Ammunition is an inventory resource rather than an attribute of the weapon itself.
+
+A weapon may therefore require:
+
+ammunition_type: mass_driver_round
+
+while the ship separately provides:
+
+ammunition_capacity: 200
+
+through magazines or ammunition storage.
+
+This permits:
+
+different magazine sizes;
+shared ammunition stores;
+ammunition purchasing;
+ammunition mass;
+ammunition scarcity;
+weapons competing for storage.
+9. Dynamic operating resources
+
+The following values should exist at runtime rather than merely being calculated during fitting.
+
+9.1 Power demand
+
+power_demand
+
+The instantaneous power requested by active systems.
+
+Examples:
+
+idle systems
+engines
+shields
+laser
+ECM
+sensors
+life support
+
+Power demand can fluctuate substantially during flight.
+
+A laser might have negligible idle demand but a significant demand while firing.
+
+ECM may consume substantial power only while active.
+
+Shields may have a baseline consumption plus additional demand when absorbing or regenerating damage.
+
+The ship can therefore have:
+
+power_generation = 50 MW
+power_demand = 32 MW
+
+during normal operation and:
+
+power_generation = 50 MW
+power_demand = 68 MW
+
+during intense combat.
+
+The latter is a valid operating state rather than necessarily an invalid ship configuration.
+
+9.2 Compute demand
+
+compute_demand
+
+Current computing requirements.
+
+This can vary with:
+
+active sensors;
+target tracking;
+ECM;
+navigation;
+combat systems;
+communications.
+
+A ship should generally remain within available compute capacity, although future equipment could potentially support degraded operation when overloaded.
+
+9.3 Heat
+
+heat
+
+Current accumulated thermal load.
+
+Heat generation is generated by active systems.
+
+Heat dissipation removes heat over time.
+
+Conceptually:
+
+new_heat =
+    old_heat
+    + heat_generated
+    - heat_dissipated
+
+This makes thermal management a dynamic constraint rather than a simple installation check.
+
+9.4 Life-support demand
+
+life_support_demand
+
+Current life-support consumption.
+
+Demand should depend at least on the number of occupants.
+
+The system should permit future modifiers for:
+
+passenger type;
+crew;
+environmental conditions;
+damaged systems;
+luxury accommodation;
+emergency conditions.
+10. Inventory resources
+10.1 Fuel
+
+Fuel is stored aboard the ship and consumed during operation.
+
+Runtime state should include:
+
+fuel_current
+fuel_capacity
+
+Fuel contributes to mass.
+
+Different propulsion technologies may eventually use different fuel resources, but the initial architecture should not require that complexity.
+
+10.2 Ammunition
+
+Ammunition is stored aboard the ship and consumed by weapons.
+
+Runtime state should support multiple ammunition types:
+
+{
+  "mass_driver_round": 180,
+  "missile_light": 12
+}
+
+A weapon declares the ammunition type it consumes.
+
+Energy weapons such as lasers generally do not consume ammunition, although they still consume power and generate heat.
+
+10.3 Cargo
+
+Cargo remains the existing commodity inventory model:
+
+{
+  "commodity_id": quantity
+}
+
+Cargo contributes to both cargo capacity and ship mass.
+
+11. Module schema
+
+The general module schema should be broad enough to support most equipment without requiring a unique runtime class for every module.
+
+A proposed common schema:
+
+{
+  "id": "example_module",
+  "name": "Example Module",
+  "maker": "Example Corp",
+  "category": "system",
+  "mount": "system",
+
+  "mass": 2.0,
+  "volume": 3.0,
+
+  "provides": {
+    "power_generation": 0,
+    "power_distribution": 0,
+    "compute_capacity": 0,
+    "heat_dissipation": 0,
+    "life_support_capacity": 0,
+    "cargo_capacity": 0,
+    "fuel_capacity": 0,
+    "ammunition_capacity": 0
+  },
+
+  "demands": {
+    "power": 0,
+    "compute": 0,
+    "heat": 0
+  }
+}
+
+Not every field needs to appear in every record. Zero-valued properties should normally be omitted.
+
+Additional category-specific properties can be added where required.
+
+For example, an engine needs:
+
+thrust
+max_speed
+fuel_consumption
+
+while a weapon needs:
+
+damage
+range
+rate_of_fire
+power_demand
+heat_generation
+ammunition_type
+
+The common assembler should aggregate generic resource properties while category-specific systems interpret their own properties.
+
+12. Initial module categories
+
+The first implementation should support at least the following module families.
+
+12.1 Main engines
+
+Category:
+
+propulsion
+
+Mount:
+
+main_engine
+
+Properties:
+
+mass
+volume
+thrust
+max_speed
+boost_multiplier
+fuel_consumption
+power_demand
+heat_generation
+
+The existing prototype engine properties should be retained where possible.
+
+Example:
+
+{
+  "id": "mark_3_fusion",
+  "name": "Mark 3 Fusion Drive",
+  "maker": "Example Corp",
+  "category": "propulsion",
+  "mount": "main_engine",
+  "mass": 8.0,
+  "volume": 7.0,
+  "thrust": 180,
+  "max_speed": 1200,
+  "boost_multiplier": 1.5,
+  "fuel_consumption": 1.2,
+  "power_demand": 4,
+  "heat_generation": 3
+}
+
+Values are illustrative and should not be considered canonical setting values.
+
+13. Power plants
+
+Category:
+
+power
+
+Mount:
+
+power
+
+Properties:
+
+power_generation
+mass
+volume
+heat_generation
+fuel_consumption
+
+Example:
+
+{
+  "id": "fusion_plant_mk2",
+  "name": "Fusion Plant Mk II",
+  "maker": "Example Corp",
+  "category": "power",
+  "mount": "power",
+  "mass": 8.0,
+  "volume": 6.0,
+  "power_generation": 50,
+  "heat_generation": 15,
+  "fuel_consumption": 0.4
+}
+
+The power plant is infrastructure rather than a payload system.
+
+14. Computer cores
+
+Category:
+
+computer
+
+Mount:
+
+system
+
+Properties:
+
+compute_capacity
+power_demand
+heat_generation
+
+Example:
+
+{
+  "id": "nav_combat_core_mk1",
+  "name": "Nav/Combat Core Mk I",
+  "maker": "Example Corp",
+  "category": "computer",
+  "mount": "system",
+  "mass": 1.0,
+  "volume": 1.0,
+  "compute_capacity": 20,
+  "power_demand": 2,
+  "heat_generation": 1
+}
+15. Life-support systems
+
+Category:
+
+life_support
+
+Mount:
+
+system
+
+Properties:
+
+life_support_capacity
+power_demand
+heat_generation
+
+Example:
+
+{
+  "id": "life_support_mk2",
+  "name": "Life Support Mk II",
+  "maker": "Example Corp",
+  "category": "life_support",
+  "mount": "system",
+  "mass": 2.0,
+  "volume": 4.0,
+  "life_support_capacity": 12,
+  "power_demand": 2,
+  "heat_generation": 1
+}
+
+Life-support capacity is deliberately independent from passenger accommodation.
+
+This permits the game to distinguish:
+
+number of available berths;
+number of people the ship can sustain;
+quality of accommodation;
+life-support operating cost.
+16. Thermal systems
+
+Category:
+
+thermal
+
+Mount:
+
+system
+
+Properties:
+
+heat_dissipation
+power_demand
+mass
+volume
+
+Example:
+
+{
+  "id": "radiator_mk1",
+  "name": "Radiator Mk I",
+  "maker": "Example Corp",
+  "category": "thermal",
+  "mount": "system",
+  "mass": 2.0,
+  "volume": 3.0,
+  "heat_dissipation": 20
+}
+
+Radiators may eventually have deployment state, damage vulnerability or other behaviour, but these are not required for the first architecture.
+
+17. Weapons
+
+Weapons are modules occupying weapon mounts.
+
+Common properties:
+
+category
+mount
+mass
+volume
+damage
+rate_of_fire
+range
+power_demand
+heat_generation
+ammunition_type
+ammunition_per_shot
+
+An energy weapon might omit ammunition:
+
+{
+  "id": "light_laser",
+  "name": "Light Laser",
+  "maker": "Example Corp",
+  "category": "weapon",
+  "mount": "light_weapon",
+  "mass": 3.0,
+  "volume": 2.0,
+  "power_demand": 4,
+  "heat_generation": 3
+}
+
+A mass driver could instead specify:
+
+{
+  "id": "light_mass_driver",
+  "name": "Light Mass Driver",
+  "maker": "Example Corp",
+  "category": "weapon",
+  "mount": "light_weapon",
+  "mass": 3.0,
+  "volume": 2.0,
+  "power_demand": 2,
+  "heat_generation": 1,
+  "ammunition_type": "mass_driver_round",
+  "ammunition_per_shot": 1
+}
+
+The ammunition itself is not part of the weapon module.
+
+18. Ammunition magazines
+
+Category:
+
+ammunition
+
+Mount:
+
+system
+
+A magazine/storage module provides physical ammunition capacity.
+
+Example:
+
+{
+  "id": "mass_driver_magazine_200",
+  "name": "Mass Driver Magazine 200",
+  "maker": "Example Corp",
+  "category": "ammunition",
+  "mount": "system",
+  "mass": 1.5,
+  "volume": 2.0,
+  "ammunition_capacity": {
+    "mass_driver_round": 200
+  }
+}
+
+The ammunition inventory is then stored separately.
+
+This allows ammunition capacity to become an actual fitting decision.
+
+19. Cargo bays
+
+Category:
+
+cargo
+
+No mandatory mount.
+
+Properties:
+
+mass
+volume
+cargo_capacity
+
+Example:
+
+{
+  "id": "cargo_bay_10",
+  "name": "Cargo Bay 10",
+  "maker": "Example Corp",
+  "category": "cargo",
+  "mass": 2.0,
+  "volume": 8.0,
+  "cargo_capacity": 10
+}
+
+The cargo bay itself consumes internal volume; its cargo subsequently contributes additional loaded mass.
+
+20. Passenger accommodation
+
+Category:
+
+passenger
+
+No mandatory mount unless a particular accommodation type requires one.
+
+Properties may include:
+
+mass
+volume
+passenger_capacity
+power_demand
+life_support_demand
+
+Example:
+
+{
+  "id": "standard_cabin_4",
+  "name": "Standard Passenger Cabin",
+  "maker": "Example Corp",
+  "category": "passenger",
+  "mass": 3.0,
+  "volume": 10.0,
+  "passenger_capacity": 4,
+  "power_demand": 1
+}
+
+Passenger accommodation should eventually support quality/class distinctions, but the base data model should not require them.
+
+21. Shields
+
+Category:
+
+shield
+
+Mount:
+
+system
+
+Shields are an important example of a system whose resource demand varies during operation.
+
+A shield system might provide:
+
+shield_capacity
+
+while consuming:
+
+power_demand_idle
+power_demand_recharge
+heat_generation
+
+The first implementation can simplify this to an active demand value.
+
+The important architectural point is that shield operation is not a static fitting constraint.
+
+22. ECM
+
+Category:
+
+ecm
+
+Mount:
+
+utility
+
+or:
+
+system
+
+ECM should consume compute and power while active and generate heat.
+
+Example properties:
+
+compute_demand
+power_demand
+heat_generation
+range
+effectiveness
+
+This provides a clear example of dynamic resource competition.
+
+23. Sensors
+
+Category:
+
+sensor
+
+Mount:
+
+system
+
+Sensors consume compute and power.
+
+Different sensor modules can trade:
+
+range;
+resolution;
+compute consumption;
+power consumption;
+heat;
+mass;
+volume.
+24. Ship templates
+
+ships.json should remain a catalogue of manufacturer/default configurations rather than being the definition of every possible ship configuration.
+
+A template might become:
+
+{
+  "id": "pegasus_courier",
+  "name": "Pegasus Courier",
+  "maker": "Example Corp",
+  "chassis": "pegasus",
+  "modules": [
+    "fusion_plant_mk1",
+    "mark_3_fusion",
+    "nav_combat_core_mk1",
+    "life_support_mk1",
+    "standard_cabin_4",
+    "cargo_bay_10"
+  ]
+}
+
+A template is therefore a recommended/default loadout.
+
+An owned ship can subsequently replace, add or remove compatible modules.
+
+This preserves the existing distinction between manufacturer templates and individual owned ship instances.
+
+25. Owned ship
+
+The existing owned ship representation should evolve from:
+
+{
+  "chassis_id": "...",
+  "engine_id": "...",
+  "armour_id": "..."
+}
+
+to something closer to:
+
+{
+  "id": "ship_001",
+  "name": "Vixen",
+  "template_id": "pegasus_courier",
+  "chassis_id": "pegasus",
+  "modules": [
+    {
+      "slot": "main_engine",
+      "module_id": "mark_3_fusion"
+    },
+    {
+      "slot": "power",
+      "module_id": "fusion_plant_mk2"
+    },
+    {
+      "slot": "system_1",
+      "module_id": "nav_combat_core_mk1"
+    },
+    {
+      "slot": "system_2",
+      "module_id": "life_support_mk2"
+    },
+    {
+      "slot": "light_weapon_1",
+      "module_id": "light_laser"
+    }
+  ],
+  "location": "aboard"
+}
+
+The exact representation of generic system mounts should be decided during implementation.
+
+The important distinction is that an owned ship stores the installed configuration, not derived statistics.
+
+26. Ship assembler
+
+ShipAssembler becomes the central system for constructing and validating ships.
+
+It should perform four major operations.
+
+26.1 Assemble
+
+Load:
+
+chassis
++
+installed modules
+
+and produce an AssembledShip.
+
+26.2 Calculate static envelope
+
+Calculate:
+
+total installed mass
+total installed volume
+available mounts
+used mounts
+
+and validate against the chassis.
+
+26.3 Calculate infrastructure
+
+Aggregate:
+
+power_generation
+compute_capacity
+heat_dissipation
+life_support_capacity
+cargo_capacity
+fuel_capacity
+ammunition_capacity
+26.4 Calculate operating state
+
+Given an active-system state, calculate:
+
+power_demand
+compute_demand
+heat_generation
+life_support_demand
+fuel_consumption
+ammunition consumption
+
+This should be separate from static assembly.
+
+27. Static fitting validation
+
+A module can be installed only if:
+
+its required mount exists;
+a compatible mount is available;
+its mass fits within the chassis envelope;
+its volume fits within the chassis envelope;
+all mandatory dependencies are satisfied.
+
+Static resource generation should not necessarily be required at installation time if the resource is an operating budget.
+
+For example, a laser that draws 15 MW should be installable on a ship whose normal systems already consume 40 MW from a 50 MW plant.
+
+The player has created a potentially overloaded operating configuration, not an impossible physical installation.
+
+The fitting system should therefore distinguish:
+
+installation constraints
+
+from:
+
+operating constraints
+28. Operating power management
+
+Power should be treated as a dynamic shared resource.
+
+Each active system has a current power demand.
+
+The ship has available generation.
+
+The operating state therefore contains:
+
+power_available
+power_requested
+power_allocated
+power_deficit
+
+The player should eventually be able to control priorities or system states.
+
+Example:
+
+Power generation: 50 MW
+
+Life support        4 MW   critical
+Flight systems     12 MW   critical
+Sensors             3 MW   high
+Shields            10 MW   high
+ECM                 8 MW   normal
+Laser              15 MW   normal
+
+Total requested    52 MW
+
+The ship can resolve this through prioritisation rather than simply refusing to operate.
+
+A later version can support configurable priority groups.
+
+The initial runtime architecture should nevertheless represent power allocation explicitly so that this can be added without redesigning modules.
+
+29. Compute management
+
+Compute follows a similar pattern but is likely to be less frequently contested than power.
+
+The ship has:
+
+compute_capacity
+
+and active systems request:
+
+compute_demand
+
+Examples:
+
+navigation;
+advanced sensors;
+targeting;
+ECM;
+communications;
+autonomous systems.
+
+Compute overload may initially result in system degradation or denial.
+
+The precise gameplay consequence can be implemented later.
+
+30. Thermal management
+
+Thermal management should model accumulated heat.
+
+Each active system contributes:
+
+heat_generation
+
+The ship has:
+
+heat_dissipation
+
+and runtime state contains:
+
+current_heat
+
+A ship operating a high-power laser may therefore be able to fire continuously for a short period before thermal load becomes problematic.
+
+This creates a useful distinction between:
+
+power-limited
+
+and:
+
+heat-limited
+
+weapons.
+
+A weapon might have enough power available to fire but still need firing pauses to avoid overheating.
+
+31. Life-support management
+
+Life support has both capacity and ongoing demand.
+
+The ship calculates:
+
+life_support_capacity
+
+from installed systems and:
+
+life_support_demand
+
+from current occupants.
+
+The ship should track at least:
+
+crew_count
+passenger_count
+
+and derive:
+
+occupant_count
+
+Additional categories can be introduced later.
+
+Life support should also consume power continuously.
+
+A passenger ship therefore has three distinct constraints:
+
+physical accommodation
+life-support capacity
+life-support operating resources
+
+This is important to the setting because small vessels can be economically viable passenger carriers without requiring enormous hulls.
+
+32. Consumable resource management
+
+Fuel and ammunition are persistent inventories.
+
+They should not be treated as static fitting values.
+
+A ship can have:
+
+fuel_capacity = 150
+fuel_current = 37
+
+or:
+
+ammunition_capacity = 300
+ammunition_current = 42
+
+The player can choose how much to purchase or load.
+
+This creates an important distinction between:
+
+ship capability
+
+and:
+
+current loadout
+
+A cargo ship may technically have substantial ammunition capacity while departing with almost none.
+
+Likewise, a ship can have a large fuel tank but only partially fill it to save mass.
+
+33. Derived ship statistics
+
+The assembler should derive conventional flight statistics from the assembled configuration.
+
+At minimum:
+
+total_mass
+forward_thrust
+reverse_thrust
+acceleration
+max_speed
+boost_max_speed
+rotation_speed
+linear_damp
+hull
+
+The existing prototype already derives several of these from chassis and engine. The new model should preserve that behaviour while allowing more modules to influence the results.
+
+For example:
+
+acceleration
+    = effective_thrust / current_mass
+
+rather than simply:
+
+engine_thrust / chassis_mass
+
+because fuel, ammunition and cargo should eventually affect handling.
+
+34. Static versus dynamic statistics
+
+The runtime should distinguish between:
+
+Configuration statistics
+
+These change when the ship is refitted:
+
+dry_mass
+volume_used
+power_generation
+compute_capacity
+heat_dissipation
+life_support_capacity
+cargo_capacity
+fuel_capacity
+ammunition_capacity
+mount_usage
+Load statistics
+
+These change when the ship is loaded:
+
+fuel_mass
+cargo_mass
+ammunition_mass
+passenger_mass
+loaded_mass
+Operational statistics
+
+These change continuously during flight:
+
+power_demand
+power_allocation
+compute_demand
+current_heat
+life_support_demand
+fuel_consumption
+ammunition_remaining
+shield_state
+
+This separation should prevent the assembler from becoming responsible for transient simulation.
+
+35. Recommended runtime types
+
+The existing ShipAssembler, ShipAssembly, OwnedShip, AssembledShip and ShipStats concepts should be retained, but their responsibilities should become clearer.
+
+OwnedShip
+
+Persistent player-owned configuration.
+
+Contains:
+
+id
+name
+template_id
+chassis_id
+installed_modules
+location
+
+and other persistent ship-specific information.
+
+ShipAssembly
+
+Gameplay operations concerning fitting:
+
+install_module()
+remove_module()
+buy_module()
+sell_module()
+preview_configuration()
+validate_configuration()
+ShipAssembler
+
+Converts persistent configuration into an assembled ship:
+
+assemble()
+derive_stats()
+calculate_capacities()
+validate()
+AssembledShip
+
+Runtime representation of the configured ship.
+
+Contains:
+
+chassis
+modules
+mounts
+capacities
+derived_stats
+ShipOperatingState
+
+Transient state:
+
+power_demand
+power_allocation
+compute_demand
+heat
+fuel
+ammunition
+shields
+active_systems
+
+Keeping operating state separate from assembly is important.
+
+36. Catalog organisation
+
+The current prototype has separate:
+
+chassis.json
+engines.json
+armour.json
+ships.json
+
+The new system should retain separate catalogues where they provide useful editing and browsing boundaries.
+
+A likely structure is:
+
+chassis.json
+modules.json
+weapons.json
+ammunition.json
+ships.json
+
+Alternatively, all modules can be stored in one modules.json catalogue if the editor makes category filtering easy.
+
+The latter has the advantage that the assembler can treat every piece of equipment uniformly.
+
+A reasonable first implementation is:
+
+chassis.json
+modules.json
+ships.json
+
+with modules.json containing module categories such as:
+
+propulsion
+power
+computer
+life_support
+thermal
+weapon
+shield
+sensor
+ecm
+cargo
+passenger
+ammunition
+utility
+
+Weapons can be split into their own catalogue later if their records become sufficiently complex.
+
+37. Chassis schema
+
+The existing chassis record should evolve toward:
+
+{
+  "id": "pegasus",
+  "name": "Pegasus",
+  "maker": "Example Corp",
+
+  "mass_limit": 80,
+  "volume": 60,
+
+  "hits": 100,
+
+  "maneuver": "high",
+
+  "mounts": {
+    "main_engine": 1,
+    "power": 1,
+    "maneuver": 2,
+    "system": 5,
+    "utility": 4,
+    "light_weapon": 3,
+    "medium_weapon": 0,
+    "heavy_weapon": 0
+  }
+}
+
+The exact naming of mass_limit versus max_mass, and volume versus internal_volume, should be standardised before implementation.
+
+The important change is that mounts become part of the chassis definition.
+
+38. Manufacturer differentiation
+
+The model should allow manufacturers to differentiate products through combinations of:
+
+chassis architecture;
+mass;
+volume;
+mount availability;
+power efficiency;
+module performance;
+module mass;
+module volume;
+heat characteristics;
+reliability;
+cost.
+
+A manufacturer does not need an arbitrary global "technology bonus".
+
+For example:
+
+Corporation A
+light, compact, power-efficient systems
+
+Corporation B
+heavy, powerful systems with high heat output
+
+Corporation C
+high-end compact equipment with expensive maintenance
+
+This should emerge naturally from the catalogue data.
+
+39. Example Pegasus configurations
+
+A Pegasus chassis might provide:
+
+Mass:              80 t
+Volume:            60 m³
+
+Main engine:        1
+Power:              1
+System:             5
+Utility:            4
+Light weapons:      3
+
+A courier configuration:
+
+1 main engine
+1 power plant
+1 computer
+1 life support
+1 passenger cabin
+2 cargo bays
+1 sensor
+1 light weapon
+
+An interceptor configuration:
+
+1 main engine
+1 power plant
+1 computer
+1 life support
+1 shield
+1 thermal system
+3 light weapons
+2 utility systems
+
+A scout configuration:
+
+1 main engine
+1 power plant
+2 computers
+1 life support
+advanced sensors
+large fuel capacity
+1 light weapon
+
+The same chassis consequently supports substantially different gameplay roles.
+
+40. Shipyard implications
+
+The shipyard should eventually expose two distinct views.
+
+Configuration
+
+The player chooses:
+
+Propulsion
+Power
+Systems
+Weapons
+Utilities
+Cargo
+Passengers
+
+with compatible mounts shown in each category.
+
+Engineering
+
+The player sees the resulting envelope:
+
+MASS           68 / 80 t
+VOLUME         47 / 60 m³
+
+POWER          42 / 50 MW
+COMPUTE        31 / 40 CU
+HEAT           38 / 55 HU/s
+
+LIFE SUPPORT    8 / 10 people
+CARGO          10 t
+FUEL           120 t
+AMMUNITION     300 rounds
+
+LIGHT WEAPONS   2 / 3
+MEDIUM WEAPONS  0 / 0
+HEAVY WEAPONS   0 / 0
+
+The engineering display should distinguish between:
+
+fitting headroom
+
+and:
+
+operational headroom
+
+For example, a weapon can be fitted while its firing demand causes a temporary power deficit.
+
+41. Design constraints for implementation
+
+The first implementation should deliberately avoid:
+
+physical placement of components;
+individual room geometry;
+wiring simulation;
+individual pipes or coolant lines;
+detailed structural engineering;
+arbitrary nested module trees;
+separate slot types for every conceivable system;
+mandatory use of every available mount.
+
+The model should instead provide a compact simulation layer underneath a slot-based interface.
+
+The target complexity is:
+
+Elite-style fitting
++
+shared engineering budgets
++
+dynamic power/heat management
++
+passenger/life-support simulation
++
+physical consumables
+
+rather than:
+
+full spacecraft engineering simulator
+42. Summary model
+
+The complete conceptual model is:
+
+                         CHASSIS
+                            |
+             +--------------+--------------+
+             |              |              |
+          MASS           VOLUME         MOUNTS
+             |              |              |
+             +--------------+--------------+
+                            |
+                     INSTALLED MODULES
+                            |
+       +--------------------+---------------------+
+       |          |         |        |            |
+     POWER      COMPUTE   THERMAL  LIFE SUPPORT  STORAGE
+       |          |         |        |            |
+    generation  capacity  dissipation capacity   fuel
+    demand      demand    generation demand       ammo
+                                                    cargo
+       |          |         |        |
+       +----------+---------+--------+
+                            |
+                     OPERATING STATE
+                            |
+       +--------------------+--------------------+
+       |                    |                    |
+     POWER                HEAT             CONSUMABLES
+  allocation          accumulation       fuel/ammo/cargo
+       |
+       +--------------------+
+       |          |         |
+    weapons    shields     ECM
+
+The central design rule is:
+
+The chassis defines what the ship can physically accommodate. Modules determine what the ship can do. Infrastructure modules create shared budgets. Active systems compete for those budgets during operation. Consumables determine how long the ship can sustain its capabilities.
+
+This gives the game a construction system that is substantially richer than the current chassis/engine/armour model while remaining data-driven
