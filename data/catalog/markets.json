@@ -1,0 +1,12 @@
+[
+  {
+    "id": "proxima_exchange",
+    "building_id": "proxima_exchange",
+    "listings": [
+      { "commodity_id": "water_ice", "price": 42, "quantity": 200 },
+      { "commodity_id": "protein_packs", "price": 78, "quantity": 120 },
+      { "commodity_id": "spare_parts", "price": 115, "quantity": 60 },
+      { "commodity_id": "fuel_cells", "price": 92, "quantity": 80 }
+    ]
+  }
+]

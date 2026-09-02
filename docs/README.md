@@ -14,6 +14,7 @@ Specification and setting reference for the Godot prototype. This is the checkpo
 |----------|----------|
 | [architecture.md](design/architecture.md) | Code layering, data flow, main loops, non-goals |
 | [data_model.md](design/data_model.md) | JSON catalog schemas, runtime types, how to extend data |
+| [ui_theme.md](design/ui_theme.md) | Corporate UI theme tokens, variations, showcase |
 
 ### Setting (working bible)
 

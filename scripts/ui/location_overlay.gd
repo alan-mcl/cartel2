@@ -3,6 +3,8 @@ extends CanvasLayer
 signal visit_requested(building_id: String)
 signal undock_ship_selected(ship_id: String)
 signal module_changed(ship_id: String, slot: String, module_id: String)
+signal save_requested
+signal quit_to_menu_requested
 
 @onready var _title: Label = $Dim/Center/Panel/TitleLabel
 @onready var _building_name: Label = $Dim/Center/Panel/BuildingNameLabel
@@ -14,6 +16,11 @@ signal module_changed(ship_id: String, slot: String, module_id: String)
 @onready var _workshop_modules: VBoxContainer = $Dim/Center/Panel/WorkshopPanel/ModuleOptions
 @onready var _building_list: VBoxContainer = $Dim/Center/Panel/BuildingList
 @onready var _undock_button: Button = $Dim/Center/Panel/UndockButton
+@onready var _save_menu_button: Button = $Dim/Center/Panel/SaveMenuButton
+@onready var _save_menu_panel: VBoxContainer = $Dim/Center/Panel/SaveMenuPanel
+@onready var _save_button: Button = $Dim/Center/Panel/SaveMenuPanel/SaveButton
+@onready var _quit_button: Button = $Dim/Center/Panel/SaveMenuPanel/QuitButton
+@onready var _save_menu_back_button: Button = $Dim/Center/Panel/SaveMenuPanel/BackButton
 @onready var _undock_picker: VBoxContainer = $Dim/Center/Panel/UndockPicker
 @onready var _hint: Label = $Dim/Center/Panel/HintLabel
 
@@ -27,8 +34,13 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	_undock_button.pressed.connect(_on_undock_pressed)
+	_save_menu_button.pressed.connect(_on_save_menu_pressed)
+	_save_button.pressed.connect(_on_save_pressed)
+	_quit_button.pressed.connect(_on_quit_pressed)
+	_save_menu_back_button.pressed.connect(_on_save_menu_back)
 	_workshop_panel.visible = false
 	_undock_picker.visible = false
+	_save_menu_panel.visible = false
 
 
 func bind(catalog: Catalog, session: PrototypeSession) -> void:
@@ -42,12 +54,14 @@ func open() -> void:
 	visible = true
 	_undock_picker_visible = false
 	_workshop_selected_ship_id = ""
+	_save_menu_panel.visible = false
 	refresh()
 
 
 func close() -> void:
 	visible = false
 	_undock_picker_visible = false
+	_save_menu_panel.visible = false
 
 
 func refresh() -> void:
@@ -63,13 +77,16 @@ func refresh() -> void:
 	_building_name.text = str(building.get("name", "Building"))
 	_description.text = str(building.get("short_desc", ""))
 
+	var save_menu_open: bool = _save_menu_panel.visible
 	var kind := str(building.get("kind", ""))
 	var is_workshop := kind == "workshop"
-	_workshop_panel.visible = is_workshop and not _undock_picker_visible
-	_status.visible = not is_workshop and not _undock_picker_visible
-	_building_list.visible = not _undock_picker_visible
-	_undock_button.visible = not _undock_picker_visible
+	_workshop_panel.visible = is_workshop and not _undock_picker_visible and not save_menu_open
+	_status.visible = not is_workshop and not _undock_picker_visible and not save_menu_open
+	_building_list.visible = not _undock_picker_visible and not save_menu_open
+	_undock_button.visible = not _undock_picker_visible and not save_menu_open
+	_save_menu_button.visible = not _undock_picker_visible and not save_menu_open
 	_undock_picker.visible = _undock_picker_visible
+	_save_menu_panel.visible = save_menu_open
 
 	if _undock_picker_visible:
 		_status.text = ""
@@ -96,12 +113,33 @@ func _status_for_building(building: Dictionary) -> String:
 
 
 func _update_hint(is_workshop: bool) -> void:
-	if _undock_picker_visible:
+	if _save_menu_panel.visible:
+		_hint.text = "Save progress or return to main menu"
+	elif _undock_picker_visible:
 		_hint.text = "Choose a ship to launch · Esc to cancel"
 	elif is_workshop:
 		_hint.text = "Click modules to install · Visit other buildings below · Undock to choose a ship"
 	else:
-		_hint.text = "Click a building to visit · Undock to choose a ship · Esc undocks"
+		_hint.text = "Click a building to visit · Undock to choose a ship · Save / Menu for progress"
+
+
+func _on_save_menu_pressed() -> void:
+	_undock_picker_visible = false
+	_save_menu_panel.visible = true
+	refresh()
+
+
+func _on_save_menu_back() -> void:
+	_save_menu_panel.visible = false
+	refresh()
+
+
+func _on_save_pressed() -> void:
+	save_requested.emit()
+
+
+func _on_quit_pressed() -> void:
+	quit_to_menu_requested.emit()
 
 
 func _rebuild_workshop_panel() -> void:

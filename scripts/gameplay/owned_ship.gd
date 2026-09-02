@@ -26,3 +26,19 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 
 	ship.location = str(data.get("location", "aboard"))
 	return ship
+
+
+func to_dict() -> Dictionary:
+	var data := {
+		"id": id,
+		"name": name,
+		"template_id": template_id,
+		"chassis_id": chassis_id,
+		"engine_id": engine_id,
+		"location": location,
+	}
+	if armour_id.is_empty():
+		data["armour_id"] = null
+	else:
+		data["armour_id"] = armour_id
+	return data

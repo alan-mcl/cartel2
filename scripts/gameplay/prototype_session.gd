@@ -3,6 +3,11 @@ extends RefCounted
 
 signal changed
 
+const NEW_GAME_HABITAT_ID := "proxima_habitat"
+
+var player_name: String = ""
+var callsign: String = ""
+
 var sector_id: String = "proxima"
 var location_name: String = "Proxima near orbit"
 var credits: int = 3000
@@ -25,37 +30,167 @@ var pending_destination_id: String = ""
 var hull: float = 0.0
 var max_hull: float = 0.0
 
+var cargo: Dictionary = {}
+var spare_parts: Dictionary = {}
+
 var _hull_stress_cooldown: float = 0.0
 
 
-func load_player(catalog: Catalog) -> void:
+func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: String) -> bool:
+	player_name = new_player_name.strip_edges()
+	callsign = new_callsign.strip_edges()
+	if player_name.is_empty() or callsign.is_empty():
+		return false
+
 	var player_data := catalog.get_player()
 	credits = int(player_data.get("credits", credits))
 	owned_ships.clear()
+	salvaged_ids.clear()
+	inspected_ids.clear()
+	docked = false
+	habitat_id = ""
+	building_id = ""
+	in_unspace = false
+	unspace_n = 0
+	unspace_world_id = ""
+	pending_destination_id = ""
+	hull = 0.0
+	max_hull = 0.0
+	cargo.clear()
+	spare_parts.clear()
 
 	var ships: Variant = player_data.get("ships", [])
+	if typeof(ships) != TYPE_ARRAY or ships.is_empty():
+		push_error("Player data ships must be a non-empty array.")
+		return false
+
+	for ship_data in ships:
+		if typeof(ship_data) != TYPE_DICTIONARY:
+			continue
+		var ship := OwnedShip.from_dict(ship_data)
+		ship.location = NEW_GAME_HABITAT_ID
+		owned_ships.append(ship)
+
+	if owned_ships.is_empty():
+		push_error("No valid starter ships found.")
+		return false
+
+	current_ship_id = owned_ships[0].id
+
+	var starting_sector := str(player_data.get("starting_sector", "proxima"))
+	if not enter_sector(catalog, starting_sector, false):
+		return false
+
+	if not dock(catalog, NEW_GAME_HABITAT_ID):
+		return false
+
+	spare_parts["mark_1_fusion"] = 1
+
+	last_log = "Welcome to %s, %s. All ships docked at Proxima Habitat." % [callsign, player_name]
+	changed.emit()
+	return true
+
+
+func to_dict() -> Dictionary:
+	return {
+		"sector_id": sector_id,
+		"location_name": location_name,
+		"credits": credits,
+		"objective": objective,
+		"last_log": last_log,
+		"salvaged_ids": salvaged_ids.duplicate(),
+		"inspected_ids": inspected_ids.duplicate(),
+		"docked": docked,
+		"habitat_id": habitat_id,
+		"building_id": building_id,
+		"current_ship_id": current_ship_id,
+		"in_unspace": in_unspace,
+		"unspace_n": unspace_n,
+		"unspace_world_id": unspace_world_id,
+		"pending_destination_id": pending_destination_id,
+		"hull": hull,
+		"max_hull": max_hull,
+		"cargo": cargo.duplicate(),
+		"spare_parts": spare_parts.duplicate(),
+	}
+
+
+func ships_to_array() -> Array:
+	var ships: Array = []
+	for ship in owned_ships:
+		ships.append(ship.to_dict())
+	return ships
+
+
+func from_save(catalog: Catalog, data: Dictionary) -> bool:
+	if not _validate_save_data(data):
+		return false
+
+	var player: Dictionary = data.get("player", {})
+	player_name = str(player.get("name", ""))
+	callsign = str(player.get("callsign", ""))
+
+	var session_data: Dictionary = data.get("session", {})
+	sector_id = str(session_data.get("sector_id", "proxima"))
+	location_name = str(session_data.get("location_name", ""))
+	credits = int(session_data.get("credits", 0))
+	objective = str(session_data.get("objective", ""))
+	last_log = str(session_data.get("last_log", ""))
+	salvaged_ids = _string_array_from_variant(session_data.get("salvaged_ids", []))
+	inspected_ids = _string_array_from_variant(session_data.get("inspected_ids", []))
+	docked = bool(session_data.get("docked", false))
+	habitat_id = str(session_data.get("habitat_id", ""))
+	building_id = str(session_data.get("building_id", ""))
+	current_ship_id = str(session_data.get("current_ship_id", ""))
+	in_unspace = bool(session_data.get("in_unspace", false))
+	unspace_n = int(session_data.get("unspace_n", 0))
+	unspace_world_id = str(session_data.get("unspace_world_id", ""))
+	pending_destination_id = str(session_data.get("pending_destination_id", ""))
+	hull = float(session_data.get("hull", 0.0))
+	max_hull = float(session_data.get("max_hull", 0.0))
+	cargo = _int_dict_from_variant(session_data.get("cargo", {}))
+	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
+
+	owned_ships.clear()
+	var ships: Variant = data.get("ships", [])
 	if typeof(ships) != TYPE_ARRAY:
-		push_error("Player data ships must be an array.")
-		return
+		push_error("Save file ships must be an array.")
+		return false
 
 	for ship_data in ships:
 		if typeof(ship_data) != TYPE_DICTIONARY:
 			continue
 		owned_ships.append(OwnedShip.from_dict(ship_data))
 
-	current_ship_id = _find_aboard_ship_id()
-	if current_ship_id.is_empty() and not owned_ships.is_empty():
-		current_ship_id = owned_ships[0].id
-		owned_ships[0].location = "aboard"
+	if owned_ships.is_empty():
+		push_error("Save file contains no ships.")
+		return false
 
-	var starting_sector := str(player_data.get("starting_sector", "proxima"))
-	enter_sector(catalog, starting_sector, false)
+	if get_owned_ship(current_ship_id) == null:
+		push_error("Save file current_ship_id '%s' not found in fleet." % current_ship_id)
+		return false
 
-	var current_ship := get_owned_ship(current_ship_id)
-	if current_ship != null:
-		last_log = "%s ready. Thrusters online." % current_ship.name
+	if in_unspace:
+		if catalog.get_unspace(unspace_world_id).is_empty():
+			push_error("Save file references unknown unspace '%s'." % unspace_world_id)
+			return false
+		if pending_destination_id.is_empty() or catalog.get_sector(pending_destination_id).is_empty():
+			push_error("Save file has invalid pending destination '%s'." % pending_destination_id)
+			return false
+	elif catalog.get_sector(sector_id).is_empty():
+		push_error("Save file references unknown sector '%s'." % sector_id)
+		return false
+
+	if docked:
+		if catalog.get_habitat(habitat_id).is_empty():
+			push_error("Save file references unknown habitat '%s'." % habitat_id)
+			return false
+		if not building_id.is_empty() and catalog.get_building(building_id).is_empty():
+			push_error("Save file references unknown building '%s'." % building_id)
+			return false
 
 	changed.emit()
+	return true
 
 
 func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true) -> bool:
@@ -281,15 +416,15 @@ func undock(catalog: Catalog, ship_id: String) -> bool:
 
 
 func set_module(ship_id: String, slot: String, module_id: String) -> bool:
+	if slot == "chassis":
+		push_error("Chassis cannot be changed.")
+		return false
+
 	var ship := get_owned_ship(ship_id)
 	if ship == null:
 		return false
 
 	match slot:
-		"chassis":
-			if module_id.is_empty():
-				return false
-			ship.chassis_id = module_id
 		"engine":
 			if module_id.is_empty():
 				return false
@@ -316,8 +451,168 @@ func get_current_habitat(catalog: Catalog) -> Dictionary:
 	return catalog.get_habitat(habitat_id)
 
 
+func get_cargo_count(commodity_id: String) -> int:
+	return int(cargo.get(commodity_id, 0))
+
+
+func add_cargo(commodity_id: String, amount: int) -> void:
+	if amount <= 0:
+		return
+	cargo[commodity_id] = get_cargo_count(commodity_id) + amount
+
+
+func remove_cargo(commodity_id: String, amount: int) -> bool:
+	if amount <= 0:
+		return false
+	var current := get_cargo_count(commodity_id)
+	if current < amount:
+		return false
+	var remaining := current - amount
+	if remaining <= 0:
+		cargo.erase(commodity_id)
+	else:
+		cargo[commodity_id] = remaining
+	return true
+
+
+func get_spare_part_count(part_id: String) -> int:
+	return int(spare_parts.get(part_id, 0))
+
+
+func add_spare_part(part_id: String, amount: int) -> void:
+	if amount <= 0:
+		return
+	spare_parts[part_id] = get_spare_part_count(part_id) + amount
+
+
+func remove_spare_part(part_id: String, amount: int) -> bool:
+	if amount <= 0:
+		return false
+	var current := get_spare_part_count(part_id)
+	if current < amount:
+		return false
+	var remaining := current - amount
+	if remaining <= 0:
+		spare_parts.erase(part_id)
+	else:
+		spare_parts[part_id] = remaining
+	return true
+
+
+func buy_commodity(catalog: Catalog, building_id: String, commodity_id: String, amount: int = 1) -> bool:
+	if amount <= 0:
+		return false
+
+	var market := catalog.get_market_for_building(building_id)
+	if market.is_empty():
+		return false
+
+	var listing := _find_market_listing(market, commodity_id)
+	if listing.is_empty():
+		return false
+
+	var commodity := catalog.get_commodity(commodity_id)
+	if commodity.is_empty():
+		return false
+
+	var price := int(listing.get("price", commodity.get("base_price", 0)))
+	var total_cost := price * amount
+	if credits < total_cost:
+		last_log = "Insufficient credits. Need d%d." % total_cost
+		changed.emit()
+		return false
+
+	credits -= total_cost
+	add_cargo(commodity_id, amount)
+	last_log = "Bought %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total_cost]
+	changed.emit()
+	return true
+
+
+func sell_commodity(catalog: Catalog, building_id: String, commodity_id: String, amount: int = 1) -> bool:
+	if amount <= 0:
+		return false
+
+	var market := catalog.get_market_for_building(building_id)
+	if market.is_empty():
+		return false
+
+	var listing := _find_market_listing(market, commodity_id)
+	if listing.is_empty():
+		return false
+
+	if get_cargo_count(commodity_id) < amount:
+		last_log = "Not enough cargo to sell."
+		changed.emit()
+		return false
+
+	var commodity := catalog.get_commodity(commodity_id)
+	var price := int(listing.get("price", commodity.get("base_price", 0)))
+	var sell_price := maxi(1, int(price * 0.8))
+	var total := sell_price * amount
+
+	if not remove_cargo(commodity_id, amount):
+		return false
+
+	credits += total
+	last_log = "Sold %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total]
+	changed.emit()
+	return true
+
+
+func _find_market_listing(market: Dictionary, commodity_id: String) -> Dictionary:
+	var listings: Variant = market.get("listings", [])
+	if typeof(listings) != TYPE_ARRAY:
+		return {}
+	for listing_variant in listings:
+		if typeof(listing_variant) != TYPE_DICTIONARY:
+			continue
+		var listing: Dictionary = listing_variant
+		if str(listing.get("commodity_id", "")) == commodity_id:
+			return listing
+	return {}
+
+
+func _int_dict_from_variant(value: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if typeof(value) != TYPE_DICTIONARY:
+		return result
+	for key in value.keys():
+		result[str(key)] = int(value[key])
+	return result
+
+
 func _find_aboard_ship_id() -> String:
 	for ship in owned_ships:
 		if ship.location == "aboard":
 			return ship.id
 	return ""
+
+
+func _string_array_from_variant(value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	if typeof(value) != TYPE_ARRAY:
+		return result
+	for item in value:
+		result.append(str(item))
+	return result
+
+
+static func _validate_save_data(data: Dictionary) -> bool:
+	if data.is_empty():
+		return false
+
+	var version := int(data.get("version", 0))
+	if version != SaveStore.SAVE_VERSION:
+		push_error("Unsupported save version: %d" % version)
+		return false
+
+	if typeof(data.get("session", {})) != TYPE_DICTIONARY:
+		push_error("Save file missing session object.")
+		return false
+
+	if typeof(data.get("ships", [])) != TYPE_ARRAY:
+		push_error("Save file missing ships array.")
+		return false
+
+	return true

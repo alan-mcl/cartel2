@@ -3,13 +3,13 @@ extends CanvasLayer
 signal jump_requested(target_sector_id: String, n: int)
 signal cancelled
 
-@onready var _title: Label = $Dim/Center/Panel/TitleLabel
-@onready var _description: Label = $Dim/Center/Panel/DescriptionLabel
-@onready var _route_list: VBoxContainer = $Dim/Center/Panel/RouteList
-@onready var _solution_label: Label = $Dim/Center/Panel/SolutionLabel
-@onready var _confirm_button: Button = $Dim/Center/Panel/ConfirmButton
-@onready var _cancel_button: Button = $Dim/Center/Panel/CancelButton
-@onready var _hint: Label = $Dim/Center/Panel/HintLabel
+@onready var _title: Label = $Background/Center/Panel/VBox/TitleLabel
+@onready var _description: Label = $Background/Center/Panel/VBox/DescriptionLabel
+@onready var _route_list: VBoxContainer = $Background/Center/Panel/VBox/RouteList
+@onready var _solution_label: Label = $Background/Center/Panel/VBox/SolutionLabel
+@onready var _confirm_button: Button = $Background/Center/Panel/VBox/ConfirmButton
+@onready var _cancel_button: Button = $Background/Center/Panel/VBox/CancelButton
+@onready var _hint: Label = $Background/Center/Panel/VBox/HintLabel
 
 var _catalog: Catalog
 var _session: PrototypeSession

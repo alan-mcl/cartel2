@@ -2,19 +2,25 @@
   {
     "id": "proxima_habitat",
     "name": "Proxima Habitat",
+    "type": "habitat",
+    "description": "Orbital city hub above Proxima. Most travellers never go dirtside.",
     "short_desc": "Orbital city hub. Most travellers never go dirtside.",
+    "art": "res://assets/ui/locations/proxima_habitat.svg",
     "default_building": "proxima_habitat_terminal",
     "buildings": [
       "proxima_habitat_terminal",
-      "davidsons",
-      "skyedge_space_ships",
-      "habitat_workshop"
+      "habitat_workshop",
+      "proxima_exchange",
+      "davidsons"
     ]
   },
   {
     "id": "bela_orbital_habitat",
     "name": "Bela Orbital Habitat",
+    "type": "habitat",
+    "description": "Resort orbital city above Bela's endless oceans.",
     "short_desc": "Resort orbital city above Bela's endless oceans.",
+    "art": "res://assets/ui/locations/bela_orbital_habitat.svg",
     "default_building": "bela_habitat_terminal",
     "buildings": [
       "bela_habitat_terminal",

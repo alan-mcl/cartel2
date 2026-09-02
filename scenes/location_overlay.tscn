@@ -87,8 +87,29 @@ theme_override_constants/separation = 6
 layout_mode = 2
 text = "Undock"
 
+[node name="SaveMenuButton" type="Button" parent="Dim/Center/Panel"]
+layout_mode = 2
+text = "Save / Menu"
+
+[node name="SaveMenuPanel" type="VBoxContainer" parent="Dim/Center/Panel"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SaveButton" type="Button" parent="Dim/Center/Panel/SaveMenuPanel"]
+layout_mode = 2
+text = "Save Game"
+
+[node name="QuitButton" type="Button" parent="Dim/Center/Panel/SaveMenuPanel"]
+layout_mode = 2
+text = "Quit to Menu"
+
+[node name="BackButton" type="Button" parent="Dim/Center/Panel/SaveMenuPanel"]
+layout_mode = 2
+text = "Back"
+
 [node name="HintLabel" type="Label" parent="Dim/Center/Panel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
-text = "Click a building to visit · Undock to choose a ship · Esc undocks"
+text = "Click a building to visit · Undock to choose a ship · Save / Menu for progress"
 horizontal_alignment = 1

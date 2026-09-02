@@ -1,233 +1,185 @@
 # Planets and sectors
 
-**Status:** Six-sector catalog is **setting intent** (from original POC world data). The Godot prototype implements **Proxima** and **Bela** near-orbit only — habitats, jump gates, beacons, wrecks, debris. Surface cities and four other sectors are documented for redesign and future JSON catch-up.
-
-## Spatial model
-
-```
-Sector (star system)
-├── Planet (habitable E-type world)
-│   └── City | Habitat
-│       └── Building
-├── Jump Gate (orbital, dockable)
-└── Unspace mappings → other sectors
-```
-
-Every starter planet has an orbital **habitat** on its roadmap — the usual launch and dock point for ships. Habitats use explicit type flags in a full rebuild; the original POC inferred habitat from naming.
-
-## Sectors summary
-
-| Sector | Numeric id | Planet | Jump gate | Role |
-|--------|------------|--------|-----------|------|
-| Proxima Sector | 528 | Proxima | Proxima Jump Gate | Galactic capital |
-| Tycho Sector | −132 | Tycho | Tycho Jump Gate | Harsh rim world |
-| Bela Sector | −10810 | Bela | Bela Jump Gate | Water-world resort |
-| Irasia Sector | 7487 | Irasia | Irasia Jump Gate | Commerce / industry |
-| Tokirev Sector | 29861 | Tokirev | Tokirev Jump Gate | Factory world |
-| New Fennet Sector | 2590 | New Fennet | New Fennet Jump Gate | Underdeveloped rim |
-
-Prototype JSON uses string ids `proxima` and `bela` (numeric ids reserved for Unspace canon).
-
-## Planet statistics
-
-| Planet | Class | System | Pop | Temp | Ocean | Default entry |
-|--------|-------|--------|-----|------|-------|---------------|
-| Proxima | E1 | Alpha Centauri | 6B | 21°C | 81% | Proxima Habitat |
-| Tycho | E3 | Acturus | 3B | 23°C | 62% | Tycho Habitat |
-| Bela | E4 | Beta Pisces | 2.5B | 20°C | 92% | Bela Orbital Habitat |
-| Irasia | E5 | Epsilon Hydra | 6B | 17°C | 76% | Irasia Habitat |
-| Tokirev | E2 | Pyxis | 5.6B | 15°C | 62% | Tokirev Habitat |
-| New Fennet | E1 | Tau Eridani | 2B | 20°C | 78% | New Fennet Habitat |
-
----
-
 ## Proxima
 
 **Classification:** E1  
 **System:** Alpha Centauri  
-**Radius:** 1.05 Earth  
-**Population:** 6 billion  
-**Ocean coverage:** 81%  
-**Average temperature:** 21°C  
+**Gravity:** .98 G  
+**Population:** 60 billion  
+**Ocean coverage:** 71%  
+**Climate:** Temperate
 
 Proxima was the first E-type planet discovered and colonised by humans, and is today the **galactic capital**. It is a lush, densely populated world with many large cities.
 
-### Cities
+### City Malls
 
-Concord (capital hub), New Atlanta, Loch Grumman, Greenfields CM, Century CM, Safeharbour CM, **Proxima Habitat**.
+Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharbour.
+
+### Oribtals
+
+Proxima Habitat
+Habitat buildings in prototype: Terminal, Davidsons (pilot bar), Skyedge Space Ships (merchant, closed), Habitat Workshop.
 
 ### Prototype orbit (JSON)
 
-Near-orbit entities: Proxima Habitat, Proxima Jump Gate, three nav beacons, derelict wreck (+d850 salvage), debris field, planet limb, dust ring at play bounds 3500. Player spawn (−400, −150).
-
-Habitat buildings in prototype: Terminal, Davidsons (pilot bar), Skyedge Space Ships (merchant, closed), Habitat Workshop.
-
----
+Near-orbit entities: Proxima Habitat, Proxima Jump Gate, 
 
 ## Tycho
 
 **Classification:** E3  
-**System:** Acturus  
-**Radius:** 0.89 Earth  
-**Population:** 3 billion  
+**System:** Regulus  
+**Gravity:** 1.07 G
+**Population:** 3.5 billion  
 **Ocean coverage:** 62%  
-**Average temperature:** 23°C  
+**Climate:** Arid
 
-Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen G-type gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes.
+Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen G-type gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
 
-### Cities
+### City Malls
 
-Ozero, **Tycho Habitat**.
+Ozero.
 
-**Prose TBD for redesign** — surface detail beyond the above.
+### Orbitals
 
----
+Tycho Habitat
 
-## Bela
+## La Bella Vista
 
 **Classification:** E4  
 **System:** Beta Pisces  
-**Radius:** 0.95 Earth  
-**Population:** 2.5 billion  
+**Gravity:** 0.95 G  
+**Population:** 15 billion  
 **Ocean coverage:** 92%  
-**Average temperature:** 20°C  
+**Climate:** Warm  
 
 Bela is a water world with only one continental land mass. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
-### Cities
+### City Malls
 
-Oberon, Santa Margarita, **Bela Orbital Habitat**.
-
+Oberon, Santa Margarita
 Notable landmark: Watershed Stadium (Oberon cricket) — from original world catalog.
+
+### Orbitals
+
+Bela Habitat
+Habitat buildings: Bela Orbital Terminal, Habitat Workshop.
 
 ### Prototype orbit (JSON)
 
-Bela Orbital Habitat, Bela Jump Gate, two beacons, drift wreck (Santa Margarita flavour, +d420 salvage), debris, water-tinted planet limb, play bounds 3200. Player spawn (200, −100).
-
-Habitat buildings: Bela Orbital Terminal, Habitat Workshop (shared workshop id).
-
----
+Bela Orbital Habitat, Bela Jump Gate
 
 ## Irasia
 
 **Classification:** E5  
-**System:** Epsilon Hydra  
-**Population:** 6 billion  
+**System:** Epsilon Hydra
+**Gravity:** .99 G
+**Population:** 46 billion  
 **Ocean coverage:** 76%  
-**Average temperature:** 17°C  
+**Climate:** Temperate
 
-### Cities
+Irasia is a prosperous and heavily industrialised world, with enormous coastal cities and extensive manufacturing districts. Its temperate climate and abundant oceans support a large population, while its position on major trade routes has made it one of the galaxy’s principal centres of commerce.
 
-La Palma, Fairhaven CM, **Irasia Habitat**.
+### City Malls
 
-**Prose TBD for redesign** — commerce/industry role from sector summary only.
+La Palma
+Fairhaven
 
----
+### Orbitals
+
+Irasia Habitat
 
 ## Tokirev
 
 **Classification:** E2  
 **System:** Pyxis  
-**Population:** 5.6 billion  
+**Gravity:** 1.02 G
+**Population:** 56 billion  
 **Ocean coverage:** 62%  
-**Average temperature:** 15°C  
+**CLimate:** Cold
 
-### Cities
+Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
 
-Kaliningrad, **Tokirev Habitat**.
+### City Malls
 
-**Prose TBD for redesign** — factory-world role from sector summary only.
+Kaliningrad
 
----
+### Orbitals
 
-## New Fennet
+Tokirev Habitat
+
+## Fennet
 
 **Classification:** E1  
-**System:** Tau Eridani  
-**Population:** 2 billion  
+**System:** Tau Eridani 
+**Gravity:** .95 G
+**Population:** 29 billion  
 **Ocean coverage:** 78%  
 **Average temperature:** 20°C  
 
-### Cities
+Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
 
-Belfast, **New Fennet Habitat**.
+### City Malls
 
-**Prose TBD for redesign** — underdeveloped rim; original POC left short description undefined.
+Belfast
 
----
+### Orbitals
 
-## Unspace route table
+Fennet Habitat
 
-Directed edges: `(from_sector, solution) → to_sector`. Canonical integers from original sector definitions.
+## Fortuna
 
-### Proxima Sector (528)
+**Classification:** E2
+**System:** Tau Ceti
+**Gravity:** 1.01 G
+**Population:** 34 billion
+**Ocean coverage:** 68%
+**Climate:** Temperate
 
-| To | Solution |
-|----|----------|
-| Bela | **42** |
-| Tycho | 900008 |
-| Irasia | −7620 |
-| Tokirev | 2901 |
-| New Fennet | 955249 |
+Fortuna is a wealthy and densely populated world whose prosperity was built on finance, trade and speculation. Its cities are filled with banks, exchanges, corporate headquarters and luxury developments, while enormous agricultural regions provide food for its population. The planet is known for its comfortable standard of living and its unusually active commercial culture.
 
-### Tycho Sector (−132)
+### City Malls
 
-| To | Solution |
-|----|----------|
-| Bela | 77335 |
-| Proxima | −10 |
-| Tokirev | 662 |
-| New Fennet | 2 |
+Jubilee, New Venice, Bellagio
 
-### Bela Sector (−10810)
+### Orbitals
 
-| To | Solution |
-|----|----------|
-| Proxima | **−34458** |
-| Irasia | 99 |
-| Tokirev | 79999 |
+Fortuna Habitat
 
-### Irasia Sector (7487)
+## New Carthage
 
-| To | Solution |
-|----|----------|
-| Bela | 36 |
-| Tycho | 900008 |
-| Proxima | 3 |
-| Tokirev | 96636 |
+**Classification:** E4
+**System:** 61 Cygni
+**Gravity:** 0.98 G
+**Population:** 27 billion
+**Ocean coverage:** 84%
+**Climate:** Warm
 
-### Tokirev Sector (29861)
+New Carthage is a largely oceanic world whose major population centres developed around a network of artificial islands and enormous coastal cities. Originally settled as a trading colony, it became a major shipping and financial hub. Much of the planet's culture remains shaped by commerce, with old mercantile institutions sitting alongside vast modern corporate developments.
 
-| To | Solution |
-|----|----------|
-| Bela | 23412745 |
-| Tycho | 6780032 |
-| Irasia | −4395625 |
-| Proxima | −55 |
-| New Fennet | −88327 |
+### City Malls
 
-### New Fennet Sector (2590)
+Carthage, New Tyre, Leptis, Utica
 
-| To | Solution |
-|----|----------|
-| Tycho | 88105 |
-| Tokirev | −44 |
-| Proxima | 623 |
+### Orbitals
 
-**Smoke-test route:** Proxima → Bela with solution **42** (canonical test path).
+New Carthage Habitat
 
-Prototype JSON: only Proxima ↔ Bela mappings are loaded; other routes await sector expansion.
+## Horizon
 
-## Notable buildings (original six-system world)
+**Classification:** E1
+**System:** Epsilon Eridani
+**Gravity:** 0.97 G
+**Population:** 43 billion
+**Ocean coverage:** 77%
+**Climate:** Temperate
 
-Thirty buildings total in the POC catalog — sample categories:
+Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
 
-**Merchants (distributor-linked):** Skyedge Space Ships, Concord Scouts, Grumman Distributors, Tower Ships, Jasons Hardware, BCD Suppliers, Bobs Guns, Self Defence Emporium.
+### City Malls
 
-**Landmarks:** Concord Central Hub, Davidsons (pilot bar), habitat terminals/docks, City Mall interfaces.
+Horizon, Meridian, Providence, New Geneva, Ascension
 
-Prototype implements a subset at Proxima and Bela habitats only.
+### Orbitals
 
-## Proxima distances (design reference)
+Horizon Habitat
 
-From original spreadsheet: pairwise km between Concord, New Atlanta, Loch Grumman, Greenfields CM, Century CM, Safeharbour CM, Proxima Habitat. All habitat legs **2000 km**; longest surface leg Concord ↔ New Atlanta **10849 km**. Relevant when surface travel and roadmaps are implemented.

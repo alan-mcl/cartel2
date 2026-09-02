@@ -12,6 +12,8 @@ const SECTORS_PATH := "res://data/catalog/sectors.json"
 const UNSPACES_PATH := "res://data/catalog/unspaces.json"
 const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
+const COMMODITIES_PATH := "res://data/catalog/commodities.json"
+const MARKETS_PATH := "res://data/catalog/markets.json"
 
 var chassis_by_id: Dictionary = {}
 var engines_by_id: Dictionary = {}
@@ -23,6 +25,8 @@ var interactables_by_id: Dictionary = {}
 var sectors_by_id: Dictionary = {}
 var unspaces_by_id: Dictionary = {}
 var worlds_by_id: Dictionary = {}
+var commodities_by_id: Dictionary = {}
+var markets_by_id: Dictionary = {}
 var player_data: Dictionary = {}
 
 
@@ -44,6 +48,8 @@ func load_all() -> void:
 	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
+	commodities_by_id = _load_indexed_array(COMMODITIES_PATH)
+	markets_by_id = _load_indexed_array(MARKETS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -107,6 +113,57 @@ func get_world(sector_id: String) -> Dictionary:
 
 func get_player() -> Dictionary:
 	return player_data
+
+
+func get_commodity(id: String) -> Dictionary:
+	return _require(commodities_by_id, id, "commodity")
+
+
+func get_market_for_building(building_id: String) -> Dictionary:
+	for market in markets_by_id.values():
+		if typeof(market) != TYPE_DICTIONARY:
+			continue
+		if str(market.get("building_id", "")) == building_id:
+			return market
+	return {}
+
+
+func get_building_type(building: Dictionary) -> String:
+	if building.is_empty():
+		return ""
+	var building_type := str(building.get("type", ""))
+	if not building_type.is_empty():
+		return building_type
+	match str(building.get("kind", "")):
+		"workshop":
+			return "shipyard"
+		"merchant":
+			return "market"
+		"landmark":
+			return "bar"
+		_:
+			return str(building.get("kind", "terminal"))
+
+
+func get_building_description(building: Dictionary) -> String:
+	if building.is_empty():
+		return ""
+	var desc := str(building.get("description", ""))
+	if desc.is_empty():
+		desc = str(building.get("short_desc", ""))
+	return desc
+
+
+func get_building_art(building: Dictionary) -> String:
+	return str(building.get("art", ""))
+
+
+func get_habitat_art(habitat: Dictionary) -> String:
+	return str(habitat.get("art", ""))
+
+
+func list_commodities() -> Array:
+	return commodities_by_id.values()
 
 
 func list_chassis() -> Array:

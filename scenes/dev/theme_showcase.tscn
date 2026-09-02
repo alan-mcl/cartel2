@@ -1,0 +1,463 @@
+[gd_scene load_steps=8 format=3 uid="uid://cartel_theme_showcase"]
+
+[ext_resource type="Script" path="res://scripts/dev/theme_showcase.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_metric" path="res://scenes/ui/patterns/metric_block.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_status_row" path="res://scenes/ui/patterns/status_row.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_headline" path="res://scenes/ui/patterns/headline_item.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_alert" path="res://scenes/ui/patterns/alert_banner.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_toolbar" path="res://scenes/ui/patterns/compact_toolbar.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_data_table" path="res://scenes/ui/patterns/data_table.tscn" id="7"]
+
+[node name="ThemeShowcase" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.054902, 0.070588, 0.086275, 1)
+
+[node name="Layout" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Layout/VBox"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Cartel UI Theme Showcase"
+
+[node name="Subtitle" type="Label" parent="Layout/VBox"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "1920×1080 reference · IBM Plex · corporate information system"
+
+[node name="Tabs" type="TabContainer" parent="Layout/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="System" type="ScrollContainer" parent="Layout/VBox/Tabs"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_tab_index = 0
+
+[node name="SystemContent" type="VBoxContainer" parent="Layout/VBox/Tabs/System"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Typography" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "TYPOGRAPHY"
+
+[node name="TitleSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Page title (Title · 24)"
+
+[node name="HeadlineSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Headline"
+text = "Headline sample (20)"
+
+[node name="SectionSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Section label (15 medium muted)"
+
+[node name="BodySample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+text = "Body text at default 15px for operational screens."
+
+[node name="MutedSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "Secondary / muted metadata line."
+
+[node name="MetaSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Meta"
+text = "Meta · 12px · source timestamps"
+
+[node name="NumericSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Credits: d12,450"
+
+[node name="StatusRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Positive" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/StatusRow"]
+layout_mode = 2
+theme_type_variation = &"Positive"
+text = "Online"
+
+[node name="Warning" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/StatusRow"]
+layout_mode = 2
+theme_type_variation = &"Warning"
+text = "Degraded"
+
+[node name="Negative" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/StatusRow"]
+layout_mode = 2
+theme_type_variation = &"Negative"
+text = "Fault"
+
+[node name="AlertSample" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Alert"
+text = "Alert: boundary proximity warning"
+
+[node name="Sep1" type="HSeparator" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+
+[node name="ControlsLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "CONTROLS"
+
+[node name="ButtonRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Normal" type="Button" parent="Layout/VBox/Tabs/System/SystemContent/ButtonRow"]
+layout_mode = 2
+text = "Normal"
+
+[node name="HoverHint" type="Button" parent="Layout/VBox/Tabs/System/SystemContent/ButtonRow"]
+layout_mode = 2
+text = "Hover me"
+
+[node name="Disabled" type="Button" parent="Layout/VBox/Tabs/System/SystemContent/ButtonRow"]
+layout_mode = 2
+disabled = true
+text = "Disabled"
+
+[node name="FormRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LineEdit" type="LineEdit" parent="Layout/VBox/Tabs/System/SystemContent/FormRow"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+placeholder_text = "LineEdit focus state"
+
+[node name="ReadOnly" type="LineEdit" parent="Layout/VBox/Tabs/System/SystemContent/FormRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+editable = false
+text = "Read-only field"
+
+[node name="CheckRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CheckOn" type="CheckBox" parent="Layout/VBox/Tabs/System/SystemContent/CheckRow"]
+layout_mode = 2
+button_pressed = true
+text = "Checked"
+
+[node name="CheckOff" type="CheckBox" parent="Layout/VBox/Tabs/System/SystemContent/CheckRow"]
+layout_mode = 2
+text = "Unchecked"
+
+[node name="OptionButton" type="OptionButton" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Filter: All"
+popup/item_0/id = 0
+popup/item_1/text = "Filter: In stock"
+popup/item_1/id = 1
+popup/item_2/text = "Filter: Low supply"
+popup/item_2/id = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Layout/VBox/Tabs/System/SystemContent"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+max_value = 100.0
+value = 62.0
+show_percentage = false
+
+[node name="PanelsLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "PANELS"
+
+[node name="PanelRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Surface" type="PanelContainer" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Surface"
+
+[node name="SurfaceLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow/Surface"]
+layout_mode = 2
+text = "Surface panel"
+
+[node name="Elevated" type="PanelContainer" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Elevated"
+
+[node name="ElevatedLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow/Elevated"]
+layout_mode = 2
+text = "Elevated panel"
+
+[node name="Media" type="PanelContainer" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Media"
+
+[node name="MediaLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent/PanelRow/Media"]
+layout_mode = 2
+text = "Media panel"
+
+[node name="MetricsLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "METRICS"
+
+[node name="MetricsRow" type="HBoxContainer" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="MetricCredits" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="Label" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow/MetricCredits"]
+layout_mode = 2
+text = "Credits"
+
+[node name="MetricHull" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="Label" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow/MetricHull"]
+layout_mode = 2
+text = "Hull"
+
+[node name="MetricSpeed" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="Label" parent="Layout/VBox/Tabs/System/SystemContent/MetricsRow/MetricSpeed"]
+layout_mode = 2
+text = "Speed"
+
+[node name="ListLabel" type="Label" parent="Layout/VBox/Tabs/System/SystemContent"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "ITEM LIST"
+
+[node name="ItemList" type="ItemList" parent="Layout/VBox/Tabs/System/SystemContent"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+item_count = 4
+allow_reselect = true
+select_mode = 1
+item_0/text = "Dock manifest · Flare-ON SS"
+item_1/text = "Dock manifest · Pegasus P101"
+item_2/text = "Spare Mark 3 Fusion · x1"
+item_3/text = "Spare Light Composite · x2"
+
+[node name="Operational" type="VBoxContainer" parent="Layout/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+metadata/_tab_index = 1
+
+[node name="OpTitle" type="Label" parent="Layout/VBox/Tabs/Operational"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Operational sample — Shipyard / Market"
+
+[node name="OpToolbar" parent="Layout/VBox/Tabs/Operational" instance=ExtResource("6")]
+layout_mode = 2
+
+[node name="Primary" parent="Layout/VBox/Tabs/Operational/OpToolbar"]
+layout_mode = 2
+text = "All listings"
+
+[node name="Secondary" parent="Layout/VBox/Tabs/Operational/OpToolbar"]
+layout_mode = 2
+text = "In stock"
+
+[node name="Tertiary" parent="Layout/VBox/Tabs/Operational/OpToolbar"]
+layout_mode = 2
+text = "Export CSV"
+
+[node name="OpSplit" type="HSplitContainer" parent="Layout/VBox/Tabs/Operational"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 520
+
+[node name="Left" type="VBoxContainer" parent="Layout/VBox/Tabs/Operational/OpSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="OpTable" parent="Layout/VBox/Tabs/Operational/OpSplit/Left" instance=ExtResource("7")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Header" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable"]
+layout_mode = 2
+
+[node name="HeaderGrid" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable/Header"]
+layout_mode = 2
+
+[node name="Col1" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable/Header/HeaderGrid"]
+layout_mode = 2
+text = "Commodity"
+
+[node name="Col2" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable/Header/HeaderGrid"]
+layout_mode = 2
+text = "Price"
+
+[node name="Col3" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable/Header/HeaderGrid"]
+layout_mode = 2
+text = "Store"
+
+[node name="Col4" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable/Header/HeaderGrid"]
+layout_mode = 2
+text = "Cargo"
+
+[node name="Rows" parent="Layout/VBox/Tabs/Operational/OpSplit/Left/OpTable"]
+layout_mode = 2
+item_count = 5
+item_0/text = "Industrial Metals · d420 · 18 · 2"
+item_1/text = "Refined Fuel · d180 · 40 · 0"
+item_2/text = "Electronics · d890 · 6 · 1"
+item_3/text = "Mark 3 Fusion · d2400 · 1 · 0"
+item_4/text = "Light Composite · d650 · 3 · 1"
+
+[node name="Right" type="VBoxContainer" parent="Layout/VBox/Tabs/Operational/OpSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatsTitle" type="Label" parent="Layout/VBox/Tabs/Operational/OpSplit/Right"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "SESSION STATS"
+
+[node name="StatusCredits" parent="Layout/VBox/Tabs/Operational/OpSplit/Right" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="Key" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusCredits"]
+layout_mode = 2
+text = "Credits"
+
+[node name="Value" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusCredits"]
+layout_mode = 2
+text = "d12,450"
+
+[node name="StatusDocked" parent="Layout/VBox/Tabs/Operational/OpSplit/Right" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="Key" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusDocked"]
+layout_mode = 2
+text = "Docked ships"
+
+[node name="Value" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusDocked"]
+layout_mode = 2
+text = "2"
+
+[node name="StatusYard" parent="Layout/VBox/Tabs/Operational/OpSplit/Right" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="Key" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusYard"]
+layout_mode = 2
+text = "Yard stock"
+
+[node name="Value" parent="Layout/VBox/Tabs/Operational/OpSplit/Right/StatusYard"]
+layout_mode = 2
+theme_type_variation = &"Positive"
+text = "Available"
+
+[node name="Media" type="VBoxContainer" parent="Layout/VBox/Tabs"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+metadata/_tab_index = 2
+
+[node name="MediaTitle" type="Label" parent="Layout/VBox/Tabs/Media"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Media sample — Sector wire"
+
+[node name="MediaAlert" parent="Layout/VBox/Tabs/Media" instance=ExtResource("5")]
+layout_mode = 2
+
+[node name="HBox" parent="Layout/VBox/Tabs/Media/MediaAlert"]
+layout_mode = 2
+
+[node name="Tag" parent="Layout/VBox/Tabs/Media/MediaAlert/HBox"]
+layout_mode = 2
+text = "BREAKING"
+
+[node name="Message" parent="Layout/VBox/Tabs/Media/MediaAlert/HBox"]
+layout_mode = 2
+text = "Proxima Exchange reports elevated demand for refined fuel."
+
+[node name="Feed" type="VBoxContainer" parent="Layout/VBox/Tabs/Media"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="Story1" parent="Layout/VBox/Tabs/Media/Feed" instance=ExtResource("4")]
+layout_mode = 2
+
+[node name="Headline" parent="Layout/VBox/Tabs/Media/Feed/Story1"]
+layout_mode = 2
+text = "Shipyard backlog clears after parts shipment"
+
+[node name="Meta" parent="Layout/VBox/Tabs/Media/Feed/Story1"]
+layout_mode = 2
+text = "Proxima Dispatch · 14:32 local"
+
+[node name="Story2" parent="Layout/VBox/Tabs/Media/Feed" instance=ExtResource("4")]
+layout_mode = 2
+
+[node name="Headline" parent="Layout/VBox/Tabs/Media/Feed/Story2"]
+layout_mode = 2
+text = "Bela gate traffic steady; no transit delays reported"
+
+[node name="Meta" parent="Layout/VBox/Tabs/Media/Feed/Story2"]
+layout_mode = 2
+text = "Sector Wire · 13:05 local"
+
+[node name="Story3" parent="Layout/VBox/Tabs/Media/Feed" instance=ExtResource("4")]
+layout_mode = 2
+
+[node name="Headline" parent="Layout/VBox/Tabs/Media/Feed/Story3"]
+layout_mode = 2
+text = "Davidsons announces extended dockside hours"
+
+[node name="Meta" parent="Layout/VBox/Tabs/Media/Feed/Story3"]
+layout_mode = 2
+text = "Habitat Bulletin · 11:48 local"

@@ -97,3 +97,25 @@ static func _derive_stats(ship: AssembledShip) -> ShipStats:
 	stats.linear_damp = float(MANEUVER_DAMP.get(maneuver, MANEUVER_DAMP["medium"]))
 
 	return stats
+
+
+static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
+	var assembled := assemble_owned(catalog, owned)
+	if assembled.chassis.is_empty() or assembled.engine.is_empty():
+		return {}
+
+	var mass := (
+		float(assembled.chassis.get("mass", 0.0))
+		+ float(assembled.engine.get("mass", 0.0))
+		+ float(assembled.armour.get("mass", 0.0))
+	)
+	var maneuver := str(assembled.chassis.get("maneuver", "medium"))
+	return {
+		"mass": mass,
+		"thrust": assembled.stats.forward_thrust,
+		"max_speed": assembled.stats.max_speed,
+		"boost_max_speed": assembled.stats.boost_max_speed,
+		"maneuver": maneuver,
+		"armour_hits": int(assembled.armour.get("hits", 0)) if not assembled.armour.is_empty() else 0,
+		"chassis_hits": int(assembled.chassis.get("hits", 0)),
+	}

@@ -12,13 +12,15 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `engines.json` | array | Propulsion |
 | `armour.json` | array | Armour plates |
 | `ships.json` | array | Ship templates (default loadouts) |
-| `player.json` | object | Starting sector, credits, owned ship instances |
+| `player.json` | object | New-game template: starting sector, credits, owned ship instances |
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
 | `sectors.json` | array | Sector identity, bounds, spawn, Unspace mappings |
 | `unspaces.json` | array | N-space transit layouts (depth, spawn, world link) |
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |
 | `interactables.json` | array | Interaction definitions |
+| `commodities.json` | array | Trade goods (mass, base_price) |
+| `markets.json` | array | Building-linked commodity listings |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 
@@ -39,6 +41,8 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 }
 ```
 
+New Game reads this template once; runtime progress is stored in save slots under `user://saves/`.
+
 ### Owned ship instance
 
 | Field | Type | Description |
@@ -50,6 +54,8 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 | `engine_id` | string | Current engine |
 | `armour_id` | string \| null | Current armour (empty/null = none) |
 | `location` | string | `"aboard"` or habitat id (e.g. `proxima_habitat`) |
+
+`OwnedShip.to_dict()` mirrors `from_dict()` for save serialization.
 
 - **aboard** — ship the player flies in orbit.
 - **habitat id** — parked at that habitat; persists across sector jumps.
@@ -205,9 +211,12 @@ Runtime: `InteractableDef.from_dict()` — `RefCounted`, not a Godot Resource.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string | Matches dock `dock_location_id` |
+| `id` | string | Matches dock `location_id` |
 | `name` | string | |
-| `short_desc` | string | |
+| `type` | string | `habitat` |
+| `description` | string | Long description for habitat screen header |
+| `short_desc` | string | Legacy short text |
+| `art` | string | `res://` path to location illustration |
 | `default_building` | string | Opened on dock |
 | `buildings` | string[] | Visit list |
 
@@ -217,10 +226,16 @@ Runtime: `InteractableDef.from_dict()` — `RefCounted`, not a Godot Resource.
 |-------|------|-------------|
 | `id` | string | |
 | `name` | string | |
-| `kind` | string | `terminal`, `landmark`, `merchant`, `workshop`, … |
-| `short_desc` | string | |
+| `type` | string | `terminal`, `shipyard`, `market`, `bar`, … |
+| `kind` | string | Legacy alias (`workshop` → shipyard, `landmark` → bar) |
+| `description` | string | Building detail text |
+| `short_desc` | string | Legacy short text |
+| `art` | string | `res://` path to building illustration |
+| `services` | string[] | Optional (e.g. `assembly`, `parts`) |
 
-Workshop (`kind: "workshop"`) enables module swap UI for ships with `location` equal to current `habitat_id`.
+Building `type` drives HabitatScreen content panels. UI never hardcodes building order or ids.
+
+Workshop/shipyard buildings enable **ShipyardScreen** assembly for ships with `location` equal to current `habitat_id`.
 
 ## Runtime session state
 
@@ -228,6 +243,8 @@ Workshop (`kind: "workshop"`) enables module swap UI for ships with `location` e
 
 | Field | Description |
 |-------|-------------|
+| `player_name` | Pilot display name |
+| `callsign` | Pilot callsign |
 | `sector_id` | Current 3-space sector (when not in unspace) |
 | `in_unspace` | Flying through N-space transit |
 | `unspace_n` | Current N-space depth |
@@ -244,8 +261,41 @@ Workshop (`kind: "workshop"`) enables module swap UI for ships with `location` e
 | `habitat_id`, `building_id` | Current dock context |
 | `owned_ships` | `OwnedShip[]` |
 | `current_ship_id` | Aboard ship id |
+| `cargo` | `{ commodity_id: qty }` player cargo hold |
+| `spare_parts` | `{ part_id: qty }` spare engines/armour in inventory |
 
-Key methods: `enter_sector`, `enter_unspace`, `arrive_from_unspace`, `apply_hull_stress`, `dock`, `visit`, `undock`, `salvage`, `inspect`, `set_module`, `get_spawn_position`.
+Key methods: `start_new_game`, `to_dict`, `from_save`, `buy_commodity`, `sell_commodity`, `add_spare_part`, `remove_spare_part`, `dock`, `visit`, `undock`, …
+
+### Ship assembly (`ShipAssembly`)
+
+Gameplay operations independent of UI:
+
+- `buy_part` / `sell_part` — yard stock ↔ credits ↔ `spare_parts`
+- `install_part` / `remove_part` — slot is `engine` or `armour` only; **chassis is fixed**
+- `preview_stats` / `get_stat_block` — derived stats for shipyard display
+
+Installing consumes one spare; previously installed part returns to inventory.
+
+## Save files
+
+Three slots at `user://saves/slot_1.json` … `slot_3.json`. Loader/writer: `scripts/gameplay/save_store.gd`.
+
+```json
+{
+  "version": 1,
+  "saved_at": "2026-09-01T12:00:00Z",
+  "player": { "name": "Jane Doe", "callsign": "Vixen" },
+  "session": { /* PrototypeSession.to_dict() */ },
+  "ships": [ /* OwnedShip.to_dict() */ ],
+  "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
+}
+```
+
+**Session fields saved:** sector, location strings, credits, objective, log, salvaged/inspected ids, docked state, habitat/building ids, current ship id, unspace transit fields, hull stress, **cargo**, **spare_parts**.
+
+**Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load), world node layouts (reloaded from `worlds.json`).
+
+**Flight fields:** player position, velocity, and facing so mid-orbit and mid-4-space saves restore correctly. Docked saves store the last frozen position; load reopens the location overlay.
 
 ## How to extend
 

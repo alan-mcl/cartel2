@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cartel_pattern_data_table"]
+
+[node name="DataTable" type="VBoxContainer"]
+theme_override_constants/separation = 4
+
+[node name="Header" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"Elevated"
+
+[node name="HeaderGrid" type="GridContainer" parent="Header"]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="Col1" type="Label" parent="Header/HeaderGrid"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Column A"
+
+[node name="Col2" type="Label" parent="Header/HeaderGrid"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Column B"
+
+[node name="Col3" type="Label" parent="Header/HeaderGrid"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Column C"
+
+[node name="Col4" type="Label" parent="Header/HeaderGrid"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Column D"
+
+[node name="Rows" type="ItemList" parent="."]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 3
+item_0/text = "Row 1 · value · status · note"
+item_1/text = "Row 2 · value · status · note"
+item_2/text = "Row 3 · value · status · note"

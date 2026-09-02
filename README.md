@@ -1,6 +1,6 @@
 # Cartel — 2D spaceship prototype
 
-Playable near-orbit prototype for **Cartel**, set in Proxima Sector. Fly a ship with inertia, explore orbital space, salvage wrecks, dock at habitats, outfit ships at the workshop, and jump between sectors via Unspace gates.
+Playable near-orbit prototype for **Cartel**, set in Proxima Sector. Fly a ship with inertia, explore orbital space, salvage wrecks, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
 
 ## Requirements
 
@@ -16,6 +16,8 @@ Godot binary used for development: `~/opt/Godot_v4.7.2-stable_linux.x86_64`
 
 Or open `project.godot` in the Godot editor and press **F5**.
 
+The game opens at the **main menu**. Choose **New Game** to enter your pilot name and callsign; you begin docked at **Proxima Habitat** with your starter fleet parked there. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
+
 ## Controls
 
 | Action | Keys |
@@ -26,31 +28,40 @@ Or open `project.godot` in the Godot editor and press **F5**.
 | Rotate right | D, Right |
 | Boost | Shift (while thrusting) |
 | Interact / Dock / Translate / Emerge | E |
-| Pause | Escape (disabled while docked; overlay pauses while picking route) |
-| Undock / Cancel jump | Esc or button |
+| Pause | Escape (disabled while docked or jump overlay open) |
+| Back (habitat UI) | Escape |
+| Save / Load | Pause menu (in flight) or Save on habitat footer |
+| Quit to menu | Pause menu or Menu on habitat footer |
+| Undock | Back to Space on habitat footer |
 
 ## Prototype loop
 
-1. Launch in the **Flare-ON SS** in **Proxima Sector**; a **Pegasus P101** is parked at Proxima Habitat.
-2. Fly toward **Beacon 3** and salvage the **Derelict Wreck** (+d850).
-3. Dock at **Proxima Habitat** — your current ship is parked there.
-4. Visit **Habitat Workshop** to swap chassis, engine, or armour on any docked ship (free).
-5. Fly to the **Jump Gate**, pick **Bela Sector**, confirm **4-space** translation (known solution 42 shown as flavour).
-6. Navigate **4-space**: fly past shear hazards and debris to the **Exit Portal**, then `[E]` to emerge in Bela orbit.
-7. Explore Bela orbit, dock at **Bela Orbital Habitat**, salvage the drift wreck, and jump back to Proxima via 4-space.
-8. **Undock** and choose which ship to launch when multiple are parked at a habitat.
+1. Start at the **main menu** — New Game, Load, or Exit.
+2. **New Game:** enter pilot name and callsign; begin docked at **Proxima Habitat** with **Flare-ON SS** and **Pegasus P101** parked there.
+3. Visit buildings from the habitat screen — **Terminal**, **Davidsons** (flavour), **Proxima Exchange** (buy/sell commodities), **Shipyard** (parts + assembly).
+4. At the **Shipyard**, buy spare engines/armour, install on docked ships (chassis is fixed), inspect live stats.
+5. **Back to Space** — choose a ship to launch into **Proxima Sector** orbit.
+6. Fly toward **Beacon 3** and salvage the **Derelict Wreck** (+d850).
+7. Fly to the **Jump Gate**, pick **Bela Sector**, confirm **4-space** translation.
+8. Navigate **4-space** to the **Exit Portal**, then `[E]` to emerge in Bela orbit.
+9. Dock at **Bela Orbital Habitat**, use terminal and shipyard, jump back to Proxima.
+10. **Save** progress from the pause menu or habitat footer.
 
 ## Project layout
 
 ```
-assets/               SVG/PNG art (sprite paths live on chassis and world JSON)
-scripts/gameplay/     Ship motion/state, JSON catalog loader, assembler, owned fleet
-scripts/presentation/ Godot integration (ship, camera, world loader)
-scripts/tools/        Placeholder art generator
-scripts/ui/           HUD, pause, location, and jump overlays
-scenes/               Main scene and world objects
-data/catalog/         JSON ship, player, habitat, sector, world, and interactable catalogs
-docs/                 Architecture, data model, and setting bible
+assets/ui/fonts/       IBM Plex Sans/Mono (OFL)
+assets/ui/locations/   Placeholder habitat/building art (SVG)
+assets/ui/patterns/    Reusable themed UI pattern scenes
+themes/                cartel_theme.tres (project default)
+scripts/tools/         Theme builder, art generator
+scripts/gameplay/      Catalog, session, ship assembly, save store
+scripts/presentation/  Godot integration (ship, camera, world loader)
+scripts/ui/            HUD, menus, UiRoot, habitat/shipyard screens
+scenes/ui/             Full-screen habitat UI scenes
+scenes/dev/            Developer-only scenes (theme showcase)
+data/catalog/          JSON catalogs including commodities and markets
+docs/                  Architecture, data model, setting bible
 ```
 
 Regenerate placeholder art:
@@ -59,21 +70,30 @@ Regenerate placeholder art:
 python3 scripts/tools/generate_placeholder_art.py
 ```
 
-Then reimport in Godot (open the project or run with `--import`).
+Rebuild UI theme after token changes:
+
+```bash
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --headless -s res://scripts/tools/build_cartel_theme.gd
+```
+
+Open the theme developer showcase:
+
+```bash
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+  --scene res://scenes/dev/theme_showcase.tscn
+```
 
 ## Documentation
 
 Specification and setting lore live in [`docs/`](docs/README.md):
 
 - **Design** — architecture and JSON data model for this Godot prototype
-- **Setting** — planets, corporations, ships, and equipment (working bible; edit before catalogs catch up)
+- **Setting** — planets, corporations, ships, and equipment (working bible)
 
 ## Placeholders
 
-- SVG/PNG placeholders are generated; replace with final art when ready.
-- Unspace solution **typing** is not implemented yet (`solution` on mappings is shown as flavour only).
-- Only **4-space** (lowest N) is playable; deeper N-space routes are future work.
-- Ship **hyperdrive** translation is not implemented (jump gates only).
-- Habitat buildings are menu-only; no on-foot interiors.
-- Merchants are flavour-only (sales closed).
-- No save/load for fleet or sector position.
+- Location art under `assets/ui/locations/` are placeholders; replace with final paintings when ready.
+- No named NPCs or dialogue in this slice — store interactions only.
+- Market stock is catalog-defined and restocks each session (not persisted).
+- Only **4-space** is playable; deeper N-space routes are future work.
+- Merchants beyond the Exchange are not implemented (Skyedge remains unused in Proxima visit list).

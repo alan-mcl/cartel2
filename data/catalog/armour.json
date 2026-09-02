@@ -4,6 +4,8 @@
     "name": "5mm Chitanium",
     "maker": "Bayes Inc",
     "mass": 0.8,
-    "hits": 12
+    "hits": 12,
+    "cost": 650,
+    "description": "Light chitanium plate. Standard orbital traffic protection."
   }
 ]

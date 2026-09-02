@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cartel_pattern_metric"]
+
+[node name="MetricBlock" type="VBoxContainer"]
+theme_override_constants/separation = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "Metric"
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "0"

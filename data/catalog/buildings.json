@@ -2,31 +2,56 @@
   {
     "id": "proxima_habitat_terminal",
     "name": "Proxima Habitat Terminal",
+    "type": "terminal",
     "kind": "terminal",
-    "short_desc": "The central terminal on Proxima Habitat. Docking lanes and customs."
+    "description": "The central terminal on Proxima Habitat. Docking lanes and customs.",
+    "short_desc": "The central terminal on Proxima Habitat. Docking lanes and customs.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
   },
   {
     "id": "davidsons",
     "name": "Davidsons",
+    "type": "bar",
     "kind": "landmark",
-    "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes."
+    "description": "Pilot bar where off-duty crews trade rumours and bad jokes. The lights are low and the air smells of synth-whiskey.",
+    "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes.",
+    "art": "res://assets/ui/locations/davidsons.svg"
   },
   {
     "id": "skyedge_space_ships",
     "name": "Skyedge Space Ships",
+    "type": "merchant",
     "kind": "merchant",
-    "short_desc": "Scout ship showroom. Sales counter is closed in this prototype."
+    "description": "Scout ship showroom. Sales counter is closed in this prototype.",
+    "short_desc": "Scout ship showroom. Sales counter is closed in this prototype.",
+    "art": "res://assets/ui/locations/skyedge.svg"
   },
   {
     "id": "habitat_workshop",
-    "name": "Habitat Workshop",
+    "name": "Shipyard",
+    "type": "shipyard",
     "kind": "workshop",
-    "short_desc": "Outfitting bays for chassis, engines, and armour. Select a docked ship to modify its loadout."
+    "description": "Outfitting bays for engines and armour. Chassis work is restricted — hull frames are registered at build.",
+    "short_desc": "Outfitting bays for engines and armour on docked ships.",
+    "art": "res://assets/ui/locations/proxima_shipyard.svg",
+    "services": ["assembly", "parts"]
+  },
+  {
+    "id": "proxima_exchange",
+    "name": "Proxima Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Automated commodity exchange. Bulk goods, rations, and consumables trade on open contracts.",
+    "short_desc": "Automated commodity exchange for bulk goods and consumables.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
   },
   {
     "id": "bela_habitat_terminal",
     "name": "Bela Orbital Terminal",
+    "type": "terminal",
     "kind": "terminal",
-    "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean."
+    "description": "Resort terminal with customs and docking lanes overlooking the ocean.",
+    "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
+    "art": "res://assets/ui/locations/bela_terminal.svg"
   }
 ]

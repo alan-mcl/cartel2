@@ -16,77 +16,86 @@ mouse_filter = 2
 
 [node name="Margin" type="MarginContainer" parent="Root"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 16
+anchors_preset = 0
+offset_right = 520.0
+offset_bottom = 320.0
+theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 12
 
-[node name="VBox" type="VBoxContainer" parent="Root/Margin"]
+[node name="StatusPanel" type="PanelContainer" parent="Root/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_type_variation = &"Surface"
 
-[node name="HintLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="VBox" type="VBoxContainer" parent="Root/Margin/StatusPanel"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.82, 0.95, 0.9)
+theme_override_constants/separation = 4
+
+[node name="HintLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Meta"
 text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · E interact · Esc pause"
 
-[node name="ShipLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="PilotLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.92, 1, 1)
+theme_type_variation = &"Section"
+text = "Pilot: —"
+
+[node name="ShipLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
+layout_mode = 2
 text = "Ship: Flare-ON SS · Flare-ON Chassis · Mark 3 Fusion"
 
-[node name="StatsRow" type="HBoxContainer" parent="Root/Margin/VBox"]
+[node name="StatsRow" type="HBoxContainer" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 16
 
-[node name="SpeedLabel" type="Label" parent="Root/Margin/VBox/StatsRow"]
+[node name="SpeedLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
 layout_mode = 2
+theme_type_variation = &"Numeric"
 text = "Speed: 0"
 
-[node name="HeadingLabel" type="Label" parent="Root/Margin/VBox/StatsRow"]
+[node name="HeadingLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
 layout_mode = 2
+theme_type_variation = &"Numeric"
 text = "Heading: 0°"
 
-[node name="BoostLabel" type="Label" parent="Root/Margin/VBox/StatsRow"]
+[node name="BoostLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
 layout_mode = 2
+theme_type_variation = &"Numeric"
 text = "Boost: --"
 
-[node name="LocationLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="LocationLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
 text = "Location: Proxima near orbit"
 
-[node name="ObjectiveLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="ObjectiveLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.85, 0.45, 1)
+theme_type_variation = &"Section"
 text = "Objective: Investigate the wreck near Beacon 3"
 
-[node name="TargetLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="TargetLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
+theme_type_variation = &"Muted"
 text = "Target: none"
 
-[node name="CreditsLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="CreditsLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
+theme_type_variation = &"Numeric"
 text = "Credits: d3000"
 
-[node name="LogLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="LogLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
+theme_type_variation = &"Muted"
 autowrap_mode = 3
-theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
 text = "Flare-ON SS ready. Thrusters online."
 
-[node name="HullLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="HullLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.55, 1, 1)
+theme_type_variation = &"Numeric"
 text = "Hull: 18 / 18"
 
-[node name="BoundaryLabel" type="Label" parent="Root/Margin/VBox"]
+[node name="BoundaryLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.45, 0.35, 1)
+theme_type_variation = &"Alert"
 text = "Warning: drifting toward dust ring edge"

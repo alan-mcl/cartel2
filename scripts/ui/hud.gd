@@ -1,17 +1,18 @@
 extends CanvasLayer
 
-@onready var _ship: Label = $Root/Margin/VBox/ShipLabel
-@onready var _speed: Label = $Root/Margin/VBox/StatsRow/SpeedLabel
-@onready var _heading: Label = $Root/Margin/VBox/StatsRow/HeadingLabel
-@onready var _boost: Label = $Root/Margin/VBox/StatsRow/BoostLabel
-@onready var _location: Label = $Root/Margin/VBox/LocationLabel
-@onready var _objective: Label = $Root/Margin/VBox/ObjectiveLabel
-@onready var _target: Label = $Root/Margin/VBox/TargetLabel
-@onready var _credits: Label = $Root/Margin/VBox/CreditsLabel
-@onready var _log: Label = $Root/Margin/VBox/LogLabel
-@onready var _boundary: Label = $Root/Margin/VBox/BoundaryLabel
-@onready var _hull: Label = $Root/Margin/VBox/HullLabel
-@onready var _hint: Label = $Root/Margin/VBox/HintLabel
+@onready var _pilot: Label = $Root/Margin/StatusPanel/VBox/PilotLabel
+@onready var _ship: Label = $Root/Margin/StatusPanel/VBox/ShipLabel
+@onready var _speed: Label = $Root/Margin/StatusPanel/VBox/StatsRow/SpeedLabel
+@onready var _heading: Label = $Root/Margin/StatusPanel/VBox/StatsRow/HeadingLabel
+@onready var _boost: Label = $Root/Margin/StatusPanel/VBox/StatsRow/BoostLabel
+@onready var _location: Label = $Root/Margin/StatusPanel/VBox/LocationLabel
+@onready var _objective: Label = $Root/Margin/StatusPanel/VBox/ObjectiveLabel
+@onready var _target: Label = $Root/Margin/StatusPanel/VBox/TargetLabel
+@onready var _credits: Label = $Root/Margin/StatusPanel/VBox/CreditsLabel
+@onready var _log: Label = $Root/Margin/StatusPanel/VBox/LogLabel
+@onready var _boundary: Label = $Root/Margin/StatusPanel/VBox/BoundaryLabel
+@onready var _hull: Label = $Root/Margin/StatusPanel/VBox/HullLabel
+@onready var _hint: Label = $Root/Margin/StatusPanel/VBox/HintLabel
 
 var _session: PrototypeSession
 var _player: CharacterBody2D
@@ -32,6 +33,11 @@ func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 func refresh() -> void:
 	if _session == null:
 		return
+
+	if not _session.player_name.is_empty() or not _session.callsign.is_empty():
+		_pilot.text = 'Pilot: %s "%s"' % [_session.player_name, _session.callsign]
+	else:
+		_pilot.text = ""
 
 	if _assembled_ship != null:
 		_ship.text = "Ship: %s" % _assembled_ship.get_summary()

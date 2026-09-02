@@ -1,12 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://cartel_main"]
+[gd_scene load_steps=10 format=3 uid="uid://cartel_main"]
 
 [ext_resource type="Script" path="res://scripts/presentation/main.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/presentation/starfield.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://cartel_player_ship" path="res://scenes/player_ship.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://cartel_hud" path="res://scenes/hud.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://cartel_pause" path="res://scenes/pause_overlay.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://cartel_location_overlay" path="res://scenes/location_overlay.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://cartel_jump_overlay" path="res://scenes/jump_overlay.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://cartel_main_menu" path="res://scenes/main_menu.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://cartel_new_game" path="res://scenes/new_game_overlay.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://cartel_save_overlay" path="res://scenes/save_overlay.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://cartel_ui_root" path="res://scenes/ui/ui_root.tscn" id="11"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1")
@@ -23,6 +26,12 @@ position = Vector2(-400, -150)
 
 [node name="PauseOverlay" parent="." instance=ExtResource("5")]
 
-[node name="LocationOverlay" parent="." instance=ExtResource("6")]
-
 [node name="JumpOverlay" parent="." instance=ExtResource("7")]
+
+[node name="MainMenu" parent="." instance=ExtResource("8")]
+
+[node name="NewGameOverlay" parent="." instance=ExtResource("9")]
+
+[node name="SaveOverlay" parent="." instance=ExtResource("10")]
+
+[node name="UiRoot" parent="." instance=ExtResource("11")]

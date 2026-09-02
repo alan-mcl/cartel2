@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cartel_pattern_status_row"]
+
+[node name="StatusRow" type="HBoxContainer"]
+theme_override_constants/separation = 12
+
+[node name="Key" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Muted"
+text = "Status"
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "OK"

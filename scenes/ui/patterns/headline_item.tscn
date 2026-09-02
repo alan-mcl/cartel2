@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cartel_pattern_headline"]
+
+[node name="HeadlineItem" type="VBoxContainer"]
+theme_override_constants/separation = 2
+
+[node name="Headline" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"Headline"
+text = "Headline"
+
+[node name="Meta" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"Meta"
+text = "Source · timestamp"

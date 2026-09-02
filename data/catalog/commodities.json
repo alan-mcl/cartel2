@@ -1,0 +1,30 @@
+[
+  {
+    "id": "water_ice",
+    "name": "Water Ice",
+    "mass": 1.0,
+    "base_price": 45,
+    "description": "Purified orbital ice blocks. Standard life-support feedstock."
+  },
+  {
+    "id": "protein_packs",
+    "name": "Protein Packs",
+    "mass": 0.5,
+    "base_price": 80,
+    "description": "Shelf-stable ration blocks for long-haul crews."
+  },
+  {
+    "id": "spare_parts",
+    "name": "Spare Parts",
+    "mass": 2.0,
+    "base_price": 120,
+    "description": "Assorted fasteners, seals, and consumables for field repairs."
+  },
+  {
+    "id": "fuel_cells",
+    "name": "Fuel Cells",
+    "mass": 1.5,
+    "base_price": 95,
+    "description": "Compact fusion cell cartridges for auxiliary systems."
+  }
+]
