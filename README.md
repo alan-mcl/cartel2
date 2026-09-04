@@ -1,6 +1,6 @@
 # Cartel — 2D spaceship prototype
 
-Playable near-orbit prototype for **Cartel**, set in Proxima Sector. Fly a ship with inertia, explore orbital space, salvage wrecks, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
+Playable near-orbit prototype for **Cartel**, set in Proxima Sector. Fly a ship with inertia, explore orbital space around a planet, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
 
 ## Requirements
 
@@ -40,12 +40,11 @@ The game opens at the **main menu**. Choose **New Game** to enter your pilot nam
 2. **New Game:** enter pilot name and callsign; begin docked at **Proxima Habitat** with **Flare-ON SS** and **Pegasus P101** parked there.
 3. Visit buildings from the habitat screen — **Terminal**, **Davidsons** (flavour), **Proxima Exchange** (buy/sell commodities), **Shipyard** (parts + assembly).
 4. At the **Shipyard**, buy spare modules, drag them onto chassis slots to install (chassis fixed), inspect configuration and engineering budgets, refuel. Yard stock is grouped by module category tabs.
-5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit.
-6. Fly toward **Beacon 3** and salvage the **Derelict Wreck** (+d850).
-7. Fly to the **Jump Gate**, pick **Bela Sector**, confirm **4-space** translation.
-8. Navigate **4-space** to the **Exit Portal**, then `[E]` to emerge in Bela orbit.
-9. Dock at **Bela Orbital Habitat**, use terminal and shipyard, jump back to Proxima.
-10. **Save** progress from the pause menu or habitat footer.
+5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit beside the habitat ring.
+6. Fly the orbital ring (slowly rotating) and visit the **Jump Gate** to pick **Bela Sector**, confirm **4-space** translation.
+7. Navigate **4-space** to the **Exit Portal**, then `[E]` to emerge in Bela orbit near the jump gate.
+8. Dock at **Bela Orbital Habitat**, use terminal and shipyard, jump back to Proxima.
+9. **Save** progress from the pause menu or habitat footer.
 
 ## Project layout
 

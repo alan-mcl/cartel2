@@ -66,6 +66,26 @@ def planet_limb_png(width: int, height: int):
     return rgba
 
 
+def planet_disc_png(width: int, height: int):
+    cx, cy = width / 2, height / 2
+    radius = min(width, height) * 0.46
+
+    def rgba(x: int, y: int, w: int, h: int):
+        dx = x - cx
+        dy = y - cy
+        dist = (dx * dx + dy * dy) ** 0.5
+        if dist > radius:
+            return bytes((0, 0, 0, 0))
+        edge = max(0.0, 1.0 - (radius - dist) / 36.0)
+        red = int(24 + edge * 28)
+        green = int(52 + edge * 60)
+        blue = int(110 + edge * 100)
+        alpha = int(min(255, max(0, (radius - dist + 24) * 5)))
+        return bytes((red, green, blue, alpha))
+
+    return rgba
+
+
 def main() -> None:
     write_text(
         ASSETS / "ships/chassis/flare_on_chassis.svg",
@@ -89,11 +109,54 @@ def main() -> None:
     )
 
     write_text(
-        ASSETS / "world/habitat.svg",
-        """<svg xmlns="http://www.w3.org/2000/svg" width="260" height="160" viewBox="-130 -80 260 160">
-  <polygon points="-110,-70 110,-70 130,0 110,70 -110,70 -130,0" fill="#d99e38" stroke="#f2c85a" stroke-width="4"/>
+        ASSETS / "world/habitat_proxima.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="280" height="180" viewBox="-140 -90 280 180">
+  <polygon points="-120,-75 120,-75 145,0 120,75 -120,75 -145,0" fill="#d99e38" stroke="#f2c85a" stroke-width="5"/>
+  <rect x="-35" y="-15" width="70" height="30" rx="4" fill="#f2c85a" opacity="0.45"/>
 </svg>""",
     )
+
+    write_text(
+        ASSETS / "world/habitat_bela.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="280" height="180" viewBox="-140 -90 280 180">
+  <ellipse cx="0" cy="0" rx="130" ry="70" fill="#5a9ec8" stroke="#9fd4f5" stroke-width="5"/>
+  <ellipse cx="0" cy="0" rx="95" ry="48" fill="none" stroke="#d8f0ff" stroke-width="3"/>
+</svg>""",
+    )
+
+    orbitals = {
+        "torus.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="-70 -70 140 140">
+  <ellipse cx="0" cy="0" rx="55" ry="22" fill="none" stroke="#8aa0b8" stroke-width="6"/>
+  <ellipse cx="0" cy="0" rx="22" ry="55" fill="none" stroke="#8aa0b8" stroke-width="6"/>
+</svg>""",
+        "yard.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="160" height="100" viewBox="-80 -50 160 100">
+  <rect x="-70" y="-20" width="140" height="40" fill="#6a7580" stroke="#9aa5b0" stroke-width="3"/>
+  <rect x="-50" y="-45" width="30" height="25" fill="#505860" stroke="#9aa5b0" stroke-width="2"/>
+  <rect x="20" y="-45" width="30" height="25" fill="#505860" stroke="#9aa5b0" stroke-width="2"/>
+</svg>""",
+        "tank_farm.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="150" height="110" viewBox="-75 -55 150 110">
+  <ellipse cx="-35" cy="10" rx="22" ry="35" fill="#607080" stroke="#90a8b8" stroke-width="3"/>
+  <ellipse cx="35" cy="10" rx="22" ry="35" fill="#607080" stroke="#90a8b8" stroke-width="3"/>
+  <rect x="-57" y="-25" width="114" height="8" fill="#90a8b8"/>
+</svg>""",
+        "array.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="130" height="130" viewBox="-65 -65 130 130">
+  <line x1="-50" y1="0" x2="50" y2="0" stroke="#7a90a8" stroke-width="4"/>
+  <line x1="0" y1="-50" x2="0" y2="50" stroke="#7a90a8" stroke-width="4"/>
+  <circle cx="0" cy="0" r="18" fill="#506070" stroke="#9ab0c8" stroke-width="3"/>
+</svg>""",
+        "tower.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="90" height="160" viewBox="-45 -80 90 160">
+  <rect x="-8" y="-60" width="16" height="120" fill="#687888" stroke="#98a8b8" stroke-width="3"/>
+  <polygon points="-20,-70 20,-70 0,-55" fill="#98a8b8"/>
+  <line x1="-25" y1="-40" x2="25" y2="-40" stroke="#98a8b8" stroke-width="2"/>
+  <line x1="-18" y1="-10" x2="18" y2="-10" stroke="#98a8b8" stroke-width="2"/>
+</svg>""",
+        "platform.svg": """<svg xmlns="http://www.w3.org/2000/svg" width="170" height="90" viewBox="-85 -45 170 90">
+  <polygon points="-75,20 75,20 60,-15 -60,-15" fill="#5a6878" stroke="#8a98a8" stroke-width="3"/>
+  <rect x="-20" y="-35" width="40" height="20" fill="#708090" stroke="#8a98a8" stroke-width="2"/>
+</svg>""",
+    }
+    for name, svg in orbitals.items():
+        write_text(ASSETS / f"world/orbitals/{name}", svg)
 
     write_text(
         ASSETS / "world/jump_gate.svg",
@@ -131,6 +194,7 @@ def main() -> None:
     write_png(ASSETS / "space/stars_far.png", 512, 512, stars_png(512, 512, 180, 90210))
     write_png(ASSETS / "space/stars_near.png", 512, 512, stars_png(512, 512, 320, 90211))
     write_png(ASSETS / "world/planet_limb.png", 512, 512, planet_limb_png(512, 512))
+    write_png(ASSETS / "world/planet.png", 512, 512, planet_disc_png(512, 512))
 
 
 if __name__ == "__main__":

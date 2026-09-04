@@ -78,7 +78,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if not _game_active or session.docked or _jump.visible:
+	if not _game_active or session.docked or _jump.visible or _player.is_transitioning():
 		return
 
 	var distance := _player.global_position.length()
@@ -100,21 +100,25 @@ func _can_toggle_pause() -> bool:
 		return false
 	if session.docked or _jump.visible or _ui_root.visible:
 		return false
+	if _player.is_transitioning():
+		return false
 	return true
 
 
 func try_interact(target: Interactable) -> void:
 	if not _game_active or target == null or target.definition == null:
 		return
+	if _player.is_transitioning():
+		return
 
 	match target.definition.kind:
 		InteractableDef.Kind.DOCK:
-			_dock_at(target.definition.dock_location_id)
+			_dock_at_async(target)
 		InteractableDef.Kind.TRANSLATE:
 			if not session.in_unspace:
-				_open_jump_overlay(target.definition.title)
+				_translate_at_async(target)
 		InteractableDef.Kind.ARRIVE:
-			_arrive_from_unspace()
+			_arrive_from_unspace_async()
 		_:
 			var result := target.interact(session)
 			if result.is_empty():
@@ -268,7 +272,10 @@ func _capture_flight_state() -> Dictionary:
 func _apply_flight_state(flight: Dictionary) -> void:
 	if typeof(flight) != TYPE_DICTIONARY or flight.is_empty():
 		if not session.docked:
-			_player.global_position = session.get_spawn_position(catalog)
+			if session.in_unspace:
+				_player.global_position = session.get_spawn_position(catalog)
+			else:
+				_player.global_position = _world_loader.get_habitat_launch_position()
 		_player.freeze_motion()
 		return
 
@@ -299,10 +306,10 @@ func _load_current_space(place_player: bool = true) -> void:
 		_load_current_sector(place_player)
 
 
-func _load_current_sector(place_player: bool = true) -> void:
+func _load_current_sector(place_player: bool = true, spawn_near: String = "") -> void:
 	play_bounds = _world_loader.load_sector(_world, catalog, session, session.sector_id)
 	_starfield.reset_tint()
-	_finalize_world_load(place_player)
+	_finalize_world_load(place_player, spawn_near)
 
 
 func _load_unspace(place_player: bool = true) -> void:
@@ -312,11 +319,17 @@ func _load_unspace(place_player: bool = true) -> void:
 	_finalize_world_load(place_player)
 
 
-func _finalize_world_load(place_player: bool = true) -> void:
+func _finalize_world_load(place_player: bool = true, spawn_near: String = "") -> void:
 	if _player.has_method("register_world_interactables"):
 		_player.register_world_interactables()
 	if place_player:
-		_player.global_position = session.get_spawn_position(catalog)
+		match spawn_near:
+			"habitat":
+				_player.global_position = _world_loader.get_habitat_launch_position()
+			"jump_gate":
+				_player.global_position = _world_loader.get_jump_gate_approach_position()
+			_:
+				_player.global_position = session.get_spawn_position(catalog)
 	_player.freeze_motion()
 
 
@@ -345,25 +358,27 @@ func _on_jump_requested(target_sector_id: String, n: int) -> void:
 	_on_interaction_target_changed(_player.get_current_target())
 
 
-func _arrive_from_unspace() -> void:
-	if not session.in_unspace:
+func _translate_at_async(target: Interactable) -> void:
+	if session.docked or session.in_unspace or target == null:
 		return
 
-	if not session.arrive_from_unspace(catalog):
+	await _player.play_descend_transition(target.global_position)
+	if not _game_active or session.docked:
 		return
 
-	_load_current_sector(true)
-	_on_session_changed()
-	_on_interaction_target_changed(_player.get_current_target())
+	_open_jump_overlay(target.get_title())
 
 
-func _on_jump_cancelled() -> void:
-	get_tree().paused = false
-	_on_interaction_target_changed(_player.get_current_target())
+func _dock_at_async(target: Interactable) -> void:
+	if target == null or target.definition == null:
+		return
 
-
-func _dock_at(location_id: String) -> void:
+	var location_id := target.definition.dock_location_id
 	if location_id.is_empty() or session.docked:
+		return
+
+	await _player.play_descend_transition(target.global_position)
+	if not _game_active or session.docked:
 		return
 
 	if not session.dock(catalog, location_id):
@@ -379,6 +394,34 @@ func _dock_at(location_id: String) -> void:
 	_on_interaction_target_changed(_player.get_current_target())
 
 
+func _arrive_from_unspace_async() -> void:
+	if not session.in_unspace:
+		return
+
+	if not session.arrive_from_unspace(catalog):
+		return
+
+	_load_current_sector(false)
+	_on_session_changed()
+
+	var gate_pos := _world_loader.get_jump_gate_world_position()
+	var approach_pos := _world_loader.get_jump_gate_approach_position()
+	var outward := (approach_pos - gate_pos).normalized()
+	if outward.length_squared() < 0.001:
+		outward = Vector2.RIGHT
+
+	await _player.play_emerge_transition(gate_pos, approach_pos, outward.angle())
+	if not _game_active:
+		return
+
+	_on_interaction_target_changed(_player.get_current_target())
+
+
+func _on_jump_cancelled() -> void:
+	get_tree().paused = false
+	_on_interaction_target_changed(_player.get_current_target())
+
+
 func _on_ui_undock_requested(ship_id: String) -> void:
 	if ship_id.is_empty() or not session.docked:
 		return
@@ -388,7 +431,6 @@ func _on_ui_undock_requested(ship_id: String) -> void:
 
 	player_ship = _assemble_current_ship()
 	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
-	_player.freeze_motion()
 	_hud.set_assembled_ship(player_ship)
 
 	get_tree().paused = false
@@ -396,6 +438,17 @@ func _on_ui_undock_requested(ship_id: String) -> void:
 	_hud.visible = true
 	_pause.close()
 	_on_session_changed()
+
+	var habitat_pos := _world_loader.get_habitat_world_position()
+	var launch_pos := _world_loader.get_habitat_launch_position()
+	var outward := (launch_pos - habitat_pos).normalized()
+	if outward.length_squared() < 0.001:
+		outward = Vector2.UP
+
+	await _player.play_emerge_transition(habitat_pos, launch_pos, outward.angle())
+	if not _game_active:
+		return
+
 	_on_interaction_target_changed(_player.get_current_target())
 
 

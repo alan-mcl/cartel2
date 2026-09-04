@@ -11,7 +11,7 @@ var callsign: String = ""
 var sector_id: String = "proxima"
 var location_name: String = "Proxima near orbit"
 var credits: int = 3000
-var objective: String = "Investigate the wreck near Beacon 3"
+var objective: String = "Explore Proxima near orbit"
 var last_log: String = "Flare-ON SS ready. Thrusters online."
 var salvaged_ids: Array[String] = []
 var inspected_ids: Array[String] = []
@@ -32,6 +32,7 @@ var max_hull: float = 0.0
 
 var spare_parts: Dictionary = {}
 var sandbox: bool = false
+var orbital_phase_by_sector: Dictionary = {}
 
 var _hull_stress_cooldown: float = 0.0
 
@@ -57,6 +58,7 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	hull = 0.0
 	max_hull = 0.0
 	spare_parts.clear()
+	orbital_phase_by_sector.clear()
 
 	var ships: Variant = player_data.get("ships", [])
 	if typeof(ships) != TYPE_ARRAY or ships.is_empty():
@@ -110,6 +112,7 @@ func to_dict() -> Dictionary:
 		"hull": hull,
 		"max_hull": max_hull,
 		"spare_parts": spare_parts.duplicate(),
+		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
 	}
 
 
@@ -147,6 +150,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	hull = float(session_data.get("hull", 0.0))
 	max_hull = float(session_data.get("max_hull", 0.0))
 	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
+	orbital_phase_by_sector = _float_dict_from_variant(session_data.get("orbital_phase_by_sector", {}))
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := _int_dict_from_variant(session_data.get("cargo", {}))
@@ -304,9 +308,15 @@ func _init_hull_from_ship(assembled_ship: AssembledShip) -> void:
 
 
 func get_sector_spawn(catalog: Catalog) -> Vector2:
-	var sector := catalog.get_sector(sector_id)
-	var spawn: Dictionary = sector.get("spawn", {})
-	return Vector2(float(spawn.get("x", 0.0)), float(spawn.get("y", 0.0)))
+	return Vector2.ZERO
+
+
+func get_orbital_phase(sector_key: String) -> float:
+	return float(orbital_phase_by_sector.get(sector_key, 0.0))
+
+
+func set_orbital_phase(sector_key: String, phase: float) -> void:
+	orbital_phase_by_sector[sector_key] = phase
 
 
 func is_salvaged(interactable_id: String) -> bool:
@@ -605,6 +615,15 @@ func _int_dict_from_variant(value: Variant) -> Dictionary:
 		return result
 	for key in value.keys():
 		result[str(key)] = int(value[key])
+	return result
+
+
+func _float_dict_from_variant(value: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if typeof(value) != TYPE_DICTIONARY:
+		return result
+	for key in value.keys():
+		result[str(key)] = float(value[key])
 	return result
 
 

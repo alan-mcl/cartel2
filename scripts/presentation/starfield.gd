@@ -52,6 +52,10 @@ func _process(_delta: float) -> void:
 func _make_star_layer(texture_path: String, layer_name: String, scale_multiplier: float) -> Node2D:
 	var layer := Node2D.new()
 	layer.name = layer_name
+	if layer_name == "FarStars":
+		layer.z_index = -200
+	else:
+		layer.z_index = -100
 
 	var texture := load(texture_path) as Texture2D
 	if texture == null:

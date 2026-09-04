@@ -133,21 +133,32 @@ flowchart TD
 
 ## World loading
 
+3-space sectors (`proxima`, `bela`) use a structured layout in `worlds.json`:
+
+- **`planet`** — full-disc background sprite at the origin (non-interactable, no collision)
+- **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
+- **`jump_gate`** — static gate farther out (angle derived from sector id)
+
+4-space layouts (`n4_default`) still use a flat **`entities`** list (beacons, debris, hazards, exit portal).
+
 `WorldLoader` maps entity `kind` to packed scenes:
 
 | Kind | Scene |
 |------|-------|
 | `habitat` | `scenes/world/habitat.tscn` |
 | `jump_gate` | `scenes/world/jump_gate.tscn` |
+| `orbital` | `scenes/world/orbital.tscn` (visual-only station) |
 | `beacon` | `scenes/world/beacon.tscn` |
 | `wreck` | `scenes/world/wreck.tscn` |
 | `debris` | `scenes/world/debris_rock.tscn` |
 | `hazard` | `scenes/world/hazard.tscn` (4-space shear fields) |
-| `planet_limb` | Sprite2D spawned in code |
+| `planet_limb` | Sprite2D spawned in code (legacy) |
+
+Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `PrototypeSession.orbital_phase_by_sector` (saved/loaded).
 
 Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. Hazards use `NspaceHazard.configure(entity)`.
 
-`WorldLoader.load_unspace` loads layouts from `worlds.json` via `unspaces.json` (`world_id`), with a violet dust ring and no planet limb unless specified.
+`WorldLoader.load_unspace` loads layouts from `worlds.json` via `unspaces.json` (`world_id`), with a violet dust ring and no planet unless specified.
 
 The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (not stored in JSON).
 
@@ -155,8 +166,8 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (n
 
 | Format | Use |
 |--------|-----|
-| **SVG** | Ships, stations, gates, beacons, wrecks, debris |
-| **PNG** | Starfield tiles, planet limb, painterly backgrounds |
+| **SVG** | Ships, stations, gates, beacons, wrecks, debris, orbitals |
+| **PNG** | Starfield tiles, planet disc, painterly backgrounds |
 
 Chassis entries reference hull sprites and `hull_color` modulate. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
 

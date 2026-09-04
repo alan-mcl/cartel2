@@ -22,7 +22,7 @@ Habitat buildings in prototype: Terminal, Davidsons (pilot bar), Skyedge Space S
 
 ### Prototype orbit (JSON)
 
-Near-orbit entities: Proxima Habitat, Proxima Jump Gate, 
+Large planet disc backdrop, rotating ring of seven orbitals (Proxima Habitat plus six unnamed stations), and a static jump gate farther out.
 
 ## Tycho
 
@@ -66,7 +66,7 @@ Habitat buildings: Bela Orbital Terminal, Habitat Workshop.
 
 ### Prototype orbit (JSON)
 
-Bela Orbital Habitat, Bela Jump Gate
+Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (Bela Orbital Habitat plus three unnamed stations), and a static jump gate farther out.
 
 ## Irasia
 
