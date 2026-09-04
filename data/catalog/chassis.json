@@ -5,10 +5,22 @@
     "maker": "Holt-Winters Corp",
     "mass": 3.2,
     "hits": 18,
-    "max_load": 6.0,
+    "mass_limit": 18.0,
+    "volume": 24.0,
+    "heat_capacity": 80.0,
     "maneuver": "high",
     "hull_color": "#5ee0ff",
-    "sprite": "res://assets/ships/chassis/flare_on_chassis.svg"
+    "sprite": "res://assets/ships/chassis/flare_on_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 4,
+      "utility": 2,
+      "light_weapon": 2,
+      "medium_weapon": 0,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
   },
   {
     "id": "pegasus_chassis",
@@ -16,9 +28,21 @@
     "maker": "GVW Corp",
     "mass": 8.5,
     "hits": 28,
-    "max_load": 24.0,
+    "mass_limit": 48.0,
+    "volume": 60.0,
+    "heat_capacity": 120.0,
     "maneuver": "low",
     "hull_color": "#b8a878",
-    "sprite": "res://assets/ships/chassis/pegasus_chassis.svg"
+    "sprite": "res://assets/ships/chassis/pegasus_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 5,
+      "utility": 4,
+      "light_weapon": 3,
+      "medium_weapon": 0,
+      "heavy_weapon": 0,
+      "maneuver": 2
+    }
   }
 ]

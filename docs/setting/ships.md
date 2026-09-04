@@ -4,14 +4,14 @@
 
 ## Composition model
 
-A space ship is assembled from catalog components:
+A space ship is assembled from a fixed chassis and installed modules:
 
 ```
 SpaceShip
-├── Chassis (required)
-├── Engine (required)
-├── Armour (optional)
-└── Weapons[] (0–n; one "current" for combat)
+├── Chassis (required, fixed)
+├── modules[] (slot → module_id)
+├── fuel_current, ammunition{}, cargo{}
+└── derived stats + operating state (in flight)
 ```
 
 | Field | Description |
@@ -128,4 +128,4 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 | Weapons on player ships | Mass driver, lasers, etc. | Not wired in Godot prototype |
 | Hyperdrive on Dragon Gold | Alpha class | Not in prototype JSON |
 
-Flight behaviour in the prototype uses derived thrust, speed, and maneuver from chassis + engine + armour only — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).
+Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and heat simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).

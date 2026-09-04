@@ -2,16 +2,18 @@
 
 JSON catalog schemas and runtime types for the Godot prototype. For setting intent beyond what is catalogued today, see [setting docs](../setting/README.md).
 
+Full assembly design: [ship_assembly.txt](ship_assembly.txt).
+
 ## Catalog files
 
 All catalog arrays are indexed by string `id` at load time. Duplicate ids log errors.
 
 | File | Format | Purpose |
 |------|--------|---------|
-| `chassis.json` | array | Hull frames |
-| `engines.json` | array | Propulsion |
-| `armour.json` | array | Armour plates |
-| `ships.json` | array | Ship templates (default loadouts) |
+| `chassis.json` | array | Hull frames with mount envelopes |
+| `modules.json` | array | All installable equipment (propulsion, power, weapons, cargo, …) |
+| `ammunition.json` | array | Ammunition type definitions (mass, cost) |
+| `ships.json` | array | Manufacturer templates (recommended module loadouts) |
 | `player.json` | object | New-game template: starting sector, credits, owned ship instances |
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
@@ -31,7 +33,71 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 - Sector ids in `worlds.json` keys must match `sectors.json` ids.
 - World entity ids are unique within a sector layout; interactable ids reference `interactables.json`.
 
-## `player.json`
+## Ship construction model
+
+```
+Chassis (envelope + mounts)
+  └── installed modules (slot → module_id)
+        └── aggregated capacities + derived flight stats
+              └── operating state (power, heat, fuel — in flight)
+```
+
+**Static fitting** validates mount compatibility, mass limit, and volume. **Operating overload** (e.g. weapons drawing more power than the plant generates while firing) is allowed at install time; `ShipOperations.tick` resolves power/heat/fuel during flight.
+
+### `chassis.json`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | |
+| `name` | string | |
+| `maker` | string | Corporation name |
+| `mass` | number | Hull structural mass (tonnes) |
+| `hits` | number | Base structural integrity |
+| `mass_limit` | number | Maximum configured ship mass (tonnes) |
+| `volume` | number | Internal volume envelope (m³) |
+| `heat_capacity` | number | Thermal overload ceiling |
+| `maneuver` | string | `low` \| `medium` \| `high` → rotation and damp |
+| `mounts` | object | Mount category → count (e.g. `main_engine: 1`, `system: 5`) |
+| `hull_color` | string | HTML colour for sprite modulate |
+| `sprite` | string | `res://` path to hull art |
+
+### `modules.json`
+
+Common fields (omit zero-valued properties):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | |
+| `name` | string | |
+| `maker` | string | |
+| `category` | string | See categories below |
+| `mount` | string | Required mount category; omit for internal-only modules |
+| `mass` | number | Tonnes |
+| `volume` | number | m³ |
+| `cost` | number | Yard purchase price |
+| `description` | string | |
+
+Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `heat_generation`, `compute_capacity`, `compute_demand`, `heat_dissipation`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
+
+**Categories in prototype:** `propulsion`, `power`, `computer`, `life_support`, `thermal`, `sensor`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
+
+### `ships.json` (template)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Template id |
+| `name` | string | |
+| `maker` | string | |
+| `chassis` | string | Chassis id |
+| `modules` | string[] | Recommended module ids (assigned to slots at new game) |
+
+### Slot naming
+
+Mounted modules use `{mount_category}_{n}` (e.g. `main_engine_1`, `system_3`, `light_weapon_1`).
+
+Internal modules (cargo, fuel, armour without mount) use `internal_{n}`.
+
+### `player.json`
 
 ```json
 {
@@ -49,285 +115,115 @@ New Game reads this template once; runtime progress is stored in save slots unde
 |-------|------|-------------|
 | `id` | string | Unique instance id |
 | `name` | string | Display / call sign |
-| `template_id` | string | Reference to `ships.json` (metadata, default weapons) |
-| `chassis_id` | string | Current chassis |
-| `engine_id` | string | Current engine |
-| `armour_id` | string \| null | Current armour (empty/null = none) |
-| `location` | string | `"aboard"` or habitat id (e.g. `proxima_habitat`) |
+| `template_id` | string | Reference to `ships.json` |
+| `chassis_id` | string | Fixed chassis |
+| `modules` | array | `{ slot, module_id }` installed configuration |
+| `fuel_current` | number | Stored propulsion fuel |
+| `ammunition` | object | `{ ammo_type_id: qty }` |
+| `cargo` | object | `{ commodity_id: qty }` per-ship hold |
+| `location` | string | `"aboard"` or habitat id |
 
-`OwnedShip.to_dict()` mirrors `from_dict()` for save serialization.
+Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engine_1` / `internal_1`.
 
 - **aboard** — ship the player flies in orbit.
 - **habitat id** — parked at that habitat; persists across sector jumps.
-- Docking sets current ship `location` to the docked habitat id.
-- Undocking sets chosen ship to `aboard` and updates `current_ship_id`.
 
-## Ship modules
+## Runtime ship types
 
-### `chassis.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | |
-| `name` | string | |
-| `maker` | string | Corporation name |
-| `mass` | number | Tonnes |
-| `hits` | number | Structural integrity (not used in flight prototype) |
-| `max_load` | number | Cargo capacity tonnes |
-| `maneuver` | string | `low` \| `medium` \| `high` → rotation and damp |
-| `hull_color` | string | HTML colour for sprite modulate |
-| `sprite` | string | `res://` path to hull art |
-
-### `engines.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | |
-| `name` | string | |
-| `maker` | string | |
-| `mass` | number | Tonnes |
-| `thrust` | number | Design thrust (input to assembler) |
-| `max_speed` | number | km/s cap |
-| `boost_multiplier` | number | Boost speed factor |
-
-### `armour.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | |
-| `name` | string | |
-| `maker` | string | |
-| `mass` | number | Tonnes |
-| `hits` | number | Armour pool (not used in flight prototype) |
-
-### `ships.json`
-
-Template record; owned instances override module ids.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Template id |
-| `name` | string | |
-| `maker` | string | |
-| `chassis` | string | Default chassis id |
-| `engine` | string | Default engine id |
-| `armour` | string \| null | Default armour |
-| `weapons` | array | Weapon ids (empty in prototype) |
+| Type | File | Role |
+|------|------|------|
+| `OwnedShip` | `owned_ship.gd` | Persistent configuration + inventories |
+| `AssembledShip` | `assembled_ship.gd` | Resolved modules, capacities, envelope, derived stats |
+| `ShipOperatingState` | `ship_operating_state.gd` | Transient power/heat/fuel/compute state |
+| `ShipAssembler` | `ship_assembler.gd` | Assemble, validate install, derive stats |
+| `ShipOperations` | `ship_operations.gd` | In-flight operating tick |
+| `ShipAssembly` | `ship_assembly.gd` | Fitting gameplay (buy/sell/install/remove/refuel) |
 
 ### Derived flight stats
 
-`ShipAssembler._derive_stats` combines chassis + engine + armour:
+`ShipAssembler.derive_stats` uses **loaded mass** = dry module mass + fuel mass + cargo mass + ammunition mass:
 
-- Total mass = sum of module masses
-- `forward_thrust` = engine thrust / mass × scale
-- `reverse_thrust` = forward × ratio
-- `max_speed`, `boost_max_speed` from engine (boost capped)
-- `rotation_speed`, `linear_damp` from chassis `maneuver` tier
+- `forward_thrust` = engine thrust / loaded_mass × scale
+- Maneuver rotation/damp from chassis tier
+- Boost speed capped at 980 km/s
 
-Workshop swaps update owned ship module ids immediately; `main.gd` re-assembles and reconfigures the player ship when the aboard ship changes.
+### Operating state (in flight)
 
-## Sectors and worlds
+`ShipOperations.tick` each physics frame:
 
-### `sectors.json`
+- Allocates power by priority (life support + propulsion critical; sensors/computer high; weapons normal)
+- Integrates heat (generation − dissipation); overheat reduces boost and thrust
+- Consumes fuel from `owned.fuel_current`
+- Sets `thrust_factor` when fuel empty, power deficit, or overheating
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Sector key (e.g. `proxima`) |
-| `name` | string | Full name ("Proxima Sector") |
-| `orbit_name` | string | HUD location while in orbit |
-| `play_bounds` | number | Dust ring radius (world units) |
-| `spawn` | `{ x, y }` | Player position after sector load / jump |
-| `objective` | string | HUD objective text |
-| `mappings` | array | Known Unspace routes from this sector |
+Session persists `ship_heat` across saves; fuel lives on the owned ship.
 
-#### Mapping entry
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `target` | string | Destination sector id |
-| `solution` | number | Known Unspace integer (flavour; typing not implemented) |
-| `n` | number | N-space depth for this route (4 = shallowest playable) |
-| `label` | string | Button text in jump overlay |
-
-Example: Proxima → Bela uses solution **42** at **n=4**; Bela → Proxima uses **−34458** at **n=4**.
-
-### `unspaces.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unspace layout id (e.g. `n4_default`) |
-| `n` | number | N-space depth (4 = lowest above 3-space realspace) |
-| `name` | string | Display name |
-| `orbit_name` | string | HUD location while in transit |
-| `play_bounds` | number | Boundary radius |
-| `spawn` | `{ x, y }` | Entry position in 4-space |
-| `objective` | string | Default objective text |
-| `world_id` | string | Key in `worlds.json` for entity layout |
-
-### `worlds.json`
-
-Top-level object: `{ "sector_id": { "entities": [ ... ] } }`.
-
-#### World entity
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | yes | Unique within sector |
-| `kind` | string | yes | See kinds below |
-| `position` | `{ x, y }` | yes | World coordinates |
-| `rotation` | number | no | Radians |
-| `scale` | `{ x, y }` | no | Default 1,1 |
-| `label` | string | no | Label node text |
-| `interactable` | string | no | Interactable catalog id |
-| `sprite` | string | no | Override texture path |
-| `modulate` | string | no | HTML colour (e.g. water-world tint) |
-
-**Kinds:** `habitat`, `jump_gate`, `beacon`, `wreck`, `debris`, `planet_limb`, `hazard`.
-
-Hazard entities support `radius`, optional `shear_strength`, `hull_stress`.
-
-Dust ring is **not** in JSON; generated from `play_bounds`.
-
-## Interactables
-
-### `interactables.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | |
-| `title` | string | Display name |
-| `inspect_text` | string | Flavour / log on interact |
-| `kind` | string | `inspect` \| `salvage` \| `dock` \| `translate` \| `arrive` |
-| `salvage_reward` | number | Credits (salvage only) |
-| `dock_location_id` | string | Habitat id (dock only) |
-
-Translate interactables open the route overlay; `arrive` interactables complete 4-space transit at exit portals.
-
-Runtime: `InteractableDef.from_dict()` — `RefCounted`, not a Godot Resource.
-
-## Habitats and buildings
-
-### `habitats.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Matches dock `location_id` |
-| `name` | string | |
-| `type` | string | `habitat` |
-| `description` | string | Long description for habitat screen header |
-| `short_desc` | string | Legacy short text |
-| `art` | string | `res://` path to location illustration |
-| `default_building` | string | Opened on dock |
-| `buildings` | string[] | Visit list |
-
-### `buildings.json`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | |
-| `name` | string | |
-| `type` | string | `terminal`, `shipyard`, `market`, `bar`, … |
-| `kind` | string | Legacy alias (`workshop` → shipyard, `landmark` → bar) |
-| `description` | string | Building detail text |
-| `short_desc` | string | Legacy short text |
-| `art` | string | `res://` path to building illustration |
-| `services` | string[] | Optional (e.g. `assembly`, `parts`) |
-
-Building `type` drives HabitatScreen content panels. UI never hardcodes building order or ids.
-
-Workshop/shipyard buildings enable **ShipyardScreen** assembly for ships with `location` equal to current `habitat_id`.
-
-## Runtime session state
+## `player.json` and session
 
 `PrototypeSession` (`scripts/gameplay/prototype_session.gd`):
 
 | Field | Description |
 |-------|-------------|
-| `player_name` | Pilot display name |
-| `callsign` | Pilot callsign |
-| `sector_id` | Current 3-space sector (when not in unspace) |
-| `in_unspace` | Flying through N-space transit |
-| `unspace_n` | Current N-space depth |
-| `unspace_world_id` | Active unspace layout id |
-| `pending_destination_id` | Target sector after exit portal |
-| `hull` / `max_hull` | Hull stress during 4-space (from chassis hits) |
-| `location_name` | Orbit name or `"Habitat / Building"` when docked |
-| `credits` | Player credits |
-| `objective` | HUD string |
-| `last_log` | Recent action message |
-| `salvaged_ids` | Interactable ids already salvaged |
-| `inspected_ids` | Interactable ids inspected at least once |
-| `docked` | In habitat menu |
-| `habitat_id`, `building_id` | Current dock context |
-| `owned_ships` | `OwnedShip[]` |
-| `current_ship_id` | Aboard ship id |
-| `cargo` | `{ commodity_id: qty }` player cargo hold |
-| `spare_parts` | `{ part_id: qty }` spare engines/armour in inventory |
+| `owned_ships` | `OwnedShip[]` — each carries its own `cargo` |
+| `spare_parts` | `{ module_id: qty }` uninstalled modules in player inventory |
+| `ship_heat` | Current accumulated thermal load (aboard ship) |
+| `hull` / `max_hull` | Hull stress during 4-space (from chassis + armour hits) |
 
-Key methods: `start_new_game`, `to_dict`, `from_save`, `buy_commodity`, `sell_commodity`, `add_spare_part`, `remove_spare_part`, `dock`, `visit`, `undock`, …
+Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected docked ship (defaults to `current_ship_id`).
 
 ### Ship assembly (`ShipAssembly`)
 
-Gameplay operations independent of UI:
-
 - `buy_part` / `sell_part` — yard stock ↔ credits ↔ `spare_parts`
-- `install_part` / `remove_part` — slot is `engine` or `armour` only; **chassis is fixed**
-- `preview_stats` / `get_stat_block` — derived stats for shipyard display
+- `install_module` / `remove_module` — any compatible slot; validates mass/volume/mount
+- `refuel_ship` — fill fuel tank toward capacity for credits
+- `preview_stats` / `get_engineering_block` — configuration + engineering readout for shipyard UI
 
-Installing consumes one spare; previously installed part returns to inventory.
+Chassis is **fixed**; undock is allowed even with incomplete fits (no thrust without engine/fuel).
 
 ## Save files
 
-Three slots at `user://saves/slot_1.json` … `slot_3.json`. Loader/writer: `scripts/gameplay/save_store.gd`.
+Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VERSION` = **2**.
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "saved_at": "2026-09-01T12:00:00Z",
   "player": { "name": "Jane Doe", "callsign": "Vixen" },
-  "session": { /* PrototypeSession.to_dict() */ },
-  "ships": [ /* OwnedShip.to_dict() */ ],
+  "session": { /* PrototypeSession.to_dict() — includes ship_heat, spare_parts */ },
+  "ships": [ /* OwnedShip.to_dict() — modules, cargo, fuel, ammunition */ ],
   "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
 }
 ```
 
-**Session fields saved:** sector, location strings, credits, objective, log, salvaged/inspected ids, docked state, habitat/building ids, current ship id, unspace transit fields, hull stress, **cargo**, **spare_parts**.
+Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship_id`.
 
-**Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load), world node layouts (reloaded from `worlds.json`).
+**Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load).
 
-**Flight fields:** player position, velocity, and facing so mid-orbit and mid-4-space saves restore correctly. Docked saves store the last frozen position; load reopens the location overlay.
+## Sectors, worlds, interactables, habitats
+
+(Sector/world/interactable/habitat schemas unchanged — see previous sections in git history or setting docs.)
 
 ## How to extend
 
-### Add an orbit object
+### Add a module
 
-1. Add interactable to `interactables.json` if the object is interactive.
-2. Add entity to `worlds.json` under the sector's `entities` array.
-3. Ensure `kind` is mapped in `WorldLoader.SCENES` (or handled for `planet_limb`).
-4. Reimport / run.
+1. Add entry to `modules.json` with `category`, optional `mount`, mass/volume, and category stats.
+2. Reference in `ships.json` template if part of a default loadout.
+3. Set `cost` for shipyard purchase.
 
-### Add a building
+### Add a ship template
 
-1. Entry in `buildings.json`.
-2. Add building id to habitat's `buildings` array in `habitats.json`.
-
-### Add a sector
-
-1. Entry in `sectors.json` with spawn, bounds, mappings.
-2. Layout in `worlds.json` under new sector id.
-3. Habitats / interactables as needed.
-4. Optionally set `player.json` `starting_sector` for testing.
+1. Ensure chassis exists with appropriate `mounts`.
+2. Add `ships.json` record with `modules[]` list.
+3. Add owned instance to `player.json` with explicit slot assignments, or rely on auto-assignment from template.
 
 ## Implemented subset vs setting
 
 | Area | In JSON today | Setting target |
 |------|---------------|----------------|
-| Sectors | Proxima, Bela | Six starter systems |
-| Chassis | Flare-ON, Pegasus | Seven+ families |
-| Engines | Mark 1, Mark 3 Fusion | Fusion, antimatter, gravitic tiers |
-| Armour | 5mm Chitanium | Titanium/endosteel range |
-| Weapons | None | Mass driver, lasers, plasma, … |
-| Shields, LSS, hyperdrive | None | Full design tables |
-| On-foot cities | None | Roadmaps per planet |
+| Ship model | Chassis + modules + budgets | Full Elite-style fitting + combat |
+| Modules | Fusion engines, power, LS, sensors, lasers, mass drivers, cargo, fuel | Shields, ECM, hyperdrive, passenger classes |
+| Weapons | Catalogued; not fired in flight | Full combat loop |
+| Operating sim | Power, heat, fuel in flight | Combat power contention, ammo consumption |
 
-Canonical lore and full catalogs: [setting/planets.md](../setting/planets.md), [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).
+Canonical lore: [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).

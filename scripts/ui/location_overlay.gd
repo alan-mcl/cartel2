@@ -169,9 +169,21 @@ func _rebuild_workshop_panel() -> void:
 func _rebuild_module_options(ship: OwnedShip) -> void:
 	_clear_container(_workshop_modules)
 
-	_add_module_section("Chassis", "chassis", _catalog.list_chassis(), ship.chassis_id, ship.id, false)
-	_add_module_section("Engine", "engine", _catalog.list_engines(), ship.engine_id, ship.id, false)
-	_add_module_section("Armour", "armour", _catalog.list_armour(), ship.armour_id, ship.id, true)
+	var assembled := ShipAssembler.assemble_owned(_catalog, ship)
+	for entry in assembled.installed_modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var slot := str(entry.get("slot", ""))
+		var module_data: Variant = entry.get("data", {})
+		var module_name := str(module_data.get("name", entry.get("module_id", ""))) if typeof(module_data) == TYPE_DICTIONARY else str(entry.get("module_id", ""))
+		var label := Label.new()
+		label.text = "%s: %s" % [slot, module_name]
+		_workshop_modules.add_child(label)
+
+	var note := Label.new()
+	note.text = "Use Shipyard assembly for module changes."
+	note.theme_type_variation = &"Muted"
+	_workshop_modules.add_child(note)
 
 
 func _add_module_section(

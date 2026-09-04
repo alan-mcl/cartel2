@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mass_driver_round",
+    "name": "Mass Driver Round",
+    "mass": 0.05,
+    "cost": 2
+  },
+  {
+    "id": "missile_light",
+    "name": "Light Missile",
+    "mass": 1.2,
+    "cost": 85
+  }
+]

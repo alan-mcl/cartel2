@@ -8,22 +8,23 @@
 |-------|-----------|-------|
 | **Full component model** | Original design spreadsheet | Stats for chassis, engines, weapons, shields, armour, LSS, hyperdrives, ammo |
 | **Ship families** | Ships design doc | Lore and intended loadouts — see [ships.md](ships.md) |
-| **Prototype catalog** | `data/catalog/*.json` | Subset used by `ShipAssembler` |
+| **Prototype catalog** | `data/catalog/*.json` | Chassis, unified modules, ammunition types, ship templates |
 
 Rebuild should treat the spreadsheet as **target balance**; JSON as **current instance data**.
 
 ## Space ship slots
 
 ```
-Chassis (required)
-Engine (required)
-Armour (optional)
-Weapons[] (0–n)
-Shield (design)
-Life support (design)
-Hyperdrive (design)
-CPU / software (design — SnedeCorp)
+Chassis (required, fixed on owned ships)
+Installed modules[] (slot → module_id)
+  ├── propulsion (main_engine mount)
+  ├── power (power mount)
+  ├── systems (system mount): computer, life support, thermal, sensors, …
+  ├── weapons (light/medium/heavy weapon mounts)
+  └── internal: cargo bays, fuel tanks, armour
 ```
+
+Mount counts come from chassis `mounts`. Unused mounts are normal.
 
 ---
 
@@ -31,12 +32,12 @@ CPU / software (design — SnedeCorp)
 
 | Stat | Description |
 |------|-------------|
-| Weight | Tonnes (`mass` in JSON) |
+| Weight | Hull structural mass (`mass` in JSON) |
+| Mass limit | Maximum configured ship mass |
+| Volume | Internal volume envelope |
 | Hits | Structural integrity |
-| Max load | Cargo/capacity tonnes |
-| Maneuver | low / medium / high — affects rotation and damping in prototype |
-
-Original POC XML used placeholder hits (1000); design values are typically **10–40**.
+| Maneuver | low / medium / high — affects rotation and damping |
+| Mounts | Available hardpoints by category |
 
 ### In prototype JSON
 
@@ -49,19 +50,22 @@ Each chassis references a hull **sprite** path and **hull_color** for rendering.
 
 ---
 
-## Engines
+## Modules (`modules.json`)
+
+All equipment is defined in a single catalogue, filtered by `category`.
+
+### Propulsion (`category: propulsion`, mount: `main_engine`)
 
 Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1–2 Gravitic**.
 
-| Stat (design) | JSON field | Prototype use |
-|---------------|------------|---------------|
-| Weight | `mass` | Total ship mass |
+| Stat | JSON field | Prototype use |
+|------|------------|---------------|
+| Weight | `mass` | Ship mass |
 | Thrust | `thrust` | Forward acceleration |
 | Max speed | `max_speed` | Speed cap km/s |
-| Fuel use | — | Conceptual; not simulated |
+| Fuel use | `fuel_consumption` | Consumed in flight |
 | Boost | `boost_multiplier` | Boost speed factor |
-
-Gravitic engines (Flare-ON SK): thrust/speed TBD in sheet; optimised for near-orbit.
+| Power / heat | `power_demand`, `heat_generation` | Operating budgets |
 
 ### In prototype JSON
 
@@ -70,17 +74,15 @@ Gravitic engines (Flare-ON SK): thrust/speed TBD in sheet; optimised for near-or
 | `mark_3_fusion` | Bayes Inc | Flare-ON SS default |
 | `mark_1_fusion` | Bayes Inc | Pegasus P101 default |
 
-`ShipAssembler` derives `ShipStats`: thrust/mass scaling, maneuver-based rotation and linear damp, boost cap 980 km/s.
+`ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and heat in flight.
 
 ---
 
 ## Armour
 
-Design materials: **5–15 mm Titanium / Endosteel** with hit points and "stops all" behaviour.
+Design materials: **5–15 mm Titanium / Endosteel** with hit points.
 
-Original POC name: **5mm Chitanium** (differs from spreadsheet material names).
-
-Armour **reduces** incoming damage in design; algorithm was stubbed in Java POC. Not used in flight prototype.
+In the module model, armour is an **internal module** (`category: armour`) adding `hits` to the assembled hull pool.
 
 ### In prototype JSON
 
@@ -195,10 +197,11 @@ Ship computer and onboard software monopoly in lore. Flare-ON SK markets "latest
 At **Habitat Workshop** (`kind: "workshop"`):
 
 - Lists ships with `location` matching current habitat
-- Free swap of chassis, engine, armour from catalog lists
-- Immediate re-assembly and hull sprite update for aboard ship
+- Buy/sell/install/remove modules from unified catalogue
+- Refuel ships; inspect configuration and engineering budgets
+- Chassis is fixed per owned ship
 
-Planned: paid stock, limited inventory, weapons/shields/LSS/hyperdrive slots — see README placeholders and [architecture.md](../design/architecture.md).
+Planned: weapons firing, shield combat, hyperdrive slots — see README placeholders and [architecture.md](../design/architecture.md).
 
 ---
 
@@ -206,7 +209,7 @@ Planned: paid stock, limited inventory, weapons/shields/LSS/hyperdrive slots —
 
 When extending JSON after editing this bible:
 
-1. Add chassis/engines/armour/weapons entries with consistent ids
+1. Add module entries to `modules.json` with consistent ids and category
 2. Reference in `ships.json` templates and `player.json` instances
-3. Extend `ShipAssembler` / stats if new stat fields matter for flight
+3. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 4. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

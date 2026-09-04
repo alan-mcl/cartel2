@@ -2,12 +2,16 @@ extends CharacterBody2D
 
 signal interaction_target_changed(interactable: Interactable)
 signal motion_changed(speed: float, heading_deg: float, boosting: bool)
+signal operating_state_changed(state: ShipOperatingState)
 
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 
 @export var ship_id: String = "flare_on_ss"
 
 var assembled_ship: AssembledShip
+var owned_ship: OwnedShip
+var catalog: Catalog
+var operating_state: ShipOperatingState = ShipOperatingState.new()
 var motion := ShipMotion.new()
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
@@ -19,9 +23,12 @@ var _current_target: Interactable = null
 var _shear_hazards: Array[NspaceHazard] = []
 
 
-func configure(ship: AssembledShip) -> void:
+func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catalog = null) -> void:
 	assembled_ship = ship
+	owned_ship = owned
+	catalog = game_catalog
 	_apply_hull_visual()
+	_refresh_loaded_stats()
 
 
 func _apply_hull_visual() -> void:
@@ -40,6 +47,13 @@ func _apply_hull_visual() -> void:
 
 	var color_text := str(assembled_ship.chassis.get("hull_color", "#ffffff"))
 	_hull.modulate = Color.html(color_text)
+
+
+func _refresh_loaded_stats() -> void:
+	if catalog == null or owned_ship == null or assembled_ship == null:
+		return
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
+	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
 
 
 func freeze_motion() -> void:
@@ -73,7 +87,6 @@ func apply_shear_forces(session: PrototypeSession, delta: float) -> void:
 		if session != null:
 			session.apply_hull_stress(hazard.get_hull_stress(), delta)
 
-	# Slight slowdown at zero hull — not lethal
 	if session != null and session.hull <= 0.0:
 		motion.velocity *= 0.985
 
@@ -103,13 +116,6 @@ func register_world_interactables() -> void:
 		_register_interactable(node as Interactable)
 
 
-func _register_interactable(interactable: Interactable) -> void:
-	if interactable == null:
-		return
-	if not interactable.focus_changed.is_connected(_on_interactable_focus_changed):
-		interactable.focus_changed.connect(_on_interactable_focus_changed)
-
-
 func _physics_process(delta: float) -> void:
 	var stats := get_stats()
 	if stats.max_speed <= 0.0:
@@ -121,9 +127,38 @@ func _physics_process(delta: float) -> void:
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
 
-	motion.step(stats, delta, thrust, reverse, rotate_left, rotate_right, boost)
-
 	var session: PrototypeSession = get_parent().session if get_parent() != null else null
+	if session != null and catalog != null and owned_ship != null and assembled_ship != null:
+		operating_state = ShipOperations.tick(
+			catalog,
+			assembled_ship,
+			owned_ship,
+			delta,
+			{
+				"thrust": thrust,
+				"boost": boost,
+				"in_flight": not session.docked,
+			},
+			1,
+			session.ship_heat
+		)
+		session.ship_heat = operating_state.heat
+		_refresh_loaded_stats()
+		operating_state_changed.emit(operating_state)
+		_update_operating_warnings(session)
+
+	motion.step(
+		stats,
+		delta,
+		thrust,
+		reverse,
+		rotate_left,
+		rotate_right,
+		boost,
+		operating_state.thrust_factor,
+		operating_state.boost_allowed
+	)
+
 	if session != null and session.in_unspace:
 		apply_shear_forces(session, delta)
 
@@ -133,6 +168,15 @@ func _physics_process(delta: float) -> void:
 
 	_update_thrust_visual(thrust or reverse)
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
+
+
+func _update_operating_warnings(session: PrototypeSession) -> void:
+	if operating_state.fuel_empty and Input.is_action_pressed("thrust"):
+		session.last_log = "Out of fuel."
+	elif operating_state.overheating:
+		session.last_log = "Thermal overload. Reduce thrust."
+	elif operating_state.power_deficit > 0.0:
+		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -188,3 +232,10 @@ func _refresh_target() -> void:
 	if _current_target != best:
 		_current_target = best
 		interaction_target_changed.emit(_current_target)
+
+
+func _register_interactable(interactable: Interactable) -> void:
+	if interactable == null:
+		return
+	if not interactable.focus_changed.is_connected(_on_interactable_focus_changed):
+		interactable.focus_changed.connect(_on_interactable_focus_changed)

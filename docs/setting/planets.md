@@ -183,3 +183,21 @@ Horizon, Meridian, Providence, New Geneva, Ascension
 
 Horizon Habitat
 
+## Titania IX
+
+**Classification:** E4.9
+**System:** Wolf 359
+**Gravity:** 0.86 G
+**Population:** 8.5 billion
+**Ocean coverage:** 78%
+**Climate:** Temperate
+
+The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans and tracts of densely settled temperate territory. Most of its population lives in large coastal metropolitan regions surrounded by intensive agriculture. Its low gravity and spectacular skies have also made it a popular destination for tourism and residential development.
+
+### City Malls
+
+Titania Central, Skygarden
+
+### Orbitals
+
+Titania Habitat

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_shipyard_screen"]
+[gd_scene format=3 uid="uid://dxunnumg4q2q4"]
 
-[ext_resource type="Script" path="res://scripts/ui/shipyard_screen.gd" id="1"]
+[ext_resource type="Script" uid="uid://36dgr4wqf4h7" path="res://scripts/ui/shipyard_screen.gd" id="1"]
 
-[node name="ShipyardScreen" type="Control"]
+[node name="ShipyardScreen" type="Control" unique_id=408352300]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="Layout" type="VBoxContainer" parent="."]
+[node name="Layout" type="VBoxContainer" parent="." unique_id=522720042]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,115 +20,116 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="Header" type="PanelContainer" parent="Layout"]
+[node name="Header" type="PanelContainer" parent="Layout" unique_id=1454783911]
 layout_mode = 2
 theme_type_variation = &"Surface"
 
-[node name="HeaderBox" type="VBoxContainer" parent="Layout/Header"]
+[node name="HeaderBox" type="VBoxContainer" parent="Layout/Header" unique_id=2111827148]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="Layout/Header/HeaderBox"]
+[node name="Title" type="Label" parent="Layout/Header/HeaderBox" unique_id=1769949421]
 layout_mode = 2
 theme_type_variation = &"Title"
 text = "Shipyard"
 
-[node name="Credits" type="Label" parent="Layout/Header/HeaderBox"]
+[node name="Credits" type="Label" parent="Layout/Header/HeaderBox" unique_id=1134620159]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Credits: d0"
 
-[node name="ArtHost" type="VBoxContainer" parent="Layout/Header/HeaderBox"]
+[node name="ArtHost" type="VBoxContainer" parent="Layout/Header/HeaderBox" unique_id=222437775]
 layout_mode = 2
 
-[node name="Body" type="PanelContainer" parent="Layout"]
+[node name="Body" type="PanelContainer" parent="Layout" unique_id=2099481698]
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Surface"
 
-[node name="Split" type="HSplitContainer" parent="Layout/Body"]
+[node name="Split" type="HSplitContainer" parent="Layout/Body" unique_id=174005222]
 layout_mode = 2
 size_flags_vertical = 3
+split_offsets = PackedInt32Array(360)
 split_offset = 360
 
-[node name="Left" type="VBoxContainer" parent="Layout/Body/Split"]
+[node name="Left" type="VBoxContainer" parent="Layout/Body/Split" unique_id=1273638830]
 custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ShipsHeading" type="Label" parent="Layout/Body/Split/Left"]
+[node name="ShipsHeading" type="Label" parent="Layout/Body/Split/Left" unique_id=937152102]
 layout_mode = 2
 theme_type_variation = &"Section"
 text = "DOCKED SHIPS"
 
-[node name="ShipItemList" type="ItemList" parent="Layout/Body/Split/Left"]
-custom_minimum_size = Vector2(0, 120)
+[node name="ShipItemList" type="ItemList" parent="Layout/Body/Split/Left" unique_id=1434113218]
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 select_mode = 1
 allow_reselect = true
 
-[node name="ShipDetail" type="VBoxContainer" parent="Layout/Body/Split/Left"]
+[node name="ShipDetailScroll" type="ScrollContainer" parent="Layout/Body/Split/Left" unique_id=1262612191]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ShipDetail" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll" unique_id=1697656282]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetail"]
+[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll/ShipDetail" unique_id=1409077569]
 layout_mode = 2
 
-[node name="ShipDetailBody" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetail"]
+[node name="ShipDetailBody" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll/ShipDetail" unique_id=1097284895]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/separation = 4
 
-[node name="Right" type="VBoxContainer" parent="Layout/Body/Split"]
+[node name="Right" type="VBoxContainer" parent="Layout/Body/Split" unique_id=708009954]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="PartsList" type="VBoxContainer" parent="Layout/Body/Split/Right"]
+[node name="StockHeading" type="Label" parent="Layout/Body/Split/Right" unique_id=135384268]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "YARD STOCK / INVENTORY"
+
+[node name="StockTabs" type="TabContainer" parent="Layout/Body/Split/Right" unique_id=681286870]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 4
+size_flags_stretch_ratio = 2.0
 
-[node name="PartDetail" type="VBoxContainer" parent="Layout/Body/Split/Right"]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Actions" type="HBoxContainer" parent="Layout/Body/Split/Right"]
+[node name="Actions" type="HBoxContainer" parent="Layout/Body/Split/Right" unique_id=1248852137]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BuyButton" type="Button" parent="Layout/Body/Split/Right/Actions"]
+[node name="BuyButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=1866846280]
 layout_mode = 2
 text = "Buy"
 
-[node name="SellButton" type="Button" parent="Layout/Body/Split/Right/Actions"]
+[node name="SellButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=294495571]
 layout_mode = 2
 text = "Sell"
 
-[node name="InstallButton" type="Button" parent="Layout/Body/Split/Right/Actions"]
+[node name="RefuelButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=1582411307]
 layout_mode = 2
-text = "Install"
+text = "Refuel"
 
-[node name="RemoveButton" type="Button" parent="Layout/Body/Split/Right/Actions"]
-layout_mode = 2
-text = "Remove Armour"
-
-[node name="Footer" type="PanelContainer" parent="Layout"]
+[node name="Footer" type="PanelContainer" parent="Layout" unique_id=1134504380]
 layout_mode = 2
 theme_type_variation = &"Elevated"
 
-[node name="FooterBox" type="HBoxContainer" parent="Layout/Footer"]
+[node name="FooterBox" type="HBoxContainer" parent="Layout/Footer" unique_id=753931720]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BackButton" type="Button" parent="Layout/Footer/FooterBox"]
+[node name="BackButton" type="Button" parent="Layout/Footer/FooterBox" unique_id=2050058480]
 layout_mode = 2
 text = "Back"
 
-[node name="Log" type="Label" parent="Layout/Footer/FooterBox"]
+[node name="Log" type="Label" parent="Layout/Footer/FooterBox" unique_id=156358949]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Muted"
 autowrap_mode = 3
-text = ""

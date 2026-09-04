@@ -29,8 +29,8 @@ var unspace_world_id: String = ""
 var pending_destination_id: String = ""
 var hull: float = 0.0
 var max_hull: float = 0.0
+var ship_heat: float = 0.0
 
-var cargo: Dictionary = {}
 var spare_parts: Dictionary = {}
 
 var _hull_stress_cooldown: float = 0.0
@@ -56,7 +56,7 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	pending_destination_id = ""
 	hull = 0.0
 	max_hull = 0.0
-	cargo.clear()
+	ship_heat = 0.0
 	spare_parts.clear()
 
 	var ships: Variant = player_data.get("ships", [])
@@ -110,7 +110,7 @@ func to_dict() -> Dictionary:
 		"pending_destination_id": pending_destination_id,
 		"hull": hull,
 		"max_hull": max_hull,
-		"cargo": cargo.duplicate(),
+		"ship_heat": ship_heat,
 		"spare_parts": spare_parts.duplicate(),
 	}
 
@@ -148,8 +148,11 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	pending_destination_id = str(session_data.get("pending_destination_id", ""))
 	hull = float(session_data.get("hull", 0.0))
 	max_hull = float(session_data.get("max_hull", 0.0))
-	cargo = _int_dict_from_variant(session_data.get("cargo", {}))
+	ship_heat = float(session_data.get("ship_heat", 0.0))
 	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
+
+	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
+	var legacy_cargo := _int_dict_from_variant(session_data.get("cargo", {}))
 
 	owned_ships.clear()
 	var ships: Variant = data.get("ships", [])
@@ -161,6 +164,12 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		if typeof(ship_data) != TYPE_DICTIONARY:
 			continue
 		owned_ships.append(OwnedShip.from_dict(ship_data))
+
+	if save_version == SaveStore.LEGACY_SAVE_VERSION and not legacy_cargo.is_empty():
+		var aboard_ship := get_owned_ship(current_ship_id)
+		if aboard_ship != null:
+			for commodity_id in legacy_cargo.keys():
+				aboard_ship.add_cargo(str(commodity_id), int(legacy_cargo[commodity_id]))
 
 	if owned_ships.is_empty():
 		push_error("Save file contains no ships.")
@@ -292,7 +301,7 @@ func _init_hull_from_ship(assembled_ship: AssembledShip) -> void:
 	if assembled_ship == null or assembled_ship.chassis.is_empty():
 		max_hull = 18.0
 	else:
-		max_hull = float(assembled_ship.chassis.get("hits", 18.0))
+		max_hull = float(assembled_ship.capacities.get("hull_hits", assembled_ship.chassis.get("hits", 18.0)))
 	hull = max_hull
 	_hull_stress_cooldown = 0.0
 
@@ -415,30 +424,6 @@ func undock(catalog: Catalog, ship_id: String) -> bool:
 	return true
 
 
-func set_module(ship_id: String, slot: String, module_id: String) -> bool:
-	if slot == "chassis":
-		push_error("Chassis cannot be changed.")
-		return false
-
-	var ship := get_owned_ship(ship_id)
-	if ship == null:
-		return false
-
-	match slot:
-		"engine":
-			if module_id.is_empty():
-				return false
-			ship.engine_id = module_id
-		"armour":
-			ship.armour_id = module_id
-		_:
-			return false
-
-	last_log = "Updated %s loadout." % ship.name
-	changed.emit()
-	return true
-
-
 func get_current_building(catalog: Catalog) -> Dictionary:
 	if building_id.is_empty():
 		return {}
@@ -451,28 +436,43 @@ func get_current_habitat(catalog: Catalog) -> Dictionary:
 	return catalog.get_habitat(habitat_id)
 
 
-func get_cargo_count(commodity_id: String) -> int:
-	return int(cargo.get(commodity_id, 0))
+func get_cargo_ship(ship_id: String = "") -> OwnedShip:
+	if not ship_id.is_empty():
+		return get_owned_ship(ship_id)
+	if docked and not current_ship_id.is_empty():
+		return get_owned_ship(current_ship_id)
+	return get_current_owned_ship()
 
 
-func add_cargo(commodity_id: String, amount: int) -> void:
-	if amount <= 0:
-		return
-	cargo[commodity_id] = get_cargo_count(commodity_id) + amount
+func get_cargo_count(ship: OwnedShip, commodity_id: String) -> int:
+	if ship == null:
+		return 0
+	return ship.get_cargo_count(commodity_id)
 
 
-func remove_cargo(commodity_id: String, amount: int) -> bool:
-	if amount <= 0:
+func get_ship_cargo_mass(catalog: Catalog, ship: OwnedShip) -> float:
+	if ship == null:
+		return 0.0
+	return ShipOperations.get_cargo_mass(catalog, ship)
+
+
+func get_ship_cargo_capacity(catalog: Catalog, ship: OwnedShip) -> float:
+	if ship == null:
+		return 0.0
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	return float(assembled.capacities.get("cargo_capacity", 0.0))
+
+
+func can_add_cargo(catalog: Catalog, ship: OwnedShip, commodity_id: String, amount: int) -> bool:
+	if ship == null or amount <= 0:
 		return false
-	var current := get_cargo_count(commodity_id)
-	if current < amount:
+	var commodity := catalog.get_commodity(commodity_id)
+	if commodity.is_empty():
 		return false
-	var remaining := current - amount
-	if remaining <= 0:
-		cargo.erase(commodity_id)
-	else:
-		cargo[commodity_id] = remaining
-	return true
+	var capacity := get_ship_cargo_capacity(catalog, ship)
+	var current_mass := get_ship_cargo_mass(catalog, ship)
+	var added_mass := float(commodity.get("mass", 0.0)) * amount
+	return current_mass + added_mass <= capacity + 0.001
 
 
 func get_spare_part_count(part_id: String) -> int:
@@ -499,8 +499,20 @@ func remove_spare_part(part_id: String, amount: int) -> bool:
 	return true
 
 
-func buy_commodity(catalog: Catalog, building_id: String, commodity_id: String, amount: int = 1) -> bool:
+func buy_commodity(
+	catalog: Catalog,
+	building_id: String,
+	commodity_id: String,
+	amount: int = 1,
+	ship_id: String = ""
+) -> bool:
 	if amount <= 0:
+		return false
+
+	var ship := get_cargo_ship(ship_id)
+	if ship == null:
+		last_log = "No ship selected for cargo."
+		changed.emit()
 		return false
 
 	var market := catalog.get_market_for_building(building_id)
@@ -515,6 +527,11 @@ func buy_commodity(catalog: Catalog, building_id: String, commodity_id: String, 
 	if commodity.is_empty():
 		return false
 
+	if not can_add_cargo(catalog, ship, commodity_id, amount):
+		last_log = "Not enough cargo capacity on %s." % ship.name
+		changed.emit()
+		return false
+
 	var price := int(listing.get("price", commodity.get("base_price", 0)))
 	var total_cost := price * amount
 	if credits < total_cost:
@@ -523,14 +540,26 @@ func buy_commodity(catalog: Catalog, building_id: String, commodity_id: String, 
 		return false
 
 	credits -= total_cost
-	add_cargo(commodity_id, amount)
+	ship.add_cargo(commodity_id, amount)
 	last_log = "Bought %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total_cost]
 	changed.emit()
 	return true
 
 
-func sell_commodity(catalog: Catalog, building_id: String, commodity_id: String, amount: int = 1) -> bool:
+func sell_commodity(
+	catalog: Catalog,
+	building_id: String,
+	commodity_id: String,
+	amount: int = 1,
+	ship_id: String = ""
+) -> bool:
 	if amount <= 0:
+		return false
+
+	var ship := get_cargo_ship(ship_id)
+	if ship == null:
+		last_log = "No ship selected for cargo."
+		changed.emit()
 		return false
 
 	var market := catalog.get_market_for_building(building_id)
@@ -541,7 +570,7 @@ func sell_commodity(catalog: Catalog, building_id: String, commodity_id: String,
 	if listing.is_empty():
 		return false
 
-	if get_cargo_count(commodity_id) < amount:
+	if get_cargo_count(ship, commodity_id) < amount:
 		last_log = "Not enough cargo to sell."
 		changed.emit()
 		return false
@@ -551,7 +580,7 @@ func sell_commodity(catalog: Catalog, building_id: String, commodity_id: String,
 	var sell_price := maxi(1, int(price * 0.8))
 	var total := sell_price * amount
 
-	if not remove_cargo(commodity_id, amount):
+	if not ship.remove_cargo(commodity_id, amount):
 		return false
 
 	credits += total
@@ -603,7 +632,7 @@ static func _validate_save_data(data: Dictionary) -> bool:
 		return false
 
 	var version := int(data.get("version", 0))
-	if version != SaveStore.SAVE_VERSION:
+	if version != SaveStore.SAVE_VERSION and version != SaveStore.LEGACY_SAVE_VERSION:
 		push_error("Unsupported save version: %d" % version)
 		return false
 

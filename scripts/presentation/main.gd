@@ -32,6 +32,7 @@ func _ready() -> void:
 	session.changed.connect(_on_session_changed)
 	_player.interaction_target_changed.connect(_on_interaction_target_changed)
 	_player.motion_changed.connect(_on_motion_changed)
+	_player.operating_state_changed.connect(_on_operating_state_changed)
 
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
@@ -160,7 +161,7 @@ func _start_game_from_session() -> void:
 		push_error("Failed to assemble current player ship.")
 		return
 
-	_player.configure(player_ship)
+	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
 	_hud.set_assembled_ship(player_ship)
 	_hud.visible = true
 	_game_active = true
@@ -386,7 +387,7 @@ func _on_ui_undock_requested(ship_id: String) -> void:
 		return
 
 	player_ship = _assemble_current_ship()
-	_player.configure(player_ship)
+	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
 	_player.freeze_motion()
 	_hud.set_assembled_ship(player_ship)
 
@@ -402,7 +403,7 @@ func _on_ui_ship_changed(ship_id: String) -> void:
 	if ship_id != session.current_ship_id:
 		return
 	player_ship = _assemble_current_ship()
-	_player.configure(player_ship)
+	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
 	_hud.set_assembled_ship(player_ship)
 
 
@@ -502,3 +503,7 @@ func _on_interaction_target_changed(target: Interactable) -> void:
 
 func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> void:
 	_hud.set_motion(speed, heading_deg, boosting)
+
+
+func _on_operating_state_changed(state: ShipOperatingState) -> void:
+	_hud.set_operating_state(state)

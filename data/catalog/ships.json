@@ -4,17 +4,35 @@
     "name": "Flare-ON SS",
     "maker": "Holt-Winters Corp",
     "chassis": "flare_on_chassis",
-    "engine": "mark_3_fusion",
-    "armour": null,
-    "weapons": []
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_3_fusion",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "radiator_mk1",
+      "sensor_basic",
+      "fuel_tank_small",
+      "cargo_bay_4",
+      "light_laser"
+    ]
   },
   {
     "id": "pegasus_p101",
     "name": "Pegasus P101",
     "maker": "GVW Corp",
     "chassis": "pegasus_chassis",
-    "engine": "mark_1_fusion",
-    "armour": "chitanium_5mm",
-    "weapons": []
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_1_fusion",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "radiator_mk1",
+      "sensor_basic",
+      "mass_driver_magazine_200",
+      "fuel_tank_medium",
+      "cargo_bay_10",
+      "chitanium_5mm",
+      "light_mass_driver"
+    ]
   }
 ]

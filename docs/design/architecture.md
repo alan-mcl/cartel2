@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `ShipAssembler`, `ShipAssembly`, `ShipMotion`, `OwnedShip`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -35,7 +35,7 @@ flowchart LR
   Session --> Assembly[ShipAssembly]
   Catalog --> Assembly
   UiRoot --> Habitat[HabitatScreen]
-  UiRoot --> Shipyard[ShipyardScreen]
+  Habitat --> Shipyard[ShipyardScreen embedded]
   SaveStore --> UserSaves[user://saves/slot_N.json]
   Loader --> World["$World nodes"]
   Assembler --> PlayerShip[PlayerShip configure]
@@ -55,8 +55,10 @@ On startup, `main.gd`:
 
 Docking opens **UiRoot** — a full-screen opaque Control UI (not a dim overlay). Navigation uses **ScreenStack** (`push_screen`, `pop_screen`, `replace_screen`):
 
-- **HabitatScreen** — building list from catalog, location art frame, type-based content panels (terminal/bar info, Exchange market, Shipyard overview).
-- **ShipyardScreen** — pushed for assembly: docked ships, fixed chassis, engine/armour install from spare inventory, yard stock buy/sell.
+- **HabitatScreen** — building list from catalog, location art frame, type-based content panels (terminal, Exchange market, embedded Shipyard assembly).
+- **ShipyardScreen** — embedded in the habitat content pane when Shipyard is selected: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel.
+
+Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `module_stock_item`).
 
 UI scripts receive a **UiContext** (`catalog`, `session`, `stack`, callbacks). They never load JSON or run gameplay rules directly — they call `PrototypeSession` / `ShipAssembly` and refresh on `session.changed`.
 
@@ -81,7 +83,7 @@ Location and building art paths live in catalog JSON under `assets/ui/locations/
 
 ### Orbital flight
 
-- `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from chassis + engine + armour).
+- `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from assembled modules and loaded mass), modulated by operating-state `thrust_factor`.
 - `play_bounds` per sector defines the dust ring; HUD warns when the player drifts outside.
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
 
@@ -100,8 +102,8 @@ Dock and jump-route selection set `get_tree().paused = true` until the overlay c
 ### Docking and shipyard
 
 1. `[E]` at habitat → `session.dock(catalog, habitat_id)` → **HabitatScreen**.
-2. Visit buildings from catalog list; **Proxima Exchange** for commodity buy/sell; **Shipyard** → **Open Assembly** for engine/armour fitting.
-3. Chassis is **fixed** per ship; engines and armour install from **spare_parts** inventory (buy at yard, sell spares back).
+2. Visit buildings from catalog list; **Proxima Exchange** for commodity buy/sell (per-ship cargo holds); **Shipyard** shows assembly inline in the habitat content pane.
+3. Chassis is **fixed** per ship; modules install from **spare_parts** inventory by dragging stock onto compatible slots (or click spare then click slot). Buy at yard fills spares; drag off a slot to uninstall. Engineering panel shows mass, volume, power, compute, heat, fuel budgets.
 4. Undock: **Terminal** → select docked ship → **Undock** → resume flight.
 
 Ships parked at a habitat **stay there when jumping sectors** (only the aboard ship travels).
@@ -160,7 +162,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 ## Save / load
 
 - Three fixed slots: `user://saves/slot_1.json` … `slot_3.json`.
-- Saves store pilot identity, full `PrototypeSession` state (including `cargo` and `spare_parts`), owned ship instances, and player flight position/velocity/facing.
+- Saves store pilot identity, full `PrototypeSession` state (including `spare_parts` and `ship_heat`), owned ship instances (modules, per-ship cargo, fuel, ammunition), and player flight position/velocity/facing.
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
 
@@ -171,10 +173,9 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unspace solution typing (integers shown as flavour only)
 - Deeper N-space routes (n > 4)
 - Ship hyperdrive translation
-- Ship combat, weapons firing, shields
+- Ship combat, weapons firing, shield hit pools
 - Paid workshop beyond parts inventory model
 - NPC traffic
-- Fuel / heat
 - Full six-sector world (only Proxima and Bela implemented in JSON)
 
 See [data_model.md](data_model.md) for implemented catalog subset vs [setting docs](../setting/README.md) for intended scope.

@@ -16,11 +16,13 @@ func step(
 	reverse: bool,
 	rotate_left: bool,
 	rotate_right: bool,
-	boost: bool
+	boost: bool,
+	thrust_factor: float = 1.0,
+	boost_allowed: bool = true
 ) -> void:
 	_thrusting = thrust
 	_reversing = reverse
-	_boosting = boost and thrust
+	_boosting = boost and thrust and boost_allowed
 
 	var rotate_input := float(rotate_right) - float(rotate_left)
 	facing += rotate_input * stats.rotation_speed * delta
@@ -29,11 +31,11 @@ func step(
 	var thrust_force := 0.0
 
 	if thrust:
-		thrust_force = stats.forward_thrust
+		thrust_force = stats.forward_thrust * clamp(thrust_factor, 0.0, 1.0)
 		if _boosting:
 			thrust_force *= stats.boost_multiplier
 	elif reverse:
-		thrust_force = -stats.reverse_thrust
+		thrust_force = -stats.reverse_thrust * clamp(thrust_factor, 0.0, 1.0)
 
 	velocity += forward * thrust_force * delta
 

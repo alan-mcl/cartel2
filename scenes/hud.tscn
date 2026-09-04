@@ -63,6 +63,25 @@ layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Boost: --"
 
+[node name="SystemsRow" type="HBoxContainer" parent="Root/Margin/StatusPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="FuelLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Fuel: —"
+
+[node name="PowerLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Power: —"
+
+[node name="HeatLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Heat: —"
+
 [node name="LocationLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
 text = "Location: Proxima near orbit"

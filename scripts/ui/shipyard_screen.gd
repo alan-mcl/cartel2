@@ -1,34 +1,73 @@
 extends Control
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
+const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
+const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 
+const STOCK_CATEGORIES := [
+	"propulsion",
+	"power",
+	"computer",
+	"life_support",
+	"thermal",
+	"sensor",
+	"weapon",
+	"armour",
+	"cargo",
+	"fuel",
+	"ammunition",
+]
+
+const SLOT_GROUPS := [
+	{"label": "Propulsion", "prefixes": ["main_engine", "maneuver"]},
+	{"label": "Power", "prefixes": ["power"]},
+	{"label": "Systems", "prefixes": ["system"]},
+	{"label": "Weapons", "prefixes": ["light_weapon", "medium_weapon", "heavy_weapon"]},
+	{"label": "Utilities", "prefixes": ["utility"]},
+	{"label": "Internal", "prefixes": ["internal"]},
+]
+
+@onready var _header: PanelContainer = $Layout/Header
 @onready var _title: Label = $Layout/Header/HeaderBox/Title
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
+@onready var _back_button: Button = $Layout/Footer/FooterBox/BackButton
 @onready var _ship_item_list: ItemList = $Layout/Body/Split/Left/ShipItemList
-@onready var _ship_detail: VBoxContainer = $Layout/Body/Split/Left/ShipDetail
-@onready var _ship_art_host: VBoxContainer = $Layout/Body/Split/Left/ShipDetail/ShipArtHost
-@onready var _ship_detail_body: VBoxContainer = $Layout/Body/Split/Left/ShipDetail/ShipDetailBody
-@onready var _parts_list: VBoxContainer = $Layout/Body/Split/Right/PartsList
-@onready var _part_detail: VBoxContainer = $Layout/Body/Split/Right/PartDetail
+@onready var _ship_art_host: VBoxContainer = $Layout/Body/Split/Left/ShipDetailScroll/ShipDetail/ShipArtHost
+@onready var _ship_detail_body: VBoxContainer = $Layout/Body/Split/Left/ShipDetailScroll/ShipDetail/ShipDetailBody
+@onready var _stock_tabs: TabContainer = $Layout/Body/Split/Right/StockTabs
 @onready var _log: Label = $Layout/Footer/FooterBox/Log
 
 var _context: UiContext
+var _embedded := false
 var _selected_ship_id: String = ""
 var _selected_part_id: String = ""
-var _selected_part_category: String = ""
-
+var _selected_slot: String = ""
+var _selected_stock_tab: int = 0
 var _ship_ids: PackedStringArray = PackedStringArray()
 var _suppress_ship_select: bool = false
 var _ship_art_frame: PanelContainer
 
 
 func _ready() -> void:
-	$Layout/Footer/FooterBox/BackButton.pressed.connect(_on_back_pressed)
+	_back_button.pressed.connect(_on_back_pressed)
 	$Layout/Body/Split/Right/Actions/BuyButton.pressed.connect(_on_buy_pressed)
 	$Layout/Body/Split/Right/Actions/SellButton.pressed.connect(_on_sell_pressed)
-	$Layout/Body/Split/Right/Actions/InstallButton.pressed.connect(_on_install_pressed)
-	$Layout/Body/Split/Right/Actions/RemoveButton.pressed.connect(_on_remove_pressed)
+	$Layout/Body/Split/Right/Actions/RefuelButton.pressed.connect(_on_refuel_pressed)
 	_ship_item_list.item_selected.connect(_on_ship_item_selected)
+
+
+func configure_embedded(enabled: bool) -> void:
+	_embedded = enabled
+	if is_node_ready():
+		_apply_embedded_chrome()
+	else:
+		if not ready.is_connected(_apply_embedded_chrome):
+			ready.connect(_apply_embedded_chrome, CONNECT_ONE_SHOT)
+
+
+func _apply_embedded_chrome() -> void:
+	_header.visible = not _embedded
+	_back_button.visible = not _embedded
 
 
 func bind(context: UiContext) -> void:
@@ -50,25 +89,31 @@ func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
 
-	var building := _context.session.get_current_building(_context.catalog)
-	_title.text = str(building.get("name", "Shipyard"))
+	if _stock_tabs.get_tab_count() > 0:
+		_selected_stock_tab = _stock_tabs.current_tab
 
-	var art_host: VBoxContainer = $Layout/Header/HeaderBox/ArtHost
-	if art_host.get_child_count() == 0:
-		var art := LOCATION_ART.instantiate()
-		art_host.add_child(art)
-		art.set_art_path(_context.catalog.get_building_art(building), str(building.get("name", "")))
+	if not _embedded:
+		var building := _context.session.get_current_building(_context.catalog)
+		_title.text = str(building.get("name", "Shipyard"))
 
-	_credits.text = "Credits: d%d" % _context.session.credits
+		var art_host: VBoxContainer = $Layout/Header/HeaderBox/ArtHost
+		if art_host.get_child_count() == 0:
+			var art := LOCATION_ART.instantiate()
+			art_host.add_child(art)
+			art.set_art_path(_context.catalog.get_building_art(building), str(building.get("name", "")))
+
+		_credits.text = "Credits: d%d" % _context.session.credits
+
 	_log.text = _context.session.last_log
 	_rebuild_ship_list()
 	_rebuild_ship_detail()
-	_rebuild_parts_list()
-	_rebuild_part_detail()
+	_rebuild_stock_tabs()
 	_update_actions()
 
 
 func handle_back() -> bool:
+	if _embedded:
+		return false
 	_on_back_pressed()
 	return true
 
@@ -97,6 +142,7 @@ func _on_ship_item_selected(index: int) -> void:
 	if index < 0 or index >= _ship_ids.size():
 		return
 	_selected_ship_id = _ship_ids[index]
+	_selected_slot = ""
 	_rebuild_ship_detail()
 	_update_actions()
 
@@ -111,8 +157,12 @@ func _rebuild_ship_detail() -> void:
 	if ship == null:
 		return
 
+	var engineering := ShipAssembly.get_engineering_block(_context.catalog, ship)
+	var stats: Dictionary = engineering.get("stats", {})
+	var capacities: Dictionary = engineering.get("capacities", {})
+	var envelope: Dictionary = engineering.get("envelope", {})
+	var mounts: Dictionary = engineering.get("mounts", {})
 	var assembled := ShipAssembly.preview_stats(_context.catalog, ship)
-	var stats := ShipAssembly.get_stat_block(_context.catalog, ship)
 	var chassis_data := _context.catalog.get_chassis(ship.chassis_id)
 
 	_ship_art_frame = LOCATION_ART.instantiate()
@@ -129,99 +179,241 @@ func _rebuild_ship_detail() -> void:
 	chassis.theme_type_variation = &"Numeric"
 	_ship_detail_body.add_child(chassis)
 
-	var engine := Label.new()
-	engine.text = "Engine: %s" % str(assembled.engine.get("name", ship.engine_id))
-	_ship_detail_body.add_child(engine)
+	_ship_detail_body.add_child(_section_label("CONFIGURATION"))
+	_add_slot_board(ship)
 
-	var armour_text := "None"
-	if not ship.armour_id.is_empty():
-		armour_text = str(assembled.armour.get("name", ship.armour_id))
-	var armour := Label.new()
-	armour.text = "Armour: %s" % armour_text
-	_ship_detail_body.add_child(armour)
+	_ship_detail_body.add_child(_section_label("ENGINEERING"))
+	_ship_detail_body.add_child(_detail_label(
+		"MASS",
+		"%.1f / %.1f t" % [float(envelope.get("dry_mass", 0.0)), float(envelope.get("mass_limit", 0.0))]
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"VOLUME",
+		"%.1f / %.1f m³" % [float(envelope.get("volume_used", 0.0)), float(envelope.get("volume", 0.0))]
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"POWER",
+		"%.0f / %.0f MW idle" % [float(engineering.get("idle_power_requested", 0.0)), float(engineering.get("idle_power_available", 0.0))]
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"COMPUTE",
+		"%.0f / %.0f CU idle" % [float(engineering.get("idle_compute_demand", 0.0)), float(capacities.get("compute_capacity", 0.0))]
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"HEAT",
+		"%.0f / %.0f HU/s" % [float(engineering.get("idle_heat_generation", 0.0)), float(capacities.get("heat_dissipation", 0.0))]
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"LIFE SUPPORT",
+		"%.0f people" % float(capacities.get("life_support_capacity", 0.0))
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"CARGO",
+		"%.0f t capacity" % float(capacities.get("cargo_capacity", 0.0))
+	))
+	_ship_detail_body.add_child(_detail_label(
+		"FUEL",
+		"%.0f / %.0f" % [ship.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
+	))
+
+	for mount_type in ["light_weapon", "medium_weapon", "heavy_weapon"]:
+		if mounts.has(mount_type):
+			var usage: Dictionary = mounts[mount_type]
+			var mount_label: String = mount_type.replace("_", " ").capitalize()
+			_ship_detail_body.add_child(_detail_label(
+				mount_label.to_upper(),
+				"%d / %d" % [int(usage.get("used", 0)), int(usage.get("total", 0))]
+			))
 
 	if not stats.is_empty():
-		var stats_heading := _section_label("STATS")
-		_ship_detail_body.add_child(stats_heading)
-
-		for key in ["mass", "thrust", "max_speed", "boost_max_speed", "maneuver", "armour_hits"]:
+		_ship_detail_body.add_child(_section_label("FLIGHT"))
+		for key in ["loaded_mass", "thrust", "max_speed", "boost_max_speed", "maneuver"]:
 			if stats.has(key):
-				var row := Label.new()
-				row.text = "%s: %s" % [key, str(stats[key])]
-				_ship_detail_body.add_child(row)
+				_ship_detail_body.add_child(_detail_label(key, str(stats[key])))
 
 
-func _rebuild_parts_list() -> void:
-	for child in _parts_list.get_children():
+func _slot_group_for(slot: String) -> String:
+	var mount_type := ShipAssembler.slot_mount_type(slot)
+	for group in SLOT_GROUPS:
+		var prefixes: Array = group.get("prefixes", [])
+		if prefixes.has(mount_type):
+			return str(group.get("label", ""))
+	return ""
+
+
+func _add_slot_board(ship: OwnedShip) -> void:
+	var visible_slots := ShipAssembler.list_visible_slots(_context.catalog, ship)
+	var grouped: Dictionary = {}
+	for slot in visible_slots:
+		var slot_id := str(slot)
+		var group_label := _slot_group_for(slot_id)
+		if group_label.is_empty():
+			continue
+		if not grouped.has(group_label):
+			grouped[group_label] = []
+		grouped[group_label].append(slot_id)
+
+	for group in SLOT_GROUPS:
+		var label := str(group.get("label", ""))
+		if not grouped.has(label):
+			continue
+
+		_ship_detail_body.add_child(_section_label(label.to_upper()))
+		for slot_id in grouped[label]:
+			var module_id := ship.get_module_id(slot_id)
+			var module_name := "(empty)"
+			if not module_id.is_empty():
+				module_name = str(_context.catalog.get_module(module_id).get("name", module_id))
+
+			var slot_panel := MODULE_SLOT.instantiate()
+			var compatible := _selected_part_id if not _selected_part_id.is_empty() else ""
+			slot_panel.configure(
+				slot_id,
+				module_id,
+				module_name,
+				ship.id,
+				compatible,
+				Callable(self, "_validate_slot_drop")
+			)
+			slot_panel.slot_clicked.connect(_on_slot_clicked)
+			slot_panel.module_dropped.connect(_on_module_dropped_on_slot)
+			_ship_detail_body.add_child(slot_panel)
+
+
+func _validate_slot_drop(slot_id: String, data: Dictionary) -> bool:
+	var ship := _context.session.get_owned_ship(_selected_ship_id)
+	if ship == null:
+		return false
+
+	var spare := -1
+	if str(data.get("type", "")) == "stock":
+		spare = _context.session.get_spare_part_count(str(data.get("module_id", "")))
+
+	return ShipAssembly.can_drop_on_slot(_context.catalog, ship, slot_id, data, spare)
+
+
+func _on_slot_clicked(slot_id: String) -> void:
+	if not _selected_part_id.is_empty():
+		var ship := _context.session.get_owned_ship(_selected_ship_id)
+		if ship != null:
+			var spare := _context.session.get_spare_part_count(_selected_part_id)
+			var data := {"type": "stock", "module_id": _selected_part_id}
+			if ShipAssembly.can_drop_on_slot(_context.catalog, ship, slot_id, data, spare):
+				_on_module_dropped_on_slot(slot_id, data)
+				return
+
+	_selected_slot = slot_id
+	_rebuild_ship_detail()
+	_update_actions()
+
+
+func _on_module_dropped_on_slot(slot_id: String, data: Dictionary) -> void:
+	var drag_type := str(data.get("type", ""))
+	var changed := false
+
+	if drag_type == "stock":
+		var part_id := str(data.get("module_id", ""))
+		changed = ShipAssembly.install_module(
+			_context.session,
+			_context.catalog,
+			_selected_ship_id,
+			slot_id,
+			part_id
+		)
+	elif drag_type == "slot":
+		var from_slot := str(data.get("slot", ""))
+		changed = ShipAssembly.relocate_module(
+			_context.session,
+			_context.catalog,
+			_selected_ship_id,
+			from_slot,
+			slot_id
+		)
+
+	if changed:
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_ship_id)
+		_selected_slot = slot_id
+		refresh()
+
+
+func _on_module_dropped_on_stock(data: Dictionary) -> void:
+	if str(data.get("type", "")) != "slot":
+		return
+	var from_slot := str(data.get("slot", ""))
+	if from_slot.is_empty():
+		return
+	if ShipAssembly.remove_module(_context.session, _context.catalog, _selected_ship_id, from_slot):
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_ship_id)
+		if _selected_slot == from_slot:
+			_selected_slot = ""
+		refresh()
+
+
+func _rebuild_stock_tabs() -> void:
+	for child in _stock_tabs.get_children():
 		child.queue_free()
 
-	var heading := _section_label("YARD STOCK / INVENTORY")
-	_parts_list.add_child(heading)
+	var parts_by_category: Dictionary = {}
+	for category in STOCK_CATEGORIES:
+		parts_by_category[category] = []
 
 	for part_entry in ShipAssembly.list_yard_parts(_context.catalog):
 		var part_id := str(part_entry.get("id", ""))
 		var category := str(part_entry.get("category", ""))
-		var data: Dictionary = part_entry.get("data", {})
-		var spare := _context.session.get_spare_part_count(part_id)
-		var button := Button.new()
-		var prefix := "> " if part_id == _selected_part_id else ""
-		button.text = "%s%s (d%d) x%d spare" % [
-			prefix,
-			str(data.get("name", part_id)),
-			int(data.get("cost", 0)),
-			spare,
-		]
-		button.pressed.connect(_on_part_selected.bind(part_id, category))
-		_parts_list.add_child(button)
+		if not parts_by_category.has(category):
+			parts_by_category[category] = []
+		parts_by_category[category].append(part_entry)
 
+	for category in STOCK_CATEGORIES:
+		var entries: Array = parts_by_category.get(category, [])
+		if entries.is_empty():
+			continue
 
-func _rebuild_part_detail() -> void:
-	for child in _part_detail.get_children():
-		child.queue_free()
+		var scroll := ScrollContainer.new()
+		scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_stock_tabs.add_child(scroll)
 
-	if _selected_part_id.is_empty():
-		return
+		var list := VBoxContainer.new()
+		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		list.add_theme_constant_override("separation", 4)
+		scroll.add_child(list)
 
-	var part := ShipAssembly.get_part_def(_context.catalog, _selected_part_id, _selected_part_category)
-	if part.is_empty():
-		return
+		for part_entry in entries:
+			var part_id := str(part_entry.get("id", ""))
+			var data: Dictionary = part_entry.get("data", {})
+			var spare := _context.session.get_spare_part_count(part_id)
+			var row := MODULE_STOCK_ITEM.instantiate()
+			row.configure(
+				part_id,
+				str(data.get("name", part_id)),
+				int(data.get("cost", 0)),
+				spare,
+				part_id == _selected_part_id
+			)
+			row.stock_selected.connect(_on_part_selected)
+			row.module_dropped_on_stock.connect(_on_module_dropped_on_stock)
+			list.add_child(row)
 
-	var name_label := _headline_label(str(part.get("name", _selected_part_id)))
-	_part_detail.add_child(name_label)
+		_stock_tabs.set_tab_title(_stock_tabs.get_tab_count() - 1, category.capitalize())
 
-	var category := Label.new()
-	category.text = "Category: %s" % _selected_part_category
-	_part_detail.add_child(category)
-
-	var mass := Label.new()
-	mass.text = "Mass: %s t" % str(part.get("mass", "?"))
-	_part_detail.add_child(mass)
-
-	var cost := Label.new()
-	cost.text = "Cost: d%d" % int(part.get("cost", 0))
-	_part_detail.add_child(cost)
-
-	var desc := str(part.get("description", ""))
-	if not desc.is_empty():
-		var desc_label := Label.new()
-		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc_label.text = desc
-		_part_detail.add_child(desc_label)
+	if _stock_tabs.get_tab_count() > 0:
+		_stock_tabs.current_tab = clampi(_selected_stock_tab, 0, _stock_tabs.get_tab_count() - 1)
 
 
 func _update_actions() -> void:
 	var buy := $Layout/Body/Split/Right/Actions/BuyButton
 	var sell := $Layout/Body/Split/Right/Actions/SellButton
-	var install := $Layout/Body/Split/Right/Actions/InstallButton
-	var remove := $Layout/Body/Split/Right/Actions/RemoveButton
+	var refuel := $Layout/Body/Split/Right/Actions/RefuelButton
 
 	buy.disabled = _selected_part_id.is_empty()
 	sell.disabled = _selected_part_id.is_empty() or _context.session.get_spare_part_count(_selected_part_id) <= 0
-	install.disabled = _selected_ship_id.is_empty() or _selected_part_id.is_empty() or _context.session.get_spare_part_count(_selected_part_id) <= 0
-	remove.disabled = _selected_ship_id.is_empty()
 
 	var ship := _context.session.get_owned_ship(_selected_ship_id)
-	remove.disabled = ship == null or ship.armour_id.is_empty()
+	refuel.disabled = ship == null
 
 
 func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
@@ -234,37 +426,29 @@ func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: Strin
 	_suppress_ship_select = false
 
 
-func _on_part_selected(part_id: String, category: String) -> void:
+func _on_part_selected(part_id: String) -> void:
 	_selected_part_id = part_id
-	_selected_part_category = category
+	if not _selected_ship_id.is_empty() and _selected_slot.is_empty():
+		var ship := _context.session.get_owned_ship(_selected_ship_id)
+		if ship != null:
+			var slots := ShipAssembly.find_compatible_slots(_context.catalog, ship, part_id)
+			if slots.size() == 1:
+				_selected_slot = str(slots[0])
 	refresh()
 
 
 func _on_buy_pressed() -> void:
-	if ShipAssembly.buy_part(_context.session, _context.catalog, _selected_part_id, _selected_part_category):
+	if ShipAssembly.buy_part(_context.session, _context.catalog, _selected_part_id):
 		refresh()
 
 
 func _on_sell_pressed() -> void:
-	if ShipAssembly.sell_part(_context.session, _context.catalog, _selected_part_id, _selected_part_category):
+	if ShipAssembly.sell_part(_context.session, _context.catalog, _selected_part_id):
 		refresh()
 
 
-func _on_install_pressed() -> void:
-	if ShipAssembly.install_part(
-		_context.session,
-		_context.catalog,
-		_selected_ship_id,
-		_selected_part_category,
-		_selected_part_id
-	):
-		if _context.on_ship_changed.is_valid():
-			_context.on_ship_changed.call(_selected_ship_id)
-		refresh()
-
-
-func _on_remove_pressed() -> void:
-	if ShipAssembly.remove_part(_context.session, _context.catalog, _selected_ship_id, "armour"):
+func _on_refuel_pressed() -> void:
+	if ShipAssembly.refuel_ship(_context.session, _context.catalog, _selected_ship_id):
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)
 		refresh()
@@ -277,10 +461,10 @@ func _section_label(text: String) -> Label:
 	return label
 
 
-func _headline_label(text: String) -> Label:
+func _detail_label(label_text: String, value_text: String) -> Label:
 	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Headline"
+	label.text = "%s: %s" % [label_text, value_text]
+	label.theme_type_variation = &"Numeric"
 	return label
 
 
@@ -289,7 +473,7 @@ func _on_back_pressed() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
+	if not visible or _embedded:
 		return
 	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause"):
 		_on_back_pressed()

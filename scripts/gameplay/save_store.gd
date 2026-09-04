@@ -1,7 +1,8 @@
 class_name SaveStore
 extends RefCounted
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
+const LEGACY_SAVE_VERSION := 1
 const SLOT_COUNT := 3
 const SAVE_DIR := "user://saves/"
 
@@ -127,7 +128,7 @@ static func validate_save_data(data: Dictionary) -> bool:
 		return false
 
 	var version := int(data.get("version", 0))
-	if version != SAVE_VERSION:
+	if version != SAVE_VERSION and version != LEGACY_SAVE_VERSION:
 		push_error("Unsupported save version: %d" % version)
 		return false
 

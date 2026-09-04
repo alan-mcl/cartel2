@@ -9,11 +9,14 @@ const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
 @onready var _art_host: VBoxContainer = $Layout/Body/Split/Right/ArtHost
-@onready var _content_host: VBoxContainer = $Layout/Body/Split/Right/ContentHost
+@onready var _content_scroll: ScrollContainer = $Layout/Body/Split/Right/ContentScroll
+@onready var _content_host: VBoxContainer = $Layout/Body/Split/Right/ContentScroll/ContentHost
+@onready var _shipyard_host: Control = $Layout/Body/Split/Right/ShipyardHost
 @onready var _log: Label = $Layout/Body/Split/Right/Log
 
 var _context: UiContext
 var _art_frame: PanelContainer
+var _shipyard_panel: Control
 
 var _building_ids: PackedStringArray = PackedStringArray()
 var _suppress_building_select: bool = false
@@ -69,8 +72,13 @@ func refresh() -> void:
 	_log.text = _context.session.last_log
 
 	_rebuild_building_list(habitat)
-	_update_art(habitat, building)
-	_rebuild_content(building)
+	var building_type := _context.catalog.get_building_type(building)
+	if building_type == "shipyard":
+		_show_shipyard_embedded()
+	else:
+		_hide_shipyard_embedded()
+		_update_art(habitat, building)
+		_rebuild_content(building)
 
 
 func handle_back() -> bool:
@@ -137,8 +145,13 @@ func _update_building_panels() -> void:
 		return
 	_log.text = _context.session.last_log
 	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
-	_update_art(habitat, building)
-	_rebuild_content(building)
+	var building_type := _context.catalog.get_building_type(building)
+	if building_type == "shipyard":
+		_show_shipyard_embedded()
+	else:
+		_hide_shipyard_embedded()
+		_update_art(habitat, building)
+		_rebuild_content(building)
 
 
 func _update_art(habitat: Dictionary, building: Dictionary) -> void:
@@ -175,8 +188,6 @@ func _rebuild_content(building: Dictionary) -> void:
 	match building_type:
 		"market":
 			_build_market_content(building)
-		"shipyard":
-			_build_shipyard_overview(building)
 		"terminal":
 			_build_terminal_content(building)
 		_:
@@ -196,11 +207,13 @@ func _build_market_content(building: Dictionary) -> void:
 
 	var split := HSplitContainer.new()
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	split.custom_minimum_size = Vector2(0, 320)
 	_content_host.add_child(split)
 
 	var left := VBoxContainer.new()
 	left.custom_minimum_size = Vector2(320, 0)
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.add_theme_constant_override("separation", 4)
 	split.add_child(left)
 
@@ -213,11 +226,7 @@ func _build_market_content(building: Dictionary) -> void:
 	_commodity_item_list.item_selected.connect(_on_commodity_item_selected)
 	left.add_child(_commodity_item_list)
 
-	var detail := VBoxContainer.new()
-	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail.add_theme_constant_override("separation", 8)
-	split.add_child(detail)
-	detail.set_meta("detail_host", true)
+	var detail := _add_scroll_pane(split, "detail_host")
 
 	var listings: Variant = market.get("listings", [])
 	if typeof(listings) != TYPE_ARRAY:
@@ -264,12 +273,9 @@ func _on_commodity_item_selected(index: int) -> void:
 	if index < 0 or index >= _market_commodity_ids.size():
 		return
 	_selected_commodity_id = _market_commodity_ids[index]
-	for child in _content_host.get_children():
-		if child is HSplitContainer:
-			for panel in child.get_children():
-				if panel.has_meta("detail_host"):
-					_rebuild_commodity_detail(panel as VBoxContainer)
-					return
+	var detail := _find_meta_host("detail_host")
+	if detail != null:
+		_rebuild_commodity_detail(detail)
 
 
 func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
@@ -285,7 +291,14 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 
 	var price := int(listing.get("price", commodity.get("base_price", 0)))
 	var store_qty := int(listing.get("quantity", 0))
-	var cargo_qty := _context.session.get_cargo_count(_selected_commodity_id)
+	var cargo_ship := _context.session.get_cargo_ship(_selected_terminal_ship_id)
+	var cargo_qty := 0
+	var cargo_cap := 0.0
+	var cargo_mass := 0.0
+	if cargo_ship != null:
+		cargo_qty = _context.session.get_cargo_count(cargo_ship, _selected_commodity_id)
+		cargo_cap = _context.session.get_ship_cargo_capacity(_context.catalog, cargo_ship)
+		cargo_mass = _context.session.get_ship_cargo_mass(_context.catalog, cargo_ship)
 
 	detail.add_child(_headline_label(str(commodity.get("name", _selected_commodity_id))))
 
@@ -298,7 +311,9 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 
 	detail.add_child(_detail_row("Price", "d%d" % price))
 	detail.add_child(_detail_row("Store stock", str(store_qty)))
-	detail.add_child(_detail_row("Your cargo", str(cargo_qty)))
+	if cargo_ship != null:
+		detail.add_child(_detail_row("Ship cargo", str(cargo_qty)))
+		detail.add_child(_detail_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
@@ -334,11 +349,13 @@ func _build_terminal_content(_building: Dictionary) -> void:
 
 	var split := HSplitContainer.new()
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	split.custom_minimum_size = Vector2(0, 320)
 	_content_host.add_child(split)
 
 	var left := VBoxContainer.new()
 	left.custom_minimum_size = Vector2(280, 0)
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.add_theme_constant_override("separation", 4)
 	split.add_child(left)
 
@@ -351,11 +368,7 @@ func _build_terminal_content(_building: Dictionary) -> void:
 	_terminal_ship_item_list.item_selected.connect(_on_terminal_ship_item_selected)
 	left.add_child(_terminal_ship_item_list)
 
-	var detail := VBoxContainer.new()
-	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail.add_theme_constant_override("separation", 8)
-	split.add_child(detail)
-	detail.set_meta("terminal_detail_host", true)
+	var detail := _add_scroll_pane(split, "terminal_detail_host")
 
 	for ship in ships:
 		_terminal_ship_ids.append(ship.id)
@@ -381,12 +394,9 @@ func _on_terminal_ship_item_selected(index: int) -> void:
 	if index < 0 or index >= _terminal_ship_ids.size():
 		return
 	_selected_terminal_ship_id = _terminal_ship_ids[index]
-	for child in _content_host.get_children():
-		if child is HSplitContainer:
-			for panel in child.get_children():
-				if panel.has_meta("terminal_detail_host"):
-					_rebuild_terminal_ship_detail(panel as VBoxContainer)
-					return
+	var detail := _find_meta_host("terminal_detail_host")
+	if detail != null:
+		_rebuild_terminal_ship_detail(detail)
 
 
 func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
@@ -418,16 +428,19 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 	detail.add_child(summary)
 
 	detail.add_child(_detail_row("Chassis", str(assembled.chassis.get("name", ship.chassis_id))))
-	detail.add_child(_detail_row("Engine", str(assembled.engine.get("name", ship.engine_id))))
 
-	var armour_text := "None"
-	if not ship.armour_id.is_empty():
-		armour_text = str(assembled.armour.get("name", ship.armour_id))
-	detail.add_child(_detail_row("Armour", armour_text))
+	detail.add_child(_section_label("MODULES"))
+	for entry in assembled.installed_modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var slot := str(entry.get("slot", ""))
+		var module_data: Variant = entry.get("data", {})
+		var module_name := str(module_data.get("name", entry.get("module_id", ""))) if typeof(module_data) == TYPE_DICTIONARY else str(entry.get("module_id", ""))
+		detail.add_child(_detail_row(slot, module_name))
 
 	if not stats.is_empty():
 		detail.add_child(_section_label("STATS"))
-		for key in ["mass", "thrust", "max_speed", "boost_max_speed", "maneuver", "armour_hits"]:
+		for key in ["dry_mass", "loaded_mass", "thrust", "max_speed", "boost_max_speed", "maneuver", "armour_hits"]:
 			if stats.has(key):
 				detail.add_child(_detail_row(key, str(stats[key])))
 
@@ -437,41 +450,52 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 	detail.add_child(undock)
 
 
-func _build_shipyard_overview(_building: Dictionary) -> void:
-	var ships := _context.session.ships_at(_context.session.habitat_id)
-	var ship_label := Label.new()
-	if ships.is_empty():
-		ship_label.text = "No ships docked at this habitat."
-	else:
-		var names: PackedStringArray = PackedStringArray()
-		for ship in ships:
-			names.append(ship.name)
-		ship_label.text = "Docked ships: %s" % ", ".join(names)
-	ship_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_content_host.add_child(ship_label)
+func _show_shipyard_embedded() -> void:
+	_art_host.visible = false
+	_content_scroll.visible = false
+	_log.visible = false
+	_shipyard_host.visible = true
 
-	var open := Button.new()
-	open.text = "Open Assembly"
-	open.pressed.connect(_on_open_shipyard)
-	_content_host.add_child(open)
+	if _shipyard_panel == null:
+		_shipyard_panel = SHIPYARD_SCREEN.instantiate()
+		_shipyard_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_shipyard_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_shipyard_host.add_child(_shipyard_panel)
+		_shipyard_panel.configure_embedded(true)
+		_shipyard_panel.bind(_context)
+	elif _shipyard_panel.has_method("refresh"):
+		_shipyard_panel.refresh()
+
+
+func _hide_shipyard_embedded() -> void:
+	_shipyard_host.visible = false
+	_art_host.visible = true
+	_content_scroll.visible = true
+	_log.visible = true
 
 
 func _on_buy_commodity(commodity_id: String) -> void:
-	if _context.session.buy_commodity(_context.catalog, _context.session.building_id, commodity_id):
+	if _context.session.buy_commodity(
+		_context.catalog,
+		_context.session.building_id,
+		commodity_id,
+		1,
+		_selected_terminal_ship_id
+	):
 		_selected_commodity_id = commodity_id
 		refresh()
 
 
 func _on_sell_commodity(commodity_id: String) -> void:
-	if _context.session.sell_commodity(_context.catalog, _context.session.building_id, commodity_id):
+	if _context.session.sell_commodity(
+		_context.catalog,
+		_context.session.building_id,
+		commodity_id,
+		1,
+		_selected_terminal_ship_id
+	):
 		_selected_commodity_id = commodity_id
 		refresh()
-
-
-func _on_open_shipyard() -> void:
-	var screen := SHIPYARD_SCREEN.instantiate()
-	_context.stack.push_screen(screen)
-	screen.bind(_context)
 
 
 func _on_undock_ship(ship_id: String) -> void:
@@ -487,6 +511,35 @@ func _on_save_pressed() -> void:
 func _on_menu_pressed() -> void:
 	if _context.on_quit_to_menu_requested.is_valid():
 		_context.on_quit_to_menu_requested.call()
+
+
+func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	parent.add_child(scroll)
+
+	var body := VBoxContainer.new()
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_constant_override("separation", 8)
+	body.set_meta(meta_name, true)
+	scroll.add_child(body)
+	return body
+
+
+func _find_meta_host(meta_name: String) -> VBoxContainer:
+	return _find_meta_host_in(_content_host, meta_name)
+
+
+func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
+	if node is VBoxContainer and node.has_meta(meta_name):
+		return node as VBoxContainer
+	for child in node.get_children():
+		var found := _find_meta_host_in(child, meta_name)
+		if found != null:
+			return found
+	return null
 
 
 func _clear_children(node: Node) -> void:

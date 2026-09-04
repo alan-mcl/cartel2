@@ -2,8 +2,8 @@ class_name Catalog
 extends RefCounted
 
 const CHASSIS_PATH := "res://data/catalog/chassis.json"
-const ENGINES_PATH := "res://data/catalog/engines.json"
-const ARMOUR_PATH := "res://data/catalog/armour.json"
+const MODULES_PATH := "res://data/catalog/modules.json"
+const AMMUNITION_PATH := "res://data/catalog/ammunition.json"
 const SHIPS_PATH := "res://data/catalog/ships.json"
 const BUILDINGS_PATH := "res://data/catalog/buildings.json"
 const HABITATS_PATH := "res://data/catalog/habitats.json"
@@ -16,8 +16,8 @@ const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const MARKETS_PATH := "res://data/catalog/markets.json"
 
 var chassis_by_id: Dictionary = {}
-var engines_by_id: Dictionary = {}
-var armour_by_id: Dictionary = {}
+var modules_by_id: Dictionary = {}
+var ammunition_by_id: Dictionary = {}
 var ships_by_id: Dictionary = {}
 var buildings_by_id: Dictionary = {}
 var habitats_by_id: Dictionary = {}
@@ -38,8 +38,8 @@ static func load_default() -> Catalog:
 
 func load_all() -> void:
 	chassis_by_id = _load_indexed_array(CHASSIS_PATH)
-	engines_by_id = _load_indexed_array(ENGINES_PATH)
-	armour_by_id = _load_indexed_array(ARMOUR_PATH)
+	modules_by_id = _load_indexed_array(MODULES_PATH)
+	ammunition_by_id = _load_indexed_array(AMMUNITION_PATH)
 	ships_by_id = _load_indexed_array(SHIPS_PATH)
 	buildings_by_id = _load_indexed_array(BUILDINGS_PATH)
 	habitats_by_id = _load_indexed_array(HABITATS_PATH)
@@ -56,12 +56,12 @@ func get_chassis(id: String) -> Dictionary:
 	return _require(chassis_by_id, id, "chassis")
 
 
-func get_engine(id: String) -> Dictionary:
-	return _require(engines_by_id, id, "engine")
+func get_module(id: String) -> Dictionary:
+	return _require(modules_by_id, id, "module")
 
 
-func get_armour(id: String) -> Dictionary:
-	return _require(armour_by_id, id, "armour")
+func get_ammunition(id: String) -> Dictionary:
+	return _require(ammunition_by_id, id, "ammunition")
 
 
 func get_ship(id: String) -> Dictionary:
@@ -170,12 +170,20 @@ func list_chassis() -> Array:
 	return chassis_by_id.values()
 
 
-func list_engines() -> Array:
-	return engines_by_id.values()
+func list_modules(category: String = "") -> Array:
+	if category.is_empty():
+		return modules_by_id.values()
+	var filtered: Array = []
+	for module_def in modules_by_id.values():
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		if str(module_def.get("category", "")) == category:
+			filtered.append(module_def)
+	return filtered
 
 
-func list_armour() -> Array:
-	return armour_by_id.values()
+func list_ammunition_types() -> Array:
+	return ammunition_by_id.values()
 
 
 func _load_indexed_array(path: String) -> Dictionary:

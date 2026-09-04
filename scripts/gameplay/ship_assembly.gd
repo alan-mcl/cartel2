@@ -1,8 +1,7 @@
 class_name ShipAssembly
 extends RefCounted
 
-const SLOT_ENGINE := "engine"
-const SLOT_ARMOUR := "armour"
+const REFUEL_COST_PER_UNIT := 3
 
 
 static func preview_stats(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
@@ -13,8 +12,28 @@ static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
 	return ShipAssembler.get_stat_block(catalog, owned)
 
 
-static func buy_part(session: PrototypeSession, catalog: Catalog, part_id: String, category: String) -> bool:
-	var part := _get_part_def(catalog, part_id, category)
+static func get_engineering_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
+	var assembled := assemble_owned(catalog, owned)
+	var stats := get_stat_block(catalog, owned)
+	var idle: ShipOperatingState = ShipOperations.idle_snapshot(catalog, assembled, owned, 1)
+	return {
+		"stats": stats,
+		"capacities": assembled.capacities.duplicate(true),
+		"envelope": assembled.envelope.duplicate(true),
+		"mounts": assembled.mounts.duplicate(true),
+		"idle_power_requested": idle.power_requested,
+		"idle_power_available": idle.power_available,
+		"idle_compute_demand": idle.compute_demand,
+		"idle_heat_generation": idle.heat_generation,
+	}
+
+
+static func assemble_owned(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
+	return ShipAssembler.assemble_owned(catalog, owned)
+
+
+static func buy_part(session: PrototypeSession, catalog: Catalog, part_id: String) -> bool:
+	var part := catalog.get_module(part_id)
 	if part.is_empty():
 		return false
 
@@ -31,8 +50,8 @@ static func buy_part(session: PrototypeSession, catalog: Catalog, part_id: Strin
 	return true
 
 
-static func sell_part(session: PrototypeSession, catalog: Catalog, part_id: String, category: String) -> bool:
-	var part := _get_part_def(catalog, part_id, category)
+static func sell_part(session: PrototypeSession, catalog: Catalog, part_id: String) -> bool:
+	var part := catalog.get_module(part_id)
 	if part.is_empty():
 		return false
 
@@ -50,17 +69,13 @@ static func sell_part(session: PrototypeSession, catalog: Catalog, part_id: Stri
 	return true
 
 
-static func install_part(
+static func install_module(
 	session: PrototypeSession,
 	catalog: Catalog,
 	ship_id: String,
 	slot: String,
 	part_id: String
 ) -> bool:
-	if slot == "chassis":
-		push_error("Chassis cannot be changed at the shipyard.")
-		return false
-
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return false
@@ -75,88 +90,241 @@ static func install_part(
 		session.changed.emit()
 		return false
 
-	var category := slot
-	var part := _get_part_def(catalog, part_id, category)
+	var validation := ShipAssembler.validate_install(catalog, ship, slot, part_id)
+	if not bool(validation.get("ok", false)):
+		session.last_log = str(validation.get("reason", "Cannot install module."))
+		session.changed.emit()
+		return false
+
+	var part := catalog.get_module(part_id)
 	if part.is_empty():
 		return false
 
-	match slot:
-		SLOT_ENGINE:
-			if not session.remove_spare_part(part_id, 1):
-				return false
-			if not ship.engine_id.is_empty():
-				session.add_spare_part(ship.engine_id, 1)
-			ship.engine_id = part_id
-		SLOT_ARMOUR:
-			if not session.remove_spare_part(part_id, 1):
-				return false
-			if not ship.armour_id.is_empty():
-				session.add_spare_part(ship.armour_id, 1)
-			ship.armour_id = part_id
-		_:
-			return false
+	if not session.remove_spare_part(part_id, 1):
+		return false
 
+	var previous := ship.remove_module(slot)
+	if not previous.is_empty():
+		session.add_spare_part(previous, 1)
+
+	ship.set_module(slot, part_id)
 	session.last_log = "Installed %s on %s." % [str(part.get("name", part_id)), ship.name]
 	session.changed.emit()
 	return true
 
 
-static func remove_part(session: PrototypeSession, catalog: Catalog, ship_id: String, slot: String) -> bool:
-	if slot != SLOT_ARMOUR:
-		session.last_log = "Only armour can be removed in this slice."
-		session.changed.emit()
+static func relocate_module(
+	session: PrototypeSession,
+	catalog: Catalog,
+	ship_id: String,
+	from_slot: String,
+	to_slot: String
+) -> bool:
+	if from_slot == to_slot:
 		return false
 
 	var ship := session.get_owned_ship(ship_id)
-	if ship == null or ship.armour_id.is_empty():
+	if ship == null:
 		return false
 
 	if ship.location != session.habitat_id:
+		session.last_log = "Ship must be docked at this habitat."
+		session.changed.emit()
 		return false
 
-	session.add_spare_part(ship.armour_id, 1)
-	var armour_name := str(catalog.get_armour(ship.armour_id).get("name", ship.armour_id))
-	ship.armour_id = ""
-	session.last_log = "Removed %s from %s." % [armour_name, ship.name]
+	var moving := ship.get_module_id(from_slot)
+	if moving.is_empty():
+		session.last_log = "No module installed in that slot."
+		session.changed.emit()
+		return false
+
+	var target := ship.get_module_id(to_slot)
+	var trial: OwnedShip = OwnedShip.from_dict(ship.to_dict())
+	trial.remove_module(from_slot)
+	if not target.is_empty():
+		trial.remove_module(to_slot)
+
+	var first_validation := ShipAssembler.validate_install(catalog, trial, to_slot, moving)
+	if not bool(first_validation.get("ok", false)):
+		session.last_log = str(first_validation.get("reason", "Cannot move module."))
+		session.changed.emit()
+		return false
+
+	if not target.is_empty():
+		trial.set_module(to_slot, moving)
+		var second_validation := ShipAssembler.validate_install(catalog, trial, from_slot, target)
+		if not bool(second_validation.get("ok", false)):
+			session.last_log = str(second_validation.get("reason", "Cannot swap modules."))
+			session.changed.emit()
+			return false
+
+	ship.remove_module(from_slot)
+	if not target.is_empty():
+		ship.remove_module(to_slot)
+	ship.set_module(to_slot, moving)
+	if not target.is_empty():
+		ship.set_module(from_slot, target)
+
+	var part := catalog.get_module(moving)
+	if target.is_empty():
+		session.last_log = "Moved %s to %s." % [str(part.get("name", moving)), to_slot]
+	else:
+		var other := catalog.get_module(target)
+		session.last_log = "Swapped %s and %s." % [
+			str(part.get("name", moving)),
+			str(other.get("name", target)),
+		]
 	session.changed.emit()
 	return true
 
 
-static func get_part_cost(catalog: Catalog, part_id: String, category: String) -> int:
-	var part := _get_part_def(catalog, part_id, category)
+static func remove_module(session: PrototypeSession, catalog: Catalog, ship_id: String, slot: String) -> bool:
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		return false
+
+	if ship.location != session.habitat_id:
+		session.last_log = "Ship must be docked at this habitat."
+		session.changed.emit()
+		return false
+
+	var previous := ship.remove_module(slot)
+	if previous.is_empty():
+		session.last_log = "No module installed in that slot."
+		session.changed.emit()
+		return false
+
+	session.add_spare_part(previous, 1)
+	var part := catalog.get_module(previous)
+	session.last_log = "Removed %s from %s." % [str(part.get("name", previous)), ship.name]
+	session.changed.emit()
+	return true
+
+
+static func refuel_ship(session: PrototypeSession, catalog: Catalog, ship_id: String) -> bool:
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		return false
+
+	if ship.location != session.habitat_id:
+		session.last_log = "Ship must be docked at this habitat."
+		session.changed.emit()
+		return false
+
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var capacity := float(assembled.capacities.get("fuel_capacity", 0.0))
+	if capacity <= 0.0:
+		session.last_log = "Ship has no fuel tank installed."
+		session.changed.emit()
+		return false
+
+	var needed := capacity - ship.fuel_current
+	if needed <= 0.01:
+		session.last_log = "Fuel tank already full."
+		session.changed.emit()
+		return false
+
+	var cost := int(ceil(needed * REFUEL_COST_PER_UNIT))
+	if session.credits < cost:
+		session.last_log = "Insufficient credits to refuel. Need d%d." % cost
+		session.changed.emit()
+		return false
+
+	session.credits -= cost
+	ship.fuel_current = capacity
+	session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
+	session.changed.emit()
+	return true
+
+
+static func get_part_cost(catalog: Catalog, part_id: String) -> int:
+	var part := catalog.get_module(part_id)
 	return int(part.get("cost", 0))
 
 
 static func get_part_category(catalog: Catalog, part_id: String) -> String:
-	if catalog.engines_by_id.has(part_id):
-		return SLOT_ENGINE
-	if catalog.armour_by_id.has(part_id):
-		return SLOT_ARMOUR
-	return ""
+	var part := catalog.get_module(part_id)
+	return str(part.get("category", ""))
 
 
 static func list_yard_parts(catalog: Catalog) -> Array[Dictionary]:
 	var parts: Array[Dictionary] = []
-	for engine in catalog.list_engines():
-		if typeof(engine) == TYPE_DICTIONARY:
-			var entry: Dictionary = engine
-			parts.append({"id": str(entry.get("id", "")), "category": SLOT_ENGINE, "data": entry})
-	for armour in catalog.list_armour():
-		if typeof(armour) == TYPE_DICTIONARY:
-			var entry: Dictionary = armour
-			parts.append({"id": str(entry.get("id", "")), "category": SLOT_ARMOUR, "data": entry})
+	for module_def in catalog.list_modules():
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = module_def
+		parts.append({"id": str(entry.get("id", "")), "category": str(entry.get("category", "")), "data": entry})
 	return parts
 
 
-static func get_part_def(catalog: Catalog, part_id: String, category: String) -> Dictionary:
-	return _get_part_def(catalog, part_id, category)
+static func get_part_def(catalog: Catalog, part_id: String) -> Dictionary:
+	return catalog.get_module(part_id)
 
 
-static func _get_part_def(catalog: Catalog, part_id: String, category: String) -> Dictionary:
-	match category:
-		SLOT_ENGINE:
-			return catalog.get_engine(part_id)
-		SLOT_ARMOUR:
-			return catalog.get_armour(part_id)
-		_:
-			return {}
+static func list_install_slots(catalog: Catalog, owned: OwnedShip) -> Array:
+	var chassis := catalog.get_chassis(owned.chassis_id)
+	return ShipAssembler.list_slots_for_chassis(chassis)
+
+
+static func can_drop_on_slot(
+	catalog: Catalog,
+	owned: OwnedShip,
+	slot: String,
+	data: Dictionary,
+	spare_count: int = -1
+) -> bool:
+	if owned == null or slot.is_empty() or data.is_empty():
+		return false
+
+	var drag_type := str(data.get("type", ""))
+	if drag_type == "stock":
+		var part_id := str(data.get("module_id", ""))
+		if part_id.is_empty():
+			return false
+		if spare_count >= 0 and spare_count <= 0:
+			return false
+		return bool(ShipAssembler.validate_install(catalog, owned, slot, part_id).get("ok", false))
+
+	if drag_type == "slot":
+		var from_slot := str(data.get("slot", ""))
+		var moving := str(data.get("module_id", ""))
+		if from_slot.is_empty() or moving.is_empty() or from_slot == slot:
+			return false
+
+		var target := owned.get_module_id(slot)
+		var trial: OwnedShip = OwnedShip.from_dict(owned.to_dict())
+		trial.remove_module(from_slot)
+		if not target.is_empty():
+			trial.remove_module(slot)
+
+		if not bool(ShipAssembler.validate_install(catalog, trial, slot, moving).get("ok", false)):
+			return false
+
+		if not target.is_empty():
+			trial.set_module(slot, moving)
+			return bool(ShipAssembler.validate_install(catalog, trial, from_slot, target).get("ok", false))
+		return true
+
+	return false
+
+
+static func find_compatible_slots(catalog: Catalog, owned: OwnedShip, part_id: String) -> Array:
+	var module_def := catalog.get_module(part_id)
+	if module_def.is_empty():
+		return []
+
+	var slots: Array = []
+	var mount := str(module_def.get("mount", ""))
+	if mount.is_empty():
+		for i in range(1, 13):
+			slots.append("internal_%d" % i)
+		return slots
+
+	var chassis := catalog.get_chassis(owned.chassis_id)
+	var mounts: Variant = chassis.get("mounts", {})
+	var count := 0
+	if typeof(mounts) == TYPE_DICTIONARY:
+		count = int(mounts.get(mount, 0))
+	for i in range(count):
+		slots.append("%s_%d" % [mount, i + 1])
+	return slots

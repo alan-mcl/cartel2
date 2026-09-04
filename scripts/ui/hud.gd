@@ -5,6 +5,10 @@ extends CanvasLayer
 @onready var _speed: Label = $Root/Margin/StatusPanel/VBox/StatsRow/SpeedLabel
 @onready var _heading: Label = $Root/Margin/StatusPanel/VBox/StatsRow/HeadingLabel
 @onready var _boost: Label = $Root/Margin/StatusPanel/VBox/StatsRow/BoostLabel
+@onready var _systems_row: HBoxContainer = $Root/Margin/StatusPanel/VBox/SystemsRow
+@onready var _fuel: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/FuelLabel
+@onready var _power: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/PowerLabel
+@onready var _heat: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/HeatLabel
 @onready var _location: Label = $Root/Margin/StatusPanel/VBox/LocationLabel
 @onready var _objective: Label = $Root/Margin/StatusPanel/VBox/ObjectiveLabel
 @onready var _target: Label = $Root/Margin/StatusPanel/VBox/TargetLabel
@@ -17,6 +21,7 @@ extends CanvasLayer
 var _session: PrototypeSession
 var _player: CharacterBody2D
 var _assembled_ship: AssembledShip
+var _operating_state: ShipOperatingState
 
 
 func bind(session: PrototypeSession, player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
@@ -54,11 +59,23 @@ func refresh() -> void:
 		else:
 			_hull.visible = false
 
+	if _operating_state != null:
+		set_operating_state(_operating_state)
+
 
 func set_motion(speed: float, heading_deg: float, boosting: bool) -> void:
 	_speed.text = "Speed: %.0f" % speed
 	_heading.text = "Heading: %.0f°" % fposmod(heading_deg + 360.0, 360.0)
 	_boost.text = "Boost: ON" if boosting else "Boost: --"
+
+
+func set_operating_state(state: ShipOperatingState) -> void:
+	_operating_state = state
+	if state == null:
+		return
+	_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
+	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
+	_heat.text = "Heat: %.0f / %.0f" % [state.heat, state.heat_capacity]
 
 
 func set_target(target: Interactable) -> void:
