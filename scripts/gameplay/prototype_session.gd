@@ -32,6 +32,7 @@ var max_hull: float = 0.0
 var ship_heat: float = 0.0
 
 var spare_parts: Dictionary = {}
+var sandbox: bool = false
 
 var _hull_stress_cooldown: float = 0.0
 

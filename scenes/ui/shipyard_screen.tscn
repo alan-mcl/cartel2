@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://dxunnumg4q2q4"]
+[gd_scene load_steps=3 format=3 uid="uid://dxunnumg4q2q4"]
 
 [ext_resource type="Script" uid="uid://36dgr4wqf4h7" path="res://scripts/ui/shipyard_screen.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/components/inventory_drop_target.gd" id="2"]
 
 [node name="ShipyardScreen" type="Control" unique_id=408352300]
 layout_mode = 3
@@ -46,73 +47,99 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Surface"
 
-[node name="Split" type="HSplitContainer" parent="Layout/Body" unique_id=174005222]
+[node name="Split" type="HBoxContainer" parent="Layout/Body" unique_id=174005222]
 layout_mode = 2
 size_flags_vertical = 3
-split_offsets = PackedInt32Array(360)
-split_offset = 360
-
-[node name="Left" type="VBoxContainer" parent="Layout/Body/Split" unique_id=1273638830]
-custom_minimum_size = Vector2(340, 0)
-layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ShipsHeading" type="Label" parent="Layout/Body/Split/Left" unique_id=937152102]
+[node name="ShipColumn" type="VBoxContainer" parent="Layout/Body/Split" unique_id=1273638830]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.0
+theme_override_constants/separation = 8
+
+[node name="ShipsHeading" type="Label" parent="Layout/Body/Split/ShipColumn" unique_id=937152102]
 layout_mode = 2
 theme_type_variation = &"Section"
 text = "DOCKED SHIPS"
 
-[node name="ShipItemList" type="ItemList" parent="Layout/Body/Split/Left" unique_id=1434113218]
-custom_minimum_size = Vector2(0, 96)
+[node name="ShipItemList" type="ItemList" parent="Layout/Body/Split/ShipColumn" unique_id=1434113218]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.35
 select_mode = 1
 allow_reselect = true
 
-[node name="ShipDetailScroll" type="ScrollContainer" parent="Layout/Body/Split/Left" unique_id=1262612191]
+[node name="ShipInfoScroll" type="ScrollContainer" parent="Layout/Body/Split/ShipColumn" unique_id=1262612191]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.65
+horizontal_scroll_mode = 0
+
+[node name="ShipInfo" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn/ShipInfoScroll" unique_id=1697656282]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo" unique_id=1409077569]
+layout_mode = 2
+
+[node name="ShipStatsBody" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo" unique_id=1097284895]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ConfigColumn" type="VBoxContainer" parent="Layout/Body/Split" unique_id=708009955]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.0
+theme_override_constants/separation = 8
+
+[node name="ConfigHeading" type="Label" parent="Layout/Body/Split/ConfigColumn" unique_id=937152103]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "CONFIGURATION"
+
+[node name="ConfigScroll" type="ScrollContainer" parent="Layout/Body/Split/ConfigColumn" unique_id=1262612192]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ShipDetail" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll" unique_id=1697656282]
+[node name="ConfigBody" type="VBoxContainer" parent="Layout/Body/Split/ConfigColumn/ConfigScroll" unique_id=1097284896]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll/ShipDetail" unique_id=1409077569]
-layout_mode = 2
-
-[node name="ShipDetailBody" type="VBoxContainer" parent="Layout/Body/Split/Left/ShipDetailScroll/ShipDetail" unique_id=1097284895]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Right" type="VBoxContainer" parent="Layout/Body/Split" unique_id=708009954]
+[node name="InventoryColumn" type="VBoxContainer" parent="Layout/Body/Split" unique_id=708009954]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 theme_override_constants/separation = 8
+script = ExtResource("2")
 
-[node name="StockHeading" type="Label" parent="Layout/Body/Split/Right" unique_id=135384268]
+[node name="StockHeading" type="Label" parent="Layout/Body/Split/InventoryColumn" unique_id=135384268]
 layout_mode = 2
 theme_type_variation = &"Section"
 text = "YARD STOCK / INVENTORY"
 
-[node name="StockTabs" type="TabContainer" parent="Layout/Body/Split/Right" unique_id=681286870]
+[node name="StockTabs" type="TabContainer" parent="Layout/Body/Split/InventoryColumn" unique_id=681286870]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 2.0
+script = ExtResource("2")
 
-[node name="Actions" type="HBoxContainer" parent="Layout/Body/Split/Right" unique_id=1248852137]
+[node name="Actions" type="HBoxContainer" parent="Layout/Body/Split/InventoryColumn" unique_id=1248852137]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BuyButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=1866846280]
+[node name="BuyButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions" unique_id=1866846280]
 layout_mode = 2
 text = "Buy"
 
-[node name="SellButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=294495571]
+[node name="SellButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions" unique_id=294495571]
 layout_mode = 2
 text = "Sell"
 
-[node name="RefuelButton" type="Button" parent="Layout/Body/Split/Right/Actions" unique_id=1582411307]
+[node name="RefuelButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions" unique_id=1582411307]
 layout_mode = 2
 text = "Refuel"
 

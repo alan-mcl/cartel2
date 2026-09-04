@@ -10,6 +10,7 @@ var module_name: String = ""
 var ship_id: String = ""
 var compatible_module_id: String = ""
 var drop_validator: Callable = Callable()
+var _click_pending := false
 
 @onready var _slot_label: Label = $HBox/SlotLabel
 @onready var _module_label: Label = $HBox/ModuleLabel
@@ -48,13 +49,21 @@ func _apply_labels() -> void:
 
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		slot_clicked.emit(slot_id)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			if module_id.is_empty():
+				slot_clicked.emit(slot_id)
+			else:
+				_click_pending = true
+		elif _click_pending:
+			_click_pending = false
+			slot_clicked.emit(slot_id)
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	if module_id.is_empty():
 		return null
+	_click_pending = false
 	var preview := Label.new()
 	preview.text = module_name
 	set_drag_preview(preview)

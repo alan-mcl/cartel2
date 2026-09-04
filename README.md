@@ -59,7 +59,7 @@ scripts/gameplay/      Catalog, session, ship assembly, save store
 scripts/presentation/  Godot integration (ship, camera, world loader)
 scripts/ui/            HUD, menus, UiRoot, habitat/shipyard screens
 scenes/ui/             Full-screen habitat UI scenes
-scenes/dev/            Developer-only scenes (theme showcase)
+scenes/dev/            Developer-only scenes (theme showcase, ship assembly sandbox)
 data/catalog/          JSON catalogs including commodities and markets
 docs/                  Architecture, data model, setting bible
 ```
@@ -82,6 +82,15 @@ Open the theme developer showcase:
 ~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
   --scene res://scenes/dev/theme_showcase.tscn
 ```
+
+Open the ship assembly sandbox (no economy, fitting rules only):
+
+```bash
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+  --scene res://scenes/dev/ship_assembly_sandbox.tscn
+```
+
+In the editor, open either scene and press **F6** to run it standalone. **F5** still launches the full game.
 
 ## Documentation
 

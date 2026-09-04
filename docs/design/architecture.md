@@ -64,6 +64,10 @@ UI scripts receive a **UiContext** (`catalog`, `session`, `stack`, callbacks). T
 
 Location and building art paths live in catalog JSON under `assets/ui/locations/` (placeholder SVGs today).
 
+### Ship assembly sandbox
+
+For fitting and engineering work without the full game loop, run `scenes/dev/ship_assembly_sandbox.tscn` (CLI `--scene` or editor **F6**). It bootstraps `Catalog`, a sandbox `PrototypeSession` (`session.sandbox = true`), and embeds `ShipyardScreen` with buy/sell disabled and unlimited module drag from catalog. Toolbar actions add empty hulls, strip modules, and restore manufacturer templates. Fitting validation (mounts, mass, volume) matches the main game.
+
 ## Main scene structure
 
 `scenes/main.tscn`:

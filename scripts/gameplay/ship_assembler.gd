@@ -67,12 +67,16 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 		push_error("Cannot assemble invalid owned ship.")
 		return AssembledShip.new()
 
-	var template := catalog.get_ship(owned.template_id)
+	var template: Dictionary = {}
+	if not owned.template_id.is_empty():
+		template = catalog.get_ship(owned.template_id)
+
+	var chassis_data := catalog.get_chassis(owned.chassis_id)
 	var assembled := AssembledShip.new()
 	assembled.id = owned.id
 	assembled.name = owned.name
-	assembled.maker = str(template.get("maker", ""))
-	assembled.chassis = catalog.get_chassis(owned.chassis_id)
+	assembled.maker = str(template.get("maker", chassis_data.get("maker", "")))
+	assembled.chassis = chassis_data
 	assembled.installed_modules = _resolve_installed_modules(catalog, owned)
 	assembled.mounts = _calculate_mount_usage(assembled.chassis, assembled.installed_modules)
 	assembled.capacities = _calculate_capacities(catalog, assembled)
@@ -159,9 +163,11 @@ static func validate_install(
 
 static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipStats:
 	var stats := ShipStats.new()
+	if assembled.chassis.is_empty():
+		return stats
+
 	var engine := assembled.get_propulsion_module()
-	if assembled.chassis.is_empty() or engine.is_empty():
-		push_error("Ship '%s' is missing required chassis or engine." % assembled.id)
+	if engine.is_empty():
 		return stats
 
 	var mass: float = maxf(loaded_mass, 0.1)

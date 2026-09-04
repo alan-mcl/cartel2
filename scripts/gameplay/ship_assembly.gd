@@ -85,7 +85,7 @@ static func install_module(
 		session.changed.emit()
 		return false
 
-	if session.get_spare_part_count(part_id) <= 0:
+	if not session.sandbox and session.get_spare_part_count(part_id) <= 0:
 		session.last_log = "No spare part available to install."
 		session.changed.emit()
 		return false
@@ -100,11 +100,12 @@ static func install_module(
 	if part.is_empty():
 		return false
 
-	if not session.remove_spare_part(part_id, 1):
-		return false
+	if not session.sandbox:
+		if not session.remove_spare_part(part_id, 1):
+			return false
 
 	var previous := ship.remove_module(slot)
-	if not previous.is_empty():
+	if not session.sandbox and not previous.is_empty():
 		session.add_spare_part(previous, 1)
 
 	ship.set_module(slot, part_id)
@@ -194,7 +195,8 @@ static func remove_module(session: PrototypeSession, catalog: Catalog, ship_id: 
 		session.changed.emit()
 		return false
 
-	session.add_spare_part(previous, 1)
+	if not session.sandbox:
+		session.add_spare_part(previous, 1)
 	var part := catalog.get_module(previous)
 	session.last_log = "Removed %s from %s." % [str(part.get("name", previous)), ship.name]
 	session.changed.emit()
@@ -223,6 +225,12 @@ static func refuel_ship(session: PrototypeSession, catalog: Catalog, ship_id: St
 		session.last_log = "Fuel tank already full."
 		session.changed.emit()
 		return false
+
+	if session.sandbox:
+		ship.fuel_current = capacity
+		session.last_log = "Refuelled %s." % ship.name
+		session.changed.emit()
+		return true
 
 	var cost := int(ceil(needed * REFUEL_COST_PER_UNIT))
 	if session.credits < cost:
