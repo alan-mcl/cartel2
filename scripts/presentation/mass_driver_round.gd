@@ -1,0 +1,92 @@
+extends Area2D
+
+const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const ROUND_RADIUS := 5.0
+const ROUND_COLOR := Color(1.0, 0.7, 0.27, 1.0)
+const ROUND_OUTLINE := Color(1.0, 0.55, 0.2, 1.0)
+const SOLID_MASK := 2
+
+var _direction := Vector2.RIGHT
+var _speed: float = 1000.0
+var _max_range: float = 1200.0
+var _damage: float = 0.0
+var _traveled: float = 0.0
+
+
+static func spawn(
+	parent: Node2D,
+	origin: Vector2,
+	direction: Vector2,
+	speed: float,
+	max_range: float,
+	damage: float
+) -> void:
+	var scene := load("res://scenes/world/mass_driver_round.tscn") as PackedScene
+	if scene == null:
+		push_error("Missing mass driver round scene.")
+		return
+
+	var round := scene.instantiate()
+	if round == null:
+		push_error("Failed to instantiate mass driver round.")
+		return
+
+	parent.add_child(round)
+	if round.has_method("configure"):
+		round.configure(origin, direction, speed, max_range, damage)
+
+
+func configure(origin: Vector2, direction: Vector2, speed: float, max_range: float, damage: float) -> void:
+	global_position = origin
+	_direction = direction.normalized()
+	_speed = speed
+	_max_range = max_range
+	_damage = damage
+	rotation = _direction.angle() + PI / 2.0
+	queue_redraw()
+
+
+func _ready() -> void:
+	monitoring = true
+	body_entered.connect(_on_body_entered)
+	queue_redraw()
+
+
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, ROUND_RADIUS, ROUND_COLOR)
+	draw_arc(Vector2.ZERO, ROUND_RADIUS, 0.0, TAU, 24, ROUND_OUTLINE, 1.5)
+
+
+func _physics_process(delta: float) -> void:
+	var step := _speed * delta
+	var next_traveled := _traveled + step
+	if next_traveled >= _max_range:
+		queue_free()
+		return
+
+	var from := global_position
+	var to := from + _direction * step
+	var hit := _sweep(from, to)
+	if not hit.is_empty():
+		global_position = hit.position
+		WeaponHit.apply(hit.collider, _damage)
+		queue_free()
+		return
+
+	global_position = to
+	_traveled = next_traveled
+
+
+func _sweep(from: Vector2, to: Vector2) -> Dictionary:
+	var space_state := get_world_2d().direct_space_state
+	if space_state == null:
+		return {}
+
+	var query := PhysicsRayQueryParameters2D.create(from, to)
+	query.collision_mask = SOLID_MASK
+	return space_state.intersect_ray(query)
+
+
+func _on_body_entered(body: Node) -> void:
+	WeaponHit.apply(body, _damage)
+	queue_free()

@@ -33,7 +33,7 @@ theme_override_constants/separation = 4
 [node name="HintLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Meta"
-text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · E interact · Esc pause"
+text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · Space/LMB fire · E interact · Esc pause"
 
 [node name="PilotLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2
@@ -76,6 +76,12 @@ text = "Fuel: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Power: —"
+
+[node name="AmmoLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Ammo: —"
 
 [node name="HeatLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
 layout_mode = 2

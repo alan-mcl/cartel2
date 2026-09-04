@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes **two chassis**, **two fusion engines**, **one armour**, and **no weapons, shields, LSS, or hyperdrives**. Workshop swaps modules for free with immediate flight-stat effect.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes chassis, engines, sensors, **light laser**, **light mass driver**, cargo/fuel modules, and armour. **Light laser and mass driver fire in orbital flight**; shields, LSS variants, and hyperdrives remain design-only.
 
 ## Design layers
 
@@ -132,7 +132,7 @@ Types include mass driver, plasma, scatter, rockets, laser/turbo laser turrets, 
 
 **Pegasus P101 lore:** mass driver for defence.  
 **Flare-ON SS lore:** rotating laser turret.  
-Not implemented in Godot prototype.
+**Godot prototype:** light laser (hitscan beam) and light mass driver (kinetic projectile) fire along ship facing in orbital flight. Debris is destructible; stations and wrecks block shots.
 
 ### Weapon systems and ammo modules (design)
 
@@ -201,7 +201,7 @@ At **Habitat Workshop** (`kind: "workshop"`):
 - Refuel ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Planned: weapons firing, shield combat, hyperdrive slots — see README placeholders and [architecture.md](../design/architecture.md).
+Planned: shield combat, hyperdrive slots — see README placeholders and [architecture.md](../design/architecture.md). Weapons firing (light laser, mass driver) is implemented in orbital flight.
 
 ---
 

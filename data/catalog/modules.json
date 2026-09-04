@@ -109,6 +109,7 @@
     "damage": 18,
     "rate_of_fire": 0.8,
     "range": 1200,
+    "projectile_speed": 1000,
     "power_demand": 2.0,
     "ammunition_type": "mass_driver_round",
     "ammunition_per_shot": 1,

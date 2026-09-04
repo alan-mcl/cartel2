@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var _systems_row: HBoxContainer = $Root/Margin/StatusPanel/VBox/SystemsRow
 @onready var _fuel: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/FuelLabel
 @onready var _power: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/PowerLabel
+@onready var _ammo: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/AmmoLabel
 @onready var _location: Label = $Root/Margin/StatusPanel/VBox/LocationLabel
 @onready var _objective: Label = $Root/Margin/StatusPanel/VBox/ObjectiveLabel
 @onready var _target: Label = $Root/Margin/StatusPanel/VBox/TargetLabel
@@ -61,6 +62,43 @@ func refresh() -> void:
 	if _operating_state != null:
 		set_operating_state(_operating_state)
 
+	_refresh_ammo()
+
+
+func _refresh_ammo() -> void:
+	if _ammo == null:
+		return
+
+	var ammo_text := _build_ammo_text()
+	if ammo_text.is_empty():
+		_ammo.visible = false
+	else:
+		_ammo.visible = true
+		_ammo.text = ammo_text
+
+
+func _build_ammo_text() -> String:
+	if _assembled_ship == null or _session == null:
+		return ""
+
+	var owned := _session.get_current_owned_ship()
+	if owned == null:
+		return ""
+
+	for entry in _assembled_ship.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: Variant = entry.get("data", {})
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var ammo_type := str(module_def.get("ammunition_type", ""))
+		if ammo_type.is_empty():
+			continue
+
+		return "Ammo: %d" % owned.get_ammo_count(ammo_type)
+
+	return ""
+
 
 func set_motion(speed: float, heading_deg: float, boosting: bool) -> void:
 	_speed.text = "Speed: %.0f" % speed
@@ -102,4 +140,6 @@ func _ready() -> void:
 	if heat_label:
 		heat_label.visible = false
 	if _hint:
-		_hint.text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · E interact · Esc pause"
+		_hint.text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · Space/LMB fire · E interact · Esc pause"
+	if _ammo:
+		_ammo.visible = false

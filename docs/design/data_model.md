@@ -223,7 +223,7 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 |------|---------------|----------------|
 | Ship model | Chassis + modules + budgets | Full Elite-style fitting + combat |
 | Modules | Fusion engines, power, LS, sensors, lasers, mass drivers, cargo, fuel | Shields, ECM, hyperdrive, passenger classes |
-| Weapons | Catalogued; not fired in flight | Full combat loop |
-| Operating sim | Power, fuel, compute in flight | Combat power contention, heat/signature, ammo consumption |
+| Weapons | Light laser and mass driver fire in flight; debris destructible | Full combat loop, NPC ships, shields |
+| Operating sim | Power, fuel, compute in flight; weapon power while firing | Combat power contention, heat/signature, full ammo logistics |
 
 Canonical lore: [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).

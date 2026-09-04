@@ -137,6 +137,20 @@ func get_ammo_count(ammo_id: String) -> int:
 	return int(ammunition.get(ammo_id, 0))
 
 
+func remove_ammo(ammo_id: String, amount: int) -> bool:
+	if amount <= 0:
+		return true
+	var current := get_ammo_count(ammo_id)
+	if current < amount:
+		return false
+	var remaining := current - amount
+	if remaining <= 0:
+		ammunition.erase(ammo_id)
+	else:
+		ammunition[ammo_id] = float(remaining)
+	return true
+
+
 static func _parse_modules_array(modules_data: Array) -> Array:
 	var result: Array = []
 	for entry in modules_data:

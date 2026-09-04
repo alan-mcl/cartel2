@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -88,6 +88,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 ### Orbital flight
 
 - `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from assembled modules and loaded mass), modulated by operating-state `thrust_factor`.
+- Hold **Space** or **LMB** (`fire`) to discharge installed weapons along ship facing. `ShipWeapons` handles rate-of-fire cooldowns and ammo; `ShipOperations` allocates weapon power only while firing.
 - `play_bounds` per sector defines the dust ring; HUD warns when the player drifts outside.
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
 
@@ -177,7 +178,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unspace solution typing (integers shown as flavour only)
 - Deeper N-space routes (n > 4)
 - Ship hyperdrive translation
-- Ship combat, weapons firing, shield hit pools
+- NPC ship combat, shield hit pools, full damage-type combat loop
 - Paid workshop beyond parts inventory model
 - NPC traffic
 - Full six-sector world (only Proxima and Bela implemented in JSON)

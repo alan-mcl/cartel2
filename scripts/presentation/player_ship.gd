@@ -5,6 +5,9 @@ signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 signal operating_state_changed(state: ShipOperatingState)
 
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
+const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
+const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
+const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
 
 @export var ship_id: String = "flare_on_ss"
 
@@ -13,6 +16,7 @@ var owned_ship: OwnedShip
 var catalog: Catalog
 var operating_state: ShipOperatingState = ShipOperatingState.new()
 var motion := ShipMotion.new()
+var weapons: ShipWeapons = ShipWeapons.new()
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
 @onready var _hull: Sprite2D = $Visual/Hull
@@ -27,6 +31,7 @@ func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catal
 	assembled_ship = ship
 	owned_ship = owned
 	catalog = game_catalog
+	weapons.reset()
 	_apply_hull_visual()
 	_refresh_loaded_stats()
 
@@ -126,8 +131,14 @@ func _physics_process(delta: float) -> void:
 	var rotate_left := Input.is_action_pressed("rotate_left")
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
-
 	var session: PrototypeSession = get_parent().session if get_parent() != null else null
+	var firing := (
+		Input.is_action_pressed("fire")
+		and session != null
+		and not session.docked
+		and not get_tree().paused
+	)
+
 	if session != null and catalog != null and owned_ship != null and assembled_ship != null:
 		operating_state = ShipOperations.tick(
 			catalog,
@@ -138,12 +149,27 @@ func _physics_process(delta: float) -> void:
 				"thrust": thrust,
 				"boost": boost,
 				"in_flight": not session.docked,
+				"fire": firing,
 			},
 			1
 		)
 		_refresh_loaded_stats()
 		operating_state_changed.emit(operating_state)
-		_update_operating_warnings(session)
+		_update_operating_warnings(session, firing)
+
+		var weapon_result: Dictionary = weapons.tick(
+			assembled_ship,
+			owned_ship,
+			delta,
+			firing,
+			operating_state.weapons_allowed
+		)
+		if not weapon_result.get("orders", []).is_empty():
+			_spawn_weapon_orders(weapon_result["orders"])
+		if bool(weapon_result.get("ammo_changed", false)):
+			session.changed.emit()
+		if firing and bool(weapon_result.get("out_of_ammo", false)):
+			session.last_log = "Out of ammunition."
 
 	motion.step(
 		stats,
@@ -168,11 +194,55 @@ func _physics_process(delta: float) -> void:
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
 
 
-func _update_operating_warnings(session: PrototypeSession) -> void:
+func _update_operating_warnings(session: PrototypeSession, firing: bool = false) -> void:
 	if operating_state.fuel_empty and Input.is_action_pressed("thrust"):
 		session.last_log = "Out of fuel."
+	elif firing and not operating_state.weapons_allowed and operating_state.weapon_power_requested > 0.0:
+		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
 	elif operating_state.power_deficit > 0.0:
 		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
+
+
+func _spawn_weapon_orders(orders: Array) -> void:
+	var world := _get_world_root()
+	if world == null:
+		return
+
+	var origin := _muzzle_position()
+	var direction := _fire_direction()
+	for order_variant in orders:
+		if typeof(order_variant) != TYPE_DICTIONARY:
+			continue
+		var order: Dictionary = order_variant
+		var delivery := str(order.get("delivery", ""))
+		var damage := float(order.get("damage", 0.0))
+		var max_range := float(order.get("range", 0.0))
+		if delivery == "beam":
+			_LaserBeam.spawn(world, origin, direction, max_range, damage)
+		elif delivery == "projectile":
+			_MassDriverRound.spawn(
+				world,
+				origin,
+				direction,
+				float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED)),
+				max_range,
+				damage
+			)
+
+
+func _muzzle_position() -> Vector2:
+	return global_position + Vector2.from_angle(motion.facing) * ShipWeapons.MUZZLE_OFFSET
+
+
+func _fire_direction() -> Vector2:
+	return Vector2.from_angle(motion.facing)
+
+
+func _get_world_root() -> Node2D:
+	var main := get_parent()
+	if main == null:
+		return null
+	return main.get_node_or_null("World") as Node2D
 
 
 func _unhandled_input(event: InputEvent) -> void:

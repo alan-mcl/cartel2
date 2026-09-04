@@ -36,11 +36,13 @@ static func tick(
 	var thrusting := bool(inputs.get("thrust", false))
 	var boosting := bool(inputs.get("boost", false)) and thrusting
 	var in_flight := bool(inputs.get("in_flight", true))
+	var firing := bool(inputs.get("fire", false)) and in_flight
 
 	state.active_systems = {
 		"engine": thrusting,
 		"boost": boosting,
 		"sensors": in_flight,
+		"weapons": firing,
 	}
 
 	var demands: Array = _collect_power_demands(assembled, state.active_systems)
@@ -112,6 +114,8 @@ static func _collect_power_demands(assembled: AssembledShip, active_systems: Dic
 			continue
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
 			continue
+		if category == "weapon" and not bool(active_systems.get("weapons", false)):
+			continue
 		if category == "power":
 			demand = max(demand, float(module_def.get("fuel_consumption", 0.0)) * 2.0)
 
@@ -169,16 +173,26 @@ static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
 	var remaining: float = state.power_available
 	var allocated: float = 0.0
 	var requested: float = 0.0
+	var allocated_by_category: Dictionary = {}
 
 	for entry in sorted:
-		requested += float(entry["demand"])
-		var grant: float = minf(float(entry["demand"]), remaining)
+		var category := str(entry.get("category", ""))
+		var demand := float(entry["demand"])
+		requested += demand
+		var grant: float = minf(demand, remaining)
 		allocated += grant
 		remaining -= grant
+		allocated_by_category[category] = float(allocated_by_category.get(category, 0.0)) + grant
 
 	state.power_requested = requested
 	state.power_allocated = allocated
 	state.power_deficit = maxf(0.0, requested - allocated)
+	state.weapon_power_requested = _requested_for_category(demands, "weapon")
+	state.weapon_power_allocated = float(allocated_by_category.get("weapon", 0.0))
+	state.weapons_allowed = (
+		state.weapon_power_requested <= 0.0
+		or state.weapon_power_allocated >= state.weapon_power_requested
+	)
 
 
 static func _requested_for_category(demands: Array, category: String) -> float:

@@ -125,7 +125,7 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 |------|--------|----------------------|
 | Pegasus P103a engine | Mark 2 Antimatter + plasma | Mark 2 Fusion in XML |
 | Chassis hits | 10–40 (design sheet) | 1000 placeholder in XML |
-| Weapons on player ships | Mass driver, lasers, etc. | Not wired in Godot prototype |
+| Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in Godot prototype |
 | Hyperdrive on Dragon Gold | Alpha class | Not in prototype JSON |
 
 Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and heat simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).

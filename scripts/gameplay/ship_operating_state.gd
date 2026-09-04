@@ -21,4 +21,8 @@ var fuel_empty: bool = false
 var thrust_factor: float = 1.0
 var boost_allowed: bool = true
 
+var weapon_power_requested: float = 0.0
+var weapon_power_allocated: float = 0.0
+var weapons_allowed: bool = true
+
 var active_systems: Dictionary = {}
