@@ -19,9 +19,9 @@ Chassis (required, fixed on owned ships)
 Installed modules[] (slot → module_id)
   ├── propulsion (main_engine mount)
   ├── power (power mount)
-  ├── systems (system mount): computer, life support, thermal, sensors, …
+  ├── systems (system mount): computer, life support, sensors, …
   ├── weapons (light/medium/heavy weapon mounts)
-  └── internal: cargo bays, fuel tanks, armour
+  └── other: cargo bays, fuel tanks, armour, magazines
 ```
 
 Mount counts come from chassis `mounts`. Unused mounts are normal.
@@ -65,7 +65,7 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 | Max speed | `max_speed` | Speed cap km/s |
 | Fuel use | `fuel_consumption` | Consumed in flight |
 | Boost | `boost_multiplier` | Boost speed factor |
-| Power / heat | `power_demand`, `heat_generation` | Operating budgets |
+| Power | `power_demand` | Operating budget |
 
 ### In prototype JSON
 
@@ -74,7 +74,7 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 | `mark_3_fusion` | Bayes Inc | Flare-ON SS default |
 | `mark_1_fusion` | Bayes Inc | Pegasus P101 default |
 
-`ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and heat in flight.
+`ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and compute in flight.
 
 ---
 

@@ -166,7 +166,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 ## Save / load
 
 - Three fixed slots: `user://saves/slot_1.json` … `slot_3.json`.
-- Saves store pilot identity, full `PrototypeSession` state (including `spare_parts` and `ship_heat`), owned ship instances (modules, per-ship cargo, fuel, ammunition), and player flight position/velocity/facing.
+- Saves store pilot identity, full `PrototypeSession` state (including `spare_parts`), owned ship instances (modules, per-ship cargo, fuel, ammunition), and player flight position/velocity/facing.
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
 

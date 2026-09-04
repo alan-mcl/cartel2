@@ -1,4 +1,7 @@
 Ship Construction Data Model Specification
+
+Prototype note: heat/signature and Utility/Internal slot names are deferred in the Godot build — use System + Other mounts; see docs/design/data_model.md for the live catalog schema.
+
 1. Purpose
 
 The ship construction model defines how individual ships are assembled from a fixed chassis and a configurable collection of installed modules.

@@ -12,7 +12,6 @@
     "boost_multiplier": 1.85,
     "fuel_consumption": 0.35,
     "power_demand": 4.0,
-    "heat_generation": 3.0,
     "cost": 2400,
     "description": "High-output fusion drive. Popular on agile civilian hulls."
   },
@@ -29,7 +28,6 @@
     "boost_multiplier": 1.4,
     "fuel_consumption": 0.28,
     "power_demand": 3.0,
-    "heat_generation": 2.0,
     "cost": 900,
     "description": "Reliable entry-level fusion engine. Heavy but dependable."
   },
@@ -42,7 +40,6 @@
     "mass": 1.2,
     "volume": 2.0,
     "power_generation": 28.0,
-    "heat_generation": 6.0,
     "fuel_consumption": 0.08,
     "cost": 1800,
     "description": "Compact fusion reactor for light and medium hulls."
@@ -57,7 +54,6 @@
     "volume": 0.5,
     "compute_capacity": 16.0,
     "power_demand": 1.5,
-    "heat_generation": 0.5,
     "cost": 1200,
     "description": "Standard navigation and combat processing core."
   },
@@ -71,22 +67,8 @@
     "volume": 1.5,
     "life_support_capacity": 4.0,
     "power_demand": 1.5,
-    "heat_generation": 0.5,
     "cost": 650,
     "description": "Spartan A1 life support. Adequate for short-haul crews."
-  },
-  {
-    "id": "radiator_mk1",
-    "name": "Radiator Mk I",
-    "maker": "Bayes Inc",
-    "category": "thermal",
-    "mount": "system",
-    "mass": 0.5,
-    "volume": 1.0,
-    "heat_dissipation": 12.0,
-    "power_demand": 0.5,
-    "cost": 450,
-    "description": "Basic heat exchanger array for civilian ships."
   },
   {
     "id": "sensor_basic",
@@ -98,7 +80,6 @@
     "volume": 0.4,
     "compute_demand": 2.0,
     "power_demand": 1.0,
-    "heat_generation": 0.3,
     "cost": 550,
     "description": "Standard orbital navigation and proximity sensors."
   },
@@ -114,7 +95,6 @@
     "rate_of_fire": 2.0,
     "range": 800,
     "power_demand": 4.0,
-    "heat_generation": 3.0,
     "cost": 1100,
     "description": "Rotating laser turret for self-defence."
   },
@@ -130,7 +110,6 @@
     "rate_of_fire": 0.8,
     "range": 1200,
     "power_demand": 2.0,
-    "heat_generation": 1.0,
     "ammunition_type": "mass_driver_round",
     "ammunition_per_shot": 1,
     "cost": 950,
@@ -141,7 +120,7 @@
     "name": "Mass Driver Magazine 200",
     "maker": "Bayes Inc",
     "category": "ammunition",
-    "mount": "system",
+    "mounts": ["other", "light_weapon", "medium_weapon", "heavy_weapon"],
     "mass": 0.4,
     "volume": 1.0,
     "ammunition_capacity": {

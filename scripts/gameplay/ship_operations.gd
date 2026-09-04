@@ -8,11 +8,9 @@ const POWER_PRIORITY_BY_CATEGORY := {
 	"propulsion": PowerPriority.CRITICAL,
 	"computer": PowerPriority.HIGH,
 	"sensor": PowerPriority.HIGH,
-	"thermal": PowerPriority.HIGH,
 	"shield": PowerPriority.HIGH,
 	"weapon": PowerPriority.NORMAL,
 	"ecm": PowerPriority.NORMAL,
-	"utility": PowerPriority.NORMAL,
 	"power": PowerPriority.CRITICAL,
 }
 
@@ -23,15 +21,12 @@ static func tick(
 	owned: OwnedShip,
 	delta: float,
 	inputs: Dictionary,
-	occupant_count: int,
-	current_heat: float
+	occupant_count: int
 ) -> ShipOperatingState:
 	var state: ShipOperatingState = ShipOperatingState.new()
 	if assembled == null or owned == null or assembled.chassis.is_empty():
 		return state
 
-	state.heat_capacity = float(assembled.capacities.get("heat_capacity", 80.0))
-	state.heat_dissipation = float(assembled.capacities.get("heat_dissipation", 0.0))
 	state.compute_capacity = float(assembled.capacities.get("compute_capacity", 0.0))
 	state.life_support_capacity = float(assembled.capacities.get("life_support_capacity", 0.0))
 	state.power_available = float(assembled.capacities.get("power_generation", 0.0))
@@ -54,9 +49,6 @@ static func tick(
 	state.life_support_overloaded = state.life_support_demand > state.life_support_capacity
 
 	_allocate_power(state, demands)
-	state.heat_generation = _collect_heat_generation(assembled, state.active_systems, demands)
-	state.heat = clamp(current_heat + (state.heat_generation - state.heat_dissipation) * delta, 0.0, state.heat_capacity)
-	state.overheating = state.heat >= state.heat_capacity * 0.95
 
 	state.fuel_consumption = _collect_fuel_consumption(assembled, state.active_systems, demands)
 	if state.fuel_current > 0.0 and state.fuel_consumption > 0.0:
@@ -76,11 +68,6 @@ static func tick(
 		if propulsion_requested > 0.0 and state.power_allocated < propulsion_requested:
 			state.thrust_factor = clamp(state.power_allocated / propulsion_requested, 0.2, 1.0)
 
-	if state.overheating:
-		state.boost_allowed = false
-		if thrusting:
-			state.thrust_factor = min(state.thrust_factor, 0.6)
-
 	if boosting and not state.boost_allowed:
 		state.active_systems["boost"] = false
 
@@ -94,8 +81,7 @@ static func idle_snapshot(catalog: Catalog, assembled: AssembledShip, owned: Own
 		owned,
 		0.0,
 		{"thrust": false, "boost": false, "in_flight": false},
-		occupant_count,
-		0.0
+		occupant_count
 	)
 
 
@@ -153,25 +139,6 @@ static func _collect_compute_demand(assembled: AssembledShip, active_systems: Di
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
 			continue
 		total += float(module_def.get("compute_demand", 0.0))
-	return total
-
-
-static func _collect_heat_generation(assembled: AssembledShip, active_systems: Dictionary, demands: Array) -> float:
-	var total := 0.0
-	for entry in assembled.installed_modules:
-		if typeof(entry) != TYPE_DICTIONARY:
-			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
-			continue
-
-		var category := str(module_def.get("category", ""))
-		var heat := float(module_def.get("heat_generation", 0.0))
-		if category == "propulsion" and not bool(active_systems.get("engine", false)):
-			continue
-		if category == "propulsion" and bool(active_systems.get("boost", false)):
-			heat *= 1.5
-		total += heat
 	return total
 
 

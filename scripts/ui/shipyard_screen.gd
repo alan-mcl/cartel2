@@ -10,7 +10,6 @@ const STOCK_CATEGORIES := [
 	"power",
 	"computer",
 	"life_support",
-	"thermal",
 	"sensor",
 	"weapon",
 	"armour",
@@ -24,8 +23,7 @@ const SLOT_GROUPS := [
 	{"label": "Power", "prefixes": ["power"]},
 	{"label": "Systems", "prefixes": ["system"]},
 	{"label": "Weapons", "prefixes": ["light_weapon", "medium_weapon", "heavy_weapon"]},
-	{"label": "Utilities", "prefixes": ["utility"]},
-	{"label": "Internal", "prefixes": ["internal"]},
+	{"label": "Other", "prefixes": ["other"]},
 ]
 
 @onready var _header: PanelContainer = $Layout/Header
@@ -253,10 +251,6 @@ func _rebuild_ship_detail() -> void:
 	_ship_stats_body.add_child(_detail_label(
 		"COMPUTE",
 		"%.0f / %.0f CU idle" % [float(engineering.get("idle_compute_demand", 0.0)), float(capacities.get("compute_capacity", 0.0))]
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"HEAT",
-		"%.0f / %.0f HU/s" % [float(engineering.get("idle_heat_generation", 0.0)), float(capacities.get("heat_dissipation", 0.0))]
 	))
 	_ship_stats_body.add_child(_detail_label(
 		"LIFE SUPPORT",

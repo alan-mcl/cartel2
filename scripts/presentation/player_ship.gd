@@ -139,10 +139,8 @@ func _physics_process(delta: float) -> void:
 				"boost": boost,
 				"in_flight": not session.docked,
 			},
-			1,
-			session.ship_heat
+			1
 		)
-		session.ship_heat = operating_state.heat
 		_refresh_loaded_stats()
 		operating_state_changed.emit(operating_state)
 		_update_operating_warnings(session)
@@ -173,8 +171,6 @@ func _physics_process(delta: float) -> void:
 func _update_operating_warnings(session: PrototypeSession) -> void:
 	if operating_state.fuel_empty and Input.is_action_pressed("thrust"):
 		session.last_log = "Out of fuel."
-	elif operating_state.overheating:
-		session.last_log = "Thermal overload. Reduce thrust."
 	elif operating_state.power_deficit > 0.0:
 		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
 

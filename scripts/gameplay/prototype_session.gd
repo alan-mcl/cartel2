@@ -29,7 +29,6 @@ var unspace_world_id: String = ""
 var pending_destination_id: String = ""
 var hull: float = 0.0
 var max_hull: float = 0.0
-var ship_heat: float = 0.0
 
 var spare_parts: Dictionary = {}
 var sandbox: bool = false
@@ -57,7 +56,6 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	pending_destination_id = ""
 	hull = 0.0
 	max_hull = 0.0
-	ship_heat = 0.0
 	spare_parts.clear()
 
 	var ships: Variant = player_data.get("ships", [])
@@ -111,7 +109,6 @@ func to_dict() -> Dictionary:
 		"pending_destination_id": pending_destination_id,
 		"hull": hull,
 		"max_hull": max_hull,
-		"ship_heat": ship_heat,
 		"spare_parts": spare_parts.duplicate(),
 	}
 
@@ -149,7 +146,6 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	pending_destination_id = str(session_data.get("pending_destination_id", ""))
 	hull = float(session_data.get("hull", 0.0))
 	max_hull = float(session_data.get("max_hull", 0.0))
-	ship_heat = float(session_data.get("ship_heat", 0.0))
 	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))

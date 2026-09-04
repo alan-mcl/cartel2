@@ -24,7 +24,6 @@ static func get_engineering_block(catalog: Catalog, owned: OwnedShip) -> Diction
 		"idle_power_requested": idle.power_requested,
 		"idle_power_available": idle.power_available,
 		"idle_compute_demand": idle.compute_demand,
-		"idle_heat_generation": idle.heat_generation,
 	}
 
 
@@ -322,17 +321,18 @@ static func find_compatible_slots(catalog: Catalog, owned: OwnedShip, part_id: S
 		return []
 
 	var slots: Array = []
-	var mount := str(module_def.get("mount", ""))
-	if mount.is_empty():
-		for i in range(1, 13):
-			slots.append("internal_%d" % i)
-		return slots
-
+	var allowed_mounts := ShipAssembler.module_mounts(module_def)
 	var chassis := catalog.get_chassis(owned.chassis_id)
 	var mounts: Variant = chassis.get("mounts", {})
-	var count := 0
-	if typeof(mounts) == TYPE_DICTIONARY:
-		count = int(mounts.get(mount, 0))
-	for i in range(count):
-		slots.append("%s_%d" % [mount, i + 1])
+
+	for mount in allowed_mounts:
+		if str(mount) == "other":
+			for i in range(1, 13):
+				slots.append("other_%d" % i)
+			continue
+		if typeof(mounts) != TYPE_DICTIONARY:
+			continue
+		var count := int(mounts.get(str(mount), 0))
+		for i in range(count):
+			slots.append("%s_%d" % [mount, i + 1])
 	return slots

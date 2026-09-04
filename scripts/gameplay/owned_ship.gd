@@ -23,7 +23,7 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 
 	var modules_data: Variant = data.get("modules", [])
 	if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
-		ship.modules = _parse_modules_array(modules_data)
+		ship.modules = _migrate_slot_names(_parse_modules_array(modules_data))
 	else:
 		ship.modules = _migrate_legacy_modules(data)
 
@@ -158,7 +158,35 @@ static func _migrate_legacy_modules(data: Dictionary) -> Array:
 
 	var armour: Variant = data.get("armour_id")
 	if armour != null and str(armour) != "" and str(armour) != "null":
-		result.append({"slot": "internal_1", "module_id": str(armour)})
+		result.append({"slot": "other_1", "module_id": str(armour)})
+	return result
+
+
+static func _migrate_slot_names(modules: Array) -> Array:
+	var max_system := 0
+	for entry in modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var slot := str(entry.get("slot", ""))
+		if slot.begins_with("system_"):
+			max_system = maxi(max_system, int(slot.trim_prefix("system_")))
+
+	var result: Array = []
+	for entry in modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var slot := str(entry.get("slot", ""))
+		var module_id := str(entry.get("module_id", ""))
+		if module_id.is_empty():
+			continue
+		if module_id == "radiator_mk1":
+			continue
+		if slot.begins_with("internal_"):
+			slot = "other_%s" % slot.trim_prefix("internal_")
+		elif slot.begins_with("utility_"):
+			max_system += 1
+			slot = "system_%d" % max_system
+		result.append({"slot": slot, "module_id": module_id})
 	return result
 
 

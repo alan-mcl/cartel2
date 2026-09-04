@@ -8,7 +8,6 @@ extends CanvasLayer
 @onready var _systems_row: HBoxContainer = $Root/Margin/StatusPanel/VBox/SystemsRow
 @onready var _fuel: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/FuelLabel
 @onready var _power: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/PowerLabel
-@onready var _heat: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/HeatLabel
 @onready var _location: Label = $Root/Margin/StatusPanel/VBox/LocationLabel
 @onready var _objective: Label = $Root/Margin/StatusPanel/VBox/ObjectiveLabel
 @onready var _target: Label = $Root/Margin/StatusPanel/VBox/TargetLabel
@@ -75,7 +74,6 @@ func set_operating_state(state: ShipOperatingState) -> void:
 		return
 	_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
-	_heat.text = "Heat: %.0f / %.0f" % [state.heat, state.heat_capacity]
 
 
 func set_target(target: Interactable) -> void:
@@ -100,5 +98,8 @@ func set_boundary_warning(active: bool, in_unspace: bool = false) -> void:
 
 func _ready() -> void:
 	_boundary.visible = false
+	var heat_label := get_node_or_null("Root/Margin/StatusPanel/VBox/SystemsRow/HeatLabel")
+	if heat_label:
+		heat_label.visible = false
 	if _hint:
 		_hint.text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · E interact · Esc pause"

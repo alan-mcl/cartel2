@@ -9,12 +9,6 @@ var power_deficit: float = 0.0
 var compute_capacity: float = 0.0
 var compute_demand: float = 0.0
 
-var heat: float = 0.0
-var heat_generation: float = 0.0
-var heat_dissipation: float = 0.0
-var heat_capacity: float = 0.0
-var overheating: bool = false
-
 var life_support_capacity: float = 0.0
 var life_support_demand: float = 0.0
 var life_support_overloaded: bool = false

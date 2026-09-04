@@ -39,10 +39,10 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 Chassis (envelope + mounts)
   └── installed modules (slot → module_id)
         └── aggregated capacities + derived flight stats
-              └── operating state (power, heat, fuel — in flight)
+              └── operating state (power, fuel, compute — in flight)
 ```
 
-**Static fitting** validates mount compatibility, mass limit, and volume. **Operating overload** (e.g. weapons drawing more power than the plant generates while firing) is allowed at install time; `ShipOperations.tick` resolves power/heat/fuel during flight.
+**Static fitting** validates mount compatibility, mass limit, and volume. **Operating overload** (e.g. weapons drawing more power than the plant generates while firing) is allowed at install time; `ShipOperations.tick` resolves power/fuel/compute during flight.
 
 ### `chassis.json`
 
@@ -55,7 +55,6 @@ Chassis (envelope + mounts)
 | `hits` | number | Base structural integrity |
 | `mass_limit` | number | Maximum configured ship mass (tonnes) |
 | `volume` | number | Internal volume envelope (m³) |
-| `heat_capacity` | number | Thermal overload ceiling |
 | `maneuver` | string | `low` \| `medium` \| `high` → rotation and damp |
 | `mounts` | object | Mount category → count (e.g. `main_engine: 1`, `system: 5`) |
 | `hull_color` | string | HTML colour for sprite modulate |
@@ -71,15 +70,18 @@ Common fields (omit zero-valued properties):
 | `name` | string | |
 | `maker` | string | |
 | `category` | string | See categories below |
-| `mount` | string | Required mount category; omit for internal-only modules |
+| `mount` | string | Single required mount category |
+| `mounts` | string[] | Optional; when present, module may install in any listed mount (tried in order for auto-assignment) |
 | `mass` | number | Tonnes |
 | `volume` | number | m³ |
 | `cost` | number | Yard purchase price |
 | `description` | string | |
 
-Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `heat_generation`, `compute_capacity`, `compute_demand`, `heat_dissipation`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
+Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
-**Categories in prototype:** `propulsion`, `power`, `computer`, `life_support`, `thermal`, `sensor`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
+**Categories in prototype:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
+
+Use `"mount": "system"` (or another single mount) for modules with one home. Use `"mounts": ["other", "light_weapon", …]` when a part can fit multiple slot types. Omit both for Other-only modules (`ShipAssembler.module_mounts()` defaults to `["other"]`).
 
 ### `ships.json` (template)
 
@@ -95,7 +97,7 @@ Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fue
 
 Mounted modules use `{mount_category}_{n}` (e.g. `main_engine_1`, `system_3`, `light_weapon_1`).
 
-Internal modules (cargo, fuel, armour without mount) use `internal_{n}`.
+**Other** slots (`other_{n}`) hold volume-only modules (cargo, fuel, armour, magazines). Chassis `utility` counts are merged into `system` in the prototype catalog.
 
 ### `player.json`
 
@@ -123,7 +125,7 @@ New Game reads this template once; runtime progress is stored in save slots unde
 | `cargo` | object | `{ commodity_id: qty }` per-ship hold |
 | `location` | string | `"aboard"` or habitat id |
 
-Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engine_1` / `internal_1`.
+Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engine_1` / `other_1`. Legacy `internal_*` and `utility_*` slot names migrate to `other_*` / next free `system_*`.
 
 - **aboard** — ship the player flies in orbit.
 - **habitat id** — parked at that habitat; persists across sector jumps.
@@ -134,7 +136,7 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 |------|------|------|
 | `OwnedShip` | `owned_ship.gd` | Persistent configuration + inventories |
 | `AssembledShip` | `assembled_ship.gd` | Resolved modules, capacities, envelope, derived stats |
-| `ShipOperatingState` | `ship_operating_state.gd` | Transient power/heat/fuel/compute state |
+| `ShipOperatingState` | `ship_operating_state.gd` | Transient power/fuel/compute state |
 | `ShipAssembler` | `ship_assembler.gd` | Assemble, validate install, derive stats |
 | `ShipOperations` | `ship_operations.gd` | In-flight operating tick |
 | `ShipAssembly` | `ship_assembly.gd` | Fitting gameplay (buy/sell/install/remove/refuel) |
@@ -152,11 +154,10 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 `ShipOperations.tick` each physics frame:
 
 - Allocates power by priority (life support + propulsion critical; sensors/computer high; weapons normal)
-- Integrates heat (generation − dissipation); overheat reduces boost and thrust
 - Consumes fuel from `owned.fuel_current`
-- Sets `thrust_factor` when fuel empty, power deficit, or overheating
+- Sets `thrust_factor` when fuel empty or power deficit
 
-Session persists `ship_heat` across saves; fuel lives on the owned ship.
+Fuel lives on the owned ship. Heat/signature simulation is deferred beyond this prototype.
 
 ## `player.json` and session
 
@@ -166,7 +167,6 @@ Session persists `ship_heat` across saves; fuel lives on the owned ship.
 |-------|-------------|
 | `owned_ships` | `OwnedShip[]` — each carries its own `cargo` |
 | `spare_parts` | `{ module_id: qty }` uninstalled modules in player inventory |
-| `ship_heat` | Current accumulated thermal load (aboard ship) |
 | `hull` / `max_hull` | Hull stress during 4-space (from chassis + armour hits) |
 
 Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected docked ship (defaults to `current_ship_id`).
@@ -189,7 +189,7 @@ Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VER
   "version": 2,
   "saved_at": "2026-09-01T12:00:00Z",
   "player": { "name": "Jane Doe", "callsign": "Vixen" },
-  "session": { /* PrototypeSession.to_dict() — includes ship_heat, spare_parts */ },
+  "session": { /* PrototypeSession.to_dict() — includes spare_parts */ },
   "ships": [ /* OwnedShip.to_dict() — modules, cargo, fuel, ammunition */ ],
   "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
 }
@@ -224,6 +224,6 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 | Ship model | Chassis + modules + budgets | Full Elite-style fitting + combat |
 | Modules | Fusion engines, power, LS, sensors, lasers, mass drivers, cargo, fuel | Shields, ECM, hyperdrive, passenger classes |
 | Weapons | Catalogued; not fired in flight | Full combat loop |
-| Operating sim | Power, heat, fuel in flight | Combat power contention, ammo consumption |
+| Operating sim | Power, fuel, compute in flight | Combat power contention, heat/signature, ammo consumption |
 
 Canonical lore: [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).

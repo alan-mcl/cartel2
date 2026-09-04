@@ -22,7 +22,6 @@ const PROVIDES_KEYS := [
 	"power_generation",
 	"power_distribution",
 	"compute_capacity",
-	"heat_dissipation",
 	"life_support_capacity",
 	"cargo_capacity",
 	"fuel_capacity",
@@ -33,7 +32,6 @@ const MOUNT_CATEGORIES := [
 	"power",
 	"maneuver",
 	"system",
-	"utility",
 	"light_weapon",
 	"medium_weapon",
 	"heavy_weapon",
@@ -91,27 +89,47 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 	return assembled
 
 
+static func module_mounts(module_def: Dictionary) -> Array:
+	var mounts_data: Variant = module_def.get("mounts", [])
+	if typeof(mounts_data) == TYPE_ARRAY and not mounts_data.is_empty():
+		var result: Array = []
+		for mount in mounts_data:
+			result.append(str(mount))
+		return result
+
+	var mount := str(module_def.get("mount", ""))
+	if not mount.is_empty():
+		return [mount]
+	return ["other"]
+
+
 static func assign_modules_to_slots(catalog: Catalog, chassis: Dictionary, module_ids: Array) -> Array:
 	var result: Array = []
 	var mount_usage: Dictionary = {}
-	var internal_index := 1
+	var other_index := 1
 
 	for module_id in module_ids:
 		var module_def := catalog.get_module(str(module_id))
 		if module_def.is_empty():
 			continue
 
-		var mount := str(module_def.get("mount", ""))
-		if mount.is_empty():
-			result.append({"slot": "internal_%d" % internal_index, "module_id": str(module_id)})
-			internal_index += 1
-			continue
+		var allowed_mounts := module_mounts(module_def)
+		var placed := false
+		for mount in allowed_mounts:
+			if str(mount) == "other":
+				result.append({"slot": "other_%d" % other_index, "module_id": str(module_id)})
+				other_index += 1
+				placed = true
+				break
 
-		var slot := _next_free_mount_slot(chassis, mount, mount_usage)
-		if slot.is_empty():
-			push_error("No free slot for module '%s' mount '%s'." % [module_id, mount])
-			continue
-		result.append({"slot": slot, "module_id": str(module_id)})
+			var slot := _next_free_mount_slot(chassis, str(mount), mount_usage)
+			if not slot.is_empty():
+				result.append({"slot": slot, "module_id": str(module_id)})
+				placed = true
+				break
+
+		if not placed:
+			push_error("No free slot for module '%s'." % module_id)
 
 	return result
 
@@ -240,7 +258,7 @@ static func list_slots_for_chassis(chassis: Dictionary) -> Array:
 			slots.append("%s_%d" % [mount_category, i + 1])
 
 	for i in range(1, 13):
-		slots.append("internal_%d" % i)
+		slots.append("other_%d" % i)
 	return slots
 
 
@@ -257,30 +275,30 @@ static func list_visible_slots(catalog: Catalog, owned: OwnedShip) -> Array:
 			for i in range(count):
 				slots.append("%s_%d" % [mount_category, i + 1])
 
-	var max_internal_index := 0
+	var max_other_index := 0
 	for entry in owned.modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		var slot := str(entry.get("slot", ""))
-		if not slot.begins_with("internal_"):
+		if not slot.begins_with("other_"):
 			continue
 		if not slots.has(slot):
 			slots.append(slot)
-		var index := int(slot.trim_prefix("internal_"))
-		max_internal_index = maxi(max_internal_index, index)
+		var index := int(slot.trim_prefix("other_"))
+		max_other_index = maxi(max_other_index, index)
 
-	var empty_internal := "internal_%d" % (max_internal_index + 1)
-	if max_internal_index == 0:
-		empty_internal = "internal_1"
-	if not slots.has(empty_internal):
-		slots.append(empty_internal)
+	var empty_other := "other_%d" % (max_other_index + 1)
+	if max_other_index == 0:
+		empty_other = "other_1"
+	if not slots.has(empty_other):
+		slots.append(empty_other)
 
 	return slots
 
 
 static func slot_mount_type(slot: String) -> String:
-	if slot.begins_with("internal_"):
-		return "internal"
+	if slot.begins_with("other_"):
+		return "other"
 	for mount_category in MOUNT_CATEGORIES:
 		if slot.begins_with("%s_" % mount_category):
 			return mount_category
@@ -319,7 +337,7 @@ static func _calculate_mount_usage(chassis: Dictionary, installed_modules: Array
 			continue
 		var slot := str(entry.get("slot", ""))
 		var mount_type := slot_mount_type(slot)
-		if mount_type == "internal" or mount_type.is_empty():
+		if mount_type == "other" or mount_type.is_empty():
 			continue
 		if not usage.has(mount_type):
 			usage[mount_type] = {"used": 0, "total": 0}
@@ -333,14 +351,12 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 		"power_generation": 0.0,
 		"power_distribution": 0.0,
 		"compute_capacity": 0.0,
-		"heat_dissipation": 0.0,
 		"life_support_capacity": 0.0,
 		"cargo_capacity": 0.0,
 		"fuel_capacity": 0.0,
 		"passenger_capacity": 0.0,
 		"ammunition_capacity": {},
 		"hull_hits": int(assembled.chassis.get("hits", 0)),
-		"heat_capacity": float(assembled.chassis.get("heat_capacity", 80.0)),
 	}
 
 	for entry in assembled.installed_modules:
@@ -407,18 +423,22 @@ static func _next_free_mount_slot(chassis: Dictionary, mount: String, mount_usag
 
 
 static func _slot_compatible(_catalog: Catalog, chassis: Dictionary, slot: String, module_def: Dictionary) -> bool:
-	var mount := str(module_def.get("mount", ""))
-	if slot.begins_with("internal_"):
-		return mount.is_empty()
+	var slot_type := slot_mount_type(slot)
+	if slot_type.is_empty():
+		return false
 
-	if mount.is_empty():
-		return slot.begins_with("internal_")
+	var allowed_mounts := module_mounts(module_def)
+	if not allowed_mounts.has(slot_type):
+		return false
 
-	var expected_prefix := "%s_" % mount
+	if slot_type == "other":
+		return slot.begins_with("other_")
+
+	var expected_prefix := "%s_" % slot_type
 	if not slot.begins_with(expected_prefix):
 		return false
 
 	var mounts: Variant = chassis.get("mounts", {})
 	if typeof(mounts) != TYPE_DICTIONARY:
 		return false
-	return int(mounts.get(mount, 0)) > 0
+	return int(mounts.get(slot_type, 0)) > 0
