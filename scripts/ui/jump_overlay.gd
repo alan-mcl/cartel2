@@ -55,29 +55,36 @@ func _refresh() -> void:
 
 	var sector := _catalog.get_sector(_session.sector_id)
 	var mappings: Variant = sector.get("mappings", [])
-	if typeof(mappings) != TYPE_ARRAY:
+	var route_count := 0
+	if typeof(mappings) == TYPE_ARRAY:
+		for mapping_variant in mappings:
+			if typeof(mapping_variant) != TYPE_DICTIONARY:
+				continue
+
+			var mapping: Dictionary = mapping_variant
+			var target_id := str(mapping.get("target", ""))
+			if target_id.is_empty():
+				continue
+
+			var target_sector := _catalog.get_sector(target_id)
+			var label := str(mapping.get("label", target_sector.get("name", target_id)))
+			var friction := int(mapping.get("friction", 0))
+			var band := _catalog.friction_band_label(friction)
+
+			var button := Button.new()
+			var prefix := "> " if target_id == _selected_target_id else ""
+			button.text = "%s%s — %s" % [prefix, label, band]
+			button.pressed.connect(_on_route_pressed.bind(mapping))
+			_route_list.add_child(button)
+			route_count += 1
+
+	_hint.text = "Esc or Cancel to stay in orbit"
+	if route_count == 0:
+		_solution_label.text = "No known Unspace routes from this gate."
+		_confirm_button.disabled = true
 		return
 
-	for mapping_variant in mappings:
-		if typeof(mapping_variant) != TYPE_DICTIONARY:
-			continue
-
-		var mapping: Dictionary = mapping_variant
-		var target_id := str(mapping.get("target", ""))
-		if target_id.is_empty():
-			continue
-
-		var target_sector := _catalog.get_sector(target_id)
-		var label := str(mapping.get("label", target_sector.get("name", target_id)))
-
-		var button := Button.new()
-		var prefix := "> " if target_id == _selected_target_id else ""
-		button.text = "%s%s" % [prefix, label]
-		button.pressed.connect(_on_route_pressed.bind(mapping))
-		_route_list.add_child(button)
-
 	_update_selection_ui()
-	_hint.text = "Esc or Cancel to stay in orbit"
 
 
 func _on_route_pressed(mapping: Dictionary) -> void:
@@ -94,11 +101,13 @@ func _update_selection_ui() -> void:
 		_confirm_button.disabled = true
 		return
 
-	_solution_label.text = (
-		"Route: %s via %d-space (known solution %d). Shallow transit — slower, safer."
-		% [_selected_label, _selected_n, _selected_solution]
-	)
 	var mapping := _catalog.get_mapping(_session.sector_id, _selected_target_id, _selected_n)
+	var friction := int(mapping.get("friction", 0))
+	var band := _catalog.friction_band_label(friction)
+	_solution_label.text = (
+		"Route: %s via %d-space (%s transit, known solution %d)."
+		% [_selected_label, _selected_n, band, _selected_solution]
+	)
 	var entry_seconds := float(mapping.get("entry_seconds", 0.0))
 	var exit_seconds := float(mapping.get("exit_seconds", 0.0))
 	if entry_seconds > 0.0 or exit_seconds > 0.0:

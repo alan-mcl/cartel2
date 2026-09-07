@@ -14,13 +14,18 @@ func tick(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 	if frozen or session == null or delta <= 0.0:
 		return
 
+	var previous_day := CommodityEconomy.gst_day(session.gst_seconds)
+
 	if session.in_unspace:
 		_tick_unspace(session, catalog, delta)
 	else:
 		session.gst_seconds += delta
 
+	if CommodityEconomy.gst_day(session.gst_seconds) != previous_day:
+		CommodityEconomy.ensure_quotes(session, catalog)
 
-func apply_mapping_lump(session: GameSession, mapping: Dictionary, field: String) -> float:
+
+func apply_mapping_lump(session: GameSession, mapping: Dictionary, field: String, catalog: Catalog = null) -> float:
 	if session == null or mapping.is_empty():
 		return 0.0
 
@@ -34,6 +39,8 @@ func apply_mapping_lump(session: GameSession, mapping: Dictionary, field: String
 		applied *= 1.0 + randf_range(-jitter, jitter)
 
 	session.advance_gst(applied)
+	if catalog != null:
+		CommodityEconomy.ensure_quotes(session, catalog)
 	return applied
 
 

@@ -13,16 +13,133 @@
     "kind": "translate"
   },
   {
+    "id": "tycho_habitat",
+    "title": "Tycho Habitat",
+    "inspect_text": "Industrial orbital. Docking lanes are open; ore shuttles share the approaches.",
+    "kind": "dock",
+    "dock_location_id": "tycho_habitat"
+  },
+  {
+    "id": "tycho_jump_gate",
+    "title": "Tycho Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
     "id": "bela_habitat",
-    "title": "Bela Orbital Habitat",
+    "title": "La Bella Vista Habitat",
     "inspect_text": "Resort orbital city. Docking lanes are open; the water-world gleams below.",
     "kind": "dock",
     "dock_location_id": "bela_orbital_habitat"
   },
   {
     "id": "bela_jump_gate",
-    "title": "Bela Jump Gate",
+    "title": "La Bella Vista Jump Gate",
     "inspect_text": "Unspace translation ring. Known routes lead back toward Proxima and beyond.",
+    "kind": "translate"
+  },
+  {
+    "id": "irasia_habitat",
+    "title": "Irasia Habitat",
+    "inspect_text": "Commercial orbital. Docking lanes are open; trade traffic fills the ring.",
+    "kind": "dock",
+    "dock_location_id": "irasia_habitat"
+  },
+  {
+    "id": "irasia_jump_gate",
+    "title": "Irasia Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "tokirev_habitat",
+    "title": "Tokirev Habitat",
+    "inspect_text": "Factory orbital. Docking lanes are open; automated yards crowd the skyline.",
+    "kind": "dock",
+    "dock_location_id": "tokirev_habitat"
+  },
+  {
+    "id": "tokirev_jump_gate",
+    "title": "Tokirev Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "fennet_habitat",
+    "title": "Fennet Habitat",
+    "inspect_text": "Rim orbital. Docking lanes are open; the frontier still shows through.",
+    "kind": "dock",
+    "dock_location_id": "fennet_habitat"
+  },
+  {
+    "id": "fennet_jump_gate",
+    "title": "Fennet Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "fortuna_habitat",
+    "title": "Fortuna Habitat",
+    "inspect_text": "Polished orbital. Docking lanes are open; private shuttles keep to their own lanes.",
+    "kind": "dock",
+    "dock_location_id": "fortuna_habitat"
+  },
+  {
+    "id": "fortuna_jump_gate",
+    "title": "Fortuna Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "new_carthage_habitat",
+    "title": "New Carthage Habitat",
+    "inspect_text": "Mercantile orbital. Docking lanes are open; shipping traffic never quite stops.",
+    "kind": "dock",
+    "dock_location_id": "new_carthage_habitat"
+  },
+  {
+    "id": "new_carthage_jump_gate",
+    "title": "New Carthage Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "horizon_habitat",
+    "title": "Horizon Habitat",
+    "inspect_text": "Civic orbital. Docking lanes are open; suburban shuttles mix with long-haul traffic.",
+    "kind": "dock",
+    "dock_location_id": "horizon_habitat"
+  },
+  {
+    "id": "horizon_jump_gate",
+    "title": "Horizon Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "titania_habitat",
+    "title": "Titania Habitat",
+    "inspect_text": "Tourist orbital. Docking lanes are open; Titania's storms fill the view.",
+    "kind": "dock",
+    "dock_location_id": "titania_habitat"
+  },
+  {
+    "id": "titania_jump_gate",
+    "title": "Titania Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+    "kind": "translate"
+  },
+  {
+    "id": "concordia_habitat",
+    "title": "Concordia Habitat",
+    "inspect_text": "Commerce orbital above Pelagos. Docking lanes are open; twin suns glare off the hulls.",
+    "kind": "dock",
+    "dock_location_id": "concordia_habitat"
+  },
+  {
+    "id": "pelagos_jump_gate",
+    "title": "Pelagos Jump Gate",
+    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
     "kind": "translate"
   },
   {

@@ -198,8 +198,9 @@ func _rebuild_content(building: Dictionary) -> void:
 
 
 func _build_market_content(building: Dictionary) -> void:
-	var market := _context.catalog.get_market_for_building(str(building.get("id", "")))
-	if market.is_empty():
+	_context.session.refresh_market_quotes(_context.catalog)
+	var listings := _context.session.get_sector_quote_listings(_context.catalog)
+	if listings.is_empty():
 		var empty := Label.new()
 		empty.text = "No market listings available."
 		_content_host.add_child(empty)
@@ -221,6 +222,9 @@ func _build_market_content(building: Dictionary) -> void:
 	split.add_child(left)
 
 	left.add_child(_section_label("EXCHANGE LISTINGS"))
+	var quote_day := Label.new()
+	quote_day.text = "Quotes as of %s" % _context.session.get_market_quote_day_label()
+	left.add_child(quote_day)
 
 	_commodity_item_list = ItemList.new()
 	_commodity_item_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -230,10 +234,6 @@ func _build_market_content(building: Dictionary) -> void:
 	left.add_child(_commodity_item_list)
 
 	var detail := _add_scroll_pane(split, "detail_host")
-
-	var listings: Variant = market.get("listings", [])
-	if typeof(listings) != TYPE_ARRAY:
-		return
 
 	for listing_variant in listings:
 		if typeof(listing_variant) != TYPE_DICTIONARY:
@@ -249,7 +249,7 @@ func _build_market_content(building: Dictionary) -> void:
 
 		var price := int(listing.get("price", commodity.get("base_price", 0)))
 		_commodity_item_list.add_item(
-			"%s · d%d · store %d" % [
+			"%s · d%d · depth %d" % [
 				str(commodity.get("name", commodity_id)),
 				price,
 				int(listing.get("quantity", 0)),
@@ -313,7 +313,8 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		detail.add_child(desc)
 
 	detail.add_child(_detail_row("Price", "d%d" % price))
-	detail.add_child(_detail_row("Store stock", str(store_qty)))
+	detail.add_child(_detail_row("Sell price", "d%d" % CommodityEconomy.sell_price(price)))
+	detail.add_child(_detail_row("Contract depth", str(store_qty)))
 	if cargo_ship != null:
 		detail.add_child(_detail_row("Ship cargo", str(cargo_qty)))
 		detail.add_child(_detail_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))

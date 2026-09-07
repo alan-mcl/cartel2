@@ -34,6 +34,9 @@ var spare_parts: Dictionary = {}
 var sandbox: bool = false
 var orbital_phase_by_sector: Dictionary = {}
 var gst_seconds: float = 0.0
+var market_quotes: Dictionary = {}
+var market_quotes_day: int = -1
+var route_friction_delta: Dictionary = {}
 
 var _hull_stress_cooldown: float = 0.0
 
@@ -61,6 +64,9 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	spare_parts.clear()
 	orbital_phase_by_sector.clear()
 	gst_seconds = GalacticCalendar.start_seconds_from_player(player_data)
+	market_quotes.clear()
+	market_quotes_day = -1
+	route_friction_delta.clear()
 
 	var ships: Variant = player_data.get("ships", [])
 	if typeof(ships) != TYPE_ARRAY or ships.is_empty():
@@ -92,6 +98,8 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	if not dock(catalog, NEW_GAME_HABITAT_ID):
 		return false
 
+	CommodityEconomy.ensure_quotes(self, catalog)
+
 	spare_parts["mark_1_fusion"] = 1
 
 	last_log = "Welcome to %s, %s. All ships docked at Proxima Habitat." % [callsign, player_name]
@@ -121,6 +129,7 @@ func to_dict() -> Dictionary:
 		"spare_parts": spare_parts.duplicate(),
 		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
 		"gst_seconds": gst_seconds,
+		"route_friction_delta": route_friction_delta.duplicate(),
 	}
 
 
@@ -163,6 +172,9 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		gst_seconds = float(session_data.get("gst_seconds", 0.0))
 	else:
 		gst_seconds = GalacticCalendar.default_start_seconds()
+	route_friction_delta = _float_dict_from_variant(session_data.get("route_friction_delta", {}))
+	market_quotes.clear()
+	market_quotes_day = -1
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := _int_dict_from_variant(session_data.get("cargo", {}))
@@ -212,6 +224,8 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		if not building_id.is_empty() and catalog.get_building(building_id).is_empty():
 			push_error("Save file references unknown building '%s'." % building_id)
 			return false
+
+	CommodityEconomy.ensure_quotes(self, catalog)
 
 	changed.emit()
 	return true
@@ -287,6 +301,48 @@ func advance_gst(seconds: float) -> void:
 	if seconds <= 0.0:
 		return
 	gst_seconds += seconds
+
+
+func refresh_market_quotes(catalog: Catalog) -> bool:
+	return CommodityEconomy.ensure_quotes(self, catalog)
+
+
+func get_market_sector_id(catalog: Catalog) -> String:
+	if not habitat_id.is_empty():
+		var habitat_sector := catalog.get_habitat_sector_id(habitat_id)
+		if not habitat_sector.is_empty():
+			return habitat_sector
+	return sector_id
+
+
+func get_sector_quote_listings(catalog: Catalog, market_sector_id: String = "") -> Array:
+	CommodityEconomy.ensure_quotes(self, catalog)
+	if market_sector_id.is_empty():
+		market_sector_id = get_market_sector_id(catalog)
+	var sector_quotes: Variant = market_quotes.get(market_sector_id, {})
+	if typeof(sector_quotes) != TYPE_DICTIONARY:
+		return []
+
+	var listings: Array = []
+	for commodity in catalog.list_commodities():
+		if typeof(commodity) != TYPE_DICTIONARY:
+			continue
+		var commodity_id := str(commodity.get("id", ""))
+		if commodity_id.is_empty():
+			continue
+		var quote: Variant = sector_quotes.get(commodity_id, {})
+		if typeof(quote) != TYPE_DICTIONARY:
+			continue
+		listings.append({
+			"commodity_id": commodity_id,
+			"price": int(quote.get("price", commodity.get("base_price", 0))),
+			"quantity": int(quote.get("quantity", 0)),
+		})
+	return listings
+
+
+func get_market_quote_day_label() -> String:
+	return GalacticCalendar.format_date_only(gst_seconds)
 
 
 func get_gst_timestamp() -> String:
@@ -546,11 +602,16 @@ func buy_commodity(
 		changed.emit()
 		return false
 
-	var market := catalog.get_market_for_building(building_id)
-	if market.is_empty():
+	var building := catalog.get_building(building_id)
+	if catalog.get_building_type(building) != "market":
 		return false
 
-	var listing := _find_market_listing(market, commodity_id)
+	var listing := CommodityEconomy.quote_for_sector(
+		self,
+		catalog,
+		get_market_sector_id(catalog),
+		commodity_id
+	)
 	if listing.is_empty():
 		return false
 
@@ -593,11 +654,16 @@ func sell_commodity(
 		changed.emit()
 		return false
 
-	var market := catalog.get_market_for_building(building_id)
-	if market.is_empty():
+	var building := catalog.get_building(building_id)
+	if catalog.get_building_type(building) != "market":
 		return false
 
-	var listing := _find_market_listing(market, commodity_id)
+	var listing := CommodityEconomy.quote_for_sector(
+		self,
+		catalog,
+		get_market_sector_id(catalog),
+		commodity_id
+	)
 	if listing.is_empty():
 		return false
 
@@ -608,7 +674,7 @@ func sell_commodity(
 
 	var commodity := catalog.get_commodity(commodity_id)
 	var price := int(listing.get("price", commodity.get("base_price", 0)))
-	var sell_price := maxi(1, int(price * 0.8))
+	var sell_price := CommodityEconomy.sell_price(price)
 	var total := sell_price * amount
 
 	if not ship.remove_cargo(commodity_id, amount):

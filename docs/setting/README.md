@@ -27,23 +27,25 @@ Each linked document opens with a **Status** note where relevant: what is playab
 |------|----------|
 | [overview.md](overview.md) | Fantasy, era, currency, Unspace, Media Reality, Saint Apex, Sleepers, Asciidians, Atomic Problems |
 | [date_time.md](date_time.md) | Galactic Standard Calendar and Time |
-| [planets.md](planets.md) | Six starter systems, stats, cities, Unspace route table |
+| [planets.md](planets.md) | Eleven E-type worlds, stats, cities, habitats |
 | [corporations.md](corporations.md) | Sixteen megacorporations |
 | [ships.md](ships.md) | Ship families and configurations |
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
 | [commodities.md](commodities.md) | Closed eleven-category trade roster |
+| [trade_network.md](trade_network.md) | Public Unspace route graph, friction, daily markets |
 
 ## Current implementation
 
 | Setting area | Current implementation |
 |--------------|-----------|
-| Sectors playable | Proxima, Bela (near orbit only) |
-| Habitats | Proxima Habitat, Bela Orbital Habitat |
-| Jump routes listed | Proxima ↔ Bela via flyable **4-space** (n=4 only) |
+| Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game starts at Proxima |
+| Habitats | One dockable habitat per sector (Proxima Habitat, La Bella Vista Habitat, …) |
+| Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
 | Unspace hazards | Shear fields + debris in 4-space; hull stress (non-lethal) |
-| GST clock | HUD + habitat; 1:1 in orbit/docked; mapping lumps + irregular unspace flow |
+| GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
-| Commodities | Eleven broad categories; Proxima Exchange lists all |
+| Commodities | Eleven categories; daily quotes at every habitat Exchange |
+| Market simulation | Daily GST reset from production/consumption + route friction |
 | Surface cities | Not implemented |
 
 When redesigning, edit these markdown files first; then update JSON catalogs to match.

@@ -113,6 +113,16 @@ static func format_timestamp(total_seconds: float) -> String:
 	]
 
 
+static func format_date_only(total_seconds: float) -> String:
+	var parts := from_seconds(total_seconds)
+	return "%d %s %s %d GST" % [
+		parts.day,
+		MONTH_NAMES[parts.month - 1],
+		parts.quarter,
+		parts.year,
+	]
+
+
 static func format_duration(total_seconds: float) -> String:
 	var remaining := maxi(0, int(round(total_seconds)))
 	if remaining <= 0:

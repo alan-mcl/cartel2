@@ -55,6 +55,43 @@
       "radius": 2700
     }
   },
+  "tycho": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#dd8844"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "tycho_habitat_obj",
+          "kind": "habitat",
+          "label": "Tycho Habitat",
+          "interactable": "tycho_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#dd9966"
+        },
+        {
+          "id": "tycho_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "tycho_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tank_farm.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "tycho_jump_gate_obj",
+      "label": "Tycho Jump Gate",
+      "interactable": "tycho_jump_gate",
+      "radius": 2700
+    }
+  },
   "bela": {
     "planet": {
       "sprite": "res://assets/world/planet.png",
@@ -68,7 +105,7 @@
         {
           "id": "bela_habitat_obj",
           "kind": "habitat",
-          "label": "Bela Orbital Habitat",
+          "label": "La Bella Vista Habitat",
           "interactable": "bela_habitat",
           "sprite": "res://assets/world/habitat_bela.svg"
         },
@@ -91,8 +128,384 @@
     },
     "jump_gate": {
       "id": "bela_jump_gate_obj",
-      "label": "Bela Jump Gate",
+      "label": "La Bella Vista Jump Gate",
       "interactable": "bela_jump_gate",
+      "radius": 2700
+    }
+  },
+  "irasia": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#c8d4b8"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "irasia_habitat_obj",
+          "kind": "habitat",
+          "label": "Irasia Habitat",
+          "interactable": "irasia_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#c8d4b8"
+        },
+        {
+          "id": "irasia_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "irasia_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "irasia_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tank_farm.svg"
+        },
+        {
+          "id": "irasia_orbital_4",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "irasia_orbital_5",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tower.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "irasia_jump_gate_obj",
+      "label": "Irasia Jump Gate",
+      "interactable": "irasia_jump_gate",
+      "radius": 2700
+    }
+  },
+  "tokirev": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#a8c0d8"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "tokirev_habitat_obj",
+          "kind": "habitat",
+          "label": "Tokirev Habitat",
+          "interactable": "tokirev_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#a8b8c8"
+        },
+        {
+          "id": "tokirev_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "tokirev_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tank_farm.svg"
+        },
+        {
+          "id": "tokirev_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "tokirev_orbital_4",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tower.svg"
+        },
+        {
+          "id": "tokirev_orbital_5",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "tokirev_jump_gate_obj",
+      "label": "Tokirev Jump Gate",
+      "interactable": "tokirev_jump_gate",
+      "radius": 2700
+    }
+  },
+  "fennet": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#90c090"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "fennet_habitat_obj",
+          "kind": "habitat",
+          "label": "Fennet Habitat",
+          "interactable": "fennet_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#98c878"
+        },
+        {
+          "id": "fennet_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "fennet_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "fennet_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "fennet_jump_gate_obj",
+      "label": "Fennet Jump Gate",
+      "interactable": "fennet_jump_gate",
+      "radius": 2700
+    }
+  },
+  "fortuna": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#e8d8a8"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "fortuna_habitat_obj",
+          "kind": "habitat",
+          "label": "Fortuna Habitat",
+          "interactable": "fortuna_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#e8d070"
+        },
+        {
+          "id": "fortuna_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "fortuna_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "fortuna_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tower.svg"
+        },
+        {
+          "id": "fortuna_orbital_4",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "fortuna_jump_gate_obj",
+      "label": "Fortuna Jump Gate",
+      "interactable": "fortuna_jump_gate",
+      "radius": 2700
+    }
+  },
+  "new_carthage": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#70c8c8"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "new_carthage_habitat_obj",
+          "kind": "habitat",
+          "label": "New Carthage Habitat",
+          "interactable": "new_carthage_habitat",
+          "sprite": "res://assets/world/habitat_bela.svg",
+          "modulate": "#70d0c8"
+        },
+        {
+          "id": "new_carthage_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "new_carthage_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "new_carthage_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "new_carthage_orbital_4",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "new_carthage_jump_gate_obj",
+      "label": "New Carthage Jump Gate",
+      "interactable": "new_carthage_jump_gate",
+      "radius": 2700
+    }
+  },
+  "horizon": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#b8d0a8"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "horizon_habitat_obj",
+          "kind": "habitat",
+          "label": "Horizon Habitat",
+          "interactable": "horizon_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#b8d098"
+        },
+        {
+          "id": "horizon_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "horizon_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "horizon_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tank_farm.svg"
+        },
+        {
+          "id": "horizon_orbital_4",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "horizon_orbital_5",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "horizon_jump_gate_obj",
+      "label": "Horizon Jump Gate",
+      "interactable": "horizon_jump_gate",
+      "radius": 2700
+    }
+  },
+  "titania": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#c8d8f0"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "titania_habitat_obj",
+          "kind": "habitat",
+          "label": "Titania Habitat",
+          "interactable": "titania_habitat",
+          "sprite": "res://assets/world/habitat_bela.svg",
+          "modulate": "#c0d4f0"
+        },
+        {
+          "id": "titania_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "titania_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/array.svg"
+        },
+        {
+          "id": "titania_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/platform.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "titania_jump_gate_obj",
+      "label": "Titania Jump Gate",
+      "interactable": "titania_jump_gate",
+      "radius": 2700
+    }
+  },
+  "pelagos": {
+    "planet": {
+      "sprite": "res://assets/world/planet.png",
+      "diameter": 2000,
+      "modulate": "#d4a060"
+    },
+    "orbital_ring": {
+      "radius": 1600,
+      "period_seconds": 720,
+      "orbitals": [
+        {
+          "id": "concordia_habitat_obj",
+          "kind": "habitat",
+          "label": "Concordia Habitat",
+          "interactable": "concordia_habitat",
+          "sprite": "res://assets/world/habitat_proxima.svg",
+          "modulate": "#d4a050"
+        },
+        {
+          "id": "pelagos_orbital_1",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/torus.svg"
+        },
+        {
+          "id": "pelagos_orbital_2",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/yard.svg"
+        },
+        {
+          "id": "pelagos_orbital_3",
+          "kind": "orbital",
+          "sprite": "res://assets/world/orbitals/tank_farm.svg"
+        }
+      ]
+    },
+    "jump_gate": {
+      "id": "pelagos_jump_gate_obj",
+      "label": "Pelagos Jump Gate",
+      "interactable": "pelagos_jump_gate",
       "radius": 2700
     }
   },

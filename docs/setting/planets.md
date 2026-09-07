@@ -52,7 +52,7 @@ Tycho Habitat
 **Ocean coverage:** 92%  
 **Climate:** Warm  
 
-Bela is a water world with only one continental land mass, orbiting the star also known as Fum-al-Samakah. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
+La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting the star also known as Fum-al-Samakah. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
 ### City Malls
 
@@ -61,12 +61,12 @@ Notable landmark: Watershed Stadium (Oberon cricket) — from original world cat
 
 ### Orbitals
 
-Bela Habitat
-Habitat buildings: Bela Orbital Terminal, Habitat Workshop.
+La Bella Vista Habitat
+Habitat buildings: La Bella Vista Orbital Terminal, Habitat Workshop.
 
 ### Current orbit (JSON)
 
-Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (Bela Orbital Habitat plus three unnamed stations), and a static jump gate farther out.
+Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (La Bella Vista Habitat plus three unnamed stations), and a static jump gate farther out.
 
 ## Irasia
 

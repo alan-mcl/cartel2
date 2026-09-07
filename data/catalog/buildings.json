@@ -46,12 +46,183 @@
     "art": "res://assets/ui/locations/proxima_exchange.svg"
   },
   {
+    "id": "tycho_habitat_terminal",
+    "name": "Tycho Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
+    "short_desc": "Hard-worn terminal above Tycho.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
     "id": "bela_habitat_terminal",
-    "name": "Bela Orbital Terminal",
+    "name": "La Bella Vista Orbital Terminal",
     "type": "terminal",
     "kind": "terminal",
     "description": "Resort terminal with customs and docking lanes overlooking the ocean.",
     "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
     "art": "res://assets/ui/locations/bela_terminal.svg"
+  },
+  {
+    "id": "irasia_habitat_terminal",
+    "name": "Irasia Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
+    "short_desc": "Commercial terminal on a major trade route.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "tokirev_habitat_terminal",
+    "name": "Tokirev Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Factory-world terminal. Automated cargo handlers outnumber passengers.",
+    "short_desc": "Factory-world terminal with automated cargo handlers.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "fennet_habitat_terminal",
+    "name": "Fennet Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
+    "short_desc": "Rim terminal that still feels like a frontier stop.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "fortuna_habitat_terminal",
+    "name": "Fortuna Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Quiet, expensive terminal. Private shuttles outnumber tramp freighters.",
+    "short_desc": "Quiet, expensive terminal above a finance world.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "new_carthage_habitat_terminal",
+    "name": "New Carthage Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
+    "short_desc": "Shipping terminal above an oceanic mercantile hub.",
+    "art": "res://assets/ui/locations/bela_terminal.svg"
+  },
+  {
+    "id": "horizon_habitat_terminal",
+    "name": "Horizon Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Busy civic terminal above a great population centre. Suburban shuttles mix with long-haul traffic.",
+    "short_desc": "Busy civic terminal above a great population centre.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "titania_habitat_terminal",
+    "name": "Titania Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
+    "short_desc": "Tourist terminal with low-gravity docking lanes.",
+    "art": "res://assets/ui/locations/bela_terminal.svg"
+  },
+  {
+    "id": "concordia_orbital_terminal",
+    "name": "Concordia Orbital Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
+    "short_desc": "Commerce terminal above Pelagos.",
+    "art": "res://assets/ui/locations/proxima_terminal.svg"
+  },
+  {
+    "id": "tycho_exchange",
+    "name": "Tycho Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Automated commodity exchange for Tycho orbital contracts.",
+    "short_desc": "Automated commodity exchange for Tycho orbital contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "bela_exchange",
+    "name": "La Bella Vista Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Resort-world exchange listing daily contracts across the eleven trade categories.",
+    "short_desc": "Resort-world exchange listing daily trade contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "irasia_exchange",
+    "name": "Irasia Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commercial exchange on a major trade spine.",
+    "short_desc": "Commercial exchange on a major trade spine.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "tokirev_exchange",
+    "name": "Tokirev Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Factory-world exchange for industrial cargo contracts.",
+    "short_desc": "Factory-world exchange for industrial cargo contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "fennet_exchange",
+    "name": "Fennet Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Rim exchange listing agricultural and industrial contracts.",
+    "short_desc": "Rim exchange listing agricultural and industrial contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "fortuna_exchange",
+    "name": "Fortuna Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Finance-world exchange with polished contract listings.",
+    "short_desc": "Finance-world exchange with polished contract listings.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "new_carthage_exchange",
+    "name": "New Carthage Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Mercantile exchange for shipping and commodity contracts.",
+    "short_desc": "Mercantile exchange for shipping and commodity contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "horizon_exchange",
+    "name": "Horizon Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Population-centre exchange with broad daily contract listings.",
+    "short_desc": "Population-centre exchange with broad daily contract listings.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "titania_exchange",
+    "name": "Titania Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Tourist-world exchange listing resort and import contracts.",
+    "short_desc": "Tourist-world exchange listing resort and import contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
+  },
+  {
+    "id": "concordia_exchange",
+    "name": "Concordia Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
+    "short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
+    "art": "res://assets/ui/locations/proxima_exchange.svg"
   }
 ]

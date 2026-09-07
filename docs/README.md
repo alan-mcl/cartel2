@@ -22,7 +22,8 @@ Specification and setting reference for the Cartel game. Content grows as system
 |----------|----------|
 | [setting/README.md](setting/README.md) | Glossary and setting index |
 | [setting/overview.md](setting/overview.md) | Fantasy, era, currency, lore topics |
-| [setting/planets.md](setting/planets.md) | Six starter systems, cities, Unspace routes |
+| [setting/planets.md](setting/planets.md) | Eleven E-type worlds, cities, habitats |
+| [setting/trade_network.md](setting/trade_network.md) | Public Unspace route graph, friction, daily markets |
 | [setting/corporations.md](setting/corporations.md) | Sixteen megacorporations |
 | [setting/ships.md](setting/ships.md) | Ship families and configurations |
 | [setting/equipment.md](setting/equipment.md) | Components, weapons, shields, LSS, hyperdrives |

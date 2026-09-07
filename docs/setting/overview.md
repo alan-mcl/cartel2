@@ -1,6 +1,6 @@
 # Setting overview
 
-**Status:** Full setting intent from original design notes. This game implements near-orbit flight in **Proxima** and **Bela** only; corporations, lore topics, and six-sector geography are documented here for future catch-up.
+**Status:** Full setting intent from original design notes. The catalog includes **eleven** near-orbit sectors from [planets.md](planets.md); Unspace travel is still **Proxima ↔ La Bella Vista** only. Corporations and lore topics remain documented here for future catch-up.
 
 ## Fantasy
 
@@ -24,18 +24,18 @@ The game tracks a single **credits** integer (no cash/credit split yet).
 
 ## Starter playground
 
-Six connected sectors form the original design world:
+The original design world was six connected sectors. [planets.md](planets.md) now lists **eleven** E-type worlds; all eleven are in the catalog as near-orbit sectors.
 
 | Sector | Role |
 |--------|------|
 | Proxima | Galactic capital |
 | Tycho | Harsh rim world |
-| Bela | Water-world resort |
+| La Bella Vista | Water-world resort |
 | Irasia | Commerce / industry |
 | Tokirev | Factory world |
-| New Fennet | Underdeveloped rim |
+| Fennet | Underdeveloped rim |
 
-Details: [planets.md](planets.md). Current JSON: Proxima and Bela only.
+Details: [planets.md](planets.md). Catalog: all eleven worlds as near-orbit sectors; public Unspace trade graph in [trade_network.md](trade_network.md).
 
 ## Megacorporations
 

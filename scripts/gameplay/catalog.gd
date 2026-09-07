@@ -15,6 +15,11 @@ const PLAYER_PATH := "res://data/catalog/player.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const MARKETS_PATH := "res://data/catalog/markets.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
+const ROUTES_PATH := "res://data/catalog/routes.json"
+const ECONOMIES_PATH := "res://data/catalog/economies.json"
+
+const ROUTE_SECONDS_PER_FRICTION := 240.0
+const ROUTE_TIME_JITTER := 0.08
 
 var chassis_by_id: Dictionary = {}
 var modules_by_id: Dictionary = {}
@@ -24,6 +29,8 @@ var buildings_by_id: Dictionary = {}
 var habitats_by_id: Dictionary = {}
 var interactables_by_id: Dictionary = {}
 var sectors_by_id: Dictionary = {}
+var routes_by_id: Dictionary = {}
+var economies_by_id: Dictionary = {}
 var unspaces_by_id: Dictionary = {}
 var worlds_by_id: Dictionary = {}
 var commodities_by_id: Dictionary = {}
@@ -47,6 +54,9 @@ func load_all() -> void:
 	habitats_by_id = _load_indexed_array(HABITATS_PATH)
 	interactables_by_id = _load_indexed_array(INTERACTABLES_PATH)
 	sectors_by_id = _load_indexed_array(SECTORS_PATH)
+	routes_by_id = _load_indexed_array(ROUTES_PATH)
+	economies_by_id = _load_indexed_array(ECONOMIES_PATH)
+	_synthesize_sector_mappings()
 	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
@@ -85,6 +95,41 @@ func get_interactable(id: String) -> Dictionary:
 
 func get_sector(id: String) -> Dictionary:
 	return _require(sectors_by_id, id, "sector")
+
+
+func get_route(id: String) -> Dictionary:
+	return _require(routes_by_id, id, "route")
+
+
+func get_economy(sector_id: String) -> Dictionary:
+	return _require(economies_by_id, sector_id, "economy")
+
+
+func list_sectors() -> Array:
+	return sectors_by_id.values()
+
+
+func list_routes() -> Array:
+	return routes_by_id.values()
+
+
+func get_habitat_sector_id(habitat_id: String) -> String:
+	var habitat := get_habitat(habitat_id)
+	if habitat.is_empty():
+		return ""
+	return str(habitat.get("sector_id", ""))
+
+
+func friction_band_label(friction: int) -> String:
+	if friction <= 20:
+		return "Excellent"
+	if friction <= 40:
+		return "Good"
+	if friction <= 60:
+		return "Moderate"
+	if friction <= 80:
+		return "Difficult"
+	return "Hazardous"
 
 
 func get_unspace(id: String) -> Dictionary:
@@ -217,6 +262,61 @@ func list_modules(category: String = "") -> Array:
 
 func list_ammunition_types() -> Array:
 	return ammunition_by_id.values()
+
+
+func _synthesize_sector_mappings() -> void:
+	var mappings_by_sector: Dictionary = {}
+	for sector_id in sectors_by_id.keys():
+		mappings_by_sector[sector_id] = []
+
+	for route in routes_by_id.values():
+		if typeof(route) != TYPE_DICTIONARY:
+			continue
+		var a := str(route.get("a", ""))
+		var b := str(route.get("b", ""))
+		if a.is_empty() or b.is_empty():
+			continue
+		var friction := int(route.get("friction", 0))
+		var n := int(route.get("n", 4))
+		var lump_seconds := friction * ROUTE_SECONDS_PER_FRICTION
+		_append_route_mapping(mappings_by_sector, a, b, int(route.get("solution_ab", 0)), friction, n, lump_seconds)
+		_append_route_mapping(mappings_by_sector, b, a, int(route.get("solution_ba", 0)), friction, n, lump_seconds)
+
+	for sector_id in sectors_by_id.keys():
+		var sector: Dictionary = sectors_by_id[sector_id]
+		var mappings: Array = mappings_by_sector.get(sector_id, [])
+		mappings.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+			return int(left.get("friction", 999)) < int(right.get("friction", 999))
+		)
+		sector["mappings"] = mappings
+
+
+func _append_route_mapping(
+	mappings_by_sector: Dictionary,
+	from_id: String,
+	to_id: String,
+	solution: int,
+	friction: int,
+	n: int,
+	lump_seconds: float
+) -> void:
+	if not sectors_by_id.has(from_id) or not sectors_by_id.has(to_id):
+		push_error("Route references unknown sector: %s -> %s" % [from_id, to_id])
+		return
+
+	var target_sector: Dictionary = sectors_by_id[to_id]
+	var mappings: Array = mappings_by_sector.get(from_id, [])
+	mappings.append({
+		"target": to_id,
+		"solution": solution,
+		"n": n,
+		"label": str(target_sector.get("name", to_id)),
+		"friction": friction,
+		"entry_seconds": lump_seconds,
+		"exit_seconds": lump_seconds,
+		"time_jitter": ROUTE_TIME_JITTER,
+	})
+	mappings_by_sector[from_id] = mappings
 
 
 func _load_indexed_array(path: String) -> Dictionary:

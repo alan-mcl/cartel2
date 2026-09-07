@@ -1,6 +1,6 @@
 # Commodity roster
 
-**Status:** The closed eleven-category roster is implemented in `data/catalog/commodities.json`. Proxima Exchange lists all categories. Dynamic economy (supply, demand, multi-market arbitrage) is not yet implemented.
+**Status:** The closed eleven-category roster is implemented in `data/catalog/commodities.json`. Every habitat Exchange lists daily quotes from `CommodityEconomy`. See [trade_network.md](trade_network.md).
 
 ## Overview
 
@@ -113,7 +113,8 @@ They are potentially high-value, compact industrial goods and can therefore be e
 |---------|--------|
 | Eleven categories in catalog | Implemented |
 | Per-ship cargo holds | Implemented |
-| Proxima Exchange buy/sell | Implemented (all eleven listed) |
-| Market stock depletion | Not implemented (quantity is display-only) |
-| Multi-market arbitrage | Not implemented |
-| Planet production/consumption | Not implemented |
+| Habitat Exchange buy/sell | Implemented (daily quotes, all eleven habitats) |
+| Multi-market arbitrage | Implemented (graph-driven price differences) |
+| Market stock depletion | Not implemented (contract depth is display-only) |
+| Planet production/consumption | Implemented (`economies.json` + daily reset) |
+| Economic events / blockades | Not implemented (`route_friction_delta` reserved) |

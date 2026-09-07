@@ -17,12 +17,14 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `player.json` | object | New-game template: starting sector, credits, owned ship instances |
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
-| `sectors.json` | array | Sector identity, bounds, spawn, Unspace mappings |
+| `sectors.json` | array | Sector identity, bounds, spawn (mappings synthesized from `routes.json`) |
+| `routes.json` | array | Public Unspace trade network (undirected edges, friction, solutions) |
+| `economies.json` | array | Per-sector production/consumption profiles and network tier |
 | `unspaces.json` | array | N-space transit layouts (depth, spawn, world link) |
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
-| `markets.json` | array | Building-linked commodity listings |
+| `markets.json` | array | Legacy static listings (unused; quotes are runtime) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
@@ -248,7 +250,7 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 
 Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `TrafficDirector` + `TrafficActor` in `scripts/gameplay/`, presented by `NpcShip` in `scripts/presentation/`.
 
-- Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 60 ships, Bela ≈ 35 after ~25% cap reduction.
+- Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 60 ships, La Bella Vista ≈ 35 after ~25% cap reduction.
 - Initial spawn places route-following roles mid-corridor (15–85% along habitat/gate/orbital legs); cycle replacements still appear at endpoints.
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
 - Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`.
@@ -279,7 +281,11 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 
 ## Sectors, worlds, interactables, habitats
 
-Each sector in `sectors.json` may include `mappings[]` for jump routes. Besides `target`, `solution`, `n`, and `label`, mappings carry `entry_seconds`, `exit_seconds`, and `time_jitter` for translation time cost (see GST section above).
+Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `Catalog` synthesizes bidirectional mappings from `routes.json`. Each mapping includes `target`, `solution`, `n`, `label`, `friction`, `entry_seconds`, `exit_seconds`, and `time_jitter`. GST lumps use `friction × 240` seconds.
+
+`habitats.json` entries include `sector_id` for market quote lookup. Exchange buildings use `type: market`.
+
+Daily commodity quotes are computed at runtime by `CommodityEconomy` from `economies.json`, `routes.json`, and `commodities.json`. Session stores `market_quotes` and `market_quotes_day` (recomputed on load from `gst_seconds`).
 
 Other sector/world/interactable/habitat schemas unchanged — see setting docs.
 

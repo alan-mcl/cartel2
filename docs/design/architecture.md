@@ -148,7 +148,7 @@ flowchart TD
 
 ## World loading
 
-3-space sectors (`proxima`, `bela`) use a structured layout in `worlds.json`:
+3-space sectors (`proxima`, `bela`, and the nine additional worlds in `sectors.json`) use a structured layout in `worlds.json`:
 
 - **`planet`** — full-disc background sprite at the origin (non-interactable, no collision)
 - **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
@@ -181,7 +181,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (n
 
 `TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
 
-- **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~60 ships, Bela ~35).
+- **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~60 ships, La Bella Vista ~35).
 - **Spawn** — initial fleet is scattered mid-route along corridors (15–85% progress), not clustered at endpoints.
 - **Variation** — per-ship cruise jitter and lateral route offset so lanes are not identical.
 - **Simulation** — each ship is an `OwnedShip` + `AssembledShip` ticking `ShipOperations` and `ShipWeapons` (fuel, power, ammo).
@@ -223,6 +223,8 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Ship hyperdrive translation
 - NPC ship combat beyond provoked engage/flee (no shields, no full damage-type loop, player invulnerable)
 - Paid workshop beyond parts inventory model
-- Full six-sector world (only Proxima and Bela implemented in JSON)
+- Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)
+- Unknown/private Unspace routes
+- Market contract depletion (depth is display-only)
 
 See [data_model.md](data_model.md) for implemented catalog subset vs [setting docs](../setting/README.md) for intended scope.

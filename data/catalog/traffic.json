@@ -44,6 +44,60 @@
         "runabout": 0.32,
         "dock_cycle": 0.16
       }
+    },
+    "tycho": {
+      "role_weights": {
+        "transit": 0.36,
+        "shuttle": 0.28,
+        "loiter": 0.08,
+        "runabout": 0.10,
+        "dock_cycle": 0.18
+      }
+    },
+    "irasia": {
+      "role_weights": {
+        "transit": 0.34,
+        "shuttle": 0.28,
+        "loiter": 0.10,
+        "runabout": 0.08,
+        "dock_cycle": 0.20
+      }
+    },
+    "tokirev": {
+      "role_weights": {
+        "transit": 0.36,
+        "shuttle": 0.30,
+        "loiter": 0.08,
+        "runabout": 0.06,
+        "dock_cycle": 0.20
+      }
+    },
+    "fortuna": {
+      "role_weights": {
+        "transit": 0.22,
+        "shuttle": 0.18,
+        "loiter": 0.22,
+        "runabout": 0.12,
+        "dock_cycle": 0.26
+      }
+    },
+    "new_carthage": {
+      "role_weights": {
+        "transit": 0.24,
+        "shuttle": 0.20,
+        "loiter": 0.20,
+        "runabout": 0.10,
+        "dock_cycle": 0.26
+      }
+    },
+    "titania": {
+      "role_weights": {
+        "transit": 0.16,
+        "shuttle": 0.18,
+        "loiter": 0.16,
+        "runabout": 0.34,
+        "dock_cycle": 0.16
+      }
     }
   },
   "role_ship_templates": {

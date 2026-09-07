@@ -414,7 +414,7 @@ func _on_jump_requested(target_sector_id: String, n: int) -> void:
 		return
 
 	var mapping := catalog.get_mapping(origin_id, target_sector_id, n)
-	var applied := _game_clock.apply_mapping_lump(session, mapping, "entry_seconds")
+	var applied := _game_clock.apply_mapping_lump(session, mapping, "entry_seconds", catalog)
 	if applied > 0.0:
 		session.last_log = (
 			"Translated into %d-space. Entry lag: %s GST."
@@ -441,7 +441,7 @@ func _arrive_from_unspace() -> void:
 		return
 
 	var mapping := catalog.get_mapping(origin_id, dest_id, n)
-	var applied := _game_clock.apply_mapping_lump(session, mapping, "exit_seconds")
+	var applied := _game_clock.apply_mapping_lump(session, mapping, "exit_seconds", catalog)
 	if applied > 0.0:
 		session.last_log = (
 			"Emergence complete. Exit lag: %s GST."
