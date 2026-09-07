@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. The Godot prototype playable fleet: **Flare-ON SS** (aboard) and **Pegasus P101** (parked at Proxima Habitat), assembled from JSON module ids.
+**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. Playable fleet: **Flare-ON SS** (aboard) and **Pegasus P101** (parked at Proxima Habitat), assembled from JSON module ids.
 
 ## Composition model
 
@@ -41,7 +41,7 @@ Originally designed and manufactured fifty years ago by the now defunct **GVW Co
 
 The original model and still the most common civilian configuration. The P101 heralded a revolution in space travel when it was marketed as the first affordable private space ship. It is mounted with a basic Mark 1 fusion engine and in modern times a mass driver cannon for defence. The original had a basic A1 life support system, making it an uncomfortable vessel by modern standards.
 
-**Prototype instance:** Pegasus P101 — Mark 1 fusion, 5mm Chitanium armour, parked at Proxima Habitat.
+**Game instance:** Pegasus P101 — Mark 1 fusion, 5mm Chitanium armour, parked at Proxima Habitat.
 
 ### P103
 
@@ -61,7 +61,7 @@ Produced by the dynamic **Holt-Winters Corporation**, the small Flare-ON is a mo
 
 The Flare-ON SS is the base model and features a powerful Mark 3 fusion engine that provides excellent acceleration to this light ship. It is armed with a rotating laser turret for self-defence. This configuration is by far the most common.
 
-**Prototype instance:** Flare-ON SS — Mark 3 fusion, no armour, player starting ship.
+**Game instance:** Flare-ON SS — Mark 3 fusion, no armour, player starting ship.
 
 ### SK
 
@@ -119,13 +119,13 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 
 ---
 
-## Prototype vs design gaps
+## Current implementation vs design gaps
 
 | Item | Design | Original POC / notes |
 |------|--------|----------------------|
 | Pegasus P103a engine | Mark 2 Antimatter + plasma | Mark 2 Fusion in XML |
 | Chassis hits | 10–40 (design sheet) | 1000 placeholder in XML |
-| Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in Godot prototype |
-| Hyperdrive on Dragon Gold | Alpha class | Not in prototype JSON |
+| Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
+| Hyperdrive on Dragon Gold | Alpha class | Not in current JSON |
 
 Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and heat simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).

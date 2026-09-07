@@ -12,7 +12,7 @@ signal cancelled
 @onready var _hint: Label = $Background/Center/Panel/VBox/HintLabel
 
 var _catalog: Catalog
-var _session: PrototypeSession
+var _session: GameSession
 var _gate_title: String = ""
 var _selected_target_id: String = ""
 var _selected_n: int = 4
@@ -27,7 +27,7 @@ func _ready() -> void:
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 
 
-func bind(catalog: Catalog, session: PrototypeSession) -> void:
+func bind(catalog: Catalog, session: GameSession) -> void:
 	_catalog = catalog
 	_session = session
 

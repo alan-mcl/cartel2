@@ -31,7 +31,7 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
 
-static func buy_part(session: PrototypeSession, catalog: Catalog, part_id: String) -> bool:
+static func buy_part(session: GameSession, catalog: Catalog, part_id: String) -> bool:
 	var part := catalog.get_module(part_id)
 	if part.is_empty():
 		return false
@@ -49,7 +49,7 @@ static func buy_part(session: PrototypeSession, catalog: Catalog, part_id: Strin
 	return true
 
 
-static func sell_part(session: PrototypeSession, catalog: Catalog, part_id: String) -> bool:
+static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -> bool:
 	var part := catalog.get_module(part_id)
 	if part.is_empty():
 		return false
@@ -69,7 +69,7 @@ static func sell_part(session: PrototypeSession, catalog: Catalog, part_id: Stri
 
 
 static func install_module(
-	session: PrototypeSession,
+	session: GameSession,
 	catalog: Catalog,
 	ship_id: String,
 	slot: String,
@@ -114,7 +114,7 @@ static func install_module(
 
 
 static func relocate_module(
-	session: PrototypeSession,
+	session: GameSession,
 	catalog: Catalog,
 	ship_id: String,
 	from_slot: String,
@@ -178,7 +178,7 @@ static func relocate_module(
 	return true
 
 
-static func remove_module(session: PrototypeSession, catalog: Catalog, ship_id: String, slot: String) -> bool:
+static func remove_module(session: GameSession, catalog: Catalog, ship_id: String, slot: String) -> bool:
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return false
@@ -202,7 +202,7 @@ static func remove_module(session: PrototypeSession, catalog: Catalog, ship_id: 
 	return true
 
 
-static func refuel_ship(session: PrototypeSession, catalog: Catalog, ship_id: String) -> bool:
+static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return false

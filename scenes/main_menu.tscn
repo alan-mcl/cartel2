@@ -42,6 +42,12 @@ theme_type_variation = &"Muted"
 text = "Main Menu"
 horizontal_alignment = 1
 
+[node name="VersionLabel" type="Label" parent="Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Meta"
+text = "DEV"
+horizontal_alignment = 1
+
 [node name="Spacer" type="Control" parent="Center/Panel/VBox"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2

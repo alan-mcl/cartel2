@@ -18,9 +18,9 @@ Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharb
 ### Oribtals
 
 Proxima Habitat
-Habitat buildings in prototype: Terminal, Davidsons (pilot bar), Skyedge Space Ships (merchant, closed), Habitat Workshop.
+Habitat buildings in game: Terminal, Davidsons (pilot bar), Skyedge Space Ships (merchant, closed), Habitat Workshop.
 
-### Prototype orbit (JSON)
+### Current orbit (JSON)
 
 Large planet disc backdrop, rotating ring of seven orbitals (Proxima Habitat plus six unnamed stations), and a static jump gate farther out.
 
@@ -64,7 +64,7 @@ Notable landmark: Watershed Stadium (Oberon cricket) — from original world cat
 Bela Habitat
 Habitat buildings: Bela Orbital Terminal, Habitat Workshop.
 
-### Prototype orbit (JSON)
+### Current orbit (JSON)
 
 Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (Bela Orbital Habitat plus three unnamed stations), and a static jump gate farther out.
 

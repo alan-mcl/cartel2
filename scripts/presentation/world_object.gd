@@ -9,7 +9,7 @@ var interactable_id: String = ""
 @onready var _interactable: Interactable = get_node_or_null("Interactable")
 
 
-func configure(entity: Dictionary, catalog: Catalog, session: PrototypeSession) -> void:
+func configure(entity: Dictionary, catalog: Catalog, session: GameSession) -> void:
 	entity_id = str(entity.get("id", ""))
 	if entity.has("position"):
 		var pos: Dictionary = entity.get("position", {})
@@ -57,7 +57,7 @@ func configure(entity: Dictionary, catalog: Catalog, session: PrototypeSession) 
 	apply_salvage_state(session)
 
 
-func apply_salvage_state(session: PrototypeSession) -> void:
+func apply_salvage_state(session: GameSession) -> void:
 	if interactable_id.is_empty() or session == null:
 		return
 

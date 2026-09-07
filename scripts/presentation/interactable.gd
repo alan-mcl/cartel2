@@ -28,7 +28,7 @@ func can_interact() -> bool:
 	return true
 
 
-func interact(session: PrototypeSession) -> String:
+func interact(session: GameSession) -> String:
 	if not can_interact() or session == null:
 		return ""
 

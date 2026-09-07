@@ -1,6 +1,6 @@
 # Setting overview
 
-**Status:** Full setting intent from original design notes. The Godot prototype implements near-orbit flight in **Proxima** and **Bela** only; corporations, lore topics, and six-sector geography are documented here for future catch-up.
+**Status:** Full setting intent from original design notes. This game implements near-orbit flight in **Proxima** and **Bela** only; corporations, lore topics, and six-sector geography are documented here for future catch-up.
 
 ## Fantasy
 
@@ -12,7 +12,7 @@ The player is an **independent operator**: trader, mercenary, outlaw, or entrepr
 
 - Intended in-game calendar: **~2646 AD**.
 - Hard-SF leaning: Unspace physics, cryogenic sleepers, recovered Earth time capsules, **Media Reality**, **Atomic Problems**.
-- Asciidians: intelligent natives of Unspace (from design notes; not present in prototype gameplay).
+- Asciidians: intelligent natives of Unspace (from design notes; not yet in gameplay).
 
 ## Currency
 
@@ -20,11 +20,11 @@ The player is an **independent operator**: trader, mercenary, outlaw, or entrepr
 - **Cash** — carried on the person; spent first.
 - **Credit (eCash)** — bank balance; used when cash is insufficient.
 
-The prototype tracks a single **credits** integer (no cash/credit split yet).
+The game tracks a single **credits** integer (no cash/credit split yet).
 
 ## Starter playground
 
-Six connected sectors form the original POC world:
+Six connected sectors form the original design world:
 
 | Sector | Role |
 |--------|------|
@@ -35,21 +35,21 @@ Six connected sectors form the original POC world:
 | Tokirev | Factory world |
 | New Fennet | Underdeveloped rim |
 
-Details: [planets.md](planets.md). Prototype JSON: Proxima and Bela only.
+Details: [planets.md](planets.md). Current JSON: Proxima and Bela only.
 
 ## Megacorporations
 
 Sixteen named corps appear in world data as **economic factions**, not military alliances. Summaries in [corporations.md](corporations.md); full prose for each.
 
-Ten corps have lore but had **empty product lists** in the original POC catalog.
+Ten corps have lore but had **empty product lists** in the original Java design catalog.
 
 ## Unspace
 
 The scientific term for the higher-order dimensions through which matter can be moved is **n-space**. The public universally says **unspace**. **3-space** is ordinary realspace (planetary orbits). Higher N-spaces are abstract transit layers — routes go *deeper* into N-space.
 
-Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (more shear, hazards, and hostile phenomena). This prototype implements only **4-space** — the shallowest Unspace layer above realspace.
+Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (more shear, hazards, and hostile phenomena). The game currently implements only **4-space** — the shallowest Unspace layer above realspace.
 
-### Translation flow (prototype)
+### Translation flow (current)
 
 1. At a **jump gate** in 3-space, pick destination and confirm **4-space**.
 2. Ship enters a flyable 4-space layout; navigate shear fields and debris to an **exit portal**.
@@ -107,6 +107,6 @@ Despite futuristic weapons, weight-conscious pilots favour **22-millimeter solid
 
 1. Original Office design notes — intent and balance
 2. Starter-world catalogs — topology and identities
-3. POC / prototype behaviour — what was actually wired
+3. Current implementation — what is wired in this game
 
 When notes and instance data disagree, **design intent follows the notes** unless this setting bible is deliberately revised here first.

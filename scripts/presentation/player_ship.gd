@@ -83,7 +83,7 @@ func exit_shear(hazard: NspaceHazard) -> void:
 	_shear_hazards.erase(hazard)
 
 
-func apply_shear_forces(session: PrototypeSession, delta: float) -> void:
+func apply_shear_forces(session: GameSession, delta: float) -> void:
 	if _shear_hazards.is_empty():
 		return
 
@@ -139,7 +139,7 @@ func _physics_process(delta: float) -> void:
 	var rotate_left := Input.is_action_pressed("rotate_left")
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
-	var session: PrototypeSession = get_parent().session if get_parent() != null else null
+	var session: GameSession = get_parent().session if get_parent() != null else null
 	var firing := (
 		Input.is_action_pressed("fire")
 		and session != null
@@ -202,7 +202,7 @@ func _physics_process(delta: float) -> void:
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
 
 
-func _update_operating_warnings(session: PrototypeSession, firing: bool = false) -> void:
+func _update_operating_warnings(session: GameSession, firing: bool = false) -> void:
 	if operating_state.fuel_empty and Input.is_action_pressed("thrust"):
 		session.last_log = "Out of fuel."
 	elif firing and not operating_state.weapons_allowed and operating_state.weapon_power_requested > 0.0:

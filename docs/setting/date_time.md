@@ -1,6 +1,6 @@
 # Galactic Standard Calendar and Time
 
-**Status:** Calendar rules are setting canon. The Godot prototype implements GST tracking, a HUD/habitat clock, mapping-based translation lumps, and irregular unspace time flow.
+**Status:** Calendar rules are setting canon. This game implements GST tracking, a HUD/habitat clock, mapping-based translation lumps, and irregular unspace time flow.
 
 The Galactic Standard Calendar (GSC) and Galactic Standard Time (GST) form the common civil timekeeping standard used across human space.
 
@@ -87,9 +87,9 @@ A typical timestamp might therefore be:
 
 with the same event potentially expressed in a different local time by observers elsewhere.
 
-## Prototype time flow
+## Current time flow
 
-The near-orbit prototype advances GST as follows:
+The game advances GST as follows:
 
 - **Realspace flight** and **habitat/building menus** — one GST second per real second (visible on HUD and habitat header with seconds resolution).
 - **Entering unspace** at a jump gate — discrete GST lump from the route mapping (`entry_seconds`, with small random jitter).

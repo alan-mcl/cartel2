@@ -11,12 +11,12 @@ const PANEL_BG_ALPHA := 0.25
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 
-var _session: PrototypeSession
+var _session: GameSession
 var _assembled_ship: AssembledShip
 var _operating_state: ShipOperatingState
 
 
-func bind(session: PrototypeSession, _player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
+func bind(session: GameSession, _player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
 	_session = session
 	_bind_gst_clock()
 	set_assembled_ship(assembled_ship)

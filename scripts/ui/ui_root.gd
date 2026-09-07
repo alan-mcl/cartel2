@@ -4,7 +4,7 @@ extends CanvasLayer
 @onready var _stack: ScreenStack = $Root/Stack
 
 var catalog: Catalog
-var session: PrototypeSession
+var session: GameSession
 var context := UiContext.new()
 
 var on_ship_changed: Callable = Callable()
@@ -20,7 +20,7 @@ func _ready() -> void:
 
 func configure(
 	p_catalog: Catalog,
-	p_session: PrototypeSession,
+	p_session: GameSession,
 	ship_changed: Callable,
 	undock: Callable,
 	save: Callable,

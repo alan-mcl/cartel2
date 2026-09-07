@@ -12,7 +12,7 @@ const SANDBOX_HABITAT_ID := "proxima_habitat"
 @onready var _screen_stack: ScreenStack = $ScreenStack
 
 var _catalog: Catalog
-var _session: PrototypeSession
+var _session: GameSession
 var _context: UiContext
 var _yard: Control
 var _ship_id_counter: int = 0
@@ -30,8 +30,8 @@ func _ready() -> void:
 	_add_hull_button.pressed.connect(_on_add_hull_pressed)
 
 
-func _build_session() -> PrototypeSession:
-	var session := PrototypeSession.new()
+func _build_session() -> GameSession:
+	var session := GameSession.new()
 	session.sandbox = true
 	session.docked = true
 	session.habitat_id = SANDBOX_HABITAT_ID

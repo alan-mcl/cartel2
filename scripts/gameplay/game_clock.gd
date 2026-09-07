@@ -10,7 +10,7 @@ func reset_unspace_pulse() -> void:
 	_pulse_interval = 0.0
 
 
-func tick(session: PrototypeSession, catalog: Catalog, delta: float, frozen: bool) -> void:
+func tick(session: GameSession, catalog: Catalog, delta: float, frozen: bool) -> void:
 	if frozen or session == null or delta <= 0.0:
 		return
 
@@ -20,7 +20,7 @@ func tick(session: PrototypeSession, catalog: Catalog, delta: float, frozen: boo
 		session.gst_seconds += delta
 
 
-func apply_mapping_lump(session: PrototypeSession, mapping: Dictionary, field: String) -> float:
+func apply_mapping_lump(session: GameSession, mapping: Dictionary, field: String) -> float:
 	if session == null or mapping.is_empty():
 		return 0.0
 
@@ -37,7 +37,7 @@ func apply_mapping_lump(session: PrototypeSession, mapping: Dictionary, field: S
 	return applied
 
 
-func _tick_unspace(session: PrototypeSession, catalog: Catalog, delta: float) -> void:
+func _tick_unspace(session: GameSession, catalog: Catalog, delta: float) -> void:
 	var config := _get_unspace_gst_config(catalog, session.unspace_world_id)
 	var depth := maxi(1, session.unspace_n - 3)
 

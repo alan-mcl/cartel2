@@ -1,6 +1,6 @@
 # Cartel UI theme
 
-Corporate information-system visual language for the Godot prototype: charcoal surfaces, off-white text, amber accent. Designed at **1920×1080** with compact Bloomberg-style density — fonts do not scale up to fill the viewport.
+Corporate information-system visual language for this game: charcoal surfaces, off-white text, amber accent. Designed at **1920×1080** with compact Bloomberg-style density — fonts do not scale up to fill the viewport.
 
 ## Canonical resources
 

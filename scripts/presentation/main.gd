@@ -2,7 +2,7 @@ extends Node2D
 
 const _TRAFFIC_DIRECTOR_SCRIPT: GDScript = preload("res://scripts/gameplay/traffic_director.gd")
 
-var session := PrototypeSession.new()
+var session := GameSession.new()
 var catalog := Catalog.load_default()
 var player_ship: AssembledShip
 var play_bounds: float = 3500.0
@@ -181,7 +181,7 @@ func _show_main_menu() -> void:
 
 	if session != null and session.changed.is_connected(_on_session_changed):
 		session.changed.disconnect(_on_session_changed)
-	session = PrototypeSession.new()
+	session = GameSession.new()
 	session.changed.connect(_on_session_changed)
 	_ui_root.configure(
 		catalog,
@@ -227,7 +227,7 @@ func _start_game_from_session() -> void:
 
 
 func _begin_new_game(player_name: String, callsign: String) -> void:
-	session = PrototypeSession.new()
+	session = GameSession.new()
 	session.changed.connect(_on_session_changed)
 
 	if not session.start_new_game(catalog, player_name, callsign):
@@ -249,7 +249,7 @@ func _load_slot(slot_index: int) -> void:
 		push_error("Failed to read save slot %d." % slot_index)
 		return
 
-	var new_session := PrototypeSession.new()
+	var new_session := GameSession.new()
 	if not new_session.from_save(catalog, data):
 		push_error("Failed to load save slot %d." % slot_index)
 		return

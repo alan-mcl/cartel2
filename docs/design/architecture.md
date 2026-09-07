@@ -1,6 +1,6 @@
 # Architecture
 
-High-level structure of the Godot 4.7 near-orbit prototype. This document describes **this repository**, not the original Java/XML POC.
+High-level structure of the Godot 4.7 near-orbit game. Historical design notes from the original Java/XML design repo are reference only.
 
 ## Design principles
 
@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -26,7 +26,7 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 ```mermaid
 flowchart LR
   JSON[data/catalog JSON] --> Catalog
-  Catalog --> Session[PrototypeSession]
+  Catalog --> Session[GameSession]
   Catalog --> Assembler[ShipAssembler]
   Catalog --> Loader[WorldLoader]
   Session --> HUD
@@ -45,7 +45,7 @@ On startup, `main.gd`:
 
 1. Loads `Catalog.load_default()`.
 2. Shows the **main menu** (New Game / Load / Exit).
-3. **New Game** — player enters name and callsign; `PrototypeSession.start_new_game` seeds fleet from `player.json`, parks all ships at Proxima Habitat, and opens **HabitatScreen** docked at the Terminal.
+3. **New Game** — player enters name and callsign; `GameSession.start_new_game` seeds fleet from `player.json`, parks all ships at Proxima Habitat, and opens **HabitatScreen** docked at the Terminal.
 4. **Load** — reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.
 5. Assembles the current ship via `ShipAssembler.assemble_owned`.
 6. Calls `WorldLoader.load_sector` or `load_unspace` to populate `$World`.
@@ -60,13 +60,13 @@ Docking opens **UiRoot** — a full-screen opaque Control UI (not a dim overlay)
 
 Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `module_stock_item`).
 
-UI scripts receive a **UiContext** (`catalog`, `session`, `stack`, callbacks). They never load JSON or run gameplay rules directly — they call `PrototypeSession` / `ShipAssembly` and refresh on `session.changed`.
+UI scripts receive a **UiContext** (`catalog`, `session`, `stack`, callbacks). They never load JSON or run gameplay rules directly — they call `GameSession` / `ShipAssembly` and refresh on `session.changed`.
 
 Location and building art paths live in catalog JSON under `assets/ui/locations/` (placeholder SVGs today).
 
 ### Ship assembly sandbox
 
-For fitting and engineering work without the full game loop, run `scenes/dev/ship_assembly_sandbox.tscn` (CLI `--scene` or editor **F6**). It bootstraps `Catalog`, a sandbox `PrototypeSession` (`session.sandbox = true`), and embeds `ShipyardScreen` with buy/sell disabled and unlimited module drag from catalog. Toolbar actions add empty hulls, strip modules, and restore manufacturer templates. Fitting validation (mounts, mass, volume) matches the main game.
+For fitting and engineering work without the full game loop, run `scenes/dev/ship_assembly_sandbox.tscn` (CLI `--scene` or editor **F6**). It bootstraps `Catalog`, a sandbox `GameSession` (`session.sandbox = true`), and embeds `ShipyardScreen` with buy/sell disabled and unlimited module drag from catalog. Toolbar actions add empty hulls, strip modules, and restore manufacturer templates. Fitting validation (mounts, mass, volume) matches the main game.
 
 ## Main scene structure
 
@@ -169,7 +169,7 @@ flowchart TD
 | `hazard` | `scenes/world/hazard.tscn` (4-space shear fields) |
 | `planet_limb` | Sprite2D spawned in code (legacy) |
 
-Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `PrototypeSession.orbital_phase_by_sector` (saved/loaded).
+Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded).
 
 Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. Hazards use `NspaceHazard.configure(entity)`.
 
@@ -210,11 +210,11 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 ## Save / load
 
 - Three fixed slots: `user://saves/slot_1.json` … `slot_3.json`.
-- Saves store pilot identity, full `PrototypeSession` state (including `spare_parts`), owned ship instances (modules, per-ship cargo, fuel, ammunition), and player flight position/velocity/facing.
+- Saves store pilot identity, full `GameSession` state (including `spare_parts`), owned ship instances (modules, per-ship cargo, fuel, ammunition), player flight position/velocity/facing, and `game_version` (from `GameVersion.VERSION`).
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
 
-## Explicit non-goals (current prototype)
+## Not yet implemented
 
 - On-foot play: city roadmaps, trams, surface travel
 - Named NPCs, dialogue trees, Dialogue Manager integration

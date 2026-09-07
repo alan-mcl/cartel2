@@ -1,6 +1,6 @@
 extends Label
 
-var _session: PrototypeSession
+var _session: GameSession
 
 
 func _ready() -> void:
@@ -9,7 +9,7 @@ func _ready() -> void:
 		theme_type_variation = &"Numeric"
 
 
-func bind(session: PrototypeSession) -> void:
+func bind(session: GameSession) -> void:
 	_session = session
 	_refresh()
 

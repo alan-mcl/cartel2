@@ -2,7 +2,7 @@ class_name UiContext
 extends RefCounted
 
 var catalog: Catalog
-var session: PrototypeSession
+var session: GameSession
 var stack: ScreenStack
 var on_ship_changed: Callable = Callable()
 var on_undock_requested: Callable = Callable()

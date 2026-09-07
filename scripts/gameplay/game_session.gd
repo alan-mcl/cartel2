@@ -1,4 +1,4 @@
-class_name PrototypeSession
+class_name GameSession
 extends RefCounted
 
 signal changed

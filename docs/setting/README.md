@@ -1,6 +1,6 @@
 # Setting index
 
-Working bible for the Cartel setting. Content is **setting intent** — editable prose that may run ahead of `data/catalog/` JSON in this prototype.
+Working bible for the Cartel setting. Content is **setting intent** — editable prose that may run ahead of `data/catalog/` JSON in the current game.
 
 Each linked document opens with a **Status** note where relevant: what is playable today vs what is design target.
 
@@ -14,7 +14,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | **City Mall (CM)** | Enclosed consumer habitat (MicroDonald-style) |
 | **Building** | Visitable location within a city or habitat |
 | **Unspace / n-space** | Higher-order dimensions used for inter-sector travel |
-| **Solution** | Integer code required to traverse a known Unspace route (stored in data; typing not implemented in prototype) |
+| **Solution** | Integer code required to traverse a known Unspace route (stored in data; typing not yet implemented) |
 | **d** | Galactic dollar |
 | **Cash** | Carried on the person |
 | **Credit (eCash)** | Bank balance |
@@ -32,9 +32,9 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | [ships.md](ships.md) | Ship families and configurations |
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
 
-## Prototype coverage
+## Current implementation
 
-| Setting area | Prototype |
+| Setting area | Current implementation |
 |--------------|-----------|
 | Sectors playable | Proxima, Bela (near orbit only) |
 | Habitats | Proxima Habitat, Bela Orbital Habitat |

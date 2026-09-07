@@ -1,6 +1,8 @@
-# Cartel — 2D spaceship prototype
+# Cartel — 2D spaceship game
 
-Playable near-orbit prototype for **Cartel**, set in Proxima Sector. Fly a ship with inertia, explore orbital space around a planet, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
+**Cartel** is a 2D near-orbit spaceship game built in Godot 4.7. Current version: **DEV**.
+
+Fly with inertia, explore orbital space, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
 
 ## Requirements
 
@@ -16,7 +18,7 @@ Godot binary used for development: `~/opt/Godot_v4.7.2-stable_linux.x86_64`
 
 Or open `project.godot` in the Godot editor and press **F5**.
 
-The game opens at the **main menu**. Choose **New Game** to enter your pilot name and callsign; you begin docked at **Proxima Habitat** with your starter fleet parked there. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
+The game opens at the **main menu** (version shown as **DEV**). Choose **New Game** to enter your pilot name and callsign; you begin docked at **Proxima Habitat** with your starter fleet parked there. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
 
 ## Controls
 
@@ -34,7 +36,7 @@ The game opens at the **main menu**. Choose **New Game** to enter your pilot nam
 | Quit to menu | Pause menu or Menu on habitat footer |
 | Undock | Terminal: select docked ship, then Undock |
 
-## Prototype loop
+## Core loop
 
 1. Start at the **main menu** — New Game, Load, or Exit.
 2. **New Game:** enter pilot name and callsign; begin docked at **Proxima Habitat** with **Flare-ON SS** and **Pegasus P101** parked there.
@@ -54,7 +56,7 @@ assets/ui/locations/   Placeholder habitat/building art (SVG)
 assets/ui/patterns/    Reusable themed UI pattern scenes
 themes/                cartel_theme.tres (project default)
 scripts/tools/         Theme builder, art generator
-scripts/gameplay/      Catalog, session, ship assembly, save store
+scripts/gameplay/      Catalog, session, ship assembly, save store, version
 scripts/presentation/  Godot integration (ship, camera, world loader)
 scripts/ui/            HUD, menus, UiRoot, habitat/shipyard screens
 scenes/ui/             Full-screen habitat UI scenes
@@ -95,13 +97,17 @@ In the editor, open either scene and press **F6** to run it standalone. **F5** s
 
 Specification and setting lore live in [`docs/`](docs/README.md):
 
-- **Design** — architecture and JSON data model for this Godot prototype
+- **Design** — architecture and JSON data model for this game
 - **Setting** — planets, corporations, ships, and equipment (working bible)
+
+## Versioning
+
+Game version is defined in `scripts/gameplay/game_version.gd` (`GameVersion.VERSION`, currently **DEV**). Saves include a `game_version` field for diagnostics; save schema version is separate (`SaveStore.SAVE_VERSION`).
 
 ## Placeholders
 
 - Location art under `assets/ui/locations/` are placeholders; replace with final paintings when ready.
-- No named NPCs or dialogue in this slice — store interactions only.
+- No named NPCs or dialogue yet — store interactions only.
 - Market stock is catalog-defined and restocks each session (not persisted).
 - Only **4-space** is playable; deeper N-space routes are future work.
-- Merchants beyond the Exchange are not implemented (Skyedge remains unused in Proxima visit list).
+- Merchants beyond the Exchange are not fully implemented (Skyedge sales counter closed).

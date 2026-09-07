@@ -1,6 +1,6 @@
 # Cartel documentation
 
-Specification and setting reference for the Godot prototype. This is the checkpoint after JSON-driven orbit and jump-gate travel; content will grow as systems are added.
+Specification and setting reference for the Cartel game. Content grows as systems ship.
 
 ## Rule of thumb
 
@@ -8,11 +8,11 @@ Specification and setting reference for the Godot prototype. This is the checkpo
 
 ## Contents
 
-### Design (this prototype)
+### Design (this game)
 
 | Document | Contents |
 |----------|----------|
-| [architecture.md](design/architecture.md) | Code layering, data flow, main loops, non-goals |
+| [architecture.md](design/architecture.md) | Code layering, data flow, main loops, not-yet-implemented features |
 | [data_model.md](design/data_model.md) | JSON catalog schemas, runtime types, how to extend data |
 | [ui_theme.md](design/ui_theme.md) | Corporate UI theme tokens, variations, showcase |
 
@@ -29,4 +29,4 @@ Specification and setting reference for the Godot prototype. This is the checkpo
 
 ## Source material
 
-Setting prose is distilled from the original Cartel design notes (Office documents in the sibling Java POC repo). This prototype does not copy binary design files; extracts were used as read-only reference when authoring `docs/setting/`.
+Setting prose is distilled from the original Cartel design notes (Office documents in the sibling Java design repo). This game does not copy binary design files; extracts were used as read-only reference when authoring `docs/setting/`.

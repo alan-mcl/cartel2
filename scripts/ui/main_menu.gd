@@ -5,11 +5,14 @@ signal load_requested
 signal exit_requested
 
 @onready var _load_button: Button = $Center/Panel/VBox/LoadButton
+@onready var _version_label: Label = $Center/Panel/VBox/VersionLabel
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
+	if _version_label != null:
+		_version_label.text = GameVersion.VERSION
 	$Center/Panel/VBox/NewGameButton.pressed.connect(_on_new_game_pressed)
 	_load_button.pressed.connect(_on_load_pressed)
 	$Center/Panel/VBox/ExitButton.pressed.connect(_on_exit_pressed)

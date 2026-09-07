@@ -49,7 +49,7 @@ func clear_world(world_root: Node2D) -> void:
 func load_sector(
 	world_root: Node2D,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	sector_id: String
 ) -> float:
 	clear_world(world_root)
@@ -72,7 +72,7 @@ func load_sector(
 func load_unspace(
 	world_root: Node2D,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	unspace_id: String
 ) -> float:
 	clear_world(world_root)
@@ -91,7 +91,7 @@ func load_unspace(
 	return _spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
 
 
-func apply_salvage_visuals(session: PrototypeSession) -> void:
+func apply_salvage_visuals(session: GameSession) -> void:
 	for entity_id in spawned_by_id:
 		var node: Node = spawned_by_id[entity_id]
 		if node is WorldObject:
@@ -155,7 +155,7 @@ func _spawn_world_entities(
 	world_root: Node2D,
 	world_data: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	fallback_bounds: float
 ) -> float:
 	var entities: Variant = world_data.get("entities", [])
@@ -174,7 +174,7 @@ func _spawn_planetary_layout(
 	world_root: Node2D,
 	world_data: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	sector_id: String
 ) -> void:
 	var planet_data: Dictionary = world_data.get("planet", {})
@@ -401,7 +401,7 @@ func _spawn_orbital_ring(
 	world_root: Node2D,
 	ring_data: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	sector_id: String
 ) -> void:
 	var ring_script: Script = OrbitalRingScript
@@ -461,7 +461,7 @@ func _spawn_orbital_ring(
 func _spawn_orbital_instance(
 	orbital_def: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession
+	session: GameSession
 ) -> Node2D:
 	var kind := str(orbital_def.get("kind", ""))
 	var scene_path: String = SCENES.get(kind, "")
@@ -482,7 +482,7 @@ func _configure_orbital_instance(
 	instance: Node2D,
 	orbital_def: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession
+	session: GameSession
 ) -> void:
 	if instance is WorldObject:
 		instance.configure(orbital_def, catalog, session)
@@ -498,7 +498,7 @@ func _spawn_sector_jump_gate(
 	world_root: Node2D,
 	gate_data: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession,
+	session: GameSession,
 	sector_id: String
 ) -> void:
 	var gate_radius := float(gate_data.get("radius", 2700.0))
@@ -545,7 +545,7 @@ func _spawn_entity(
 	world_root: Node2D,
 	entity: Dictionary,
 	catalog: Catalog,
-	session: PrototypeSession
+	session: GameSession
 ) -> Node:
 	var kind := str(entity.get("kind", ""))
 	var entity_id := str(entity.get("id", ""))

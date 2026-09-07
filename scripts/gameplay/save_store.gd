@@ -112,6 +112,7 @@ static func build_save_data(
 ) -> Dictionary:
 	return {
 		"version": SAVE_VERSION,
+		"game_version": GameVersion.VERSION,
 		"saved_at": Time.get_datetime_string_from_system(true),
 		"player": {
 			"name": player_name,

@@ -3,7 +3,7 @@ class_name OrbitalRing
 
 var period_seconds: float = 720.0
 var sector_id: String = ""
-var session: PrototypeSession = null
+var session: GameSession = null
 
 
 func _process(delta: float) -> void:

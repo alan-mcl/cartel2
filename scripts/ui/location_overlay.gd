@@ -25,7 +25,7 @@ signal quit_to_menu_requested
 @onready var _hint: Label = $Dim/Center/Panel/HintLabel
 
 var _catalog: Catalog
-var _session: PrototypeSession
+var _session: GameSession
 var _workshop_selected_ship_id: String = ""
 var _undock_picker_visible: bool = false
 
@@ -43,7 +43,7 @@ func _ready() -> void:
 	_save_menu_panel.visible = false
 
 
-func bind(catalog: Catalog, session: PrototypeSession) -> void:
+func bind(catalog: Catalog, session: GameSession) -> void:
 	_catalog = catalog
 	_session = session
 	if session != null:
@@ -107,7 +107,7 @@ func _status_for_building(building: Dictionary) -> String:
 	var kind := str(building.get("kind", ""))
 	match kind:
 		"merchant":
-			return "Sales and services are closed in this prototype."
+			return "Sales and services are closed for the season."
 		_:
 			return ""
 

@@ -1,6 +1,6 @@
 # Data model
 
-JSON catalog schemas and runtime types for the Godot prototype. For setting intent beyond what is catalogued today, see [setting docs](../setting/README.md).
+JSON catalog schemas and runtime types for this game. For setting intent beyond what is catalogued today, see [setting docs](../setting/README.md).
 
 Full assembly design: [ship_assembly.txt](ship_assembly.txt).
 
@@ -81,7 +81,7 @@ Common fields (omit zero-valued properties):
 
 Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
-**Categories in prototype:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
+**Categories in current JSON:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
 
 Use `"mount": "system"` (or another single mount) for modules with one home. Use `"mounts": ["other", "light_weapon", …]` when a part can fit multiple slot types. Omit both for Other-only modules (`ShipAssembler.module_mounts()` defaults to `["other"]`).
 
@@ -99,7 +99,7 @@ Use `"mount": "system"` (or another single mount) for modules with one home. Use
 
 Mounted modules use `{mount_category}_{n}` (e.g. `main_engine_1`, `system_3`, `light_weapon_1`).
 
-**Other** slots (`other_{n}`) hold volume-only modules (cargo, fuel, armour, magazines). Chassis `utility` counts are merged into `system` in the prototype catalog.
+**Other** slots (`other_{n}`) hold volume-only modules (cargo, fuel, armour, magazines). Chassis `utility` counts are merged into `system` in the current catalog.
 
 ### `player.json`
 
@@ -163,7 +163,7 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | `local_sensor` | `sensor_basic` | North-up local-space radar panel |
 | `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
 
-Prototype gating is install-based; compute overload degradation is deferred.
+Capability gating is install-based; compute overload degradation is deferred.
 
 ### Derived flight stats
 
@@ -181,11 +181,11 @@ Prototype gating is install-based; compute overload degradation is deferred.
 - Consumes fuel from `owned.fuel_current`
 - Sets `thrust_factor` when fuel empty or power deficit
 
-Fuel lives on the owned ship. Heat/signature simulation is deferred beyond this prototype.
+Fuel lives on the owned ship. Heat/signature simulation is deferred beyond the current build.
 
 ## `player.json` and session
 
-`PrototypeSession` (`scripts/gameplay/prototype_session.gd`):
+`GameSession` (`scripts/gameplay/game_session.gd`):
 
 | Field | Description |
 |-------|-------------|
@@ -231,9 +231,10 @@ Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VER
 ```json
 {
   "version": 2,
+  "game_version": "DEV",
   "saved_at": "2026-09-01T12:00:00Z",
   "player": { "name": "Jane Doe", "callsign": "Vixen" },
-  "session": { /* PrototypeSession.to_dict() — includes spare_parts */ },
+  "session": { /* GameSession.to_dict() — includes spare_parts */ },
   "ships": [ /* OwnedShip.to_dict() — modules, cargo, fuel, ammunition */ ],
   "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
 }

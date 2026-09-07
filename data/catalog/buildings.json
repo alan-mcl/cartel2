@@ -22,8 +22,8 @@
     "name": "Skyedge Space Ships",
     "type": "merchant",
     "kind": "merchant",
-    "description": "Scout ship showroom. Sales counter is closed in this prototype.",
-    "short_desc": "Scout ship showroom. Sales counter is closed in this prototype.",
+    "description": "Scout ship showroom. The sales counter is closed for the season.",
+    "short_desc": "Scout ship showroom. The sales counter is closed for the season.",
     "art": "res://assets/ui/locations/skyedge.svg"
   },
   {
