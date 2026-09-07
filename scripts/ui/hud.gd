@@ -61,14 +61,14 @@ func set_operating_state(state: ShipOperatingState) -> void:
 
 
 func set_nav_state(
-	play_bounds: float,
+	nav_radius: float,
 	ship_pos: Vector2,
 	ship_heading_deg: float,
 	contacts: Array,
 	camera: Camera2D
 ) -> void:
 	if _has_capability("local_sensor") and _local_sensor_map != null:
-		_local_sensor_map.set_nav_state(play_bounds, ship_pos, ship_heading_deg, contacts)
+		_local_sensor_map.set_nav_state(nav_radius, ship_pos, ship_heading_deg, contacts)
 	if _has_capability("local_system_waypoints") and _waypoint_arrows != null:
 		_waypoint_arrows.set_nav_state(ship_pos, contacts, camera)
 

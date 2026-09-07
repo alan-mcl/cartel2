@@ -1,7 +1,10 @@
 {
   "near_lod_radius": 1400.0,
-  "sensor_contact_radius": 3800.0,
-  "cruise_speed_fraction": 0.5,
+  "sensor_contact_radius": 6500.0,
+  "cruise_speed_fraction": 0.33,
+  "waypoint_weight_habitat": 0.45,
+  "waypoint_weight_jump_gate": 0.35,
+  "waypoint_weight_orbital_each": 0.20,
   "cruise_speed_jitter": 0.2,
   "route_lateral_offset_min": 80.0,
   "route_lateral_offset_max": 180.0,

@@ -1,6 +1,6 @@
 extends Node2D
 
-const _TRAFFIC_DIRECTOR_SCRIPT: GDScript = preload("res://scripts/gameplay/traffic_director.gd")
+const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.gd")
 
 var session := GameSession.new()
 var catalog := Catalog.load_default()
@@ -103,7 +103,7 @@ func _is_gst_frozen() -> bool:
 func _ensure_traffic_director() -> void:
 	if _traffic_director != null:
 		return
-	_traffic_director = _TRAFFIC_DIRECTOR_SCRIPT.new()
+	_traffic_director = TrafficDirectorScript.new()
 
 
 func _physics_process(delta: float) -> void:
@@ -119,8 +119,11 @@ func _physics_process(delta: float) -> void:
 	if not session.in_unspace and _traffic_director != null:
 		contacts.append_array(_traffic_director.get_traffic_contacts(_player.global_position))
 
+	var nav_radius := play_bounds
+	if not session.in_unspace:
+		nav_radius = _world_loader.get_content_radius()
 	_hud.set_nav_state(
-		play_bounds,
+		nav_radius,
 		_player.global_position,
 		rad_to_deg(_player.motion.facing),
 		contacts,
@@ -378,7 +381,7 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 				catalog,
 				_world,
 				session.sector_id,
-				play_bounds,
+				_world_loader.get_traffic_envelope_radius(),
 				_player.global_position,
 				_world_loader
 			)

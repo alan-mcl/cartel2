@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const _TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
@@ -97,7 +97,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if actor == null or actor.ai_state == _TrafficActorScript.STATE_DESTROYED:
+	if actor == null or actor.ai_state == TrafficActorScript.STATE_DESTROYED:
 		return
 	# Movement is driven by TrafficDirector.tick; keep hull aligned here.
 	rotation = actor.motion.facing + PI / 2.0

@@ -110,6 +110,16 @@ func get_jump_gate_world_position() -> Vector2:
 	return Vector2(cos(_gate_angle) * _gate_radius, sin(_gate_angle) * _gate_radius)
 
 
+func get_content_radius() -> float:
+	return maxf(_gate_radius, _ring_radius) * 1.15
+
+
+func get_traffic_envelope_radius() -> float:
+	if _gate_radius > 0.0:
+		return _gate_radius * 1.25
+	return 5000.0
+
+
 func get_habitat_orbital_velocity() -> Vector2:
 	var habitat_world := get_habitat_world_position()
 	if habitat_world.length_squared() < 0.001 or _ring_period_seconds <= 0.0:
@@ -501,7 +511,7 @@ func _spawn_sector_jump_gate(
 	session: GameSession,
 	sector_id: String
 ) -> void:
-	var gate_radius := float(gate_data.get("radius", 2700.0))
+	var gate_radius := float(gate_data.get("radius", 5400.0))
 	_gate_radius = gate_radius
 	_gate_angle = _gate_angle_for_sector(sector_id)
 

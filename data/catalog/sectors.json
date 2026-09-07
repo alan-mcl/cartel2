@@ -18,7 +18,7 @@
       "Century",
       "Safeharbour"
     ],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Proxima near orbit",
     "mappings": []
   },
@@ -34,7 +34,7 @@
     "ocean_coverage": 0.62,
     "climate": "Arid",
     "city_malls": ["Ozero"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Tycho near orbit",
     "mappings": []
   },
@@ -50,7 +50,7 @@
     "ocean_coverage": 0.92,
     "climate": "Warm",
     "city_malls": ["Oberon", "Santa Margarita"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore La Bella Vista near orbit",
     "mappings": []
   },
@@ -66,7 +66,7 @@
     "ocean_coverage": 0.76,
     "climate": "Temperate",
     "city_malls": ["La Palma", "Fairhaven"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Irasia near orbit",
     "mappings": []
   },
@@ -82,7 +82,7 @@
     "ocean_coverage": 0.62,
     "climate": "Cold",
     "city_malls": ["Kaliningrad"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Tokirev near orbit",
     "mappings": []
   },
@@ -98,7 +98,7 @@
     "ocean_coverage": 0.78,
     "climate": "Temperate",
     "city_malls": ["Belfast"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Fennet near orbit",
     "mappings": []
   },
@@ -114,7 +114,7 @@
     "ocean_coverage": 0.68,
     "climate": "Temperate",
     "city_malls": ["Jubilee", "New Venice", "Bellagio"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Fortuna near orbit",
     "mappings": []
   },
@@ -130,7 +130,7 @@
     "ocean_coverage": 0.84,
     "climate": "Warm",
     "city_malls": ["Carthage", "New Tyre", "Leptis", "Utica"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore New Carthage near orbit",
     "mappings": []
   },
@@ -146,7 +146,7 @@
     "ocean_coverage": 0.77,
     "climate": "Temperate",
     "city_malls": ["Horizon", "Meridian", "Providence", "New Geneva", "Ascension"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Horizon near orbit",
     "mappings": []
   },
@@ -162,7 +162,7 @@
     "ocean_coverage": 0.78,
     "climate": "Cold",
     "city_malls": ["Titania Central", "Skygarden"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Titania IX near orbit",
     "mappings": []
   },
@@ -178,7 +178,7 @@
     "ocean_coverage": 0.69,
     "climate": "Arid",
     "city_malls": ["Mediran", "Twin Cities", "New Cambridge"],
-    "play_bounds": 3800,
+    "play_bounds": 8000,
     "objective": "Explore Pelagos near orbit",
     "mappings": []
   }

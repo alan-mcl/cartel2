@@ -9,19 +9,19 @@ const ORBITAL_DRAW_RADIUS := 3.0
 const BACKGROUND_ALPHA := 0.25
 const BORDER_WIDTH := 1.5
 
-var _play_bounds: float = 3500.0
+var _nav_radius: float = 3500.0
 var _ship_pos: Vector2 = Vector2.ZERO
 var _ship_heading_deg: float = 0.0
 var _contacts: Array = []
 
 
 func set_nav_state(
-	play_bounds: float,
+	nav_radius: float,
 	ship_pos: Vector2,
 	ship_heading_deg: float,
 	contacts: Array
 ) -> void:
-	_play_bounds = maxf(play_bounds, 1.0)
+	_nav_radius = maxf(nav_radius, 1.0)
 	_ship_pos = ship_pos
 	_ship_heading_deg = ship_heading_deg
 	_contacts = contacts
@@ -75,7 +75,7 @@ func _draw() -> void:
 func _map_layout() -> Dictionary:
 	var map_center := size * 0.5
 	var map_radius := minf(size.x, size.y) * 0.5 - INNER_PADDING
-	var view_radius := maxf(_play_bounds, 1.0)
+	var view_radius := maxf(_nav_radius, 1.0)
 	var scale := map_radius / view_radius
 	return {
 		"center": map_center,

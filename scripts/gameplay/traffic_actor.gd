@@ -1,5 +1,7 @@
 extends RefCounted
 
+const SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
+
 enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
 
 const STATE_DOCKED := AiState.DOCKED
@@ -9,6 +11,138 @@ const LOITER_RADIUS := 180.0
 const ARRIVAL_DISTANCE := 60.0
 const ROTATE_THRESHOLD := 0.12
 const PEACEFUL_VELOCITY_BLEND := 3.5
+
+
+static func create(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	role_name: String,
+	template: String,
+	spawn_pos: Vector2,
+	spawn_facing: float,
+	sector_id: String
+) -> RefCounted:
+	var actor: RefCounted = load(SCRIPT_PATH).new()
+	actor.id = "traffic_%d" % randi()
+	actor.role = role_name
+	actor.template_id = template
+	actor.callsign = _generate_callsign(traffic_config, template)
+	actor.hull_color_shift = randf_range(-0.06, 0.06)
+	actor.owned_ship = _create_owned_ship(catalog, template, actor.callsign)
+	actor.assembled_ship = ShipAssembler.assemble_owned(catalog, actor.owned_ship)
+	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
+	actor.hull_current = actor.hull_max
+	actor.motion.facing = spawn_facing
+	actor.motion.velocity = Vector2.from_angle(spawn_facing) * 20.0
+	actor._position = spawn_pos
+	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
+	actor.loiter_angle = randf() * TAU
+	actor._assign_route_endpoints(sector_id)
+	return actor
+
+
+static func _create_owned_ship(catalog: Catalog, template_id: String, callsign: String) -> OwnedShip:
+	var template := catalog.get_ship(template_id)
+	var owned := OwnedShip.new()
+	owned.id = "npc_%d" % randi()
+	owned.name = callsign
+	owned.template_id = template_id
+	owned.chassis_id = str(template.get("chassis", ""))
+	var chassis := catalog.get_chassis(owned.chassis_id)
+	var module_ids: Array = []
+	var raw_modules: Variant = template.get("modules", [])
+	if typeof(raw_modules) == TYPE_ARRAY:
+		for module_id in raw_modules:
+			module_ids.append(str(module_id))
+	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	owned.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
+	ShipAssembler.seed_ammunition(catalog, owned)
+	return owned
+
+
+static func _generate_callsign(traffic_config: Dictionary, template_id: String) -> String:
+	var prefixes: Variant = traffic_config.get("callsign_prefixes", {})
+	var prefix := str(prefixes.get(template_id, "TRF"))
+	return "%s-%04d" % [prefix, randi() % 10000]
+
+
+static func pick_waypoint_trip(anchors: Array, traffic_config: Dictionary) -> Dictionary:
+	var from_id := pick_weighted_waypoint(anchors, traffic_config, "")
+	var to_id := pick_weighted_waypoint(anchors, traffic_config, from_id)
+	return {"from": from_id, "to": to_id}
+
+
+static func pick_weighted_waypoint(
+	anchors: Array,
+	traffic_config: Dictionary,
+	exclude_id: String = ""
+) -> String:
+	var candidates: Array = []
+	var weights: Array = []
+	var w_habitat := float(traffic_config.get("waypoint_weight_habitat", 0.45))
+	var w_gate := float(traffic_config.get("waypoint_weight_jump_gate", 0.35))
+	var w_orbital_each := float(traffic_config.get("waypoint_weight_orbital_each", 0.20))
+
+	for entry_variant in anchors:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var anchor_id := str(entry.get("id", ""))
+		if anchor_id.is_empty() or anchor_id == exclude_id:
+			continue
+		var kind := str(entry.get("kind", ""))
+		var weight := 0.0
+		match kind:
+			"habitat":
+				weight = w_habitat
+			"jump_gate":
+				weight = w_gate
+			"orbital":
+				weight = w_orbital_each
+			_:
+				continue
+		candidates.append(anchor_id)
+		weights.append(weight)
+
+	if candidates.is_empty():
+		return "habitat"
+
+	var total := 0.0
+	for weight in weights:
+		total += float(weight)
+	if total <= 0.0:
+		return str(candidates[0])
+
+	var roll := randf() * total
+	var cumulative := 0.0
+	for i in range(candidates.size()):
+		cumulative += float(weights[i])
+		if roll <= cumulative:
+			return str(candidates[i])
+	return str(candidates[0])
+
+
+static func _pick_cruise_speed(traffic_config: Dictionary, assembled: AssembledShip) -> float:
+	var fraction := float(traffic_config.get("cruise_speed_fraction", 0.33))
+	var jitter := float(traffic_config.get("cruise_speed_jitter", 0.2))
+	var hull_max_speed := float(assembled.stats.max_speed)
+	if hull_max_speed <= 0.0:
+		return 100.0
+	var jitter_mult := randf_range(1.0 - jitter, 1.0 + jitter)
+	return hull_max_speed * fraction * jitter_mult
+
+
+static func pick_template_for_role(traffic_config: Dictionary, role_name: String) -> String:
+	var mapping: Variant = traffic_config.get("role_ship_templates", {})
+	var entry: Variant = mapping.get(role_name, "pegasus_p101")
+	if typeof(entry) == TYPE_ARRAY:
+		var choices: Array = entry
+		if choices.is_empty():
+			return "pegasus_p101"
+		return str(choices[randi() % choices.size()])
+	return str(entry)
+
 
 var id: String = ""
 var callsign: String = ""
@@ -40,34 +174,6 @@ var cycle_spawn_hint: Dictionary = {}
 
 var _position: Vector2 = Vector2.ZERO
 var _route_initialized: bool = false
-
-
-static func create(
-	catalog: Catalog,
-	traffic_config: Dictionary,
-	role_name: String,
-	template: String,
-	spawn_pos: Vector2,
-	spawn_facing: float,
-	sector_id: String
-) -> RefCounted:
-	var actor: RefCounted = load("res://scripts/gameplay/traffic_actor.gd").new()
-	actor.id = "traffic_%d" % randi()
-	actor.role = role_name
-	actor.template_id = template
-	actor.callsign = _generate_callsign(traffic_config, template)
-	actor.hull_color_shift = randf_range(-0.06, 0.06)
-	actor.owned_ship = _create_owned_ship(catalog, template, actor.callsign)
-	actor.assembled_ship = ShipAssembler.assemble_owned(catalog, actor.owned_ship)
-	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
-	actor.hull_current = actor.hull_max
-	actor.motion.facing = spawn_facing
-	actor.motion.velocity = Vector2.from_angle(spawn_facing) * 20.0
-	actor._position = spawn_pos
-	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
-	actor.loiter_angle = randf() * TAU
-	actor._assign_route_endpoints(sector_id)
-	return actor
 
 
 var position: Vector2:
@@ -123,54 +229,31 @@ func take_weapon_hit(damage: float, traffic_config: Dictionary) -> void:
 			ai_state = AiState.FLEE
 
 
+func assign_waypoint_trip(from_id: String, to_id: String) -> void:
+	route_from_id = from_id
+	route_to_id = to_id
+	route_offset = Vector2.ZERO
+	_route_initialized = true
+
+
 func init_route_from_anchors(anchors: Array, traffic_config: Dictionary = {}) -> void:
 	if _route_initialized:
 		return
 	_route_initialized = true
 
 	match role:
-		"transit":
-			route_to_id = _pick_transit_destination(anchors)
-			route_from_id = _infer_route_origin(route_to_id, anchors)
-			_assign_route_offset(traffic_config, anchors)
-		"dock_cycle":
-			route_from_id = "habitat"
-			route_to_id = _pick_outbound_destination(anchors)
-			_assign_route_offset(traffic_config, anchors)
-		"shuttle":
-			var orbital_anchors := _orbital_anchor_ids(anchors)
-			if orbital_anchors.is_empty():
-				route_from_id = "habitat"
-				route_to_id = "jump_gate"
-			else:
-				route_to_id = orbital_anchors[randi() % orbital_anchors.size()]
-				var from_choices := orbital_anchors.duplicate()
-				from_choices.erase(route_to_id)
-				if from_choices.is_empty():
-					route_from_id = "habitat"
-				else:
-					route_from_id = from_choices[randi() % from_choices.size()]
-			_assign_route_offset(traffic_config, anchors)
+		"transit", "dock_cycle", "shuttle":
+			var trip := pick_waypoint_trip(anchors, traffic_config)
+			route_from_id = str(trip.get("from", "habitat"))
+			route_to_id = str(trip.get("to", "jump_gate"))
+			route_offset = Vector2.ZERO
 
 
-func place_along_route(anchors: Array, progress: float, traffic_config: Dictionary) -> void:
+func place_along_route(anchors: Array, _progress: float, _traffic_config: Dictionary) -> void:
 	if anchors.is_empty():
 		return
 
-	progress = clampf(progress, 0.15, 0.85)
-
 	match role:
-		"transit", "dock_cycle", "shuttle":
-			if route_to_id.is_empty():
-				return
-			var from_pos := _route_origin_position(anchors)
-			var to_pos := _find_anchor_position(anchors, route_to_id)
-			if from_pos.length_squared() < 1.0 or to_pos.length_squared() < 1.0:
-				return
-			if route_offset.length_squared() < 1.0:
-				_assign_route_offset(traffic_config, anchors)
-			var pos := from_pos.lerp(to_pos, progress) + route_offset
-			_apply_mid_route_pose(pos, to_pos)
 		"loiter", "runabout":
 			loiter_angle = randf() * TAU
 
@@ -181,7 +264,7 @@ func tick(
 	delta: float,
 	player_pos: Vector2,
 	anchors: Array,
-	play_bounds: float,
+	traffic_envelope: float,
 	world_loader: WorldLoader = null
 ) -> void:
 	pending_weapon_orders.clear()
@@ -250,7 +333,7 @@ func tick(
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
 	_check_route_arrival(traffic_config, world_loader, prev_position)
-	_check_play_bounds(play_bounds)
+	_check_traffic_envelope(traffic_envelope)
 	_check_fuel_exhaustion()
 
 
@@ -276,53 +359,6 @@ func get_sensor_contact(player_pos: Vector2, traffic_config: Dictionary) -> Dict
 		"contact_kind": "traffic_npc",
 		"position": position,
 	}
-
-
-static func _create_owned_ship(catalog: Catalog, template_id: String, callsign: String) -> OwnedShip:
-	var template := catalog.get_ship(template_id)
-	var owned := OwnedShip.new()
-	owned.id = "npc_%d" % randi()
-	owned.name = callsign
-	owned.template_id = template_id
-	owned.chassis_id = str(template.get("chassis", ""))
-	var chassis := catalog.get_chassis(owned.chassis_id)
-	var module_ids: Array = []
-	var raw_modules: Variant = template.get("modules", [])
-	if typeof(raw_modules) == TYPE_ARRAY:
-		for module_id in raw_modules:
-			module_ids.append(str(module_id))
-	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
-	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	owned.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
-	ShipAssembler.seed_ammunition(catalog, owned)
-	return owned
-
-
-static func _generate_callsign(traffic_config: Dictionary, template_id: String) -> String:
-	var prefixes: Variant = traffic_config.get("callsign_prefixes", {})
-	var prefix := str(prefixes.get(template_id, "TRF"))
-	return "%s-%04d" % [prefix, randi() % 10000]
-
-
-static func _pick_cruise_speed(traffic_config: Dictionary, assembled: AssembledShip) -> float:
-	var fraction := float(traffic_config.get("cruise_speed_fraction", 0.5))
-	var jitter := float(traffic_config.get("cruise_speed_jitter", 0.2))
-	var hull_max_speed := float(assembled.stats.max_speed)
-	if hull_max_speed <= 0.0:
-		return 100.0
-	var jitter_mult := randf_range(1.0 - jitter, 1.0 + jitter)
-	return hull_max_speed * fraction * jitter_mult
-
-
-static func pick_template_for_role(traffic_config: Dictionary, role_name: String) -> String:
-	var mapping: Variant = traffic_config.get("role_ship_templates", {})
-	var entry: Variant = mapping.get(role_name, "pegasus_p101")
-	if typeof(entry) == TYPE_ARRAY:
-		var choices: Array = entry
-		if choices.is_empty():
-			return "pegasus_p101"
-		return str(choices[randi() % choices.size()])
-	return str(entry)
 
 
 func _should_engage(traffic_config: Dictionary) -> bool:
@@ -380,10 +416,8 @@ func _build_ai_inputs(
 
 func _traffic_inputs(delta: float, anchors: Array) -> Dictionary:
 	match role:
-		"transit", "dock_cycle":
+		"transit", "dock_cycle", "shuttle":
 			return _route_inputs(anchors)
-		"shuttle":
-			return _shuttle_inputs(anchors)
 		"loiter":
 			return _loiter_inputs(delta, anchors)
 		"runabout":
@@ -406,24 +440,6 @@ func _route_destination(anchors: Array) -> Vector2:
 	if target.length_squared() < 1.0:
 		target = _find_anchor_position(anchors, "jump_gate")
 	return target
-
-
-func _shuttle_inputs(anchors: Array) -> Dictionary:
-	var orbital_anchors := _orbital_anchor_ids(anchors)
-	if orbital_anchors.is_empty():
-		return _route_inputs(anchors)
-	if route_to_id.is_empty() or not orbital_anchors.has(route_to_id):
-		route_to_id = orbital_anchors[randi() % orbital_anchors.size()]
-	var target := _find_anchor_position(anchors, route_to_id)
-	if position.distance_to(target) < ARRIVAL_DISTANCE:
-		var choices := orbital_anchors.duplicate()
-		choices.erase(route_to_id)
-		if choices.is_empty():
-			route_to_id = orbital_anchors[randi() % orbital_anchors.size()]
-		else:
-			route_to_id = choices[randi() % choices.size()]
-		target = _find_anchor_position(anchors, route_to_id)
-	return _steer_toward(target, true, false)
 
 
 func _loiter_inputs(delta: float, anchors: Array) -> Dictionary:
@@ -505,25 +521,18 @@ func _check_route_arrival(traffic_config: Dictionary, world_loader: WorldLoader,
 		return
 
 	match role:
-		"transit":
+		"transit", "dock_cycle", "shuttle":
 			request_cycle({"arrived_at": route_to_id, "reason": "route_complete"})
-		"dock_cycle":
-			if route_to_id == "habitat":
-				request_cycle({"arrived_at": "habitat", "reason": "route_complete"})
-			else:
-				route_from_id = route_to_id
-				route_to_id = "habitat"
-				ai_state = AiState.DOCKING
 		_:
 			pass
 
 
-func _check_play_bounds(play_bounds: float) -> void:
-	if play_bounds <= 0.0:
+func _check_traffic_envelope(traffic_envelope: float) -> void:
+	if traffic_envelope <= 0.0:
 		return
 	if ai_state == AiState.ENGAGE or ai_state == AiState.FLEE:
 		return
-	if position.length() <= play_bounds * 0.98:
+	if position.length() <= traffic_envelope * 0.98:
 		return
 	request_cycle({"reason": "out_of_bounds"})
 
@@ -598,27 +607,6 @@ func _ring_radius_estimate(anchors: Array) -> float:
 	return maxf(habitat_pos.length(), 1200.0)
 
 
-func _pick_transit_destination(anchors: Array) -> String:
-	var roll := randf()
-	if roll < 0.35:
-		return "jump_gate"
-	if roll < 0.65:
-		return "habitat"
-	var orbitals := _orbital_anchor_ids(anchors)
-	if orbitals.is_empty():
-		return "jump_gate"
-	return str(orbitals[randi() % orbitals.size()])
-
-
-func _pick_outbound_destination(anchors: Array) -> String:
-	if randf() < 0.6:
-		return "jump_gate"
-	var orbitals := _orbital_anchor_ids(anchors)
-	if orbitals.is_empty():
-		return "jump_gate"
-	return str(orbitals[randi() % orbitals.size()])
-
-
 func _assign_route_endpoints(_sector_id: String) -> void:
 	route_from_id = ""
 	route_to_id = ""
@@ -627,39 +615,10 @@ func _assign_route_endpoints(_sector_id: String) -> void:
 		loiter_center = Vector2.ZERO
 
 
-func _assign_route_offset(traffic_config: Dictionary, anchors: Array) -> void:
-	var min_off := float(traffic_config.get("route_lateral_offset_min", 80.0))
-	var max_off := float(traffic_config.get("route_lateral_offset_max", 180.0))
-	var from_pos := _route_origin_position(anchors)
-	var to_pos := _find_anchor_position(anchors, route_to_id)
-	var corridor := to_pos - from_pos
-	if corridor.length_squared() < 1.0:
-		route_offset = Vector2.ZERO
-		return
-	var lateral := corridor.orthogonal().normalized()
-	var side := 1.0 if randf() > 0.5 else -1.0
-	route_offset = lateral * side * randf_range(min_off, max_off)
-
-
 func _route_origin_position(anchors: Array) -> Vector2:
 	if not route_from_id.is_empty():
 		return _find_anchor_position(anchors, route_from_id)
 	return _infer_route_origin_position(route_to_id, anchors)
-
-
-func _infer_route_origin(dest_id: String, anchors: Array) -> String:
-	match dest_id:
-		"habitat":
-			if randf() < 0.65:
-				return "jump_gate"
-			var orbitals := _orbital_anchor_ids(anchors)
-			if orbitals.is_empty():
-				return "jump_gate"
-			return str(orbitals[randi() % orbitals.size()])
-		"jump_gate":
-			return "habitat"
-		_:
-			return "habitat" if randf() < 0.5 else "jump_gate"
 
 
 func _infer_route_origin_position(dest_id: String, anchors: Array) -> Vector2:

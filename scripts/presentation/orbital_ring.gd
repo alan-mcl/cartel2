@@ -21,4 +21,4 @@ func _update_label_counter_rotation() -> void:
 	for child in get_children():
 		var label: Label = child.get_node_or_null("Label")
 		if label != null:
-			label.rotation = -rotation
+			label.rotation = -(rotation + child.rotation)

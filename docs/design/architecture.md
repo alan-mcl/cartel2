@@ -89,7 +89,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 
 - `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from assembled modules and loaded mass), modulated by operating-state `thrust_factor`.
 - Hold **Space** or **LMB** (`fire`) to discharge installed weapons along ship facing. `ShipWeapons` handles rate-of-fire cooldowns and ammo; `ShipOperations` allocates weapon power only while firing.
-- `play_bounds` per sector defines the dust ring; the world still renders the boundary ring.
+- `play_bounds` per sector defines the distant dust ring (visual landmark only; player flight is unbounded).
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
 - Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`).
 
@@ -175,22 +175,23 @@ Each configured world object uses `WorldObject.configure(entity, catalog, sessio
 
 `WorldLoader.load_unspace` loads layouts from `worlds.json` via `unspaces.json` (`world_id`), with a violet dust ring and no planet unless specified.
 
-The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (not stored in JSON).
+The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (not stored in JSON). Local radar scales to **content radius** (`max(jump_gate_radius, orbital_ring_radius) × 1.15`) so contacts stay readable when the dust ring is much larger than the playable landmarks.
 
 ## In-system NPC traffic (3-space)
 
 `TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
 
 - **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~60 ships, La Bella Vista ~35).
-- **Spawn** — initial fleet is scattered mid-route along corridors (15–85% progress), not clustered at endpoints.
-- **Variation** — per-ship cruise jitter and lateral route offset so lanes are not identical.
+- **Spawn** — trip roles spawn at a weighted origin waypoint (habitat, gate, or orbital) and cruise to a different weighted destination; loiter/runabout spawn at a weighted waypoint.
+- **Variation** — per-ship cruise jitter; trip routes steer directly to destination (no mid-corridor scatter).
 - **Simulation** — each ship is an `OwnedShip` + `AssembledShip` ticking `ShipOperations` and `ShipWeapons` (fuel, power, ammo).
 - **LOD** — full `NpcShip` physics within `near_lod_radius`; distant ships are kinematic sprites.
-- **Roles** — transit, shuttle, loiter, runabout, dock_cycle (habitat/gate/orbital routes).
-- **Lifecycle** — anonymous sprites cycle on route completion, fuel exhaustion, or leaving bounds; fleet size is conserved by immediate replacement (new callsign, full tank).
+- **Roles** — transit, shuttle, dock_cycle share one-shot waypoint trips; loiter and runabout are local flavor near gate/habitat.
+- **Lifecycle** — trip roles despawn on arrival at habitat, gate, or orbital interactable radius; director immediately spawns a fresh ship at a newly chosen origin (not the previous destination).
 - **Combat** — provoked only; NPCs engage or flee at full engine cruise. Player weapons hit NPC layer 16; NPC shots stop on the player visually but do not apply hull damage.
-- **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips across the sector (`sensor_contact_radius` ≈ `play_bounds`).
-- **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 50%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
+- **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips out to `sensor_contact_radius` (~gate distance). Map rim aligns with content radius, not the dust ring.
+- **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 33%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
+- **Bounds** — NPC recycle envelope is `gate_radius × 1.25`; player flight has no position clamp.
 
 Catalog: `data/catalog/traffic.json`. Presentation: `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`.
 

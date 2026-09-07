@@ -4,12 +4,13 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const NPC_SHIP_SCENE_PATH := "res://scenes/npc_ship.tscn"
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
+const TRIP_ROLES := ["transit", "shuttle", "dock_cycle"]
 
 var actors: Array = []
 var _catalog: Catalog
 var _traffic_config: Dictionary = {}
 var _sector_id: String = ""
-var _play_bounds: float = 3800.0
+var _traffic_envelope: float = 6750.0
 var _target_fleet_size: int = 0
 var _world_root: Node2D
 var _traffic_root: Node2D
@@ -21,7 +22,7 @@ func setup(
 	catalog: Catalog,
 	world_root: Node2D,
 	sector_id: String,
-	play_bounds: float,
+	traffic_envelope: float,
 	player_pos: Vector2,
 	world_loader: WorldLoader
 ) -> void:
@@ -29,7 +30,7 @@ func setup(
 	_catalog = catalog
 	_traffic_config = catalog.get_traffic_config()
 	_sector_id = sector_id
-	_play_bounds = play_bounds
+	_traffic_envelope = traffic_envelope
 	_world_root = world_root
 	_rng.randomize()
 
@@ -80,7 +81,7 @@ func tick(delta: float, player_pos: Vector2, world_loader: WorldLoader) -> void:
 		actor.near_lod = actor.position.distance_to(player_pos) <= near_radius
 		_update_lod_node(actor, was_near)
 
-		actor.tick(_catalog, _traffic_config, delta, player_pos, anchors, _play_bounds, world_loader)
+		actor.tick(_catalog, _traffic_config, delta, player_pos, anchors, _traffic_envelope, world_loader)
 		_spawn_actor_weapons(actor)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
@@ -148,8 +149,9 @@ func _spawn_initial_fleet(total: int, player_pos: Vector2, world_loader: WorldLo
 	for i in range(total):
 		var role := _pick_role()
 		var template := TrafficActorScript.pick_template_for_role(_traffic_config, role)
-		var spawn_pose := _pick_initial_spawn_pose(role, player_pos, world_loader, anchors)
-		var actor = TrafficActorScript.create(
+		var trip := _pick_trip_for_role(role, anchors)
+		var spawn_pose := _pick_initial_spawn_pose(role, player_pos, world_loader, anchors, trip)
+		var actor := TrafficActorScript.create(
 			_catalog,
 			_traffic_config,
 			role,
@@ -158,20 +160,18 @@ func _spawn_initial_fleet(total: int, player_pos: Vector2, world_loader: WorldLo
 			spawn_pose.facing,
 			_sector_id
 		)
+		_configure_actor_route(actor, role, anchors, trip)
 		if role == "loiter":
 			actor.loiter_center = spawn_pose.position
-		actor.init_route_from_anchors(anchors, _traffic_config)
-		if not anchors.is_empty():
-			var progress := randf_range(0.15, 0.85)
-			actor.place_along_route(anchors, progress, _traffic_config)
 		actors.append(actor)
 
 
 func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, world_loader: WorldLoader):
 	var role := _pick_role()
 	var template := TrafficActorScript.pick_template_for_role(_traffic_config, role)
-	var spawn_pose := _pick_cycle_spawn_pose(hint, player_pos, anchors, world_loader, role)
-	var actor = TrafficActorScript.create(
+	var trip := _pick_trip_for_role(role, anchors)
+	var spawn_pose := _pick_cycle_spawn_pose(hint, player_pos, anchors, world_loader, role, trip)
+	var actor := TrafficActorScript.create(
 		_catalog,
 		_traffic_config,
 		role,
@@ -180,13 +180,26 @@ func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, w
 		spawn_pose.facing,
 		_sector_id
 	)
+	_configure_actor_route(actor, role, anchors, trip)
 	if role == "loiter":
 		actor.loiter_center = spawn_pose.position
-	actor.init_route_from_anchors(anchors, _traffic_config)
 	actors.append(actor)
 	actor.near_lod = actor.position.distance_to(player_pos) <= float(_traffic_config.get("near_lod_radius", 1400.0))
 	_update_lod_node(actor, not actor.near_lod)
 	return actor
+
+
+func _configure_actor_route(actor, role: String, anchors: Array, trip: Dictionary) -> void:
+	if role in TRIP_ROLES and not trip.is_empty():
+		actor.assign_waypoint_trip(str(trip.get("from", "")), str(trip.get("to", "")))
+	else:
+		actor.init_route_from_anchors(anchors, _traffic_config)
+
+
+func _pick_trip_for_role(role: String, anchors: Array) -> Dictionary:
+	if role in TRIP_ROLES:
+		return TrafficActorScript.pick_waypoint_trip(anchors, _traffic_config)
+	return {}
 
 
 func _retire_and_replace(
@@ -263,21 +276,31 @@ func _pick_spawn_position(player_pos: Vector2) -> Vector2:
 	var min_dist := float(_traffic_config.get("spawn_min_distance_player", 400.0))
 	for attempt in range(24):
 		var angle := _rng.randf() * TAU
-		var radius := _rng.randf_range(_play_bounds * 0.15, _play_bounds * 0.92)
+		var radius := _rng.randf_range(_traffic_envelope * 0.15, _traffic_envelope * 0.92)
 		var pos := Vector2(cos(angle), sin(angle)) * radius
 		if pos.distance_to(player_pos) >= min_dist:
 			return pos
-	return Vector2.from_angle(_rng.randf() * TAU) * _play_bounds * 0.5
+	return Vector2.from_angle(_rng.randf() * TAU) * _traffic_envelope * 0.5
 
 
 func _pick_initial_spawn_pose(
 	role: String,
 	player_pos: Vector2,
 	world_loader: WorldLoader,
-	anchors: Array
+	anchors: Array,
+	trip: Dictionary
 ) -> Dictionary:
-	if role == "dock_cycle" and world_loader != null:
-		return _spawn_pose_at_habitat(world_loader, anchors)
+	if role in TRIP_ROLES and not trip.is_empty():
+		return _spawn_pose_at_waypoint(
+			str(trip.get("from", "")),
+			anchors,
+			world_loader,
+			str(trip.get("to", ""))
+		)
+	if role in ["loiter", "runabout"]:
+		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
+		var face_toward := "jump_gate" if role == "loiter" else "habitat"
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, face_toward)
 	var pos := _pick_spawn_position(player_pos)
 	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
 
@@ -287,28 +310,62 @@ func _pick_cycle_spawn_pose(
 	player_pos: Vector2,
 	anchors: Array,
 	world_loader: WorldLoader,
-	role: String
+	role: String,
+	trip: Dictionary
 ) -> Dictionary:
 	var reason := str(hint.get("reason", ""))
-	var arrived_at := str(hint.get("arrived_at", ""))
 
-	if role == "dock_cycle" and world_loader != null:
-		return _spawn_pose_at_habitat(world_loader, anchors)
+	if role in TRIP_ROLES and not trip.is_empty():
+		return _spawn_pose_at_waypoint(
+			str(trip.get("from", "")),
+			anchors,
+			world_loader,
+			str(trip.get("to", ""))
+		)
 
-	if reason == "destroyed" or reason == "out_of_bounds" or reason == "fuel_empty" or arrived_at.is_empty():
-		var pos := _pick_spawn_position(player_pos)
-		return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
+	if reason == "destroyed" or reason == "out_of_bounds" or reason == "fuel_empty":
+		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, "habitat")
 
-	if arrived_at == "jump_gate" and world_loader != null:
-		return _spawn_pose_at_habitat(world_loader, anchors, "jump_gate")
-	if arrived_at == "habitat" and world_loader != null:
-		return _spawn_pose_at_gate(world_loader, anchors)
-	if _is_orbital_id(arrived_at, anchors) and world_loader != null:
-		if _rng.randf() < 0.5:
-			return _spawn_pose_at_habitat(world_loader, anchors, arrived_at)
-		return _spawn_pose_at_orbital(arrived_at, anchors)
+	if role in ["loiter", "runabout"]:
+		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
+		var face_toward := "jump_gate" if role == "loiter" else "habitat"
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, face_toward)
 
 	var pos := _pick_spawn_position(player_pos)
+	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
+
+
+func _spawn_pose_at_waypoint(
+	waypoint_id: String,
+	anchors: Array,
+	world_loader: WorldLoader,
+	face_toward_id: String = ""
+) -> Dictionary:
+	if waypoint_id.is_empty():
+		var pos := _pick_spawn_position(Vector2.ZERO)
+		return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
+
+	match waypoint_id:
+		"habitat":
+			if world_loader != null:
+				return _spawn_pose_at_habitat(
+					world_loader,
+					anchors,
+					face_toward_id if not face_toward_id.is_empty() else "jump_gate"
+				)
+		"jump_gate":
+			if world_loader != null:
+				return _spawn_pose_at_gate(
+					world_loader,
+					anchors,
+					face_toward_id if not face_toward_id.is_empty() else "habitat"
+				)
+		_:
+			if _is_orbital_id(waypoint_id, anchors):
+				return _spawn_pose_at_orbital(waypoint_id, anchors, face_toward_id)
+
+	var pos := _pick_spawn_position(Vector2.ZERO)
 	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
 
 
@@ -319,14 +376,14 @@ func _spawn_pose_at_habitat(world_loader: WorldLoader, anchors: Array, face_towa
 	return {"position": launch_pos, "facing": facing}
 
 
-func _spawn_pose_at_gate(world_loader: WorldLoader, anchors: Array) -> Dictionary:
+func _spawn_pose_at_gate(world_loader: WorldLoader, anchors: Array, face_toward_id: String = "habitat") -> Dictionary:
 	var spawn_pos := world_loader.get_jump_gate_approach_position()
-	var habitat_pos := _find_anchor_position(anchors, "habitat")
-	var facing := (habitat_pos - spawn_pos).angle() if habitat_pos.length_squared() > 1.0 else _rng.randf_range(-PI, PI)
+	var face_pos := _find_anchor_position(anchors, face_toward_id)
+	var facing := (face_pos - spawn_pos).angle() if face_pos.length_squared() > 1.0 else _rng.randf_range(-PI, PI)
 	return {"position": spawn_pos, "facing": facing}
 
 
-func _spawn_pose_at_orbital(orbital_id: String, anchors: Array) -> Dictionary:
+func _spawn_pose_at_orbital(orbital_id: String, anchors: Array, face_toward_id: String = "") -> Dictionary:
 	var orbital_pos := _find_anchor_position(anchors, orbital_id)
 	if orbital_pos.length_squared() < 1.0:
 		var pos := _pick_spawn_position(Vector2.ZERO)
@@ -335,8 +392,8 @@ func _spawn_pose_at_orbital(orbital_id: String, anchors: Array) -> Dictionary:
 	if inward.length_squared() < 0.001:
 		inward = Vector2.UP
 	var spawn_pos := orbital_pos + inward * 220.0
-	var habitat_pos := _find_anchor_position(anchors, "habitat")
-	var facing := (habitat_pos - spawn_pos).angle() if habitat_pos.length_squared() > 1.0 else inward.angle()
+	var face_pos := _find_anchor_position(anchors, face_toward_id) if not face_toward_id.is_empty() else _find_anchor_position(anchors, "habitat")
+	var facing := (face_pos - spawn_pos).angle() if face_pos.length_squared() > 1.0 else inward.angle()
 	return {"position": spawn_pos, "facing": facing}
 
 

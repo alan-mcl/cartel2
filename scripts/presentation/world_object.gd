@@ -3,6 +3,7 @@ class_name WorldObject
 
 var entity_id: String = ""
 var interactable_id: String = ""
+var _spin_period: float = 0.0
 
 @onready var _label: Label = get_node_or_null("Label")
 @onready var _visual: Sprite2D = get_node_or_null("Visual")
@@ -55,6 +56,20 @@ func configure(entity: Dictionary, catalog: Catalog, session: GameSession) -> vo
 	interactable.definition = InteractableDef.from_dict(data)
 	interactable.visible = true
 	apply_salvage_state(session)
+
+	if get_parent() is OrbitalRing:
+		_init_axial_spin(entity_id if not entity_id.is_empty() else name)
+
+
+func _init_axial_spin(seed_id: String) -> void:
+	var hash_value := absi(seed_id.hash())
+	_spin_period = lerpf(180.0, 480.0, float(hash_value % 10000) / 10000.0)
+
+
+func _process(delta: float) -> void:
+	if _spin_period <= 0.0 or get_tree().paused:
+		return
+	rotation += TAU / _spin_period * delta
 
 
 func apply_salvage_state(session: GameSession) -> void:

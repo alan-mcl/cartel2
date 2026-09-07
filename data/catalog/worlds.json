@@ -52,7 +52,7 @@
       "id": "proxima_jump_gate_obj",
       "label": "Proxima Jump Gate",
       "interactable": "proxima_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "tycho": {
@@ -89,7 +89,7 @@
       "id": "tycho_jump_gate_obj",
       "label": "Tycho Jump Gate",
       "interactable": "tycho_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "bela": {
@@ -130,7 +130,7 @@
       "id": "bela_jump_gate_obj",
       "label": "La Bella Vista Jump Gate",
       "interactable": "bela_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "irasia": {
@@ -182,7 +182,7 @@
       "id": "irasia_jump_gate_obj",
       "label": "Irasia Jump Gate",
       "interactable": "irasia_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "tokirev": {
@@ -234,7 +234,7 @@
       "id": "tokirev_jump_gate_obj",
       "label": "Tokirev Jump Gate",
       "interactable": "tokirev_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "fennet": {
@@ -276,7 +276,7 @@
       "id": "fennet_jump_gate_obj",
       "label": "Fennet Jump Gate",
       "interactable": "fennet_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "fortuna": {
@@ -323,7 +323,7 @@
       "id": "fortuna_jump_gate_obj",
       "label": "Fortuna Jump Gate",
       "interactable": "fortuna_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "new_carthage": {
@@ -370,7 +370,7 @@
       "id": "new_carthage_jump_gate_obj",
       "label": "New Carthage Jump Gate",
       "interactable": "new_carthage_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "horizon": {
@@ -422,7 +422,7 @@
       "id": "horizon_jump_gate_obj",
       "label": "Horizon Jump Gate",
       "interactable": "horizon_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "titania": {
@@ -464,7 +464,7 @@
       "id": "titania_jump_gate_obj",
       "label": "Titania Jump Gate",
       "interactable": "titania_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "pelagos": {
@@ -506,7 +506,7 @@
       "id": "pelagos_jump_gate_obj",
       "label": "Pelagos Jump Gate",
       "interactable": "pelagos_jump_gate",
-      "radius": 2700
+      "radius": 5400
     }
   },
   "n4_default": {

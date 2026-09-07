@@ -251,9 +251,9 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `TrafficDirector` + `TrafficActor` in `scripts/gameplay/`, presented by `NpcShip` in `scripts/presentation/`.
 
 - Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 60 ships, La Bella Vista ≈ 35 after ~25% cap reduction.
-- Initial spawn places route-following roles mid-corridor (15–85% along habitat/gate/orbital legs); cycle replacements still appear at endpoints.
+- Initial spawn places trip roles (`transit`, `shuttle`, `dock_cycle`) at a weighted origin waypoint facing their destination; `loiter` / `runabout` spawn at a weighted waypoint for local flavor.
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
-- Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`.
+- Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
 - Completing a route (habitat, gate, or orbital), running dry, or leaving bounds **retires** the sprite; the director spawns a fresh replacement so fleet density stays constant.
 - Provoked combat only: NPCs engage or flee; player hull remains invulnerable this slice.
 - Sensor HUD: smaller unlabelled NPC blips across the sector and unlabelled orbital dots on the local radar.
@@ -263,10 +263,10 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | Field | Type | Description |
 |-------|------|-------------|
 | `near_lod_radius` | number | Full physics/sim radius around player |
-| `sensor_contact_radius` | number | Minimap blip range for NPC ships (typically matches sector `play_bounds`) |
-| `cruise_speed_fraction` | number | Peaceful cruise cap as fraction of assembled hull `max_speed` (e.g. 0.5) |
-| `cruise_speed_jitter` | number | Per-ship multiplier spread around cruise fraction (e.g. 0.2 → ~40–60% of max) |
-| `route_lateral_offset_min` / `max` | number | Perpendicular scatter at initial mid-route spawn (not steering target) |
+| `sensor_contact_radius` | number | Minimap blip range for NPC ships (typically ~gate radius; independent of dust ring) |
+| `cruise_speed_fraction` | number | Peaceful cruise cap as fraction of assembled hull `max_speed` (e.g. 0.33) |
+| `cruise_speed_jitter` | number | Per-ship multiplier spread around cruise fraction (e.g. 0.2 → ~26–40% of max) |
+| `waypoint_weight_habitat` / `jump_gate` / `orbital_each` | number | Weighted pick for trip origin/destination and loiter/runabout spawn points |
 | `near_count_min` / `max` | number | Near-LOD fleet size range (log-scaled by population) |
 | `far_count_min` / `max` | number | Far-LOD fleet size range |
 | `role_weights_default` | object | Role spawn weights |
