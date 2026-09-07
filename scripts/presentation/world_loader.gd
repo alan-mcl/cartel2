@@ -15,12 +15,14 @@ const SCENES := {
 
 const LAUNCH_OFFSET := 220.0
 const GATE_APPROACH_OFFSET := 280.0
+const UNDOCK_LAUNCH_SPEED := 140.0
 
 var spawned_by_id: Dictionary = {}
 var _orbital_ring: Node2D = null
 var _habitat_node: Node2D = null
 var _jump_gate_node: Node2D = null
 var _ring_radius: float = 0.0
+var _ring_period_seconds: float = 720.0
 var _habitat_slot_angle: float = 0.0
 var _gate_radius: float = 0.0
 var _gate_angle: float = 0.0
@@ -35,6 +37,7 @@ func clear_world(world_root: Node2D) -> void:
 	_habitat_node = null
 	_jump_gate_node = null
 	_ring_radius = 0.0
+	_ring_period_seconds = 720.0
 	_habitat_slot_angle = 0.0
 	_gate_radius = 0.0
 	_gate_angle = 0.0
@@ -103,6 +106,22 @@ func get_jump_gate_world_position() -> Vector2:
 	if _jump_gate_node != null:
 		return _jump_gate_node.global_position
 	return Vector2(cos(_gate_angle) * _gate_radius, sin(_gate_angle) * _gate_radius)
+
+
+func get_habitat_orbital_velocity() -> Vector2:
+	var habitat_world := get_habitat_world_position()
+	if habitat_world.length_squared() < 0.001 or _ring_period_seconds <= 0.0:
+		return Vector2.ZERO
+	var omega := TAU / _ring_period_seconds
+	return Vector2(habitat_world.y, -habitat_world.x) * omega
+
+
+func get_undock_exit_velocity() -> Vector2:
+	var habitat_world := get_habitat_world_position()
+	var outward := habitat_world.normalized()
+	if outward.length_squared() < 0.001:
+		outward = Vector2.UP
+	return get_habitat_orbital_velocity() + outward * UNDOCK_LAUNCH_SPEED
 
 
 func get_habitat_launch_position() -> Vector2:
@@ -210,6 +229,7 @@ func _spawn_orbital_ring(
 	ring_ref.rotation = session.get_orbital_phase(sector_id)
 
 	_ring_radius = float(ring_data.get("radius", 1600.0))
+	_ring_period_seconds = float(ring_data.get("period_seconds", 720.0))
 	var orbitals: Variant = ring_data.get("orbitals", [])
 	if typeof(orbitals) != TYPE_ARRAY:
 		world_root.add_child(ring)

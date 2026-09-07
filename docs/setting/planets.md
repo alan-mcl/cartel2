@@ -46,13 +46,13 @@ Tycho Habitat
 ## La Bella Vista
 
 **Classification:** E4  
-**System:** Beta Pisces  
+**System:** Beta Piscium
 **Gravity:** 0.95 G  
 **Population:** 15 billion  
 **Ocean coverage:** 92%  
 **Climate:** Warm  
 
-Bela is a water world with only one continental land mass. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
+Bela is a water world with only one continental land mass, orbiting the star also known as Fum-al-Samakah. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
 ### City Malls
 
@@ -91,7 +91,7 @@ Irasia Habitat
 ## Tokirev
 
 **Classification:** E2  
-**System:** Pyxis  
+**System:** HD 73256
 **Gravity:** 1.02 G
 **Population:** 56 billion  
 **Ocean coverage:** 62%  
@@ -110,7 +110,7 @@ Tokirev Habitat
 ## Fennet
 
 **Classification:** E1  
-**System:** Tau Eridani 
+**System:** Tau¹ Eridani
 **Gravity:** .95 G
 **Population:** 29 billion  
 **Ocean coverage:** 78%  
@@ -188,11 +188,11 @@ Horizon Habitat
 **Classification:** E4.9
 **System:** Wolf 359
 **Gravity:** 0.86 G
-**Population:** 8.5 billion
+**Population:** 6.5 billion
 **Ocean coverage:** 78%
-**Climate:** Temperate
+**Climate:** Cold
 
-The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans and tracts of densely settled temperate territory. Most of its population lives in large coastal metropolitan regions surrounded by intensive agriculture. Its low gravity and spectacular skies have also made it a popular destination for tourism and residential development.
+The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
 
 ### City Malls
 
@@ -201,3 +201,21 @@ Titania Central, Skygarden
 ### Orbitals
 
 Titania Habitat
+
+## Pelagos
+
+**Classification:** E2
+**System:** Kepler-16
+**Gravity:** 1.01 G
+**Population:** 21 billion
+**Ocean coverage:** 69%
+**Climate:** Arid
+
+Pelagos is a prosperous world orbiting two suns, with enormous coastal cities and extensive mineral resources. The binary system gives the planet unusually complex seasonal and daylight cycles, but its inhabitants have long since adapted. Concordia is a major centre of commerce and manufacturing, with a reputation for innovation and enterprise.
+
+### City Malls
+Mediran, Twin Cities, New Cambridge
+
+### Orbitals
+Concordia Habitat, Concordia Orbital Terminal
+

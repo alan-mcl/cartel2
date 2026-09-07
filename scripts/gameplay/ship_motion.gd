@@ -39,12 +39,10 @@ func step(
 
 	velocity += forward * thrust_force * delta
 
-	var damp := exp(-stats.linear_damp * delta)
-	velocity *= damp
-
-	var speed_cap := stats.boost_max_speed if _boosting else stats.max_speed
-	if velocity.length() > speed_cap:
-		velocity = velocity.normalized() * speed_cap
+	if abs(thrust_force) > 0.0:
+		var speed_cap := stats.boost_max_speed if _boosting else stats.max_speed
+		if velocity.length() > speed_cap:
+			velocity = velocity.normalized() * speed_cap
 
 
 func get_speed() -> float:

@@ -164,7 +164,9 @@ The Praetorium is a provider of private security, legal services and arbitration
 
 Terra Nova is a planetary resource extraction corporation specializing in mining, agriculture and environmental engineering. It operates mines, industrial plantations and genetically engineered food systems, alongside water extraction, forestry and terraforming. Terra Nova's philosophy is simple: a planet is a resource to be optimized, and its enormous appetite for land and materials makes it a dominant force in frontier development.
 
+## Orion Spur Company (OSC)
 
+OSC is an ancient trading corporation whose origins lie in the beginnings of commercial space travel. Over centuries it expanded into shipping, finance, resource extraction and general commerce, eventually becoming one of the largest diversified corporations in human space. The company is known for its relentless expansion and aggressive acquisition strategy, routinely entering markets where it has little previous presence and quickly establishing a challenging position.
 
 
 

@@ -78,7 +78,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if not _game_active or session.docked or _jump.visible or _player.is_transitioning():
+	if not _game_active or session.docked or _jump.visible:
 		return
 
 	var distance := _player.global_position.length()
@@ -100,25 +100,21 @@ func _can_toggle_pause() -> bool:
 		return false
 	if session.docked or _jump.visible or _ui_root.visible:
 		return false
-	if _player.is_transitioning():
-		return false
 	return true
 
 
 func try_interact(target: Interactable) -> void:
 	if not _game_active or target == null or target.definition == null:
 		return
-	if _player.is_transitioning():
-		return
 
 	match target.definition.kind:
 		InteractableDef.Kind.DOCK:
-			_dock_at_async(target)
+			_dock_at(target.definition.dock_location_id)
 		InteractableDef.Kind.TRANSLATE:
 			if not session.in_unspace:
-				_translate_at_async(target)
+				_open_jump_overlay(target.get_title())
 		InteractableDef.Kind.ARRIVE:
-			_arrive_from_unspace_async()
+			_arrive_from_unspace()
 		_:
 			var result := target.interact(session)
 			if result.is_empty():
@@ -358,27 +354,20 @@ func _on_jump_requested(target_sector_id: String, n: int) -> void:
 	_on_interaction_target_changed(_player.get_current_target())
 
 
-func _translate_at_async(target: Interactable) -> void:
-	if session.docked or session.in_unspace or target == null:
+func _arrive_from_unspace() -> void:
+	if not session.in_unspace:
 		return
 
-	await _player.play_descend_transition(target.global_position)
-	if not _game_active or session.docked:
+	if not session.arrive_from_unspace(catalog):
 		return
 
-	_open_jump_overlay(target.get_title())
+	_load_current_sector(true, "jump_gate")
+	_on_session_changed()
+	_on_interaction_target_changed(_player.get_current_target())
 
 
-func _dock_at_async(target: Interactable) -> void:
-	if target == null or target.definition == null:
-		return
-
-	var location_id := target.definition.dock_location_id
+func _dock_at(location_id: String) -> void:
 	if location_id.is_empty() or session.docked:
-		return
-
-	await _player.play_descend_transition(target.global_position)
-	if not _game_active or session.docked:
 		return
 
 	if not session.dock(catalog, location_id):
@@ -391,29 +380,6 @@ func _dock_at_async(target: Interactable) -> void:
 	_ui_root.session = session
 	_ui_root.open_habitat()
 	_on_session_changed()
-	_on_interaction_target_changed(_player.get_current_target())
-
-
-func _arrive_from_unspace_async() -> void:
-	if not session.in_unspace:
-		return
-
-	if not session.arrive_from_unspace(catalog):
-		return
-
-	_load_current_sector(false)
-	_on_session_changed()
-
-	var gate_pos := _world_loader.get_jump_gate_world_position()
-	var approach_pos := _world_loader.get_jump_gate_approach_position()
-	var outward := (approach_pos - gate_pos).normalized()
-	if outward.length_squared() < 0.001:
-		outward = Vector2.RIGHT
-
-	await _player.play_emerge_transition(gate_pos, approach_pos, outward.angle())
-	if not _game_active:
-		return
-
 	_on_interaction_target_changed(_player.get_current_target())
 
 
@@ -433,22 +399,20 @@ func _on_ui_undock_requested(ship_id: String) -> void:
 	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
 	_hud.set_assembled_ship(player_ship)
 
+	var launch_pos := _world_loader.get_habitat_launch_position()
+	var habitat_pos := _world_loader.get_habitat_world_position()
+	var outward := (launch_pos - habitat_pos).normalized()
+	if outward.length_squared() < 0.001:
+		outward = Vector2.UP
+
 	get_tree().paused = false
 	_ui_root.close_ui()
 	_hud.visible = true
 	_pause.close()
 	_on_session_changed()
 
-	var habitat_pos := _world_loader.get_habitat_world_position()
-	var launch_pos := _world_loader.get_habitat_launch_position()
-	var outward := (launch_pos - habitat_pos).normalized()
-	if outward.length_squared() < 0.001:
-		outward = Vector2.UP
-
-	await _player.play_emerge_transition(habitat_pos, launch_pos, outward.angle())
-	if not _game_active:
-		return
-
+	_player.global_position = launch_pos
+	_player.apply_launch_velocity(_world_loader.get_undock_exit_velocity(), outward.angle())
 	_on_interaction_target_changed(_player.get_current_target())
 
 

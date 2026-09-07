@@ -20,18 +20,11 @@ var weapons: ShipWeapons = ShipWeapons.new()
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
 @onready var _hull: Sprite2D = $Visual/Hull
-@onready var _visual_root: Node2D = $Visual
 @onready var _interact_area: Area2D = $InteractSensor
 
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
 var _shear_hazards: Array[NspaceHazard] = []
-var _transition_active: bool = false
-var _transition_tween: Tween = null
-var _base_hull_modulate: Color = Color.WHITE
-
-const EMERGE_DURATION := 0.9
-const DESCEND_DURATION := 0.75
 
 
 func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catalog = null) -> void:
@@ -73,85 +66,11 @@ func freeze_motion() -> void:
 	motion.velocity = Vector2.ZERO
 
 
-func is_transitioning() -> bool:
-	return _transition_active
-
-
-func play_emerge_transition(start_pos: Vector2, end_pos: Vector2, facing: float) -> void:
-	await _animate_transition(start_pos, end_pos, facing, EMERGE_DURATION, true)
-
-
-func play_descend_transition(target_pos: Vector2) -> void:
-	var start_pos := global_position
-	if start_pos.distance_squared_to(target_pos) < 64.0:
-		return
-	var facing := (target_pos - start_pos).angle()
-	await _animate_transition(start_pos, target_pos, facing, DESCEND_DURATION, false)
-
-
-func _animate_transition(
-	start_pos: Vector2,
-	end_pos: Vector2,
-	facing: float,
-	duration: float,
-	emerging: bool
-) -> void:
-	_stop_transition_tween()
-	_transition_active = true
-	freeze_motion()
-
-	global_position = start_pos
+func apply_launch_velocity(launch_velocity: Vector2, facing: float) -> void:
+	motion.velocity = launch_velocity
+	velocity = launch_velocity
 	motion.facing = facing
-	rotation = motion.facing + PI / 2.0
-
-	if _hull != null:
-		_base_hull_modulate = _hull.modulate
-
-	if emerging:
-		_visual_root.scale = Vector2(0.55, 0.55)
-		if _hull != null:
-			_hull.modulate = _base_hull_modulate
-		if _thrust_flame != null:
-			_thrust_flame.visible = true
-	else:
-		_visual_root.scale = Vector2.ONE
-		if _hull != null:
-			_hull.modulate = _base_hull_modulate
-
-	_transition_tween = create_tween()
-	_transition_tween.set_parallel(true)
-	_transition_tween.set_trans(Tween.TRANS_CUBIC)
-	_transition_tween.set_ease(Tween.EASE_IN_OUT if not emerging else Tween.EASE_OUT)
-	_transition_tween.tween_property(self, "global_position", end_pos, duration)
-
-	if emerging:
-		_transition_tween.tween_property(_visual_root, "scale", Vector2.ONE, duration)
-	else:
-		_transition_tween.tween_property(_visual_root, "scale", Vector2(0.45, 0.45), duration)
-		if _hull != null:
-			_transition_tween.tween_property(_hull, "modulate:a", 0.25, duration)
-
-	await _transition_tween.finished
-	_reset_transition_visuals()
-	_transition_active = false
-	_transition_tween = null
-
-
-func _reset_transition_visuals() -> void:
-	if _visual_root != null:
-		_visual_root.scale = Vector2.ONE
-	if _hull != null:
-		_hull.modulate = _base_hull_modulate
-	if _thrust_flame != null:
-		_thrust_flame.visible = false
-
-
-func _stop_transition_tween() -> void:
-	if _transition_tween != null and _transition_tween.is_valid():
-		_transition_tween.kill()
-	_transition_tween = null
-	_reset_transition_visuals()
-	_transition_active = false
+	rotation = facing + PI / 2.0
 
 
 func enter_shear(hazard: NspaceHazard) -> void:
@@ -210,9 +129,6 @@ func register_world_interactables() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if _transition_active:
-		return
-
 	var stats := get_stats()
 	if stats.max_speed <= 0.0:
 		return
@@ -337,8 +253,6 @@ func _get_world_root() -> Node2D:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _transition_active:
-		return
 	if event.is_action_pressed("interact"):
 		if _current_target and _current_target.can_interact():
 			get_parent().try_interact(_current_target)
