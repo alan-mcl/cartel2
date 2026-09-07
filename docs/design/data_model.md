@@ -76,6 +76,7 @@ Common fields (omit zero-valued properties):
 | `volume` | number | m³ |
 | `cost` | number | Yard purchase price |
 | `description` | string | |
+| `capabilities` | string[] | Optional feature tags aggregated onto `AssembledShip` (e.g. `basic_hud`, `local_sensor`) |
 
 Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
@@ -143,11 +144,23 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | Type | File | Role |
 |------|------|------|
 | `OwnedShip` | `owned_ship.gd` | Persistent configuration + inventories |
-| `AssembledShip` | `assembled_ship.gd` | Resolved modules, capacities, envelope, derived stats |
+| `AssembledShip` | `assembled_ship.gd` | Resolved modules, capacities, capabilities, envelope, derived stats |
 | `ShipOperatingState` | `ship_operating_state.gd` | Transient power/fuel/compute state |
 | `ShipAssembler` | `ship_assembler.gd` | Assemble, validate install, derive stats |
 | `ShipOperations` | `ship_operations.gd` | In-flight operating tick |
 | `ShipAssembly` | `ship_assembly.gd` | Fitting gameplay (buy/sell/install/remove/refuel) |
+
+### Capabilities (flight UI)
+
+`ShipAssembler` unions each installed module's `capabilities[]` onto `AssembledShip.capabilities`. Presentation code calls `AssembledShip.has_capability(id)` to gate HUD features:
+
+| Capability | Typical grantor | Unlocks |
+|------------|-----------------|---------|
+| `basic_hud` | `nav_combat_core_mk1` (computer) | Speed/heading, fuel/power, GST clock |
+| `local_sensor` | `sensor_basic` | North-up local-space radar panel |
+| `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
+
+Prototype gating is install-based; compute overload degradation is deferred.
 
 ### Derived flight stats
 

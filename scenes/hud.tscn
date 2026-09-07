@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=5 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/ui/local_sensor_map.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/ui/waypoint_arrows.gd" id="4"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -15,115 +17,70 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Margin" type="MarginContainer" parent="Root"]
+[node name="WaypointArrows" type="Control" parent="Root"]
 layout_mode = 1
-anchors_preset = 0
-offset_right = 520.0
-offset_bottom = 320.0
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4")
 
-[node name="StatusPanel" type="PanelContainer" parent="Root/Margin"]
-layout_mode = 2
+[node name="StatusPanel" type="PanelContainer" parent="Root"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 332.0
+offset_bottom = 96.0
 theme_type_variation = &"Surface"
 
-[node name="VBox" type="VBoxContainer" parent="Root/Margin/StatusPanel"]
+[node name="VBox" type="VBoxContainer" parent="Root/StatusPanel"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="HintLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Meta"
-text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · Space/LMB fire · E interact · Esc pause"
-
-[node name="PilotLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Section"
-text = "Pilot: —"
-
-[node name="ShipLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-text = "Ship: Flare-ON SS · Flare-ON Chassis · Mark 3 Fusion"
-
-[node name="StatsRow" type="HBoxContainer" parent="Root/Margin/StatusPanel/VBox"]
+[node name="StatsRow" type="HBoxContainer" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="SpeedLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
+[node name="SpeedLabel" type="Label" parent="Root/StatusPanel/VBox/StatsRow"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Speed: 0"
 
-[node name="HeadingLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
+[node name="HeadingLabel" type="Label" parent="Root/StatusPanel/VBox/StatsRow"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Heading: 0°"
 
-[node name="BoostLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/StatsRow"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Boost: --"
-
-[node name="SystemsRow" type="HBoxContainer" parent="Root/Margin/StatusPanel/VBox"]
+[node name="SystemsRow" type="HBoxContainer" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="FuelLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+[node name="FuelLabel" type="Label" parent="Root/StatusPanel/VBox/SystemsRow"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Fuel: —"
 
-[node name="PowerLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
+[node name="PowerLabel" type="Label" parent="Root/StatusPanel/VBox/SystemsRow"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Power: —"
 
-[node name="AmmoLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Ammo: —"
+[node name="GstClockLabel" parent="Root/StatusPanel/VBox" instance=ExtResource("2")]
 
-[node name="HeatLabel" type="Label" parent="Root/Margin/StatusPanel/VBox/SystemsRow"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Heat: —"
-
-[node name="GstClockLabel" parent="Root/Margin/StatusPanel/VBox" instance=ExtResource("2")]
-
-[node name="LocationLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-text = "Location: Proxima near orbit"
-
-[node name="ObjectiveLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Section"
-text = "Objective: Investigate the wreck near Beacon 3"
-
-[node name="TargetLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Muted"
-text = "Target: none"
-
-[node name="CreditsLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Credits: d3000"
-
-[node name="LogLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Muted"
-autowrap_mode = 3
-text = "Flare-ON SS ready. Thrusters online."
-
-[node name="HullLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Hull: 18 / 18"
-
-[node name="BoundaryLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"Alert"
-text = "Warning: drifting toward dust ring edge"
+[node name="LocalSensorMap" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -232.0
+offset_top = -232.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("3")

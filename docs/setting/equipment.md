@@ -76,6 +76,18 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 
 `ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and compute in flight.
 
+### Computer (`category: computer`, mount: `system`)
+
+| id | Capabilities | Notes |
+|----|--------------|-------|
+| `nav_combat_core_mk1` | `basic_hud` | Speed/heading, fuel/power, GST clock in flight |
+
+### Sensor (`category: sensor`, mount: `system`)
+
+| id | Capabilities | Notes |
+|----|--------------|-------|
+| `sensor_basic` | `local_sensor`, `local_system_waypoints` | Local radar panel; edge arrows to habitat, jump gate, or unspace exit portal |
+
 ---
 
 ## Armour

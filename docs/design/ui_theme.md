@@ -110,4 +110,4 @@ Not the main scene — for visual QA and onboarding only.
 - Prefer `theme_type_variation` over `theme_override_*` in scenes.
 - Do not hardcode cyan/gold sci-fi colours in UI scripts.
 - Dynamic labels: use `theme_type_variation = &"Section"` etc., or `get_theme_color()` for token lookups.
-- HUD flight status sits in a compact top-left `Surface` panel, not full-bleed.
+- HUD flight status sits in a compact top-left `Surface` panel when the ship has `basic_hud`. Sensor capabilities add a bottom-right local radar panel and viewport-edge waypoint arrows.

@@ -98,8 +98,13 @@ func _physics_process(_delta: float) -> void:
 	if not _game_active or session.docked or _jump.visible:
 		return
 
-	var distance := _player.global_position.length()
-	_hud.set_boundary_warning(distance > play_bounds, session.in_unspace)
+	_hud.set_nav_state(
+		play_bounds,
+		_player.global_position,
+		rad_to_deg(_player.motion.facing),
+		_world_loader.get_nav_contacts(catalog, session.in_unspace),
+		_camera
+	)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -558,8 +563,8 @@ func _on_session_changed() -> void:
 	_hud.refresh()
 
 
-func _on_interaction_target_changed(target: Interactable) -> void:
-	_hud.set_target(target)
+func _on_interaction_target_changed(_target: Interactable) -> void:
+	pass
 
 
 func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> void:

@@ -78,6 +78,7 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 	assembled.installed_modules = _resolve_installed_modules(catalog, owned)
 	assembled.mounts = _calculate_mount_usage(assembled.chassis, assembled.installed_modules)
 	assembled.capacities = _calculate_capacities(catalog, assembled)
+	assembled.capabilities = _aggregate_capabilities(assembled)
 	assembled.envelope = _calculate_envelope(assembled)
 
 	if load_state:
@@ -380,6 +381,22 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 				capacities["ammunition_capacity"][ammo_id] = current + int(ammo_cap[ammo_id])
 
 	return capacities
+
+
+static func _aggregate_capabilities(assembled: AssembledShip) -> Dictionary:
+	var capabilities: Dictionary = {}
+	for entry in assembled.installed_modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: Variant = entry.get("data", {})
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_caps: Variant = module_def.get("capabilities", [])
+		if typeof(module_caps) != TYPE_ARRAY:
+			continue
+		for cap in module_caps:
+			capabilities[str(cap)] = true
+	return capabilities
 
 
 static func _calculate_envelope(assembled: AssembledShip) -> Dictionary:

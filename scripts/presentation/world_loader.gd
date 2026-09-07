@@ -208,6 +208,58 @@ func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
 		planet.modulate = Color(str(planet_data.get("modulate")))
 
 	world_root.add_child(planet)
+	spawned_by_id["planet"] = planet
+
+
+func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
+	var contacts: Array = []
+	if in_unspace:
+		var portal: Variant = spawned_by_id.get("n4_exit_portal")
+		if portal is Node2D:
+			contacts.append({
+				"id": "exit_portal",
+				"name": _resolve_contact_name(portal, catalog, "Exit Portal"),
+				"short_label": "X",
+				"position": portal.global_position,
+			})
+	else:
+		var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
+		contacts.append({
+			"id": "planet",
+			"name": str(sector.get("name", "Planet")),
+			"short_label": "P",
+			"position": Vector2.ZERO,
+		})
+		if _habitat_node != null:
+			contacts.append({
+				"id": "habitat",
+				"name": _resolve_contact_name(_habitat_node, catalog, "Habitat"),
+				"short_label": "H",
+				"position": get_habitat_world_position(),
+			})
+		var gate_pos := get_jump_gate_world_position()
+		if gate_pos.length_squared() > 0.001 and _jump_gate_node != null:
+			contacts.append({
+				"id": "jump_gate",
+				"name": _resolve_contact_name(_jump_gate_node, catalog, "Jump Gate"),
+				"short_label": "G",
+				"position": gate_pos,
+			})
+	return contacts
+
+
+func _resolve_contact_name(node: Node, _catalog: Catalog, fallback: String) -> String:
+	if node is WorldObject:
+		var world_object: WorldObject = node
+		var interactable: Interactable = world_object.get_node_or_null("Interactable")
+		if interactable != null and interactable.definition != null:
+			return interactable.get_title()
+
+	var label: Label = node.get_node_or_null("Label")
+	if label != null and not label.text.is_empty():
+		return label.text
+
+	return fallback
 
 
 func _spawn_orbital_ring(

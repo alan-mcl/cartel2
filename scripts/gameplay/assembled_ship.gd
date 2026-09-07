@@ -8,8 +8,13 @@ var chassis: Dictionary = {}
 var installed_modules: Array = []
 var mounts: Dictionary = {}
 var capacities: Dictionary = {}
+var capabilities: Dictionary = {}
 var envelope: Dictionary = {}
 var stats: ShipStats = ShipStats.new()
+
+
+func has_capability(id: String) -> bool:
+	return capabilities.get(id, false)
 
 
 func get_summary() -> String:

@@ -54,6 +54,7 @@
     "volume": 0.5,
     "compute_capacity": 16.0,
     "power_demand": 1.5,
+    "capabilities": ["basic_hud"],
     "cost": 1200,
     "description": "Standard navigation and combat processing core."
   },
@@ -80,6 +81,7 @@
     "volume": 0.4,
     "compute_demand": 2.0,
     "power_demand": 1.0,
+    "capabilities": ["local_sensor", "local_system_waypoints"],
     "cost": 550,
     "description": "Standard orbital navigation and proximity sensors."
   },
