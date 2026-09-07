@@ -13,8 +13,8 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `InteractableDef` |
-| `scripts/presentation/` | `main.gd`, `player_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
+| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
 | `data/catalog/` | JSON catalogs (see [data_model.md](data_model.md)) |
@@ -177,6 +177,23 @@ Each configured world object uses `WorldObject.configure(entity, catalog, sessio
 
 The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (not stored in JSON).
 
+## In-system NPC traffic (3-space)
+
+`TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
+
+- **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~60 ships, Bela ~35).
+- **Spawn** — initial fleet is scattered mid-route along corridors (15–85% progress), not clustered at endpoints.
+- **Variation** — per-ship cruise jitter and lateral route offset so lanes are not identical.
+- **Simulation** — each ship is an `OwnedShip` + `AssembledShip` ticking `ShipOperations` and `ShipWeapons` (fuel, power, ammo).
+- **LOD** — full `NpcShip` physics within `near_lod_radius`; distant ships are kinematic sprites.
+- **Roles** — transit, shuttle, loiter, runabout, dock_cycle (habitat/gate/orbital routes).
+- **Lifecycle** — anonymous sprites cycle on route completion, fuel exhaustion, or leaving bounds; fleet size is conserved by immediate replacement (new callsign, full tank).
+- **Combat** — provoked only; NPCs engage or flee at full engine cruise. Player weapons hit NPC layer 16; NPC shots stop on the player visually but do not apply hull damage.
+- **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips across the sector (`sensor_contact_radius` ≈ `play_bounds`).
+- **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 50%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
+
+Catalog: `data/catalog/traffic.json`. Presentation: `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`.
+
 ## Graphics convention
 
 | Format | Use |
@@ -204,9 +221,8 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unspace solution typing (integers shown as flavour only)
 - Deeper N-space routes (n > 4)
 - Ship hyperdrive translation
-- NPC ship combat, shield hit pools, full damage-type combat loop
+- NPC ship combat beyond provoked engage/flee (no shields, no full damage-type loop, player invulnerable)
 - Paid workshop beyond parts inventory model
-- NPC traffic
 - Full six-sector world (only Proxima and Bela implemented in JSON)
 
 See [data_model.md](data_model.md) for implemented catalog subset vs [setting docs](../setting/README.md) for intended scope.

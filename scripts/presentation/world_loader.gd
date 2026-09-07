@@ -21,6 +21,7 @@ var spawned_by_id: Dictionary = {}
 var _orbital_ring: Node2D = null
 var _habitat_node: Node2D = null
 var _jump_gate_node: Node2D = null
+var _orbital_entries: Array = []
 var _ring_radius: float = 0.0
 var _ring_period_seconds: float = 720.0
 var _habitat_slot_angle: float = 0.0
@@ -36,6 +37,7 @@ func clear_world(world_root: Node2D) -> void:
 	_orbital_ring = null
 	_habitat_node = null
 	_jump_gate_node = null
+	_orbital_entries.clear()
 	_ring_radius = 0.0
 	_ring_period_seconds = 720.0
 	_habitat_slot_angle = 0.0
@@ -245,7 +247,140 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 				"short_label": "G",
 				"position": gate_pos,
 			})
+		for entry_variant in _orbital_entries:
+			if typeof(entry_variant) != TYPE_DICTIONARY:
+				continue
+			var entry: Dictionary = entry_variant
+			var orbital_node: Variant = entry.get("node")
+			if orbital_node is Node2D and _orbital_ring != null:
+				contacts.append({
+					"id": str(entry.get("id", "")),
+					"name": "",
+					"short_label": "",
+					"contact_kind": "orbital",
+					"position": _orbital_ring.global_transform * orbital_node.position,
+				})
 	return contacts
+
+
+func get_traffic_anchors() -> Array:
+	var anchors: Array = []
+	if _habitat_node != null:
+		anchors.append({
+			"id": "habitat",
+			"kind": "habitat",
+			"position": get_habitat_world_position(),
+		})
+	if _jump_gate_node != null:
+		anchors.append({
+			"id": "jump_gate",
+			"kind": "jump_gate",
+			"position": get_jump_gate_world_position(),
+		})
+	for entry_variant in _orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var orbital_node: Variant = entry.get("node")
+		if orbital_node is Node2D and _orbital_ring != null:
+			anchors.append({
+				"id": str(entry.get("id", "")),
+				"kind": "orbital",
+				"position": _orbital_ring.global_transform * orbital_node.position,
+			})
+	return anchors
+
+
+func is_traffic_at_destination(world_pos: Vector2, destination_id: String, traffic_config: Dictionary = {}) -> bool:
+	return is_traffic_route_arrived(world_pos, world_pos, destination_id, traffic_config)
+
+
+func is_traffic_route_arrived(
+	prev_pos: Vector2,
+	world_pos: Vector2,
+	destination_id: String,
+	traffic_config: Dictionary = {}
+) -> bool:
+	var node := _destination_node(destination_id)
+	if node == null or not is_instance_valid(node):
+		return false
+
+	var interactable := node.get_node_or_null("Interactable") as Area2D
+	if interactable != null and is_instance_valid(interactable):
+		if _point_in_interactable(world_pos, interactable):
+			return true
+		return _segment_intersects_interactable(prev_pos, world_pos, interactable)
+
+	var anchor_pos := _destination_world_position(node, destination_id)
+	if anchor_pos.length_squared() < 1.0:
+		return false
+	var radius := float(traffic_config.get("orbital_arrival_radius", 90.0))
+	if world_pos.distance_to(anchor_pos) <= radius:
+		return true
+	return _segment_intersects_circle(prev_pos, world_pos, anchor_pos, radius)
+
+
+func _destination_node(destination_id: String) -> Node2D:
+	if destination_id == "habitat":
+		return _habitat_node
+	if destination_id == "jump_gate":
+		return _jump_gate_node
+	for entry_variant in _orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("id", "")) == destination_id:
+			var orbital_node: Variant = entry.get("node")
+			if orbital_node is Node2D:
+				return orbital_node
+	return null
+
+
+func _destination_world_position(node: Node2D, destination_id: String) -> Vector2:
+	if destination_id == "habitat":
+		return get_habitat_world_position()
+	if destination_id == "jump_gate":
+		return get_jump_gate_world_position()
+	if _orbital_ring != null and node.get_parent() == _orbital_ring:
+		return _orbital_ring.global_transform * node.position
+	return node.global_position
+
+
+func _point_in_interactable(world_pos: Vector2, area: Area2D) -> bool:
+	var collision := area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision == null or collision.shape == null:
+		return false
+	if collision.shape is CircleShape2D:
+		var circle := collision.shape as CircleShape2D
+		var center := collision.global_transform.origin
+		var scale := maxf(collision.global_scale.x, collision.global_scale.y)
+		return world_pos.distance_to(center) <= circle.radius * scale
+	return false
+
+
+func _segment_intersects_interactable(from_pos: Vector2, to_pos: Vector2, area: Area2D) -> bool:
+	var collision := area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision == null or collision.shape == null:
+		return false
+	if collision.shape is CircleShape2D:
+		var circle := collision.shape as CircleShape2D
+		var center := collision.global_transform.origin
+		var scale := maxf(collision.global_scale.x, collision.global_scale.y)
+		return _segment_intersects_circle(from_pos, to_pos, center, circle.radius * scale)
+	return false
+
+
+func _segment_intersects_circle(from_pos: Vector2, to_pos: Vector2, center: Vector2, radius: float) -> bool:
+	if from_pos.distance_to(center) <= radius or to_pos.distance_to(center) <= radius:
+		return true
+	var ab := to_pos - from_pos
+	var ab_len_sq := ab.length_squared()
+	if ab_len_sq < 0.001:
+		return from_pos.distance_to(center) <= radius
+	var ac := center - from_pos
+	var t := clampf(ac.dot(ab) / ab_len_sq, 0.0, 1.0)
+	var closest := from_pos + ab * t
+	return closest.distance_to(center) <= radius
 
 
 func _resolve_contact_name(node: Node, _catalog: Catalog, fallback: String) -> String:
@@ -310,6 +445,12 @@ func _spawn_orbital_ring(
 		if kind == "habitat":
 			_habitat_node = instance
 			_habitat_slot_angle = angle
+		elif kind == "orbital":
+			_orbital_entries.append({
+				"id": entity_id,
+				"node": instance,
+				"kind": "orbital",
+			})
 
 	world_root.add_child(ring)
 	_orbital_ring = ring_ref

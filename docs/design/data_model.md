@@ -23,6 +23,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `markets.json` | array | Building-linked commodity listings |
+| `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 
@@ -149,6 +150,8 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | `ShipAssembler` | `ship_assembler.gd` | Assemble, validate install, derive stats |
 | `ShipOperations` | `ship_operations.gd` | In-flight operating tick |
 | `ShipAssembly` | `ship_assembly.gd` | Fitting gameplay (buy/sell/install/remove/refuel) |
+| `TrafficDirector` | `traffic_director.gd` | Spawns/ticks ephemeral NPC fleet in 3-space |
+| `TrafficActor` | `traffic_actor.gd` | Single NPC ship AI + operating state |
 
 ### Capabilities (flight UI)
 
@@ -240,6 +243,39 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 
 **Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load).
 
+## In-system NPC traffic (3-space)
+
+Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `TrafficDirector` + `TrafficActor` in `scripts/gameplay/`, presented by `NpcShip` in `scripts/presentation/`.
+
+- Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 60 ships, Bela ≈ 35 after ~25% cap reduction.
+- Initial spawn places route-following roles mid-corridor (15–85% along habitat/gate/orbital legs); cycle replacements still appear at endpoints.
+- Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
+- Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`.
+- Completing a route (habitat, gate, or orbital), running dry, or leaving bounds **retires** the sprite; the director spawns a fresh replacement so fleet density stays constant.
+- Provoked combat only: NPCs engage or flee; player hull remains invulnerable this slice.
+- Sensor HUD: smaller unlabelled NPC blips across the sector and unlabelled orbital dots on the local radar.
+
+### `traffic.json`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `near_lod_radius` | number | Full physics/sim radius around player |
+| `sensor_contact_radius` | number | Minimap blip range for NPC ships (typically matches sector `play_bounds`) |
+| `cruise_speed_fraction` | number | Peaceful cruise cap as fraction of assembled hull `max_speed` (e.g. 0.5) |
+| `cruise_speed_jitter` | number | Per-ship multiplier spread around cruise fraction (e.g. 0.2 → ~40–60% of max) |
+| `route_lateral_offset_min` / `max` | number | Perpendicular scatter at initial mid-route spawn (not steering target) |
+| `near_count_min` / `max` | number | Near-LOD fleet size range (log-scaled by population) |
+| `far_count_min` / `max` | number | Far-LOD fleet size range |
+| `role_weights_default` | object | Role spawn weights |
+| `sector_overrides` | object | Per-sector role weight overrides |
+| `role_ship_templates` | object | Template id(s) per role |
+
+### `sectors.json` (addition)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `population_billions` | number | Drives traffic density (log-scaled fleet size) |
+
 ## Sectors, worlds, interactables, habitats
 
 Each sector in `sectors.json` may include `mappings[]` for jump routes. Besides `target`, `solution`, `n`, and `label`, mappings carry `entry_seconds`, `exit_seconds`, and `time_jitter` for translation time cost (see GST section above).
@@ -266,7 +302,7 @@ Other sector/world/interactable/habitat schemas unchanged — see setting docs.
 |------|---------------|----------------|
 | Ship model | Chassis + modules + budgets | Full Elite-style fitting + combat |
 | Modules | Fusion engines, power, LS, sensors, lasers, mass drivers, cargo, fuel | Shields, ECM, hyperdrive, passenger classes |
-| Weapons | Light laser and mass driver fire in flight; debris destructible | Full combat loop, NPC ships, shields |
-| Operating sim | Power, fuel, compute in flight; weapon power while firing | Combat power contention, heat/signature, full ammo logistics |
+| Weapons | Light laser and mass driver fire in flight; debris destructible; NPC traffic engage/flee | Full combat loop, shields, player hull damage |
+| Operating sim | Power, fuel, compute in flight; weapon power while firing; NPC ships use same tick | Combat power contention, heat/signature, full ammo logistics |
 
 Canonical lore: [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).

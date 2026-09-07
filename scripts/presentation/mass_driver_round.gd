@@ -4,13 +4,17 @@ const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
 const ROUND_RADIUS := 5.0
 const ROUND_COLOR := Color(1.0, 0.7, 0.27, 1.0)
 const ROUND_OUTLINE := Color(1.0, 0.55, 0.2, 1.0)
-const SOLID_MASK := 2
+const DEFAULT_SOLID_MASK := 2
+const NPC_MASK := 16
+const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
 
 var _direction := Vector2.RIGHT
 var _speed: float = 1000.0
 var _max_range: float = 1200.0
 var _damage: float = 0.0
 var _traveled: float = 0.0
+var _collision_mask: int = DEFAULT_WEAPON_MASK
+var _exclude: Array = []
 
 
 static func spawn(
@@ -19,7 +23,9 @@ static func spawn(
 	direction: Vector2,
 	speed: float,
 	max_range: float,
-	damage: float
+	damage: float,
+	collision_mask: int = DEFAULT_WEAPON_MASK,
+	exclude: Array = []
 ) -> void:
 	var scene := load("res://scenes/world/mass_driver_round.tscn") as PackedScene
 	if scene == null:
@@ -33,15 +39,25 @@ static func spawn(
 
 	parent.add_child(round)
 	if round.has_method("configure"):
-		round.configure(origin, direction, speed, max_range, damage)
+		round.configure(origin, direction, speed, max_range, damage, collision_mask, exclude)
 
 
-func configure(origin: Vector2, direction: Vector2, speed: float, max_range: float, damage: float) -> void:
+func configure(
+	origin: Vector2,
+	direction: Vector2,
+	speed: float,
+	max_range: float,
+	damage: float,
+	collision_mask: int = DEFAULT_WEAPON_MASK,
+	exclude: Array = []
+) -> void:
 	global_position = origin
 	_direction = direction.normalized()
 	_speed = speed
 	_max_range = max_range
 	_damage = damage
+	_collision_mask = collision_mask
+	_exclude = exclude
 	rotation = _direction.angle() + PI / 2.0
 	queue_redraw()
 
@@ -83,7 +99,10 @@ func _sweep(from: Vector2, to: Vector2) -> Dictionary:
 		return {}
 
 	var query := PhysicsRayQueryParameters2D.create(from, to)
-	query.collision_mask = SOLID_MASK
+	query.collision_mask = _collision_mask
+	for body in _exclude:
+		if body is CollisionObject2D:
+			query.exclude.append(body.get_rid())
 	return space_state.intersect_ray(query)
 
 

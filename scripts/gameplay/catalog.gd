@@ -14,6 +14,7 @@ const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const MARKETS_PATH := "res://data/catalog/markets.json"
+const TRAFFIC_PATH := "res://data/catalog/traffic.json"
 
 var chassis_by_id: Dictionary = {}
 var modules_by_id: Dictionary = {}
@@ -28,6 +29,7 @@ var worlds_by_id: Dictionary = {}
 var commodities_by_id: Dictionary = {}
 var markets_by_id: Dictionary = {}
 var player_data: Dictionary = {}
+var traffic_config: Dictionary = {}
 
 
 static func load_default() -> Catalog:
@@ -50,6 +52,7 @@ func load_all() -> void:
 	player_data = _load_json_object(PLAYER_PATH)
 	commodities_by_id = _load_indexed_array(COMMODITIES_PATH)
 	markets_by_id = _load_indexed_array(MARKETS_PATH)
+	traffic_config = _load_json_object(TRAFFIC_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -135,6 +138,10 @@ func get_world(sector_id: String) -> Dictionary:
 
 func get_player() -> Dictionary:
 	return player_data
+
+
+func get_traffic_config() -> Dictionary:
+	return traffic_config
 
 
 func get_commodity(id: String) -> Dictionary:

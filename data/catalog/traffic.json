@@ -1,0 +1,60 @@
+{
+  "near_lod_radius": 1400.0,
+  "sensor_contact_radius": 3800.0,
+  "cruise_speed_fraction": 0.5,
+  "cruise_speed_jitter": 0.2,
+  "route_lateral_offset_min": 80.0,
+  "route_lateral_offset_max": 180.0,
+  "spawn_min_distance_player": 400.0,
+  "dock_arrival_distance": 80.0,
+  "orbital_arrival_radius": 90.0,
+  "engage_timeout_seconds": 45.0,
+  "engage_hull_threshold_pegasus": 0.5,
+  "engage_hull_threshold_flare": 0.4,
+  "population_min_billions": 3.0,
+  "population_max_billions": 60.0,
+  "near_count_min": 9,
+  "near_count_max": 16,
+  "far_count_min": 3,
+  "far_count_max": 44,
+  "destroyed_respawn_seconds": 8.0,
+  "cycle_stagger_seconds": 0.0,
+  "role_weights_default": {
+    "transit": 0.28,
+    "shuttle": 0.24,
+    "loiter": 0.12,
+    "runabout": 0.16,
+    "dock_cycle": 0.20
+  },
+  "sector_overrides": {
+    "proxima": {
+      "role_weights": {
+        "transit": 0.32,
+        "shuttle": 0.26,
+        "loiter": 0.10,
+        "runabout": 0.10,
+        "dock_cycle": 0.22
+      }
+    },
+    "bela": {
+      "role_weights": {
+        "transit": 0.18,
+        "shuttle": 0.20,
+        "loiter": 0.14,
+        "runabout": 0.32,
+        "dock_cycle": 0.16
+      }
+    }
+  },
+  "role_ship_templates": {
+    "transit": "pegasus_p101",
+    "shuttle": "pegasus_p101",
+    "loiter": ["pegasus_p101", "flare_on_ss"],
+    "runabout": "flare_on_ss",
+    "dock_cycle": "pegasus_p101"
+  },
+  "callsign_prefixes": {
+    "pegasus_p101": "PGS",
+    "flare_on_ss": "HW"
+  }
+}

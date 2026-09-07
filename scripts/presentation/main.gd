@@ -1,12 +1,15 @@
 extends Node2D
 
+const _TRAFFIC_DIRECTOR_SCRIPT: GDScript = preload("res://scripts/gameplay/traffic_director.gd")
+
 var session := PrototypeSession.new()
 var catalog := Catalog.load_default()
 var player_ship: AssembledShip
 var play_bounds: float = 3500.0
 
-var _world_loader := WorldLoader.new()
 var _game_clock := GameClock.new()
+var _world_loader := WorldLoader.new()
+var _traffic_director = null
 var _translate_gate_title: String = ""
 var _current_slot: int = -1
 var _game_active: bool = false
@@ -79,6 +82,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _game_clock == null:
+		return
 	_game_clock.tick(session, catalog, delta, _is_gst_frozen())
 
 
@@ -94,15 +99,30 @@ func _is_gst_frozen() -> bool:
 	return false
 
 
-func _physics_process(_delta: float) -> void:
-	if not _game_active or session.docked or _jump.visible:
+func _ensure_traffic_director() -> void:
+	if _traffic_director != null:
 		return
+	_traffic_director = _TRAFFIC_DIRECTOR_SCRIPT.new()
+
+
+func _physics_process(delta: float) -> void:
+	if not _game_active or session.docked or _jump.visible or get_tree().paused:
+		return
+
+	if not session.in_unspace:
+		_ensure_traffic_director()
+		if _traffic_director != null:
+			_traffic_director.tick(delta, _player.global_position, _world_loader)
+
+	var contacts := _world_loader.get_nav_contacts(catalog, session.in_unspace)
+	if not session.in_unspace and _traffic_director != null:
+		contacts.append_array(_traffic_director.get_traffic_contacts(_player.global_position))
 
 	_hud.set_nav_state(
 		play_bounds,
 		_player.global_position,
 		rad_to_deg(_player.motion.facing),
-		_world_loader.get_nav_contacts(catalog, session.in_unspace),
+		contacts,
 		_camera
 	)
 
@@ -318,6 +338,8 @@ func _apply_flight_state(flight: Dictionary) -> void:
 
 
 func _clear_world() -> void:
+	if _traffic_director != null:
+		_traffic_director.clear()
 	for child in _world.get_children():
 		child.queue_free()
 
@@ -345,6 +367,21 @@ func _load_unspace(place_player: bool = true) -> void:
 func _finalize_world_load(place_player: bool = true, spawn_near: String = "") -> void:
 	if _player.has_method("register_world_interactables"):
 		_player.register_world_interactables()
+
+	if _traffic_director != null:
+		_traffic_director.clear()
+	if not session.in_unspace:
+		_ensure_traffic_director()
+		if _traffic_director != null:
+			_traffic_director.setup(
+				catalog,
+				_world,
+				session.sector_id,
+				play_bounds,
+				_player.global_position,
+				_world_loader
+			)
+
 	if place_player:
 		match spawn_near:
 			"habitat":

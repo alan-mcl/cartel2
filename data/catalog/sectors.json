@@ -3,6 +3,7 @@
     "id": "proxima",
     "name": "Proxima Sector",
     "orbit_name": "Proxima near orbit",
+    "population_billions": 60,
     "play_bounds": 3800,
     "objective": "Explore Proxima near orbit",
     "mappings": [
@@ -21,6 +22,7 @@
     "id": "bela",
     "name": "Bela Sector",
     "orbit_name": "Bela near orbit",
+    "population_billions": 15,
     "play_bounds": 3800,
     "objective": "Explore Bela near orbit",
     "mappings": [

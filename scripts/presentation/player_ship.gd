@@ -8,6 +8,7 @@ const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
+const _WEAPON_MASK := 2 | 16
 
 @export var ship_id: String = "flare_on_ss"
 
@@ -225,7 +226,7 @@ func _spawn_weapon_orders(orders: Array) -> void:
 		var damage := float(order.get("damage", 0.0))
 		var max_range := float(order.get("range", 0.0))
 		if delivery == "beam":
-			_LaserBeam.spawn(world, origin, direction, max_range, damage)
+			_LaserBeam.spawn(world, origin, direction, max_range, damage, _WEAPON_MASK, [self])
 		elif delivery == "projectile":
 			_MassDriverRound.spawn(
 				world,
@@ -233,7 +234,9 @@ func _spawn_weapon_orders(orders: Array) -> void:
 				direction,
 				float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED)),
 				max_range,
-				damage
+				damage,
+				_WEAPON_MASK,
+				[self]
 			)
 
 
