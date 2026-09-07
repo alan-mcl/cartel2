@@ -7,6 +7,7 @@ const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 @onready var _description: Label = $Layout/Header/HeaderBox/Description
 @onready var _pilot: Label = $Layout/Header/HeaderBox/Pilot
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
+@onready var _gst_clock: Label = $Layout/Header/HeaderBox/GstClockLabel
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
 @onready var _art_host: VBoxContainer = $Layout/Body/Split/Right/ArtHost
 @onready var _content_scroll: ScrollContainer = $Layout/Body/Split/Right/ContentScroll
@@ -44,6 +45,8 @@ func bind(context: UiContext) -> void:
 	_context = context
 	if _context.session != null and not _context.session.changed.is_connected(refresh):
 		_context.session.changed.connect(refresh)
+	if _gst_clock != null and _gst_clock.has_method("bind") and _context.session != null:
+		_gst_clock.bind(_context.session)
 	_refresh_when_ready()
 
 

@@ -6,7 +6,15 @@
     "play_bounds": 3800,
     "objective": "Explore Proxima near orbit",
     "mappings": [
-      { "target": "bela", "solution": 42, "n": 4, "label": "Bela Sector" }
+      {
+        "target": "bela",
+        "solution": 42,
+        "n": 4,
+        "label": "Bela Sector",
+        "entry_seconds": 10800,
+        "exit_seconds": 10800,
+        "time_jitter": 0.08
+      }
     ]
   },
   {
@@ -16,7 +24,15 @@
     "play_bounds": 3800,
     "objective": "Explore Bela near orbit",
     "mappings": [
-      { "target": "proxima", "solution": -34458, "n": 4, "label": "Proxima Sector" }
+      {
+        "target": "proxima",
+        "solution": -34458,
+        "n": 4,
+        "label": "Proxima Sector",
+        "entry_seconds": 10800,
+        "exit_seconds": 10800,
+        "time_jitter": 0.08
+      }
     ]
   }
 ]

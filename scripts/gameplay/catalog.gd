@@ -98,6 +98,28 @@ func get_unspace_for_n(n: int) -> Dictionary:
 	return {}
 
 
+func get_mapping(from_sector_id: String, to_sector_id: String, n: int) -> Dictionary:
+	var sector := get_sector(from_sector_id)
+	if sector.is_empty():
+		return {}
+
+	var mappings: Variant = sector.get("mappings", [])
+	if typeof(mappings) != TYPE_ARRAY:
+		return {}
+
+	for mapping_variant in mappings:
+		if typeof(mapping_variant) != TYPE_DICTIONARY:
+			continue
+		var mapping: Dictionary = mapping_variant
+		if str(mapping.get("target", "")) != to_sector_id:
+			continue
+		if int(mapping.get("n", 0)) != n:
+			continue
+		return mapping
+
+	return {}
+
+
 func get_world(sector_id: String) -> Dictionary:
 	if not worlds_by_id.has(sector_id):
 		push_error("Unknown world id: %s" % sector_id)

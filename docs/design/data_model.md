@@ -105,6 +105,14 @@ Mounted modules use `{mount_category}_{n}` (e.g. `main_engine_1`, `system_3`, `l
 {
   "starting_sector": "proxima",
   "credits": 3000,
+  "gst": {
+    "year": 2646,
+    "month": 1,
+    "day": 1,
+    "hour": 8,
+    "minute": 0,
+    "second": 0
+  },
   "ships": [ /* owned instances */ ]
 }
 ```
@@ -168,8 +176,28 @@ Fuel lives on the owned ship. Heat/signature simulation is deferred beyond this 
 | `owned_ships` | `OwnedShip[]` — each carries its own `cargo` |
 | `spare_parts` | `{ module_id: qty }` uninstalled modules in player inventory |
 | `hull` / `max_hull` | Hull stress during 4-space (from chassis + armour hits) |
+| `gst_seconds` | Elapsed GST since 1 January Q1, year 0 (float; persisted in saves) |
 
 Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected docked ship (defaults to `current_ship_id`).
+
+### Galactic Standard Time
+
+| Type | File | Role |
+|------|------|------|
+| `GalacticCalendar` | `galactic_calendar.gd` | 364-day GSC math, timestamp formatting |
+| `GameClock` | `game_clock.gd` | Real-time tick, unspace irregular pulses, mapping translation lumps |
+
+`GameClock.tick` runs from `main.gd` when the game is active and GST is not frozen (menus, pause overlay, save/load overlay, jump picker). Habitat UI keeps GST running at 1:1 while docked.
+
+**Sector mapping time fields** (on each object in `sectors.json` → `mappings[]`):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `entry_seconds` | number | GST consumed when translating into unspace on this route |
+| `exit_seconds` | number | GST consumed when emerging at the destination |
+| `time_jitter` | number | ± fraction applied to each lump (e.g. `0.08` → ±8%) |
+
+**Unspace GST overrides** (optional on `unspaces.json` entries under `gst`): `pulse_min`, `pulse_max`, `stretch_min`, `stretch_max`, `slip_chance`, `slip_min`, `slip_max` — control irregular time flow while flying in N-space. Deeper N uses larger depth multiplier in code.
 
 ### Ship assembly (`ShipAssembly`)
 
@@ -201,7 +229,9 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 
 ## Sectors, worlds, interactables, habitats
 
-(Sector/world/interactable/habitat schemas unchanged — see previous sections in git history or setting docs.)
+Each sector in `sectors.json` may include `mappings[]` for jump routes. Besides `target`, `solution`, `n`, and `label`, mappings carry `entry_seconds`, `exit_seconds`, and `time_jitter` for translation time cost (see GST section above).
+
+Other sector/world/interactable/habitat schemas unchanged — see setting docs.
 
 ## How to extend
 

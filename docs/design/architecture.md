@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit prototype. This document descri
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `PrototypeSession`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -75,7 +75,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 - **Starfield** — parallax background bound to follow camera.
 - **World** — empty at edit time; populated at runtime by `WorldLoader`.
 - **PlayerShip** — inertial flight, interaction sensor, camera.
-- **HUD** — pilot name/callsign, ship summary, location, objective, credits, target, motion.
+- **HUD** — pilot name/callsign, ship summary, GST clock, location, objective, credits, target, motion.
 - **MainMenu** — New Game, Load, Exit.
 - **NewGameOverlay** — pilot name and callsign form.
 - **SaveOverlay** — three-slot save/load browser.
@@ -113,13 +113,27 @@ Dock and jump-route selection set `get_tree().paused = true` until the overlay c
 
 Ships parked at a habitat **stay there when jumping sectors** (only the aboard ship travels).
 
+### Galactic Standard Time (GST)
+
+Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps; `GameClock` in `main.gd` advances time each frame.
+
+| Context | GST behaviour |
+|---------|---------------|
+| Realspace flight | 1:1 with real time |
+| Habitat / building UI | 1:1 (tree may be paused; clock uses `PROCESS_MODE_ALWAYS`) |
+| Unspace flight | Irregular pulses — stutter and jumps, more erratic at higher N |
+| Jump gate entry / exit portal | Discrete lump from sector `mappings[]` (`entry_seconds`, `exit_seconds`, `time_jitter`) |
+| Main menu, pause, save/load, jump picker | Frozen |
+
+HUD and **HabitatScreen** header show `GstClockLabel` at seconds resolution. `session.changed` is **not** emitted every second — widgets poll `gst_seconds` directly.
+
 ### Jump travel (3-space ↔ 4-space ↔ 3-space)
 
 1. `[E]` at jump gate (3-space only) → jump overlay lists destinations from `mappings[]`.
 2. Select destination → confirm **4-space (n=4)** route. Known `solution` integer shown as flavour; no typing yet.
-3. Confirm → `session.enter_unspace` → `WorldLoader.load_unspace` → player at 4-space entry spawn, violet starfield tint.
-4. Fly through 4-space: N-space **shear hazards** knock the ship and stress hull (non-lethal); solid debris uses existing collision.
-5. `[E]` at **Exit Portal** (`arrive` interactable) → `session.arrive_from_unspace` → load destination sector orbit.
+3. Confirm → `session.enter_unspace` → entry translation lump applied → `WorldLoader.load_unspace` → player at 4-space entry spawn, violet starfield tint.
+4. Fly through 4-space: N-space **shear hazards** knock the ship and stress hull (non-lethal); solid debris uses existing collision. GST advances irregularly while in transit.
+5. `[E]` at **Exit Portal** (`arrive` interactable) → exit translation lump applied → `session.arrive_from_unspace` → load destination sector orbit.
 
 Hyperdrive-equipped ships may later translate without a gate or from other 4-space regions — not implemented.
 

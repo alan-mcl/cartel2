@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=3 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -87,6 +88,8 @@ text = "Ammo: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Heat: —"
+
+[node name="GstClockLabel" parent="Root/Margin/StatusPanel/VBox" instance=ExtResource("2")]
 
 [node name="LocationLabel" type="Label" parent="Root/Margin/StatusPanel/VBox"]
 layout_mode = 2

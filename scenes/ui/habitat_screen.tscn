@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_habitat_screen"]
+[gd_scene load_steps=3 format=3 uid="uid://cartel_habitat_screen"]
 
 [ext_resource type="Script" path="res://scripts/ui/habitat_screen.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
 
 [node name="HabitatScreen" type="Control"]
 layout_mode = 3
@@ -47,6 +48,8 @@ text = "Pilot: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Credits: d0"
+
+[node name="GstClockLabel" parent="Layout/Header/HeaderBox" instance=ExtResource("2")]
 
 [node name="Body" type="PanelContainer" parent="Layout"]
 layout_mode = 2

@@ -6,6 +6,7 @@ var player_ship: AssembledShip
 var play_bounds: float = 3500.0
 
 var _world_loader := WorldLoader.new()
+var _game_clock := GameClock.new()
 var _translate_gate_title: String = ""
 var _current_slot: int = -1
 var _game_active: bool = false
@@ -75,6 +76,22 @@ func _ready() -> void:
 	_save_overlay.close()
 
 	_show_main_menu()
+
+
+func _process(delta: float) -> void:
+	_game_clock.tick(session, catalog, delta, _is_gst_frozen())
+
+
+func _is_gst_frozen() -> bool:
+	if not _game_active:
+		return true
+	if _main_menu.visible or _new_game.visible:
+		return true
+	if _save_overlay.visible or _jump.visible:
+		return true
+	if _pause.visible and get_tree().paused:
+		return true
+	return false
 
 
 func _physics_process(_delta: float) -> void:
@@ -162,7 +179,7 @@ func _start_game_from_session() -> void:
 		return
 
 	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
-	_hud.set_assembled_ship(player_ship)
+	_hud.bind(session, _player, player_ship)
 	_hud.visible = true
 	_game_active = true
 
@@ -180,6 +197,9 @@ func _start_game_from_session() -> void:
 		get_tree().paused = false
 		_ui_root.close_ui()
 
+	if session.in_unspace:
+		_game_clock.reset_unspace_pulse()
+
 
 func _begin_new_game(player_name: String, callsign: String) -> void:
 	session = PrototypeSession.new()
@@ -193,6 +213,8 @@ func _begin_new_game(player_name: String, callsign: String) -> void:
 	_main_menu.close()
 	_new_game.close()
 	_ui_root.session = session
+	_jump.bind(catalog, session)
+	_hud.bind(session, _player, AssembledShip.new())
 	_start_game_from_session()
 
 
@@ -344,8 +366,18 @@ func _on_jump_requested(target_sector_id: String, n: int) -> void:
 	if target_sector_id.is_empty():
 		return
 
+	var origin_id := session.sector_id
 	if not session.enter_unspace(catalog, target_sector_id, n, player_ship):
 		return
+
+	var mapping := catalog.get_mapping(origin_id, target_sector_id, n)
+	var applied := _game_clock.apply_mapping_lump(session, mapping, "entry_seconds")
+	if applied > 0.0:
+		session.last_log = (
+			"Translated into %d-space. Entry lag: %s GST."
+			% [n, GalacticCalendar.format_duration(applied)]
+		)
+	_game_clock.reset_unspace_pulse()
 
 	_load_unspace(true)
 	_jump.close()
@@ -358,8 +390,20 @@ func _arrive_from_unspace() -> void:
 	if not session.in_unspace:
 		return
 
+	var origin_id := session.sector_id
+	var dest_id := session.pending_destination_id
+	var n := session.unspace_n
+
 	if not session.arrive_from_unspace(catalog):
 		return
+
+	var mapping := catalog.get_mapping(origin_id, dest_id, n)
+	var applied := _game_clock.apply_mapping_lump(session, mapping, "exit_seconds")
+	if applied > 0.0:
+		session.last_log = (
+			"Emergence complete. Exit lag: %s GST."
+			% GalacticCalendar.format_duration(applied)
+		)
 
 	_load_current_sector(true, "jump_gate")
 	_on_session_changed()
@@ -397,7 +441,7 @@ func _on_ui_undock_requested(ship_id: String) -> void:
 
 	player_ship = _assemble_current_ship()
 	_player.configure(player_ship, session.get_current_owned_ship(), catalog)
-	_hud.set_assembled_ship(player_ship)
+	_hud.bind(session, _player, player_ship)
 
 	var launch_pos := _world_loader.get_habitat_launch_position()
 	var habitat_pos := _world_loader.get_habitat_world_position()

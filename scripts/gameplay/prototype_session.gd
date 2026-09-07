@@ -33,6 +33,7 @@ var max_hull: float = 0.0
 var spare_parts: Dictionary = {}
 var sandbox: bool = false
 var orbital_phase_by_sector: Dictionary = {}
+var gst_seconds: float = 0.0
 
 var _hull_stress_cooldown: float = 0.0
 
@@ -59,6 +60,7 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	max_hull = 0.0
 	spare_parts.clear()
 	orbital_phase_by_sector.clear()
+	gst_seconds = GalacticCalendar.start_seconds_from_player(player_data)
 
 	var ships: Variant = player_data.get("ships", [])
 	if typeof(ships) != TYPE_ARRAY or ships.is_empty():
@@ -113,6 +115,7 @@ func to_dict() -> Dictionary:
 		"max_hull": max_hull,
 		"spare_parts": spare_parts.duplicate(),
 		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
+		"gst_seconds": gst_seconds,
 	}
 
 
@@ -151,6 +154,10 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	max_hull = float(session_data.get("max_hull", 0.0))
 	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
 	orbital_phase_by_sector = _float_dict_from_variant(session_data.get("orbital_phase_by_sector", {}))
+	if session_data.has("gst_seconds"):
+		gst_seconds = float(session_data.get("gst_seconds", 0.0))
+	else:
+		gst_seconds = GalacticCalendar.default_start_seconds()
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := _int_dict_from_variant(session_data.get("cargo", {}))
@@ -267,6 +274,16 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	last_log = "Emergence complete. Welcome to %s." % location_name
 	changed.emit()
 	return true
+
+
+func advance_gst(seconds: float) -> void:
+	if seconds <= 0.0:
+		return
+	gst_seconds += seconds
+
+
+func get_gst_timestamp() -> String:
+	return GalacticCalendar.format_timestamp(gst_seconds)
 
 
 func apply_hull_stress(amount: float, delta: float) -> void:

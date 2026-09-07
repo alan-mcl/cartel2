@@ -7,6 +7,15 @@
     "play_bounds": 4000,
     "spawn": { "x": -1800, "y": 0 },
     "objective": "Reach the exit portal",
-    "world_id": "n4_default"
+    "world_id": "n4_default",
+    "gst": {
+      "pulse_min": 0.35,
+      "pulse_max": 2.4,
+      "stretch_min": 0.35,
+      "stretch_max": 2.8,
+      "slip_chance": 0.12,
+      "slip_min": 2.0,
+      "slip_max": 18.0
+    }
   }
 ]

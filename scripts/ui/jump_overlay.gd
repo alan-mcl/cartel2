@@ -98,6 +98,17 @@ func _update_selection_ui() -> void:
 		"Route: %s via %d-space (known solution %d). Shallow transit — slower, safer."
 		% [_selected_label, _selected_n, _selected_solution]
 	)
+	var mapping := _catalog.get_mapping(_session.sector_id, _selected_target_id, _selected_n)
+	var entry_seconds := float(mapping.get("entry_seconds", 0.0))
+	var exit_seconds := float(mapping.get("exit_seconds", 0.0))
+	if entry_seconds > 0.0 or exit_seconds > 0.0:
+		_solution_label.text += (
+			" Nominal translation lag: %s entry, %s exit GST."
+			% [
+				GalacticCalendar.format_duration(entry_seconds),
+				GalacticCalendar.format_duration(exit_seconds),
+			]
+		)
 	_confirm_button.disabled = false
 	_confirm_button.text = "Translate via %d-space" % _selected_n
 

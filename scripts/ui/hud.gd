@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var _fuel: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/FuelLabel
 @onready var _power: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/PowerLabel
 @onready var _ammo: Label = $Root/Margin/StatusPanel/VBox/SystemsRow/AmmoLabel
+@onready var _gst_clock: Label = $Root/Margin/StatusPanel/VBox/GstClockLabel
 @onready var _location: Label = $Root/Margin/StatusPanel/VBox/LocationLabel
 @onready var _objective: Label = $Root/Margin/StatusPanel/VBox/ObjectiveLabel
 @onready var _target: Label = $Root/Margin/StatusPanel/VBox/TargetLabel
@@ -27,7 +28,20 @@ var _operating_state: ShipOperatingState
 func bind(session: PrototypeSession, player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
 	_session = session
 	_player = player
+	_bind_gst_clock()
 	set_assembled_ship(assembled_ship)
+
+
+func _bind_gst_clock() -> void:
+	var clock := _get_gst_clock()
+	if clock != null:
+		clock.bind(_session)
+
+
+func _get_gst_clock() -> Label:
+	if _gst_clock != null:
+		return _gst_clock
+	return get_node_or_null("Root/Margin/StatusPanel/VBox/GstClockLabel") as Label
 
 
 func set_assembled_ship(assembled_ship: AssembledShip) -> void:
@@ -143,3 +157,5 @@ func _ready() -> void:
 		_hint.text = "W/↑ thrust · S/↓ reverse · A/D rotate · Shift boost · Space/LMB fire · E interact · Esc pause"
 	if _ammo:
 		_ammo.visible = false
+	if _session != null:
+		_bind_gst_clock()

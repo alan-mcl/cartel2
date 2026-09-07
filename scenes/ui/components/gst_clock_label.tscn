@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cartel_gst_clock_label"]
+
+[ext_resource type="Script" path="res://scripts/ui/gst_clock_label.gd" id="1"]
+
+[node name="GstClockLabel" type="Label"]
+theme_type_variation = &"Numeric"
+text = "1 January Q1 2646, 08:00:00 GST"
+script = ExtResource("1")

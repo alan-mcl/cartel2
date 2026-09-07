@@ -1,6 +1,14 @@
 {
   "starting_sector": "proxima",
   "credits": 3000,
+  "gst": {
+    "year": 2646,
+    "month": 1,
+    "day": 1,
+    "hour": 8,
+    "minute": 0,
+    "second": 0
+  },
   "ships": [
     {
       "id": "flare_on_ss_1",

@@ -19,12 +19,14 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | **Cash** | Carried on the person |
 | **Credit (eCash)** | Bank balance |
 | **E-type** | Earth-like planetary classification E1–E5 |
+| **GST / GSC** | Galactic Standard Time / Calendar — interstellar civil time (364-day year) |
 
 ## Documents
 
 | File | Contents |
 |------|----------|
 | [overview.md](overview.md) | Fantasy, era, currency, Unspace, Media Reality, Saint Apex, Sleepers, Asciidians, Atomic Problems |
+| [date_time.md](date_time.md) | Galactic Standard Calendar and Time |
 | [planets.md](planets.md) | Six starter systems, stats, cities, Unspace route table |
 | [corporations.md](corporations.md) | Sixteen megacorporations |
 | [ships.md](ships.md) | Ship families and configurations |
@@ -38,6 +40,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Habitats | Proxima Habitat, Bela Orbital Habitat |
 | Jump routes listed | Proxima ↔ Bela via flyable **4-space** (n=4 only) |
 | Unspace hazards | Shear fields + debris in 4-space; hull stress (non-lethal) |
+| GST clock | HUD + habitat; 1:1 in orbit/docked; mapping lumps + irregular unspace flow |
 | Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
 | Surface cities | Not implemented |
 

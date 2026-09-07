@@ -1,5 +1,7 @@
 # Galactic Standard Calendar and Time
 
+**Status:** Calendar rules are setting canon. The Godot prototype implements GST tracking, a HUD/habitat clock, mapping-based translation lumps, and irregular unspace time flow.
+
 The Galactic Standard Calendar (GSC) and Galactic Standard Time (GST) form the common civil timekeeping standard used across human space.
 
 The system is derived from the historical Gregorian calendar but was redesigned for a civilization no longer dependent on Earth's orbital cycle. It retains familiar month names and the seven-day week while eliminating astronomical corrections and irregular month lengths.
@@ -84,3 +86,15 @@ A typical timestamp might therefore be:
 **35 March Q1 2653, 18:42:17 GST**
 
 with the same event potentially expressed in a different local time by observers elsewhere.
+
+## Prototype time flow
+
+The near-orbit prototype advances GST as follows:
+
+- **Realspace flight** and **habitat/building menus** — one GST second per real second (visible on HUD and habitat header with seconds resolution).
+- **Entering unspace** at a jump gate — discrete GST lump from the route mapping (`entry_seconds`, with small random jitter).
+- **Flying in unspace** — irregular pulses: time stalls, then jumps forward; higher N-space depth is more erratic.
+- **Exiting unspace** at the portal — discrete GST lump from the same mapping (`exit_seconds`, with jitter).
+- **Frozen** during main menu, pause overlay, save/load overlay, and jump-route picker.
+
+New games start at **1 January Q1 2646, 08:00:00 GST** (configurable in `player.json`). Saves store `session.gst_seconds`.
