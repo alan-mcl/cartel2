@@ -32,6 +32,7 @@ const UNSPACE_TINT := Color(0.78, 0.58, 1.0, 1.0)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_world.process_mode = Node.PROCESS_MODE_PAUSABLE
 
 	session.changed.connect(_on_session_changed)
 	_player.interaction_target_changed.connect(_on_interaction_target_changed)

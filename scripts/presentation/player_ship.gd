@@ -108,6 +108,7 @@ func get_stats() -> ShipStats:
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_to_group("player")
 
 	var thrust_texture := load(THRUST_SPRITE) as Texture2D
