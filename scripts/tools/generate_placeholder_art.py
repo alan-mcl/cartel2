@@ -3,8 +3,11 @@
 
 from __future__ import annotations
 
+import os
 import random
 import struct
+import subprocess
+import sys
 import zlib
 from pathlib import Path
 
@@ -102,6 +105,45 @@ def main() -> None:
     )
 
     write_text(
+        ASSETS / "ships/chassis/krypton_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="-36 -36 72 72">
+  <ellipse cx="0" cy="0" rx="28" ry="12" fill="#c8e878" stroke="#e8f8a8" stroke-width="2"/>
+  <ellipse cx="0" cy="0" rx="10" ry="10" fill="#98b858" stroke="#e8f8a8" stroke-width="2"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/wolff_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="88" height="64" viewBox="-44 -32 88 64">
+  <rect x="-32" y="-18" width="64" height="36" rx="4" fill="#8898a8" stroke="#b8c8d8" stroke-width="2"/>
+  <rect x="-12" y="-26" width="24" height="10" fill="#687888" stroke="#b8c8d8" stroke-width="2"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/dragon_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="96" height="48" viewBox="-48 -24 96 48">
+  <polygon points="40,-8 40,8 -36,14 -36,-14" fill="#ffd060" stroke="#ffe8a0" stroke-width="2"/>
+  <polygon points="-36,-10 -36,10 -44,0" fill="#c8a040" stroke="#ffe8a0" stroke-width="2"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/juno_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="72" height="56" viewBox="-36 -28 72 56">
+  <polygon points="0,-22 30,12 0,18 -30,12" fill="#a8b8d0" stroke="#d0d8e8" stroke-width="2"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/silhouette_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="-40 -20 80 40">
+  <polygon points="0,-16 34,0 0,12 -34,0" fill="#d87888" stroke="#f0a8b8" stroke-width="2"/>
+  <line x1="-20" y1="0" x2="20" y2="0" stroke="#f0a8b8" stroke-width="2"/>
+</svg>""",
+    )
+
+    write_text(
         ASSETS / "ships/fx/thrust.svg",
         """<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-16 -16 32 32">
   <polygon points="-8,8 0,20 8,8" fill="#ff8c33" opacity="0.85"/>
@@ -195,6 +237,44 @@ def main() -> None:
     write_png(ASSETS / "space/stars_near.png", 512, 512, stars_png(512, 512, 320, 90211))
     write_png(ASSETS / "world/planet_limb.png", 512, 512, planet_limb_png(512, 512))
     write_png(ASSETS / "world/planet.png", 512, 512, planet_disc_png(512, 512))
+
+    _run_godot_import()
+
+
+def _find_godot_binary() -> Path | None:
+    env_path := os.environ.get("GODOT")
+    if env_path:
+        candidate = Path(env_path).expanduser()
+        if candidate.is_file():
+            return candidate
+
+    for candidate in (
+        Path.home() / "opt/Godot_v4.7.2-stable_linux.x86_64",
+        Path("/usr/bin/godot"),
+        Path("/usr/local/bin/godot"),
+    ):
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def _run_godot_import() -> None:
+    godot := _find_godot_binary()
+    if godot is None:
+        print(
+            "warning: Godot binary not found; run `godot --path . --import --headless --quit` "
+            "so new SVG/PNG assets get .import sidecars.",
+            file=sys.stderr,
+        )
+        return
+
+    print(f"running Godot import via {godot}")
+    result = subprocess.run(
+        [str(godot), "--path", str(ROOT), "--import", "--headless", "--quit"],
+        check=False,
+    )
+    if result.returncode != 0:
+        print(f"warning: Godot import exited with code {result.returncode}", file=sys.stderr)
 
 
 if __name__ == "__main__":

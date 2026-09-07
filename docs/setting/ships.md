@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. Playable fleet: **Flare-ON SS** (aboard) and **Pegasus P101** (parked at Proxima Habitat), assembled from JSON module ids.
+**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. Playable fleet at Proxima Habitat includes **Flare-ON SS** (player starting hull, first in fleet) plus one parked instance of every catalog template for shipyard testing.
 
 ## Composition model
 
@@ -128,4 +128,18 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 | Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
 | Hyperdrive on Dragon Gold | Alpha class | Not in current JSON |
 
-Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and heat simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).
+Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).
+
+### In prototype JSON (`ships.json`)
+
+All fourteen manufacturer templates are catalogued with placeholder loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations are **invented placeholders** where the design doc is sparse.
+
+| Template id | Chassis | Notes |
+|-------------|---------|-------|
+| `flare_on_ss`, `flare_on_sk` | `flare_on_chassis` | SS = player default; SK = gravitic + turbo laser |
+| `pegasus_p101`, `p103`, `p103a` | `pegasus_chassis` | P103a = law-enforcement antimatter + plasma |
+| `krypton_k2`, `krypton_k3` | `krypton_chassis` | K2 fusion / K3 antimatter saucer |
+| `wolff_warrior`, `wolff_gladius` | `wolff_chassis` | Missile + scatter gunship |
+| `dragon_gold` | `dragon_chassis` | Interceptor + alpha hyperdrive (catalog only) |
+| `juno_1045`, `1088`, `1090` | `juno_chassis` | Scout progression (placeholder) |
+| `silhouette_mk8` | `silhouette_chassis` | Tactical fighter |

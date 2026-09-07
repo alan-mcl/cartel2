@@ -5,6 +5,7 @@ signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 signal operating_state_changed(state: ShipOperatingState)
 
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
+const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
@@ -45,11 +46,7 @@ func _apply_hull_visual() -> void:
 	if sprite_path.is_empty():
 		push_error("Chassis '%s' is missing sprite path." % str(assembled_ship.chassis.get("id", "")))
 	else:
-		var texture := load(sprite_path) as Texture2D
-		if texture == null:
-			push_error("Failed to load chassis sprite: %s" % sprite_path)
-		else:
-			_hull.texture = texture
+		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 
 	var color_text := str(assembled_ship.chassis.get("hull_color", "#ffffff"))
 	_hull.modulate = Color.html(color_text)

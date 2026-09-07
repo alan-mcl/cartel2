@@ -3,6 +3,7 @@ extends RefCounted
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const NPC_SHIP_SCENE_PATH := "res://scenes/npc_ship.tscn"
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
+const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 
 var actors: Array = []
 var _catalog: Catalog
@@ -395,9 +396,7 @@ func _spawn_far_sprite(actor) -> void:
 	hull.name = "Hull"
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
 	if not sprite_path.is_empty():
-		var texture := load(sprite_path) as Texture2D
-		if texture != null:
-			hull.texture = texture
+		hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 	hull.scale = Vector2(0.65, 0.65)
 	var base_color := Color.html(str(actor.assembled_ship.chassis.get("hull_color", "#ffffff")))
 	hull.modulate = base_color.lightened(actor.hull_color_shift)

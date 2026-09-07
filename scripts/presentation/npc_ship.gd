@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const _TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
+const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
@@ -109,9 +110,7 @@ func _apply_hull_visual() -> void:
 
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
 	if not sprite_path.is_empty():
-		var texture := load(sprite_path) as Texture2D
-		if texture != null:
-			_hull.texture = texture
+		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 
 	var base := _base_hull_color()
 	_hull.modulate = base.lightened(actor.hull_color_shift)

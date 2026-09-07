@@ -60,8 +60,8 @@ static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 
 	ship.cargo = _dict_from_variant(ship_data.get("cargo", {}))
 	ship.ammunition = _float_dict_from_variant(ship_data.get("ammunition", {}))
-	if ship.ammunition.is_empty() and ship.template_id == "pegasus_p101":
-		ship.ammunition["mass_driver_round"] = 120.0
+	if ship.ammunition.is_empty():
+		ShipAssembler.seed_ammunition(catalog, ship)
 	return ship
 
 

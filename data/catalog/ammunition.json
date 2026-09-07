@@ -10,5 +10,17 @@
     "name": "Light Missile",
     "mass": 1.2,
     "cost": 85
+  },
+  {
+    "id": "plasma_cell",
+    "name": "Plasma Cell",
+    "mass": 0.15,
+    "cost": 12
+  },
+  {
+    "id": "scatter_shell",
+    "name": "Scatter Shell",
+    "mass": 0.4,
+    "cost": 18
   }
 ]

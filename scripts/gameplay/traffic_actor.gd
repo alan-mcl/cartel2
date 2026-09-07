@@ -294,8 +294,7 @@ static func _create_owned_ship(catalog: Catalog, template_id: String, callsign: 
 	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	owned.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
-	if template_id == "pegasus_p101":
-		owned.ammunition["mass_driver_round"] = 120.0
+	ShipAssembler.seed_ammunition(catalog, owned)
 	return owned
 
 
@@ -330,7 +329,8 @@ func _should_engage(traffic_config: Dictionary) -> bool:
 	if not is_armed() or not has_ammo():
 		return false
 	var hull_ratio := hull_current / maxf(hull_max, 1.0)
-	if template_id == "flare_on_ss":
+	var maneuver := str(assembled_ship.chassis.get("maneuver", "medium"))
+	if maneuver == "high":
 		return hull_ratio > float(traffic_config.get("engage_hull_threshold_flare", 0.4))
 	return hull_ratio > float(traffic_config.get("engage_hull_threshold_pegasus", 0.5))
 

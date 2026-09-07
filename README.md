@@ -65,10 +65,16 @@ data/catalog/          JSON catalogs including commodities and markets
 docs/                  Architecture, data model, setting bible
 ```
 
-Regenerate placeholder art:
+Regenerate placeholder art (runs Godot import for new SVG/PNG assets):
 
 ```bash
 python3 scripts/tools/generate_placeholder_art.py
+```
+
+If chassis sprites fail to load after adding art manually, run:
+
+```bash
+godot --path . --import --headless --quit
 ```
 
 Rebuild UI theme after token changes:

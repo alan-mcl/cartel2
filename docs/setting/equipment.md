@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes chassis, engines, sensors, **light laser**, **light mass driver**, cargo/fuel modules, and armour. **Light laser and mass driver fire in orbital flight**; shields, LSS variants, and hyperdrives remain design-only.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, engines through Mark 2 antimatter and gravitic, sensors, lasers, mass drivers, plasma/scatter/missile weapons, cargo/fuel modules, armour, and an alpha hyperdrive catalog entry (no translation gameplay). **Light laser and mass driver fire in orbital flight**; shields remain design-only.
 
 ## Design layers
 
@@ -45,6 +45,11 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 |----|-------|----------|-------|
 | `flare_on_chassis` | Holt-Winters | high | Light sporty hull |
 | `pegasus_chassis` | GVW Corp | low | Workhorse freighter |
+| `krypton_chassis` | Durbin-Watson Corp | high | Mid-range saucer |
+| `wolff_chassis` | Bayes Inc | medium | Armed freighter / gunship |
+| `dragon_chassis` | Kolmogorov-Smirnov | high | Interceptor |
+| `juno_chassis` | Bayes Inc | medium | Light scout |
+| `silhouette_chassis` | Oklahoma Combine | high | Tactical fighter |
 
 Each chassis references a hull **sprite** path and **hull_color** for rendering.
 
@@ -73,6 +78,8 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 |----|-------|------|
 | `mark_3_fusion` | Bayes Inc | Flare-ON SS default |
 | `mark_1_fusion` | Bayes Inc | Pegasus P101 default |
+| `mark_2_antimatter` | Bayes Inc | Gunships, P103a, K3 |
+| `gravitic_mk1` | Holt-Winters Corp | Flare-ON SK |
 
 `ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and compute in flight.
 
@@ -112,14 +119,11 @@ Holt-Winters holds major market share for shield generators in corporate lore.
 
 ---
 
-## Hyperdrives (design only)
+## Hyperdrives (catalog placeholder)
 
-| Class | Weight | Range (ly) | Speed | Recharge (min) |
-|-------|--------|------------|-------|----------------|
-| Alpha | 4 t | 20 | 2 xl | 10 |
-| Beta | 5 t | 25 | 3 xl | 10 |
-
-Gold Dragon intended to mount Alpha class. Not in prototype JSON or gameplay.
+| Class | Module id | Notes |
+|-------|-----------|-------|
+| Alpha | `hyperdrive_alpha` | Dragon Gold template; no translation gameplay yet |
 
 **Future Unspace role:** hyperdrive-equipped ships will be able to initiate translation from 4-space without reaching a fixed exit portal, and eventually from regions away from jump-gate entry points. Jump gates remain the standard shallow-route injection method for ships without hyperdrives.
 

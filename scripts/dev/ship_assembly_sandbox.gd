@@ -46,7 +46,12 @@ func _build_session() -> GameSession:
 		for ship_data in ships_data:
 			if typeof(ship_data) != TYPE_DICTIONARY:
 				continue
-			var ship := OwnedShip.from_dict(ship_data)
+			var modules_data: Variant = ship_data.get("modules", [])
+			var ship: OwnedShip
+			if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
+				ship = OwnedShip.from_dict(ship_data)
+			else:
+				ship = OwnedShip.from_template(_catalog, ship_data)
 			ship.location = SANDBOX_HABITAT_ID
 			session.owned_ships.append(ship)
 			_ship_id_counter += 1
@@ -160,8 +165,7 @@ func _on_restore_pressed() -> void:
 	var assembled := ShipAssembler.assemble_owned(_catalog, ship)
 	ship.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
 	ship.ammunition.clear()
-	if ship.template_id == "pegasus_p101":
-		ship.ammunition["mass_driver_round"] = 120.0
+	ShipAssembler.seed_ammunition(_catalog, ship)
 
 	_session.last_log = "Restored %s template." % ship.name
 	_session.changed.emit()

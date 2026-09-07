@@ -15,7 +15,7 @@
       "power": 1,
       "system": 6,
       "light_weapon": 2,
-      "medium_weapon": 0,
+      "medium_weapon": 1,
       "heavy_weapon": 0,
       "maneuver": 1
     }
@@ -36,9 +36,114 @@
       "power": 1,
       "system": 9,
       "light_weapon": 3,
-      "medium_weapon": 0,
+      "medium_weapon": 1,
       "heavy_weapon": 0,
       "maneuver": 2
+    }
+  },
+  {
+    "id": "krypton_chassis",
+    "name": "Krypton Chassis",
+    "maker": "Durbin-Watson Corp",
+    "mass": 6.0,
+    "hits": 22,
+    "mass_limit": 32.0,
+    "volume": 40.0,
+    "maneuver": "high",
+    "hull_color": "#c8e878",
+    "sprite": "res://assets/ships/chassis/krypton_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 7,
+      "light_weapon": 2,
+      "medium_weapon": 1,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
+  },
+  {
+    "id": "wolff_chassis",
+    "name": "Wolff Chassis",
+    "maker": "Bayes Inc",
+    "mass": 10.0,
+    "hits": 30,
+    "mass_limit": 42.0,
+    "volume": 50.0,
+    "maneuver": "medium",
+    "hull_color": "#8898a8",
+    "sprite": "res://assets/ships/chassis/wolff_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 8,
+      "light_weapon": 1,
+      "medium_weapon": 2,
+      "heavy_weapon": 1,
+      "maneuver": 2
+    }
+  },
+  {
+    "id": "dragon_chassis",
+    "name": "Dragon Chassis",
+    "maker": "Kolmogorov-Smirnov",
+    "mass": 7.5,
+    "hits": 24,
+    "mass_limit": 36.0,
+    "volume": 44.0,
+    "maneuver": "high",
+    "hull_color": "#ffd060",
+    "sprite": "res://assets/ships/chassis/dragon_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 8,
+      "light_weapon": 2,
+      "medium_weapon": 1,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
+  },
+  {
+    "id": "juno_chassis",
+    "name": "Juno Chassis",
+    "maker": "Bayes Inc",
+    "mass": 5.0,
+    "hits": 20,
+    "mass_limit": 28.0,
+    "volume": 36.0,
+    "maneuver": "medium",
+    "hull_color": "#a8b8d0",
+    "sprite": "res://assets/ships/chassis/juno_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 6,
+      "light_weapon": 2,
+      "medium_weapon": 0,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
+  },
+  {
+    "id": "silhouette_chassis",
+    "name": "Silhouette Chassis",
+    "maker": "Oklahoma Combine",
+    "mass": 6.8,
+    "hits": 22,
+    "mass_limit": 34.0,
+    "volume": 42.0,
+    "maneuver": "high",
+    "hull_color": "#d87888",
+    "sprite": "res://assets/ships/chassis/silhouette_chassis.svg",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 7,
+      "light_weapon": 2,
+      "medium_weapon": 2,
+      "heavy_weapon": 0,
+      "maneuver": 1
     }
   }
 ]

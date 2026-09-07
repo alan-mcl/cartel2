@@ -11,6 +11,7 @@ const STOCK_CATEGORIES := [
 	"computer",
 	"life_support",
 	"sensor",
+	"hyperdrive",
 	"weapon",
 	"armour",
 	"cargo",

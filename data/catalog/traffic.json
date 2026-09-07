@@ -47,14 +47,26 @@
     }
   },
   "role_ship_templates": {
-    "transit": "pegasus_p101",
-    "shuttle": "pegasus_p101",
-    "loiter": ["pegasus_p101", "flare_on_ss"],
-    "runabout": "flare_on_ss",
-    "dock_cycle": "pegasus_p101"
+    "transit": ["pegasus_p101", "pegasus_p103", "krypton_k2", "juno_1045"],
+    "shuttle": ["pegasus_p101", "krypton_k2", "juno_1088"],
+    "loiter": ["pegasus_p103a", "wolff_warrior", "wolff_gladius", "silhouette_mk8", "dragon_gold", "flare_on_ss"],
+    "runabout": ["flare_on_ss", "flare_on_sk", "juno_1090", "krypton_k3"],
+    "dock_cycle": ["pegasus_p101", "pegasus_p103", "juno_1045"]
   },
   "callsign_prefixes": {
     "pegasus_p101": "PGS",
-    "flare_on_ss": "HW"
+    "pegasus_p103": "PGS",
+    "pegasus_p103a": "LAW",
+    "flare_on_ss": "HW",
+    "flare_on_sk": "HW",
+    "krypton_k2": "DW",
+    "krypton_k3": "DW",
+    "wolff_warrior": "WLF",
+    "wolff_gladius": "WLF",
+    "dragon_gold": "DRG",
+    "juno_1045": "JNO",
+    "juno_1088": "JNO",
+    "juno_1090": "JNO",
+    "silhouette_mk8": "SIL"
   }
 }

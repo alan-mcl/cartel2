@@ -203,7 +203,7 @@ Catalog: `data/catalog/traffic.json`. Presentation: `scenes/npc_ship.tscn`, `scr
 
 Chassis entries reference hull sprites and `hull_color` modulate. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
 
-Regenerate placeholders: `python3 scripts/tools/generate_placeholder_art.py`, then Godot reimport.
+Regenerate placeholders: `python3 scripts/tools/generate_placeholder_art.py` (runs Godot import for new SVG/PNG sidecars). If import is skipped, run `godot --path . --import --headless --quit` manually.
 
 UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_theme.md](docs/design/ui_theme.md). Reference viewport: **1920×1080**.
 

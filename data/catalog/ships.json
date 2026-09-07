@@ -16,6 +16,22 @@
     ]
   },
   {
+    "id": "flare_on_sk",
+    "name": "Flare-ON SK",
+    "maker": "Holt-Winters Corp",
+    "chassis": "flare_on_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "gravitic_mk1",
+      "nav_combat_core_mk2",
+      "life_support_a3",
+      "sensor_advanced",
+      "fuel_tank_small",
+      "cargo_bay_4",
+      "turbo_laser"
+    ]
+  },
+  {
     "id": "pegasus_p101",
     "name": "Pegasus P101",
     "maker": "GVW Corp",
@@ -30,6 +46,198 @@
       "fuel_tank_medium",
       "cargo_bay_10",
       "chitanium_5mm",
+      "light_mass_driver"
+    ]
+  },
+  {
+    "id": "pegasus_p103",
+    "name": "Pegasus P103",
+    "maker": "GVW Corp",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_1_fusion",
+      "nav_combat_core_mk1",
+      "life_support_a3",
+      "sensor_basic",
+      "fuel_tank_medium",
+      "cargo_bay_10",
+      "chitanium_5mm"
+    ]
+  },
+  {
+    "id": "pegasus_p103a",
+    "name": "Pegasus P103a",
+    "maker": "GVW Corp",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_2_antimatter",
+      "nav_combat_core_mk2",
+      "life_support_mk1",
+      "targeting_core_mk2",
+      "sensor_advanced",
+      "plasma_magazine_100",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "plasma_cannon"
+    ]
+  },
+  {
+    "id": "krypton_k2",
+    "name": "Krypton K2",
+    "maker": "Durbin-Watson Corp",
+    "chassis": "krypton_chassis",
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_3_fusion",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "sensor_basic",
+      "fuel_tank_medium",
+      "cargo_bay_10",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "krypton_k3",
+    "name": "Krypton K3",
+    "maker": "Durbin-Watson Corp",
+    "chassis": "krypton_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_2_antimatter",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "sensor_basic",
+      "fuel_tank_medium",
+      "cargo_bay_10",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "wolff_warrior",
+    "name": "Wolff Warrior",
+    "maker": "Bayes Inc",
+    "chassis": "wolff_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_2_antimatter",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "sensor_basic",
+      "missile_magazine_24",
+      "scatter_magazine_80",
+      "fuel_tank_large",
+      "chitanium_5mm",
+      "missile_launcher",
+      "scatter_cannon"
+    ]
+  },
+  {
+    "id": "wolff_gladius",
+    "name": "Wolff Gladius",
+    "maker": "Bayes Inc",
+    "chassis": "wolff_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_2_antimatter",
+      "nav_combat_core_mk2",
+      "life_support_mk1",
+      "targeting_core_mk2",
+      "sensor_basic",
+      "missile_magazine_24",
+      "scatter_magazine_80",
+      "fuel_tank_large",
+      "chitanium_10mm",
+      "missile_launcher",
+      "scatter_cannon"
+    ]
+  },
+  {
+    "id": "dragon_gold",
+    "name": "Dragon Gold",
+    "maker": "Kolmogorov-Smirnov",
+    "chassis": "dragon_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_2_antimatter",
+      "nav_combat_core_mk2",
+      "life_support_mk1",
+      "sensor_advanced",
+      "hyperdrive_alpha",
+      "plasma_magazine_100",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "light_laser",
+      "plasma_burst"
+    ]
+  },
+  {
+    "id": "juno_1045",
+    "name": "Juno 1045",
+    "maker": "Bayes Inc",
+    "chassis": "juno_chassis",
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_1_fusion",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "sensor_basic",
+      "fuel_tank_small",
+      "cargo_bay_4",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "juno_1088",
+    "name": "Juno 1088",
+    "maker": "Bayes Inc",
+    "chassis": "juno_chassis",
+    "modules": [
+      "fusion_plant_mk1",
+      "mark_3_fusion",
+      "nav_combat_core_mk1",
+      "life_support_mk1",
+      "sensor_advanced",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "juno_1090",
+    "name": "Juno 1090",
+    "maker": "Bayes Inc",
+    "chassis": "juno_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_3_fusion",
+      "nav_combat_core_mk2",
+      "life_support_mk1",
+      "sensor_advanced",
+      "mass_driver_magazine_200",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "light_laser",
+      "light_mass_driver"
+    ]
+  },
+  {
+    "id": "silhouette_mk8",
+    "name": "Silhouette Mk8",
+    "maker": "Oklahoma Combine",
+    "chassis": "silhouette_chassis",
+    "modules": [
+      "fusion_plant_mk2",
+      "mark_3_fusion",
+      "nav_combat_core_mk2",
+      "life_support_mk1",
+      "sensor_advanced",
+      "mass_driver_magazine_200",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "turbo_laser",
       "light_mass_driver"
     ]
   }

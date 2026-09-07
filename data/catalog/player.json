@@ -53,6 +53,90 @@
       },
       "cargo": {},
       "location": "proxima_habitat"
+    },
+    {
+      "id": "flare_on_sk_1",
+      "name": "Flare-ON SK",
+      "template_id": "flare_on_sk",
+      "chassis_id": "flare_on_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "pegasus_p103_1",
+      "name": "Pegasus P103",
+      "template_id": "pegasus_p103",
+      "chassis_id": "pegasus_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "pegasus_p103a_1",
+      "name": "Pegasus P103a",
+      "template_id": "pegasus_p103a",
+      "chassis_id": "pegasus_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "krypton_k2_1",
+      "name": "Krypton K2",
+      "template_id": "krypton_k2",
+      "chassis_id": "krypton_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "krypton_k3_1",
+      "name": "Krypton K3",
+      "template_id": "krypton_k3",
+      "chassis_id": "krypton_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "wolff_warrior_1",
+      "name": "Wolff Warrior",
+      "template_id": "wolff_warrior",
+      "chassis_id": "wolff_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "wolff_gladius_1",
+      "name": "Wolff Gladius",
+      "template_id": "wolff_gladius",
+      "chassis_id": "wolff_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "dragon_gold_1",
+      "name": "Dragon Gold",
+      "template_id": "dragon_gold",
+      "chassis_id": "dragon_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "juno_1045_1",
+      "name": "Juno 1045",
+      "template_id": "juno_1045",
+      "chassis_id": "juno_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "juno_1088_1",
+      "name": "Juno 1088",
+      "template_id": "juno_1088",
+      "chassis_id": "juno_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "juno_1090_1",
+      "name": "Juno 1090",
+      "template_id": "juno_1090",
+      "chassis_id": "juno_chassis",
+      "location": "proxima_habitat"
+    },
+    {
+      "id": "silhouette_mk8_1",
+      "name": "Silhouette Mk8",
+      "template_id": "silhouette_mk8",
+      "chassis_id": "silhouette_chassis",
+      "location": "proxima_habitat"
     }
   ]
 }

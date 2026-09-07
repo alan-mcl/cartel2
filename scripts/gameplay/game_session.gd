@@ -70,7 +70,12 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	for ship_data in ships:
 		if typeof(ship_data) != TYPE_DICTIONARY:
 			continue
-		var ship := OwnedShip.from_dict(ship_data)
+		var modules_data: Variant = ship_data.get("modules", [])
+		var ship: OwnedShip
+		if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
+			ship = OwnedShip.from_dict(ship_data)
+		else:
+			ship = OwnedShip.from_template(catalog, ship_data)
 		ship.location = NEW_GAME_HABITAT_ID
 		owned_ships.append(ship)
 
