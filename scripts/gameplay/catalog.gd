@@ -148,6 +148,10 @@ func get_commodity(id: String) -> Dictionary:
 	return _require(commodities_by_id, id, "commodity")
 
 
+func has_commodity(id: String) -> bool:
+	return commodities_by_id.has(id)
+
+
 func get_market_for_building(building_id: String) -> Dictionary:
 	for market in markets_by_id.values():
 		if typeof(market) != TYPE_DICTIONARY:

@@ -41,8 +41,8 @@
     "name": "Proxima Exchange",
     "type": "market",
     "kind": "merchant",
-    "description": "Automated commodity exchange. Bulk goods, rations, and consumables trade on open contracts.",
-    "short_desc": "Automated commodity exchange for bulk goods and consumables.",
+    "description": "Automated commodity exchange. Open contracts across the eleven principal trade categories.",
+    "short_desc": "Automated commodity exchange for interplanetary trade categories.",
     "art": "res://assets/ui/locations/proxima_exchange.svg"
   },
   {

@@ -31,6 +31,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | [corporations.md](corporations.md) | Sixteen megacorporations |
 | [ships.md](ships.md) | Ship families and configurations |
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
+| [commodities.md](commodities.md) | Closed eleven-category trade roster |
 
 ## Current implementation
 
@@ -42,6 +43,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Unspace hazards | Shear fields + debris in 4-space; hull stress (non-lethal) |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; mapping lumps + irregular unspace flow |
 | Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
+| Commodities | Eleven broad categories; Proxima Exchange lists all |
 | Surface cities | Not implemented |
 
 When redesigning, edit these markdown files first; then update JSON catalogs to match.

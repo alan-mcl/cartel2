@@ -3,10 +3,17 @@
     "id": "proxima_exchange",
     "building_id": "proxima_exchange",
     "listings": [
-      { "commodity_id": "water_ice", "price": 42, "quantity": 200 },
-      { "commodity_id": "protein_packs", "price": 78, "quantity": 120 },
-      { "commodity_id": "spare_parts", "price": 115, "quantity": 60 },
-      { "commodity_id": "fuel_cells", "price": 92, "quantity": 80 }
+      { "commodity_id": "food_products", "price": 47, "quantity": 500 },
+      { "commodity_id": "pharmaceuticals", "price": 175, "quantity": 120 },
+      { "commodity_id": "consumer_goods", "price": 88, "quantity": 300 },
+      { "commodity_id": "data", "price": 215, "quantity": 80 },
+      { "commodity_id": "entertainment", "price": 138, "quantity": 150 },
+      { "commodity_id": "industrial_components", "price": 108, "quantity": 200 },
+      { "commodity_id": "chemicals", "price": 68, "quantity": 400 },
+      { "commodity_id": "advanced_raw_materials", "price": 195, "quantity": 100 },
+      { "commodity_id": "luxury_goods", "price": 275, "quantity": 40 },
+      { "commodity_id": "military_goods", "price": 245, "quantity": 50 },
+      { "commodity_id": "compute_cores", "price": 390, "quantity": 30 }
     ]
   }
 ]

@@ -44,7 +44,7 @@ func _ready() -> void:
 func bind(context: UiContext) -> void:
 	_context = context
 	if _context.session != null and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh)
+		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
 	if _gst_clock != null and _gst_clock.has_method("bind") and _context.session != null:
 		_gst_clock.bind(_context.session)
 	_refresh_when_ready()
@@ -131,7 +131,7 @@ func _select_building_at_index(index: int) -> void:
 		_context.session.changed.disconnect(refresh)
 	var visited := _context.session.visit(_context.catalog, building_id)
 	if was_connected and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh)
+		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
 	if not visited:
 		return
 	_selected_commodity_id = ""
@@ -478,27 +478,25 @@ func _hide_shipyard_embedded() -> void:
 
 
 func _on_buy_commodity(commodity_id: String) -> void:
-	if _context.session.buy_commodity(
+	_selected_commodity_id = commodity_id
+	_context.session.buy_commodity(
 		_context.catalog,
 		_context.session.building_id,
 		commodity_id,
 		1,
 		_selected_terminal_ship_id
-	):
-		_selected_commodity_id = commodity_id
-		refresh()
+	)
 
 
 func _on_sell_commodity(commodity_id: String) -> void:
-	if _context.session.sell_commodity(
+	_selected_commodity_id = commodity_id
+	_context.session.sell_commodity(
 		_context.catalog,
 		_context.session.building_id,
 		commodity_id,
 		1,
 		_selected_terminal_ship_id
-	):
-		_selected_commodity_id = commodity_id
-		refresh()
+	)
 
 
 func _on_undock_ship(ship_id: String) -> void:

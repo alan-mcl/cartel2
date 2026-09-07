@@ -184,6 +184,8 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 			for commodity_id in legacy_cargo.keys():
 				aboard_ship.add_cargo(str(commodity_id), int(legacy_cargo[commodity_id]))
 
+	_prune_unknown_cargo(catalog)
+
 	if owned_ships.is_empty():
 		push_error("Save file contains no ships.")
 		return false
@@ -629,6 +631,16 @@ func _find_market_listing(market: Dictionary, commodity_id: String) -> Dictionar
 		if str(listing.get("commodity_id", "")) == commodity_id:
 			return listing
 	return {}
+
+
+func _prune_unknown_cargo(catalog: Catalog) -> void:
+	for ship in owned_ships:
+		var unknown_ids: Array[String] = []
+		for commodity_id in ship.cargo.keys():
+			if not catalog.has_commodity(str(commodity_id)):
+				unknown_ids.append(str(commodity_id))
+		for commodity_id in unknown_ids:
+			ship.cargo.erase(commodity_id)
 
 
 func _int_dict_from_variant(value: Variant) -> Dictionary:
