@@ -261,7 +261,7 @@ func _build_unspace_nav_contacts(catalog: Catalog) -> Array:
 		"short_label": "X",
 		"contact_kind": "landmark",
 		"position": _nspace_field.get_portal_position(),
-	}]
+	}] + _nspace_field.get_inhabitant_contacts()
 
 
 func _ensure_sector_nav_cache(catalog: Catalog) -> void:

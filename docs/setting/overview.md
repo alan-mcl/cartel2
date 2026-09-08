@@ -12,7 +12,7 @@ The player is an **independent operator**: trader, mercenary, outlaw, or entrepr
 
 - Intended in-game calendar: **~2646 AD**.
 - Hard-SF leaning: Unspace physics, cryogenic sleepers, recovered Earth time capsules, **Media Reality**, **Atomic Problems**.
-- Asciidians: intelligent natives of Unspace (from design notes; not yet in gameplay).
+- Ascidians: intelligent natives of Unspace (from design notes; now appear as ambient fauna in 4-space).
 
 ## Currency
 
@@ -49,7 +49,7 @@ The scientific term for the higher-order dimensions through which matter can be 
 
 Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (stronger signature hazards and hostile phenomena). The game currently implements only **4-space** — the shallowest Unspace layer above realspace.
 
-**4-space family (implemented):** dark void with a **polygonised topographic mesh** under the ship — peaks, troughs, and ridges read through height-based colour. **False proximity** comes from edge crossings: every boundary kick perturbs velocity, and some crossings randomly resize/reorient the mesh so the exit portal and apparent terrain shift. A soft radial bound turns the ship back toward the center near the rim. Sensors with **`4_space_topology`** can label the exit portal embedded in a face. Deeper N-spaces will reuse this pattern with escalating hazards and dedicated topology capabilities.
+**4-space family (implemented):** dark void with a **polygonised topographic mesh** under the ship — peaks, troughs, and ridges read through height-based colour. **False proximity** comes from edge crossings: every boundary kick perturbs velocity, and some crossings randomly resize/reorient the mesh so the exit portal and apparent terrain shift. A soft radial bound turns the ship back toward the center near the rim. Sensors with **`4_space_topology`** can label the exit portal embedded in a face. **Ascidians** — luminous, translucent amoeba-like natives — wander independently of the mesh and fade when passing behind topographic peaks; they appear as faint radar blips. Deeper N-spaces will reuse this pattern with escalating hazards and dedicated topology capabilities.
 
 ### Translation flow (current)
 
@@ -91,9 +91,9 @@ When travellers returned to uninhabitable Earth, one human colony survived on Ma
 
 Common name for planet **BJE356DF** — red dust and exceptionally ferocious native life.
 
-## Asciidians
+## Ascidians
 
-Intelligent creatures inhabiting unspace dimensions. Humanity is not alone, but contact remains marginal in playable scope.
+Intelligent creatures inhabiting unspace dimensions. Humanity is not alone, but contact remains marginal in playable scope. In **4-space**, one to three Ascidians typically drift through each transit — luminous, colour-shifting forms that pass through the topographic mesh and are unaffected by edge crossings or terrain deformation.
 
 ## Artificial intelligence and Atomic Problems
 

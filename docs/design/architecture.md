@@ -156,7 +156,7 @@ flowchart TD
 
 4-space layouts are defined in `unspaces.json` as a **`field`** block: a procedurally generated topographic triangle mesh, edge-crossing kicks/deforms, and an exit portal embedded in a face. Legacy flat `entities` lists in `worlds.json` are no longer used for unspace loading.
 
-`WorldLoader.load_unspace` spawns an `NspaceField` (procedural topography under the ship) instead of sector entity scenes. No dust ring in unspace. The mesh is visual-only; edge crossings perturb the ship and sometimes the terrain. Topography is **deterministically seeded** from the route's translation `solution` (set at jump confirm) combined with transit `n`, with an optional catalog `seed_salt` for tuning — the same route always produces the same mesh layout and colour variation.
+`WorldLoader.load_unspace` spawns an `NspaceField` (procedural topography under the ship) instead of sector entity scenes. No dust ring in unspace. The mesh is visual-only; edge crossings perturb the ship and sometimes the terrain. Topography is **deterministically seeded** from the route's translation `solution` (set at jump confirm) combined with transit `n`, with an optional catalog `seed_salt` for tuning — the same route always produces the same mesh layout and colour variation. **Ascidians** (1–3 per visit, visit-randomised spawn) wander independently of the mesh; they fade behind peaks via height sampling and appear as faint unlabeled radar contacts.
 
 `WorldLoader` maps 3-space entity `kind` to packed scenes:
 

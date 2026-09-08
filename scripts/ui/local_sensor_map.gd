@@ -5,6 +5,7 @@ const INNER_PADDING := 14.0
 const CONTACT_HIT_RADIUS := 10.0
 const CONTACT_DRAW_RADIUS := 4.0
 const TRAFFIC_DRAW_RADIUS := 1.5
+const ASCIDIAN_DRAW_RADIUS := 2.0
 const ORBITAL_DRAW_RADIUS := 3.0
 const BACKGROUND_ALPHA := 0.25
 const BORDER_WIDTH := 1.5
@@ -142,6 +143,8 @@ func _contact_draw_radius(contact_kind: String) -> float:
 	match contact_kind:
 		"traffic_npc":
 			return TRAFFIC_DRAW_RADIUS
+		"ascidian":
+			return ASCIDIAN_DRAW_RADIUS
 		"orbital":
 			return ORBITAL_DRAW_RADIUS
 		_:
@@ -152,6 +155,8 @@ func _contact_color(contact_kind: String, info: Color, muted: Color) -> Color:
 	match contact_kind:
 		"traffic_npc":
 			return muted
+		"ascidian":
+			return Color(info.r, info.g, info.b, info.a * 0.42)
 		"orbital":
 			return Color(info.r, info.g, info.b, info.a * 0.65)
 		_:

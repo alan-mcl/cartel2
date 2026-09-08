@@ -2,6 +2,7 @@ extends Node2D
 class_name NspaceField
 
 const InteractableScene := preload("res://scenes/world/interactable_marker.tscn")
+const Ascidian := preload("res://scripts/presentation/ascidian.gd")
 
 var _play_bounds: float = 8000.0
 var _time: float = 0.0
@@ -13,6 +14,7 @@ var _bound: Dictionary = {}
 var _edge_cfg: Dictionary = {}
 var _portal_config: Dictionary = {}
 var _palette: Dictionary = {}
+var _inhabitants_cfg: Dictionary = {}
 
 var _route_seed: int = 0
 var _seed_phase: float = 0.0
@@ -28,6 +30,8 @@ var _portal_face_index: int = -1
 
 var _portal_node: Node2D = null
 var _interactable: Interactable = null
+var _ascidians: Array = []
+var _visit_rng := RandomNumberGenerator.new()
 
 var _last_ship_pos: Vector2 = Vector2.INF
 var _edge_cooldown: float = 0.0
@@ -50,6 +54,7 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	_bound = _dict(field_data.get("bound", {}))
 	_edge_cfg = _dict(field_data.get("edge", {}))
 	_portal_config = _dict(field_data.get("portal", {}))
+	_inhabitants_cfg = _dict(field_data.get("inhabitants", {}))
 
 	var solution := 0
 	var n := int(unspace.get("n", 4))
@@ -73,7 +78,54 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	_build_edge_catalog()
 	_pick_portal_face()
 	_setup_portal(catalog, session)
+	_update_portal()
+	_spawn_ascidians(unspace)
 	queue_redraw()
+
+
+func sample_height(world_pos: Vector2) -> float:
+	var local_pos := to_local(world_pos)
+	if _faces.is_empty() or _animated.is_empty() or _heights.is_empty():
+		return 0.0
+
+	for face_variant in _faces:
+		if typeof(face_variant) != TYPE_ARRAY:
+			continue
+		var face: Array = face_variant
+		if face.size() < 3:
+			continue
+		var i0 := int(face[0])
+		var i1 := int(face[1])
+		var i2 := int(face[2])
+		if i0 >= _animated.size() or i1 >= _animated.size() or i2 >= _animated.size():
+			continue
+
+		var a := _animated[i0]
+		var b := _animated[i1]
+		var c := _animated[i2]
+		var bary := _barycentric(local_pos, a, b, c)
+		if bary.x < -0.001 or bary.y < -0.001 or bary.z < -0.001:
+			continue
+		return _heights[i0] * bary.x + _heights[i1] * bary.y + _heights[i2] * bary.z
+
+	return 0.0
+
+
+func get_inhabitant_contacts() -> Array:
+	var contacts: Array = []
+	for index in range(_ascidians.size()):
+		var ascidian_variant = _ascidians[index]
+		if not ascidian_variant is Ascidian:
+			continue
+		var ascidian: Ascidian = ascidian_variant
+		contacts.append({
+			"id": "ascidian_%d" % index,
+			"name": "Ascidian",
+			"short_label": "",
+			"contact_kind": "ascidian",
+			"position": ascidian.global_position,
+		})
+	return contacts
 
 
 func get_portal_position() -> Vector2:
@@ -114,49 +166,65 @@ func _draw() -> void:
 	if _faces.is_empty():
 		return
 
-	var peak := _color("peak", Color(0.66, 0.96, 1.0, 0.94))
-	var trough := _color("trough", Color(0.16, 0.10, 0.38, 0.94))
-	var accent_violet := _color("accent_violet", Color(0.58, 0.38, 0.98, 0.92))
-	var accent_teal := _color("accent_teal", Color(0.28, 0.88, 0.82, 0.92))
-	var accent_amber := _color("accent_amber", Color(1.0, 0.72, 0.38, 0.90))
-	var accent_rose := _color("accent_rose", Color(0.98, 0.48, 0.72, 0.90))
-	var edge_base := _color("edge", Color(0.48, 0.82, 0.98, 0.88))
-	var ridge := _color("ridge", Color(0.82, 0.98, 1.0, 0.98))
+	var peak := _color("peak", Color(0.49, 0.91, 1.0, 0.90))
+	var trough := _color("trough", Color(0.10, 0.05, 0.23, 0.92))
+	var shallow := _color("shallow", Color(0.14, 0.12, 0.42, 0.92))
+	var bright := _color("bright", Color(0.62, 0.98, 1.0, 0.94))
+	var edge_base := _color("edge", Color(0.35, 0.72, 0.92, 0.82))
+	var ridge := _color("ridge", Color(0.72, 0.96, 1.0, 0.95))
+	var portal_host := _color("portal_host", Color(0.95, 0.55, 0.25, 0.45))
 
 	for face_index in range(_faces.size()):
-		var face_variant = _faces[face_index]
-		if typeof(face_variant) != TYPE_ARRAY:
-			continue
-		var face: Array = face_variant
-		if face.size() < 3:
-			continue
-		var i0 := int(face[0])
-		var i1 := int(face[1])
-		var i2 := int(face[2])
-		if i0 >= _animated.size() or i1 >= _animated.size() or i2 >= _animated.size():
-			continue
+		_draw_topo_face(face_index, peak, trough, shallow, bright, portal_host)
 
-		var h := (_heights[i0] + _heights[i1] + _heights[i2]) / 3.0
-		var centroid := (_animated[i0] + _animated[i1] + _animated[i2]) / 3.0
-		var angle := atan2(centroid.y, centroid.x)
-		var diversity := (sin(angle * 2.1 + _seed_phase) * 0.5 + 0.5)
-		var accent_mix := accent_teal.lerp(accent_amber, diversity)
-		accent_mix = accent_mix.lerp(accent_rose, sin(angle * 3.7 - _seed_phase * 0.6) * 0.5 + 0.5)
-		var low := trough.lerp(accent_violet, diversity * 0.55)
-		var high := peak.lerp(accent_mix, 0.35 + diversity * 0.25)
-		var fill := low.lerp(high, h).lightened(0.14)
-		fill.a = minf(fill.a + 0.08, 1.0)
-		if face_index == _portal_face_index:
-			fill = fill.lerp(_color("portal_host", Color(0.95, 0.55, 0.25, 0.45)), 0.35)
+	_draw_topo_edges(edge_base, ridge)
 
-		var p0 := _animated[i0]
-		var p1 := _animated[i1]
-		var p2 := _animated[i2]
-		if not _is_valid_triangle(p0, p1, p2):
-			continue
 
-		draw_colored_polygon(PackedVector2Array([p0, p1, p2]), fill)
+func _draw_topo_face(
+	face_index: int,
+	peak: Color,
+	trough: Color,
+	shallow: Color,
+	bright: Color,
+	portal_host: Color
+) -> void:
+	if face_index < 0 or face_index >= _faces.size():
+		return
 
+	var face_variant = _faces[face_index]
+	if typeof(face_variant) != TYPE_ARRAY:
+		return
+	var face: Array = face_variant
+	if face.size() < 3:
+		return
+
+	var i0 := int(face[0])
+	var i1 := int(face[1])
+	var i2 := int(face[2])
+	if i0 >= _animated.size() or i1 >= _animated.size() or i2 >= _animated.size():
+		return
+
+	var h := (_heights[i0] + _heights[i1] + _heights[i2]) / 3.0
+	var centroid := (_animated[i0] + _animated[i1] + _animated[i2]) / 3.0
+	var angle := atan2(centroid.y, centroid.x)
+	var blue_shift := sin(angle * 1.8 + _seed_phase) * 0.5 + 0.5
+	var low := trough.lerp(shallow, blue_shift * 0.35)
+	var high := peak.lerp(bright, blue_shift * 0.25)
+	var fill := low.lerp(high, h).lightened(0.08)
+	fill.a = minf(fill.a + 0.04, 1.0)
+	if face_index == _portal_face_index:
+		fill = fill.lerp(portal_host, 0.35)
+
+	var p0 := _animated[i0]
+	var p1 := _animated[i1]
+	var p2 := _animated[i2]
+	if not _is_valid_triangle(p0, p1, p2):
+		return
+
+	draw_colored_polygon(PackedVector2Array([p0, p1, p2]), fill)
+
+
+func _draw_topo_edges(edge_base: Color, ridge: Color) -> void:
 	for edge in _edges:
 		var v0: int = edge.get("v0", 0)
 		var v1: int = edge.get("v1", 0)
@@ -550,6 +618,90 @@ func _setup_portal(catalog: Catalog, _session: GameSession) -> void:
 
 	if _portal_node.has_method("configure"):
 		_portal_node.call("configure", _palette)
+
+
+func _spawn_ascidians(unspace: Dictionary) -> void:
+	_clear_ascidians()
+
+	if _inhabitants_cfg.is_empty():
+		return
+
+	_visit_rng.seed = int(Time.get_ticks_usec())
+	var count_min := maxi(0, int(_inhabitants_cfg.get("count_min", 1)))
+	var count_max := maxi(count_min, int(_inhabitants_cfg.get("count_max", 3)))
+	var count := _visit_rng.randi_range(count_min, count_max)
+	if count <= 0:
+		return
+
+	var spawn_data: Dictionary = _dict(unspace.get("spawn", {}))
+	var spawn_hint := Vector2(
+		float(spawn_data.get("x", -_play_bounds * 0.45)),
+		float(spawn_data.get("y", 0.0))
+	)
+	var portal_pos := get_portal_position()
+	var min_spawn_dist := float(_inhabitants_cfg.get("min_spawn_dist", 900.0))
+	var wander_fraction := float(_inhabitants_cfg.get("wander_radius_fraction", 0.72))
+	var wander_radius := _play_bounds * wander_fraction
+
+	var spawn_cfg := _inhabitants_cfg.duplicate()
+	spawn_cfg["play_bounds"] = _play_bounds
+	spawn_cfg["wander_radius_fraction"] = wander_fraction
+
+	for _i in range(count):
+		var start_pos := _pick_ascidian_spawn(spawn_hint, portal_pos, wander_radius, min_spawn_dist)
+		var ascidian: Ascidian = Ascidian.new()
+		ascidian.name = "Ascidian_%d" % (_ascidians.size() + 1)
+		add_child(ascidian)
+		ascidian.configure(self, spawn_cfg, start_pos, _visit_rng)
+		_ascidians.append(ascidian)
+
+
+func _pick_ascidian_spawn(
+	spawn_hint: Vector2,
+	portal_pos: Vector2,
+	wander_radius: float,
+	min_spawn_dist: float
+) -> Vector2:
+	for _attempt in range(24):
+		var angle := _visit_rng.randf() * TAU
+		var radial := _visit_rng.randf_range(wander_radius * 0.2, wander_radius * 0.88)
+		var candidate := Vector2(cos(angle), sin(angle)) * radial
+		if candidate.distance_to(spawn_hint) < min_spawn_dist:
+			continue
+		if portal_pos != Vector2.ZERO and candidate.distance_to(portal_pos) < min_spawn_dist:
+			continue
+		return candidate
+
+	return Vector2(
+		cos(_visit_rng.randf() * TAU),
+		sin(_visit_rng.randf() * TAU)
+	) * wander_radius * 0.55
+
+
+func _clear_ascidians() -> void:
+	for ascidian_variant in _ascidians:
+		if ascidian_variant is Node:
+			(ascidian_variant as Node).queue_free()
+	_ascidians.clear()
+
+
+func _barycentric(point: Vector2, a: Vector2, b: Vector2, c: Vector2) -> Vector3:
+	var v0 := c - a
+	var v1 := b - a
+	var v2 := point - a
+	var dot00 := v0.dot(v0)
+	var dot01 := v0.dot(v1)
+	var dot02 := v0.dot(v2)
+	var dot11 := v1.dot(v1)
+	var dot12 := v1.dot(v2)
+	var denom := dot00 * dot11 - dot01 * dot01
+	if absf(denom) < 0.000001:
+		return Vector3(-1.0, -1.0, -1.0)
+	var inv_denom := 1.0 / denom
+	var v := (dot11 * dot02 - dot01 * dot12) * inv_denom
+	var w := (dot00 * dot12 - dot01 * dot02) * inv_denom
+	var u := 1.0 - v - w
+	return Vector3(u, v, w)
 
 
 func _color(key: String, fallback: Color) -> Color:

@@ -18,14 +18,12 @@
     },
     "field": {
       "palette": {
-        "peak": "#a8f4ff",
-        "trough": "0.16,0.10,0.38,0.94",
-        "ridge": "#d8fcff",
-        "edge": "#6ec8f0",
-        "accent_violet": "#9460fa",
-        "accent_teal": "#48e0d0",
-        "accent_amber": "#ffb860",
-        "accent_rose": "#fa78b8",
+        "peak": "#7ee8ff",
+        "trough": "0.10,0.05,0.23,0.92",
+        "shallow": "0.14,0.12,0.42,0.92",
+        "bright": "0.62,0.98,1.0,0.94",
+        "ridge": "#b8f4ff",
+        "edge": "#5ab8d8",
         "portal_host": "0.95,0.55,0.25,0.45",
         "portal_rim": "#fff0a8",
         "portal_glow": "0.95,0.55,0.25,0.65",
@@ -61,6 +59,23 @@
         "interact_radius": 220,
         "interactable": "unspace_exit",
         "leash_fraction": 0.88
+      },
+      "inhabitants": {
+        "count_min": 1,
+        "count_max": 3,
+        "speed_min": 22,
+        "speed_max": 48,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "altitude_min": 0.12,
+        "altitude_max": 0.88,
+        "altitude_drift_min": 0.035,
+        "altitude_drift_max": 0.09,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
       }
     }
   }

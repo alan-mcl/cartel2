@@ -25,7 +25,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 
 | File | Contents |
 |------|----------|
-| [overview.md](overview.md) | Fantasy, era, currency, Unspace, Media Reality, Saint Apex, Sleepers, Asciidians, Atomic Problems |
+| [overview.md](overview.md) | Fantasy, era, currency, Unspace, Media Reality, Saint Apex, Sleepers, Ascidians, Atomic Problems |
 | [date_time.md](date_time.md) | Galactic Standard Calendar and Time |
 | [planets.md](planets.md) | Eleven E-type worlds, stats, cities, habitats |
 | [corporations.md](corporations.md) | Sixteen megacorporations |
@@ -41,7 +41,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game starts at Proxima |
 | Habitats | One dockable habitat per sector (Proxima Habitat, La Bella Vista Habitat, …) |
 | Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
-| Unspace hazards | Edge-crossing velocity kicks + random mesh deformation in 4-space; soft radial bound near play rim; false proximity via shifting topography |
+| Unspace hazards | Edge-crossing velocity kicks + random mesh deformation in 4-space; soft radial bound near play rim; false proximity via shifting topography; 1–3 ambient Ascidians per visit |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
 | Commodities | Eleven categories; daily quotes at every habitat Exchange |
