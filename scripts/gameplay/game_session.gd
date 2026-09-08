@@ -82,6 +82,7 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 			ship = OwnedShip.from_dict(ship_data)
 		else:
 			ship = OwnedShip.from_template(catalog, ship_data)
+		OwnedShip.finalize_loaded_ship(ship, catalog)
 		ship.location = NEW_GAME_HABITAT_ID
 		owned_ships.append(ship)
 
@@ -188,7 +189,9 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	for ship_data in ships:
 		if typeof(ship_data) != TYPE_DICTIONARY:
 			continue
-		owned_ships.append(OwnedShip.from_dict(ship_data))
+		var ship := OwnedShip.from_dict(ship_data)
+		OwnedShip.finalize_loaded_ship(ship, catalog)
+		owned_ships.append(ship)
 
 	if save_version == SaveStore.LEGACY_SAVE_VERSION and not legacy_cargo.is_empty():
 		var aboard_ship := get_owned_ship(current_ship_id)

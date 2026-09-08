@@ -232,7 +232,24 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 				"id": "exit_portal",
 				"name": _resolve_contact_name(portal, catalog, "Exit Portal"),
 				"short_label": "X",
+				"contact_kind": "landmark",
 				"position": portal.global_position,
+			})
+		for entity_id in spawned_by_id:
+			if entity_id == "n4_exit_portal":
+				continue
+			var node: Variant = spawned_by_id[entity_id]
+			if not node is WorldObject:
+				continue
+			var beacon_name := _resolve_contact_name(node, catalog, "")
+			if beacon_name.is_empty():
+				continue
+			contacts.append({
+				"id": str(entity_id),
+				"name": beacon_name,
+				"short_label": "",
+				"contact_kind": "beacon",
+				"position": node.global_position,
 			})
 	else:
 		var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
@@ -240,6 +257,7 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 			"id": "planet",
 			"name": str(sector.get("name", "Planet")),
 			"short_label": "P",
+			"contact_kind": "landmark",
 			"position": Vector2.ZERO,
 		})
 		if _habitat_node != null:
@@ -247,6 +265,7 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 				"id": "habitat",
 				"name": _resolve_contact_name(_habitat_node, catalog, "Habitat"),
 				"short_label": "H",
+				"contact_kind": "landmark",
 				"position": get_habitat_world_position(),
 			})
 		var gate_pos := get_jump_gate_world_position()
@@ -255,6 +274,7 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 				"id": "jump_gate",
 				"name": _resolve_contact_name(_jump_gate_node, catalog, "Jump Gate"),
 				"short_label": "G",
+				"contact_kind": "landmark",
 				"position": gate_pos,
 			})
 		for entry_variant in _orbital_entries:
@@ -263,9 +283,10 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 			var entry: Dictionary = entry_variant
 			var orbital_node: Variant = entry.get("node")
 			if orbital_node is Node2D and _orbital_ring != null:
+				var orbital_name := str(entry.get("label", ""))
 				contacts.append({
 					"id": str(entry.get("id", "")),
-					"name": "",
+					"name": orbital_name,
 					"short_label": "",
 					"contact_kind": "orbital",
 					"position": _orbital_ring.global_transform * orbital_node.position,
@@ -460,6 +481,7 @@ func _spawn_orbital_ring(
 				"id": entity_id,
 				"node": instance,
 				"kind": "orbital",
+				"label": str(orbital_def.get("label", "")),
 			})
 
 	world_root.add_child(ring)

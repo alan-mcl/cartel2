@@ -8,6 +8,7 @@ const POWER_PRIORITY_BY_CATEGORY := {
 	"propulsion": PowerPriority.CRITICAL,
 	"computer": PowerPriority.HIGH,
 	"sensor": PowerPriority.HIGH,
+	"transponder": PowerPriority.HIGH,
 	"shield": PowerPriority.HIGH,
 	"weapon": PowerPriority.NORMAL,
 	"ecm": PowerPriority.NORMAL,
@@ -43,6 +44,7 @@ static func tick(
 		"boost": boosting,
 		"sensors": in_flight,
 		"weapons": firing,
+		"transponder": in_flight and assembled.has_transponder(),
 	}
 
 	var demands: Array = _collect_power_demands(assembled, state.active_systems)
@@ -113,6 +115,8 @@ static func _collect_power_demands(assembled: AssembledShip, active_systems: Dic
 		if category == "propulsion" and not bool(active_systems.get("engine", false)):
 			continue
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
+			continue
+		if category == "transponder" and not bool(active_systems.get("transponder", false)):
 			continue
 		if category == "weapon" and not bool(active_systems.get("weapons", false)):
 			continue
@@ -192,6 +196,12 @@ static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
 	state.weapons_allowed = (
 		state.weapon_power_requested <= 0.0
 		or state.weapon_power_allocated >= state.weapon_power_requested
+	)
+	state.transponder_broadcasting = (
+		bool(state.active_systems.get("transponder", false))
+		and _requested_for_category(demands, "transponder") > 0.0
+		and float(allocated_by_category.get("transponder", 0.0))
+		>= _requested_for_category(demands, "transponder")
 	)
 
 

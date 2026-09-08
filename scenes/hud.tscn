@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=6 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/ui/local_sensor_map.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/ui/waypoint_arrows.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/ui/beacon_label_overlay.gd" id="5"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -26,6 +27,23 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4")
+
+[node name="BeaconLabelOverlay" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5")
+
+[node name="PlayerHoverProbe" type="Control" parent="Root"]
+visible = false
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 0
 
 [node name="StatusPanel" type="PanelContainer" parent="Root"]
 layout_mode = 0

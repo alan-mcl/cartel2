@@ -27,8 +27,10 @@ func configure(entity: Dictionary, catalog: Catalog, session: GameSession) -> vo
 	var visual: Sprite2D = get_node_or_null("Visual")
 
 	var label_text := str(entity.get("label", ""))
-	if label != null and not label_text.is_empty():
-		label.text = label_text
+	if label != null:
+		if not label_text.is_empty():
+			label.text = label_text
+		label.visible = false
 
 	var sprite_path := str(entity.get("sprite", ""))
 	if visual != null and not sprite_path.is_empty():

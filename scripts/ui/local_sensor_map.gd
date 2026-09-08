@@ -8,11 +8,17 @@ const TRAFFIC_DRAW_RADIUS := 1.5
 const ORBITAL_DRAW_RADIUS := 3.0
 const BACKGROUND_ALPHA := 0.25
 const BORDER_WIDTH := 1.5
+const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 var _nav_radius: float = 3500.0
 var _ship_pos: Vector2 = Vector2.ZERO
 var _ship_heading_deg: float = 0.0
 var _contacts: Array = []
+var _player_broadcast_text: String = ""
+
+
+func set_player_broadcast(text: String) -> void:
+	_player_broadcast_text = text
 
 
 func set_nav_state(
@@ -156,11 +162,31 @@ func _draw_ship(center: Vector2, color: Color) -> void:
 
 
 func _update_hover_tooltip(local_pos: Vector2) -> void:
+	var layout := _map_layout()
+	var map_center: Vector2 = layout["center"]
+	if local_pos.distance_to(map_center) <= CONTACT_HIT_RADIUS + 4.0:
+		tooltip_text = _player_broadcast_text
+		return
+
 	var contact := _find_contact_at(local_pos)
 	if contact.is_empty():
 		tooltip_text = ""
-	else:
-		tooltip_text = str(contact.get("name", ""))
+		return
+
+	var contact_kind := str(contact.get("contact_kind", ""))
+	if contact_kind == "traffic_npc":
+		if bool(contact.get("broadcasting", false)):
+			tooltip_text = TransponderBroadcastScript.format_tooltip({
+				"registration": contact.get("registration", ""),
+				"callsign": contact.get("callsign", ""),
+				"ship_name": contact.get("ship_name", ""),
+				"affiliation": contact.get("affiliation", ""),
+			})
+		else:
+			tooltip_text = ""
+		return
+
+	tooltip_text = str(contact.get("name", ""))
 
 
 func _find_contact_at(local_pos: Vector2) -> Dictionary:

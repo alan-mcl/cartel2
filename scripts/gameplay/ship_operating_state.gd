@@ -26,3 +26,4 @@ var weapon_power_allocated: float = 0.0
 var weapons_allowed: bool = true
 
 var active_systems: Dictionary = {}
+var transponder_broadcasting: bool = false

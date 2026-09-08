@@ -65,10 +65,7 @@ func _draw() -> void:
 
 
 func _world_to_screen(world_pos: Vector2) -> Vector2:
-	var viewport_size := get_viewport_rect().size
-	var zoom := _camera.zoom
-	var camera_pos := _camera.global_position
-	return (world_pos - camera_pos) * zoom + viewport_size * 0.5
+	return get_viewport().get_canvas_transform() * world_pos
 
 
 func _is_on_screen(screen_pos: Vector2, viewport_size: Vector2) -> bool:

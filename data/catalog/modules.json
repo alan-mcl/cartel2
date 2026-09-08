@@ -81,9 +81,21 @@
     "volume": 0.4,
     "compute_demand": 2.0,
     "power_demand": 1.0,
-    "capabilities": ["local_sensor", "local_system_waypoints"],
+    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons"],
     "cost": 550,
     "description": "Standard orbital navigation and proximity sensors."
+  },
+  {
+    "id": "vessel_registration_beacon",
+    "name": "Vessel Registration Beacon",
+    "maker": "SnedeCorp",
+    "category": "transponder",
+    "mount": "system",
+    "mass": 0.15,
+    "volume": 0.2,
+    "power_demand": 0.3,
+    "cost": 320,
+    "description": "Commercial Article 19 identification transmitter. Broadcasts hull registration and pilot callsign when powered."
   },
   {
     "id": "light_laser",
@@ -283,7 +295,7 @@
     "volume": 0.6,
     "compute_demand": 3.0,
     "power_demand": 1.5,
-    "capabilities": ["local_sensor", "local_system_waypoints"],
+    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons"],
     "cost": 950,
     "description": "Extended-range orbital and survey sensors."
   },

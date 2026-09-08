@@ -1,8 +1,11 @@
 class_name OwnedShip
 extends RefCounted
 
+const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
+
 var id: String = ""
 var name: String = ""
+var registration: String = ""
 var template_id: String = ""
 var chassis_id: String = ""
 var location: String = "aboard"
@@ -16,6 +19,7 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 	var ship := OwnedShip.new()
 	ship.id = str(data.get("id", ""))
 	ship.name = str(data.get("name", ship.id))
+	ship.registration = str(data.get("registration", ""))
 	ship.template_id = str(data.get("template_id", ""))
 	ship.chassis_id = str(data.get("chassis_id", ""))
 	ship.location = str(data.get("location", "aboard"))
@@ -32,10 +36,17 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 	return ship
 
 
+static func finalize_loaded_ship(ship: OwnedShip, catalog: Catalog) -> void:
+	if ship == null:
+		return
+	ship.ensure_registration(catalog)
+
+
 static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 	var ship := OwnedShip.new()
 	ship.id = str(ship_data.get("id", ""))
 	ship.name = str(ship_data.get("name", ship.id))
+	ship.registration = str(ship_data.get("registration", ""))
 	ship.template_id = str(ship_data.get("template_id", ""))
 	ship.chassis_id = str(ship_data.get("chassis_id", ""))
 	ship.location = str(ship_data.get("location", "aboard"))
@@ -62,13 +73,24 @@ static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 	ship.ammunition = _float_dict_from_variant(ship_data.get("ammunition", {}))
 	if ship.ammunition.is_empty():
 		ShipAssembler.seed_ammunition(catalog, ship)
+	ship.ensure_registration(catalog)
 	return ship
+
+
+func ensure_registration(catalog: Catalog) -> void:
+	if not registration.is_empty() or catalog == null:
+		return
+	if template_id.is_empty():
+		registration = TransponderBroadcastScript.generate_registration(catalog, id)
+	else:
+		registration = TransponderBroadcastScript.generate_registration(catalog, template_id)
 
 
 func to_dict() -> Dictionary:
 	return {
 		"id": id,
 		"name": name,
+		"registration": registration,
 		"template_id": template_id,
 		"chassis_id": chassis_id,
 		"location": location,

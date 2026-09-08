@@ -75,7 +75,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 - **Starfield** — parallax background bound to follow camera.
 - **World** — empty at edit time; populated at runtime by `WorldLoader`.
 - **PlayerShip** — inertial flight, interaction sensor, camera.
-- **HUD** — capability-gated flight chrome: basic instrument cluster (computer), local radar and waypoint arrows (sensor). Hidden when docked.
+- **HUD** — capability-gated flight chrome: basic instrument cluster (computer), local radar and waypoint arrows (sensor), transponder label overlay (`sensor_read_beacons`). Hidden when docked.
 - **MainMenu** — New Game, Load, Exit.
 - **NewGameOverlay** — pilot name and callsign form.
 - **SaveOverlay** — three-slot save/load browser.
@@ -91,7 +91,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 - Hold **Space** or **LMB** (`fire`) to discharge installed weapons along ship facing. `ShipWeapons` handles rate-of-fire cooldowns and ammo; `ShipOperations` allocates weapon power only while firing.
 - `play_bounds` per sector defines the distant dust ring (visual landmark only; player flight is unbounded).
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
-- Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`).
+- Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`). In-system ships require a powered `vessel_registration_beacon` (Commercial Article 19).
 
 ### Interaction kinds
 

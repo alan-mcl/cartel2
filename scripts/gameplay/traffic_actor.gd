@@ -1,6 +1,7 @@
 extends RefCounted
 
 const SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
+const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
 
@@ -26,9 +27,15 @@ static func create(
 	actor.id = "traffic_%d" % randi()
 	actor.role = role_name
 	actor.template_id = template
-	actor.callsign = _generate_callsign(traffic_config, template)
 	actor.hull_color_shift = randf_range(-0.06, 0.06)
-	actor.owned_ship = _create_owned_ship(catalog, template, actor.callsign)
+	var affiliation_record := _pick_affiliation_record(traffic_config)
+	actor.affiliation = str(affiliation_record.get("name", ""))
+	var is_independent := str(affiliation_record.get("kind", "corporate")) == "independent"
+	actor.callsign = TransponderBroadcastScript.generate_callsign_for_affiliation(
+		traffic_config,
+		affiliation_record
+	)
+	actor.owned_ship = _create_owned_ship(catalog, template, traffic_config, is_independent)
 	actor.assembled_ship = ShipAssembler.assemble_owned(catalog, actor.owned_ship)
 	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
 	actor.hull_current = actor.hull_max
@@ -41,11 +48,17 @@ static func create(
 	return actor
 
 
-static func _create_owned_ship(catalog: Catalog, template_id: String, callsign: String) -> OwnedShip:
+static func _create_owned_ship(
+	catalog: Catalog,
+	template_id: String,
+	traffic_config: Dictionary,
+	is_independent: bool
+) -> OwnedShip:
 	var template := catalog.get_ship(template_id)
 	var owned := OwnedShip.new()
 	owned.id = "npc_%d" % randi()
-	owned.name = callsign
+	owned.name = _pick_vanity_name(traffic_config) if is_independent else ""
+	owned.registration = TransponderBroadcastScript.generate_registration(catalog, template_id)
 	owned.template_id = template_id
 	owned.chassis_id = str(template.get("chassis", ""))
 	var chassis := catalog.get_chassis(owned.chassis_id)
@@ -61,10 +74,39 @@ static func _create_owned_ship(catalog: Catalog, template_id: String, callsign: 
 	return owned
 
 
-static func _generate_callsign(traffic_config: Dictionary, template_id: String) -> String:
-	var prefixes: Variant = traffic_config.get("callsign_prefixes", {})
-	var prefix := str(prefixes.get(template_id, "TRF"))
-	return "%s-%04d" % [prefix, randi() % 10000]
+static func _pick_affiliation_record(traffic_config: Dictionary) -> Dictionary:
+	var affiliations: Variant = traffic_config.get("affiliations", [])
+	if typeof(affiliations) != TYPE_ARRAY or affiliations.is_empty():
+		return {"kind": "independent", "name": "Independent Operator"}
+
+	var independent_weight := float(traffic_config.get("independent_weight", 0.30))
+	var corporate: Array = []
+	var independent: Dictionary = {}
+
+	for entry_variant in affiliations:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		match str(entry.get("kind", "")):
+			"independent":
+				independent = entry
+			"corporate":
+				corporate.append(entry)
+
+	if randf() < independent_weight and not independent.is_empty():
+		return independent
+	if not corporate.is_empty():
+		return corporate[randi() % corporate.size()]
+	if not independent.is_empty():
+		return independent
+	return {"kind": "independent", "name": "Independent Operator"}
+
+
+static func _pick_vanity_name(traffic_config: Dictionary) -> String:
+	var names: Variant = traffic_config.get("vanity_ship_names", [])
+	if typeof(names) != TYPE_ARRAY or names.is_empty():
+		return "Wayfarer"
+	return str(names[randi() % names.size()])
 
 
 static func pick_waypoint_trip(anchors: Array, traffic_config: Dictionary) -> Dictionary:
@@ -146,6 +188,7 @@ static func pick_template_for_role(traffic_config: Dictionary, role_name: String
 
 var id: String = ""
 var callsign: String = ""
+var affiliation: String = ""
 var role: String = "transit"
 var template_id: String = ""
 var hull_color_shift: float = 0.0
@@ -352,12 +395,30 @@ func get_sensor_contact(player_pos: Vector2, traffic_config: Dictionary) -> Dict
 	var radius := float(traffic_config.get("sensor_contact_radius", 1600.0))
 	if position.distance_to(player_pos) > radius:
 		return {}
+
+	var broadcasting := operating_state.transponder_broadcasting
+	var ship_name := assembled_ship.name if assembled_ship != null else ""
+	if not owned_ship.name.is_empty():
+		ship_name = owned_ship.name
+
+	var broadcast := TransponderBroadcastScript.build(
+		owned_ship.registration if owned_ship != null else "",
+		callsign,
+		ship_name,
+		affiliation if broadcasting else ""
+	)
+
 	return {
 		"id": id,
-		"name": "%s · %s" % [callsign, assembled_ship.name],
+		"name": TransponderBroadcastScript.format_tooltip(broadcast) if broadcasting else "",
 		"short_label": "",
 		"contact_kind": "traffic_npc",
 		"position": position,
+		"broadcasting": broadcasting,
+		"registration": broadcast.get("registration", ""),
+		"callsign": broadcast.get("callsign", ""),
+		"ship_name": broadcast.get("ship_name", ""),
+		"affiliation": broadcast.get("affiliation", ""),
 	}
 
 

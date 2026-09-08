@@ -93,7 +93,16 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 
 | id | Capabilities | Notes |
 |----|--------------|-------|
-| `sensor_basic` | `local_sensor`, `local_system_waypoints` | Local radar panel; edge arrows to habitat, jump gate, or unspace exit portal |
+| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons` | Local radar panel; edge arrows; transponder label overlay |
+| `sensor_advanced` | same as basic | Extended-range sensors |
+
+### Transponder (`category: transponder`, mount: `system`)
+
+| id | Notes |
+|----|-------|
+| `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). |
+
+**Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay.
 
 ---
 

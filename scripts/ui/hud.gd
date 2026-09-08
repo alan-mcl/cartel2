@@ -1,6 +1,8 @@
 extends CanvasLayer
 
 const PANEL_BG_ALPHA := 0.25
+const PLAYER_HOVER_RADIUS := 24.0
+const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
 @onready var _speed: Label = $Root/StatusPanel/VBox/StatsRow/SpeedLabel
@@ -10,10 +12,13 @@ const PANEL_BG_ALPHA := 0.25
 @onready var _gst_clock: Label = $Root/StatusPanel/VBox/GstClockLabel
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
+@onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
+@onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
 
 var _session: GameSession
 var _assembled_ship: AssembledShip
 var _operating_state: ShipOperatingState
+var _player_broadcast_text: String = ""
 
 
 func bind(session: GameSession, _player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
@@ -65,18 +70,42 @@ func set_nav_state(
 	ship_pos: Vector2,
 	ship_heading_deg: float,
 	contacts: Array,
-	camera: Camera2D
+	camera: Camera2D,
+	player_broadcast: Dictionary = {}
 ) -> void:
+	_player_broadcast_text = TransponderBroadcastScript.format_tooltip(player_broadcast)
+
 	if _has_capability("local_sensor") and _local_sensor_map != null:
+		if _local_sensor_map.has_method("set_player_broadcast"):
+			_local_sensor_map.set_player_broadcast(_player_broadcast_text)
 		_local_sensor_map.set_nav_state(nav_radius, ship_pos, ship_heading_deg, contacts)
 	if _has_capability("local_system_waypoints") and _waypoint_arrows != null:
 		_waypoint_arrows.set_nav_state(ship_pos, contacts, camera)
+	if _has_capability("sensor_read_beacons") and _beacon_labels != null:
+		_beacon_labels.set_overlay_state(contacts, camera)
+
+	_update_player_hover_probe(ship_pos, camera)
+
+
+func _update_player_hover_probe(ship_pos: Vector2, camera: Camera2D) -> void:
+	if _player_hover_probe == null or camera == null:
+		return
+
+	var screen_pos := get_viewport().get_canvas_transform() * ship_pos
+	_player_hover_probe.position = screen_pos - Vector2(PLAYER_HOVER_RADIUS, PLAYER_HOVER_RADIUS)
+	_player_hover_probe.size = Vector2(PLAYER_HOVER_RADIUS * 2.0, PLAYER_HOVER_RADIUS * 2.0)
+	_player_hover_probe.visible = not _player_broadcast_text.is_empty()
+
+	var mouse_pos := _player_hover_probe.get_global_mouse_position()
+	var hovering := _player_hover_probe.get_global_rect().has_point(mouse_pos)
+	_player_hover_probe.tooltip_text = _player_broadcast_text if hovering else ""
 
 
 func _refresh_capabilities() -> void:
 	var has_basic := _has_capability("basic_hud")
 	var has_sensor := _has_capability("local_sensor")
 	var has_waypoints := _has_capability("local_system_waypoints")
+	var has_beacon_reader := _has_capability("sensor_read_beacons")
 
 	if _status_panel != null:
 		_status_panel.visible = has_basic
@@ -84,6 +113,8 @@ func _refresh_capabilities() -> void:
 		_local_sensor_map.set_feature_visible(has_sensor)
 	if _waypoint_arrows != null:
 		_waypoint_arrows.set_feature_visible(has_waypoints)
+	if _beacon_labels != null:
+		_beacon_labels.set_feature_visible(has_beacon_reader)
 
 
 func _has_capability(id: String) -> bool:

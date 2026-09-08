@@ -17,10 +17,10 @@ func _ready() -> void:
 	$Background/Center/Panel/VBox/BackButton.pressed.connect(_on_back_pressed)
 
 
-func open() -> void:
+func open(default_callsign: String = "") -> void:
 	visible = true
 	_name_field.text = ""
-	_callsign_field.text = ""
+	_callsign_field.text = default_callsign
 	_on_field_changed("")
 	_name_field.grab_focus()
 

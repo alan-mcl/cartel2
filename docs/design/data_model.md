@@ -128,7 +128,8 @@ New Game reads this template once; runtime progress is stored in save slots unde
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string | Unique instance id |
-| `name` | string | Display / call sign |
+| `name` | string | Optional given ship name (distinct from pilot callsign) |
+| `registration` | string | Vessel registration number (`VR-{PREFIX}-{NNNN}`) |
 | `template_id` | string | Reference to `ships.json` |
 | `chassis_id` | string | Fixed chassis |
 | `modules` | array | `{ slot, module_id }` installed configuration |
@@ -164,8 +165,13 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | `basic_hud` | `nav_combat_core_mk1` (computer) | Speed/heading, fuel/power, GST clock |
 | `local_sensor` | `sensor_basic` | North-up local-space radar panel |
 | `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
+| `sensor_read_beacons` | `sensor_basic` | HUD transponder labels for NPC ships and named landmarks |
 
 Capability gating is install-based; compute overload degradation is deferred.
+
+### Transponder (Article 19)
+
+In-system ships require an installed `vessel_registration_beacon` (`category: transponder`). When powered in flight, the beacon broadcasts hull registration and pilot callsign; optional ship name and (NPC-only) corporate affiliation may be included. Reader capability `sensor_read_beacons` replaces always-on world labels with HUD overlay text.
 
 ### Derived flight stats
 
@@ -272,6 +278,14 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `role_weights_default` | object | Role spawn weights |
 | `sector_overrides` | object | Per-sector role weight overrides |
 | `role_ship_templates` | object | Template id(s) per role |
+| `callsign_prefixes` | object | Hull template id → registration prefix (`VR-{prefix}-{NNNN}`) |
+| `independent_weight` | number | Fraction of NPC traffic assigned `Independent Operator` (default 0.30) |
+| `affiliations` | array | Operator records: `{ id, kind, name, callsign_prefix? }`. `kind` is `corporate` or `independent`. Corporate `callsign_prefix` is the stock ticker from [corporations.md](../setting/corporations.md) (e.g. `HW`, `SNE`). |
+| `independent_callsigns` | array | Full personal pilot callsigns for independents and New Game defaults |
+| `independent_callsign_prefixes` / `independent_callsign_roots` | array | Optional combinatoric parts (`{Prefix} {Root}`) when both are non-empty |
+| `vanity_ship_names` | array | Hull given names; always assigned to independent operators, never to corporate |
+
+**NPC identity:** corporate ships broadcast `{TICKER}-{NNN}` callsigns (e.g. `HW-447`) and affiliation only — no hull name. Independent ships always receive a name from `vanity_ship_names` and a personal callsign from the independent lists. Player callsign at New Game is pre-filled from `independent_callsigns` but remains editable.
 
 ### `sectors.json` (addition)
 

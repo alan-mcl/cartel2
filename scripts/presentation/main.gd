@@ -1,6 +1,7 @@
 extends Node2D
 
 const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.gd")
+const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 var session := GameSession.new()
 var catalog := Catalog.load_default()
@@ -122,12 +123,20 @@ func _physics_process(delta: float) -> void:
 	var nav_radius := play_bounds
 	if not session.in_unspace:
 		nav_radius = _world_loader.get_content_radius()
+
+	var owned := session.get_current_owned_ship()
+	var player_broadcast: Dictionary = TransponderBroadcastScript.player_broadcast(
+		owned.registration if owned != null else "",
+		session.callsign,
+		owned.name if owned != null else ""
+	)
 	_hud.set_nav_state(
 		nav_radius,
 		_player.global_position,
 		rad_to_deg(_player.motion.facing),
 		contacts,
-		_camera
+		_camera,
+		player_broadcast
 	)
 
 
@@ -556,7 +565,10 @@ func _on_pause_load_requested() -> void:
 
 
 func _on_main_menu_new_game() -> void:
-	_new_game.open()
+	var default_callsign := TransponderBroadcastScript.generate_independent_callsign(
+		catalog.get_traffic_config()
+	)
+	_new_game.open(default_callsign)
 
 
 func _on_main_menu_load() -> void:

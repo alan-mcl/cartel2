@@ -17,6 +17,10 @@ func has_capability(id: String) -> bool:
 	return capabilities.get(id, false)
 
 
+func has_transponder() -> bool:
+	return not modules_in_category("transponder").is_empty()
+
+
 func get_summary() -> String:
 	var parts: PackedStringArray = PackedStringArray([name])
 	if not chassis.is_empty():
