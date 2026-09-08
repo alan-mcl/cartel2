@@ -47,12 +47,14 @@ Ten corps have lore but had **empty product lists** in the original Java design 
 
 The scientific term for the higher-order dimensions through which matter can be moved is **n-space**. The public universally says **unspace**. **3-space** is ordinary realspace (planetary orbits). Higher N-spaces are abstract transit layers — routes go *deeper* into N-space.
 
-Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (more shear, hazards, and hostile phenomena). The game currently implements only **4-space** — the shallowest Unspace layer above realspace.
+Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (stronger signature hazards and hostile phenomena). The game currently implements only **4-space** — the shallowest Unspace layer above realspace.
+
+**4-space family (implemented):** dark void with a **polygonised topographic mesh** under the ship — peaks, troughs, and ridges read through height-based colour. **False proximity** comes from edge crossings: every boundary kick perturbs velocity, and some crossings randomly resize/reorient the mesh so the exit portal and apparent terrain shift. A soft radial bound turns the ship back toward the center near the rim. Sensors with **`4_space_topology`** can label the exit portal embedded in a face. Deeper N-spaces will reuse this pattern with escalating hazards and dedicated topology capabilities.
 
 ### Translation flow (current)
 
 1. At a **jump gate** in 3-space, pick destination and confirm **4-space**.
-2. Ship enters a flyable 4-space layout; navigate shear fields and debris to an **exit portal**.
+2. Ship enters the 4-space topographic field; cross polygon edges (kicks and occasional terrain scrambles) to reach the **exit portal** embedded in a face.
 3. `[E]` at the exit portal to emerge in the destination sector's near orbit.
 
 **Jump gates** inject travellers at a fixed entry point. **Hyperdrive-equipped ships** (future) will translate from other 4-space regions without needing the gate portal — see [equipment.md](equipment.md).

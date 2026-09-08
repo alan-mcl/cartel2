@@ -26,6 +26,7 @@ var current_ship_id: String = ""
 var in_unspace: bool = false
 var unspace_n: int = 0
 var unspace_world_id: String = ""
+var unspace_solution: int = 0
 var pending_destination_id: String = ""
 var hull: float = 0.0
 var max_hull: float = 0.0
@@ -58,6 +59,7 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	in_unspace = false
 	unspace_n = 0
 	unspace_world_id = ""
+	unspace_solution = 0
 	pending_destination_id = ""
 	hull = 0.0
 	max_hull = 0.0
@@ -124,6 +126,7 @@ func to_dict() -> Dictionary:
 		"in_unspace": in_unspace,
 		"unspace_n": unspace_n,
 		"unspace_world_id": unspace_world_id,
+		"unspace_solution": unspace_solution,
 		"pending_destination_id": pending_destination_id,
 		"hull": hull,
 		"max_hull": max_hull,
@@ -164,6 +167,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	in_unspace = bool(session_data.get("in_unspace", false))
 	unspace_n = int(session_data.get("unspace_n", 0))
 	unspace_world_id = str(session_data.get("unspace_world_id", ""))
+	unspace_solution = int(session_data.get("unspace_solution", 0))
 	pending_destination_id = str(session_data.get("pending_destination_id", ""))
 	hull = float(session_data.get("hull", 0.0))
 	max_hull = float(session_data.get("max_hull", 0.0))
@@ -243,6 +247,7 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	in_unspace = false
 	unspace_n = 0
 	unspace_world_id = ""
+	unspace_solution = 0
 	pending_destination_id = ""
 	location_name = str(sector.get("orbit_name", new_sector_id))
 	objective = str(sector.get("objective", ""))
@@ -268,10 +273,12 @@ func enter_unspace(
 	if unspace.is_empty():
 		return false
 
+	var mapping := catalog.get_mapping(sector_id, destination_id, n)
 	pending_destination_id = destination_id
 	in_unspace = true
 	unspace_n = n
 	unspace_world_id = str(unspace.get("id", ""))
+	unspace_solution = int(mapping.get("solution", 0))
 	_init_hull_from_ship(assembled_ship)
 
 	location_name = str(unspace.get("orbit_name", "4-space"))
@@ -362,7 +369,7 @@ func apply_hull_stress(amount: float, delta: float) -> void:
 
 	_hull_stress_cooldown = 0.45
 	hull = max(0.0, hull - amount)
-	last_log = "N-space shear stressing hull. (%d/%d)" % [int(hull), int(max_hull)]
+	last_log = "N-space turbulence stressing hull. (%d/%d)" % [int(hull), int(max_hull)]
 	changed.emit()
 
 

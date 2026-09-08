@@ -2,6 +2,7 @@ class_name WorldLoader
 extends RefCounted
 
 const OrbitalRingScript := preload("res://scripts/presentation/orbital_ring.gd")
+const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 
 const SCENES := {
 	"habitat": "res://scenes/world/habitat.tscn",
@@ -30,6 +31,7 @@ var _gate_angle: float = 0.0
 var _sector_id: String = ""
 var _sector_nav_cache: Array = []
 var _sector_nav_cache_ready: bool = false
+var _nspace_field: NspaceField = null
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -48,6 +50,7 @@ func clear_world(world_root: Node2D) -> void:
 	_sector_id = ""
 	_sector_nav_cache.clear()
 	_sector_nav_cache_ready = false
+	_nspace_field = null
 
 
 func load_sector(
@@ -82,17 +85,19 @@ func load_unspace(
 	clear_world(world_root)
 
 	var unspace := catalog.get_unspace(unspace_id)
-	var play_bounds := float(unspace.get("play_bounds", 4000.0))
-	var world_id := str(unspace.get("world_id", unspace_id))
-	var world_data := catalog.get_world(world_id)
+	var play_bounds := float(unspace.get("play_bounds", 8000.0))
 
-	_spawn_dust_ring(
-		world_root,
-		play_bounds,
-		Color(0.55, 0.25, 0.75, 0.42)
-	)
+	var field: NspaceField = NspaceField.new()
+	field.name = "NspaceField"
+	field.configure(unspace, catalog, session, play_bounds)
+	world_root.add_child(field)
+	_nspace_field = field
 
-	return _spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
+	var portal_node: Node2D = field.get_portal_node()
+	if portal_node != null:
+		spawned_by_id["n4_exit_portal"] = portal_node
+
+	return play_bounds
 
 
 func apply_salvage_visuals(session: GameSession) -> void:
@@ -242,33 +247,21 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 
 
 func _build_unspace_nav_contacts(catalog: Catalog) -> Array:
-	var contacts: Array = []
-	var portal: Variant = spawned_by_id.get("n4_exit_portal")
-	if portal is Node2D:
-		contacts.append({
-			"id": "exit_portal",
-			"name": _resolve_contact_name(portal, catalog, "Exit Portal"),
-			"short_label": "X",
-			"contact_kind": "landmark",
-			"position": portal.global_position,
-		})
-	for entity_id in spawned_by_id:
-		if entity_id == "n4_exit_portal":
-			continue
-		var node: Variant = spawned_by_id[entity_id]
-		if not node is WorldObject:
-			continue
-		var beacon_name := _resolve_contact_name(node, catalog, "")
-		if beacon_name.is_empty():
-			continue
-		contacts.append({
-			"id": str(entity_id),
-			"name": beacon_name,
-			"short_label": "",
-			"contact_kind": "beacon",
-			"position": node.global_position,
-		})
-	return contacts
+	if _nspace_field == null:
+		return []
+
+	var portal_title := "Exit Portal"
+	var interactable_data := catalog.get_interactable("unspace_exit")
+	if not interactable_data.is_empty():
+		portal_title = str(interactable_data.get("title", portal_title))
+
+	return [{
+		"id": "exit_portal",
+		"name": portal_title,
+		"short_label": "X",
+		"contact_kind": "landmark",
+		"position": _nspace_field.get_portal_position(),
+	}]
 
 
 func _ensure_sector_nav_cache(catalog: Catalog) -> void:

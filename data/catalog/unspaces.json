@@ -4,10 +4,9 @@
     "n": 4,
     "name": "4-space transit",
     "orbit_name": "4-space",
-    "play_bounds": 4000,
-    "spawn": { "x": -1800, "y": 0 },
+    "play_bounds": 8000,
+    "spawn": { "x": -3600, "y": 0 },
     "objective": "Reach the exit portal",
-    "world_id": "n4_default",
     "gst": {
       "pulse_min": 0.35,
       "pulse_max": 2.4,
@@ -16,6 +15,53 @@
       "slip_chance": 0.12,
       "slip_min": 2.0,
       "slip_max": 18.0
+    },
+    "field": {
+      "palette": {
+        "peak": "#a8f4ff",
+        "trough": "0.16,0.10,0.38,0.94",
+        "ridge": "#d8fcff",
+        "edge": "#6ec8f0",
+        "accent_violet": "#9460fa",
+        "accent_teal": "#48e0d0",
+        "accent_amber": "#ffb860",
+        "accent_rose": "#fa78b8",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 0,
+        "ring_count": 11,
+        "points_per_ring": 10,
+        "jitter": 0.22,
+        "height_freq": 0.001,
+        "shimmer_amp": 10.0,
+        "shimmer_speed": 0.35,
+        "deform_chance": 0.35,
+        "deform_duration": 0.62,
+        "deform_rotate_max": 0.35,
+        "deform_scale_min": 0.93,
+        "deform_scale_max": 1.07
+      },
+      "kick": {
+        "min": 35,
+        "max": 95
+      },
+      "bound": {
+        "band_fraction": 0.18,
+        "strength": 420
+      },
+      "edge": {
+        "thickness": 120,
+        "cooldown": 1.0
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "leash_fraction": 0.88
+      }
     }
   }
 ]

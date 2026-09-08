@@ -166,6 +166,7 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | `local_sensor` | `sensor_basic` | North-up local-space radar panel |
 | `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
 | `sensor_read_beacons` | `sensor_basic` | HUD transponder labels for NPC ships and named landmarks |
+| `4_space_topology` | `sensor_basic` | Unspace exit portal radar dot, edge arrow, and label (4-space only) |
 
 Capability gating is install-based; compute overload degradation is deferred.
 

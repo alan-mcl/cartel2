@@ -16,7 +16,7 @@ var _current_slot: int = -1
 var _game_active: bool = false
 var _save_overlay_source: String = ""
 
-const UNSPACE_TINT := Color(0.78, 0.58, 1.0, 1.0)
+const UNSPACE_TINT := Color(0.1, 0.08, 0.14, 1.0)
 
 @onready var _world: Node2D = $World
 @onready var _player: CharacterBody2D = $PlayerShip
@@ -117,6 +117,8 @@ func _physics_process(delta: float) -> void:
 			_traffic_director.tick(delta, _player.global_position, _world_loader)
 
 	var contacts := _world_loader.get_nav_contacts(catalog, session.in_unspace)
+	if session.in_unspace and not player_ship.has_capability("4_space_topology"):
+		contacts = _filter_topology_contacts(contacts)
 	if not session.in_unspace and _traffic_director != null:
 		contacts.append_array(_traffic_director.get_traffic_contacts(_player.global_position))
 
@@ -366,15 +368,32 @@ func _load_current_space(place_player: bool = true) -> void:
 
 func _load_current_sector(place_player: bool = true, spawn_near: String = "") -> void:
 	play_bounds = _world_loader.load_sector(_world, catalog, session, session.sector_id)
-	_starfield.reset_tint()
+	if _starfield.has_method("set_unspace_mode"):
+		_starfield.set_unspace_mode(false)
+	else:
+		_starfield.reset_tint()
 	_finalize_world_load(place_player, spawn_near)
 
 
 func _load_unspace(place_player: bool = true) -> void:
 	play_bounds = _world_loader.load_unspace(_world, catalog, session, session.unspace_world_id)
-	if _starfield.has_method("set_tint"):
+	if _starfield.has_method("set_unspace_mode"):
+		_starfield.set_unspace_mode(true)
+	elif _starfield.has_method("set_tint"):
 		_starfield.set_tint(UNSPACE_TINT)
 	_finalize_world_load(place_player)
+
+
+func _filter_topology_contacts(contacts: Array) -> Array:
+	var filtered: Array = []
+	for contact_variant in contacts:
+		if typeof(contact_variant) != TYPE_DICTIONARY:
+			continue
+		var contact: Dictionary = contact_variant
+		if str(contact.get("id", "")) == "exit_portal":
+			continue
+		filtered.append(contact)
+	return filtered
 
 
 func _finalize_world_load(place_player: bool = true, spawn_near: String = "") -> void:

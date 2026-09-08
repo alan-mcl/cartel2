@@ -11,6 +11,7 @@ var _far_layer: Node2D
 var _near_layer: Node2D
 var _camera: Camera2D
 var _tint: Color = Color.WHITE
+var _unspace_mode: bool = false
 
 
 func _ready() -> void:
@@ -27,6 +28,7 @@ func bind_camera(camera: Camera2D) -> void:
 
 func set_tint(color: Color) -> void:
 	_tint = color
+	_unspace_mode = false
 	_apply_tint()
 
 
@@ -34,10 +36,19 @@ func reset_tint() -> void:
 	set_tint(Color.WHITE)
 
 
+func set_unspace_mode(active: bool) -> void:
+	_unspace_mode = active
+	_apply_tint()
+
+
 func _apply_tint() -> void:
-	if _far_layer != null:
+	if _far_layer == null or _near_layer == null:
+		return
+	if _unspace_mode:
+		_far_layer.modulate = Color(0.06, 0.05, 0.1, 0.22)
+		_near_layer.modulate = Color(0.04, 0.04, 0.08, 0.14)
+	else:
 		_far_layer.modulate = _tint
-	if _near_layer != null:
 		_near_layer.modulate = _tint
 
 

@@ -93,7 +93,7 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 
 | id | Capabilities | Notes |
 |----|--------------|-------|
-| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons` | Local radar panel; edge arrows; transponder label overlay |
+| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology` | Local radar panel; edge arrows; transponder label overlay; 4-space exit portal labelling |
 | `sensor_advanced` | same as basic | Extended-range sensors |
 
 ### Transponder (`category: transponder`, mount: `system`)

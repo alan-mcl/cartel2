@@ -9,6 +9,7 @@ const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
+const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 const _WEAPON_MASK := 2 | 16
 
 @export var ship_id: String = "flare_on_ss"
@@ -80,25 +81,20 @@ func exit_shear(hazard: NspaceHazard) -> void:
 	_shear_hazards.erase(hazard)
 
 
-func apply_shear_forces(session: GameSession, delta: float) -> void:
-	if _shear_hazards.is_empty():
-		return
+func apply_nspace_forces(session: GameSession, delta: float) -> void:
+	var field: NspaceField = _get_nspace_field()
+	if field != null:
+		field.apply_forces(self, session, delta)
 
-	for hazard in _shear_hazards:
-		if hazard == null or not is_instance_valid(hazard):
-			continue
 
-		var offset := global_position - hazard.global_position
-		if offset.length_squared() < 0.001:
-			offset = Vector2.RIGHT
-		var direction := offset.normalized()
-		motion.velocity += direction * hazard.get_shear_strength() * delta
-
-		if session != null:
-			session.apply_hull_stress(hazard.get_hull_stress(), delta)
-
-	if session != null and session.hull <= 0.0:
-		motion.velocity *= 0.985
+func _get_nspace_field() -> NspaceField:
+	var world := _get_world_root()
+	if world == null:
+		return null
+	for child in world.get_children():
+		if child is NspaceField:
+			return child as NspaceField
+	return null
 
 
 func get_stats() -> ShipStats:
@@ -190,7 +186,7 @@ func _physics_process(delta: float) -> void:
 	)
 
 	if session != null and session.in_unspace:
-		apply_shear_forces(session, delta)
+		apply_nspace_forces(session, delta)
 
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity

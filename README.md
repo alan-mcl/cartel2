@@ -44,7 +44,7 @@ The game opens at the **main menu** (version shown as **DEV**). Choose **New Gam
 4. At the **Shipyard**, buy spare modules, drag them onto chassis slots to install (chassis fixed), inspect configuration and engineering budgets, refuel. Yard stock is grouped by module category tabs.
 5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit beside the habitat ring.
 6. Fly the orbital ring (slowly rotating) and visit the **Jump Gate** to pick **La Bella Vista Sector**, confirm **4-space** translation.
-7. Navigate **4-space** to the **Exit Portal**, then `[E]` to emerge in La Bella Vista orbit near the jump gate.
+7. Navigate **4-space** through the undulating lattice to the **Exit Portal**, then `[E]` to emerge in La Bella Vista orbit near the jump gate.
 8. Dock at **La Bella Vista Habitat**, use terminal and shipyard, jump back to Proxima.
 9. **Save** progress from the pause menu or habitat footer.
 

@@ -91,7 +91,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 - Hold **Space** or **LMB** (`fire`) to discharge installed weapons along ship facing. `ShipWeapons` handles rate-of-fire cooldowns and ammo; `ShipOperations` allocates weapon power only while firing.
 - `play_bounds` per sector defines the distant dust ring (visual landmark only; player flight is unbounded).
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
-- Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`). In-system ships require a powered `vessel_registration_beacon` (Commercial Article 19).
+- Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology` for unspace exit labelling). In-system ships require a powered `vessel_registration_beacon` (Commercial Article 19).
 
 ### Interaction kinds
 
@@ -132,9 +132,9 @@ HUD and **HabitatScreen** header show `GstClockLabel` at seconds resolution. `se
 
 1. `[E]` at jump gate (3-space only) → jump overlay lists destinations from `mappings[]`.
 2. Select destination → confirm **4-space (n=4)** route. Known `solution` integer shown as flavour; no typing yet.
-3. Confirm → `session.enter_unspace` → entry translation lump applied → `WorldLoader.load_unspace` → player at 4-space entry spawn, violet starfield tint.
-4. Fly through 4-space: N-space **shear hazards** knock the ship and stress hull (non-lethal); solid debris uses existing collision. GST advances irregularly while in transit.
-5. `[E]` at **Exit Portal** (`arrive` interactable) → exit translation lump applied → `session.arrive_from_unspace` → load destination sector orbit.
+3. Confirm → `session.enter_unspace` → entry translation lump applied → `WorldLoader.load_unspace` → player at 4-space entry spawn, dim starfield behind undulating geometry.
+4. Fly through 4-space: a **polygonised topographic mesh** fills the play disk under the ship. Crossing any edge applies a velocity kick; some crossings also scramble the mesh. A soft radial bound pushes the ship back toward the center near the rim. GST advances irregularly while in transit.
+5. `[E]` at **Exit Portal** (embedded in a mesh face, labelled only with `4_space_topology` sensors) → exit translation lump applied → `session.arrive_from_unspace` → load destination sector orbit.
 
 Hyperdrive-equipped ships may later translate without a gate or from other 4-space regions — not implemented.
 
@@ -154,9 +154,11 @@ flowchart TD
 - **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
 - **`jump_gate`** — static gate farther out (angle derived from sector id)
 
-4-space layouts (`n4_default`) still use a flat **`entities`** list (beacons, debris, hazards, exit portal).
+4-space layouts are defined in `unspaces.json` as a **`field`** block: a procedurally generated topographic triangle mesh, edge-crossing kicks/deforms, and an exit portal embedded in a face. Legacy flat `entities` lists in `worlds.json` are no longer used for unspace loading.
 
-`WorldLoader` maps entity `kind` to packed scenes:
+`WorldLoader.load_unspace` spawns an `NspaceField` (procedural topography under the ship) instead of sector entity scenes. No dust ring in unspace. The mesh is visual-only; edge crossings perturb the ship and sometimes the terrain. Topography is **deterministically seeded** from the route's translation `solution` (set at jump confirm) combined with transit `n`, with an optional catalog `seed_salt` for tuning — the same route always produces the same mesh layout and colour variation.
+
+`WorldLoader` maps 3-space entity `kind` to packed scenes:
 
 | Kind | Scene |
 |------|-------|
@@ -166,16 +168,16 @@ flowchart TD
 | `beacon` | `scenes/world/beacon.tscn` |
 | `wreck` | `scenes/world/wreck.tscn` |
 | `debris` | `scenes/world/debris_rock.tscn` |
-| `hazard` | `scenes/world/hazard.tscn` (4-space shear fields) |
+| `hazard` | `scenes/world/hazard.tscn` (legacy; not used in 4-space) |
 | `planet_limb` | Sprite2D spawned in code (legacy) |
 
 Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded).
 
-Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. Hazards use `NspaceHazard.configure(entity)`.
+Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. 4-space uses `NspaceField.configure(unspace, catalog, session, play_bounds)`.
 
-`WorldLoader.load_unspace` loads layouts from `worlds.json` via `unspaces.json` (`world_id`), with a violet dust ring and no planet unless specified.
+`WorldLoader.load_unspace` reads the `field` block from `unspaces.json` (palette, topo generation, kick/bound tuning, portal). `GameSession.unspace_solution` is set in `enter_unspace` from the selected route mapping and persisted across saves. Local radar in unspace scales to `play_bounds`. Exit portal nav contacts require the **`4_space_topology`** sensor capability.
 
-The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (not stored in JSON). Local radar scales to **content radius** (`max(jump_gate_radius, orbital_ring_radius) × 1.15`) so contacts stay readable when the dust ring is much larger than the playable landmarks.
+The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sector load time (not used in unspace). Local radar in 3-space scales to **content radius** (`max(jump_gate_radius, orbital_ring_radius) × 1.15`) so contacts stay readable when the dust ring is much larger than the playable landmarks.
 
 ## In-system NPC traffic (3-space)
 

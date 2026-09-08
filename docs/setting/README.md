@@ -41,7 +41,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game starts at Proxima |
 | Habitats | One dockable habitat per sector (Proxima Habitat, La Bella Vista Habitat, …) |
 | Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
-| Unspace hazards | Shear fields + debris in 4-space; hull stress (non-lethal) |
+| Unspace hazards | Edge-crossing velocity kicks + random mesh deformation in 4-space; soft radial bound near play rim; false proximity via shifting topography |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
 | Commodities | Eleven categories; daily quotes at every habitat Exchange |

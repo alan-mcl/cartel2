@@ -81,7 +81,7 @@
     "volume": 0.4,
     "compute_demand": 2.0,
     "power_demand": 1.0,
-    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons"],
+    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons", "4_space_topology"],
     "cost": 550,
     "description": "Standard orbital navigation and proximity sensors."
   },
@@ -295,7 +295,7 @@
     "volume": 0.6,
     "compute_demand": 3.0,
     "power_demand": 1.5,
-    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons"],
+    "capabilities": ["local_sensor", "local_system_waypoints", "sensor_read_beacons", "4_space_topology"],
     "cost": 950,
     "description": "Extended-range orbital and survey sensors."
   },
