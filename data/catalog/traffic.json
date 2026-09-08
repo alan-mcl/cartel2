@@ -10,6 +10,8 @@
   "cruise_speed_jitter": 0.2,
   "route_lateral_offset_min": 80.0,
   "route_lateral_offset_max": 180.0,
+  "local_scatter_radius_min": 180.0,
+  "local_scatter_radius_max": 280.0,
   "spawn_min_distance_player": 400.0,
   "dock_arrival_distance": 80.0,
   "orbital_arrival_radius": 90.0,

@@ -169,6 +169,47 @@ static func pick_weighted_waypoint(
 	return str(candidates[0])
 
 
+static func pick_weighted_gate_orbital(anchors: Array, traffic_config: Dictionary) -> String:
+	var candidates: Array = []
+	var weights: Array = []
+	var w_gate := float(traffic_config.get("waypoint_weight_jump_gate", 0.35))
+	var w_orbital_each := float(traffic_config.get("waypoint_weight_orbital_each", 0.20))
+
+	for entry_variant in anchors:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var anchor_id := str(entry.get("id", ""))
+		if anchor_id.is_empty():
+			continue
+		match str(entry.get("kind", "")):
+			"jump_gate":
+				candidates.append(anchor_id)
+				weights.append(w_gate)
+			"orbital":
+				candidates.append(anchor_id)
+				weights.append(w_orbital_each)
+			_:
+				continue
+
+	if candidates.is_empty():
+		return "jump_gate"
+
+	var total := 0.0
+	for weight in weights:
+		total += float(weight)
+	if total <= 0.0:
+		return str(candidates[0])
+
+	var roll := randf() * total
+	var cumulative := 0.0
+	for i in range(candidates.size()):
+		cumulative += float(weights[i])
+		if roll <= cumulative:
+			return str(candidates[i])
+	return str(candidates[0])
+
+
 static func _pick_cruise_speed(traffic_config: Dictionary, assembled: AssembledShip) -> float:
 	var fraction := float(traffic_config.get("cruise_speed_fraction", 0.33))
 	var jitter := float(traffic_config.get("cruise_speed_jitter", 0.2))
@@ -300,13 +341,76 @@ func init_route_from_anchors(anchors: Array, traffic_config: Dictionary = {}) ->
 			route_offset = Vector2.ZERO
 
 
-func place_along_route(anchors: Array, _progress: float, _traffic_config: Dictionary) -> void:
+func place_along_route(anchors: Array, progress: float, traffic_config: Dictionary) -> bool:
 	if anchors.is_empty():
-		return
+		return false
 
 	match role:
+		"transit", "shuttle", "dock_cycle":
+			if route_from_id.is_empty() or route_to_id.is_empty():
+				return false
+			var origin := _find_anchor_position(anchors, route_from_id)
+			var dest := _find_anchor_position(anchors, route_to_id)
+			if origin.length_squared() < 1.0 or dest.length_squared() < 1.0:
+				return false
+
+			var clamped_progress := clampf(progress, 0.15, 0.85)
+			var base_pos := origin.lerp(dest, clamped_progress)
+			var segment := dest - origin
+			var lateral := Vector2.ZERO
+			if segment.length_squared() > 1.0:
+				var perpendicular := Vector2(-segment.y, segment.x).normalized()
+				var offset_min := float(traffic_config.get("route_lateral_offset_min", 80.0))
+				var offset_max := float(traffic_config.get("route_lateral_offset_max", 180.0))
+				var offset_mag := randf_range(offset_min, offset_max)
+				if randf() < 0.5:
+					offset_mag = -offset_mag
+				lateral = perpendicular * offset_mag
+			route_offset = lateral
+			_apply_mid_route_pose(base_pos + lateral, dest)
+			return true
 		"loiter", "runabout":
 			loiter_angle = randf() * TAU
+			return true
+		_:
+			return false
+
+
+func try_place_mid_route_arrival(
+	anchors: Array,
+	traffic_config: Dictionary,
+	player_pos: Vector2
+) -> bool:
+	var min_dist := float(traffic_config.get("spawn_min_distance_player", 400.0))
+	for _attempt in range(8):
+		var progress := randf_range(0.15, 0.85)
+		if not place_along_route(anchors, progress, traffic_config):
+			return false
+		if position.distance_to(player_pos) >= min_dist:
+			return true
+	return false
+
+
+func place_local_scatter(
+	anchors: Array,
+	traffic_config: Dictionary,
+	anchor_id: String,
+	face_toward_id: String
+) -> void:
+	var anchor_pos := _find_anchor_position(anchors, anchor_id)
+	if anchor_pos.length_squared() < 1.0:
+		return
+
+	var radius_min := float(traffic_config.get("local_scatter_radius_min", 180.0))
+	var radius_max := float(traffic_config.get("local_scatter_radius_max", 280.0))
+	var scatter_pos := anchor_pos + Vector2.from_angle(randf() * TAU) * randf_range(radius_min, radius_max)
+	var face_pos := _find_anchor_position(anchors, face_toward_id)
+	if face_pos.length_squared() < 1.0:
+		face_pos = anchor_pos + Vector2.RIGHT
+	_apply_mid_route_pose(scatter_pos, face_pos)
+	loiter_angle = randf() * TAU
+	if role == "loiter":
+		loiter_center = scatter_pos
 
 
 func mark_systems_catchup() -> void:

@@ -257,7 +257,7 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `TrafficDirector` + `TrafficActor` in `scripts/gameplay/`, presented by `NpcShip` in `scripts/presentation/`.
 
 - Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 100 ships at population max (`near_count_max + far_count_max`); full simulation capped by `sim_slot_max`.
-- Initial spawn places trip roles (`transit`, `shuttle`, `dock_cycle`) at a weighted origin waypoint facing their destination; `loiter` / `runabout` spawn at a weighted waypoint for local flavor.
+- Initial spawn places trip roles (`transit`, `shuttle`, `dock_cycle`) 15–85% along origin→destination with lateral offset; `loiter` / `runabout` scatter near the jump gate and orbitals (not habitat). Cycle replacements still spawn at origin waypoints.
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
 - Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
 - Completing a route (habitat, gate, or orbital), running dry, or leaving bounds **retires** the sprite; the director spawns a fresh replacement so fleet density stays constant.
@@ -274,7 +274,9 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `sensor_contact_radius` | number | Minimap blip range for NPC ships (typically ~gate radius; independent of dust ring) |
 | `cruise_speed_fraction` | number | Peaceful cruise cap as fraction of assembled hull `max_speed` (e.g. 0.33) |
 | `cruise_speed_jitter` | number | Per-ship multiplier spread around cruise fraction (e.g. 0.2 → ~26–40% of max) |
-| `waypoint_weight_habitat` / `jump_gate` / `orbital_each` | number | Weighted pick for trip origin/destination and loiter/runabout spawn points |
+| `waypoint_weight_habitat` / `jump_gate` / `orbital_each` | number | Weighted pick for trip origin/destination and loiter/runabout anchor bias |
+| `route_lateral_offset_min` / `route_lateral_offset_max` | number | Perpendicular scatter for mid-route arrival spawn |
+| `local_scatter_radius_min` / `local_scatter_radius_max` | number | Ring offset for loiter/runabout arrival spawn near gate/orbitals |
 | `near_count_min` / `max` | number | Near-LOD fleet size range (log-scaled by population) |
 | `far_count_min` / `max` | number | Far-LOD fleet size range |
 | `role_weights_default` | object | Role spawn weights |

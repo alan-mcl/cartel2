@@ -162,8 +162,7 @@ func _spawn_initial_fleet(total: int, player_pos: Vector2, world_loader: WorldLo
 			_sector_id
 		)
 		_configure_actor_route(actor, role, anchors, trip)
-		if role == "loiter":
-			actor.loiter_center = spawn_pose.position
+		_apply_initial_arrival_placement(actor, role, anchors, player_pos, trip, spawn_pose)
 		actors.append(actor)
 
 
@@ -256,6 +255,32 @@ func _configure_actor_route(actor, role: String, anchors: Array, trip: Dictionar
 		actor.assign_waypoint_trip(str(trip.get("from", "")), str(trip.get("to", "")))
 	else:
 		actor.init_route_from_anchors(anchors, _traffic_config)
+
+
+func _apply_initial_arrival_placement(
+	actor,
+	role: String,
+	anchors: Array,
+	player_pos: Vector2,
+	trip: Dictionary,
+	fallback_pose: Dictionary
+) -> void:
+	if role in TRIP_ROLES and not trip.is_empty():
+		if not actor.try_place_mid_route_arrival(anchors, _traffic_config, player_pos):
+			actor.sync_position(fallback_pose.get("position", Vector2.ZERO))
+			actor.motion.facing = float(fallback_pose.get("facing", 0.0))
+			actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * actor.cruise_speed_cap
+		return
+
+	if role in ["loiter", "runabout"]:
+		var anchor_id := TrafficActorScript.pick_weighted_gate_orbital(anchors, _traffic_config)
+		var face_toward := "jump_gate" if role == "loiter" else "habitat"
+		actor.place_local_scatter(anchors, _traffic_config, anchor_id, face_toward)
+		return
+
+	actor.sync_position(fallback_pose.get("position", Vector2.ZERO))
+	actor.motion.facing = float(fallback_pose.get("facing", 0.0))
+	actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * actor.cruise_speed_cap
 
 
 func _pick_trip_for_role(role: String, anchors: Array) -> Dictionary:
@@ -360,7 +385,7 @@ func _pick_initial_spawn_pose(
 			str(trip.get("to", ""))
 		)
 	if role in ["loiter", "runabout"]:
-		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
+		var waypoint_id := TrafficActorScript.pick_weighted_gate_orbital(anchors, _traffic_config)
 		var face_toward := "jump_gate" if role == "loiter" else "habitat"
 		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, face_toward)
 	var pos := _pick_spawn_position(player_pos)

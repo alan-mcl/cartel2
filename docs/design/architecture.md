@@ -182,8 +182,8 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (n
 `TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
 
 - **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~100 ships at population max, smaller worlds less).
-- **Spawn** — trip roles spawn at a weighted origin waypoint (habitat, gate, or orbital) and cruise to a different weighted destination; loiter/runabout spawn at a weighted waypoint.
-- **Variation** — per-ship cruise jitter; trip routes steer directly to destination (no mid-corridor scatter).
+- **Spawn** — on sector arrival, trip roles appear 15–85% along their corridor toward destination; loiter/runabout scatter near the jump gate and orbitals. Cycle replacements still launch from origin waypoints.
+- **Variation** — per-ship cruise jitter; trip routes steer directly to destination with optional lateral offset at arrival spawn.
 - **Simulation LOD** — up to `sim_slot_max` (~20) nearest ships run full `ShipOperations`, weapons, and `NpcShip` physics. The rest of the fleet (~100 cap) are kinematic sprites with cheap cruise AI only.
 - **Presentation LOD** — follows sim slots: slotted ships use `NpcShip` (`CharacterBody2D`); unslotted ships are distant sprites regardless of distance inside `near_lod_radius`.
 - **Roles** — transit, shuttle, dock_cycle share one-shot waypoint trips; loiter and runabout are local flavor near gate/habitat.
