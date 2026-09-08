@@ -14,6 +14,9 @@ const LOITER_RADIUS := 180.0
 const ARRIVAL_DISTANCE := 60.0
 const ROTATE_THRESHOLD := 0.12
 const PEACEFUL_VELOCITY_BLEND := 3.5
+const COAST_SPEED_FRACTION := 0.92
+const COAST_HEADING_TOLERANCE := 0.2
+const LAUNCH_SPEED := 20.0
 
 
 static func create(
@@ -44,9 +47,9 @@ static func create(
 	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
 	actor.hull_current = actor.hull_max
 	actor.motion.facing = spawn_facing
-	actor.motion.velocity = Vector2.from_angle(spawn_facing) * 20.0
 	actor._position = spawn_pos
 	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
+	actor.motion.velocity = Vector2.from_angle(spawn_facing) * LAUNCH_SPEED
 	actor.loiter_angle = randf() * TAU
 	actor._assign_route_endpoints(sector_id)
 	return actor
@@ -407,7 +410,7 @@ func place_local_scatter(
 	var face_pos := _find_anchor_position(anchors, face_toward_id)
 	if face_pos.length_squared() < 1.0:
 		face_pos = anchor_pos + Vector2.RIGHT
-	_apply_mid_route_pose(scatter_pos, face_pos)
+	_apply_mid_route_pose(scatter_pos, face_pos, LAUNCH_SPEED)
 	loiter_angle = randf() * TAU
 	if role == "loiter":
 		loiter_center = scatter_pos
@@ -769,9 +772,25 @@ func _steer_toward(target: Vector2, use_thrust: bool, use_boost: bool) -> Dictio
 		inputs["rotate_right"] = true
 
 	var outside_arrival := to_target.length_squared() > ARRIVAL_DISTANCE * ARRIVAL_DISTANCE
+	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	if use_thrust and outside_arrival:
-		inputs["thrust"] = true
-		inputs["boost"] = use_boost and absf(delta_facing) < ROTATE_THRESHOLD * 2.0
+		if in_combat:
+			inputs["thrust"] = true
+			inputs["boost"] = use_boost and absf(delta_facing) < ROTATE_THRESHOLD * 2.0
+		else:
+			var speed := motion.velocity.length()
+			var speed_low := speed < cruise_speed_cap * COAST_SPEED_FRACTION
+			var aligned := absf(delta_facing) < ROTATE_THRESHOLD * 2.0
+			var heading_error := 0.0
+			if speed > 1.0:
+				heading_error = absf(wrapf(motion.velocity.angle() - desired, -PI, PI))
+			if speed_low:
+				inputs["thrust"] = true
+				inputs["boost"] = use_boost
+			elif aligned and heading_error > COAST_HEADING_TOLERANCE:
+				inputs["thrust"] = true
+			elif role in ["loiter", "runabout"] and heading_error > COAST_HEADING_TOLERANCE:
+				inputs["thrust"] = true
 	return inputs
 
 
@@ -921,9 +940,10 @@ func _infer_route_origin_position(dest_id: String, anchors: Array) -> Vector2:
 			return _find_anchor_position(anchors, "habitat")
 
 
-func _apply_mid_route_pose(pos: Vector2, face_toward: Vector2) -> void:
+func _apply_mid_route_pose(pos: Vector2, face_toward: Vector2, speed: float = -1.0) -> void:
 	_position = pos
 	var to_target := face_toward - pos
 	if to_target.length_squared() > 1.0:
 		motion.facing = to_target.angle()
-	motion.velocity = Vector2.from_angle(motion.facing) * cruise_speed_cap
+	var travel_speed := cruise_speed_cap if speed < 0.0 else speed
+	motion.velocity = Vector2.from_angle(motion.facing) * travel_speed

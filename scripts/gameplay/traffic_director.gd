@@ -269,7 +269,7 @@ func _apply_initial_arrival_placement(
 		if not actor.try_place_mid_route_arrival(anchors, _traffic_config, player_pos):
 			actor.sync_position(fallback_pose.get("position", Vector2.ZERO))
 			actor.motion.facing = float(fallback_pose.get("facing", 0.0))
-			actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * actor.cruise_speed_cap
+			actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * TrafficActorScript.LAUNCH_SPEED
 		return
 
 	if role in ["loiter", "runabout"]:
@@ -280,7 +280,7 @@ func _apply_initial_arrival_placement(
 
 	actor.sync_position(fallback_pose.get("position", Vector2.ZERO))
 	actor.motion.facing = float(fallback_pose.get("facing", 0.0))
-	actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * actor.cruise_speed_cap
+	actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * TrafficActorScript.LAUNCH_SPEED
 
 
 func _pick_trip_for_role(role: String, anchors: Array) -> Dictionary:
