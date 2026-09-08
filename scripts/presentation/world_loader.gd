@@ -28,6 +28,8 @@ var _habitat_slot_angle: float = 0.0
 var _gate_radius: float = 0.0
 var _gate_angle: float = 0.0
 var _sector_id: String = ""
+var _sector_nav_cache: Array = []
+var _sector_nav_cache_ready: bool = false
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -44,6 +46,8 @@ func clear_world(world_root: Node2D) -> void:
 	_gate_radius = 0.0
 	_gate_angle = 0.0
 	_sector_id = ""
+	_sector_nav_cache.clear()
+	_sector_nav_cache_ready = false
 
 
 func load_sector(
@@ -224,74 +228,122 @@ func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
 
 
 func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
-	var contacts: Array = []
 	if in_unspace:
-		var portal: Variant = spawned_by_id.get("n4_exit_portal")
-		if portal is Node2D:
-			contacts.append({
-				"id": "exit_portal",
-				"name": _resolve_contact_name(portal, catalog, "Exit Portal"),
-				"short_label": "X",
-				"contact_kind": "landmark",
-				"position": portal.global_position,
-			})
-		for entity_id in spawned_by_id:
-			if entity_id == "n4_exit_portal":
-				continue
-			var node: Variant = spawned_by_id[entity_id]
-			if not node is WorldObject:
-				continue
-			var beacon_name := _resolve_contact_name(node, catalog, "")
-			if beacon_name.is_empty():
-				continue
-			contacts.append({
-				"id": str(entity_id),
-				"name": beacon_name,
-				"short_label": "",
-				"contact_kind": "beacon",
-				"position": node.global_position,
-			})
-	else:
-		var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
+		return _build_unspace_nav_contacts(catalog)
+
+	_ensure_sector_nav_cache(catalog)
+	_refresh_sector_nav_positions()
+	var contacts: Array = []
+	for entry_variant in _sector_nav_cache:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		contacts.append((entry_variant as Dictionary).duplicate())
+	return contacts
+
+
+func _build_unspace_nav_contacts(catalog: Catalog) -> Array:
+	var contacts: Array = []
+	var portal: Variant = spawned_by_id.get("n4_exit_portal")
+	if portal is Node2D:
 		contacts.append({
-			"id": "planet",
-			"name": str(sector.get("name", "Planet")),
-			"short_label": "P",
+			"id": "exit_portal",
+			"name": _resolve_contact_name(portal, catalog, "Exit Portal"),
+			"short_label": "X",
+			"contact_kind": "landmark",
+			"position": portal.global_position,
+		})
+	for entity_id in spawned_by_id:
+		if entity_id == "n4_exit_portal":
+			continue
+		var node: Variant = spawned_by_id[entity_id]
+		if not node is WorldObject:
+			continue
+		var beacon_name := _resolve_contact_name(node, catalog, "")
+		if beacon_name.is_empty():
+			continue
+		contacts.append({
+			"id": str(entity_id),
+			"name": beacon_name,
+			"short_label": "",
+			"contact_kind": "beacon",
+			"position": node.global_position,
+		})
+	return contacts
+
+
+func _ensure_sector_nav_cache(catalog: Catalog) -> void:
+	if _sector_nav_cache_ready:
+		return
+
+	_sector_nav_cache.clear()
+	var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
+	_sector_nav_cache.append({
+		"id": "planet",
+		"name": str(sector.get("name", "Planet")),
+		"short_label": "P",
+		"contact_kind": "landmark",
+		"position": Vector2.ZERO,
+	})
+	if _habitat_node != null:
+		_sector_nav_cache.append({
+			"id": "habitat",
+			"name": _resolve_contact_name(_habitat_node, catalog, "Habitat"),
+			"short_label": "H",
 			"contact_kind": "landmark",
 			"position": Vector2.ZERO,
 		})
-		if _habitat_node != null:
-			contacts.append({
-				"id": "habitat",
-				"name": _resolve_contact_name(_habitat_node, catalog, "Habitat"),
-				"short_label": "H",
-				"contact_kind": "landmark",
-				"position": get_habitat_world_position(),
+	if _jump_gate_node != null:
+		_sector_nav_cache.append({
+			"id": "jump_gate",
+			"name": _resolve_contact_name(_jump_gate_node, catalog, "Jump Gate"),
+			"short_label": "G",
+			"contact_kind": "landmark",
+			"position": Vector2.ZERO,
+		})
+	for entry_variant in _orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var orbital_node: Variant = entry.get("node")
+		if orbital_node is Node2D and _orbital_ring != null:
+			_sector_nav_cache.append({
+				"id": str(entry.get("id", "")),
+				"name": str(entry.get("label", "")),
+				"short_label": "",
+				"contact_kind": "orbital",
+				"position": Vector2.ZERO,
 			})
-		var gate_pos := get_jump_gate_world_position()
-		if gate_pos.length_squared() > 0.001 and _jump_gate_node != null:
-			contacts.append({
-				"id": "jump_gate",
-				"name": _resolve_contact_name(_jump_gate_node, catalog, "Jump Gate"),
-				"short_label": "G",
-				"contact_kind": "landmark",
-				"position": gate_pos,
-			})
-		for entry_variant in _orbital_entries:
-			if typeof(entry_variant) != TYPE_DICTIONARY:
-				continue
-			var entry: Dictionary = entry_variant
-			var orbital_node: Variant = entry.get("node")
-			if orbital_node is Node2D and _orbital_ring != null:
-				var orbital_name := str(entry.get("label", ""))
-				contacts.append({
-					"id": str(entry.get("id", "")),
-					"name": orbital_name,
-					"short_label": "",
-					"contact_kind": "orbital",
-					"position": _orbital_ring.global_transform * orbital_node.position,
-				})
-	return contacts
+	_sector_nav_cache_ready = true
+
+
+func _refresh_sector_nav_positions() -> void:
+	for entry_variant in _sector_nav_cache:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		match str(entry.get("id", "")):
+			"habitat":
+				entry["position"] = get_habitat_world_position()
+			"jump_gate":
+				entry["position"] = get_jump_gate_world_position()
+			"planet":
+				entry["position"] = Vector2.ZERO
+			_:
+				if str(entry.get("contact_kind", "")) == "orbital":
+					entry["position"] = _orbital_contact_position(str(entry.get("id", "")))
+
+
+func _orbital_contact_position(orbital_id: String) -> Vector2:
+	for entry_variant in _orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("id", "")) != orbital_id:
+			continue
+		var orbital_node: Variant = entry.get("node")
+		if orbital_node is Node2D and _orbital_ring != null:
+			return _orbital_ring.global_transform * orbital_node.position
+	return Vector2.ZERO
 
 
 func get_traffic_anchors() -> Array:

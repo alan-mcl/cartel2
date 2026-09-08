@@ -8,13 +8,13 @@ const TRAFFIC_DRAW_RADIUS := 1.5
 const ORBITAL_DRAW_RADIUS := 3.0
 const BACKGROUND_ALPHA := 0.25
 const BORDER_WIDTH := 1.5
-const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 var _nav_radius: float = 3500.0
 var _ship_pos: Vector2 = Vector2.ZERO
 var _ship_heading_deg: float = 0.0
 var _contacts: Array = []
 var _player_broadcast_text: String = ""
+var _last_hover_pos: Vector2 = Vector2(-99999.0, -99999.0)
 
 
 func set_player_broadcast(text: String) -> void:
@@ -32,7 +32,6 @@ func set_nav_state(
 	_ship_heading_deg = ship_heading_deg
 	_contacts = contacts
 	queue_redraw()
-	_update_hover_tooltip(get_local_mouse_position())
 
 
 func set_feature_visible(active: bool) -> void:
@@ -49,6 +48,15 @@ func _ready() -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		_update_hover_tooltip(event.position)
+
+
+func _process(_delta: float) -> void:
+	if not visible:
+		return
+	var mouse_pos := get_local_mouse_position()
+	if mouse_pos.distance_squared_to(_last_hover_pos) <= 0.25:
+		return
+	_update_hover_tooltip(mouse_pos)
 
 
 func _notification(what: int) -> void:
@@ -162,6 +170,7 @@ func _draw_ship(center: Vector2, color: Color) -> void:
 
 
 func _update_hover_tooltip(local_pos: Vector2) -> void:
+	_last_hover_pos = local_pos
 	var layout := _map_layout()
 	var map_center: Vector2 = layout["center"]
 	if local_pos.distance_to(map_center) <= CONTACT_HIT_RADIUS + 4.0:
@@ -176,12 +185,7 @@ func _update_hover_tooltip(local_pos: Vector2) -> void:
 	var contact_kind := str(contact.get("contact_kind", ""))
 	if contact_kind == "traffic_npc":
 		if bool(contact.get("broadcasting", false)):
-			tooltip_text = TransponderBroadcastScript.format_tooltip({
-				"registration": contact.get("registration", ""),
-				"callsign": contact.get("callsign", ""),
-				"ship_name": contact.get("ship_name", ""),
-				"affiliation": contact.get("affiliation", ""),
-			})
+			tooltip_text = str(contact.get("name", ""))
 		else:
 			tooltip_text = ""
 		return

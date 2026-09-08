@@ -1,5 +1,7 @@
 {
   "near_lod_radius": 1400.0,
+  "sim_slot_max": 20,
+  "sim_slot_hysteresis": 200.0,
   "sensor_contact_radius": 6500.0,
   "cruise_speed_fraction": 0.33,
   "waypoint_weight_habitat": 0.45,
@@ -19,7 +21,7 @@
   "near_count_min": 9,
   "near_count_max": 16,
   "far_count_min": 3,
-  "far_count_max": 44,
+  "far_count_max": 84,
   "destroyed_respawn_seconds": 8.0,
   "cycle_stagger_seconds": 0.0,
   "role_weights_default": {

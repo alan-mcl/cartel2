@@ -3,7 +3,6 @@ extends Control
 const LINE_HEIGHT := 14.0
 const LABEL_OFFSET := Vector2(18.0, -10.0)
 const SCREEN_MARGIN := 24.0
-const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 var _contacts: Array = []
 var _camera: Camera2D = null
@@ -62,14 +61,14 @@ func _draw() -> void:
 func _lines_for_contact(contact: Dictionary) -> PackedStringArray:
 	var contact_kind := str(contact.get("contact_kind", "landmark"))
 	if contact_kind == "traffic_npc":
+		if not bool(contact.get("has_sim_slot", false)):
+			return PackedStringArray()
 		if not bool(contact.get("broadcasting", false)):
 			return PackedStringArray()
-		return TransponderBroadcastScript.format_lines({
-			"registration": contact.get("registration", ""),
-			"callsign": contact.get("callsign", ""),
-			"ship_name": contact.get("ship_name", ""),
-			"affiliation": contact.get("affiliation", ""),
-		})
+		var cached_lines: Variant = contact.get("beacon_lines", PackedStringArray())
+		if typeof(cached_lines) == TYPE_PACKED_STRING_ARRAY:
+			return cached_lines
+		return PackedStringArray()
 
 	var name := str(contact.get("name", ""))
 	if name.is_empty():

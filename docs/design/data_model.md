@@ -256,7 +256,7 @@ Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship
 
 Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `TrafficDirector` + `TrafficActor` in `scripts/gameplay/`, presented by `NpcShip` in `scripts/presentation/`.
 
-- Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 60 ships, La Bella Vista ≈ 35 after ~25% cap reduction.
+- Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 100 ships at population max (`near_count_max + far_count_max`); full simulation capped by `sim_slot_max`.
 - Initial spawn places trip roles (`transit`, `shuttle`, `dock_cycle`) at a weighted origin waypoint facing their destination; `loiter` / `runabout` spawn at a weighted waypoint for local flavor.
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
 - Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
@@ -268,7 +268,9 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `near_lod_radius` | number | Full physics/sim radius around player |
+| `near_lod_radius` | number | Legacy distance hint; presentation and full sim follow `sim_slot_max` |
+| `sim_slot_max` | number | Max ships with full systems tick + `NpcShip` physics (default ~20) |
+| `sim_slot_hysteresis` | number | Distance grace (m) to keep a slot when a ship was previously slotted |
 | `sensor_contact_radius` | number | Minimap blip range for NPC ships (typically ~gate radius; independent of dust ring) |
 | `cruise_speed_fraction` | number | Peaceful cruise cap as fraction of assembled hull `max_speed` (e.g. 0.33) |
 | `cruise_speed_jitter` | number | Per-ship multiplier spread around cruise fraction (e.g. 0.2 → ~26–40% of max) |

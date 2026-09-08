@@ -63,8 +63,9 @@ func tick(delta: float, player_pos: Vector2, world_loader: WorldLoader) -> void:
 		return
 
 	var anchors := world_loader.get_traffic_anchors()
-	var near_radius := float(_traffic_config.get("near_lod_radius", 1400.0))
 	var cycle_queue: Array = []
+
+	_assign_sim_slots(player_pos)
 
 	for actor_variant in actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
@@ -78,7 +79,7 @@ func tick(delta: float, player_pos: Vector2, world_loader: WorldLoader) -> void:
 				continue
 
 		var was_near: bool = bool(actor.near_lod)
-		actor.near_lod = actor.position.distance_to(player_pos) <= near_radius
+		actor.near_lod = actor.has_sim_slot
 		_update_lod_node(actor, was_near)
 
 		actor.tick(_catalog, _traffic_config, delta, player_pos, anchors, _traffic_envelope, world_loader)
@@ -184,9 +185,70 @@ func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, w
 	if role == "loiter":
 		actor.loiter_center = spawn_pose.position
 	actors.append(actor)
-	actor.near_lod = actor.position.distance_to(player_pos) <= float(_traffic_config.get("near_lod_radius", 1400.0))
-	_update_lod_node(actor, not actor.near_lod)
 	return actor
+
+
+func _assign_sim_slots(player_pos: Vector2) -> void:
+	var sim_max := int(_traffic_config.get("sim_slot_max", 20))
+	var hysteresis := float(_traffic_config.get("sim_slot_hysteresis", 200.0))
+	var pool: Array = []
+
+	for actor_variant in actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if not actor.is_active():
+			actor.has_sim_slot = false
+			continue
+
+		var dist: float = actor.position.distance_to(player_pos)
+		if actor.has_sim_slot:
+			dist = maxf(0.0, dist - hysteresis)
+
+		var priority := 0
+		if actor.ai_state == TrafficActorScript.STATE_ENGAGE or actor.ai_state == TrafficActorScript.STATE_FLEE:
+			priority = 1
+
+		pool.append({
+			"actor": actor,
+			"dist": dist,
+			"priority": priority,
+			"had_slot": actor.has_sim_slot,
+		})
+
+	for entry_variant in pool:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var actor = entry.get("actor")
+		if actor != null:
+			actor.has_sim_slot = false
+
+	pool.sort_custom(_compare_sim_slot_candidates)
+
+	var assigned := 0
+	for entry_variant in pool:
+		if assigned >= sim_max:
+			break
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var actor = entry.get("actor")
+		if actor == null:
+			continue
+		var had_slot: bool = bool(entry.get("had_slot", false))
+		if not had_slot:
+			actor.mark_systems_catchup()
+		actor.has_sim_slot = true
+		assigned += 1
+
+
+static func _compare_sim_slot_candidates(a: Dictionary, b: Dictionary) -> bool:
+	var priority_a := int(a.get("priority", 0))
+	var priority_b := int(b.get("priority", 0))
+	if priority_a != priority_b:
+		return priority_a > priority_b
+	return float(a.get("dist", 0.0)) < float(b.get("dist", 0.0))
 
 
 func _configure_actor_route(actor, role: String, anchors: Array, trip: Dictionary) -> void:

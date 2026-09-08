@@ -7,6 +7,8 @@ enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
 
 const STATE_DOCKED := AiState.DOCKED
 const STATE_DESTROYED := AiState.DESTROYED
+const STATE_ENGAGE := AiState.ENGAGE
+const STATE_FLEE := AiState.FLEE
 
 const LOITER_RADIUS := 180.0
 const ARRIVAL_DISTANCE := 60.0
@@ -37,6 +39,8 @@ static func create(
 	)
 	actor.owned_ship = _create_owned_ship(catalog, template, traffic_config, is_independent)
 	actor.assembled_ship = ShipAssembler.assemble_owned(catalog, actor.owned_ship)
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, actor.owned_ship, actor.assembled_ship)
+	actor.assembled_ship.stats = ShipAssembler.derive_stats(actor.assembled_ship, loaded_mass)
 	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
 	actor.hull_current = actor.hull_max
 	actor.motion.facing = spawn_facing
@@ -211,12 +215,16 @@ var route_to_id: String = ""
 var route_offset: Vector2 = Vector2.ZERO
 var pending_weapon_orders: Array = []
 var near_lod: bool = false
+var has_sim_slot: bool = false
+var needs_systems_catchup: bool = false
 var node: Node2D = null
 var cycle_pending: bool = false
 var cycle_spawn_hint: Dictionary = {}
 
 var _position: Vector2 = Vector2.ZERO
 var _route_initialized: bool = false
+var _cached_beacon_lines: PackedStringArray = PackedStringArray()
+var _cached_broadcasting: bool = false
 
 
 var position: Vector2:
@@ -301,6 +309,16 @@ func place_along_route(anchors: Array, _progress: float, _traffic_config: Dictio
 			loiter_angle = randf() * TAU
 
 
+func mark_systems_catchup() -> void:
+	needs_systems_catchup = true
+	_invalidate_beacon_cache()
+
+
+func _invalidate_beacon_cache() -> void:
+	_cached_beacon_lines = PackedStringArray()
+	_cached_broadcasting = false
+
+
 func tick(
 	catalog: Catalog,
 	traffic_config: Dictionary,
@@ -321,6 +339,32 @@ func tick(
 
 	init_route_from_anchors(anchors, traffic_config)
 
+	if not has_sim_slot:
+		_tick_kinematic(delta, player_pos, anchors, traffic_config, traffic_envelope, world_loader, prev_position)
+		return
+
+	_tick_full_sim(
+		catalog,
+		traffic_config,
+		delta,
+		player_pos,
+		anchors,
+		traffic_envelope,
+		world_loader,
+		prev_position
+	)
+
+
+func _tick_full_sim(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	delta: float,
+	player_pos: Vector2,
+	anchors: Array,
+	traffic_envelope: float,
+	world_loader: WorldLoader,
+	prev_position: Vector2
+) -> void:
 	var inputs := _build_ai_inputs(delta, player_pos, anchors, traffic_config)
 	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 
@@ -378,6 +422,69 @@ func tick(
 	_check_route_arrival(traffic_config, world_loader, prev_position)
 	_check_traffic_envelope(traffic_envelope)
 	_check_fuel_exhaustion()
+	_refresh_beacon_cache()
+
+	if needs_systems_catchup:
+		needs_systems_catchup = false
+
+
+func _tick_kinematic(
+	delta: float,
+	player_pos: Vector2,
+	anchors: Array,
+	traffic_config: Dictionary,
+	traffic_envelope: float,
+	world_loader: WorldLoader,
+	prev_position: Vector2
+) -> void:
+	operating_state.transponder_broadcasting = false
+	_invalidate_beacon_cache()
+
+	var inputs := _build_ai_inputs(delta, player_pos, anchors, traffic_config)
+	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
+
+	motion.step(
+		assembled_ship.stats,
+		delta,
+		bool(inputs.get("thrust", false)),
+		bool(inputs.get("reverse", false)),
+		bool(inputs.get("rotate_left", false)),
+		bool(inputs.get("rotate_right", false)),
+		bool(inputs.get("boost", false)),
+		1.0,
+		true
+	)
+
+	if not in_combat:
+		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
+		if bool(inputs.get("thrust", false)):
+			_blend_peaceful_velocity(delta)
+
+	_position += motion.velocity * delta
+	_sync_far_lod_node()
+
+	_handle_combat_timeout(delta, player_pos, traffic_config)
+	_check_route_arrival(traffic_config, world_loader, prev_position)
+	_check_traffic_envelope(traffic_envelope)
+
+
+func _refresh_beacon_cache() -> void:
+	var broadcasting := operating_state.transponder_broadcasting
+	if broadcasting == _cached_broadcasting and not _cached_beacon_lines.is_empty():
+		return
+
+	var ship_name := assembled_ship.name if assembled_ship != null else ""
+	if not owned_ship.name.is_empty():
+		ship_name = owned_ship.name
+
+	var broadcast := TransponderBroadcastScript.build(
+		owned_ship.registration if owned_ship != null else "",
+		callsign,
+		ship_name,
+		affiliation if broadcasting else ""
+	)
+	_cached_beacon_lines = TransponderBroadcastScript.format_lines(broadcast) if broadcasting else PackedStringArray()
+	_cached_broadcasting = broadcasting
 
 
 func request_cycle(hint: Dictionary) -> void:
@@ -396,6 +503,22 @@ func get_sensor_contact(player_pos: Vector2, traffic_config: Dictionary) -> Dict
 	if position.distance_to(player_pos) > radius:
 		return {}
 
+	if not has_sim_slot:
+		return {
+			"id": id,
+			"name": "",
+			"short_label": "",
+			"contact_kind": "traffic_npc",
+			"position": position,
+			"has_sim_slot": false,
+			"broadcasting": false,
+			"beacon_lines": PackedStringArray(),
+			"registration": owned_ship.registration if owned_ship != null else "",
+			"callsign": callsign,
+			"ship_name": owned_ship.name if owned_ship != null else "",
+			"affiliation": "",
+		}
+
 	var broadcasting := operating_state.transponder_broadcasting
 	var ship_name := assembled_ship.name if assembled_ship != null else ""
 	if not owned_ship.name.is_empty():
@@ -410,11 +533,13 @@ func get_sensor_contact(player_pos: Vector2, traffic_config: Dictionary) -> Dict
 
 	return {
 		"id": id,
-		"name": TransponderBroadcastScript.format_tooltip(broadcast) if broadcasting else "",
+		"name": "\n".join(_cached_beacon_lines) if broadcasting else "",
 		"short_label": "",
 		"contact_kind": "traffic_npc",
 		"position": position,
+		"has_sim_slot": has_sim_slot,
 		"broadcasting": broadcasting,
+		"beacon_lines": _cached_beacon_lines if broadcasting else PackedStringArray(),
 		"registration": broadcast.get("registration", ""),
 		"callsign": broadcast.get("callsign", ""),
 		"ship_name": broadcast.get("ship_name", ""),

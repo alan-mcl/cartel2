@@ -181,15 +181,15 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at load time (n
 
 `TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
 
-- **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~60 ships, La Bella Vista ~35).
+- **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~100 ships at population max, smaller worlds less).
 - **Spawn** — trip roles spawn at a weighted origin waypoint (habitat, gate, or orbital) and cruise to a different weighted destination; loiter/runabout spawn at a weighted waypoint.
 - **Variation** — per-ship cruise jitter; trip routes steer directly to destination (no mid-corridor scatter).
-- **Simulation** — each ship is an `OwnedShip` + `AssembledShip` ticking `ShipOperations` and `ShipWeapons` (fuel, power, ammo).
-- **LOD** — full `NpcShip` physics within `near_lod_radius`; distant ships are kinematic sprites.
+- **Simulation LOD** — up to `sim_slot_max` (~20) nearest ships run full `ShipOperations`, weapons, and `NpcShip` physics. The rest of the fleet (~100 cap) are kinematic sprites with cheap cruise AI only.
+- **Presentation LOD** — follows sim slots: slotted ships use `NpcShip` (`CharacterBody2D`); unslotted ships are distant sprites regardless of distance inside `near_lod_radius`.
 - **Roles** — transit, shuttle, dock_cycle share one-shot waypoint trips; loiter and runabout are local flavor near gate/habitat.
 - **Lifecycle** — trip roles despawn on arrival at habitat, gate, or orbital interactable radius; director immediately spawns a fresh ship at a newly chosen origin (not the previous destination).
 - **Combat** — provoked only; NPCs engage or flee at full engine cruise. Player weapons hit NPC layer 16; NPC shots stop on the player visually but do not apply hull damage.
-- **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips out to `sensor_contact_radius` (~gate distance). Map rim aligns with content radius, not the dust ring.
+- **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips out to `sensor_contact_radius` (~gate distance) for the full fleet. Beacon text overlay only for slotted, broadcasting ships. Map rim aligns with content radius, not the dust ring.
 - **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 33%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
 - **Bounds** — NPC recycle envelope is `gate_radius × 1.25`; player flight has no position clamp.
 
