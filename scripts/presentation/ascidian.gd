@@ -16,7 +16,6 @@ var _altitude_target: float = 0.5
 var _altitude_speed: float = 0.06
 var _altitude_wobble_amp: float = 0.05
 var _altitude_wobble_speed: float = 0.22
-var _fade_band: float = 0.12
 var _segment_count: int = 24
 var _wobble_amp: float = 18.0
 var _pulse_speed: float = 0.55
@@ -32,7 +31,6 @@ var _core_offsets: Array = []
 var _waypoint: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _time: float = 0.0
-var _visibility_alpha: float = 1.0
 
 
 func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rng: RandomNumberGenerator) -> void:
@@ -57,7 +55,6 @@ func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rn
 	)
 	_altitude_wobble_amp = visit_rng.randf_range(0.03, 0.07)
 	_altitude_wobble_speed = visit_rng.randf_range(0.16, 0.32)
-	_fade_band = float(cfg.get("fade_band", 0.12))
 	_segment_count = visit_rng.randi_range(20, 28)
 	_wobble_amp = _radius * visit_rng.randf_range(0.14, 0.24)
 	_pulse_speed = visit_rng.randf_range(0.35, 0.75)
@@ -83,43 +80,38 @@ func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rn
 	_velocity = Vector2.from_angle(visit_rng.randf() * TAU) * _speed * 0.15
 	_pick_waypoint()
 	z_index = 5
-	queue_redraw()
+	visible = false
 
 
 func get_visibility() -> float:
-	return _visibility_alpha
+	return 1.0
 
 
-func _physics_process(delta: float) -> void:
-	if delta <= 0.0:
-		return
-
-	_time += delta
-	_color_lerp = fmod(_color_lerp + _color_drift_speed * delta, 1.0)
-	_update_altitude(delta)
-	_update_visibility()
-	_wander(delta)
-	queue_redraw()
+func get_swim_depth() -> float:
+	return _current_altitude()
 
 
-func _draw() -> void:
-	if _visibility_alpha <= 0.01:
-		return
-
-	var outline := _build_outline()
-	if outline.size() < 3:
-		return
-
-	var warm_body := _warm_a.lerp(_warm_b, _color_lerp)
-	var vis := _visibility_alpha
-
-	_draw_aura(outline, warm_body, vis)
-	_draw_membrane(outline, warm_body, vis)
-	_draw_interior(warm_body, vis)
-	_draw_border(outline, warm_body, vis)
+func get_body_color() -> Color:
+	return _warm_a.lerp(_warm_b, _color_lerp)
 
 
-func _build_outline() -> PackedVector2Array:
+func get_radius() -> float:
+	return _radius
+
+
+func get_render_time() -> float:
+	return _time
+
+
+func get_pulse_speed() -> float:
+	return _pulse_speed
+
+
+func get_phase_offset() -> float:
+	return _phase_offset
+
+
+func build_outline() -> PackedVector2Array:
 	var points := PackedVector2Array()
 	for i in range(_segment_count):
 		var angle := TAU * float(i) / float(_segment_count)
@@ -132,89 +124,14 @@ func _build_outline() -> PackedVector2Array:
 	return points
 
 
-func _draw_aura(outline: PackedVector2Array, warm_body: Color, vis: float) -> void:
-	var aura := warm_body.lightened(0.28)
-	aura.a = 0.10 * vis
-	var aura_points := PackedVector2Array()
-	for point in outline:
-		aura_points.append(point * 1.38)
-	draw_colored_polygon(aura_points, aura)
+func _physics_process(delta: float) -> void:
+	if delta <= 0.0:
+		return
 
-
-func _draw_membrane(outline: PackedVector2Array, warm_body: Color, vis: float) -> void:
-	var membrane := warm_body
-	membrane.a = 0.24 * vis
-	draw_colored_polygon(outline, membrane)
-
-	var sheen := warm_body.lightened(0.35)
-	sheen.a = 0.10 * vis
-	var sheen_points := PackedVector2Array()
-	for point in outline:
-		sheen_points.append(point * 0.82)
-	draw_colored_polygon(sheen_points, sheen)
-
-
-func _draw_interior(warm_body: Color, vis: float) -> void:
-	var core_warm := warm_body.lightened(0.22)
-	core_warm.a = 0.42 * vis
-	draw_circle(Vector2.ZERO, _radius * 0.34, core_warm)
-
-	var heart := warm_body.lightened(0.42)
-	heart.a = 0.55 * vis
-	var pulse := sin(_time * _pulse_speed * 1.35 + _phase_offset) * 0.5 + 0.5
-	draw_circle(Vector2.ZERO, _radius * lerpf(0.12, 0.20, pulse), heart)
-
-	for core_data in _core_offsets:
-		if typeof(core_data) != TYPE_DICTIONARY:
-			continue
-		var data: Dictionary = core_data
-		var angle := float(data.get("angle", 0.0)) + _time * 0.09
-		var dist := float(data.get("dist", 0.2)) * _radius
-		var size := float(data.get("size", 0.2)) * _radius
-		var phase := float(data.get("phase", 0.0))
-		var offset := Vector2.from_angle(angle) * dist
-		offset += Vector2.from_angle(phase + _time * 0.21) * _radius * 0.04
-		var node_col := warm_body.lerp(_warm_b, sin(_time * 0.45 + phase) * 0.5 + 0.5)
-		node_col.a = 0.38 * vis
-		draw_circle(offset, size, node_col)
-
-	for filament_index in range(_filament_count):
-		if filament_index >= _filament_angles.size():
-			continue
-		_draw_filament(filament_index, warm_body, vis)
-
-
-func _draw_filament(filament_index: int, warm_body: Color, vis: float) -> void:
-	var base_angle := _filament_angles[filament_index]
-	var filament_col := warm_body.lightened(0.18)
-	filament_col.a = 0.34 * vis
-	var width := maxf(1.2, _radius * 0.018)
-
-	var points := PackedVector2Array()
-	var step_count := 10
-	for step in range(step_count):
-		var t := float(step) / float(step_count - 1)
-		var curl := sin(_time * 0.55 + t * 4.2 + base_angle) * 0.55
-		var angle := base_angle + curl * (0.35 + t * 0.45)
-		var radial := _radius * lerpf(0.10, 0.62, t)
-		radial += sin(_time * 0.9 + t * 6.0 + filament_index) * _radius * 0.035
-		points.append(Vector2.from_angle(angle) * radial)
-
-	for i in range(points.size() - 1):
-		draw_line(points[i], points[i + 1], filament_col, width)
-
-
-func _draw_border(outline: PackedVector2Array, warm_body: Color, vis: float) -> void:
-	var rim := warm_body.lightened(0.55)
-	rim.a = 0.92 * vis
-	var rim_width := maxf(2.0, _radius * 0.028)
-
-	var closed := outline.duplicate()
-	closed.append(outline[0])
-	draw_polyline(closed, rim, rim_width, true)
-
-	var halo := Color(1.0, 0.96, 0.82, 0.38 * vis)
-	draw_polyline(closed, halo, rim_width * 1.8, true)
+	_time += delta
+	_color_lerp = fmod(_color_lerp + _color_drift_speed * delta, 1.0)
+	_update_altitude(delta)
+	_wander(delta)
 
 
 func _wander(delta: float) -> void:
@@ -274,25 +191,6 @@ func _update_altitude(delta: float) -> void:
 
 	var blend := 1.0 - exp(-delta * _altitude_speed * 8.0)
 	_altitude = lerpf(_altitude, _altitude_target, blend)
-
-
-func _update_visibility() -> void:
-	if _field == null:
-		_visibility_alpha = 1.0
-		return
-
-	var terrain_height := _field.sample_height(global_position)
-	var swim_depth := _current_altitude()
-	if terrain_height <= swim_depth:
-		_visibility_alpha = 1.0
-		return
-
-	var excess := terrain_height - swim_depth
-	if _fade_band <= 0.001:
-		_visibility_alpha = 0.0
-		return
-
-	_visibility_alpha = 1.0 - clampf(excess / _fade_band, 0.0, 1.0)
 
 
 func _pick_warm_color(rng: RandomNumberGenerator) -> Color:

@@ -3,6 +3,7 @@ class_name NspaceField
 
 const InteractableScene := preload("res://scenes/world/interactable_marker.tscn")
 const Ascidian := preload("res://scripts/presentation/ascidian.gd")
+const NspaceBackdrop3D := preload("res://scripts/presentation/nspace_backdrop_3d.gd")
 
 var _play_bounds: float = 8000.0
 var _time: float = 0.0
@@ -42,6 +43,10 @@ var _deform_lerp: float = 0.0
 var _deform_start: PackedVector2Array = PackedVector2Array()
 var _deform_target: PackedVector2Array = PackedVector2Array()
 
+var _backdrop_viewport: SubViewport = null
+var _backdrop_3d: NspaceBackdrop3D = null
+var _height_scale: float = 600.0
+
 
 func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play_bounds: float) -> void:
 	_play_bounds = play_bounds
@@ -74,13 +79,17 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	_seed_phase = float(_route_seed) * 0.017
 	_rng.seed = _route_seed
 
+	_height_scale = float(_topo.get("height_scale", 600.0))
+	process_priority = 10
+
 	_build_topo_mesh()
 	_build_edge_catalog()
 	_pick_portal_face()
+	_setup_backdrop_3d()
 	_setup_portal(catalog, session)
 	_update_portal()
 	_spawn_ascidians(unspace)
-	queue_redraw()
+	_update_backdrop()
 
 
 func sample_height(world_pos: Vector2) -> float:
@@ -138,6 +147,55 @@ func get_portal_node() -> Node2D:
 	return _portal_node
 
 
+func get_animated_vertices() -> PackedVector2Array:
+	return _animated
+
+
+func get_heights() -> PackedFloat32Array:
+	return _heights
+
+
+func get_faces() -> Array:
+	return _faces
+
+
+func get_edges() -> Array:
+	return _edges
+
+
+func get_ascidians() -> Array:
+	return _ascidians
+
+
+func get_seed_phase() -> float:
+	return _seed_phase
+
+
+func get_portal_face_index() -> int:
+	return _portal_face_index
+
+
+func get_height_scale() -> float:
+	return _height_scale
+
+
+func get_ascidian_depth_bias() -> float:
+	return float(_inhabitants_cfg.get("depth_bias", 12.0))
+
+
+func get_palette_color(key: String, fallback: Color) -> Color:
+	return _color(key, fallback)
+
+
+func get_face_fill_color(face_index: int) -> Color:
+	var peak := _color("peak", Color(0.49, 0.91, 1.0, 0.90))
+	var trough := _color("trough", Color(0.10, 0.05, 0.23, 0.92))
+	var shallow := _color("shallow", Color(0.14, 0.12, 0.42, 0.92))
+	var bright := _color("bright", Color(0.62, 0.98, 1.0, 0.94))
+	var portal_host := _color("portal_host", Color(0.95, 0.55, 0.25, 0.45))
+	return _compute_face_fill(face_index, peak, trough, shallow, bright, portal_host)
+
+
 func apply_forces(ship: CharacterBody2D, session: GameSession, delta: float) -> void:
 	if ship == null or delta <= 0.0 or not ship.get("motion") is ShipMotion:
 		return
@@ -159,50 +217,121 @@ func _physics_process(delta: float) -> void:
 	_update_animated_vertices()
 	_update_portal()
 	_update_disarmed_edges()
-	queue_redraw()
+
+
+func _process(_delta: float) -> void:
+	_update_backdrop()
+
+
+func _setup_backdrop_3d() -> void:
+	_backdrop_viewport = SubViewport.new()
+	_backdrop_viewport.name = "BackdropViewport"
+	_backdrop_viewport.own_world_3d = true
+	_backdrop_viewport.transparent_bg = false
+	_backdrop_viewport.handle_input_locally = false
+	_backdrop_viewport.disable_3d = false
+	_backdrop_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_backdrop_viewport.size = _get_render_size()
+	add_child(_backdrop_viewport)
+
+	var world_env := WorldEnvironment.new()
+	var env := Environment.new()
+	env.background_mode = Environment.BG_COLOR
+	env.background_color = Color(0.04, 0.03, 0.07, 1.0)
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	env.ambient_light_color = Color(0.35, 0.32, 0.45)
+	env.ambient_light_energy = 1.0
+	world_env.environment = env
+	_backdrop_viewport.add_child(world_env)
+
+	var root_3d := Node3D.new()
+	root_3d.name = "BackdropRoot"
+	_backdrop_viewport.add_child(root_3d)
+
+	var light := DirectionalLight3D.new()
+	light.name = "TopoLight"
+	light.rotation_degrees = Vector3(-48.0, 32.0, 0.0)
+	light.light_energy = 1.35
+	light.light_color = Color(0.85, 0.92, 1.0)
+	root_3d.add_child(light)
+
+	var fill := OmniLight3D.new()
+	fill.name = "TopoFill"
+	fill.light_energy = 0.85
+	fill.light_color = Color(0.55, 0.62, 0.82)
+	fill.omni_range = 20000.0
+	fill.position = Vector3(0.0, 0.0, 1200.0)
+	root_3d.add_child(fill)
+
+	_backdrop_3d = NspaceBackdrop3D.new()
+	_backdrop_3d.name = "Backdrop3D"
+	_backdrop_3d.configure(self, _height_scale)
+	root_3d.add_child(_backdrop_3d)
+
+	call_deferred("queue_redraw")
 
 
 func _draw() -> void:
-	if _faces.is_empty():
+	if _backdrop_viewport == null:
 		return
 
-	var peak := _color("peak", Color(0.49, 0.91, 1.0, 0.90))
-	var trough := _color("trough", Color(0.10, 0.05, 0.23, 0.92))
-	var shallow := _color("shallow", Color(0.14, 0.12, 0.42, 0.92))
-	var bright := _color("bright", Color(0.62, 0.98, 1.0, 0.94))
-	var edge_base := _color("edge", Color(0.35, 0.72, 0.92, 0.82))
-	var ridge := _color("ridge", Color(0.72, 0.96, 1.0, 0.95))
-	var portal_host := _color("portal_host", Color(0.95, 0.55, 0.25, 0.45))
+	var camera := get_viewport().get_camera_2d()
+	if camera == null:
+		return
 
-	for face_index in range(_faces.size()):
-		_draw_topo_face(face_index, peak, trough, shallow, bright, portal_host)
+	var tex := _backdrop_viewport.get_texture()
+	if tex == null:
+		return
 
-	_draw_topo_edges(edge_base, ridge)
+	var tex_size := tex.get_size()
+	var center := to_local(camera.get_screen_center_position())
+	var scale := Vector2.ONE / camera.zoom
+	draw_set_transform_matrix(Transform2D(Vector2(scale.x, 0.0), Vector2(0.0, -scale.y), center))
+	draw_texture_rect(tex, Rect2(-tex_size * 0.5, tex_size), false)
+	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
-func _draw_topo_face(
+func _update_backdrop() -> void:
+	if _backdrop_3d == null or _backdrop_viewport == null:
+		return
+
+	var camera := get_viewport().get_camera_2d()
+	if camera == null:
+		return
+
+	var vp_size := _get_render_size()
+	if _backdrop_viewport.size != vp_size:
+		_backdrop_viewport.size = vp_size
+
+	_backdrop_3d.sync_camera_from_2d(camera, Vector2(vp_size))
+	_backdrop_3d.rebuild()
+	queue_redraw()
+
+
+func _compute_face_fill(
 	face_index: int,
 	peak: Color,
 	trough: Color,
 	shallow: Color,
 	bright: Color,
 	portal_host: Color
-) -> void:
+) -> Color:
+	var fallback := trough
 	if face_index < 0 or face_index >= _faces.size():
-		return
+		return fallback
 
 	var face_variant = _faces[face_index]
 	if typeof(face_variant) != TYPE_ARRAY:
-		return
+		return fallback
 	var face: Array = face_variant
 	if face.size() < 3:
-		return
+		return fallback
 
 	var i0 := int(face[0])
 	var i1 := int(face[1])
 	var i2 := int(face[2])
 	if i0 >= _animated.size() or i1 >= _animated.size() or i2 >= _animated.size():
-		return
+		return fallback
 
 	var h := (_heights[i0] + _heights[i1] + _heights[i2]) / 3.0
 	var centroid := (_animated[i0] + _animated[i1] + _animated[i2]) / 3.0
@@ -210,32 +339,13 @@ func _draw_topo_face(
 	var blue_shift := sin(angle * 1.8 + _seed_phase) * 0.5 + 0.5
 	var low := trough.lerp(shallow, blue_shift * 0.35)
 	var high := peak.lerp(bright, blue_shift * 0.25)
-	var fill := low.lerp(high, h).lightened(0.08)
-	fill.a = minf(fill.a + 0.04, 1.0)
+	var fill := low.lerp(high, h)
+	fill = fill.lerp(fill.lightened(0.12), 0.55)
+	fill.a = minf(fill.a + 0.06, 1.0)
 	if face_index == _portal_face_index:
 		fill = fill.lerp(portal_host, 0.35)
 
-	var p0 := _animated[i0]
-	var p1 := _animated[i1]
-	var p2 := _animated[i2]
-	if not _is_valid_triangle(p0, p1, p2):
-		return
-
-	draw_colored_polygon(PackedVector2Array([p0, p1, p2]), fill)
-
-
-func _draw_topo_edges(edge_base: Color, ridge: Color) -> void:
-	for edge in _edges:
-		var v0: int = edge.get("v0", 0)
-		var v1: int = edge.get("v1", 0)
-		if v0 >= _animated.size() or v1 >= _animated.size():
-			continue
-		var p0 := _animated[v0]
-		var p1 := _animated[v1]
-		var height_delta := absf(_heights[v0] - _heights[v1])
-		var width := lerpf(1.2, 2.8, clampf(height_delta * 2.5, 0.0, 1.0))
-		var edge_col := edge_base.lerp(ridge, clampf(height_delta * 1.8, 0.0, 1.0))
-		draw_line(p0, p1, edge_col, width)
+	return fill
 
 
 func _build_topo_mesh() -> void:
@@ -309,13 +419,20 @@ func _build_topo_mesh() -> void:
 func _recompute_heights() -> void:
 	_heights.resize(_rest.size())
 	var freq := float(_topo.get("height_freq", 0.0028))
+	var amplitude := float(_topo.get("height_amplitude", 1.0))
+	var contrast := float(_topo.get("height_contrast", 1.0))
 	var seed_offset := _seed_phase
 	for i in range(_rest.size()):
 		var pos := _rest[i]
 		var n := sin(pos.x * freq + seed_offset) * cos(pos.y * freq * 0.73 + seed_offset * 1.7)
-		n += sin(pos.x * freq * 2.15 + pos.y * freq * 1.45 + seed_offset) * 0.42
-		n += cos(pos.length() * freq * 0.55 + seed_offset * 2.3) * 0.28
-		_heights[i] = clampf((n + 1.45) / 2.9, 0.0, 1.0)
+		n += sin(pos.x * freq * 2.15 + pos.y * freq * 1.45 + seed_offset) * 0.55
+		n += cos(pos.length() * freq * 0.55 + seed_offset * 2.3) * 0.36
+		n += sin(pos.x * freq * 3.4 - pos.y * freq * 2.8 + seed_offset * 0.6) * 0.22
+		var t := clampf((n + 1.65) / 2.85, 0.0, 1.0)
+		t = clampf((t - 0.5) * amplitude + 0.5, 0.0, 1.0)
+		if contrast > 0.001 and absf(contrast - 1.0) > 0.001:
+			t = pow(t, 1.0 / contrast)
+		_heights[i] = t
 
 
 func _update_animated_vertices() -> void:
@@ -564,11 +681,25 @@ func _update_portal() -> void:
 	var face_variant = _faces[_portal_face_index]
 	if typeof(face_variant) != TYPE_ARRAY:
 		return
-	var portal_pos := _face_centroid_animated(face_variant as Array)
+	var portal_pos := _face_centroid_rest(face_variant as Array)
 	portal_pos = _leash_position(portal_pos)
 	_portal_node.position = portal_pos
 	if _portal_node.has_method("queue_redraw"):
 		_portal_node.queue_redraw()
+
+
+func _face_centroid_rest(face: Array) -> Vector2:
+	var sum := Vector2.ZERO
+	var count := 0
+	for index_variant in face:
+		var index := int(index_variant)
+		if index < 0 or index >= _rest.size():
+			continue
+		sum += _rest[index]
+		count += 1
+	if count == 0:
+		return Vector2.ZERO
+	return sum / float(count)
 
 
 func _face_centroid_animated(face: Array) -> Vector2:
@@ -739,6 +870,18 @@ func _is_valid_triangle(a: Vector2, b: Vector2, c: Vector2) -> bool:
 		return false
 	var area2 := absf((b - a).cross(c - a))
 	return area2 > maxf(4.0, _play_bounds * 0.00005)
+
+
+func _get_render_size() -> Vector2i:
+	var vp := get_viewport()
+	if vp != null:
+		var size := vp.get_visible_rect().size
+		if size.x >= 1.0 and size.y >= 1.0:
+			return Vector2i(size)
+	var window := DisplayServer.window_get_size()
+	if window.x >= 1 and window.y >= 1:
+		return window
+	return Vector2i(1920, 1080)
 
 
 func _dict(value: Variant) -> Dictionary:

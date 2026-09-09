@@ -89,8 +89,8 @@ func load_unspace(
 
 	var field: NspaceField = NspaceField.new()
 	field.name = "NspaceField"
-	field.configure(unspace, catalog, session, play_bounds)
 	world_root.add_child(field)
+	field.configure(unspace, catalog, session, play_bounds)
 	_nspace_field = field
 
 	var portal_node: Node2D = field.get_portal_node()
