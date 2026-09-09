@@ -3,6 +3,7 @@ extends RefCounted
 
 const OrbitalRingScript := preload("res://scripts/presentation/orbital_ring.gd")
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
+const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
 
 const SCENES := {
 	"habitat": "res://scenes/world/habitat.tscn",
@@ -207,28 +208,10 @@ func _spawn_planetary_layout(
 
 
 func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
-	var planet := Sprite2D.new()
+	var planet := PlanetBackdropScript.new()
 	planet.name = "Planet"
-	planet.z_index = -50
-
-	var sprite_path := str(planet_data.get("sprite", "res://assets/world/planet.png"))
-	var texture := load(sprite_path) as Texture2D
-	if texture != null:
-		planet.texture = texture
-
-	planet.centered = true
-	planet.position = Vector2.ZERO
-
-	var diameter := float(planet_data.get("diameter", 2000.0))
-	if texture != null:
-		var tex_size := texture.get_size()
-		if tex_size.x > 0.0:
-			planet.scale = Vector2.ONE * (diameter / tex_size.x)
-
-	if planet_data.has("modulate"):
-		planet.modulate = Color(str(planet_data.get("modulate")))
-
 	world_root.add_child(planet)
+	planet.configure(planet_data, _sector_id)
 	spawned_by_id["planet"] = planet
 
 
