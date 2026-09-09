@@ -20,7 +20,26 @@ The player is an **independent operator**: trader, mercenary, outlaw, or entrepr
 - **Cash** — carried on the person; spent first.
 - **Credit (eCash)** — bank balance; used when cash is insufficient.
 
-The game tracks a single **credits** integer (no cash/credit split yet).
+The game tracks a single **credits** integer (no cash/credit split yet). Starting-kit credit values combine the original POC cash and eCash figures.
+
+## Player backgrounds
+
+At **New Game** the player chooses a **callsign**, a **portrait**, and a **background** — a starting kit, not a class with exclusive mechanics. Backgrounds define credits, docked habitat, starter ships, and flavour text. The original Java POC called these **Profiles**.
+
+| Background | Flavour | Credits | Habitat | Ships |
+|------------|---------|---------|---------|-------|
+| **Tester** (default) | Development kit with the full template fleet | d3000 | Proxima Habitat | All catalog templates (shipyard testing) |
+| **Trader** | Respectable free trader | d5220 | Proxima Habitat | Pegasus P101 (fitted) |
+| **Hotshot** | Affluent rebel | d3000 | La Bella Vista Habitat | Flare-ON SS (fitted) |
+| **Entrepreneur** | Self-made businessman, no hull yet | d30000 | Proxima Habitat | None (undock blocked until hull buying exists) |
+| **Outlaw** | Rim smuggler with a warrant | d250 | Tycho Habitat | Wolff Warrior |
+| **Soldier** | Ex-corporate army pilot | d2000 | Proxima Habitat | Juno 1088 |
+
+**Location mapping:** the POC placed some kits in surface cities (Concord, Loch Grumman) that are not implemented yet. Trader, Entrepreneur, and Soldier start at **Proxima Habitat** instead. Hotshot starts at **La Bella Vista Habitat** (POC: Bela Orbital Habitat). Outlaw starts at **Tycho Habitat**.
+
+**Portrait:** the player picks from images in `assets/ui/portraits/` at New Game. The path is stored in save data and shown on the habitat header.
+
+Catalog: `data/catalog/backgrounds.json`. GST start time remains in `data/catalog/player.json`.
 
 ## Starter playground
 

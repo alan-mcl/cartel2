@@ -45,7 +45,7 @@ On startup, `main.gd`:
 
 1. Loads `Catalog.load_default()`.
 2. Shows the **main menu** (New Game / Load / Exit).
-3. **New Game** — player enters name and callsign; `GameSession.start_new_game` seeds fleet from `player.json`, parks all ships at Proxima Habitat, and opens **HabitatScreen** docked at the Terminal.
+3. **New Game** — player enters callsign, portrait, and background; `GameSession.start_new_game` seeds fleet from `backgrounds.json`, docks at the kit's habitat, and opens **HabitatScreen** at the Terminal.
 4. **Load** — reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.
 5. Assembles the current ship via `ShipAssembler.assemble_owned`.
 6. Calls `WorldLoader.load_sector` or `load_unspace` to populate `$World`.
@@ -77,7 +77,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 - **PlayerShip** — inertial flight, interaction sensor, camera.
 - **HUD** — capability-gated flight chrome: basic instrument cluster (computer), local radar and waypoint arrows (sensor), transponder label overlay (`sensor_read_beacons`). Hidden when docked.
 - **MainMenu** — New Game, Load, Exit.
-- **NewGameOverlay** — pilot name and callsign form.
+- **NewGameOverlay** — callsign, portrait picker, and background kit form.
 - **SaveOverlay** — three-slot save/load browser.
 - **PauseOverlay** — Resume, Save, Load, Quit to Menu (Escape during flight).
 - **UiRoot** — opaque full-screen habitat UI with ScreenStack.

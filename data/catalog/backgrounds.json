@@ -1,0 +1,262 @@
+{
+  "default_id": "tester",
+  "backgrounds": [
+    {
+      "id": "tester",
+      "name": "Tester",
+      "description": "Development kit with the full template fleet for shipyard testing.",
+      "background": "You are a sandbox pilot with every hull in the yard.",
+      "starting_location": "Proxima Habitat.",
+      "ship": "Every catalog template is parked here for fitting tests.",
+      "money": "d3000 and a spare Mark 1 fusion in the parts locker.",
+      "credits": 3000,
+      "habitat_id": "proxima_habitat",
+      "spare_parts": {
+        "mark_1_fusion": 1
+      },
+      "ships": [
+        {
+          "id": "flare_on_ss_1",
+          "name": "Flare-ON SS",
+          "template_id": "flare_on_ss",
+          "chassis_id": "flare_on_chassis",
+          "modules": [
+            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
+            { "slot": "main_engine_1", "module_id": "mark_3_fusion" },
+            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
+            { "slot": "system_2", "module_id": "life_support_mk1" },
+            { "slot": "system_3", "module_id": "sensor_basic" },
+            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
+            { "slot": "other_1", "module_id": "fuel_tank_small" },
+            { "slot": "other_2", "module_id": "cargo_bay_4" },
+            { "slot": "light_weapon_1", "module_id": "light_laser" }
+          ],
+          "fuel_current": 40.0,
+          "ammunition": {},
+          "cargo": {}
+        },
+        {
+          "id": "pegasus_p101_1",
+          "name": "Pegasus P101",
+          "template_id": "pegasus_p101",
+          "chassis_id": "pegasus_chassis",
+          "modules": [
+            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
+            { "slot": "main_engine_1", "module_id": "mark_1_fusion" },
+            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
+            { "slot": "system_2", "module_id": "life_support_mk1" },
+            { "slot": "system_3", "module_id": "sensor_basic" },
+            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
+            { "slot": "other_1", "module_id": "mass_driver_magazine_200" },
+            { "slot": "other_2", "module_id": "fuel_tank_medium" },
+            { "slot": "other_3", "module_id": "cargo_bay_10" },
+            { "slot": "other_4", "module_id": "chitanium_5mm" },
+            { "slot": "light_weapon_1", "module_id": "light_mass_driver" }
+          ],
+          "fuel_current": 80.0,
+          "ammunition": {
+            "mass_driver_round": 120
+          },
+          "cargo": {}
+        },
+        {
+          "id": "flare_on_sk_1",
+          "name": "Flare-ON SK",
+          "template_id": "flare_on_sk",
+          "chassis_id": "flare_on_chassis"
+        },
+        {
+          "id": "pegasus_p103_1",
+          "name": "Pegasus P103",
+          "template_id": "pegasus_p103",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p103a_1",
+          "name": "Pegasus P103a",
+          "template_id": "pegasus_p103a",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "krypton_k2_1",
+          "name": "Krypton K2",
+          "template_id": "krypton_k2",
+          "chassis_id": "krypton_chassis"
+        },
+        {
+          "id": "krypton_k3_1",
+          "name": "Krypton K3",
+          "template_id": "krypton_k3",
+          "chassis_id": "krypton_chassis"
+        },
+        {
+          "id": "wolff_warrior_1",
+          "name": "Wolff Warrior",
+          "template_id": "wolff_warrior",
+          "chassis_id": "wolff_chassis"
+        },
+        {
+          "id": "wolff_gladius_1",
+          "name": "Wolff Gladius",
+          "template_id": "wolff_gladius",
+          "chassis_id": "wolff_chassis"
+        },
+        {
+          "id": "dragon_gold_1",
+          "name": "Dragon Gold",
+          "template_id": "dragon_gold",
+          "chassis_id": "dragon_chassis"
+        },
+        {
+          "id": "juno_1045_1",
+          "name": "Juno 1045",
+          "template_id": "juno_1045",
+          "chassis_id": "juno_chassis"
+        },
+        {
+          "id": "juno_1088_1",
+          "name": "Juno 1088",
+          "template_id": "juno_1088",
+          "chassis_id": "juno_chassis"
+        },
+        {
+          "id": "juno_1090_1",
+          "name": "Juno 1090",
+          "template_id": "juno_1090",
+          "chassis_id": "juno_chassis"
+        },
+        {
+          "id": "silhouette_mk8_1",
+          "name": "Silhouette Mk8",
+          "template_id": "silhouette_mk8",
+          "chassis_id": "silhouette_chassis"
+        }
+      ]
+    },
+    {
+      "id": "trader",
+      "name": "Trader",
+      "description": "A respected free trader between star systems.",
+      "background": "You have been working as a mover of goods and cargo for a few years now, running the 4-space routes between the core systems. It got boring, and you're ready to try some riskier routes for the promise of greater profit.",
+      "starting_location": "Proxima Habitat, heart of commerce.",
+      "ship": "Your trusty Pegasus P101 is fitted for cargo hauling.",
+      "money": "d5220 in combined savings.",
+      "credits": 5220,
+      "habitat_id": "proxima_habitat",
+      "spare_parts": {},
+      "ships": [
+        {
+          "id": "pegasus_p101_1",
+          "name": "Pegasus P101",
+          "template_id": "pegasus_p101",
+          "chassis_id": "pegasus_chassis",
+          "modules": [
+            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
+            { "slot": "main_engine_1", "module_id": "mark_1_fusion" },
+            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
+            { "slot": "system_2", "module_id": "life_support_mk1" },
+            { "slot": "system_3", "module_id": "sensor_basic" },
+            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
+            { "slot": "other_1", "module_id": "mass_driver_magazine_200" },
+            { "slot": "other_2", "module_id": "fuel_tank_medium" },
+            { "slot": "other_3", "module_id": "cargo_bay_10" },
+            { "slot": "other_4", "module_id": "chitanium_5mm" },
+            { "slot": "light_weapon_1", "module_id": "light_mass_driver" }
+          ],
+          "fuel_current": 80.0,
+          "ammunition": {
+            "mass_driver_round": 120
+          },
+          "cargo": {}
+        }
+      ]
+    },
+    {
+      "id": "hotshot",
+      "name": "Hotshot",
+      "description": "A young punk looking for adventure.",
+      "background": "Delinquent child of affluent parents, you have decided that it's time to strike off on your own. After a furious row at the planet-side resort, you've shuttled up to the Habitat where your ship is docked.",
+      "starting_location": "La Bella Vista Habitat.",
+      "ship": "Daddy bought you a Flare-ON SS for your last birthday.",
+      "money": "Your irate folks have frozen your accounts, but you have d3000 in a wallet they didn't know about.",
+      "credits": 3000,
+      "habitat_id": "bela_orbital_habitat",
+      "spare_parts": {},
+      "ships": [
+        {
+          "id": "flare_on_ss_1",
+          "name": "Flare-ON SS",
+          "template_id": "flare_on_ss",
+          "chassis_id": "flare_on_chassis",
+          "modules": [
+            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
+            { "slot": "main_engine_1", "module_id": "mark_3_fusion" },
+            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
+            { "slot": "system_2", "module_id": "life_support_mk1" },
+            { "slot": "system_3", "module_id": "sensor_basic" },
+            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
+            { "slot": "other_1", "module_id": "fuel_tank_small" },
+            { "slot": "other_2", "module_id": "cargo_bay_4" },
+            { "slot": "light_weapon_1", "module_id": "light_laser" }
+          ],
+          "fuel_current": 40.0,
+          "ammunition": {},
+          "cargo": {}
+        }
+      ]
+    },
+    {
+      "id": "entrepreneur",
+      "name": "Entrepreneur",
+      "description": "A self-made businessman planning to buy a new ship.",
+      "background": "Your last startup was a mixed success but you managed to exit with a small profit. Always on the lookout for an opportunity, you reckon that now might be a good time to get into the aeronautics industry.",
+      "starting_location": "Proxima Habitat.",
+      "ship": "None, but a hull is at the top of your shopping list.",
+      "money": "d32000 left from your last venture.",
+      "credits": 32000,
+      "habitat_id": "proxima_habitat",
+      "spare_parts": {},
+      "ships": []
+    },
+    {
+      "id": "outlaw",
+      "name": "Outlaw",
+      "description": "A known trouble maker with an outstanding arrest warrant.",
+      "background": "Several years experience of smuggling, merc work and bounty hunting on the rim paid your bills. The last job wasn't a success however, and you need a sure thing next up to stay afloat.",
+      "starting_location": "Tycho Habitat.",
+      "ship": "You pilot a battle scarred Wolff Warrior.",
+      "money": "Down on your luck, you've got d250 in your back pocket.",
+      "credits": 250,
+      "habitat_id": "tycho_habitat",
+      "spare_parts": {},
+      "ships": [
+        {
+          "id": "wolff_warrior_1",
+          "name": "Wolff Warrior",
+          "template_id": "wolff_warrior",
+          "chassis_id": "wolff_chassis"
+        }
+      ]
+    },
+    {
+      "id": "soldier",
+      "name": "Soldier",
+      "description": "An ex-military pilot tired of taking orders.",
+      "background": "You have just resigned your dead-end commission in one of the corporate armies to strike out on your own. You know you can fly and fight, but you're not sure how far those skills will take you in civilian life.",
+      "starting_location": "Proxima Habitat.",
+      "ship": "Your savings have bought you a battered but sound Juno 1088, rather a step down from the Dragon you used to pilot.",
+      "money": "After the ship you have d2000 left.",
+      "credits": 2000,
+      "habitat_id": "proxima_habitat",
+      "spare_parts": {},
+      "ships": [
+        {
+          "id": "juno_1088_1",
+          "name": "Juno 1088",
+          "template_id": "juno_1088",
+          "chassis_id": "juno_chassis"
+        }
+      ]
+    }
+  ]
+}

@@ -214,7 +214,7 @@ func _show_main_menu() -> void:
 
 func _start_game_from_session() -> void:
 	player_ship = _assemble_current_ship()
-	if player_ship.name.is_empty():
+	if player_ship.name.is_empty() and not session.docked:
 		push_error("Failed to assemble current player ship.")
 		return
 
@@ -241,11 +241,11 @@ func _start_game_from_session() -> void:
 		_game_clock.reset_unspace_pulse()
 
 
-func _begin_new_game(player_name: String, callsign: String) -> void:
+func _begin_new_game(callsign: String, background_id: String, portrait_path: String) -> void:
 	session = GameSession.new()
 	session.changed.connect(_on_session_changed)
 
-	if not session.start_new_game(catalog, player_name, callsign):
+	if not session.start_new_game(catalog, callsign, background_id, portrait_path):
 		push_error("Failed to start new game.")
 		return
 
@@ -302,8 +302,8 @@ func _save_to_slot(slot_index: int) -> bool:
 
 	var flight := _capture_flight_state()
 	var save_data := SaveStore.build_save_data(
-		session.player_name,
 		session.callsign,
+		session.portrait_path,
 		session.to_dict(),
 		session.ships_to_array(),
 		flight
@@ -587,6 +587,7 @@ func _on_main_menu_new_game() -> void:
 	var default_callsign := TransponderBroadcastScript.generate_independent_callsign(
 		catalog.get_traffic_config()
 	)
+	_new_game.bind(catalog)
 	_new_game.open(default_callsign)
 
 
@@ -599,8 +600,8 @@ func _on_main_menu_exit() -> void:
 	get_tree().quit()
 
 
-func _on_new_game_confirmed(player_name: String, callsign: String) -> void:
-	_begin_new_game(player_name, callsign)
+func _on_new_game_confirmed(callsign: String, background_id: String, portrait_path: String) -> void:
+	_begin_new_game(callsign, background_id, portrait_path)
 
 
 func _on_new_game_cancelled() -> void:

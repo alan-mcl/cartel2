@@ -12,6 +12,7 @@ const SECTORS_PATH := "res://data/catalog/sectors.json"
 const UNSPACES_PATH := "res://data/catalog/unspaces.json"
 const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
+const BACKGROUNDS_PATH := "res://data/catalog/backgrounds.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const MARKETS_PATH := "res://data/catalog/markets.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
@@ -36,6 +37,8 @@ var worlds_by_id: Dictionary = {}
 var commodities_by_id: Dictionary = {}
 var markets_by_id: Dictionary = {}
 var player_data: Dictionary = {}
+var backgrounds_by_id: Dictionary = {}
+var default_background_id: String = "tester"
 var traffic_config: Dictionary = {}
 
 
@@ -60,6 +63,7 @@ func load_all() -> void:
 	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
+	_load_backgrounds()
 	commodities_by_id = _load_indexed_array(COMMODITIES_PATH)
 	markets_by_id = _load_indexed_array(MARKETS_PATH)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
@@ -183,6 +187,25 @@ func get_world(sector_id: String) -> Dictionary:
 
 func get_player() -> Dictionary:
 	return player_data
+
+
+func get_background(id: String) -> Dictionary:
+	return backgrounds_by_id.get(id, {})
+
+
+func list_backgrounds() -> Array:
+	var backgrounds: Array = []
+	for background in backgrounds_by_id.values():
+		if typeof(background) == TYPE_DICTIONARY:
+			backgrounds.append(background)
+	backgrounds.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return str(left.get("name", "")) < str(right.get("name", ""))
+	)
+	return backgrounds
+
+
+func get_default_background_id() -> String:
+	return default_background_id
 
 
 func get_traffic_config() -> Dictionary:
@@ -340,6 +363,32 @@ func _load_indexed_array(path: String) -> Dictionary:
 		indexed[entry_id] = entry_dict
 
 	return indexed
+
+
+func _load_backgrounds() -> void:
+	backgrounds_by_id.clear()
+	default_background_id = "tester"
+
+	var data := _load_json_object(BACKGROUNDS_PATH)
+	if data.is_empty():
+		return
+
+	default_background_id = str(data.get("default_id", "tester"))
+	var backgrounds: Variant = data.get("backgrounds", [])
+	if typeof(backgrounds) != TYPE_ARRAY:
+		push_error("backgrounds.json must contain a backgrounds array.")
+		return
+
+	for entry in backgrounds:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var background_id := str(entry.get("id", ""))
+		if background_id.is_empty():
+			push_error("Background entry is missing id.")
+			continue
+		if backgrounds_by_id.has(background_id):
+			push_error("Duplicate background id '%s'." % background_id)
+		backgrounds_by_id[background_id] = entry
 
 
 func _load_json_array(path: String) -> Array:

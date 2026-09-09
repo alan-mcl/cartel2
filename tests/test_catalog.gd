@@ -17,3 +17,10 @@ static func run(runner: TestRunner) -> void:
 	var mapping := catalog.get_mapping("proxima", "bela", 4)
 	runner.check(not mapping.is_empty(), "proxima→bela n=4 mapping exists")
 	runner.check(int(mapping.get("solution", 0)) == 42, "proxima→bela solution is 42")
+
+	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
+	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
+	runner.check(not catalog.get_background("hotshot").is_empty(), "hotshot background exists")
+	runner.check(not catalog.get_background("entrepreneur").is_empty(), "entrepreneur background exists")
+	runner.check(not catalog.get_background("outlaw").is_empty(), "outlaw background exists")
+	runner.check(not catalog.get_background("soldier").is_empty(), "soldier background exists")

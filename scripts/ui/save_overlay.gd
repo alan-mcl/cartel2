@@ -49,14 +49,12 @@ func _refresh_slots() -> void:
 		_slot_list.add_child(row)
 
 		if occupied:
-			var player_name := str(slot_info.get("player_name", ""))
 			var callsign := str(slot_info.get("callsign", ""))
 			var location := str(slot_info.get("location", ""))
 			var saved_at := str(slot_info.get("saved_at", ""))
 			var label := Label.new()
-			label.text = 'Slot %d: %s "%s" — %s — %s' % [
+			label.text = 'Slot %d: "%s" — %s — %s' % [
 				slot_index,
-				player_name,
 				callsign,
 				location,
 				saved_at,

@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. Playable fleet at Proxima Habitat includes **Flare-ON SS** (player starting hull, first in fleet) plus one parked instance of every catalog template for shipyard testing.
+**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see [overview.md](overview.md#player-backgrounds).
 
 ## Composition model
 

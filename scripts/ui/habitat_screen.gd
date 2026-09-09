@@ -5,7 +5,8 @@ const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 
 @onready var _title: Label = $Layout/Header/HeaderBox/Title
 @onready var _description: Label = $Layout/Header/HeaderBox/Description
-@onready var _pilot: Label = $Layout/Header/HeaderBox/Pilot
+@onready var _portrait: TextureRect = $Layout/Header/HeaderBox/PilotRow/Portrait
+@onready var _pilot: Label = $Layout/Header/HeaderBox/PilotRow/Pilot
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
 @onready var _gst_clock: Label = $Layout/Header/HeaderBox/GstClockLabel
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
@@ -70,7 +71,8 @@ func refresh() -> void:
 	_title.text = str(habitat.get("name", "Habitat"))
 	var habitat_desc := str(habitat.get("description", habitat.get("short_desc", "")))
 	_description.text = habitat_desc
-	_pilot.text = 'Pilot: %s "%s"' % [_context.session.player_name, _context.session.callsign]
+	_pilot.text = 'Pilot: "%s"' % _context.session.callsign
+	_update_portrait(_context.session.portrait_path)
 	_credits.text = "Credits: d%d" % _context.session.credits
 	_log.text = _context.session.last_log
 
@@ -341,11 +343,27 @@ func _find_market_listing(commodity_id: String) -> Dictionary:
 	return {}
 
 
+func _update_portrait(portrait_path: String) -> void:
+	if _portrait == null:
+		return
+	if portrait_path.is_empty() or not ResourceLoader.exists(portrait_path):
+		_portrait.texture = null
+		_portrait.visible = false
+		return
+	var texture := load(portrait_path) as Texture2D
+	_portrait.texture = texture
+	_portrait.visible = texture != null
+
+
 func _build_terminal_content(_building: Dictionary) -> void:
 	var ships := _context.session.ships_at(_context.session.habitat_id)
 	if ships.is_empty():
 		var empty := Label.new()
-		empty.text = "No ships docked at this habitat."
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		empty.text = (
+			"No ships docked at this habitat. "
+			+ "Hull sales are not open yet — you cannot undock until you own a ship."
+		)
 		_content_host.add_child(empty)
 		return
 

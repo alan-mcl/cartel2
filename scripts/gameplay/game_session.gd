@@ -3,10 +3,9 @@ extends RefCounted
 
 signal changed
 
-const NEW_GAME_HABITAT_ID := "proxima_habitat"
-
-var player_name: String = ""
 var callsign: String = ""
+var portrait_path: String = ""
+var background_id: String = ""
 
 var sector_id: String = "proxima"
 var location_name: String = "Proxima near orbit"
@@ -42,19 +41,39 @@ var route_friction_delta: Dictionary = {}
 var _hull_stress_cooldown: float = 0.0
 
 
-func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: String) -> bool:
-	player_name = new_player_name.strip_edges()
+func start_new_game(
+	catalog: Catalog,
+	new_callsign: String,
+	new_background_id: String,
+	new_portrait_path: String = ""
+) -> bool:
 	callsign = new_callsign.strip_edges()
-	if player_name.is_empty() or callsign.is_empty():
+	portrait_path = new_portrait_path.strip_edges()
+	background_id = new_background_id.strip_edges()
+	if callsign.is_empty():
+		return false
+
+	var kit := catalog.get_background(background_id)
+	if kit.is_empty():
+		background_id = catalog.get_default_background_id()
+		kit = catalog.get_background(background_id)
+	if kit.is_empty():
+		push_error("No valid background kit found.")
+		return false
+
+	var habitat_id := str(kit.get("habitat_id", "proxima_habitat"))
+	var habitat := catalog.get_habitat(habitat_id)
+	if habitat.is_empty():
+		push_error("Background '%s' references unknown habitat '%s'." % [background_id, habitat_id])
 		return false
 
 	var player_data := catalog.get_player()
-	credits = int(player_data.get("credits", credits))
+	credits = int(kit.get("credits", credits))
 	owned_ships.clear()
 	salvaged_ids.clear()
 	inspected_ids.clear()
 	docked = false
-	habitat_id = ""
+	self.habitat_id = ""
 	building_id = ""
 	in_unspace = false
 	unspace_n = 0
@@ -70,9 +89,9 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 	market_quotes_day = -1
 	route_friction_delta.clear()
 
-	var ships: Variant = player_data.get("ships", [])
-	if typeof(ships) != TYPE_ARRAY or ships.is_empty():
-		push_error("Player data ships must be a non-empty array.")
+	var ships: Variant = kit.get("ships", [])
+	if typeof(ships) != TYPE_ARRAY:
+		push_error("Background '%s' ships must be an array." % background_id)
 		return false
 
 	for ship_data in ships:
@@ -85,27 +104,30 @@ func start_new_game(catalog: Catalog, new_player_name: String, new_callsign: Str
 		else:
 			ship = OwnedShip.from_template(catalog, ship_data)
 		OwnedShip.finalize_loaded_ship(ship, catalog)
-		ship.location = NEW_GAME_HABITAT_ID
+		ship.location = habitat_id
 		owned_ships.append(ship)
 
-	if owned_ships.is_empty():
-		push_error("No valid starter ships found.")
-		return false
+	current_ship_id = owned_ships[0].id if not owned_ships.is_empty() else ""
 
-	current_ship_id = owned_ships[0].id
-
-	var starting_sector := str(player_data.get("starting_sector", "proxima"))
+	var starting_sector := str(habitat.get("sector_id", "proxima"))
 	if not enter_sector(catalog, starting_sector, false):
 		return false
 
-	if not dock(catalog, NEW_GAME_HABITAT_ID):
+	if not dock(catalog, habitat_id):
 		return false
+
+	var spare: Variant = kit.get("spare_parts", {})
+	if typeof(spare) == TYPE_DICTIONARY:
+		for part_id in spare.keys():
+			spare_parts[str(part_id)] = int(spare[part_id])
 
 	CommodityEconomy.ensure_quotes(self, catalog)
 
-	spare_parts["mark_1_fusion"] = 1
-
-	last_log = "Welcome to %s, %s. All ships docked at Proxima Habitat." % [callsign, player_name]
+	var habitat_name := str(habitat.get("name", habitat_id))
+	if owned_ships.is_empty():
+		last_log = "Welcome, %s. Docked at %s with no ships." % [callsign, habitat_name]
+	else:
+		last_log = "Welcome, %s. All ships docked at %s." % [callsign, habitat_name]
 	changed.emit()
 	return true
 
@@ -149,8 +171,9 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		return false
 
 	var player: Dictionary = data.get("player", {})
-	player_name = str(player.get("name", ""))
 	callsign = str(player.get("callsign", ""))
+	portrait_path = str(player.get("portrait", ""))
+	background_id = str(player.get("background_id", ""))
 
 	var session_data: Dictionary = data.get("session", {})
 	sector_id = str(session_data.get("sector_id", "proxima"))
@@ -206,10 +229,11 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	_prune_unknown_cargo(catalog)
 
 	if owned_ships.is_empty():
-		push_error("Save file contains no ships.")
-		return false
-
-	if get_owned_ship(current_ship_id) == null:
+		if not docked:
+			push_error("Save file contains no ships and is not docked.")
+			return false
+		current_ship_id = ""
+	elif get_owned_ship(current_ship_id) == null:
 		push_error("Save file current_ship_id '%s' not found in fleet." % current_ship_id)
 		return false
 

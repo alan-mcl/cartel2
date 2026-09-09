@@ -36,12 +36,11 @@ func _build_session() -> GameSession:
 	session.docked = true
 	session.habitat_id = SANDBOX_HABITAT_ID
 	session.building_id = "habitat_workshop"
-	session.player_name = "Sandbox"
 	session.callsign = "SBX"
 	session.last_log = "Assembly sandbox ready."
 
-	var player_data := _catalog.get_player()
-	var ships_data: Variant = player_data.get("ships", [])
+	var kit := _catalog.get_background(_catalog.get_default_background_id())
+	var ships_data: Variant = kit.get("ships", [])
 	if typeof(ships_data) == TYPE_ARRAY:
 		for ship_data in ships_data:
 			if typeof(ship_data) != TYPE_DICTIONARY:

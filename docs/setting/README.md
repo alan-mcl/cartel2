@@ -38,7 +38,8 @@ Each linked document opens with a **Status** note where relevant: what is playab
 
 | Setting area | Current implementation |
 |--------------|-----------|
-| Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game starts at Proxima |
+| Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game background selects starting habitat |
+| Player backgrounds | Six kits in `backgrounds.json` (Tester default); callsign + portrait at New Game |
 | Habitats | One dockable habitat per sector (Proxima Habitat, La Bella Vista Habitat, …) |
 | Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
 | Unspace hazards | Static irregular Delaunay topo in 4-space (no player velocity perturbations for now); fixed exit portal on a host face; 1–3 ambient Ascidians per visit |

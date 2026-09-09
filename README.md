@@ -18,7 +18,7 @@ Godot binary used for development: `~/opt/Godot_v4.7.2-stable_linux.x86_64`
 
 Or open `project.godot` in the Godot editor and press **F5**.
 
-The game opens at the **main menu** (version shown as **DEV**). Choose **New Game** to enter your pilot name and callsign; you begin docked at **Proxima Habitat** with your starter fleet parked there. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
+The game opens at the **main menu** (version shown as **DEV**). Choose **New Game** to enter your callsign, pick a portrait, and choose a starting **background** kit. The default **Tester** background begins docked at **Proxima Habitat** with the full template fleet. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
 
 ## Controls
 
@@ -39,7 +39,7 @@ The game opens at the **main menu** (version shown as **DEV**). Choose **New Gam
 ## Core loop
 
 1. Start at the **main menu** — New Game, Load, or Exit.
-2. **New Game:** enter pilot name and callsign; begin docked at **Proxima Habitat** with **Flare-ON SS** and **Pegasus P101** parked there.
+2. **New Game:** enter callsign, portrait, and background; default **Tester** kit begins docked at **Proxima Habitat** with the full template fleet.
 3. Visit buildings from the habitat screen — **Terminal**, **Davidsons** (flavour), **Proxima Exchange** (buy/sell commodities), **Shipyard** (parts + assembly).
 4. At the **Shipyard**, buy spare modules, drag them onto chassis slots to install (chassis fixed), inspect configuration and engineering budgets, refuel. Yard stock is grouped by module category tabs.
 5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit beside the habitat ring.
@@ -53,6 +53,7 @@ The game opens at the **main menu** (version shown as **DEV**). Choose **New Gam
 ```
 assets/ui/fonts/       IBM Plex Sans/Mono (OFL)
 assets/ui/locations/   Placeholder habitat/building art (SVG)
+assets/ui/portraits/   Player portrait images (add PNG/WebP/JPG manually)
 assets/ui/patterns/    Reusable themed UI pattern scenes
 themes/                cartel_theme.tres (project default)
 scripts/tools/         Theme builder, art generator
@@ -71,11 +72,13 @@ Regenerate placeholder art (runs Godot import for new SVG/PNG assets):
 python3 scripts/tools/generate_placeholder_art.py
 ```
 
-If chassis sprites fail to load after adding art manually, run:
+If chassis sprites or player portraits fail to load after adding art manually, run:
 
 ```bash
 godot --path . --import --headless --quit
 ```
+
+Drop portrait images into `assets/ui/portraits/` (PNG, WebP, or JPG). They appear in the New Game picker after import.
 
 Rebuild UI theme after token changes:
 

@@ -29,8 +29,8 @@ static func get_slot_info(slot_index: int) -> Dictionary:
 	var info := {
 		"slot": slot_index,
 		"occupied": false,
-		"player_name": "",
 		"callsign": "",
+		"portrait": "",
 		"location": "",
 		"saved_at": "",
 	}
@@ -43,8 +43,8 @@ static func get_slot_info(slot_index: int) -> Dictionary:
 
 	var player: Dictionary = data.get("player", {})
 	info["occupied"] = true
-	info["player_name"] = str(player.get("name", ""))
 	info["callsign"] = str(player.get("callsign", ""))
+	info["portrait"] = str(player.get("portrait", ""))
 	info["saved_at"] = str(data.get("saved_at", ""))
 
 	var session: Dictionary = data.get("session", {})
@@ -104,8 +104,8 @@ static func write_slot(slot_index: int, data: Dictionary) -> bool:
 
 
 static func build_save_data(
-	player_name: String,
 	callsign: String,
+	portrait_path: String,
 	session_data: Dictionary,
 	ships: Array,
 	flight: Dictionary
@@ -115,8 +115,8 @@ static func build_save_data(
 		"game_version": GameVersion.VERSION,
 		"saved_at": Time.get_datetime_string_from_system(true),
 		"player": {
-			"name": player_name,
 			"callsign": callsign,
+			"portrait": portrait_path,
 		},
 		"session": session_data,
 		"ships": ships,
