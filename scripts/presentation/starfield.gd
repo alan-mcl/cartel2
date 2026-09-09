@@ -52,12 +52,13 @@ func _apply_tint() -> void:
 		_near_layer.modulate = _tint
 
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if _camera == null:
 		return
 
-	_far_layer.position = _camera.global_position * parallax_far
-	_near_layer.position = _camera.global_position * parallax_near
+	var anchor := _camera.get_screen_center_position()
+	_far_layer.position = anchor * parallax_far
+	_near_layer.position = anchor * parallax_near
 
 
 func _make_star_layer(texture_path: String, layer_name: String, scale_multiplier: float) -> Node2D:

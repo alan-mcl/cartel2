@@ -31,6 +31,7 @@ var _core_offsets: Array = []
 var _waypoint: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _time: float = 0.0
+var _fixed_swim_depth: float = -1.0
 
 
 func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rng: RandomNumberGenerator) -> void:
@@ -45,10 +46,17 @@ func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rn
 		float(cfg.get("speed_max", 48.0))
 	)
 	_wander_radius = float(cfg.get("wander_radius_fraction", 0.72)) * float(cfg.get("play_bounds", 8000.0))
-	_altitude_min = float(cfg.get("altitude_min", cfg.get("swim_depth_min", 0.12)))
-	_altitude_max = float(cfg.get("altitude_max", cfg.get("swim_depth_max", 0.88)))
-	_altitude = visit_rng.randf_range(_altitude_min, _altitude_max)
-	_altitude_target = _pick_altitude_target()
+	if cfg.has("fixed_swim_depth"):
+		_fixed_swim_depth = float(cfg["fixed_swim_depth"])
+		_altitude_min = _fixed_swim_depth
+		_altitude_max = _fixed_swim_depth
+		_altitude = _fixed_swim_depth
+		_altitude_target = _fixed_swim_depth
+	else:
+		_altitude_min = float(cfg.get("altitude_min", cfg.get("swim_depth_min", 0.12)))
+		_altitude_max = float(cfg.get("altitude_max", cfg.get("swim_depth_max", 0.88)))
+		_altitude = visit_rng.randf_range(_altitude_min, _altitude_max)
+		_altitude_target = _pick_altitude_target()
 	_altitude_speed = visit_rng.randf_range(
 		float(cfg.get("altitude_drift_min", 0.035)),
 		float(cfg.get("altitude_drift_max", 0.09))
@@ -139,7 +147,7 @@ func _wander(delta: float) -> void:
 	var dist := to_waypoint.length()
 	if dist < maxf(_radius * 2.2, 140.0):
 		_pick_waypoint()
-		if _visit_rng.randf() < 0.55:
+		if _fixed_swim_depth < 0.0 and _visit_rng.randf() < 0.55:
 			_altitude_target = _pick_altitude_target()
 		to_waypoint = _waypoint - position
 		dist = to_waypoint.length()
@@ -181,11 +189,15 @@ func _pick_altitude_target() -> float:
 
 
 func _current_altitude() -> float:
+	if _fixed_swim_depth >= 0.0:
+		return _fixed_swim_depth
 	var wobble := sin(_time * _altitude_wobble_speed + _phase_offset) * _altitude_wobble_amp
 	return clampf(_altitude + wobble, _altitude_min, _altitude_max)
 
 
 func _update_altitude(delta: float) -> void:
+	if _fixed_swim_depth >= 0.0:
+		return
 	if absf(_altitude - _altitude_target) < 0.025:
 		_altitude_target = _pick_altitude_target()
 

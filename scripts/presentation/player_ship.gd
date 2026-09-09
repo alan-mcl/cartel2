@@ -9,7 +9,6 @@ const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
-const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 const _WEAPON_MASK := 2 | 16
 
 @export var ship_id: String = "flare_on_ss"
@@ -27,7 +26,6 @@ var weapons: ShipWeapons = ShipWeapons.new()
 
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
-var _shear_hazards: Array[NspaceHazard] = []
 
 
 func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catalog = null) -> void:
@@ -72,31 +70,6 @@ func apply_launch_velocity(launch_velocity: Vector2, facing: float) -> void:
 	rotation = facing + PI / 2.0
 
 
-func enter_shear(hazard: NspaceHazard) -> void:
-	if hazard != null and hazard not in _shear_hazards:
-		_shear_hazards.append(hazard)
-
-
-func exit_shear(hazard: NspaceHazard) -> void:
-	_shear_hazards.erase(hazard)
-
-
-func apply_nspace_forces(session: GameSession, delta: float) -> void:
-	var field: NspaceField = _get_nspace_field()
-	if field != null:
-		field.apply_forces(self, session, delta)
-
-
-func _get_nspace_field() -> NspaceField:
-	var world := _get_world_root()
-	if world == null:
-		return null
-	for child in world.get_children():
-		if child is NspaceField:
-			return child as NspaceField
-	return null
-
-
 func get_stats() -> ShipStats:
 	if assembled_ship == null:
 		return ShipStats.new()
@@ -106,7 +79,6 @@ func get_stats() -> ShipStats:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_to_group("player")
-
 	var thrust_texture := load(THRUST_SPRITE) as Texture2D
 	if _thrust_flame and thrust_texture:
 		_thrust_flame.texture = thrust_texture
@@ -185,12 +157,10 @@ func _physics_process(delta: float) -> void:
 		operating_state.boost_allowed
 	)
 
-	if session != null and session.in_unspace:
-		apply_nspace_forces(session, delta)
-
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity
 	move_and_slide()
+	motion.velocity = velocity
 
 	_update_thrust_visual(thrust or reverse)
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())

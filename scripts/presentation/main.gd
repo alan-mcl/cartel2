@@ -422,7 +422,7 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 				_player.global_position = _world_loader.get_jump_gate_approach_position()
 			_:
 				_player.global_position = session.get_spawn_position(catalog)
-	_player.freeze_motion()
+		_player.freeze_motion()
 
 
 func _open_jump_overlay(gate_title: String) -> void:

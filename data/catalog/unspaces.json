@@ -31,32 +31,10 @@
       },
       "topo": {
         "seed_salt": 0,
-        "ring_count": 17,
-        "points_per_ring": 14,
-        "jitter": 0.18,
-        "height_freq": 0.0014,
-        "height_amplitude": 1.38,
-        "height_contrast": 1.32,
-        "shimmer_amp": 6.0,
-        "shimmer_speed": 0.35,
-        "height_scale": 600,
-        "deform_chance": 0.2,
-        "deform_duration": 0.72,
-        "deform_rotate_max": 0.14,
-        "deform_scale_min": 0.96,
-        "deform_scale_max": 1.04
-      },
-      "kick": {
-        "min": 16,
-        "max": 42
-      },
-      "bound": {
-        "band_fraction": 0.18,
-        "strength": 420
-      },
-      "edge": {
-        "thickness": 120,
-        "cooldown": 1.0
+        "fov_vertex_count": 50,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.18,
+        "height_scale": 600
       },
       "portal": {
         "interact_radius": 220,
@@ -72,11 +50,6 @@
         "radius_max": 180,
         "wander_radius_fraction": 0.72,
         "min_spawn_dist": 900,
-        "altitude_min": 0.42,
-        "altitude_max": 0.96,
-        "depth_bias": 18.0,
-        "altitude_drift_min": 0.035,
-        "altitude_drift_max": 0.09,
         "fade_band": 0.12,
         "lobe_count_min": 8,
         "lobe_count_max": 12

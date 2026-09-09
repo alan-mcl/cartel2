@@ -11,12 +11,15 @@ var _camera_z: float = 2500.0
 var _camera: Camera3D
 var _topo_mesh_instance: MeshInstance3D
 var _edge_mesh_instance: MeshInstance3D
+var _portal_mesh_instance: MeshInstance3D
 var _ascidian_root: Node3D
 var _ascidian_instances: Array = []
 
 var _topo_material: StandardMaterial3D
 var _edge_material: StandardMaterial3D
+var _portal_material: StandardMaterial3D
 var _ascidian_material: StandardMaterial3D
+var _ascidian_mesh_timer: float = 0.0
 
 
 func configure(field: NspaceField, height_scale: float) -> void:
@@ -42,14 +45,20 @@ func _setup_materials() -> void:
 	_topo_material = StandardMaterial3D.new()
 	_topo_material.vertex_color_use_as_albedo = true
 	_topo_material.albedo_color = Color.WHITE
-	_topo_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_topo_material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	_topo_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	_topo_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
 	_edge_material = StandardMaterial3D.new()
 	_edge_material.vertex_color_use_as_albedo = true
-	_edge_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_edge_material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	_edge_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+
+	_portal_material = StandardMaterial3D.new()
+	_portal_material.vertex_color_use_as_albedo = true
+	_portal_material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+	_portal_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_portal_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
 	_ascidian_material = StandardMaterial3D.new()
 	_ascidian_material.vertex_color_use_as_albedo = true
@@ -63,39 +72,58 @@ func _setup_mesh_instances() -> void:
 	_topo_mesh_instance = MeshInstance3D.new()
 	_topo_mesh_instance.name = "TopoMesh"
 	_topo_mesh_instance.material_override = _topo_material
+	_topo_mesh_instance.sorting_offset = 0.0
 	add_child(_topo_mesh_instance)
 
 	_edge_mesh_instance = MeshInstance3D.new()
 	_edge_mesh_instance.name = "EdgeMesh"
 	_edge_mesh_instance.material_override = _edge_material
+	_edge_mesh_instance.sorting_offset = 0.5
 	add_child(_edge_mesh_instance)
+
+	_portal_mesh_instance = MeshInstance3D.new()
+	_portal_mesh_instance.name = "PortalMesh"
+	_portal_mesh_instance.material_override = _portal_material
+	_portal_mesh_instance.sorting_offset = 1.0
+	add_child(_portal_mesh_instance)
 
 	_ascidian_root = Node3D.new()
 	_ascidian_root.name = "Ascidians"
 	add_child(_ascidian_root)
 
 
-func sync_camera_from_2d(camera: Camera2D, viewport_size: Vector2) -> void:
+func sync_camera_from_2d(camera: Camera2D, viewport_size: Vector2, view_center: Vector2) -> void:
 	if _camera == null or camera == null:
 		return
 
-	var center := camera.get_screen_center_position()
 	# Default Camera3D orientation looks down world -Z; keep identity rotation so
 	# 2D world XY maps to 3D XY (with Y flipped at vertex mapping time).
-	_camera.position = Vector3(center.x, -center.y, _camera_z)
+	_camera.position = Vector3(view_center.x, -view_center.y, _camera_z)
 	_camera.basis = Basis.IDENTITY
 
 	var visible_height := viewport_size.y / maxf(camera.zoom.y, 0.001)
 	_camera.size = visible_height * 0.5
 
 
-func rebuild() -> void:
+func rebuild_static() -> void:
 	if _field == null:
 		return
 
 	_topo_mesh_instance.mesh = _build_topo_mesh()
 	_edge_mesh_instance.mesh = _build_edge_mesh()
-	_rebuild_ascidians()
+	_portal_mesh_instance.mesh = _build_portal_mesh()
+
+
+func update_ascidians(delta: float) -> void:
+	if _field == null:
+		return
+
+	_ascidian_mesh_timer += delta
+	var refresh_meshes := _ascidian_mesh_timer >= 0.12
+	if refresh_meshes:
+		_ascidian_mesh_timer = 0.0
+
+	_update_ascidian_instances(refresh_meshes)
 
 
 func _build_topo_mesh() -> ArrayMesh:
@@ -117,27 +145,31 @@ func _build_topo_mesh() -> ArrayMesh:
 		if face.size() < 3:
 			continue
 
-		var i0 := int(face[0])
-		var i1 := int(face[1])
-		var i2 := int(face[2])
-		if i0 >= animated.size() or i1 >= animated.size() or i2 >= animated.size():
-			continue
-
-		var p0 := _map_vertex(animated[i0], heights[i0])
-		var p1 := _map_vertex(animated[i1], heights[i1])
-		var p2 := _map_vertex(animated[i2], heights[i2])
-
-		if p0.is_equal_approx(p1) or p1.is_equal_approx(p2) or p2.is_equal_approx(p0):
+		var indices: Array = []
+		for index_variant in face:
+			var index := int(index_variant)
+			if index < 0 or index >= animated.size():
+				continue
+			indices.append(index)
+		if indices.size() < 3:
 			continue
 
 		var fill: Color = _field.get_face_fill_color(face_index)
-		fill.a = maxf(fill.a, 0.92)
+		fill.a = 1.0
+		var anchor := int(indices[0])
+		var p_anchor := _map_vertex(animated[anchor], heights[anchor])
 
-		for vertex in [p0, p1, p2]:
-			st.set_color(fill)
-			st.add_vertex(vertex)
+		for i in range(1, indices.size() - 1):
+			var i1 := int(indices[i])
+			var i2 := int(indices[i + 1])
+			var p1 := _map_vertex(animated[i1], heights[i1])
+			var p2 := _map_vertex(animated[i2], heights[i2])
+			if p_anchor.is_equal_approx(p1) or p1.is_equal_approx(p2) or p2.is_equal_approx(p_anchor):
+				continue
+			for vertex in [p_anchor, p1, p2]:
+				st.set_color(fill)
+				st.add_vertex(vertex)
 
-	st.generate_normals()
 	return st.commit()
 
 
@@ -165,11 +197,56 @@ func _build_edge_mesh() -> ArrayMesh:
 		var p1 := _map_vertex(animated[v1], heights[v1])
 		var height_delta := absf(heights[v0] - heights[v1])
 		var edge_col := edge_base.lerp(ridge, clampf(height_delta * 1.8, 0.0, 1.0))
+		edge_col.a = 1.0
 		var width := lerpf(2.0, 5.0, clampf(height_delta * 2.5, 0.0, 1.0))
 
 		_add_edge_quad(st, p0, p1, width, edge_col)
 
 	return st.commit()
+
+
+func _build_portal_mesh() -> ArrayMesh:
+	if _field == null:
+		return ArrayMesh.new()
+
+	var portal_pos := _field.get_portal_position()
+	if portal_pos == Vector2.INF:
+		return ArrayMesh.new()
+
+	var host_height := _field.get_portal_host_height()
+	var z := host_height * _height_scale + 2.0
+	var center := Vector3(portal_pos.x, -portal_pos.y, z)
+	var radius := _field.get_portal_visual_radius()
+
+	var rim_col := _field.get_palette_color("portal_rim", Color(1.0, 0.94, 0.66, 1.0))
+	var glow_col := _field.get_palette_color("portal_glow", Color(0.95, 0.55, 0.25, 0.65))
+	var core_col := _field.get_palette_color("portal_core", Color(0.04, 0.02, 0.08, 0.88))
+	rim_col.a = 1.0
+	glow_col.a = 1.0
+	core_col.a = 1.0
+
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	_add_disc_fan(st, center, radius * 1.08, glow_col, 32)
+	_add_disc_fan(st, center, radius * 0.92, rim_col, 28)
+	_add_disc_fan(st, center, radius * 0.42, core_col, 20)
+	return st.commit()
+
+
+func _add_disc_fan(st: SurfaceTool, center: Vector3, radius: float, color: Color, segments: int) -> void:
+	if radius <= 0.001:
+		return
+	for i in range(segments):
+		var a0 := TAU * float(i) / float(segments)
+		var a1 := TAU * float(i + 1) / float(segments)
+		var p0 := center + Vector3(cos(a0), sin(a0), 0.0) * radius
+		var p1 := center + Vector3(cos(a1), sin(a1), 0.0) * radius
+		st.set_color(color)
+		st.add_vertex(center)
+		st.set_color(color)
+		st.add_vertex(p0)
+		st.set_color(color)
+		st.add_vertex(p1)
 
 
 func _add_edge_quad(st: SurfaceTool, a: Vector3, b: Vector3, width: float, color: Color) -> void:
@@ -209,7 +286,7 @@ func _add_edge_quad(st: SurfaceTool, a: Vector3, b: Vector3, width: float, color
 	st.add_vertex(v3)
 
 
-func _rebuild_ascidians() -> void:
+func _update_ascidian_instances(refresh_meshes: bool) -> void:
 	var ascidians: Array = _field.get_ascidians()
 
 	while _ascidian_instances.size() > ascidians.size():
@@ -220,9 +297,10 @@ func _rebuild_ascidians() -> void:
 		var mesh_inst := MeshInstance3D.new()
 		mesh_inst.material_override = _ascidian_material
 		mesh_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		mesh_inst.sorting_offset = 2.0
+		mesh_inst.sorting_offset = 4.0
 		_ascidian_root.add_child(mesh_inst)
 		_ascidian_instances.append(mesh_inst)
+		refresh_meshes = true
 
 	for index in range(ascidians.size()):
 		var ascidian_variant = ascidians[index]
@@ -230,12 +308,9 @@ func _rebuild_ascidians() -> void:
 			continue
 		var ascidian: Ascidian = ascidian_variant
 		var mesh_inst: MeshInstance3D = _ascidian_instances[index]
-		mesh_inst.mesh = _build_ascidian_mesh(ascidian)
-		var swim := ascidian.get_swim_depth()
-		var terrain_h := _field.sample_height(ascidian.global_position)
-		var depth := swim * _height_scale
-		if swim >= terrain_h - 0.05:
-			depth += _field.get_ascidian_depth_bias()
+		if refresh_meshes or mesh_inst.mesh == null:
+			mesh_inst.mesh = _build_ascidian_mesh(ascidian)
+		var depth := ascidian.get_swim_depth() * _height_scale
 		var pos := ascidian.position
 		mesh_inst.position = Vector3(pos.x, -pos.y, depth)
 		mesh_inst.visible = true
