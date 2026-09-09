@@ -21,15 +21,42 @@
           "template_id": "flare_on_ss",
           "chassis_id": "flare_on_chassis",
           "modules": [
-            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
-            { "slot": "main_engine_1", "module_id": "mark_3_fusion" },
-            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
-            { "slot": "system_2", "module_id": "life_support_mk1" },
-            { "slot": "system_3", "module_id": "sensor_basic" },
-            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
-            { "slot": "other_1", "module_id": "fuel_tank_small" },
-            { "slot": "other_2", "module_id": "cargo_bay_4" },
-            { "slot": "light_weapon_1", "module_id": "light_laser" }
+            {
+              "slot": "power_1",
+              "module_id": "hw_helios_compact_40"
+            },
+            {
+              "slot": "main_engine_1",
+              "module_id": "mark_3_fusion"
+            },
+            {
+              "slot": "system_1",
+              "module_id": "nav_combat_core_mk1"
+            },
+            {
+              "slot": "system_2",
+              "module_id": "life_support_mk1"
+            },
+            {
+              "slot": "system_3",
+              "module_id": "sensor_basic"
+            },
+            {
+              "slot": "system_4",
+              "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "other_1",
+              "module_id": "fuel_tank_small"
+            },
+            {
+              "slot": "other_2",
+              "module_id": "cargo_bay_4"
+            },
+            {
+              "slot": "light_weapon_1",
+              "module_id": "light_laser"
+            }
           ],
           "fuel_current": 40.0,
           "ammunition": {},
@@ -41,17 +68,50 @@
           "template_id": "pegasus_p101",
           "chassis_id": "pegasus_chassis",
           "modules": [
-            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
-            { "slot": "main_engine_1", "module_id": "mark_1_fusion" },
-            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
-            { "slot": "system_2", "module_id": "life_support_mk1" },
-            { "slot": "system_3", "module_id": "sensor_basic" },
-            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
-            { "slot": "other_1", "module_id": "mass_driver_magazine_200" },
-            { "slot": "other_2", "module_id": "fuel_tank_medium" },
-            { "slot": "other_3", "module_id": "cargo_bay_10" },
-            { "slot": "other_4", "module_id": "chitanium_5mm" },
-            { "slot": "light_weapon_1", "module_id": "light_mass_driver" }
+            {
+              "slot": "power_1",
+              "module_id": "gi_pp_18"
+            },
+            {
+              "slot": "main_engine_1",
+              "module_id": "mark_1_fusion"
+            },
+            {
+              "slot": "system_1",
+              "module_id": "nav_combat_core_mk1"
+            },
+            {
+              "slot": "system_2",
+              "module_id": "life_support_mk1"
+            },
+            {
+              "slot": "system_3",
+              "module_id": "sensor_basic"
+            },
+            {
+              "slot": "system_4",
+              "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "other_1",
+              "module_id": "mass_driver_magazine_200"
+            },
+            {
+              "slot": "other_2",
+              "module_id": "fuel_tank_medium"
+            },
+            {
+              "slot": "other_3",
+              "module_id": "cargo_bay_10"
+            },
+            {
+              "slot": "other_4",
+              "module_id": "chitanium_5mm"
+            },
+            {
+              "slot": "light_weapon_1",
+              "module_id": "light_mass_driver"
+            }
           ],
           "fuel_current": 80.0,
           "ammunition": {
@@ -151,17 +211,50 @@
           "template_id": "pegasus_p101",
           "chassis_id": "pegasus_chassis",
           "modules": [
-            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
-            { "slot": "main_engine_1", "module_id": "mark_1_fusion" },
-            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
-            { "slot": "system_2", "module_id": "life_support_mk1" },
-            { "slot": "system_3", "module_id": "sensor_basic" },
-            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
-            { "slot": "other_1", "module_id": "mass_driver_magazine_200" },
-            { "slot": "other_2", "module_id": "fuel_tank_medium" },
-            { "slot": "other_3", "module_id": "cargo_bay_10" },
-            { "slot": "other_4", "module_id": "chitanium_5mm" },
-            { "slot": "light_weapon_1", "module_id": "light_mass_driver" }
+            {
+              "slot": "power_1",
+              "module_id": "gi_pp_18"
+            },
+            {
+              "slot": "main_engine_1",
+              "module_id": "mark_1_fusion"
+            },
+            {
+              "slot": "system_1",
+              "module_id": "nav_combat_core_mk1"
+            },
+            {
+              "slot": "system_2",
+              "module_id": "life_support_mk1"
+            },
+            {
+              "slot": "system_3",
+              "module_id": "sensor_basic"
+            },
+            {
+              "slot": "system_4",
+              "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "other_1",
+              "module_id": "mass_driver_magazine_200"
+            },
+            {
+              "slot": "other_2",
+              "module_id": "fuel_tank_medium"
+            },
+            {
+              "slot": "other_3",
+              "module_id": "cargo_bay_10"
+            },
+            {
+              "slot": "other_4",
+              "module_id": "chitanium_5mm"
+            },
+            {
+              "slot": "light_weapon_1",
+              "module_id": "light_mass_driver"
+            }
           ],
           "fuel_current": 80.0,
           "ammunition": {
@@ -189,15 +282,42 @@
           "template_id": "flare_on_ss",
           "chassis_id": "flare_on_chassis",
           "modules": [
-            { "slot": "power_1", "module_id": "fusion_plant_mk1" },
-            { "slot": "main_engine_1", "module_id": "mark_3_fusion" },
-            { "slot": "system_1", "module_id": "nav_combat_core_mk1" },
-            { "slot": "system_2", "module_id": "life_support_mk1" },
-            { "slot": "system_3", "module_id": "sensor_basic" },
-            { "slot": "system_4", "module_id": "vessel_registration_beacon" },
-            { "slot": "other_1", "module_id": "fuel_tank_small" },
-            { "slot": "other_2", "module_id": "cargo_bay_4" },
-            { "slot": "light_weapon_1", "module_id": "light_laser" }
+            {
+              "slot": "power_1",
+              "module_id": "hw_helios_compact_40"
+            },
+            {
+              "slot": "main_engine_1",
+              "module_id": "mark_3_fusion"
+            },
+            {
+              "slot": "system_1",
+              "module_id": "nav_combat_core_mk1"
+            },
+            {
+              "slot": "system_2",
+              "module_id": "life_support_mk1"
+            },
+            {
+              "slot": "system_3",
+              "module_id": "sensor_basic"
+            },
+            {
+              "slot": "system_4",
+              "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "other_1",
+              "module_id": "fuel_tank_small"
+            },
+            {
+              "slot": "other_2",
+              "module_id": "cargo_bay_4"
+            },
+            {
+              "slot": "light_weapon_1",
+              "module_id": "light_laser"
+            }
           ],
           "fuel_current": 40.0,
           "ammunition": {},

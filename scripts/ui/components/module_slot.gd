@@ -22,7 +22,8 @@ func configure(
 	p_module_name: String,
 	p_ship_id: String,
 	p_compatible_module_id: String = "",
-	p_drop_validator: Callable = Callable()
+	p_drop_validator: Callable = Callable(),
+	p_tooltip: String = ""
 ) -> void:
 	slot_id = p_slot_id
 	module_id = p_module_id
@@ -30,6 +31,7 @@ func configure(
 	ship_id = p_ship_id
 	compatible_module_id = p_compatible_module_id
 	drop_validator = p_drop_validator
+	tooltip_text = p_tooltip
 	if is_node_ready():
 		_apply_labels()
 
@@ -49,7 +51,9 @@ func _apply_labels() -> void:
 
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if not event is InputEventMouseButton:
+		return
+	if event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			if module_id.is_empty():
 				slot_clicked.emit(slot_id)

@@ -5,7 +5,7 @@
     "maker": "Holt-Winters Corp",
     "chassis": "flare_on_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "hw_helios_compact_40",
       "mark_3_fusion",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -22,7 +22,7 @@
     "maker": "Holt-Winters Corp",
     "chassis": "flare_on_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "hw_helios_arc_9",
       "gravitic_mk1",
       "nav_combat_core_mk2",
       "life_support_a3",
@@ -39,7 +39,7 @@
     "maker": "GVW Corp",
     "chassis": "pegasus_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "gi_pp_18",
       "mark_1_fusion",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -58,7 +58,7 @@
     "maker": "GVW Corp",
     "chassis": "pegasus_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "gi_pp_18",
       "mark_1_fusion",
       "nav_combat_core_mk1",
       "life_support_a3",
@@ -75,7 +75,7 @@
     "maker": "GVW Corp",
     "chassis": "pegasus_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "gi_utility_fusion_55",
       "mark_2_antimatter",
       "nav_combat_core_mk2",
       "life_support_mk1",
@@ -94,7 +94,7 @@
     "maker": "Durbin-Watson Corp",
     "chassis": "krypton_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "ora_yardfit_24",
       "mark_3_fusion",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -111,7 +111,7 @@
     "maker": "Durbin-Watson Corp",
     "chassis": "krypton_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "ora_ap_56",
       "mark_2_antimatter",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -128,7 +128,7 @@
     "maker": "Bayes Inc",
     "chassis": "wolff_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "gi_utility_fusion_55",
       "mark_2_antimatter",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -148,7 +148,7 @@
     "maker": "Bayes Inc",
     "chassis": "wolff_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "gi_utility_fusion_55",
       "mark_2_antimatter",
       "nav_combat_core_mk2",
       "life_support_mk1",
@@ -169,7 +169,7 @@
     "maker": "Kolmogorov-Smirnov",
     "chassis": "dragon_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "ora_ap_56",
       "mark_2_antimatter",
       "nav_combat_core_mk2",
       "life_support_mk1",
@@ -189,7 +189,7 @@
     "maker": "Bayes Inc",
     "chassis": "juno_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "gi_pp_18",
       "mark_1_fusion",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -206,7 +206,7 @@
     "maker": "Bayes Inc",
     "chassis": "juno_chassis",
     "modules": [
-      "fusion_plant_mk1",
+      "gi_standard_civic_28",
       "mark_3_fusion",
       "nav_combat_core_mk1",
       "life_support_mk1",
@@ -223,7 +223,7 @@
     "maker": "Bayes Inc",
     "chassis": "juno_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "gi_type_40_industrial",
       "mark_3_fusion",
       "nav_combat_core_mk2",
       "life_support_mk1",
@@ -242,7 +242,7 @@
     "maker": "Oklahoma Combine",
     "chassis": "silhouette_chassis",
     "modules": [
-      "fusion_plant_mk2",
+      "oc_workhorse_dynamo",
       "mark_3_fusion",
       "nav_combat_core_mk2",
       "life_support_mk1",

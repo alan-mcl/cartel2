@@ -10,6 +10,31 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "data" / "catalog"
 
+POWER_PLANT_MAKERS = {
+    "Holt-Winters Corp",
+    "ParaRamcoVidia",
+    "General Industrial",
+    "Orion Aerospace",
+    "Oklahoma Combine",
+    "Four Rivers Zaibatsu",
+    "Atlas Concern",
+    "House of Roth",
+    "The Meridian Company",
+    "Seven Bells Inc",
+    "Sakuraya Shinise",
+    "Andean Consolidated",
+    "Terra Nova",
+    "Evergreen Group",
+    "Tukey Enterprises",
+    "Chettiar Holdings",
+    "Guangzhou Mercantile",
+    "Crown & Anchor",
+    "Pacific Triad",
+}
+
+POWER_PLANT_TYPES = {"fission", "fusion", "radioisotope"}
+RETIRED_POWER_IDS = {"fusion_plant_mk1", "fusion_plant_mk2"}
+
 
 def load_array(path: Path) -> list:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -103,6 +128,55 @@ def main() -> int:
         errors.append(
             f"backgrounds.json: default_id '{default_background_id}' not found"
         )
+
+    modules = load_array(CATALOG / "modules.json")
+    modules_by_id = index_by_id(modules)
+    power_count = 0
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        if module_id in RETIRED_POWER_IDS:
+            errors.append(f"modules.json: retired power plant id '{module_id}' still present")
+        if str(module.get("category", "")) != "power":
+            continue
+        power_count += 1
+        for field in ("maker", "brand", "plant_type", "power_generation"):
+            if field not in module:
+                errors.append(f"power module {module_id}: missing {field}")
+        maker = str(module.get("maker", ""))
+        if maker and maker not in POWER_PLANT_MAKERS:
+            errors.append(f"power module {module_id}: unknown maker '{maker}'")
+        plant_type = str(module.get("plant_type", ""))
+        if plant_type and plant_type not in POWER_PLANT_TYPES:
+            errors.append(f"power module {module_id}: invalid plant_type '{plant_type}'")
+        if str(module.get("mount", "")) != "power":
+            errors.append(f"power module {module_id}: mount must be 'power'")
+        fuel = float(module.get("fuel_consumption", -1.0))
+        generation = float(module.get("power_generation", 0.0))
+        if plant_type == "radioisotope":
+            if fuel != 0.0:
+                errors.append(
+                    f"power module {module_id}: radioisotope fuel_consumption must be 0"
+                )
+            if generation > 12.0:
+                errors.append(
+                    f"power module {module_id}: radioisotope output exceeds 12 MW"
+                )
+
+    for template in ships.values():
+        for module_id in template.get("modules", []):
+            if str(module_id) in RETIRED_POWER_IDS:
+                errors.append(
+                    f"ship {template['id']}: references retired power plant '{module_id}'"
+                )
+            module = modules_by_id.get(str(module_id))
+            if module is None:
+                continue
+            if str(module.get("category", "")) == "power" and str(module_id) in RETIRED_POWER_IDS:
+                errors.append(
+                    f"ship {template['id']}: references retired power plant '{module_id}'"
+                )
 
     buildings = load_array(CATALOG / "buildings.json")
     for chassis_id, chassis_def in chassis.items():

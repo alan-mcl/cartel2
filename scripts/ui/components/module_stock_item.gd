@@ -12,6 +12,7 @@ var sandbox_mode: bool = false
 var category_text: String = ""
 var _name_text: String = ""
 var _cost: int = 0
+var _meta_detail: String = ""
 
 @onready var _label: Label = $HBox/NameLabel
 @onready var _meta: Label = $HBox/MetaLabel
@@ -24,7 +25,9 @@ func configure(
 	spare: int,
 	is_selected: bool,
 	sandbox: bool = false,
-	category: String = ""
+	category: String = "",
+	meta_detail: String = "",
+	tooltip: String = ""
 ) -> void:
 	module_id = p_module_id
 	spare_count = spare
@@ -33,6 +36,8 @@ func configure(
 	category_text = category
 	_name_text = name_text
 	_cost = cost
+	_meta_detail = meta_detail
+	tooltip_text = tooltip
 	_apply_labels_if_ready()
 
 
@@ -59,9 +64,14 @@ func _apply_labels(name_text: String, cost: int, spare: int, is_selected: bool) 
 	if _meta:
 		if sandbox_mode:
 			var meta := category_text if not category_text.is_empty() else "module"
+			if not _meta_detail.is_empty():
+				meta = "%s · %s" % [meta, _meta_detail]
 			_meta.text = meta.capitalize()
 		else:
-			_meta.text = "d%d · x%d" % [cost, spare]
+			var meta := "d%d · x%d" % [cost, spare]
+			if not _meta_detail.is_empty():
+				meta = "%s · %s" % [_meta_detail, meta]
+			_meta.text = meta
 	if is_selected:
 		theme_type_variation = &"Elevated"
 	else:
@@ -69,7 +79,9 @@ func _apply_labels(name_text: String, cost: int, spare: int, is_selected: bool) 
 
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+	if event.button_index == MOUSE_BUTTON_LEFT:
 		stock_selected.emit(module_id)
 
 

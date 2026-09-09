@@ -85,6 +85,49 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 
 `ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and compute in flight.
 
+### Power plants (`category: power`, mount: `power`)
+
+Shipboard reactors mount on the chassis `power` hardpoint. One plant is typical; larger hulls may carry more in future designs.
+
+| Stat | JSON field | Prototype use |
+|------|------------|---------------|
+| Output | `power_generation` | Operating budget (MW) |
+| Weight | `mass` | Ship mass |
+| Envelope | `volume` | Fitting limit |
+| Fuel burn | `fuel_consumption` | Plant fuel use in flight |
+| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Brand | `brand` | Product family / marque within the maker |
+| Type | `plant_type` | Technology class (see below) |
+
+Manufacturer tiers for power plants are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+
+#### Plant types
+
+Three types are in the catalog today. All share the same fitting and operating rules in the prototype; type drives stats, marketing, and future mechanics.
+
+| Type | Role | Typical output | Fuel |
+|------|------|----------------|------|
+| **Fission** | Mature, compact, reliable. Default for older, cheaper, smaller, and frontier ships. | 16–72 MW | Moderate |
+| **Fusion** | Newer, advanced. Higher output and better fuel burn at a premium. Sporty and refitted hulls. | 28–54 MW | Lower |
+| **Radioisotope** | Decay heat; always on, no refuelling. Low power — life support, beacon, sensors only on light hulls. | 6–12 MW | Zero |
+
+Reserved for later (no SKUs yet): **solar**, **chemical** — may ignore ship fuel or gate on environment.
+
+#### In prototype JSON
+
+Forty-eight branded SKUs across nineteen manufacturers (~31 fission, ~11 fusion, 6 radioisotope). Examples:
+
+| id | Maker | Brand | Type | Output |
+|----|-------|-------|------|--------|
+| `gi_pp_18` | General Industrial | GI | fission | 18 MW |
+| `hw_helios_compact_40` | Holt-Winters Corp | Helios | fusion | 32 MW |
+| `ora_ap_56` | Orion Aerospace | Orion | fusion | 54 MW |
+| `hw_helios_ember` | Holt-Winters Corp | Helios | radioisotope | 9 MW |
+
+Ship templates: older workhorses (Pegasus, Juno, Krypton K2, Silhouette) carry fission; Holt-Winters Flare-ON and late refits carry fusion. No template defaults to a radioisotope plant.
+
+The POC `fusion_plant_mk1` / `fusion_plant_mk2` Bayes Inc placeholders are retired.
+
 ### Computer (`category: computer`, mount: `system`)
 
 | id | Capabilities | Notes |
@@ -237,6 +280,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Reference in `ships.json` templates and `player.json` instances
-3. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
-4. Add corporate `maker` strings aligned with [corporations.md](corporations.md)
+2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`)
+3. Reference in `ships.json` templates and `player.json` instances
+4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
+5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

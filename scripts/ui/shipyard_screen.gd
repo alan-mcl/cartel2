@@ -5,6 +5,8 @@ const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
 
+const POWER_SORT_KEYS := ["price", "type", "mw"]
+
 const STOCK_CATEGORIES := [
 	"propulsion",
 	"power",
@@ -51,6 +53,8 @@ var _ship_ids: PackedStringArray = PackedStringArray()
 var _suppress_ship_select: bool = false
 var _ship_art_frame: PanelContainer
 var _refresh_pending := false
+var _power_sort: String = "price"
+var _power_sort_asc: bool = true
 
 
 func _ready() -> void:
@@ -313,8 +317,11 @@ func _add_slot_board(ship: OwnedShip) -> void:
 		for slot_id in grouped[label]:
 			var module_id := ship.get_module_id(slot_id)
 			var module_name := "(empty)"
+			var slot_tooltip := ""
 			if not module_id.is_empty():
-				module_name = str(_context.catalog.get_module(module_id).get("name", module_id))
+				var module_def := _context.catalog.get_module(module_id)
+				module_name = str(module_def.get("name", module_id))
+				slot_tooltip = ModuleSpecText.format_tooltip(module_def)
 
 			var slot_panel := MODULE_SLOT.instantiate()
 			var compatible := _selected_part_id if not _selected_part_id.is_empty() else ""
@@ -324,7 +331,8 @@ func _add_slot_board(ship: OwnedShip) -> void:
 				module_name,
 				ship.id,
 				compatible,
-				Callable(self, "_validate_slot_drop")
+				Callable(self, "_validate_slot_drop"),
+				slot_tooltip
 			)
 			slot_panel.slot_clicked.connect(_on_slot_clicked)
 			slot_panel.module_dropped.connect(_on_module_dropped_on_slot)
@@ -405,7 +413,7 @@ func _rebuild_stock_tabs() -> void:
 
 	for child in _stock_tabs.get_children():
 		_stock_tabs.remove_child(child)
-		child.free()
+		child.queue_free()
 
 	var parts_by_category: Dictionary = {}
 	for category in STOCK_CATEGORIES:
@@ -423,24 +431,51 @@ func _rebuild_stock_tabs() -> void:
 		if entries.is_empty():
 			continue
 
-		var scroll := ScrollContainer.new()
-		scroll.set_script(INVENTORY_DROP_TARGET)
-		scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		_stock_tabs.add_child(scroll)
-		_bind_inventory_drop_target(scroll)
+		var tab_root: Control
+		var list_parent: Control
 
-		var list := VBoxContainer.new()
-		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		list.add_theme_constant_override("separation", 4)
-		scroll.add_child(list)
+		if category == "power":
+			entries = _sort_power_entries(entries)
+			var tab_column := VBoxContainer.new()
+			tab_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			tab_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			tab_column.add_theme_constant_override("separation", 4)
+			tab_root = tab_column
+			tab_column.add_child(_build_power_sort_bar())
+			var scroll := ScrollContainer.new()
+			scroll.set_script(INVENTORY_DROP_TARGET)
+			scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+			tab_column.add_child(scroll)
+			_bind_inventory_drop_target(scroll)
+			list_parent = VBoxContainer.new()
+			list_parent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			list_parent.add_theme_constant_override("separation", 4)
+			scroll.add_child(list_parent)
+		else:
+			var scroll := ScrollContainer.new()
+			scroll.set_script(INVENTORY_DROP_TARGET)
+			scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+			tab_root = scroll
+			_bind_inventory_drop_target(scroll)
+			list_parent = VBoxContainer.new()
+			list_parent.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			list_parent.add_theme_constant_override("separation", 4)
+			scroll.add_child(list_parent)
+
+		_stock_tabs.add_child(tab_root)
 
 		for part_entry in entries:
 			var part_id := str(part_entry.get("id", ""))
 			var data: Dictionary = part_entry.get("data", {})
 			var category_label := str(part_entry.get("category", data.get("category", "")))
 			var spare := _context.session.get_spare_part_count(part_id)
+			var meta_detail := ""
+			if category == "power":
+				meta_detail = _power_stock_meta(data)
 			var row := MODULE_STOCK_ITEM.instantiate()
 			row.configure(
 				part_id,
@@ -449,11 +484,13 @@ func _rebuild_stock_tabs() -> void:
 				spare,
 				part_id == _selected_part_id,
 				_sandbox,
-				category_label
+				category_label,
+				meta_detail,
+				ModuleSpecText.format_tooltip(data)
 			)
 			row.stock_selected.connect(_on_part_selected)
 			row.module_dropped_on_stock.connect(_on_module_dropped_on_stock)
-			list.add_child(row)
+			list_parent.add_child(row)
 
 		_stock_tabs.set_tab_title(_stock_tabs.get_tab_count() - 1, category.capitalize())
 
@@ -469,19 +506,14 @@ func _refresh_part_selection() -> void:
 
 func _update_stock_selection() -> void:
 	for tab_index in range(_stock_tabs.get_tab_count()):
-		var scroll := _stock_tabs.get_tab_control(tab_index)
-		if scroll == null:
+		var tab_root := _stock_tabs.get_tab_control(tab_index)
+		if tab_root == null:
 			continue
-		for list in scroll.get_children():
-			if not list is VBoxContainer:
-				continue
-			for child in list.get_children():
-				if not child is ModuleStockItem:
-					continue
-				var row: ModuleStockItem = child
-				var is_selected := row.module_id == _selected_part_id
-				if row.selected != is_selected:
-					row.set_selected_state(is_selected)
+		_for_each_stock_row(tab_root, func(row: ModuleStockItem) -> void:
+			var is_selected := row.module_id == _selected_part_id
+			if row.selected != is_selected:
+				row.set_selected_state(is_selected)
+		)
 
 
 func _bind_inventory_drop_target(node: Node) -> void:
@@ -546,6 +578,94 @@ func _section_label(text: String) -> Label:
 	label.text = text
 	label.theme_type_variation = &"Section"
 	return label
+
+
+func _power_stock_meta(data: Dictionary) -> String:
+	var plant_type := str(data.get("plant_type", ""))
+	var output_mw := float(data.get("power_generation", 0.0))
+	if plant_type.is_empty():
+		return ""
+	return "%s · %.0f MW" % [plant_type.capitalize(), output_mw]
+
+
+func _build_power_sort_bar() -> HBoxContainer:
+	var bar := HBoxContainer.new()
+	bar.add_theme_constant_override("separation", 8)
+	var sort_label := Label.new()
+	sort_label.text = "SORT"
+	sort_label.theme_type_variation = &"Section"
+	bar.add_child(sort_label)
+	for sort_key in POWER_SORT_KEYS:
+		var button := Button.new()
+		button.text = _power_sort_button_label(sort_key)
+		button.pressed.connect(_on_power_sort_pressed.bind(sort_key))
+		bar.add_child(button)
+	return bar
+
+
+func _power_sort_button_label(sort_key: String) -> String:
+	var label := sort_key.to_upper()
+	if sort_key == "mw":
+		label = "MW"
+	if _power_sort == sort_key:
+		label = "%s %s" % ["^" if _power_sort_asc else "v", label]
+	return label
+
+
+func _on_power_sort_pressed(sort_key: String) -> void:
+	if _power_sort == sort_key:
+		_power_sort_asc = not _power_sort_asc
+	else:
+		_power_sort = sort_key
+		_power_sort_asc = true
+	# Defer rebuild so the sort button is not freed mid-signal.
+	call_deferred("_rebuild_stock_tabs")
+
+
+func _sort_power_entries(entries: Array) -> Array:
+	var sorted: Array = entries.duplicate()
+	sorted.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		var left_data: Dictionary = left.get("data", {})
+		var right_data: Dictionary = right.get("data", {})
+		var cmp := 0
+		match _power_sort:
+			"price":
+				cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+			"type":
+				cmp = str(left_data.get("plant_type", "")).nocasecmp_to(
+					str(right_data.get("plant_type", ""))
+				)
+				if cmp == 0:
+					cmp = _float_compare(
+						float(left_data.get("power_generation", 0.0)),
+						float(right_data.get("power_generation", 0.0))
+					)
+			"mw":
+				cmp = _float_compare(
+					float(left_data.get("power_generation", 0.0)),
+					float(right_data.get("power_generation", 0.0))
+				)
+		if not _power_sort_asc:
+			cmp = -cmp
+		return cmp < 0
+	)
+	return sorted
+
+
+func _float_compare(left: float, right: float) -> int:
+	if left < right:
+		return -1
+	if left > right:
+		return 1
+	return 0
+
+
+func _for_each_stock_row(root: Node, callback: Callable) -> void:
+	if root is ModuleStockItem:
+		callback.call(root)
+		return
+	for child in root.get_children():
+		_for_each_stock_row(child, callback)
 
 
 func _detail_label(label_text: String, value_text: String) -> Label:
