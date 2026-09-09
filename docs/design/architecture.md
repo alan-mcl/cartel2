@@ -17,7 +17,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
-| `data/catalog/` | JSON catalogs (see [data_model.md](data_model.md)) |
+| `data/catalog/` | JSON catalogs (schemas in-repo; see files under `data/catalog/`) |
 | `assets/` | Art referenced by catalog paths |
 | `themes/` | `cartel_theme.tres` — corporate UI theme (see [ui_theme.md](ui_theme.md)) |
 
@@ -230,4 +230,4 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unknown/private Unspace routes
 - Market contract depletion (depth is display-only)
 
-See [data_model.md](data_model.md) for implemented catalog subset vs [setting docs](../setting/README.md) for intended scope.
+See `data/catalog/` and [setting docs](../setting/README.md) for implemented subset vs intended scope.

@@ -1,0 +1,13 @@
+---
+description: JSON catalog conventions
+globs: data/catalog/**/*.json
+alwaysApply: false
+---
+
+# Catalog JSON
+
+- ids: lowercase `snake_case`, unique within each file.
+- Referential integrity: ships → chassis + modules; worlds `interactable` → `interactables.json`; routes `a`/`b` → `sectors.json`; unspace `id` → key in `worlds.json`.
+- Sector jump routes are synthesized from `routes.json` at load time — add routes there, not inline in sectors.
+- Setting lore lives in `docs/setting/`; catalogs are instance data for the running game.
+- Run `python3 scripts/tools/validate_ship_templates.py` and `./scripts/ci/check.sh` after catalog edits.

@@ -128,7 +128,7 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 | Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
 | Hyperdrive on Dragon Gold | Alpha class | Not in current JSON |
 
-Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation — see [equipment.md](equipment.md) and [data_model.md](../design/data_model.md).
+Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation — see [equipment.md](equipment.md) and [architecture.md](../design/architecture.md).
 
 ### In prototype JSON (`ships.json`)
 

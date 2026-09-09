@@ -1,0 +1,14 @@
+---
+description: GDScript standards for Cartel
+globs: **/*.gd
+alwaysApply: false
+---
+
+# GDScript
+
+- Godot 4.7, typed GDScript 2.0.
+- Gameplay scripts: `extends RefCounted`, `class_name` where shared; no scene tree access.
+- Reuse existing types (`Catalog`, `GameSession`, `ShipAssembler`, `OwnedShip`, `InteractableDef`).
+- After edits, run `./scripts/ci/check.sh` — Godot `--check-only` per script; exit code alone is not reliable.
+- Do not add GUT; put unit tests in `tests/` with `TestRunner`.
+- Never pair `--check-only` with `--debug`.

@@ -13,7 +13,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | Document | Contents |
 |----------|----------|
 | [architecture.md](design/architecture.md) | Code layering, data flow, main loops, not-yet-implemented features |
-| [data_model.md](design/data_model.md) | JSON catalog schemas, runtime types, how to extend data |
+| [architecture.md](design/architecture.md) + [data/catalog/](../data/catalog/) | JSON catalogs and runtime types (no separate data_model.md yet) |
 | [ui_theme.md](design/ui_theme.md) | Corporate UI theme tokens, variations, showcase |
 
 ### Setting (working bible)

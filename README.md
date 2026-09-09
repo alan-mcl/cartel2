@@ -99,6 +99,16 @@ Open the ship assembly sandbox (no economy, fitting rules only):
 
 In the editor, open either scene and press **F6** to run it standalone. **F5** still launches the full game.
 
+## Checks
+
+Agents and contributors should run the local gate after GDScript or catalog changes:
+
+```bash
+GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
+```
+
+This validates ship templates and catalog references, imports assets, runs Godot `--check-only` on gameplay/presentation/ui scripts, and executes headless unit tests. See [AGENTS.md](AGENTS.md) for project conventions.
+
 ## Documentation
 
 Specification and setting lore live in [`docs/`](docs/README.md):

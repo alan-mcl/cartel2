@@ -1,0 +1,12 @@
+---
+description: Cartel Godot project conventions for all agent work
+alwaysApply: true
+---
+
+# Cartel project rules
+
+- Run `./scripts/ci/check.sh` after GDScript or `data/catalog/` changes before marking work complete.
+- Gameplay logic: `scripts/gameplay/` as `RefCounted` only (no nodes). Session type is `GameSession`.
+- Presentation/UI adapt data; do not put game rules in `@onready` UI scripts.
+- Edit `docs/setting/` before changing lore in JSON catalogs.
+- Do not commit `.godot/`. See root `AGENTS.md` for run commands and scope guardrails.
