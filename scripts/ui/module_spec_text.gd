@@ -8,6 +8,7 @@ const STAT_ROWS: Array[Dictionary] = [
 	{"key": "mount", "label": "Mount"},
 	{"key": "power_generation", "label": "Output", "suffix": " MW", "float": true},
 	{"key": "plant_type", "label": "Plant type"},
+	{"key": "core_type", "label": "Core type"},
 	{"key": "fuel_consumption", "label": "Fuel use", "float": true},
 	{"key": "thrust", "label": "Thrust", "float": true},
 	{"key": "max_speed", "label": "Max speed", "suffix": " km/s", "float": true},
@@ -34,6 +35,7 @@ const SKIP_EXTRA_KEYS := {
 	"brand": true,
 	"category": true,
 	"plant_type": true,
+	"core_type": true,
 	"description": true,
 	"mount": true,
 	"capabilities": true,
@@ -49,10 +51,12 @@ static func format_tooltip(module_def: Dictionary) -> String:
 	if not name.is_empty():
 		lines.append(name)
 
-	for identity_key in ["maker", "brand", "category"]:
+	for identity_key in ["maker", "brand", "category", "plant_type", "core_type"]:
 		var value := str(module_def.get(identity_key, ""))
 		if value.is_empty():
 			continue
+		if identity_key in ["plant_type", "core_type"]:
+			value = value.capitalize()
 		lines.append("%s: %s" % [identity_key.capitalize(), value])
 
 	var stat_lines := _format_stat_lines(module_def)
@@ -139,7 +143,7 @@ static func _format_stat_row(row: Dictionary, value: Variant) -> String:
 	if bool(row.get("float", false)) or typeof(value) in [TYPE_FLOAT, TYPE_INT]:
 		return "%s: %s%s" % [label, _format_number(float(value)), suffix]
 	var text := str(value)
-	if key == "plant_type":
+	if key in ["plant_type", "core_type"]:
 		text = text.capitalize()
 	return "%s: %s%s" % [label, text, suffix]
 

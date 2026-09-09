@@ -35,6 +35,32 @@ POWER_PLANT_MAKERS = {
 POWER_PLANT_TYPES = {"fission", "fusion", "radioisotope"}
 RETIRED_POWER_IDS = {"fusion_plant_mk1", "fusion_plant_mk2"}
 
+COMPUTE_CORE_MAKERS = {
+    "SnedeCorp",
+    "ParaRamcoVidia",
+    "Monday Corporation",
+    "Mercury Communications",
+    "Chimera Corporation",
+    "Seven Bells Inc",
+    "Orion Aerospace",
+    "Holt-Winters Corp",
+    "Sakuraya Shinise",
+    "Four Rivers Zaibatsu",
+    "Oklahoma Combine",
+    "Tukey Enterprises",
+    "The Meridian Company",
+    "Cult of Apex",
+    "LiveWorlds",
+    "Orion Spur Company",
+}
+
+COMPUTE_CORE_TYPES = {"silicon", "photon", "quantum"}
+RETIRED_COMPUTER_IDS = {
+    "nav_combat_core_mk1",
+    "nav_combat_core_mk2",
+    "targeting_core_mk2",
+}
+
 
 def load_array(path: Path) -> list:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -131,6 +157,39 @@ def main() -> int:
 
     modules = load_array(CATALOG / "modules.json")
     modules_by_id = index_by_id(modules)
+    computer_count = 0
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        if module_id in RETIRED_COMPUTER_IDS:
+            errors.append(
+                f"modules.json: retired computer id '{module_id}' still present"
+            )
+        if str(module.get("category", "")) != "computer":
+            continue
+        computer_count += 1
+        for field in ("maker", "brand", "core_type", "compute_capacity"):
+            if field not in module:
+                errors.append(f"computer module {module_id}: missing {field}")
+        maker = str(module.get("maker", ""))
+        if maker and maker not in COMPUTE_CORE_MAKERS:
+            errors.append(f"computer module {module_id}: unknown maker '{maker}'")
+        core_type = str(module.get("core_type", ""))
+        if core_type and core_type not in COMPUTE_CORE_TYPES:
+            errors.append(f"computer module {module_id}: invalid core_type '{core_type}'")
+        if str(module.get("mount", "")) != "system":
+            errors.append(f"computer module {module_id}: mount must be 'system'")
+        if "compute_demand" in module:
+            errors.append(
+                f"computer module {module_id}: compute_demand must not be set on cores"
+            )
+        capabilities = module.get("capabilities", [])
+        if not isinstance(capabilities, list) or "basic_hud" not in capabilities:
+            errors.append(
+                f"computer module {module_id}: must include basic_hud capability"
+            )
+
     power_count = 0
     for module in modules:
         if not isinstance(module, dict):
@@ -165,18 +224,33 @@ def main() -> int:
                 )
 
     for template in ships.values():
+        has_computer = False
         for module_id in template.get("modules", []):
-            if str(module_id) in RETIRED_POWER_IDS:
+            module_id = str(module_id)
+            if module_id in RETIRED_POWER_IDS:
                 errors.append(
                     f"ship {template['id']}: references retired power plant '{module_id}'"
                 )
-            module = modules_by_id.get(str(module_id))
+            if module_id in RETIRED_COMPUTER_IDS:
+                errors.append(
+                    f"ship {template['id']}: references retired computer '{module_id}'"
+                )
+            module = modules_by_id.get(module_id)
             if module is None:
                 continue
-            if str(module.get("category", "")) == "power" and str(module_id) in RETIRED_POWER_IDS:
+            category = str(module.get("category", ""))
+            if category == "power" and module_id in RETIRED_POWER_IDS:
                 errors.append(
                     f"ship {template['id']}: references retired power plant '{module_id}'"
                 )
+            if category == "computer":
+                has_computer = True
+                if str(module.get("core_type", "")) == "quantum":
+                    errors.append(
+                        f"ship {template['id']}: template must not default to quantum core '{module_id}'"
+                    )
+        if not has_computer:
+            errors.append(f"ship {template['id']}: missing computer module")
 
     buildings = load_array(CATALOG / "buildings.json")
     for chassis_id, chassis_def in chassis.items():

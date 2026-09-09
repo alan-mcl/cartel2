@@ -81,7 +81,7 @@ Common fields (omit zero-valued properties):
 | `description` | string | |
 | `capabilities` | string[] | Optional feature tags aggregated onto `AssembledShip` (e.g. `basic_hud`, `local_sensor`) |
 
-Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
+Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
 **Categories in current JSON:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
 
@@ -162,7 +162,7 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 
 | Capability | Typical grantor | Unlocks |
 |------------|-----------------|---------|
-| `basic_hud` | `nav_combat_core_mk1` (computer) | Speed/heading, fuel/power, GST clock |
+| `basic_hud` | any computer module (temporary gate) | Speed/heading, fuel/power, GST clock |
 | `local_sensor` | `sensor_basic` | North-up local-space radar panel |
 | `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
 | `sensor_read_beacons` | `sensor_basic` | HUD transponder labels for NPC ships and named landmarks |

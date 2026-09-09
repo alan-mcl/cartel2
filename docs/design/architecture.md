@@ -56,7 +56,7 @@ On startup, `main.gd`:
 Docking opens **UiRoot** — a full-screen opaque Control UI (not a dim overlay). Navigation uses **ScreenStack** (`push_screen`, `pop_screen`, `replace_screen`):
 
 - **HabitatScreen** — building list from catalog, location art frame, type-based content panels (terminal, Exchange market, embedded Shipyard assembly).
-- **ShipyardScreen** — embedded in the habitat content pane when Shipyard is selected: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`) in `modules.json`.
+- **ShipyardScreen** — embedded in the habitat content pane when Shipyard is selected: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Computer stock sorts by price, type, or CU; row meta shows `core_type` and capacity. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules carry `brand` and `core_type` (`silicon` | `photon` | `quantum`) in `modules.json`.
 
 Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `module_stock_item`).
 

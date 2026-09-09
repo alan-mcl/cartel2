@@ -5,7 +5,12 @@ const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
 
-const POWER_SORT_KEYS := ["price", "type", "mw"]
+const SORTABLE_STOCK_CATEGORIES := ["power", "computer"]
+
+const STOCK_SORT_KEYS := {
+	"power": ["price", "type", "mw"],
+	"computer": ["price", "type", "cu"],
+}
 
 const STOCK_CATEGORIES := [
 	"propulsion",
@@ -53,8 +58,10 @@ var _ship_ids: PackedStringArray = PackedStringArray()
 var _suppress_ship_select: bool = false
 var _ship_art_frame: PanelContainer
 var _refresh_pending := false
-var _power_sort: String = "price"
-var _power_sort_asc: bool = true
+var _stock_sort: Dictionary = {
+	"power": {"key": "price", "asc": true},
+	"computer": {"key": "price", "asc": true},
+}
 
 
 func _ready() -> void:
@@ -434,14 +441,14 @@ func _rebuild_stock_tabs() -> void:
 		var tab_root: Control
 		var list_parent: Control
 
-		if category == "power":
-			entries = _sort_power_entries(entries)
+		if category in SORTABLE_STOCK_CATEGORIES:
+			entries = _sort_stock_entries(category, entries)
 			var tab_column := VBoxContainer.new()
 			tab_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			tab_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			tab_column.add_theme_constant_override("separation", 4)
 			tab_root = tab_column
-			tab_column.add_child(_build_power_sort_bar())
+			tab_column.add_child(_build_stock_sort_bar(category))
 			var scroll := ScrollContainer.new()
 			scroll.set_script(INVENTORY_DROP_TARGET)
 			scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -474,8 +481,8 @@ func _rebuild_stock_tabs() -> void:
 			var category_label := str(part_entry.get("category", data.get("category", "")))
 			var spare := _context.session.get_spare_part_count(part_id)
 			var meta_detail := ""
-			if category == "power":
-				meta_detail = _power_stock_meta(data)
+			if category in SORTABLE_STOCK_CATEGORIES:
+				meta_detail = _stock_meta(category, data)
 			var row := MODULE_STOCK_ITEM.instantiate()
 			row.configure(
 				part_id,
@@ -580,72 +587,109 @@ func _section_label(text: String) -> Label:
 	return label
 
 
-func _power_stock_meta(data: Dictionary) -> String:
-	var plant_type := str(data.get("plant_type", ""))
-	var output_mw := float(data.get("power_generation", 0.0))
-	if plant_type.is_empty():
-		return ""
-	return "%s · %.0f MW" % [plant_type.capitalize(), output_mw]
+func _stock_meta(category: String, data: Dictionary) -> String:
+	match category:
+		"power":
+			var plant_type := str(data.get("plant_type", ""))
+			var output_mw := float(data.get("power_generation", 0.0))
+			if plant_type.is_empty():
+				return ""
+			return "%s · %.0f MW" % [plant_type.capitalize(), output_mw]
+		"computer":
+			var core_type := str(data.get("core_type", ""))
+			var compute_cu := float(data.get("compute_capacity", 0.0))
+			if core_type.is_empty():
+				return ""
+			return "%s · %.0f CU" % [core_type.capitalize(), compute_cu]
+	return ""
 
 
-func _build_power_sort_bar() -> HBoxContainer:
+func _build_stock_sort_bar(category: String) -> HBoxContainer:
 	var bar := HBoxContainer.new()
 	bar.add_theme_constant_override("separation", 8)
 	var sort_label := Label.new()
 	sort_label.text = "SORT"
 	sort_label.theme_type_variation = &"Section"
 	bar.add_child(sort_label)
-	for sort_key in POWER_SORT_KEYS:
+	for sort_key in STOCK_SORT_KEYS.get(category, []):
 		var button := Button.new()
-		button.text = _power_sort_button_label(sort_key)
-		button.pressed.connect(_on_power_sort_pressed.bind(sort_key))
+		button.text = _stock_sort_button_label(category, sort_key)
+		button.pressed.connect(_on_stock_sort_pressed.bind(category, sort_key))
 		bar.add_child(button)
 	return bar
 
 
-func _power_sort_button_label(sort_key: String) -> String:
+func _stock_sort_button_label(category: String, sort_key: String) -> String:
 	var label := sort_key.to_upper()
 	if sort_key == "mw":
 		label = "MW"
-	if _power_sort == sort_key:
-		label = "%s %s" % ["^" if _power_sort_asc else "v", label]
+	if sort_key == "cu":
+		label = "CU"
+	var sort_state: Dictionary = _stock_sort.get(category, {"key": "price", "asc": true})
+	if str(sort_state.get("key", "")) == sort_key:
+		label = "%s %s" % ["^" if bool(sort_state.get("asc", true)) else "v", label]
 	return label
 
 
-func _on_power_sort_pressed(sort_key: String) -> void:
-	if _power_sort == sort_key:
-		_power_sort_asc = not _power_sort_asc
+func _on_stock_sort_pressed(category: String, sort_key: String) -> void:
+	var sort_state: Dictionary = _stock_sort.get(category, {"key": "price", "asc": true})
+	if str(sort_state.get("key", "")) == sort_key:
+		sort_state["asc"] = not bool(sort_state.get("asc", true))
 	else:
-		_power_sort = sort_key
-		_power_sort_asc = true
+		sort_state["key"] = sort_key
+		sort_state["asc"] = true
+	_stock_sort[category] = sort_state
 	# Defer rebuild so the sort button is not freed mid-signal.
 	call_deferred("_rebuild_stock_tabs")
 
 
-func _sort_power_entries(entries: Array) -> Array:
+func _sort_stock_entries(category: String, entries: Array) -> Array:
+	var sort_state: Dictionary = _stock_sort.get(category, {"key": "price", "asc": true})
+	var sort_key := str(sort_state.get("key", "price"))
+	var sort_asc := bool(sort_state.get("asc", true))
 	var sorted: Array = entries.duplicate()
 	sorted.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
 		var left_data: Dictionary = left.get("data", {})
 		var right_data: Dictionary = right.get("data", {})
 		var cmp := 0
-		match _power_sort:
-			"price":
-				cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
-			"type":
-				cmp = str(left_data.get("plant_type", "")).nocasecmp_to(
-					str(right_data.get("plant_type", ""))
-				)
-				if cmp == 0:
-					cmp = _float_compare(
-						float(left_data.get("power_generation", 0.0)),
-						float(right_data.get("power_generation", 0.0))
-					)
-			"mw":
-				cmp = _float_compare(
-					float(left_data.get("power_generation", 0.0)),
-					float(right_data.get("power_generation", 0.0))
-				)
-		if not _power_sort_asc:
+		match category:
+			"power":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"type":
+						cmp = str(left_data.get("plant_type", "")).nocasecmp_to(
+							str(right_data.get("plant_type", ""))
+						)
+						if cmp == 0:
+							cmp = _float_compare(
+								float(left_data.get("power_generation", 0.0)),
+								float(right_data.get("power_generation", 0.0))
+							)
+					"mw":
+						cmp = _float_compare(
+							float(left_data.get("power_generation", 0.0)),
+							float(right_data.get("power_generation", 0.0))
+						)
+			"computer":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"type":
+						cmp = str(left_data.get("core_type", "")).nocasecmp_to(
+							str(right_data.get("core_type", ""))
+						)
+						if cmp == 0:
+							cmp = _float_compare(
+								float(left_data.get("compute_capacity", 0.0)),
+								float(right_data.get("compute_capacity", 0.0))
+							)
+					"cu":
+						cmp = _float_compare(
+							float(left_data.get("compute_capacity", 0.0)),
+							float(right_data.get("compute_capacity", 0.0))
+						)
+		if not sort_asc:
 			cmp = -cmp
 		return cmp < 0
 	)

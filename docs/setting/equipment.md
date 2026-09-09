@@ -128,11 +128,50 @@ Ship templates: older workhorses (Pegasus, Juno, Krypton K2, Silhouette) carry f
 
 The POC `fusion_plant_mk1` / `fusion_plant_mk2` Bayes Inc placeholders are retired.
 
-### Computer (`category: computer`, mount: `system`)
+### Compute cores (`category: computer`, mount: `system`)
 
-| id | Capabilities | Notes |
-|----|--------------|-------|
-| `nav_combat_core_mk1` | `basic_hud` | Speed/heading, fuel/power, GST clock in flight |
+Shipboard compute cores mount on the chassis `system` hardpoint. One core is typical; larger hulls may carry more in future designs.
+
+| Stat | JSON field | Prototype use |
+|------|------------|---------------|
+| Capacity | `compute_capacity` | Operating budget (CU) |
+| Weight | `mass` | Ship mass |
+| Envelope | `volume` | Fitting limit |
+| Power | `power_demand` | Operating budget (MW) |
+| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Brand | `brand` | Product family / marque within the maker |
+| Type | `core_type` | Technology class (see below) |
+
+Manufacturer tiers for compute cores are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+
+**Role:** cores **only supply compute (CU)** in the prototype. Targeting, fire-control, extra HUD features, and similar functions will be **separate system modules** that consume CU and grant capabilities. Every core still carries `basic_hud` so undocked ships show flight instruments — a temporary gate, not a product role.
+
+#### Core types
+
+Three types are in the catalog today. All share the same fitting and operating rules in the prototype; type drives stats, marketing, and future mechanics.
+
+| Type | Role | Typical CU | Notes |
+|------|------|------------|-------|
+| **Silicon** | Conventional semiconductor computing. Cheap, mature, robust, ubiquitous. | 8–28 | Default for older, cheaper, and frontier ships. Best CU per credit. |
+| **Photon** | Photonic computing — light for computation and data movement. Excellent bandwidth for parallel workloads. | 22–48 | Attractive for sensor-heavy, communications, and sporty hulls. Best CU per tonne and watt. |
+| **Quantum** | Quantum computing — specialized, not simply faster. Useful for particular mathematical, optimization, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimization, simulation) in addition to CU. |
+
+#### In prototype JSON
+
+Forty-one branded SKUs across sixteen manufacturers (~27 silicon, ~9 photon, 5 quantum). Examples:
+
+| id | Maker | Brand | Type | CU |
+|----|-------|-------|------|-----|
+| `mdc_monday_core` | Monday Corporation | Monday | silicon | 12 |
+| `hw_helios_prism` | Holt-Winters Corp | Helios | photon | 38 |
+| `prv_qbit_foundry` | ParaRamcoVidia | PRV | quantum | 12 |
+| `sne_lattice` | SnedeCorp | SnedOS | photon | 36 |
+
+Ship templates: workhorses and budget hulls carry silicon; sporty and late refits carry photon. No template defaults to a quantum core.
+
+SnedeCorp is the galactic software monopoly in lore, but still sells **sealed, attested hardware** — the box SnedOS runs on. ParaRamcoVidia is the glossy semiconductor house.
+
+The POC `nav_combat_core_mk1`, `nav_combat_core_mk2`, and `targeting_core_mk2` placeholders are retired. Targeting will return as a CU-consuming system module, not a core.
 
 ### Sensor (`category: sensor`, mount: `system`)
 
@@ -280,7 +319,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`)
+2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`)
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

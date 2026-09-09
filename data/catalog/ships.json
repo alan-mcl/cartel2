@@ -7,7 +7,7 @@
     "modules": [
       "hw_helios_compact_40",
       "mark_3_fusion",
-      "nav_combat_core_mk1",
+      "hw_helios_spark",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -24,7 +24,7 @@
     "modules": [
       "hw_helios_arc_9",
       "gravitic_mk1",
-      "nav_combat_core_mk2",
+      "sne_lattice",
       "life_support_a3",
       "sensor_advanced",
       "vessel_registration_beacon",
@@ -41,7 +41,7 @@
     "modules": [
       "gi_pp_18",
       "mark_1_fusion",
-      "nav_combat_core_mk1",
+      "mdc_monday_core",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -60,7 +60,7 @@
     "modules": [
       "gi_pp_18",
       "mark_1_fusion",
-      "nav_combat_core_mk1",
+      "mdc_workplace_12",
       "life_support_a3",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -77,9 +77,8 @@
     "modules": [
       "gi_utility_fusion_55",
       "mark_2_antimatter",
-      "nav_combat_core_mk2",
+      "prv_tensor_t9",
       "life_support_mk1",
-      "targeting_core_mk2",
       "sensor_advanced",
       "vessel_registration_beacon",
       "plasma_magazine_100",
@@ -96,7 +95,7 @@
     "modules": [
       "ora_yardfit_24",
       "mark_3_fusion",
-      "nav_combat_core_mk1",
+      "ora_yardfit_nav",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -113,7 +112,7 @@
     "modules": [
       "ora_ap_56",
       "mark_2_antimatter",
-      "nav_combat_core_mk1",
+      "ora_avionics_a40",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -130,7 +129,7 @@
     "modules": [
       "gi_utility_fusion_55",
       "mark_2_antimatter",
-      "nav_combat_core_mk1",
+      "oc_field_core_16",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -150,9 +149,8 @@
     "modules": [
       "gi_utility_fusion_55",
       "mark_2_antimatter",
-      "nav_combat_core_mk2",
+      "oc_workhorse_brain",
       "life_support_mk1",
-      "targeting_core_mk2",
       "sensor_basic",
       "vessel_registration_beacon",
       "missile_magazine_24",
@@ -171,7 +169,7 @@
     "modules": [
       "ora_ap_56",
       "mark_2_antimatter",
-      "nav_combat_core_mk2",
+      "prv_lumina_lx",
       "life_support_mk1",
       "sensor_advanced",
       "vessel_registration_beacon",
@@ -191,7 +189,7 @@
     "modules": [
       "gi_pp_18",
       "mark_1_fusion",
-      "nav_combat_core_mk1",
+      "te_handy_core",
       "life_support_mk1",
       "sensor_basic",
       "vessel_registration_beacon",
@@ -208,7 +206,7 @@
     "modules": [
       "gi_standard_civic_28",
       "mark_3_fusion",
-      "nav_combat_core_mk1",
+      "hg_caduceus_c30",
       "life_support_mk1",
       "sensor_advanced",
       "vessel_registration_beacon",
@@ -225,7 +223,7 @@
     "modules": [
       "gi_type_40_industrial",
       "mark_3_fusion",
-      "nav_combat_core_mk2",
+      "hg_hermes_beam",
       "life_support_mk1",
       "sensor_advanced",
       "vessel_registration_beacon",
@@ -244,7 +242,7 @@
     "modules": [
       "oc_workhorse_dynamo",
       "mark_3_fusion",
-      "nav_combat_core_mk2",
+      "oc_workhorse_brain",
       "life_support_mk1",
       "sensor_advanced",
       "vessel_registration_beacon",

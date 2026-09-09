@@ -26,6 +26,7 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not catalog.get_background("soldier").is_empty(), "soldier background exists")
 
 	_validate_power_plants(runner, catalog)
+	_validate_compute_cores(runner, catalog)
 
 
 static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void:
@@ -76,4 +77,64 @@ static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void
 		runner.check(
 			generation >= idle_requested,
 			"%s plant covers idle power demand" % ship_id
+		)
+
+
+static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> void:
+	var computer_modules: Array = catalog.list_modules("computer")
+	runner.check_eq(computer_modules.size(), 41, "forty-one compute core SKUs")
+
+	var retired := [
+		"nav_combat_core_mk1",
+		"nav_combat_core_mk2",
+		"targeting_core_mk2",
+	]
+	var type_counts := {"silicon": 0, "photon": 0, "quantum": 0}
+	for module_def in computer_modules:
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_id := str(module_def.get("id", ""))
+		runner.check(
+			not module_id in retired,
+			"retired POC computer %s absent" % module_id
+		)
+		var core_type := str(module_def.get("core_type", ""))
+		runner.check(not core_type.is_empty(), "%s has core_type" % module_id)
+		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
+		runner.check(
+			not module_def.has("compute_demand"),
+			"%s has no compute_demand" % module_id
+		)
+		var capabilities: Variant = module_def.get("capabilities", [])
+		runner.check(
+			typeof(capabilities) == TYPE_ARRAY and capabilities.has("basic_hud"),
+			"%s grants basic_hud" % module_id
+		)
+		if type_counts.has(core_type):
+			type_counts[core_type] += 1
+
+	runner.check_eq(type_counts["silicon"], 27, "twenty-seven silicon cores")
+	runner.check_eq(type_counts["photon"], 9, "nine photon cores")
+	runner.check_eq(type_counts["quantum"], 5, "five quantum cores")
+
+	for ship_def in catalog.ships_by_id.values():
+		if typeof(ship_def) != TYPE_DICTIONARY:
+			continue
+		var ship_id := str(ship_def.get("id", ""))
+		var owned := OwnedShip.from_template(
+			catalog,
+			{
+				"id": "%s_compute_test" % ship_id,
+				"template_id": ship_id,
+				"chassis_id": str(ship_def.get("chassis", "")),
+			}
+		)
+		var engineering := ShipAssembly.get_engineering_block(catalog, owned)
+		var capacities: Dictionary = engineering.get("capacities", {})
+		var compute_capacity := float(capacities.get("compute_capacity", 0.0))
+		var idle_compute_demand := float(engineering.get("idle_compute_demand", 0.0))
+		runner.check(compute_capacity > 0.0, "%s template has a compute core" % ship_id)
+		runner.check(
+			compute_capacity >= idle_compute_demand,
+			"%s core covers idle compute demand" % ship_id
 		)

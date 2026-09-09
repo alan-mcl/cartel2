@@ -31,7 +31,7 @@
             },
             {
               "slot": "system_1",
-              "module_id": "nav_combat_core_mk1"
+              "module_id": "hw_helios_spark"
             },
             {
               "slot": "system_2",
@@ -78,7 +78,7 @@
             },
             {
               "slot": "system_1",
-              "module_id": "nav_combat_core_mk1"
+              "module_id": "mdc_monday_core"
             },
             {
               "slot": "system_2",
@@ -221,7 +221,7 @@
             },
             {
               "slot": "system_1",
-              "module_id": "nav_combat_core_mk1"
+              "module_id": "mdc_monday_core"
             },
             {
               "slot": "system_2",
@@ -292,7 +292,7 @@
             },
             {
               "slot": "system_1",
-              "module_id": "nav_combat_core_mk1"
+              "module_id": "hw_helios_spark"
             },
             {
               "slot": "system_2",
