@@ -226,6 +226,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Ship hyperdrive translation
 - NPC ship combat beyond provoked engage/flee (no shields, no full damage-type loop, player invulnerable)
 - Paid workshop beyond parts inventory model
+- Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)
 - Unknown/private Unspace routes
 - Market contract depletion (depth is display-only)

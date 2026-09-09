@@ -44,7 +44,7 @@ static func tick(
 		"boost": boosting,
 		"sensors": in_flight,
 		"weapons": firing,
-		"transponder": in_flight and assembled.has_transponder(),
+		"transponder": in_flight and assembled.has_transponder() and owned.transponder_enabled,
 	}
 
 	var demands: Array = _collect_power_demands(assembled, state.active_systems)
@@ -85,6 +85,17 @@ static func idle_snapshot(catalog: Catalog, assembled: AssembledShip, owned: Own
 		owned,
 		0.0,
 		{"thrust": false, "boost": false, "in_flight": false},
+		occupant_count
+	)
+
+
+static func launch_snapshot(catalog: Catalog, assembled: AssembledShip, owned: OwnedShip, occupant_count: int) -> ShipOperatingState:
+	return tick(
+		catalog,
+		assembled,
+		owned,
+		0.0,
+		{"thrust": true, "boost": false, "in_flight": true, "fire": false},
 		occupant_count
 	)
 
@@ -178,11 +189,13 @@ static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
 	var allocated: float = 0.0
 	var requested: float = 0.0
 	var allocated_by_category: Dictionary = {}
+	var requested_by_category: Dictionary = {}
 
 	for entry in sorted:
 		var category := str(entry.get("category", ""))
 		var demand := float(entry["demand"])
 		requested += demand
+		requested_by_category[category] = float(requested_by_category.get(category, 0.0)) + demand
 		var grant: float = minf(demand, remaining)
 		allocated += grant
 		remaining -= grant
@@ -191,6 +204,8 @@ static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
 	state.power_requested = requested
 	state.power_allocated = allocated
 	state.power_deficit = maxf(0.0, requested - allocated)
+	state.power_allocated_by_category = allocated_by_category.duplicate(true)
+	state.power_requested_by_category = requested_by_category.duplicate(true)
 	state.weapon_power_requested = _requested_for_category(demands, "weapon")
 	state.weapon_power_allocated = float(allocated_by_category.get("weapon", 0.0))
 	state.weapons_allowed = (

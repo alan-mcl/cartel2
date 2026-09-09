@@ -1,0 +1,63 @@
+Chassis
+
+Tier 1: Orion Aerospace; Holt-Winters Corp; Oklahoma Combine
+Tier 2: Atlas Concern; The Meridian Company; Crown & Anchor; Four Rivers Zaibatsu
+Tier 3: General Industrial; Pacific Triad; Andean Consolidated; Sakuraya Shinise; Orion Spur Company
+Tier 4: Tukey Enterprises; Chettiar Holdings; Guangzhou Mercantile; Terra Nova
+Tier 5: Universal House; Evergreen Group; The Hanseatic Guild
+
+Cargo & other infra (incl fuel tanks)
+
+Tier 1: Oklahoma Combine; Atlas Concern; The Meridian Company; Crown & Anchor
+Tier 2: The Hanseatic Guild; General Industrial; Four Rivers Zaibatsu; Guangzhou Mercantile
+Tier 3: Carthage Mercantile; Chettiar Holdings; Pacific Triad; Orion Spur Company
+Tier 4: Tukey Enterprises; Universal House; Evergreen Group; Terra Nova
+Tier 5: Andean Consolidated; Sakuraya Shinise
+
+Power Plants
+
+Tier 1: Holt-Winters Corp; ParaRamcoVidia; General Industrial
+Tier 2: Orion Aerospace; Oklahoma Combine; Four Rivers Zaibatsu; Atlas Concern
+Tier 3: House of Roth; The Meridian Company; Seven Bells Inc; Sakuraya Shinise
+Tier 4: Andean Consolidated; Terra Nova; Evergreen Group; Tukey Enterprises; Chettiar Holdings
+Tier 5: Guangzhou Mercantile; Crown & Anchor; Pacific Triad
+
+Compute & Comms
+
+Tier 1: SnedeCorp; ParaRamcoVidia
+Tier 2: Monday Corporation; Mercury Communications; Chimera Corporation
+Tier 3: Seven Bells Inc; Orion Aerospace; Holt-Winters Corp; Sakuraya Shinise
+Tier 4: Four Rivers Zaibatsu; Oklahoma Combine; Tukey Enterprises; The Meridian Company
+Tier 5: Cult of Apex; LiveWorlds; Orion Spur Company
+
+Sensors & Navigation
+
+Tier 1: Mercury Communications; Orion Aerospace; ParaRamcoVidia
+Tier 2: SnedeCorp; Holt-Winters Corp; Seven Bells Inc
+Tier 3: Chimera Corporation; Monday Corporation; Four Rivers Zaibatsu; Oklahoma Combine
+Tier 4: Atlas Concern; Sakuraya Shinise; The Meridian Company; Tukey Enterprises
+Tier 5: LiveWorlds; Cult of Apex; General Industrial
+
+Life Support
+
+Tier 1: Holt-Winters Corp; Orion Aerospace
+Tier 2: ParaRamcoVidia; General Industrial; Oklahoma Combine
+Tier 3: BioGenesis Life Sciences; Greenfields Corporation; Four Rivers Zaibatsu; Sakuraya Shinise
+Tier 4: Morrow & Sons; Universal House; Evergreen Group; Atlas Concern
+Tier 5: Tukey Enterprises; The Meridian Company
+
+Armour & Shields (incl other defense like PDC)
+
+Tier 1: Holt-Winters Corp; Oklahoma Combine; Orion Aerospace
+Tier 2: ParaRamcoVidia; General Industrial; Chimera Corporation; Atlas Concern
+Tier 3: Four Rivers Zaibatsu; Galactic Outcomes; Seven Bells Inc; SnedeCorp
+Tier 4: The Meridian Company; Sakuraya Shinise; Pacific Triad; Tukey Enterprises
+Tier 5: Cult of Apex; Terra Nova; Andean Consolidated; Evergreen Group
+
+Weapons
+
+Tier 1: Holt-Winters Corp; Orion Aerospace; Oklahoma Combine; Galactic Outcomes
+Tier 2: ParaRamcoVidia; Four Rivers Zaibatsu; Chimera Corporation; Atlas Concern
+Tier 3: General Industrial; Seven Bells Inc; SnedeCorp; Pacific Triad
+Tier 4: Tukey Enterprises; Andean Consolidated; Terra Nova; Sakuraya Shinise; Cult of Apex
+Tier 5: Guangzhou Mercantile; Carthage Mercantile; The Meridian Company

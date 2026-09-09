@@ -27,3 +27,5 @@ var weapons_allowed: bool = true
 
 var active_systems: Dictionary = {}
 var transponder_broadcasting: bool = false
+var power_allocated_by_category: Dictionary = {}
+var power_requested_by_category: Dictionary = {}

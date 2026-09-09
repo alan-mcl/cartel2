@@ -34,6 +34,11 @@ var _terminal_ship_ids: PackedStringArray = PackedStringArray()
 var _terminal_ship_item_list: ItemList
 var _suppress_terminal_ship_select: bool = false
 
+var _selected_dealer_stock_id: String = ""
+var _dealer_stock_ids: PackedStringArray = PackedStringArray()
+var _dealer_item_list: ItemList
+var _suppress_dealer_select: bool = false
+
 
 func _ready() -> void:
 	$Layout/Footer/SaveButton.pressed.connect(_on_save_pressed)
@@ -138,6 +143,7 @@ func _select_building_at_index(index: int) -> void:
 		return
 	_selected_commodity_id = ""
 	_selected_terminal_ship_id = ""
+	_selected_dealer_stock_id = ""
 	_update_building_panels()
 
 
@@ -177,6 +183,7 @@ func _rebuild_content(building: Dictionary) -> void:
 
 	_commodity_item_list = null
 	_terminal_ship_item_list = null
+	_dealer_item_list = null
 
 	if building.is_empty():
 		return
@@ -195,6 +202,10 @@ func _rebuild_content(building: Dictionary) -> void:
 			_build_market_content(building)
 		"terminal":
 			_build_terminal_content(building)
+		"ship_dealer":
+			_build_ship_dealer_content(building)
+		"chassis_dealer":
+			_build_chassis_dealer_content(building)
 		_:
 			pass
 
@@ -362,7 +373,7 @@ func _build_terminal_content(_building: Dictionary) -> void:
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty.text = (
 			"No ships docked at this habitat. "
-			+ "Hull sales are not open yet — you cannot undock until you own a ship."
+			+ "Visit Concord Scouts for a used ship or Skyedge for an unfitted frame."
 		)
 		_content_host.add_child(empty)
 		return
@@ -466,10 +477,19 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 			if stats.has(key):
 				detail.add_child(_detail_row(key, str(stats[key])))
 
-	var undock := Button.new()
-	undock.text = "Undock"
-	undock.pressed.connect(_on_undock_ship.bind(ship.id))
-	detail.add_child(undock)
+	var blockers := ShipAssembly.undock_blockers(_context.catalog, ship)
+	if blockers.is_empty():
+		var undock := Button.new()
+		undock.text = "Undock"
+		undock.pressed.connect(_on_undock_ship.bind(ship.id))
+		detail.add_child(undock)
+	else:
+		detail.add_child(_section_label("LAUNCH CHECKS"))
+		for reason in blockers:
+			var hint := Label.new()
+			hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			hint.text = reason
+			detail.add_child(hint)
 
 
 func _show_shipyard_embedded() -> void:
@@ -516,6 +536,222 @@ func _on_sell_commodity(commodity_id: String) -> void:
 		1,
 		_selected_terminal_ship_id
 	)
+
+
+func _build_ship_dealer_content(building: Dictionary) -> void:
+	_dealer_stock_ids.clear()
+	var stock: Variant = building.get("stock", [])
+	if typeof(stock) != TYPE_ARRAY or stock.is_empty():
+		var empty := Label.new()
+		empty.text = "No ships in stock."
+		_content_host.add_child(empty)
+		return
+
+	var split := HSplitContainer.new()
+	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	split.custom_minimum_size = Vector2(0, 320)
+	_content_host.add_child(split)
+
+	var left := VBoxContainer.new()
+	left.custom_minimum_size = Vector2(320, 0)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left.add_theme_constant_override("separation", 4)
+	split.add_child(left)
+
+	left.add_child(_section_label("USED SCOUT SHIPS"))
+
+	_dealer_item_list = ItemList.new()
+	_dealer_item_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_dealer_item_list.select_mode = ItemList.SELECT_SINGLE
+	_dealer_item_list.allow_reselect = true
+	_dealer_item_list.item_selected.connect(_on_dealer_item_selected)
+	left.add_child(_dealer_item_list)
+
+	var detail := _add_scroll_pane(split, "dealer_detail_host")
+
+	for template_id in stock:
+		var id := str(template_id)
+		var template := _context.catalog.get_ship(id)
+		if template.is_empty():
+			continue
+		_dealer_stock_ids.append(id)
+		var price := ShipAssembly.used_ship_price(_context.catalog, id)
+		_dealer_item_list.add_item(
+			"%s · d%d" % [str(template.get("name", id)), price]
+		)
+
+	if _selected_dealer_stock_id.is_empty() and not _dealer_stock_ids.is_empty():
+		_selected_dealer_stock_id = _dealer_stock_ids[0]
+	elif not _dealer_stock_ids.has(_selected_dealer_stock_id):
+		_selected_dealer_stock_id = _dealer_stock_ids[0] if not _dealer_stock_ids.is_empty() else ""
+
+	_select_item_by_id(
+		_dealer_item_list,
+		_dealer_stock_ids,
+		_selected_dealer_stock_id,
+		"_suppress_dealer_select"
+	)
+	_rebuild_ship_dealer_detail(detail)
+
+
+func _build_chassis_dealer_content(building: Dictionary) -> void:
+	_dealer_stock_ids.clear()
+	var stock: Variant = building.get("stock", [])
+	if typeof(stock) != TYPE_ARRAY or stock.is_empty():
+		var empty := Label.new()
+		empty.text = "No chassis in stock."
+		_content_host.add_child(empty)
+		return
+
+	var split := HSplitContainer.new()
+	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	split.custom_minimum_size = Vector2(0, 320)
+	_content_host.add_child(split)
+
+	var left := VBoxContainer.new()
+	left.custom_minimum_size = Vector2(320, 0)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left.add_theme_constant_override("separation", 4)
+	split.add_child(left)
+
+	left.add_child(_section_label("UNFITTED FRAMES"))
+
+	_dealer_item_list = ItemList.new()
+	_dealer_item_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_dealer_item_list.select_mode = ItemList.SELECT_SINGLE
+	_dealer_item_list.allow_reselect = true
+	_dealer_item_list.item_selected.connect(_on_dealer_item_selected)
+	left.add_child(_dealer_item_list)
+
+	var detail := _add_scroll_pane(split, "dealer_detail_host")
+
+	for chassis_id in stock:
+		var id := str(chassis_id)
+		var chassis := _context.catalog.get_chassis(id)
+		if chassis.is_empty():
+			continue
+		_dealer_stock_ids.append(id)
+		var price := ShipAssembly.chassis_price(_context.catalog, id)
+		_dealer_item_list.add_item(
+			"%s · d%d" % [str(chassis.get("name", id)), price]
+		)
+
+	if _selected_dealer_stock_id.is_empty() and not _dealer_stock_ids.is_empty():
+		_selected_dealer_stock_id = _dealer_stock_ids[0]
+	elif not _dealer_stock_ids.has(_selected_dealer_stock_id):
+		_selected_dealer_stock_id = _dealer_stock_ids[0] if not _dealer_stock_ids.is_empty() else ""
+
+	_select_item_by_id(
+		_dealer_item_list,
+		_dealer_stock_ids,
+		_selected_dealer_stock_id,
+		"_suppress_dealer_select"
+	)
+	_rebuild_chassis_dealer_detail(detail)
+
+
+func _on_dealer_item_selected(index: int) -> void:
+	if _suppress_dealer_select:
+		return
+	if index < 0 or index >= _dealer_stock_ids.size():
+		return
+	_selected_dealer_stock_id = _dealer_stock_ids[index]
+	var detail := _find_meta_host("dealer_detail_host")
+	if detail == null:
+		return
+	var building := _context.session.get_current_building(_context.catalog)
+	var building_type := _context.catalog.get_building_type(building)
+	if building_type == "ship_dealer":
+		_rebuild_ship_dealer_detail(detail)
+	elif building_type == "chassis_dealer":
+		_rebuild_chassis_dealer_detail(detail)
+
+
+func _rebuild_ship_dealer_detail(detail: VBoxContainer) -> void:
+	_clear_children(detail)
+	if _selected_dealer_stock_id.is_empty():
+		return
+
+	var template := _context.catalog.get_ship(_selected_dealer_stock_id)
+	if template.is_empty():
+		return
+
+	var chassis := _context.catalog.get_chassis(str(template.get("chassis", "")))
+	var preview_ship := OwnedShip.from_template(_context.catalog, {
+		"id": "preview",
+		"name": str(template.get("name", _selected_dealer_stock_id)),
+		"template_id": _selected_dealer_stock_id,
+		"chassis_id": str(template.get("chassis", "")),
+	})
+	var assembled := ShipAssembly.preview_stats(_context.catalog, preview_ship)
+	var price := ShipAssembly.used_ship_price(_context.catalog, _selected_dealer_stock_id)
+
+	var art_host := VBoxContainer.new()
+	detail.add_child(art_host)
+	var art := LOCATION_ART.instantiate()
+	art_host.add_child(art)
+	art.set_art_path(str(chassis.get("sprite", "")), str(template.get("name", _selected_dealer_stock_id)))
+
+	detail.add_child(_headline_label(str(template.get("name", _selected_dealer_stock_id))))
+	detail.add_child(_detail_row("Maker", str(template.get("maker", ""))))
+	detail.add_child(_detail_row("Price", "d%d" % price))
+	detail.add_child(_detail_row("Chassis", str(chassis.get("name", ""))))
+
+	var summary := Label.new()
+	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	summary.text = assembled.get_summary()
+	detail.add_child(summary)
+
+	var buy := Button.new()
+	buy.text = "Buy"
+	buy.pressed.connect(_on_buy_used_ship.bind(_selected_dealer_stock_id))
+	detail.add_child(buy)
+
+
+func _rebuild_chassis_dealer_detail(detail: VBoxContainer) -> void:
+	_clear_children(detail)
+	if _selected_dealer_stock_id.is_empty():
+		return
+
+	var chassis := _context.catalog.get_chassis(_selected_dealer_stock_id)
+	if chassis.is_empty():
+		return
+
+	var price := ShipAssembly.chassis_price(_context.catalog, _selected_dealer_stock_id)
+
+	var art_host := VBoxContainer.new()
+	detail.add_child(art_host)
+	var art := LOCATION_ART.instantiate()
+	art_host.add_child(art)
+	art.set_art_path(str(chassis.get("sprite", "")), str(chassis.get("name", _selected_dealer_stock_id)))
+
+	detail.add_child(_headline_label(str(chassis.get("name", _selected_dealer_stock_id))))
+	detail.add_child(_detail_row("Maker", str(chassis.get("maker", ""))))
+	detail.add_child(_detail_row("Price", "d%d" % price))
+	detail.add_child(_detail_row("Maneuver", str(chassis.get("maneuver", ""))))
+	detail.add_child(_detail_row("Mass limit", str(chassis.get("mass_limit", ""))))
+
+	var note := Label.new()
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note.text = "Unfitted frame. Visit the Shipyard to install modules before undocking."
+	detail.add_child(note)
+
+	var buy := Button.new()
+	buy.text = "Buy"
+	buy.pressed.connect(_on_buy_chassis.bind(_selected_dealer_stock_id))
+	detail.add_child(buy)
+
+
+func _on_buy_used_ship(template_id: String) -> void:
+	_selected_dealer_stock_id = template_id
+	_context.session.buy_used_ship(_context.catalog, template_id)
+
+
+func _on_buy_chassis(chassis_id: String) -> void:
+	_selected_dealer_stock_id = chassis_id
+	_context.session.buy_chassis(_context.catalog, chassis_id)
 
 
 func _on_undock_ship(ship_id: String) -> void:

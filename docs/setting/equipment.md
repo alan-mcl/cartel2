@@ -51,6 +51,8 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 | `juno_chassis` | Bayes Inc | medium | Light scout |
 | `silhouette_chassis` | Oklahoma Combine | high | Tactical fighter |
 
+Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at the Workshop before they can undock.
+
 Each chassis references a hull **sprite** path and **hull_color** for rendering.
 
 ---
@@ -100,7 +102,7 @@ Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1�
 
 | id | Notes |
 |----|-------|
-| `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). |
+| `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). Sold at the Habitat Workshop (Transponder tab). |
 
 **Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay.
 

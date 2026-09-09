@@ -31,7 +31,7 @@ At **New Game** the player chooses a **callsign**, a **portrait**, and a **backg
 | **Tester** (default) | Development kit with the full template fleet | d3000 | Proxima Habitat | All catalog templates (shipyard testing) |
 | **Trader** | Respectable free trader | d5220 | Proxima Habitat | Pegasus P101 (fitted) |
 | **Hotshot** | Affluent rebel | d3000 | La Bella Vista Habitat | Flare-ON SS (fitted) |
-| **Entrepreneur** | Self-made businessman, no hull yet | d30000 | Proxima Habitat | None (undock blocked until hull buying exists) |
+| **Entrepreneur** | Self-made businessman, no hull yet | d32000 | Proxima Habitat | None (buy a used ship at Concord Scouts or a frame at Skyedge) |
 | **Outlaw** | Rim smuggler with a warrant | d250 | Tycho Habitat | Wolff Warrior |
 | **Soldier** | Ex-corporate army pilot | d2000 | Proxima Habitat | Juno 1088 |
 

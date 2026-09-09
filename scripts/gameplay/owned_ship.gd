@@ -13,6 +13,7 @@ var modules: Array = []
 var cargo: Dictionary = {}
 var fuel_current: float = 0.0
 var ammunition: Dictionary = {}
+var transponder_enabled: bool = true
 
 
 static func from_dict(data: Dictionary) -> OwnedShip:
@@ -24,6 +25,7 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 	ship.chassis_id = str(data.get("chassis_id", ""))
 	ship.location = str(data.get("location", "aboard"))
 	ship.fuel_current = float(data.get("fuel_current", 0.0))
+	ship.transponder_enabled = bool(data.get("transponder_enabled", true))
 
 	var modules_data: Variant = data.get("modules", [])
 	if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
@@ -98,6 +100,7 @@ func to_dict() -> Dictionary:
 		"cargo": cargo.duplicate(),
 		"fuel_current": fuel_current,
 		"ammunition": ammunition.duplicate(),
+		"transponder_enabled": transponder_enabled,
 	}
 
 

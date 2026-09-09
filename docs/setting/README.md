@@ -44,7 +44,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
 | Unspace hazards | Static irregular Delaunay topo in 4-space (no player velocity perturbations for now); fixed exit portal on a host face; 1–3 ambient Ascidians per visit |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
-| Ship instances | Flare-ON SS (aboard), Pegasus P101 (parked) |
+| Ship instances | Background kits + buy at Proxima **Concord Scouts** (used fitted) or **Skyedge** (unfitted chassis) |
 | Commodities | Eleven categories; daily quotes at every habitat Exchange |
 | Market simulation | Daily GST reset from production/consumption + route friction |
 | Surface cities | Not implemented |

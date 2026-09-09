@@ -532,6 +532,12 @@ func undock(catalog: Catalog, ship_id: String) -> bool:
 	if ship == null or ship.location != habitat_id:
 		return false
 
+	var blockers := ShipAssembly.undock_blockers(catalog, ship)
+	if not blockers.is_empty():
+		last_log = blockers[0]
+		changed.emit()
+		return false
+
 	ship.location = "aboard"
 	current_ship_id = ship_id
 	docked = false
@@ -617,6 +623,86 @@ func remove_spare_part(part_id: String, amount: int) -> bool:
 		spare_parts.erase(part_id)
 	else:
 		spare_parts[part_id] = remaining
+	return true
+
+
+func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
+	if not docked:
+		return false
+
+	var building := catalog.get_building(building_id)
+	if catalog.get_building_type(building) != "chassis_dealer":
+		return false
+	if not _building_stock_has(building, chassis_id):
+		last_log = "Chassis not available here."
+		changed.emit()
+		return false
+
+	var chassis := catalog.get_chassis(chassis_id)
+	if chassis.is_empty():
+		return false
+
+	var cost := ShipAssembly.chassis_price(catalog, chassis_id)
+	if credits < cost:
+		last_log = "Insufficient credits. Need d%d." % cost
+		changed.emit()
+		return false
+
+	var ship := OwnedShip.new()
+	ship.id = _next_purchased_ship_id("frame_%s" % chassis_id)
+	ship.name = "%s (empty)" % str(chassis.get("name", chassis_id))
+	ship.chassis_id = chassis_id
+	ship.template_id = ""
+	ship.modules = []
+	ship.fuel_current = 0.0
+	ship.location = habitat_id
+	OwnedShip.finalize_loaded_ship(ship, catalog)
+
+	credits -= cost
+	owned_ships.append(ship)
+	if current_ship_id.is_empty():
+		current_ship_id = ship.id
+	last_log = "Purchased %s for d%d. Visit the Shipyard to fit out." % [ship.name, cost]
+	changed.emit()
+	return true
+
+
+func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
+	if not docked:
+		return false
+
+	var building := catalog.get_building(building_id)
+	if catalog.get_building_type(building) != "ship_dealer":
+		return false
+	if not _building_stock_has(building, template_id):
+		last_log = "Ship not available here."
+		changed.emit()
+		return false
+
+	var template := catalog.get_ship(template_id)
+	if template.is_empty():
+		return false
+
+	var cost := ShipAssembly.used_ship_price(catalog, template_id)
+	if credits < cost:
+		last_log = "Insufficient credits. Need d%d." % cost
+		changed.emit()
+		return false
+
+	var ship_data := {
+		"id": _next_purchased_ship_id("used_%s" % template_id),
+		"name": str(template.get("name", template_id)),
+		"template_id": template_id,
+		"chassis_id": str(template.get("chassis", "")),
+		"location": habitat_id,
+	}
+	var ship := OwnedShip.from_template(catalog, ship_data)
+	credits -= cost
+	owned_ships.append(ship)
+	if current_ship_id.is_empty():
+		current_ship_id = ship.id
+	last_log = "Purchased %s for d%d." % [ship.name, cost]
+	changed.emit()
 	return true
 
 
@@ -766,6 +852,25 @@ func _find_aboard_ship_id() -> String:
 		if ship.location == "aboard":
 			return ship.id
 	return ""
+
+
+func _building_stock_has(building: Dictionary, stock_id: String) -> bool:
+	if stock_id.is_empty() or building.is_empty():
+		return false
+	var stock: Variant = building.get("stock", [])
+	if typeof(stock) != TYPE_ARRAY:
+		return false
+	for entry in stock:
+		if str(entry) == stock_id:
+			return true
+	return false
+
+
+func _next_purchased_ship_id(prefix: String) -> String:
+	var index := 1
+	while get_owned_ship("%s_%d" % [prefix, index]) != null:
+		index += 1
+	return "%s_%d" % [prefix, index]
 
 
 func _string_array_from_variant(value: Variant) -> Array[String]:

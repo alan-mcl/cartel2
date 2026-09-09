@@ -104,6 +104,32 @@ def main() -> int:
             f"backgrounds.json: default_id '{default_background_id}' not found"
         )
 
+    buildings = load_array(CATALOG / "buildings.json")
+    for chassis_id, chassis_def in chassis.items():
+        if "cost" not in chassis_def:
+            errors.append(f"chassis {chassis_id}: missing cost")
+
+    for building in buildings:
+        if not isinstance(building, dict):
+            continue
+        building_id = str(building.get("id", ""))
+        building_type = str(building.get("type", ""))
+        stock = building.get("stock", [])
+        if not isinstance(stock, list):
+            continue
+        if building_type not in ("ship_dealer", "chassis_dealer"):
+            continue
+        for stock_id in stock:
+            stock_id = str(stock_id)
+            if building_type == "ship_dealer" and stock_id not in ships:
+                errors.append(
+                    f"building {building_id}: unknown ship template '{stock_id}'"
+                )
+            if building_type == "chassis_dealer" and stock_id not in chassis:
+                errors.append(
+                    f"building {building_id}: unknown chassis '{stock_id}'"
+                )
+
     for route in routes:
         route_id = str(route.get("id", "?"))
         for end in ("a", "b"):

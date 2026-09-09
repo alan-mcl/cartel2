@@ -129,4 +129,4 @@ Game version is defined in `scripts/gameplay/game_version.gd` (`GameVersion.VERS
 - No named NPCs or dialogue yet — store interactions only.
 - Market stock is catalog-defined and restocks each session (not persisted).
 - Only **4-space** is playable; deeper N-space routes are future work.
-- Merchants beyond the Exchange are not fully implemented (Skyedge sales counter closed).
+- Hull merchants on Proxima Habitat only (Concord Scouts used ships, Skyedge chassis frames).

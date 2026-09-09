@@ -31,6 +31,90 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
 
+static func undock_blockers(catalog: Catalog, owned: OwnedShip, occupant_count: int = 1) -> PackedStringArray:
+	var blockers: PackedStringArray = PackedStringArray()
+	if owned == null:
+		blockers.append("No ship selected.")
+		return blockers
+
+	var assembled := assemble_owned(catalog, owned)
+	var ship_name := owned.name if not owned.name.is_empty() else owned.id
+
+	if assembled.stats.max_speed <= 0.0:
+		blockers.append(
+			"%s has no propulsion. Fit an engine at the Shipyard first." % ship_name
+		)
+
+	if owned.fuel_current <= 0.0:
+		blockers.append("No fuel — refuel at the Shipyard.")
+
+	var life_support_capacity := float(assembled.capacities.get("life_support_capacity", 0.0))
+	var life_support_demand := maxf(1.0, float(occupant_count))
+	if life_support_capacity < life_support_demand:
+		blockers.append("No life support — fit a life support module at the Shipyard.")
+
+	var launch_state := ShipOperations.launch_snapshot(catalog, assembled, owned, occupant_count)
+	var power_generation := float(assembled.capacities.get("power_generation", 0.0))
+	var has_engine := not assembled.get_propulsion_module().is_empty()
+
+	if life_support_capacity >= life_support_demand:
+		if not _category_power_satisfied(launch_state, "life_support"):
+			blockers.append(
+				"No power to life support — fit a reactor (or a larger one) at the Shipyard."
+			)
+
+	if has_engine:
+		var propulsion_requested := float(
+			launch_state.power_requested_by_category.get("propulsion", 0.0)
+		)
+		if propulsion_requested <= 0.0 and power_generation <= 0.0:
+			blockers.append("No power to engines — fit a reactor at the Shipyard.")
+		elif not _category_power_satisfied(launch_state, "propulsion"):
+			blockers.append(
+				"No power to engines — fit a reactor (or a larger one) at the Shipyard."
+			)
+
+	if not assembled.has_transponder():
+		blockers.append(
+			"No transponder — buy a Vessel Registration Beacon at the Shipyard."
+		)
+	elif not owned.transponder_enabled:
+		blockers.append("Transponder is deactivated.")
+
+	return blockers
+
+
+static func _category_power_satisfied(state: ShipOperatingState, category: String) -> bool:
+	var requested := float(state.power_requested_by_category.get(category, 0.0))
+	if requested <= 0.0:
+		return true
+	var allocated := float(state.power_allocated_by_category.get(category, 0.0))
+	return allocated >= requested
+
+
+static func chassis_price(catalog: Catalog, chassis_id: String) -> int:
+	var chassis := catalog.get_chassis(chassis_id)
+	if chassis.is_empty():
+		return 0
+	return int(chassis.get("cost", 0))
+
+
+static func used_ship_price(catalog: Catalog, template_id: String) -> int:
+	var template := catalog.get_ship(template_id)
+	if template.is_empty():
+		return 0
+
+	var base := chassis_price(catalog, str(template.get("chassis", "")))
+	var module_total := 0
+	var modules: Variant = template.get("modules", [])
+	if typeof(modules) == TYPE_ARRAY:
+		for module_id in modules:
+			var module_def := catalog.get_module(str(module_id))
+			if typeof(module_def) == TYPE_DICTIONARY:
+				module_total += int(module_def.get("cost", 0))
+	return base + int(module_total * 0.5)
+
+
 static func buy_part(session: GameSession, catalog: Catalog, part_id: String) -> bool:
 	var part := catalog.get_module(part_id)
 	if part.is_empty():

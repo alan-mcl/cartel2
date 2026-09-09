@@ -4,8 +4,8 @@
     "name": "Proxima Habitat Terminal",
     "type": "terminal",
     "kind": "terminal",
-    "description": "The central terminal on Proxima Habitat. Docking lanes and customs.",
-    "short_desc": "The central terminal on Proxima Habitat. Docking lanes and customs.",
+    "description": "The central terminal on Proxima Habitat is the busiest spaceport in the galaxy. Swarms of ships transit every minute, and throngs of travellers, pilots and staff jostle eachother for space.",
+    "short_desc": "The central arrivals and departures terminal on Proxima Habitat.",
     "art": "res://assets/ui/locations/proxima_terminal.svg"
   },
   {
@@ -20,25 +20,59 @@
   {
     "id": "skyedge_space_ships",
     "name": "Skyedge Space Ships",
-    "type": "merchant",
+    "type": "chassis_dealer",
     "kind": "merchant",
-    "description": "Scout ship showroom. The sales counter is closed for the season.",
-    "short_desc": "Scout ship showroom. The sales counter is closed for the season.",
-    "art": "res://assets/ui/locations/skyedge.svg"
+    "description": "The premier provider of duty-free light space craft chassis. Large or small, we have a frame to suit your needs — register your hull and fit it out at the Shipyard.",
+    "short_desc": "Ship chassis dealer and frame registrar.",
+    "art": "res://assets/ui/locations/skyedge.svg",
+    "stock": [
+      "flare_on_chassis",
+      "pegasus_chassis",
+      "krypton_chassis",
+      "wolff_chassis",
+      "dragon_chassis",
+      "juno_chassis",
+      "silhouette_chassis"
+    ]
+  },
+  {
+    "id": "concord_scouts",
+    "name": "Concord Scouts",
+    "type": "ship_dealer",
+    "kind": "merchant",
+    "description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly.",
+    "short_desc": "No finer place to purchase new or used space craft.",
+    "art": "res://assets/ui/locations/concord_scouts.svg",
+    "stock": [
+      "flare_on_ss",
+      "flare_on_sk",
+      "pegasus_p101",
+      "pegasus_p103",
+      "pegasus_p103a",
+      "krypton_k2",
+      "krypton_k3",
+      "wolff_warrior",
+      "wolff_gladius",
+      "dragon_gold",
+      "juno_1045",
+      "juno_1088",
+      "juno_1090",
+      "silhouette_mk8"
+    ]
   },
   {
     "id": "habitat_workshop",
-    "name": "Shipyard",
+    "name": "Centauri Shipyard",
     "type": "shipyard",
     "kind": "workshop",
-    "description": "Outfitting bays for engines and armour. Chassis work is restricted — hull frames are registered at build.",
-    "short_desc": "Outfitting bays for engines and armour on docked ships.",
+    "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. You must supply at least a registered chassis.",
+    "short_desc": "Outfitting bays for installing systems on docked ships.",
     "art": "res://assets/ui/locations/proxima_shipyard.svg",
     "services": ["assembly", "parts"]
   },
   {
     "id": "proxima_exchange",
-    "name": "Proxima Exchange",
+    "name": "Proxima Central Exchange",
     "type": "market",
     "kind": "merchant",
     "description": "Automated commodity exchange. Open contracts across the eleven principal trade categories.",
