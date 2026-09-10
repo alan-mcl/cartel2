@@ -1,0 +1,27 @@
+# Design backlog
+
+Deferred features and follow-up passes. For what is **not implemented in code today**, see also [architecture.md](architecture.md#not-yet-implemented).
+
+## Propulsion fuel types
+
+**Status:** Not started. All main engines consume the same `fuel_current` pool on owned ships.
+
+**Goal:** Split propulsion fuels by `engine_type` so operating cost reflects chemistry, not only engine list price:
+
+| `engine_type` | Intended fuel |
+|---------------|---------------|
+| `chemical` | Chemical propellant |
+| `hydro_thermal` | Hydrogen |
+| `electric_plasma` | Reaction mass (power-limited; plant MW caps thrust) |
+| `direct_fusion` | Fusion fuel (dedicated reactor in the engine) |
+| `antimatter` | Antimatter — **expensive to buy and scarce to carry** |
+
+**Follow-on work:** `commodities.json` entries, fuel tank modules or capacity by type, refuel pricing at habitats, `ShipOperations` consumption rules, shipyard UI, save migration. Until then, antimatter engines are gated by SKU cost and low `fuel_consumption` on the shared pool only.
+
+## Gravitic propulsion line
+
+**Status:** Single catalog placeholder (`hw_sundancer_loft` on Flare-ON SK). No gravitic product line or unique near-orbit / hyper-travel mechanics.
+
+## Integrated sail
+
+**Status:** Not catalogued. Different mechanics from chemical / thermal / plasma / fusion / antimatter families; add when sail physics are specified.

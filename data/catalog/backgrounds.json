@@ -8,11 +8,11 @@
       "background": "You are a sandbox pilot with every hull in the yard.",
       "starting_location": "Proxima Habitat.",
       "ship": "Every catalog template is parked here for fitting tests.",
-      "money": "d3000 and a spare Mark 1 fusion in the parts locker.",
+      "money": "d3000 and a spare GI-HT-18 in the parts locker.",
       "credits": 3000,
       "habitat_id": "proxima_habitat",
       "spare_parts": {
-        "mark_1_fusion": 1
+        "gi_ht_18": 1
       },
       "ships": [
         {
@@ -27,7 +27,7 @@
             },
             {
               "slot": "main_engine_1",
-              "module_id": "mark_3_fusion"
+              "module_id": "hw_sundancer_compact"
             },
             {
               "slot": "system_1",
@@ -74,7 +74,7 @@
             },
             {
               "slot": "main_engine_1",
-              "module_id": "mark_1_fusion"
+              "module_id": "gi_ht_18"
             },
             {
               "slot": "system_1",
@@ -217,7 +217,7 @@
             },
             {
               "slot": "main_engine_1",
-              "module_id": "mark_1_fusion"
+              "module_id": "gi_ht_18"
             },
             {
               "slot": "system_1",
@@ -288,7 +288,7 @@
             },
             {
               "slot": "main_engine_1",
-              "module_id": "mark_3_fusion"
+              "module_id": "hw_sundancer_compact"
             },
             {
               "slot": "system_1",

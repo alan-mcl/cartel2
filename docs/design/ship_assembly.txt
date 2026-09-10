@@ -686,19 +686,21 @@ The existing prototype engine properties should be retained where possible.
 Example:
 
 {
-  "id": "mark_3_fusion",
-  "name": "Mark 3 Fusion Drive",
-  "maker": "Example Corp",
+  "id": "hw_sundancer_compact",
+  "name": "Sundancer Compact",
+  "maker": "Holt-Winters Corp",
+  "brand": "Sundancer",
+  "engine_type": "direct_fusion",
   "category": "propulsion",
   "mount": "main_engine",
-  "mass": 8.0,
-  "volume": 7.0,
-  "thrust": 180,
-  "max_speed": 1200,
-  "boost_multiplier": 1.5,
-  "fuel_consumption": 1.2,
+  "mass": 1.8,
+  "volume": 2.5,
+  "thrust": 2080,
+  "max_speed": 680,
+  "boost_multiplier": 1.85,
+  "fuel_consumption": 0.12,
   "power_demand": 4,
-  "heat_generation": 3
+  "cost": 2400
 }
 
 Values are illustrative and should not be considered canonical setting values.
@@ -1069,11 +1071,10 @@ A template might become:
   "maker": "Example Corp",
   "chassis": "pegasus",
   "modules": [
-    "fusion_plant_mk1",
-    "mark_3_fusion",
-    "nav_combat_core_mk1",
-    "life_support_mk1",
-    "standard_cabin_4",
+    "gi_pp_18",
+    "hw_sundancer_compact",
+    "mdc_monday_core",
+    "gi_ls_4",
     "cargo_bay_10"
   ]
 }
@@ -1104,11 +1105,11 @@ to something closer to:
   "modules": [
     {
       "slot": "main_engine",
-      "module_id": "mark_3_fusion"
+      "module_id": "hw_sundancer_compact"
     },
     {
       "slot": "power",
-      "module_id": "fusion_plant_mk2"
+      "module_id": "gi_pp_18"
     },
     {
       "slot": "system_1",

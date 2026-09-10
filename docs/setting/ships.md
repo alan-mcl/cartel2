@@ -41,9 +41,9 @@ Originally designed and manufactured fifty years ago by the now defunct **GVW Co
 
 ### P101
 
-The original model and still the most common civilian configuration. The P101 heralded a revolution in space travel when it was marketed as the first affordable private space ship. It is mounted with a basic Mark 1 fusion engine and in modern times a mass driver cannon for defence. The original had a basic A1 life support system, making it an uncomfortable vessel by modern standards.
+The original model and still the most common civilian configuration. The P101 heralded a revolution in space travel when it was marketed as the first affordable private space ship. It is mounted with a basic GI-HT-18 hydro-thermal engine and in modern times a mass driver cannon for defence. The original had a basic A1 life support system, making it an uncomfortable vessel by modern standards.
 
-**Game instance:** Pegasus P101 — Mark 1 fusion, 5mm Chitanium armour, parked at Proxima Habitat.
+**Game instance:** Pegasus P101 — GI-HT-18 hydro-thermal, 5mm Chitanium armour, parked at Proxima Habitat.
 
 ### P103
 
@@ -61,13 +61,13 @@ Produced by the dynamic **Holt-Winters Corporation**, the small Flare-ON is a mo
 
 ### SS
 
-The Flare-ON SS is the base model and features a powerful Mark 3 fusion engine that provides excellent acceleration to this light ship. It is armed with a rotating laser turret for self-defence. This configuration is by far the most common.
+The Flare-ON SS is the base model and features a Sundancer Compact direct-fusion drive that provides excellent acceleration to this light ship. It is armed with a rotating laser turret for self-defence. This configuration is by far the most common.
 
-**Game instance:** Flare-ON SS — Mark 3 fusion, no armour, player starting ship.
+**Game instance:** Flare-ON SS — Sundancer Compact, no armour, player starting ship.
 
 ### SK
 
-The Flare-ON SK is a cutting edge craft and is becoming an increasingly common sight near the resort worlds of the galaxy. It is driven by a new gravitic engine that provides excellent near-orbit performance but limits its independent hyper-travel distance. It packs a punch with a powerful turbo laser turret and sports all the latest onboard software systems. Although intended as a rich man's toy, this craft has much potential as a second-generation planetary defence fighter.
+The Flare-ON SK is a cutting edge craft and is becoming an increasingly common sight near the resort worlds of the galaxy. It is driven by a Sundancer Loft gravitic engine that provides excellent near-orbit performance but limits its independent hyper-travel distance. It packs a punch with a powerful turbo laser turret and sports all the latest onboard software systems. Although intended as a rich man's toy, this craft has much potential as a second-generation planetary defence fighter.
 
 ---
 
@@ -77,11 +77,11 @@ The Krypton is the mainstay of the **Durbin-Watson Corporation** in the mid-rang
 
 ### K2
 
-This solid craft carries a Mark 3 fusion engine and mounts a basic laser turret. Despite not reaching the load limit of the chassis, this craft is still somewhat underpowered for its weight. It is none-the-less a popular ship that can fulfil a variety of roles.
+This solid craft carries a Bellatrix Main 44 hydro-thermal engine and mounts a basic laser turret. Despite not reaching the load limit of the chassis, this craft is still somewhat underpowered for its weight. It is none-the-less a popular ship that can fulfil a variety of roles.
 
 ### K3
 
-The K3 is a large improvement on the K2, sporting an antimatter engine that provides significantly more thrust and acceleration.
+The K3 is a large improvement on the K2, sporting a Bellatrix Trace antimatter engine that provides significantly more thrust and acceleration.
 
 ---
 
@@ -125,7 +125,7 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 
 | Item | Design | Original POC / notes |
 |------|--------|----------------------|
-| Pegasus P103a engine | Mark 2 Antimatter + plasma | Mark 2 Fusion in XML |
+| Pegasus P103a engine | Ionique Annihilon antimatter + plasma | Mark 2 Fusion in XML |
 | Chassis hits | 10–40 (design sheet) | 1000 placeholder in XML |
 | Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
 | Hyperdrive on Dragon Gold | Alpha class | Not in current JSON |

@@ -86,6 +86,63 @@ TRANSPORT_VOLUME_PER_CREW = {"spartan": 2.5, "comfort": 5.0, "luxury": 7.0}
 HABITAT_VOLUME_PER_CREW = {"spartan": 8.0, "comfort": 11.0, "luxury": 14.0}
 TRANSPORT_ONE_SEAT_COCKPIT_FLOOR = 4.0
 
+PROPULSION_MAKERS = {
+    "Holt-Winters Corp",
+    "Orion Aerospace",
+    "Oklahoma Combine",
+    "Atlas Concern",
+    "ParaRamcoVidia",
+    "Four Rivers Zaibatsu",
+    "The Meridian Company",
+    "General Industrial",
+    "Crown & Anchor",
+    "House of Roth",
+    "Chimera Corporation",
+    "Sakuraya Shinise",
+    "Seven Bells Inc",
+    "Pacific Triad",
+    "Tukey Enterprises",
+    "Terra Nova",
+    "Andean Consolidated",
+    "Guangzhou Mercantile",
+    "Orion Spur Company",
+}
+
+ENGINE_TYPES = {
+    "chemical",
+    "hydro_thermal",
+    "electric_plasma",
+    "direct_fusion",
+    "antimatter",
+    "gravitic",
+}
+
+RETIRED_PROPULSION_IDS = {
+    "mark_1_fusion",
+    "mark_3_fusion",
+    "mark_2_antimatter",
+    "gravitic_mk1",
+}
+
+PROPULSION_SKU_COUNT = 48
+PROPULSION_TYPE_COUNTS = {
+    "chemical": 12,
+    "hydro_thermal": 16,
+    "electric_plasma": 8,
+    "direct_fusion": 7,
+    "antimatter": 4,
+    "gravitic": 1,
+}
+
+ENGINE_TYPE_LABELS = {
+    "chemical": "Chemical",
+    "hydro_thermal": "Hydro-thermal",
+    "electric_plasma": "Electric plasma",
+    "direct_fusion": "Direct fusion",
+    "antimatter": "Antimatter",
+    "gravitic": "Gravitic",
+}
+
 
 def load_array(path: Path) -> list:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -289,6 +346,46 @@ def main() -> int:
             f"found {life_support_count}"
         )
 
+    propulsion_count = 0
+    propulsion_type_counts = {key: 0 for key in PROPULSION_TYPE_COUNTS}
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        if module_id in RETIRED_PROPULSION_IDS:
+            errors.append(
+                f"modules.json: retired propulsion id '{module_id}' still present"
+            )
+        if str(module.get("category", "")) != "propulsion":
+            continue
+        propulsion_count += 1
+        for field in ("maker", "brand", "engine_type", "thrust"):
+            if field not in module:
+                errors.append(f"propulsion module {module_id}: missing {field}")
+        maker = str(module.get("maker", ""))
+        if maker and maker not in PROPULSION_MAKERS:
+            errors.append(f"propulsion module {module_id}: unknown maker '{maker}'")
+        if maker == "Bayes Inc":
+            errors.append(f"propulsion module {module_id}: Bayes Inc must not make engines")
+        engine_type = str(module.get("engine_type", ""))
+        if engine_type and engine_type not in ENGINE_TYPES:
+            errors.append(f"propulsion module {module_id}: invalid engine_type '{engine_type}'")
+        if engine_type in propulsion_type_counts:
+            propulsion_type_counts[engine_type] += 1
+        if str(module.get("mount", "")) != "main_engine":
+            errors.append(f"propulsion module {module_id}: mount must be 'main_engine'")
+    if propulsion_count != PROPULSION_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {PROPULSION_SKU_COUNT} propulsion SKUs, "
+            f"found {propulsion_count}"
+        )
+    for engine_type, expected in PROPULSION_TYPE_COUNTS.items():
+        found = propulsion_type_counts.get(engine_type, 0)
+        if found != expected:
+            errors.append(
+                f"modules.json: expected {expected} {engine_type} engines, found {found}"
+            )
+
     power_count = 0
     for module in modules:
         if not isinstance(module, dict):
@@ -325,6 +422,7 @@ def main() -> int:
     for template in ships.values():
         has_computer = False
         has_life_support = False
+        has_propulsion = False
         template_id = str(template.get("id", ""))
         chassis_id = str(template.get("chassis", ""))
         chassis_def = chassis.get(chassis_id, {})
@@ -332,6 +430,10 @@ def main() -> int:
         dry_mass = float(chassis_def.get("mass", 0.0))
         for module_id in template.get("modules", []):
             module_id = str(module_id)
+            if module_id in RETIRED_PROPULSION_IDS:
+                errors.append(
+                    f"ship {template_id}: references retired propulsion '{module_id}'"
+                )
             if module_id in RETIRED_POWER_IDS:
                 errors.append(
                     f"ship {template_id}: references retired power plant '{module_id}'"
@@ -366,10 +468,14 @@ def main() -> int:
                     errors.append(
                         f"ship {template_id}: life support '{module_id}' capacity below 1"
                     )
+            if category == "propulsion":
+                has_propulsion = True
         if not has_computer:
             errors.append(f"ship {template_id}: missing computer module")
         if not has_life_support:
             errors.append(f"ship {template_id}: missing life support module")
+        if not has_propulsion:
+            errors.append(f"ship {template_id}: missing propulsion module")
         if chassis_def:
             volume_limit = float(chassis_def.get("volume", 0.0))
             mass_limit = float(chassis_def.get("mass_limit", 0.0))

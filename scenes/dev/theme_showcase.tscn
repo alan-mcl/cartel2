@@ -281,7 +281,7 @@ allow_reselect = true
 select_mode = 1
 item_0/text = "Dock manifest · Flare-ON SS"
 item_1/text = "Dock manifest · Pegasus P101"
-item_2/text = "Spare Mark 3 Fusion · x1"
+item_2/text = "Spare Sundancer Compact · x1"
 item_3/text = "Spare Light Composite · x2"
 
 [node name="Operational" type="VBoxContainer" parent="Layout/VBox/Tabs"]
@@ -352,7 +352,7 @@ item_count = 5
 item_0/text = "Industrial Metals · d420 · 18 · 2"
 item_1/text = "Refined Fuel · d180 · 40 · 0"
 item_2/text = "Electronics · d890 · 6 · 1"
-item_3/text = "Mark 3 Fusion · d2400 · 1 · 0"
+item_3/text = "Sundancer Compact · d2400 · 1 · 0"
 item_4/text = "Light Composite · d650 · 3 · 1"
 
 [node name="Right" type="VBoxContainer" parent="Layout/VBox/Tabs/Operational/OpSplit"]

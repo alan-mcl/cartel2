@@ -61,3 +61,11 @@ Tier 2: ParaRamcoVidia; Four Rivers Zaibatsu; Chimera Corporation; Atlas Concern
 Tier 3: General Industrial; Seven Bells Inc; SnedeCorp; Pacific Triad
 Tier 4: Tukey Enterprises; Andean Consolidated; Terra Nova; Sakuraya Shinise; Cult of Apex
 Tier 5: Guangzhou Mercantile; Carthage Mercantile; The Meridian Company
+
+Propulsion
+
+Tier 1: Orion Aerospace; Holt-Winters Corp; Oklahoma Combine
+Tier 2: Atlas Concern; ParaRamcoVidia; Four Rivers Zaibatsu; The Meridian Company
+Tier 3: General Industrial; Crown & Anchor; House of Roth; Chimera Corporation
+Tier 4: Sakuraya Shinise; Seven Bells Inc; Pacific Triad; Tukey Enterprises
+Tier 5: Terra Nova; Andean Consolidated; Guangzhou Mercantile; Orion Spur Company

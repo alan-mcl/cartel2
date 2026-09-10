@@ -6,7 +6,7 @@
     "chassis": "flare_on_chassis",
     "modules": [
       "hw_helios_compact_40",
-      "mark_3_fusion",
+      "hw_sundancer_compact",
       "hw_helios_spark",
       "hw_helios_breath",
       "sensor_basic",
@@ -23,7 +23,7 @@
     "chassis": "flare_on_chassis",
     "modules": [
       "hw_helios_arc_9",
-      "gravitic_mk1",
+      "hw_sundancer_loft",
       "sne_lattice",
       "hw_helios_lounge",
       "sensor_advanced",
@@ -39,7 +39,7 @@
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_pp_18",
-      "mark_1_fusion",
+      "gi_ht_18",
       "mdc_monday_core",
       "gi_ls_4",
       "sensor_basic",
@@ -58,7 +58,7 @@
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_pp_18",
-      "mark_1_fusion",
+      "gi_ht_18",
       "mdc_workplace_12",
       "prv_vitacore_l",
       "sensor_basic",
@@ -75,7 +75,7 @@
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_utility_fusion_55",
-      "mark_2_antimatter",
+      "prv_ionique_annihilon",
       "prv_tensor_t9",
       "gi_ls_4",
       "sensor_advanced",
@@ -93,7 +93,7 @@
     "chassis": "krypton_chassis",
     "modules": [
       "ora_yardfit_24",
-      "mark_3_fusion",
+      "ora_bellatrix_main_44",
       "ora_yardfit_nav",
       "ora_yardfit_air",
       "sensor_basic",
@@ -110,7 +110,7 @@
     "chassis": "krypton_chassis",
     "modules": [
       "ora_ap_56",
-      "mark_2_antimatter",
+      "ora_bellatrix_trace",
       "ora_avionics_a40",
       "ora_cabin_a20",
       "sensor_basic",
@@ -127,7 +127,7 @@
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
-      "mark_2_antimatter",
+      "chi_fable_kiss",
       "oc_field_core_16",
       "oc_field_air_2",
       "sensor_basic",
@@ -147,7 +147,7 @@
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
-      "mark_2_antimatter",
+      "roth_privy_seal_null",
       "oc_workhorse_brain",
       "oc_workhorse_lungs",
       "sensor_basic",
@@ -167,7 +167,7 @@
     "chassis": "dragon_chassis",
     "modules": [
       "ora_ap_56",
-      "mark_2_antimatter",
+      "ora_bellatrix_trace",
       "prv_lumina_lx",
       "ora_glasspack_air",
       "sensor_advanced",
@@ -187,7 +187,7 @@
     "chassis": "juno_chassis",
     "modules": [
       "gi_pp_18",
-      "mark_1_fusion",
+      "te_knock_off_burner",
       "te_handy_core",
       "te_handy_air",
       "sensor_basic",
@@ -204,7 +204,7 @@
     "chassis": "juno_chassis",
     "modules": [
       "gi_standard_civic_28",
-      "mark_3_fusion",
+      "tmc_wake_hydro_22",
       "hg_caduceus_c30",
       "tmc_transit_air",
       "sensor_advanced",
@@ -221,7 +221,7 @@
     "chassis": "juno_chassis",
     "modules": [
       "gi_type_40_industrial",
-      "mark_3_fusion",
+      "tmc_rhumb_longhaul",
       "hg_hermes_beam",
       "tmc_channel_cabin",
       "sensor_advanced",
@@ -240,7 +240,7 @@
     "chassis": "silhouette_chassis",
     "modules": [
       "oc_workhorse_dynamo",
-      "mark_3_fusion",
+      "oc_drawbar_30",
       "oc_workhorse_brain",
       "oc_red_dirt_recycle",
       "sensor_advanced",

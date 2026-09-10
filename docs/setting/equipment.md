@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, engines through Mark 2 antimatter and gravitic, sensors, lasers, mass drivers, plasma/scatter/missile weapons, cargo/fuel modules, armour, and an alpha hyperdrive catalog entry (no translation gameplay). **Light laser and mass driver fire in orbital flight**; shields remain design-only.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, forty-eight branded propulsion SKUs (five commercial engine types plus one gravitic placeholder), power plants, compute cores, life support, sensors, lasers, mass drivers, plasma/scatter/missile weapons, cargo/fuel modules, armour, and an alpha hyperdrive catalog entry (no translation gameplay). **Light laser and mass driver fire in orbital flight**; shields remain design-only.
 
 ## Design layers
 
@@ -63,25 +63,46 @@ All equipment is defined in a single catalogue, filtered by `category`.
 
 ### Propulsion (`category: propulsion`, mount: `main_engine`)
 
-Families in design: **Mark 1–6 Fusion**, **Mark 1–6 Antimatter**, **Mark 1–2 Gravitic**.
+Commercial main engines are branded products: **maker** (corporation), **brand** (propulsion marque), marketing **name**, and **`engine_type`** (technology class). Progression is expressed in stats and price, not Mark numbers.
 
 | Stat | JSON field | Prototype use |
 |------|------------|---------------|
 | Weight | `mass` | Ship mass |
 | Thrust | `thrust` | Forward acceleration |
 | Max speed | `max_speed` | Speed cap km/s |
-| Fuel use | `fuel_consumption` | Consumed in flight |
+| Fuel use | `fuel_consumption` | Consumed in flight (shared pool today — see [backlog](../design/backlog.md)) |
 | Boost | `boost_multiplier` | Boost speed factor |
 | Power | `power_demand` | Operating budget |
+| Type | `engine_type` | Technology class (see below) |
 
-### In prototype JSON
+Manufacturer tiers for propulsion are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
-| id | Maker | Role |
-|----|-------|------|
-| `mark_3_fusion` | Bayes Inc | Flare-ON SS default |
-| `mark_1_fusion` | Bayes Inc | Pegasus P101 default |
-| `mark_2_antimatter` | Bayes Inc | Gunships, P103a, K3 |
-| `gravitic_mk1` | Holt-Winters Corp | Flare-ON SK |
+#### Engine types
+
+Five types are in the commercial catalog today. All share the same fitting rules; type drives stats, marketing, and future mechanics. **Gravitic** is reserved as a single placeholder SKU (Flare-ON SK); Integrated Sail is not catalogued yet.
+
+| Type | Role | Typical profile |
+|------|------|-----------------|
+| **Chemical** | High thrust, poor fuel efficiency, low power draw. Cheap and mature — dock tugs, budget scouts, emergency burn. | High thrust, moderate speed, strong boost, thirsty fuel |
+| **Hydro-thermal** | Heats hydrogen and expels exhaust. Better fuel than chemical while retaining substantial thrust; **hungry for ship power**. Mature everyday engine. | Balanced thrust/speed, moderate fuel, high `power_demand` |
+| **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
+| **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
+| **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme. **Fuel type differentiation** (expensive antimatter stores) is deferred — see [backlog](../design/backlog.md). | Top thrust/speed/boost, tiny fuel use on shared pool |
+| **Gravitic** | Placeholder only — not a filled product line. | Near-orbit performance (mechanics TBD) |
+
+Propulsion marques are **distinct from** power/compute/life-support brands (e.g. Sundancer for HW engines vs Helios for plants and LSS).
+
+#### In prototype JSON
+
+Forty-eight branded SKUs across nineteen manufacturers (~12 chemical, ~16 hydro-thermal, ~8 electric plasma, ~7 direct fusion, ~4 antimatter, 1 gravitic). Examples:
+
+| id | Maker | Brand | Type | Notes |
+|----|-------|-------|------|-------|
+| `gi_ht_18` | General Industrial | GI | hydro_thermal | Pegasus P101/P103 default |
+| `hw_sundancer_compact` | Holt-Winters Corp | Sundancer | direct_fusion | Flare-ON SS |
+| `hw_sundancer_loft` | Holt-Winters Corp | Sundancer | gravitic | Flare-ON SK placeholder |
+| `ora_bellatrix_trace` | Orion Aerospace | Bellatrix | antimatter | Krypton K3 |
+| `prv_ionique_annihilon` | ParaRamcoVidia | Ionique | antimatter | Glossy law-enforcement tier |
 
 `ShipAssembler` derives `ShipStats` from loaded mass; `ShipOperations` ticks fuel, power, and compute in flight.
 
@@ -381,7 +402,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
+2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`). Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

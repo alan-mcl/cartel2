@@ -28,6 +28,7 @@ static func run(runner: TestRunner) -> void:
 	_validate_power_plants(runner, catalog)
 	_validate_compute_cores(runner, catalog)
 	_validate_life_support(runner, catalog)
+	_validate_propulsion(runner, catalog)
 
 
 static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void:
@@ -138,6 +139,68 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 		runner.check(
 			compute_capacity >= idle_compute_demand,
 			"%s core covers idle compute demand" % ship_id
+		)
+
+
+static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
+	var propulsion_modules: Array = catalog.list_modules("propulsion")
+	runner.check_eq(propulsion_modules.size(), 48, "forty-eight propulsion SKUs")
+
+	var retired := [
+		"mark_1_fusion",
+		"mark_3_fusion",
+		"mark_2_antimatter",
+		"gravitic_mk1",
+	]
+	var type_counts := {
+		"chemical": 0,
+		"hydro_thermal": 0,
+		"electric_plasma": 0,
+		"direct_fusion": 0,
+		"antimatter": 0,
+		"gravitic": 0,
+	}
+	for module_def in propulsion_modules:
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_id := str(module_def.get("id", ""))
+		runner.check(
+			not module_id in retired,
+			"retired POC propulsion %s absent" % module_id
+		)
+		var engine_type := str(module_def.get("engine_type", ""))
+		runner.check(not engine_type.is_empty(), "%s has engine_type" % module_id)
+		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
+		runner.check(
+			str(module_def.get("maker", "")) != "Bayes Inc",
+			"%s is not Bayes Inc propulsion" % module_id
+		)
+		if type_counts.has(engine_type):
+			type_counts[engine_type] += 1
+
+	runner.check_eq(type_counts["chemical"], 12, "twelve chemical engines")
+	runner.check_eq(type_counts["hydro_thermal"], 16, "sixteen hydro-thermal engines")
+	runner.check_eq(type_counts["electric_plasma"], 8, "eight electric plasma engines")
+	runner.check_eq(type_counts["direct_fusion"], 7, "seven direct fusion engines")
+	runner.check_eq(type_counts["antimatter"], 4, "four antimatter engines")
+	runner.check_eq(type_counts["gravitic"], 1, "one gravitic placeholder")
+
+	for ship_def in catalog.ships_by_id.values():
+		if typeof(ship_def) != TYPE_DICTIONARY:
+			continue
+		var ship_id := str(ship_def.get("id", ""))
+		var owned := OwnedShip.from_template(
+			catalog,
+			{
+				"id": "%s_propulsion_test" % ship_id,
+				"template_id": ship_id,
+				"chassis_id": str(ship_def.get("chassis", "")),
+			}
+		)
+		var assembled := ShipAssembler.assemble_owned(catalog, owned)
+		runner.check(
+			not assembled.get_propulsion_module().is_empty(),
+			"%s template has a main engine" % ship_id
 		)
 
 

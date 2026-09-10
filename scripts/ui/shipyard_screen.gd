@@ -5,9 +5,10 @@ const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
 
-const SORTABLE_STOCK_CATEGORIES := ["power", "computer", "life_support"]
+const SORTABLE_STOCK_CATEGORIES := ["propulsion", "power", "computer", "life_support"]
 
 const STOCK_SORT_KEYS := {
+	"propulsion": ["price", "type", "thrust"],
 	"power": ["price", "type", "mw"],
 	"computer": ["price", "type", "cu"],
 	"life_support": ["price", "crew"],
@@ -60,6 +61,7 @@ var _suppress_ship_select: bool = false
 var _ship_art_frame: PanelContainer
 var _refresh_pending := false
 var _stock_sort: Dictionary = {
+	"propulsion": {"key": "price", "asc": true},
 	"power": {"key": "price", "asc": true},
 	"computer": {"key": "price", "asc": true},
 	"life_support": {"key": "price", "asc": true},
@@ -591,6 +593,12 @@ func _section_label(text: String) -> Label:
 
 func _stock_meta(category: String, data: Dictionary) -> String:
 	match category:
+		"propulsion":
+			var engine_type := str(data.get("engine_type", ""))
+			var thrust := float(data.get("thrust", 0.0))
+			if engine_type.is_empty():
+				return ""
+			return "%s · %.0f thrust" % [ModuleSpecText.format_engine_type(engine_type), thrust]
 		"power":
 			var plant_type := str(data.get("plant_type", ""))
 			var output_mw := float(data.get("power_generation", 0.0))
@@ -670,6 +678,24 @@ func _sort_stock_entries(category: String, entries: Array) -> Array:
 		var right_data: Dictionary = right.get("data", {})
 		var cmp := 0
 		match category:
+			"propulsion":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"type":
+						cmp = str(left_data.get("engine_type", "")).nocasecmp_to(
+							str(right_data.get("engine_type", ""))
+						)
+						if cmp == 0:
+							cmp = _float_compare(
+								float(left_data.get("thrust", 0.0)),
+								float(right_data.get("thrust", 0.0))
+							)
+					"thrust":
+						cmp = _float_compare(
+							float(left_data.get("thrust", 0.0)),
+							float(right_data.get("thrust", 0.0))
+						)
 			"power":
 				match sort_key:
 					"price":

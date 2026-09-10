@@ -31,7 +31,7 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
 
 ## ID conventions
 
-- Lowercase snake_case: `proxima_habitat`, `mark_3_fusion`, `flare_on_ss_1`.
+- Lowercase snake_case: `proxima_habitat`, `hw_sundancer_compact`, `flare_on_ss_1`.
 - Habitat ids match dock `location_id` on owned ships when parked.
 - Sector ids in `worlds.json` keys must match `sectors.json` ids.
 - World entity ids are unique within a sector layout; interactable ids reference `interactables.json`.
@@ -81,7 +81,7 @@ Common fields (omit zero-valued properties):
 | `description` | string | |
 | `capabilities` | string[] | Optional feature tags aggregated onto `AssembledShip` (e.g. `basic_hud`, `local_sensor`) |
 
-Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
+Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `engine_type` (propulsion: `chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`), `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
 **Categories in current JSON:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
 

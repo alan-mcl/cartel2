@@ -56,7 +56,7 @@ On startup, `main.gd`:
 Docking opens **UiRoot** — a full-screen opaque Control UI (not a dim overlay). Navigation uses **ScreenStack** (`push_screen`, `pop_screen`, `replace_screen`):
 
 - **HabitatScreen** — building list from catalog, location art frame, type-based content panels (terminal, Exchange market, embedded Shipyard assembly).
-- **ShipyardScreen** — embedded in the habitat content pane when Shipyard is selected: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Computer stock sorts by price, type, or CU; row meta shows `core_type` and capacity. Life support stock sorts by price or crew; row meta shows crew, Transport vs Habitat, and luxury flags. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules carry `brand` and `core_type` (`silicon` | `photon` | `quantum`); life support modules carry `brand` and optional `ls_habitat` / `ls_comfort` / `ls_luxury` capability flags in `modules.json`. `ls_habitat` marks live-aboard cabin volume; its absence is transport seating. LSS `volume` includes that cabin.
+- **ShipyardScreen** — embedded in the habitat content pane when Shipyard is selected: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Propulsion stock sorts by price, type, or thrust; row meta shows `engine_type` and thrust. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Computer stock sorts by price, type, or CU; row meta shows `core_type` and capacity. Life support stock sorts by price or crew; row meta shows crew, Transport vs Habitat, and luxury flags. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Propulsion modules carry `brand` and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`); power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules carry `brand` and `core_type` (`silicon` | `photon` | `quantum`); life support modules carry `brand` and optional `ls_habitat` / `ls_comfort` / `ls_luxury` capability flags in `modules.json`. `ls_habitat` marks live-aboard cabin volume; its absence is transport seating. LSS `volume` includes that cabin.
 
 Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `module_stock_item`).
 
@@ -230,5 +230,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)
 - Unknown/private Unspace routes
 - Market contract depletion (depth is display-only)
+
+Deferred design passes (propulsion fuel types, gravitic line, integrated sail): [backlog.md](backlog.md).
 
 See `data/catalog/` and [setting docs](../setting/README.md) for implemented subset vs intended scope.
