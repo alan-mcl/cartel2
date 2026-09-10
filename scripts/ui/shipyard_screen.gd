@@ -605,8 +605,11 @@ func _stock_meta(category: String, data: Dictionary) -> String:
 			return "%s · %.0f CU" % [core_type.capitalize(), compute_cu]
 		"life_support":
 			var crew := float(data.get("life_support_capacity", 0.0))
-			var meta := "%.0f crew" % crew
 			var capabilities: Variant = data.get("capabilities", [])
+			var habitat := false
+			if typeof(capabilities) == TYPE_ARRAY:
+				habitat = capabilities.has("ls_habitat")
+			var meta := "%.0f crew · %s" % [crew, "Habitat" if habitat else "Transport"]
 			if typeof(capabilities) == TYPE_ARRAY:
 				if capabilities.has("ls_luxury"):
 					meta = "%s · Luxury" % meta

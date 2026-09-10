@@ -159,18 +159,24 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 			module_def.has("compute_demand"),
 			"%s has compute_demand" % module_id
 		)
-		runner.check(
-			float(module_def.get("life_support_capacity", 0.0)) >= 1.0,
-			"%s sustains at least one crew" % module_id
-		)
+		var crew := float(module_def.get("life_support_capacity", 0.0))
+		runner.check(crew >= 1.0 and crew <= 6.0, "%s crew is 1–6" % module_id)
 		var capabilities: Variant = module_def.get("capabilities", [])
+		var cap_list: Array = []
 		if typeof(capabilities) == TYPE_ARRAY:
-			for cap in capabilities:
-				var cap_id := str(cap)
-				runner.check(
-					cap_id == "ls_comfort" or cap_id == "ls_luxury",
-					"%s has valid luxury flag %s" % [module_id, cap_id]
-				)
+			cap_list = capabilities
+		for cap in cap_list:
+			var cap_id := str(cap)
+			runner.check(
+				cap_id == "ls_comfort" or cap_id == "ls_luxury" or cap_id == "ls_habitat",
+				"%s has valid life support flag %s" % [module_id, cap_id]
+			)
+		var volume := float(module_def.get("volume", 0.0))
+		var floor := _life_support_volume_floor(crew, cap_list)
+		runner.check(
+			volume + 0.0001 >= floor,
+			"%s volume %.1f meets floor %.1f" % [module_id, volume, floor]
+		)
 
 	for ship_def in catalog.ships_by_id.values():
 		if typeof(ship_def) != TYPE_DICTIONARY:
@@ -186,11 +192,54 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 		)
 		var engineering := ShipAssembly.get_engineering_block(catalog, owned)
 		var capacities: Dictionary = engineering.get("capacities", {})
+		var envelope: Dictionary = engineering.get("envelope", {})
 		var lss_capacity := float(capacities.get("life_support_capacity", 0.0))
 		var compute_capacity := float(capacities.get("compute_capacity", 0.0))
 		var idle_compute_demand := float(engineering.get("idle_compute_demand", 0.0))
+		var volume_used := float(envelope.get("volume_used", 0.0))
+		var volume_limit := float(envelope.get("volume", 0.0))
+		var dry_mass := float(envelope.get("dry_mass", 0.0))
+		var mass_limit := float(envelope.get("mass_limit", 0.0))
 		runner.check(lss_capacity >= 1.0, "%s template has life support" % ship_id)
 		runner.check(
 			compute_capacity >= idle_compute_demand,
 			"%s life support fits idle compute budget" % ship_id
 		)
+		runner.check(
+			volume_used <= volume_limit + 0.0001,
+			"%s assembled volume %.2f ≤ %.1f" % [ship_id, volume_used, volume_limit]
+		)
+		runner.check(
+			dry_mass <= mass_limit + 0.0001,
+			"%s assembled mass %.2f ≤ %.1f" % [ship_id, dry_mass, mass_limit]
+		)
+
+
+static func _life_support_volume_floor(crew: float, capabilities: Array) -> float:
+	var habitat := capabilities.has("ls_habitat")
+	var band := "spartan"
+	if capabilities.has("ls_luxury"):
+		band = "luxury"
+	elif capabilities.has("ls_comfort"):
+		band = "comfort"
+	var per_crew := 2.5
+	if habitat:
+		match band:
+			"comfort":
+				per_crew = 11.0
+			"luxury":
+				per_crew = 14.0
+			_:
+				per_crew = 8.0
+	else:
+		match band:
+			"comfort":
+				per_crew = 5.0
+			"luxury":
+				per_crew = 7.0
+			_:
+				per_crew = 2.5
+	var floor := per_crew * crew
+	if not habitat and crew <= 1.0:
+		floor = maxf(floor, 4.0)
+	return floor

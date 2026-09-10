@@ -79,8 +79,12 @@ LIFE_SUPPORT_MAKERS = {
     "The Meridian Company",
 }
 
-LIFE_SUPPORT_LUXURY_FLAGS = {"ls_comfort", "ls_luxury"}
+LIFE_SUPPORT_FLAGS = {"ls_comfort", "ls_luxury", "ls_habitat"}
 RETIRED_LIFE_SUPPORT_IDS = {"life_support_mk1", "life_support_a3"}
+LIFE_SUPPORT_SKU_COUNT = 41
+TRANSPORT_VOLUME_PER_CREW = {"spartan": 2.5, "comfort": 5.0, "luxury": 7.0}
+HABITAT_VOLUME_PER_CREW = {"spartan": 8.0, "comfort": 11.0, "luxury": 14.0}
+TRANSPORT_ONE_SEAT_COCKPIT_FLOOR = 4.0
 
 
 def load_array(path: Path) -> list:
@@ -93,6 +97,26 @@ def load_object(path: Path) -> dict:
 
 def index_by_id(items: list) -> dict:
     return {item["id"]: item for item in items}
+
+
+def life_support_band(capabilities: list) -> str:
+    caps = {str(cap) for cap in capabilities}
+    if "ls_luxury" in caps:
+        return "luxury"
+    if "ls_comfort" in caps:
+        return "comfort"
+    return "spartan"
+
+
+def life_support_volume_floor(crew: float, capabilities: list) -> float:
+    caps = [str(cap) for cap in capabilities]
+    band = life_support_band(caps)
+    habitat = "ls_habitat" in caps
+    per_crew = (HABITAT_VOLUME_PER_CREW if habitat else TRANSPORT_VOLUME_PER_CREW)[band]
+    floor = per_crew * crew
+    if not habitat and crew <= 1.0:
+        floor = max(floor, TRANSPORT_ONE_SEAT_COCKPIT_FLOOR)
+    return floor
 
 
 def collect_interactable_refs(value: object, found: set[str]) -> None:
@@ -211,6 +235,7 @@ def main() -> int:
                 f"computer module {module_id}: must include basic_hud capability"
             )
 
+    life_support_count = 0
     for module in modules:
         if not isinstance(module, dict):
             continue
@@ -221,6 +246,7 @@ def main() -> int:
             )
         if str(module.get("category", "")) != "life_support":
             continue
+        life_support_count += 1
         for field in ("maker", "brand", "life_support_capacity", "compute_demand"):
             if field not in module:
                 errors.append(f"life support module {module_id}: missing {field}")
@@ -233,6 +259,11 @@ def main() -> int:
             errors.append(
                 f"life support module {module_id}: fuel_consumption must not be set"
             )
+        crew = float(module.get("life_support_capacity", 0.0))
+        if crew < 1.0 or crew > 6.0:
+            errors.append(
+                f"life support module {module_id}: life_support_capacity must be 1–6"
+            )
         capabilities = module.get("capabilities", [])
         if not isinstance(capabilities, list):
             errors.append(
@@ -241,10 +272,22 @@ def main() -> int:
             continue
         for cap in capabilities:
             cap_id = str(cap)
-            if cap_id not in LIFE_SUPPORT_LUXURY_FLAGS:
+            if cap_id not in LIFE_SUPPORT_FLAGS:
                 errors.append(
                     f"life support module {module_id}: invalid capability '{cap_id}'"
                 )
+        volume = float(module.get("volume", 0.0))
+        floor = life_support_volume_floor(crew, capabilities)
+        if volume + 1e-6 < floor:
+            errors.append(
+                f"life support module {module_id}: volume {volume} m³ below "
+                f"{floor} m³ floor for crew {crew:g}"
+            )
+    if life_support_count != LIFE_SUPPORT_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {LIFE_SUPPORT_SKU_COUNT} life support SKUs, "
+            f"found {life_support_count}"
+        )
 
     power_count = 0
     for module in modules:
@@ -282,44 +325,64 @@ def main() -> int:
     for template in ships.values():
         has_computer = False
         has_life_support = False
+        template_id = str(template.get("id", ""))
+        chassis_id = str(template.get("chassis", ""))
+        chassis_def = chassis.get(chassis_id, {})
+        volume_used = 0.0
+        dry_mass = float(chassis_def.get("mass", 0.0))
         for module_id in template.get("modules", []):
             module_id = str(module_id)
             if module_id in RETIRED_POWER_IDS:
                 errors.append(
-                    f"ship {template['id']}: references retired power plant '{module_id}'"
+                    f"ship {template_id}: references retired power plant '{module_id}'"
                 )
             if module_id in RETIRED_COMPUTER_IDS:
                 errors.append(
-                    f"ship {template['id']}: references retired computer '{module_id}'"
+                    f"ship {template_id}: references retired computer '{module_id}'"
                 )
             if module_id in RETIRED_LIFE_SUPPORT_IDS:
                 errors.append(
-                    f"ship {template['id']}: references retired life support '{module_id}'"
+                    f"ship {template_id}: references retired life support '{module_id}'"
                 )
             module = modules_by_id.get(module_id)
             if module is None:
                 continue
+            volume_used += float(module.get("volume", 0.0))
+            dry_mass += float(module.get("mass", 0.0))
             category = str(module.get("category", ""))
             if category == "power" and module_id in RETIRED_POWER_IDS:
                 errors.append(
-                    f"ship {template['id']}: references retired power plant '{module_id}'"
+                    f"ship {template_id}: references retired power plant '{module_id}'"
                 )
             if category == "computer":
                 has_computer = True
                 if str(module.get("core_type", "")) == "quantum":
                     errors.append(
-                        f"ship {template['id']}: template must not default to quantum core '{module_id}'"
+                        f"ship {template_id}: template must not default to quantum core '{module_id}'"
                     )
             if category == "life_support":
                 has_life_support = True
                 if float(module.get("life_support_capacity", 0.0)) < 1.0:
                     errors.append(
-                        f"ship {template['id']}: life support '{module_id}' capacity below 1"
+                        f"ship {template_id}: life support '{module_id}' capacity below 1"
                     )
         if not has_computer:
-            errors.append(f"ship {template['id']}: missing computer module")
+            errors.append(f"ship {template_id}: missing computer module")
         if not has_life_support:
-            errors.append(f"ship {template['id']}: missing life support module")
+            errors.append(f"ship {template_id}: missing life support module")
+        if chassis_def:
+            volume_limit = float(chassis_def.get("volume", 0.0))
+            mass_limit = float(chassis_def.get("mass_limit", 0.0))
+            if volume_used > volume_limit + 1e-6:
+                errors.append(
+                    f"ship {template_id}: assembled volume {volume_used:.2f} m³ "
+                    f"exceeds chassis {volume_limit:.1f} m³"
+                )
+            if dry_mass > mass_limit + 1e-6:
+                errors.append(
+                    f"ship {template_id}: assembled mass {dry_mass:.2f} t "
+                    f"exceeds mass_limit {mass_limit:.1f} t"
+                )
 
     buildings = load_array(CATALOG / "buildings.json")
     for chassis_id, chassis_def in chassis.items():

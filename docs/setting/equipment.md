@@ -226,11 +226,13 @@ Holt-Winters holds major market share for shield generators in corporate lore.
 
 Shipboard life support systems mount on the chassis `system` hardpoint. One unit is typical; larger hulls may carry more in future designs.
 
+**Volume is cabin + recyclers**, not a rack. Fitting a life-support SKU is fitting the seats or bunks, ablution, aisles, and air plant into the chassis envelope.
+
 | Stat | JSON field | Prototype use |
 |------|------------|---------------|
-| Capacity | `life_support_capacity` | Crew the ship can sustain (people) |
-| Weight | `mass` | Ship mass |
-| Envelope | `volume` | Fitting limit |
+| Capacity | `life_support_capacity` | Crew the ship can sustain (people), 1–6 |
+| Weight | `mass` | Ship mass (furnishings and recyclers, not empty cubic metres) |
+| Envelope | `volume` | Cabin + plant, counted against chassis `volume` |
 | Power | `power_demand` | Operating budget (MW) |
 | Compute | `compute_demand` | Operating budget (CU) |
 | Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
@@ -238,33 +240,56 @@ Shipboard life support systems mount on the chassis `system` hardpoint. One unit
 
 Manufacturer tiers for life support are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
-**Role:** life support **sustains crew** in the prototype. Capacity is independent of passenger berths. Launch requires installed life support with capacity ≥ occupant count (currently 1). Luxury is optional **capability flags** for future gameplay — not a type enum.
+**Role:** life support **sustains crew** in the prototype. Launch requires installed life support with capacity ≥ occupant count (currently 1). Cabin mode and luxury are optional **capability flags** — not a type enum.
+
+#### Transport vs habitat
+
+| Flag | Mode | Analog |
+|------|------|--------|
+| (none) | **Transport** | Commercial air travel: seating and ablution. You sit the hop; you do not live aboard. |
+| `ls_habitat` | **Habitat** | Cruise cabin or long-haul truck sleeper: at least a shared bunk. You can sleep and linger. |
+
+Do not add `ls_transport`. Workshop stock still labels the implied default as Transport vs Habitat.
+
+Fighters, cockpit packs, and short-haul scouts are transport. Freighters, gunships, and live-aboard yachts are habitat.
 
 #### Luxury flags (future hooks)
 
-Original design tiers A1–A4 map onto capacity plus optional flags. A5 (bar) is reserved for later.
+Original design tiers A1–A4 map onto capacity plus optional flags. A5 (bar) is reserved for later. Luxury stacks with habitat: transport + luxury is first-class seats; habitat with no luxury is a hot bunk or truck sleeper; habitat + luxury is cabin hospitality.
 
 | Flag | Original tier | Meaning |
 |------|---------------|---------|
-| (none) | A1 | Spartan. Recyclers and bunks. |
-| `ls_comfort` | A2 | Climate, proper bunks, decent air. |
+| (none) | A1 | Spartan. Recyclers and seats or bunks. |
+| `ls_comfort` | A2 | Climate, decent air, proper seats or bunks. |
 | `ls_luxury` | A3–A4 | Cabin-grade hospitality. |
 
-Spartan SKUs omit `capabilities`. Flags are install-only hooks; no luxury gameplay in the prototype yet.
+Spartan SKUs omit luxury flags. Flags are install-only hooks; no luxury gameplay in the prototype yet.
+
+#### Volume floors (m³ per person)
+
+| Mode | Spartan | Comfort | Luxury |
+|------|---------|---------|--------|
+| Transport | 2.5 | 5 | 7 |
+| Habitat | 8 | 11 | 14 |
+
+1-seater **transport** cockpits still need ~4–6 m³ (controls, seat, ablution), not 2.5. 1-seater **habitat** (truck sleeper) is ~8–14 m³.
+
+Current chassis envelopes are unchanged (Flare-ON 24 m³ through Pegasus 60 m³). Habitat at these floors eats hull volume: a 4-person live-aboard fits a stock Pegasus as spartan bunks; 2-person habitat is the practical cap on Krypton, Wolff, and Dragon. Industrial 6-person spartan habitats (~48 m³) are catalogue-only until larger hulls exist.
 
 #### In prototype JSON
 
-Forty-one branded SKUs across fifteen manufacturers (~24 spartan, ~11 comfort, ~6 luxury). Includes budget **1-seater cockpit packs** for fighters and solo scouts. Examples:
+Forty-one branded SKUs across fifteen manufacturers. Crew is 1, 2, 4, or 6. Examples:
 
-| id | Maker | Brand | Crew | Flags |
-|----|-------|-------|------|-------|
-| `te_handy_air` | Tukey Enterprises | HandyAir | 1 | — |
-| `gi_ls_4` | General Industrial | GI | 4 | — |
-| `hw_helios_breath` | Holt-Winters Corp | Helios | 1 | `ls_comfort` |
-| `prv_vitacore_l` | ParaRamcoVidia | VitaCore | 8 | `ls_luxury` |
-| `atl_loadmaster_habitat` | Atlas Concern | Loadmaster | 14 | — |
+| id | Maker | Brand | Crew | Mode | Flags |
+|----|-------|-------|------|------|-------|
+| `te_handy_air` | Tukey Enterprises | HandyAir | 1 | Transport | — |
+| `hw_helios_breath` | Holt-Winters Corp | Helios | 1 | Transport | `ls_comfort` |
+| `hw_helios_lounge` | Holt-Winters Corp | Helios | 1 | Habitat | `ls_habitat`, `ls_luxury` |
+| `gi_ls_4` | General Industrial | GI | 4 | Habitat | `ls_habitat` |
+| `prv_vitacore_l` | ParaRamcoVidia | VitaCore | 2 | Habitat | `ls_habitat`, `ls_luxury` |
+| `atl_loadmaster_habitat` | Atlas Concern | Loadmaster | 6 | Habitat | `ls_habitat` |
 
-Ship templates: workhorses and budget hulls carry spartan units; sporty and luxury hulls carry comfort or luxury. Pegasus P101 lore remains A1 spartan; P103 lore remains A3 luxury.
+Ship templates: workhorses carry spartan habitat or transport packs that fit the hull; sporty and luxury hulls carry comfort or luxury. Pegasus P101 lore remains A1 spartan (four hot bunks); P103 lore remains A3 luxury (two-person cabin).
 
 The POC `life_support_mk1` and `life_support_a3` placeholders are retired.
 
@@ -356,7 +381,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`
+2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

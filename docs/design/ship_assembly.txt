@@ -783,6 +783,7 @@ Properties:
 life_support_capacity
 power_demand
 heat_generation
+volume (cabin + recyclers in the prototype)
 
 Example:
 
@@ -792,12 +793,16 @@ Example:
   "maker": "Example Corp",
   "category": "life_support",
   "mount": "system",
-  "mass": 2.0,
-  "volume": 4.0,
-  "life_support_capacity": 12,
+  "mass": 2.2,
+  "volume": 32.0,
+  "life_support_capacity": 4,
   "power_demand": 2,
   "heat_generation": 1
 }
+
+Prototype note: `volume` includes living space (seats or bunks), not only the air plant.
+Crew capacity is 1–6. Flag `ls_habitat` means live-aboard bunks; its absence is
+transport seating. Optional `ls_comfort` / `ls_luxury` mark accommodation quality.
 
 Life-support capacity is deliberately independent from passenger accommodation.
 

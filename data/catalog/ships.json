@@ -29,7 +29,6 @@
       "sensor_advanced",
       "vessel_registration_beacon",
       "fuel_tank_small",
-      "cargo_bay_4",
       "turbo_laser"
     ]
   },
@@ -117,7 +116,7 @@
       "sensor_basic",
       "vessel_registration_beacon",
       "fuel_tank_medium",
-      "cargo_bay_10",
+      "cargo_bay_4",
       "light_laser"
     ]
   },
@@ -130,7 +129,7 @@
       "gi_utility_fusion_55",
       "mark_2_antimatter",
       "oc_field_core_16",
-      "oc_field_air_6",
+      "oc_field_air_2",
       "sensor_basic",
       "vessel_registration_beacon",
       "missile_magazine_24",
