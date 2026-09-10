@@ -271,6 +271,10 @@ func list_chassis() -> Array:
 	return chassis_by_id.values()
 
 
+func list_ships() -> Array:
+	return ships_by_id.values()
+
+
 func list_modules(category: String = "") -> Array:
 	if category.is_empty():
 		return modules_by_id.values()

@@ -72,6 +72,9 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
 # Ship assembly sandbox (F6)
 # res://scenes/dev/ship_assembly_sandbox.tscn
+
+# Combat sandbox (F6)
+# res://scenes/dev/combat_sandbox.tscn
 ```
 
 ## Documentation map

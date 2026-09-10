@@ -69,6 +69,10 @@ Location and building art paths live in catalog JSON under `assets/ui/locations/
 
 For fitting and engineering work without the full game loop, run `scenes/dev/ship_assembly_sandbox.tscn` (CLI `--scene` or editor **F6**). It bootstraps `Catalog`, a sandbox `GameSession` (`session.sandbox = true`), and embeds `ShipyardScreen` with buy/sell disabled and unlimited module drag from catalog. Toolbar actions add empty hulls, strip modules, and restore manufacturer templates. Fitting validation (mounts, mass, volume) matches the main game.
 
+### Combat sandbox
+
+For 1v1 combat iteration without the full game loop, run `scenes/dev/combat_sandbox.tscn` (CLI `--scene` or editor **F6**). The setup overlay lists all manufacturer templates from `ships.json` with read-only stats and installed systems. **Begin bout** places player and opponent on the starfield just beyond combined weapon range, facing each other with zero velocity. Opponent attitude is **Fight to the death** (default, stays engaged) or **Standard NPC** (provoked fight-or-flight from `TrafficActor`). **Esc** ends the bout and returns to setup. Uses production `PlayerShip`, `NpcShip`, `ShipCombat`, and HUD; no world landmarks or traffic director.
+
 ## Main scene structure
 
 `scenes/main.tscn`:

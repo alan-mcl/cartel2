@@ -1,0 +1,162 @@
+[gd_scene load_steps=6 format=3 uid="uid://cartel_combat_sandbox"]
+
+[ext_resource type="Script" path="res://scripts/dev/combat_sandbox.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/presentation/starfield.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_player_ship" path="res://scenes/player_ship.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cartel_hud" path="res://scenes/hud.tscn" id="4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.054902, 0.070588, 0.086275, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.26, 0.32, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="CombatSandbox" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="PlayerShip" parent="." instance=ExtResource("3")]
+
+[node name="HUD" parent="." instance=ExtResource("4")]
+
+[node name="SetupLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="Root" type="Control" parent="SetupLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="SetupLayer/Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.04, 0.82)
+
+[node name="Panel" type="PanelContainer" parent="SetupLayer/Root"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -340.0
+offset_right = 560.0
+offset_bottom = 340.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="SetupLayer/Root/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="SetupLayer/Root/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Combat Sandbox (1v1)"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "Choose manufacturer hulls, review stock fittings, then begin the bout."
+autowrap_mode = 3
+horizontal_alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="PlayerColumn" type="VBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PlayerHeading" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox/Body/PlayerColumn"]
+layout_mode = 2
+theme_type_variation = &"Headline"
+text = "Player"
+
+[node name="PlayerOption" type="OptionButton" parent="SetupLayer/Root/Panel/Margin/VBox/Body/PlayerColumn"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="PlayerScroll" type="ScrollContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body/PlayerColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerSpec" type="VBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body/PlayerColumn/PlayerScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="OpponentColumn" type="VBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="OpponentHeading" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn"]
+layout_mode = 2
+theme_type_variation = &"Headline"
+text = "Opponent"
+
+[node name="OpponentOption" type="OptionButton" parent="SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="OpponentScroll" type="ScrollContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OpponentSpec" type="VBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn/OpponentScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Footer" type="HBoxContainer" parent="SetupLayer/Root/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AttitudeLabel" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+layout_mode = 2
+text = "Opponent attitude"
+
+[node name="AttitudeOption" type="OptionButton" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="BeginButton" type="Button" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+layout_mode = 2
+text = "Begin bout"
+
+[node name="StatusLabel" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Muted"
+horizontal_alignment = 2

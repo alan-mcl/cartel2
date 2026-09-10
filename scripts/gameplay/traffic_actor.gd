@@ -4,6 +4,7 @@ const SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
+enum CombatAttitude { STANDARD, FIGHT_TO_DEATH }
 
 const STATE_DOCKED := AiState.DOCKED
 const STATE_DESTROYED := AiState.DESTROYED
@@ -250,6 +251,7 @@ var operating_state: ShipOperatingState = ShipOperatingState.new()
 var weapons: ShipWeapons = ShipWeapons.new()
 
 var ai_state: AiState = AiState.TRAFFIC
+var combat_attitude: CombatAttitude = CombatAttitude.STANDARD
 var hull_current: float = 0.0
 var hull_max: float = 0.0
 var combat_state: ShipCombatState
@@ -331,11 +333,15 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 		return
 
 	if ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
-		if _should_engage(traffic_config):
+		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or _should_engage(traffic_config):
 			ai_state = AiState.ENGAGE
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
 		else:
 			ai_state = AiState.FLEE
+
+
+func freeze_traffic_route() -> void:
+	_route_initialized = true
 
 
 func assign_waypoint_trip(from_id: String, to_id: String) -> void:
@@ -517,7 +523,12 @@ func _tick_full_sim(
 	)
 	pending_weapon_orders = weapon_result.get("orders", [])
 
-	if ai_state == AiState.ENGAGE and firing and bool(weapon_result.get("out_of_ammo", false)):
+	if (
+		ai_state == AiState.ENGAGE
+		and firing
+		and bool(weapon_result.get("out_of_ammo", false))
+		and combat_attitude != CombatAttitude.FIGHT_TO_DEATH
+	):
 		ai_state = AiState.FLEE
 
 	motion.step(
@@ -718,7 +729,10 @@ func _build_ai_inputs(
 		AiState.DOCKING:
 			inputs = _steer_toward(_route_destination(anchors), true, false)
 		_:
-			inputs = _traffic_inputs(delta, anchors)
+			if anchors.is_empty():
+				pass
+			else:
+				inputs = _traffic_inputs(delta, anchors)
 
 	if operating_state.fuel_empty:
 		inputs["thrust"] = false
@@ -832,6 +846,8 @@ func _can_fire_at(player_pos: Vector2) -> bool:
 
 
 func _handle_combat_timeout(delta: float, player_pos: Vector2, _traffic_config: Dictionary) -> void:
+	if combat_attitude == CombatAttitude.FIGHT_TO_DEATH:
+		return
 	if ai_state != AiState.ENGAGE:
 		return
 	engage_timer -= delta

@@ -1,6 +1,8 @@
 class_name TestCombat
 extends RefCounted
 
+const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+
 
 static func run(runner: TestRunner) -> void:
 	_test_mass_driver_example(runner)
@@ -8,6 +10,10 @@ static func run(runner: TestRunner) -> void:
 	_test_cyber_ignores_armour(runner)
 	_test_packet_conversion(runner)
 	_test_point_defence_intercept(runner)
+	_test_fight_to_death_attitude(runner)
+	_test_standard_npc_attitude(runner)
+	_test_traffic_idles_without_anchors(runner)
+	_test_ship_weapons_max_range(runner)
 
 
 static func _assembled_with_modules(modules: Array, armour: Dictionary = {}) -> AssembledShip:
@@ -143,3 +149,109 @@ static func _test_point_defence_intercept(runner: TestRunner) -> void:
 			intercepted = true
 			break
 	runner.check(intercepted, "point defence intercepts ballistic at 100% chance")
+
+
+static func _traffic_config() -> Dictionary:
+	return {
+		"engage_timeout_seconds": 45.0,
+		"engage_hull_threshold_flare": 0.4,
+		"engage_hull_threshold_pegasus": 0.5,
+	}
+
+
+static func _make_armed_actor(hull_ratio: float):
+	var actor = TrafficActorScript.new()
+	actor.owned_ship = OwnedShip.new()
+	actor.assembled_ship = AssembledShip.new()
+	actor.assembled_ship.chassis = {"maneuver": "low"}
+	actor.assembled_ship.capacities = {"hull_hits": 28.0}
+	actor.assembled_ship.installed_modules = [{
+		"slot": "weapon_1",
+		"module_id": "test_laser",
+		"data": {
+			"category": "weapon",
+			"delivery_type": "beam",
+			"range": 800.0,
+		},
+	}]
+	actor.combat_state = ShipCombatState.from_assembled(actor.assembled_ship)
+	actor.hull_max = 28.0
+	actor.hull_current = hull_ratio * actor.hull_max
+	actor.combat_state.hull_current = actor.hull_current
+	return actor
+
+
+static func _test_fight_to_death_attitude(runner: TestRunner) -> void:
+	var actor = _make_armed_actor(0.2)
+	actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	actor.take_combat_hit("ballistic", {"kinetic": 1.0}, _traffic_config())
+	runner.check(
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE,
+		"fight to death engages at low hull"
+	)
+
+	actor.ai_state = TrafficActorScript.STATE_ENGAGE
+	actor.engage_timer = 1.0
+	actor._handle_combat_timeout(10.0, Vector2(5000.0, 0.0), _traffic_config())
+	runner.check(
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE,
+		"fight to death ignores engage timeout"
+	)
+
+	if (
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE
+		and actor.combat_attitude != TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+	):
+		actor.ai_state = TrafficActorScript.STATE_FLEE
+	runner.check(
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE,
+		"fight to death does not flee when dry"
+	)
+
+
+static func _test_standard_npc_attitude(runner: TestRunner) -> void:
+	var actor = _make_armed_actor(0.2)
+	actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	actor.take_combat_hit("ballistic", {"kinetic": 1.0}, _traffic_config())
+	runner.check(
+		actor.ai_state == TrafficActorScript.STATE_FLEE,
+		"standard NPC flees at low hull"
+	)
+
+	actor.ai_state = TrafficActorScript.STATE_ENGAGE
+	actor.engage_timer = 1.0
+	actor._handle_combat_timeout(10.0, Vector2(100.0, 0.0), _traffic_config())
+	runner.check(
+		actor.ai_state == TrafficActorScript.AiState.TRAFFIC,
+		"standard NPC disengages after timeout"
+	)
+
+
+static func _test_traffic_idles_without_anchors(runner: TestRunner) -> void:
+	var actor = TrafficActorScript.new()
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	var inputs: Dictionary = actor._build_ai_inputs(0.1, Vector2(100.0, 0.0), [], _traffic_config())
+	runner.check(not bool(inputs.get("thrust", false)), "traffic idles with empty anchors")
+	runner.check(not bool(inputs.get("boost", false)), "traffic does not boost with empty anchors")
+
+
+static func _test_ship_weapons_max_range(runner: TestRunner) -> void:
+	var assembled := AssembledShip.new()
+	assembled.installed_modules = [
+		{
+			"slot": "weapon_1",
+			"module_id": "short",
+			"data": {"category": "weapon", "range": 700.0},
+		},
+		{
+			"slot": "weapon_2",
+			"module_id": "long",
+			"data": {"category": "weapon", "range": 1500.0},
+		},
+	]
+	runner.check(
+		is_equal_approx(ShipWeapons.max_module_range(assembled), 1500.0),
+		"max module range picks longest weapon"
+	)

@@ -12,6 +12,20 @@ func reset() -> void:
 	_cooldowns.clear()
 
 
+static func max_module_range(assembled: AssembledShip) -> float:
+	var max_range := 0.0
+	if assembled == null:
+		return max_range
+	for entry in assembled.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: Variant = entry.get("data", {})
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		max_range = maxf(max_range, float(module_def.get("range", 0.0)))
+	return max_range
+
+
 func tick(
 	catalog: Catalog,
 	assembled: AssembledShip,
