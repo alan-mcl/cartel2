@@ -9,7 +9,8 @@ const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
-const _WEAPON_MASK := 2 | 16
+const _RocketProjectile := preload("res://scripts/presentation/rocket_projectile.gd")
+const _WEAPON_MASK := 2 | 16 | 1
 
 @export var ship_id: String = "flare_on_ss"
 
@@ -114,6 +115,10 @@ func _physics_process(delta: float) -> void:
 	)
 
 	if session != null and catalog != null and owned_ship != null and assembled_ship != null:
+		var combat_state := session.build_combat_state(assembled_ship)
+		ShipCombat.tick_shields(combat_state, assembled_ship, delta)
+		session.apply_combat_state(combat_state)
+
 		operating_state = ShipOperations.tick(
 			catalog,
 			assembled_ship,
@@ -125,13 +130,16 @@ func _physics_process(delta: float) -> void:
 				"in_flight": not session.docked,
 				"fire": firing,
 			},
-			1
+			1,
+			combat_state
 		)
 		_refresh_loaded_stats()
+		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
 		operating_state_changed.emit(operating_state)
 		_update_operating_warnings(session, firing)
 
 		var weapon_result: Dictionary = weapons.tick(
+			catalog,
 			assembled_ship,
 			owned_ship,
 			delta,
@@ -175,6 +183,26 @@ func _update_operating_warnings(session: GameSession, firing: bool = false) -> v
 		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
 
 
+func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
+	var session: GameSession = get_parent().session if get_parent() != null else null
+	if session == null or catalog == null or assembled_ship == null:
+		return
+	session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
+	_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+
+
+func take_weapon_hit(damage: float) -> void:
+	take_combat_hit("ballistic", {"kinetic": damage})
+
+
+func _apply_hull_damage_visual(health_ratio: float) -> void:
+	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
+		return
+	var ratio := clampf(health_ratio, 0.25, 1.0)
+	var base := Color.html(str(assembled_ship.chassis.get("hull_color", "#ffffff")))
+	_hull.modulate = Color(base.r * ratio + (1.0 - ratio) * 0.2, base.g * ratio, base.b * ratio, base.a)
+
+
 func _spawn_weapon_orders(orders: Array) -> void:
 	var world := _get_world_root()
 	if world == null:
@@ -186,21 +214,20 @@ func _spawn_weapon_orders(orders: Array) -> void:
 		if typeof(order_variant) != TYPE_DICTIONARY:
 			continue
 		var order: Dictionary = order_variant
-		var delivery := str(order.get("delivery", ""))
-		var damage := float(order.get("damage", 0.0))
+		var delivery := str(order.get("delivery_type", order.get("delivery", "")))
+		var packets: Dictionary = order.get("packets", {})
 		var max_range := float(order.get("range", 0.0))
-		if delivery == "beam":
-			_LaserBeam.spawn(world, origin, direction, max_range, damage, _WEAPON_MASK, [self])
-		elif delivery == "projectile":
+		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
+		var weapon_type := str(order.get("weapon_type", ""))
+		if delivery in ["beam", "cyber"]:
+			_LaserBeam.spawn(world, origin, direction, max_range, delivery, packets, _WEAPON_MASK, [self])
+		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
+			_RocketProjectile.spawn(
+				world, origin, direction, speed, max_range, delivery, packets, _WEAPON_MASK, [self]
+			)
+		elif delivery in ["ballistic", "plasma", "guided"]:
 			_MassDriverRound.spawn(
-				world,
-				origin,
-				direction,
-				float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED)),
-				max_range,
-				damage,
-				_WEAPON_MASK,
-				[self]
+				world, origin, direction, speed, max_range, delivery, packets, _WEAPON_MASK, [self]
 			)
 
 

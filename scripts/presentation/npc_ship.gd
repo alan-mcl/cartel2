@@ -6,6 +6,7 @@ const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
+const _RocketProjectile := preload("res://scripts/presentation/rocket_projectile.gd")
 
 const NPC_LAYER := 16
 const SOLID_MASK := 2
@@ -37,9 +38,13 @@ func sync_from_actor(traffic_actor) -> void:
 
 
 func take_weapon_hit(damage: float) -> void:
+	take_combat_hit("ballistic", {"kinetic": damage})
+
+
+func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
 	if actor == null or catalog == null:
 		return
-	actor.take_weapon_hit(damage, catalog.get_traffic_config())
+	actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
 
 
 func apply_hull_damage_visual(health_ratio: float) -> void:
@@ -68,21 +73,20 @@ func spawn_weapon_orders(orders: Array) -> void:
 		if typeof(order_variant) != TYPE_DICTIONARY:
 			continue
 		var order: Dictionary = order_variant
-		var delivery := str(order.get("delivery", ""))
-		var damage := float(order.get("damage", 0.0))
+		var delivery := str(order.get("delivery_type", order.get("delivery", "")))
+		var packets: Dictionary = order.get("packets", {})
 		var max_range := float(order.get("range", 0.0))
-		if delivery == "beam":
-			_LaserBeam.spawn(world, origin, direction, max_range, damage, WEAPON_MASK, [])
-		elif delivery == "projectile":
+		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
+		var weapon_type := str(order.get("weapon_type", ""))
+		if delivery in ["beam", "cyber"]:
+			_LaserBeam.spawn(world, origin, direction, max_range, delivery, packets, WEAPON_MASK, [])
+		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
+			_RocketProjectile.spawn(
+				world, origin, direction, speed, max_range, delivery, packets, WEAPON_MASK, []
+			)
+		elif delivery in ["ballistic", "plasma", "guided"]:
 			_MassDriverRound.spawn(
-				world,
-				origin,
-				direction,
-				float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED)),
-				max_range,
-				damage,
-				WEAPON_MASK,
-				[]
+				world, origin, direction, speed, max_range, delivery, packets, WEAPON_MASK, []
 			)
 
 

@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, forty-eight branded propulsion SKUs (five commercial engine types plus one gravitic placeholder), power plants, compute cores, life support, sensors, lasers, mass drivers, plasma/scatter/missile weapons, cargo/fuel modules, armour, and an alpha hyperdrive catalog entry (no translation gameplay). **Light laser and mass driver fire in orbital flight**; shields remain design-only.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, forty-eight branded propulsion SKUs (five commercial engine types plus one gravitic placeholder), power plants, compute cores, life support, sensors, branded weapons/armour/shields/point-defence/cyber-defence lines, cargo/fuel modules, and an alpha hyperdrive catalog entry (no translation gameplay). **Phase 1 combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Light laser, mass driver, plasma, scatter, rockets, and missiles fire in orbital flight.
 
 ## Design layers
 
@@ -213,23 +213,29 @@ The POC `nav_combat_core_mk1`, `nav_combat_core_mk2`, and `targeting_core_mk2` p
 
 ## Armour
 
-Design materials: **5–15 mm Titanium / Endosteel** with hit points.
+Design materials: **5–15 mm Chitanium / Endosteel** with hit points.
 
-In the module model, armour is an **internal module** (`category: armour`) adding `hits` to the assembled hull pool.
+Armour is an **internal module** (`category: armour`, mount `other`) that adds `hits` to the assembled hull pool **and** provides a `protection` profile (fractions 0–1) vs kinetic, concussive, and energy packets. Cyber ignores armour.
 
-### In prototype JSON
+Required JSON: `maker`, `brand`, `hits`, `protection` (`kinetic`, `concussive`, `energy`).
 
-| id | Maker | Mass | Hits |
-|----|-------|------|------|
-| `chitanium_5mm` | Bayes Inc | 0.8 t | 12 |
+Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Armour & Shields column).
 
 ---
 
-## Shields (design only)
+## Shields
 
-Energy, missile, and deflector shield tiers with hit pools and damage-type stopping rules. No shield objects in prototype JSON.
+Active defensive modules (`category: shield`, mount `other`). Each shield has `shield_type` (`deflector` | `energy` | `electronic`), `shield_capacity`, `protection` per packet type, `power_demand`, and `regen` (capacity per second while not depleted).
 
-Holt-Winters holds major market share for shield generators in corporate lore.
+Multiple shields process incoming packets sequentially. Holt-Winters holds major market share for shield generators in corporate lore.
+
+---
+
+## Point defence and cyber defence
+
+**Point defence** (`category: point_defence`, mount `other`): passive intercept of ballistic and guided munitions. `intercept_chance` (0–1) stacks as \(1 - \prod (1 - p_i)\). Always-on in flight; consumes power (and optionally compute).
+
+**Cyber defence** (`category: cyber_defence`, mount `system`): reduces cyber packets after electronic shields. Consumes compute and power — trades offensive CU for resilience.
 
 ---
 
@@ -316,19 +322,25 @@ The POC `life_support_mk1` and `life_support_a3` placeholders are retired.
 
 ---
 
-## Ship weapons (design catalog)
+## Ship weapons
 
-Types include mass driver, plasma, scatter, rockets, laser/turbo laser turrets, plasma burst, MDC turret, flak — with weight, damage rating, type, ROF, range, ammo.
+Weapons (`category: weapon`) require `maker`, `brand`, `weapon_type`, and `delivery_type`. Damage is expressed as `damage_packets` on the weapon or on consumed ammunition.
 
-**Original POC:** Mass Driver Cannon with damage signature `P,90-100` (projectile 90–100).
+| `weapon_type` | Typical `delivery_type` | Default packets |
+|---------------|-------------------------|-----------------|
+| `mass_driver` | `ballistic` | kinetic |
+| `laser` | `beam` | energy |
+| `plasma` | `plasma` | energy + concussive |
+| `scatter` | `ballistic` | kinetic + concussive (`area_effect` flag) |
+| `rocket` | `ballistic` | kinetic + concussive (from ammo) |
+| `missile` | `guided` | kinetic + concussive (from ammo) |
+| `cyber` | `cyber` | cyber |
 
-**Pegasus P101 lore:** mass driver for defence.  
-**Flare-ON SS lore:** rotating laser turret.  
-**Godot prototype:** light laser (hitscan beam) and light mass driver (kinetic projectile) fire along ship facing in orbital flight. Debris is destructible; stations and wrecks block shots.
+**Pegasus P101 lore:** mass driver for defence. **Flare-ON SS lore:** rotating laser turret. **Wolff lore:** rocket launcher + scatter cannon.
 
-### Weapon systems and ammo modules (design)
+Ammunition types in `ammunition.json` may carry `damage_packets`. Magazine modules unchanged (`category: ammunition`).
 
-Hardpoints classified Type Q / W / E with max weapons and ammo module slots. Ammo modules: MDC, Plasma, Energy Cell, Rockets, Flak Shells.
+Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Weapons column).
 
 ---
 
@@ -353,28 +365,25 @@ See [overview.md](overview.md).
 
 ---
 
-## Damage model (design)
+## Damage model (Phase 1)
 
-### Damage packet
+### Damage packets
 
-Attacks resolve to typed amounts:
+| Packet | Role |
+|--------|------|
+| `kinetic` | Hull / physical |
+| `concussive` | Hull / machinery disruption |
+| `energy` | Hull / systems |
+| `cyber` | Compute degradation |
 
-| Type code | Channel |
-|-----------|---------|
-| P | Projectile / kinetic |
-| E | Energy |
-| X | Explosive |
-| C | Collision |
+### Resolution order
 
-Example: `P,90-100` → 90–100 projectile damage (dice roll).
+1. **Point defence** — ballistic / guided only
+2. **Shields** — per-packet absorption from `protection` profile; drains `shield_capacity`
+3. **Armour** — remaining kinetic / concussive / energy only
+4. **Resource conversion** — see [ship_offense_defense.txt](../design/ship_offense_defense.txt)
 
-### Application order (ship)
-
-1. **Armour** — reduces packet (stub in POC)
-2. **Chassis** — subtracts converted damage from hits:
-   - projectile ÷10, energy ÷5, explosive ÷5, collision ÷2
-
-Extended **JMD** combat taxonomy (shield modes, guidance types) existed in design spreadsheet — not in prototype loop.
+Integrity losses to Power and Compute reduce effective generation/CU in `ShipOperations` until repaired at dock.
 
 ---
 
@@ -393,7 +402,7 @@ At **Habitat Workshop** (`kind: "workshop"`):
 - Refuel ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Planned: shield combat, hyperdrive slots — see README placeholders and [architecture.md](../design/architecture.md). Weapons firing (light laser, mass driver) is implemented in orbital flight.
+Planned: homing missiles, scatter cones, hyperdrive translation — see [architecture.md](../design/architecture.md). Phase 1 weapons, shields, armour, and packet combat are implemented in orbital flight; dock resets hull and integrity.
 
 ---
 
@@ -402,7 +411,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`). Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
+2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`). Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Weapon modules require `maker`, `brand`, `weapon_type`, `delivery_type`, and `damage_packets` (or ammo-supplied packets). Armour requires `protection`; shields require `shield_type`, `shield_capacity`, `protection`, `regen`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

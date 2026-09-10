@@ -5,13 +5,16 @@ const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
 
-const SORTABLE_STOCK_CATEGORIES := ["propulsion", "power", "computer", "life_support"]
+const SORTABLE_STOCK_CATEGORIES := ["propulsion", "power", "computer", "life_support", "weapon", "armour", "shield"]
 
 const STOCK_SORT_KEYS := {
 	"propulsion": ["price", "type", "thrust"],
 	"power": ["price", "type", "mw"],
 	"computer": ["price", "type", "cu"],
 	"life_support": ["price", "crew"],
+	"weapon": ["price", "type", "damage"],
+	"armour": ["price", "hits"],
+	"shield": ["price", "type", "capacity"],
 }
 
 const STOCK_CATEGORIES := [
@@ -24,6 +27,9 @@ const STOCK_CATEGORIES := [
 	"hyperdrive",
 	"weapon",
 	"armour",
+	"shield",
+	"point_defence",
+	"cyber_defence",
 	"cargo",
 	"fuel",
 	"ammunition",
@@ -65,6 +71,9 @@ var _stock_sort: Dictionary = {
 	"power": {"key": "price", "asc": true},
 	"computer": {"key": "price", "asc": true},
 	"life_support": {"key": "price", "asc": true},
+	"weapon": {"key": "price", "asc": true},
+	"armour": {"key": "price", "asc": true},
+	"shield": {"key": "price", "asc": true},
 }
 
 
@@ -624,6 +633,45 @@ func _stock_meta(category: String, data: Dictionary) -> String:
 				elif capabilities.has("ls_comfort"):
 					meta = "%s · Comfort" % meta
 			return meta
+		"weapon":
+			var weapon_type := str(data.get("weapon_type", ""))
+			var delivery := str(data.get("delivery_type", ""))
+			if weapon_type.is_empty():
+				return ""
+			var packets: Variant = data.get("damage_packets", {})
+			var packet_summary := ""
+			if typeof(packets) == TYPE_DICTIONARY and not packets.is_empty():
+				var parts: PackedStringArray = PackedStringArray()
+				for packet_key in packets.keys():
+					parts.append("%s %.0f" % [str(packet_key).capitalize(), float(packets[packet_key])])
+				packet_summary = " · " + ", ".join(parts)
+			elif not str(data.get("ammunition_type", "")).is_empty():
+				packet_summary = " · %s ammo" % str(data.get("ammunition_type", ""))
+			return "%s · %s%s" % [weapon_type.capitalize(), delivery.capitalize(), packet_summary]
+		"armour":
+			var hits := float(data.get("hits", 0.0))
+			if hits <= 0.0:
+				return ""
+			return "%.0f hits" % hits
+		"shield":
+			var shield_type := str(data.get("shield_type", ""))
+			var capacity := float(data.get("shield_capacity", 0.0))
+			if shield_type.is_empty():
+				return ""
+			return "%s · %.0f cap" % [shield_type.capitalize(), capacity]
+		"point_defence":
+			var intercept := float(data.get("intercept_chance", 0.0))
+			if intercept <= 0.0:
+				return ""
+			return "Intercept %.0f%%" % (intercept * 100.0)
+		"cyber_defence":
+			var protection: Variant = data.get("protection", {})
+			if typeof(protection) != TYPE_DICTIONARY:
+				return ""
+			var cyber := float(protection.get("cyber", 0.0))
+			if cyber <= 0.0:
+				return ""
+			return "Cyber %.0f%%" % (cyber * 100.0)
 	return ""
 
 
@@ -741,6 +789,38 @@ func _sort_stock_entries(category: String, entries: Array) -> Array:
 							float(left_data.get("life_support_capacity", 0.0)),
 							float(right_data.get("life_support_capacity", 0.0))
 						)
+			"weapon":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"type":
+						cmp = str(left_data.get("weapon_type", "")).nocasecmp_to(
+							str(right_data.get("weapon_type", ""))
+						)
+					"damage":
+						cmp = _float_compare(
+							_weapon_packet_total(left_data),
+							_weapon_packet_total(right_data)
+						)
+			"armour":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"hits":
+						cmp = int(left_data.get("hits", 0)) - int(right_data.get("hits", 0))
+			"shield":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"type":
+						cmp = str(left_data.get("shield_type", "")).nocasecmp_to(
+							str(right_data.get("shield_type", ""))
+						)
+					"capacity":
+						cmp = _float_compare(
+							float(left_data.get("shield_capacity", 0.0)),
+							float(right_data.get("shield_capacity", 0.0))
+						)
 		if not sort_asc:
 			cmp = -cmp
 		return cmp < 0
@@ -754,6 +834,16 @@ func _float_compare(left: float, right: float) -> int:
 	if left > right:
 		return 1
 	return 0
+
+
+func _weapon_packet_total(module_def: Dictionary) -> float:
+	var packets: Variant = module_def.get("damage_packets", {})
+	if typeof(packets) != TYPE_DICTIONARY:
+		return float(module_def.get("rate_of_fire", 0.0))
+	var total := 0.0
+	for packet_value in packets.values():
+		total += float(packet_value)
+	return total
 
 
 func _for_each_stock_row(root: Node, callback: Callable) -> void:

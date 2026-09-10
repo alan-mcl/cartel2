@@ -6,6 +6,7 @@ func _init() -> void:
 	TestCatalog.run(runner)
 	TestSession.run(runner)
 	TestAssembler.run(runner)
+	TestCombat.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)

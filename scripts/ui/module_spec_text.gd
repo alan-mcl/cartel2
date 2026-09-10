@@ -10,6 +10,12 @@ const STAT_ROWS: Array[Dictionary] = [
 	{"key": "plant_type", "label": "Plant type"},
 	{"key": "core_type", "label": "Core type"},
 	{"key": "engine_type", "label": "Engine type"},
+	{"key": "weapon_type", "label": "Weapon type"},
+	{"key": "delivery_type", "label": "Delivery type"},
+	{"key": "shield_type", "label": "Shield type"},
+	{"key": "shield_capacity", "label": "Shield capacity", "float": true},
+	{"key": "regen", "label": "Shield regen", "suffix": "/s", "float": true},
+	{"key": "intercept_chance", "label": "Intercept chance", "float": true},
 	{"key": "fuel_consumption", "label": "Fuel use", "float": true},
 	{"key": "thrust", "label": "Thrust", "float": true},
 	{"key": "max_speed", "label": "Max speed", "suffix": " km/s", "float": true},
@@ -38,6 +44,11 @@ const SKIP_EXTRA_KEYS := {
 	"plant_type": true,
 	"core_type": true,
 	"engine_type": true,
+	"weapon_type": true,
+	"delivery_type": true,
+	"shield_type": true,
+	"damage_packets": true,
+	"protection": true,
 	"description": true,
 	"mount": true,
 	"capabilities": true,
@@ -53,7 +64,17 @@ static func format_tooltip(module_def: Dictionary) -> String:
 	if not name.is_empty():
 		lines.append(name)
 
-	for identity_key in ["maker", "brand", "category", "engine_type", "plant_type", "core_type"]:
+	for identity_key in [
+		"maker",
+		"brand",
+		"category",
+		"engine_type",
+		"plant_type",
+		"core_type",
+		"weapon_type",
+		"delivery_type",
+		"shield_type",
+	]:
 		var value := str(module_def.get(identity_key, ""))
 		if value.is_empty():
 			continue
@@ -101,6 +122,23 @@ static func format_tooltip(module_def: Dictionary) -> String:
 				"Ammunition %s: %s" % [str(ammo_key), str(ammo_capacity.get(ammo_key, ""))]
 			)
 
+	var packets: Variant = module_def.get("damage_packets", {})
+	if typeof(packets) == TYPE_DICTIONARY and not packets.is_empty():
+		if not lines.is_empty():
+			lines.append("")
+		lines.append("Damage packets")
+		for packet_key in packets.keys():
+			lines.append("  %s: %s" % [str(packet_key).capitalize(), str(packets.get(packet_key, ""))])
+
+	var protection: Variant = module_def.get("protection", {})
+	if typeof(protection) == TYPE_DICTIONARY and not protection.is_empty():
+		if not lines.is_empty():
+			lines.append("")
+		lines.append("Protection")
+		for prot_key in protection.keys():
+			var frac := float(protection.get(prot_key, 0.0))
+			lines.append("  %s: %.0f%%" % [str(prot_key).capitalize(), frac * 100.0])
+
 	return "\n".join(lines)
 
 
@@ -144,7 +182,7 @@ static func _format_stat_row(row: Dictionary, value: Variant) -> String:
 	if bool(row.get("float", false)) or typeof(value) in [TYPE_FLOAT, TYPE_INT]:
 		return "%s: %s%s" % [label, _format_number(float(value)), suffix]
 	var text := str(value)
-	if key in ["plant_type", "core_type", "engine_type"]:
+	if key in ["plant_type", "core_type", "engine_type", "weapon_type", "delivery_type", "shield_type"]:
 		text = _format_type_label(key, text)
 	return "%s: %s%s" % [label, text, suffix]
 
@@ -176,7 +214,9 @@ static func _format_type_label(key: String, value: String) -> String:
 				return "Gravitic"
 			_:
 				return value.capitalize()
-	if key in ["plant_type", "core_type"]:
+	if key in ["plant_type", "core_type", "weapon_type", "shield_type"]:
+		return value.capitalize()
+	if key == "delivery_type":
 		return value.capitalize()
 	return value
 

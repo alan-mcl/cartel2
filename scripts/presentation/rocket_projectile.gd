@@ -1,24 +1,21 @@
 extends Area2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
-const ROUND_RADIUS := 5.0
-const ROUND_COLOR := Color(1.0, 0.7, 0.27, 1.0)
-const ROUND_OUTLINE := Color(1.0, 0.55, 0.2, 1.0)
-const PLASMA_COLOR := Color(0.95, 0.35, 1.0, 1.0)
-const PLASMA_OUTLINE := Color(0.75, 0.2, 0.95, 1.0)
+const ROCKET_RADIUS := 7.0
+const ROCKET_COLOR := Color(0.95, 0.45, 0.25, 1.0)
+const ROCKET_OUTLINE := Color(0.85, 0.3, 0.15, 1.0)
 const DEFAULT_SOLID_MASK := 2
 const NPC_MASK := 16
 const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
 
 var _direction := Vector2.RIGHT
-var _speed: float = 1000.0
-var _max_range: float = 1200.0
+var _speed: float = 650.0
+var _max_range: float = 1500.0
 var _delivery_type := "ballistic"
 var _packets: Dictionary = {}
 var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
-var _plasma := false
 
 
 static func spawn(
@@ -32,19 +29,19 @@ static func spawn(
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = []
 ) -> void:
-	var scene := load("res://scenes/world/mass_driver_round.tscn") as PackedScene
+	var scene := load("res://scenes/world/rocket_projectile.tscn") as PackedScene
 	if scene == null:
-		push_error("Missing mass driver round scene.")
+		push_error("Missing rocket projectile scene.")
 		return
 
-	var round := scene.instantiate()
-	if round == null:
-		push_error("Failed to instantiate mass driver round.")
+	var rocket := scene.instantiate()
+	if rocket == null:
+		push_error("Failed to instantiate rocket projectile.")
 		return
 
-	parent.add_child(round)
-	if round.has_method("configure"):
-		round.configure(origin, direction, speed, max_range, delivery_type, packets, collision_mask, exclude)
+	parent.add_child(rocket)
+	if rocket.has_method("configure"):
+		rocket.configure(origin, direction, speed, max_range, delivery_type, packets, collision_mask, exclude)
 
 
 func configure(
@@ -65,7 +62,6 @@ func configure(
 	_packets = packets.duplicate(true)
 	_collision_mask = collision_mask
 	_exclude = exclude
-	_plasma = delivery_type == "plasma"
 	rotation = _direction.angle() + PI / 2.0
 	queue_redraw()
 
@@ -77,10 +73,8 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var fill := PLASMA_COLOR if _plasma else ROUND_COLOR
-	var outline := PLASMA_OUTLINE if _plasma else ROUND_OUTLINE
-	draw_circle(Vector2.ZERO, ROUND_RADIUS, fill)
-	draw_arc(Vector2.ZERO, ROUND_RADIUS, 0.0, TAU, 24, outline, 1.5)
+	draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
+	draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
 
 
 func _physics_process(delta: float) -> void:

@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -191,7 +191,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 - **Presentation LOD** — follows sim slots: slotted ships use `NpcShip` (`CharacterBody2D`); unslotted ships are distant sprites regardless of distance inside `near_lod_radius`.
 - **Roles** — transit, shuttle, dock_cycle share one-shot waypoint trips; loiter and runabout are local flavor near gate/habitat.
 - **Lifecycle** — trip roles despawn on arrival at habitat, gate, or orbital interactable radius; director immediately spawns a fresh ship at a newly chosen origin (not the previous destination).
-- **Combat** — provoked only; NPCs engage or flee at full engine cruise. Player weapons hit NPC layer 16; NPC shots stop on the player visually but do not apply hull damage.
+- **Combat** — provoked only; NPCs engage or flee at full engine cruise. `ShipCombat` resolves typed damage packets (PD → shields → armour → Hits/Power/Compute). Player and NPC shots apply combat damage; at 0 Hits thrust and weapons cut off. Docking repairs hull and integrity.
 - **Sensors** — local radar shows unlabelled orbital dots (whole system) and smaller unlabelled NPC blips out to `sensor_contact_radius` (~gate distance) for the full fleet. Beacon text overlay only for slotted, broadcasting ships. Map rim aligns with content radius, not the dust ring.
 - **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 33%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
 - **Bounds** — NPC recycle envelope is `gate_radius × 1.25`; player flight has no position clamp.
@@ -225,7 +225,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unspace solution typing (integers shown as flavour only)
 - Deeper N-space routes (n > 4)
 - Ship hyperdrive translation
-- NPC ship combat beyond provoked engage/flee (no shields, no full damage-type loop, player invulnerable)
+- Homing missiles, scatter pellet cones, combat game-over screen
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)

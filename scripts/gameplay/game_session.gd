@@ -29,6 +29,9 @@ var unspace_solution: int = 0
 var pending_destination_id: String = ""
 var hull: float = 0.0
 var max_hull: float = 0.0
+var power_integrity_lost: float = 0.0
+var compute_integrity_lost: float = 0.0
+var shield_charges: Dictionary = {}
 
 var spare_parts: Dictionary = {}
 var sandbox: bool = false
@@ -152,6 +155,9 @@ func to_dict() -> Dictionary:
 		"pending_destination_id": pending_destination_id,
 		"hull": hull,
 		"max_hull": max_hull,
+		"power_integrity_lost": power_integrity_lost,
+		"compute_integrity_lost": compute_integrity_lost,
+		"shield_charges": shield_charges.duplicate(true),
 		"spare_parts": spare_parts.duplicate(),
 		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
 		"gst_seconds": gst_seconds,
@@ -194,6 +200,9 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	pending_destination_id = str(session_data.get("pending_destination_id", ""))
 	hull = float(session_data.get("hull", 0.0))
 	max_hull = float(session_data.get("max_hull", 0.0))
+	power_integrity_lost = float(session_data.get("power_integrity_lost", 0.0))
+	compute_integrity_lost = float(session_data.get("compute_integrity_lost", 0.0))
+	shield_charges = _float_dict_from_variant(session_data.get("shield_charges", {}))
 	spare_parts = _int_dict_from_variant(session_data.get("spare_parts", {}))
 	orbital_phase_by_sector = _float_dict_from_variant(session_data.get("orbital_phase_by_sector", {}))
 	if session_data.has("gst_seconds"):
@@ -413,12 +422,53 @@ func get_spawn_position(catalog: Catalog) -> Vector2:
 
 
 func _init_hull_from_ship(assembled_ship: AssembledShip) -> void:
-	if assembled_ship == null or assembled_ship.chassis.is_empty():
-		max_hull = 18.0
+	var state := build_combat_state(assembled_ship)
+	apply_combat_state(state)
+
+
+func build_combat_state(assembled_ship: AssembledShip) -> ShipCombatState:
+	var state := ShipCombatState.from_assembled(assembled_ship)
+	if max_hull > 0.0:
+		state.hull_max = max_hull
+	if hull > 0.0:
+		state.hull_current = hull
 	else:
-		max_hull = float(assembled_ship.capacities.get("hull_hits", assembled_ship.chassis.get("hits", 18.0)))
-	hull = max_hull
+		state.hull_current = state.hull_max
+	state.power_integrity_lost = power_integrity_lost
+	state.compute_integrity_lost = compute_integrity_lost
+	if not shield_charges.is_empty():
+		state.shield_charges = shield_charges.duplicate(true)
+	return state
+
+
+func apply_combat_state(state: ShipCombatState) -> void:
+	if state == null:
+		return
+	hull = state.hull_current
+	max_hull = state.hull_max
+	power_integrity_lost = state.power_integrity_lost
+	compute_integrity_lost = state.compute_integrity_lost
+	shield_charges = state.shield_charges.duplicate(true)
 	_hull_stress_cooldown = 0.0
+
+
+func repair_combat_at_dock(catalog: Catalog) -> void:
+	var ship := get_current_owned_ship()
+	if ship == null or catalog == null:
+		return
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var state := ShipCombatState.from_assembled(assembled)
+	apply_combat_state(state)
+
+
+func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_type: String, packets: Dictionary) -> Dictionary:
+	var state := build_combat_state(assembled_ship)
+	var result := ShipCombat.resolve_hit(assembled_ship, state, delivery_type, packets)
+	apply_combat_state(state)
+	if state.is_hull_disabled():
+		last_log = "Hull breached. Systems offline."
+	changed.emit()
+	return result
 
 
 func get_sector_spawn(catalog: Catalog) -> Vector2:
@@ -500,6 +550,7 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	habitat_id = location_id
 	building_id = default_building_id
 	location_name = "%s / %s" % [str(habitat.get("name", location_id)), str(default_building.get("name", default_building_id))]
+	repair_combat_at_dock(catalog)
 	last_log = "Docked at %s." % str(default_building.get("name", default_building_id))
 	changed.emit()
 	return true

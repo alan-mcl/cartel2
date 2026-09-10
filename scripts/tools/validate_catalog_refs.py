@@ -143,6 +143,73 @@ ENGINE_TYPE_LABELS = {
     "gravitic": "Gravitic",
 }
 
+WEAPON_MAKERS = {
+    "Holt-Winters Corp",
+    "Orion Aerospace",
+    "Oklahoma Combine",
+    "Galactic Outcomes",
+    "ParaRamcoVidia",
+    "Four Rivers Zaibatsu",
+    "Chimera Corporation",
+    "Atlas Concern",
+    "General Industrial",
+    "Seven Bells Inc",
+    "SnedeCorp",
+    "Pacific Triad",
+    "Tukey Enterprises",
+    "Andean Consolidated",
+    "Terra Nova",
+    "Sakuraya Shinise",
+    "Cult of Apex",
+    "Guangzhou Mercantile",
+    "Carthage Mercantile",
+    "The Meridian Company",
+}
+
+ARMOUR_SHIELD_MAKERS = {
+    "Holt-Winters Corp",
+    "Oklahoma Combine",
+    "Orion Aerospace",
+    "ParaRamcoVidia",
+    "General Industrial",
+    "Chimera Corporation",
+    "Atlas Concern",
+    "Four Rivers Zaibatsu",
+    "Galactic Outcomes",
+    "Seven Bells Inc",
+    "SnedeCorp",
+    "The Meridian Company",
+    "Sakuraya Shinise",
+    "Pacific Triad",
+    "Tukey Enterprises",
+    "Terra Nova",
+    "Andean Consolidated",
+    "Evergreen Group",
+    "Cult of Apex",
+}
+
+WEAPON_TYPES = {
+    "mass_driver",
+    "laser",
+    "plasma",
+    "scatter",
+    "rocket",
+    "missile",
+    "cyber",
+}
+
+DELIVERY_TYPES = {"ballistic", "beam", "plasma", "guided", "cyber"}
+
+SHIELD_TYPES = {"deflector", "energy", "electronic"}
+
+PACKET_TYPES = {"kinetic", "concussive", "energy", "cyber"}
+
+WEAPON_SKU_COUNT = 31
+ARMOUR_SKU_COUNT = 16
+SHIELD_SKU_COUNT = 13
+POINT_DEFENCE_SKU_COUNT = 8
+CYBER_DEFENCE_SKU_COUNT = 6
+
 
 def load_array(path: Path) -> list:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -418,6 +485,112 @@ def main() -> int:
                 errors.append(
                     f"power module {module_id}: radioisotope output exceeds 12 MW"
                 )
+
+    ammunition = index_by_id(load_array(CATALOG / "ammunition.json"))
+    weapon_count = armour_count = shield_count = pd_count = cyber_def_count = 0
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        category = str(module.get("category", ""))
+        if category == "weapon":
+            weapon_count += 1
+            for field in ("maker", "brand", "weapon_type", "delivery_type"):
+                if field not in module:
+                    errors.append(f"weapon module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker == "Bayes Inc":
+                errors.append(f"weapon module {module_id}: Bayes Inc must not make weapons")
+            if maker and maker not in WEAPON_MAKERS:
+                errors.append(f"weapon module {module_id}: unknown maker '{maker}'")
+            weapon_type = str(module.get("weapon_type", ""))
+            if weapon_type and weapon_type not in WEAPON_TYPES:
+                errors.append(f"weapon module {module_id}: invalid weapon_type '{weapon_type}'")
+            delivery_type = str(module.get("delivery_type", ""))
+            if delivery_type and delivery_type not in DELIVERY_TYPES:
+                errors.append(f"weapon module {module_id}: invalid delivery_type '{delivery_type}'")
+            if weapon_type == "plasma" and delivery_type != "plasma":
+                errors.append(f"weapon module {module_id}: plasma weapons require plasma delivery")
+            ammo_type = str(module.get("ammunition_type", ""))
+            has_packets = "damage_packets" in module
+            if ammo_type:
+                if has_packets:
+                    errors.append(
+                        f"weapon module {module_id}: must not set damage_packets when using ammo"
+                    )
+                if ammo_type not in ammunition:
+                    errors.append(
+                        f"weapon module {module_id}: unknown ammunition '{ammo_type}'"
+                    )
+            elif not has_packets:
+                errors.append(f"weapon module {module_id}: needs damage_packets or ammunition_type")
+        elif category == "armour":
+            armour_count += 1
+            for field in ("maker", "brand", "hits", "protection"):
+                if field not in module:
+                    errors.append(f"armour module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker == "Bayes Inc":
+                errors.append(f"armour module {module_id}: Bayes Inc must not make armour")
+            if maker and maker not in ARMOUR_SHIELD_MAKERS:
+                errors.append(f"armour module {module_id}: unknown maker '{maker}'")
+        elif category == "shield":
+            shield_count += 1
+            for field in ("maker", "brand", "shield_type", "shield_capacity", "protection", "regen"):
+                if field not in module:
+                    errors.append(f"shield module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker and maker not in ARMOUR_SHIELD_MAKERS:
+                errors.append(f"shield module {module_id}: unknown maker '{maker}'")
+            shield_type = str(module.get("shield_type", ""))
+            if shield_type and shield_type not in SHIELD_TYPES:
+                errors.append(f"shield module {module_id}: invalid shield_type '{shield_type}'")
+        elif category == "point_defence":
+            pd_count += 1
+            for field in ("maker", "brand", "intercept_chance"):
+                if field not in module:
+                    errors.append(f"point_defence module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker and maker not in ARMOUR_SHIELD_MAKERS:
+                errors.append(f"point_defence module {module_id}: unknown maker '{maker}'")
+        elif category == "cyber_defence":
+            cyber_def_count += 1
+            for field in ("maker", "brand", "protection"):
+                if field not in module:
+                    errors.append(f"cyber_defence module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker and maker not in ARMOUR_SHIELD_MAKERS:
+                errors.append(f"cyber_defence module {module_id}: unknown maker '{maker}'")
+
+    if weapon_count != WEAPON_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {WEAPON_SKU_COUNT} weapon SKUs, found {weapon_count}"
+        )
+    if armour_count != ARMOUR_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {ARMOUR_SKU_COUNT} armour SKUs, found {armour_count}"
+        )
+    if shield_count != SHIELD_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {SHIELD_SKU_COUNT} shield SKUs, found {shield_count}"
+        )
+    if pd_count != POINT_DEFENCE_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {POINT_DEFENCE_SKU_COUNT} point_defence SKUs, found {pd_count}"
+        )
+    if cyber_def_count != CYBER_DEFENCE_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {CYBER_DEFENCE_SKU_COUNT} cyber_defence SKUs, "
+            f"found {cyber_def_count}"
+        )
+
+    for ammo_id, ammo in ammunition.items():
+        packets = ammo.get("damage_packets")
+        if packets is None:
+            errors.append(f"ammunition {ammo_id}: missing damage_packets")
+            continue
+        if not isinstance(packets, dict) or not packets:
+            errors.append(f"ammunition {ammo_id}: damage_packets must be a non-empty object")
 
     for template in ships.values():
         has_computer = False

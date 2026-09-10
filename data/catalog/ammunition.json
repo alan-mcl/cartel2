@@ -3,24 +3,58 @@
     "id": "mass_driver_round",
     "name": "Mass Driver Round",
     "mass": 0.05,
-    "cost": 2
+    "cost": 2,
+    "damage_packets": {
+      "kinetic": 18
+    }
   },
   {
     "id": "missile_light",
     "name": "Light Missile",
     "mass": 1.2,
-    "cost": 85
+    "cost": 85,
+    "damage_packets": {
+      "kinetic": 25,
+      "concussive": 35
+    }
   },
   {
     "id": "plasma_cell",
     "name": "Plasma Cell",
     "mass": 0.15,
-    "cost": 12
+    "cost": 12,
+    "damage_packets": {
+      "energy": 20,
+      "concussive": 8
+    }
   },
   {
     "id": "scatter_shell",
     "name": "Scatter Shell",
     "mass": 0.4,
-    "cost": 18
+    "cost": 18,
+    "damage_packets": {
+      "kinetic": 18,
+      "concussive": 22
+    }
+  },
+  {
+    "id": "rocket_he",
+    "name": "HE Rocket",
+    "mass": 1.0,
+    "cost": 65,
+    "damage_packets": {
+      "kinetic": 20,
+      "concussive": 30
+    }
+  },
+  {
+    "id": "rocket_emp",
+    "name": "EMP Rocket",
+    "mass": 1.0,
+    "cost": 95,
+    "damage_packets": {
+      "cyber": 32
+    }
   }
 ]

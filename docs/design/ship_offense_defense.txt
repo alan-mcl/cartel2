@@ -1,0 +1,813 @@
+PHASE 1 SHIP COMBAT — OFFENSIVE & DEFENSIVE SYSTEM SPEC
+
+CORE MODEL
+
+Ships have three primary resources that can be degraded in combat:
+
+Hits
+Power
+Compute
+
+Hits represent physical hull integrity.
+
+Power represents available shipboard power generation. Installed systems consume power, so reducing available power can force systems offline.
+
+Compute represents available computational capacity. Installed systems consume compute cycles, so reducing compute can disable or degrade computational systems.
+
+Weapons do not directly specify which resource they damage. Instead, weapons generate damage packets. Damage packets are processed against the target's installed defensive systems and ultimately translated into resource damage or system disruption.
+
+
+DAMAGE PACKETS
+
+Phase 1 uses four damage packet types:
+
+Kinetic
+Concussive
+Energy
+Cyber
+
+KINETIC
+
+Physical momentum delivered by a projectile or other solid object.
+
+Typical sources:
+- Mass drivers
+- Conventional projectile weapons
+- Missile kinetic components
+- Fragments / shrapnel
+
+Primary effect:
+- Hull damage
+- Armour interaction
+
+Typical secondary effect:
+- Limited physical system damage
+
+Example packet:
+Kinetic 40
+
+
+CONCUSSIVE
+
+Mechanical shock, explosive, blast and structural disruption.
+
+Typical sources:
+- Explosive warheads
+- Plasma weapons
+- Scatter weapons
+- Heavy impacts
+
+Primary effect:
+- Hull damage
+- Physical system disruption
+
+Typical secondary effect:
+- Greater tendency than Kinetic to disrupt installed machinery
+
+Example packet:
+Concussive 30
+
+
+ENERGY
+
+Directed or concentrated energy delivered to the target.
+
+Typical sources:
+- Lasers
+- Turbo lasers
+- Plasma weapons
+- Other directed-energy weapons
+
+Primary effect:
+- Hull damage
+- System damage
+
+Example packet:
+Energy 25
+
+
+CYBER
+
+Attack against the computational and electronic systems of the target ship.
+
+Typical sources:
+- Computer intrusion
+- Electronic warfare
+- EMP attacks
+
+Primary effect:
+- Compute degradation
+- Disablement of compute-dependent systems
+
+Example packet:
+Cyber 20
+
+DAMAGE PACKETS AND DELIVERY SYSTEMS
+
+Damage type and delivery type are separate concepts.
+
+Damage packet:
+What the attack does.
+
+Delivery type:
+How the attack reaches the target.
+
+A weapon can therefore produce one or several damage packets.
+
+Examples:
+
+Light Mass Driver
+Delivery: Ballistic
+Packet: Kinetic
+
+Rocket
+Delivery: Ballistic
+Packet: Kinetic + Concussive
+
+Guided Missile / Drone
+Delivery: Guided
+Packet: Kinetic + Concussive
+
+Laser
+Delivery: Beam
+Packet: Energy
+
+Plasma Cannon
+Delivery: Plasma
+Packet: Energy + Concussive
+
+Networked Intrusion
+Delivery: Cyber
+Packet: Cyber
+
+EMP Missile
+Delivery: Guided
+Packet: Cyber + Concussive
+
+
+OFFENSIVE DELIVERY TYPES
+
+Phase 1 uses five basic delivery types:
+
+Ballistic
+Beam
+Plasma
+Guided
+Cyber
+
+
+BALLISTIC
+
+A physical projectile travels from the attacking vessel to the target.
+
+Examples:
+- Mass driver
+- Conventional cannon
+- Projectile weapon
+
+Typical damage:
+- Kinetic
+- Kinetic + Concussive
+
+Defended against primarily by:
+- Armour
+- Point defence
+
+
+BEAM
+
+Energy is directed at the target without a conventional projectile travelling to it.
+
+Examples:
+- Laser
+- Turbo laser
+
+Typical damage:
+- Energy
+
+Defended against primarily by:
+- Shields
+- Energy protection
+
+
+PLASMA
+
+A high-energy plasma attack is delivered toward the target.
+
+Examples:
+- Plasma cannon
+- Plasma burst cannon
+
+Typical damage:
+- Energy
+- Energy + Concussive
+
+Plasma is retained as a separate delivery type in Phase 1 because it is an established weapon family in the existing equipment design and can have distinct defensive interactions from conventional beam weapons.
+
+Defended against primarily by:
+- Shields
+- Energy protection
+- Armour after shield penetration
+
+
+GUIDED
+
+A physical munition travels independently toward the target.
+
+Examples:
+- Missiles
+- Drones
+
+Typical damage:
+- Kinetic
+- Concussive
+- Kinetic + Concussive
+- Other warhead combinations later
+
+Defended against primarily by:
+- Point defence
+- Missile countermeasures
+- Shields, depending on shield design
+
+
+CYBER
+
+An attack is delivered through the target's electronic and computational environment.
+
+Examples:
+- Intrusion attack
+- Electronic warfare
+
+Typical damage:
+- Cyber
+
+Defended against primarily by:
+- Cyber defence
+- Defensive computing
+- Other electronic countermeasures
+
+
+WEAPON PROPERTIES
+
+The delivery type and damage packet are not intended to describe every characteristic of a weapon.
+
+Other properties remain separate:
+
+- Range
+- Rate of fire
+- Accuracy
+- Tracking
+- Ammunition requirement
+- Magazine capacity
+- Projectile/munition speed
+- Area of effect
+- Guidance quality
+- Armour penetration
+- Shield interaction
+- Power demand
+- Compute demand
+
+These properties modify how a weapon performs without becoming additional damage types.
+
+For example, "fragmentation" is a weapon characteristic rather than a damage type.
+
+"Penetrating" is a weapon characteristic rather than a damage type.
+
+"Area effect" is a weapon characteristic rather than a damage type.
+
+
+PHASE 1 OFFENSIVE EQUIPMENT ROSTER
+
+LIGHT MASS DRIVER
+
+Delivery:
+Ballistic
+
+Damage:
+Kinetic
+
+Role:
+Cheap, high rate of fire, general-purpose projectile weapon.
+
+Typical defence:
+Armour, point defence, deflector shields.
+
+The existing prototype already has a light mass driver.
+
+
+HEAVY MASS DRIVER
+
+Delivery:
+Ballistic
+
+Damage:
+Kinetic + optional Concussive component
+
+Role:
+Heavy physical damage, lower rate of fire.
+
+Typical defence:
+Armour, point defence, deflector shields.
+
+
+LASER
+
+Delivery:
+Beam
+
+Damage:
+Energy
+
+Role:
+Accurate directed-energy weapon.
+
+Typical defence:
+Energy protection and energy shields.
+
+The existing prototype already has a light laser.
+
+
+TURBO LASER
+
+Delivery:
+Beam
+
+Damage:
+Energy
+
+Role:
+Higher-performance laser weapon with increased rate of fire and/or output.
+
+Typical defence:
+Energy protection and energy shields.
+
+The existing prototype already contains a turbo laser.
+
+
+PLASMA CANNON
+
+Delivery:
+Plasma
+
+Damage:
+Energy + Concussive
+
+Role:
+Heavy energy weapon with a significant physical-disruption component.
+
+Typical defence:
+Energy Shields followed by armour.
+
+
+PLASMA BURST
+
+Delivery:
+Plasma
+
+Damage:
+Energy + Concussive
+
+Role:
+Short-range or burst-oriented plasma attack.
+
+Typical defence:
+Shields followed by armour.
+
+The existing prototype already contains a plasma burst weapon.
+
+
+SCATTER CANNON
+
+Delivery:
+Ballistic / Area
+
+Damage:
+Kinetic + Concussive
+
+Role:
+Short-range area weapon.
+
+Typical defence:
+Armour, Point defence and deflector shields.
+
+The existing design already includes scatter weapons.
+
+ROCKET LAUNCHER
+
+Delivery:
+Ballistic
+
+Damage:
+Depends on rocket warhead.
+
+Default Phase 1 warhead:
+Kinetic + Concussive
+
+Role:
+Long-range unguided attack.
+
+Typical defence:
+Armour, Point defence and deflector shields.
+
+The existing prototype already contains missile launchers and missile magazines.
+
+
+GUIDED MISSILE LAUNCHER
+
+Delivery:
+Guided
+
+Damage:
+Depends on missile warhead.
+
+Default Phase 1 warhead:
+Kinetic + Concussive
+
+Role:
+Long-range guided attack.
+
+Typical defence:
+Armour, Point defence and deflector shields.
+
+The existing prototype already contains missile launchers and missile magazines.
+
+CYBER INTRUSION SUITE
+
+Delivery:
+Cyber
+
+Damage:
+Cyber
+
+Role:
+Direct attack against the target's computing capability.
+
+Typical defence:
+Cyber defence.
+
+Unlike physical weapons, Cyber attacks do not need to overcome conventional armour or physical shields.
+
+EMP ROCKETS
+
+Delivery:
+Ballistic
+
+Damage:
+Cyber
+
+Role:
+Direct attack against the target's computing capability.
+
+Typical defence:
+Cyber defence, point defence
+
+Unlike physical weapons, Cyber attacks do not need to overcome conventional armour or physical shields.
+
+
+DEFENSIVE SYSTEMS
+
+Phase 1 defensive equipment consists of:
+
+Armour
+Shields
+Point Defence
+Cyber Defence
+
+
+ARMOUR
+
+Passive physical protection.
+
+Armour reduces incoming physical damage before it is applied to the ship's underlying hull and systems.
+
+Primary interaction:
+- Kinetic
+- Concussive
+
+Secondary interaction:
+- Energy, depending on armour technology
+
+Armour is represented as an installed module and contributes additional effective hull protection.
+
+The existing equipment model already uses Chitanium armour modules that add Hits to the assembled ship.
+
+
+SHIELDS
+
+Shields are active defensive systems.
+
+A shield does not simply have a single "shield strength" against everything. Each shield has a protection profile describing how strongly it protects against each damage packet type.
+
+Example:
+
+Deflector Shield
+Kinetic: high
+Concussive: high
+Energy: low
+Cyber: none
+
+Energy Shield
+Kinetic: low
+Concussive: medium
+Energy: high
+Cyber: none
+
+Electronic Shield
+Kinetic: none
+Concussive: none
+Energy: low
+Cyber: high
+
+SHIELD PROFILE
+
+A shield therefore has at least:
+
+- Shield capacity
+- Protection against Kinetic
+- Protection against Concussive
+- Protection against Energy
+- Protection against Cyber
+- Power demand
+- Mass
+- Volume
+- Regeneration/recovery characteristics
+
+The protection values determine how much of an incoming damage packet is absorbed or mitigated.
+
+For example:
+
+Incoming:
+Energy 50
+
+Shield:
+Energy protection 60%
+
+Result:
+20 Energy reaches the ship.
+
+
+SHIELD SPECIALISATION
+
+Shield designs should generally involve tradeoffs.
+
+A cheap specialist shield might provide very high protection against one damage channel while providing little protection against others.
+
+A general-purpose shield might provide moderate protection across several channels.
+
+An expensive military shield might provide strong protection across several channels but consume substantial power.
+
+This allows shield selection to become part of ship fitting without requiring a huge number of separate shield mechanics.
+
+
+POINT DEFENCE
+
+Point defence protects the ship from physical incoming threats before they reach the ship.
+
+Primary targets:
+- Ballistic projectiles
+- Guided missiles
+- Other interceptable physical threats
+
+Point defence is not a conventional shield.
+
+It attacks or intercepts the incoming weapon rather than reducing the damage packet after impact.
+
+Point defence therefore introduces a separate interception stage:
+
+Incoming weapon
+→ Point defence attempt
+→ If intercepted: no damage
+→ If not intercepted: damage packet proceeds to shields/armour
+
+
+CYBER DEFENCE
+
+Cyber defence protects the ship's computational systems against Cyber attacks.
+
+A successful Cyber attack can reduce effective Compute Capacity.
+
+Cyber defence may:
+- Block an attack
+- Reduce Cyber damage
+- Detect an intrusion
+- Prevent specific systems from being compromised
+
+Cyber defence itself consumes ship resources, particularly Compute and potentially Power.
+
+This creates a deliberate tradeoff:
+
+More defensive computing makes a ship harder to compromise, but consumes some of the same computational capacity that could otherwise support offensive and utility systems.
+
+
+COMBAT RESOLUTION
+
+A basic Phase 1 attack follows this sequence:
+
+1. Weapon fires.
+
+2. Weapon's delivery type determines the relevant interception/defence stage.
+
+3. Point defence or other delivery-specific defence attempts to defeat the attack where applicable.
+
+4. If the attack reaches the target, its damage packets are generated.
+
+5. Shields process the incoming packets according to their protection profile.
+
+6. Armour processes remaining physical damage.
+
+7. Remaining damage is applied to the appropriate ship resources.
+
+8. Resulting Power and Compute reductions can disable installed systems if the ship can no longer meet their operating requirements.
+
+
+EXAMPLE: MASS DRIVER
+
+Attacker:
+Light Mass Driver
+
+Delivery:
+Ballistic
+
+Packet:
+Kinetic 40
+
+Defence:
+Point defence fails.
+
+Shield:
+Deflector absorbs 25%.
+
+Remaining:
+Kinetic 30
+
+Armour:
+Reduces the effective physical damage.
+
+Remaining damage:
+Applied to Hits.
+
+
+EXAMPLE: MISSILE
+
+Attacker:
+Missile Launcher
+
+Delivery:
+Guided
+
+Packet:
+Kinetic 25
+Concussive 35
+
+Defence:
+Point defence attempts interception.
+
+If interception fails:
+
+Shield processes both packets according to its Kinetic and Concussive protection.
+
+Armour then processes the remaining physical damage.
+
+Remaining damage is applied to the ship.
+
+
+EXAMPLE: LASER
+
+Attacker:
+Laser
+
+Delivery:
+Beam
+
+Packet:
+Energy 30
+
+There is no projectile for point defence to intercept.
+
+Shield processes Energy damage.
+
+Remaining Energy damage reaches armour/hull.
+
+
+EXAMPLE: CYBER ATTACK
+
+Attacker:
+Cyber Intrusion Suite
+
+Delivery:
+Cyber
+
+Packet:
+Cyber 30
+
+Conventional armour:
+Irrelevant.
+
+Conventional point defence:
+Irrelevant.
+
+Cyber defence:
+Attempts to block or reduce the attack.
+
+Remaining Cyber damage reduces effective Compute Capacity.
+
+If Compute Capacity falls below the demand of installed systems, those systems become unavailable.
+
+
+RESOURCE DEGRADATION
+
+The important Phase 1 design principle is that combat does not simply reduce Hits.
+
+A ship can be defeated or seriously crippled in several ways.
+
+Hull degradation:
+Hits fall.
+
+Power degradation:
+Available MW falls.
+
+Compute degradation:
+Available CU falls.
+
+A ship might therefore survive physically while becoming incapable of operating its weapons, sensors, life support, propulsion, or other systems.
+
+For example:
+
+Ship has:
+60 MW generation
+45 MW installed demand
+
+An attack reduces effective power generation to:
+30 MW
+
+The ship is now operating with a 15 MW deficit.
+
+Systems must shut down or become unavailable until demand falls below available generation.
+
+
+Likewise:
+
+Ship has:
+40 CU
+35 CU installed demand
+
+Cyber attack reduces effective Compute Capacity to:
+20 CU
+
+The ship can no longer operate all of its compute-dependent systems.
+
+This means offensive systems can have fundamentally different tactical purposes without requiring artificial "damage to CPU" weapons.
+
+The basic Phase 1 combat vocabulary is therefore:
+
+DAMAGE PACKETS
+Kinetic
+Concussive
+Energy
+Cyber
+
+DELIVERY TYPES
+Ballistic
+Beam
+Plasma
+Guided
+Cyber
+
+DEFENSIVE SYSTEMS
+Armour
+Shields
+Point Defence
+Cyber Defence
+
+SHIP RESOURCES
+Hits
+Power
+Compute
+
+
+PHASE 1 IMPLEMENTATION NOTES (locked for Godot build)
+
+Packet-to-resource conversion (after shields and armour):
+  Kinetic    -> Hits 1.0,  Power 0.10, Compute 0.0
+  Concussive -> Hits 0.8,  Power 0.25, Compute 0.0
+  Energy     -> Hits 0.6,  Power 0.20, Compute 0.10
+  Cyber      -> Hits 0.0,  Power 0.0,  Compute 1.0
+
+Scatter weapons use delivery Ballistic; area_effect is a weapon flag, not a delivery type.
+
+Warheads: ammunition supplies damage_packets when the weapon consumes ammo; otherwise
+the weapon module carries damage_packets (lasers, cyber suite).
+
+Rocket vs guided missile: rocket launcher is Ballistic delivery; guided missile launcher
+is Guided delivery. Both may share HE warheads; EMP rockets carry Cyber-only packets.
+Ballistic/guided EMP is interceptable by point defence; remaining Cyber ignores armour
+and kinetic/concussive/energy shields but is reduced by electronic shields and cyber defence.
+
+Plasma delivery is explicit on the weapon module (never inferred from ammunition type).
+Point defence does not intercept beam, plasma, or cyber delivery.
+
+Armour adds Hits and provides a protection profile vs kinetic/concussive/energy; cyber
+ignores armour.
+
+Existing catalog module ids (light_laser, light_mass_driver, missile_launcher, etc.) are
+preserved; missile_launcher display name is Rocket Launcher (unguided).

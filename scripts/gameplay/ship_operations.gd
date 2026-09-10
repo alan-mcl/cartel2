@@ -10,9 +10,20 @@ const POWER_PRIORITY_BY_CATEGORY := {
 	"sensor": PowerPriority.HIGH,
 	"transponder": PowerPriority.HIGH,
 	"shield": PowerPriority.HIGH,
+	"point_defence": PowerPriority.HIGH,
 	"weapon": PowerPriority.NORMAL,
 	"ecm": PowerPriority.NORMAL,
+	"cyber_defence": PowerPriority.NORMAL,
 	"power": PowerPriority.CRITICAL,
+}
+
+const COMPUTE_PRIORITY_BY_CATEGORY := {
+	"life_support": PowerPriority.CRITICAL,
+	"computer": PowerPriority.HIGH,
+	"sensor": PowerPriority.HIGH,
+	"cyber_defence": PowerPriority.NORMAL,
+	"point_defence": PowerPriority.NORMAL,
+	"weapon": PowerPriority.NORMAL,
 }
 
 
@@ -22,15 +33,16 @@ static func tick(
 	owned: OwnedShip,
 	delta: float,
 	inputs: Dictionary,
-	occupant_count: int
+	occupant_count: int,
+	combat_state: ShipCombatState = null
 ) -> ShipOperatingState:
 	var state: ShipOperatingState = ShipOperatingState.new()
 	if assembled == null or owned == null or assembled.chassis.is_empty():
 		return state
 
-	state.compute_capacity = float(assembled.capacities.get("compute_capacity", 0.0))
+	state.compute_capacity = ShipCombat.get_effective_compute_capacity(assembled, combat_state)
 	state.life_support_capacity = float(assembled.capacities.get("life_support_capacity", 0.0))
-	state.power_available = float(assembled.capacities.get("power_generation", 0.0))
+	state.power_available = ShipCombat.get_effective_power_generation(assembled, combat_state)
 	state.fuel_current = owned.fuel_current
 	state.fuel_capacity = float(assembled.capacities.get("fuel_capacity", 0.0))
 
@@ -47,8 +59,8 @@ static func tick(
 		"transponder": in_flight and assembled.has_transponder() and owned.transponder_enabled,
 	}
 
-	var demands: Array = _collect_power_demands(assembled, state.active_systems)
-	state.compute_demand = _collect_compute_demand(assembled, state.active_systems)
+	var demands: Array = _collect_power_demands(assembled, state.active_systems, in_flight)
+	state.compute_demand = _collect_compute_demand(assembled, state.active_systems, in_flight)
 	state.life_support_demand = max(1.0, float(occupant_count))
 	state.life_support_overloaded = state.life_support_demand > state.life_support_capacity
 
@@ -74,6 +86,11 @@ static func tick(
 
 	if boosting and not state.boost_allowed:
 		state.active_systems["boost"] = false
+
+	if combat_state != null and combat_state.is_hull_disabled():
+		state.thrust_factor = 0.0
+		state.boost_allowed = false
+		state.weapons_allowed = false
 
 	return state
 
@@ -109,7 +126,11 @@ static func get_cargo_mass(catalog: Catalog, owned: OwnedShip) -> float:
 	return mass
 
 
-static func _collect_power_demands(assembled: AssembledShip, active_systems: Dictionary) -> Array:
+static func _collect_power_demands(
+	assembled: AssembledShip,
+	active_systems: Dictionary,
+	in_flight: bool
+) -> Array:
 	var demands: Array = []
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
@@ -131,6 +152,8 @@ static func _collect_power_demands(assembled: AssembledShip, active_systems: Dic
 			continue
 		if category == "weapon" and not bool(active_systems.get("weapons", false)):
 			continue
+		if category in ["shield", "point_defence"] and not in_flight:
+			continue
 		if category == "power":
 			demand = max(demand, float(module_def.get("fuel_consumption", 0.0)) * 2.0)
 
@@ -146,8 +169,12 @@ static func _collect_power_demands(assembled: AssembledShip, active_systems: Dic
 	return demands
 
 
-static func _collect_compute_demand(assembled: AssembledShip, active_systems: Dictionary) -> float:
-	var total := 0.0
+static func _collect_compute_demand(
+	assembled: AssembledShip,
+	active_systems: Dictionary,
+	in_flight: bool
+) -> float:
+	var entries: Array = []
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
@@ -155,9 +182,23 @@ static func _collect_compute_demand(assembled: AssembledShip, active_systems: Di
 		if typeof(module_def) != TYPE_DICTIONARY:
 			continue
 		var category := str(module_def.get("category", ""))
+		var demand := float(module_def.get("compute_demand", 0.0))
+		if demand <= 0.0:
+			continue
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
 			continue
-		total += float(module_def.get("compute_demand", 0.0))
+		if category == "point_defence" and not in_flight:
+			continue
+		entries.append({
+			"category": category,
+			"demand": demand,
+			"priority": int(COMPUTE_PRIORITY_BY_CATEGORY.get(category, PowerPriority.NORMAL)),
+		})
+
+	entries.sort_custom(func(a, b): return int(a["priority"]) < int(b["priority"]))
+	var total := 0.0
+	for row in entries:
+		total += float(row.get("demand", 0.0))
 	return total
 
 

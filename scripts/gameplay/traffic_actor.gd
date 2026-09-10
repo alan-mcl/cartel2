@@ -45,7 +45,9 @@ static func create(
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, actor.owned_ship, actor.assembled_ship)
 	actor.assembled_ship.stats = ShipAssembler.derive_stats(actor.assembled_ship, loaded_mass)
 	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
-	actor.hull_current = actor.hull_max
+	actor.combat_state = ShipCombatState.from_assembled(actor.assembled_ship)
+	actor.hull_current = actor.combat_state.hull_current
+	actor.hull_max = actor.combat_state.hull_max
 	actor.motion.facing = spawn_facing
 	actor._position = spawn_pos
 	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
@@ -250,6 +252,7 @@ var weapons: ShipWeapons = ShipWeapons.new()
 var ai_state: AiState = AiState.TRAFFIC
 var hull_current: float = 0.0
 var hull_max: float = 0.0
+var combat_state: ShipCombatState
 var cruise_speed_cap: float = 100.0
 var engage_timer: float = 0.0
 var loiter_center: Vector2 = Vector2.ZERO
@@ -306,10 +309,21 @@ func has_ammo() -> bool:
 
 
 func take_weapon_hit(damage: float, traffic_config: Dictionary) -> void:
+	take_combat_hit("ballistic", {"kinetic": damage}, traffic_config)
+
+
+func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config: Dictionary) -> void:
 	if ai_state == AiState.DESTROYED:
 		return
+	if combat_state == null:
+		combat_state = ShipCombatState.from_assembled(assembled_ship)
 
-	hull_current = maxf(0.0, hull_current - damage)
+	var result := ShipCombat.resolve_hit(assembled_ship, combat_state, delivery_type, packets)
+	if bool(result.get("intercepted", false)):
+		return
+
+	hull_current = combat_state.hull_current
+	hull_max = combat_state.hull_max
 	_update_hull_visual()
 
 	if hull_current <= 0.0:
@@ -475,13 +489,18 @@ func _tick_full_sim(
 	var inputs := _build_ai_inputs(delta, player_pos, anchors, traffic_config)
 	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 
+	if combat_state == null:
+		combat_state = ShipCombatState.from_assembled(assembled_ship)
+	ShipCombat.tick_shields(combat_state, assembled_ship, delta)
+
 	operating_state = ShipOperations.tick(
 		catalog,
 		assembled_ship,
 		owned_ship,
 		delta,
 		inputs,
-		1
+		1,
+		combat_state
 	)
 
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
@@ -489,6 +508,7 @@ func _tick_full_sim(
 
 	var firing := bool(inputs.get("fire", false)) and operating_state.weapons_allowed
 	var weapon_result: Dictionary = weapons.tick(
+		catalog,
 		assembled_ship,
 		owned_ship,
 		delta,

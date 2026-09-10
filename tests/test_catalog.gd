@@ -29,6 +29,7 @@ static func run(runner: TestRunner) -> void:
 	_validate_compute_cores(runner, catalog)
 	_validate_life_support(runner, catalog)
 	_validate_propulsion(runner, catalog)
+	_validate_combat(runner, catalog)
 
 
 static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void:
@@ -276,6 +277,49 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 			dry_mass <= mass_limit + 0.0001,
 			"%s assembled mass %.2f ≤ %.1f" % [ship_id, dry_mass, mass_limit]
 		)
+
+
+static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
+	var weapons: Array = catalog.list_modules("weapon")
+	runner.check_eq(weapons.size(), 31, "thirty-one weapon SKUs")
+
+	var armour: Array = catalog.list_modules("armour")
+	runner.check_eq(armour.size(), 16, "sixteen armour SKUs")
+
+	var shields: Array = catalog.list_modules("shield")
+	runner.check_eq(shields.size(), 13, "thirteen shield SKUs")
+
+	for module_def in weapons:
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_id := str(module_def.get("id", ""))
+		runner.check(not str(module_def.get("weapon_type", "")).is_empty(), "%s has weapon_type" % module_id)
+		runner.check(not str(module_def.get("delivery_type", "")).is_empty(), "%s has delivery_type" % module_id)
+		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
+		runner.check(
+			str(module_def.get("maker", "")) != "Bayes Inc",
+			"%s is not Bayes Inc weapon" % module_id
+		)
+
+	for module_def in armour:
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_id := str(module_def.get("id", ""))
+		runner.check(module_def.has("protection"), "%s has protection profile" % module_id)
+		runner.check(
+			str(module_def.get("maker", "")) != "Bayes Inc",
+			"%s is not Bayes Inc armour" % module_id
+		)
+
+	var assembled := ShipAssembler.assemble(catalog, "pegasus_p101")
+	var state := ShipCombatState.from_assembled(assembled)
+	var result := ShipCombat.resolve_hit(
+		assembled,
+		state,
+		"ballistic",
+		{"kinetic": 40.0}
+	)
+	runner.check(float(result.get("hull_damage", 0.0)) > 0.0, "pegasus takes kinetic hull damage")
 
 
 static func _life_support_volume_floor(crew: float, capabilities: Array) -> float:

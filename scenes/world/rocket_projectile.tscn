@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cartel_rocket_projectile"]
+
+[ext_resource type="Script" path="res://scripts/presentation/rocket_projectile.gd" id="1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rocket"]
+radius = 7.0
+
+[node name="RocketProjectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rocket")

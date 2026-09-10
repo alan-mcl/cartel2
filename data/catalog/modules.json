@@ -33,7 +33,7 @@
     "fuel_consumption": 0.26,
     "power_demand": 14.0,
     "cost": 2100,
-    "description": "HW's hydro-thermal line — sporty exhaust without Sundancer Compact pricing."
+    "description": "HW's hydro-thermal line \u2014 sporty exhaust without Sundancer Compact pricing."
   },
   {
     "id": "hw_sundancer_arc",
@@ -69,7 +69,7 @@
     "fuel_consumption": 0.12,
     "power_demand": 4.0,
     "cost": 2400,
-    "description": "Compact direct-fusion — the Flare-ON SS default and HW's best-seller."
+    "description": "Compact direct-fusion \u2014 the Flare-ON SS default and HW's best-seller."
   },
   {
     "id": "hw_sundancer_loft",
@@ -87,7 +87,7 @@
     "fuel_consumption": 0.25,
     "power_demand": 5.0,
     "cost": 6800,
-    "description": "Experimental gravitic drive. Excellent near-orbit performance — catalog placeholder."
+    "description": "Experimental gravitic drive. Excellent near-orbit performance \u2014 catalog placeholder."
   },
   {
     "id": "ora_bellatrix_yard_c14",
@@ -141,7 +141,7 @@
     "fuel_consumption": 0.28,
     "power_demand": 12.0,
     "cost": 950,
-    "description": "Mid-tier hydro-thermal — deliberately modest so medium hulls still feel weighty."
+    "description": "Mid-tier hydro-thermal \u2014 deliberately modest so medium hulls still feel weighty."
   },
   {
     "id": "ora_bellatrix_ap_p40",
@@ -195,7 +195,7 @@
     "fuel_consumption": 0.08,
     "power_demand": 6.0,
     "cost": 5400,
-    "description": "Antimatter trace engine — law-enforcement and interceptor tier."
+    "description": "Antimatter trace engine \u2014 law-enforcement and interceptor tier."
   },
   {
     "id": "oc_prairie_fire_torch",
@@ -231,7 +231,7 @@
     "fuel_consumption": 0.32,
     "power_demand": 16.0,
     "cost": 1400,
-    "description": "Drawbar hydro-thermal — tactical fighter and gunship staple."
+    "description": "Drawbar hydro-thermal \u2014 tactical fighter and gunship staple."
   },
   {
     "id": "oc_drawbar_36",
@@ -267,7 +267,7 @@
     "fuel_consumption": 0.07,
     "power_demand": 24.0,
     "cost": 2650,
-    "description": "The Combine's slightly off-brand electric line — still Drawbar branded."
+    "description": "The Combine's slightly off-brand electric line \u2014 still Drawbar branded."
   },
   {
     "id": "atl_pithead_kick",
@@ -357,7 +357,7 @@
     "fuel_consumption": 0.04,
     "power_demand": 18.0,
     "cost": 2400,
-    "description": "Consumer plasma with the Ionique badge — brochure photography included."
+    "description": "Consumer plasma with the Ionique badge \u2014 brochure photography included."
   },
   {
     "id": "prv_ionique_p7",
@@ -375,7 +375,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 32.0,
     "cost": 3400,
-    "description": "The P7 line — more cruise speed, same glossy packaging."
+    "description": "The P7 line \u2014 more cruise speed, same glossy packaging."
   },
   {
     "id": "prv_novajet_torch",
@@ -447,7 +447,7 @@
     "fuel_consumption": 0.26,
     "power_demand": 9.0,
     "cost": 980,
-    "description": "Conservative Mikuni hydro-thermal — long service intervals, modest numbers."
+    "description": "Conservative Mikuni hydro-thermal \u2014 long service intervals, modest numbers."
   },
   {
     "id": "frz_mikuni_type_28",
@@ -483,7 +483,7 @@
     "fuel_consumption": 0.09,
     "power_demand": 5.5,
     "cost": 4000,
-    "description": "Tensho direct-fusion — zaibatsu engineering without the marketing fuss."
+    "description": "Tensho direct-fusion \u2014 zaibatsu engineering without the marketing fuss."
   },
   {
     "id": "tmc_wake_hydro_22",
@@ -519,7 +519,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 20.0,
     "cost": 2550,
-    "description": "Rhumb plasma cruise — built for routes measured in weeks, not burns."
+    "description": "Rhumb plasma cruise \u2014 built for routes measured in weeks, not burns."
   },
   {
     "id": "tmc_wake_kick",
@@ -537,7 +537,7 @@
     "fuel_consumption": 0.7,
     "power_demand": 2.8,
     "cost": 640,
-    "description": "Wake chemical — the exception in a hydro-heavy catalogue."
+    "description": "Wake chemical \u2014 the exception in a hydro-heavy catalogue."
   },
   {
     "id": "gi_ht_18",
@@ -627,7 +627,7 @@
     "fuel_consumption": 0.31,
     "power_demand": 17.0,
     "cost": 1650,
-    "description": "Old-money hydro-thermal — quiet, heavy, and built to outlast the mortgage."
+    "description": "Old-money hydro-thermal \u2014 quiet, heavy, and built to outlast the mortgage."
   },
   {
     "id": "roth_privy_seal_f11",
@@ -681,7 +681,7 @@
     "fuel_consumption": 0.06,
     "power_demand": 26.0,
     "cost": 2900,
-    "description": "Experimental plasma coil — Chimera's brochure never explains the warranty."
+    "description": "Experimental plasma coil \u2014 Chimera's brochure never explains the warranty."
   },
   {
     "id": "chi_fable_core",
@@ -699,7 +699,7 @@
     "fuel_consumption": 0.11,
     "power_demand": 4.8,
     "cost": 3700,
-    "description": "Fable direct-fusion — half science project, half ship engine."
+    "description": "Fable direct-fusion \u2014 half science project, half ship engine."
   },
   {
     "id": "chi_fable_kiss",
@@ -735,7 +735,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 21.0,
     "cost": 2700,
-    "description": "Change Ring plasma arc — communications-house hardware repurposed for thrust."
+    "description": "Change Ring plasma arc \u2014 communications-house hardware repurposed for thrust."
   },
   {
     "id": "pt_jade_wake_burn",
@@ -753,7 +753,7 @@
     "fuel_consumption": 0.71,
     "power_demand": 3.0,
     "cost": 600,
-    "description": "Rim-world chemical burn — cheap, loud, everywhere."
+    "description": "Rim-world chemical burn \u2014 cheap, loud, everywhere."
   },
   {
     "id": "pt_nine_dragons_hydro_20",
@@ -789,7 +789,7 @@
     "fuel_consumption": 0.82,
     "power_demand": 2.5,
     "cost": 450,
-    "description": "Tukey sideline chemical — suspiciously affordable."
+    "description": "Tukey sideline chemical \u2014 suspiciously affordable."
   },
   {
     "id": "tni_overburden_chemical_14",
@@ -807,7 +807,7 @@
     "fuel_consumption": 0.85,
     "power_demand": 3.5,
     "cost": 500,
-    "description": "Frontier chemical for extraction tugs — optimized for dirt, not elegance."
+    "description": "Frontier chemical for extraction tugs \u2014 optimized for dirt, not elegance."
   },
   {
     "id": "ac_altiplano_burn",
@@ -843,7 +843,7 @@
     "fuel_consumption": 0.79,
     "power_demand": 2.0,
     "cost": 480,
-    "description": "Merchant-house chemical — eight-tonne nominal class, negotiable quality."
+    "description": "Merchant-house chemical \u2014 eight-tonne nominal class, negotiable quality."
   },
   {
     "id": "osc_outstation_packet",
@@ -861,7 +861,7 @@
     "fuel_consumption": 0.77,
     "power_demand": 2.2,
     "cost": 460,
-    "description": "Rim packet-runner chemical — bought in bulk, installed in haste."
+    "description": "Rim packet-runner chemical \u2014 bought in bulk, installed in haste."
   },
   {
     "id": "hw_helios_breath",
@@ -1042,7 +1042,7 @@
     "power_demand": 2.4,
     "compute_demand": 3.6,
     "cost": 3800,
-    "description": "The L line — a two-berth live-aboard cabin with the same glossy brochure photography.",
+    "description": "The L line \u2014 a two-berth live-aboard cabin with the same glossy brochure photography.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -1199,7 +1199,7 @@
     "power_demand": 1.6,
     "compute_demand": 2.0,
     "cost": 1800,
-    "description": "Medical-grade two-berth air loop. Not a hospital — just bunks whose air passes a clinical audit.",
+    "description": "Medical-grade two-berth air loop. Not a hospital \u2014 just bunks whose air passes a clinical audit.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -1629,39 +1629,6 @@
     "description": "Commercial Article 19 identification transmitter. Broadcasts hull registration and pilot callsign when powered."
   },
   {
-    "id": "light_laser",
-    "name": "Light Laser",
-    "maker": "Holt-Winters Corp",
-    "category": "weapon",
-    "mount": "light_weapon",
-    "mass": 0.6,
-    "volume": 0.8,
-    "damage": 12,
-    "rate_of_fire": 2.0,
-    "range": 800,
-    "power_demand": 4.0,
-    "cost": 1100,
-    "description": "Rotating laser turret for self-defence."
-  },
-  {
-    "id": "light_mass_driver",
-    "name": "Light Mass Driver",
-    "maker": "Bayes Inc",
-    "category": "weapon",
-    "mount": "light_weapon",
-    "mass": 0.8,
-    "volume": 1.0,
-    "damage": 18,
-    "rate_of_fire": 0.8,
-    "range": 1200,
-    "projectile_speed": 1000,
-    "power_demand": 2.0,
-    "ammunition_type": "mass_driver_round",
-    "ammunition_per_shot": 1,
-    "cost": 950,
-    "description": "Kinetic defence cannon. Common on workhorse freighters."
-  },
-  {
     "id": "mass_driver_magazine_200",
     "name": "Mass Driver Magazine 200",
     "maker": "Bayes Inc",
@@ -1679,17 +1646,6 @@
     },
     "cost": 320,
     "description": "Ammunition storage for mass driver weapons."
-  },
-  {
-    "id": "chitanium_5mm",
-    "name": "5mm Chitanium",
-    "maker": "Bayes Inc",
-    "category": "armour",
-    "mass": 0.8,
-    "volume": 1.2,
-    "hits": 12,
-    "cost": 650,
-    "description": "Light chitanium plate. Standard orbital traffic protection."
   },
   {
     "id": "cargo_bay_4",
@@ -1748,7 +1704,7 @@
     "power_generation": 9.0,
     "fuel_consumption": 0.0,
     "cost": 1800,
-    "description": "Always-on decay heat for dockside yachts and auxiliary bays. No refuelling — ever."
+    "description": "Always-on decay heat for dockside yachts and auxiliary bays. No refuelling \u2014 ever."
   },
   {
     "id": "hw_helios_compact_40",
@@ -1823,7 +1779,7 @@
     "power_generation": 40.0,
     "fuel_consumption": 0.09,
     "cost": 3600,
-    "description": "The X7 line — more output, same glossy brochure photography."
+    "description": "The X7 line \u2014 more output, same glossy brochure photography."
   },
   {
     "id": "prv_energy_series_7",
@@ -1913,7 +1869,7 @@
     "power_generation": 52.0,
     "fuel_consumption": 0.13,
     "cost": 3100,
-    "description": "GI sells everything everyone needs. This is their fusion line — no frills, all megawatts."
+    "description": "GI sells everything everyone needs. This is their fusion line \u2014 no frills, all megawatts."
   },
   {
     "id": "ora_yardfit_24",
@@ -2033,7 +1989,7 @@
     "power_generation": 44.0,
     "fuel_consumption": 0.09,
     "cost": 4400,
-    "description": "The 880 series — conservative engineering with fusion efficiency."
+    "description": "The 880 series \u2014 conservative engineering with fusion efficiency."
   },
   {
     "id": "frz_kawabe_k60",
@@ -2093,7 +2049,7 @@
     "power_generation": 72.0,
     "fuel_consumption": 0.2,
     "cost": 4800,
-    "description": "Titan-class output for the largest hulls Atlas touches. No fusion option — mass is the point."
+    "description": "Titan-class output for the largest hulls Atlas touches. No fusion option \u2014 mass is the point."
   },
   {
     "id": "roth_energie_12",
@@ -2112,7 +2068,7 @@
   },
   {
     "id": "roth_prive_continental",
-    "name": "Roth Privé Continental",
+    "name": "Roth Priv\u00e9 Continental",
     "maker": "House of Roth",
     "brand": "Roth Energie",
     "plant_type": "fusion",
@@ -2183,7 +2139,7 @@
     "power_generation": 44.0,
     "fuel_consumption": 0.11,
     "cost": 3300,
-    "description": "Seven Bells' fusion experiment — named after a bell that never sold."
+    "description": "Seven Bells' fusion experiment \u2014 named after a bell that never sold."
   },
   {
     "id": "sakuraya_wakaba",
@@ -2198,7 +2154,7 @@
     "power_generation": 24.0,
     "fuel_consumption": 0.08,
     "cost": 2200,
-    "description": "Traditional fission in a refined envelope. Wakaba — young leaf — for cautious operators."
+    "description": "Traditional fission in a refined envelope. Wakaba \u2014 young leaf \u2014 for cautious operators."
   },
   {
     "id": "sakuraya_asahi_plant",
@@ -2348,7 +2304,7 @@
     "power_generation": 24.0,
     "fuel_consumption": 0.09,
     "cost": 1800,
-    "description": "Steward-class fission — careful engineering, long service intervals."
+    "description": "Steward-class fission \u2014 careful engineering, long service intervals."
   },
   {
     "id": "chet_nagarathar_42",
@@ -2393,7 +2349,7 @@
     "power_generation": 34.0,
     "fuel_consumption": 0.16,
     "cost": 1500,
-    "description": "Pearl River fission — merchant-house rebadge, rim-world price."
+    "description": "Pearl River fission \u2014 merchant-house rebadge, rim-world price."
   },
   {
     "id": "ca_admiralty_dynamo",
@@ -2561,7 +2517,7 @@
       "basic_hud"
     ],
     "cost": 1600,
-    "description": "The T9 tier — more CU, same Tensor badge on the bezel."
+    "description": "The T9 tier \u2014 more CU, same Tensor badge on the bezel."
   },
   {
     "id": "prv_lumina_lx",
@@ -2597,7 +2553,7 @@
       "basic_hud"
     ],
     "cost": 11200,
-    "description": "Foundry-grade quantum. Not a faster ship computer — a different kind of math."
+    "description": "Foundry-grade quantum. Not a faster ship computer \u2014 a different kind of math."
   },
   {
     "id": "mdc_monday_core",
@@ -2957,7 +2913,7 @@
       "basic_hud"
     ],
     "cost": 1700,
-    "description": "Quiet, reliable silicon. No photon line — tradition over fashion."
+    "description": "Quiet, reliable silicon. No photon line \u2014 tradition over fashion."
   },
   {
     "id": "frz_shirakawa_type_2",
@@ -3222,90 +3178,7 @@
     "volume": 4.0,
     "power_demand": 8.0,
     "cost": 12000,
-    "description": "Alpha-class hyperdrive. Catalog placeholder — no translation gameplay yet."
-  },
-  {
-    "id": "turbo_laser",
-    "name": "Turbo Laser",
-    "maker": "Holt-Winters Corp",
-    "category": "weapon",
-    "mount": "medium_weapon",
-    "mass": 1.2,
-    "volume": 1.4,
-    "damage": 22,
-    "rate_of_fire": 1.5,
-    "range": 900,
-    "power_demand": 8.0,
-    "cost": 2800,
-    "description": "Medium rotating turbo laser turret."
-  },
-  {
-    "id": "plasma_cannon",
-    "name": "Plasma Cannon",
-    "maker": "Bayes Inc",
-    "category": "weapon",
-    "mount": "medium_weapon",
-    "mass": 1.4,
-    "volume": 1.6,
-    "damage": 28,
-    "rate_of_fire": 0.6,
-    "range": 1000,
-    "power_demand": 6.0,
-    "ammunition_type": "plasma_cell",
-    "ammunition_per_shot": 1,
-    "cost": 3200,
-    "description": "Nose-mounted plasma cannon. Common on enforcement Pegasus variants."
-  },
-  {
-    "id": "plasma_burst",
-    "name": "Plasma Burst Cannon",
-    "maker": "Kolmogorov-Smirnov",
-    "category": "weapon",
-    "mount": "medium_weapon",
-    "mass": 1.6,
-    "volume": 1.8,
-    "damage": 35,
-    "rate_of_fire": 0.4,
-    "range": 700,
-    "power_demand": 10.0,
-    "ammunition_type": "plasma_cell",
-    "ammunition_per_shot": 2,
-    "cost": 4500,
-    "description": "Short-range plasma burst weapon for interceptors."
-  },
-  {
-    "id": "scatter_cannon",
-    "name": "Heavy Scatter Cannon",
-    "maker": "Bayes Inc",
-    "category": "weapon",
-    "mount": "heavy_weapon",
-    "mass": 2.2,
-    "volume": 2.5,
-    "damage": 40,
-    "rate_of_fire": 0.3,
-    "range": 600,
-    "power_demand": 5.0,
-    "ammunition_type": "scatter_shell",
-    "ammunition_per_shot": 1,
-    "cost": 3800,
-    "description": "Area-effect scatter cannon for gunship hardpoints."
-  },
-  {
-    "id": "missile_launcher",
-    "name": "Missile Launcher",
-    "maker": "Bayes Inc",
-    "category": "weapon",
-    "mount": "medium_weapon",
-    "mass": 1.0,
-    "volume": 1.2,
-    "damage": 45,
-    "rate_of_fire": 0.2,
-    "range": 1500,
-    "power_demand": 3.0,
-    "ammunition_type": "missile_light",
-    "ammunition_per_shot": 1,
-    "cost": 2600,
-    "description": "Unguided missile launcher. Wolff standard armament."
+    "description": "Alpha-class hyperdrive. Catalog placeholder \u2014 no translation gameplay yet."
   },
   {
     "id": "plasma_magazine_100",
@@ -3363,17 +3236,6 @@
     "description": "Internal missile storage rack."
   },
   {
-    "id": "chitanium_10mm",
-    "name": "10mm Chitanium",
-    "maker": "Bayes Inc",
-    "category": "armour",
-    "mass": 1.4,
-    "volume": 2.0,
-    "hits": 22,
-    "cost": 1200,
-    "description": "Medium chitanium plate for combat hulls."
-  },
-  {
     "id": "cargo_bay_20",
     "name": "Cargo Bay 20",
     "maker": "Tukey Enterprises",
@@ -3394,5 +3256,1430 @@
     "fuel_capacity": 120.0,
     "cost": 850,
     "description": "Extended-range propulsion fuel storage."
+  },
+  {
+    "id": "light_laser",
+    "name": "Light Laser",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "light_weapon",
+    "mass": 0.6,
+    "volume": 0.8,
+    "rate_of_fire": 2.0,
+    "range": 800,
+    "power_demand": 4.0,
+    "cost": 1100,
+    "description": "Rotating laser turret for self-defence.",
+    "damage_packets": {
+      "energy": 12
+    }
+  },
+  {
+    "id": "light_mass_driver",
+    "name": "Light Mass Driver",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "light_weapon",
+    "mass": 0.8,
+    "volume": 1.0,
+    "rate_of_fire": 0.8,
+    "range": 1200,
+    "power_demand": 2.0,
+    "cost": 950,
+    "description": "Kinetic defence cannon. Common on workhorse freighters.",
+    "ammunition_type": "mass_driver_round",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 1000
+  },
+  {
+    "id": "turbo_laser",
+    "name": "Turbo Laser",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "medium_weapon",
+    "mass": 1.2,
+    "volume": 1.4,
+    "rate_of_fire": 1.5,
+    "range": 900,
+    "power_demand": 8.0,
+    "cost": 2800,
+    "description": "Medium rotating turbo laser turret.",
+    "damage_packets": {
+      "energy": 22
+    }
+  },
+  {
+    "id": "plasma_cannon",
+    "name": "Plasma Cannon",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "category": "weapon",
+    "weapon_type": "plasma",
+    "delivery_type": "plasma",
+    "mount": "medium_weapon",
+    "mass": 1.4,
+    "volume": 1.6,
+    "rate_of_fire": 0.6,
+    "range": 1000,
+    "power_demand": 6.0,
+    "cost": 3200,
+    "description": "Nose-mounted plasma cannon. Common on enforcement Pegasus variants.",
+    "ammunition_type": "plasma_cell",
+    "ammunition_per_shot": 1
+  },
+  {
+    "id": "plasma_burst",
+    "name": "Plasma Burst Cannon",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "weapon",
+    "weapon_type": "plasma",
+    "delivery_type": "plasma",
+    "mount": "medium_weapon",
+    "mass": 1.6,
+    "volume": 1.8,
+    "rate_of_fire": 0.4,
+    "range": 700,
+    "power_demand": 10.0,
+    "cost": 4500,
+    "description": "Short-range plasma burst weapon for interceptors.",
+    "ammunition_type": "plasma_cell",
+    "ammunition_per_shot": 2
+  },
+  {
+    "id": "scatter_cannon",
+    "name": "Heavy Scatter Cannon",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "weapon",
+    "weapon_type": "scatter",
+    "delivery_type": "ballistic",
+    "mount": "heavy_weapon",
+    "mass": 2.2,
+    "volume": 2.5,
+    "rate_of_fire": 0.3,
+    "range": 600,
+    "power_demand": 5.0,
+    "cost": 3800,
+    "description": "Area-effect scatter cannon for gunship hardpoints.",
+    "ammunition_type": "scatter_shell",
+    "ammunition_per_shot": 1,
+    "area_effect": true
+  },
+  {
+    "id": "missile_launcher",
+    "name": "Rocket Launcher",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "weapon",
+    "weapon_type": "rocket",
+    "delivery_type": "ballistic",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.2,
+    "rate_of_fire": 0.2,
+    "range": 1500,
+    "power_demand": 3.0,
+    "cost": 2600,
+    "description": "Long-range unguided rocket launcher. Wolff standard armament.",
+    "ammunition_type": "rocket_he",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 650
+  },
+  {
+    "id": "heavy_mass_driver",
+    "name": "Heavy Mass Driver",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "medium_weapon",
+    "mass": 1.6,
+    "volume": 1.8,
+    "rate_of_fire": 0.35,
+    "range": 1400,
+    "power_demand": 5.0,
+    "cost": 3400,
+    "description": "Heavy kinetic cannon with a concussive kick.",
+    "damage_packets": {
+      "kinetic": 32,
+      "concussive": 8
+    },
+    "projectile_speed": 900
+  },
+  {
+    "id": "guided_missile_launcher",
+    "name": "Guided Missile Launcher",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "weapon",
+    "weapon_type": "missile",
+    "delivery_type": "guided",
+    "mount": "medium_weapon",
+    "mass": 1.2,
+    "volume": 1.4,
+    "rate_of_fire": 0.15,
+    "range": 1800,
+    "power_demand": 4.0,
+    "cost": 4200,
+    "description": "Long-range guided missile launcher.",
+    "ammunition_type": "missile_light",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 720
+  },
+  {
+    "id": "emp_rocket_launcher",
+    "name": "EMP Rocket Launcher",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "weapon",
+    "weapon_type": "rocket",
+    "delivery_type": "ballistic",
+    "mount": "light_weapon",
+    "mass": 0.9,
+    "volume": 1.1,
+    "rate_of_fire": 0.18,
+    "range": 1400,
+    "power_demand": 3.5,
+    "cost": 3100,
+    "description": "Unguided EMP rocket pod for compute disruption.",
+    "ammunition_type": "rocket_emp",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 620
+  },
+  {
+    "id": "cyber_intrusion_suite",
+    "name": "Cyber Intrusion Suite",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "weapon",
+    "weapon_type": "cyber",
+    "delivery_type": "cyber",
+    "mount": "medium_weapon",
+    "mass": 0.7,
+    "volume": 0.9,
+    "rate_of_fire": 0.25,
+    "range": 900,
+    "power_demand": 5.0,
+    "cost": 4800,
+    "description": "Direct attack against target compute capacity.",
+    "damage_packets": {
+      "cyber": 28
+    }
+  },
+  {
+    "id": "hw_laser_mk1",
+    "name": "Helios Laser",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 2.2,
+    "range": 850,
+    "power_demand": 4.0,
+    "cost": 1300,
+    "description": "Holt-Winters Corp laser line.",
+    "damage_packets": {
+      "energy": 14
+    }
+  },
+  {
+    "id": "ora_mass_driver_mk1",
+    "name": "Bellatrix Mass Driver",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.9,
+    "range": 1100,
+    "power_demand": 4.0,
+    "cost": 1200,
+    "description": "Orion Aerospace mass driver line.",
+    "ammunition_type": "mass_driver_round",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 1000
+  },
+  {
+    "id": "oc_mass_driver_mk1",
+    "name": "OC Mass Driver",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.5,
+    "range": 1200,
+    "power_demand": 4.0,
+    "cost": 2100,
+    "description": "Oklahoma Combine mass driver line.",
+    "damage_packets": {
+      "kinetic": 24
+    }
+  },
+  {
+    "id": "go_scatter_mk1",
+    "name": "GO Scatter",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "weapon",
+    "weapon_type": "scatter",
+    "delivery_type": "ballistic",
+    "mount": "heavy_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.35,
+    "range": 550,
+    "power_demand": 4.0,
+    "cost": 2900,
+    "description": "Galactic Outcomes scatter line.",
+    "ammunition_type": "scatter_shell",
+    "ammunition_per_shot": 1,
+    "area_effect": true
+  },
+  {
+    "id": "prv_plasma_mk1",
+    "name": "Ionique Plasma",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "category": "weapon",
+    "weapon_type": "plasma",
+    "delivery_type": "plasma",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.55,
+    "range": 950,
+    "power_demand": 4.0,
+    "cost": 3000,
+    "description": "ParaRamcoVidia plasma line.",
+    "ammunition_type": "plasma_cell",
+    "ammunition_per_shot": 1
+  },
+  {
+    "id": "frz_laser_mk1",
+    "name": "FRZ Laser",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 1.2,
+    "range": 880,
+    "power_demand": 4.0,
+    "cost": 2400,
+    "description": "Four Rivers Zaibatsu laser line.",
+    "damage_packets": {
+      "energy": 18
+    }
+  },
+  {
+    "id": "chi_plasma_mk1",
+    "name": "Chimera Plasma",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "weapon",
+    "weapon_type": "plasma",
+    "delivery_type": "plasma",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.45,
+    "range": 750,
+    "power_demand": 4.0,
+    "cost": 4100,
+    "description": "Chimera Corporation plasma line.",
+    "ammunition_type": "plasma_cell",
+    "ammunition_per_shot": 1
+  },
+  {
+    "id": "atl_mass_driver_mk1",
+    "name": "Atlas Mass Driver",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "heavy_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.28,
+    "range": 1300,
+    "power_demand": 4.0,
+    "cost": 3600,
+    "description": "Atlas Concern mass driver line.",
+    "damage_packets": {
+      "kinetic": 36
+    }
+  },
+  {
+    "id": "gi_laser_mk1",
+    "name": "GI Laser",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 1.8,
+    "range": 700,
+    "power_demand": 4.0,
+    "cost": 900,
+    "description": "General Industrial laser line.",
+    "damage_packets": {
+      "energy": 10
+    }
+  },
+  {
+    "id": "sbi_laser_mk1",
+    "name": "Seven Bells Laser",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 1.4,
+    "range": 920,
+    "power_demand": 4.0,
+    "cost": 2600,
+    "description": "Seven Bells Inc laser line.",
+    "damage_packets": {
+      "energy": 20
+    }
+  },
+  {
+    "id": "sne_cyber_mk1",
+    "name": "SnedOS Cyber",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "weapon",
+    "weapon_type": "cyber",
+    "delivery_type": "cyber",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.3,
+    "range": 850,
+    "power_demand": 4.0,
+    "cost": 4200,
+    "description": "SnedeCorp cyber line.",
+    "damage_packets": {
+      "cyber": 22
+    }
+  },
+  {
+    "id": "pt_rocket_mk1",
+    "name": "Triad Rocket",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "weapon",
+    "weapon_type": "rocket",
+    "delivery_type": "ballistic",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.22,
+    "range": 1500,
+    "power_demand": 4.0,
+    "cost": 2700,
+    "description": "Pacific Triad rocket line.",
+    "ammunition_type": "rocket_he",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 650
+  },
+  {
+    "id": "te_mass_driver_mk1",
+    "name": "TE Mass Driver",
+    "maker": "Tukey Enterprises",
+    "brand": "TE",
+    "category": "weapon",
+    "weapon_type": "mass_driver",
+    "delivery_type": "ballistic",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.75,
+    "range": 1000,
+    "power_demand": 4.0,
+    "cost": 1050,
+    "description": "Tukey Enterprises mass driver line.",
+    "damage_packets": {
+      "kinetic": 16
+    }
+  },
+  {
+    "id": "adc_plasma_mk1",
+    "name": "Andean Plasma",
+    "maker": "Andean Consolidated",
+    "brand": "Andean",
+    "category": "weapon",
+    "weapon_type": "plasma",
+    "delivery_type": "plasma",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.5,
+    "range": 800,
+    "power_demand": 4.0,
+    "cost": 2200,
+    "description": "Andean Consolidated plasma line.",
+    "ammunition_type": "plasma_cell",
+    "ammunition_per_shot": 1
+  },
+  {
+    "id": "tn_laser_mk1",
+    "name": "Terra Nova Laser",
+    "maker": "Terra Nova",
+    "brand": "Terra Nova",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "heavy_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.9,
+    "range": 1000,
+    "power_demand": 4.0,
+    "cost": 3400,
+    "description": "Terra Nova laser line.",
+    "damage_packets": {
+      "energy": 28
+    }
+  },
+  {
+    "id": "ss_laser_mk1",
+    "name": "Shinise Laser",
+    "maker": "Sakuraya Shinise",
+    "brand": "Shinise",
+    "category": "weapon",
+    "weapon_type": "laser",
+    "delivery_type": "beam",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 2.0,
+    "range": 820,
+    "power_demand": 4.0,
+    "cost": 1400,
+    "description": "Sakuraya Shinise laser line.",
+    "damage_packets": {
+      "energy": 13
+    }
+  },
+  {
+    "id": "apex_cyber_mk1",
+    "name": "Apex Cyber",
+    "maker": "Cult of Apex",
+    "brand": "Apex",
+    "category": "weapon",
+    "weapon_type": "cyber",
+    "delivery_type": "cyber",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.2,
+    "range": 950,
+    "power_demand": 4.0,
+    "cost": 5200,
+    "description": "Cult of Apex cyber line.",
+    "damage_packets": {
+      "cyber": 34
+    }
+  },
+  {
+    "id": "gz_scatter_mk1",
+    "name": "GZ Scatter",
+    "maker": "Guangzhou Mercantile",
+    "brand": "GZ",
+    "category": "weapon",
+    "weapon_type": "scatter",
+    "delivery_type": "ballistic",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.4,
+    "range": 650,
+    "power_demand": 4.0,
+    "cost": 2500,
+    "description": "Guangzhou Mercantile scatter line.",
+    "ammunition_type": "scatter_shell",
+    "ammunition_per_shot": 1,
+    "area_effect": true
+  },
+  {
+    "id": "cm_rocket_mk1",
+    "name": "Carthage Rocket",
+    "maker": "Carthage Mercantile",
+    "brand": "Carthage",
+    "category": "weapon",
+    "weapon_type": "rocket",
+    "delivery_type": "ballistic",
+    "mount": "light_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.25,
+    "range": 1300,
+    "power_demand": 4.0,
+    "cost": 2300,
+    "description": "Carthage Mercantile rocket line.",
+    "ammunition_type": "rocket_he",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 650
+  },
+  {
+    "id": "mdc_missile_mk1",
+    "name": "Meridian Missile",
+    "maker": "The Meridian Company",
+    "brand": "Meridian",
+    "category": "weapon",
+    "weapon_type": "missile",
+    "delivery_type": "guided",
+    "mount": "medium_weapon",
+    "mass": 1.0,
+    "volume": 1.0,
+    "rate_of_fire": 0.16,
+    "range": 1700,
+    "power_demand": 4.0,
+    "cost": 3900,
+    "description": "The Meridian Company missile line.",
+    "ammunition_type": "missile_light",
+    "ammunition_per_shot": 1,
+    "projectile_speed": 720
+  },
+  {
+    "id": "chitanium_5mm",
+    "name": "5mm Chitanium",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.2,
+    "hits": 12,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.08,
+      "energy": 0.05
+    },
+    "cost": 650,
+    "description": "Light chitanium plate. Standard orbital traffic protection."
+  },
+  {
+    "id": "chitanium_10mm",
+    "name": "10mm Chitanium",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.4,
+    "volume": 2.0,
+    "hits": 22,
+    "protection": {
+      "kinetic": 0.18,
+      "concussive": 0.15,
+      "energy": 0.1
+    },
+    "cost": 1200,
+    "description": "Medium chitanium plate for combat hulls."
+  },
+  {
+    "id": "ora_chit_10",
+    "name": "Bellatrix Chit 10",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.7,
+    "volume": 1.0,
+    "hits": 10,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.06,
+      "energy": 0.04
+    },
+    "cost": 550,
+    "description": "Orion Aerospace chitanium plate."
+  },
+  {
+    "id": "prv_chit_14",
+    "name": "PRV Chit 14",
+    "maker": "ParaRamcoVidia",
+    "brand": "PRV",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.9,
+    "volume": 1.3,
+    "hits": 14,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.08,
+      "energy": 0.12
+    },
+    "cost": 820,
+    "description": "ParaRamcoVidia chitanium plate."
+  },
+  {
+    "id": "gi_chit_20",
+    "name": "GI Chit 20",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.2,
+    "volume": 1.6,
+    "hits": 20,
+    "protection": {
+      "kinetic": 0.15,
+      "concussive": 0.12,
+      "energy": 0.07
+    },
+    "cost": 950,
+    "description": "General Industrial chitanium plate."
+  },
+  {
+    "id": "chi_chit_15",
+    "name": "Chimera Chit 15",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.4,
+    "hits": 15,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.08,
+      "energy": 0.14
+    },
+    "cost": 880,
+    "description": "Chimera Corporation chitanium plate."
+  },
+  {
+    "id": "atl_chit_24",
+    "name": "Atlas Chit 24",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.5,
+    "volume": 2.1,
+    "hits": 24,
+    "protection": {
+      "kinetic": 0.2,
+      "concussive": 0.16,
+      "energy": 0.08
+    },
+    "cost": 1350,
+    "description": "Atlas Concern chitanium plate."
+  },
+  {
+    "id": "frz_chit_17",
+    "name": "FRZ Chit 17",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "hits": 17,
+    "protection": {
+      "kinetic": 0.11,
+      "concussive": 0.1,
+      "energy": 0.09
+    },
+    "cost": 840,
+    "description": "Four Rivers Zaibatsu chitanium plate."
+  },
+  {
+    "id": "go_chit_19",
+    "name": "GO Chit 19",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.2,
+    "volume": 1.7,
+    "hits": 19,
+    "protection": {
+      "kinetic": 0.16,
+      "concussive": 0.14,
+      "energy": 0.06
+    },
+    "cost": 980,
+    "description": "Galactic Outcomes chitanium plate."
+  },
+  {
+    "id": "sbi_chit_13",
+    "name": "Seven Bells Chit 13",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.85,
+    "volume": 1.2,
+    "hits": 13,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.07,
+      "energy": 0.11
+    },
+    "cost": 720,
+    "description": "Seven Bells Inc chitanium plate."
+  },
+  {
+    "id": "sne_chit_11",
+    "name": "SnedOS Chit 11",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.75,
+    "volume": 1.1,
+    "hits": 11,
+    "protection": {
+      "kinetic": 0.06,
+      "concussive": 0.05,
+      "energy": 0.15
+    },
+    "cost": 680,
+    "description": "SnedeCorp chitanium plate."
+  },
+  {
+    "id": "pt_chit_21",
+    "name": "Triad Chit 21",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.3,
+    "volume": 1.8,
+    "hits": 21,
+    "protection": {
+      "kinetic": 0.17,
+      "concussive": 0.13,
+      "energy": 0.07
+    },
+    "cost": 1100,
+    "description": "Pacific Triad chitanium plate."
+  },
+  {
+    "id": "te_chit_9",
+    "name": "TE Chit 9",
+    "maker": "Tukey Enterprises",
+    "brand": "TE",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.65,
+    "volume": 0.9,
+    "hits": 9,
+    "protection": {
+      "kinetic": 0.07,
+      "concussive": 0.05,
+      "energy": 0.04
+    },
+    "cost": 480,
+    "description": "Tukey Enterprises chitanium plate."
+  },
+  {
+    "id": "adc_chit_16",
+    "name": "Andean Chit 16",
+    "maker": "Andean Consolidated",
+    "brand": "Andean",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.4,
+    "hits": 16,
+    "protection": {
+      "kinetic": 0.11,
+      "concussive": 0.09,
+      "energy": 0.1
+    },
+    "cost": 760,
+    "description": "Andean Consolidated chitanium plate."
+  },
+  {
+    "id": "eg_chit_12",
+    "name": "Evergreen Chit 12",
+    "maker": "Evergreen Group",
+    "brand": "Evergreen",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.1,
+    "hits": 12,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.07,
+      "energy": 0.06
+    },
+    "cost": 620,
+    "description": "Evergreen Group chitanium plate."
+  },
+  {
+    "id": "apex_chit_8",
+    "name": "Apex Chit 8",
+    "maker": "Cult of Apex",
+    "brand": "Apex",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.6,
+    "volume": 0.9,
+    "hits": 8,
+    "protection": {
+      "kinetic": 0.05,
+      "concussive": 0.04,
+      "energy": 0.18
+    },
+    "cost": 900,
+    "description": "Cult of Apex chitanium plate."
+  },
+  {
+    "id": "hw_deflector_mk1",
+    "name": "Helios Deflector Mk I",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 40,
+    "protection": {
+      "kinetic": 0.75,
+      "concussive": 0.7,
+      "energy": 0.15,
+      "cyber": 0.0
+    },
+    "power_demand": 8.0,
+    "regen": 4.0,
+    "cost": 3200,
+    "description": "General-purpose kinetic deflector."
+  },
+  {
+    "id": "hw_energy_mk1",
+    "name": "Helios Energy Screen Mk I",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 35,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.25,
+      "energy": 0.8,
+      "cyber": 0.0
+    },
+    "power_demand": 10.0,
+    "regen": 3.5,
+    "cost": 3400,
+    "description": "Directed-energy shield screen."
+  },
+  {
+    "id": "oc_deflector_mk1",
+    "name": "OC Deflector Plate",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 30,
+    "protection": {
+      "kinetic": 0.65,
+      "concussive": 0.6,
+      "energy": 0.1,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2400,
+    "description": ""
+  },
+  {
+    "id": "ora_deflector_mk1",
+    "name": "Bellatrix Deflector",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 28,
+    "protection": {
+      "kinetic": 0.6,
+      "concussive": 0.55,
+      "energy": 0.12,
+      "cyber": 0.0
+    },
+    "power_demand": 5.5,
+    "regen": 3.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "prv_energy_mk1",
+    "name": "Ionique Energy Shield",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 32,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.2,
+      "energy": 0.75,
+      "cyber": 0.0
+    },
+    "power_demand": 9.0,
+    "regen": 3.0,
+    "cost": 3100,
+    "description": ""
+  },
+  {
+    "id": "gi_deflector_mk1",
+    "name": "GI Deflector",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 22,
+    "protection": {
+      "kinetic": 0.5,
+      "concussive": 0.45,
+      "energy": 0.08,
+      "cyber": 0.0
+    },
+    "power_demand": 5.0,
+    "regen": 3.0,
+    "cost": 1800,
+    "description": ""
+  },
+  {
+    "id": "sne_electronic_mk1",
+    "name": "SnedOS Electronic Veil",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "shield",
+    "shield_type": "electronic",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 20,
+    "protection": {
+      "kinetic": 0.0,
+      "concussive": 0.0,
+      "energy": 0.2,
+      "cyber": 0.7
+    },
+    "power_demand": 4.0,
+    "regen": 3.0,
+    "cost": 2600,
+    "description": "",
+    "compute_demand": 2.0
+  },
+  {
+    "id": "frz_deflector_mk1",
+    "name": "FRZ Deflector Shield",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 26,
+    "protection": {
+      "kinetic": 0.58,
+      "concussive": 0.52,
+      "energy": 0.11,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2640,
+    "description": ""
+  },
+  {
+    "id": "chi_energy_mk1",
+    "name": "Chimera Energy Shield",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 30,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.22,
+      "energy": 0.72,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2800,
+    "description": ""
+  },
+  {
+    "id": "atl_deflector_mk1",
+    "name": "Atlas Deflector Shield",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 34,
+    "protection": {
+      "kinetic": 0.68,
+      "concussive": 0.62,
+      "energy": 0.12,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2960,
+    "description": ""
+  },
+  {
+    "id": "go_deflector_mk1",
+    "name": "GO Deflector Shield",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 25,
+    "protection": {
+      "kinetic": 0.55,
+      "concussive": 0.5,
+      "energy": 0.1,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2600,
+    "description": ""
+  },
+  {
+    "id": "pt_energy_mk1",
+    "name": "Triad Energy Shield",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 28,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.18,
+      "energy": 0.68,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2720,
+    "description": ""
+  },
+  {
+    "id": "te_deflector_mk1",
+    "name": "TE Deflector Shield",
+    "maker": "Tukey Enterprises",
+    "brand": "TE",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 18,
+    "protection": {
+      "kinetic": 0.45,
+      "concussive": 0.4,
+      "energy": 0.08,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2320,
+    "description": ""
+  },
+  {
+    "id": "go_pd_mk1",
+    "name": "GO Point Defence Turret",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.35,
+    "power_demand": 3.0,
+    "cost": 1900,
+    "description": ""
+  },
+  {
+    "id": "oc_pd_mk1",
+    "name": "OC Sentinel PD",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.28,
+    "power_demand": 3.0,
+    "cost": 1700,
+    "description": ""
+  },
+  {
+    "id": "hw_pd_mk1",
+    "name": "Helios Guard PD",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.32,
+    "power_demand": 3.0,
+    "cost": 2100,
+    "description": ""
+  },
+  {
+    "id": "ora_pd_mk1",
+    "name": "Bellatrix PD Array",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.25,
+    "power_demand": 3.0,
+    "cost": 1600,
+    "description": ""
+  },
+  {
+    "id": "frz_pd_mk1",
+    "name": "FRZ Intercept Grid",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.3,
+    "power_demand": 3.0,
+    "cost": 1850,
+    "description": ""
+  },
+  {
+    "id": "gi_pd_mk1",
+    "name": "GI Close-In PD",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.22,
+    "power_demand": 3.0,
+    "cost": 1400,
+    "description": ""
+  },
+  {
+    "id": "atl_pd_mk1",
+    "name": "Atlas Watchdog PD",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.33,
+    "power_demand": 3.0,
+    "cost": 2000,
+    "description": ""
+  },
+  {
+    "id": "sbi_pd_mk1",
+    "name": "Seven Bells PD Bell",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.27,
+    "power_demand": 3.0,
+    "cost": 1750,
+    "description": ""
+  },
+  {
+    "id": "sne_cyberwall_mk1",
+    "name": "SnedOS Cyberwall",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.4
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "chi_cyberwall_mk1",
+    "name": "Chimera Firewall",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.35
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "prv_cyberwall_mk1",
+    "name": "PRV Compute Guard",
+    "maker": "ParaRamcoVidia",
+    "brand": "PRV",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.3
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "hw_cyberwall_mk1",
+    "name": "Helios Signal Guard",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.25
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "sbi_cyberwall_mk1",
+    "name": "Seven Bells Cipher Ring",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.28
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "frz_cyberwall_mk1",
+    "name": "FRZ Lattice Guard",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.22
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": ""
+  },
+  {
+    "id": "rocket_magazine_16",
+    "name": "Rocket Rack 16",
+    "maker": "Orion Aerospace",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 0.9,
+    "volume": 1.8,
+    "ammunition_capacity": {
+      "rocket_he": 16,
+      "rocket_emp": 16
+    },
+    "cost": 620,
+    "description": "Internal rocket storage rack."
   }
 ]

@@ -132,7 +132,7 @@
       "oc_field_air_2",
       "sensor_basic",
       "vessel_registration_beacon",
-      "missile_magazine_24",
+      "rocket_magazine_16",
       "scatter_magazine_80",
       "fuel_tank_large",
       "chitanium_5mm",
@@ -152,10 +152,11 @@
       "oc_workhorse_lungs",
       "sensor_basic",
       "vessel_registration_beacon",
-      "missile_magazine_24",
+      "rocket_magazine_16",
       "scatter_magazine_80",
       "fuel_tank_large",
       "chitanium_10mm",
+      "hw_deflector_mk1",
       "missile_launcher",
       "scatter_cannon"
     ]
