@@ -114,7 +114,14 @@ func _physics_process(delta: float) -> void:
 	if not session.in_unspace:
 		_ensure_traffic_director()
 		if _traffic_director != null:
-			_traffic_director.tick(delta, _player.global_position, _world_loader)
+			_traffic_director.tick(
+				delta,
+				_player.global_position,
+				_world_loader,
+				_player.motion.velocity,
+				_player.motion.facing,
+				_player.motion.is_thrusting()
+			)
 
 	var contacts := _world_loader.get_nav_contacts(catalog, session.in_unspace)
 	if session.in_unspace and not player_ship.has_capability("4_space_topology"):

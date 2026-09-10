@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" path="res://assets/ships/fx/thrust.svg" id="3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_npc"]
-radius = 10.0
-height = 34.0
+radius = 16.0
+height = 44.0
 
 [node name="NpcShip" type="CharacterBody2D"]
 collision_layer = 16

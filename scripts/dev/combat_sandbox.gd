@@ -6,7 +6,7 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const NPC_MIN_WEAPON_RANGE := 800.0
 const ENGAGEMENT_MARGIN := 80.0
 const DEFAULT_PLAYER_TEMPLATE := "flare_on_ss"
-const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103"
+const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103a"
 const NAV_RADIUS := 3000.0
 
 enum BoutState { SETUP, FIGHTING }
@@ -22,6 +22,7 @@ enum BoutState { SETUP, FIGHTING }
 @onready var _opponent_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn/OpponentOption
 @onready var _opponent_spec_host: VBoxContainer = $SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn/OpponentScroll/OpponentSpec
 @onready var _attitude_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Footer/AttitudeOption
+@onready var _skill_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Footer/SkillOption
 @onready var _begin_button: Button = $SetupLayer/Root/Panel/Margin/VBox/Footer/BeginButton
 @onready var _status_label: Label = $SetupLayer/Root/Panel/Margin/VBox/Footer/StatusLabel
 
@@ -49,6 +50,7 @@ func _ready() -> void:
 
 	_populate_ship_options()
 	_populate_attitude_options()
+	_populate_skill_options()
 	_refresh_spec_panels()
 
 	_begin_button.pressed.connect(_on_begin_pressed)
@@ -106,6 +108,27 @@ func _populate_attitude_options() -> void:
 	_attitude_option.add_item("Fight to the death")
 	_attitude_option.add_item("Standard NPC")
 	_attitude_option.selected = 0
+
+
+func _populate_skill_options() -> void:
+	_skill_option.clear()
+	_skill_option.add_item("Random")
+	_skill_option.add_item("Novice")
+	_skill_option.add_item("Experienced")
+	_skill_option.add_item("Elite")
+	_skill_option.selected = 2
+
+
+func _selected_pilot_skill() -> int:
+	match _skill_option.selected:
+		1:
+			return CombatPilot.Skill.NOVICE
+		2:
+			return CombatPilot.Skill.EXPERIENCED
+		3:
+			return CombatPilot.Skill.ELITE
+		_:
+			return -1
 
 
 func _select_template_option(option: OptionButton, template_id: String) -> void:
@@ -175,6 +198,8 @@ func _rebuild_spec_panel(host: VBoxContainer, template_id: String) -> void:
 	))
 
 	host.add_child(_section_label("SYSTEMS"))
+	if assembled.modules_in_category("weapon").is_empty():
+		host.add_child(_detail_label("WEAPONS", "Unarmed"))
 	_add_module_groups(host, assembled)
 
 
@@ -238,10 +263,20 @@ func _on_begin_pressed() -> void:
 		_status_label.text = "Select player and opponent hulls."
 		return
 
-	_begin_bout(player_template_id, opponent_template_id, _attitude_option.selected)
+	_begin_bout(
+		player_template_id,
+		opponent_template_id,
+		_attitude_option.selected,
+		_selected_pilot_skill()
+	)
 
 
-func _begin_bout(player_template_id: String, opponent_template_id: String, attitude_index: int) -> void:
+func _begin_bout(
+	player_template_id: String,
+	opponent_template_id: String,
+	attitude_index: int,
+	pilot_skill: int = -1
+) -> void:
 	_clear_bout()
 
 	var player_owned := _owned_ship_from_template(player_template_id, "sandbox_player")
@@ -265,7 +300,7 @@ func _begin_bout(player_template_id: String, opponent_template_id: String, attit
 	_player.freeze_motion()
 	_player.rotation = _player.motion.facing + PI / 2.0
 
-	_spawn_opponent(opponent_template_id, separation, attitude_index)
+	_spawn_opponent(opponent_template_id, separation, attitude_index, pilot_skill)
 
 	_camera.make_current()
 	_hud.bind(session, _player, player_assembled)
@@ -277,7 +312,12 @@ func _begin_bout(player_template_id: String, opponent_template_id: String, attit
 	get_tree().paused = false
 
 
-func _spawn_opponent(template_id: String, separation: float, attitude_index: int) -> void:
+func _spawn_opponent(
+	template_id: String,
+	separation: float,
+	attitude_index: int,
+	pilot_skill: int = -1
+) -> void:
 	var traffic_config := catalog.get_traffic_config()
 	var spawn_pos := Vector2(separation, 0.0)
 	var spawn_facing := PI
@@ -300,6 +340,8 @@ func _spawn_opponent(template_id: String, separation: float, attitude_index: int
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
 		_opponent_actor.ai_state = TrafficActorScript.STATE_ENGAGE
 		_opponent_actor.engage_timer = 9999.0
+		_opponent_actor.begin_combat_pilot()
+		_apply_pilot_skill(_opponent_actor, pilot_skill)
 	else:
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
@@ -309,6 +351,13 @@ func _spawn_opponent(template_id: String, separation: float, attitude_index: int
 	_traffic_root.add_child(_opponent_node)
 	_opponent_node.global_position = spawn_pos
 	_opponent_node.bind_actor(_opponent_actor, catalog)
+
+
+func _apply_pilot_skill(actor, pilot_skill: int) -> void:
+	if pilot_skill < 0 or actor == null or actor.combat_pilot == null:
+		return
+	actor.combat_pilot.skill = pilot_skill as CombatPilot.Skill
+	actor.combat_pilot._apply_skill_table()
 
 
 func _ensure_traffic_root() -> Node2D:
@@ -350,7 +399,10 @@ func _physics_process(delta: float) -> void:
 		_player.global_position,
 		anchors,
 		0.0,
-		null
+		null,
+		_player.motion.velocity,
+		_player.motion.facing,
+		_player.motion.is_thrusting()
 	)
 
 	if _opponent_node != null and is_instance_valid(_opponent_node):

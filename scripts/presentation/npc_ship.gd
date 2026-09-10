@@ -3,6 +3,7 @@ extends CharacterBody2D
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
+const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
@@ -17,6 +18,7 @@ var catalog: Catalog
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
 @onready var _hull: Sprite2D = $Visual/Hull
+@onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 
 
 func bind_actor(traffic_actor, game_catalog: Catalog) -> void:
@@ -67,7 +69,6 @@ func spawn_weapon_orders(orders: Array) -> void:
 	if world == null or actor == null:
 		return
 
-	var origin := _muzzle_position()
 	var direction := Vector2.from_angle(actor.motion.facing)
 	for order_variant in orders:
 		if typeof(order_variant) != TYPE_DICTIONARY:
@@ -78,15 +79,46 @@ func spawn_weapon_orders(orders: Array) -> void:
 		var max_range := float(order.get("range", 0.0))
 		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
 		var weapon_type := str(order.get("weapon_type", ""))
+		var exclude: Array = [self]
 		if delivery in ["beam", "cyber"]:
-			_LaserBeam.spawn(world, origin, direction, max_range, delivery, packets, WEAPON_MASK, [])
+			_LaserBeam.spawn(
+				world,
+				_muzzle_position(),
+				direction,
+				max_range,
+				delivery,
+				packets,
+				WEAPON_MASK,
+				exclude,
+				self
+			)
 		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
 			_RocketProjectile.spawn(
-				world, origin, direction, speed, max_range, delivery, packets, WEAPON_MASK, []
+				world,
+				_muzzle_position(_RocketProjectile.ROCKET_RADIUS),
+				direction,
+				speed,
+				max_range,
+				delivery,
+				packets,
+				WEAPON_MASK,
+				exclude,
+				actor.motion.velocity,
+				self
 			)
 		elif delivery in ["ballistic", "plasma", "guided"]:
 			_MassDriverRound.spawn(
-				world, origin, direction, speed, max_range, delivery, packets, WEAPON_MASK, []
+				world,
+				_muzzle_position(_MassDriverRound.ROUND_RADIUS),
+				direction,
+				speed,
+				max_range,
+				delivery,
+				packets,
+				WEAPON_MASK,
+				exclude,
+				actor.motion.velocity,
+				self
 			)
 
 
@@ -115,6 +147,7 @@ func _apply_hull_visual() -> void:
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
 	if not sprite_path.is_empty():
 		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
+		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
 
 	var base := _base_hull_color()
 	_hull.modulate = base.lightened(actor.hull_color_shift)
@@ -126,10 +159,14 @@ func _base_hull_color() -> Color:
 	return Color.html(str(actor.assembled_ship.chassis.get("hull_color", "#ffffff")))
 
 
-func _muzzle_position() -> Vector2:
+func _muzzle_position(projectile_radius: float = 5.0) -> Vector2:
 	if actor == null:
 		return global_position
-	return global_position + Vector2.from_angle(actor.motion.facing) * ShipWeapons.MUZZLE_OFFSET
+	var offset := ShipWeapons.MUZZLE_OFFSET
+	if not actor.assembled_ship.chassis.is_empty():
+		var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
+		offset = HullHitboxScript.muzzle_offset(sprite_path, projectile_radius)
+	return global_position + Vector2.from_angle(actor.motion.facing) * offset
 
 
 func _get_world_root() -> Node2D:

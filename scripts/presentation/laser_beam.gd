@@ -17,18 +17,21 @@ static func spawn(
 	delivery_type: String,
 	packets: Dictionary,
 	collision_mask: int = DEFAULT_WEAPON_MASK,
-	exclude: Array = []
+	exclude: Array = [],
+	shooter: Node = null
 ) -> void:
-	var end := origin + direction.normalized() * max_range
-	var hit := _raycast(parent, origin, direction, max_range, collision_mask, exclude)
+	var travel := direction.normalized()
+	var start := origin + travel * 6.0
+	var end := start + travel * max_range
+	var hit := _raycast(parent, start, direction, max_range, collision_mask, exclude)
 	if not hit.is_empty():
 		end = hit.position
-		WeaponHit.apply(hit.collider, delivery_type, packets)
+		WeaponHit.apply(hit.collider, delivery_type, packets, shooter)
 
 	var beam := Line2D.new()
 	beam.width = 2.5
 	beam.default_color = CYBER_COLOR if delivery_type == "cyber" else BEAM_COLOR
-	beam.points = PackedVector2Array([origin, end])
+	beam.points = PackedVector2Array([start, end])
 	parent.add_child(beam)
 
 	var timer := beam.get_tree().create_timer(DURATION)

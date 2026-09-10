@@ -2,6 +2,7 @@ extends RefCounted
 
 const SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
+const CombatPilotScript := preload("res://scripts/gameplay/combat_pilot.gd")
 
 enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
 enum CombatAttitude { STANDARD, FIGHT_TO_DEATH }
@@ -257,6 +258,7 @@ var hull_max: float = 0.0
 var combat_state: ShipCombatState
 var cruise_speed_cap: float = 100.0
 var engage_timer: float = 0.0
+var combat_pilot: CombatPilot
 var loiter_center: Vector2 = Vector2.ZERO
 var loiter_angle: float = 0.0
 var route_from_id: String = ""
@@ -336,8 +338,15 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or _should_engage(traffic_config):
 			ai_state = AiState.ENGAGE
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
+			begin_combat_pilot()
 		else:
 			ai_state = AiState.FLEE
+
+
+func begin_combat_pilot() -> void:
+	if combat_pilot == null:
+		combat_pilot = CombatPilotScript.new()
+	combat_pilot.reset()
 
 
 func freeze_traffic_route() -> void:
@@ -453,7 +462,10 @@ func tick(
 	player_pos: Vector2,
 	anchors: Array,
 	traffic_envelope: float,
-	world_loader: WorldLoader = null
+	world_loader: WorldLoader = null,
+	player_vel: Vector2 = Vector2.ZERO,
+	player_facing: float = 0.0,
+	player_thrusting: bool = false
 ) -> void:
 	pending_weapon_orders.clear()
 	cycle_pending = false
@@ -467,7 +479,18 @@ func tick(
 	init_route_from_anchors(anchors, traffic_config)
 
 	if not has_sim_slot:
-		_tick_kinematic(delta, player_pos, anchors, traffic_config, traffic_envelope, world_loader, prev_position)
+		_tick_kinematic(
+			delta,
+			player_pos,
+			player_vel,
+			player_facing,
+			player_thrusting,
+			anchors,
+			traffic_config,
+			traffic_envelope,
+			world_loader,
+			prev_position
+		)
 		return
 
 	_tick_full_sim(
@@ -475,6 +498,9 @@ func tick(
 		traffic_config,
 		delta,
 		player_pos,
+		player_vel,
+		player_facing,
+		player_thrusting,
 		anchors,
 		traffic_envelope,
 		world_loader,
@@ -487,12 +513,17 @@ func _tick_full_sim(
 	traffic_config: Dictionary,
 	delta: float,
 	player_pos: Vector2,
+	player_vel: Vector2,
+	player_facing: float,
+	player_thrusting: bool,
 	anchors: Array,
 	traffic_envelope: float,
 	world_loader: WorldLoader,
 	prev_position: Vector2
 ) -> void:
-	var inputs := _build_ai_inputs(delta, player_pos, anchors, traffic_config)
+	var inputs := _build_ai_inputs(
+		delta, player_pos, player_vel, player_facing, player_thrusting, anchors, traffic_config
+	)
 	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 
 	if combat_state == null:
@@ -569,6 +600,9 @@ func _tick_full_sim(
 func _tick_kinematic(
 	delta: float,
 	player_pos: Vector2,
+	player_vel: Vector2,
+	player_facing: float,
+	player_thrusting: bool,
 	anchors: Array,
 	traffic_config: Dictionary,
 	traffic_envelope: float,
@@ -578,7 +612,9 @@ func _tick_kinematic(
 	operating_state.transponder_broadcasting = false
 	_invalidate_beacon_cache()
 
-	var inputs := _build_ai_inputs(delta, player_pos, anchors, traffic_config)
+	var inputs := _build_ai_inputs(
+		delta, player_pos, player_vel, player_facing, player_thrusting, anchors, traffic_config
+	)
 	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 
 	motion.step(
@@ -698,6 +734,9 @@ func _should_engage(traffic_config: Dictionary) -> bool:
 func _build_ai_inputs(
 	delta: float,
 	player_pos: Vector2,
+	player_vel: Vector2,
+	player_facing: float,
+	player_thrusting: bool,
 	anchors: Array,
 	traffic_config: Dictionary
 ) -> Dictionary:
@@ -713,8 +752,27 @@ func _build_ai_inputs(
 
 	match ai_state:
 		AiState.ENGAGE:
-			inputs = _steer_toward(player_pos, true, true)
-			inputs["fire"] = _can_fire_at(player_pos)
+			if combat_pilot == null:
+				combat_pilot = CombatPilotScript.new()
+			var profile: Dictionary = CombatPilotScript.build_weapon_profile(assembled_ship, owned_ship)
+			var max_speed := 100.0
+			if assembled_ship != null and assembled_ship.stats != null:
+				max_speed = assembled_ship.stats.max_speed
+			var maneuver := "medium"
+			if assembled_ship != null and not assembled_ship.chassis.is_empty():
+				maneuver = str(assembled_ship.chassis.get("maneuver", "medium"))
+			inputs = combat_pilot.tick({
+				"ship_pos": position,
+				"facing": motion.facing,
+				"ship_vel": motion.velocity,
+				"target_pos": player_pos,
+				"target_vel": player_vel,
+				"target_facing": player_facing,
+				"target_thrusting": player_thrusting,
+				"max_speed": max_speed,
+				"maneuver": maneuver,
+				"profile": profile,
+			})
 		AiState.FLEE:
 			var flee_target := _find_anchor_position(anchors, "habitat")
 			if flee_target.length_squared() < 1.0:
@@ -801,30 +859,29 @@ func _steer_toward(target: Vector2, use_thrust: bool, use_boost: bool) -> Dictio
 		"fire": false,
 	}
 	if delta_facing > ROTATE_THRESHOLD:
-		inputs["rotate_left"] = true
-	elif delta_facing < -ROTATE_THRESHOLD:
 		inputs["rotate_right"] = true
+	elif delta_facing < -ROTATE_THRESHOLD:
+		inputs["rotate_left"] = true
 
 	var outside_arrival := to_target.length_squared() > ARRIVAL_DISTANCE * ARRIVAL_DISTANCE
-	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
-	if use_thrust and outside_arrival:
-		if in_combat:
+	var aligned := absf(delta_facing) < ROTATE_THRESHOLD * 2.0
+
+	if ai_state == AiState.FLEE and use_thrust and outside_arrival:
+		inputs["thrust"] = true
+		inputs["boost"] = use_boost and aligned
+	elif use_thrust and outside_arrival:
+		var speed := motion.velocity.length()
+		var speed_low := speed < cruise_speed_cap * COAST_SPEED_FRACTION
+		var heading_error := 0.0
+		if speed > 1.0:
+			heading_error = absf(wrapf(motion.velocity.angle() - desired, -PI, PI))
+		if speed_low:
 			inputs["thrust"] = true
-			inputs["boost"] = use_boost and absf(delta_facing) < ROTATE_THRESHOLD * 2.0
-		else:
-			var speed := motion.velocity.length()
-			var speed_low := speed < cruise_speed_cap * COAST_SPEED_FRACTION
-			var aligned := absf(delta_facing) < ROTATE_THRESHOLD * 2.0
-			var heading_error := 0.0
-			if speed > 1.0:
-				heading_error = absf(wrapf(motion.velocity.angle() - desired, -PI, PI))
-			if speed_low:
-				inputs["thrust"] = true
-				inputs["boost"] = use_boost
-			elif aligned and heading_error > COAST_HEADING_TOLERANCE:
-				inputs["thrust"] = true
-			elif role in ["loiter", "runabout"] and heading_error > COAST_HEADING_TOLERANCE:
-				inputs["thrust"] = true
+			inputs["boost"] = use_boost
+		elif aligned and heading_error > COAST_HEADING_TOLERANCE:
+			inputs["thrust"] = true
+		elif role in ["loiter", "runabout"] and heading_error > COAST_HEADING_TOLERANCE:
+			inputs["thrust"] = true
 	return inputs
 
 

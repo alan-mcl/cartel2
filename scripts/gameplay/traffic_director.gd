@@ -58,7 +58,14 @@ func clear() -> void:
 	_traffic_root = null
 
 
-func tick(delta: float, player_pos: Vector2, world_loader: WorldLoader) -> void:
+func tick(
+	delta: float,
+	player_pos: Vector2,
+	world_loader: WorldLoader,
+	player_vel: Vector2 = Vector2.ZERO,
+	player_facing: float = 0.0,
+	player_thrusting: bool = false
+) -> void:
 	if _traffic_root == null:
 		return
 
@@ -82,7 +89,18 @@ func tick(delta: float, player_pos: Vector2, world_loader: WorldLoader) -> void:
 		actor.near_lod = actor.has_sim_slot
 		_update_lod_node(actor, was_near)
 
-		actor.tick(_catalog, _traffic_config, delta, player_pos, anchors, _traffic_envelope, world_loader)
+		actor.tick(
+			_catalog,
+			_traffic_config,
+			delta,
+			player_pos,
+			anchors,
+			_traffic_envelope,
+			world_loader,
+			player_vel,
+			player_facing,
+			player_thrusting
+		)
 		_spawn_actor_weapons(actor)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:

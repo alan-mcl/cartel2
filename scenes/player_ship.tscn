@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" path="res://assets/ships/fx/thrust.svg" id="4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ship"]
-radius = 10.0
-height = 34.0
+radius = 16.0
+height = 44.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sensor"]
 radius = 120.0

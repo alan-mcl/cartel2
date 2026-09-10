@@ -151,6 +151,14 @@ text = "Opponent attitude"
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 
+[node name="SkillLabel" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+layout_mode = 2
+text = "Pilot skill"
+
+[node name="SkillOption" type="OptionButton" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
 [node name="BeginButton" type="Button" parent="SetupLayer/Root/Panel/Margin/VBox/Footer"]
 layout_mode = 2
 text = "Begin bout"
