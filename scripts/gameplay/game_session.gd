@@ -519,7 +519,25 @@ func visit(catalog: Catalog, target_building_id: String) -> bool:
 
 	building_id = target_building_id
 	location_name = "%s / %s" % [str(habitat.get("name", habitat_id)), str(building.get("name", target_building_id))]
-	last_log = str(building.get("short_desc", ""))
+	changed.emit()
+	return true
+
+
+func rename_ship(ship_id: String, new_name: String) -> bool:
+	if not docked:
+		return false
+
+	var trimmed := new_name.strip_edges()
+	if trimmed.is_empty():
+		return false
+
+	var ship := get_owned_ship(ship_id)
+	if ship == null or ship.location != habitat_id:
+		return false
+
+	var old_name := ship.name
+	ship.name = trimmed
+	last_log = "Renamed %s to %s." % [old_name, trimmed]
 	changed.emit()
 	return true
 

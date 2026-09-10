@@ -10,9 +10,12 @@ const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
 @onready var _gst_clock: Label = $Layout/Header/HeaderBox/GstClockLabel
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
-@onready var _art_host: VBoxContainer = $Layout/Body/Split/Right/ArtHost
+@onready var _building_title: Label = $Layout/Body/Split/Right/BuildingHeader/BuildingInfo/BuildingTitle
+@onready var _building_description: Label = $Layout/Body/Split/Right/BuildingHeader/BuildingInfo/BuildingDescription
+@onready var _art_host: VBoxContainer = $Layout/Body/Split/Right/BuildingHeader/ArtHost
 @onready var _content_scroll: ScrollContainer = $Layout/Body/Split/Right/ContentScroll
 @onready var _content_host: VBoxContainer = $Layout/Body/Split/Right/ContentScroll/ContentHost
+@onready var _terminal_host: VBoxContainer = $Layout/Body/Split/Right/TerminalHost
 @onready var _shipyard_host: Control = $Layout/Body/Split/Right/ShipyardHost
 @onready var _log: Label = $Layout/Body/Split/Right/Log
 
@@ -38,6 +41,8 @@ var _selected_dealer_stock_id: String = ""
 var _dealer_stock_ids: PackedStringArray = PackedStringArray()
 var _dealer_item_list: ItemList
 var _suppress_dealer_select: bool = false
+
+var _show_rename_field: bool = false
 
 
 func _ready() -> void:
@@ -82,13 +87,8 @@ func refresh() -> void:
 	_log.text = _context.session.last_log
 
 	_rebuild_building_list(habitat)
-	var building_type := _context.catalog.get_building_type(building)
-	if building_type == "shipyard":
-		_show_shipyard_embedded()
-	else:
-		_hide_shipyard_embedded()
-		_update_art(habitat, building)
-		_rebuild_content(building)
+	_update_building_header(habitat, building)
+	_show_building_content(habitat, building)
 
 
 func handle_back() -> bool:
@@ -112,7 +112,8 @@ func _rebuild_building_list(habitat: Dictionary) -> void:
 		if building.is_empty():
 			continue
 		_building_ids.append(building_id)
-		_building_item_list.add_item(str(building.get("name", building_id)))
+		var index := _building_item_list.add_item(str(building.get("name", building_id)))
+		_building_item_list.set_item_tooltip(index, str(building.get("short_desc", "")))
 
 	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
 
@@ -144,6 +145,7 @@ func _select_building_at_index(index: int) -> void:
 	_selected_commodity_id = ""
 	_selected_terminal_ship_id = ""
 	_selected_dealer_stock_id = ""
+	_show_rename_field = false
 	_update_building_panels()
 
 
@@ -156,19 +158,24 @@ func _update_building_panels() -> void:
 		return
 	_log.text = _context.session.last_log
 	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
-	var building_type := _context.catalog.get_building_type(building)
-	if building_type == "shipyard":
-		_show_shipyard_embedded()
-	else:
-		_hide_shipyard_embedded()
-		_update_art(habitat, building)
-		_rebuild_content(building)
+	_update_building_header(habitat, building)
+	_show_building_content(habitat, building)
 
 
-func _update_art(habitat: Dictionary, building: Dictionary) -> void:
+func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:
+	if building.is_empty():
+		_building_title.text = ""
+		_building_description.text = ""
+		return
+
+	_building_title.text = str(building.get("name", ""))
+	_building_description.text = _context.catalog.get_building_description(building)
+
 	if _art_frame == null:
 		_art_frame = LOCATION_ART.instantiate()
 		_art_host.add_child(_art_frame)
+	if _art_frame.has_method("configure_header_mode"):
+		_art_frame.configure_header_mode(true)
 
 	var art_path := _context.catalog.get_building_art(building)
 	var label := str(building.get("name", ""))
@@ -176,6 +183,22 @@ func _update_art(habitat: Dictionary, building: Dictionary) -> void:
 		art_path = _context.catalog.get_habitat_art(habitat)
 		label = str(habitat.get("name", ""))
 	_art_frame.set_art_path(art_path, label)
+
+
+func _show_building_content(habitat: Dictionary, building: Dictionary) -> void:
+	var building_type := _context.catalog.get_building_type(building)
+	match building_type:
+		"shipyard":
+			_show_shipyard_embedded()
+		"terminal":
+			_hide_shipyard_embedded()
+			_show_terminal_embedded(building)
+		_:
+			_hide_shipyard_embedded()
+			_hide_terminal_embedded()
+			_content_scroll.visible = true
+			_log.visible = true
+			_rebuild_content(building)
 
 
 func _rebuild_content(building: Dictionary) -> void:
@@ -189,19 +212,9 @@ func _rebuild_content(building: Dictionary) -> void:
 		return
 
 	var building_type := _context.catalog.get_building_type(building)
-	var name_label := _headline_label(str(building.get("name", "")))
-	_content_host.add_child(name_label)
-
-	var desc := Label.new()
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.text = _context.catalog.get_building_description(building)
-	_content_host.add_child(desc)
-
 	match building_type:
 		"market":
 			_build_market_content(building)
-		"terminal":
-			_build_terminal_content(building)
 		"ship_dealer":
 			_build_ship_dealer_content(building)
 		"chassis_dealer":
@@ -366,8 +379,35 @@ func _update_portrait(portrait_path: String) -> void:
 	_portrait.visible = texture != null
 
 
+func _show_terminal_embedded(_building: Dictionary) -> void:
+	_content_scroll.visible = false
+	_terminal_host.visible = true
+	_log.visible = true
+	_clear_children(_terminal_host)
+	_build_terminal_content(_building)
+
+
+func _hide_terminal_embedded() -> void:
+	_terminal_host.visible = false
+
+
 func _build_terminal_content(_building: Dictionary) -> void:
 	var ships := _context.session.ships_at(_context.session.habitat_id)
+
+	var columns := HBoxContainer.new()
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 12)
+	_terminal_host.add_child(columns)
+
+	var left := VBoxContainer.new()
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left.size_flags_stretch_ratio = 1.0
+	left.add_theme_constant_override("separation", 4)
+	columns.add_child(left)
+
+	left.add_child(_section_label("YOUR DOCKED SHIPS"))
+
 	if ships.is_empty():
 		var empty := Label.new()
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -375,24 +415,10 @@ func _build_terminal_content(_building: Dictionary) -> void:
 			"No ships docked at this habitat. "
 			+ "Visit Concord Scouts for a used ship or Skyedge for an unfitted frame."
 		)
-		_content_host.add_child(empty)
+		left.add_child(empty)
 		return
 
 	_terminal_ship_ids.clear()
-
-	var split := HSplitContainer.new()
-	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	split.custom_minimum_size = Vector2(0, 320)
-	_content_host.add_child(split)
-
-	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(280, 0)
-	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	left.add_theme_constant_override("separation", 4)
-	split.add_child(left)
-
-	left.add_child(_section_label("DOCKED SHIPS"))
 
 	_terminal_ship_item_list = ItemList.new()
 	_terminal_ship_item_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -401,7 +427,18 @@ func _build_terminal_content(_building: Dictionary) -> void:
 	_terminal_ship_item_list.item_selected.connect(_on_terminal_ship_item_selected)
 	left.add_child(_terminal_ship_item_list)
 
-	var detail := _add_scroll_pane(split, "terminal_detail_host")
+	var detail := _add_scroll_pane(columns, "terminal_detail_host")
+	var detail_scroll := detail.get_parent() as ScrollContainer
+	if detail_scroll != null:
+		detail_scroll.size_flags_stretch_ratio = 1.0
+
+	var admin := VBoxContainer.new()
+	admin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	admin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	admin.size_flags_stretch_ratio = 1.0
+	admin.add_theme_constant_override("separation", 8)
+	admin.set_meta("terminal_admin_host", true)
+	columns.add_child(admin)
 
 	for ship in ships:
 		_terminal_ship_ids.append(ship.id)
@@ -418,7 +455,7 @@ func _build_terminal_content(_building: Dictionary) -> void:
 		_selected_terminal_ship_id,
 		"_suppress_terminal_ship_select"
 	)
-	_rebuild_terminal_ship_detail(detail)
+	_rebuild_terminal_ship_panels()
 
 
 func _on_terminal_ship_item_selected(index: int) -> void:
@@ -427,9 +464,17 @@ func _on_terminal_ship_item_selected(index: int) -> void:
 	if index < 0 or index >= _terminal_ship_ids.size():
 		return
 	_selected_terminal_ship_id = _terminal_ship_ids[index]
+	_show_rename_field = false
+	_rebuild_terminal_ship_panels()
+
+
+func _rebuild_terminal_ship_panels() -> void:
 	var detail := _find_meta_host("terminal_detail_host")
+	var admin := _find_meta_host("terminal_admin_host")
 	if detail != null:
 		_rebuild_terminal_ship_detail(detail)
+	if admin != null:
+		_rebuild_terminal_admin_panel(admin)
 
 
 func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
@@ -454,12 +499,6 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 	art.set_art_path(sprite_path, ship.name)
 
 	detail.add_child(_headline_label(ship.name))
-
-	var summary := Label.new()
-	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	summary.text = assembled.get_summary()
-	detail.add_child(summary)
-
 	detail.add_child(_detail_row("Chassis", str(assembled.chassis.get("name", ship.chassis_id))))
 
 	detail.add_child(_section_label("MODULES"))
@@ -477,24 +516,87 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 			if stats.has(key):
 				detail.add_child(_detail_row(key, str(stats[key])))
 
+
+func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
+	_clear_children(admin)
+
+	if _selected_terminal_ship_id.is_empty():
+		return
+
+	var ship := _context.session.get_owned_ship(_selected_terminal_ship_id)
+	if ship == null:
+		return
+
+	var rename := Button.new()
+	rename.text = "Rename Ship"
+	rename.pressed.connect(_on_rename_ship_pressed)
+	admin.add_child(rename)
+
+	if _show_rename_field:
+		var rename_row := HBoxContainer.new()
+		rename_row.add_theme_constant_override("separation", 8)
+		admin.add_child(rename_row)
+
+		var field := LineEdit.new()
+		field.text = ship.name
+		field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		field.text_submitted.connect(_on_rename_ship_submitted)
+		rename_row.add_child(field)
+
+		var confirm := Button.new()
+		confirm.text = "Confirm"
+		confirm.pressed.connect(func() -> void:
+			_on_rename_ship_submitted(field.text)
+		)
+		rename_row.add_child(confirm)
+
+	admin.add_child(_section_label("LAUNCH STATUS"))
+
 	var blockers := ShipAssembly.undock_blockers(_context.catalog, ship)
 	if blockers.is_empty():
-		var undock := Button.new()
-		undock.text = "Undock"
-		undock.pressed.connect(_on_undock_ship.bind(ship.id))
-		detail.add_child(undock)
+		var cleared := Label.new()
+		cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		cleared.text = "All checks green - cleared for launch."
+		admin.add_child(cleared)
+
+		var launch := Button.new()
+		launch.text = "Launch"
+		launch.pressed.connect(_on_undock_ship.bind(ship.id))
+		admin.add_child(launch)
 	else:
-		detail.add_child(_section_label("LAUNCH CHECKS"))
 		for reason in blockers:
 			var hint := Label.new()
 			hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			hint.text = reason
-			detail.add_child(hint)
+			admin.add_child(hint)
+
+
+func _on_rename_ship_pressed() -> void:
+	_show_rename_field = true
+	call_deferred("_refresh_terminal_admin_panel")
+
+
+func _refresh_terminal_admin_panel() -> void:
+	var admin := _find_meta_host("terminal_admin_host")
+	if admin != null:
+		_rebuild_terminal_admin_panel(admin)
+
+
+func _on_rename_ship_submitted(new_name: String) -> void:
+	if _selected_terminal_ship_id.is_empty():
+		return
+	if not _context.session.rename_ship(_selected_terminal_ship_id, new_name):
+		return
+	_show_rename_field = false
+	var index := _terminal_ship_ids.find(_selected_terminal_ship_id)
+	if index >= 0 and _terminal_ship_item_list != null:
+		_terminal_ship_item_list.set_item_text(index, new_name.strip_edges())
+	call_deferred("_rebuild_terminal_ship_panels")
 
 
 func _show_shipyard_embedded() -> void:
-	_art_host.visible = false
 	_content_scroll.visible = false
+	_terminal_host.visible = false
 	_log.visible = false
 	_shipyard_host.visible = true
 
@@ -511,9 +613,6 @@ func _show_shipyard_embedded() -> void:
 
 func _hide_shipyard_embedded() -> void:
 	_shipyard_host.visible = false
-	_art_host.visible = true
-	_content_scroll.visible = true
-	_log.visible = true
 
 
 func _on_buy_commodity(commodity_id: String) -> void:
@@ -785,7 +884,10 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 
 
 func _find_meta_host(meta_name: String) -> VBoxContainer:
-	return _find_meta_host_in(_content_host, meta_name)
+	var found := _find_meta_host_in(_content_host, meta_name)
+	if found != null:
+		return found
+	return _find_meta_host_in(_terminal_host, meta_name)
 
 
 func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
@@ -801,7 +903,7 @@ func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
 func _clear_children(node: Node) -> void:
 	for child in node.get_children():
 		node.remove_child(child)
-		child.free()
+		child.queue_free()
 
 
 func _select_item_by_id(

@@ -136,6 +136,27 @@ static func run(runner: TestRunner) -> void:
 	)
 	runner.check(gate_session.undock(catalog, gate_ship.id), "fully fitted tester ship undocks")
 
+	var rename_session := GameSession.new()
+	runner.check(
+		rename_session.start_new_game(catalog, "REN-1", "tester"),
+		"rename session starts docked"
+	)
+	var rename_ship := rename_session.owned_ships[0]
+	runner.check(
+		rename_session.rename_ship(rename_ship.id, "  New Name  "),
+		"rename docked ship succeeds"
+	)
+	runner.check_eq(rename_ship.name, "New Name", "rename strips whitespace")
+	runner.check(
+		not rename_session.rename_ship(rename_ship.id, "   "),
+		"empty rename rejected"
+	)
+	rename_ship.location = "aboard"
+	runner.check(
+		not rename_session.rename_ship(rename_ship.id, "Away Ship"),
+		"rename rejected when ship not at habitat"
+	)
+
 	runner.check(
 		session.enter_unspace(catalog, "bela", 4, assembled),
 		"enter_unspace proxima→bela"
