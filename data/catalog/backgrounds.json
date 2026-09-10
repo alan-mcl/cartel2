@@ -35,7 +35,7 @@
             },
             {
               "slot": "system_2",
-              "module_id": "life_support_mk1"
+              "module_id": "hw_helios_breath"
             },
             {
               "slot": "system_3",
@@ -82,7 +82,7 @@
             },
             {
               "slot": "system_2",
-              "module_id": "life_support_mk1"
+              "module_id": "gi_ls_4"
             },
             {
               "slot": "system_3",
@@ -225,7 +225,7 @@
             },
             {
               "slot": "system_2",
-              "module_id": "life_support_mk1"
+              "module_id": "gi_ls_4"
             },
             {
               "slot": "system_3",
@@ -296,7 +296,7 @@
             },
             {
               "slot": "system_2",
-              "module_id": "life_support_mk1"
+              "module_id": "hw_helios_breath"
             },
             {
               "slot": "system_3",

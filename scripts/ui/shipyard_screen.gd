@@ -5,11 +5,12 @@ const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
 
-const SORTABLE_STOCK_CATEGORIES := ["power", "computer"]
+const SORTABLE_STOCK_CATEGORIES := ["power", "computer", "life_support"]
 
 const STOCK_SORT_KEYS := {
 	"power": ["price", "type", "mw"],
 	"computer": ["price", "type", "cu"],
+	"life_support": ["price", "crew"],
 }
 
 const STOCK_CATEGORIES := [
@@ -61,6 +62,7 @@ var _refresh_pending := false
 var _stock_sort: Dictionary = {
 	"power": {"key": "price", "asc": true},
 	"computer": {"key": "price", "asc": true},
+	"life_support": {"key": "price", "asc": true},
 }
 
 
@@ -601,6 +603,16 @@ func _stock_meta(category: String, data: Dictionary) -> String:
 			if core_type.is_empty():
 				return ""
 			return "%s · %.0f CU" % [core_type.capitalize(), compute_cu]
+		"life_support":
+			var crew := float(data.get("life_support_capacity", 0.0))
+			var meta := "%.0f crew" % crew
+			var capabilities: Variant = data.get("capabilities", [])
+			if typeof(capabilities) == TYPE_ARRAY:
+				if capabilities.has("ls_luxury"):
+					meta = "%s · Luxury" % meta
+				elif capabilities.has("ls_comfort"):
+					meta = "%s · Comfort" % meta
+			return meta
 	return ""
 
 
@@ -625,6 +637,8 @@ func _stock_sort_button_label(category: String, sort_key: String) -> String:
 		label = "MW"
 	if sort_key == "cu":
 		label = "CU"
+	if sort_key == "crew":
+		label = "CREW"
 	var sort_state: Dictionary = _stock_sort.get(category, {"key": "price", "asc": true})
 	if str(sort_state.get("key", "")) == sort_key:
 		label = "%s %s" % ["^" if bool(sort_state.get("asc", true)) else "v", label]
@@ -688,6 +702,15 @@ func _sort_stock_entries(category: String, entries: Array) -> Array:
 						cmp = _float_compare(
 							float(left_data.get("compute_capacity", 0.0)),
 							float(right_data.get("compute_capacity", 0.0))
+						)
+			"life_support":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					"crew":
+						cmp = _float_compare(
+							float(left_data.get("life_support_capacity", 0.0)),
+							float(right_data.get("life_support_capacity", 0.0))
 						)
 		if not sort_asc:
 			cmp = -cmp

@@ -168,6 +168,8 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | `sensor_read_beacons` | `sensor_basic` | HUD transponder labels for NPC ships and named landmarks |
 | `4_space_topology` | `sensor_basic` | Unspace exit portal radar dot, edge arrow, and label (4-space only) |
 
+Life support modules may grant optional luxury capability flags (`ls_comfort`, `ls_luxury`) for future hospitality gameplay. A5 bar is reserved for later.
+
 Capability gating is install-based; compute overload degradation is deferred.
 
 ### Transponder (Article 19)

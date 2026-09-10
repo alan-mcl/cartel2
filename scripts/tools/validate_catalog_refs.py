@@ -61,6 +61,27 @@ RETIRED_COMPUTER_IDS = {
     "targeting_core_mk2",
 }
 
+LIFE_SUPPORT_MAKERS = {
+    "Holt-Winters Corp",
+    "Orion Aerospace",
+    "ParaRamcoVidia",
+    "General Industrial",
+    "Oklahoma Combine",
+    "BioGenesis Life Sciences",
+    "Greenfields Corporation",
+    "Four Rivers Zaibatsu",
+    "Sakuraya Shinise",
+    "Morrow & Sons",
+    "Universal House",
+    "Evergreen Group",
+    "Atlas Concern",
+    "Tukey Enterprises",
+    "The Meridian Company",
+}
+
+LIFE_SUPPORT_LUXURY_FLAGS = {"ls_comfort", "ls_luxury"}
+RETIRED_LIFE_SUPPORT_IDS = {"life_support_mk1", "life_support_a3"}
+
 
 def load_array(path: Path) -> list:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -190,6 +211,41 @@ def main() -> int:
                 f"computer module {module_id}: must include basic_hud capability"
             )
 
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        if module_id in RETIRED_LIFE_SUPPORT_IDS:
+            errors.append(
+                f"modules.json: retired life support id '{module_id}' still present"
+            )
+        if str(module.get("category", "")) != "life_support":
+            continue
+        for field in ("maker", "brand", "life_support_capacity", "compute_demand"):
+            if field not in module:
+                errors.append(f"life support module {module_id}: missing {field}")
+        maker = str(module.get("maker", ""))
+        if maker and maker not in LIFE_SUPPORT_MAKERS:
+            errors.append(f"life support module {module_id}: unknown maker '{maker}'")
+        if str(module.get("mount", "")) != "system":
+            errors.append(f"life support module {module_id}: mount must be 'system'")
+        if "fuel_consumption" in module:
+            errors.append(
+                f"life support module {module_id}: fuel_consumption must not be set"
+            )
+        capabilities = module.get("capabilities", [])
+        if not isinstance(capabilities, list):
+            errors.append(
+                f"life support module {module_id}: capabilities must be an array"
+            )
+            continue
+        for cap in capabilities:
+            cap_id = str(cap)
+            if cap_id not in LIFE_SUPPORT_LUXURY_FLAGS:
+                errors.append(
+                    f"life support module {module_id}: invalid capability '{cap_id}'"
+                )
+
     power_count = 0
     for module in modules:
         if not isinstance(module, dict):
@@ -225,6 +281,7 @@ def main() -> int:
 
     for template in ships.values():
         has_computer = False
+        has_life_support = False
         for module_id in template.get("modules", []):
             module_id = str(module_id)
             if module_id in RETIRED_POWER_IDS:
@@ -234,6 +291,10 @@ def main() -> int:
             if module_id in RETIRED_COMPUTER_IDS:
                 errors.append(
                     f"ship {template['id']}: references retired computer '{module_id}'"
+                )
+            if module_id in RETIRED_LIFE_SUPPORT_IDS:
+                errors.append(
+                    f"ship {template['id']}: references retired life support '{module_id}'"
                 )
             module = modules_by_id.get(module_id)
             if module is None:
@@ -249,8 +310,16 @@ def main() -> int:
                     errors.append(
                         f"ship {template['id']}: template must not default to quantum core '{module_id}'"
                     )
+            if category == "life_support":
+                has_life_support = True
+                if float(module.get("life_support_capacity", 0.0)) < 1.0:
+                    errors.append(
+                        f"ship {template['id']}: life support '{module_id}' capacity below 1"
+                    )
         if not has_computer:
             errors.append(f"ship {template['id']}: missing computer module")
+        if not has_life_support:
+            errors.append(f"ship {template['id']}: missing life support module")
 
     buildings = load_array(CATALOG / "buildings.json")
     for chassis_id, chassis_def in chassis.items():

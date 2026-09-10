@@ -27,6 +27,7 @@ static func run(runner: TestRunner) -> void:
 
 	_validate_power_plants(runner, catalog)
 	_validate_compute_cores(runner, catalog)
+	_validate_life_support(runner, catalog)
 
 
 static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void:
@@ -137,4 +138,59 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 		runner.check(
 			compute_capacity >= idle_compute_demand,
 			"%s core covers idle compute demand" % ship_id
+		)
+
+
+static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void:
+	var life_support_modules: Array = catalog.list_modules("life_support")
+	runner.check_eq(life_support_modules.size(), 41, "forty-one life support SKUs")
+
+	var retired := ["life_support_mk1", "life_support_a3"]
+	for module_def in life_support_modules:
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+		var module_id := str(module_def.get("id", ""))
+		runner.check(
+			not module_id in retired,
+			"retired POC life support %s absent" % module_id
+		)
+		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
+		runner.check(
+			module_def.has("compute_demand"),
+			"%s has compute_demand" % module_id
+		)
+		runner.check(
+			float(module_def.get("life_support_capacity", 0.0)) >= 1.0,
+			"%s sustains at least one crew" % module_id
+		)
+		var capabilities: Variant = module_def.get("capabilities", [])
+		if typeof(capabilities) == TYPE_ARRAY:
+			for cap in capabilities:
+				var cap_id := str(cap)
+				runner.check(
+					cap_id == "ls_comfort" or cap_id == "ls_luxury",
+					"%s has valid luxury flag %s" % [module_id, cap_id]
+				)
+
+	for ship_def in catalog.ships_by_id.values():
+		if typeof(ship_def) != TYPE_DICTIONARY:
+			continue
+		var ship_id := str(ship_def.get("id", ""))
+		var owned := OwnedShip.from_template(
+			catalog,
+			{
+				"id": "%s_lss_test" % ship_id,
+				"template_id": ship_id,
+				"chassis_id": str(ship_def.get("chassis", "")),
+			}
+		)
+		var engineering := ShipAssembly.get_engineering_block(catalog, owned)
+		var capacities: Dictionary = engineering.get("capacities", {})
+		var lss_capacity := float(capacities.get("life_support_capacity", 0.0))
+		var compute_capacity := float(capacities.get("compute_capacity", 0.0))
+		var idle_compute_demand := float(engineering.get("idle_compute_demand", 0.0))
+		runner.check(lss_capacity >= 1.0, "%s template has life support" % ship_id)
+		runner.check(
+			compute_capacity >= idle_compute_demand,
+			"%s life support fits idle compute budget" % ship_id
 		)

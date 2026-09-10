@@ -222,14 +222,51 @@ Holt-Winters holds major market share for shield generators in corporate lore.
 
 ---
 
-## Life support (design only)
+### Life support (`category: life_support`, mount: `system`)
 
-Tiers **A1–A5**: capacity in man-hours, luxury level (none → bar).
+Shipboard life support systems mount on the chassis `system` hardpoint. One unit is typical; larger hulls may carry more in future designs.
 
-- Pegasus P101 lore: A1 (spartan).
-- Pegasus P103 lore: A3 (luxury).
+| Stat | JSON field | Prototype use |
+|------|------------|---------------|
+| Capacity | `life_support_capacity` | Crew the ship can sustain (people) |
+| Weight | `mass` | Ship mass |
+| Envelope | `volume` | Fitting limit |
+| Power | `power_demand` | Operating budget (MW) |
+| Compute | `compute_demand` | Operating budget (CU) |
+| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Brand | `brand` | Product family / marque within the maker |
 
-Not simulated in prototype.
+Manufacturer tiers for life support are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+
+**Role:** life support **sustains crew** in the prototype. Capacity is independent of passenger berths. Launch requires installed life support with capacity ≥ occupant count (currently 1). Luxury is optional **capability flags** for future gameplay — not a type enum.
+
+#### Luxury flags (future hooks)
+
+Original design tiers A1–A4 map onto capacity plus optional flags. A5 (bar) is reserved for later.
+
+| Flag | Original tier | Meaning |
+|------|---------------|---------|
+| (none) | A1 | Spartan. Recyclers and bunks. |
+| `ls_comfort` | A2 | Climate, proper bunks, decent air. |
+| `ls_luxury` | A3–A4 | Cabin-grade hospitality. |
+
+Spartan SKUs omit `capabilities`. Flags are install-only hooks; no luxury gameplay in the prototype yet.
+
+#### In prototype JSON
+
+Forty-one branded SKUs across fifteen manufacturers (~24 spartan, ~11 comfort, ~6 luxury). Includes budget **1-seater cockpit packs** for fighters and solo scouts. Examples:
+
+| id | Maker | Brand | Crew | Flags |
+|----|-------|-------|------|-------|
+| `te_handy_air` | Tukey Enterprises | HandyAir | 1 | — |
+| `gi_ls_4` | General Industrial | GI | 4 | — |
+| `hw_helios_breath` | Holt-Winters Corp | Helios | 1 | `ls_comfort` |
+| `prv_vitacore_l` | ParaRamcoVidia | VitaCore | 8 | `ls_luxury` |
+| `atl_loadmaster_habitat` | Atlas Concern | Loadmaster | 14 | — |
+
+Ship templates: workhorses and budget hulls carry spartan units; sporty and luxury hulls carry comfort or luxury. Pegasus P101 lore remains A1 spartan; P103 lore remains A3 luxury.
+
+The POC `life_support_mk1` and `life_support_a3` placeholders are retired.
 
 ---
 
@@ -319,7 +356,7 @@ Planned: shield combat, hyperdrive slots — see README placeholders and [archit
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`)
+2. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)
