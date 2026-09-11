@@ -68,14 +68,49 @@ static func thrust_plume_base_offset(
 	return base_y
 
 
+static func sprite_bounds_center(sprite_path: String) -> Vector2:
+	var points := _parse_svg_points(sprite_path)
+	if points.is_empty():
+		return Vector2.ZERO
+	var min_x := points[0].x
+	var max_x := points[0].x
+	var min_y := points[0].y
+	var max_y := points[0].y
+	for point in points:
+		min_x = minf(min_x, point.x)
+		max_x = maxf(max_x, point.x)
+		min_y = minf(min_y, point.y)
+		max_y = maxf(max_y, point.y)
+	return Vector2((min_x + max_x) * 0.5, (min_y + max_y) * 0.5)
+
+
+static func stern_extent(sprite_path: String, fallback_hull_height: float = 64.0) -> float:
+	var points := _parse_svg_points(sprite_path)
+	if points.is_empty():
+		return sprite_stern_y(sprite_path, fallback_hull_height)
+	var max_y := points[0].y
+	for point in points:
+		max_y = maxf(max_y, point.y)
+	return max_y
+
+
 static func thrust_attach_offset(
 	hull_sprite_path: String,
 	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg",
 	fallback_hull_height: float = 64.0
 ) -> float:
-	return sprite_stern_y(hull_sprite_path, fallback_hull_height) - thrust_plume_base_offset(
-		thrust_sprite_path
-	)
+	var center := sprite_bounds_center(hull_sprite_path)
+	var stern := stern_extent(hull_sprite_path, fallback_hull_height)
+	return stern - center.y - thrust_plume_base_offset(thrust_sprite_path)
+
+
+static func apply_hull_sprite_alignment(hull: Sprite2D, hull_sprite_path: String) -> void:
+	if hull == null:
+		return
+	if hull_sprite_path.is_empty():
+		hull.offset = Vector2.ZERO
+		return
+	hull.offset = -sprite_bounds_center(hull_sprite_path)
 
 
 static func apply_thrust_flame_position(
@@ -89,6 +124,16 @@ static func apply_thrust_flame_position(
 		0.0,
 		thrust_attach_offset(hull_sprite_path, thrust_sprite_path)
 	)
+
+
+static func apply_hull_and_thrust(
+	hull: Sprite2D,
+	thrust_flame: Sprite2D,
+	hull_sprite_path: String,
+	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg"
+) -> void:
+	apply_hull_sprite_alignment(hull, hull_sprite_path)
+	apply_thrust_flame_position(thrust_flame, hull_sprite_path, thrust_sprite_path)
 
 
 static func apply_from_chassis_sprite(collision_shape: CollisionShape2D, sprite_path: String) -> void:
@@ -155,6 +200,22 @@ static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
 			var pt := Vector2(cx + cos(angle) * rx, cy + sin(angle) * ry)
 			points.append(_map_svg_point(pt, view_box, img_size))
 
+	for match_result in RegEx.create_from_string(
+		"<circle[^>]*cx\\s*=\\s*\"([^\"]+)\"[^>]*cy\\s*=\\s*\"([^\"]+)\"[^>]*r\\s*=\\s*\"([^\"]+)\""
+	).search_all(text):
+		var cx := float(match_result.get_string(1))
+		var cy := float(match_result.get_string(2))
+		var radius := float(match_result.get_string(3))
+		for i in ELLIPSE_SAMPLES:
+			var angle := TAU * float(i) / float(ELLIPSE_SAMPLES)
+			var pt := Vector2(cx + cos(angle) * radius, cy + sin(angle) * radius)
+			points.append(_map_svg_point(pt, view_box, img_size))
+
+	for match_result in RegEx.create_from_string(
+		"<path[^>]*d\\s*=\\s*\"([^\"]+)\""
+	).search_all(text):
+		_append_path_points(points, match_result.get_string(1), view_box, img_size)
+
 	return points
 
 
@@ -204,6 +265,134 @@ static func _map_svg_point(v: Vector2, view_box: Vector4, img_size: Vector2) -> 
 	var sx := img_size.x / view_box.z if view_box.z > 0.001 else 1.0
 	var sy := img_size.y / view_box.w if view_box.w > 0.001 else 1.0
 	return Vector2((v.x - cx) * sx, (v.y - cy) * sy)
+
+
+static func _append_path_points(
+	points: PackedVector2Array,
+	d: String,
+	view_box: Vector4,
+	img_size: Vector2
+) -> void:
+	var state := {"pen": Vector2.ZERO, "subpath_start": Vector2.ZERO}
+	var cmd := ""
+	var nums: Array[float] = []
+	var i := 0
+	while i <= d.length():
+		var at_end := i >= d.length()
+		var ch := "" if at_end else d[i]
+		if at_end or _is_path_command(ch):
+			if not cmd.is_empty():
+				_apply_path_command(points, cmd, nums, state, view_box, img_size)
+			if at_end:
+				break
+			cmd = ch
+			nums.clear()
+			i += 1
+			continue
+		if ch == "," or ch == " " or ch == "\t" or ch == "\n" or ch == "\r":
+			i += 1
+			continue
+		var num_end := i
+		while num_end < d.length() and not _is_path_command(d[num_end]) and d[num_end] not in [",", " ", "\t", "\n", "\r"]:
+			num_end += 1
+		if num_end == i:
+			i += 1
+			continue
+		nums.append(float(d.substr(i, num_end - i)))
+		i = num_end
+
+
+static func _is_path_command(ch: String) -> bool:
+	return ch in ["M", "m", "L", "l", "H", "h", "V", "v", "C", "c", "S", "s", "Q", "q", "T", "t", "A", "a", "Z", "z"]
+
+
+static func _apply_path_command(
+	points: PackedVector2Array,
+	cmd: String,
+	nums: Array[float],
+	state: Dictionary,
+	view_box: Vector4,
+	img_size: Vector2
+) -> void:
+	var pen: Vector2 = state["pen"]
+	var subpath_start: Vector2 = state["subpath_start"]
+	var idx := 0
+
+	match cmd:
+		"M":
+			var first_move := true
+			while idx + 1 < nums.size():
+				pen = Vector2(nums[idx], nums[idx + 1])
+				idx += 2
+				if first_move:
+					subpath_start = pen
+					first_move = false
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"m":
+			var first_move := true
+			while idx + 1 < nums.size():
+				pen += Vector2(nums[idx], nums[idx + 1])
+				idx += 2
+				if first_move:
+					subpath_start = pen
+					first_move = false
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"L":
+			while idx + 1 < nums.size():
+				pen = Vector2(nums[idx], nums[idx + 1])
+				idx += 2
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"l":
+			while idx + 1 < nums.size():
+				pen += Vector2(nums[idx], nums[idx + 1])
+				idx += 2
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"H":
+			while idx < nums.size():
+				pen.x = nums[idx]
+				idx += 1
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"h":
+			while idx < nums.size():
+				pen.x += nums[idx]
+				idx += 1
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"V":
+			while idx < nums.size():
+				pen.y = nums[idx]
+				idx += 1
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"v":
+			while idx < nums.size():
+				pen.y += nums[idx]
+				idx += 1
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"C":
+			while idx + 5 < nums.size():
+				var c1 := Vector2(nums[idx], nums[idx + 1])
+				var c2 := Vector2(nums[idx + 2], nums[idx + 3])
+				pen = Vector2(nums[idx + 4], nums[idx + 5])
+				idx += 6
+				points.append(_map_svg_point(c1, view_box, img_size))
+				points.append(_map_svg_point(c2, view_box, img_size))
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"c":
+			while idx + 5 < nums.size():
+				var c1 := pen + Vector2(nums[idx], nums[idx + 1])
+				var c2 := pen + Vector2(nums[idx + 2], nums[idx + 3])
+				pen += Vector2(nums[idx + 4], nums[idx + 5])
+				idx += 6
+				points.append(_map_svg_point(c1, view_box, img_size))
+				points.append(_map_svg_point(c2, view_box, img_size))
+				points.append(_map_svg_point(pen, view_box, img_size))
+		"Z", "z":
+			pen = subpath_start
+			points.append(_map_svg_point(pen, view_box, img_size))
+		_:
+			pass
+
+	state["pen"] = pen
+	state["subpath_start"] = subpath_start
 
 
 static func _convex_hull(points: PackedVector2Array) -> PackedVector2Array:

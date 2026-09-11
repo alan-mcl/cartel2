@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_transponder_override(runner)
 	_test_no_local_sensor_no_beacon_radar(runner)
 	_test_visual_contact(runner)
+	_test_visual_contact_catalog_radius(runner, catalog)
 	_test_specialist_scanners(runner, catalog)
 	_test_catalog_signatures(runner, catalog)
 	_test_catalog_sensor_skus(runner, catalog)
@@ -21,6 +22,8 @@ static func run(runner: TestRunner) -> void:
 	_test_live_signature_idle_vs_fitted(runner)
 	_test_live_signature_thrust_and_glow(runner)
 	_test_live_signature_weapon_and_compute(runner)
+	_test_threshold_detection_envelope(runner)
+	_test_threshold_detection_close_boost(runner)
 
 
 static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -> AssembledShip:
@@ -47,7 +50,7 @@ static func _observer_profile(
 	return {
 		"has_local_sensor": has_local_sensor,
 		"range": range_value,
-		"max_detect_range": range_value * SensorSystem.MAX_CHANNEL_RANGE_MULT,
+		"max_detect_range": range_value,
 		"sensitivity": sensitivity,
 		"effectiveness": 1.0,
 	}
@@ -135,6 +138,21 @@ static func _test_visual_contact(runner: TestRunner) -> void:
 	var detection := SensorSystem.evaluate(300.0, SensorSystem.empty_signature(), false, profile, 500.0)
 	runner.check(bool(detection.get("detected", false)), "visual contact inside radius")
 	runner.check(bool(detection.get("via_visual", false)), "visual contact flagged")
+
+
+static func _test_visual_contact_catalog_radius(runner: TestRunner, catalog: Catalog) -> void:
+	var traffic_config := catalog.get_traffic_config()
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
+	var profile := _observer_profile(6500.0, SensorSystem.empty_signature(), true)
+	runner.check_eq(visual_radius, 250.0, "catalog visual contact radius is 250 m")
+	runner.check(
+		not SensorSystem.is_detected(300.0, SensorSystem.empty_signature(), false, profile, visual_radius),
+		"beyond catalog visual radius stays undetected"
+	)
+	runner.check(
+		SensorSystem.is_detected(200.0, SensorSystem.empty_signature(), false, profile, visual_radius),
+		"within catalog visual radius detects by eyeball"
+	)
 
 
 static func _test_specialist_scanners(runner: TestRunner, catalog: Catalog) -> void:
@@ -301,7 +319,7 @@ static func _test_is_detected_beacon(runner: TestRunner) -> void:
 	)
 	runner.check(
 		not SensorSystem.is_detected(7000.0, SensorSystem.empty_signature(), true, profile, 500.0),
-		"is_detected false beyond beacon range"
+		"is_detected false beyond sensor envelope"
 	)
 
 
@@ -541,4 +559,54 @@ static func _test_live_signature_weapon_and_compute(runner: TestRunner) -> void:
 	runner.check(
 		high_comp_sig > low_comp_sig,
 		"computational signature scales with compute demand"
+	)
+
+
+static func _test_threshold_detection_envelope(runner: TestRunner) -> void:
+	var profile := _observer_profile(
+		6500.0,
+		{
+			"thermal": 1.0,
+			"gravitational": 1.0,
+			"electromagnetic": 1.0,
+			"computational": 1.0,
+		}
+	)
+	var quiet := {
+		"thermal": 6.0,
+		"gravitational": 0.4,
+		"electromagnetic": 1.0,
+		"computational": 0.5,
+	}
+	var loud := {
+		"thermal": 20.0,
+		"gravitational": 0.4,
+		"electromagnetic": 1.0,
+		"computational": 0.5,
+	}
+	runner.check(
+		not SensorSystem.is_detected(6000.0, quiet, false, profile, 500.0),
+		"quiet thermal at sensor rim stays below threshold"
+	)
+	runner.check(
+		SensorSystem.is_detected(6000.0, loud, false, profile, 500.0),
+		"loud thermal at sensor rim exceeds threshold"
+	)
+
+
+static func _test_threshold_detection_close_boost(runner: TestRunner) -> void:
+	var profile := _observer_profile(6500.0, {"thermal": 1.0})
+	var marginal := {
+		"thermal": 7.0,
+		"gravitational": 0.0,
+		"electromagnetic": 0.0,
+		"computational": 0.0,
+	}
+	runner.check(
+		not SensorSystem.is_detected(6000.0, marginal, false, profile, 500.0),
+		"marginal signature missed at sensor rim"
+	)
+	runner.check(
+		SensorSystem.is_detected(200.0, marginal, false, profile, 500.0),
+		"close range weight helps marginal signature detect"
 	)

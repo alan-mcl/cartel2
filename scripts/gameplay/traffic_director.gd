@@ -76,7 +76,7 @@ func tick(
 	var anchors := world_loader.get_traffic_anchors()
 	var cycle_queue: Array = []
 	var frame := Engine.get_physics_frames()
-	var visual_radius := float(_traffic_config.get("visual_contact_radius", 500.0))
+	var visual_radius := float(_traffic_config.get("visual_contact_radius", 250.0))
 	var player_effectiveness := SensorSystem.sensor_effectiveness(player_assembled, player_operating)
 	var player_profile := SensorSystem.tick_observer_profile(player_assembled, player_effectiveness)
 	var player_signature := SensorSystem.live_signature(player_assembled, player_operating)
@@ -610,7 +610,7 @@ func _spawn_far_sprite(actor) -> void:
 	if thrust_texture != null:
 		thrust_flame.texture = thrust_texture
 	if not sprite_path.is_empty():
-		HullHitboxScript.apply_thrust_flame_position(thrust_flame, sprite_path)
+		HullHitboxScript.apply_hull_and_thrust(hull, thrust_flame, sprite_path)
 	root.add_child(thrust_flame)
 
 	root.global_position = actor.position

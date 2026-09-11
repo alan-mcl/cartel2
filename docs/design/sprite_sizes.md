@@ -99,7 +99,7 @@ position.y = hull_height / 2 - thrust_plume_base_offset
 
 `thrust_plume_base_offset` is parsed from thrust SVG art (currently **8** on the 32×32 placeholder). Example (Pegasus 70×70): `35 - 8 = **27**`.
 
-**Runtime:** `HullHitbox.apply_thrust_flame_position()` sets `ThrustFlame.position.y` from the hull SVG `height` attribute when each ship is configured (player, NPC, distant traffic).
+**Runtime:** `HullHitbox.apply_hull_and_thrust()` centers each hull sprite on its art bounds (`Sprite2D.offset`) and sets thrust from the visual stern (player, NPC, distant traffic).
 
 ---
 

@@ -749,7 +749,7 @@ func refresh_player_detection(
 		_cached_player_contact.clear()
 		return
 
-	var visual_radius := float(traffic_config.get("visual_contact_radius", 500.0))
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
 	var distance := position.distance_to(observer_pos)
 	var target_signature := SensorSystem.live_signature(assembled_ship, operating_state)
 	var broadcasting := _is_broadcasting()

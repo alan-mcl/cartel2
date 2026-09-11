@@ -883,18 +883,21 @@ static func _test_hull_hitbox(runner: TestRunner) -> void:
 	var krypton_canvas := HullHitbox.sprite_canvas_size(KryptonPath)
 	runner.check(is_equal_approx(krypton_canvas.y, 70.0), "krypton canvas height from SVG")
 	const ThrustPath := "res://assets/ships/fx/thrust.svg"
+	const WolffPath := "res://assets/ships/chassis/wolff_chassis.svg"
+	var krypton_center := HullHitbox.sprite_bounds_center(KryptonPath)
 	var krypton_thrust_y := HullHitbox.thrust_attach_offset(KryptonPath, ThrustPath)
 	var plume_base := HullHitbox.thrust_plume_base_offset(ThrustPath)
 	runner.check(
-		is_equal_approx(krypton_thrust_y, 35.0 - plume_base),
-		"thrust plume base meets hull canvas bottom edge"
+		is_equal_approx(
+			krypton_thrust_y,
+			HullHitbox.stern_extent(KryptonPath) - krypton_center.y - plume_base
+		),
+		"thrust plume base meets visual hull stern"
 	)
-	var krypton_stern_y := krypton_hull[0].y
-	for point in krypton_hull:
-		krypton_stern_y = maxf(krypton_stern_y, point.y)
+	var wolff_center := HullHitbox.sprite_bounds_center(WolffPath)
 	runner.check(
-		krypton_thrust_y > krypton_stern_y,
-		"thrust sits below hull paint stern using canvas height"
+		wolff_center.length_squared() > 0.01,
+		"wolff art center parsed from path geometry"
 	)
 
 

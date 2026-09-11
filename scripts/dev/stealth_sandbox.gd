@@ -5,7 +5,7 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 
 const DEFAULT_PLAYER_TEMPLATE := "flare_on_ss"
 const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103a"
-const STEALTH_MARGIN := 2000.0
+const SPAWN_RING_FRACTION := 0.9
 const DEFAULT_OPPONENT_COUNT := 4
 const MIN_OPPONENT_COUNT := 1
 const MAX_OPPONENT_COUNT := 12
@@ -258,14 +258,12 @@ func _owned_ship_from_template(template_id: String, ship_id: String) -> OwnedShi
 	return OwnedShip.from_template(catalog, ship_data)
 
 
-func _max_detect_range(assembled: AssembledShip) -> float:
+func _sensor_range(assembled: AssembledShip) -> float:
 	if assembled == null or assembled.sensor_profile.is_empty():
-		return SensorSystem.compute_static_sensor_profile(assembled).get("max_detect_range", 0.0)
-	return float(assembled.sensor_profile.get("max_detect_range", 0.0))
-
-
-func _stealth_separation(player_assembled: AssembledShip, opponent_assembled: AssembledShip) -> float:
-	return maxf(_max_detect_range(player_assembled), _max_detect_range(opponent_assembled)) + STEALTH_MARGIN
+		return float(
+			SensorSystem.compute_static_sensor_profile(assembled).get("range", 500.0)
+		)
+	return float(assembled.sensor_profile.get("range", 500.0))
 
 
 func _on_begin_pressed() -> void:
@@ -303,11 +301,7 @@ func _begin_drill(
 	var player_assembled := ShipAssembler.assemble_owned(catalog, player_owned)
 	session.apply_combat_state(ShipCombatState.from_assembled(player_assembled))
 
-	var opponent_assembled := ShipAssembler.assemble_owned(
-		catalog,
-		_owned_ship_from_template(opponent_template_id, "sandbox_opponent_preview")
-	)
-	_nav_radius = _stealth_separation(player_assembled, opponent_assembled)
+	_nav_radius = _sensor_range(player_assembled)
 	_current_pilot_skill = pilot_skill
 
 	_player.configure(player_assembled, player_owned, catalog)
@@ -316,7 +310,12 @@ func _begin_drill(
 	_player.freeze_motion()
 	_player.rotation = _player.motion.facing + PI / 2.0
 
-	_spawn_opponents(opponent_template_id, opponent_count, _nav_radius, attitude_index)
+	_spawn_opponents(
+		opponent_template_id,
+		opponent_count,
+		_nav_radius * SPAWN_RING_FRACTION,
+		attitude_index
+	)
 
 	_camera.make_current()
 	_hud.bind(session, _player, player_assembled)
@@ -471,7 +470,7 @@ func _try_npc_acquire(
 	if actor.ai_state != TrafficActorScript.AiState.TRAFFIC:
 		return
 
-	var visual_radius := float(traffic_config.get("visual_contact_radius", 500.0))
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
 	var distance: float = actor.position.distance_to(_player.global_position)
 	var npc_effectiveness := SensorSystem.sensor_effectiveness(actor.assembled_ship, actor.operating_state)
 	var npc_profile := SensorSystem.tick_observer_profile(actor.assembled_ship, npc_effectiveness)

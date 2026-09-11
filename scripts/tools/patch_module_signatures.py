@@ -351,7 +351,7 @@ def patch_modules(modules: list) -> None:
 
 
 def patch_traffic(traffic: dict) -> None:
-    traffic["visual_contact_radius"] = 500.0
+    traffic["visual_contact_radius"] = 250.0
 
 
 def main() -> int:

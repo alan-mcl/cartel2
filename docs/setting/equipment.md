@@ -226,7 +226,7 @@ Sensors detect signature channels within **`sensor_range`**, using per-channel *
 
 Specialist scanners trade navigation extras for channel focus. Suites remain the default on manufacturer templates.
 
-**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. Contacts appear when (1) within visual range, (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19), or (3) any signature channel exceeds the observer's sensor threshold at distance. Target lock is not implemented; unguided weapons do not require detection.
+**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Target lock is not implemented; unguided weapons do not require detection.
 
 ### Transponder (`category: transponder`, mount: `system`)
 

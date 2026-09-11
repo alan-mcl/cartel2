@@ -84,7 +84,7 @@ horizontal_alignment = 1
 [node name="Subtitle" type="Label" parent="SetupLayer/Root/Panel/Margin/VBox"]
 layout_mode = 2
 theme_type_variation = &"Muted"
-text = "Transponders off, targets scattered beyond sensor range. Close distance to detect signatures; NPCs hunt only after they acquire you."
+text = "Transponders off. Minimap rim is your sensor range; silent hulls inside it stay dark until signature channels exceed the sensor threshold (close range helps)."
 autowrap_mode = 3
 horizontal_alignment = 1
 

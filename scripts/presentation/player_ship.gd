@@ -50,7 +50,7 @@ func _apply_hull_visual() -> void:
 	else:
 		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
-		HullHitboxScript.apply_thrust_flame_position(_thrust_flame, sprite_path)
+		HullHitboxScript.apply_hull_and_thrust(_hull, _thrust_flame, sprite_path)
 
 	_hull.modulate = Color.WHITE
 

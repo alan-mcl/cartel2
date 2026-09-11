@@ -2,8 +2,9 @@ class_name SensorSystem
 extends RefCounted
 
 const CHANNELS := ["thermal", "gravitational", "electromagnetic", "computational"]
-const SIGNATURE_SCALE := 100.0
-const MAX_CHANNEL_RANGE_MULT := 1.5
+const DETECT_THRESHOLD := 8.0
+const CLOSE_WEIGHT := 1.25
+const FAR_WEIGHT := 0.75
 const HULL_GRAV_PER_TONNE := 0.08
 const SIGNATURE_GLOW_SEC := 1.5
 const POWER_IDLE_SIGNATURE_FLOOR := 0.15
@@ -189,7 +190,7 @@ static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionar
 
 	profile["range"] = range_max
 	profile["sensitivity"] = sensitivity
-	profile["max_detect_range"] = range_max * MAX_CHANNEL_RANGE_MULT
+	profile["max_detect_range"] = range_max
 	return profile
 
 
@@ -242,28 +243,19 @@ static func is_detected(
 	if not has_local_sensor or sensor_range <= 0.0:
 		return false
 
-	var max_detect_range := float(observer_profile.get("max_detect_range", sensor_range * MAX_CHANNEL_RANGE_MULT))
-	var outer_limit := maxf(visual_radius, max_detect_range) * effectiveness
-	if distance > outer_limit:
+	var envelope := sensor_range * effectiveness
+	if distance > envelope:
 		return false
 
-	if target_broadcasting and distance <= sensor_range * effectiveness:
+	if target_broadcasting:
 		return true
 
+	var range_weight := _range_weight(distance, sensor_range, effectiveness)
 	var sensitivity: Dictionary = observer_profile.get("sensitivity", empty_signature())
 	for channel in CHANNELS:
 		var sig_strength := float(target_signature.get(channel, 0.0))
 		var channel_sensitivity := float(sensitivity.get(channel, 0.0))
-		if sig_strength <= 0.0 or channel_sensitivity <= 0.0:
-			continue
-
-		var channel_mult := clampf(
-			sig_strength * channel_sensitivity / SIGNATURE_SCALE,
-			0.0,
-			MAX_CHANNEL_RANGE_MULT
-		)
-		var channel_range := sensor_range * channel_mult * effectiveness
-		if distance <= channel_range:
+		if _channel_meets_threshold(sig_strength, channel_sensitivity, range_weight):
 			return true
 
 	return false
@@ -297,30 +289,17 @@ static func evaluate(
 		var sensor_range := float(observer_profile.get("range", 0.0))
 		var effectiveness := float(observer_profile.get("effectiveness", 1.0))
 
-		if (
-			target_broadcasting
-			and has_local_sensor
-			and sensor_range > 0.0
-			and distance <= sensor_range * effectiveness
-		):
+		if target_broadcasting and has_local_sensor and sensor_range > 0.0 and distance <= sensor_range * effectiveness:
 			result["via_beacon"] = true
 			result["channels"].append("beacon")
 			return result
 
+		var range_weight := _range_weight(distance, sensor_range, effectiveness)
 		var sensitivity: Dictionary = observer_profile.get("sensitivity", empty_signature())
 		for channel in CHANNELS:
 			var sig_strength := float(target_signature.get(channel, 0.0))
 			var channel_sensitivity := float(sensitivity.get(channel, 0.0))
-			if sig_strength <= 0.0 or channel_sensitivity <= 0.0:
-				continue
-
-			var channel_mult := clampf(
-				sig_strength * channel_sensitivity / SIGNATURE_SCALE,
-				0.0,
-				MAX_CHANNEL_RANGE_MULT
-			)
-			var channel_range := sensor_range * channel_mult * effectiveness
-			if distance <= channel_range:
+			if _channel_meets_threshold(sig_strength, channel_sensitivity, range_weight):
 				result["channels"].append(channel)
 
 	return result
@@ -350,6 +329,22 @@ static func channel_summary(channels: PackedStringArray) -> String:
 		else:
 			parts.append("%s sig" % channel)
 	return ", ".join(parts)
+
+
+static func _range_weight(distance: float, sensor_range: float, effectiveness: float) -> float:
+	var envelope := maxf(sensor_range * effectiveness, 1.0)
+	var t := clampf(distance / envelope, 0.0, 1.0)
+	return lerpf(CLOSE_WEIGHT, FAR_WEIGHT, t)
+
+
+static func _channel_meets_threshold(
+	sig_strength: float,
+	channel_sensitivity: float,
+	range_weight: float
+) -> bool:
+	if sig_strength <= 0.0 or channel_sensitivity <= 0.0:
+		return false
+	return sig_strength * channel_sensitivity * range_weight >= DETECT_THRESHOLD
 
 
 static func _live_power_signature_scale(operating_state: ShipOperatingState) -> float:
