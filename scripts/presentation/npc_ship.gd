@@ -53,7 +53,7 @@ func apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null:
 		return
 	var ratio := clampf(health_ratio, 0.25, 1.0)
-	var base := _base_hull_color()
+	var base := Color.WHITE
 	_hull.modulate = Color(base.r * ratio + (1.0 - ratio) * 0.2, base.g * ratio, base.b * ratio, base.a)
 
 
@@ -149,14 +149,8 @@ func _apply_hull_visual() -> void:
 		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
 
-	var base := _base_hull_color()
-	_hull.modulate = base.lightened(actor.hull_color_shift)
-
-
-func _base_hull_color() -> Color:
-	if actor == null or actor.assembled_ship.chassis.is_empty():
-		return Color.WHITE
-	return Color.html(str(actor.assembled_ship.chassis.get("hull_color", "#ffffff")))
+	var brightness: float = 1.0 + actor.hull_color_shift
+	_hull.modulate = Color(brightness, brightness, brightness, 1.0)
 
 
 func _muzzle_position(projectile_radius: float = 5.0) -> Vector2:

@@ -56,6 +56,8 @@ static func _raycast(
 	)
 	query.collision_mask = collision_mask
 	for body in exclude:
+		if not is_instance_valid(body):
+			continue
 		if body is CollisionObject2D:
 			query.exclude.append(body.get_rid())
 	return space_state.intersect_ray(query)

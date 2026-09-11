@@ -209,7 +209,7 @@ Catalog: `data/catalog/traffic.json`. Presentation: `scenes/npc_ship.tscn`, `scr
 | **SVG** | Ships, stations, gates, beacons, wrecks, debris, orbitals |
 | **PNG** | Starfield tiles, planet disc, painterly backgrounds |
 
-Chassis entries reference hull sprites and `hull_color` modulate. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
+Chassis entries reference hull **sprites**; SVG paint is the source of color (hull sprites render at `Color.WHITE`). The optional `hull_color` field is identity metadata (e.g. future radar/livery), not a sprite tint. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
 
 Regenerate placeholders: `python3 scripts/tools/generate_placeholder_art.py` (runs Godot import for new SVG/PNG sidecars). If import is skipped, run `godot --path . --import --headless --quit` manually.
 

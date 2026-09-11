@@ -53,7 +53,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 
 Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at the Workshop before they can undock.
 
-Each chassis references a hull **sprite** path and **hull_color** for rendering.
+Each chassis references a hull **sprite** path (SVG paint owns color). Optional **hull_color** is identity metadata, not a runtime sprite tint.
 
 ---
 

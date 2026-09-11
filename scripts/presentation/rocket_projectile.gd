@@ -131,6 +131,8 @@ func _sweep(from: Vector2, to: Vector2) -> Dictionary:
 	var query := PhysicsRayQueryParameters2D.create(from, to)
 	query.collision_mask = _collision_mask
 	for body in _exclude:
+		if not is_instance_valid(body):
+			continue
 		if body is CollisionObject2D:
 			query.exclude.append(body.get_rid())
 	return space_state.intersect_ray(query)

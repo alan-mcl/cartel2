@@ -51,8 +51,7 @@ func _apply_hull_visual() -> void:
 		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
 
-	var color_text := str(assembled_ship.chassis.get("hull_color", "#ffffff"))
-	_hull.modulate = Color.html(color_text)
+	_hull.modulate = Color.WHITE
 
 
 func _refresh_loaded_stats() -> void:
@@ -202,7 +201,7 @@ func _apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
 		return
 	var ratio := clampf(health_ratio, 0.25, 1.0)
-	var base := Color.html(str(assembled_ship.chassis.get("hull_color", "#ffffff")))
+	var base := Color.WHITE
 	_hull.modulate = Color(base.r * ratio + (1.0 - ratio) * 0.2, base.g * ratio, base.b * ratio, base.a)
 
 

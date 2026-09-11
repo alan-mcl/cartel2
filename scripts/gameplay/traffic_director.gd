@@ -560,8 +560,8 @@ func _spawn_far_sprite(actor) -> void:
 	if not sprite_path.is_empty():
 		hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 	hull.scale = Vector2(0.65, 0.65)
-	var base_color := Color.html(str(actor.assembled_ship.chassis.get("hull_color", "#ffffff")))
-	hull.modulate = base_color.lightened(actor.hull_color_shift)
+	var brightness: float = 1.0 + actor.hull_color_shift
+	hull.modulate = Color(brightness, brightness, brightness, 1.0)
 	root.add_child(hull)
 
 	var thrust_flame := Sprite2D.new()
