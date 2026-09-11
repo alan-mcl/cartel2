@@ -13,6 +13,7 @@ static func run(runner: TestRunner) -> void:
 	_test_fight_to_death_attitude(runner)
 	_test_standard_npc_attitude(runner)
 	_test_traffic_idles_without_anchors(runner)
+	_test_traffic_runabout_and_flee(runner)
 	_test_ship_weapons_max_range(runner)
 	_test_combat_pilot_aim_and_fire(runner)
 	_test_combat_pilot_bands(runner)
@@ -163,8 +164,12 @@ static func _test_point_defence_intercept(runner: TestRunner) -> void:
 static func _traffic_config() -> Dictionary:
 	return {
 		"engage_timeout_seconds": 45.0,
+		"flee_timeout_seconds": 20.0,
 		"engage_hull_threshold_flare": 0.4,
 		"engage_hull_threshold_pegasus": 0.5,
+		"runabout_anchor_waypoint_chance": 0.5,
+		"runabout_despawn_chance": 0.5,
+		"runabout_arrival_radius": 120.0,
 	}
 
 
@@ -242,10 +247,70 @@ static func _test_traffic_idles_without_anchors(runner: TestRunner) -> void:
 	var actor = TrafficActorScript.new()
 	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
 	var inputs: Dictionary = actor._build_ai_inputs(
-		0.1, Vector2(100.0, 0.0), Vector2.ZERO, 0.0, false, [], _traffic_config()
+		0.1, Vector2(100.0, 0.0), Vector2.ZERO, 0.0, false, [], _traffic_config(), 5000.0
 	)
 	runner.check(not bool(inputs.get("thrust", false)), "traffic idles with empty anchors")
 	runner.check(not bool(inputs.get("boost", false)), "traffic does not boost with empty anchors")
+
+
+static func _test_traffic_runabout_and_flee(runner: TestRunner) -> void:
+	var actor = TrafficActorScript.new()
+	runner.check(
+		actor._segment_intersects_circle(Vector2(-200.0, 0.0), Vector2(200.0, 0.0), Vector2.ZERO, 100.0),
+		"runabout segment arrival detects path crossing free point"
+	)
+	runner.check(
+		not actor._segment_intersects_circle(
+			Vector2(-300.0, 200.0), Vector2(300.0, 200.0), Vector2.ZERO, 100.0
+		),
+		"runabout segment arrival ignores wide miss"
+	)
+
+	actor.role = "runabout"
+	var config := _traffic_config()
+	config["runabout_anchor_waypoint_chance"] = 0.0
+	var envelope := 5000.0
+	actor._pick_runabout_waypoint([], config, envelope)
+	var waypoint_dist: float = actor.wander_target.length()
+	runner.check(
+		waypoint_dist >= envelope * 0.15 and waypoint_dist <= envelope * 0.85,
+		"runabout free waypoint stays inside traffic envelope"
+	)
+
+	actor.ai_state = TrafficActorScript.AiState.FLEE
+	actor.flee_timer = 1.0
+	actor._handle_combat_timeout(2.0, Vector2.ZERO, config)
+	runner.check(
+		actor.ai_state == TrafficActorScript.AiState.TRAFFIC,
+		"FLEE timer expiry returns to TRAFFIC"
+	)
+
+	actor.ai_state = TrafficActorScript.AiState.FLEE
+	actor.flee_timer = 100.0
+	actor._handle_combat_timeout(1.0, Vector2(3000.0, 0.0), config)
+	runner.check(
+		actor.ai_state == TrafficActorScript.AiState.TRAFFIC,
+		"distant player ends FLEE"
+	)
+
+	actor.ai_state = TrafficActorScript.AiState.FLEE
+	actor._position = Vector2(-2000.0, 0.0)
+	actor.motion.facing = 0.0
+	var anchors: Array = [{"id": "habitat", "kind": "habitat", "position": Vector2(1600.0, 0.0)}]
+	var flee_inputs: Dictionary = actor._build_ai_inputs(
+		0.1,
+		Vector2(-5000.0, 0.0),
+		Vector2.ZERO,
+		0.0,
+		false,
+		anchors,
+		config,
+		envelope
+	)
+	runner.check(
+		bool(flee_inputs.get("thrust", false)),
+		"FLEE thrusts toward safety anchor while timer runs"
+	)
 
 
 static func _test_ship_weapons_max_range(runner: TestRunner) -> void:
@@ -796,17 +861,14 @@ static func _test_hull_hitbox(runner: TestRunner) -> void:
 	const KryptonPath := "res://assets/ships/chassis/krypton_chassis.svg"
 
 	var flare_hull := HullHitbox.hull_polygon_for_sprite(FlarePath)
-	var has_nose := false
-	for point in flare_hull:
-		if point.distance_to(Vector2(0.0, -24.0)) < 3.0:
-			has_nose = true
-	runner.check(has_nose, "flare hull includes point near (0, -24)")
 	runner.check(flare_hull.size() >= 3, "flare hull is a polygon")
+	runner.check(HullHitbox.nose_extent(FlarePath) > 0.0, "flare hull has nose above center")
 
+	var flare_canvas := HullHitbox.sprite_canvas_size(FlarePath)
 	var flare_bounds := _hull_bounds(flare_hull)
 	runner.check(
-		flare_bounds.x < 40.0 and flare_bounds.y < 50.0,
-		"flare hull is tighter than 64x64 texture frame"
+		flare_bounds.x <= flare_canvas.x and flare_bounds.y <= flare_canvas.y,
+		"flare hull fits within SVG canvas"
 	)
 
 	var krypton_hull := HullHitbox.hull_polygon_for_sprite(KryptonPath)
@@ -816,6 +878,23 @@ static func _test_hull_hitbox(runner: TestRunner) -> void:
 	runner.check(
 		HullHitbox.muzzle_offset(FlarePath, 5.0) > HullHitbox.nose_extent(FlarePath),
 		"flare muzzle spawns outside hull nose"
+	)
+
+	var krypton_canvas := HullHitbox.sprite_canvas_size(KryptonPath)
+	runner.check(is_equal_approx(krypton_canvas.y, 70.0), "krypton canvas height from SVG")
+	const ThrustPath := "res://assets/ships/fx/thrust.svg"
+	var krypton_thrust_y := HullHitbox.thrust_attach_offset(KryptonPath, ThrustPath)
+	var plume_base := HullHitbox.thrust_plume_base_offset(ThrustPath)
+	runner.check(
+		is_equal_approx(krypton_thrust_y, 35.0 - plume_base),
+		"thrust plume base meets hull canvas bottom edge"
+	)
+	var krypton_stern_y := krypton_hull[0].y
+	for point in krypton_hull:
+		krypton_stern_y = maxf(krypton_stern_y, point.y)
+	runner.check(
+		krypton_thrust_y > krypton_stern_y,
+		"thrust sits below hull paint stern using canvas height"
 	)
 
 

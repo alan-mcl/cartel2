@@ -258,9 +258,13 @@ var hull_max: float = 0.0
 var combat_state: ShipCombatState
 var cruise_speed_cap: float = 100.0
 var engage_timer: float = 0.0
+var flee_timer: float = 0.0
+var flee_anchor_id: String = ""
 var combat_pilot: CombatPilot
 var loiter_center: Vector2 = Vector2.ZERO
 var loiter_angle: float = 0.0
+var wander_target: Vector2 = Vector2.ZERO
+var wander_target_id: String = ""
 var route_from_id: String = ""
 var route_to_id: String = ""
 var route_offset: Vector2 = Vector2.ZERO
@@ -340,7 +344,13 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
 			begin_combat_pilot()
 		else:
-			ai_state = AiState.FLEE
+			_begin_flee(traffic_config)
+
+
+func _begin_flee(traffic_config: Dictionary) -> void:
+	ai_state = AiState.FLEE
+	flee_timer = float(traffic_config.get("flee_timeout_seconds", 20.0))
+	flee_anchor_id = ""
 
 
 func begin_combat_pilot() -> void:
@@ -522,9 +532,17 @@ func _tick_full_sim(
 	prev_position: Vector2
 ) -> void:
 	var inputs := _build_ai_inputs(
-		delta, player_pos, player_vel, player_facing, player_thrusting, anchors, traffic_config
+		delta,
+		player_pos,
+		player_vel,
+		player_facing,
+		player_thrusting,
+		anchors,
+		traffic_config,
+		traffic_envelope
 	)
-	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
+	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
+	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
 	if combat_state == null:
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
@@ -560,7 +578,7 @@ func _tick_full_sim(
 		and bool(weapon_result.get("out_of_ammo", false))
 		and combat_attitude != CombatAttitude.FIGHT_TO_DEATH
 	):
-		ai_state = AiState.FLEE
+		_begin_flee(traffic_config)
 
 	motion.step(
 		assembled_ship.stats,
@@ -574,12 +592,12 @@ func _tick_full_sim(
 		operating_state.boost_allowed
 	)
 
-	if not in_combat:
+	if not use_cruise_cap:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
-		if bool(inputs.get("thrust", false)):
-			_blend_peaceful_velocity(delta)
 	elif operating_state.fuel_empty:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap * 0.5)
+	if use_peaceful_blend and bool(inputs.get("thrust", false)):
+		_blend_peaceful_velocity(delta)
 
 	if near_lod and node != null and is_instance_valid(node) and node.has_method("sync_from_actor"):
 		node.call("sync_from_actor", self)
@@ -588,7 +606,9 @@ func _tick_full_sim(
 		_sync_far_lod_node()
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
-	_check_route_arrival(traffic_config, world_loader, prev_position)
+	_check_route_arrival(
+		traffic_config, world_loader, prev_position, anchors, traffic_envelope
+	)
 	_check_traffic_envelope(traffic_envelope)
 	_check_fuel_exhaustion()
 	_refresh_beacon_cache()
@@ -613,9 +633,17 @@ func _tick_kinematic(
 	_invalidate_beacon_cache()
 
 	var inputs := _build_ai_inputs(
-		delta, player_pos, player_vel, player_facing, player_thrusting, anchors, traffic_config
+		delta,
+		player_pos,
+		player_vel,
+		player_facing,
+		player_thrusting,
+		anchors,
+		traffic_config,
+		traffic_envelope
 	)
-	var in_combat := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
+	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
+	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
 	motion.step(
 		assembled_ship.stats,
@@ -629,16 +657,18 @@ func _tick_kinematic(
 		true
 	)
 
-	if not in_combat:
+	if not use_cruise_cap:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
-		if bool(inputs.get("thrust", false)):
-			_blend_peaceful_velocity(delta)
+	if use_peaceful_blend and bool(inputs.get("thrust", false)):
+		_blend_peaceful_velocity(delta)
 
 	_position += motion.velocity * delta
 	_sync_far_lod_node()
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
-	_check_route_arrival(traffic_config, world_loader, prev_position)
+	_check_route_arrival(
+		traffic_config, world_loader, prev_position, anchors, traffic_envelope
+	)
 	_check_traffic_envelope(traffic_envelope)
 
 
@@ -738,7 +768,8 @@ func _build_ai_inputs(
 	player_facing: float,
 	player_thrusting: bool,
 	anchors: Array,
-	traffic_config: Dictionary
+	traffic_config: Dictionary,
+	traffic_envelope: float
 ) -> Dictionary:
 	var inputs := {
 		"thrust": false,
@@ -774,15 +805,19 @@ func _build_ai_inputs(
 				"profile": profile,
 			})
 		AiState.FLEE:
-			var flee_target := _find_anchor_position(anchors, "habitat")
+			flee_anchor_id = "habitat"
+			var flee_target := _find_anchor_position(anchors, flee_anchor_id)
 			if flee_target.length_squared() < 1.0:
-				flee_target = _find_anchor_position(anchors, "jump_gate")
+				flee_anchor_id = "jump_gate"
+				flee_target = _find_anchor_position(anchors, flee_anchor_id)
 			var away := (position - player_pos).normalized()
 			if away.length_squared() < 0.001:
 				away = Vector2.from_angle(motion.facing)
 			var flee_point := position + away * 800.0
 			if flee_target.length_squared() > 1.0:
 				flee_point = flee_target
+			else:
+				flee_anchor_id = ""
 			inputs = _steer_toward(flee_point, true, true)
 		AiState.DOCKING:
 			inputs = _steer_toward(_route_destination(anchors), true, false)
@@ -790,7 +825,7 @@ func _build_ai_inputs(
 			if anchors.is_empty():
 				pass
 			else:
-				inputs = _traffic_inputs(delta, anchors)
+				inputs = _traffic_inputs(delta, anchors, traffic_config, traffic_envelope)
 
 	if operating_state.fuel_empty:
 		inputs["thrust"] = false
@@ -799,14 +834,19 @@ func _build_ai_inputs(
 	return inputs
 
 
-func _traffic_inputs(delta: float, anchors: Array) -> Dictionary:
+func _traffic_inputs(
+	delta: float,
+	anchors: Array,
+	traffic_config: Dictionary,
+	traffic_envelope: float
+) -> Dictionary:
 	match role:
 		"transit", "dock_cycle", "shuttle":
 			return _route_inputs(anchors)
 		"loiter":
 			return _loiter_inputs(delta, anchors)
 		"runabout":
-			return _runabout_inputs(delta, anchors)
+			return _runabout_inputs(anchors, traffic_config, traffic_envelope)
 		_:
 			return _route_inputs(anchors)
 
@@ -836,13 +876,50 @@ func _loiter_inputs(delta: float, anchors: Array) -> Dictionary:
 	return _steer_toward(target, true, false)
 
 
-func _runabout_inputs(delta: float, anchors: Array) -> Dictionary:
-	loiter_angle += delta * 0.6
-	var center := _find_anchor_position(anchors, "habitat")
-	if center.length_squared() < 1.0:
-		center = Vector2.ZERO
-	var target := center + Vector2.from_angle(loiter_angle) * (_ring_radius_estimate(anchors) * 0.65)
+func _runabout_inputs(
+	anchors: Array, traffic_config: Dictionary, traffic_envelope: float
+) -> Dictionary:
+	_ensure_runabout_waypoint(anchors, traffic_config, traffic_envelope)
+	var target := _runabout_target_position(anchors)
 	return _steer_toward(target, true, true)
+
+
+func _ensure_runabout_waypoint(
+	anchors: Array, traffic_config: Dictionary, traffic_envelope: float
+) -> void:
+	if not wander_target_id.is_empty() or wander_target.length_squared() > 1.0:
+		return
+	_pick_runabout_waypoint(anchors, traffic_config, traffic_envelope)
+
+
+func _pick_runabout_waypoint(
+	anchors: Array, traffic_config: Dictionary, traffic_envelope: float
+) -> void:
+	wander_target_id = ""
+	wander_target = Vector2.ZERO
+	var anchor_chance := float(traffic_config.get("runabout_anchor_waypoint_chance", 0.5))
+	if randf() < anchor_chance and not anchors.is_empty():
+		var pick_index := randi() % anchors.size()
+		var entry_variant: Variant = anchors[pick_index]
+		if typeof(entry_variant) == TYPE_DICTIONARY:
+			var entry: Dictionary = entry_variant
+			wander_target_id = str(entry.get("id", ""))
+			wander_target = entry.get("position", Vector2.ZERO)
+			if wander_target_id.is_empty():
+				wander_target = Vector2.ZERO
+			return
+
+	var envelope := maxf(traffic_envelope, 1.0)
+	var radius := randf_range(envelope * 0.15, envelope * 0.85)
+	wander_target = Vector2.from_angle(randf() * TAU) * radius
+
+
+func _runabout_target_position(anchors: Array) -> Vector2:
+	if not wander_target_id.is_empty():
+		var anchor_pos := _find_anchor_position(anchors, wander_target_id)
+		if anchor_pos.length_squared() > 1.0:
+			return anchor_pos
+	return wander_target
 
 
 func _steer_toward(target: Vector2, use_thrust: bool, use_boost: bool) -> Dictionary:
@@ -905,19 +982,45 @@ func _can_fire_at(player_pos: Vector2) -> bool:
 func _handle_combat_timeout(delta: float, player_pos: Vector2, _traffic_config: Dictionary) -> void:
 	if combat_attitude == CombatAttitude.FIGHT_TO_DEATH:
 		return
-	if ai_state != AiState.ENGAGE:
+	if ai_state == AiState.ENGAGE:
+		engage_timer -= delta
+		if engage_timer <= 0.0 or position.distance_to(player_pos) > 2200.0:
+			ai_state = AiState.TRAFFIC
+	elif ai_state == AiState.FLEE:
+		flee_timer -= delta
+		if flee_timer <= 0.0 or position.distance_to(player_pos) > 2200.0:
+			ai_state = AiState.TRAFFIC
+			flee_anchor_id = ""
+
+
+func _check_route_arrival(
+	traffic_config: Dictionary,
+	world_loader: WorldLoader,
+	prev_position: Vector2,
+	anchors: Array,
+	traffic_envelope: float
+) -> void:
+	if world_loader == null:
 		return
-	engage_timer -= delta
-	if engage_timer <= 0.0 or position.distance_to(player_pos) > 2200.0:
-		ai_state = AiState.TRAFFIC
 
+	if ai_state == AiState.FLEE:
+		if flee_anchor_id.is_empty():
+			return
+		if not world_loader.is_traffic_route_arrived(
+			prev_position, position, flee_anchor_id, traffic_config
+		):
+			return
+		request_cycle({"reason": "fled_to_safety"})
+		return
 
-func _check_route_arrival(traffic_config: Dictionary, world_loader: WorldLoader, prev_position: Vector2) -> void:
 	if ai_state != AiState.TRAFFIC and ai_state != AiState.DOCKING:
 		return
-	if route_to_id.is_empty():
+
+	if role == "runabout":
+		_check_runabout_arrival(traffic_config, world_loader, prev_position, anchors, traffic_envelope)
 		return
-	if world_loader == null:
+
+	if route_to_id.is_empty():
 		return
 	if not world_loader.is_traffic_route_arrived(prev_position, position, route_to_id, traffic_config):
 		return
@@ -927,6 +1030,55 @@ func _check_route_arrival(traffic_config: Dictionary, world_loader: WorldLoader,
 			request_cycle({"arrived_at": route_to_id, "reason": "route_complete"})
 		_:
 			pass
+
+
+func _check_runabout_arrival(
+	traffic_config: Dictionary,
+	world_loader: WorldLoader,
+	prev_position: Vector2,
+	anchors: Array,
+	traffic_envelope: float
+) -> void:
+	if wander_target_id.is_empty() and wander_target.length_squared() < 1.0:
+		return
+
+	var arrived := false
+	if not wander_target_id.is_empty():
+		arrived = world_loader.is_traffic_route_arrived(
+			prev_position, position, wander_target_id, traffic_config
+		)
+	else:
+		var radius := float(traffic_config.get("runabout_arrival_radius", 120.0))
+		arrived = (
+			_segment_intersects_circle(prev_position, position, wander_target, radius)
+			or position.distance_to(wander_target) <= radius
+		)
+
+	if not arrived:
+		return
+
+	if not wander_target_id.is_empty():
+		var despawn_chance := float(traffic_config.get("runabout_despawn_chance", 0.5))
+		if randf() < despawn_chance:
+			request_cycle({"arrived_at": wander_target_id, "reason": "runabout_stop"})
+			return
+
+	_pick_runabout_waypoint(anchors, traffic_config, traffic_envelope)
+
+
+func _segment_intersects_circle(
+	from_pos: Vector2, to_pos: Vector2, center: Vector2, radius: float
+) -> bool:
+	if from_pos.distance_to(center) <= radius or to_pos.distance_to(center) <= radius:
+		return true
+	var ab := to_pos - from_pos
+	var ab_len_sq := ab.length_squared()
+	if ab_len_sq < 0.001:
+		return from_pos.distance_to(center) <= radius
+	var ac := center - from_pos
+	var t := clampf(ac.dot(ab) / ab_len_sq, 0.0, 1.0)
+	var closest := from_pos + ab * t
+	return closest.distance_to(center) <= radius
 
 
 func _check_traffic_envelope(traffic_envelope: float) -> void:

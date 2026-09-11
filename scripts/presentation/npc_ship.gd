@@ -148,6 +148,7 @@ func _apply_hull_visual() -> void:
 	if not sprite_path.is_empty():
 		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
+		HullHitboxScript.apply_thrust_flame_position(_thrust_flame, sprite_path)
 
 	var brightness: float = 1.0 + actor.hull_color_shift
 	_hull.modulate = Color(brightness, brightness, brightness, 1.0)

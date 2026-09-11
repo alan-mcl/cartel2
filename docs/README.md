@@ -16,6 +16,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | [backlog.md](design/backlog.md) | Deferred design passes (fuel types, gravitic line, integrated sail) |
 | [architecture.md](design/architecture.md) + [data/catalog/](../data/catalog/) | JSON catalogs and runtime types (no separate data_model.md yet) |
 | [ui_theme.md](design/ui_theme.md) | Corporate UI theme tokens, variations, showcase |
+| [sprite_sizes.md](design/sprite_sizes.md) | Production SVG/PNG dimensions for ships, world art, and UI |
 
 ### Setting (working bible)
 

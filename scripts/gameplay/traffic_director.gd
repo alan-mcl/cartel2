@@ -4,6 +4,7 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const NPC_SHIP_SCENE_PATH := "res://scenes/npc_ship.tscn"
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
+const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const TRIP_ROLES := ["transit", "shuttle", "dock_cycle"]
 
 var actors: Array = []
@@ -567,11 +568,12 @@ func _spawn_far_sprite(actor) -> void:
 	var thrust_flame := Sprite2D.new()
 	thrust_flame.name = "ThrustFlame"
 	thrust_flame.visible = false
-	thrust_flame.position = Vector2(0, 18)
 	thrust_flame.scale = Vector2(0.65, 0.65)
 	var thrust_texture := load(THRUST_SPRITE) as Texture2D
 	if thrust_texture != null:
 		thrust_flame.texture = thrust_texture
+	if not sprite_path.is_empty():
+		HullHitboxScript.apply_thrust_flame_position(thrust_flame, sprite_path)
 	root.add_child(thrust_flame)
 
 	root.global_position = actor.position

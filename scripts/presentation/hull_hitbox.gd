@@ -4,6 +4,7 @@ extends RefCounted
 const ELLIPSE_SAMPLES := 16
 
 static var _cache: Dictionary = {}
+static var _canvas_cache: Dictionary = {}
 
 
 static func nose_extent(sprite_path: String, fallback: float = 20.0) -> float:
@@ -24,6 +25,69 @@ static func muzzle_offset(
 	return maxf(
 		nose_extent(sprite_path, fallback) + projectile_radius + 2.0,
 		fallback
+	)
+
+
+static func sprite_canvas_size(sprite_path: String, fallback: Vector2 = Vector2(64.0, 64.0)) -> Vector2:
+	if sprite_path.is_empty():
+		return fallback
+	if _canvas_cache.has(sprite_path):
+		return _canvas_cache[sprite_path] as Vector2
+
+	var file := FileAccess.open(sprite_path, FileAccess.READ)
+	if file == null:
+		push_warning("HullHitbox: cannot read %s" % sprite_path)
+		return fallback
+
+	var text := file.get_as_text()
+	file.close()
+	var view_box := _parse_view_box(text)
+	var size := _parse_image_size(text, view_box)
+	_canvas_cache[sprite_path] = size
+	return size
+
+
+static func sprite_stern_y(hull_sprite_path: String, fallback_hull_height: float = 64.0) -> float:
+	var canvas := sprite_canvas_size(
+		hull_sprite_path,
+		Vector2(fallback_hull_height, fallback_hull_height)
+	)
+	return canvas.y * 0.5
+
+
+static func thrust_plume_base_offset(
+	thrust_sprite_path: String,
+	fallback: float = 8.0
+) -> float:
+	var points := _parse_svg_points(thrust_sprite_path)
+	if points.is_empty():
+		return fallback
+	var base_y := points[0].y
+	for point in points:
+		base_y = minf(base_y, point.y)
+	return base_y
+
+
+static func thrust_attach_offset(
+	hull_sprite_path: String,
+	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg",
+	fallback_hull_height: float = 64.0
+) -> float:
+	return sprite_stern_y(hull_sprite_path, fallback_hull_height) - thrust_plume_base_offset(
+		thrust_sprite_path
+	)
+
+
+static func apply_thrust_flame_position(
+	thrust_flame: Sprite2D,
+	hull_sprite_path: String,
+	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg"
+) -> void:
+	if thrust_flame == null or hull_sprite_path.is_empty():
+		return
+	thrust_flame.position = Vector2(
+		0.0,
+		thrust_attach_offset(hull_sprite_path, thrust_sprite_path)
 	)
 
 

@@ -1,0 +1,182 @@
+# Sprite size catalog
+
+Production dimensions for Cartel art assets. Use this when authoring or refreshing SVG/PNG files so **on-disk size matches in-flight size** — no compensating for camera zoom or import scale in the canvas.
+
+Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/presentation/follow_camera.gd`).
+
+---
+
+## Production rules
+
+### 1 SVG pixel = 1 world unit
+
+- Keep Godot import **`svg/scale=1.0`** on all chassis and world SVGs.
+- Player and NPC hull `Sprite2D` nodes use **`scale = (1, 1)`** at configure time.
+- Camera zoom is presentation only. Do **not** shrink SVG canvases to “fit” zoom 0.72.
+
+### Nose-up, origin-centered
+
+- Set `width` and `height` to match the `viewBox` extent.
+- Standard viewBox: **`-W/2 -H/2  W  H`** (ship centered on origin).
+- **Nose points toward −Y** (up on screen when facing default).
+- Collision hulls are derived from SVG primitives via `HullHitbox` (`scripts/presentation/hull_hitbox.gd`). Keep `width`, `height`, and `viewBox` in sync. Put paint in `style` attributes; remove conflicting presentation-attribute leftovers (`fill="#…"` on the same element as `style="fill:…"`).
+
+### Clear border (5 px)
+
+- **Max 5 px** transparent padding on **every edge** of hull sprites.
+- Hull paint lives in the inner **`(W − 10) × (H − 10)`** box.
+- Aspect ratio is part of the silhouette (dart vs saucer vs block freighter).
+
+### Color
+
+- SVG paint owns color. Hull sprites render at `Color.WHITE` (no `hull_color` modulate). See [architecture.md](architecture.md#graphics-convention).
+
+### Known runtime exceptions (do not bake into art)
+
+| Effect | Where | Value |
+|--------|-------|-------|
+| Distant traffic hulls | `traffic_director.gd` | `scale = 0.65` |
+| Starfield near layer | `starfield.gd` | tile scale `1.15` |
+| Planet disc on screen | `planet_backdrop.gd` | `sprite.scale = diameter / 512` (catalog `diameter` = 2000 → ~3.9×) |
+
+---
+
+## Chassis hulls (SVG)
+
+Paths: `assets/ships/chassis/<id>.svg` — referenced from `data/catalog/chassis.json`.
+
+### Scale rule
+
+**Anchor:** Pegasus canvas **70×70**, catalog mass **8.5**.
+
+```
+longest_axis = round_to_even(70 × mass / 8.5)
+```
+
+Apply the chassis class aspect ratio to get width and height. Pegasus is **square**; all other hulls keep their class silhouette (dart, saucer, flat fighter, long interceptor, gunship block).
+
+At zoom 0.72 on 1080p: Pegasus ≈ **50 screen px**; Flare-ON ≈ **19 px**; Wolff ≈ **59 px**.
+
+| Chassis id | Name | Mass | Longest (even) | Aspect | **Author at (W×H)** | Inner paint |
+|------------|------|------|----------------|--------|---------------------|-------------|
+| `flare_on_chassis` | Flare-ON | 3.2 | 26 | 3:4 dart | **20×26** | 10×16 |
+| `juno_chassis` | Juno | 5.0 | 42 | ~0.70 scout | **30×42** | 20×32 |
+| `krypton_chassis` | Krypton | 6.0 | 50 | 3:2 saucer | **50×34** | 40×24 |
+| `silhouette_chassis` | Silhouette | 6.8 | 56 | ~7:3 flat | **56×24** | 46×14 |
+| `dragon_chassis` | Dragon | 7.5 | 62 | ~3:7 interceptor | **26×62** | 16×52 |
+| `pegasus_chassis` | Pegasus | 8.5 | 70 | square | **70×70** | 60×60 |
+| `wolff_chassis` | Wolff | 10.0 | 82 | 8:5 gunship | **82×52** | 72×42 |
+
+**Example SVG header (Pegasus):**
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="70" height="70"
+     viewBox="-35 -35 70 70">
+  <!-- hull geometry in inner 60×60; nose toward -Y -->
+</svg>
+```
+
+Same chassis SVGs appear in habitat/shipyard UI (`LocationArt` `TextureRect`, fit inside a 160 px-tall 16:9 frame). Flight size is authoritative; UI scales down.
+
+---
+
+## Ship FX (SVG)
+
+| Asset | Path | POC | **Author at** | Notes |
+|-------|------|-----|---------------|-------|
+| Thrust flame | `assets/ships/fx/thrust.svg` | 32×32 | **20×24** | Shared across all hulls; see attachment below |
+| Mass driver round | `assets/ships/fx/mass_driver_round.svg` | 16×16 | **16×16** | Keep |
+| Laser / cyber beams | — | Line2D | — | Procedural; no sprite |
+
+### Thrust attachment
+
+One thrust sprite serves all hull sizes. Align the **plume base** (not the thrust texture edge) with the hull **canvas bottom**:
+
+```
+position.y = hull_height / 2 - thrust_plume_base_offset
+```
+
+`thrust_plume_base_offset` is parsed from thrust SVG art (currently **8** on the 32×32 placeholder). Example (Pegasus 70×70): `35 - 8 = **27**`.
+
+**Runtime:** `HullHitbox.apply_thrust_flame_position()` sets `ThrustFlame.position.y` from the hull SVG `height` attribute when each ship is configured (player, NPC, distant traffic).
+
+---
+
+## World landmarks (SVG)
+
+Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `sprite` fields. Stations should read clearly **larger than the biggest hull** (Wolff longest axis **82 px**).
+
+| Asset | Path(s) | POC | **Author at (W×H)** | Role |
+|-------|---------|-----|---------------------|------|
+| Proxima habitat | `world/habitat_proxima.svg` | 280×180 | **480×320** | Dockable; ~4× Pegasus footprint |
+| Bela habitat | `world/habitat_bela.svg` | 280×180 | **480×320** | Dockable |
+| Generic habitat (unused) | `world/habitat.svg` | 260×160 | **480×320** | Align if revived |
+| Jump gate | `world/jump_gate.svg` | 240×240 | **400×400** | Sector landmark |
+| Torus orbital | `world/orbitals/torus.svg` | 140×140 | **200×200** | Ring station |
+| Yard | `world/orbitals/yard.svg` | 160×100 | **240×150** | Shipyard silhouette |
+| Tank farm | `world/orbitals/tank_farm.svg` | 150×110 | **220×160** | Fuel storage |
+| Array | `world/orbitals/array.svg` | 130×130 | **180×180** | Sensor / comms |
+| Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** | Tall spar |
+| Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
+| Beacon | `world/beacon.svg` | 48×64 | **48×64** | Small nav marker |
+| Wreck | `world/wreck.svg` | 120×80 | **82×52** | Dead hull-class (Wolff footprint) |
+| Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON |
+
+World entity `modulate` in JSON still tints some sprites today. For a clean SVG pipeline, author final color in the file and set catalog `modulate` to `#ffffff` when replacing placeholders.
+
+---
+
+## PNG — space and planets
+
+| Asset | Path | Current | **Author at** | Usage |
+|-------|------|---------|---------------|-------|
+| Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08 |
+| Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 — do **not** bake 1.15 into the PNG |
+| Planet albedo (optional) | per-world or shared | — | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1 wrap for `PlanetBackdrop` shader |
+| Planet night lights (optional) | same | — | Same as albedo | Emissive cities; same UV layout |
+| Planet disc (legacy) | `assets/world/planet.png` | 512×512 | — | **Unused** for globe mesh; do not replace as a flat disc |
+| Planet limb (legacy) | `assets/world/planet_limb.png` | 512×512 | — | Legacy `planet_limb` entity only |
+
+Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a 512 px SubViewport and is scaled to `diameter / 512`.
+
+---
+
+## PNG / SVG — UI art
+
+| Asset | Path pattern | Current | **Author at** | Display |
+|-------|--------------|---------|---------------|---------|
+| Location / building art | `assets/ui/locations/*.svg` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
+| Pilot portraits | `assets/ui/portraits/*.png` | 1024×1024 | **1024×1024** | New-game preview 160²; habitat header 48² |
+
+Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`art` field).
+
+---
+
+## Inkscape and Godot import checklist
+
+- Use **even integer** `width` / `height` where possible.
+- **`svg/scale=1.0`** in `.import` sidecar (default for new imports).
+- **`editor/convert_colors_with_editor_theme=false`** (already set on chassis imports).
+- Prefer flat fills, linear/radial gradients, and explicit `style` paint. Avoid Inkscape-only filters, mesh gradients, and non-normal blend modes (ThorVG may drop them).
+- After adding or resizing SVGs: `godot --path . --import --headless --quit`
+- **Trap:** `scripts/tools/generate_placeholder_art.py` unconditionally overwrites all chassis SVGs at POC sizes. Do not run it on authored hull art without guarding those files first.
+
+---
+
+## Quick reference — all author-at sizes
+
+| Category | Dimensions |
+|----------|------------|
+| Hulls | 20×26 … 82×52 (Pegasus anchor 70×70; see table above) |
+| Thrust FX | 20×24 |
+| Mass driver | 16×16 |
+| Habitats | 480×320 |
+| Jump gate | 400×400 |
+| Orbitals | 100×220 … 240×240 |
+| Beacon | 48×64 |
+| Wreck / debris | 82×52 / 16×20 |
+| Star tiles | 512×512 |
+| Planet maps | 2048×1024 (2:1) |
+| Location art | 640×360 (16:9) |
+| Portraits | 1024×1024 |
