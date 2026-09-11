@@ -5,6 +5,7 @@ const INNER_PADDING := 14.0
 const CONTACT_HIT_RADIUS := 10.0
 const CONTACT_DRAW_RADIUS := 4.0
 const TRAFFIC_DRAW_RADIUS := 1.5
+const TRAFFIC_BEACON_DRAW_RADIUS := 2.5
 const ASCIDIAN_DRAW_RADIUS := 2.0
 const ORBITAL_DRAW_RADIUS := 3.0
 const BACKGROUND_ALPHA := 0.25
@@ -121,12 +122,15 @@ func _draw_contacts(center: Vector2, map_radius: float, scale: float, color: Col
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var map_pos := _world_to_map(world_pos, center, scale)
 		var contact_kind := str(contact.get("contact_kind", "landmark"))
-		var draw_radius := _contact_draw_radius(contact_kind)
+		var draw_radius := _contact_draw_radius(contact_kind, contact)
 		if not _is_inside_map(map_pos, center, map_radius, draw_radius):
 			continue
 
-		var dot_color := _contact_color(contact_kind, color, label_color)
+		var dot_color := _contact_color(contact_kind, color, label_color, contact)
 		draw_circle(map_pos, draw_radius, dot_color)
+
+		if contact_kind == "traffic_npc":
+			continue
 
 		var short_label := str(contact.get("short_label", ""))
 		if short_label.is_empty():
@@ -139,9 +143,11 @@ func _draw_contacts(center: Vector2, map_radius: float, scale: float, color: Col
 		draw_string(font, map_pos + Vector2(6.0, 4.0), short_label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, label_color)
 
 
-func _contact_draw_radius(contact_kind: String) -> float:
+func _contact_draw_radius(contact_kind: String, contact: Dictionary = {}) -> float:
 	match contact_kind:
 		"traffic_npc":
+			if bool(contact.get("broadcasting", false)):
+				return TRAFFIC_BEACON_DRAW_RADIUS
 			return TRAFFIC_DRAW_RADIUS
 		"ascidian":
 			return ASCIDIAN_DRAW_RADIUS
@@ -151,9 +157,16 @@ func _contact_draw_radius(contact_kind: String) -> float:
 			return CONTACT_DRAW_RADIUS
 
 
-func _contact_color(contact_kind: String, info: Color, muted: Color) -> Color:
+func _contact_color(
+	contact_kind: String,
+	info: Color,
+	muted: Color,
+	contact: Dictionary = {}
+) -> Color:
 	match contact_kind:
 		"traffic_npc":
+			if bool(contact.get("broadcasting", false)):
+				return info
 			return muted
 		"ascidian":
 			return Color(info.r, info.g, info.b, info.a * 0.42)
@@ -217,7 +230,7 @@ func _find_contact_at(local_pos: Vector2) -> Dictionary:
 
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var map_pos := _world_to_map(world_pos, map_center, scale)
-		var draw_radius := _contact_draw_radius(str(contact.get("contact_kind", "landmark")))
+		var draw_radius := _contact_draw_radius(str(contact.get("contact_kind", "landmark")), contact)
 		if not _is_inside_map(map_pos, map_center, map_radius, draw_radius):
 			continue
 		if map_pos.distance_squared_to(local_pos) <= hit_radius_sq:

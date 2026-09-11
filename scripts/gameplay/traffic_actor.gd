@@ -19,6 +19,8 @@ const PEACEFUL_VELOCITY_BLEND := 3.5
 const COAST_SPEED_FRACTION := 0.92
 const COAST_HEADING_TOLERANCE := 0.2
 const LAUNCH_SPEED := 20.0
+const DETECTION_STAGGER_FRAMES := 8
+const DETECTION_RANGE_HYSTERESIS := 250.0
 
 
 static func create(
@@ -271,6 +273,9 @@ var route_offset: Vector2 = Vector2.ZERO
 var pending_weapon_orders: Array = []
 var near_lod: bool = false
 var has_sim_slot: bool = false
+var player_detected: bool = false
+var has_player_contact: bool = false
+var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
 var node: Node2D = null
 var cycle_pending: bool = false
@@ -280,6 +285,7 @@ var _position: Vector2 = Vector2.ZERO
 var _route_initialized: bool = false
 var _cached_beacon_lines: PackedStringArray = PackedStringArray()
 var _cached_broadcasting: bool = false
+var _cached_player_contact: Dictionary = {}
 
 
 var position: Vector2:
@@ -629,8 +635,13 @@ func _tick_kinematic(
 	world_loader: WorldLoader,
 	prev_position: Vector2
 ) -> void:
-	operating_state.transponder_broadcasting = false
-	_invalidate_beacon_cache()
+	operating_state.transponder_broadcasting = (
+		assembled_ship != null
+		and assembled_ship.has_transponder()
+		and owned_ship != null
+		and owned_ship.transponder_enabled
+	)
+	_refresh_beacon_cache()
 
 	var inputs := _build_ai_inputs(
 		delta,
@@ -702,53 +713,149 @@ func sync_position(world_pos: Vector2) -> void:
 	_position = world_pos
 
 
-func get_sensor_contact(player_pos: Vector2, traffic_config: Dictionary) -> Dictionary:
-	var radius := float(traffic_config.get("sensor_contact_radius", 1600.0))
-	if position.distance_to(player_pos) > radius:
-		return {}
+func should_refresh_detection(frame: int, observer_pos: Vector2, visual_radius: float) -> bool:
+	if has_sim_slot:
+		return true
+	if ai_state == AiState.ENGAGE or ai_state == AiState.FLEE:
+		return true
+	if position.distance_squared_to(observer_pos) <= visual_radius * visual_radius:
+		return true
+	var phase := absi(id.hash()) % DETECTION_STAGGER_FRAMES
+	return (frame + phase) % DETECTION_STAGGER_FRAMES == 0
 
-	if not has_sim_slot:
-		return {
-			"id": id,
-			"name": "",
-			"short_label": "",
-			"contact_kind": "traffic_npc",
-			"position": position,
-			"has_sim_slot": false,
-			"broadcasting": false,
-			"beacon_lines": PackedStringArray(),
-			"registration": owned_ship.registration if owned_ship != null else "",
-			"callsign": callsign,
-			"ship_name": owned_ship.name if owned_ship != null else "",
-			"affiliation": "",
-		}
 
-	var broadcasting := operating_state.transponder_broadcasting
-	var ship_name := assembled_ship.name if assembled_ship != null else ""
-	if not owned_ship.name.is_empty():
-		ship_name = owned_ship.name
+func refresh_player_detection(
+	observer_pos: Vector2,
+	observer_profile: Dictionary,
+	player_signature: Dictionary,
+	player_broadcasting: bool,
+	traffic_config: Dictionary,
+	observer_reads_beacons: bool = false
+) -> void:
+	if assembled_ship == null:
+		player_detected = false
+		has_player_contact = false
+		_cached_player_contact.clear()
+		return
 
-	var broadcast := TransponderBroadcastScript.build(
-		owned_ship.registration if owned_ship != null else "",
-		callsign,
-		ship_name,
-		affiliation if broadcasting else ""
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 500.0))
+	var distance := position.distance_to(observer_pos)
+	var target_signature := assembled_ship.signature
+	if target_signature.is_empty():
+		target_signature = SensorSystem.ship_signature(assembled_ship)
+	var broadcasting := _is_broadcasting()
+	var check_distance := distance
+	if player_detected:
+		check_distance = maxf(0.0, distance - DETECTION_RANGE_HYSTERESIS)
+	player_detected = SensorSystem.is_detected(
+		check_distance,
+		target_signature,
+		broadcasting,
+		observer_profile,
+		visual_radius
 	)
+
+	if ai_state == AiState.ENGAGE or ai_state == AiState.FLEE:
+		var npc_effectiveness := SensorSystem.sensor_effectiveness(assembled_ship, operating_state)
+		var npc_profile := SensorSystem.tick_observer_profile(assembled_ship, npc_effectiveness)
+		has_player_contact = SensorSystem.is_detected(
+			distance,
+			player_signature,
+			player_broadcasting,
+			npc_profile,
+			visual_radius
+		)
+		if has_player_contact:
+			last_known_player_pos = observer_pos
+	else:
+		has_player_contact = false
+
+	if player_detected:
+		_update_player_contact(broadcasting, observer_reads_beacons)
+	else:
+		_cached_player_contact.clear()
+
+
+func get_cached_player_contact() -> Dictionary:
+	if not player_detected or _cached_player_contact.is_empty():
+		return {}
+	_cached_player_contact["position"] = position
+	return _cached_player_contact
+
+
+func get_sensor_contact(
+	observer_pos: Vector2,
+	observer_profile: Dictionary,
+	traffic_config: Dictionary,
+	observer_reads_beacons: bool = false
+) -> Dictionary:
+	refresh_player_detection(
+		observer_pos,
+		observer_profile,
+		SensorSystem.empty_signature(),
+		false,
+		traffic_config,
+		observer_reads_beacons
+	)
+	return get_cached_player_contact()
+
+
+func _update_player_contact(broadcasting: bool, observer_reads_beacons: bool) -> void:
+	if _cached_player_contact.is_empty():
+		_cached_player_contact = _build_player_contact(broadcasting, observer_reads_beacons)
+		return
+
+	_cached_player_contact["position"] = position
+	_cached_player_contact["has_sim_slot"] = has_sim_slot
+	_cached_player_contact["broadcasting"] = broadcasting
+	if broadcasting and observer_reads_beacons:
+		_cached_player_contact["name"] = "\n".join(_cached_beacon_lines)
+		_cached_player_contact["beacon_lines"] = _cached_beacon_lines
+		_cached_player_contact["affiliation"] = affiliation
+	else:
+		_cached_player_contact["name"] = ""
+		_cached_player_contact["beacon_lines"] = PackedStringArray()
+		_cached_player_contact["affiliation"] = ""
+
+
+func _build_player_contact(broadcasting: bool, observer_reads_beacons: bool) -> Dictionary:
+	var ship_name := assembled_ship.name if assembled_ship != null else ""
+	if owned_ship != null and not owned_ship.name.is_empty():
+		ship_name = owned_ship.name
 
 	return {
 		"id": id,
-		"name": "\n".join(_cached_beacon_lines) if broadcasting else "",
+		"name": "\n".join(_cached_beacon_lines) if broadcasting and observer_reads_beacons else "",
 		"short_label": "",
 		"contact_kind": "traffic_npc",
 		"position": position,
 		"has_sim_slot": has_sim_slot,
 		"broadcasting": broadcasting,
-		"beacon_lines": _cached_beacon_lines if broadcasting else PackedStringArray(),
-		"registration": broadcast.get("registration", ""),
-		"callsign": broadcast.get("callsign", ""),
-		"ship_name": broadcast.get("ship_name", ""),
-		"affiliation": broadcast.get("affiliation", ""),
+		"beacon_lines": _cached_beacon_lines if broadcasting and observer_reads_beacons else PackedStringArray(),
+		"registration": owned_ship.registration if owned_ship != null else "",
+		"callsign": callsign,
+		"ship_name": ship_name,
+		"affiliation": affiliation if broadcasting else "",
 	}
+
+
+func _is_broadcasting() -> bool:
+	if has_sim_slot:
+		return operating_state.transponder_broadcasting
+	return (
+		assembled_ship != null
+		and assembled_ship.has_transponder()
+		and owned_ship != null
+		and owned_ship.transponder_enabled
+	)
+
+
+func _combat_target_pos(player_pos: Vector2) -> Vector2:
+	if has_player_contact:
+		return player_pos
+	if last_known_player_pos != Vector2.ZERO:
+		return last_known_player_pos
+	return player_pos
 
 
 func _should_engage(traffic_config: Dictionary) -> bool:
@@ -796,7 +903,7 @@ func _build_ai_inputs(
 				"ship_pos": position,
 				"facing": motion.facing,
 				"ship_vel": motion.velocity,
-				"target_pos": player_pos,
+				"target_pos": _combat_target_pos(player_pos),
 				"target_vel": player_vel,
 				"target_facing": player_facing,
 				"target_thrusting": player_thrusting,
@@ -810,7 +917,7 @@ func _build_ai_inputs(
 			if flee_target.length_squared() < 1.0:
 				flee_anchor_id = "jump_gate"
 				flee_target = _find_anchor_position(anchors, flee_anchor_id)
-			var away := (position - player_pos).normalized()
+			var away := (position - _combat_target_pos(player_pos)).normalized()
 			if away.length_squared() < 0.001:
 				away = Vector2.from_angle(motion.facing)
 			var flee_point := position + away * 800.0

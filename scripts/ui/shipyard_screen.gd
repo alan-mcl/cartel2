@@ -290,6 +290,11 @@ func _rebuild_ship_detail() -> void:
 		"FUEL",
 		"%.0f / %.0f" % [ship.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
 	))
+	ModuleSpecText.append_ship_signature_rows(
+		_ship_stats_body,
+		engineering.get("signature", {}),
+		str(engineering.get("transponder_label", "off"))
+	)
 
 	for mount_type in ["light_weapon", "medium_weapon", "heavy_weapon"]:
 		if mounts.has(mount_type):

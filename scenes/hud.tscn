@@ -87,6 +87,47 @@ text = "Power: —"
 
 [node name="GstClockLabel" parent="Root/StatusPanel/VBox" instance=ExtResource("2")]
 
+[node name="SignaturePanel" type="PanelContainer" parent="Root"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 104.0
+offset_right = 332.0
+offset_bottom = 204.0
+theme_type_variation = &"Surface"
+
+[node name="VBox" type="VBoxContainer" parent="Root/SignaturePanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+text = "SIGNATURE"
+
+[node name="ThermalLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Thermal: —"
+
+[node name="GravLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Gravitational: —"
+
+[node name="EmLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "EM: —"
+
+[node name="ComputeLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Computational: —"
+
+[node name="TransponderLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Transponder: —"
+
 [node name="LocalSensorMap" type="Control" parent="Root"]
 layout_mode = 1
 anchors_preset = 3

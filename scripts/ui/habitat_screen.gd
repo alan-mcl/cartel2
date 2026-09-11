@@ -516,6 +516,13 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 			if stats.has(key):
 				detail.add_child(_detail_row(key, str(stats[key])))
 
+	var engineering := ShipAssembly.get_engineering_block(_context.catalog, ship)
+	ModuleSpecText.append_ship_signature_rows(
+		detail,
+		engineering.get("signature", {}),
+		str(engineering.get("transponder_label", "off"))
+	)
+
 
 func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 	_clear_children(admin)

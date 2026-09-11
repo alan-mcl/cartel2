@@ -54,6 +54,10 @@ const SKIP_EXTRA_KEYS := {
 	"capabilities": true,
 	"ammunition_capacity": true,
 	"mounts": true,
+	"signature": true,
+	"sensor_type": true,
+	"sensor_range": true,
+	"sensor_sensitivity": true,
 }
 
 
@@ -88,6 +92,28 @@ static func format_tooltip(module_def: Dictionary) -> String:
 		lines.append("SPECS")
 		for stat_line in stat_lines:
 			lines.append(stat_line)
+
+	var signature_lines := format_signature_lines(module_def.get("signature", {}))
+	if not signature_lines.is_empty():
+		if not lines.is_empty():
+			lines.append("")
+		lines.append("SIGNATURE")
+		for signature_line in signature_lines:
+			lines.append(signature_line)
+
+	var sensor_type := str(module_def.get("sensor_type", ""))
+	if not sensor_type.is_empty():
+		if not lines.is_empty():
+			lines.append("")
+		lines.append("Sensor type: %s" % sensor_type)
+		lines.append("Sensor range: %.0f m" % float(module_def.get("sensor_range", 0.0)))
+		var sensitivity: Variant = module_def.get("sensor_sensitivity", {})
+		if typeof(sensitivity) == TYPE_DICTIONARY:
+			for channel in ["thermal", "gravitational", "electromagnetic", "computational"]:
+				if sensitivity.has(channel):
+					lines.append(
+						"%s sensitivity: %.2f" % [channel, float(sensitivity.get(channel, 0.0))]
+					)
 
 	var description := str(module_def.get("description", "")).strip_edges()
 	if not description.is_empty():
@@ -140,6 +166,37 @@ static func format_tooltip(module_def: Dictionary) -> String:
 			lines.append("  %s: %.0f%%" % [str(prot_key).capitalize(), frac * 100.0])
 
 	return "\n".join(lines)
+
+
+static func format_signature_lines(signature: Variant) -> PackedStringArray:
+	if typeof(signature) != TYPE_DICTIONARY or signature.is_empty():
+		return PackedStringArray()
+	return SensorSystem.format_signature_lines(signature)
+
+
+static func append_ship_signature_rows(parent: VBoxContainer, signature: Dictionary, transponder_label: String) -> void:
+	if parent == null:
+		return
+	parent.add_child(_ship_section_label("SIGNATURE"))
+	for line in SensorSystem.format_signature_lines(signature, transponder_label):
+		var parts := line.split(": ", false, 1)
+		var label_text := parts[0] if parts.size() > 0 else line
+		var value_text := parts[1] if parts.size() > 1 else ""
+		parent.add_child(_ship_detail_label(label_text.to_upper(), value_text))
+
+
+static func _ship_section_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.theme_type_variation = &"Section"
+	return label
+
+
+static func _ship_detail_label(label_text: String, value_text: String) -> Label:
+	var row := Label.new()
+	row.text = "%s: %s" % [label_text, value_text]
+	row.theme_type_variation = &"Numeric"
+	return row
 
 
 static func _format_stat_lines(module_def: Dictionary) -> PackedStringArray:

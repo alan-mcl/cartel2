@@ -84,8 +84,13 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 	if load_state:
 		var loaded_mass := calculate_loaded_mass(catalog, owned, assembled)
 		assembled.stats = derive_stats(assembled, loaded_mass)
+		assembled.signature = SensorSystem.compute_ship_signature(assembled, loaded_mass)
 	else:
-		assembled.stats = derive_stats(assembled, float(assembled.envelope.get("dry_mass", 0.0)))
+		var dry_mass := float(assembled.envelope.get("dry_mass", 0.0))
+		assembled.stats = derive_stats(assembled, dry_mass)
+		assembled.signature = SensorSystem.compute_ship_signature(assembled, dry_mass)
+
+	assembled.sensor_profile = SensorSystem.compute_static_sensor_profile(assembled)
 
 	return assembled
 

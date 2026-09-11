@@ -5,6 +5,12 @@ const PLAYER_HOVER_RADIUS := 24.0
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
+@onready var _signature_panel: PanelContainer = $Root/SignaturePanel
+@onready var _thermal_label: Label = $Root/SignaturePanel/VBox/ThermalLabel
+@onready var _grav_label: Label = $Root/SignaturePanel/VBox/GravLabel
+@onready var _em_label: Label = $Root/SignaturePanel/VBox/EmLabel
+@onready var _compute_label: Label = $Root/SignaturePanel/VBox/ComputeLabel
+@onready var _transponder_label: Label = $Root/SignaturePanel/VBox/TransponderLabel
 @onready var _speed: Label = $Root/StatusPanel/VBox/StatsRow/SpeedLabel
 @onready var _heading: Label = $Root/StatusPanel/VBox/StatsRow/HeadingLabel
 @onready var _fuel: Label = $Root/StatusPanel/VBox/SystemsRow/FuelLabel
@@ -63,6 +69,25 @@ func set_operating_state(state: ShipOperatingState) -> void:
 		return
 	_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
+	if _assembled_ship != null:
+		var signature := SensorSystem.ship_signature(_assembled_ship)
+		var transponder_label := "on" if state.transponder_broadcasting else "off"
+		set_signature_state(signature, transponder_label)
+
+
+func set_signature_state(signature: Dictionary, transponder_label: String) -> void:
+	if not _has_capability("basic_hud"):
+		return
+	if _thermal_label != null:
+		_thermal_label.text = "Thermal: %.1f" % float(signature.get("thermal", 0.0))
+	if _grav_label != null:
+		_grav_label.text = "Gravitational: %.1f" % float(signature.get("gravitational", 0.0))
+	if _em_label != null:
+		_em_label.text = "EM: %.1f" % float(signature.get("electromagnetic", 0.0))
+	if _compute_label != null:
+		_compute_label.text = "Computational: %.1f" % float(signature.get("computational", 0.0))
+	if _transponder_label != null:
+		_transponder_label.text = "Transponder: %s" % transponder_label
 
 
 func set_nav_state(
@@ -109,6 +134,9 @@ func _refresh_capabilities() -> void:
 
 	if _status_panel != null:
 		_status_panel.visible = has_basic
+	if _signature_panel != null:
+		_signature_panel.visible = has_basic
+		_apply_translucent_panel(_signature_panel)
 	if _local_sensor_map != null:
 		_local_sensor_map.set_feature_visible(has_sensor)
 	if _waypoint_arrows != null:
@@ -123,6 +151,7 @@ func _has_capability(id: String) -> bool:
 
 func _ready() -> void:
 	_apply_translucent_panel(_status_panel)
+	_apply_translucent_panel(_signature_panel)
 	if _session != null:
 		_bind_gst_clock()
 	_refresh_capabilities()

@@ -7,6 +7,7 @@ func _init() -> void:
 	TestSession.run(runner)
 	TestAssembler.run(runner)
 	TestCombat.run(runner)
+	TestSensors.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)

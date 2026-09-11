@@ -16,6 +16,10 @@ static func get_engineering_block(catalog: Catalog, owned: OwnedShip) -> Diction
 	var assembled := assemble_owned(catalog, owned)
 	var stats := get_stat_block(catalog, owned)
 	var idle: ShipOperatingState = ShipOperations.idle_snapshot(catalog, assembled, owned, 1)
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned, assembled)
+	var transponder_label := "off"
+	if assembled.has_transponder():
+		transponder_label = "on" if owned.transponder_enabled else "disabled"
 	return {
 		"stats": stats,
 		"capacities": assembled.capacities.duplicate(true),
@@ -24,6 +28,8 @@ static func get_engineering_block(catalog: Catalog, owned: OwnedShip) -> Diction
 		"idle_power_requested": idle.power_requested,
 		"idle_power_available": idle.power_available,
 		"idle_compute_demand": idle.compute_demand,
+		"signature": assembled.signature.duplicate(true),
+		"transponder_label": transponder_label,
 	}
 
 

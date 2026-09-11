@@ -584,6 +584,31 @@ def main() -> int:
             f"found {cyber_def_count}"
         )
 
+    sensor_count = sum(1 for m in modules if m.get("category") == "sensor")
+    if sensor_count != 6:
+        errors.append(f"modules.json: expected 6 sensor SKUs, found {sensor_count}")
+
+    signature_channels = {"thermal", "gravitational", "electromagnetic", "computational"}
+    for module in modules:
+        module_id = str(module.get("id", ""))
+        signature = module.get("signature")
+        if not isinstance(signature, dict):
+            errors.append(f"modules.json: {module_id} missing signature object")
+            continue
+        missing = signature_channels - set(signature.keys())
+        if missing:
+            errors.append(f"modules.json: {module_id} signature missing {sorted(missing)}")
+        if module.get("category") == "sensor":
+            if not str(module.get("sensor_type", "")):
+                errors.append(f"modules.json: {module_id} missing sensor_type")
+            if "sensor_range" not in module:
+                errors.append(f"modules.json: {module_id} missing sensor_range")
+            sensitivity = module.get("sensor_sensitivity")
+            if not isinstance(sensitivity, dict):
+                errors.append(f"modules.json: {module_id} missing sensor_sensitivity")
+            elif signature_channels - set(sensitivity.keys()):
+                errors.append(f"modules.json: {module_id} sensor_sensitivity incomplete")
+
     for ammo_id, ammo in ammunition.items():
         packets = ammo.get("damage_packets")
         if packets is None:

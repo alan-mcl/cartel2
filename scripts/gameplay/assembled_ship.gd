@@ -11,6 +11,8 @@ var capacities: Dictionary = {}
 var capabilities: Dictionary = {}
 var envelope: Dictionary = {}
 var stats: ShipStats = ShipStats.new()
+var signature: Dictionary = {}
+var sensor_profile: Dictionary = {}
 
 
 func has_capability(id: String) -> bool:

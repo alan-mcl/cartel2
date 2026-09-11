@@ -114,20 +114,28 @@ func _physics_process(delta: float) -> void:
 	if not session.in_unspace:
 		_ensure_traffic_director()
 		if _traffic_director != null:
+			var player_broadcasting: bool = (
+				_player.operating_state.transponder_broadcasting
+				if _player.assembled_ship != null
+				else false
+			)
 			_traffic_director.tick(
 				delta,
 				_player.global_position,
 				_world_loader,
 				_player.motion.velocity,
 				_player.motion.facing,
-				_player.motion.is_thrusting()
+				_player.motion.is_thrusting(),
+				_player.assembled_ship,
+				_player.operating_state,
+				player_broadcasting
 			)
 
 	var contacts := _world_loader.get_nav_contacts(catalog, session.in_unspace)
 	if session.in_unspace and not player_ship.has_capability("4_space_topology"):
 		contacts = _filter_topology_contacts(contacts)
 	if not session.in_unspace and _traffic_director != null:
-		contacts.append_array(_traffic_director.get_traffic_contacts(_player.global_position))
+		contacts.append_array(_traffic_director.get_traffic_contacts())
 
 	var nav_radius := play_bounds
 	if not session.in_unspace:
@@ -147,6 +155,11 @@ func _physics_process(delta: float) -> void:
 		_camera,
 		player_broadcast
 	)
+	var player_signature := SensorSystem.ship_signature(_player.assembled_ship)
+	var transponder_label := "off"
+	if _player.operating_state.transponder_broadcasting:
+		transponder_label = "on"
+	_hud.set_signature_state(player_signature, transponder_label)
 
 
 func _unhandled_input(event: InputEvent) -> void:

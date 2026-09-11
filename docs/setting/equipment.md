@@ -194,12 +194,37 @@ SnedeCorp is the galactic software monopoly in lore, but still sells **sealed, a
 
 The POC `nav_combat_core_mk1`, `nav_combat_core_mk2`, and `targeting_core_mk2` placeholders are retired. Targeting will return as a CU-consuming system module, not a core.
 
+### Signatures (all modules)
+
+Every module carries a four-channel **`signature`** block in catalog JSON:
+
+| Channel | Meaning |
+|---------|---------|
+| `thermal` | Waste heat and thermal emissions |
+| `gravitational` | Detectable mass / gravimetric footprint |
+| `electromagnetic` | Powered electronics and emissions |
+| `computational` | Detectable compute activity |
+
+A fitted ship's signature is the **sum** of installed module contributions, plus a small hull-mass grav floor from the chassis. There is no separate stealth stat — fitting quieter gear (e.g. quantum cores with low computational signature) or avoiding loud engines (gravitic drives spike gravitational signature; hydro-thermal engines spike thermal) is how ships stay harder to detect.
+
+The flight HUD (`basic_hud`) and shipyard/terminal engineering panels show the ship's current totals. Module tooltips show each part's contribution.
+
 ### Sensor (`category: sensor`, mount: `system`)
+
+Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units.
 
 | id | Capabilities | Notes |
 |----|--------------|-------|
-| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology` | Local radar panel; edge arrows; transponder label overlay; 4-space exit portal labelling |
-| `sensor_advanced` | same as basic | Extended-range sensors |
+| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology` | General-purpose suite; moderate all channels |
+| `sensor_advanced` | same as basic | Extended range and sensitivity |
+| `sensor_thermal` | `local_sensor` | High thermal sensitivity only |
+| `sensor_gravimetric` | `local_sensor` | High gravitational sensitivity only |
+| `sensor_em` | `local_sensor` | High electromagnetic sensitivity only |
+| `sensor_computational` | `local_sensor` | High computational sensitivity only |
+
+Specialist scanners trade navigation extras for channel focus. Suites remain the default on manufacturer templates.
+
+**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. Contacts appear when (1) within visual range, (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19), or (3) any signature channel exceeds the observer's sensor threshold at distance. Target lock is not implemented; unguided weapons do not require detection.
 
 ### Transponder (`category: transponder`, mount: `system`)
 
@@ -207,7 +232,7 @@ The POC `nav_combat_core_mk1`, `nav_combat_core_mk2`, and `targeting_core_mk2` p
 |----|-------|
 | `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). Sold at the Habitat Workshop (Transponder tab). |
 
-**Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay.
+**Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. When broadcasting, any observer with **`local_sensor`** detects the vessel out to sensor range regardless of how quiet the rest of the fit is — that is the point of the beacon. Without `local_sensor`, the beacon does not appear on radar (visual range still applies). Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay when broadcasting.
 
 ---
 

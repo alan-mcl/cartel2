@@ -13,6 +13,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | Document | Contents |
 |----------|----------|
 | [architecture.md](design/architecture.md) | Code layering, data flow, main loops, not-yet-implemented features |
+| [sensors_signatures.txt](design/sensors_signatures.txt) | Phase 1 sensor vs signature design spec |
 | [backlog.md](design/backlog.md) | Deferred design passes (fuel types, gravitic line, integrated sail) |
 | [architecture.md](design/architecture.md) + [data/catalog/](../data/catalog/) | JSON catalogs and runtime types (no separate data_model.md yet) |
 | [ui_theme.md](design/ui_theme.md) | Corporate UI theme tokens, variations, showcase |

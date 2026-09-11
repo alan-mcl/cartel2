@@ -65,13 +65,24 @@ func tick(
 	world_loader: WorldLoader,
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
-	player_thrusting: bool = false
+	player_thrusting: bool = false,
+	player_assembled: AssembledShip = null,
+	player_operating: ShipOperatingState = null,
+	player_broadcasting: bool = false
 ) -> void:
 	if _traffic_root == null:
 		return
 
 	var anchors := world_loader.get_traffic_anchors()
 	var cycle_queue: Array = []
+	var frame := Engine.get_physics_frames()
+	var visual_radius := float(_traffic_config.get("visual_contact_radius", 500.0))
+	var player_effectiveness := SensorSystem.sensor_effectiveness(player_assembled, player_operating)
+	var player_profile := SensorSystem.tick_observer_profile(player_assembled, player_effectiveness)
+	var player_signature := SensorSystem.ship_signature(player_assembled)
+	var player_reads_beacons := (
+		player_assembled != null and player_assembled.has_capability("sensor_read_beacons")
+	)
 
 	_assign_sim_slots(player_pos)
 
@@ -86,9 +97,22 @@ func tick(
 			else:
 				continue
 
+		if actor.should_refresh_detection(frame, player_pos, visual_radius):
+			actor.refresh_player_detection(
+				player_pos,
+				player_profile,
+				player_signature,
+				player_broadcasting,
+				_traffic_config,
+				player_reads_beacons
+			)
+		else:
+			_touch_stale_detection(actor)
+
 		var was_near: bool = bool(actor.near_lod)
 		actor.near_lod = actor.has_sim_slot
 		_update_lod_node(actor, was_near)
+		_apply_detection_visibility(actor)
 
 		actor.tick(
 			_catalog,
@@ -121,7 +145,7 @@ func tick(
 	_maintain_fleet_size(player_pos, anchors, world_loader)
 
 
-func get_traffic_contacts(player_pos: Vector2) -> Array:
+func get_traffic_contacts() -> Array:
 	var contacts: Array = []
 	for actor_variant in actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
@@ -129,10 +153,23 @@ func get_traffic_contacts(player_pos: Vector2) -> Array:
 		var actor = actor_variant
 		if not actor.is_active():
 			continue
-		var contact: Dictionary = actor.get_sensor_contact(player_pos, _traffic_config)
+		var contact: Dictionary = actor.get_cached_player_contact()
 		if not contact.is_empty():
 			contacts.append(contact)
 	return contacts
+
+
+func _touch_stale_detection(actor) -> void:
+	if actor.player_detected:
+		actor.get_cached_player_contact()
+
+
+func _apply_detection_visibility(actor) -> void:
+	if actor.node == null or not is_instance_valid(actor.node):
+		return
+	var visible := bool(actor.player_detected)
+	if actor.node.visible != visible:
+		actor.node.visible = visible
 
 
 func find_actor_by_node(node: Node):

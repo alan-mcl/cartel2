@@ -196,6 +196,11 @@ func _rebuild_spec_panel(host: VBoxContainer, template_id: String) -> void:
 		"FUEL",
 		"%.0f / %.0f" % [owned.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
 	))
+	ModuleSpecText.append_ship_signature_rows(
+		host,
+		engineering.get("signature", {}),
+		str(engineering.get("transponder_label", "off"))
+	)
 
 	host.add_child(_section_label("SYSTEMS"))
 	if assembled.modules_in_category("weapon").is_empty():
@@ -392,6 +397,20 @@ func _physics_process(delta: float) -> void:
 
 	var traffic_config := catalog.get_traffic_config()
 	var anchors: Array = []
+	var observer_profile := SensorSystem.sensor_profile(
+		_player.assembled_ship,
+		_player.operating_state
+	)
+	var player_signature := SensorSystem.ship_signature(_player.assembled_ship)
+	var player_broadcasting: bool = _player.operating_state.transponder_broadcasting
+	_opponent_actor.refresh_player_detection(
+		_player.global_position,
+		observer_profile,
+		player_signature,
+		player_broadcasting,
+		traffic_config,
+		_player.assembled_ship.has_capability("sensor_read_beacons")
+	)
 	_opponent_actor.tick(
 		catalog,
 		traffic_config,
@@ -415,9 +434,9 @@ func _physics_process(delta: float) -> void:
 func _update_hud_nav() -> void:
 	var contacts: Array = []
 	if _opponent_actor != null and _opponent_actor.is_active():
-		contacts.append(
-			_opponent_actor.get_sensor_contact(_player.global_position, catalog.get_traffic_config())
-		)
+		var contact: Dictionary = _opponent_actor.get_cached_player_contact()
+		if not contact.is_empty():
+			contacts.append(contact)
 	_hud.set_nav_state(
 		NAV_RADIUS,
 		_player.global_position,
@@ -426,6 +445,9 @@ func _update_hud_nav() -> void:
 		_camera,
 		{}
 	)
+	var player_signature := SensorSystem.ship_signature(_player.assembled_ship)
+	var transponder_label := "on" if _player.operating_state.transponder_broadcasting else "off"
+	_hud.set_signature_state(player_signature, transponder_label)
 
 
 func _end_bout() -> void:
