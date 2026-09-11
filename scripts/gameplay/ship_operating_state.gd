@@ -29,3 +29,5 @@ var active_systems: Dictionary = {}
 var transponder_broadcasting: bool = false
 var power_allocated_by_category: Dictionary = {}
 var power_requested_by_category: Dictionary = {}
+var signature_glow_propulsion: float = 0.0
+var signature_glow_weapon: float = 0.0

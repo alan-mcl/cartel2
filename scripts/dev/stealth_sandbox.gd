@@ -3,13 +3,14 @@ extends Node2D
 const NPC_SHIP_SCENE := preload("res://scenes/npc_ship.tscn")
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 
-const NPC_MIN_WEAPON_RANGE := 800.0
-const ENGAGEMENT_MARGIN := 80.0
 const DEFAULT_PLAYER_TEMPLATE := "flare_on_ss"
 const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103a"
-const NAV_RADIUS := 3000.0
+const STEALTH_MARGIN := 2000.0
+const DEFAULT_OPPONENT_COUNT := 4
+const MIN_OPPONENT_COUNT := 1
+const MAX_OPPONENT_COUNT := 12
 
-enum BoutState { SETUP, FIGHTING }
+enum DrillState { SETUP, ACTIVE }
 
 @onready var _starfield: Node2D = $Starfield
 @onready var _world: Node2D = $World
@@ -21,6 +22,7 @@ enum BoutState { SETUP, FIGHTING }
 @onready var _player_spec_host: VBoxContainer = $SetupLayer/Root/Panel/Margin/VBox/Body/PlayerColumn/PlayerScroll/PlayerSpec
 @onready var _opponent_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn/OpponentOption
 @onready var _opponent_spec_host: VBoxContainer = $SetupLayer/Root/Panel/Margin/VBox/Body/OpponentColumn/OpponentScroll/OpponentSpec
+@onready var _count_spin: SpinBox = $SetupLayer/Root/Panel/Margin/VBox/Footer/CountSpin
 @onready var _attitude_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Footer/AttitudeOption
 @onready var _skill_option: OptionButton = $SetupLayer/Root/Panel/Margin/VBox/Footer/SkillOption
 @onready var _begin_button: Button = $SetupLayer/Root/Panel/Margin/VBox/Footer/BeginButton
@@ -29,12 +31,12 @@ enum BoutState { SETUP, FIGHTING }
 var session: GameSession
 var catalog: Catalog
 
-var _bout_state: BoutState = BoutState.SETUP
+var _drill_state: DrillState = DrillState.SETUP
 var _ship_template_ids: Array[String] = []
-var _opponent_actor = null
-var _opponent_node: Node2D = null
+var _opponents: Array = []
 var _traffic_root: Node2D = null
-var _destroyed_pending: bool = false
+var _nav_radius: float = 15000.0
+var _current_pilot_skill: int = -1
 
 
 func _ready() -> void:
@@ -51,6 +53,7 @@ func _ready() -> void:
 	_populate_ship_options()
 	_populate_attitude_options()
 	_populate_skill_options()
+	_configure_count_spin()
 	_refresh_spec_panels()
 
 	_begin_button.pressed.connect(_on_begin_pressed)
@@ -66,13 +69,20 @@ func _build_session() -> GameSession:
 	var new_session := GameSession.new()
 	new_session.sandbox = true
 	new_session.docked = false
-	new_session.callsign = "SBX"
-	new_session.last_log = "Combat sandbox ready."
+	new_session.callsign = "STLX"
+	new_session.last_log = "Stealth sandbox ready."
 	return new_session
 
 
 func try_interact(_target: Interactable) -> void:
 	pass
+
+
+func _configure_count_spin() -> void:
+	_count_spin.min_value = MIN_OPPONENT_COUNT
+	_count_spin.max_value = MAX_OPPONENT_COUNT
+	_count_spin.value = DEFAULT_OPPONENT_COUNT
+	_count_spin.step = 1
 
 
 func _populate_ship_options() -> void:
@@ -248,17 +258,14 @@ func _owned_ship_from_template(template_id: String, ship_id: String) -> OwnedShi
 	return OwnedShip.from_template(catalog, ship_data)
 
 
-func _engagement_separation(player_assembled: AssembledShip, opponent_assembled: AssembledShip) -> float:
-	return (
-		maxf(
-			maxf(
-				ShipWeapons.max_module_range(player_assembled),
-				ShipWeapons.max_module_range(opponent_assembled)
-			),
-			NPC_MIN_WEAPON_RANGE
-		)
-		+ ENGAGEMENT_MARGIN
-	)
+func _max_detect_range(assembled: AssembledShip) -> float:
+	if assembled == null or assembled.sensor_profile.is_empty():
+		return SensorSystem.compute_static_sensor_profile(assembled).get("max_detect_range", 0.0)
+	return float(assembled.sensor_profile.get("max_detect_range", 0.0))
+
+
+func _stealth_separation(player_assembled: AssembledShip, opponent_assembled: AssembledShip) -> float:
+	return maxf(_max_detect_range(player_assembled), _max_detect_range(opponent_assembled)) + STEALTH_MARGIN
 
 
 func _on_begin_pressed() -> void:
@@ -268,24 +275,27 @@ func _on_begin_pressed() -> void:
 		_status_label.text = "Select player and opponent hulls."
 		return
 
-	_begin_bout(
+	_begin_drill(
 		player_template_id,
 		opponent_template_id,
+		int(_count_spin.value),
 		_attitude_option.selected,
 		_selected_pilot_skill()
 	)
 
 
-func _begin_bout(
+func _begin_drill(
 	player_template_id: String,
 	opponent_template_id: String,
+	opponent_count: int,
 	attitude_index: int,
 	pilot_skill: int = -1
 ) -> void:
-	_clear_bout()
+	_clear_drill()
 
 	var player_owned := _owned_ship_from_template(player_template_id, "sandbox_player")
 	player_owned.location = "aboard"
+	player_owned.transponder_enabled = false
 	session.owned_ships.clear()
 	session.owned_ships.append(player_owned)
 	session.current_ship_id = player_owned.id
@@ -295,9 +305,10 @@ func _begin_bout(
 
 	var opponent_assembled := ShipAssembler.assemble_owned(
 		catalog,
-		_owned_ship_from_template(opponent_template_id, "sandbox_opponent")
+		_owned_ship_from_template(opponent_template_id, "sandbox_opponent_preview")
 	)
-	var separation := _engagement_separation(player_assembled, opponent_assembled)
+	_nav_radius = _stealth_separation(player_assembled, opponent_assembled)
+	_current_pilot_skill = pilot_skill
 
 	_player.configure(player_assembled, player_owned, catalog)
 	_player.global_position = Vector2.ZERO
@@ -305,57 +316,66 @@ func _begin_bout(
 	_player.freeze_motion()
 	_player.rotation = _player.motion.facing + PI / 2.0
 
-	_spawn_opponent(opponent_template_id, separation, attitude_index, pilot_skill)
+	_spawn_opponents(opponent_template_id, opponent_count, _nav_radius, attitude_index)
 
 	_camera.make_current()
 	_hud.bind(session, _player, player_assembled)
 	_hud.visible = true
 	_setup_layer.visible = false
-	_bout_state = BoutState.FIGHTING
-	_destroyed_pending = false
+	_drill_state = DrillState.ACTIVE
 	_status_label.text = ""
 	get_tree().paused = false
 
 
-func _spawn_opponent(
+func _spawn_opponents(
 	template_id: String,
+	count: int,
 	separation: float,
-	attitude_index: int,
-	pilot_skill: int = -1
+	attitude_index: int
 ) -> void:
 	var traffic_config := catalog.get_traffic_config()
-	var spawn_pos := Vector2(separation, 0.0)
-	var spawn_facing := PI
-
-	_opponent_actor = TrafficActorScript.create(
-		catalog,
-		traffic_config,
-		"combat_sandbox",
-		template_id,
-		spawn_pos,
-		spawn_facing,
-		"proxima"
-	)
-	_opponent_actor.has_sim_slot = true
-	_opponent_actor.near_lod = true
-	_opponent_actor.motion.velocity = Vector2.ZERO
-	_opponent_actor.freeze_traffic_route()
-
-	if attitude_index == 0:
-		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
-		_opponent_actor.ai_state = TrafficActorScript.STATE_ENGAGE
-		_opponent_actor.engage_timer = 9999.0
-		_opponent_actor.begin_combat_pilot()
-		_apply_pilot_skill(_opponent_actor, pilot_skill)
-	else:
-		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
-		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
-
 	_traffic_root = _ensure_traffic_root()
-	_opponent_node = NPC_SHIP_SCENE.instantiate()
-	_traffic_root.add_child(_opponent_node)
-	_opponent_node.global_position = spawn_pos
-	_opponent_node.bind_actor(_opponent_actor, catalog)
+
+	for i in range(count):
+		var angle := TAU * float(i) / float(count) + randf_range(-0.08, 0.08)
+		var radius := separation + randf_range(-400.0, 400.0)
+		var spawn_pos := Vector2.from_angle(angle) * radius
+		var spawn_facing := (Vector2.ZERO - spawn_pos).angle()
+
+		var actor = TrafficActorScript.create(
+			catalog,
+			traffic_config,
+			"stealth_sandbox",
+			template_id,
+			spawn_pos,
+			spawn_facing,
+			"proxima"
+		)
+		actor.id = "stealth_%d" % i
+		actor.has_sim_slot = true
+		actor.near_lod = true
+		actor.motion.velocity = Vector2.ZERO
+		actor.freeze_traffic_route()
+		actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+		actor.owned_ship.transponder_enabled = false
+		actor.operating_state.transponder_broadcasting = false
+
+		if attitude_index == 0:
+			actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+		else:
+			actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
+
+		var node: Node2D = NPC_SHIP_SCENE.instantiate()
+		_traffic_root.add_child(node)
+		node.global_position = spawn_pos
+		node.bind_actor(actor, catalog)
+		node.visible = false
+
+		_opponents.append({
+			"actor": actor,
+			"node": node,
+			"destroyed_pending": false,
+		})
 
 
 func _apply_pilot_skill(actor, pilot_skill: int) -> void:
@@ -376,72 +396,135 @@ func _ensure_traffic_root() -> Node2D:
 
 
 func _physics_process(delta: float) -> void:
-	if _bout_state != BoutState.FIGHTING:
-		return
-
-	if _opponent_actor == null:
-		_update_hud_nav()
-		return
-
-	if _opponent_actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-		if not _destroyed_pending:
-			_destroyed_pending = true
-			if _opponent_node != null and is_instance_valid(_opponent_node):
-				if _opponent_node.has_method("play_destroyed"):
-					_opponent_node.call("play_destroyed")
-				else:
-					_opponent_node.queue_free()
-			_opponent_node = null
-		_update_hud_nav()
+	if _drill_state != DrillState.ACTIVE:
 		return
 
 	var traffic_config := catalog.get_traffic_config()
 	var anchors: Array = []
-	var observer_profile := SensorSystem.sensor_profile(
+	var observer_profile := SensorSystem.tick_observer_profile(
 		_player.assembled_ship,
-		_player.operating_state
+		SensorSystem.sensor_effectiveness(_player.assembled_ship, _player.operating_state)
 	)
 	var player_signature := SensorSystem.live_signature(
 		_player.assembled_ship,
 		_player.operating_state
 	)
 	var player_broadcasting: bool = _player.operating_state.transponder_broadcasting
-	_opponent_actor.refresh_player_detection(
-		_player.global_position,
-		observer_profile,
-		player_signature,
-		player_broadcasting,
-		traffic_config,
-		_player.assembled_ship.has_capability("sensor_read_beacons")
-	)
-	_opponent_actor.tick(
-		catalog,
-		traffic_config,
-		delta,
-		_player.global_position,
-		anchors,
-		0.0,
-		null,
-		_player.motion.velocity,
-		_player.motion.facing,
-		_player.motion.is_thrusting()
-	)
+	var player_reads_beacons: bool = _player.assembled_ship.has_capability("sensor_read_beacons")
 
-	if _opponent_node != null and is_instance_valid(_opponent_node):
-		if _opponent_node.has_method("spawn_weapon_orders"):
-			_opponent_node.call("spawn_weapon_orders", _opponent_actor.pending_weapon_orders)
+	for entry_variant in _opponents:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var actor = entry.get("actor")
+		var node: Node2D = entry.get("node")
+		if actor == null:
+			continue
+
+		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
+			if not bool(entry.get("destroyed_pending", false)):
+				entry["destroyed_pending"] = true
+				if node != null and is_instance_valid(node):
+					if node.has_method("play_destroyed"):
+						node.call("play_destroyed")
+					else:
+						node.queue_free()
+				entry["node"] = null
+			continue
+
+		actor.refresh_player_detection(
+			_player.global_position,
+			observer_profile,
+			player_signature,
+			player_broadcasting,
+			traffic_config,
+			player_reads_beacons
+		)
+		_try_npc_acquire(actor, traffic_config, player_signature, player_broadcasting)
+		_apply_detection_visibility(actor, node)
+
+		actor.tick(
+			catalog,
+			traffic_config,
+			delta,
+			_player.global_position,
+			anchors,
+			0.0,
+			null,
+			_player.motion.velocity,
+			_player.motion.facing,
+			_player.motion.is_thrusting()
+		)
+
+		if node != null and is_instance_valid(node) and node.has_method("spawn_weapon_orders"):
+			node.call("spawn_weapon_orders", actor.pending_weapon_orders)
 
 	_update_hud_nav()
 
 
+func _try_npc_acquire(
+	actor,
+	traffic_config: Dictionary,
+	player_signature: Dictionary,
+	player_broadcasting: bool
+) -> void:
+	if actor.ai_state != TrafficActorScript.AiState.TRAFFIC:
+		return
+
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 500.0))
+	var distance: float = actor.position.distance_to(_player.global_position)
+	var npc_effectiveness := SensorSystem.sensor_effectiveness(actor.assembled_ship, actor.operating_state)
+	var npc_profile := SensorSystem.tick_observer_profile(actor.assembled_ship, npc_effectiveness)
+	if not SensorSystem.is_detected(
+		distance,
+		player_signature,
+		player_broadcasting,
+		npc_profile,
+		visual_radius
+	):
+		return
+
+	actor.has_player_contact = true
+	actor.last_known_player_pos = _player.global_position
+
+	if (
+		actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+		or actor._should_engage(traffic_config)
+	):
+		actor.ai_state = TrafficActorScript.STATE_ENGAGE
+		if actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH:
+			actor.engage_timer = 9999.0
+		else:
+			actor.engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
+		actor.begin_combat_pilot()
+		_apply_pilot_skill(actor, _current_pilot_skill)
+	else:
+		actor._begin_flee(traffic_config)
+
+
+func _apply_detection_visibility(actor, node: Node2D) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var visible := bool(actor.player_detected)
+	if node.visible != visible:
+		node.visible = visible
+
+
 func _update_hud_nav() -> void:
 	var contacts: Array = []
-	if _opponent_actor != null and _opponent_actor.is_active():
-		var contact: Dictionary = _opponent_actor.get_cached_player_contact()
+	for entry_variant in _opponents:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var actor = entry.get("actor")
+		if actor == null or not actor.is_active():
+			continue
+		var contact: Dictionary = actor.get_cached_player_contact()
 		if not contact.is_empty():
 			contacts.append(contact)
+
 	_hud.set_nav_state(
-		NAV_RADIUS,
+		_nav_radius,
 		_player.global_position,
 		rad_to_deg(_player.motion.facing),
 		contacts,
@@ -456,26 +539,29 @@ func _update_hud_nav() -> void:
 	_hud.set_signature_state(player_signature, transponder_label)
 
 
-func _end_bout() -> void:
-	_clear_bout()
+func _end_drill() -> void:
+	_clear_drill()
 	_player.freeze_motion()
 	_hud.visible = false
 	_setup_layer.visible = true
-	_bout_state = BoutState.SETUP
+	_drill_state = DrillState.SETUP
 	get_tree().paused = true
 
 
-func _clear_bout() -> void:
-	_clear_opponent()
+func _clear_drill() -> void:
+	_clear_opponents()
 	_clear_projectiles()
-	_destroyed_pending = false
 
 
-func _clear_opponent() -> void:
-	if _opponent_node != null and is_instance_valid(_opponent_node):
-		_opponent_node.queue_free()
-	_opponent_node = null
-	_opponent_actor = null
+func _clear_opponents() -> void:
+	for entry_variant in _opponents:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var node: Node2D = entry.get("node")
+		if node != null and is_instance_valid(node):
+			node.queue_free()
+	_opponents.clear()
 	if _traffic_root != null and is_instance_valid(_traffic_root):
 		_traffic_root.queue_free()
 	_traffic_root = null
@@ -488,15 +574,14 @@ func _clear_projectiles() -> void:
 		child.queue_free()
 	if _traffic_root != null and is_instance_valid(_traffic_root):
 		for child in _traffic_root.get_children():
-			if child != _opponent_node:
-				child.queue_free()
+			child.queue_free()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _bout_state != BoutState.FIGHTING:
+	if _drill_state != DrillState.ACTIVE:
 		return
 	if event.is_action_pressed("ui_cancel"):
-		_end_bout()
+		_end_drill()
 		get_viewport().set_input_as_handled()
 
 

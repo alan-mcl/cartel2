@@ -205,9 +205,11 @@ Every module carries a four-channel **`signature`** block in catalog JSON:
 | `electromagnetic` | Powered electronics and emissions |
 | `computational` | Detectable compute activity |
 
-A fitted ship's signature is the **sum** of installed module contributions, plus a small hull-mass grav floor from the chassis. There is no separate stealth stat — fitting quieter gear (e.g. quantum cores with low computational signature) or avoiding loud engines (gravitic drives spike gravitational signature; hydro-thermal engines spike thermal) is how ships stay harder to detect.
+A fitted ship's **fitted potential** is the **sum** of installed module contributions, plus a small hull-mass grav floor from the chassis. There is no separate stealth stat — fitting quieter gear (e.g. quantum cores with low computational signature) or avoiding loud engines (gravitic drives spike gravitational signature; hydro-thermal engines spike thermal) is how ships stay harder to detect.
 
-The flight HUD (`basic_hud`) and shipyard/terminal engineering panels show the ship's current totals. Module tooltips show each part's contribution.
+In flight, the **live signature** applies each module only while that system is in use (with a ~1.5 s afterglow for propulsion and weapons). Power-plant emissions scale with load (minimum idle waste heat). The computational channel scales with compute demand vs capacity. Gravitational hull mass and passive modules (armour, life support) stay on.
+
+The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engineering panels show **fitted potential**. Module tooltips show each part's catalog contribution.
 
 ### Sensor (`category: sensor`, mount: `system`)
 

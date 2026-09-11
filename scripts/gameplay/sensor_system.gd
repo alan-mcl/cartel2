@@ -5,6 +5,11 @@ const CHANNELS := ["thermal", "gravitational", "electromagnetic", "computational
 const SIGNATURE_SCALE := 100.0
 const MAX_CHANNEL_RANGE_MULT := 1.5
 const HULL_GRAV_PER_TONNE := 0.08
+const SIGNATURE_GLOW_SEC := 1.5
+const POWER_IDLE_SIGNATURE_FLOOR := 0.15
+
+const PASSIVE_SIGNATURE_CATEGORIES := ["armour", "life_support"]
+const IN_FLIGHT_SIGNATURE_CATEGORIES := ["shield", "point_defence", "ecm"]
 
 
 static func empty_signature() -> Dictionary:
@@ -59,6 +64,94 @@ static func compute_ship_signature(assembled: AssembledShip, loaded_mass: float 
 
 	result["gravitational"] = float(result["gravitational"]) + hull_mass * HULL_GRAV_PER_TONNE
 	return result
+
+
+static func live_signature(
+	assembled: AssembledShip,
+	operating_state: ShipOperatingState = null,
+	loaded_mass: float = -1.0
+) -> Dictionary:
+	if assembled == null:
+		return empty_signature()
+	if operating_state == null:
+		return ship_signature(assembled, loaded_mass)
+
+	var result := empty_signature()
+	var in_flight := bool(operating_state.active_systems.get("sensors", false))
+	var propulsion_glow := float(operating_state.signature_glow_propulsion)
+	var weapon_glow := float(operating_state.signature_glow_weapon)
+	var power_scale := _live_power_signature_scale(operating_state)
+
+	for entry in assembled.installed_modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: Variant = entry.get("data", {})
+		if typeof(module_def) != TYPE_DICTIONARY:
+			continue
+
+		var category := str(module_def.get("category", ""))
+		var factor := _live_module_signature_factor(
+			category,
+			operating_state,
+			in_flight,
+			propulsion_glow,
+			weapon_glow,
+			power_scale
+		)
+		if factor <= 0.0:
+			continue
+
+		var module_sig := module_signature(module_def)
+		for channel in CHANNELS:
+			result[channel] = float(result[channel]) + float(module_sig[channel]) * factor
+
+	var hull_mass := loaded_mass
+	if hull_mass < 0.0:
+		hull_mass = float(assembled.envelope.get("dry_mass", 0.0))
+		if hull_mass <= 0.0:
+			hull_mass = float(assembled.chassis.get("mass", 0.0))
+	result["gravitational"] = float(result["gravitational"]) + hull_mass * HULL_GRAV_PER_TONNE
+
+	var compute_ratio := 0.0
+	if operating_state.compute_capacity > 0.0:
+		compute_ratio = clampf(
+			operating_state.compute_demand / operating_state.compute_capacity,
+			0.0,
+			1.0
+		)
+	result["computational"] = float(result["computational"]) * compute_ratio
+	return result
+
+
+static func carry_signature_glow(from_state: ShipOperatingState, to_state: ShipOperatingState) -> void:
+	if from_state == null or to_state == null:
+		return
+	to_state.signature_glow_propulsion = from_state.signature_glow_propulsion
+	to_state.signature_glow_weapon = from_state.signature_glow_weapon
+
+
+static func tick_signature_glow(operating_state: ShipOperatingState, delta: float) -> void:
+	if operating_state == null:
+		return
+
+	var engine_active := bool(operating_state.active_systems.get("engine", false))
+	var weapons_active := bool(operating_state.active_systems.get("weapons", false))
+
+	if engine_active:
+		operating_state.signature_glow_propulsion = 1.0
+	elif operating_state.signature_glow_propulsion > 0.0:
+		operating_state.signature_glow_propulsion = maxf(
+			0.0,
+			operating_state.signature_glow_propulsion - delta / SIGNATURE_GLOW_SEC
+		)
+
+	if weapons_active:
+		operating_state.signature_glow_weapon = 1.0
+	elif operating_state.signature_glow_weapon > 0.0:
+		operating_state.signature_glow_weapon = maxf(
+			0.0,
+			operating_state.signature_glow_weapon - delta / SIGNATURE_GLOW_SEC
+		)
 
 
 static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionary:
@@ -257,6 +350,48 @@ static func channel_summary(channels: PackedStringArray) -> String:
 		else:
 			parts.append("%s sig" % channel)
 	return ", ".join(parts)
+
+
+static func _live_power_signature_scale(operating_state: ShipOperatingState) -> float:
+	if operating_state.power_available <= 0.0:
+		return 0.0
+	return clampf(
+		operating_state.power_allocated / maxf(operating_state.power_available, 1.0),
+		POWER_IDLE_SIGNATURE_FLOOR,
+		1.0
+	)
+
+
+static func _live_module_signature_factor(
+	category: String,
+	operating_state: ShipOperatingState,
+	in_flight: bool,
+	propulsion_glow: float,
+	weapon_glow: float,
+	power_scale: float
+) -> float:
+	if category in PASSIVE_SIGNATURE_CATEGORIES:
+		return 1.0
+
+	match category:
+		"propulsion":
+			if bool(operating_state.active_systems.get("engine", false)):
+				return 1.0
+			return propulsion_glow
+		"weapon":
+			if bool(operating_state.active_systems.get("weapons", false)):
+				return 1.0
+			return weapon_glow
+		"sensor":
+			return 1.0 if bool(operating_state.active_systems.get("sensors", false)) else 0.0
+		"transponder":
+			return 1.0 if bool(operating_state.active_systems.get("transponder", false)) else 0.0
+		"power":
+			return power_scale
+		_:
+			if category in IN_FLIGHT_SIGNATURE_CATEGORIES:
+				return 1.0 if in_flight else 0.0
+			return 1.0 if in_flight else 0.0
 
 
 static func _sensor_effectiveness(assembled: AssembledShip, operating_state: ShipOperatingState) -> float:

@@ -75,6 +75,9 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
 # Combat sandbox (F6)
 # res://scenes/dev/combat_sandbox.tscn
+
+# Stealth sandbox (F6)
+# res://scenes/dev/stealth_sandbox.tscn
 ```
 
 ## Documentation map

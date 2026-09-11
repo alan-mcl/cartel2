@@ -155,7 +155,10 @@ func _physics_process(delta: float) -> void:
 		_camera,
 		player_broadcast
 	)
-	var player_signature := SensorSystem.ship_signature(_player.assembled_ship)
+	var player_signature := SensorSystem.live_signature(
+		_player.assembled_ship,
+		_player.operating_state
+	)
 	var transponder_label := "off"
 	if _player.operating_state.transponder_broadcasting:
 		transponder_label = "on"

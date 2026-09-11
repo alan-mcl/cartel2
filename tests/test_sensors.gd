@@ -18,6 +18,9 @@ static func run(runner: TestRunner) -> void:
 	_test_is_detected_beacon(runner)
 	_test_peaceful_no_reciprocal_contact(runner, catalog)
 	_test_stable_contact_dict_identity(runner, catalog)
+	_test_live_signature_idle_vs_fitted(runner)
+	_test_live_signature_thrust_and_glow(runner)
+	_test_live_signature_weapon_and_compute(runner)
 
 
 static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -> AssembledShip:
@@ -388,4 +391,154 @@ static func _test_stable_contact_dict_identity(runner: TestRunner, catalog: Cata
 		float(second_contact.get("position", Vector2.ZERO).x),
 		1500.0,
 		"stable contact dict updates position in place"
+	)
+
+
+static func _live_test_assembled() -> AssembledShip:
+	var modules := [
+		_module_entry({
+			"id": "engine",
+			"category": "propulsion",
+			"signature": {
+				"thermal": 20.0,
+				"gravitational": 8.0,
+				"electromagnetic": 2.0,
+				"computational": 0.5,
+			},
+		}),
+		_module_entry({
+			"id": "laser",
+			"category": "weapon",
+			"signature": {
+				"thermal": 5.0,
+				"gravitational": 0.0,
+				"electromagnetic": 12.0,
+				"computational": 1.0,
+			},
+		}),
+		_module_entry({
+			"id": "core",
+			"category": "computer",
+			"signature": {
+				"thermal": 1.0,
+				"gravitational": 0.0,
+				"electromagnetic": 2.0,
+				"computational": 30.0,
+			},
+		}),
+		_module_entry({
+			"id": "plant",
+			"category": "power",
+			"signature": {
+				"thermal": 10.0,
+				"gravitational": 0.0,
+				"electromagnetic": 4.0,
+				"computational": 0.0,
+			},
+		}),
+		_module_entry({
+			"id": "lss",
+			"category": "life_support",
+			"signature": {
+				"thermal": 3.0,
+				"gravitational": 0.0,
+				"electromagnetic": 1.0,
+				"computational": 0.0,
+			},
+		}),
+	]
+	var assembled := _assembled_with_modules(modules, 5.0)
+	assembled.signature = SensorSystem.compute_ship_signature(assembled, 5.0)
+	return assembled
+
+
+static func _live_in_flight_state(thrusting: bool, firing: bool) -> ShipOperatingState:
+	var state := ShipOperatingState.new()
+	state.active_systems = {
+		"engine": thrusting,
+		"boost": false,
+		"sensors": true,
+		"weapons": firing,
+		"transponder": false,
+	}
+	state.power_available = 100.0
+	state.power_allocated = 50.0
+	state.compute_capacity = 100.0
+	state.compute_demand = 40.0
+	return state
+
+
+static func _test_live_signature_idle_vs_fitted(runner: TestRunner) -> void:
+	var assembled := _live_test_assembled()
+	var fitted_thermal := float(assembled.signature.get("thermal", 0.0))
+	var fitted_grav := float(assembled.signature.get("gravitational", 0.0))
+	var idle := SensorSystem.live_signature(assembled, _live_in_flight_state(false, false))
+
+	runner.check(
+		float(idle.get("thermal", 0.0)) < fitted_thermal,
+		"idle in-flight thermal is lower than fitted potential"
+	)
+	runner.check(
+		float(idle.get("gravitational", 0.0)) > 0.0,
+		"idle in-flight keeps hull gravitational floor"
+	)
+	runner.check(
+		float(idle.get("gravitational", 0.0)) < fitted_grav,
+		"idle in-flight drops inactive propulsion grav contribution"
+	)
+
+
+static func _test_live_signature_thrust_and_glow(runner: TestRunner) -> void:
+	var assembled := _live_test_assembled()
+	var idle_thermal := float(
+		SensorSystem.live_signature(assembled, _live_in_flight_state(false, false)).get("thermal", 0.0)
+	)
+	var thrusting_thermal := float(
+		SensorSystem.live_signature(assembled, _live_in_flight_state(true, false)).get("thermal", 0.0)
+	)
+	runner.check(
+		thrusting_thermal > idle_thermal,
+		"thrusting raises thermal signature vs idle in-flight"
+	)
+
+	var coast_state := _live_in_flight_state(false, false)
+	coast_state.signature_glow_propulsion = 1.0
+	SensorSystem.tick_signature_glow(coast_state, 0.1)
+	runner.check(
+		coast_state.signature_glow_propulsion > 0.0,
+		"propulsion afterglow remains shortly after burn stops"
+	)
+	SensorSystem.tick_signature_glow(coast_state, 2.0)
+	runner.check_eq(
+		coast_state.signature_glow_propulsion,
+		0.0,
+		"propulsion afterglow clears after decay window"
+	)
+
+
+static func _test_live_signature_weapon_and_compute(runner: TestRunner) -> void:
+	var assembled := _live_test_assembled()
+	var idle_em := float(
+		SensorSystem.live_signature(assembled, _live_in_flight_state(false, false)).get("electromagnetic", 0.0)
+	)
+	var firing_em := float(
+		SensorSystem.live_signature(assembled, _live_in_flight_state(false, true)).get("electromagnetic", 0.0)
+	)
+	runner.check(firing_em > idle_em, "firing adds weapon electromagnetic signature")
+
+	var low_compute := _live_in_flight_state(false, false)
+	low_compute.compute_demand = 10.0
+	low_compute.compute_capacity = 100.0
+	var high_compute := _live_in_flight_state(false, false)
+	high_compute.compute_demand = 80.0
+	high_compute.compute_capacity = 100.0
+	var low_comp_sig := float(
+		SensorSystem.live_signature(assembled, low_compute).get("computational", 0.0)
+	)
+	var high_comp_sig := float(
+		SensorSystem.live_signature(assembled, high_compute).get("computational", 0.0)
+	)
+	runner.check(
+		high_comp_sig > low_comp_sig,
+		"computational signature scales with compute demand"
 	)

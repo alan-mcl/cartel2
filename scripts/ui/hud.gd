@@ -70,7 +70,7 @@ func set_operating_state(state: ShipOperatingState) -> void:
 	_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
 	if _assembled_ship != null:
-		var signature := SensorSystem.ship_signature(_assembled_ship)
+		var signature := SensorSystem.live_signature(_assembled_ship, state)
 		var transponder_label := "on" if state.transponder_broadcasting else "off"
 		set_signature_state(signature, transponder_label)
 

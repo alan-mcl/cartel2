@@ -554,6 +554,7 @@ func _tick_full_sim(
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
 	ShipCombat.tick_shields(combat_state, assembled_ship, delta)
 
+	var prev_operating := operating_state
 	operating_state = ShipOperations.tick(
 		catalog,
 		assembled_ship,
@@ -563,6 +564,8 @@ func _tick_full_sim(
 		1,
 		combat_state
 	)
+	SensorSystem.carry_signature_glow(prev_operating, operating_state)
+	SensorSystem.tick_signature_glow(operating_state, delta)
 
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
 	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
@@ -653,6 +656,14 @@ func _tick_kinematic(
 		traffic_config,
 		traffic_envelope
 	)
+	if operating_state.active_systems.is_empty():
+		operating_state.active_systems = {}
+	operating_state.active_systems["engine"] = motion.is_thrusting()
+	operating_state.active_systems["weapons"] = bool(inputs.get("fire", false))
+	operating_state.active_systems["sensors"] = true
+	operating_state.active_systems["transponder"] = operating_state.transponder_broadcasting
+	SensorSystem.tick_signature_glow(operating_state, delta)
+
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
@@ -740,9 +751,7 @@ func refresh_player_detection(
 
 	var visual_radius := float(traffic_config.get("visual_contact_radius", 500.0))
 	var distance := position.distance_to(observer_pos)
-	var target_signature := assembled_ship.signature
-	if target_signature.is_empty():
-		target_signature = SensorSystem.ship_signature(assembled_ship)
+	var target_signature := SensorSystem.live_signature(assembled_ship, operating_state)
 	var broadcasting := _is_broadcasting()
 	var check_distance := distance
 	if player_detected:

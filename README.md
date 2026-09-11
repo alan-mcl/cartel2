@@ -107,6 +107,13 @@ Open the combat sandbox (1v1 manufacturer hulls, starfield only):
   --scene res://scenes/dev/combat_sandbox.tscn
 ```
 
+Open the stealth sandbox (transponders off, scattered targets beyond sensor range):
+
+```bash
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+  --scene res://scenes/dev/stealth_sandbox.tscn
+```
+
 In the editor, open any dev sandbox scene and press **F6** to run it standalone. **F5** still launches the full game.
 
 ## Checks
