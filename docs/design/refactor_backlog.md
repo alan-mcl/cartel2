@@ -180,7 +180,7 @@ plot, and off-screen simulation all plug into.
 
 ## P1-1 `SimClock` and the `Simulation` subsystem registry
 
-**Status:** Not started. **Phase:** 1. **Depends on:** P0-2, P0-3.
+**Status:** Done. **Phase:** 1. **Depends on:** P0-2, P0-3.
 
 **Unblocks:** Missions, faction standing, overarching plot, and galaxy-wide background
 simulation.

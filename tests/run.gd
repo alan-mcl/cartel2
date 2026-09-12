@@ -11,6 +11,7 @@ func _init() -> void:
 	TestSensors.run(runner)
 	TestEconomy.run(runner)
 	TestClock.run(runner)
+	TestSimulation.run(runner)
 	TestMotion.run(runner)
 
 	if runner.failures > 0:

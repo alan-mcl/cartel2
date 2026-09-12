@@ -212,9 +212,13 @@ Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected 
 | Type | File | Role |
 |------|------|------|
 | `GalacticCalendar` | `galactic_calendar.gd` | 364-day GSC math, timestamp formatting |
-| `GameClock` | `game_clock.gd` | Real-time tick, unspace irregular pulses, mapping translation lumps |
+| `Simulation` | `simulation.gd` | Central tick owner: GST advance plus subsystem registry |
+| `SimClock` | `sim_clock.gd` | Real-time and unspace GST advance (no subsystem dispatch) |
+| `SimSubsystem` | `sim_subsystem.gd` | Base contract: `on_tick`, `on_hour`, `on_day`, `on_event`, save hooks |
+| `EconomySubsystem` | `economy_subsystem.gd` | Reposts market quotes on day rollover |
+| `GameClock` | `game_clock.gd` | Facade over `Simulation` for tests and legacy callers |
 
-`GameClock.tick` runs from `main.gd` when the game is active and GST is not frozen (menus, pause overlay, save/load overlay, jump picker). Habitat UI keeps GST running at 1:1 while docked.
+`Simulation.step` runs from `main.gd` when the game is active and GST is not frozen (menus, pause overlay, save/load overlay, jump picker). Habitat UI keeps GST running at 1:1 while docked.
 
 **Sector mapping time fields** (on each object in `sectors.json` → `mappings[]`):
 

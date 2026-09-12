@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -125,7 +125,7 @@ Ships parked at a habitat **stay there when jumping sectors** (only the aboard s
 
 ### Galactic Standard Time (GST)
 
-Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps; `GameClock` in `main.gd` advances time each frame.
+Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame and dispatches registered subsystems (economy reposts market quotes on day rollover). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
 
 | Context | GST behaviour |
 |---------|---------------|

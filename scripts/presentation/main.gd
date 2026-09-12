@@ -8,7 +8,7 @@ var catalog := Catalog.load_default()
 var player_ship: AssembledShip
 var play_bounds: float = 3500.0
 
-var _game_clock := GameClock.new()
+var _simulation := Simulation.new()
 var _world_loader := WorldLoader.new()
 var _traffic_director = null
 var _translate_gate_title: String = ""
@@ -84,9 +84,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if _game_clock == null:
+	if _simulation == null:
 		return
-	_game_clock.tick(session, catalog, delta, _is_gst_frozen())
+	_simulation.step(session, catalog, delta, _is_gst_frozen())
 
 
 func _is_gst_frozen() -> bool:
@@ -292,7 +292,7 @@ func _start_game_from_session() -> void:
 		_ui_root.close_ui()
 
 	if session.in_unspace:
-		_game_clock.reset_unspace_pulse()
+		_simulation.reset_unspace_pulse()
 
 
 func _begin_new_game(callsign: String, background_id: String, portrait_path: String) -> void:
@@ -498,13 +498,13 @@ func _on_jump_requested(target_sector_id: String, n: int) -> void:
 		return
 
 	var mapping := catalog.get_mapping(origin_id, target_sector_id, n)
-	var applied := _game_clock.apply_mapping_lump(session, mapping, "entry_seconds", catalog)
+	var applied := _simulation.apply_mapping_lump(session, mapping, "entry_seconds", catalog)
 	if applied > 0.0:
 		session.last_log = (
 			"Translated into %d-space. Entry lag: %s GST."
 			% [n, GalacticCalendar.format_duration(applied)]
 		)
-	_game_clock.reset_unspace_pulse()
+	_simulation.reset_unspace_pulse()
 
 	_load_unspace(true)
 	_jump.close()
@@ -525,7 +525,7 @@ func _arrive_from_unspace() -> void:
 		return
 
 	var mapping := catalog.get_mapping(origin_id, dest_id, n)
-	var applied := _game_clock.apply_mapping_lump(session, mapping, "exit_seconds", catalog)
+	var applied := _simulation.apply_mapping_lump(session, mapping, "exit_seconds", catalog)
 	if applied > 0.0:
 		session.last_log = (
 			"Emergence complete. Exit lag: %s GST."
