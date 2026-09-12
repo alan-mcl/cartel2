@@ -49,6 +49,14 @@ func _publish_credits_changed(delta: int) -> void:
 	events.publish(SimEvent.credits_changed(delta, credits))
 
 
+func add_credits(delta: int) -> void:
+	if delta == 0:
+		return
+	credits += delta
+	_publish_credits_changed(delta)
+	changed.emit()
+
+
 func start_new_game(
 	catalog: Catalog,
 	new_callsign: String,

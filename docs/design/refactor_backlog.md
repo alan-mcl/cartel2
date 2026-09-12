@@ -255,7 +255,7 @@ legacy cargo migration must keep working — `tests/test_save.gd` covers it.
 
 ## P1-4 Mission system spike
 
-**Status:** Not started. **Phase:** 1. **Depends on:** P1-1, P1-2, P1-3.
+**Status:** Done. **Phase:** 1. **Depends on:** P1-1, P1-2, P1-3.
 
 **Problem:** The quest system today is `var objective: String`.
 

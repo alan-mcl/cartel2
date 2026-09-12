@@ -26,7 +26,7 @@ class ProbeSubsystem extends SimSubsystem:
 		day_count += 1
 		last_day = day
 
-	func on_event(_evt: Dictionary) -> void:
+	func on_event(_session: GameSession, _catalog: Catalog, _evt: Dictionary) -> void:
 		event_count += 1
 
 	func to_dict() -> Dictionary:
@@ -201,7 +201,7 @@ static func _test_mapping_lump_day_hook(runner: TestRunner, catalog: Catalog) ->
 static func _test_subsystem_save_hooks_noop(runner: TestRunner) -> void:
 	var probe := ProbeSubsystem.new()
 	probe.tick_count = 7
-	probe.on_event({"type": "noop"})
+	probe.on_event(null, null, {"type": "noop"})
 	runner.check_eq(probe.event_count, 1, "simulation: on_event is callable")
 
 	var data := probe.to_dict()

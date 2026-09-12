@@ -12,7 +12,7 @@
 		"callsign": "FILE-1",
 		"portrait": ""
 	},
-	"saved_at": "2026-09-12T14:49:26",
+	"saved_at": "2026-09-12T14:56:07",
 	"session": {
 		"building_id": "proxima_habitat_terminal",
 		"compute_integrity_lost": 0.0,
@@ -98,7 +98,7 @@
 				}
 			],
 			"name": "Pegasus P101",
-			"registration": "VR-PGS-9825",
+			"registration": "VR-PGS-0012",
 			"template_id": "pegasus_p101",
 			"transponder_enabled": true
 		}
@@ -106,6 +106,15 @@
 	"subsystems": {
 		"economy": {
 			"data": {},
+			"version": 1
+		},
+		"missions": {
+			"data": {
+				"arrived": false,
+				"mission_id": "spike_food_run",
+				"picked_up": false,
+				"status": "offered"
+			},
 			"version": 1
 		},
 		"probe": {

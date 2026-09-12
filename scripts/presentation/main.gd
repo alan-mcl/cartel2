@@ -235,16 +235,22 @@ func try_interact(target: Interactable) -> void:
 			_world_loader.apply_salvage_visuals(session)
 
 
-func _bind_session_events(game_session: GameSession) -> void:
-	if game_session == null or _simulation == null:
+func _forward_session_event(evt: Dictionary) -> void:
+	if _simulation == null:
 		return
-	game_session.events.subscribe_all(_simulation.dispatch_event)
+	_simulation.dispatch_event(session, catalog, evt)
+
+
+func _bind_session_events(game_session: GameSession) -> void:
+	if game_session == null:
+		return
+	game_session.events.subscribe_all(_forward_session_event)
 
 
 func _unbind_session_events(game_session: GameSession) -> void:
-	if game_session == null or _simulation == null:
+	if game_session == null:
 		return
-	game_session.events.unsubscribe_all(_simulation.dispatch_event)
+	game_session.events.unsubscribe_all(_forward_session_event)
 
 
 func _show_main_menu() -> void:
@@ -325,6 +331,9 @@ func _begin_new_game(callsign: String, background_id: String, portrait_path: Str
 		return
 
 	_simulation.reset_save()
+	var missions := _simulation.get_subsystem("missions") as MissionSubsystem
+	if missions != null:
+		missions.accept(session)
 	_current_slot = -1
 	_main_menu.close()
 	_new_game.close()

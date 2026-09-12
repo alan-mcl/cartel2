@@ -9,6 +9,7 @@ var _subsystems: Dictionary = {}
 
 func _init() -> void:
 	register(EconomySubsystem.new())
+	register(MissionSubsystem.new())
 
 
 func register(subsystem: SimSubsystem) -> bool:
@@ -100,12 +101,12 @@ func reset_unspace_pulse() -> void:
 	_clock.reset_unspace_pulse()
 
 
-func dispatch_event(evt: Dictionary) -> void:
+func dispatch_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 	if evt.is_empty() or not evt.has("type"):
 		return
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant
-		subsystem.on_event(evt)
+		subsystem.on_event(session, catalog, evt)
 
 
 func collect_save() -> Dictionary:

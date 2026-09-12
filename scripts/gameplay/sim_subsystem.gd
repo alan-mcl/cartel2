@@ -20,7 +20,7 @@ func on_day(_session: GameSession, _catalog: Catalog, _day: int) -> void:
 	pass
 
 
-func on_event(_evt: Dictionary) -> void:
+func on_event(_session: GameSession, _catalog: Catalog, _evt: Dictionary) -> void:
 	pass
 
 

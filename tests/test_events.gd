@@ -163,7 +163,9 @@ static func _test_simulation_dispatch(runner: TestRunner, catalog: Catalog) -> v
 	var probe := TestSimulation.ProbeSubsystem.new()
 	runner.check(simulation.register(probe), "events: probe registers for dispatch test")
 
-	session.events.subscribe_all(simulation.dispatch_event)
+	session.events.subscribe_all(func(evt: Dictionary) -> void:
+		simulation.dispatch_event(session, catalog, evt)
+	)
 	runner.check(session.enter_sector(catalog, "bela", false), "events: dispatch enter sector")
 
 	runner.check_eq(probe.event_count, 1, "events: Simulation.dispatch_event reaches on_event")
