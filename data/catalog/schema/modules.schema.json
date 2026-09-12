@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "ModuleDef",
+  "x-catalog-file": "modules.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "maker", "category", "mass", "volume", "cost", "description", "signature"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "maker": { "type": "string" },
+    "brand": { "type": "string", "default": "" },
+    "category": {
+      "type": "string",
+      "enum": [
+        "propulsion", "power", "computer", "life_support", "sensor", "hyperdrive",
+        "weapon", "armour", "cargo", "fuel", "ammunition", "shield", "point_defence",
+        "cyber_defence", "transponder"
+      ]
+    },
+    "mount": { "type": "string", "default": "" },
+    "mounts": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "mass": { "type": "number" },
+    "volume": { "type": "number" },
+    "cost": { "type": "number" },
+    "description": { "type": "string" },
+    "capabilities": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "signature": { "$ref": "#/$defs/signature" },
+    "engine_type": {
+      "type": "string",
+      "default": "",
+      "enum": ["", "chemical", "hydro_thermal", "electric_plasma", "direct_fusion", "antimatter", "gravitic"]
+    },
+    "thrust": { "type": "number", "default": 0.0 },
+    "max_speed": { "type": "number", "default": 0.0 },
+    "boost_multiplier": { "type": "number", "default": 0.0 },
+    "fuel_consumption": { "type": "number", "default": 0.0 },
+    "plant_type": {
+      "type": "string",
+      "default": "",
+      "enum": ["", "fission", "fusion", "radioisotope"]
+    },
+    "power_generation": { "type": "number", "default": 0.0 },
+    "power_demand": { "type": "number", "default": 0.0 },
+    "core_type": {
+      "type": "string",
+      "default": "",
+      "enum": ["", "silicon", "photon", "quantum"]
+    },
+    "compute_capacity": { "type": "number", "default": 0.0 },
+    "compute_demand": { "type": "number", "default": 0.0 },
+    "life_support_capacity": { "type": "number", "default": 0.0 },
+    "hits": { "type": "number", "default": 0.0 },
+    "protection": { "$ref": "#/$defs/damage_packets" },
+    "cargo_capacity": { "type": "number", "default": 0.0 },
+    "fuel_capacity": { "type": "number", "default": 0.0 },
+    "weapon_type": { "type": "string", "default": "" },
+    "delivery_type": { "type": "string", "default": "" },
+    "rate_of_fire": { "type": "number", "default": 0.0 },
+    "range": { "type": "number", "default": 0.0 },
+    "projectile_speed": { "type": "number", "default": 0.0 },
+    "ammunition_type": { "type": "string", "default": "", "x-ref-catalog": "ammunition" },
+    "ammunition_per_shot": { "type": "number", "default": 0.0 },
+    "ammunition_capacity": { "type": "object", "default": {} },
+    "damage_packets": { "$ref": "#/$defs/damage_packets" },
+    "shield_type": { "type": "string", "default": "" },
+    "shield_capacity": { "type": "number", "default": 0.0 },
+    "regen": { "type": "number", "default": 0.0 },
+    "has_active": { "type": "boolean", "default": false },
+    "sensor_range": { "type": "number", "default": 0.0 },
+    "sensor_sensitivity": { "$ref": "#/$defs/signature" },
+    "sensor_sensitivity_passive": { "$ref": "#/$defs/signature" },
+    "area_effect": { "type": "boolean", "default": false },
+    "intercept_chance": { "type": "number", "default": 0.0 }
+  },
+  "$defs": {
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "thermal": { "type": "number", "default": 0.0 },
+        "gravitational": { "type": "number", "default": 0.0 },
+        "electromagnetic": { "type": "number", "default": 0.0 },
+        "computational": { "type": "number", "default": 0.0 }
+      }
+    },
+    "damage_packets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kinetic": { "type": "number", "default": 0.0 },
+        "energy": { "type": "number", "default": 0.0 },
+        "concussive": { "type": "number", "default": 0.0 },
+        "cyber": { "type": "number", "default": 0.0 }
+      }
+    }
+  }
+}

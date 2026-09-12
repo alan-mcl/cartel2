@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "AmmunitionDef",
+  "x-catalog-file": "ammunition.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "mass", "cost", "damage_packets"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "mass": { "type": "number" },
+    "cost": { "type": "number" },
+    "damage_packets": { "$ref": "#/$defs/damage_packets" }
+  },
+  "$defs": {
+    "damage_packets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kinetic": { "type": "number", "default": 0.0 },
+        "energy": { "type": "number", "default": 0.0 },
+        "concussive": { "type": "number", "default": 0.0 },
+        "cyber": { "type": "number", "default": 0.0 }
+      }
+    }
+  }
+}

@@ -49,14 +49,14 @@ static func load_default() -> Catalog:
 
 
 func load_all() -> void:
-	chassis_by_id = _load_indexed_array(CHASSIS_PATH)
-	modules_by_id = _load_indexed_array(MODULES_PATH)
-	ammunition_by_id = _load_indexed_array(AMMUNITION_PATH)
-	ships_by_id = _load_indexed_array(SHIPS_PATH)
+	chassis_by_id = _load_indexed_records(CHASSIS_PATH, ChassisDef)
+	modules_by_id = _load_indexed_records(MODULES_PATH, ModuleDef)
+	ammunition_by_id = _load_indexed_records(AMMUNITION_PATH, AmmunitionDef)
+	ships_by_id = _load_indexed_records(SHIPS_PATH, ShipDef)
 	buildings_by_id = _load_indexed_array(BUILDINGS_PATH)
 	habitats_by_id = _load_indexed_array(HABITATS_PATH)
 	interactables_by_id = _load_indexed_array(INTERACTABLES_PATH)
-	sectors_by_id = _load_indexed_array(SECTORS_PATH)
+	sectors_by_id = _load_indexed_records(SECTORS_PATH, SectorDef)
 	routes_by_id = _load_indexed_array(ROUTES_PATH)
 	economies_by_id = _load_indexed_array(ECONOMIES_PATH)
 	_synthesize_sector_mappings()
@@ -70,19 +70,35 @@ func load_all() -> void:
 
 
 func get_chassis(id: String) -> Dictionary:
-	return _require(chassis_by_id, id, "chassis")
+	return _require_dict(chassis_by_id, id, "chassis")
+
+
+func get_chassis_def(id: String) -> ChassisDef:
+	return _require_record(chassis_by_id, id, "chassis") as ChassisDef
 
 
 func get_module(id: String) -> Dictionary:
-	return _require(modules_by_id, id, "module")
+	return _require_dict(modules_by_id, id, "module")
+
+
+func get_module_def(id: String) -> ModuleDef:
+	return _require_record(modules_by_id, id, "module") as ModuleDef
 
 
 func get_ammunition(id: String) -> Dictionary:
-	return _require(ammunition_by_id, id, "ammunition")
+	return _require_dict(ammunition_by_id, id, "ammunition")
+
+
+func get_ammunition_def(id: String) -> AmmunitionDef:
+	return _require_record(ammunition_by_id, id, "ammunition") as AmmunitionDef
 
 
 func get_ship(id: String) -> Dictionary:
-	return _require(ships_by_id, id, "ship")
+	return _require_dict(ships_by_id, id, "ship")
+
+
+func get_ship_def(id: String) -> ShipDef:
+	return _require_record(ships_by_id, id, "ship") as ShipDef
 
 
 func get_building(id: String) -> Dictionary:
@@ -98,7 +114,11 @@ func get_interactable(id: String) -> Dictionary:
 
 
 func get_sector(id: String) -> Dictionary:
-	return _require(sectors_by_id, id, "sector")
+	return _require_dict(sectors_by_id, id, "sector")
+
+
+func get_sector_def(id: String) -> SectorDef:
+	return _require_record(sectors_by_id, id, "sector") as SectorDef
 
 
 func get_route(id: String) -> Dictionary:
@@ -110,7 +130,7 @@ func get_economy(sector_id: String) -> Dictionary:
 
 
 func list_sectors() -> Array:
-	return sectors_by_id.values()
+	return _records_to_dicts(sectors_by_id)
 
 
 func list_routes() -> Array:
@@ -268,27 +288,27 @@ func list_commodities() -> Array:
 
 
 func list_chassis() -> Array:
-	return chassis_by_id.values()
+	return _records_to_dicts(chassis_by_id)
 
 
 func list_ships() -> Array:
-	return ships_by_id.values()
+	return _records_to_dicts(ships_by_id)
 
 
 func list_modules(category: String = "") -> Array:
 	if category.is_empty():
-		return modules_by_id.values()
+		return _records_to_dicts(modules_by_id)
 	var filtered: Array = []
 	for module_def in modules_by_id.values():
-		if typeof(module_def) != TYPE_DICTIONARY:
+		if module_def == null:
 			continue
-		if str(module_def.get("category", "")) == category:
-			filtered.append(module_def)
+		if str(module_def.category) == category:
+			filtered.append(module_def.to_dict())
 	return filtered
 
 
 func list_ammunition_types() -> Array:
-	return ammunition_by_id.values()
+	return _records_to_dicts(ammunition_by_id)
 
 
 func _synthesize_sector_mappings() -> void:
@@ -310,12 +330,12 @@ func _synthesize_sector_mappings() -> void:
 		_append_route_mapping(mappings_by_sector, b, a, int(route.get("solution_ba", 0)), friction, n, lump_seconds)
 
 	for sector_id in sectors_by_id.keys():
-		var sector: Dictionary = sectors_by_id[sector_id]
+		var sector: SectorDef = sectors_by_id[sector_id]
 		var mappings: Array = mappings_by_sector.get(sector_id, [])
 		mappings.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
 			return int(left.get("friction", 999)) < int(right.get("friction", 999))
 		)
-		sector["mappings"] = mappings
+		sector.mappings = mappings
 
 
 func _append_route_mapping(
@@ -331,19 +351,105 @@ func _append_route_mapping(
 		push_error("Route references unknown sector: %s -> %s" % [from_id, to_id])
 		return
 
-	var target_sector: Dictionary = sectors_by_id[to_id]
+	var target_sector: SectorDef = sectors_by_id[to_id]
 	var mappings: Array = mappings_by_sector.get(from_id, [])
 	mappings.append({
 		"target": to_id,
 		"solution": solution,
 		"n": n,
-		"label": str(target_sector.get("name", to_id)),
+		"label": target_sector.name if not target_sector.name.is_empty() else to_id,
 		"friction": friction,
 		"entry_seconds": lump_seconds,
 		"exit_seconds": lump_seconds,
 		"time_jitter": ROUTE_TIME_JITTER,
 	})
 	mappings_by_sector[from_id] = mappings
+
+
+func _load_indexed_records(path: String, record_class: Variant) -> Dictionary:
+	var entries: Array = _load_json_array(path)
+	var indexed: Dictionary = {}
+
+	for entry in entries:
+		if typeof(entry) != TYPE_DICTIONARY:
+			push_error("Catalog entry in %s must be an object." % path)
+			continue
+
+		var entry_dict: Dictionary = entry
+		var entry_id: String = str(entry_dict.get("id", ""))
+		if entry_id.is_empty():
+			push_error("Catalog entry in %s is missing id." % path)
+			continue
+
+		_warn_unknown_catalog_keys(entry_dict, record_class.allowed_keys(), path, entry_id)
+		if not _has_required_catalog_keys(entry_dict, record_class, path, entry_id):
+			continue
+
+		if indexed.has(entry_id):
+			push_error("Duplicate catalog id '%s' in %s." % [entry_id, path])
+			continue
+
+		indexed[entry_id] = record_class.from_dict(entry_dict)
+
+	return indexed
+
+
+func _warn_unknown_catalog_keys(
+	data: Dictionary,
+	allowed: PackedStringArray,
+	path: String,
+	entry_id: String
+) -> void:
+	var allowed_set: Dictionary = {}
+	for key in allowed:
+		allowed_set[key] = true
+	for key in data.keys():
+		if not allowed_set.has(key):
+			push_error(
+				"Unknown catalog key '%s' on '%s' in %s." % [str(key), entry_id, path]
+			)
+
+
+func _has_required_catalog_keys(
+	data: Dictionary,
+	record_class: Variant,
+	path: String,
+	entry_id: String
+) -> bool:
+	var missing: Array[String] = []
+	for key in record_class.required_keys():
+		if not data.has(key):
+			missing.append(str(key))
+	if missing.is_empty():
+		return true
+	push_error(
+		"Catalog entry '%s' in %s missing required keys: %s"
+		% [entry_id, path, ", ".join(missing)]
+	)
+	return false
+
+
+func _records_to_dicts(index: Dictionary) -> Array:
+	var values: Array = []
+	for record in index.values():
+		if record == null:
+			continue
+		values.append(record.to_dict())
+	return values
+
+
+func _require_dict(index: Dictionary, id: String, kind: String) -> Dictionary:
+	var record = _require_record(index, id, kind)
+	if record == null:
+		return {}
+	return record.to_dict()
+
+
+func _require_record(index: Dictionary, id: String, kind: String):
+	if not index.has(id):
+		push_error("Unknown %s id: %s" % [kind, id])
+		return null
+	return index[id]
 
 
 func _load_indexed_array(path: String) -> Dictionary:
@@ -448,4 +554,9 @@ func _require(index: Dictionary, id: String, kind: String) -> Dictionary:
 		push_error("Unknown %s id: %s" % [kind, id])
 		return {}
 
-	return index[id]
+	var entry: Variant = index[id]
+	if typeof(entry) == TYPE_DICTIONARY:
+		return entry
+	if entry != null and entry.has_method("to_dict"):
+		return entry.to_dict()
+	return {}

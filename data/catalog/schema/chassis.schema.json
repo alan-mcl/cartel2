@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "ChassisDef",
+  "x-catalog-file": "chassis.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "maker", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "maker": { "type": "string" },
+    "cost": { "type": "number", "default": 0.0 },
+    "mass": { "type": "number" },
+    "hits": { "type": "number" },
+    "mass_limit": { "type": "number" },
+    "volume": { "type": "number" },
+    "maneuver": { "type": "string", "enum": ["low", "medium", "high"] },
+    "hull_color": { "type": "string", "default": "" },
+    "sprite": { "type": "string", "default": "" },
+    "mounts": { "$ref": "#/$defs/mounts" }
+  },
+  "$defs": {
+    "mounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    }
+  }
+}

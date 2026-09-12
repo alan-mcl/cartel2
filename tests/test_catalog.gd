@@ -8,6 +8,28 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not catalog.get_sector("proxima").is_empty(), "proxima sector exists")
 	runner.check(not catalog.get_sector("bela").is_empty(), "bela sector exists")
 
+	var module_def := catalog.get_module_def("light_laser")
+	runner.check(module_def is ModuleDef, "get_module_def(light_laser) is ModuleDef")
+	runner.check_eq(module_def.category, "weapon", "light_laser category")
+	runner.check_eq(module_def.mount, "light_weapon", "light_laser mount")
+
+	var module_dict := catalog.get_module("light_laser")
+	runner.check(typeof(module_dict) == TYPE_DICTIONARY, "get_module still returns Dictionary")
+	runner.check(module_dict.has("id"), "module dict has id")
+	runner.check(module_dict.has("range"), "module dict has range")
+	runner.check(module_dict.has("signature"), "module dict has signature")
+
+	var ship_def := catalog.get_ship_def("flare_on_ss")
+	runner.check(not ship_def.chassis.is_empty(), "flare_on_ss chassis id")
+
+	var chassis_def := catalog.get_chassis_def("pegasus_chassis")
+	var ammo_def := catalog.get_ammunition_def("mass_driver_round")
+	runner.check(chassis_def.to_dict()["id"] == "pegasus_chassis", "chassis to_dict round-trip id")
+	runner.check(
+		ammo_def.to_dict()["damage_packets"]["kinetic"] > 0.0,
+		"ammunition to_dict round-trip damage_packets"
+	)
+
 	var unspace := catalog.get_unspace_for_n(4)
 	runner.check_eq(str(unspace.get("id", "")), "n4_default", "get_unspace_for_n(4)")
 
@@ -85,16 +107,16 @@ static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void
 
 	_check_subtypes_present(runner, type_counts, "power plants")
 
-	for ship_def in catalog.ships_by_id.values():
-		if typeof(ship_def) != TYPE_DICTIONARY:
+	for ship_dict in catalog.list_ships():
+		if typeof(ship_dict) != TYPE_DICTIONARY:
 			continue
-		var ship_id := str(ship_def.get("id", ""))
+		var ship_id := str(ship_dict.get("id", ""))
 		var owned := OwnedShip.from_template(
 			catalog,
 			{
 				"id": "%s_test" % ship_id,
 				"template_id": ship_id,
-				"chassis_id": str(ship_def.get("chassis", "")),
+				"chassis_id": str(ship_dict.get("chassis", "")),
 			}
 		)
 		var engineering := ShipAssembly.get_engineering_block(catalog, owned)
@@ -142,16 +164,16 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 
 	_check_subtypes_present(runner, type_counts, "compute cores")
 
-	for ship_def in catalog.ships_by_id.values():
-		if typeof(ship_def) != TYPE_DICTIONARY:
+	for ship_dict in catalog.list_ships():
+		if typeof(ship_dict) != TYPE_DICTIONARY:
 			continue
-		var ship_id := str(ship_def.get("id", ""))
+		var ship_id := str(ship_dict.get("id", ""))
 		var owned := OwnedShip.from_template(
 			catalog,
 			{
 				"id": "%s_compute_test" % ship_id,
 				"template_id": ship_id,
-				"chassis_id": str(ship_def.get("chassis", "")),
+				"chassis_id": str(ship_dict.get("chassis", "")),
 			}
 		)
 		var engineering := ShipAssembly.get_engineering_block(catalog, owned)
@@ -204,16 +226,16 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 	# Includes the single gravitic placeholder — see backlog.md "Gravitic propulsion line".
 	_check_subtypes_present(runner, type_counts, "engines")
 
-	for ship_def in catalog.ships_by_id.values():
-		if typeof(ship_def) != TYPE_DICTIONARY:
+	for ship_dict in catalog.list_ships():
+		if typeof(ship_dict) != TYPE_DICTIONARY:
 			continue
-		var ship_id := str(ship_def.get("id", ""))
+		var ship_id := str(ship_dict.get("id", ""))
 		var owned := OwnedShip.from_template(
 			catalog,
 			{
 				"id": "%s_propulsion_test" % ship_id,
 				"template_id": ship_id,
-				"chassis_id": str(ship_def.get("chassis", "")),
+				"chassis_id": str(ship_dict.get("chassis", "")),
 			}
 		)
 		var assembled := ShipAssembler.assemble_owned(catalog, owned)
@@ -260,16 +282,16 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 			"%s volume %.1f meets floor %.1f" % [module_id, volume, floor]
 		)
 
-	for ship_def in catalog.ships_by_id.values():
-		if typeof(ship_def) != TYPE_DICTIONARY:
+	for ship_dict in catalog.list_ships():
+		if typeof(ship_dict) != TYPE_DICTIONARY:
 			continue
-		var ship_id := str(ship_def.get("id", ""))
+		var ship_id := str(ship_dict.get("id", ""))
 		var owned := OwnedShip.from_template(
 			catalog,
 			{
 				"id": "%s_lss_test" % ship_id,
 				"template_id": ship_id,
-				"chassis_id": str(ship_def.get("chassis", "")),
+				"chassis_id": str(ship_dict.get("chassis", "")),
 			}
 		)
 		var engineering := ShipAssembly.get_engineering_block(catalog, owned)

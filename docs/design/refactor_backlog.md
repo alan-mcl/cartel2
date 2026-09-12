@@ -383,7 +383,7 @@ shape.
 
 ## P3-1 Schema-driven catalog records and validation
 
-**Status:** Not started. **Phase:** 3. **Depends on:** P0-4.
+**Status:** Done. **Phase:** 3. **Depends on:** P0-4.
 
 **Unblocks:** The largest single win for agent-authored code correctness.
 

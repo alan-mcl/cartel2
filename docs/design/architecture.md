@@ -13,11 +13,11 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `TrafficSpawn`, `TrafficDetection`, `TrafficRouting`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, generated catalog records (`AmmunitionDef`, `ChassisDef`, `ModuleDef`, `ShipDef`, `SectorDef`, plus shared `CatalogSignature` / `CatalogDamagePackets`), `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `TrafficSpawn`, `TrafficDetection`, `TrafficRouting`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `traffic_view.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
-| `data/catalog/` | JSON catalogs (schemas: [data_model.md](data_model.md)) |
+| `data/catalog/` | JSON catalogs; machine-readable schema subset under `data/catalog/schema/` (field tables: [catalog_schema.md](catalog_schema.md); narrative: [data_model.md](data_model.md)) |
 | `assets/` | Art referenced by catalog paths |
 | `themes/` | `cartel_theme.tres` — corporate UI theme (see [ui_theme.md](ui_theme.md)) |
 
@@ -45,7 +45,7 @@ flowchart LR
 
 On startup, `main.gd` wires three presentation controllers and delegates to them:
 
-1. Loads `Catalog.load_default()`.
+1. Loads `Catalog.load_default()` — ammunition, chassis, modules, ships, and sectors materialise as generated `*Def` records at load; legacy `get_module()` / `list_modules()` callers still receive `Dictionary` via `to_dict()` until [P3-2](refactor_backlog.md) migrates gameplay call sites.
 2. **MenuController** shows the **main menu** (New Game / Load / Exit).
 3. **New Game** — player enters callsign, portrait, and background; `GameSession.start_new_game` seeds fleet from `backgrounds.json`, docks at the kit's habitat, and opens **HabitatScreen** at the Terminal.
 4. **Load** — reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.

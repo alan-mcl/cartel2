@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "SectorDef",
+  "x-catalog-file": "sectors.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "play_bounds"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "orbit_name": { "type": "string", "default": "" },
+    "planet_name": { "type": "string", "default": "" },
+    "star_system": { "type": "string", "default": "" },
+    "classification": { "type": "string", "default": "" },
+    "gravity": { "type": "number", "default": 1.0 },
+    "population_billions": { "type": "number", "default": 0.0 },
+    "ocean_coverage": { "type": "number", "default": 0.0 },
+    "climate": { "type": "string", "default": "" },
+    "city_malls": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "play_bounds": { "type": "number" },
+    "objective": { "type": "string", "default": "" },
+    "mappings": { "type": "array", "items": { "type": "object" }, "default": [] }
+  }
+}

@@ -2,6 +2,8 @@
 
 JSON catalog schemas and runtime types for this game. For setting intent beyond what is catalogued today, see [setting docs](../setting/README.md).
 
+Machine-readable schema files live under `data/catalog/schema/`; generated field tables are in [catalog_schema.md](catalog_schema.md). Regenerate typed records and validators with `python3 scripts/tools/generate_catalog_records.py`.
+
 Full assembly design: [ship_assembly.txt](ship_assembly.txt).
 
 ## Catalog files
@@ -27,7 +29,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `markets.json` | array | Legacy static listings (unused; quotes are runtime) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
-Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`.
+Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Typed getters (`get_module_def`, `get_chassis_def`, …) return generated `*Def` records; dictionary getters remain for incremental migration ([P3-2](refactor_backlog.md)).
 
 ## ID conventions
 

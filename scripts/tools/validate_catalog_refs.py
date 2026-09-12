@@ -638,14 +638,6 @@ def main() -> int:
                     f"modules.json: {module_id} sensor_sensitivity_passive must be an object"
                 )
 
-    for ammo_id, ammo in ammunition.items():
-        packets = ammo.get("damage_packets")
-        if packets is None:
-            errors.append(f"ammunition {ammo_id}: missing damage_packets")
-            continue
-        if not isinstance(packets, dict) or not packets:
-            errors.append(f"ammunition {ammo_id}: damage_packets must be a non-empty object")
-
     for template in ships.values():
         has_computer = False
         has_life_support = False

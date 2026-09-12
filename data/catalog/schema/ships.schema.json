@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "ShipDef",
+  "x-catalog-file": "ships.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "maker", "chassis", "modules"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "maker": { "type": "string" },
+    "chassis": { "type": "string", "x-ref-catalog": "chassis" },
+    "modules": {
+      "type": "array",
+      "items": { "type": "string", "x-ref-catalog": "modules" }
+    }
+  }
+}
