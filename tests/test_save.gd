@@ -17,14 +17,17 @@ static func run(runner: TestRunner) -> void:
 	_test_identity_round_trip(runner, catalog)
 	_test_validation(runner)
 	_test_legacy_cargo_migration(runner, catalog)
+	_test_subsystems_envelope(runner, catalog)
+	_test_file_round_trip(runner, catalog)
 
 
-static func _build_save(session: GameSession) -> Dictionary:
+static func _build_save(session: GameSession, subsystems: Dictionary = {}) -> Dictionary:
 	return SaveStore.build_save_data(
 		session.player_to_dict(),
 		session.to_dict(),
 		session.ships_to_array(),
-		FLIGHT
+		FLIGHT,
+		subsystems
 	)
 
 
@@ -185,6 +188,17 @@ static func _test_validation(runner: TestRunner) -> void:
 		),
 		"save: non-array ships rejected"
 	)
+	runner.check(
+		not SaveStore.validate_save_data(
+			{
+				"version": SaveStore.SAVE_VERSION,
+				"session": {},
+				"ships": [],
+				"subsystems": "nope",
+			}
+		),
+		"save: non-dictionary subsystems rejected"
+	)
 
 
 static func _test_legacy_cargo_migration(runner: TestRunner, catalog: Catalog) -> void:
@@ -216,3 +230,104 @@ static func _test_legacy_cargo_migration(runner: TestRunner, catalog: Catalog) -
 			0,
 			"save: unknown legacy cargo pruned"
 		)
+
+
+static func _test_subsystems_envelope(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	if not session.start_new_game(catalog, "SUBSYS-1", "trader"):
+		runner.check(false, "save: subsystems session starts")
+		return
+	runner.check(true, "save: subsystems session starts")
+
+	var simulation := Simulation.new()
+	var probe := TestSimulation.ProbeSubsystem.new()
+	runner.check(simulation.register(probe), "save: probe registers for envelope test")
+	probe.tick_count = 13
+
+	var data := _build_save(session, simulation.collect_save())
+	runner.check(
+		typeof(data.get("subsystems", {})) == TYPE_DICTIONARY,
+		"save: subsystems envelope written"
+	)
+	runner.check(data.has("subsystems"), "save: subsystems key present")
+	runner.check(
+		SaveStore.validate_save_data(data),
+		"save: envelope save validates"
+	)
+
+	var loaded_session := GameSession.new()
+	runner.check(loaded_session.from_save(catalog, data), "save: envelope save loads session")
+
+	var loaded_simulation := Simulation.new()
+	var loaded_probe := TestSimulation.ProbeSubsystem.new()
+	runner.check(
+		loaded_simulation.register(loaded_probe),
+		"save: probe registers on loaded simulation"
+	)
+	loaded_simulation.apply_save(data.get("subsystems", {}))
+	runner.check_eq(loaded_probe.tick_count, 13, "save: subsystem state survives envelope round-trip")
+
+	# Saves without the envelope must still load and leave subsystems at defaults.
+	var legacy_data := _build_save(session)
+	legacy_data.erase("subsystems")
+	runner.check(
+		SaveStore.validate_save_data(legacy_data),
+		"save: legacy save without subsystems validates"
+	)
+	runner.check(
+		GameSession.new().from_save(catalog, legacy_data),
+		"save: legacy save without subsystems loads"
+	)
+	loaded_probe.tick_count = 99
+	loaded_simulation.apply_save({})
+	runner.check_eq(loaded_probe.tick_count, 0, "save: missing envelope resets subsystem state")
+
+
+static func _writable_test_save_dir() -> String:
+	# Headless CI sandboxes may block `user://` writes; use a project-local temp dir.
+	var project_root := ProjectSettings.globalize_path("res://")
+	var dir := project_root.path_join(".test_saves")
+	if not dir.ends_with("/"):
+		dir += "/"
+	return dir
+
+
+static func _test_file_round_trip(runner: TestRunner, catalog: Catalog) -> void:
+	var original_dir := SaveStore.save_dir
+	SaveStore.save_dir = _writable_test_save_dir()
+	SaveStore.ensure_save_dir()
+
+	var session := GameSession.new()
+	if not session.start_new_game(catalog, "FILE-1", "trader"):
+		SaveStore.save_dir = original_dir
+		runner.check(false, "save: file round-trip session starts")
+		return
+	runner.check(true, "save: file round-trip session starts")
+
+	var simulation := Simulation.new()
+	var probe := TestSimulation.ProbeSubsystem.new()
+	runner.check(simulation.register(probe), "save: probe registers for file round-trip")
+	probe.tick_count = 21
+
+	var data := _build_save(session, simulation.collect_save())
+	runner.check(SaveStore.write_slot(1, data), "save: write_slot succeeds in test dir")
+	var read_back := SaveStore.read_slot(1)
+	runner.check(not read_back.is_empty(), "save: read_slot succeeds in test dir")
+	runner.check_eq(
+		int(read_back.get("version", 0)),
+		SaveStore.SAVE_VERSION,
+		"save: file round-trip preserves version"
+	)
+
+	var loaded_session := GameSession.new()
+	runner.check(loaded_session.from_save(catalog, read_back), "save: file round-trip loads session")
+	var loaded_simulation := Simulation.new()
+	var loaded_probe := TestSimulation.ProbeSubsystem.new()
+	runner.check(
+		loaded_simulation.register(loaded_probe),
+		"save: probe registers after file round-trip"
+	)
+	loaded_simulation.apply_save(read_back.get("subsystems", {}))
+	runner.check_eq(loaded_probe.tick_count, 21, "save: file round-trip preserves subsystem state")
+
+	SaveStore.save_dir = original_dir

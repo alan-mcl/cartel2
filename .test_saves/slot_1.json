@@ -1,0 +1,119 @@
+{
+	"flight": {
+		"facing": 1.25,
+		"vx": 40.0,
+		"vy": -12.5,
+		"x": 1234.5,
+		"y": -678.25
+	},
+	"game_version": "DEV",
+	"player": {
+		"background_id": "trader",
+		"callsign": "FILE-1",
+		"portrait": ""
+	},
+	"saved_at": "2026-09-12T14:49:26",
+	"session": {
+		"building_id": "proxima_habitat_terminal",
+		"compute_integrity_lost": 0.0,
+		"credits": 5220,
+		"current_ship_id": "pegasus_p101_1",
+		"docked": true,
+		"gst_seconds": 83215670400.0,
+		"habitat_id": "proxima_habitat",
+		"hull": 40.0,
+		"in_unspace": false,
+		"inspected_ids": [],
+		"last_log": "Welcome, FILE-1. All ships docked at Proxima Habitat.",
+		"location_name": "Proxima Habitat / Proxima Habitat Terminal",
+		"max_hull": 40.0,
+		"objective": "Explore Proxima near orbit",
+		"orbital_phase_by_sector": {},
+		"pending_destination_id": "",
+		"power_integrity_lost": 0.0,
+		"route_friction_delta": {},
+		"salvaged_ids": [],
+		"sector_id": "proxima",
+		"shield_charges": {},
+		"spare_parts": {},
+		"unspace_n": 0,
+		"unspace_solution": 0,
+		"unspace_world_id": ""
+	},
+	"ships": [
+		{
+			"active_sensors_enabled": true,
+			"ammunition": {
+				"mass_driver_round": 120.0
+			},
+			"cargo": {},
+			"chassis_id": "pegasus_chassis",
+			"fuel_current": 80.0,
+			"id": "pegasus_p101_1",
+			"location": "proxima_habitat",
+			"modules": [
+				{
+					"module_id": "gi_pp_18",
+					"slot": "power_1"
+				},
+				{
+					"module_id": "gi_ht_18",
+					"slot": "main_engine_1"
+				},
+				{
+					"module_id": "mdc_monday_core",
+					"slot": "system_1"
+				},
+				{
+					"module_id": "gi_ls_4",
+					"slot": "system_2"
+				},
+				{
+					"module_id": "hg_hermes_n6",
+					"slot": "system_3"
+				},
+				{
+					"module_id": "vessel_registration_beacon",
+					"slot": "system_4"
+				},
+				{
+					"module_id": "mass_driver_magazine_200",
+					"slot": "other_1"
+				},
+				{
+					"module_id": "fuel_tank_medium",
+					"slot": "other_2"
+				},
+				{
+					"module_id": "cargo_bay_10",
+					"slot": "other_3"
+				},
+				{
+					"module_id": "chitanium_5mm",
+					"slot": "other_4"
+				},
+				{
+					"module_id": "light_mass_driver",
+					"slot": "light_weapon_1"
+				}
+			],
+			"name": "Pegasus P101",
+			"registration": "VR-PGS-9825",
+			"template_id": "pegasus_p101",
+			"transponder_enabled": true
+		}
+	],
+	"subsystems": {
+		"economy": {
+			"data": {},
+			"version": 1
+		},
+		"probe": {
+			"data": {
+				"tick_count": 21
+			},
+			"version": 1
+		}
+	},
+	"version": 2
+}

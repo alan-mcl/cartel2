@@ -277,6 +277,7 @@ func _show_main_menu() -> void:
 	)
 	_jump.bind(catalog, session)
 	_hud.bind(session, _player, AssembledShip.new())
+	_simulation.reset_save()
 
 	_main_menu.open()
 
@@ -323,6 +324,7 @@ func _begin_new_game(callsign: String, background_id: String, portrait_path: Str
 		push_error("Failed to start new game.")
 		return
 
+	_simulation.reset_save()
 	_current_slot = -1
 	_main_menu.close()
 	_new_game.close()
@@ -342,6 +344,8 @@ func _load_slot(slot_index: int) -> void:
 	if not new_session.from_save(catalog, data):
 		push_error("Failed to load save slot %d." % slot_index)
 		return
+
+	_simulation.apply_save(data.get("subsystems", {}))
 
 	if session != null:
 		_unbind_session_events(session)
@@ -382,7 +386,8 @@ func _save_to_slot(slot_index: int) -> bool:
 		session.player_to_dict(),
 		session.to_dict(),
 		session.ships_to_array(),
-		flight
+		flight,
+		_simulation.collect_save()
 	)
 	if not SaveStore.write_slot(slot_index, save_data):
 		return false

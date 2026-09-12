@@ -4,14 +4,14 @@ extends RefCounted
 const SAVE_VERSION := 2
 const LEGACY_SAVE_VERSION := 1
 const SLOT_COUNT := 3
-const SAVE_DIR := "user://saves/"
+static var save_dir := "user://saves/"
 
 static func slot_path(slot_index: int) -> String:
-	return "%sslot_%d.json" % [SAVE_DIR, slot_index]
+	return "%sslot_%d.json" % [save_dir, slot_index]
 
 
 static func ensure_save_dir() -> void:
-	DirAccess.make_dir_recursive_absolute(SAVE_DIR)
+	DirAccess.make_dir_recursive_absolute(save_dir)
 
 
 static func slot_exists(slot_index: int) -> bool:
@@ -112,7 +112,8 @@ static func build_save_data(
 	player: Dictionary,
 	session_data: Dictionary,
 	ships: Array,
-	flight: Dictionary
+	flight: Dictionary,
+	subsystems: Dictionary = {}
 ) -> Dictionary:
 	return {
 		"version": SAVE_VERSION,
@@ -122,6 +123,7 @@ static func build_save_data(
 		"session": session_data,
 		"ships": ships,
 		"flight": flight,
+		"subsystems": subsystems,
 	}
 
 
@@ -140,6 +142,10 @@ static func validate_save_data(data: Dictionary) -> bool:
 
 	if typeof(data.get("ships", [])) != TYPE_ARRAY:
 		push_error("Save file missing ships array.")
+		return false
+
+	if data.has("subsystems") and typeof(data.get("subsystems", {})) != TYPE_DICTIONARY:
+		push_error("Save file subsystems must be an object.")
 		return false
 
 	return true

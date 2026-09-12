@@ -106,3 +106,41 @@ func dispatch_event(evt: Dictionary) -> void:
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant
 		subsystem.on_event(evt)
+
+
+func collect_save() -> Dictionary:
+	var blob := {}
+	for subsystem_id in _subsystems.keys():
+		var subsystem: SimSubsystem = _subsystems[subsystem_id]
+		blob[subsystem_id] = {
+			"version": subsystem.save_version,
+			"data": subsystem.to_dict(),
+		}
+	return blob
+
+
+func apply_save(blob: Dictionary) -> void:
+	if typeof(blob) != TYPE_DICTIONARY:
+		blob = {}
+
+	for subsystem_id in _subsystems.keys():
+		var subsystem: SimSubsystem = _subsystems[subsystem_id]
+		var section: Variant = blob.get(subsystem_id, null)
+		if typeof(section) != TYPE_DICTIONARY:
+			subsystem.from_dict({})
+			continue
+
+		var section_dict: Dictionary = section
+		var data: Variant = section_dict.get("data", {})
+		if typeof(data) != TYPE_DICTIONARY:
+			data = {}
+
+		var stored_version := int(section_dict.get("version", subsystem.save_version))
+		var payload: Dictionary = data
+		if stored_version != subsystem.save_version:
+			payload = subsystem.migrate(payload, stored_version)
+		subsystem.from_dict(payload)
+
+
+func reset_save() -> void:
+	apply_save({})

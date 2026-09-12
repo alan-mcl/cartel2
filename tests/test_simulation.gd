@@ -36,6 +36,27 @@ class ProbeSubsystem extends SimSubsystem:
 		tick_count = int(data.get("tick_count", 0))
 
 
+class MigratingProbeSubsystem extends SimSubsystem:
+	var value: String = ""
+	var migrate_called: bool = false
+
+	func _init() -> void:
+		id = "migrating_probe"
+		save_version = 2
+
+	func migrate(data: Dictionary, from_version: int) -> Dictionary:
+		migrate_called = true
+		if from_version == 1:
+			return {"value": str(data.get("legacy_value", ""))}
+		return data.duplicate(true)
+
+	func to_dict() -> Dictionary:
+		return {"value": value}
+
+	func from_dict(data: Dictionary) -> void:
+		value = str(data.get("value", ""))
+
+
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_default_economy_registration(runner, catalog)
@@ -45,6 +66,10 @@ static func run(runner: TestRunner) -> void:
 	_test_duplicate_register_rejected(runner)
 	_test_mapping_lump_day_hook(runner, catalog)
 	_test_subsystem_save_hooks_noop(runner)
+	_test_collect_apply_round_trip(runner)
+	_test_apply_missing_envelope_resets(runner)
+	_test_section_migrate(runner)
+	_test_reset_save(runner)
 
 
 static func _new_session(runner: TestRunner, catalog: Catalog, callsign: String) -> GameSession:
@@ -189,3 +214,63 @@ static func _test_subsystem_save_hooks_noop(runner: TestRunner) -> void:
 	runner.check(base.to_dict().is_empty(), "simulation: base to_dict is empty")
 	base.from_dict({"ignored": true})
 	runner.check(true, "simulation: base from_dict is a no-op")
+
+
+static func _test_collect_apply_round_trip(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var probe := ProbeSubsystem.new()
+	runner.check(simulation.register(probe), "simulation: probe registers for save round-trip")
+	probe.tick_count = 11
+
+	var blob := simulation.collect_save()
+	runner.check(blob.has("economy"), "simulation: collect_save includes economy")
+	runner.check(blob.has("probe"), "simulation: collect_save includes probe")
+	var probe_section: Dictionary = blob.get("probe", {})
+	runner.check_eq(int(probe_section.get("version", 0)), 1, "simulation: probe section version")
+	runner.check_eq(
+		int((probe_section.get("data", {}) as Dictionary).get("tick_count", 0)),
+		11,
+		"simulation: probe section data"
+	)
+
+	var loaded := Simulation.new()
+	var loaded_probe := ProbeSubsystem.new()
+	runner.check(loaded.register(loaded_probe), "simulation: probe registers on loaded simulation")
+	loaded.apply_save(blob)
+	runner.check_eq(loaded_probe.tick_count, 11, "simulation: apply_save restores probe state")
+
+
+static func _test_apply_missing_envelope_resets(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var probe := ProbeSubsystem.new()
+	runner.check(simulation.register(probe), "simulation: probe registers for missing envelope test")
+	probe.tick_count = 5
+
+	simulation.apply_save({})
+	runner.check_eq(probe.tick_count, 0, "simulation: missing envelope resets probe")
+
+
+static func _test_section_migrate(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var probe := MigratingProbeSubsystem.new()
+	runner.check(simulation.register(probe), "simulation: migrating probe registers")
+
+	simulation.apply_save({
+		"migrating_probe": {
+			"version": 1,
+			"data": {"legacy_value": "migrated"},
+		},
+	})
+
+	runner.check(probe.migrate_called, "simulation: migrate runs for older section version")
+	runner.check_eq(probe.value, "migrated", "simulation: migrated payload applied")
+
+
+static func _test_reset_save(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var probe := ProbeSubsystem.new()
+	runner.check(simulation.register(probe), "simulation: probe registers for reset_save")
+	probe.tick_count = 9
+
+	simulation.reset_save()
+	runner.check_eq(probe.tick_count, 0, "simulation: reset_save clears probe state")

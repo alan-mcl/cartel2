@@ -237,7 +237,7 @@ sector, commodity, quantity, and unit price. HUD and habitat screens still refre
 
 ## P1-3 Save registry with per-section versioning
 
-**Status:** Not started. **Phase:** 1. **Depends on:** P1-1, P0-2.
+**Status:** Done. **Phase:** 1. **Depends on:** P1-1, P0-2.
 
 **Unblocks:** Persisting mission progress, faction standing, and plot state without a central
 edit each time.

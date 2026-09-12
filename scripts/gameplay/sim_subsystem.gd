@@ -5,6 +5,7 @@ extends RefCounted
 ## GDScript has no interfaces; override only the hooks a subsystem needs.
 
 var id: String = ""
+var save_version: int = 1
 
 
 func on_tick(_session: GameSession, _catalog: Catalog, _delta: float) -> void:
@@ -21,6 +22,10 @@ func on_day(_session: GameSession, _catalog: Catalog, _day: int) -> void:
 
 func on_event(_evt: Dictionary) -> void:
 	pass
+
+
+func migrate(data: Dictionary, from_version: int) -> Dictionary:
+	return data.duplicate(true)
 
 
 func to_dict() -> Dictionary:
