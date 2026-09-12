@@ -135,6 +135,7 @@ static func buy_part(session: GameSession, catalog: Catalog, part_id: String) ->
 	session.credits -= cost
 	session.add_spare_part(part_id, 1)
 	session.last_log = "Purchased %s for d%d." % [str(part.get("name", part_id)), cost]
+	session.events.publish(SimEvent.credits_changed(-cost, session.credits))
 	session.changed.emit()
 	return true
 
@@ -154,6 +155,7 @@ static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -
 	session.remove_spare_part(part_id, 1)
 	session.credits += sell_price
 	session.last_log = "Sold %s for d%d." % [str(part.get("name", part_id)), sell_price]
+	session.events.publish(SimEvent.credits_changed(sell_price, session.credits))
 	session.changed.emit()
 	return true
 
@@ -199,6 +201,7 @@ static func install_module(
 
 	ship.set_module(slot, part_id)
 	session.last_log = "Installed %s on %s." % [str(part.get("name", part_id)), ship.name]
+	session.events.publish(SimEvent.module_installed(ship_id, slot, part_id))
 	session.changed.emit()
 	return true
 
@@ -330,6 +333,7 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	session.credits -= cost
 	ship.fuel_current = capacity
 	session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
+	session.events.publish(SimEvent.credits_changed(-cost, session.credits))
 	session.changed.emit()
 	return true
 

@@ -42,6 +42,11 @@ var market_quotes_day: int = -1
 var route_friction_delta: Dictionary = {}
 
 var _hull_stress_cooldown: float = 0.0
+var events := EventBus.new()
+
+
+func _publish_credits_changed(delta: int) -> void:
+	events.publish(SimEvent.credits_changed(delta, credits))
 
 
 func start_new_game(
@@ -299,6 +304,7 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	if emit_log:
 		last_log = "Arrived in %s." % str(sector.get("name", new_sector_id))
 
+	events.publish(SimEvent.sector_entered(sector_id))
 	changed.emit()
 	return true
 
@@ -536,9 +542,13 @@ func salvage(definition: InteractableDef) -> bool:
 		return false
 
 	salvaged_ids.append(definition.id)
-	credits += definition.salvage_reward
+	var reward := definition.salvage_reward
+	credits += reward
 	objective = "Continue exploring %s" % location_name
-	last_log = "Salvage secured from %s. +d%d credited." % [definition.title, definition.salvage_reward]
+	last_log = "Salvage secured from %s. +d%d credited." % [definition.title, reward]
+	events.publish(SimEvent.salvage_taken(definition.id, reward))
+	if reward != 0:
+		_publish_credits_changed(reward)
 	changed.emit()
 	return true
 
@@ -563,6 +573,7 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	location_name = "%s / %s" % [str(habitat.get("name", location_id)), str(default_building.get("name", default_building_id))]
 	repair_combat_at_dock(catalog)
 	last_log = "Docked at %s." % str(default_building.get("name", default_building_id))
+	events.publish(SimEvent.docked(habitat_id))
 	changed.emit()
 	return true
 
@@ -627,6 +638,7 @@ func undock(catalog: Catalog, ship_id: String) -> bool:
 	var sector := catalog.get_sector(sector_id)
 	location_name = str(sector.get("orbit_name", "Near orbit"))
 	last_log = "Launched %s. Thrusters online." % ship.name
+	events.publish(SimEvent.undocked(ship_id, sector_id))
 	changed.emit()
 	return true
 
@@ -743,6 +755,8 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 	if current_ship_id.is_empty():
 		current_ship_id = ship.id
 	last_log = "Purchased %s for d%d. Visit the Shipyard to fit out." % [ship.name, cost]
+	events.publish(SimEvent.ship_purchased(ship.id, "chassis", cost))
+	_publish_credits_changed(-cost)
 	changed.emit()
 	return true
 
@@ -782,6 +796,8 @@ func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
 	if current_ship_id.is_empty():
 		current_ship_id = ship.id
 	last_log = "Purchased %s for d%d." % [ship.name, cost]
+	events.publish(SimEvent.ship_purchased(ship.id, "used", cost))
+	_publish_credits_changed(-cost)
 	changed.emit()
 	return true
 
@@ -834,6 +850,11 @@ func buy_commodity(
 	credits -= total_cost
 	ship.add_cargo(commodity_id, amount)
 	last_log = "Bought %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total_cost]
+	var market_sector_id := get_market_sector_id(catalog)
+	events.publish(
+		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, price, "buy")
+	)
+	_publish_credits_changed(-total_cost)
 	changed.emit()
 	return true
 
@@ -882,6 +903,11 @@ func sell_commodity(
 
 	credits += total
 	last_log = "Sold %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total]
+	var market_sector_id := get_market_sector_id(catalog)
+	events.publish(
+		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, sell_price, "sell")
+	)
+	_publish_credits_changed(total)
 	changed.emit()
 	return true
 

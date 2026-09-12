@@ -235,6 +235,18 @@ func try_interact(target: Interactable) -> void:
 			_world_loader.apply_salvage_visuals(session)
 
 
+func _bind_session_events(game_session: GameSession) -> void:
+	if game_session == null or _simulation == null:
+		return
+	game_session.events.subscribe_all(_simulation.dispatch_event)
+
+
+func _unbind_session_events(game_session: GameSession) -> void:
+	if game_session == null or _simulation == null:
+		return
+	game_session.events.unsubscribe_all(_simulation.dispatch_event)
+
+
 func _show_main_menu() -> void:
 	_game_active = false
 	_current_slot = -1
@@ -248,10 +260,13 @@ func _show_main_menu() -> void:
 	_player.freeze_motion()
 	_clear_world()
 
-	if session != null and session.changed.is_connected(_on_session_changed):
-		session.changed.disconnect(_on_session_changed)
+	if session != null:
+		_unbind_session_events(session)
+		if session.changed.is_connected(_on_session_changed):
+			session.changed.disconnect(_on_session_changed)
 	session = GameSession.new()
 	session.changed.connect(_on_session_changed)
+	_bind_session_events(session)
 	_ui_root.configure(
 		catalog,
 		session,
@@ -296,8 +311,13 @@ func _start_game_from_session() -> void:
 
 
 func _begin_new_game(callsign: String, background_id: String, portrait_path: String) -> void:
+	if session != null:
+		_unbind_session_events(session)
+		if session.changed.is_connected(_on_session_changed):
+			session.changed.disconnect(_on_session_changed)
 	session = GameSession.new()
 	session.changed.connect(_on_session_changed)
+	_bind_session_events(session)
 
 	if not session.start_new_game(catalog, callsign, background_id, portrait_path):
 		push_error("Failed to start new game.")
@@ -323,11 +343,14 @@ func _load_slot(slot_index: int) -> void:
 		push_error("Failed to load save slot %d." % slot_index)
 		return
 
-	if session != null and session.changed.is_connected(_on_session_changed):
-		session.changed.disconnect(_on_session_changed)
+	if session != null:
+		_unbind_session_events(session)
+		if session.changed.is_connected(_on_session_changed):
+			session.changed.disconnect(_on_session_changed)
 
 	session = new_session
 	session.changed.connect(_on_session_changed)
+	_bind_session_events(session)
 	_ui_root.configure(
 		catalog,
 		session,

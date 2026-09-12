@@ -214,7 +214,7 @@ untouched.
 
 ## P1-2 Typed event bus
 
-**Status:** Not started. **Phase:** 1. **Depends on:** P1-1.
+**Status:** Done. **Phase:** 1. **Depends on:** P1-1.
 
 **Unblocks:** Mission triggers, faction reputation deltas, plot state advancement. This is the
 single most important item for the mission system.

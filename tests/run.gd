@@ -12,6 +12,7 @@ func _init() -> void:
 	TestEconomy.run(runner)
 	TestClock.run(runner)
 	TestSimulation.run(runner)
+	TestEvents.run(runner)
 	TestMotion.run(runner)
 
 	if runner.failures > 0:
