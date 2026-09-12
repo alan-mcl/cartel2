@@ -1,6 +1,7 @@
 extends Node2D
 
 const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.gd")
+const TrafficViewScript := preload("res://scripts/presentation/traffic_view.gd")
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 var session := GameSession.new()
@@ -11,6 +12,7 @@ var play_bounds: float = 3500.0
 var _simulation := Simulation.new()
 var _world_loader := WorldLoader.new()
 var _traffic_director = null
+var _traffic_view = null
 var _translate_gate_title: String = ""
 var _current_slot: int = -1
 var _game_active: bool = false
@@ -105,6 +107,7 @@ func _ensure_traffic_director() -> void:
 	if _traffic_director != null:
 		return
 	_traffic_director = TrafficDirectorScript.new()
+	_traffic_view = TrafficViewScript.new()
 
 
 func _physics_process(delta: float) -> void:
@@ -123,6 +126,7 @@ func _physics_process(delta: float) -> void:
 				delta,
 				_player.global_position,
 				_world_loader,
+				Engine.get_physics_frames(),
 				_player.motion.velocity,
 				_player.motion.facing,
 				_player.motion.is_thrusting(),
@@ -130,6 +134,8 @@ func _physics_process(delta: float) -> void:
 				_player.operating_state,
 				player_broadcasting
 			)
+			if _traffic_view != null:
+				_traffic_view.sync(_traffic_director.actors, catalog)
 
 	var contacts := _world_loader.get_nav_contacts(catalog, session.in_unspace)
 	if session.in_unspace and not player_ship.has_capability("4_space_topology"):
@@ -443,6 +449,8 @@ func _apply_flight_state(flight: Dictionary) -> void:
 
 
 func _clear_world() -> void:
+	if _traffic_view != null:
+		_traffic_view.clear()
 	if _traffic_director != null:
 		_traffic_director.clear()
 	for child in _world.get_children():
@@ -490,6 +498,8 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 	if _player.has_method("register_world_interactables"):
 		_player.register_world_interactables()
 
+	if _traffic_view != null:
+		_traffic_view.clear()
 	if _traffic_director != null:
 		_traffic_director.clear()
 	if not session.in_unspace:
@@ -497,12 +507,14 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 		if _traffic_director != null:
 			_traffic_director.setup(
 				catalog,
-				_world,
 				session.sector_id,
 				_world_loader.get_traffic_envelope_radius(),
 				_player.global_position,
 				_world_loader
 			)
+			if _traffic_view != null:
+				_traffic_view.setup(_world)
+				_traffic_view.sync(_traffic_director.actors, catalog)
 
 	if place_player:
 		match spawn_near:

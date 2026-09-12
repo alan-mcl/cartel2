@@ -14,7 +14,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 | Path | Role |
 |------|------|
 | `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
-| `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
+| `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `traffic_view.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
 | `data/catalog/` | JSON catalogs (schemas: [data_model.md](data_model.md)) |
@@ -196,7 +196,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 
 ## In-system NPC traffic (3-space)
 
-`TrafficDirector` (gameplay) spawns ephemeral civilian ships when a sector loads. Not active in Unspace or while docked.
+`TrafficDirector` (gameplay) owns spawn policy, fleet size, sim slots, detection stagger, and actor AI when a sector loads. `TrafficView` (presentation) owns the `Traffic` node tree — `npc_ship.tscn` instances for slotted actors and far sprites for the rest. `main.gd` ticks the director then syncs the view each physics frame. Not active in Unspace or while docked.
 
 - **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~100 ships at population max, smaller worlds less).
 - **Spawn** — on sector arrival, trip roles appear 15–85% along their corridor toward destination; loiter/runabout scatter near the jump gate and orbitals. Cycle replacements still launch from origin waypoints.
@@ -210,7 +210,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 - **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 33%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
 - **Bounds** — NPC recycle envelope is `gate_radius × 1.25`; player flight has no position clamp.
 
-Catalog: `data/catalog/traffic.json`. Presentation: `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`.
+Catalog: `data/catalog/traffic.json`. Presentation: `TrafficView`, `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`.
 
 ## Graphics convention
 

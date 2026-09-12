@@ -24,7 +24,6 @@ var catalog: Catalog
 func bind_actor(traffic_actor, game_catalog: Catalog) -> void:
 	actor = traffic_actor
 	catalog = game_catalog
-	traffic_actor.node = self
 	_apply_hull_visual()
 	apply_hull_damage_visual(1.0)
 

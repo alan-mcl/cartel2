@@ -287,7 +287,7 @@ and `tests/test_save.gd` should pass with only mechanical reference updates.
 
 ## P2-2 Move traffic node ownership out of the gameplay layer
 
-**Status:** Not started. **Phase:** 2. **Depends on:** P1-1.
+**Status:** Done. **Phase:** 2. **Depends on:** P1-1.
 
 **Unblocks:** Headless `TrafficDirector` tests (deferred from P0-3), and combat build-out.
 

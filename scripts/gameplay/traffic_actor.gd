@@ -278,8 +278,6 @@ var player_detected: bool = false
 var has_player_contact: bool = false
 var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
-var node: Node2D = null
-var far_thrust_flame: Sprite2D = null
 var cycle_pending: bool = false
 var cycle_spawn_hint: Dictionary = {}
 
@@ -306,13 +304,9 @@ var _ai_inputs: Dictionary = {
 
 var position: Vector2:
 	get:
-		if node != null and is_instance_valid(node):
-			return node.global_position
 		return _position
 	set(value):
 		_position = value
-		if node != null and is_instance_valid(node):
-			node.global_position = value
 
 
 func is_active() -> bool:
@@ -354,7 +348,6 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 
 	hull_current = combat_state.hull_current
 	hull_max = combat_state.hull_max
-	_update_hull_visual()
 
 	if hull_current <= 0.0:
 		ai_state = AiState.DESTROYED
@@ -625,11 +618,7 @@ func _tick_full_sim(
 	if use_peaceful_blend and bool(inputs.get("thrust", false)):
 		_blend_peaceful_velocity(delta)
 
-	if near_lod and node != null and is_instance_valid(node) and node.has_method("sync_from_actor"):
-		node.call("sync_from_actor", self)
-	else:
-		_position += motion.velocity * delta
-		_sync_far_lod_node()
+	_position += motion.velocity * delta
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
 	_check_route_arrival(
@@ -703,7 +692,6 @@ func _tick_kinematic(
 		_blend_peaceful_velocity(delta)
 
 	_position += motion.velocity * delta
-	_sync_far_lod_node()
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
 	_check_route_arrival(
@@ -1266,18 +1254,6 @@ func _blend_peaceful_velocity(delta: float) -> void:
 	motion.velocity = motion.velocity.lerp(desired, blend)
 
 
-func _sync_far_lod_node() -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	if node.has_method("sync_from_actor"):
-		return
-
-	node.global_position = _position
-	node.rotation = motion.facing + PI / 2.0
-	if far_thrust_flame != null and is_instance_valid(far_thrust_flame):
-		far_thrust_flame.visible = motion.is_thrusting()
-
-
 func _reset_ai_inputs() -> void:
 	_ai_inputs["thrust"] = false
 	_ai_inputs["reverse"] = false
@@ -1311,13 +1287,6 @@ func _maybe_refresh_stats(catalog: Catalog) -> void:
 	_last_mass_fuel = owned_ship.fuel_current
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
 	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
-
-
-func _update_hull_visual() -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	if node.has_method("apply_hull_damage_visual"):
-		node.call("apply_hull_damage_visual", hull_current / maxf(hull_max, 1.0))
 
 
 func _clamp_velocity(velocity: Vector2, cap: float) -> Vector2:

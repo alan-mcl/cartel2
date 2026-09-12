@@ -1,10 +1,7 @@
 extends RefCounted
+class_name TrafficDirector
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
-const NPC_SHIP_SCENE_PATH := "res://scenes/npc_ship.tscn"
-const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
-const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
-const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const TRIP_ROLES := ["transit", "shuttle", "dock_cycle"]
 const SIM_SLOT_ASSIGN_INTERVAL := 8
 
@@ -14,8 +11,6 @@ var _traffic_config: Dictionary = {}
 var _sector_id: String = ""
 var _traffic_envelope: float = 6750.0
 var _target_fleet_size: int = 0
-var _world_root: Node2D
-var _traffic_root: Node2D
 var _destroyed_timers: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _sim_slot_pool: Array = []
@@ -24,7 +19,6 @@ var _sim_slot_assign_counter: int = 0
 
 func setup(
 	catalog: Catalog,
-	world_root: Node2D,
 	sector_id: String,
 	traffic_envelope: float,
 	player_pos: Vector2,
@@ -35,12 +29,7 @@ func setup(
 	_traffic_config = catalog.get_traffic_config()
 	_sector_id = sector_id
 	_traffic_envelope = traffic_envelope
-	_world_root = world_root
 	_rng.randomize()
-
-	_traffic_root = Node2D.new()
-	_traffic_root.name = "Traffic"
-	world_root.add_child(_traffic_root)
 
 	var counts := _population_counts(catalog.get_sector(sector_id))
 	_target_fleet_size = counts.near + counts.far
@@ -50,26 +39,18 @@ func setup(
 
 
 func clear() -> void:
-	for actor_variant in actors:
-		if typeof(actor_variant) != TYPE_OBJECT:
-			continue
-		var actor = actor_variant
-		if actor.node != null and is_instance_valid(actor.node):
-			actor.node.queue_free()
 	actors.clear()
 	_destroyed_timers.clear()
 	_sim_slot_pool.clear()
 	_sim_slot_assign_counter = 0
 	_target_fleet_size = 0
-	if _traffic_root != null and is_instance_valid(_traffic_root):
-		_traffic_root.queue_free()
-	_traffic_root = null
 
 
 func tick(
 	delta: float,
 	player_pos: Vector2,
 	world_loader: WorldLoader,
+	physics_frame: int,
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
 	player_thrusting: bool = false,
@@ -77,12 +58,11 @@ func tick(
 	player_operating: ShipOperatingState = null,
 	player_broadcasting: bool = false
 ) -> void:
-	if _traffic_root == null:
+	if _catalog == null:
 		return
 
 	var anchors := world_loader.get_traffic_anchors()
 	var cycle_queue: Array = []
-	var frame := Engine.get_physics_frames()
 	var visual_radius := float(_traffic_config.get("visual_contact_radius", 250.0))
 	var player_effectiveness := SensorSystem.sensor_effectiveness(player_assembled, player_operating)
 	var player_active_sensors := true
@@ -114,7 +94,7 @@ func tick(
 			else:
 				continue
 
-		if actor.should_refresh_detection(frame, player_pos, visual_radius):
+		if actor.should_refresh_detection(physics_frame, player_pos, visual_radius):
 			actor.refresh_player_detection(
 				player_pos,
 				player_profile,
@@ -126,10 +106,7 @@ func tick(
 		else:
 			_touch_stale_detection(actor)
 
-		var was_near: bool = bool(actor.near_lod)
 		actor.near_lod = actor.has_sim_slot
-		_update_lod_node(actor, was_near)
-		_apply_detection_visibility(actor)
 
 		actor.tick(
 			_catalog,
@@ -143,7 +120,6 @@ func tick(
 			player_facing,
 			player_thrusting
 		)
-		_spawn_actor_weapons(actor)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
 			_destroyed_timers[actor.id] = float(_traffic_config.get("destroyed_respawn_seconds", 8.0))
@@ -179,24 +155,6 @@ func get_traffic_contacts() -> Array:
 func _touch_stale_detection(actor) -> void:
 	if actor.player_detected:
 		actor.get_cached_player_contact()
-
-
-func _apply_detection_visibility(actor) -> void:
-	if actor.node == null or not is_instance_valid(actor.node):
-		return
-	var visible := bool(actor.player_detected)
-	if actor.node.visible != visible:
-		actor.node.visible = visible
-
-
-func find_actor_by_node(node: Node):
-	for actor_variant in actors:
-		if typeof(actor_variant) != TYPE_OBJECT:
-			continue
-		var actor = actor_variant
-		if actor.node == node:
-			return actor
-	return null
 
 
 func _population_counts(sector: Dictionary) -> Dictionary:
@@ -375,8 +333,6 @@ func _retire_and_replace(
 	if index >= 0:
 		actors.remove_at(index)
 	_destroyed_timers.erase(actor.id)
-	if actor.node != null and is_instance_valid(actor.node):
-		actor.node.queue_free()
 	_spawn_replacement(hint, player_pos, anchors, world_loader)
 
 
@@ -393,12 +349,6 @@ func _handle_destroyed(
 	world_loader: WorldLoader
 ) -> bool:
 	if not _destroyed_timers.has(actor.id):
-		if actor.node != null and is_instance_valid(actor.node):
-			if actor.node.has_method("play_destroyed"):
-				actor.node.call("play_destroyed")
-			else:
-				actor.node.queue_free()
-		actor.node = null
 		_destroyed_timers[actor.id] = float(_traffic_config.get("destroyed_respawn_seconds", 8.0))
 		return true
 
@@ -575,71 +525,3 @@ func _is_orbital_id(anchor_id: String, anchors: Array) -> bool:
 		if str(entry.get("id", "")) == anchor_id and str(entry.get("kind", "")) == "orbital":
 			return true
 	return false
-
-
-func _update_lod_node(actor, was_near: bool) -> void:
-	if actor.near_lod == was_near and actor.node != null and is_instance_valid(actor.node):
-		return
-
-	if actor.node != null and is_instance_valid(actor.node):
-		actor.sync_position(actor.node.global_position)
-		actor.node.queue_free()
-		actor.node = null
-	actor.far_thrust_flame = null
-
-	if actor.near_lod:
-		_spawn_near_ship(actor)
-	else:
-		_spawn_far_sprite(actor)
-
-
-func _spawn_near_ship(actor) -> void:
-	var packed: PackedScene = load(NPC_SHIP_SCENE_PATH) as PackedScene
-	if packed == null:
-		return
-	var ship: Node2D = packed.instantiate()
-	_traffic_root.add_child(ship)
-	ship.global_position = actor.position
-	if ship.has_method("bind_actor"):
-		ship.call("bind_actor", actor, _catalog)
-	actor.node = ship
-
-
-func _spawn_far_sprite(actor) -> void:
-	var root := Node2D.new()
-	root.name = "TrafficRemote_%s" % actor.callsign
-	_traffic_root.add_child(root)
-
-	var hull := Sprite2D.new()
-	hull.name = "Hull"
-	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
-	if not sprite_path.is_empty():
-		hull.texture = ChassisSpriteScript.get_texture(sprite_path)
-	hull.scale = Vector2(0.65, 0.65)
-	var brightness: float = 1.0 + actor.hull_color_shift
-	hull.modulate = Color(brightness, brightness, brightness, 1.0)
-	root.add_child(hull)
-
-	var thrust_flame := Sprite2D.new()
-	thrust_flame.name = "ThrustFlame"
-	thrust_flame.visible = false
-	thrust_flame.scale = Vector2(0.65, 0.65)
-	var thrust_texture := load(THRUST_SPRITE) as Texture2D
-	if thrust_texture != null:
-		thrust_flame.texture = thrust_texture
-	if not sprite_path.is_empty():
-		HullHitboxScript.apply_hull_and_thrust(hull, thrust_flame, sprite_path)
-	root.add_child(thrust_flame)
-
-	root.global_position = actor.position
-	root.rotation = actor.motion.facing + PI / 2.0
-	actor.node = root
-	actor.far_thrust_flame = thrust_flame
-
-
-func _spawn_actor_weapons(actor) -> void:
-	if actor.pending_weapon_orders.is_empty() or _world_root == null:
-		return
-	if actor.node == null or not actor.node.has_method("spawn_weapon_orders"):
-		return
-	actor.node.call("spawn_weapon_orders", actor.pending_weapon_orders)
