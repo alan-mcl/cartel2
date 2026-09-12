@@ -17,7 +17,8 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 ### Nose-up, origin-centered
 
 - Set `width` and `height` to match the `viewBox` extent.
-- Standard viewBox: **`-W/2 -H/2  W  H`** (ship centered on origin).
+- Standard viewBox: **`-W/2 -H/2  W  H`** (rotation pivot at SVG `(0,0)` = texture center).
+- Place the desired spin point at SVG `(0,0)` by translating geometry — do not compensate with a shifted `viewBox` alone.
 - **Nose points toward −Y** (up on screen when facing default).
 - Collision hulls are derived from SVG primitives via `HullHitbox` (`scripts/presentation/hull_hitbox.gd`). Keep `width`, `height`, and `viewBox` in sync. Put paint in `style` attributes; remove conflicting presentation-attribute leftovers (`fill="#…"` on the same element as `style="fill:…"`).
 
@@ -91,15 +92,17 @@ Same chassis SVGs appear in habitat/shipyard UI (`LocationArt` `TextureRect`, fi
 
 ### Thrust attachment
 
-One thrust sprite serves all hull sizes. Align the **plume base** (not the thrust texture edge) with the hull **canvas bottom**:
+One thrust sprite serves all hull sizes. Align the **plume base** (not the thrust texture edge) with the hull **visual stern** (max Y of parsed hull geometry in world space):
 
 ```
-position.y = hull_height / 2 - thrust_plume_base_offset
+position.y = stern_extent(hull) - thrust_plume_base_offset
 ```
 
-`thrust_plume_base_offset` is parsed from thrust SVG art (currently **8** on the 32×32 placeholder). Example (Pegasus 70×70): `35 - 8 = **27**`.
+For origin-centered art where stern matches canvas bottom, this equals `hull_height / 2 - thrust_plume_base_offset`. Example (Pegasus 70×70): `35 - 8 = **27**`.
 
-**Runtime:** `HullHitbox.apply_hull_and_thrust()` centers each hull sprite on its art bounds (`Sprite2D.offset`) and sets thrust from the visual stern (player, NPC, distant traffic).
+`thrust_plume_base_offset` is parsed from thrust SVG art (currently **8** on the 32×32 placeholder).
+
+**Runtime:** `HullHitbox.apply_hull_and_thrust()` leaves hull `Sprite2D.offset` at zero and sets thrust Y from the visual stern (player, NPC, distant traffic). Parsed geometry is cached per sprite path.
 
 ---
 

@@ -2,7 +2,7 @@
 <svg
    width="70"
    height="70"
-   viewBox="-40 -32 70 70"
+   viewBox="-35 -35 70 70"
    version="1.1"
    id="svg1"
    sodipodi:docname="pegasus_chassis.svg"
@@ -59,7 +59,7 @@
        x2="28.78953"
        y2="1.1930732"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.78011342,0,0,1.0080757,-4.7,-6.5055366)" />
+       gradientTransform="matrix(0.78011342,0,0,1.0080757,0.3,-9.5055366)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient6"
@@ -68,7 +68,8 @@
        y1="1.3169278"
        x2="4.2083254"
        y2="1.3169278"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(5,-3)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient12"
@@ -78,7 +79,7 @@
        x2="-0.95883596"
        y2="-4.9687476"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-2.749955,1.4840329)" />
+       gradientTransform="translate(2.250045,-1.5159671)" />
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -117,16 +118,16 @@
   <path
      id="polygon1"
      style="display:inline;fill:url(#linearGradient5);stroke:#6286ba;stroke-width:0.75;stroke-linejoin:bevel"
-     d="M 25,28 10,33 H -20 L -35,28 -5.02,-26.5 Z"
+     d="M 30,25 15,30 H -15 L -30,25 -0.02,-29.5 Z"
      sodipodi:nodetypes="cccccc" />
   <path
      style="display:inline;fill:url(#linearGradient7);fill-opacity:1;stroke:#6286ba;stroke-width:0.750694;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
-     d="M -5,-27 -20,33 H 10 Z"
+     d="M 0,-30 -15,30 H 15 Z"
      id="path4"
      sodipodi:nodetypes="cccc" />
   <path
      style="fill:url(#linearGradient13);stroke:#6875c3;stroke-width:0.0859992;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1"
-     d="m -4,-7 h -2 l -2,10 2,5 h 2 l 2,-5"
+     d="M 1,-10 H -1 L -3,0 -1,5 H 1 L 3,0"
      id="path4-5"
      sodipodi:nodetypes="cccccc" />
 </svg>

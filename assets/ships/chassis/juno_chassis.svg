@@ -1,3 +1,138 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="72" height="56" viewBox="-36 -28 72 56">
-  <polygon points="0,-22 30,12 0,18 -30,12" fill="#a8b8d0" stroke="#d0d8e8" stroke-width="2"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="60"
+   height="60"
+   viewBox="-30 -30 60 60"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="juno_chassis.svg"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient6"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#092833;stop-opacity:1;"
+         offset="0"
+         id="stop6" />
+      <stop
+         style="stop-color:#0928ae;stop-opacity:1;"
+         offset="1"
+         id="stop7" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#e6e6ff;stop-opacity:1;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#e6e6ff;stop-opacity:1;"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="-10.5"
+       y1="-2.5"
+       x2="10.5"
+       y2="-2.5"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="-25.5"
+       y1="6.5"
+       x2="25.5"
+       y2="6.5"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="linearGradient7"
+       x1="-4"
+       y1="-15"
+       x2="4"
+       y2="-15"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="10.101525"
+     inkscape:cx="34.351247"
+     inkscape:cy="28.41155"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <path
+     style="fill:url(#linearGradient4);fill-opacity:1;stroke:#bfbcfc;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="M -10,18 H 10 L 25,10 V 0 L 10,-5 h -20 l -15,5 v 10 z"
+     id="path2" />
+  <path
+     style="fill:#0082b4;fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m -25,5 15,5 h 3 L -5,8 H 5 l 2,2 h 3 L 25,5 v 5 l -15,8 h -20 l -15,-8 z"
+     id="path4"
+     sodipodi:nodetypes="ccccccccccccc" />
+  <path
+     style="fill:url(#linearGradient2);fill-opacity:1;stroke:#bfbcfc;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="M -5,-25 H 5 l 5,10 V -5 L 5,23 H -5 l -5,-28 v -10 z"
+     id="path1"
+     sodipodi:nodetypes="ccccccccc" />
+  <path
+     style="fill:#0082b4;fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m -3,-25 -1,5 h 8 l -1,-5 z"
+     id="path5" />
+  <path
+     style="fill:url(#linearGradient7);stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m -4,-20 1,9 3,4 3,-4 1,-9 -4,-1 z"
+     id="path6"
+     sodipodi:nodetypes="ccccccc" />
 </svg>

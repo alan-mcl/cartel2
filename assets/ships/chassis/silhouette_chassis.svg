@@ -2,7 +2,7 @@
 <svg
    width="70"
    height="70"
-   viewBox="-40 -20 70 70"
+   viewBox="-35 -35 70 70"
    version="1.1"
    id="svg1"
    sodipodi:docname="silhouette_chassis.svg"
@@ -47,7 +47,7 @@
        x2="5.25"
        y2="5.0000582"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-5)" />
+       gradientTransform="translate(0,-15)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1"
@@ -57,13 +57,13 @@
        y1="5.0000582"
        x2="5.25"
        y2="5.0000582"
-       gradientTransform="matrix(1.5035365,0,0,1.2403797,9.6232227,14.139494)" />
+       gradientTransform="matrix(1.5035365,0,0,1.2403797,14.623223,-0.860506)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1"
        id="linearGradient4"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.5035365,0,0,1.2403797,-19.623223,14.139494)"
+       gradientTransform="matrix(-1.5035365,0,0,1.2403797,-14.623223,-0.860506)"
        x1="-5.25"
        y1="5.0000582"
        x2="5.25"
@@ -77,7 +77,7 @@
        x2="2.1249993"
        y2="8.0000076"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-5,17)" />
+       gradientTransform="translate(0,2)" />
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -89,9 +89,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="true"
-     inkscape:zoom="4.175"
-     inkscape:cx="0.47904192"
-     inkscape:cy="39.520958"
+     inkscape:zoom="8.35"
+     inkscape:cx="56.407186"
+     inkscape:cy="42.874252"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -115,21 +115,21 @@
   </sodipodi:namedview>
   <path
      style="fill:url(#linearGradient3);fill-opacity:1;stroke:#c8c8c8;stroke-width:0.682816;stroke-linejoin:round;stroke-opacity:1"
-     d="M 24.658587,20.341392 -5,33 -3.9086056,43.908605 24.658587,26.54329 Z"
+     d="M 29.658587,5.341392 0,18 1.0913944,28.908605 29.658587,11.54329 Z"
      id="path1-3"
      sodipodi:nodetypes="ccccc" />
   <path
      style="fill:url(#linearGradient4);fill-opacity:1;stroke:#c8c8c8;stroke-width:0.682816;stroke-linejoin:round;stroke-opacity:1"
-     d="M -34.658587,20.341392 -5,33 -6.0913941,43.908605 -34.658587,26.54329 Z"
+     d="M -29.658587,5.341392 0,18 -1.0913941,28.908605 -29.658587,11.54329 Z"
      id="path1-3-1"
      sodipodi:nodetypes="ccccc" />
   <path
      style="fill:url(#linearGradient2);fill-opacity:1;stroke:#c8c8c8;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m -5,-15 -5,45 v 10 c 0,0 2.6429774,5 5,5 2.3570226,0 5,-5 5,-5 V 30 Z"
+     d="m 0,-30 -5,45 v 10 c 0,0 2.6429774,5 5,5 2.3570226,0 5,-5 5,-5 V 15 Z"
      id="path1"
      sodipodi:nodetypes="cccsccc" />
   <path
      style="fill:url(#linearGradient6);stroke:#c8c8c8;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-     d="m -5,20 -1,2 -1,7 1,1 h 2 l 1,-1 -1,-7 z"
+     d="m 0,5 -1,2 -1,7 1,1 H 1 L 2,14 1,7 Z"
      id="path4" />
 </svg>

@@ -883,21 +883,57 @@ static func _test_hull_hitbox(runner: TestRunner) -> void:
 	var krypton_canvas := HullHitbox.sprite_canvas_size(KryptonPath)
 	runner.check(is_equal_approx(krypton_canvas.y, 70.0), "krypton canvas height from SVG")
 	const ThrustPath := "res://assets/ships/fx/thrust.svg"
-	const WolffPath := "res://assets/ships/chassis/wolff_chassis.svg"
-	var krypton_center := HullHitbox.sprite_bounds_center(KryptonPath)
+	const JunoPath := "res://assets/ships/chassis/juno_chassis.svg"
 	var krypton_thrust_y := HullHitbox.thrust_attach_offset(KryptonPath, ThrustPath)
 	var plume_base := HullHitbox.thrust_plume_base_offset(ThrustPath)
 	runner.check(
 		is_equal_approx(
 			krypton_thrust_y,
-			HullHitbox.stern_extent(KryptonPath) - krypton_center.y - plume_base
+			HullHitbox.stern_extent(KryptonPath) - plume_base
 		),
 		"thrust plume base meets visual hull stern"
 	)
-	var wolff_center := HullHitbox.sprite_bounds_center(WolffPath)
 	runner.check(
-		wolff_center.length_squared() > 0.01,
-		"wolff art center parsed from path geometry"
+		_view_box_is_origin_centered(JunoPath),
+		"juno viewBox is origin-centered for rotation pivot"
+	)
+	runner.check(
+		HullHitbox.stern_extent(JunoPath) > plume_base,
+		"juno stern parsed below rotation pivot for thrust attach"
+	)
+	var juno_thrust_y := HullHitbox.thrust_attach_offset(JunoPath, ThrustPath)
+	runner.check(
+		is_equal_approx(juno_thrust_y, HullHitbox.stern_extent(JunoPath) - plume_base),
+		"juno thrust plume base meets visual hull stern"
+	)
+
+	var krypton_thrust_y_again := HullHitbox.thrust_attach_offset(KryptonPath, ThrustPath)
+	runner.check(
+		is_equal_approx(krypton_thrust_y, krypton_thrust_y_again),
+		"krypton thrust offset is stable across cached reads"
+	)
+
+
+static func _view_box_is_origin_centered(sprite_path: String, tolerance: float = 0.01) -> bool:
+	var file := FileAccess.open(sprite_path, FileAccess.READ)
+	if file == null:
+		return false
+	var text := file.get_as_text()
+	file.close()
+	var regex := RegEx.create_from_string("viewBox\\s*=\\s*\"([^\"]+)\"")
+	var result := regex.search(text)
+	if result == null:
+		return false
+	var parts := result.get_string(1).split(" ", false)
+	if parts.size() != 4:
+		return false
+	var min_x := float(parts[0])
+	var min_y := float(parts[1])
+	var width := float(parts[2])
+	var height := float(parts[3])
+	return (
+		absf(min_x - (-width * 0.5)) <= tolerance
+		and absf(min_y - (-height * 0.5)) <= tolerance
 	)
 
 

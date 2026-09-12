@@ -2,9 +2,23 @@ class_name HullHitbox
 extends RefCounted
 
 const ELLIPSE_SAMPLES := 16
+const DEFAULT_THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 
 static var _cache: Dictionary = {}
 static var _canvas_cache: Dictionary = {}
+static var _points_cache: Dictionary = {}
+static var _bounds_cache: Dictionary = {}
+static var _plume_base_cache: Dictionary = {}
+static var _layout_cache: Dictionary = {}
+static var _regex_ready: bool = false
+static var _re_polygon: RegEx
+static var _re_rect: RegEx
+static var _re_ellipse: RegEx
+static var _re_circle: RegEx
+static var _re_path: RegEx
+static var _re_view_box: RegEx
+static var _re_width: RegEx
+static var _re_height: RegEx
 
 
 static func nose_extent(sprite_path: String, fallback: float = 20.0) -> float:
@@ -59,81 +73,78 @@ static func thrust_plume_base_offset(
 	thrust_sprite_path: String,
 	fallback: float = 8.0
 ) -> float:
+	if thrust_sprite_path.is_empty():
+		return fallback
+	if _plume_base_cache.has(thrust_sprite_path):
+		return float(_plume_base_cache[thrust_sprite_path])
+
 	var points := _parse_svg_points(thrust_sprite_path)
 	if points.is_empty():
+		_plume_base_cache[thrust_sprite_path] = fallback
 		return fallback
+
 	var base_y := points[0].y
 	for point in points:
 		base_y = minf(base_y, point.y)
+	_plume_base_cache[thrust_sprite_path] = base_y
 	return base_y
 
 
 static func sprite_bounds_center(sprite_path: String) -> Vector2:
-	var points := _parse_svg_points(sprite_path)
-	if points.is_empty():
-		return Vector2.ZERO
-	var min_x := points[0].x
-	var max_x := points[0].x
-	var min_y := points[0].y
-	var max_y := points[0].y
-	for point in points:
-		min_x = minf(min_x, point.x)
-		max_x = maxf(max_x, point.x)
-		min_y = minf(min_y, point.y)
-		max_y = maxf(max_y, point.y)
-	return Vector2((min_x + max_x) * 0.5, (min_y + max_y) * 0.5)
+	return _bounds_for_sprite(sprite_path).get("center", Vector2.ZERO) as Vector2
 
 
 static func stern_extent(sprite_path: String, fallback_hull_height: float = 64.0) -> float:
-	var points := _parse_svg_points(sprite_path)
-	if points.is_empty():
+	var stern := float(_bounds_for_sprite(sprite_path, fallback_hull_height).get("stern", 0.0))
+	if stern <= 0.001:
 		return sprite_stern_y(sprite_path, fallback_hull_height)
-	var max_y := points[0].y
-	for point in points:
-		max_y = maxf(max_y, point.y)
-	return max_y
+	return stern
 
 
 static func thrust_attach_offset(
 	hull_sprite_path: String,
-	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg",
+	thrust_sprite_path: String = DEFAULT_THRUST_SPRITE,
 	fallback_hull_height: float = 64.0
 ) -> float:
-	var center := sprite_bounds_center(hull_sprite_path)
-	var stern := stern_extent(hull_sprite_path, fallback_hull_height)
-	return stern - center.y - thrust_plume_base_offset(thrust_sprite_path)
+	return float(
+		_layout_for_sprite(hull_sprite_path, thrust_sprite_path, fallback_hull_height).get("thrust_y", 0.0)
+	)
 
 
 static func apply_hull_sprite_alignment(hull: Sprite2D, hull_sprite_path: String) -> void:
 	if hull == null:
 		return
-	if hull_sprite_path.is_empty():
-		hull.offset = Vector2.ZERO
-		return
-	hull.offset = -sprite_bounds_center(hull_sprite_path)
+	hull.offset = Vector2.ZERO
 
 
 static func apply_thrust_flame_position(
 	thrust_flame: Sprite2D,
 	hull_sprite_path: String,
-	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg"
+	thrust_sprite_path: String = DEFAULT_THRUST_SPRITE
 ) -> void:
 	if thrust_flame == null or hull_sprite_path.is_empty():
 		return
-	thrust_flame.position = Vector2(
-		0.0,
-		thrust_attach_offset(hull_sprite_path, thrust_sprite_path)
-	)
+	var layout := _layout_for_sprite(hull_sprite_path, thrust_sprite_path)
+	thrust_flame.position = Vector2(0.0, float(layout.get("thrust_y", 0.0)))
 
 
 static func apply_hull_and_thrust(
 	hull: Sprite2D,
 	thrust_flame: Sprite2D,
 	hull_sprite_path: String,
-	thrust_sprite_path: String = "res://assets/ships/fx/thrust.svg"
+	thrust_sprite_path: String = DEFAULT_THRUST_SPRITE
 ) -> void:
+	if hull_sprite_path.is_empty():
+		if hull != null:
+			hull.offset = Vector2.ZERO
+		return
+
 	apply_hull_sprite_alignment(hull, hull_sprite_path)
-	apply_thrust_flame_position(thrust_flame, hull_sprite_path, thrust_sprite_path)
+	if thrust_flame != null:
+		thrust_flame.position = Vector2(
+			0.0,
+			thrust_attach_offset(hull_sprite_path, thrust_sprite_path)
+		)
 
 
 static func apply_from_chassis_sprite(collision_shape: CollisionShape2D, sprite_path: String) -> void:
@@ -161,6 +172,11 @@ static func hull_polygon_for_sprite(sprite_path: String) -> PackedVector2Array:
 
 
 static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
+	if sprite_path.is_empty():
+		return PackedVector2Array()
+	if _points_cache.has(sprite_path):
+		return (_points_cache[sprite_path] as PackedVector2Array).duplicate()
+
 	var file := FileAccess.open(sprite_path, FileAccess.READ)
 	if file == null:
 		push_warning("HullHitbox: cannot read %s" % sprite_path)
@@ -168,19 +184,45 @@ static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
 
 	var text := file.get_as_text()
 	file.close()
+	var points := _parse_svg_text(text)
+	_points_cache[sprite_path] = points
+	return points.duplicate()
+
+
+static func _ensure_parse_regexes() -> void:
+	if _regex_ready:
+		return
+
+	_re_polygon = RegEx.create_from_string("<polygon[^>]*points\\s*=\\s*\"([^\"]+)\"")
+	_re_rect = RegEx.create_from_string(
+		"<rect[^>]*x\\s*=\\s*\"([^\"]+)\"[^>]*y\\s*=\\s*\"([^\"]+)\"[^>]*width\\s*=\\s*\"([^\"]+)\"[^>]*height\\s*=\\s*\"([^\"]+)\""
+	)
+	_re_ellipse = RegEx.create_from_string(
+		"<ellipse[^>]*cx\\s*=\\s*\"([^\"]+)\"[^>]*cy\\s*=\\s*\"([^\"]+)\"[^>]*rx\\s*=\\s*\"([^\"]+)\"[^>]*ry\\s*=\\s*\"([^\"]+)\""
+	)
+	_re_circle = RegEx.create_from_string(
+		"<circle[^>]*cx\\s*=\\s*\"([^\"]+)\"[^>]*cy\\s*=\\s*\"([^\"]+)\"[^>]*r\\s*=\\s*\"([^\"]+)\""
+	)
+	_re_path = RegEx.create_from_string(
+		"<path[^>]*?(?<![a-zA-Z_-])d\\s*=\\s*\"([^\"]+)\""
+	)
+	_re_view_box = RegEx.create_from_string("viewBox\\s*=\\s*\"([^\"]+)\"")
+	_re_width = RegEx.create_from_string("width\\s*=\\s*\"([0-9.]+)\"")
+	_re_height = RegEx.create_from_string("height\\s*=\\s*\"([0-9.]+)\"")
+	_regex_ready = true
+
+
+static func _parse_svg_text(text: String) -> PackedVector2Array:
+	_ensure_parse_regexes()
 
 	var view_box := _parse_view_box(text)
 	var img_size := _parse_image_size(text, view_box)
 	var points: PackedVector2Array = []
 
-	for match_result in RegEx.create_from_string(
-		"<polygon[^>]*points\\s*=\\s*\"([^\"]+)\""
-	).search_all(text):
+	for match_result in _re_polygon.search_all(text):
 		_append_polygon_points(points, match_result.get_string(1), view_box, img_size)
 
-	for match_result in RegEx.create_from_string(
-		"<rect[^>]*x\\s*=\\s*\"([^\"]+)\"[^>]*y\\s*=\\s*\"([^\"]+)\"[^>]*width\\s*=\\s*\"([^\"]+)\"[^>]*height\\s*=\\s*\"([^\"]+)\""
-	).search_all(text):
+	for match_result in _re_rect.search_all(text):
 		var rx := float(match_result.get_string(1))
 		var ry := float(match_result.get_string(2))
 		var rw := float(match_result.get_string(3))
@@ -188,9 +230,7 @@ static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
 		for corner in [Vector2(rx, ry), Vector2(rx + rw, ry), Vector2(rx + rw, ry + rh), Vector2(rx, ry + rh)]:
 			points.append(_map_svg_point(corner, view_box, img_size))
 
-	for match_result in RegEx.create_from_string(
-		"<ellipse[^>]*cx\\s*=\\s*\"([^\"]+)\"[^>]*cy\\s*=\\s*\"([^\"]+)\"[^>]*rx\\s*=\\s*\"([^\"]+)\"[^>]*ry\\s*=\\s*\"([^\"]+)\""
-	).search_all(text):
+	for match_result in _re_ellipse.search_all(text):
 		var cx := float(match_result.get_string(1))
 		var cy := float(match_result.get_string(2))
 		var rx := float(match_result.get_string(3))
@@ -200,9 +240,7 @@ static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
 			var pt := Vector2(cx + cos(angle) * rx, cy + sin(angle) * ry)
 			points.append(_map_svg_point(pt, view_box, img_size))
 
-	for match_result in RegEx.create_from_string(
-		"<circle[^>]*cx\\s*=\\s*\"([^\"]+)\"[^>]*cy\\s*=\\s*\"([^\"]+)\"[^>]*r\\s*=\\s*\"([^\"]+)\""
-	).search_all(text):
+	for match_result in _re_circle.search_all(text):
 		var cx := float(match_result.get_string(1))
 		var cy := float(match_result.get_string(2))
 		var radius := float(match_result.get_string(3))
@@ -211,17 +249,76 @@ static func _parse_svg_points(sprite_path: String) -> PackedVector2Array:
 			var pt := Vector2(cx + cos(angle) * radius, cy + sin(angle) * radius)
 			points.append(_map_svg_point(pt, view_box, img_size))
 
-	for match_result in RegEx.create_from_string(
-		"<path[^>]*d\\s*=\\s*\"([^\"]+)\""
-	).search_all(text):
+	for match_result in _re_path.search_all(text):
 		_append_path_points(points, match_result.get_string(1), view_box, img_size)
 
 	return points
 
 
+static func _bounds_for_sprite(sprite_path: String, fallback_hull_height: float = 64.0) -> Dictionary:
+	if sprite_path.is_empty():
+		return {"center": Vector2.ZERO, "stern": sprite_stern_y(sprite_path, fallback_hull_height)}
+
+	if _bounds_cache.has(sprite_path):
+		return _bounds_cache[sprite_path] as Dictionary
+
+	var points := _parse_svg_points(sprite_path)
+	var bounds := _bounds_from_points(points, sprite_path, fallback_hull_height)
+	_bounds_cache[sprite_path] = bounds
+	return bounds
+
+
+static func _bounds_from_points(
+	points: PackedVector2Array,
+	sprite_path: String,
+	fallback_hull_height: float
+) -> Dictionary:
+	if points.is_empty():
+		return {
+			"center": Vector2.ZERO,
+			"stern": sprite_stern_y(sprite_path, fallback_hull_height),
+		}
+
+	var min_x := points[0].x
+	var max_x := points[0].x
+	var min_y := points[0].y
+	var max_y := points[0].y
+	for point in points:
+		min_x = minf(min_x, point.x)
+		max_x = maxf(max_x, point.x)
+		min_y = minf(min_y, point.y)
+		max_y = maxf(max_y, point.y)
+
+	return {
+		"center": Vector2((min_x + max_x) * 0.5, (min_y + max_y) * 0.5),
+		"stern": max_y,
+	}
+
+
+static func _layout_for_sprite(
+	hull_sprite_path: String,
+	thrust_sprite_path: String = DEFAULT_THRUST_SPRITE,
+	fallback_hull_height: float = 64.0
+) -> Dictionary:
+	if hull_sprite_path.is_empty():
+		return {"thrust_y": 0.0}
+
+	var cache_key := "%s|%s" % [hull_sprite_path, thrust_sprite_path]
+	if _layout_cache.has(cache_key):
+		return _layout_cache[cache_key] as Dictionary
+
+	var stern := stern_extent(hull_sprite_path, fallback_hull_height)
+	var plume_base := thrust_plume_base_offset(thrust_sprite_path)
+	var layout := {
+		"thrust_y": stern - plume_base,
+	}
+	_layout_cache[cache_key] = layout
+	return layout
+
+
 static func _parse_view_box(text: String) -> Vector4:
-	var regex := RegEx.create_from_string("viewBox\\s*=\\s*\"([^\"]+)\"")
-	var result := regex.search(text)
+	_ensure_parse_regexes()
+	var result := _re_view_box.search(text)
 	if result == null:
 		return Vector4(0.0, 0.0, 64.0, 64.0)
 	var parts := result.get_string(1).split(" ", false)
@@ -231,10 +328,9 @@ static func _parse_view_box(text: String) -> Vector4:
 
 
 static func _parse_image_size(text: String, view_box: Vector4) -> Vector2:
-	var width_regex := RegEx.create_from_string("width\\s*=\\s*\"([0-9.]+)\"")
-	var height_regex := RegEx.create_from_string("height\\s*=\\s*\"([0-9.]+)\"")
-	var width_match := width_regex.search(text)
-	var height_match := height_regex.search(text)
+	_ensure_parse_regexes()
+	var width_match := _re_width.search(text)
+	var height_match := _re_height.search(text)
 	if width_match != null and height_match != null:
 		return Vector2(float(width_match.get_string(1)), float(height_match.get_string(1)))
 	return Vector2(view_box.z, view_box.w)

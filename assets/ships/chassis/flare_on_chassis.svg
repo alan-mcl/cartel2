@@ -2,7 +2,7 @@
 <svg
    width="40"
    height="50"
-   viewBox="-32 -32 40.000001 50.000001"
+   viewBox="-20 -25 40 50"
    version="1.1"
    id="svg1"
    sodipodi:docname="flare_on_chassis.svg"
@@ -59,7 +59,7 @@
        x2="8.4999752"
        y2="-1.9999437"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.79631301,0,0,1.000743,-10.407374,-4.9836562)" />
+       gradientTransform="matrix(0.79631301,0,0,1.000743,1.592626,2.0163438)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5"
@@ -69,7 +69,7 @@
        x2="14.687441"
        y2="-1.9999874"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-10.09955,-4.9847706)" />
+       gradientTransform="translate(1.90045,2.0152294)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient8"
@@ -79,7 +79,7 @@
        x2="0.62726712"
        y2="-3.2500012"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-10.09955,-4.9847706)" />
+       gradientTransform="translate(1.90045,2.0152294)" />
   </defs>
   <sodipodi:namedview
      id="namedview1"
@@ -119,18 +119,18 @@
   <path
      id="path1"
      style="fill:url(#linearGradient6);fill-opacity:1;stroke:#cd2b12;stroke-width:1.5;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-     d="m -12.09955,-11.984769 15.0000001,4.9999984 v 5 L -13.09955,13.015231 l -14,-15.0000016 v -5 z"
+     d="m -0.09955,-4.984769 15,4.9999984 v 5 l -16,15.0000016 -14,-15.0000016 v -5 z"
      sodipodi:nodetypes="ccccccc" />
   <path
      id="polygon1"
      style="display:inline;fill:url(#linearGradient4);fill-opacity:1;stroke:#cd2b12;stroke-width:0.892695;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-     d="m -12,-27 c 0,0 11.5114193,23.7319096 7.9631303,35.0260028 C -5.17366,11.644373 -8.904491,14.030462 -12,14.030462 c -3.095508,0 -6.826339,-2.386089 -7.963129,-6.0044592 C -23.511419,-3.2680904 -12,-27 -12,-27 Z"
+     d="M 0,-20 C 0,-20 11.511419,3.7319096 7.9631303,15.026003 6.82634,18.644373 3.095509,21.030462 0,21.030462 c -3.095508,0 -6.826339,-2.386089 -7.963129,-6.004459 C -11.511419,3.7319096 0,-20 0,-20 Z"
      sodipodi:nodetypes="csssc" />
   <ellipse
      style="fill:url(#linearGradient9);fill-opacity:1;stroke:#cd2b12;stroke-width:0.25;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
      id="path2"
-     cx="-12.09955"
-     cy="-8.2347717"
+     cx="-0.099550247"
+     cy="-1.2347717"
      rx="2.5022659"
      ry="4.7522659" />
 </svg>

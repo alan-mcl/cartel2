@@ -2,7 +2,7 @@
 <svg
    width="45"
    height="90"
-   viewBox="-48 -24 45 90"
+   viewBox="-22 -45 45 90"
    version="1.1"
    id="svg2"
    sodipodi:docname="dragon_chassis.svg"
@@ -58,7 +58,8 @@
        y1="21"
        x2="-18"
        y2="21"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(26,-21)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient7"
@@ -67,7 +68,8 @@
        y1="38.5"
        x2="-33"
        y2="38.5"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(26,-21)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient10"
@@ -77,7 +79,7 @@
        y1="38.5"
        x2="-33"
        y2="38.5"
-       gradientTransform="matrix(-1,0,0,1,-51,0)" />
+       gradientTransform="matrix(-1,0,0,1,-25,-21)" />
   </defs>
   <sodipodi:namedview
      id="namedview2"
@@ -90,8 +92,8 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="true"
      inkscape:zoom="12.570787"
-     inkscape:cx="8.4322484"
-     inkscape:cy="24.4217"
+     inkscape:cx="8.4322485"
+     inkscape:cy="62.605468"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -115,26 +117,26 @@
   </sodipodi:namedview>
   <path
      style="fill:url(#linearGradient5);stroke:none;stroke-linecap:round;stroke-linejoin:round"
-     d="m -28,-19 h 5 l 8,1 2,14 -7,2 2,1 v 57 l -5,5 h -5 l -5,-5 V -1 l 2,-1 -8,-2 3,-14 z"
+     d="m -2,-40 h 5 l 8,1 2,14 -7,2 2,1 v 57 l -5,5 h -5 l -5,-5 v -57 l 2,-1 -8,-2 3,-14 z"
      id="path2"
      sodipodi:nodetypes="ccccccccccccccc" />
   <path
      style="fill:url(#linearGradient8);fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round"
-     d="m -33,21 -10,5 v 25 l 8,5 2,-2 V 24 l -2,-2 z"
+     d="m -7,0 -10,5 v 25 l 8,5 2,-2 V 3 L -9,1 Z"
      id="path3"
      sodipodi:nodetypes="cccccccc" />
   <path
      style="fill:url(#linearGradient9);fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round"
-     d="m -18,21 10,5 v 25 l -8,5 -2,-2 V 24 l 2,-2 z"
+     d="M 8,0 18,5 V 30 L 10,35 8,33 V 3 l 2,-2 z"
      id="path3-9"
      sodipodi:nodetypes="cccccccc" />
   <path
      style="fill:#4c2500;fill-opacity:1;stroke:none;stroke-linecap:round;stroke-linejoin:round"
-     d="m -33,-17 c -1.059641,0.567103 -2,3 -2,3 0,0 4.648907,0.832913 7,1 1.662474,0.118148 3.337526,0.118148 5,0 2.351093,-0.167087 7,-1 7,-1 0,0 -0.940359,-2.432897 -2,-3 -4.408373,-2.35929 -10.591627,-2.35929 -15,0 z"
+     d="m -7,-38 c -1.059641,0.567103 -2,3 -2,3 0,0 4.648907,0.832913 7,1 1.662474,0.118148 3.337526,0.118148 5,0 2.351093,-0.167087 7,-1 7,-1 0,0 -0.940359,-2.432897 -2,-3 -4.408373,-2.35929 -10.591627,-2.35929 -15,0 z"
      id="path4"
      sodipodi:nodetypes="scsscss" />
   <path
      style="fill:#4c433b;fill-opacity:1;stroke:#7a7700;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m -30,-2 h 9"
+     d="M -4,-23 H 5"
      id="path10" />
 </svg>
