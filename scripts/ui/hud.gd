@@ -11,6 +11,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _em_label: Label = $Root/SignaturePanel/VBox/EmLabel
 @onready var _compute_label: Label = $Root/SignaturePanel/VBox/ComputeLabel
 @onready var _transponder_label: Label = $Root/SignaturePanel/VBox/TransponderLabel
+@onready var _active_sensors_label: Label = $Root/SignaturePanel/VBox/ActiveSensorsLabel
 @onready var _speed: Label = $Root/StatusPanel/VBox/StatsRow/SpeedLabel
 @onready var _heading: Label = $Root/StatusPanel/VBox/StatsRow/HeadingLabel
 @onready var _fuel: Label = $Root/StatusPanel/VBox/SystemsRow/FuelLabel
@@ -71,7 +72,11 @@ func set_operating_state(state: ShipOperatingState) -> void:
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
 
 
-func set_signature_state(signature: Dictionary, transponder_label: String) -> void:
+func set_signature_state(
+	signature: Dictionary,
+	transponder_label: String,
+	active_sensors_label: String = ""
+) -> void:
 	if not _has_capability("basic_hud"):
 		return
 	if _thermal_label != null:
@@ -84,6 +89,12 @@ func set_signature_state(signature: Dictionary, transponder_label: String) -> vo
 		_compute_label.text = "Computational: %.1f" % float(signature.get("computational", 0.0))
 	if _transponder_label != null:
 		_transponder_label.text = "Transponder: %s" % transponder_label
+	if _active_sensors_label != null:
+		if active_sensors_label.is_empty():
+			_active_sensors_label.visible = false
+		else:
+			_active_sensors_label.visible = true
+			_active_sensors_label.text = "Active sensors: %s" % active_sensors_label
 
 
 func set_nav_state(

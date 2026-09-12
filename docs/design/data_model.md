@@ -163,10 +163,10 @@ Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engin
 | Capability | Typical grantor | Unlocks |
 |------------|-----------------|---------|
 | `basic_hud` | any computer module (temporary gate) | Speed/heading, fuel/power, GST clock |
-| `local_sensor` | `sensor_basic` | North-up local-space radar panel |
-| `local_system_waypoints` | `sensor_basic` | Edge arrows toward habitat, jump gate, or exit portal |
-| `sensor_read_beacons` | `sensor_basic` | HUD transponder labels for NPC ships and named landmarks |
-| `4_space_topology` | `sensor_basic` | Unspace exit portal radar dot, edge arrow, and label (4-space only) |
+| `local_sensor` | `hg_hermes_n6` (nav packages) | North-up local-space radar panel |
+| `local_system_waypoints` | `hg_hermes_n6` | Edge arrows toward habitat, jump gate, or exit portal |
+| `sensor_read_beacons` | `hg_hermes_n6` | HUD transponder labels for NPC ships and named landmarks |
+| `4_space_topology` | `hg_hermes_n6` | Unspace exit portal radar dot, edge arrow, and label (4-space only) |
 
 Life support modules include cabin volume in `volume` (seats or bunks, not a recycler rack). Optional flags: `ls_habitat` (live-aboard bunks; **absence means transport seating**), plus `ls_comfort` / `ls_luxury` for future hospitality gameplay. Do not add `ls_transport`. A5 bar is reserved for later. Crew capacity is 1–6.
 

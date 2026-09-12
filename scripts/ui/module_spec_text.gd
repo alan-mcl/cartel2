@@ -58,6 +58,8 @@ const SKIP_EXTRA_KEYS := {
 	"sensor_type": true,
 	"sensor_range": true,
 	"sensor_sensitivity": true,
+	"sensor_sensitivity_passive": true,
+	"has_active": true,
 }
 
 
@@ -101,18 +103,28 @@ static func format_tooltip(module_def: Dictionary) -> String:
 		for signature_line in signature_lines:
 			lines.append(signature_line)
 
-	var sensor_type := str(module_def.get("sensor_type", ""))
-	if not sensor_type.is_empty():
+	var sensor_range := float(module_def.get("sensor_range", 0.0))
+	if sensor_range > 0.0 and str(module_def.get("category", "")) == "sensor":
 		if not lines.is_empty():
 			lines.append("")
-		lines.append("Sensor type: %s" % sensor_type)
-		lines.append("Sensor range: %.0f m" % float(module_def.get("sensor_range", 0.0)))
+		lines.append("SENSOR")
+		lines.append("Sensor range: %.0f m" % sensor_range)
+		var package_label := "Active package" if bool(module_def.get("has_active", false)) else "Passive package"
+		lines.append("Package: %s" % package_label)
 		var sensitivity: Variant = module_def.get("sensor_sensitivity", {})
 		if typeof(sensitivity) == TYPE_DICTIONARY:
 			for channel in ["thermal", "gravitational", "electromagnetic", "computational"]:
-				if sensitivity.has(channel):
+				if float(sensitivity.get(channel, 0.0)) > 0.0:
 					lines.append(
 						"%s sensitivity: %.2f" % [channel, float(sensitivity.get(channel, 0.0))]
+					)
+		var passive_sensitivity: Variant = module_def.get("sensor_sensitivity_passive", {})
+		if typeof(passive_sensitivity) == TYPE_DICTIONARY and not passive_sensitivity.is_empty():
+			lines.append("Quiet profile (active off):")
+			for channel in ["thermal", "gravitational", "electromagnetic", "computational"]:
+				if float(passive_sensitivity.get(channel, 0.0)) > 0.0:
+					lines.append(
+						"  %s: %.2f" % [channel, float(passive_sensitivity.get(channel, 0.0))]
 					)
 
 	var description := str(module_def.get("description", "")).strip_edges()

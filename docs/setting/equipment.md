@@ -213,20 +213,50 @@ The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engine
 
 ### Sensor (`category: sensor`, mount: `system`)
 
-Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units.
+Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units. Catalog JSON is **product-level** (maker, brand, name, stats) — bundled instruments are described in product copy, not as a `detectors[]` array.
 
-| id | Capabilities | Notes |
-|----|--------------|-------|
-| `sensor_basic` | `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology` | General-purpose suite; moderate all channels |
-| `sensor_advanced` | same as basic | Extended range and sensitivity |
-| `sensor_thermal` | `local_sensor` | High thermal sensitivity only |
-| `sensor_gravimetric` | `local_sensor` | High gravitational sensitivity only |
-| `sensor_em` | `local_sensor` | High electromagnetic sensitivity only |
-| `sensor_computational` | `local_sensor` | High computational sensitivity only |
+Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Sensors & Navigation column). Sensor marques are distinct from propulsion, power, and compute brands (e.g. **Hermes** for Mercury nav packages vs **Helios** for Holt-Winters plants).
 
-Specialist scanners trade navigation extras for channel focus. Suites remain the default on manufacturer templates.
+#### Instrument taxonomy (lore)
 
-**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Target lock is not implemented; unguided weapons do not require detection.
+Products combine passive and active instruments in marketing copy. The schema stores **`has_active`** (package includes any active instrument) and optional **`sensor_sensitivity_passive`** (listen-only profile when the player disables active sensors in flight).
+
+**8 core types**
+
+| Channel | Passive | Active |
+|---------|---------|--------|
+| Thermal | Infrared Receiver | Thermal Lidar |
+| EM | EM Array | Radar |
+| Gravitational | Gravimetric Wave Detector | Gravitational Interferometer |
+| Computational | Calculus Wave Detector | Local Geometry Scanner |
+
+**Exotic multi-signature (lore)** — Spectral Resonance Array (thermal+EM); Quantum Intelligence Array (grav+comp); Quantum-state interferometer (grav+comp); Neutrino Receptor (grav+EM); Causal Structure Sniffer (comp+EM); Tidal-field imager (grav+thermal). Two exotics appear as named products this pass; no extra signature channels.
+
+**Active vs passive:** active instruments ping when **Active sensors** is on (`R` in flight) and add to the ship's live signature. Passive listen-only instruments do not. Mixed packages use full **`sensor_sensitivity`** with active on and **`sensor_sensitivity_passive`** (or no active channels) with active off.
+
+#### Branded catalog (11 SKUs)
+
+| id | Maker | Brand | Active | Notes |
+|----|-------|-------|--------|-------|
+| `hg_hermes_n6` | Mercury Communications | Hermes | yes | N6 — IR + EM array + radar; nav caps; ~6500 m |
+| `hg_hermes_circinus` | Mercury Communications | Hermes | yes | Circinus — N6 + gravimetric wave detector; ~8000 m |
+| `hg_hermes_sideband` | Mercury Communications | Hermes | no | Sideband — EM array listen-only |
+| `ora_octant_12` | Orion Aerospace | Octant | yes | Octant 12 — IR + radar + thermal lidar; nav caps |
+| `ora_octant_plumb` | Orion Aerospace | Octant | yes | Plumb — gravitational interferometer (active-only) |
+| `hw_glimmer_glance` | Holt-Winters Corp | Glimmer | yes | Glance — IR + radar; nav caps; light |
+| `hw_glimmer_ember` | Holt-Winters Corp | Glimmer | no | Ember — infrared receiver only |
+| `prv_lumina_sight` | ParaRamcoVidia | Lumina | no | Sight — IR + EM + spectral resonance; nav caps |
+| `prv_lumina_wellhead` | ParaRamcoVidia | Lumina | no | Wellhead — neutrino receptor (strong grav+EM) |
+| `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen — calculus wave detector (comp) |
+| `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus — local geometry scanner (comp, active-only) |
+
+Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina nav lines above.
+
+The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.
+
+**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Observer sensitivity uses the full package profile with **Active sensors** on, or the quiet **`sensor_sensitivity_passive`** profile when off. Target lock is not implemented; unguided weapons do not require detection.
+
+**Active sensors toggle:** **`R`** in flight toggles active sensor pings (saved per ship as `active_sensors_enabled`, default on). Flight HUD shows **Active sensors: on/off** beside transponder status. NPC traffic always behaves as active on.
 
 ### Transponder (`category: transponder`, mount: `system`)
 

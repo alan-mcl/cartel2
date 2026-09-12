@@ -17,6 +17,7 @@ var signature_basis: Dictionary = {}
 var modules_by_category: Dictionary = {}
 var _module_caches_ready: bool = false
 var has_transponder_installed: bool = false
+var has_active_sensor_package_installed: bool = false
 var propulsion_module: Dictionary = {}
 var armour_module: Dictionary = {}
 
@@ -29,6 +30,12 @@ func has_transponder() -> bool:
 	if not _module_caches_ready:
 		_rebuild_module_caches()
 	return has_transponder_installed
+
+
+func has_active_sensor_package() -> bool:
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	return has_active_sensor_package_installed
 
 
 func get_summary() -> String:
@@ -111,6 +118,17 @@ func _rebuild_module_caches() -> void:
 	has_transponder_installed = modules_by_category.has("transponder") and not (
 		modules_by_category["transponder"] as Array
 	).is_empty()
+
+	has_active_sensor_package_installed = false
+	for entry_variant in modules_in_category("sensor"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
+		if typeof(module_data) != TYPE_DICTIONARY:
+			continue
+		if bool(module_data.get("has_active", false)):
+			has_active_sensor_package_installed = true
+			break
 
 	propulsion_module = {}
 	for entry_variant in modules_in_category("propulsion"):

@@ -70,7 +70,10 @@ static func _empty_channel_array() -> PackedFloat32Array:
 
 
 static func _add_module_to_basis(basis: Dictionary, module_def: Dictionary) -> void:
-	var bucket := _signature_bucket_for_category(str(module_def.get("category", "")))
+	var category := str(module_def.get("category", ""))
+	if category == "sensor" and not bool(module_def.get("has_active", false)):
+		return
+	var bucket := _signature_bucket_for_category(category)
 	var channels: PackedFloat32Array = basis.get(bucket, _empty_channel_array())
 	var module_sig := module_signature(module_def)
 	channels[0] += float(module_sig.get("thermal", 0.0))
@@ -163,6 +166,7 @@ static func _live_signature_from_basis(
 ) -> Dictionary:
 	var basis: Dictionary = assembled.signature_basis
 	var in_flight := bool(operating_state.active_systems.get("sensors", false))
+	var active_sensors := bool(operating_state.active_systems.get("active_sensors", false))
 	var propulsion_glow := float(operating_state.signature_glow_propulsion)
 	var weapon_glow := float(operating_state.signature_glow_weapon)
 	var power_scale := _live_power_signature_scale(operating_state)
@@ -173,7 +177,7 @@ static func _live_signature_from_basis(
 	var weapon_factor := (
 		1.0 if bool(operating_state.active_systems.get("weapons", false)) else weapon_glow
 	)
-	var sensor_factor := 1.0 if bool(operating_state.active_systems.get("sensors", false)) else 0.0
+	var sensor_factor := 1.0 if active_sensors else 0.0
 	var transponder_factor := 1.0 if bool(operating_state.active_systems.get("transponder", false)) else 0.0
 	var in_flight_factor := 1.0 if in_flight else 0.0
 
@@ -255,6 +259,7 @@ static func _live_signature_from_modules(
 ) -> Dictionary:
 	var result := empty_signature()
 	var in_flight := bool(operating_state.active_systems.get("sensors", false))
+	var active_sensors := bool(operating_state.active_systems.get("active_sensors", false))
 	var propulsion_glow := float(operating_state.signature_glow_propulsion)
 	var weapon_glow := float(operating_state.signature_glow_weapon)
 	var power_scale := _live_power_signature_scale(operating_state)
@@ -269,8 +274,10 @@ static func _live_signature_from_modules(
 		var category := str(module_def.get("category", ""))
 		var factor := _live_module_signature_factor(
 			category,
+			module_def,
 			operating_state,
 			in_flight,
+			active_sensors,
 			propulsion_glow,
 			weapon_glow,
 			power_scale
@@ -324,11 +331,38 @@ static func tick_signature_glow(operating_state: ShipOperatingState, delta: floa
 		)
 
 
+static func _module_sensitivity_for_toggle(
+	module_def: Dictionary,
+	active_sensors_enabled: bool
+) -> Dictionary:
+	var result := empty_signature()
+	if typeof(module_def) != TYPE_DICTIONARY or module_def.is_empty():
+		return result
+
+	var has_active := bool(module_def.get("has_active", false))
+	var full_sensitivity: Variant = module_def.get("sensor_sensitivity", {})
+	if typeof(full_sensitivity) != TYPE_DICTIONARY:
+		return result
+
+	if active_sensors_enabled or not has_active:
+		for channel in CHANNELS:
+			result[channel] = maxf(0.0, float(full_sensitivity.get(channel, 0.0)))
+		return result
+
+	var quiet_sensitivity: Variant = module_def.get("sensor_sensitivity_passive", {})
+	if typeof(quiet_sensitivity) == TYPE_DICTIONARY:
+		for channel in CHANNELS:
+			result[channel] = maxf(0.0, float(quiet_sensitivity.get(channel, 0.0)))
+	return result
+
+
 static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionary:
 	var profile := {
 		"has_local_sensor": false,
 		"range": 0.0,
 		"sensitivity": empty_signature(),
+		"sensitivity_active": empty_signature(),
+		"sensitivity_passive": empty_signature(),
 		"effectiveness": 1.0,
 	}
 
@@ -340,7 +374,8 @@ static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionar
 		return profile
 
 	var range_max := 0.0
-	var sensitivity := empty_signature()
+	var sensitivity_active := empty_signature()
+	var sensitivity_passive := empty_signature()
 
 	for entry in assembled.modules_in_category("sensor"):
 		var module_def: Variant = entry.get("data", {})
@@ -350,15 +385,24 @@ static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionar
 		var module_range := float(module_def.get("sensor_range", 6500.0))
 		range_max = maxf(range_max, module_range)
 
-		var module_sensitivity: Variant = module_def.get("sensor_sensitivity", {})
-		if typeof(module_sensitivity) != TYPE_DICTIONARY:
-			continue
+		var active_channels := _module_sensitivity_for_toggle(module_def, true)
 		for channel in CHANNELS:
-			var value := float(module_sensitivity.get(channel, 0.0))
-			sensitivity[channel] = maxf(float(sensitivity[channel]), value)
+			sensitivity_active[channel] = maxf(
+				float(sensitivity_active[channel]),
+				float(active_channels[channel])
+			)
+
+		var passive_channels := _module_sensitivity_for_toggle(module_def, false)
+		for channel in CHANNELS:
+			sensitivity_passive[channel] = maxf(
+				float(sensitivity_passive[channel]),
+				float(passive_channels[channel])
+			)
 
 	profile["range"] = range_max
-	profile["sensitivity"] = sensitivity
+	profile["sensitivity"] = sensitivity_active
+	profile["sensitivity_active"] = sensitivity_active
+	profile["sensitivity_passive"] = sensitivity_passive
 	profile["max_detect_range"] = range_max
 	return profile
 
@@ -372,25 +416,43 @@ static func sensor_effectiveness(
 
 static func tick_observer_profile(
 	assembled: AssembledShip,
-	effectiveness: float = 1.0
+	effectiveness: float = 1.0,
+	active_sensors_enabled: bool = true
 ) -> Dictionary:
 	if assembled == null or assembled.sensor_profile.is_empty():
 		var fallback := compute_static_sensor_profile(assembled)
 		fallback["effectiveness"] = effectiveness
+		fallback["sensitivity"] = (
+			fallback.get("sensitivity_active", empty_signature())
+			if active_sensors_enabled
+			else fallback.get("sensitivity_passive", empty_signature())
+		)
 		return fallback
 
 	var static_profile: Dictionary = assembled.sensor_profile
+	var sensitivity: Dictionary = (
+		static_profile.get("sensitivity_active", static_profile.get("sensitivity", empty_signature()))
+		if active_sensors_enabled
+		else static_profile.get("sensitivity_passive", empty_signature())
+	)
 	return {
 		"has_local_sensor": bool(static_profile.get("has_local_sensor", false)),
 		"range": float(static_profile.get("range", 0.0)),
 		"max_detect_range": float(static_profile.get("max_detect_range", 0.0)),
-		"sensitivity": static_profile.get("sensitivity", empty_signature()),
+		"sensitivity": sensitivity,
 		"effectiveness": effectiveness,
 	}
 
 
-static func sensor_profile(assembled: AssembledShip, operating_state: ShipOperatingState = null) -> Dictionary:
-	return tick_observer_profile(assembled, _sensor_effectiveness(assembled, operating_state))
+static func sensor_profile(
+	assembled: AssembledShip,
+	operating_state: ShipOperatingState = null,
+	active_sensors_enabled: bool = true
+) -> Dictionary:
+	var effectiveness := _sensor_effectiveness(assembled, operating_state)
+	if operating_state != null:
+		active_sensors_enabled = bool(operating_state.active_systems.get("active_sensors", active_sensors_enabled))
+	return tick_observer_profile(assembled, effectiveness, active_sensors_enabled)
 
 
 static func detection_stage(
@@ -568,8 +630,10 @@ static func _live_power_signature_scale(operating_state: ShipOperatingState) -> 
 
 static func _live_module_signature_factor(
 	category: String,
+	module_def: Dictionary,
 	operating_state: ShipOperatingState,
 	in_flight: bool,
+	active_sensors: bool,
 	propulsion_glow: float,
 	weapon_glow: float,
 	power_scale: float
@@ -587,7 +651,9 @@ static func _live_module_signature_factor(
 				return 1.0
 			return weapon_glow
 		"sensor":
-			return 1.0 if bool(operating_state.active_systems.get("sensors", false)) else 0.0
+			if not bool(module_def.get("has_active", false)):
+				return 0.0
+			return 1.0 if active_sensors else 0.0
 		"transponder":
 			return 1.0 if bool(operating_state.active_systems.get("transponder", false)) else 0.0
 		"power":

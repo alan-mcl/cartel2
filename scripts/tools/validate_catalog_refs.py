@@ -81,6 +81,15 @@ LIFE_SUPPORT_MAKERS = {
 
 LIFE_SUPPORT_FLAGS = {"ls_comfort", "ls_luxury", "ls_habitat"}
 RETIRED_LIFE_SUPPORT_IDS = {"life_support_mk1", "life_support_a3"}
+RETIRED_SENSOR_IDS = {
+    "sensor_basic",
+    "sensor_advanced",
+    "sensor_thermal",
+    "sensor_gravimetric",
+    "sensor_em",
+    "sensor_computational",
+}
+SENSOR_SKU_COUNT = 11
 LIFE_SUPPORT_SKU_COUNT = 41
 TRANSPORT_VOLUME_PER_CREW = {"spartan": 2.5, "comfort": 5.0, "luxury": 7.0}
 HABITAT_VOLUME_PER_CREW = {"spartan": 8.0, "comfort": 11.0, "luxury": 14.0}
@@ -585,8 +594,10 @@ def main() -> int:
         )
 
     sensor_count = sum(1 for m in modules if m.get("category") == "sensor")
-    if sensor_count != 6:
-        errors.append(f"modules.json: expected 6 sensor SKUs, found {sensor_count}")
+    if sensor_count != SENSOR_SKU_COUNT:
+        errors.append(
+            f"modules.json: expected {SENSOR_SKU_COUNT} sensor SKUs, found {sensor_count}"
+        )
 
     signature_channels = {"thermal", "gravitational", "electromagnetic", "computational"}
     for module in modules:
@@ -599,8 +610,12 @@ def main() -> int:
         if missing:
             errors.append(f"modules.json: {module_id} signature missing {sorted(missing)}")
         if module.get("category") == "sensor":
-            if not str(module.get("sensor_type", "")):
-                errors.append(f"modules.json: {module_id} missing sensor_type")
+            if not str(module.get("maker", "")):
+                errors.append(f"modules.json: {module_id} missing maker")
+            if not str(module.get("brand", "")):
+                errors.append(f"modules.json: {module_id} missing brand")
+            if "has_active" not in module:
+                errors.append(f"modules.json: {module_id} missing has_active")
             if "sensor_range" not in module:
                 errors.append(f"modules.json: {module_id} missing sensor_range")
             sensitivity = module.get("sensor_sensitivity")
@@ -608,6 +623,11 @@ def main() -> int:
                 errors.append(f"modules.json: {module_id} missing sensor_sensitivity")
             elif signature_channels - set(sensitivity.keys()):
                 errors.append(f"modules.json: {module_id} sensor_sensitivity incomplete")
+            passive_sensitivity = module.get("sensor_sensitivity_passive")
+            if passive_sensitivity is not None and not isinstance(passive_sensitivity, dict):
+                errors.append(
+                    f"modules.json: {module_id} sensor_sensitivity_passive must be an object"
+                )
 
     for ammo_id, ammo in ammunition.items():
         packets = ammo.get("damage_packets")
@@ -643,6 +663,10 @@ def main() -> int:
             if module_id in RETIRED_LIFE_SUPPORT_IDS:
                 errors.append(
                     f"ship {template_id}: references retired life support '{module_id}'"
+                )
+            if module_id in RETIRED_SENSOR_IDS:
+                errors.append(
+                    f"ship {template_id}: references retired sensor '{module_id}'"
                 )
             module = modules_by_id.get(module_id)
             if module is None:

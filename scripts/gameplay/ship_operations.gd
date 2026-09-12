@@ -67,11 +67,18 @@ static func tick_into(
 	var boosting := bool(inputs.get("boost", false)) and thrusting
 	var in_flight := bool(inputs.get("in_flight", true))
 	var firing := bool(inputs.get("fire", false)) and in_flight
+	var sensors_powered := in_flight
+	var active_sensors := (
+		sensors_powered
+		and owned.active_sensors_enabled
+		and assembled.has_active_sensor_package()
+	)
 
 	state.active_systems = {
 		"engine": thrusting,
 		"boost": boosting,
-		"sensors": in_flight,
+		"sensors": sensors_powered,
+		"active_sensors": active_sensors,
 		"weapons": firing,
 		"transponder": in_flight and assembled.has_transponder() and owned.transponder_enabled,
 	}

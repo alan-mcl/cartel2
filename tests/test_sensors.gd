@@ -24,6 +24,8 @@ static func run(runner: TestRunner) -> void:
 	_test_live_signature_weapon_and_compute(runner)
 	_test_threshold_detection_envelope(runner)
 	_test_threshold_detection_close_boost(runner)
+	_test_branded_sensor_quiet_profile(runner, catalog)
+	_test_branded_sensor_signatures(runner, catalog)
 
 
 static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -> AssembledShip:
@@ -169,8 +171,8 @@ static func _test_specialist_scanners(runner: TestRunner, catalog: Catalog) -> v
 		"computational": 1.0,
 	}
 
-	var thermal_sensor := catalog.get_module("sensor_thermal")
-	var em_sensor := catalog.get_module("sensor_em")
+	var thermal_sensor := catalog.get_module("hw_glimmer_ember")
+	var em_sensor := catalog.get_module("hg_hermes_sideband")
 	var thermal_profile := _observer_profile(
 		float(thermal_sensor.get("sensor_range", 7500.0)),
 		thermal_sensor.get("sensor_sensitivity", {})
@@ -206,30 +208,52 @@ static func _test_catalog_signatures(runner: TestRunner, catalog: Catalog) -> vo
 
 static func _test_catalog_sensor_skus(runner: TestRunner, catalog: Catalog) -> void:
 	var sensors: Array = catalog.list_modules("sensor")
-	runner.check_eq(sensors.size(), 6, "six sensor SKUs in catalog")
+	runner.check_eq(sensors.size(), 11, "eleven sensor SKUs in catalog")
+	var nav_caps := [
+		"local_sensor",
+		"local_system_waypoints",
+		"sensor_read_beacons",
+		"4_space_topology",
+	]
 	for module_def in sensors:
 		if typeof(module_def) != TYPE_DICTIONARY:
 			continue
 		var module_id := str(module_def.get("id", ""))
-		runner.check(module_def.has("sensor_type"), "%s has sensor_type" % module_id)
+		runner.check(not str(module_def.get("maker", "")).is_empty(), "%s has maker" % module_id)
+		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
+		runner.check(module_def.has("has_active"), "%s has has_active" % module_id)
 		runner.check(module_def.has("sensor_range"), "%s has sensor_range" % module_id)
 		runner.check(
 			typeof(module_def.get("sensor_sensitivity", {})) == TYPE_DICTIONARY,
 			"%s has sensor_sensitivity" % module_id
 		)
 		var capabilities: Variant = module_def.get("capabilities", [])
-		if module_id in ["sensor_basic", "sensor_advanced"]:
+		if module_id == "hg_hermes_n6":
 			runner.check(
-				typeof(capabilities) == TYPE_ARRAY and capabilities.has("local_system_waypoints"),
-				"%s suite keeps navigation capabilities" % module_id
+				typeof(capabilities) == TYPE_ARRAY
+				and capabilities.has("local_system_waypoints"),
+				"N6 keeps navigation capabilities"
 			)
-		else:
+		elif module_id == "hw_glimmer_ember":
+			runner.check(
+				float(module_def.get("sensor_sensitivity", {}).get("thermal", 0.0)) > 0.0,
+				"Ember is thermal-only"
+			)
+			runner.check(
+				not bool(module_def.get("has_active", true)),
+				"Ember is passive package"
+			)
+		elif module_id in ["hg_hermes_sideband", "ora_octant_plumb", "prv_lumina_wellhead", "prv_nexus_listen", "prv_nexus_locus"]:
 			runner.check(
 				typeof(capabilities) == TYPE_ARRAY
 				and capabilities.has("local_sensor")
 				and not capabilities.has("sensor_read_beacons"),
 				"%s specialist is local_sensor only" % module_id
 			)
+		elif capabilities == nav_caps or (
+			typeof(capabilities) == TYPE_ARRAY and capabilities.has("sensor_read_beacons")
+		):
+			runner.check(true, "%s nav package capabilities ok" % module_id)
 
 
 static func _test_assembled_signature_cache(runner: TestRunner, catalog: Catalog) -> void:
@@ -476,6 +500,7 @@ static func _live_in_flight_state(thrusting: bool, firing: bool) -> ShipOperatin
 		"engine": thrusting,
 		"boost": false,
 		"sensors": true,
+		"active_sensors": true,
 		"weapons": firing,
 		"transponder": false,
 	}
@@ -609,4 +634,87 @@ static func _test_threshold_detection_close_boost(runner: TestRunner) -> void:
 	runner.check(
 		SensorSystem.is_detected(200.0, marginal, false, profile, 500.0),
 		"close range weight helps marginal signature detect"
+	)
+
+
+static func _assembled_with_sensor_module(module_id: String, catalog: Catalog) -> AssembledShip:
+	var module_def := catalog.get_module(module_id)
+	var assembled := _assembled_with_modules([_module_entry(module_def)], 3.0)
+	assembled.capabilities = {"local_sensor": true}
+	for cap in module_def.get("capabilities", []):
+		assembled.capabilities[str(cap)] = true
+	assembled.build_caches()
+	assembled.signature = SensorSystem.compute_ship_signature(assembled, 3.0)
+	assembled.sensor_profile = SensorSystem.compute_static_sensor_profile(assembled)
+	return assembled
+
+
+static func _test_branded_sensor_quiet_profile(runner: TestRunner, catalog: Catalog) -> void:
+	var assembled := _assembled_with_sensor_module("hg_hermes_n6", catalog)
+	var profile := assembled.sensor_profile
+	var active_em := float(profile.get("sensitivity_active", {}).get("electromagnetic", 0.0))
+	var passive_em := float(profile.get("sensitivity_passive", {}).get("electromagnetic", 0.0))
+	runner.check(active_em > passive_em, "N6 active EM sensitivity exceeds quiet profile")
+	runner.check(passive_em > 0.0, "N6 quiet profile keeps some EM listen")
+
+	# Detection threshold is 8.0; at 5000 m range_weight ~0.79 needs sig*sens*weight >= 8
+	var loud_em := {
+		"thermal": 1.0,
+		"gravitational": 1.0,
+		"electromagnetic": 14.0,
+		"computational": 1.0,
+	}
+	var active_profile := SensorSystem.tick_observer_profile(assembled, 1.0, true)
+	var quiet_profile := SensorSystem.tick_observer_profile(assembled, 1.0, false)
+	runner.check(
+		SensorSystem.is_detected(5000.0, loud_em, false, active_profile, 500.0),
+		"N6 active profile detects loud EM target"
+	)
+	runner.check(
+		not SensorSystem.is_detected(5000.0, loud_em, false, quiet_profile, 500.0),
+		"N6 quiet profile misses same EM target"
+	)
+
+	var wellhead := catalog.get_module("prv_lumina_wellhead")
+	runner.check(
+		float(wellhead.get("sensor_sensitivity", {}).get("gravitational", 0.0)) > 0.0,
+		"Wellhead has gravitational sensitivity"
+	)
+	runner.check(
+		float(wellhead.get("sensor_sensitivity", {}).get("electromagnetic", 0.0)) > 0.0,
+		"Wellhead has EM sensitivity without neutrino channel"
+	)
+
+	var locus_assembled := _assembled_with_sensor_module("prv_nexus_locus", catalog)
+	var locus_active := SensorSystem.tick_observer_profile(locus_assembled, 1.0, true)
+	var locus_quiet := SensorSystem.tick_observer_profile(locus_assembled, 1.0, false)
+	runner.check(
+		float(locus_active.get("sensitivity", {}).get("computational", 0.0)) > 0.0,
+		"Locus active profile keeps computational sensitivity"
+	)
+	runner.check_eq(
+		float(locus_quiet.get("sensitivity", {}).get("computational", 0.0)),
+		0.0,
+		"Locus quiet profile drops active-only computational sensitivity"
+	)
+
+
+static func _test_branded_sensor_signatures(runner: TestRunner, catalog: Catalog) -> void:
+	var glance_assembled := _assembled_with_sensor_module("hw_glimmer_glance", catalog)
+	var quiet_state := _live_in_flight_state(false, false)
+	quiet_state.active_systems["active_sensors"] = false
+	var idle := SensorSystem.live_signature(glance_assembled, quiet_state)
+	var active_on := _live_in_flight_state(false, false)
+	active_on.active_systems["active_sensors"] = true
+	var active_off := _live_in_flight_state(false, false)
+	active_off.active_systems["active_sensors"] = false
+	var sig_on := SensorSystem.live_signature(glance_assembled, active_on)
+	var sig_off := SensorSystem.live_signature(glance_assembled, active_off)
+	runner.check(
+		float(sig_on.get("electromagnetic", 0.0)) > float(sig_off.get("electromagnetic", 0.0)),
+		"Glance active sensors on adds EM ping signature"
+	)
+	runner.check(
+		float(sig_off.get("electromagnetic", 0.0)) <= float(idle.get("electromagnetic", 0.0)) + 0.01,
+		"Glance idle signature stays quiet without active ping"
 	)

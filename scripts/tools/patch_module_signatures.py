@@ -13,156 +13,6 @@ TRAFFIC_PATH = ROOT / "data" / "catalog" / "traffic.json"
 
 SIGNATURE_KEYS = ("thermal", "gravitational", "electromagnetic", "computational")
 
-NEW_SENSORS = [
-    {
-        "id": "sensor_thermal",
-        "name": "Thermal Scanner",
-        "maker": "Holt-Winters Corp",
-        "category": "sensor",
-        "mount": "system",
-        "mass": 0.35,
-        "volume": 0.45,
-        "compute_demand": 2.5,
-        "power_demand": 1.2,
-        "sensor_type": "thermal",
-        "sensor_range": 7500.0,
-        "sensor_sensitivity": {
-            "thermal": 2.0,
-            "gravitational": 0.0,
-            "electromagnetic": 0.0,
-            "computational": 0.0,
-        },
-        "capabilities": ["local_sensor"],
-        "cost": 720,
-        "description": "Specialised thermal detection and tracking.",
-        "signature": {
-            "thermal": 1.0,
-            "gravitational": 0.2,
-            "electromagnetic": 3.0,
-            "computational": 4.0,
-        },
-    },
-    {
-        "id": "sensor_gravimetric",
-        "name": "Gravimetric Scanner",
-        "maker": "Orion Aerospace",
-        "category": "sensor",
-        "mount": "system",
-        "mass": 0.4,
-        "volume": 0.5,
-        "compute_demand": 2.8,
-        "power_demand": 1.3,
-        "sensor_type": "gravitational",
-        "sensor_range": 7500.0,
-        "sensor_sensitivity": {
-            "thermal": 0.0,
-            "gravitational": 2.0,
-            "electromagnetic": 0.0,
-            "computational": 0.0,
-        },
-        "capabilities": ["local_sensor"],
-        "cost": 780,
-        "description": "Passive gravitational contact detection.",
-        "signature": {
-            "thermal": 0.8,
-            "gravitational": 0.3,
-            "electromagnetic": 2.5,
-            "computational": 4.5,
-        },
-    },
-    {
-        "id": "sensor_em",
-        "name": "EM Spectrum Scanner",
-        "maker": "Mercury Communications",
-        "category": "sensor",
-        "mount": "system",
-        "mass": 0.32,
-        "volume": 0.42,
-        "compute_demand": 2.2,
-        "power_demand": 1.1,
-        "sensor_type": "electromagnetic",
-        "sensor_range": 7500.0,
-        "sensor_sensitivity": {
-            "thermal": 0.0,
-            "gravitational": 0.0,
-            "electromagnetic": 2.0,
-            "computational": 0.0,
-        },
-        "capabilities": ["local_sensor"],
-        "cost": 700,
-        "description": "Electromagnetic emissions detection and tracking.",
-        "signature": {
-            "thermal": 0.6,
-            "gravitational": 0.15,
-            "electromagnetic": 3.5,
-            "computational": 3.5,
-        },
-    },
-    {
-        "id": "sensor_computational",
-        "name": "Computational Scanner",
-        "maker": "ParaRamcoVidia",
-        "category": "sensor",
-        "mount": "system",
-        "mass": 0.38,
-        "volume": 0.48,
-        "compute_demand": 3.5,
-        "power_demand": 1.4,
-        "sensor_type": "computational",
-        "sensor_range": 7500.0,
-        "sensor_sensitivity": {
-            "thermal": 0.0,
-            "gravitational": 0.0,
-            "electromagnetic": 0.0,
-            "computational": 2.0,
-        },
-        "capabilities": ["local_sensor"],
-        "cost": 820,
-        "description": "Detects active onboard computational workloads.",
-        "signature": {
-            "thermal": 0.7,
-            "gravitational": 0.15,
-            "electromagnetic": 2.0,
-            "computational": 5.0,
-        },
-    },
-]
-
-SENSOR_SUITE_STATS = {
-    "sensor_basic": {
-        "sensor_type": "suite",
-        "sensor_range": 6500.0,
-        "sensor_sensitivity": {
-            "thermal": 1.0,
-            "gravitational": 1.0,
-            "electromagnetic": 1.0,
-            "computational": 1.0,
-        },
-        "signature": {
-            "thermal": 0.8,
-            "gravitational": 0.2,
-            "electromagnetic": 2.5,
-            "computational": 3.5,
-        },
-    },
-    "sensor_advanced": {
-        "sensor_type": "suite",
-        "sensor_range": 8500.0,
-        "sensor_sensitivity": {
-            "thermal": 1.35,
-            "gravitational": 1.35,
-            "electromagnetic": 1.35,
-            "computational": 1.35,
-        },
-        "signature": {
-            "thermal": 1.0,
-            "gravitational": 0.25,
-            "electromagnetic": 3.0,
-            "computational": 4.5,
-        },
-    },
-}
-
 
 def _clamp(value: float, lo: float = 0.0) -> float:
     return max(lo, round(value, 2))
@@ -241,6 +91,8 @@ def compute_signature(module: dict) -> dict[str, float]:
         sig["computational"] = 0.3
 
     elif category == "sensor":
+        if not module.get("has_active", False):
+            return {key: 0.0 for key in SIGNATURE_KEYS}
         sig["computational"] = 3.0 + compute_demand * 0.5
         sig["electromagnetic"] = 2.0 + power_demand * 0.8
         sig["thermal"] = 0.8 + power_demand * 0.3
@@ -314,40 +166,12 @@ def compute_signature(module: dict) -> dict[str, float]:
 
 
 def patch_modules(modules: list) -> None:
-    existing_ids = {m["id"] for m in modules}
-
     for module in modules:
-        module_id = module["id"]
-        if module_id in SENSOR_SUITE_STATS:
-            stats = SENSOR_SUITE_STATS[module_id]
-            module.update(
-                {
-                    "sensor_type": stats["sensor_type"],
-                    "sensor_range": stats["sensor_range"],
-                    "sensor_sensitivity": stats["sensor_sensitivity"],
-                    "signature": stats["signature"],
-                }
-            )
-        elif module.get("category") == "sensor":
-            if "sensor_type" not in module:
-                module["sensor_type"] = "suite"
-            if "sensor_range" not in module:
-                module["sensor_range"] = 6500.0
-            if "sensor_sensitivity" not in module:
-                module["sensor_sensitivity"] = {
-                    "thermal": 1.0,
-                    "gravitational": 1.0,
-                    "electromagnetic": 1.0,
-                    "computational": 1.0,
-                }
+        if module.get("category") == "sensor":
             if "signature" not in module:
                 module["signature"] = compute_signature(module)
         elif "signature" not in module:
             module["signature"] = compute_signature(module)
-
-    for new_sensor in NEW_SENSORS:
-        if new_sensor["id"] not in existing_ids:
-            modules.append(new_sensor)
 
 
 def patch_traffic(traffic: dict) -> None:

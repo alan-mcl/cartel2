@@ -29,6 +29,7 @@ The game opens at the **main menu** (version shown as **DEV**). Choose **New Gam
 | Rotate left | A, Left |
 | Rotate right | D, Right |
 | Boost | Shift (while thrusting) |
+| Toggle active sensors | R (mixed/active packages only) |
 | Interact / Dock / Translate / Emerge | E |
 | Pause | Escape (disabled while docked or jump overlay open) |
 | Back (habitat UI) | Escape |

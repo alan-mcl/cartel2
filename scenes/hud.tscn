@@ -92,7 +92,7 @@ layout_mode = 0
 offset_left = 12.0
 offset_top = 104.0
 offset_right = 332.0
-offset_bottom = 204.0
+offset_bottom = 224.0
 theme_type_variation = &"Surface"
 
 [node name="VBox" type="VBoxContainer" parent="Root/SignaturePanel"]
@@ -127,6 +127,11 @@ text = "Computational: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Transponder: —"
+
+[node name="ActiveSensorsLabel" type="Label" parent="Root/SignaturePanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Active sensors: —"
 
 [node name="LocalSensorMap" type="Control" parent="Root"]
 layout_mode = 1

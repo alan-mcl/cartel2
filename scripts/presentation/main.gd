@@ -162,10 +162,15 @@ func _physics_process(delta: float) -> void:
 	var transponder_label := "off"
 	if _player.operating_state.transponder_broadcasting:
 		transponder_label = "on"
-	_hud.set_signature_state(player_signature, transponder_label)
+	var active_sensors_label := _active_sensors_hud_label(_player.assembled_ship, _player.operating_state)
+	_hud.set_signature_state(player_signature, transponder_label, active_sensors_label)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_active_sensors"):
+		if _can_toggle_active_sensors():
+			_toggle_active_sensors()
+			return
 	if event.is_action_pressed("pause"):
 		if _ui_root.visible and _ui_root.handle_back():
 			return
@@ -181,6 +186,32 @@ func _can_toggle_pause() -> bool:
 	if session.docked or _jump.visible or _ui_root.visible:
 		return false
 	return true
+
+
+func _can_toggle_active_sensors() -> bool:
+	if not _game_active or session.docked or _jump.visible or _ui_root.visible:
+		return false
+	if get_tree().paused:
+		return false
+	if _player.assembled_ship == null:
+		return false
+	return _player.assembled_ship.has_active_sensor_package()
+
+
+func _toggle_active_sensors() -> void:
+	var owned := session.get_current_owned_ship()
+	if owned == null:
+		return
+	owned.active_sensors_enabled = not owned.active_sensors_enabled
+	session.changed.emit()
+
+
+func _active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:
+	if assembled == null or not assembled.has_active_sensor_package():
+		return ""
+	if state == null:
+		return "off"
+	return "on" if bool(state.active_systems.get("active_sensors", false)) else "off"
 
 
 func try_interact(target: Interactable) -> void:
@@ -672,4 +703,5 @@ func _on_operating_state_changed(state: ShipOperatingState) -> void:
 	if _player.assembled_ship != null:
 		var signature := SensorSystem.live_signature(_player.assembled_ship, state)
 		var transponder_label := "on" if state.transponder_broadcasting else "off"
-		_hud.set_signature_state(signature, transponder_label)
+		var active_sensors_label := _active_sensors_hud_label(_player.assembled_ship, state)
+		_hud.set_signature_state(signature, transponder_label, active_sensors_label)

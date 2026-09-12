@@ -678,6 +678,7 @@ func _tick_kinematic(
 	operating_state.active_systems["engine"] = motion.is_thrusting()
 	operating_state.active_systems["weapons"] = bool(inputs.get("fire", false))
 	operating_state.active_systems["sensors"] = true
+	operating_state.active_systems["active_sensors"] = true
 	operating_state.active_systems["transponder"] = operating_state.transponder_broadcasting
 	SensorSystem.tick_signature_glow(operating_state, delta)
 

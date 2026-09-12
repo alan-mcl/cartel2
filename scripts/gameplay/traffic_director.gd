@@ -85,7 +85,14 @@ func tick(
 	var frame := Engine.get_physics_frames()
 	var visual_radius := float(_traffic_config.get("visual_contact_radius", 250.0))
 	var player_effectiveness := SensorSystem.sensor_effectiveness(player_assembled, player_operating)
-	var player_profile := SensorSystem.tick_observer_profile(player_assembled, player_effectiveness)
+	var player_active_sensors := true
+	if player_operating != null:
+		player_active_sensors = bool(player_operating.active_systems.get("active_sensors", true))
+	var player_profile := SensorSystem.tick_observer_profile(
+		player_assembled,
+		player_effectiveness,
+		player_active_sensors
+	)
 	var player_signature := SensorSystem.live_signature(player_assembled, player_operating)
 	var player_reads_beacons := (
 		player_assembled != null and player_assembled.has_capability("sensor_read_beacons")

@@ -453,7 +453,18 @@ func _update_hud_nav() -> void:
 		_player.operating_state
 	)
 	var transponder_label := "on" if _player.operating_state.transponder_broadcasting else "off"
-	_hud.set_signature_state(player_signature, transponder_label)
+	var active_sensors_label := _active_sensors_hud_label()
+	_hud.set_signature_state(player_signature, transponder_label, active_sensors_label)
+
+
+func _active_sensors_hud_label() -> String:
+	if _player.assembled_ship == null or not _player.assembled_ship.has_active_sensor_package():
+		return ""
+	return (
+		"on"
+		if bool(_player.operating_state.active_systems.get("active_sensors", false))
+		else "off"
+	)
 
 
 func _end_bout() -> void:
@@ -495,6 +506,11 @@ func _clear_projectiles() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _bout_state != BoutState.FIGHTING:
 		return
+	if event.is_action_pressed("toggle_active_sensors"):
+		if _player.owned_ship != null and _player.assembled_ship.has_active_sensor_package():
+			_player.owned_ship.active_sensors_enabled = not _player.owned_ship.active_sensors_enabled
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("ui_cancel"):
 		_end_bout()
 		get_viewport().set_input_as_handled()
