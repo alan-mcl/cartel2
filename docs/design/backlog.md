@@ -1,6 +1,6 @@
 # Design backlog
 
-Deferred features and follow-up passes. For what is **not implemented in code today**, see also [architecture.md](architecture.md#not-yet-implemented).
+Deferred **design and content** features. For what is **not implemented in code today**, see also [architecture.md](architecture.md#not-yet-implemented). For maintainability and extensibility work — refactors, test and CI gaps, content tooling — see [refactor_backlog.md](refactor_backlog.md).
 
 ## Propulsion fuel types
 

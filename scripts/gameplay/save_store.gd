@@ -103,9 +103,13 @@ static func write_slot(slot_index: int, data: Dictionary) -> bool:
 	return true
 
 
+## Assembles the save sections. Each section is serialized by whoever owns it —
+## `player` and `session` by `GameSession`, `ships` by `OwnedShip`, `flight` by the presentation
+## layer — so this function never needs to know a section's field list. Pass dictionaries, not
+## `GameSession`: it already references `SaveStore.SAVE_VERSION`, and a mutual type dependency
+## risks a GDScript cyclic reference.
 static func build_save_data(
-	callsign: String,
-	portrait_path: String,
+	player: Dictionary,
 	session_data: Dictionary,
 	ships: Array,
 	flight: Dictionary
@@ -114,10 +118,7 @@ static func build_save_data(
 		"version": SAVE_VERSION,
 		"game_version": GameVersion.VERSION,
 		"saved_at": Time.get_datetime_string_from_system(true),
-		"player": {
-			"callsign": callsign,
-			"portrait": portrait_path,
-		},
+		"player": player,
 		"session": session_data,
 		"ships": ships,
 		"flight": flight,

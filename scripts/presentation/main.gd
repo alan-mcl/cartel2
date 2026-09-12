@@ -356,8 +356,7 @@ func _save_to_slot(slot_index: int) -> bool:
 
 	var flight := _capture_flight_state()
 	var save_data := SaveStore.build_save_data(
-		session.callsign,
-		session.portrait_path,
+		session.player_to_dict(),
 		session.to_dict(),
 		session.ships_to_array(),
 		flight

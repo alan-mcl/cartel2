@@ -89,8 +89,10 @@ RETIRED_SENSOR_IDS = {
     "sensor_em",
     "sensor_computational",
 }
-SENSOR_SKU_COUNT = 11
-LIFE_SUPPORT_SKU_COUNT = 41
+# SKU counts are floors, not exact expectations. Adding content must never fail validation;
+# these only catch accidental bulk deletion. Do not convert them back to equality checks.
+SENSOR_SKU_FLOOR = 8
+LIFE_SUPPORT_SKU_FLOOR = 35
 TRANSPORT_VOLUME_PER_CREW = {"spartan": 2.5, "comfort": 5.0, "luxury": 7.0}
 HABITAT_VOLUME_PER_CREW = {"spartan": 8.0, "comfort": 11.0, "luxury": 14.0}
 TRANSPORT_ONE_SEAT_COCKPIT_FLOOR = 4.0
@@ -133,13 +135,15 @@ RETIRED_PROPULSION_IDS = {
     "gravitic_mk1",
 }
 
-PROPULSION_SKU_COUNT = 48
-PROPULSION_TYPE_COUNTS = {
-    "chemical": 12,
-    "hydro_thermal": 16,
-    "electric_plasma": 8,
-    "direct_fusion": 7,
-    "antimatter": 4,
+PROPULSION_SKU_FLOOR = 40
+# Every engine family must keep at least one SKU so a line cannot silently vanish. Gravitic is
+# intentionally a single placeholder — see docs/design/backlog.md.
+PROPULSION_TYPE_FLOORS = {
+    "chemical": 1,
+    "hydro_thermal": 1,
+    "electric_plasma": 1,
+    "direct_fusion": 1,
+    "antimatter": 1,
     "gravitic": 1,
 }
 
@@ -213,11 +217,11 @@ SHIELD_TYPES = {"deflector", "energy", "electronic"}
 
 PACKET_TYPES = {"kinetic", "concussive", "energy", "cyber"}
 
-WEAPON_SKU_COUNT = 31
-ARMOUR_SKU_COUNT = 16
-SHIELD_SKU_COUNT = 13
-POINT_DEFENCE_SKU_COUNT = 8
-CYBER_DEFENCE_SKU_COUNT = 6
+WEAPON_SKU_FLOOR = 25
+ARMOUR_SKU_FLOOR = 12
+SHIELD_SKU_FLOOR = 10
+POINT_DEFENCE_SKU_FLOOR = 6
+CYBER_DEFENCE_SKU_FLOOR = 4
 
 
 def load_array(path: Path) -> list:
@@ -416,14 +420,14 @@ def main() -> int:
                 f"life support module {module_id}: volume {volume} m³ below "
                 f"{floor} m³ floor for crew {crew:g}"
             )
-    if life_support_count != LIFE_SUPPORT_SKU_COUNT:
+    if life_support_count < LIFE_SUPPORT_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {LIFE_SUPPORT_SKU_COUNT} life support SKUs, "
+            f"modules.json: expected at least {LIFE_SUPPORT_SKU_FLOOR} life support SKUs, "
             f"found {life_support_count}"
         )
 
     propulsion_count = 0
-    propulsion_type_counts = {key: 0 for key in PROPULSION_TYPE_COUNTS}
+    propulsion_type_counts = {key: 0 for key in PROPULSION_TYPE_FLOORS}
     for module in modules:
         if not isinstance(module, dict):
             continue
@@ -450,16 +454,16 @@ def main() -> int:
             propulsion_type_counts[engine_type] += 1
         if str(module.get("mount", "")) != "main_engine":
             errors.append(f"propulsion module {module_id}: mount must be 'main_engine'")
-    if propulsion_count != PROPULSION_SKU_COUNT:
+    if propulsion_count < PROPULSION_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {PROPULSION_SKU_COUNT} propulsion SKUs, "
+            f"modules.json: expected at least {PROPULSION_SKU_FLOOR} propulsion SKUs, "
             f"found {propulsion_count}"
         )
-    for engine_type, expected in PROPULSION_TYPE_COUNTS.items():
+    for engine_type, minimum in PROPULSION_TYPE_FLOORS.items():
         found = propulsion_type_counts.get(engine_type, 0)
-        if found != expected:
+        if found < minimum:
             errors.append(
-                f"modules.json: expected {expected} {engine_type} engines, found {found}"
+                f"modules.json: expected at least {minimum} {engine_type} engines, found {found}"
             )
 
     power_count = 0
@@ -571,32 +575,37 @@ def main() -> int:
             if maker and maker not in ARMOUR_SHIELD_MAKERS:
                 errors.append(f"cyber_defence module {module_id}: unknown maker '{maker}'")
 
-    if weapon_count != WEAPON_SKU_COUNT:
+    if weapon_count < WEAPON_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {WEAPON_SKU_COUNT} weapon SKUs, found {weapon_count}"
+            f"modules.json: expected at least {WEAPON_SKU_FLOOR} weapon SKUs, "
+            f"found {weapon_count}"
         )
-    if armour_count != ARMOUR_SKU_COUNT:
+    if armour_count < ARMOUR_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {ARMOUR_SKU_COUNT} armour SKUs, found {armour_count}"
+            f"modules.json: expected at least {ARMOUR_SKU_FLOOR} armour SKUs, "
+            f"found {armour_count}"
         )
-    if shield_count != SHIELD_SKU_COUNT:
+    if shield_count < SHIELD_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {SHIELD_SKU_COUNT} shield SKUs, found {shield_count}"
+            f"modules.json: expected at least {SHIELD_SKU_FLOOR} shield SKUs, "
+            f"found {shield_count}"
         )
-    if pd_count != POINT_DEFENCE_SKU_COUNT:
+    if pd_count < POINT_DEFENCE_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {POINT_DEFENCE_SKU_COUNT} point_defence SKUs, found {pd_count}"
+            f"modules.json: expected at least {POINT_DEFENCE_SKU_FLOOR} point_defence SKUs, "
+            f"found {pd_count}"
         )
-    if cyber_def_count != CYBER_DEFENCE_SKU_COUNT:
+    if cyber_def_count < CYBER_DEFENCE_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {CYBER_DEFENCE_SKU_COUNT} cyber_defence SKUs, "
+            f"modules.json: expected at least {CYBER_DEFENCE_SKU_FLOOR} cyber_defence SKUs, "
             f"found {cyber_def_count}"
         )
 
     sensor_count = sum(1 for m in modules if m.get("category") == "sensor")
-    if sensor_count != SENSOR_SKU_COUNT:
+    if sensor_count < SENSOR_SKU_FLOOR:
         errors.append(
-            f"modules.json: expected {SENSOR_SKU_COUNT} sensor SKUs, found {sensor_count}"
+            f"modules.json: expected at least {SENSOR_SKU_FLOOR} sensor SKUs, "
+            f"found {sensor_count}"
         )
 
     signature_channels = {"thermal", "gravitational", "electromagnetic", "computational"}

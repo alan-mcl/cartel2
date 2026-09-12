@@ -55,7 +55,7 @@ The game opens at the **main menu** (version shown as **DEV**). Choose **New Gam
 assets/ui/fonts/       IBM Plex Sans/Mono (OFL)
 assets/ui/locations/   Placeholder habitat/building art (SVG)
 assets/ui/portraits/   Player portrait images (add PNG/WebP/JPG manually)
-assets/ui/patterns/    Reusable themed UI pattern scenes
+scenes/ui/patterns/    Reusable themed UI pattern scenes
 themes/                cartel_theme.tres (project default)
 scripts/tools/         Theme builder, art generator
 scripts/gameplay/      Catalog, session, ship assembly, save store, version

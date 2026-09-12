@@ -135,6 +135,17 @@ func start_new_game(
 	return true
 
 
+## Player identity section of a save. Kept in the same file as `from_save`, which reads it back,
+## so the two cannot drift — losing `background_id` on every round-trip was the result of the
+## writer living in `SaveStore` while the reader lived here.
+func player_to_dict() -> Dictionary:
+	return {
+		"callsign": callsign,
+		"portrait": portrait_path,
+		"background_id": background_id,
+	}
+
+
 func to_dict() -> Dictionary:
 	return {
 		"sector_id": sector_id,
@@ -173,7 +184,7 @@ func ships_to_array() -> Array:
 
 
 func from_save(catalog: Catalog, data: Dictionary) -> bool:
-	if not _validate_save_data(data):
+	if not SaveStore.validate_save_data(data):
 		return false
 
 	var player: Dictionary = data.get("player", {})
@@ -949,23 +960,3 @@ func _string_array_from_variant(value: Variant) -> Array[String]:
 	for item in value:
 		result.append(str(item))
 	return result
-
-
-static func _validate_save_data(data: Dictionary) -> bool:
-	if data.is_empty():
-		return false
-
-	var version := int(data.get("version", 0))
-	if version != SaveStore.SAVE_VERSION and version != SaveStore.LEGACY_SAVE_VERSION:
-		push_error("Unsupported save version: %d" % version)
-		return false
-
-	if typeof(data.get("session", {})) != TYPE_DICTIONARY:
-		push_error("Save file missing session object.")
-		return false
-
-	if typeof(data.get("ships", [])) != TYPE_ARRAY:
-		push_error("Save file missing ships array.")
-		return false
-
-	return true

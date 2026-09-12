@@ -13,11 +13,11 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
-| `data/catalog/` | JSON catalogs (schemas in-repo; see files under `data/catalog/`) |
+| `data/catalog/` | JSON catalogs (schemas: [data_model.md](data_model.md)) |
 | `assets/` | Art referenced by catalog paths |
 | `themes/` | `cartel_theme.tres` — corporate UI theme (see [ui_theme.md](ui_theme.md)) |
 

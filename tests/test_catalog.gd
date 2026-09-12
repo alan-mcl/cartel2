@@ -32,9 +32,35 @@ static func run(runner: TestRunner) -> void:
 	_validate_combat(runner, catalog)
 
 
+## Catalog sizes are content, not contract. Assert a floor so accidental bulk deletion is still
+## caught, but do not assert equality — exact counts broke this suite on every SKU addition.
+## Do not reintroduce `check_eq` on category sizes.
+static func _check_min_count(
+	runner: TestRunner,
+	actual: int,
+	minimum: int,
+	label: String
+) -> void:
+	runner.check(actual >= minimum, "%s (expected >= %d, got %d)" % [label, minimum, actual])
+
+
+## Every subtype a category declares must have at least one SKU, so a family cannot silently
+## vanish from the catalog.
+static func _check_subtypes_present(
+	runner: TestRunner,
+	type_counts: Dictionary,
+	label: String
+) -> void:
+	for type_name in type_counts.keys():
+		runner.check(
+			int(type_counts[type_name]) > 0,
+			"%s: %s represented (got %d)" % [label, str(type_name), int(type_counts[type_name])]
+		)
+
+
 static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void:
 	var power_modules: Array = catalog.list_modules("power")
-	runner.check_eq(power_modules.size(), 48, "forty-eight power plant SKUs")
+	_check_min_count(runner, power_modules.size(), 40, "power plant SKUs")
 
 	var type_counts := {"fission": 0, "fusion": 0, "radioisotope": 0}
 	for module_def in power_modules:
@@ -57,9 +83,7 @@ static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void
 				"%s radioisotope has zero fuel burn" % module_id
 			)
 
-	runner.check_eq(type_counts["fission"], 31, "thirty-one fission plants")
-	runner.check_eq(type_counts["fusion"], 11, "eleven fusion plants")
-	runner.check_eq(type_counts["radioisotope"], 6, "six radioisotope plants")
+	_check_subtypes_present(runner, type_counts, "power plants")
 
 	for ship_def in catalog.ships_by_id.values():
 		if typeof(ship_def) != TYPE_DICTIONARY:
@@ -85,7 +109,7 @@ static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void
 
 static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> void:
 	var computer_modules: Array = catalog.list_modules("computer")
-	runner.check_eq(computer_modules.size(), 41, "forty-one compute core SKUs")
+	_check_min_count(runner, computer_modules.size(), 35, "compute core SKUs")
 
 	var retired := [
 		"nav_combat_core_mk1",
@@ -116,9 +140,7 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 		if type_counts.has(core_type):
 			type_counts[core_type] += 1
 
-	runner.check_eq(type_counts["silicon"], 27, "twenty-seven silicon cores")
-	runner.check_eq(type_counts["photon"], 9, "nine photon cores")
-	runner.check_eq(type_counts["quantum"], 5, "five quantum cores")
+	_check_subtypes_present(runner, type_counts, "compute cores")
 
 	for ship_def in catalog.ships_by_id.values():
 		if typeof(ship_def) != TYPE_DICTIONARY:
@@ -145,7 +167,7 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 
 static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 	var propulsion_modules: Array = catalog.list_modules("propulsion")
-	runner.check_eq(propulsion_modules.size(), 48, "forty-eight propulsion SKUs")
+	_check_min_count(runner, propulsion_modules.size(), 40, "propulsion SKUs")
 
 	var retired := [
 		"mark_1_fusion",
@@ -179,12 +201,8 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 		if type_counts.has(engine_type):
 			type_counts[engine_type] += 1
 
-	runner.check_eq(type_counts["chemical"], 12, "twelve chemical engines")
-	runner.check_eq(type_counts["hydro_thermal"], 16, "sixteen hydro-thermal engines")
-	runner.check_eq(type_counts["electric_plasma"], 8, "eight electric plasma engines")
-	runner.check_eq(type_counts["direct_fusion"], 7, "seven direct fusion engines")
-	runner.check_eq(type_counts["antimatter"], 4, "four antimatter engines")
-	runner.check_eq(type_counts["gravitic"], 1, "one gravitic placeholder")
+	# Includes the single gravitic placeholder — see backlog.md "Gravitic propulsion line".
+	_check_subtypes_present(runner, type_counts, "engines")
 
 	for ship_def in catalog.ships_by_id.values():
 		if typeof(ship_def) != TYPE_DICTIONARY:
@@ -207,7 +225,7 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 
 static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void:
 	var life_support_modules: Array = catalog.list_modules("life_support")
-	runner.check_eq(life_support_modules.size(), 41, "forty-one life support SKUs")
+	_check_min_count(runner, life_support_modules.size(), 35, "life support SKUs")
 
 	var retired := ["life_support_mk1", "life_support_a3"]
 	for module_def in life_support_modules:
@@ -281,13 +299,13 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 
 static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
 	var weapons: Array = catalog.list_modules("weapon")
-	runner.check_eq(weapons.size(), 31, "thirty-one weapon SKUs")
+	_check_min_count(runner, weapons.size(), 25, "weapon SKUs")
 
 	var armour: Array = catalog.list_modules("armour")
-	runner.check_eq(armour.size(), 16, "sixteen armour SKUs")
+	_check_min_count(runner, armour.size(), 12, "armour SKUs")
 
 	var shields: Array = catalog.list_modules("shield")
-	runner.check_eq(shields.size(), 13, "thirteen shield SKUs")
+	_check_min_count(runner, shields.size(), 10, "shield SKUs")
 
 	for module_def in weapons:
 		if typeof(module_def) != TYPE_DICTIONARY:
