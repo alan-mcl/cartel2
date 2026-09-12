@@ -6,6 +6,7 @@ const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const TRIP_ROLES := ["transit", "shuttle", "dock_cycle"]
+const SIM_SLOT_ASSIGN_INTERVAL := 8
 
 var actors: Array = []
 var _catalog: Catalog
@@ -17,6 +18,8 @@ var _world_root: Node2D
 var _traffic_root: Node2D
 var _destroyed_timers: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
+var _sim_slot_pool: Array = []
+var _sim_slot_assign_counter: int = 0
 
 
 func setup(
@@ -42,6 +45,8 @@ func setup(
 	var counts := _population_counts(catalog.get_sector(sector_id))
 	_target_fleet_size = counts.near + counts.far
 	_spawn_initial_fleet(_target_fleet_size, player_pos, world_loader)
+	_assign_sim_slots(player_pos)
+	_sim_slot_assign_counter = 0
 
 
 func clear() -> void:
@@ -53,6 +58,8 @@ func clear() -> void:
 			actor.node.queue_free()
 	actors.clear()
 	_destroyed_timers.clear()
+	_sim_slot_pool.clear()
+	_sim_slot_assign_counter = 0
 	_target_fleet_size = 0
 	if _traffic_root != null and is_instance_valid(_traffic_root):
 		_traffic_root.queue_free()
@@ -84,7 +91,10 @@ func tick(
 		player_assembled != null and player_assembled.has_capability("sensor_read_beacons")
 	)
 
-	_assign_sim_slots(player_pos)
+	_sim_slot_assign_counter += 1
+	if _sim_slot_assign_counter >= SIM_SLOT_ASSIGN_INTERVAL:
+		_sim_slot_assign_counter = 0
+		_assign_sim_slots(player_pos)
 
 	for actor_variant in actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
@@ -246,7 +256,7 @@ func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, w
 func _assign_sim_slots(player_pos: Vector2) -> void:
 	var sim_max := int(_traffic_config.get("sim_slot_max", 20))
 	var hysteresis := float(_traffic_config.get("sim_slot_hysteresis", 200.0))
-	var pool: Array = []
+	_sim_slot_pool.clear()
 
 	for actor_variant in actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
@@ -264,14 +274,14 @@ func _assign_sim_slots(player_pos: Vector2) -> void:
 		if actor.ai_state == TrafficActorScript.STATE_ENGAGE or actor.ai_state == TrafficActorScript.STATE_FLEE:
 			priority = 1
 
-		pool.append({
+		_sim_slot_pool.append({
 			"actor": actor,
 			"dist": dist,
 			"priority": priority,
 			"had_slot": actor.has_sim_slot,
 		})
 
-	for entry_variant in pool:
+	for entry_variant in _sim_slot_pool:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
@@ -279,10 +289,10 @@ func _assign_sim_slots(player_pos: Vector2) -> void:
 		if actor != null:
 			actor.has_sim_slot = false
 
-	pool.sort_custom(_compare_sim_slot_candidates)
+	_sim_slot_pool.sort_custom(_compare_sim_slot_candidates)
 
 	var assigned := 0
-	for entry_variant in pool:
+	for entry_variant in _sim_slot_pool:
 		if assigned >= sim_max:
 			break
 		if typeof(entry_variant) != TYPE_DICTIONARY:
@@ -568,6 +578,7 @@ func _update_lod_node(actor, was_near: bool) -> void:
 		actor.sync_position(actor.node.global_position)
 		actor.node.queue_free()
 		actor.node = null
+	actor.far_thrust_flame = null
 
 	if actor.near_lod:
 		_spawn_near_ship(actor)
@@ -616,6 +627,7 @@ func _spawn_far_sprite(actor) -> void:
 	root.global_position = actor.position
 	root.rotation = actor.motion.facing + PI / 2.0
 	actor.node = root
+	actor.far_thrust_flame = thrust_flame
 
 
 func _spawn_actor_weapons(actor) -> void:

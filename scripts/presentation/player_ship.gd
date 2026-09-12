@@ -122,8 +122,8 @@ func _physics_process(delta: float) -> void:
 		ShipCombat.tick_shields(combat_state, assembled_ship, delta)
 		session.apply_combat_state(combat_state)
 
-		var prev_operating := operating_state
-		operating_state = ShipOperations.tick(
+		ShipOperations.tick_into(
+			operating_state,
 			catalog,
 			assembled_ship,
 			owned_ship,
@@ -137,7 +137,6 @@ func _physics_process(delta: float) -> void:
 			1,
 			combat_state
 		)
-		SensorSystem.carry_signature_glow(prev_operating, operating_state)
 		SensorSystem.tick_signature_glow(operating_state, delta)
 		_refresh_loaded_stats()
 		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))

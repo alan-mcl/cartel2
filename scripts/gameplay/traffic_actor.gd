@@ -21,6 +21,7 @@ const COAST_HEADING_TOLERANCE := 0.2
 const LAUNCH_SPEED := 20.0
 const DETECTION_STAGGER_FRAMES := 8
 const DETECTION_RANGE_HYSTERESIS := 250.0
+const STATS_REFRESH_INTERVAL := 15
 
 
 static func create(
@@ -278,6 +279,7 @@ var has_player_contact: bool = false
 var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
 var node: Node2D = null
+var far_thrust_flame: Sprite2D = null
 var cycle_pending: bool = false
 var cycle_spawn_hint: Dictionary = {}
 
@@ -286,6 +288,20 @@ var _route_initialized: bool = false
 var _cached_beacon_lines: PackedStringArray = PackedStringArray()
 var _cached_broadcasting: bool = false
 var _cached_player_contact: Dictionary = {}
+var _stats_refresh_counter: int = 0
+var _mass_stats_dirty: bool = true
+var _last_mass_fuel: float = -1.0
+var _combat_weapon_profile: Dictionary = {}
+var _weapon_profile_dirty: bool = true
+var _ai_inputs: Dictionary = {
+	"thrust": false,
+	"reverse": false,
+	"rotate_left": false,
+	"rotate_right": false,
+	"boost": false,
+	"in_flight": true,
+	"fire": false,
+}
 
 
 var position: Vector2:
@@ -363,6 +379,7 @@ func begin_combat_pilot() -> void:
 	if combat_pilot == null:
 		combat_pilot = CombatPilotScript.new()
 	combat_pilot.reset()
+	_weapon_profile_dirty = true
 
 
 func freeze_traffic_route() -> void:
@@ -463,6 +480,7 @@ func place_local_scatter(
 
 func mark_systems_catchup() -> void:
 	needs_systems_catchup = true
+	_mass_stats_dirty = true
 	_invalidate_beacon_cache()
 
 
@@ -554,8 +572,8 @@ func _tick_full_sim(
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
 	ShipCombat.tick_shields(combat_state, assembled_ship, delta)
 
-	var prev_operating := operating_state
-	operating_state = ShipOperations.tick(
+	ShipOperations.tick_into(
+		operating_state,
 		catalog,
 		assembled_ship,
 		owned_ship,
@@ -564,11 +582,8 @@ func _tick_full_sim(
 		1,
 		combat_state
 	)
-	SensorSystem.carry_signature_glow(prev_operating, operating_state)
 	SensorSystem.tick_signature_glow(operating_state, delta)
-
-	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
-	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
+	_maybe_refresh_stats(catalog)
 
 	var firing := bool(inputs.get("fire", false)) and operating_state.weapons_allowed
 	var weapon_result: Dictionary = weapons.tick(
@@ -581,6 +596,8 @@ func _tick_full_sim(
 	)
 	pending_weapon_orders = weapon_result.get("orders", [])
 
+	if bool(weapon_result.get("ammo_changed", false)):
+		_weapon_profile_dirty = true
 	if (
 		ai_state == AiState.ENGAGE
 		and firing
@@ -751,29 +768,59 @@ func refresh_player_detection(
 
 	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
 	var distance := position.distance_to(observer_pos)
-	var target_signature := SensorSystem.live_signature(assembled_ship, operating_state)
 	var broadcasting := _is_broadcasting()
 	var check_distance := distance
 	if player_detected:
 		check_distance = maxf(0.0, distance - DETECTION_RANGE_HYSTERESIS)
-	player_detected = SensorSystem.is_detected(
+	var detect_stage := SensorSystem.detection_stage(
 		check_distance,
-		target_signature,
 		broadcasting,
 		observer_profile,
 		visual_radius
 	)
+	match detect_stage:
+		SensorSystem.DetectStage.VISUAL, SensorSystem.DetectStage.BEACON:
+			player_detected = true
+		SensorSystem.DetectStage.UNDETECTED:
+			player_detected = false
+		SensorSystem.DetectStage.NEEDS_SIGNATURE:
+			player_detected = SensorSystem.is_detected(
+				check_distance,
+				SensorSystem.live_signature(assembled_ship, operating_state),
+				broadcasting,
+				observer_profile,
+				visual_radius
+			)
 
 	if ai_state == AiState.ENGAGE or ai_state == AiState.FLEE:
-		var npc_effectiveness := SensorSystem.sensor_effectiveness(assembled_ship, operating_state)
-		var npc_profile := SensorSystem.tick_observer_profile(assembled_ship, npc_effectiveness)
-		has_player_contact = SensorSystem.is_detected(
-			distance,
-			player_signature,
-			player_broadcasting,
-			npc_profile,
-			visual_radius
-		)
+		if distance <= visual_radius:
+			has_player_contact = true
+		else:
+			var npc_effectiveness := SensorSystem.sensor_effectiveness(
+				assembled_ship, operating_state
+			)
+			var npc_profile := SensorSystem.tick_observer_profile(
+				assembled_ship, npc_effectiveness
+			)
+			var player_stage := SensorSystem.detection_stage(
+				distance,
+				player_broadcasting,
+				npc_profile,
+				visual_radius
+			)
+			match player_stage:
+				SensorSystem.DetectStage.VISUAL, SensorSystem.DetectStage.BEACON:
+					has_player_contact = true
+				SensorSystem.DetectStage.UNDETECTED:
+					has_player_contact = false
+				SensorSystem.DetectStage.NEEDS_SIGNATURE:
+					has_player_contact = SensorSystem.is_detected(
+						distance,
+						player_signature,
+						player_broadcasting,
+						npc_profile,
+						visual_radius
+					)
 		if has_player_contact:
 			last_known_player_pos = observer_pos
 	else:
@@ -887,28 +934,24 @@ func _build_ai_inputs(
 	traffic_config: Dictionary,
 	traffic_envelope: float
 ) -> Dictionary:
-	var inputs := {
-		"thrust": false,
-		"reverse": false,
-		"rotate_left": false,
-		"rotate_right": false,
-		"boost": false,
-		"in_flight": true,
-		"fire": false,
-	}
+	_reset_ai_inputs()
 
 	match ai_state:
 		AiState.ENGAGE:
 			if combat_pilot == null:
 				combat_pilot = CombatPilotScript.new()
-			var profile: Dictionary = CombatPilotScript.build_weapon_profile(assembled_ship, owned_ship)
+			if _weapon_profile_dirty:
+				_combat_weapon_profile = CombatPilotScript.build_weapon_profile(
+					assembled_ship, owned_ship
+				)
+				_weapon_profile_dirty = false
 			var max_speed := 100.0
 			if assembled_ship != null and assembled_ship.stats != null:
 				max_speed = assembled_ship.stats.max_speed
 			var maneuver := "medium"
 			if assembled_ship != null and not assembled_ship.chassis.is_empty():
 				maneuver = str(assembled_ship.chassis.get("maneuver", "medium"))
-			inputs = combat_pilot.tick({
+			_copy_ai_inputs_from(combat_pilot.tick({
 				"ship_pos": position,
 				"facing": motion.facing,
 				"ship_vel": motion.velocity,
@@ -918,8 +961,8 @@ func _build_ai_inputs(
 				"target_thrusting": player_thrusting,
 				"max_speed": max_speed,
 				"maneuver": maneuver,
-				"profile": profile,
-			})
+				"profile": _combat_weapon_profile,
+			}))
 		AiState.FLEE:
 			flee_anchor_id = "habitat"
 			var flee_target := _find_anchor_position(anchors, flee_anchor_id)
@@ -934,20 +977,18 @@ func _build_ai_inputs(
 				flee_point = flee_target
 			else:
 				flee_anchor_id = ""
-			inputs = _steer_toward(flee_point, true, true)
+			_copy_ai_inputs_from(_steer_toward(flee_point, true, true))
 		AiState.DOCKING:
-			inputs = _steer_toward(_route_destination(anchors), true, false)
+			_copy_ai_inputs_from(_steer_toward(_route_destination(anchors), true, false))
 		_:
-			if anchors.is_empty():
-				pass
-			else:
-				inputs = _traffic_inputs(delta, anchors, traffic_config, traffic_envelope)
+			if not anchors.is_empty():
+				_copy_ai_inputs_from(_traffic_inputs(delta, anchors, traffic_config, traffic_envelope))
 
 	if operating_state.fuel_empty:
-		inputs["thrust"] = false
-		inputs["boost"] = false
+		_ai_inputs["thrust"] = false
+		_ai_inputs["boost"] = false
 
-	return inputs
+	return _ai_inputs
 
 
 func _traffic_inputs(
@@ -1232,9 +1273,43 @@ func _sync_far_lod_node() -> void:
 
 	node.global_position = _position
 	node.rotation = motion.facing + PI / 2.0
-	var thrust_flame := node.get_node_or_null("ThrustFlame") as Sprite2D
-	if thrust_flame != null:
-		thrust_flame.visible = motion.is_thrusting()
+	if far_thrust_flame != null and is_instance_valid(far_thrust_flame):
+		far_thrust_flame.visible = motion.is_thrusting()
+
+
+func _reset_ai_inputs() -> void:
+	_ai_inputs["thrust"] = false
+	_ai_inputs["reverse"] = false
+	_ai_inputs["rotate_left"] = false
+	_ai_inputs["rotate_right"] = false
+	_ai_inputs["boost"] = false
+	_ai_inputs["in_flight"] = true
+	_ai_inputs["fire"] = false
+
+
+func _copy_ai_inputs_from(source: Dictionary) -> void:
+	_ai_inputs["thrust"] = bool(source.get("thrust", false))
+	_ai_inputs["reverse"] = bool(source.get("reverse", false))
+	_ai_inputs["rotate_left"] = bool(source.get("rotate_left", false))
+	_ai_inputs["rotate_right"] = bool(source.get("rotate_right", false))
+	_ai_inputs["boost"] = bool(source.get("boost", false))
+	_ai_inputs["in_flight"] = bool(source.get("in_flight", true))
+	_ai_inputs["fire"] = bool(source.get("fire", false))
+
+
+func _maybe_refresh_stats(catalog: Catalog) -> void:
+	if owned_ship != null and not is_equal_approx(_last_mass_fuel, owned_ship.fuel_current):
+		_mass_stats_dirty = true
+	_stats_refresh_counter += 1
+	if not _mass_stats_dirty and _stats_refresh_counter < STATS_REFRESH_INTERVAL:
+		return
+	_stats_refresh_counter = 0
+	_mass_stats_dirty = false
+	if owned_ship == null or assembled_ship == null:
+		return
+	_last_mass_fuel = owned_ship.fuel_current
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
+	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
 
 
 func _update_hull_visual() -> void:

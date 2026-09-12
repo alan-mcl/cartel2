@@ -669,3 +669,7 @@ func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> voi
 
 func _on_operating_state_changed(state: ShipOperatingState) -> void:
 	_hud.set_operating_state(state)
+	if _player.assembled_ship != null:
+		var signature := SensorSystem.live_signature(_player.assembled_ship, state)
+		var transponder_label := "on" if state.transponder_broadcasting else "off"
+		_hud.set_signature_state(signature, transponder_label)

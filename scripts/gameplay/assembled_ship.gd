@@ -13,6 +13,12 @@ var envelope: Dictionary = {}
 var stats: ShipStats = ShipStats.new()
 var signature: Dictionary = {}
 var sensor_profile: Dictionary = {}
+var signature_basis: Dictionary = {}
+var modules_by_category: Dictionary = {}
+var _module_caches_ready: bool = false
+var has_transponder_installed: bool = false
+var propulsion_module: Dictionary = {}
+var armour_module: Dictionary = {}
 
 
 func has_capability(id: String) -> bool:
@@ -20,7 +26,9 @@ func has_capability(id: String) -> bool:
 
 
 func has_transponder() -> bool:
-	return not modules_in_category("transponder").is_empty()
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	return has_transponder_installed
 
 
 func get_summary() -> String:
@@ -56,29 +64,68 @@ func get_module_id(slot: String) -> String:
 
 
 func modules_in_category(category: String) -> Array:
-	var result: Array = []
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	var cached: Variant = modules_by_category.get(category, null)
+	if cached == null:
+		return []
+	return cached as Array
+
+
+func get_propulsion_module() -> Dictionary:
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	return propulsion_module
+
+
+func get_armour_module() -> Dictionary:
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	return armour_module
+
+
+func ensure_signature_basis() -> void:
+	if signature_basis.is_empty():
+		signature_basis = SensorSystem.compute_signature_basis(self)
+
+
+func build_caches() -> void:
+	_rebuild_module_caches()
+	signature_basis = SensorSystem.compute_signature_basis(self)
+
+
+func _rebuild_module_caches() -> void:
+	_module_caches_ready = true
+	modules_by_category = {}
 	for entry in installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		var module_data: Variant = entry.get("data", {})
 		if typeof(module_data) != TYPE_DICTIONARY:
 			continue
-		if str(module_data.get("category", "")) == category:
-			result.append(entry)
-	return result
+		var category := str(module_data.get("category", ""))
+		if not modules_by_category.has(category):
+			modules_by_category[category] = []
+		(modules_by_category[category] as Array).append(entry)
 
+	has_transponder_installed = modules_by_category.has("transponder") and not (
+		modules_by_category["transponder"] as Array
+	).is_empty()
 
-func get_propulsion_module() -> Dictionary:
-	for entry in modules_in_category("propulsion"):
-		var module_data: Variant = entry.get("data", {})
+	propulsion_module = {}
+	for entry_variant in modules_in_category("propulsion"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
 		if typeof(module_data) == TYPE_DICTIONARY:
-			return module_data
-	return {}
+			propulsion_module = module_data
+			break
 
-
-func get_armour_module() -> Dictionary:
-	for entry in modules_in_category("armour"):
-		var module_data: Variant = entry.get("data", {})
+	armour_module = {}
+	for entry_variant in modules_in_category("armour"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
 		if typeof(module_data) == TYPE_DICTIONARY:
-			return module_data
-	return {}
+			armour_module = module_data
+			break

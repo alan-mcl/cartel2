@@ -132,14 +132,6 @@ func _ready() -> void:
 		_thrust_flame.texture = thrust_texture
 
 
-func _physics_process(_delta: float) -> void:
-	if actor == null or actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-		return
-	# Movement is driven by TrafficDirector.tick; keep hull aligned here.
-	rotation = actor.motion.facing + PI / 2.0
-	_update_thrust_visual(actor.motion.is_thrusting())
-
-
 func _apply_hull_visual() -> void:
 	if _hull == null or actor == null or actor.assembled_ship.chassis.is_empty():
 		return

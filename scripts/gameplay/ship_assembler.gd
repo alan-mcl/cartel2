@@ -80,6 +80,7 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 	assembled.capacities = _calculate_capacities(catalog, assembled)
 	assembled.capabilities = _aggregate_capabilities(assembled)
 	assembled.envelope = _calculate_envelope(assembled)
+	assembled.build_caches()
 
 	if load_state:
 		var loaded_mass := calculate_loaded_mass(catalog, owned, assembled)

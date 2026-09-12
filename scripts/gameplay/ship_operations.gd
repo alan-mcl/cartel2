@@ -37,8 +37,25 @@ static func tick(
 	combat_state: ShipCombatState = null
 ) -> ShipOperatingState:
 	var state: ShipOperatingState = ShipOperatingState.new()
+	tick_into(state, catalog, assembled, owned, delta, inputs, occupant_count, combat_state)
+	return state
+
+
+static func tick_into(
+	state: ShipOperatingState,
+	catalog: Catalog,
+	assembled: AssembledShip,
+	owned: OwnedShip,
+	delta: float,
+	inputs: Dictionary,
+	occupant_count: int,
+	combat_state: ShipCombatState = null
+) -> void:
+	if state == null:
+		return
 	if assembled == null or owned == null or assembled.chassis.is_empty():
-		return state
+		_reset_operating_state(state)
+		return
 
 	state.compute_capacity = ShipCombat.get_effective_compute_capacity(assembled, combat_state)
 	state.life_support_capacity = float(assembled.capacities.get("life_support_capacity", 0.0))
@@ -80,7 +97,7 @@ static func tick(
 	elif state.fuel_empty and thrusting:
 		state.thrust_factor = 0.0
 	elif state.power_deficit > 0.0 and thrusting:
-		var propulsion_requested := _requested_for_category(demands, "propulsion")
+		var propulsion_requested := float(state.power_requested_by_category.get("propulsion", 0.0))
 		if propulsion_requested > 0.0 and state.power_allocated < propulsion_requested:
 			state.thrust_factor = clamp(state.power_allocated / propulsion_requested, 0.2, 1.0)
 
@@ -91,8 +108,6 @@ static func tick(
 		state.thrust_factor = 0.0
 		state.boost_allowed = false
 		state.weapons_allowed = false
-
-	return state
 
 
 static func idle_snapshot(catalog: Catalog, assembled: AssembledShip, owned: OwnedShip, occupant_count: int) -> ShipOperatingState:
@@ -124,6 +139,31 @@ static func get_cargo_mass(catalog: Catalog, owned: OwnedShip) -> float:
 		var commodity := catalog.get_commodity(str(commodity_id))
 		mass += float(commodity.get("mass", 0.0)) * qty
 	return mass
+
+
+static func _reset_operating_state(state: ShipOperatingState) -> void:
+	state.power_available = 0.0
+	state.power_requested = 0.0
+	state.power_allocated = 0.0
+	state.power_deficit = 0.0
+	state.compute_capacity = 0.0
+	state.compute_demand = 0.0
+	state.life_support_capacity = 0.0
+	state.life_support_demand = 0.0
+	state.life_support_overloaded = false
+	state.fuel_consumption = 0.0
+	state.fuel_current = 0.0
+	state.fuel_capacity = 0.0
+	state.fuel_empty = false
+	state.thrust_factor = 1.0
+	state.boost_allowed = true
+	state.weapon_power_requested = 0.0
+	state.weapon_power_allocated = 0.0
+	state.weapons_allowed = true
+	state.active_systems = {}
+	state.transponder_broadcasting = false
+	state.power_allocated_by_category = {}
+	state.power_requested_by_category = {}
 
 
 static func _collect_power_demands(
@@ -195,7 +235,7 @@ static func _collect_compute_demand(
 			"priority": int(COMPUTE_PRIORITY_BY_CATEGORY.get(category, PowerPriority.NORMAL)),
 		})
 
-	entries.sort_custom(func(a, b): return int(a["priority"]) < int(b["priority"]))
+	entries.sort_custom(_compare_compute_priority)
 	var total := 0.0
 	for row in entries:
 		total += float(row.get("demand", 0.0))
@@ -223,20 +263,25 @@ static func _collect_fuel_consumption(assembled: AssembledShip, active_systems: 
 
 
 static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
-	var sorted := demands.duplicate()
-	sorted.sort_custom(func(a, b): return int(a["priority"]) < int(b["priority"]))
+	demands.sort_custom(_compare_power_priority)
 
 	var remaining: float = state.power_available
 	var allocated: float = 0.0
 	var requested: float = 0.0
 	var allocated_by_category: Dictionary = {}
 	var requested_by_category: Dictionary = {}
+	var weapon_requested := 0.0
+	var transponder_requested := 0.0
 
-	for entry in sorted:
+	for entry in demands:
 		var category := str(entry.get("category", ""))
 		var demand := float(entry["demand"])
 		requested += demand
 		requested_by_category[category] = float(requested_by_category.get(category, 0.0)) + demand
+		if category == "weapon":
+			weapon_requested += demand
+		elif category == "transponder":
+			transponder_requested += demand
 		var grant: float = minf(demand, remaining)
 		allocated += grant
 		remaining -= grant
@@ -245,25 +290,24 @@ static func _allocate_power(state: ShipOperatingState, demands: Array) -> void:
 	state.power_requested = requested
 	state.power_allocated = allocated
 	state.power_deficit = maxf(0.0, requested - allocated)
-	state.power_allocated_by_category = allocated_by_category.duplicate(true)
-	state.power_requested_by_category = requested_by_category.duplicate(true)
-	state.weapon_power_requested = _requested_for_category(demands, "weapon")
+	state.power_allocated_by_category = allocated_by_category
+	state.power_requested_by_category = requested_by_category
+	state.weapon_power_requested = weapon_requested
 	state.weapon_power_allocated = float(allocated_by_category.get("weapon", 0.0))
 	state.weapons_allowed = (
-		state.weapon_power_requested <= 0.0
-		or state.weapon_power_allocated >= state.weapon_power_requested
+		weapon_requested <= 0.0
+		or state.weapon_power_allocated >= weapon_requested
 	)
 	state.transponder_broadcasting = (
 		bool(state.active_systems.get("transponder", false))
-		and _requested_for_category(demands, "transponder") > 0.0
-		and float(allocated_by_category.get("transponder", 0.0))
-		>= _requested_for_category(demands, "transponder")
+		and transponder_requested > 0.0
+		and float(allocated_by_category.get("transponder", 0.0)) >= transponder_requested
 	)
 
 
-static func _requested_for_category(demands: Array, category: String) -> float:
-	var total := 0.0
-	for entry in demands:
-		if str(entry.get("category", "")) == category:
-			total += float(entry.get("demand", 0.0))
-	return total
+static func _compare_power_priority(a: Dictionary, b: Dictionary) -> bool:
+	return int(a.get("priority", 0)) < int(b.get("priority", 0))
+
+
+static func _compare_compute_priority(a: Dictionary, b: Dictionary) -> bool:
+	return int(a.get("priority", 0)) < int(b.get("priority", 0))

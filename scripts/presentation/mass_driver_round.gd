@@ -10,6 +10,9 @@ const DEFAULT_SOLID_MASK := 2
 const NPC_MASK := 16
 const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
 const SPAWN_SKIN := 6.0
+const SCENE_PATH := "res://scenes/world/mass_driver_round.tscn"
+
+static var _packed_scene: PackedScene
 
 var _velocity := Vector2.ZERO
 var _muzzle_speed: float = 1000.0
@@ -36,7 +39,9 @@ static func spawn(
 	inherited_velocity: Vector2 = Vector2.ZERO,
 	shooter: Node = null
 ) -> void:
-	var scene := load("res://scenes/world/mass_driver_round.tscn") as PackedScene
+	if _packed_scene == null:
+		_packed_scene = load(SCENE_PATH) as PackedScene
+	var scene := _packed_scene
 	if scene == null:
 		push_error("Missing mass driver round scene.")
 		return
