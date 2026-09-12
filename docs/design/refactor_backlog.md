@@ -272,7 +272,7 @@ taxonomy in this item. It is a spike; keep it to one hardcoded mission.
 
 ## P2-1 Split `GameSession`
 
-**Status:** Not started. **Phase:** 2. **Depends on:** P1-1, P1-2, P0-2, P0-3.
+**Status:** Done. **Phase:** 2. **Depends on:** P1-1, P1-2, P0-2, P0-3.
 
 **Problem:** 971 lines spanning player identity, location and unspace transit, wallet, spare
 parts, market quote cache, fleet, persisted combat hull state, GST, and orbital phase. It is

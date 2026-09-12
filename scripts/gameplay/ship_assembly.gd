@@ -127,15 +127,11 @@ static func buy_part(session: GameSession, catalog: Catalog, part_id: String) ->
 		return false
 
 	var cost := int(part.get("cost", 0))
-	if session.credits < cost:
-		session.last_log = "Insufficient credits. Need d%d." % cost
-		session.changed.emit()
+	if not session.try_spend_credits(cost):
 		return false
 
-	session.credits -= cost
 	session.add_spare_part(part_id, 1)
 	session.last_log = "Purchased %s for d%d." % [str(part.get("name", part_id)), cost]
-	session.events.publish(SimEvent.credits_changed(-cost, session.credits))
 	session.changed.emit()
 	return true
 
@@ -153,9 +149,8 @@ static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -
 	var cost := int(part.get("cost", 0))
 	var sell_price := maxi(1, int(cost * 0.6))
 	session.remove_spare_part(part_id, 1)
-	session.credits += sell_price
+	session.apply_credits_delta(sell_price)
 	session.last_log = "Sold %s for d%d." % [str(part.get("name", part_id)), sell_price]
-	session.events.publish(SimEvent.credits_changed(sell_price, session.credits))
 	session.changed.emit()
 	return true
 
@@ -325,15 +320,12 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 		return true
 
 	var cost := int(ceil(needed * REFUEL_COST_PER_UNIT))
-	if session.credits < cost:
-		session.last_log = "Insufficient credits to refuel. Need d%d." % cost
-		session.changed.emit()
-		return false
+	if not session.can_afford_credits(cost):
+		return session.fail_action("Insufficient credits to refuel. Need d%d." % cost)
 
-	session.credits -= cost
+	session.apply_credits_delta(-cost)
 	ship.fuel_current = capacity
 	session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
-	session.events.publish(SimEvent.credits_changed(-cost, session.credits))
 	session.changed.emit()
 	return true
 

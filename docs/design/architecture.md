@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -40,6 +40,8 @@ flowchart LR
   Loader --> World["$World nodes"]
   Assembler --> PlayerShip[PlayerShip configure]
 ```
+
+`GameSession` is an aggregate root: `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence` own the fields; public properties on `GameSession` forward to those slices so UI and tests keep using `session.credits` and `session.owned_ships`. Save JSON keys are unchanged — `to_dict` / `from_save` compose the slice serializers.
 
 On startup, `main.gd`:
 
