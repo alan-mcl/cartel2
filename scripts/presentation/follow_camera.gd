@@ -4,8 +4,13 @@ extends Camera2D
 @export var look_ahead_strength: float = 0.35
 @export var zoom_level: float = 0.72
 
+var session: GameSession
 var _ship: CharacterBody2D
 var _smoothing_enabled_default: bool = true
+
+
+func bind_session(game_session: GameSession) -> void:
+	session = game_session
 
 
 func _ready() -> void:
@@ -37,10 +42,6 @@ func _physics_process(_delta: float) -> void:
 
 
 func _is_in_unspace() -> bool:
-	var main := _ship.get_parent()
-	if main == null:
+	if session == null:
 		return false
-	var session: Variant = main.get("session")
-	if session == null or not (session is GameSession):
-		return false
-	return (session as GameSession).in_unspace
+	return session.in_unspace

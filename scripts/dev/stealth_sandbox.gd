@@ -43,6 +43,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	catalog = Catalog.load_default()
 	session = _build_session()
+	_camera.bind_session(session)
 
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
@@ -304,7 +305,7 @@ func _begin_drill(
 	_nav_radius = _sensor_range(player_assembled)
 	_current_pilot_skill = pilot_skill
 
-	_player.configure(player_assembled, player_owned, catalog)
+	_player.configure(player_assembled, player_owned, catalog, session)
 	_player.global_position = Vector2.ZERO
 	_player.motion.facing = 0.0
 	_player.freeze_motion()

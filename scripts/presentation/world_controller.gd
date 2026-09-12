@@ -239,7 +239,12 @@ func on_ui_undock_requested(ship_id: String) -> void:
 		return
 
 	_main.player_ship = assemble_current_ship()
-	_player.configure(_main.player_ship, _main.session.get_current_owned_ship(), _catalog)
+	_player.configure(
+		_main.player_ship,
+		_main.session.get_current_owned_ship(),
+		_catalog,
+		_main.session
+	)
 	_hud.bind(_main.session, _player, _main.player_ship)
 
 	var launch_pos := _world_loader.get_habitat_launch_position()
@@ -263,7 +268,12 @@ func on_ui_ship_changed(ship_id: String) -> void:
 	if ship_id != _main.session.current_ship_id:
 		return
 	_main.player_ship = assemble_current_ship()
-	_player.configure(_main.player_ship, _main.session.get_current_owned_ship(), _catalog)
+	_player.configure(
+		_main.player_ship,
+		_main.session.get_current_owned_ship(),
+		_catalog,
+		_main.session
+	)
 	_hud.set_assembled_ship(_main.player_ship)
 
 

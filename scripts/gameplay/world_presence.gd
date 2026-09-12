@@ -32,6 +32,14 @@ func set_orbital_phase(sector_key: String, phase: float) -> void:
 	orbital_phase_by_sector[sector_key] = phase
 
 
+func advance_orbital_phase(sector_key: String, period_seconds: float, delta: float) -> void:
+	if period_seconds <= 0.0 or delta <= 0.0:
+		return
+	var phase := get_orbital_phase(sector_key)
+	phase = fposmod(phase + TAU / period_seconds * delta, TAU)
+	set_orbital_phase(sector_key, phase)
+
+
 func get_unspace_spawn(catalog: Catalog) -> Vector2:
 	var unspace := catalog.get_unspace(unspace_world_id)
 	if unspace.is_empty():

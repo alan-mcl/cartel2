@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
 | `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `traffic_view.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -51,7 +51,7 @@ On startup, `main.gd` wires three presentation controllers and delegates to them
 4. **Load** — reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.
 5. **WorldController** assembles the current ship via `ShipAssembler.assemble_owned` and calls `WorldLoader.load_sector` or `load_unspace` to populate `$World`.
 6. **FlightLoopController** ticks traffic and feeds nav/signature HUD each physics frame when flight is active.
-7. Controllers bind HUD and overlays to session state; `main.gd` keeps `session` and `try_interact` on the node for parent duck-typing.
+7. Controllers bind HUD and overlays to session state; `main.gd` keeps `session` and `try_interact` on the node, and injects `session` into `PlayerShip` / `FollowCamera` via `configure` / `bind_session`.
 
 ## Habitat UI (menu planet)
 
@@ -187,7 +187,7 @@ flowchart TD
 | `hazard` | `scenes/world/hazard.tscn` (legacy; not used in 4-space) |
 | `planet_limb` | Sprite2D spawned in code (legacy) |
 
-Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded).
+Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded). `Simulation.step` advances phase for the current sector when in realspace flight; `OrbitalRing` reads phase for rotation (does not write session while docked or in unspace).
 
 Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. 4-space uses `NspaceField.configure(unspace, catalog, session, play_bounds)`.
 
@@ -197,7 +197,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 
 ## In-system NPC traffic (3-space)
 
-`TrafficDirector` (gameplay) owns spawn policy, fleet size, sim slots, detection stagger, and actor AI when a sector loads. `TrafficView` (presentation) owns the `Traffic` node tree — `npc_ship.tscn` instances for slotted actors and far sprites for the rest. **FlightLoopController** ticks the director then syncs the view each physics frame. Not active in Unspace or while docked.
+`TrafficDirector` (gameplay) owns spawn policy, fleet size, sim slots, detection stagger, and actor AI when a sector loads. `TrafficView` (presentation) owns the `Traffic` node tree — `npc_ship.tscn` instances for slotted actors and far sprites for the rest. **FlightLoopController** ticks the director then syncs the view each physics frame. Sector landmark nav contacts come from a shared in-place cache on `WorldLoader` (callers compose a new array before appending traffic). Not active in Unspace or while docked.
 
 - **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~100 ships at population max, smaller worlds less).
 - **Spawn** — on sector arrival, trip roles appear 15–85% along their corridor toward destination; loiter/runabout scatter near the jump gate and orbitals. Cycle replacements still launch from origin waypoints.

@@ -533,6 +533,15 @@ func set_orbital_phase(sector_key: String, phase: float) -> void:
 	world.set_orbital_phase(sector_key, phase)
 
 
+func advance_orbital_phase(catalog: Catalog, delta: float) -> void:
+	if docked or in_unspace or delta <= 0.0:
+		return
+	var world_data: Dictionary = catalog.get_world(sector_id)
+	var ring_data: Dictionary = world_data.get("orbital_ring", {})
+	var period_seconds := float(ring_data.get("period_seconds", 720.0))
+	world.advance_orbital_phase(sector_id, period_seconds, delta)
+
+
 func is_salvaged(interactable_id: String) -> bool:
 	return player.is_salvaged(interactable_id)
 

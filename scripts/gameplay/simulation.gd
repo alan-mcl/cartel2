@@ -43,6 +43,8 @@ func step(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 	if not bool(advance_result.get("advanced", false)):
 		return
 
+	session.advance_orbital_phase(catalog, delta)
+
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant
 		subsystem.on_tick(session, catalog, delta)

@@ -97,7 +97,9 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog)
 
-	var contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
+	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
+	var contacts: Array = []
+	contacts.append_array(landmark_contacts)
 	if _main.session.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
 		contacts = _filter_topology_contacts(contacts)
 	if not _main.session.in_unspace and _traffic_director != null:

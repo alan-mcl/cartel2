@@ -96,6 +96,7 @@ func _bind_controllers() -> void:
 		_on_session_changed,
 		_on_interaction_target_changed
 	)
+	_camera.bind_session(session)
 	_menu.bind(
 		self,
 		_main_menu,
@@ -106,6 +107,7 @@ func _bind_controllers() -> void:
 		_hud,
 		_ui_root,
 		_player,
+		_camera,
 		catalog,
 		_simulation,
 		_world,

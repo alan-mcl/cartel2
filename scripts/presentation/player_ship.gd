@@ -19,6 +19,7 @@ const _WEAPON_MASK := 2 | 16 | 1
 var assembled_ship: AssembledShip
 var owned_ship: OwnedShip
 var catalog: Catalog
+var session: GameSession
 var operating_state: ShipOperatingState = ShipOperatingState.new()
 var motion := ShipMotion.new()
 var weapons: ShipWeapons = ShipWeapons.new()
@@ -33,10 +34,16 @@ var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
 
 
-func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catalog = null) -> void:
+func configure(
+	ship: AssembledShip,
+	owned: OwnedShip = null,
+	game_catalog: Catalog = null,
+	game_session: GameSession = null
+) -> void:
 	assembled_ship = ship
 	owned_ship = owned
 	catalog = game_catalog
+	session = game_session
 	weapons.reset()
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 	_apply_hull_visual()
@@ -105,7 +112,6 @@ func _physics_process(delta: float) -> void:
 	var rotate_left := Input.is_action_pressed("rotate_left")
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
-	var session: GameSession = get_parent().session if get_parent() != null else null
 	var firing := (
 		Input.is_action_pressed("fire")
 		and session != null
@@ -168,7 +174,6 @@ func _update_operating_warnings(session: GameSession, firing: bool = false) -> v
 
 
 func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
-	var session: GameSession = get_parent().session if get_parent() != null else null
 	if session == null or catalog == null or assembled_ship == null:
 		return
 	session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)

@@ -215,18 +215,14 @@ func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
 	spawned_by_id["planet"] = planet
 
 
+## Returns the live sector nav cache. Callers must not mutate entries; compose a new Array if appending.
 func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 	if in_unspace:
 		return _build_unspace_nav_contacts(catalog)
 
 	_ensure_sector_nav_cache(catalog)
 	_refresh_sector_nav_positions()
-	var contacts: Array = []
-	for entry_variant in _sector_nav_cache:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
-			continue
-		contacts.append((entry_variant as Dictionary).duplicate())
-	return contacts
+	return _sector_nav_cache
 
 
 func _build_unspace_nav_contacts(catalog: Catalog) -> Array:

@@ -41,6 +41,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	catalog = Catalog.load_default()
 	session = _build_session()
+	_camera.bind_session(session)
 
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
@@ -299,7 +300,7 @@ func _begin_bout(
 	)
 	var separation := _engagement_separation(player_assembled, opponent_assembled)
 
-	_player.configure(player_assembled, player_owned, catalog)
+	_player.configure(player_assembled, player_owned, catalog, session)
 	_player.global_position = Vector2.ZERO
 	_player.motion.facing = 0.0
 	_player.freeze_motion()

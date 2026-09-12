@@ -11,6 +11,7 @@ var _jump: CanvasLayer
 var _hud: CanvasLayer
 var _ui_root: CanvasLayer
 var _player: CharacterBody2D
+var _camera: Camera2D
 var _catalog: Catalog
 var _simulation: Simulation
 var _world: WorldController
@@ -32,6 +33,7 @@ func bind(
 	hud: CanvasLayer,
 	ui_root: CanvasLayer,
 	player: CharacterBody2D,
+	camera: Camera2D,
 	catalog: Catalog,
 	simulation: Simulation,
 	world: WorldController,
@@ -48,6 +50,7 @@ func bind(
 	_hud = hud
 	_ui_root = ui_root
 	_player = player
+	_camera = camera
 	_catalog = catalog
 	_simulation = simulation
 	_world = world
@@ -119,6 +122,7 @@ func show_main_menu() -> void:
 	)
 	_jump.bind(_catalog, _main.session)
 	_hud.bind(_main.session, _player, AssembledShip.new())
+	_refresh_session_bindings()
 	_simulation.reset_save()
 	_main_menu.open()
 
@@ -129,7 +133,13 @@ func start_game_from_session() -> void:
 		push_error("Failed to assemble current player ship.")
 		return
 
-	_player.configure(_main.player_ship, _main.session.get_current_owned_ship(), _catalog)
+	_player.configure(
+		_main.player_ship,
+		_main.session.get_current_owned_ship(),
+		_catalog,
+		_main.session
+	)
+	_refresh_session_bindings()
 	_hud.bind(_main.session, _player, _main.player_ship)
 	_hud.visible = true
 	_main.game_active = true
@@ -177,6 +187,7 @@ func begin_new_game(callsign: String, background_id: String, portrait_path: Stri
 	_ui_root.session = _main.session
 	_jump.bind(_catalog, _main.session)
 	_hud.bind(_main.session, _player, AssembledShip.new())
+	_refresh_session_bindings()
 	start_game_from_session()
 
 
@@ -212,6 +223,7 @@ func load_slot(slot_index: int) -> void:
 	)
 	_jump.bind(_catalog, _main.session)
 	_hud.bind(_main.session, _player, AssembledShip.new())
+	_refresh_session_bindings()
 
 	_current_slot = slot_index
 	_main_menu.close()
@@ -317,6 +329,11 @@ func on_ui_save_requested() -> void:
 	_save_overlay_source = "habitat"
 	_tree.paused = true
 	_save_overlay.open(_save_overlay.Mode.SAVE)
+
+
+func _refresh_session_bindings() -> void:
+	if _camera != null and _camera.has_method("bind_session"):
+		_camera.bind_session(_main.session)
 
 
 func bind_session_events(game_session: GameSession) -> void:

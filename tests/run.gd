@@ -17,6 +17,7 @@ func _init() -> void:
 	TestTraffic.run(runner)
 	TestShipSim.run(runner)
 	TestMotion.run(runner)
+	TestDebris.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)

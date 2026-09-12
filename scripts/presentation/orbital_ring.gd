@@ -6,14 +6,13 @@ var sector_id: String = ""
 var session: GameSession = null
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if get_tree().paused:
 		return
 	if session == null or session.docked or session.in_unspace:
 		return
 
-	rotation += TAU / period_seconds * delta
-	session.set_orbital_phase(sector_id, rotation)
+	rotation = session.get_orbital_phase(sector_id)
 	_update_label_counter_rotation()
 
 

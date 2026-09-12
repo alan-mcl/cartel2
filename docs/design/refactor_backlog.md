@@ -354,7 +354,7 @@ wiring in `main.gd`.
 
 ## P2-5 Boundary and per-frame correctness fixes
 
-**Status:** Not started. **Phase:** 2. **Depends on:** none (can run parallel to P2-1).
+**Status:** Done. **Phase:** 2. **Depends on:** none (can run parallel to P2-1).
 
 **Scope:** Small, independent fixes:
 - `debris_rock.gd` holds combat HP (`DEFAULT_HP := 40.0`) and death logic in presentation — move

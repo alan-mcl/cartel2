@@ -70,6 +70,10 @@ static func run(runner: TestRunner) -> void:
 	_test_apply_missing_envelope_resets(runner)
 	_test_section_migrate(runner)
 	_test_reset_save(runner)
+	_test_orbital_phase_advance(runner, catalog)
+	_test_orbital_phase_docked(runner, catalog)
+	_test_orbital_phase_unspace(runner, catalog)
+	_test_orbital_phase_frozen(runner, catalog)
 
 
 static func _new_session(runner: TestRunner, catalog: Catalog, callsign: String) -> GameSession:
@@ -274,3 +278,69 @@ static func _test_reset_save(runner: TestRunner) -> void:
 
 	simulation.reset_save()
 	runner.check_eq(probe.tick_count, 0, "simulation: reset_save clears probe state")
+
+
+static func _test_orbital_phase_advance(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _new_session(runner, catalog, "SIM-ORBIT")
+	if session == null:
+		return
+	var simulation := Simulation.new()
+	session.docked = false
+	session.set_orbital_phase(session.sector_id, 0.0)
+
+	simulation.step(session, catalog, 1.0, false)
+
+	runner.check(
+		session.get_orbital_phase(session.sector_id) > 0.0,
+		"simulation: flight step advances orbital phase"
+	)
+
+
+static func _test_orbital_phase_docked(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _new_session(runner, catalog, "SIM-ORBIT-DOCK")
+	if session == null:
+		return
+	var simulation := Simulation.new()
+	session.set_orbital_phase(session.sector_id, 1.25)
+	session.docked = true
+
+	simulation.step(session, catalog, 1.0, false)
+
+	runner.check_eq(
+		session.get_orbital_phase(session.sector_id),
+		1.25,
+		"simulation: docked session does not advance orbital phase"
+	)
+
+
+static func _test_orbital_phase_unspace(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _new_session(runner, catalog, "SIM-ORBIT-UNSPACE")
+	if session == null:
+		return
+	var simulation := Simulation.new()
+	session.set_orbital_phase(session.sector_id, 0.75)
+	session.in_unspace = true
+
+	simulation.step(session, catalog, 1.0, false)
+
+	runner.check_eq(
+		session.get_orbital_phase(session.sector_id),
+		0.75,
+		"simulation: unspace session does not advance orbital phase"
+	)
+
+
+static func _test_orbital_phase_frozen(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _new_session(runner, catalog, "SIM-ORBIT-FROZEN")
+	if session == null:
+		return
+	var simulation := Simulation.new()
+	session.set_orbital_phase(session.sector_id, 2.5)
+
+	simulation.step(session, catalog, 1.0, true)
+
+	runner.check_eq(
+		session.get_orbital_phase(session.sector_id),
+		2.5,
+		"simulation: frozen step does not advance orbital phase"
+	)
