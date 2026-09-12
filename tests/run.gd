@@ -15,6 +15,7 @@ func _init() -> void:
 	TestEvents.run(runner)
 	TestMissions.run(runner)
 	TestTraffic.run(runner)
+	TestShipSim.run(runner)
 	TestMotion.run(runner)
 
 	if runner.failures > 0:

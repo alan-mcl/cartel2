@@ -306,7 +306,7 @@ Re-run `scripts/dev/bench_traffic.gd` before and after and keep the numbers with
 
 ## P2-3 Converge player and NPC ship simulation
 
-**Status:** Not started. **Phase:** 2. **Depends on:** P1-1.
+**Status:** Done. **Phase:** 2. **Depends on:** P1-1.
 
 **Unblocks:** Combat systems build-out. A new weapon class currently has to be implemented
 twice.

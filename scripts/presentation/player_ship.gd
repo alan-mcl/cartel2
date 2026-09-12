@@ -8,6 +8,7 @@ const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
+const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
 const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
 const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
 const _RocketProjectile := preload("res://scripts/presentation/rocket_projectile.gd")
@@ -21,6 +22,7 @@ var catalog: Catalog
 var operating_state: ShipOperatingState = ShipOperatingState.new()
 var motion := ShipMotion.new()
 var weapons: ShipWeapons = ShipWeapons.new()
+var _sim: ShipSimCore = ShipSimCoreScript.new()
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
 @onready var _hull: Sprite2D = $Visual/Hull
@@ -36,8 +38,9 @@ func configure(ship: AssembledShip, owned: OwnedShip = null, game_catalog: Catal
 	owned_ship = owned
 	catalog = game_catalog
 	weapons.reset()
+	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 	_apply_hull_visual()
-	_refresh_loaded_stats()
+	_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
 
 
 func _apply_hull_visual() -> void:
@@ -53,13 +56,6 @@ func _apply_hull_visual() -> void:
 		HullHitboxScript.apply_hull_and_thrust(_hull, _thrust_flame, sprite_path)
 
 	_hull.modulate = Color.WHITE
-
-
-func _refresh_loaded_stats() -> void:
-	if catalog == null or owned_ship == null or assembled_ship == null:
-		return
-	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
-	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
 
 
 func freeze_motion() -> void:
@@ -116,41 +112,34 @@ func _physics_process(delta: float) -> void:
 		and not session.docked
 		and not get_tree().paused
 	)
+	var physics_inputs := {
+		"thrust": thrust,
+		"reverse": reverse,
+		"rotate_left": rotate_left,
+		"rotate_right": rotate_right,
+		"boost": boost,
+	}
 
 	if session != null and catalog != null and owned_ship != null and assembled_ship != null:
+		# Display-rate cadence: HUD ops telemetry and signature readout need every-frame updates.
 		var combat_state := session.build_combat_state(assembled_ship)
-		ShipCombat.tick_shields(combat_state, assembled_ship, delta)
+		_sim.tick_shields(combat_state, delta)
 		session.apply_combat_state(combat_state)
 
-		ShipOperations.tick_into(
-			operating_state,
-			catalog,
-			assembled_ship,
-			owned_ship,
-			delta,
-			{
-				"thrust": thrust,
-				"boost": boost,
-				"in_flight": not session.docked,
-				"fire": firing,
-			},
-			1,
-			combat_state
-		)
-		SensorSystem.tick_signature_glow(operating_state, delta)
-		_refresh_loaded_stats()
+		var inputs := {
+			"thrust": thrust,
+			"boost": boost,
+			"in_flight": not session.docked,
+			"fire": firing,
+		}
+		_sim.step_operating(delta, inputs, 1, combat_state)
+		_sim.refresh_signature(delta)
+		_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
 		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
 		operating_state_changed.emit(operating_state)
 		_update_operating_warnings(session, firing)
 
-		var weapon_result: Dictionary = weapons.tick(
-			catalog,
-			assembled_ship,
-			owned_ship,
-			delta,
-			firing,
-			operating_state.weapons_allowed
-		)
+		var weapon_result: Dictionary = _sim.step_weapons(delta, firing)
 		if not weapon_result.get("orders", []).is_empty():
 			_spawn_weapon_orders(weapon_result["orders"])
 		if bool(weapon_result.get("ammo_changed", false)):
@@ -158,17 +147,7 @@ func _physics_process(delta: float) -> void:
 		if firing and bool(weapon_result.get("out_of_ammo", false)):
 			session.last_log = "Out of ammunition."
 
-	motion.step(
-		stats,
-		delta,
-		thrust,
-		reverse,
-		rotate_left,
-		rotate_right,
-		boost,
-		operating_state.thrust_factor,
-		operating_state.boost_allowed
-	)
+	_sim.step_physics(delta, physics_inputs)
 
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity

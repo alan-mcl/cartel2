@@ -428,6 +428,13 @@ func _physics_process(delta: float) -> void:
 	)
 
 	if _opponent_node != null and is_instance_valid(_opponent_node):
+		if _opponent_node.has_method("sync_from_actor"):
+			_opponent_node.call("sync_from_actor", _opponent_actor)
+		if _opponent_node.has_method("apply_hull_damage_visual"):
+			_opponent_node.call(
+				"apply_hull_damage_visual",
+				_opponent_actor.hull_current / maxf(_opponent_actor.hull_max, 1.0)
+			)
 		if _opponent_node.has_method("spawn_weapon_orders"):
 			_opponent_node.call("spawn_weapon_orders", _opponent_actor.pending_weapon_orders)
 

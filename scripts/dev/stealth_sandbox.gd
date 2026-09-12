@@ -456,8 +456,16 @@ func _physics_process(delta: float) -> void:
 			_player.motion.is_thrusting()
 		)
 
-		if node != null and is_instance_valid(node) and node.has_method("spawn_weapon_orders"):
-			node.call("spawn_weapon_orders", actor.pending_weapon_orders)
+		if node != null and is_instance_valid(node):
+			if node.has_method("sync_from_actor"):
+				node.call("sync_from_actor", actor)
+			if node.has_method("apply_hull_damage_visual"):
+				node.call(
+					"apply_hull_damage_visual",
+					actor.hull_current / maxf(actor.hull_max, 1.0)
+				)
+			if node.has_method("spawn_weapon_orders"):
+				node.call("spawn_weapon_orders", actor.pending_weapon_orders)
 
 	_update_hud_nav()
 

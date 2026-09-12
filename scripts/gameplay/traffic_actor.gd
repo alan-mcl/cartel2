@@ -3,6 +3,7 @@ extends RefCounted
 const SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 const CombatPilotScript := preload("res://scripts/gameplay/combat_pilot.gd")
+const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
 
 enum AiState { TRAFFIC, ENGAGE, FLEE, DOCKING, DOCKED, DESTROYED }
 enum CombatAttitude { STANDARD, FIGHT_TO_DEATH }
@@ -21,7 +22,6 @@ const COAST_HEADING_TOLERANCE := 0.2
 const LAUNCH_SPEED := 20.0
 const DETECTION_STAGGER_FRAMES := 8
 const DETECTION_RANGE_HYSTERESIS := 250.0
-const STATS_REFRESH_INTERVAL := 15
 
 
 static func create(
@@ -58,6 +58,8 @@ static func create(
 	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
 	actor.motion.velocity = Vector2.from_angle(spawn_facing) * LAUNCH_SPEED
 	actor.loiter_angle = randf() * TAU
+	actor.sim = ShipSimCoreScript.new()
+	actor.sim.bind(catalog, actor.assembled_ship, actor.owned_ship, actor.motion, actor.operating_state, actor.weapons)
 	actor._assign_route_endpoints(sector_id)
 	return actor
 
@@ -253,6 +255,7 @@ var assembled_ship: AssembledShip
 var motion := ShipMotion.new()
 var operating_state: ShipOperatingState = ShipOperatingState.new()
 var weapons: ShipWeapons = ShipWeapons.new()
+var sim
 
 var ai_state: AiState = AiState.TRAFFIC
 var combat_attitude: CombatAttitude = CombatAttitude.STANDARD
@@ -286,9 +289,6 @@ var _route_initialized: bool = false
 var _cached_beacon_lines: PackedStringArray = PackedStringArray()
 var _cached_broadcasting: bool = false
 var _cached_player_contact: Dictionary = {}
-var _stats_refresh_counter: int = 0
-var _mass_stats_dirty: bool = true
-var _last_mass_fuel: float = -1.0
 var _combat_weapon_profile: Dictionary = {}
 var _weapon_profile_dirty: bool = true
 var _ai_inputs: Dictionary = {
@@ -473,7 +473,8 @@ func place_local_scatter(
 
 func mark_systems_catchup() -> void:
 	needs_systems_catchup = true
-	_mass_stats_dirty = true
+	if sim != null:
+		sim.mark_stats_dirty()
 	_invalidate_beacon_cache()
 
 
@@ -507,6 +508,7 @@ func tick(
 
 	if not has_sim_slot:
 		_tick_kinematic(
+			catalog,
 			delta,
 			player_pos,
 			player_vel,
@@ -535,6 +537,14 @@ func tick(
 	)
 
 
+func _ensure_sim(catalog: Catalog) -> void:
+	if sim != null:
+		return
+	sim = ShipSimCoreScript.new()
+	if assembled_ship != null and owned_ship != null:
+		sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
+
+
 func _tick_full_sim(
 	catalog: Catalog,
 	traffic_config: Dictionary,
@@ -548,6 +558,7 @@ func _tick_full_sim(
 	world_loader: WorldLoader,
 	prev_position: Vector2
 ) -> void:
+	_ensure_sim(catalog)
 	var inputs := _build_ai_inputs(
 		delta,
 		player_pos,
@@ -563,30 +574,18 @@ func _tick_full_sim(
 
 	if combat_state == null:
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
-	ShipCombat.tick_shields(combat_state, assembled_ship, delta)
 
-	ShipOperations.tick_into(
-		operating_state,
-		catalog,
-		assembled_ship,
-		owned_ship,
-		delta,
-		inputs,
-		1,
-		combat_state
-	)
-	SensorSystem.tick_signature_glow(operating_state, delta)
-	_maybe_refresh_stats(catalog)
+	if sim == null:
+		return
+
+	# Sim-slot cadence: full ops/weapons/stats every slotted tick; stats refresh on interval.
+	sim.tick_shields(combat_state, delta)
+	sim.step_operating(delta, inputs, 1, combat_state)
+	sim.refresh_signature(delta)
+	sim.refresh_stats(ShipSimCore.StatsCadence.INTERVAL)
 
 	var firing := bool(inputs.get("fire", false)) and operating_state.weapons_allowed
-	var weapon_result: Dictionary = weapons.tick(
-		catalog,
-		assembled_ship,
-		owned_ship,
-		delta,
-		firing,
-		operating_state.weapons_allowed
-	)
+	var weapon_result: Dictionary = sim.step_weapons(delta, firing)
 	pending_weapon_orders = weapon_result.get("orders", [])
 
 	if bool(weapon_result.get("ammo_changed", false)):
@@ -599,17 +598,7 @@ func _tick_full_sim(
 	):
 		_begin_flee(traffic_config)
 
-	motion.step(
-		assembled_ship.stats,
-		delta,
-		bool(inputs.get("thrust", false)),
-		bool(inputs.get("reverse", false)),
-		bool(inputs.get("rotate_left", false)),
-		bool(inputs.get("rotate_right", false)),
-		bool(inputs.get("boost", false)),
-		operating_state.thrust_factor,
-		operating_state.boost_allowed
-	)
+	sim.step_physics(delta, inputs)
 
 	if not use_cruise_cap:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
@@ -633,6 +622,7 @@ func _tick_full_sim(
 
 
 func _tick_kinematic(
+	catalog: Catalog,
 	delta: float,
 	player_pos: Vector2,
 	player_vel: Vector2,
@@ -644,6 +634,7 @@ func _tick_kinematic(
 	world_loader: WorldLoader,
 	prev_position: Vector2
 ) -> void:
+	_ensure_sim(catalog)
 	operating_state.transponder_broadcasting = (
 		assembled_ship != null
 		and assembled_ship.has_transponder()
@@ -669,22 +660,28 @@ func _tick_kinematic(
 	operating_state.active_systems["sensors"] = true
 	operating_state.active_systems["active_sensors"] = true
 	operating_state.active_systems["transponder"] = operating_state.transponder_broadcasting
-	SensorSystem.tick_signature_glow(operating_state, delta)
+
+	if sim != null:
+		# Kinematic cadence: cheap motion + signature glow only; no ops/weapons/mass refresh.
+		sim.refresh_signature(delta)
 
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
-	motion.step(
-		assembled_ship.stats,
-		delta,
-		bool(inputs.get("thrust", false)),
-		bool(inputs.get("reverse", false)),
-		bool(inputs.get("rotate_left", false)),
-		bool(inputs.get("rotate_right", false)),
-		bool(inputs.get("boost", false)),
-		1.0,
-		true
-	)
+	if sim != null:
+		sim.step_physics(delta, inputs, true)
+	else:
+		motion.step(
+			assembled_ship.stats,
+			delta,
+			bool(inputs.get("thrust", false)),
+			bool(inputs.get("reverse", false)),
+			bool(inputs.get("rotate_left", false)),
+			bool(inputs.get("rotate_right", false)),
+			bool(inputs.get("boost", false)),
+			1.0,
+			true
+		)
 
 	if not use_cruise_cap:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
@@ -1272,21 +1269,6 @@ func _copy_ai_inputs_from(source: Dictionary) -> void:
 	_ai_inputs["boost"] = bool(source.get("boost", false))
 	_ai_inputs["in_flight"] = bool(source.get("in_flight", true))
 	_ai_inputs["fire"] = bool(source.get("fire", false))
-
-
-func _maybe_refresh_stats(catalog: Catalog) -> void:
-	if owned_ship != null and not is_equal_approx(_last_mass_fuel, owned_ship.fuel_current):
-		_mass_stats_dirty = true
-	_stats_refresh_counter += 1
-	if not _mass_stats_dirty and _stats_refresh_counter < STATS_REFRESH_INTERVAL:
-		return
-	_stats_refresh_counter = 0
-	_mass_stats_dirty = false
-	if owned_ship == null or assembled_ship == null:
-		return
-	_last_mass_fuel = owned_ship.fuel_current
-	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned_ship, assembled_ship)
-	assembled_ship.stats = ShipAssembler.derive_stats(assembled_ship, loaded_mass)
 
 
 func _clamp_velocity(velocity: Vector2, cap: float) -> Vector2:
