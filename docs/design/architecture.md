@@ -14,7 +14,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 | Path | Role |
 |------|------|
 | `scripts/gameplay/` | `Catalog`, `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `WeaponHit`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `InteractableDef` |
-| `scripts/presentation/` | `main.gd`, `player_ship.gd`, `npc_ship.gd`, `traffic_view.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
+| `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `traffic_view.gd`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
 | `data/catalog/` | JSON catalogs (schemas: [data_model.md](data_model.md)) |
@@ -43,15 +43,15 @@ flowchart LR
 
 `GameSession` is an aggregate root: `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence` own the fields; public properties on `GameSession` forward to those slices so UI and tests keep using `session.credits` and `session.owned_ships`. Save JSON keys are unchanged — `to_dict` / `from_save` compose the slice serializers.
 
-On startup, `main.gd`:
+On startup, `main.gd` wires three presentation controllers and delegates to them:
 
 1. Loads `Catalog.load_default()`.
-2. Shows the **main menu** (New Game / Load / Exit).
+2. **MenuController** shows the **main menu** (New Game / Load / Exit).
 3. **New Game** — player enters callsign, portrait, and background; `GameSession.start_new_game` seeds fleet from `backgrounds.json`, docks at the kit's habitat, and opens **HabitatScreen** at the Terminal.
 4. **Load** — reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.
-5. Assembles the current ship via `ShipAssembler.assemble_owned`.
-6. Calls `WorldLoader.load_sector` or `load_unspace` to populate `$World`.
-7. Binds HUD and overlays to session state.
+5. **WorldController** assembles the current ship via `ShipAssembler.assemble_owned` and calls `WorldLoader.load_sector` or `load_unspace` to populate `$World`.
+6. **FlightLoopController** ticks traffic and feeds nav/signature HUD each physics frame when flight is active.
+7. Controllers bind HUD and overlays to session state; `main.gd` keeps `session` and `try_interact` on the node for parent duck-typing.
 
 ## Habitat UI (menu planet)
 
@@ -128,9 +128,9 @@ Ships parked at a habitat **stay there when jumping sectors** (only the aboard s
 
 ### Galactic Standard Time (GST)
 
-Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame and dispatches registered subsystems (economy reposts market quotes on day rollover). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
+Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame (GST freeze from **MenuController** when paused, in menus, or docked in habitat UI) and dispatches registered subsystems (economy reposts market quotes on day rollover). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
 
-Successful gameplay mutations publish typed events on `GameSession.events` (`EventBus` + `SimEvent` factories — e.g. `commodity_traded`, `sector_entered`, `docked`). `main.gd` forwards those events to `Simulation.dispatch_event(session, catalog, evt)`, which calls `SimSubsystem.on_event(session, catalog, evt)`. UI still refreshes on the coarse `session.changed` signal; typed events are for simulation subsystems and future mission/faction hooks, not HUD wiring.
+Successful gameplay mutations publish typed events on `GameSession.events` (`EventBus` + `SimEvent` factories — e.g. `commodity_traded`, `sector_entered`, `docked`). **MenuController** forwards those events to `Simulation.dispatch_event(session, catalog, evt)`, which calls `SimSubsystem.on_event(session, catalog, evt)`. UI still refreshes on the coarse `session.changed` signal; typed events are for simulation subsystems and future mission/faction hooks, not HUD wiring.
 
 `MissionSubsystem` is a spike (not a content system): one hardcoded Proxima→Bela food delivery auto-accepted on new game, tracked via commodity and sector events, paid on completion, persisted under `subsystems.missions`.
 
@@ -197,7 +197,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 
 ## In-system NPC traffic (3-space)
 
-`TrafficDirector` (gameplay) owns spawn policy, fleet size, sim slots, detection stagger, and actor AI when a sector loads. `TrafficView` (presentation) owns the `Traffic` node tree — `npc_ship.tscn` instances for slotted actors and far sprites for the rest. `main.gd` ticks the director then syncs the view each physics frame. Not active in Unspace or while docked.
+`TrafficDirector` (gameplay) owns spawn policy, fleet size, sim slots, detection stagger, and actor AI when a sector loads. `TrafficView` (presentation) owns the `Traffic` node tree — `npc_ship.tscn` instances for slotted actors and far sprites for the rest. **FlightLoopController** ticks the director then syncs the view each physics frame. Not active in Unspace or while docked.
 
 - **Density** — log-scaled from `population_billions` on the sector (`traffic.json` caps; Proxima ~100 ships at population max, smaller worlds less).
 - **Spawn** — on sector arrival, trip roles appear 15–85% along their corridor toward destination; loiter/runabout scatter near the jump gate and orbitals. Cycle replacements still launch from origin waypoints.

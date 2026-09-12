@@ -342,7 +342,7 @@ updates every frame.
 
 ## P2-4 Split `main.gd`
 
-**Status:** Not started. **Phase:** 2. **Depends on:** P1-1, P1-2.
+**Status:** Done. **Phase:** 2. **Depends on:** P1-1, P1-2.
 
 **Problem:** 675 lines and the second-most-churned file in the repo (23 commits). It owns
 session lifecycle, world loading, traffic ticking, nav and HUD feeding, save/load, input and
