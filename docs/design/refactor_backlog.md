@@ -368,7 +368,7 @@ wiring in `main.gd`.
 
 ## P2-6 Split `traffic_actor.gd`
 
-**Status:** Not started. **Phase:** 2. **Depends on:** P2-2, P2-3.
+**Status:** Done. **Phase:** 2. **Depends on:** P2-2, P2-3.
 
 **Problem:** 1,385 lines — the largest file in the repo — mixing AI state machines, routing,
 detection staging, and motion, with deep nesting. `combat_pilot.gd` (779 lines) has the same
