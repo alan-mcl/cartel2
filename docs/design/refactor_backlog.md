@@ -559,12 +559,20 @@ production controllers and **`ship_assembly_sandbox`** unchanged.
 
 ## P6-3 Object pooling
 
-**Status:** Not started. **Phase:** 6. **Depends on:** P2-2.
+**Status:** Done. **Phase:** 6. **Depends on:** P2-2.
 
-**Problem:** No pooling anywhere. `TrafficDirector._update_lod_node` `queue_free`s and
-re-instantiates a node on **every** near/far LOD crossing, and projectiles instantiate and free
-per shot.
+**Measured (headless, `bench_traffic_view.gd`, 100 actors / 20 near, 120 iters):**
 
-**Explicitly do NOT:** do this before measuring. Pool only what `bench_traffic.gd` and a frame
-profile show to matter, and note that `_sim_slot_pool` in `traffic_director.gd` is a priority
-queue for sim slots, not an object pool — the name is misleading.
+| Metric | Before pool | After pool |
+|--------|-------------|------------|
+| sync stable LOD | 1223 us/frame | 1977 us/frame |
+| sync forced crossings (4 flips/frame) | 7465 us/frame | 3333 us/frame |
+| near spawn load() each time | 80.3 us/spawn | (cached in TrafficView) |
+| near spawn cached PackedScene | 24.3 us/spawn | 15.9 us/spawn (bench) |
+| projectile spawn+free (mass/rocket/laser) | 107–207 us/shot | not pooled (below crossing cost) |
+
+**Scope (done):** Presentation bench [`scripts/dev/bench_traffic_view.gd`](scripts/dev/bench_traffic_view.gd).
+LOD churn is in [`TrafficView.sync`](scripts/presentation/traffic_view.gd) (not `TrafficDirector`).
+Cached `npc_ship.tscn` PackedScene; [`PresentationNodePool`](scripts/presentation/presentation_node_pool.gd)
+for near ships; far sprite root pool. Projectiles unchanged. `_sim_slot_pool` on
+`traffic_director.gd` remains a sim-slot priority queue, not an object pool.
