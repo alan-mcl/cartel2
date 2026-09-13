@@ -18,6 +18,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
 | `data/catalog/` | JSON catalogs; machine-readable schema subset under `data/catalog/schema/` (field tables: [catalog_schema.md](catalog_schema.md); narrative: [data_model.md](data_model.md)) |
+| `scripts/tools/` | Catalog validators including `validate_sector_completeness.py` and `generate_sector_bundle.py` for multi-file sector authoring |
 | `assets/` | Art referenced by catalog paths |
 | `themes/` | `cartel_theme.tres` — corporate UI theme (see [ui_theme.md](ui_theme.md)) |
 

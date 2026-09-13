@@ -1,0 +1,53 @@
+{
+  "id": "example_sector",
+  "name": "Example Sector",
+  "planet_name": "Example",
+  "star_system": "Example System",
+  "classification": "E3",
+  "population_billions": 8.0,
+  "climate": "Temperate",
+  "objective": "Explore Example near orbit",
+  "planet": {
+    "sprite": "res://assets/world/planet.png",
+    "diameter": 2000,
+    "modulate": "#aabbcc"
+  },
+  "orbitals": [
+    "res://assets/world/orbitals/torus.svg",
+    "res://assets/world/orbitals/yard.svg"
+  ],
+  "habitat": {
+    "name": "Example Habitat",
+    "description": "Template orbital hub for generator documentation.",
+    "short_desc": "Template orbital hub.",
+    "art": "res://assets/ui/locations/proxima_habitat.svg"
+  },
+  "economy": {
+    "tier": "mid",
+    "wealth": 1.0,
+    "produce": {
+      "consumer_goods": 1.2,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 1.2,
+      "chemicals": 1.0
+    }
+  },
+  "routes": [
+    {
+      "b": "proxima",
+      "friction": 55,
+      "n": 4,
+      "solution_ab": 12001,
+      "solution_ba": -4500
+    }
+  ],
+  "traffic_role_weights": {
+    "transit": 0.3,
+    "shuttle": 0.25,
+    "loiter": 0.12,
+    "runabout": 0.13,
+    "dock_cycle": 0.2
+  }
+}

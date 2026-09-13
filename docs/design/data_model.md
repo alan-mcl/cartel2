@@ -313,6 +313,10 @@ Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `C
 
 Daily commodity quotes are computed at runtime by `CommodityEconomy` from `economies.json`, `routes.json`, and `commodities.json`. Session stores `market_quotes` and `market_quotes_day` (recomputed on load from `gst_seconds`).
 
+**Sector completeness:** `scripts/tools/validate_sector_completeness.py` (wired into `validate_catalog_refs.py`) checks every `sectors.json` id has a matching world, economy, exactly one habitat (`sector_id`), resolvable buildings, dock/translate interactables linked from the world layout, and at least one route edge. Legacy ids may differ from `{id}_habitat` templates (e.g. `bela_orbital_habitat`, `concordia_habitat` on sector `pelagos`); validation is structural, not string-prefix rules.
+
+**Adding a sector:** `scripts/tools/generate_sector_bundle.py` patches `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, and `routes.json` from a compact spec. See `scripts/tools/sector_spec.example.json`. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
+
 Other sector/world/interactable/habitat schemas unchanged — see setting docs.
 
 ## How to extend

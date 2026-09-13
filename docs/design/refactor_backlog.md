@@ -432,7 +432,7 @@ The goal of this phase is that adding the 50th sector costs what adding the 12th
 
 ## P4-1 Sector bundle generator
 
-**Status:** Not started. **Phase:** 4. **Depends on:** P4-2 (validator first, so the generator
+**Status:** Done. **Phase:** 4. **Depends on:** P4-2 (validator first, so the generator
 has a correctness oracle).
 
 **Problem:** A sector is one logical unit stored across six files with hand-matched ids. Adding
@@ -451,7 +451,7 @@ files.
 
 ## P4-2 Sector completeness validator
 
-**Status:** Not started. **Phase:** 4. **Depends on:** none. **Can be pulled into Phase 0** if
+**Status:** Done. **Phase:** 4. **Depends on:** none. **Can be pulled into Phase 0** if
 sector authoring starts before this phase — it is cheap and independently valuable.
 
 **Problem:** Nothing verifies that a sector is complete across the six files it spans.

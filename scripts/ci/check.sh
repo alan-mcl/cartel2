@@ -79,6 +79,9 @@ if [[ $RUN_VALIDATORS -eq 1 ]]; then
 
   echo "== Catalog referential checks =="
   python3 scripts/tools/validate_catalog_refs.py
+
+  echo "== Sector bundle tests =="
+  python3 scripts/tools/test_sector_bundle.py
 fi
 
 if [[ $RUN_IMPORT -eq 1 ]]; then

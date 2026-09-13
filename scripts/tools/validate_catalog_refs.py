@@ -12,6 +12,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 from catalog_io import load_modules
+from validate_sector_completeness import check as check_sector_completeness
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "data" / "catalog"
@@ -787,6 +788,8 @@ def main() -> int:
             errors.append(
                 f"unspace {unspace_id}: unknown portal interactable '{interactable_id}'"
             )
+
+    errors.extend(check_sector_completeness(CATALOG))
 
     if errors:
         for err in errors:
