@@ -43,6 +43,10 @@ Ozero.
 
 Tycho Habitat
 
+### Current orbit (JSON)
+
+Large planet disc backdrop (warm tint), rotating ring of three orbitals (Tycho Habitat plus two unnamed stations), static jump gate farther out, and a few **debris rocks** between the ring and the gate — leftover ore and slag from industrial traffic, shootable but not salvaged.
+
 ## La Bella Vista
 
 **Classification:** E4  

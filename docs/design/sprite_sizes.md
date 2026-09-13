@@ -122,9 +122,7 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 | Array | `world/orbitals/array.svg` | 130×130 | **180×180** | Sensor / comms |
 | Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** | Tall spar |
 | Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
-| Beacon | `world/beacon.svg` | 48×64 | **48×64** | Small nav marker |
-| Wreck | `world/wreck.svg` | 120×80 | **82×52** | Dead hull-class (Wolff footprint) |
-| Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON |
+| Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON; shootable catalog rocks |
 
 World entity `modulate` in JSON still tints some sprites today. For a clean SVG pipeline, author final color in the file and set catalog `modulate` to `#ffffff` when replacing placeholders.
 
@@ -139,7 +137,6 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 | Planet albedo (optional) | per-world or shared | — | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1 wrap for `PlanetBackdrop` shader |
 | Planet night lights (optional) | same | — | Same as albedo | Emissive cities; same UV layout |
 | Planet disc (legacy) | `assets/world/planet.png` | 512×512 | — | **Unused** for globe mesh; do not replace as a flat disc |
-| Planet limb (legacy) | `assets/world/planet_limb.png` | 512×512 | — | Legacy `planet_limb` entity only |
 
 Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a 512 px SubViewport and is scaled to `diameter / 512`.
 
@@ -177,8 +174,7 @@ Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`a
 | Habitats | 480×320 |
 | Jump gate | 400×400 |
 | Orbitals | 100×220 … 240×240 |
-| Beacon | 48×64 |
-| Wreck / debris | 82×52 / 16×20 |
+| Debris rock | 16×20 |
 | Star tiles | 512×512 |
 | Planet maps | 2048×1024 (2:1) |
 | Location art | 640×360 (16:9) |

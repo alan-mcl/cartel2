@@ -8,10 +8,7 @@ const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdro
 const SCENES := {
 	"habitat": "res://scenes/world/habitat.tscn",
 	"jump_gate": "res://scenes/world/jump_gate.tscn",
-	"beacon": "res://scenes/world/beacon.tscn",
-	"wreck": "res://scenes/world/wreck.tscn",
 	"debris": "res://scenes/world/debris_rock.tscn",
-	"hazard": "res://scenes/world/hazard.tscn",
 	"orbital": "res://scenes/world/orbital.tscn",
 }
 
@@ -205,6 +202,12 @@ func _spawn_planetary_layout(
 
 	var gate_data: Dictionary = world_data.get("jump_gate", {})
 	_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
+
+	var entities: Variant = world_data.get("entities", [])
+	if typeof(entities) == TYPE_ARRAY:
+		for entity_variant in entities:
+			if typeof(entity_variant) == TYPE_DICTIONARY:
+				_spawn_entity(world_root, entity_variant, catalog, session)
 
 
 func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
@@ -606,10 +609,6 @@ func _spawn_entity(
 	var kind := str(entity.get("kind", ""))
 	var entity_id := str(entity.get("id", ""))
 
-	if kind == "planet_limb":
-		_spawn_planet_limb(world_root, entity)
-		return null
-
 	var scene_path: String = SCENES.get(kind, "")
 	if scene_path.is_empty():
 		push_error("Unknown world entity kind: %s" % kind)
@@ -628,41 +627,12 @@ func _spawn_entity(
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
-	elif kind == "hazard" and instance is NspaceHazard:
-		instance.configure(entity)
 	elif instance is WorldObject:
 		instance.configure(entity, catalog, session)
 	elif instance.has_method("configure"):
 		instance.call("configure", entity, catalog, session)
 
 	return instance
-
-
-func _spawn_planet_limb(world_root: Node2D, entity: Dictionary) -> void:
-	var limb := Sprite2D.new()
-	limb.name = str(entity.get("id", "PlanetLimb"))
-
-	var pos: Dictionary = entity.get("position", {})
-	limb.position = Vector2(float(pos.get("x", 0.0)), float(pos.get("y", 0.0)))
-
-	if entity.has("scale"):
-		var scale_data: Dictionary = entity.get("scale", {})
-		limb.scale = Vector2(float(scale_data.get("x", 1.0)), float(scale_data.get("y", 1.0)))
-
-	var sprite_path := str(entity.get("sprite", "res://assets/world/planet_limb.png"))
-	var texture := load(sprite_path) as Texture2D
-	if texture != null:
-		limb.texture = texture
-
-	limb.centered = true
-
-	if entity.has("modulate"):
-		limb.modulate = Color(str(entity.get("modulate")))
-
-	world_root.add_child(limb)
-	var entity_id := str(entity.get("id", ""))
-	if not entity_id.is_empty():
-		spawned_by_id[entity_id] = limb
 
 
 func _configure_debris(instance: Node2D, entity: Dictionary) -> void:

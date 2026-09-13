@@ -484,7 +484,7 @@ possible, it is not permission to enable deeper layers.
 
 ## P4-5 Decide the fate of the unused world entity kinds
 
-**Status:** Not started. **Phase:** 4.
+**Status:** Done. **Phase:** 4.
 
 **Problem:** `WorldLoader.SCENES` registers `beacon`, `wreck`, `debris`, and `hazard`, with
 scenes and scripts behind them, but no catalog JSON references any of them. Either use them as

@@ -54,6 +54,17 @@ static func run(runner: TestRunner) -> void:
 	var exit_def := InteractableDef.from_dict(catalog.get_interactable("unspace_exit"))
 	runner.check(exit_def.kind == InteractableDef.Kind.ARRIVE, "unspace_exit parses as ARRIVE")
 
+	var tycho_world := catalog.get_world("tycho")
+	var debris_count := 0
+	var entities: Variant = tycho_world.get("entities", [])
+	if typeof(entities) == TYPE_ARRAY:
+		for entity_variant in entities:
+			if typeof(entity_variant) != TYPE_DICTIONARY:
+				continue
+			if str(entity_variant.get("kind", "")) == "debris":
+				debris_count += 1
+	runner.check(debris_count >= 1, "catalog has at least one debris world entity (tycho)")
+
 	var mapping := catalog.get_mapping("proxima", "bela", 4)
 	runner.check(not mapping.is_empty(), "proxima→bela n=4 mapping exists")
 	runner.check(int(mapping.get("solution", 0)) == 42, "proxima→bela solution is 42")

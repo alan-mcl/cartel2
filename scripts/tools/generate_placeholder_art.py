@@ -51,24 +51,6 @@ def stars_png(width: int, height: int, count: int, seed: int) -> None:
     return rgba
 
 
-def planet_limb_png(width: int, height: int):
-    cx, cy = width * 0.35, height * 0.55
-    radius = min(width, height) * 0.72
-
-    def rgba(x: int, y: int, w: int, h: int):
-        dx = x - cx
-        dy = y - cy
-        dist = (dx * dx + dy * dy) ** 0.5
-        if dist > radius:
-            return bytes((0, 0, 0, 0))
-        edge = max(0.0, 1.0 - (radius - dist) / 28.0)
-        base = int(18 + edge * 24)
-        alpha = int(min(255, max(0, (radius - dist + 18) * 6)))
-        return bytes((base, base + 6, base + 14, alpha))
-
-    return rgba
-
-
 def planet_disc_png(width: int, height: int):
     cx, cy = width / 2, height / 2
     radius = min(width, height) * 0.46
@@ -209,22 +191,6 @@ def main() -> None:
     )
 
     write_text(
-        ASSETS / "world/beacon.svg",
-        """<svg xmlns="http://www.w3.org/2000/svg" width="48" height="64" viewBox="-24 -40 48 64">
-  <rect x="-3" y="-10" width="6" height="30" fill="#59e6f2"/>
-  <polygon points="-12,-28 12,-28 0,-8" fill="#59e6f2"/>
-</svg>""",
-    )
-
-    write_text(
-        ASSETS / "world/wreck.svg",
-        """<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80" viewBox="-60 -40 120 80">
-  <polygon points="-45,-20 50,-5 35,25 -30,30 -55,5" fill="#d95938" stroke="#8c2818" stroke-width="2"/>
-  <polyline points="-20,-10 5,0 20,15" fill="none" stroke="#2a1208" stroke-width="2"/>
-</svg>""",
-    )
-
-    write_text(
         ASSETS / "world/debris.svg",
         """<svg xmlns="http://www.w3.org/2000/svg" width="80" height="64" viewBox="-40 -32 80 64">
   <polygon points="-28,-18 24,-22 32,12 -8,28 -34,8" fill="#737880" stroke="#565b62" stroke-width="2"/>
@@ -235,7 +201,6 @@ def main() -> None:
 
     write_png(ASSETS / "space/stars_far.png", 512, 512, stars_png(512, 512, 180, 90210))
     write_png(ASSETS / "space/stars_near.png", 512, 512, stars_png(512, 512, 320, 90211))
-    write_png(ASSETS / "world/planet_limb.png", 512, 512, planet_limb_png(512, 512))
     write_png(ASSETS / "world/planet.png", 512, 512, planet_disc_png(512, 512))
 
     _run_godot_import()

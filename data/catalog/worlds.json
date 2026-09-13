@@ -90,7 +90,28 @@
       "label": "Tycho Jump Gate",
       "interactable": "tycho_jump_gate",
       "radius": 5400
-    }
+    },
+    "entities": [
+      {
+        "id": "tycho_debris_1",
+        "kind": "debris",
+        "position": { "x": 2800, "y": 900 },
+        "rotation": 0.35
+      },
+      {
+        "id": "tycho_debris_2",
+        "kind": "debris",
+        "position": { "x": 3200, "y": -1200 },
+        "rotation": -0.8
+      },
+      {
+        "id": "tycho_debris_3",
+        "kind": "debris",
+        "position": { "x": 4100, "y": 400 },
+        "rotation": 1.1,
+        "scale": { "x": 1.15, "y": 0.9 }
+      }
+    ]
   },
   "bela": {
     "planet": {

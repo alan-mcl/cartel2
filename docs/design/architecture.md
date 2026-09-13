@@ -111,7 +111,7 @@ For signature and detection iteration without Proxima traffic, run `scenes/dev/s
 | Kind | Behaviour |
 |------|-----------|
 | `inspect` | Log flavour text; track `inspected_ids` |
-| `salvage` | One-time credits; id tracked in `salvaged_ids`; wreck visual modulated |
+| `salvage` | One-time credits; id tracked in `salvaged_ids`; host `WorldObject` visual modulated (not a dedicated wreck scene) |
 | `dock` | Pause tree, hide HUD, open UiRoot habitat screen, park current ship at habitat |
 | `translate` | Pause tree, open jump overlay with sector `mappings` (pick destination + N-space depth) |
 | `arrive` | At 4-space exit portal: complete transit into destination 3-space orbit |
@@ -170,8 +170,9 @@ flowchart TD
 - **`planet`** — lit 3D globe rendered in an isolated `SubViewport` and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Slow axial spin with a sun-lit day/night terminator; optional catalog `albedo` / `night_lights` wrap maps (legacy `sprite` is ignored for the globe mesh).
 - **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
 - **`jump_gate`** — static gate farther out (angle derived from sector id)
+- **`entities`** (optional) — free-floating world objects spawned after the ring and gate (e.g. shootable **debris** rocks); not used for unspace worlds
 
-4-space layouts are defined in `unspaces.json` as a **`field`** block: a one-shot Poisson-scattered point field, Delaunay triangulation (with optional convex quad merges), independent random vertex heights, and a fixed exit portal on a chosen host face. Legacy flat `entities` lists in `worlds.json` are no longer used for unspace loading.
+4-space layouts are defined in `unspaces.json` as a **`field`** block: a one-shot Poisson-scattered point field, Delaunay triangulation (with optional convex quad merges), independent random vertex heights, and a fixed exit portal on a chosen host face. Flat `entities` lists in `worlds.json` are not used for unspace loading.
 
 `WorldLoader.load_unspace` spawns an `NspaceField` instead of sector entity scenes. No dust ring in unspace. The field builds the mesh once from catalog tuning (`fov_vertex_count`, `scatter_margin`, `quad_merge_chance`, `height_scale`) so the play zone plus an FOV margin stays off-screen. **3D presentation** is rendered in an isolated `SubViewport` (`own_world_3d`) and composited behind the ship via `_draw()` on the field node. Heights map to the view axis (`Z`) as a ground plane under the 2D ship; an orthographic `Camera3D` tracks the active `Camera2D`. The exit portal is placed once on a host face from the route seed; its visual is a 3D disc in the backdrop while a hidden 2D `Area2D` handles `[E]` interaction. Unspace applies no field forces on the player; ship flight uses the same `ShipMotion` path as 3-space orbit. **Ascidians** (1–3 per visit, visit-randomised spawn) wander in 2D logic but draw in 3D at mid height between min and max vertex Z; opaque terrain depth-tests against them so peaks occlude naturally. They appear as faint unlabeled radar contacts. Higher-N spaces may later project 3D geometry into the play plane; 4-space does not.
 
@@ -182,11 +183,7 @@ flowchart TD
 | `habitat` | `scenes/world/habitat.tscn` |
 | `jump_gate` | `scenes/world/jump_gate.tscn` |
 | `orbital` | `scenes/world/orbital.tscn` (visual-only station) |
-| `beacon` | `scenes/world/beacon.tscn` |
-| `wreck` | `scenes/world/wreck.tscn` |
-| `debris` | `scenes/world/debris_rock.tscn` |
-| `hazard` | `scenes/world/hazard.tscn` (legacy; not used in 4-space) |
-| `planet_limb` | Sprite2D spawned in code (legacy) |
+| `debris` | `scenes/world/debris_rock.tscn` (collision; weapon damage via `DebrisHealth`) |
 
 Habitat and jump gate have interactable areas but **no solid collision** — the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded). `Simulation.step` advances phase for the current sector when in realspace flight; `OrbitalRing` reads phase for rotation (does not write session while docked or in unspace).
 
@@ -218,7 +215,7 @@ Catalog: `data/catalog/traffic.json`. Presentation: `TrafficView`, `scenes/npc_s
 
 | Format | Use |
 |--------|-----|
-| **SVG** | Ships, stations, gates, beacons, wrecks, debris, orbitals |
+| **SVG** | Ships, stations, gates, debris, orbitals |
 | **PNG** | Starfield tiles, planet disc, painterly backgrounds |
 
 Chassis entries reference hull **sprites**; SVG paint is the source of color (hull sprites render at `Color.WHITE`). The optional `hull_color` field is identity metadata (e.g. future radar/livery), not a sprite tint. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.

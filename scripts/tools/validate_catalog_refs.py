@@ -208,6 +208,53 @@ def check_unspace_completeness(unspaces: list) -> list[str]:
     return errors
 
 
+ALLOWED_WORLD_ENTITY_KINDS = frozenset(
+    {"habitat", "jump_gate", "orbital", "debris"}
+)
+
+
+def check_world_entity_kinds(worlds: dict) -> list[str]:
+    errors: list[str] = []
+
+    def check_kind(kind: str, label: str) -> None:
+        if not kind:
+            errors.append(f"{label}: missing kind")
+            return
+        if kind not in ALLOWED_WORLD_ENTITY_KINDS:
+            errors.append(
+                f"{label}: unknown world entity kind '{kind}' "
+                f"(allowed: {', '.join(sorted(ALLOWED_WORLD_ENTITY_KINDS))})"
+            )
+
+    for world_id, world_data in worlds.items():
+        if not isinstance(world_data, dict):
+            continue
+        ring = world_data.get("orbital_ring", {})
+        if isinstance(ring, dict):
+            orbitals = ring.get("orbitals", [])
+            if isinstance(orbitals, list):
+                for index, orbital in enumerate(orbitals):
+                    if not isinstance(orbital, dict):
+                        continue
+                    entity_id = str(orbital.get("id", f"index_{index}"))
+                    check_kind(
+                        str(orbital.get("kind", "")),
+                        f"world {world_id} orbital {entity_id}",
+                    )
+        entities = world_data.get("entities", [])
+        if isinstance(entities, list):
+            for index, entity in enumerate(entities):
+                if not isinstance(entity, dict):
+                    continue
+                entity_id = str(entity.get("id", f"index_{index}"))
+                check_kind(
+                    str(entity.get("kind", "")),
+                    f"world {world_id} entity {entity_id}",
+                )
+
+    return errors
+
+
 PROPULSION_MAKERS = {
     "Holt-Winters Corp",
     "Orion Aerospace",
@@ -895,6 +942,7 @@ def main() -> int:
 
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))
+    errors.extend(check_world_entity_kinds(worlds))
 
     if errors:
         for err in errors:
