@@ -10,6 +10,9 @@ static func run(runner: TestRunner) -> void:
 
 	var module_def := catalog.get_module_def("light_laser")
 	runner.check(module_def is ModuleDef, "get_module_def(light_laser) is ModuleDef")
+	var weapon_defs: Array = catalog.list_module_defs("weapon")
+	runner.check(not weapon_defs.is_empty(), "list_module_defs(weapon) non-empty")
+	runner.check(weapon_defs[0] is ModuleDef, "list_module_defs returns ModuleDef")
 	runner.check_eq(module_def.category, "weapon", "light_laser category")
 	runner.check_eq(module_def.mount, "light_weapon", "light_laser mount")
 
@@ -240,7 +243,7 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 		)
 		var assembled := ShipAssembler.assemble_owned(catalog, owned)
 		runner.check(
-			not assembled.get_propulsion_module().is_empty(),
+			assembled.get_propulsion_module_def() != null,
 			"%s template has a main engine" % ship_id
 		)
 

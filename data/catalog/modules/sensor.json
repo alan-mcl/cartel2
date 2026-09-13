@@ -1,0 +1,382 @@
+[
+  {
+    "id": "hg_hermes_circinus",
+    "name": "Hermes Circinus",
+    "maker": "Mercury Communications",
+    "brand": "Hermes",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.5,
+    "volume": 0.6,
+    "compute_demand": 3.0,
+    "power_demand": 1.5,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor",
+      "local_system_waypoints",
+      "sensor_read_beacons",
+      "4_space_topology"
+    ],
+    "cost": 950,
+    "description": "Circinus extends the N6 stack with a gravimetric wave detector for survey and escort fits.",
+    "sensor_range": 8000.0,
+    "sensor_sensitivity": {
+      "thermal": 1.35,
+      "gravitational": 1.35,
+      "electromagnetic": 1.35,
+      "computational": 1.35
+    },
+    "sensor_sensitivity_passive": {
+      "thermal": 1.2,
+      "gravitational": 1.35,
+      "electromagnetic": 0.4,
+      "computational": 1.2
+    },
+    "signature": {
+      "thermal": 1.0,
+      "gravitational": 0.25,
+      "electromagnetic": 3.0,
+      "computational": 4.5
+    }
+  },
+  {
+    "id": "hg_hermes_n6",
+    "name": "Hermes N6",
+    "maker": "Mercury Communications",
+    "brand": "Hermes",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.3,
+    "volume": 0.4,
+    "compute_demand": 2.0,
+    "power_demand": 1.0,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor",
+      "local_system_waypoints",
+      "sensor_read_beacons",
+      "4_space_topology"
+    ],
+    "cost": 550,
+    "description": "Hermes N6 pairs an infrared receiver and EM array with a civilian radar \u2014 the municipal nav package on workhorse hulls.",
+    "sensor_range": 6500.0,
+    "sensor_sensitivity": {
+      "thermal": 1.0,
+      "gravitational": 1.0,
+      "electromagnetic": 1.0,
+      "computational": 1.0
+    },
+    "sensor_sensitivity_passive": {
+      "thermal": 1.0,
+      "gravitational": 1.0,
+      "electromagnetic": 0.35,
+      "computational": 1.0
+    },
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.2,
+      "electromagnetic": 2.5,
+      "computational": 3.5
+    }
+  },
+  {
+    "id": "hg_hermes_sideband",
+    "name": "Hermes Sideband",
+    "maker": "Mercury Communications",
+    "brand": "Hermes",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.22,
+    "volume": 0.3,
+    "compute_demand": 1.5,
+    "power_demand": 0.6,
+    "has_active": false,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 480,
+    "description": "Sideband is a listen-only EM array for operators who want emissions intelligence without painting the lane.",
+    "sensor_range": 7000.0,
+    "sensor_sensitivity": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 1.8,
+      "computational": 0.0
+    },
+    "signature": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "hw_glimmer_ember",
+    "name": "Glimmer Ember",
+    "maker": "Holt-Winters Corp",
+    "brand": "Glimmer",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.18,
+    "volume": 0.28,
+    "compute_demand": 1.2,
+    "power_demand": 0.5,
+    "has_active": false,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 380,
+    "description": "Ember is a passive infrared receiver for pilots who would rather stay dark than paint the belt.",
+    "sensor_range": 6800.0,
+    "sensor_sensitivity": {
+      "thermal": 1.8,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    },
+    "signature": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "hw_glimmer_glance",
+    "name": "Glimmer Glance",
+    "maker": "Holt-Winters Corp",
+    "brand": "Glimmer",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.25,
+    "volume": 0.35,
+    "compute_demand": 1.8,
+    "power_demand": 0.9,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor",
+      "local_system_waypoints",
+      "sensor_read_beacons",
+      "4_space_topology"
+    ],
+    "cost": 620,
+    "description": "Glance keeps Holt-Winters sport hulls light: infrared receiver plus a short-range racing radar.",
+    "sensor_range": 6200.0,
+    "sensor_sensitivity": {
+      "thermal": 1.1,
+      "gravitational": 0.8,
+      "electromagnetic": 1.0,
+      "computational": 0.8
+    },
+    "sensor_sensitivity_passive": {
+      "thermal": 1.0,
+      "gravitational": 0.7,
+      "electromagnetic": 0.35,
+      "computational": 0.7
+    },
+    "signature": {
+      "thermal": 0.7,
+      "gravitational": 0.15,
+      "electromagnetic": 2.2,
+      "computational": 3.0
+    }
+  },
+  {
+    "id": "ora_octant_12",
+    "name": "Octant 12",
+    "maker": "Orion Aerospace",
+    "brand": "Octant",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.38,
+    "volume": 0.48,
+    "compute_demand": 2.4,
+    "power_demand": 1.3,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor",
+      "local_system_waypoints",
+      "sensor_read_beacons",
+      "4_space_topology"
+    ],
+    "cost": 780,
+    "description": "Octant 12 bundles an infrared receiver, radar, and thermal lidar for operators who want active ranging on every approach.",
+    "sensor_range": 6800.0,
+    "sensor_sensitivity": {
+      "thermal": 1.4,
+      "gravitational": 0.5,
+      "electromagnetic": 1.1,
+      "computational": 0.6
+    },
+    "sensor_sensitivity_passive": {
+      "thermal": 1.0,
+      "gravitational": 0.4,
+      "electromagnetic": 0.3,
+      "computational": 0.4
+    },
+    "signature": {
+      "thermal": 1.2,
+      "gravitational": 0.15,
+      "electromagnetic": 3.2,
+      "computational": 3.8
+    }
+  },
+  {
+    "id": "ora_octant_plumb",
+    "name": "Octant Plumb",
+    "maker": "Orion Aerospace",
+    "brand": "Octant",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.55,
+    "volume": 0.65,
+    "compute_demand": 3.2,
+    "power_demand": 1.8,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 1100,
+    "description": "Plumb is a gravitational interferometer package \u2014 active gravimetric ranging for survey contractors who accept the ping.",
+    "sensor_range": 8200.0,
+    "sensor_sensitivity": {
+      "thermal": 0.0,
+      "gravitational": 2.2,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    },
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 1.8,
+      "electromagnetic": 2.0,
+      "computational": 2.5
+    }
+  },
+  {
+    "id": "prv_lumina_sight",
+    "name": "Lumina Sight",
+    "maker": "ParaRamcoVidia",
+    "brand": "Lumina",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.42,
+    "volume": 0.52,
+    "compute_demand": 2.8,
+    "power_demand": 1.1,
+    "has_active": false,
+    "capabilities": [
+      "local_sensor",
+      "local_system_waypoints",
+      "sensor_read_beacons",
+      "4_space_topology"
+    ],
+    "cost": 1400,
+    "description": "Lumina Sight layers a spectral resonance array over infrared and EM listen \u2014 glossy law-enforcement nav without active pings.",
+    "sensor_range": 7200.0,
+    "sensor_sensitivity": {
+      "thermal": 1.3,
+      "gravitational": 0.5,
+      "electromagnetic": 1.5,
+      "computational": 0.4
+    },
+    "signature": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "prv_lumina_wellhead",
+    "name": "Lumina Wellhead",
+    "maker": "ParaRamcoVidia",
+    "brand": "Lumina",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.48,
+    "volume": 0.58,
+    "compute_demand": 3.0,
+    "power_demand": 1.2,
+    "has_active": false,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 2200,
+    "description": "Wellhead mounts a neutrino receptor tuned for reactor and drive activity \u2014 strong gravimetric and EM listen, no transmitters.",
+    "sensor_range": 9000.0,
+    "sensor_sensitivity": {
+      "thermal": 0.3,
+      "gravitational": 1.8,
+      "electromagnetic": 1.6,
+      "computational": 0.2
+    },
+    "signature": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "prv_nexus_listen",
+    "name": "Nexus Listen",
+    "maker": "ParaRamcoVidia",
+    "brand": "Nexus",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.36,
+    "volume": 0.46,
+    "compute_demand": 3.2,
+    "power_demand": 1.0,
+    "has_active": false,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 880,
+    "description": "Nexus Listen is a calculus wave detector for spotting active onboard compute workloads at range.",
+    "sensor_range": 7500.0,
+    "sensor_sensitivity": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 2.0
+    },
+    "signature": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "prv_nexus_locus",
+    "name": "Nexus Locus",
+    "maker": "ParaRamcoVidia",
+    "brand": "Nexus",
+    "category": "sensor",
+    "mount": "system",
+    "mass": 0.4,
+    "volume": 0.5,
+    "compute_demand": 3.6,
+    "power_demand": 1.5,
+    "has_active": true,
+    "capabilities": [
+      "local_sensor"
+    ],
+    "cost": 1050,
+    "description": "Locus drives a local geometry scanner \u2014 active computational ranging for operators who need to map thinking ships.",
+    "sensor_range": 7800.0,
+    "sensor_sensitivity": {
+      "thermal": 0.0,
+      "gravitational": 0.0,
+      "electromagnetic": 0.0,
+      "computational": 2.2
+    },
+    "signature": {
+      "thermal": 0.5,
+      "gravitational": 0.1,
+      "electromagnetic": 1.8,
+      "computational": 4.5
+    }
+  }
+]

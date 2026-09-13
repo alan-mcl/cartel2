@@ -7,21 +7,19 @@ import json
 import sys
 from pathlib import Path
 
+TOOLS = Path(__file__).resolve().parent
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from catalog_io import load_array, index_by_id, load_modules
+
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "data" / "catalog"
 
 
-def load_array(path: Path) -> list:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def index_by_id(items: list) -> dict:
-    return {item["id"]: item for item in items}
-
-
 def main() -> int:
     chassis_by_id = index_by_id(load_array(CATALOG / "chassis.json"))
-    modules_by_id = index_by_id(load_array(CATALOG / "modules.json"))
+    modules_by_id = index_by_id(load_modules())
     ships = load_array(CATALOG / "ships.json")
 
     errors: list[str] = []

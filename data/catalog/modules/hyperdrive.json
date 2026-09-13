@@ -1,0 +1,20 @@
+[
+  {
+    "id": "hyperdrive_alpha",
+    "name": "Alpha Hyperdrive",
+    "maker": "Kolmogorov-Smirnov",
+    "category": "hyperdrive",
+    "mount": "system",
+    "mass": 4.0,
+    "volume": 4.0,
+    "power_demand": 8.0,
+    "cost": 12000,
+    "description": "Alpha-class hyperdrive. Catalog placeholder \u2014 no translation gameplay yet.",
+    "signature": {
+      "thermal": 4.4,
+      "gravitational": 6.0,
+      "electromagnetic": 6.2,
+      "computational": 1.0
+    }
+  }
+]

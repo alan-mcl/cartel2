@@ -193,8 +193,8 @@ static func _remove_modules_in_category(catalog: Catalog, ship: OwnedShip, categ
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_data: Variant = entry.get("data", {})
-		if typeof(module_data) != TYPE_DICTIONARY:
+		var module_data: ModuleDef = entry.get("data", null)
+		if module_data == null:
 			continue
-		if str(module_data.get("category", "")) == category:
+		if module_data.category == category:
 			ship.remove_module(str(entry.get("slot", "")))

@@ -215,36 +215,35 @@ static func build_weapon_profile(assembled: AssembledShip, owned: OwnedShip) -> 
 		return profile
 
 	var best_range := -1.0
-	var best_module: Dictionary = {}
+	var best_module: ModuleDef = null
 
 	for entry_variant in assembled.modules_in_category("weapon"):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
 
-		var ammo_type := str(module_def.get("ammunition_type", ""))
-		if not ammo_type.is_empty():
-			var ammo_per_shot := int(module_def.get("ammunition_per_shot", 1))
-			if owned.get_ammo_count(ammo_type) < ammo_per_shot:
+		if not module_def.ammunition_type.is_empty():
+			var ammo_per_shot := int(module_def.ammunition_per_shot) if module_def.ammunition_per_shot > 0.0 else 1
+			if owned.get_ammo_count(module_def.ammunition_type) < ammo_per_shot:
 				continue
 
-		var weapon_range := float(module_def.get("range", 800.0))
+		var weapon_range := module_def.range if module_def.range > 0.0 else 800.0
 		if weapon_range <= best_range:
 			continue
 
 		best_range = weapon_range
 		best_module = module_def
 
-	if best_module.is_empty():
+	if best_module == null:
 		return profile
 
 	var delivery := ShipCombat.delivery_type_from_module(best_module)
-	var projectile_speed := float(best_module.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
-	if delivery == "ballistic" and str(best_module.get("weapon_type", "")) == "rocket":
-		projectile_speed = float(best_module.get("projectile_speed", ShipWeapons.DEFAULT_ROCKET_SPEED))
+	var projectile_speed := best_module.projectile_speed if best_module.projectile_speed > 0.0 else ShipWeapons.DEFAULT_PROJECTILE_SPEED
+	if delivery == "ballistic" and best_module.weapon_type == "rocket":
+		projectile_speed = best_module.projectile_speed if best_module.projectile_speed > 0.0 else ShipWeapons.DEFAULT_ROCKET_SPEED
 
 	var needs_facing := true
 	if delivery == "guided" and GUIDED_OFFBORE_FIRE:

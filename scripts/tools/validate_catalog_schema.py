@@ -13,7 +13,7 @@ SCHEMA_DIR = ROOT / "data" / "catalog" / "schema"
 
 REF_CATALOG_FILES = {
     "chassis": "chassis.json",
-    "modules": "modules.json",
+    "modules": "modules/",
     "ammunition": "ammunition.json"
 }
 
@@ -29,13 +29,23 @@ TYPE_CHECKS = {
 SCHEMA_TARGETS = [
     ("ammunition.json", SCHEMA_DIR / "ammunition.schema.json"),
     ("chassis.json", SCHEMA_DIR / "chassis.schema.json"),
-    ("modules.json", SCHEMA_DIR / "modules.schema.json"),
+    ("modules/", SCHEMA_DIR / "modules.schema.json"),
     ("sectors.json", SCHEMA_DIR / "sectors.schema.json"),
     ("ships.json", SCHEMA_DIR / "ships.schema.json"),
 ]
 
 def load_array(filename: str) -> list:
-    return json.loads((CATALOG / filename).read_text(encoding='utf-8'))
+    path = CATALOG / filename
+    if filename.endswith('/'):
+        merged: list = []
+        module_dir = CATALOG / filename.rstrip('/')
+        for child in sorted(module_dir.glob('*.json')):
+            data = json.loads(child.read_text(encoding='utf-8'))
+            if not isinstance(data, list):
+                raise ValueError(f'{child.name} must contain a JSON array')
+            merged.extend(data)
+        return merged
+    return json.loads(path.read_text(encoding='utf-8'))
 
 def index_by_id(items: list) -> dict:
     return {

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "fuel_tank_large",
+    "name": "Fuel Tank Large",
+    "maker": "Bayes Inc",
+    "category": "fuel",
+    "mass": 0.9,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 850,
+    "description": "Extended-range propulsion fuel storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.48,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "fuel_tank_medium",
+    "name": "Fuel Tank Medium",
+    "maker": "Bayes Inc",
+    "category": "fuel",
+    "mass": 0.6,
+    "volume": 4.0,
+    "fuel_capacity": 80.0,
+    "cost": 550,
+    "description": "Medium propulsion fuel storage for longer routes.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.32,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "fuel_tank_small",
+    "name": "Fuel Tank Small",
+    "maker": "Bayes Inc",
+    "category": "fuel",
+    "mass": 0.3,
+    "volume": 2.0,
+    "fuel_capacity": 40.0,
+    "cost": 350,
+    "description": "Compact propulsion fuel storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.16,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  }
+]

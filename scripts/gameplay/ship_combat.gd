@@ -18,10 +18,10 @@ static func initial_shield_charges(assembled: AssembledShip) -> Dictionary:
 		return charges
 	for entry in _shield_entries(assembled):
 		var slot := str(entry.get("slot", ""))
-		var module_def: Dictionary = entry.get("data", {})
-		if slot.is_empty() or module_def.is_empty():
+		var module_def: ModuleDef = entry.get("data", null)
+		if slot.is_empty() or module_def == null:
 			continue
-		charges[slot] = float(module_def.get("shield_capacity", 0.0))
+		charges[slot] = module_def.shield_capacity
 	return charges
 
 
@@ -30,15 +30,14 @@ static func tick_shields(state: ShipCombatState, assembled: AssembledShip, delta
 		return
 	for entry in _shield_entries(assembled):
 		var slot := str(entry.get("slot", ""))
-		var module_def: Dictionary = entry.get("data", {})
-		if slot.is_empty() or module_def.is_empty():
+		var module_def: ModuleDef = entry.get("data", null)
+		if slot.is_empty() or module_def == null:
 			continue
-		var capacity := float(module_def.get("shield_capacity", 0.0))
+		var capacity := module_def.shield_capacity
 		var current := float(state.shield_charges.get(slot, capacity))
 		if current >= capacity:
 			continue
-		var regen := float(module_def.get("regen", 0.0))
-		state.shield_charges[slot] = minf(capacity, current + regen * delta)
+		state.shield_charges[slot] = minf(capacity, current + module_def.regen * delta)
 
 
 static func resolve_hit(
@@ -102,33 +101,27 @@ static func get_effective_compute_capacity(assembled: AssembledShip, state: Ship
 	return maxf(0.0, base - state.compute_integrity_lost)
 
 
-static func packets_from_module(catalog: Catalog, module_def: Dictionary) -> Dictionary:
-	if typeof(module_def) != TYPE_DICTIONARY or module_def.is_empty():
+static func packets_from_module(catalog: Catalog, module_def: ModuleDef) -> Dictionary:
+	if module_def == null:
 		return {}
 
-	var ammo_type := str(module_def.get("ammunition_type", ""))
-	if not ammo_type.is_empty() and catalog != null:
-		var ammo := catalog.get_ammunition(ammo_type)
-		if not ammo.is_empty() and ammo.has("damage_packets"):
-			return _normalize_packets(ammo.get("damage_packets", {}))
+	if not module_def.ammunition_type.is_empty() and catalog != null:
+		var ammo := catalog.get_ammunition_def(module_def.ammunition_type)
+		if ammo != null:
+			return _normalize_packets(ammo.damage_packets.to_dict())
 
-	if module_def.has("damage_packets"):
-		return _normalize_packets(module_def.get("damage_packets", {}))
+	if not CatalogDamagePackets.is_empty(module_def.damage_packets):
+		return _normalize_packets(module_def.damage_packets.to_dict())
 
-	var legacy_damage := float(module_def.get("damage", 0.0))
-	if legacy_damage > 0.0:
-		var delivery := str(module_def.get("delivery_type", "ballistic"))
-		if delivery == "beam" or delivery == "plasma":
-			return {"energy": legacy_damage}
-		return {"kinetic": legacy_damage}
 	return {}
 
 
-static func delivery_type_from_module(module_def: Dictionary) -> String:
-	var explicit := str(module_def.get("delivery_type", ""))
-	if not explicit.is_empty():
-		return explicit
-	if str(module_def.get("ammunition_type", "")).is_empty():
+static func delivery_type_from_module(module_def: ModuleDef) -> String:
+	if module_def == null:
+		return "ballistic"
+	if not module_def.delivery_type.is_empty():
+		return module_def.delivery_type
+	if module_def.ammunition_type.is_empty():
 		return "beam"
 	return "ballistic"
 
@@ -162,10 +155,10 @@ static func _packets_total(packets: Dictionary) -> float:
 static func _roll_point_defence_intercept(assembled: AssembledShip) -> bool:
 	var miss_chance := 1.0
 	for entry in assembled.modules_in_category("point_defence"):
-		var module_def: Dictionary = entry.get("data", {})
-		if module_def.is_empty():
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
-		var chance := clampf(float(module_def.get("intercept_chance", 0.0)), 0.0, 1.0)
+		var chance := clampf(module_def.intercept_chance, 0.0, 1.0)
 		miss_chance *= 1.0 - chance
 	return randf() >= miss_chance
 
@@ -180,16 +173,14 @@ static func _apply_shields(
 		if remaining.is_empty():
 			break
 		var slot := str(entry.get("slot", ""))
-		var module_def: Dictionary = entry.get("data", {})
-		if slot.is_empty() or module_def.is_empty():
+		var module_def: ModuleDef = entry.get("data", null)
+		if slot.is_empty() or module_def == null:
 			continue
-		var capacity := float(module_def.get("shield_capacity", 0.0))
+		var capacity := module_def.shield_capacity
 		var charge := float(state.shield_charges.get(slot, capacity))
 		if charge <= 0.0:
 			continue
-		var protection: Dictionary = module_def.get("protection", {})
-		if typeof(protection) != TYPE_DICTIONARY:
-			protection = {}
+		var protection := module_def.protection.to_dict()
 		var next_remaining: Dictionary = {}
 		for packet_type in remaining.keys():
 			var amount := float(remaining[packet_type])
@@ -205,12 +196,10 @@ static func _apply_shields(
 
 
 static func _apply_armour(assembled: AssembledShip, packets: Dictionary) -> Dictionary:
-	var armour := assembled.get_armour_module()
-	if armour.is_empty():
+	var armour := assembled.get_armour_module_def()
+	if armour == null:
 		return packets.duplicate(true)
-	var protection: Dictionary = armour.get("protection", {})
-	if typeof(protection) != TYPE_DICTIONARY:
-		protection = {}
+	var protection := armour.protection.to_dict()
 
 	var remaining: Dictionary = {}
 	for packet_type in packets.keys():
@@ -233,14 +222,11 @@ static func _apply_cyber_defence(assembled: AssembledShip, packets: Dictionary) 
 	var cyber_amount := float(remaining.get("cyber", 0.0))
 	var total_reduction := 0.0
 	for entry in assembled.modules_in_category("cyber_defence"):
-		var module_def: Dictionary = entry.get("data", {})
-		if module_def.is_empty():
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
-		var protection: Variant = module_def.get("protection", {})
-		if typeof(protection) == TYPE_DICTIONARY:
-			total_reduction += clampf(float(protection.get("cyber", 0.0)), 0.0, 1.0)
-		else:
-			total_reduction += clampf(float(module_def.get("cyber_reduction", 0.0)), 0.0, 1.0)
+		var protection := module_def.protection.to_dict()
+		total_reduction += clampf(float(protection.get("cyber", 0.0)), 0.0, 1.0)
 	total_reduction = clampf(total_reduction, 0.0, 0.95)
 	var leaked := cyber_amount * (1.0 - total_reduction)
 	if leaked > 0.0:
@@ -251,15 +237,11 @@ static func _apply_cyber_defence(assembled: AssembledShip, packets: Dictionary) 
 
 
 static func _convert_packets_to_resources(packets: Dictionary) -> Dictionary:
-	var hits := 0.0
-	var power := 0.0
-	var compute := 0.0
+	var result := {"hits": 0.0, "power": 0.0, "compute": 0.0}
 	for packet_type in packets.keys():
 		var amount := float(packets[packet_type])
-		var row: Variant = RESOURCE_CONVERSION.get(packet_type, {})
-		if typeof(row) != TYPE_DICTIONARY:
-			continue
-		hits += amount * float(row.get("hits", 0.0))
-		power += amount * float(row.get("power", 0.0))
-		compute += amount * float(row.get("compute", 0.0))
-	return {"hits": hits, "power": power, "compute": compute}
+		var conversion: Dictionary = RESOURCE_CONVERSION.get(packet_type, {})
+		result["hits"] += amount * float(conversion.get("hits", 0.0))
+		result["power"] += amount * float(conversion.get("power", 0.0))
+		result["compute"] += amount * float(conversion.get("compute", 0.0))
+	return result

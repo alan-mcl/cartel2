@@ -1,0 +1,162 @@
+[
+  {
+    "id": "atl_pd_mk1",
+    "name": "Atlas Watchdog PD",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.33,
+    "power_demand": 3.0,
+    "cost": 2000,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "frz_pd_mk1",
+    "name": "FRZ Intercept Grid",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.3,
+    "power_demand": 3.0,
+    "cost": 1850,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "gi_pd_mk1",
+    "name": "GI Close-In PD",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.22,
+    "power_demand": 3.0,
+    "cost": 1400,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "go_pd_mk1",
+    "name": "GO Point Defence Turret",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.35,
+    "power_demand": 3.0,
+    "cost": 1900,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "hw_pd_mk1",
+    "name": "Helios Guard PD",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.32,
+    "power_demand": 3.0,
+    "cost": 2100,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "oc_pd_mk1",
+    "name": "OC Sentinel PD",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.28,
+    "power_demand": 3.0,
+    "cost": 1700,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "ora_pd_mk1",
+    "name": "Bellatrix PD Array",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.25,
+    "power_demand": 3.0,
+    "cost": 1600,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  },
+  {
+    "id": "sbi_pd_mk1",
+    "name": "Seven Bells PD Bell",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.0,
+    "intercept_chance": 0.27,
+    "power_demand": 3.0,
+    "cost": 1750,
+    "description": "",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.12,
+      "electromagnetic": 3.5,
+      "computational": 0.6
+    }
+  }
+]

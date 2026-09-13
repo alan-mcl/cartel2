@@ -1,0 +1,367 @@
+[
+  {
+    "id": "atl_deflector_mk1",
+    "name": "Atlas Deflector Shield",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 34,
+    "protection": {
+      "kinetic": 0.68,
+      "concussive": 0.62,
+      "energy": 0.12,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2960,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "chi_energy_mk1",
+    "name": "Chimera Energy Shield",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 30,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.22,
+      "energy": 0.72,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2800,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "frz_deflector_mk1",
+    "name": "FRZ Deflector Shield",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 26,
+    "protection": {
+      "kinetic": 0.58,
+      "concussive": 0.52,
+      "energy": 0.11,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2640,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "gi_deflector_mk1",
+    "name": "GI Deflector",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 22,
+    "protection": {
+      "kinetic": 0.5,
+      "concussive": 0.45,
+      "energy": 0.08,
+      "cyber": 0.0
+    },
+    "power_demand": 5.0,
+    "regen": 3.0,
+    "cost": 1800,
+    "description": "",
+    "signature": {
+      "thermal": 3.5,
+      "gravitational": 0.2,
+      "electromagnetic": 5.5,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "go_deflector_mk1",
+    "name": "GO Deflector Shield",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 25,
+    "protection": {
+      "kinetic": 0.55,
+      "concussive": 0.5,
+      "energy": 0.1,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2600,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "hw_deflector_mk1",
+    "name": "Helios Deflector Mk I",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 40,
+    "protection": {
+      "kinetic": 0.75,
+      "concussive": 0.7,
+      "energy": 0.15,
+      "cyber": 0.0
+    },
+    "power_demand": 8.0,
+    "regen": 4.0,
+    "cost": 3200,
+    "description": "General-purpose kinetic deflector.",
+    "signature": {
+      "thermal": 4.7,
+      "gravitational": 0.2,
+      "electromagnetic": 7.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "hw_energy_mk1",
+    "name": "Helios Energy Screen Mk I",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 35,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.25,
+      "energy": 0.8,
+      "cyber": 0.0
+    },
+    "power_demand": 10.0,
+    "regen": 3.5,
+    "cost": 3400,
+    "description": "Directed-energy shield screen.",
+    "signature": {
+      "thermal": 5.5,
+      "gravitational": 0.2,
+      "electromagnetic": 8.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "oc_deflector_mk1",
+    "name": "OC Deflector Plate",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 30,
+    "protection": {
+      "kinetic": 0.65,
+      "concussive": 0.6,
+      "energy": 0.1,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2400,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "ora_deflector_mk1",
+    "name": "Bellatrix Deflector",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 28,
+    "protection": {
+      "kinetic": 0.6,
+      "concussive": 0.55,
+      "energy": 0.12,
+      "cyber": 0.0
+    },
+    "power_demand": 5.5,
+    "regen": 3.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 3.7,
+      "gravitational": 0.2,
+      "electromagnetic": 5.75,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "prv_energy_mk1",
+    "name": "Ionique Energy Shield",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 32,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.2,
+      "energy": 0.75,
+      "cyber": 0.0
+    },
+    "power_demand": 9.0,
+    "regen": 3.0,
+    "cost": 3100,
+    "description": "",
+    "signature": {
+      "thermal": 5.1,
+      "gravitational": 0.2,
+      "electromagnetic": 7.5,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "pt_energy_mk1",
+    "name": "Triad Energy Shield",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "shield",
+    "shield_type": "energy",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 28,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.18,
+      "energy": 0.68,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2720,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "sne_electronic_mk1",
+    "name": "SnedOS Electronic Veil",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "shield",
+    "shield_type": "electronic",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 20,
+    "protection": {
+      "kinetic": 0.0,
+      "concussive": 0.0,
+      "energy": 0.2,
+      "cyber": 0.7
+    },
+    "power_demand": 4.0,
+    "regen": 3.0,
+    "cost": 2600,
+    "description": "",
+    "compute_demand": 2.0,
+    "signature": {
+      "thermal": 3.1,
+      "gravitational": 0.2,
+      "electromagnetic": 5.0,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "te_deflector_mk1",
+    "name": "TE Deflector Shield",
+    "maker": "Tukey Enterprises",
+    "brand": "TE",
+    "category": "shield",
+    "shield_type": "deflector",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "shield_capacity": 18,
+    "protection": {
+      "kinetic": 0.45,
+      "concussive": 0.4,
+      "energy": 0.08,
+      "cyber": 0.0
+    },
+    "power_demand": 6.0,
+    "regen": 3.0,
+    "cost": 2320,
+    "description": "",
+    "signature": {
+      "thermal": 3.9,
+      "gravitational": 0.2,
+      "electromagnetic": 6.0,
+      "computational": 0.5
+    }
+  }
+]

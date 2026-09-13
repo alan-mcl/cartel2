@@ -1,0 +1,125 @@
+[
+  {
+    "id": "mass_driver_magazine_200",
+    "name": "Mass Driver Magazine 200",
+    "maker": "Bayes Inc",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "light_weapon",
+      "medium_weapon",
+      "heavy_weapon"
+    ],
+    "mass": 0.4,
+    "volume": 1.0,
+    "ammunition_capacity": {
+      "mass_driver_round": 200
+    },
+    "cost": 320,
+    "description": "Ammunition storage for mass driver weapons.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.08,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "missile_magazine_24",
+    "name": "Missile Rack 24",
+    "maker": "Bayes Inc",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 1.0,
+    "volume": 2.0,
+    "ammunition_capacity": {
+      "missile_light": 24
+    },
+    "cost": 680,
+    "description": "Internal missile storage rack.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.2,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "plasma_magazine_100",
+    "name": "Plasma Cell Magazine 100",
+    "maker": "Bayes Inc",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "light_weapon",
+      "medium_weapon",
+      "heavy_weapon"
+    ],
+    "mass": 0.6,
+    "volume": 1.2,
+    "ammunition_capacity": {
+      "plasma_cell": 100
+    },
+    "cost": 480,
+    "description": "Plasma cell storage for energy weapons.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.12,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "rocket_magazine_16",
+    "name": "Rocket Rack 16",
+    "maker": "Orion Aerospace",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 0.9,
+    "volume": 1.8,
+    "ammunition_capacity": {
+      "rocket_he": 16,
+      "rocket_emp": 16
+    },
+    "cost": 620,
+    "description": "Internal rocket storage rack.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.18,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "scatter_magazine_80",
+    "name": "Scatter Shell Magazine 80",
+    "maker": "Bayes Inc",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "heavy_weapon",
+      "medium_weapon"
+    ],
+    "mass": 0.8,
+    "volume": 1.4,
+    "ammunition_capacity": {
+      "scatter_shell": 80
+    },
+    "cost": 520,
+    "description": "Scatter shell storage for heavy cannons.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.16,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  }
+]

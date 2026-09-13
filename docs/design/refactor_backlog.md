@@ -402,7 +402,7 @@ P3-2 for the order.
 
 ## P3-2 Migrate `modules.json` first
 
-**Status:** Not started. **Phase:** 3. **Depends on:** P3-1.
+**Status:** Done. **Phase:** 3. **Depends on:** P3-1.
 
 **Problem:** 271 entries, 158 KB, hand-authored, 14 commits of churn, maintained by a mix of
 manual editing and one-off scripts (`generate_combat_catalog.py`,

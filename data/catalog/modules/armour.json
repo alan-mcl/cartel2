@@ -1,0 +1,386 @@
+[
+  {
+    "id": "adc_chit_16",
+    "name": "Andean Chit 16",
+    "maker": "Andean Consolidated",
+    "brand": "Andean",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.4,
+    "hits": 16,
+    "protection": {
+      "kinetic": 0.11,
+      "concussive": 0.09,
+      "energy": 0.1
+    },
+    "cost": 760,
+    "description": "Andean Consolidated chitanium plate.",
+    "signature": {
+      "thermal": 0.2,
+      "gravitational": 0.5,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "apex_chit_8",
+    "name": "Apex Chit 8",
+    "maker": "Cult of Apex",
+    "brand": "Apex",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.6,
+    "volume": 0.9,
+    "hits": 8,
+    "protection": {
+      "kinetic": 0.05,
+      "concussive": 0.04,
+      "energy": 0.18
+    },
+    "cost": 900,
+    "description": "Cult of Apex chitanium plate.",
+    "signature": {
+      "thermal": 0.12,
+      "gravitational": 0.3,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_chit_24",
+    "name": "Atlas Chit 24",
+    "maker": "Atlas Concern",
+    "brand": "Atlas",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.5,
+    "volume": 2.1,
+    "hits": 24,
+    "protection": {
+      "kinetic": 0.2,
+      "concussive": 0.16,
+      "energy": 0.08
+    },
+    "cost": 1350,
+    "description": "Atlas Concern chitanium plate.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.75,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "chi_chit_15",
+    "name": "Chimera Chit 15",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.4,
+    "hits": 15,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.08,
+      "energy": 0.14
+    },
+    "cost": 880,
+    "description": "Chimera Corporation chitanium plate.",
+    "signature": {
+      "thermal": 0.2,
+      "gravitational": 0.5,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "chitanium_10mm",
+    "name": "10mm Chitanium",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.4,
+    "volume": 2.0,
+    "hits": 22,
+    "protection": {
+      "kinetic": 0.18,
+      "concussive": 0.15,
+      "energy": 0.1
+    },
+    "cost": 1200,
+    "description": "Medium chitanium plate for combat hulls.",
+    "signature": {
+      "thermal": 0.28,
+      "gravitational": 0.7,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "chitanium_5mm",
+    "name": "5mm Chitanium",
+    "maker": "Oklahoma Combine",
+    "brand": "OC",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.2,
+    "hits": 12,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.08,
+      "energy": 0.05
+    },
+    "cost": 650,
+    "description": "Light chitanium plate. Standard orbital traffic protection.",
+    "signature": {
+      "thermal": 0.16,
+      "gravitational": 0.4,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "eg_chit_12",
+    "name": "Evergreen Chit 12",
+    "maker": "Evergreen Group",
+    "brand": "Evergreen",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 1.1,
+    "hits": 12,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.07,
+      "energy": 0.06
+    },
+    "cost": 620,
+    "description": "Evergreen Group chitanium plate.",
+    "signature": {
+      "thermal": 0.16,
+      "gravitational": 0.4,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "frz_chit_17",
+    "name": "FRZ Chit 17",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.0,
+    "volume": 1.5,
+    "hits": 17,
+    "protection": {
+      "kinetic": 0.11,
+      "concussive": 0.1,
+      "energy": 0.09
+    },
+    "cost": 840,
+    "description": "Four Rivers Zaibatsu chitanium plate.",
+    "signature": {
+      "thermal": 0.2,
+      "gravitational": 0.5,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_chit_20",
+    "name": "GI Chit 20",
+    "maker": "General Industrial",
+    "brand": "GI",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.2,
+    "volume": 1.6,
+    "hits": 20,
+    "protection": {
+      "kinetic": 0.15,
+      "concussive": 0.12,
+      "energy": 0.07
+    },
+    "cost": 950,
+    "description": "General Industrial chitanium plate.",
+    "signature": {
+      "thermal": 0.24,
+      "gravitational": 0.6,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "go_chit_19",
+    "name": "GO Chit 19",
+    "maker": "Galactic Outcomes",
+    "brand": "GO",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.2,
+    "volume": 1.7,
+    "hits": 19,
+    "protection": {
+      "kinetic": 0.16,
+      "concussive": 0.14,
+      "energy": 0.06
+    },
+    "cost": 980,
+    "description": "Galactic Outcomes chitanium plate.",
+    "signature": {
+      "thermal": 0.24,
+      "gravitational": 0.6,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_chit_10",
+    "name": "Bellatrix Chit 10",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.7,
+    "volume": 1.0,
+    "hits": 10,
+    "protection": {
+      "kinetic": 0.08,
+      "concussive": 0.06,
+      "energy": 0.04
+    },
+    "cost": 550,
+    "description": "Orion Aerospace chitanium plate.",
+    "signature": {
+      "thermal": 0.14,
+      "gravitational": 0.35,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "prv_chit_14",
+    "name": "PRV Chit 14",
+    "maker": "ParaRamcoVidia",
+    "brand": "PRV",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.9,
+    "volume": 1.3,
+    "hits": 14,
+    "protection": {
+      "kinetic": 0.1,
+      "concussive": 0.08,
+      "energy": 0.12
+    },
+    "cost": 820,
+    "description": "ParaRamcoVidia chitanium plate.",
+    "signature": {
+      "thermal": 0.18,
+      "gravitational": 0.45,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "pt_chit_21",
+    "name": "Triad Chit 21",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "armour",
+    "mount": "other",
+    "mass": 1.3,
+    "volume": 1.8,
+    "hits": 21,
+    "protection": {
+      "kinetic": 0.17,
+      "concussive": 0.13,
+      "energy": 0.07
+    },
+    "cost": 1100,
+    "description": "Pacific Triad chitanium plate.",
+    "signature": {
+      "thermal": 0.26,
+      "gravitational": 0.65,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "sbi_chit_13",
+    "name": "Seven Bells Chit 13",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.85,
+    "volume": 1.2,
+    "hits": 13,
+    "protection": {
+      "kinetic": 0.09,
+      "concussive": 0.07,
+      "energy": 0.11
+    },
+    "cost": 720,
+    "description": "Seven Bells Inc chitanium plate.",
+    "signature": {
+      "thermal": 0.17,
+      "gravitational": 0.42,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "sne_chit_11",
+    "name": "SnedOS Chit 11",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.75,
+    "volume": 1.1,
+    "hits": 11,
+    "protection": {
+      "kinetic": 0.06,
+      "concussive": 0.05,
+      "energy": 0.15
+    },
+    "cost": 680,
+    "description": "SnedeCorp chitanium plate.",
+    "signature": {
+      "thermal": 0.15,
+      "gravitational": 0.38,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "te_chit_9",
+    "name": "TE Chit 9",
+    "maker": "Tukey Enterprises",
+    "brand": "TE",
+    "category": "armour",
+    "mount": "other",
+    "mass": 0.65,
+    "volume": 0.9,
+    "hits": 9,
+    "protection": {
+      "kinetic": 0.07,
+      "concussive": 0.05,
+      "energy": 0.04
+    },
+    "cost": 480,
+    "description": "Tukey Enterprises chitanium plate.",
+    "signature": {
+      "thermal": 0.13,
+      "gravitational": 0.33,
+      "electromagnetic": 0.1,
+      "computational": 0.0
+    }
+  }
+]

@@ -7,6 +7,12 @@ import json
 import sys
 from pathlib import Path
 
+TOOLS = Path(__file__).resolve().parent
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from catalog_io import load_modules
+
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "data" / "catalog"
 
@@ -337,7 +343,7 @@ def main() -> int:
             f"backgrounds.json: default_id '{default_background_id}' not found"
         )
 
-    modules = load_array(CATALOG / "modules.json")
+    modules = load_modules()
     modules_by_id = index_by_id(modules)
     computer_count = 0
     for module in modules:

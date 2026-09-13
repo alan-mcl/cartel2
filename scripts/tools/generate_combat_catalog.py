@@ -4,10 +4,17 @@
 from __future__ import annotations
 
 import json
+import sys
+from collections import defaultdict
 from pathlib import Path
 
+TOOLS = Path(__file__).resolve().parent
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from catalog_io import load_modules_by_category, write_module_category
+
 ROOT = Path(__file__).resolve().parents[2]
-MODULES_PATH = ROOT / "data/catalog/modules.json"
 AMMO_PATH = ROOT / "data/catalog/ammunition.json"
 
 WEAPON_MAKERS = {
@@ -784,7 +791,6 @@ def build_magazines() -> list[dict]:
 
 
 def patch_modules() -> None:
-    modules = json.loads(MODULES_PATH.read_text())
     remove_cats = {"weapon", "armour", "shield", "point_defence", "cyber_defence"}
 
     combat = (
@@ -797,27 +803,26 @@ def patch_modules() -> None:
         + build_magazines()
     )
     combat_ids = {str(m.get("id", "")) for m in combat}
-
-    by_id: dict[str, dict] = {}
-    order: list[str] = []
-    for module in modules:
-        module_id = str(module.get("id", ""))
-        category = str(module.get("category", ""))
-        if category in remove_cats or module_id in combat_ids:
-            continue
-        if module_id not in by_id:
-            order.append(module_id)
-        by_id[module_id] = module
-
+    combat_by_category: dict[str, list] = defaultdict(list)
     for module in combat:
-        module_id = str(module.get("id", ""))
-        if module_id not in by_id:
-            order.append(module_id)
-        by_id[module_id] = module
+        combat_by_category[str(module.get("category", ""))].append(module)
 
-    patched = [by_id[module_id] for module_id in order]
-    MODULES_PATH.write_text(json.dumps(patched, indent=2) + "\n")
-    print(f"Patched modules.json: {len(combat)} combat modules added")
+    by_category = load_modules_by_category()
+    for category, modules in by_category.items():
+        if category in remove_cats:
+            continue
+        if category == "ammunition":
+            kept = [m for m in modules if str(m.get("id", "")) not in combat_ids]
+            write_module_category(category, kept + combat_by_category.get("ammunition", []))
+            continue
+        kept = [m for m in modules if str(m.get("id", "")) not in combat_ids]
+        if len(kept) != len(modules):
+            write_module_category(category, kept)
+
+    for category in remove_cats:
+        write_module_category(category, combat_by_category.get(category, []))
+
+    print(f"Patched modules/: {len(combat)} combat modules written across category files")
 
 
 def patch_ammunition() -> None:

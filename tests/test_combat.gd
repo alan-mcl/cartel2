@@ -26,17 +26,46 @@ static func run(runner: TestRunner) -> void:
 	_test_unarmed_cannot_fire(runner)
 
 
+static func _module_entry(slot: String, module_id: String, module_data: Dictionary) -> Dictionary:
+	var payload := {
+		"id": module_id,
+		"name": module_id,
+		"maker": "Test Maker",
+		"category": "other",
+		"mass": 1.0,
+		"volume": 1.0,
+		"cost": 1,
+		"description": "Test module",
+		"signature": {},
+	}
+	for key in module_data.keys():
+		payload[key] = module_data[key]
+	return {
+		"slot": slot,
+		"module_id": module_id,
+		"data": ModuleDef.from_dict(payload),
+	}
+
+
 static func _assembled_with_modules(modules: Array, armour: Dictionary = {}) -> AssembledShip:
 	var assembled := AssembledShip.new()
 	assembled.chassis = {"hits": 18}
 	assembled.capacities = {"hull_hits": 18, "power_generation": 40.0, "compute_capacity": 20.0}
-	assembled.installed_modules = modules.duplicate(true)
+	var converted: Array = []
+	for entry in modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var slot := str(entry.get("slot", "other_1"))
+		var module_id := str(entry.get("module_id", "test_module"))
+		var data: Variant = entry.get("data", {})
+		if data is ModuleDef:
+			converted.append(entry)
+		elif typeof(data) == TYPE_DICTIONARY:
+			converted.append(_module_entry(slot, module_id, data))
 	if not armour.is_empty():
-		assembled.installed_modules.append({
-			"slot": "other_1",
-			"module_id": "test_armour",
-			"data": armour,
-		})
+		converted.append(_module_entry("other_1", "test_armour", armour))
+	assembled.installed_modules = converted
+	assembled.build_caches()
 	return assembled
 
 
@@ -179,15 +208,14 @@ static func _make_armed_actor(hull_ratio: float):
 	actor.assembled_ship = AssembledShip.new()
 	actor.assembled_ship.chassis = {"maneuver": "low"}
 	actor.assembled_ship.capacities = {"hull_hits": 28.0}
-	actor.assembled_ship.installed_modules = [{
-		"slot": "weapon_1",
-		"module_id": "test_laser",
-		"data": {
+	actor.assembled_ship.installed_modules = [
+		_module_entry("weapon_1", "test_laser", {
 			"category": "weapon",
 			"delivery_type": "beam",
 			"range": 800.0,
-		},
-	}]
+		}),
+	]
+	actor.assembled_ship.build_caches()
 	actor.combat_state = ShipCombatState.from_assembled(actor.assembled_ship)
 	actor.hull_max = 28.0
 	actor.hull_current = hull_ratio * actor.hull_max
@@ -316,17 +344,10 @@ static func _test_traffic_runabout_and_flee(runner: TestRunner) -> void:
 static func _test_ship_weapons_max_range(runner: TestRunner) -> void:
 	var assembled := AssembledShip.new()
 	assembled.installed_modules = [
-		{
-			"slot": "weapon_1",
-			"module_id": "short",
-			"data": {"category": "weapon", "range": 700.0},
-		},
-		{
-			"slot": "weapon_2",
-			"module_id": "long",
-			"data": {"category": "weapon", "range": 1500.0},
-		},
+		_module_entry("weapon_1", "short", {"category": "weapon", "range": 700.0}),
+		_module_entry("weapon_2", "long", {"category": "weapon", "range": 1500.0}),
 	]
+	assembled.build_caches()
 	runner.check(
 		is_equal_approx(ShipWeapons.max_module_range(assembled), 1500.0),
 		"max module range picks longest weapon"

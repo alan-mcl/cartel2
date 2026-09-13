@@ -135,13 +135,12 @@ func has_ammo() -> bool:
 	for entry in assembled_ship.modules_in_category("weapon"):
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
-		var ammo_type := str(module_def.get("ammunition_type", ""))
-		if ammo_type.is_empty():
+		if module_def.ammunition_type.is_empty():
 			return true
-		if owned_ship.get_ammo_count(ammo_type) > 0:
+		if owned_ship.get_ammo_count(module_def.ammunition_type) > 0:
 			return true
 	return false
 
@@ -599,9 +598,9 @@ func _can_fire_at(player_pos: Vector2) -> bool:
 		return false
 	var range_limit := 800.0
 	for entry in assembled_ship.modules_in_category("weapon"):
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) == TYPE_DICTIONARY:
-			range_limit = maxf(range_limit, float(module_def.get("range", 800.0)))
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def != null:
+			range_limit = maxf(range_limit, module_def.range if module_def.range > 0.0 else 800.0)
 	if to_player.length() > range_limit:
 		return false
 	var angle_diff: float = absf(wrapf(to_player.angle() - motion.facing, -PI, PI))

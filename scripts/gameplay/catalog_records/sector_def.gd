@@ -81,3 +81,6 @@ static func allowed_keys() -> PackedStringArray:
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "play_bounds"])
+
+func has_source_key(key: String) -> bool:
+	return _present_keys.has(key)

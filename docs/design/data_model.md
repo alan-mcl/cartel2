@@ -13,7 +13,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | File | Format | Purpose |
 |------|--------|---------|
 | `chassis.json` | array | Hull frames with mount envelopes |
-| `modules.json` | array | All installable equipment (propulsion, power, weapons, cargo, …) |
+| `modules/*.json` | array per category | All installable equipment split by `category` under `data/catalog/modules/` |
 | `ammunition.json` | array | Ammunition type definitions (mass, cost) |
 | `ships.json` | array | Manufacturer templates (recommended module loadouts) |
 | `player.json` | object | New-game template: starting sector, credits, owned ship instances |
@@ -29,7 +29,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `markets.json` | array | Legacy static listings (unused; quotes are runtime) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
-Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Typed getters (`get_module_def`, `get_chassis_def`, …) return generated `*Def` records; dictionary getters remain for incremental migration ([P3-2](refactor_backlog.md)).
+Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. Typed getters (`get_module_def`, `list_module_defs`, …) are preferred in assembly/combat/sensors; `get_module()` still returns `Dictionary` via `to_dict()` for yard UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
 ## ID conventions
 
@@ -65,7 +65,7 @@ Chassis (envelope + mounts)
 | `hull_color` | string | HTML colour for sprite modulate |
 | `sprite` | string | `res://` path to hull art |
 
-### `modules.json`
+### `modules/*.json`
 
 Common fields (omit zero-valued properties):
 

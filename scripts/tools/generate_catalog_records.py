@@ -27,7 +27,7 @@ SHARED_DEF_CLASS_NAMES = {
 
 REF_CATALOG_FILES = {
     "chassis": "chassis.json",
-    "modules": "modules.json",
+    "modules": "modules/",
     "ammunition": "ammunition.json",
 }
 
@@ -401,6 +401,9 @@ def emit_record_class(spec: ClassSpec) -> str:
     parts.append("static func required_keys() -> PackedStringArray:")
     parts.append("\treturn PackedStringArray([" + ", ".join(f'"{k}"' for k in required) + "])")
     parts.append("")
+    parts.append("func has_source_key(key: String) -> bool:")
+    parts.append("\treturn _present_keys.has(key)")
+    parts.append("")
     return "\n".join(parts)
 
 
@@ -445,7 +448,17 @@ def emit_validator_entrypoints(class_specs: list[ClassSpec]) -> str:
             "]",
             "",
             "def load_array(filename: str) -> list:",
-            "    return json.loads((CATALOG / filename).read_text(encoding='utf-8'))",
+            "    path = CATALOG / filename",
+            "    if filename.endswith('/'):",
+            "        merged: list = []",
+            "        module_dir = CATALOG / filename.rstrip('/')",
+            "        for child in sorted(module_dir.glob('*.json')):",
+            "            data = json.loads(child.read_text(encoding='utf-8'))",
+            "            if not isinstance(data, list):",
+            "                raise ValueError(f'{child.name} must contain a JSON array')",
+            "            merged.extend(data)",
+            "        return merged",
+            "    return json.loads(path.read_text(encoding='utf-8'))",
             "",
             "def index_by_id(items: list) -> dict:",
             "    return {",

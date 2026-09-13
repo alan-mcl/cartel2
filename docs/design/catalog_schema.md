@@ -59,7 +59,7 @@ Source: `data/catalog/schema/chassis.schema.json` → `chassis.json`
 
 ## ModuleDef
 
-Source: `data/catalog/schema/modules.schema.json` → `modules.json`
+Source: `data/catalog/schema/modules.schema.json` → `modules/`
 
 | Field | Type | Required | Default | Notes |
 | --- | --- | --- | --- | --- |

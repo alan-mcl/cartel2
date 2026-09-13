@@ -18,8 +18,8 @@ var modules_by_category: Dictionary = {}
 var _module_caches_ready: bool = false
 var has_transponder_installed: bool = false
 var has_active_sensor_package_installed: bool = false
-var propulsion_module: Dictionary = {}
-var armour_module: Dictionary = {}
+var propulsion_module: ModuleDef = null
+var armour_module: ModuleDef = null
 
 
 func has_capability(id: String) -> bool:
@@ -43,22 +43,29 @@ func get_summary() -> String:
 	if not chassis.is_empty():
 		parts.append(str(chassis.get("name", "")))
 
-	var engine := get_propulsion_module()
-	if not engine.is_empty():
-		parts.append(str(engine.get("name", "")))
+	var engine := get_propulsion_module_def()
+	if engine != null:
+		parts.append(engine.name)
 
 	return " · ".join(parts)
 
 
-func get_module(slot: String) -> Dictionary:
+func get_module_def(slot: String) -> ModuleDef:
 	for entry in installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		if str(entry.get("slot", "")) == slot:
-			var module_data: Variant = entry.get("data", {})
-			if typeof(module_data) == TYPE_DICTIONARY:
+			var module_data: Variant = entry.get("data", null)
+			if module_data is ModuleDef:
 				return module_data
-	return {}
+	return null
+
+
+func get_module(slot: String) -> Dictionary:
+	var module_def := get_module_def(slot)
+	if module_def == null:
+		return {}
+	return module_def.to_dict()
 
 
 func get_module_id(slot: String) -> String:
@@ -79,16 +86,30 @@ func modules_in_category(category: String) -> Array:
 	return cached as Array
 
 
-func get_propulsion_module() -> Dictionary:
+func get_propulsion_module_def() -> ModuleDef:
 	if not _module_caches_ready:
 		_rebuild_module_caches()
 	return propulsion_module
 
 
-func get_armour_module() -> Dictionary:
+func get_armour_module_def() -> ModuleDef:
 	if not _module_caches_ready:
 		_rebuild_module_caches()
 	return armour_module
+
+
+func get_propulsion_module() -> Dictionary:
+	var module_def := get_propulsion_module_def()
+	if module_def == null:
+		return {}
+	return module_def.to_dict()
+
+
+func get_armour_module() -> Dictionary:
+	var module_def := get_armour_module_def()
+	if module_def == null:
+		return {}
+	return module_def.to_dict()
 
 
 func ensure_signature_basis() -> void:
@@ -107,10 +128,10 @@ func _rebuild_module_caches() -> void:
 	for entry in installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_data: Variant = entry.get("data", {})
-		if typeof(module_data) != TYPE_DICTIONARY:
+		var module_data: Variant = entry.get("data", null)
+		if module_data == null or not module_data is ModuleDef:
 			continue
-		var category := str(module_data.get("category", ""))
+		var category := str(module_data.category)
 		if not modules_by_category.has(category):
 			modules_by_category[category] = []
 		(modules_by_category[category] as Array).append(entry)
@@ -123,27 +144,27 @@ func _rebuild_module_caches() -> void:
 	for entry_variant in modules_in_category("sensor"):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
-		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
-		if typeof(module_data) != TYPE_DICTIONARY:
+		var module_data: Variant = (entry_variant as Dictionary).get("data", null)
+		if module_data == null or not module_data is ModuleDef:
 			continue
-		if bool(module_data.get("has_active", false)):
+		if module_data.has_active:
 			has_active_sensor_package_installed = true
 			break
 
-	propulsion_module = {}
+	propulsion_module = null
 	for entry_variant in modules_in_category("propulsion"):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
-		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
-		if typeof(module_data) == TYPE_DICTIONARY:
+		var module_data: Variant = (entry_variant as Dictionary).get("data", null)
+		if module_data is ModuleDef:
 			propulsion_module = module_data
 			break
 
-	armour_module = {}
+	armour_module = null
 	for entry_variant in modules_in_category("armour"):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
-		var module_data: Variant = (entry_variant as Dictionary).get("data", {})
-		if typeof(module_data) == TYPE_DICTIONARY:
+		var module_data: Variant = (entry_variant as Dictionary).get("data", null)
+		if module_data is ModuleDef:
 			armour_module = module_data
 			break

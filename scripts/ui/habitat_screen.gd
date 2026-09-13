@@ -506,8 +506,8 @@ func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
 		var slot := str(entry.get("slot", ""))
-		var module_data: Variant = entry.get("data", {})
-		var module_name := str(module_data.get("name", entry.get("module_id", ""))) if typeof(module_data) == TYPE_DICTIONARY else str(entry.get("module_id", ""))
+		var module_data: ModuleDef = entry.get("data", null)
+		var module_name := module_data.name if module_data != null else str(entry.get("module_id", ""))
 		detail.add_child(_detail_row(slot, module_name))
 
 	if not stats.is_empty():

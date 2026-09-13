@@ -1,0 +1,140 @@
+[
+  {
+    "id": "chi_cyberwall_mk1",
+    "name": "Chimera Firewall",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.35
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  },
+  {
+    "id": "frz_cyberwall_mk1",
+    "name": "FRZ Lattice Guard",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "FRZ",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.22
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  },
+  {
+    "id": "hw_cyberwall_mk1",
+    "name": "Helios Signal Guard",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.25
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  },
+  {
+    "id": "prv_cyberwall_mk1",
+    "name": "PRV Compute Guard",
+    "maker": "ParaRamcoVidia",
+    "brand": "PRV",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.3
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  },
+  {
+    "id": "sbi_cyberwall_mk1",
+    "name": "Seven Bells Cipher Ring",
+    "maker": "Seven Bells Inc",
+    "brand": "Seven Bells",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.28
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  },
+  {
+    "id": "sne_cyberwall_mk1",
+    "name": "SnedOS Cyberwall",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "category": "cyber_defence",
+    "mount": "system",
+    "mass": 0.6,
+    "volume": 0.8,
+    "protection": {
+      "cyber": 0.4
+    },
+    "power_demand": 2.0,
+    "compute_demand": 4.0,
+    "cost": 2200,
+    "description": "",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.07,
+      "electromagnetic": 2.3,
+      "computational": 3.9
+    }
+  }
+]

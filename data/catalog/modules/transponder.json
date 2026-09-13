@@ -1,0 +1,20 @@
+[
+  {
+    "id": "vessel_registration_beacon",
+    "name": "Vessel Registration Beacon",
+    "maker": "SnedeCorp",
+    "category": "transponder",
+    "mount": "system",
+    "mass": 0.15,
+    "volume": 0.2,
+    "power_demand": 0.3,
+    "cost": 320,
+    "description": "Commercial Article 19 identification transmitter. Broadcasts hull registration and pilot callsign when powered.",
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.01,
+      "electromagnetic": 8.0,
+      "computational": 0.2
+    }
+  }
+]

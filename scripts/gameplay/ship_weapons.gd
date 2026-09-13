@@ -19,10 +19,10 @@ static func max_module_range(assembled: AssembledShip) -> float:
 	for entry in assembled.modules_in_category("weapon"):
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
-		max_range = maxf(max_range, float(module_def.get("range", 0.0)))
+		max_range = maxf(max_range, module_def.range)
 	return max_range
 
 
@@ -56,21 +56,19 @@ func tick(
 		if slot.is_empty() or float(_cooldowns.get(slot, 0.0)) > 0.0:
 			continue
 
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
 
-		var rate_of_fire := float(module_def.get("rate_of_fire", 0.0))
-		if rate_of_fire <= 0.0:
+		if module_def.rate_of_fire <= 0.0:
 			continue
 
-		var ammo_type := str(module_def.get("ammunition_type", ""))
-		var ammo_per_shot := int(module_def.get("ammunition_per_shot", 1))
-		if not ammo_type.is_empty():
-			if owned.get_ammo_count(ammo_type) < ammo_per_shot:
+		var ammo_per_shot := int(module_def.ammunition_per_shot) if module_def.ammunition_per_shot > 0.0 else 1
+		if not module_def.ammunition_type.is_empty():
+			if owned.get_ammo_count(module_def.ammunition_type) < ammo_per_shot:
 				out_of_ammo = true
 				continue
-			if not owned.remove_ammo(ammo_type, ammo_per_shot):
+			if not owned.remove_ammo(module_def.ammunition_type, ammo_per_shot):
 				out_of_ammo = true
 				continue
 			ammo_changed = true
@@ -80,19 +78,19 @@ func tick(
 		if packets.is_empty():
 			continue
 
-		var projectile_speed := float(module_def.get("projectile_speed", DEFAULT_PROJECTILE_SPEED))
-		if delivery == "ballistic" and str(module_def.get("weapon_type", "")) == "rocket":
-			projectile_speed = float(module_def.get("projectile_speed", DEFAULT_ROCKET_SPEED))
+		var projectile_speed := module_def.projectile_speed if module_def.projectile_speed > 0.0 else DEFAULT_PROJECTILE_SPEED
+		if delivery == "ballistic" and module_def.weapon_type == "rocket":
+			projectile_speed = module_def.projectile_speed if module_def.projectile_speed > 0.0 else DEFAULT_ROCKET_SPEED
 
 		orders.append({
 			"slot": slot,
 			"module_id": str(entry.get("module_id", "")),
 			"delivery_type": delivery,
 			"packets": packets,
-			"range": float(module_def.get("range", 0.0)),
+			"range": module_def.range,
 			"projectile_speed": projectile_speed,
-			"weapon_type": str(module_def.get("weapon_type", "")),
+			"weapon_type": module_def.weapon_type,
 		})
-		_cooldowns[slot] = 1.0 / rate_of_fire
+		_cooldowns[slot] = 1.0 / module_def.rate_of_fire
 
 	return {"orders": orders, "out_of_ammo": out_of_ammo, "ammo_changed": ammo_changed}

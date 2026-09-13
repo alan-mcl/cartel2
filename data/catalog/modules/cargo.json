@@ -1,0 +1,53 @@
+[
+  {
+    "id": "cargo_bay_10",
+    "name": "Cargo Bay 10",
+    "maker": "Tukey Enterprises",
+    "category": "cargo",
+    "mass": 0.8,
+    "volume": 6.0,
+    "cargo_capacity": 10.0,
+    "cost": 750,
+    "description": "Standard freighter cargo bay.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.44,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "cargo_bay_20",
+    "name": "Cargo Bay 20",
+    "maker": "Tukey Enterprises",
+    "category": "cargo",
+    "mass": 1.2,
+    "volume": 10.0,
+    "cargo_capacity": 20.0,
+    "cost": 1100,
+    "description": "Large internal cargo hold.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.68,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "cargo_bay_4",
+    "name": "Cargo Bay 4",
+    "maker": "Tukey Enterprises",
+    "category": "cargo",
+    "mass": 0.5,
+    "volume": 3.0,
+    "cargo_capacity": 4.0,
+    "cost": 400,
+    "description": "Compact internal cargo hold.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.26,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  }
+]

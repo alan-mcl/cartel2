@@ -61,7 +61,7 @@ static func undock_blockers(catalog: Catalog, owned: OwnedShip, occupant_count: 
 
 	var launch_state := ShipOperations.launch_snapshot(catalog, assembled, owned, occupant_count)
 	var power_generation := float(assembled.capacities.get("power_generation", 0.0))
-	var has_engine := not assembled.get_propulsion_module().is_empty()
+	var has_engine := assembled.get_propulsion_module_def() != null
 
 	if life_support_capacity >= life_support_demand:
 		if not _category_power_satisfied(launch_state, "life_support"):
@@ -402,8 +402,8 @@ static func can_drop_on_slot(
 
 
 static func find_compatible_slots(catalog: Catalog, owned: OwnedShip, part_id: String) -> Array:
-	var module_def := catalog.get_module(part_id)
-	if module_def.is_empty():
+	var module_def := catalog.get_module_def(part_id)
+	if module_def == null:
 		return []
 
 	var slots: Array = []

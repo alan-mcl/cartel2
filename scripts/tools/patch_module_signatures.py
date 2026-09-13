@@ -7,8 +7,13 @@ import json
 import sys
 from pathlib import Path
 
+TOOLS = Path(__file__).resolve().parent
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from catalog_io import MODULES_DIR, load_array, load_modules, write_module_category
+
 ROOT = Path(__file__).resolve().parents[2]
-MODULES_PATH = ROOT / "data" / "catalog" / "modules.json"
 TRAFFIC_PATH = ROOT / "data" / "catalog" / "traffic.json"
 
 SIGNATURE_KEYS = ("thermal", "gravitational", "electromagnetic", "computational")
@@ -179,17 +184,19 @@ def patch_traffic(traffic: dict) -> None:
 
 
 def main() -> int:
-    modules = json.loads(MODULES_PATH.read_text(encoding="utf-8"))
-    patch_modules(modules)
-    MODULES_PATH.write_text(json.dumps(modules, indent=2) + "\n", encoding="utf-8")
+    for path in sorted(MODULES_DIR.glob("*.json")):
+        modules = load_array(path)
+        patch_modules(modules)
+        write_module_category(path.stem, modules)
 
+    all_modules = load_modules()
     traffic = json.loads(TRAFFIC_PATH.read_text(encoding="utf-8"))
     patch_traffic(traffic)
     TRAFFIC_PATH.write_text(json.dumps(traffic, indent=2) + "\n", encoding="utf-8")
 
-    sensor_count = sum(1 for m in modules if m.get("category") == "sensor")
-    sig_count = sum(1 for m in modules if "signature" in m)
-    print(f"Patched {len(modules)} modules ({sig_count} with signature, {sensor_count} sensors).")
+    sensor_count = sum(1 for m in all_modules if m.get("category") == "sensor")
+    sig_count = sum(1 for m in all_modules if "signature" in m)
+    print(f"Patched {len(all_modules)} modules ({sig_count} with signature, {sensor_count} sensors).")
     return 0
 
 

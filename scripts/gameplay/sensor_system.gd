@@ -33,14 +33,11 @@ static func empty_signature() -> Dictionary:
 	}
 
 
-static func module_signature(module_def: Dictionary) -> Dictionary:
-	if typeof(module_def) != TYPE_DICTIONARY or module_def.is_empty():
+static func module_signature(module_def: ModuleDef) -> Dictionary:
+	if module_def == null:
 		return empty_signature()
 
-	var raw: Variant = module_def.get("signature", {})
-	if typeof(raw) != TYPE_DICTIONARY:
-		return empty_signature()
-
+	var raw := module_def.signature.to_dict()
 	var result := empty_signature()
 	for channel in CHANNELS:
 		result[channel] = maxf(0.0, float(raw.get(channel, 0.0)))
@@ -69,9 +66,11 @@ static func _empty_channel_array() -> PackedFloat32Array:
 	return PackedFloat32Array([0.0, 0.0, 0.0, 0.0])
 
 
-static func _add_module_to_basis(basis: Dictionary, module_def: Dictionary) -> void:
-	var category := str(module_def.get("category", ""))
-	if category == "sensor" and not bool(module_def.get("has_active", false)):
+static func _add_module_to_basis(basis: Dictionary, module_def: ModuleDef) -> void:
+	if module_def == null:
+		return
+	var category := module_def.category
+	if category == "sensor" and not module_def.has_active:
 		return
 	var bucket := _signature_bucket_for_category(category)
 	var channels: PackedFloat32Array = basis.get(bucket, _empty_channel_array())
@@ -100,8 +99,8 @@ static func compute_signature_basis(assembled: AssembledShip) -> Dictionary:
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: Variant = entry.get("data", null)
+		if module_def == null or not module_def is ModuleDef:
 			continue
 		_add_module_to_basis(basis, module_def)
 
@@ -126,8 +125,8 @@ static func compute_ship_signature(assembled: AssembledShip, loaded_mass: float 
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: Variant = entry.get("data", null)
+		if module_def == null or not module_def is ModuleDef:
 			continue
 		var module_sig := module_signature(module_def)
 		for channel in CHANNELS:
@@ -267,11 +266,12 @@ static func _live_signature_from_modules(
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_data: Variant = entry.get("data", null)
+		if module_data == null or not module_data is ModuleDef:
 			continue
+		var module_def: ModuleDef = module_data
 
-		var category := str(module_def.get("category", ""))
+		var category := module_def.category
 		var factor := _live_module_signature_factor(
 			category,
 			module_def,
@@ -332,27 +332,22 @@ static func tick_signature_glow(operating_state: ShipOperatingState, delta: floa
 
 
 static func _module_sensitivity_for_toggle(
-	module_def: Dictionary,
+	module_def: ModuleDef,
 	active_sensors_enabled: bool
 ) -> Dictionary:
 	var result := empty_signature()
-	if typeof(module_def) != TYPE_DICTIONARY or module_def.is_empty():
+	if module_def == null:
 		return result
 
-	var has_active := bool(module_def.get("has_active", false))
-	var full_sensitivity: Variant = module_def.get("sensor_sensitivity", {})
-	if typeof(full_sensitivity) != TYPE_DICTIONARY:
-		return result
-
-	if active_sensors_enabled or not has_active:
+	var full_sensitivity := module_def.sensor_sensitivity.to_dict()
+	if active_sensors_enabled or not module_def.has_active:
 		for channel in CHANNELS:
 			result[channel] = maxf(0.0, float(full_sensitivity.get(channel, 0.0)))
 		return result
 
-	var quiet_sensitivity: Variant = module_def.get("sensor_sensitivity_passive", {})
-	if typeof(quiet_sensitivity) == TYPE_DICTIONARY:
-		for channel in CHANNELS:
-			result[channel] = maxf(0.0, float(quiet_sensitivity.get(channel, 0.0)))
+	var quiet_sensitivity := module_def.sensor_sensitivity_passive.to_dict()
+	for channel in CHANNELS:
+		result[channel] = maxf(0.0, float(quiet_sensitivity.get(channel, 0.0)))
 	return result
 
 
@@ -378,11 +373,12 @@ static func compute_static_sensor_profile(assembled: AssembledShip) -> Dictionar
 	var sensitivity_passive := empty_signature()
 
 	for entry in assembled.modules_in_category("sensor"):
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_data: Variant = entry.get("data", null)
+		if module_data == null or not module_data is ModuleDef:
 			continue
+		var module_def: ModuleDef = module_data
 
-		var module_range := float(module_def.get("sensor_range", 6500.0))
+		var module_range: float = module_def.sensor_range if module_def.sensor_range > 0.0 else 6500.0
 		range_max = maxf(range_max, module_range)
 
 		var active_channels := _module_sensitivity_for_toggle(module_def, true)
@@ -630,7 +626,7 @@ static func _live_power_signature_scale(operating_state: ShipOperatingState) -> 
 
 static func _live_module_signature_factor(
 	category: String,
-	module_def: Dictionary,
+	module_def: ModuleDef,
 	operating_state: ShipOperatingState,
 	in_flight: bool,
 	active_sensors: bool,
@@ -651,7 +647,7 @@ static func _live_module_signature_factor(
 				return 1.0
 			return weapon_glow
 		"sensor":
-			if not bool(module_def.get("has_active", false)):
+			if module_def == null or not module_def.has_active:
 				return 0.0
 			return 1.0 if active_sensors else 0.0
 		"transponder":

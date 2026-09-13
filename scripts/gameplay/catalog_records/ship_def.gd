@@ -40,3 +40,6 @@ static func allowed_keys() -> PackedStringArray:
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "maker", "chassis", "modules"])
+
+func has_source_key(key: String) -> bool:
+	return _present_keys.has(key)

@@ -36,10 +36,24 @@ static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -
 	return assembled
 
 
-static func _module_entry(module_def: Dictionary) -> Dictionary:
+static func _module_entry(module_data: Dictionary) -> Dictionary:
+	var payload := {
+		"id": "test_module",
+		"name": "Test Module",
+		"maker": "Test Maker",
+		"category": "sensor",
+		"mass": 1.0,
+		"volume": 1.0,
+		"cost": 1,
+		"description": "Test module",
+		"signature": {},
+	}
+	for key in module_data.keys():
+		payload[key] = module_data[key]
+	var module_def := ModuleDef.from_dict(payload)
 	return {
 		"slot": "system_1",
-		"module_id": str(module_def.get("id", "test")),
+		"module_id": module_def.id,
 		"data": module_def,
 	}
 

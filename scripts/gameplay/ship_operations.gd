@@ -99,7 +99,7 @@ static func tick_into(
 	state.thrust_factor = 1.0
 	state.boost_allowed = true
 
-	if assembled.get_propulsion_module().is_empty():
+	if assembled.get_propulsion_module_def() == null:
 		state.thrust_factor = 0.0
 	elif state.fuel_empty and thrusting:
 		state.thrust_factor = 0.0
@@ -182,12 +182,12 @@ static func _collect_power_demands(
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
 
-		var category := str(module_def.get("category", ""))
-		var demand := float(module_def.get("power_demand", 0.0))
+		var category := module_def.category
+		var demand := module_def.power_demand
 		if demand <= 0.0:
 			continue
 
@@ -202,7 +202,7 @@ static func _collect_power_demands(
 		if category in ["shield", "point_defence"] and not in_flight:
 			continue
 		if category == "power":
-			demand = max(demand, float(module_def.get("fuel_consumption", 0.0)) * 2.0)
+			demand = max(demand, module_def.fuel_consumption * 2.0)
 
 		if category == "propulsion" and bool(active_systems.get("boost", false)):
 			demand *= 1.35
@@ -225,11 +225,11 @@ static func _collect_compute_demand(
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
-		var category := str(module_def.get("category", ""))
-		var demand := float(module_def.get("compute_demand", 0.0))
+		var category := module_def.category
+		var demand := module_def.compute_demand
 		if demand <= 0.0:
 			continue
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
@@ -254,15 +254,15 @@ static func _collect_fuel_consumption(assembled: AssembledShip, active_systems: 
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
 			continue
 
-		var category := str(module_def.get("category", ""))
+		var category := module_def.category
 		if category == "power":
-			total += float(module_def.get("fuel_consumption", 0.0))
+			total += module_def.fuel_consumption
 		elif category == "propulsion" and bool(active_systems.get("engine", false)):
-			var rate := float(module_def.get("fuel_consumption", 0.0))
+			var rate := module_def.fuel_consumption
 			if bool(active_systems.get("boost", false)):
 				rate *= 1.6
 			total += rate

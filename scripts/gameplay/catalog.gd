@@ -2,7 +2,7 @@ class_name Catalog
 extends RefCounted
 
 const CHASSIS_PATH := "res://data/catalog/chassis.json"
-const MODULES_PATH := "res://data/catalog/modules.json"
+const MODULES_DIR := "res://data/catalog/modules/"
 const AMMUNITION_PATH := "res://data/catalog/ammunition.json"
 const SHIPS_PATH := "res://data/catalog/ships.json"
 const BUILDINGS_PATH := "res://data/catalog/buildings.json"
@@ -50,7 +50,7 @@ static func load_default() -> Catalog:
 
 func load_all() -> void:
 	chassis_by_id = _load_indexed_records(CHASSIS_PATH, ChassisDef)
-	modules_by_id = _load_indexed_records(MODULES_PATH, ModuleDef)
+	modules_by_id = _load_indexed_records_from_directory(MODULES_DIR, ModuleDef)
 	ammunition_by_id = _load_indexed_records(AMMUNITION_PATH, AmmunitionDef)
 	ships_by_id = _load_indexed_records(SHIPS_PATH, ShipDef)
 	buildings_by_id = _load_indexed_array(BUILDINGS_PATH)
@@ -299,11 +299,20 @@ func list_modules(category: String = "") -> Array:
 	if category.is_empty():
 		return _records_to_dicts(modules_by_id)
 	var filtered: Array = []
+	for module_def in list_module_defs(category):
+		if module_def == null:
+			continue
+		filtered.append(module_def.to_dict())
+	return filtered
+
+
+func list_module_defs(category: String = "") -> Array:
+	var filtered: Array = []
 	for module_def in modules_by_id.values():
 		if module_def == null:
 			continue
-		if str(module_def.category) == category:
-			filtered.append(module_def.to_dict())
+		if category.is_empty() or str(module_def.category) == category:
+			filtered.append(module_def)
 	return filtered
 
 
@@ -364,6 +373,42 @@ func _append_route_mapping(
 		"time_jitter": ROUTE_TIME_JITTER,
 	})
 	mappings_by_sector[from_id] = mappings
+
+
+func _load_indexed_records_from_directory(dir_path: String, record_class: Variant) -> Dictionary:
+	var indexed: Dictionary = {}
+	var dir := DirAccess.open(dir_path)
+	if dir == null:
+		push_error("Catalog directory not found: %s" % dir_path)
+		return indexed
+
+	var file_names: PackedStringArray = PackedStringArray()
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.ends_with(".json"):
+			file_names.append(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	file_names.sort()
+
+	for sorted_name in file_names:
+		var path := dir_path + sorted_name
+		_merge_indexed_records(indexed, _load_indexed_records(path, record_class), path)
+
+	return indexed
+
+
+func _merge_indexed_records(
+	target: Dictionary,
+	source: Dictionary,
+	path: String
+) -> void:
+	for entry_id in source.keys():
+		if target.has(entry_id):
+			push_error("Duplicate catalog id '%s' across %s." % [entry_id, path])
+			continue
+		target[entry_id] = source[entry_id]
 
 
 func _load_indexed_records(path: String, record_class: Variant) -> Dictionary:

@@ -1,0 +1,986 @@
+[
+  {
+    "id": "apex_capsule_mind",
+    "name": "Capsule Mind",
+    "maker": "Cult of Apex",
+    "brand": "Capsule",
+    "core_type": "quantum",
+    "category": "computer",
+    "mount": "system",
+    "mass": 1.15,
+    "volume": 1.45,
+    "compute_capacity": 16.0,
+    "power_demand": 4.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 7200,
+    "description": "Quantum enclosure inspired by recovered capsule writings. Faith optional; isolation mandatory.",
+    "signature": {
+      "thermal": 1.64,
+      "gravitational": 0.23,
+      "electromagnetic": 2.3,
+      "computational": 0.47
+    }
+  },
+  {
+    "id": "chi_glass",
+    "name": "Chimera Glass",
+    "maker": "Chimera Corporation",
+    "brand": "Chimera",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.45,
+    "volume": 0.58,
+    "compute_capacity": 30.0,
+    "power_demand": 2.2,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 4500,
+    "description": "Photonic glass architecture. Excellent parallel throughput; questionable origin story.",
+    "signature": {
+      "thermal": 2.3,
+      "gravitational": 0.09,
+      "electromagnetic": 4.4,
+      "computational": 4.4
+    }
+  },
+  {
+    "id": "chi_hydra_node",
+    "name": "Hydra Node",
+    "maker": "Chimera Corporation",
+    "brand": "Hydra",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.41,
+    "volume": 0.51,
+    "compute_capacity": 15.0,
+    "power_demand": 1.5,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1300,
+    "description": "Research-division silicon in a commercial chassis. The marketing team insists it is normal.",
+    "signature": {
+      "thermal": 1.2,
+      "gravitational": 0.08,
+      "electromagnetic": 2.1,
+      "computational": 4.8
+    }
+  },
+  {
+    "id": "chi_oracle_well",
+    "name": "Oracle Well",
+    "maker": "Chimera Corporation",
+    "brand": "Oracle",
+    "core_type": "quantum",
+    "category": "computer",
+    "mount": "system",
+    "mass": 1.25,
+    "volume": 1.55,
+    "compute_capacity": 18.0,
+    "power_demand": 4.7,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 14000,
+    "description": "Deep-well quantum for optimization and simulation. Delicate, expensive, occasionally sentient-adjacent.",
+    "signature": {
+      "thermal": 1.72,
+      "gravitational": 0.25,
+      "electromagnetic": 2.4,
+      "computational": 0.51
+    }
+  },
+  {
+    "id": "frz_mizuki_600",
+    "name": "Mizuki 600",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "Mizuki",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.46,
+    "volume": 0.57,
+    "compute_capacity": 19.0,
+    "power_demand": 1.7,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1450,
+    "description": "Mizuki-series silicon for zaibatsu fleet refits.",
+    "signature": {
+      "thermal": 1.36,
+      "gravitational": 0.09,
+      "electromagnetic": 2.34,
+      "computational": 5.68
+    }
+  },
+  {
+    "id": "frz_shirakawa_type_2",
+    "name": "Shirakawa Type 2",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "Shirakawa",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.36,
+    "volume": 0.46,
+    "compute_capacity": 12.0,
+    "power_demand": 1.2,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 700,
+    "description": "Type-number silicon from the Shirakawa house. Conservative and durable.",
+    "signature": {
+      "thermal": 1.08,
+      "gravitational": 0.07,
+      "electromagnetic": 1.92,
+      "computational": 4.14
+    }
+  },
+  {
+    "id": "hg_caduceus_c30",
+    "name": "Caduceus C-30",
+    "maker": "Mercury Communications",
+    "brand": "Caduceus",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.4,
+    "volume": 0.5,
+    "compute_capacity": 16.0,
+    "power_demand": 1.5,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1000,
+    "description": "Relay-grade silicon from the Caduceus family. Built for nav and comms stacks.",
+    "signature": {
+      "thermal": 1.24,
+      "gravitational": 0.08,
+      "electromagnetic": 2.16,
+      "computational": 5.02
+    }
+  },
+  {
+    "id": "hg_caduceus_quiet",
+    "name": "Caduceus Quiet",
+    "maker": "Mercury Communications",
+    "brand": "Caduceus",
+    "core_type": "quantum",
+    "category": "computer",
+    "mount": "system",
+    "mass": 1.0,
+    "volume": 1.28,
+    "compute_capacity": 11.0,
+    "power_demand": 3.8,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 8600,
+    "description": "Quantum enclosure tuned for crypto and secure comms workloads.",
+    "signature": {
+      "thermal": 1.44,
+      "gravitational": 0.2,
+      "electromagnetic": 2.05,
+      "computational": 0.37
+    }
+  },
+  {
+    "id": "hg_hermes_beam",
+    "name": "Hermes Beam",
+    "maker": "Mercury Communications",
+    "brand": "Hermes",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.46,
+    "volume": 0.59,
+    "compute_capacity": 32.0,
+    "power_demand": 2.3,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 4100,
+    "description": "Photonic beam core for high-bandwidth sensor and comms processing.",
+    "signature": {
+      "thermal": 2.4,
+      "gravitational": 0.09,
+      "electromagnetic": 4.56,
+      "computational": 4.64
+    }
+  },
+  {
+    "id": "hg_relay_pack_8",
+    "name": "Relay Pack 8",
+    "maker": "Mercury Communications",
+    "brand": "Relay",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.33,
+    "volume": 0.43,
+    "compute_capacity": 10.0,
+    "power_demand": 1.1,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 620,
+    "description": "Compact relay silicon for light hulls and messenger routes.",
+    "signature": {
+      "thermal": 1.0,
+      "gravitational": 0.07,
+      "electromagnetic": 1.8,
+      "computational": 3.7
+    }
+  },
+  {
+    "id": "hw_helios_prism",
+    "name": "Helios Prism",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.49,
+    "volume": 0.63,
+    "compute_capacity": 38.0,
+    "power_demand": 2.6,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 5200,
+    "description": "Prism photon for pilots who read spec sheets at the dealership.",
+    "signature": {
+      "thermal": 2.7,
+      "gravitational": 0.1,
+      "electromagnetic": 5.04,
+      "computational": 5.36
+    }
+  },
+  {
+    "id": "hw_helios_spark",
+    "name": "Helios Spark",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.44,
+    "volume": 0.54,
+    "compute_capacity": 18.0,
+    "power_demand": 1.6,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1400,
+    "description": "Sport silicon from the Helios line. Pairs well with a compact fusion plant.",
+    "signature": {
+      "thermal": 1.32,
+      "gravitational": 0.09,
+      "electromagnetic": 2.28,
+      "computational": 5.46
+    }
+  },
+  {
+    "id": "lw_arena_sim",
+    "name": "Arena Sim",
+    "maker": "LiveWorlds",
+    "brand": "Arena",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.42,
+    "volume": 0.54,
+    "compute_capacity": 24.0,
+    "power_demand": 1.9,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 2900,
+    "description": "Entertainment photon hardware repurposed for ship sim workloads. Not the best photon, but it sells.",
+    "signature": {
+      "thermal": 2.0,
+      "gravitational": 0.08,
+      "electromagnetic": 3.92,
+      "computational": 3.68
+    }
+  },
+  {
+    "id": "mdc_365_nav",
+    "name": "Monday 365 Nav",
+    "maker": "Monday Corporation",
+    "brand": "Monday",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.32,
+    "volume": 0.42,
+    "compute_capacity": 10.0,
+    "power_demand": 1.1,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 480,
+    "description": "Subscription-era nav silicon. The license expired; the hardware didn't.",
+    "signature": {
+      "thermal": 1.0,
+      "gravitational": 0.06,
+      "electromagnetic": 1.8,
+      "computational": 3.7
+    }
+  },
+  {
+    "id": "mdc_monday_core",
+    "name": "Monday Core",
+    "maker": "Monday Corporation",
+    "brand": "Monday",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.35,
+    "volume": 0.45,
+    "compute_capacity": 12.0,
+    "power_demand": 1.2,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 550,
+    "description": "The core that survived every merger. Unremarkable name, remarkable ubiquity.",
+    "signature": {
+      "thermal": 1.08,
+      "gravitational": 0.07,
+      "electromagnetic": 1.92,
+      "computational": 4.14
+    }
+  },
+  {
+    "id": "mdc_surface",
+    "name": "Monday Surface",
+    "maker": "Monday Corporation",
+    "brand": "Monday",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.44,
+    "volume": 0.57,
+    "compute_capacity": 28.0,
+    "power_demand": 2.1,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 3200,
+    "description": "Thin photon package with the Surface finish. Looks good in a showroom hull.",
+    "signature": {
+      "thermal": 2.2,
+      "gravitational": 0.09,
+      "electromagnetic": 4.24,
+      "computational": 4.16
+    }
+  },
+  {
+    "id": "mdc_workplace_12",
+    "name": "Monday Workplace 12",
+    "maker": "Monday Corporation",
+    "brand": "Monday",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.45,
+    "volume": 0.55,
+    "compute_capacity": 18.0,
+    "power_demand": 1.6,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1100,
+    "description": "Workplace-tier silicon for ships that treat compute like office furniture.",
+    "signature": {
+      "thermal": 1.32,
+      "gravitational": 0.09,
+      "electromagnetic": 2.28,
+      "computational": 5.46
+    }
+  },
+  {
+    "id": "oc_field_core_16",
+    "name": "Field Core 16",
+    "maker": "Oklahoma Combine",
+    "brand": "Field Core",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.4,
+    "volume": 0.5,
+    "compute_capacity": 16.0,
+    "power_demand": 1.5,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 820,
+    "description": "Sixteen compute units of practical Combine engineering.",
+    "signature": {
+      "thermal": 1.24,
+      "gravitational": 0.08,
+      "electromagnetic": 2.16,
+      "computational": 5.02
+    }
+  },
+  {
+    "id": "oc_red_dirt_logic",
+    "name": "Red Dirt Logic",
+    "maker": "Oklahoma Combine",
+    "brand": "Red Dirt",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.34,
+    "volume": 0.44,
+    "compute_capacity": 11.0,
+    "power_demand": 1.1,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 500,
+    "description": "Field silicon that keeps working after the dust settles.",
+    "signature": {
+      "thermal": 1.04,
+      "gravitational": 0.07,
+      "electromagnetic": 1.86,
+      "computational": 3.92
+    }
+  },
+  {
+    "id": "oc_workhorse_brain",
+    "name": "Workhorse Brain",
+    "maker": "Oklahoma Combine",
+    "brand": "Workhorse",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.5,
+    "volume": 0.62,
+    "compute_capacity": 22.0,
+    "power_demand": 1.9,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1550,
+    "description": "Workhorse silicon for gunships and fighters that need headroom.",
+    "signature": {
+      "thermal": 1.48,
+      "gravitational": 0.1,
+      "electromagnetic": 2.52,
+      "computational": 6.34
+    }
+  },
+  {
+    "id": "ora_avionics_a40",
+    "name": "Avionics A-40",
+    "maker": "Orion Aerospace",
+    "brand": "Orion",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.48,
+    "volume": 0.6,
+    "compute_capacity": 20.0,
+    "power_demand": 1.8,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1500,
+    "description": "Avionics-grade silicon for mid-range saucers and patrol craft.",
+    "signature": {
+      "thermal": 1.4,
+      "gravitational": 0.1,
+      "electromagnetic": 2.4,
+      "computational": 5.9
+    }
+  },
+  {
+    "id": "ora_glasspack",
+    "name": "Orion Glasspack",
+    "maker": "Orion Aerospace",
+    "brand": "Orion",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.47,
+    "volume": 0.6,
+    "compute_capacity": 34.0,
+    "power_demand": 2.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 4400,
+    "description": "Glasspack photon for sensor-heavy yard configurations.",
+    "signature": {
+      "thermal": 2.5,
+      "gravitational": 0.09,
+      "electromagnetic": 4.72,
+      "computational": 4.88
+    }
+  },
+  {
+    "id": "ora_yardfit_nav",
+    "name": "Yardfit Nav",
+    "maker": "Orion Aerospace",
+    "brand": "Orion",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.38,
+    "volume": 0.48,
+    "compute_capacity": 14.0,
+    "power_demand": 1.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 800,
+    "description": "Yard-standard nav silicon. Installed on more hulls than anyone admits.",
+    "signature": {
+      "thermal": 1.16,
+      "gravitational": 0.08,
+      "electromagnetic": 2.04,
+      "computational": 4.58
+    }
+  },
+  {
+    "id": "osc_spur_compact",
+    "name": "Spur Compact",
+    "maker": "Orion Spur Company",
+    "brand": "Spur",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.28,
+    "volume": 0.38,
+    "compute_capacity": 8.0,
+    "power_demand": 0.9,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 390,
+    "description": "Budget silicon from an acquired brand. Eight CU of honest economy.",
+    "signature": {
+      "thermal": 0.92,
+      "gravitational": 0.06,
+      "electromagnetic": 1.68,
+      "computational": 3.26
+    }
+  },
+  {
+    "id": "osc_spur_standard",
+    "name": "Spur Standard",
+    "maker": "Orion Spur Company",
+    "brand": "Spur",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.36,
+    "volume": 0.46,
+    "compute_capacity": 13.0,
+    "power_demand": 1.2,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 640,
+    "description": "Standard Spur silicon for rim operators on a budget.",
+    "signature": {
+      "thermal": 1.12,
+      "gravitational": 0.07,
+      "electromagnetic": 1.98,
+      "computational": 4.36
+    }
+  },
+  {
+    "id": "prv_lumina_lx",
+    "name": "Lumina LX",
+    "maker": "ParaRamcoVidia",
+    "brand": "Lumina",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.51,
+    "volume": 0.65,
+    "compute_capacity": 42.0,
+    "power_demand": 2.7,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 5600,
+    "description": "Flagship photon core for parallel sensor and comms workloads.",
+    "signature": {
+      "thermal": 2.9,
+      "gravitational": 0.1,
+      "electromagnetic": 5.36,
+      "computational": 5.84
+    }
+  },
+  {
+    "id": "prv_qbit_foundry",
+    "name": "PRV Qbit Foundry",
+    "maker": "ParaRamcoVidia",
+    "brand": "PRV",
+    "core_type": "quantum",
+    "category": "computer",
+    "mount": "system",
+    "mass": 1.1,
+    "volume": 1.4,
+    "compute_capacity": 12.0,
+    "power_demand": 4.0,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 11200,
+    "description": "Foundry-grade quantum. Not a faster ship computer \u2014 a different kind of math.",
+    "signature": {
+      "thermal": 1.48,
+      "gravitational": 0.22,
+      "electromagnetic": 2.1,
+      "computational": 0.39
+    }
+  },
+  {
+    "id": "prv_tensor_t4",
+    "name": "Tensor T4",
+    "maker": "ParaRamcoVidia",
+    "brand": "Tensor",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.38,
+    "volume": 0.48,
+    "compute_capacity": 14.0,
+    "power_demand": 1.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 750,
+    "description": "Consumer silicon from the Tensor line. Glossy packaging, dependable silicon.",
+    "signature": {
+      "thermal": 1.16,
+      "gravitational": 0.08,
+      "electromagnetic": 2.04,
+      "computational": 4.58
+    }
+  },
+  {
+    "id": "prv_tensor_t9",
+    "name": "Tensor T9",
+    "maker": "ParaRamcoVidia",
+    "brand": "Tensor",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.52,
+    "volume": 0.65,
+    "compute_capacity": 22.0,
+    "power_demand": 1.9,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1600,
+    "description": "The T9 tier \u2014 more CU, same Tensor badge on the bezel.",
+    "signature": {
+      "thermal": 1.48,
+      "gravitational": 0.1,
+      "electromagnetic": 2.52,
+      "computational": 6.34
+    }
+  },
+  {
+    "id": "sakuraya_kikyo",
+    "name": "Kikyo Processor",
+    "maker": "Sakuraya Shinise",
+    "brand": "Kikyo",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.37,
+    "volume": 0.47,
+    "compute_capacity": 13.0,
+    "power_demand": 1.3,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 950,
+    "description": "Conservative silicon from a house that still signs off on every wafer.",
+    "signature": {
+      "thermal": 1.12,
+      "gravitational": 0.07,
+      "electromagnetic": 1.98,
+      "computational": 4.36
+    }
+  },
+  {
+    "id": "sakuraya_shirayuki",
+    "name": "Shirayuki",
+    "maker": "Sakuraya Shinise",
+    "brand": "Shirayuki",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.47,
+    "volume": 0.58,
+    "compute_capacity": 20.0,
+    "power_demand": 1.8,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1700,
+    "description": "Quiet, reliable silicon. No photon line \u2014 tradition over fashion.",
+    "signature": {
+      "thermal": 1.4,
+      "gravitational": 0.09,
+      "electromagnetic": 2.4,
+      "computational": 5.9
+    }
+  },
+  {
+    "id": "sbi_carillon_light",
+    "name": "Carillon Light",
+    "maker": "Seven Bells Inc",
+    "brand": "Carillon",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.43,
+    "volume": 0.56,
+    "compute_capacity": 26.0,
+    "power_demand": 2.0,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 3600,
+    "description": "Light photon carillon for ships that want bandwidth without the full peal.",
+    "signature": {
+      "thermal": 2.1,
+      "gravitational": 0.09,
+      "electromagnetic": 4.08,
+      "computational": 3.92
+    }
+  },
+  {
+    "id": "sbi_peal_logic_5",
+    "name": "Peal Logic 5",
+    "maker": "Seven Bells Inc",
+    "brand": "Peal",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.39,
+    "volume": 0.49,
+    "compute_capacity": 14.0,
+    "power_demand": 1.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 880,
+    "description": "Fifth peal in the Logic series. Rings reliably under load.",
+    "signature": {
+      "thermal": 1.16,
+      "gravitational": 0.08,
+      "electromagnetic": 2.04,
+      "computational": 4.58
+    }
+  },
+  {
+    "id": "sne_bridge_200",
+    "name": "SnedOS Bridge 200",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.42,
+    "volume": 0.52,
+    "compute_capacity": 16.0,
+    "power_demand": 1.5,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 900,
+    "description": "Attested silicon core. License terms apply to the enclosure, not the silicon.",
+    "signature": {
+      "thermal": 1.24,
+      "gravitational": 0.08,
+      "electromagnetic": 2.16,
+      "computational": 5.02
+    }
+  },
+  {
+    "id": "sne_bridge_440",
+    "name": "SnedOS Bridge 440",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.55,
+    "volume": 0.68,
+    "compute_capacity": 24.0,
+    "power_demand": 2.0,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1800,
+    "description": "Mid-tier attested core for hulls that outgrew the Bridge 200 but not the audit schedule.",
+    "signature": {
+      "thermal": 1.56,
+      "gravitational": 0.11,
+      "electromagnetic": 2.64,
+      "computational": 6.78
+    }
+  },
+  {
+    "id": "sne_lattice",
+    "name": "SnedOS Lattice",
+    "maker": "SnedeCorp",
+    "brand": "SnedOS",
+    "core_type": "photon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.48,
+    "volume": 0.62,
+    "compute_capacity": 36.0,
+    "power_demand": 2.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 4800,
+    "description": "Photonic lattice in a sealed Snede chassis. The brochure mentions software; the invoice mentions hardware.",
+    "signature": {
+      "thermal": 2.6,
+      "gravitational": 0.1,
+      "electromagnetic": 4.88,
+      "computational": 5.12
+    }
+  },
+  {
+    "id": "sne_vault_7",
+    "name": "Vault-7",
+    "maker": "SnedeCorp",
+    "brand": "Vault",
+    "core_type": "quantum",
+    "category": "computer",
+    "mount": "system",
+    "mass": 1.05,
+    "volume": 1.35,
+    "compute_capacity": 14.0,
+    "power_demand": 4.2,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 9800,
+    "description": "Isolated quantum enclosure. Snede attestation covers the cage, not the physics.",
+    "signature": {
+      "thermal": 1.56,
+      "gravitational": 0.21,
+      "electromagnetic": 2.2,
+      "computational": 0.43
+    }
+  },
+  {
+    "id": "te_handy_core",
+    "name": "HandyCore",
+    "maker": "Tukey Enterprises",
+    "brand": "HandyCore",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.3,
+    "volume": 0.4,
+    "compute_capacity": 9.0,
+    "power_demand": 1.0,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 420,
+    "description": "Odd-lot silicon from a surplus pallet. Cheap enough not to ask questions.",
+    "signature": {
+      "thermal": 0.96,
+      "gravitational": 0.06,
+      "electromagnetic": 1.74,
+      "computational": 3.48
+    }
+  },
+  {
+    "id": "te_lot_9_special",
+    "name": "Lot 9 Special",
+    "maker": "Tukey Enterprises",
+    "brand": "Lot 9",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.42,
+    "volume": 0.52,
+    "compute_capacity": 17.0,
+    "power_demand": 1.5,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 680,
+    "description": "Lot 9 clearance silicon. Suspiciously good CU for the price.",
+    "signature": {
+      "thermal": 1.28,
+      "gravitational": 0.08,
+      "electromagnetic": 2.22,
+      "computational": 5.24
+    }
+  },
+  {
+    "id": "tmc_channel_4",
+    "name": "Channel 4",
+    "maker": "The Meridian Company",
+    "brand": "Channel",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.49,
+    "volume": 0.61,
+    "compute_capacity": 21.0,
+    "power_demand": 1.8,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 1600,
+    "description": "Channel-series silicon for ships that live between ports.",
+    "signature": {
+      "thermal": 1.44,
+      "gravitational": 0.1,
+      "electromagnetic": 2.46,
+      "computational": 6.12
+    }
+  },
+  {
+    "id": "tmc_transit_nav",
+    "name": "Transit Nav",
+    "maker": "The Meridian Company",
+    "brand": "Transit",
+    "core_type": "silicon",
+    "category": "computer",
+    "mount": "system",
+    "mass": 0.39,
+    "volume": 0.49,
+    "compute_capacity": 15.0,
+    "power_demand": 1.4,
+    "capabilities": [
+      "basic_hud"
+    ],
+    "cost": 900,
+    "description": "Transit-grade silicon for channel routes and hub traffic.",
+    "signature": {
+      "thermal": 1.2,
+      "gravitational": 0.08,
+      "electromagnetic": 2.1,
+      "computational": 4.8
+    }
+  }
+]

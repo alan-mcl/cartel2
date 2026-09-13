@@ -225,24 +225,25 @@ func _add_module_groups(host: VBoxContainer, assembled: AssembledShip) -> void:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
-		var module_def: Variant = entry.get("data", {})
-		if typeof(module_def) != TYPE_DICTIONARY:
+		var module_data: Variant = entry.get("data", null)
+		if module_data == null or not module_data is ModuleDef:
 			continue
-		var category := str(module_def.get("category", "other"))
+		var module_def: ModuleDef = module_data
+		var category := module_def.category if not module_def.category.is_empty() else "other"
 		if not grouped.has(category):
 			grouped[category] = []
 		grouped[category].append(module_def)
 
 	for category in grouped.keys():
 		host.add_child(_detail_label(category.replace("_", " ").to_upper(), ""))
-		for module_def_variant in grouped[category]:
-			if typeof(module_def_variant) != TYPE_DICTIONARY:
+		for mod in grouped[category]:
+			if mod == null or not mod is ModuleDef:
 				continue
-			var module_def: Dictionary = module_def_variant
-			var line := str(module_def.get("name", module_def.get("id", "module")))
+			var module_def: ModuleDef = mod
+			var line: String = module_def.name if not module_def.name.is_empty() else module_def.id
 			if category == "weapon":
-				var delivery := str(module_def.get("delivery_type", ""))
-				var weapon_range := float(module_def.get("range", 0.0))
+				var delivery: String = module_def.delivery_type
+				var weapon_range: float = module_def.range
 				if not delivery.is_empty() or weapon_range > 0.0:
 					line += " (%s, %.0f m)" % [delivery, weapon_range]
 			host.add_child(_detail_label(" ", line))
