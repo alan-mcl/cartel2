@@ -28,7 +28,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
-Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. Typed getters (`get_module_def`, `list_module_defs`, …) are preferred in assembly/combat/sensors; `get_module()` still returns `Dictionary` via `to_dict()` for yard UI. Chassis/ships/sectors dictionary getters remain until a later pass.
+Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
 ## ID conventions
 
@@ -229,7 +229,32 @@ Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected 
 | `exit_seconds` | number | GST consumed when emerging at the destination |
 | `time_jitter` | number | ± fraction applied to each lump (e.g. `0.08` → ±8%) |
 
-**Unspace GST overrides** (optional on `unspaces.json` entries under `gst`): `pulse_min`, `pulse_max`, `stretch_min`, `stretch_max`, `slip_chance`, `slip_min`, `slip_max` — control irregular time flow while flying in N-space. Deeper N uses larger depth multiplier in code.
+**Unspace GST** (required on each `unspaces.json` entry under `gst`): `pulse_min`, `pulse_max`, `stretch_min`, `stretch_max`, `slip_chance`, `slip_min`, `slip_max` — control irregular time flow while flying in N-space. Deeper layers tune these per entry in catalog data; `SimClock` does not scale GST by route `n`.
+
+### `unspaces.json`
+
+One entry per implemented N-space depth (`n` unique, `n >= 4`). `Catalog.get_unspace_for_n(n)` resolves the layout used when a route selects that depth.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Stable id; must match a key in `worlds.json` |
+| `n` | int | N-space depth (4 = shallowest implemented layer) |
+| `name` | string | Display name |
+| `orbit_name` | string | HUD location label while in transit |
+| `play_bounds` | number | Radial play disk (same role as sector `play_bounds`) |
+| `spawn` | object | `{ x, y }` entry position hint |
+| `objective` | string | Optional mission-style hint text |
+| `gst` | object | Irregular GST pulse tuning (see above) |
+| `field` | object | Procedural mesh and inhabitants (below) |
+
+**`field` blocks:**
+
+| Block | Purpose |
+|-------|---------|
+| `palette` | Colour keys for topo fill and portal (`peak`, `trough`, `portal_*`, …) |
+| `topo` | Scatter/Delaunay mesh: `seed_salt`, `fov_vertex_count`, `scatter_margin`, `quad_merge_chance`, `height_scale`, `vertex_count_min`, `vertex_count_max`, `min_dist_factor`, `default_zoom` |
+| `portal` | Exit interactable: `interactable`, `interact_radius`, placement fractions (`origin_min_fraction`, `origin_max_fraction`, `spawn_separation_fraction`, `score_spawn_weight`) |
+| `inhabitants` | Optional Ascidian spawn tuning (`count_min`/`max`, speed/radius ranges, wander fraction, …) |
 
 ### Ship assembly (`ShipAssembly`)
 

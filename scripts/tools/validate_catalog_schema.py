@@ -35,6 +35,7 @@ SCHEMA_TARGETS = [
     ("modules/", SCHEMA_DIR / "modules.schema.json"),
     ("sectors.json", SCHEMA_DIR / "sectors.schema.json"),
     ("ships.json", SCHEMA_DIR / "ships.schema.json"),
+    ("unspaces.json", SCHEMA_DIR / "unspaces.schema.json"),
 ]
 
 def load_array(filename: str) -> list:
@@ -115,13 +116,15 @@ def validate_object(
                 else:
                     errors.extend(validate_object(item, prop, label, sub_path))
             elif isinstance(item, dict):
-                val_type = (prop.get('additionalProperties') or {}).get('type')
-                if val_type:
-                    for sub_key, sub_val in item.items():
-                        if not check_type(sub_val, val_type):
-                            errors.append(
-                                f'{label}: {path}{key}.{sub_key} expected {val_type}'
-                            )
+                add_props = prop.get('additionalProperties')
+                if isinstance(add_props, dict):
+                    val_type = add_props.get('type')
+                    if val_type:
+                        for sub_key, sub_val in item.items():
+                            if not check_type(sub_val, val_type):
+                                errors.append(
+                                    f'{label}: {path}{key}.{sub_key} expected {val_type}'
+                                )
         if 'enum' in prop and item not in prop['enum']:
             errors.append(f'{label}: {path}{key} invalid value {item!r}')
     return errors

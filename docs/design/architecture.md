@@ -192,7 +192,7 @@ Habitat and jump gate have interactable areas but **no solid collision** — the
 
 Each configured world object uses `WorldObject.configure(entity, catalog, session)` for position, label, sprite override, and interactable binding. 4-space uses `NspaceField.configure(unspace, catalog, session, play_bounds)`.
 
-`WorldLoader.load_unspace` reads the `field` block from `unspaces.json` (palette, scatter/Delaunay topo, portal, inhabitants). `GameSession.unspace_solution` is set in `enter_unspace` from the selected route mapping and persisted across saves. Local radar in unspace scales to `play_bounds`. Exit portal nav contacts require the **`4_space_topology`** sensor capability.
+`WorldLoader.load_unspace` reads the `field` block from schema-validated `unspaces.json` (`UnspaceDef` at load; palette, scatter/Delaunay topo, portal placement, inhabitants). Mesh and portal policy knobs live in catalog data, not hard-coded depth formulas. `GameSession.unspace_solution` is set in `enter_unspace` from the selected route mapping and persisted across saves. Unspace GST irregularity is tuned per entry’s `gst` block (`SimClock` does not multiply by route `n`). Local radar in unspace scales to `play_bounds`. Exit portal nav contacts require the **`4_space_topology`** sensor capability.
 
 The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sector load time (not used in unspace). Local radar in 3-space scales to **content radius** (`max(jump_gate_radius, orbital_ring_radius) × 1.15`) so contacts stay readable when the dust ring is much larger than the playable landmarks.
 

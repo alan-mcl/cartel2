@@ -167,3 +167,19 @@ Source: `data/catalog/schema/ships.schema.json` → `ships.json`
 | `maker` | string | yes | `` |  |
 | `chassis` | string | yes | `` | ref → `chassis.json` |
 | `modules` | array | yes | `` |  |
+
+## UnspaceDef
+
+Source: `data/catalog/schema/unspaces.schema.json` → `unspaces.json`
+
+| Field | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | string | yes | `` |  |
+| `n` | integer | yes | `` |  |
+| `name` | string | yes | `` |  |
+| `orbit_name` | string | no | `` |  |
+| `play_bounds` | number | yes | `` |  |
+| `objective` | string | no | `` |  |
+| `spawn` | object | yes | `` |  |
+| `gst` | object | yes | `` |  |
+| `field` | object | yes | `` |  |

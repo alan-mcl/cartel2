@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "UnspaceDef",
+  "x-catalog-file": "unspaces.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "n", "name", "play_bounds", "spawn", "gst", "field"],
+  "properties": {
+    "id": { "type": "string" },
+    "n": { "type": "integer" },
+    "name": { "type": "string" },
+    "orbit_name": { "type": "string", "default": "" },
+    "play_bounds": { "type": "number" },
+    "objective": { "type": "string", "default": "" },
+    "spawn": { "type": "object", "additionalProperties": true },
+    "gst": { "type": "object", "additionalProperties": true },
+    "field": { "type": "object", "additionalProperties": true }
+  }
+}

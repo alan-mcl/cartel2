@@ -104,6 +104,110 @@ TRANSPORT_VOLUME_PER_CREW = {"spartan": 2.5, "comfort": 5.0, "luxury": 7.0}
 HABITAT_VOLUME_PER_CREW = {"spartan": 8.0, "comfort": 11.0, "luxury": 14.0}
 TRANSPORT_ONE_SEAT_COCKPIT_FLOOR = 4.0
 
+UNSPACE_GST_KEYS = (
+    "pulse_min",
+    "pulse_max",
+    "stretch_min",
+    "stretch_max",
+    "slip_chance",
+    "slip_min",
+    "slip_max",
+)
+UNSPACE_TOPO_KEYS = (
+    "seed_salt",
+    "fov_vertex_count",
+    "scatter_margin",
+    "quad_merge_chance",
+    "height_scale",
+    "vertex_count_min",
+    "vertex_count_max",
+    "min_dist_factor",
+    "default_zoom",
+)
+UNSPACE_PORTAL_KEYS = (
+    "interact_radius",
+    "interactable",
+    "origin_min_fraction",
+    "origin_max_fraction",
+    "spawn_separation_fraction",
+    "score_spawn_weight",
+)
+UNSPACE_INHABITANTS_KEYS = (
+    "count_min",
+    "count_max",
+    "speed_min",
+    "speed_max",
+    "radius_min",
+    "radius_max",
+    "wander_radius_fraction",
+    "min_spawn_dist",
+    "fade_band",
+    "lobe_count_min",
+    "lobe_count_max",
+)
+
+
+def check_unspace_completeness(unspaces: list) -> list[str]:
+    errors: list[str] = []
+    n_by_depth: dict[int, str] = {}
+    for unspace in unspaces:
+        if not isinstance(unspace, dict):
+            continue
+        unspace_id = str(unspace.get("id", ""))
+        depth_n = int(unspace.get("n", 0))
+        label = unspace_id or "?"
+        if depth_n < 4:
+            errors.append(f"unspace {label}: n must be >= 4 (got {depth_n})")
+        elif depth_n in n_by_depth:
+            errors.append(
+                f"unspace {label}: duplicate n={depth_n} (also used by {n_by_depth[depth_n]})"
+            )
+        else:
+            n_by_depth[depth_n] = unspace_id
+
+        gst = unspace.get("gst")
+        if not isinstance(gst, dict):
+            errors.append(f"unspace {label}: missing gst object")
+        else:
+            for key in UNSPACE_GST_KEYS:
+                if key not in gst:
+                    errors.append(f"unspace {label}: gst missing '{key}'")
+
+        field = unspace.get("field")
+        if not isinstance(field, dict):
+            errors.append(f"unspace {label}: missing field object")
+            continue
+
+        topo = field.get("topo")
+        if not isinstance(topo, dict):
+            errors.append(f"unspace {label}: field.topo missing")
+        else:
+            for key in UNSPACE_TOPO_KEYS:
+                if key not in topo:
+                    errors.append(f"unspace {label}: field.topo missing '{key}'")
+
+        portal = field.get("portal")
+        if not isinstance(portal, dict):
+            errors.append(f"unspace {label}: field.portal missing")
+        else:
+            for key in UNSPACE_PORTAL_KEYS:
+                if key not in portal:
+                    errors.append(f"unspace {label}: field.portal missing '{key}'")
+
+        inhabitants = field.get("inhabitants")
+        if inhabitants is not None:
+            if not isinstance(inhabitants, dict):
+                errors.append(f"unspace {label}: field.inhabitants must be an object")
+            else:
+                for key in UNSPACE_INHABITANTS_KEYS:
+                    if key not in inhabitants:
+                        errors.append(
+                            f"unspace {label}: field.inhabitants missing '{key}'"
+                        )
+
+    return errors
+
+
 PROPULSION_MAKERS = {
     "Holt-Winters Corp",
     "Orion Aerospace",
@@ -790,6 +894,7 @@ def main() -> int:
             )
 
     errors.extend(check_sector_completeness(CATALOG))
+    errors.extend(check_unspace_completeness(unspaces))
 
     if errors:
         for err in errors:

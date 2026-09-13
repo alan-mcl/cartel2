@@ -313,9 +313,14 @@ func _compute_scatter_radius() -> float:
 	return _play_bounds + fov_half * margin
 
 
+func _default_zoom() -> float:
+	return float(_topo.get("default_zoom", 0.72))
+
+
 func _compute_fov_half_diagonal(camera: Camera2D) -> float:
 	var vp_size := Vector2(_get_render_size())
-	var zoom := Vector2(0.72, 0.72)
+	var default_z := _default_zoom()
+	var zoom := Vector2(default_z, default_z)
 	if camera != null:
 		zoom = camera.zoom
 	var half_w := vp_size.x / maxf(zoom.x, 0.001) * 0.5
@@ -326,12 +331,16 @@ func _compute_fov_half_diagonal(camera: Camera2D) -> float:
 func _compute_scatter_target_count() -> int:
 	var scatter_radius := _compute_scatter_radius()
 	var vp_size := Vector2(_get_render_size())
-	var zoom := Vector2(0.72, 0.72)
+	var default_z := _default_zoom()
+	var zoom := Vector2(default_z, default_z)
 	var visible_area := (vp_size.x / zoom.x) * (vp_size.y / zoom.y)
 	var fov_count := maxi(8, int(_topo.get("fov_vertex_count", 50)))
-	var min_dist := sqrt(visible_area / float(fov_count)) * 0.92
+	var min_dist_factor := float(_topo.get("min_dist_factor", 0.92))
+	var min_dist := sqrt(visible_area / float(fov_count)) * min_dist_factor
 	var target_count := int(PI * scatter_radius * scatter_radius / (min_dist * min_dist))
-	return clampi(target_count, 120, 6000)
+	var vertex_min := int(_topo.get("vertex_count_min", 120))
+	var vertex_max := int(_topo.get("vertex_count_max", 6000))
+	return clampi(target_count, vertex_min, vertex_max)
 
 
 func _build_scatter_mesh() -> void:
@@ -515,15 +524,20 @@ func _pick_portal_face(spawn_hint: Vector2) -> void:
 	if _faces.is_empty():
 		return
 
+	var origin_min := float(_portal_config.get("origin_min_fraction", 0.25))
+	var origin_max := float(_portal_config.get("origin_max_fraction", 0.78))
+	var spawn_sep := float(_portal_config.get("spawn_separation_fraction", 0.35))
+	var score_weight := float(_portal_config.get("score_spawn_weight", 0.35))
+
 	var best_score := -INF
 	for face_index in range(_faces.size()):
 		var centroid := _face_centroid(face_index)
 		var dist_origin := centroid.length()
-		if dist_origin < _play_bounds * 0.25 or dist_origin > _play_bounds * 0.78:
+		if dist_origin < _play_bounds * origin_min or dist_origin > _play_bounds * origin_max:
 			continue
-		if centroid.distance_to(spawn_hint) < _play_bounds * 0.35:
+		if centroid.distance_to(spawn_hint) < _play_bounds * spawn_sep:
 			continue
-		var score := dist_origin + centroid.distance_to(spawn_hint) * 0.35
+		var score := dist_origin + centroid.distance_to(spawn_hint) * score_weight
 		if score > best_score:
 			best_score = score
 			_portal_face_index = face_index

@@ -58,7 +58,7 @@ func load_all() -> void:
 	routes_by_id = _load_indexed_array(ROUTES_PATH)
 	economies_by_id = _load_indexed_records(ECONOMIES_PATH, EconomyDef)
 	_synthesize_sector_mappings()
-	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
+	unspaces_by_id = _load_indexed_records(UNSPACES_PATH, UnspaceDef)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
 	_load_backgrounds()
@@ -158,14 +158,27 @@ func friction_band_label(friction: int) -> String:
 
 
 func get_unspace(id: String) -> Dictionary:
-	return _require(unspaces_by_id, id, "unspace")
+	return _require_dict(unspaces_by_id, id, "unspace")
+
+
+func get_unspace_def(id: String) -> UnspaceDef:
+	return _require_record(unspaces_by_id, id, "unspace") as UnspaceDef
 
 
 func get_unspace_for_n(n: int) -> Dictionary:
 	for entry in unspaces_by_id.values():
-		if typeof(entry) != TYPE_DICTIONARY:
+		if entry == null:
 			continue
-		if int(entry.get("n", 0)) == n:
+		var entry_n := 0
+		if entry is UnspaceDef:
+			entry_n = (entry as UnspaceDef).n
+		elif typeof(entry) == TYPE_DICTIONARY:
+			entry_n = int(entry.get("n", 0))
+		else:
+			continue
+		if entry_n == n:
+			if entry.has_method("to_dict"):
+				return entry.to_dict()
 			return entry
 	push_error("Unknown unspace depth n=%d" % n)
 	return {}

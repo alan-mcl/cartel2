@@ -16,6 +16,7 @@ static func run(runner: TestRunner) -> void:
 	_test_frozen_and_degenerate_deltas(runner, catalog)
 	_test_day_boundary_reposts_markets(runner, catalog)
 	_test_unspace_advance(runner, catalog)
+	_test_unspace_gst_from_catalog_only(runner, catalog)
 	_test_mapping_lump(runner, catalog)
 
 
@@ -150,6 +151,37 @@ static func _test_unspace_advance(runner: TestRunner, catalog: Catalog) -> void:
 		session.gst_seconds,
 		frozen_before,
 		"clock: frozen unspace tick does not advance GST"
+	)
+
+
+static func _test_unspace_gst_from_catalog_only(runner: TestRunner, catalog: Catalog) -> void:
+	var config: Dictionary = catalog.get_unspace("n4_default").get("gst", {})
+	runner.check(not config.is_empty(), "clock: n4_default gst block present")
+
+	var stretch := SimClock.gst_stretch_factor(config, 0.42)
+	var expected_stretch := lerpf(
+		float(config.get("stretch_min", 0.35)),
+		float(config.get("stretch_max", 2.8)),
+		0.42
+	)
+	runner.check(
+		absf(stretch - expected_stretch) < EPSILON,
+		"clock: stretch factor uses gst block only"
+	)
+	runner.check_eq(
+		SimClock.gst_slip_chance(config),
+		clampf(float(config.get("slip_chance", 0.12)), 0.0, 0.75),
+		"clock: slip chance uses gst block only"
+	)
+	var pulse := SimClock.gst_pulse_interval(config, 0.5)
+	var expected_pulse := lerpf(
+		float(config.get("pulse_min", 0.35)),
+		float(config.get("pulse_max", 2.4)),
+		0.5
+	)
+	runner.check(
+		absf(pulse - expected_pulse) < EPSILON,
+		"clock: pulse interval uses gst block only"
 	)
 
 

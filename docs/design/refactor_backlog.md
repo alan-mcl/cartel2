@@ -473,7 +473,7 @@ route. Add to `validate_catalog_refs.py` or a sibling script wired into `check.s
 
 ## P4-4 Parameterise the unspace field
 
-**Status:** Not started. **Phase:** 4. **Depends on:** P3-1.
+**Status:** Done. **Phase:** 4. **Depends on:** P3-1.
 
 **Problem:** `unspaces.json` has exactly one entry (n=4) and `NspaceField` builds the field from
 procedural constants, so deeper layers are code rather than content.

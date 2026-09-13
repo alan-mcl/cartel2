@@ -42,8 +42,14 @@ static func run(runner: TestRunner) -> void:
 		"ammunition to_dict round-trip damage_packets"
 	)
 
+	var unspace_def := catalog.get_unspace_def("n4_default")
+	runner.check(unspace_def is UnspaceDef, "get_unspace_def(n4_default) is UnspaceDef")
+	runner.check_eq(unspace_def.n, 4, "n4_default depth n")
 	var unspace := catalog.get_unspace_for_n(4)
 	runner.check_eq(str(unspace.get("id", "")), "n4_default", "get_unspace_for_n(4)")
+	var unspace_dict := catalog.get_unspace("n4_default")
+	runner.check(typeof(unspace_dict) == TYPE_DICTIONARY, "get_unspace still returns Dictionary")
+	runner.check(not unspace_dict.get("field", {}).is_empty(), "unspace dict includes field")
 
 	var exit_def := InteractableDef.from_dict(catalog.get_interactable("unspace_exit"))
 	runner.check(exit_def.kind == InteractableDef.Kind.ARRIVE, "unspace_exit parses as ARRIVE")

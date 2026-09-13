@@ -34,12 +34,19 @@
         "fov_vertex_count": 50,
         "scatter_margin": 1.6,
         "quad_merge_chance": 0.18,
-        "height_scale": 600
+        "height_scale": 600,
+        "vertex_count_min": 120,
+        "vertex_count_max": 6000,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
       },
       "portal": {
         "interact_radius": 220,
         "interactable": "unspace_exit",
-        "leash_fraction": 0.88
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
       },
       "inhabitants": {
         "count_min": 1,
