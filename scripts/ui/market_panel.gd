@@ -130,7 +130,7 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		cargo_cap = _context.session.get_ship_cargo_capacity(_context.catalog, cargo_ship)
 		cargo_mass = _context.session.get_ship_cargo_mass(_context.catalog, cargo_ship)
 
-	detail.add_child(_headline_label(str(commodity.get("name", _selected_commodity_id))))
+	detail.add_child(UiPatterns.headline_item(str(commodity.get("name", _selected_commodity_id))))
 
 	var desc_text := str(commodity.get("description", ""))
 	if not desc_text.is_empty():
@@ -139,12 +139,12 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		desc.text = desc_text
 		detail.add_child(desc)
 
-	detail.add_child(_detail_row("Price", "d%d" % price))
-	detail.add_child(_detail_row("Sell price", "d%d" % _context.session.commodity_sell_price(price)))
-	detail.add_child(_detail_row("Contract depth", str(store_qty)))
+	detail.add_child(UiPatterns.metric_block("Price", "d%d" % price))
+	detail.add_child(UiPatterns.metric_block("Sell price", "d%d" % _context.session.commodity_sell_price(price)))
+	detail.add_child(UiPatterns.status_row("Contract depth", str(store_qty)))
 	if cargo_ship != null:
-		detail.add_child(_detail_row("Ship cargo", str(cargo_qty)))
-		detail.add_child(_detail_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
+		detail.add_child(UiPatterns.status_row("Ship cargo", str(cargo_qty)))
+		detail.add_child(UiPatterns.status_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
 
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
@@ -240,34 +240,8 @@ func _select_item_by_id(
 	set(suppress_flag_name, false)
 
 
-func _detail_row(label_text: String, value_text: String) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-
-	var key := Label.new()
-	key.text = "%s:" % label_text
-	key.theme_type_variation = &"Muted"
-	key.custom_minimum_size = Vector2(120, 0)
-	row.add_child(key)
-
-	var value := Label.new()
-	value.text = value_text
-	value.theme_type_variation = &"Numeric"
-	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(value)
-
-	return row
-
-
 func _section_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.theme_type_variation = &"Section"
-	return label
-
-
-func _headline_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Headline"
 	return label

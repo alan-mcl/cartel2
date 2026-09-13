@@ -517,17 +517,15 @@ wired from **TerminalPanel** and **ShipyardScreen** (slot board unchanged).
 
 ## P5-3 Adopt the pattern components that already exist
 
-**Status:** Not started. **Phase:** 5.
+**Status:** Done. **Phase:** 5.
 
-**Problem:** `scenes/ui/patterns/` contains `metric_block`, `status_row`, `headline_item`,
-`alert_banner`, `compact_toolbar`, and `data_table` — all instantiated **only** by
-`scenes/dev/theme_showcase.tscn`. Meanwhile production screens hand-roll ~600 lines of
-programmatic layout and reimplement `_section_label` and `_detail_row` identically in two files.
-The design system is ahead of the screens.
+**Problem:** `scenes/ui/patterns/` contained layout scenes used only by the theme showcase;
+production panels duplicated row/headline builders; shipyard stock meta and HUD translucency
+lived outside the theme.
 
-**Scope:** Use the patterns in production screens. Move shipyard's ~70-line `_stock_meta()`
-category formatting into `ModuleSpecText`. Replace `hud.gd`'s runtime `StyleBoxFlat` with a theme
-variation.
+**Scope (done):** Pattern scripts + `UiPatterns` factory; market/dealer/ship detail use
+`status_row`, `headline_item`, `metric_block`; `ModuleSpecText.format_stock_list_meta`;
+`SurfaceTranslucent` on HUD panels.
 
 ## P5-4 Screen base class
 

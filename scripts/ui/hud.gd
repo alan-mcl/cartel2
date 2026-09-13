@@ -1,6 +1,5 @@
 extends CanvasLayer
 
-const PANEL_BG_ALPHA := 0.25
 const PLAYER_HOVER_RADIUS := 24.0
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
@@ -143,7 +142,6 @@ func _refresh_capabilities() -> void:
 		_status_panel.visible = has_basic
 	if _signature_panel != null:
 		_signature_panel.visible = has_basic
-		_apply_translucent_panel(_signature_panel)
 	if _local_sensor_map != null:
 		_local_sensor_map.set_feature_visible(has_sensor)
 	if _waypoint_arrows != null:
@@ -157,25 +155,6 @@ func _has_capability(id: String) -> bool:
 
 
 func _ready() -> void:
-	_apply_translucent_panel(_status_panel)
-	_apply_translucent_panel(_signature_panel)
 	if _session != null:
 		_bind_gst_clock()
 	_refresh_capabilities()
-
-
-func _apply_translucent_panel(panel: PanelContainer) -> void:
-	if panel == null:
-		return
-
-	var style := StyleBoxFlat.new()
-	var bg: Color = panel.get_theme_color("surface", "Cartel")
-	bg.a = PANEL_BG_ALPHA
-	style.bg_color = bg
-
-	var border: Color = panel.get_theme_color("border", "Cartel")
-	border.a = PANEL_BG_ALPHA
-	style.border_color = border
-	style.set_border_width_all(1)
-
-	panel.add_theme_stylebox_override("panel", style)

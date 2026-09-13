@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://cartel_pattern_headline"]
+[gd_scene load_steps=2 format=3 uid="uid://cartel_pattern_headline"]
+
+[ext_resource type="Script" path="res://scripts/ui/patterns/headline_item.gd" id="1"]
 
 [node name="HeadlineItem" type="VBoxContainer"]
 theme_override_constants/separation = 2
+script = ExtResource("1")
 
 [node name="Headline" type="Label" parent="."]
 layout_mode = 2

@@ -51,7 +51,7 @@ offset_left = 12.0
 offset_top = 12.0
 offset_right = 332.0
 offset_bottom = 96.0
-theme_type_variation = &"Surface"
+theme_type_variation = &"SurfaceTranslucent"
 
 [node name="VBox" type="VBoxContainer" parent="Root/StatusPanel"]
 layout_mode = 2
@@ -93,7 +93,7 @@ offset_left = 12.0
 offset_top = 104.0
 offset_right = 332.0
 offset_bottom = 224.0
-theme_type_variation = &"Surface"
+theme_type_variation = &"SurfaceTranslucent"
 
 [node name="VBox" type="VBoxContainer" parent="Root/SignaturePanel"]
 layout_mode = 2

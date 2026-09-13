@@ -179,10 +179,10 @@ func _rebuild_ship_dealer_detail(detail: VBoxContainer) -> void:
 	art_host.add_child(art)
 	art.set_art_path(str(chassis.get("sprite", "")), str(template.get("name", _selected_dealer_stock_id)))
 
-	detail.add_child(_headline_label(str(template.get("name", _selected_dealer_stock_id))))
-	detail.add_child(_detail_row("Maker", str(template.get("maker", ""))))
-	detail.add_child(_detail_row("Price", "d%d" % price))
-	detail.add_child(_detail_row("Chassis", str(chassis.get("name", ""))))
+	detail.add_child(UiPatterns.headline_item(str(template.get("name", _selected_dealer_stock_id))))
+	detail.add_child(UiPatterns.status_row("Maker", str(template.get("maker", ""))))
+	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
+	detail.add_child(UiPatterns.status_row("Chassis", str(chassis.get("name", ""))))
 
 	if assembled != null:
 		var summary := Label.new()
@@ -213,11 +213,11 @@ func _rebuild_chassis_dealer_detail(detail: VBoxContainer) -> void:
 	art_host.add_child(art)
 	art.set_art_path(str(chassis.get("sprite", "")), str(chassis.get("name", _selected_dealer_stock_id)))
 
-	detail.add_child(_headline_label(str(chassis.get("name", _selected_dealer_stock_id))))
-	detail.add_child(_detail_row("Maker", str(chassis.get("maker", ""))))
-	detail.add_child(_detail_row("Price", "d%d" % price))
-	detail.add_child(_detail_row("Maneuver", str(chassis.get("maneuver", ""))))
-	detail.add_child(_detail_row("Mass limit", str(chassis.get("mass_limit", ""))))
+	detail.add_child(UiPatterns.headline_item(str(chassis.get("name", _selected_dealer_stock_id))))
+	detail.add_child(UiPatterns.status_row("Maker", str(chassis.get("maker", ""))))
+	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
+	detail.add_child(UiPatterns.status_row("Maneuver", str(chassis.get("maneuver", ""))))
+	detail.add_child(UiPatterns.status_row("Mass limit", str(chassis.get("mass_limit", ""))))
 
 	var note := Label.new()
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -290,34 +290,8 @@ func _select_item_by_id(
 	set(suppress_flag_name, false)
 
 
-func _detail_row(label_text: String, value_text: String) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-
-	var key := Label.new()
-	key.text = "%s:" % label_text
-	key.theme_type_variation = &"Muted"
-	key.custom_minimum_size = Vector2(120, 0)
-	row.add_child(key)
-
-	var value := Label.new()
-	value.text = value_text
-	value.theme_type_variation = &"Numeric"
-	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(value)
-
-	return row
-
-
 func _section_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.theme_type_variation = &"Section"
-	return label
-
-
-func _headline_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Headline"
 	return label

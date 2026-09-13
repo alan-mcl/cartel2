@@ -185,6 +185,17 @@ func _style_panels(theme: Theme) -> void:
 	theme.set_type_variation(&"Surface", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"Surface", _flat(C.surface, C.border, 12, 0))
 
+	var translucent_bg := C.surface
+	translucent_bg.a = 0.25
+	var translucent_border := C.border
+	translucent_border.a = 0.25
+	theme.set_type_variation(&"SurfaceTranslucent", &"PanelContainer")
+	theme.set_stylebox(
+		&"panel",
+		&"SurfaceTranslucent",
+		_flat(translucent_bg, translucent_border, 12, 0)
+	)
+
 	theme.set_type_variation(&"Elevated", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"Elevated", _flat(C.elevated, C.border, 12, 0))
 

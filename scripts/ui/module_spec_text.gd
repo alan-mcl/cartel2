@@ -180,6 +180,81 @@ static func format_tooltip(module_def: Dictionary) -> String:
 	return "\n".join(lines)
 
 
+static func format_stock_list_meta(category: String, data: Dictionary) -> String:
+	match category:
+		"propulsion":
+			var engine_type := str(data.get("engine_type", ""))
+			var thrust := float(data.get("thrust", 0.0))
+			if engine_type.is_empty():
+				return ""
+			return "%s · %.0f thrust" % [format_engine_type(engine_type), thrust]
+		"power":
+			var plant_type := str(data.get("plant_type", ""))
+			var output_mw := float(data.get("power_generation", 0.0))
+			if plant_type.is_empty():
+				return ""
+			return "%s · %.0f MW" % [plant_type.capitalize(), output_mw]
+		"computer":
+			var core_type := str(data.get("core_type", ""))
+			var compute_cu := float(data.get("compute_capacity", 0.0))
+			if core_type.is_empty():
+				return ""
+			return "%s · %.0f CU" % [core_type.capitalize(), compute_cu]
+		"life_support":
+			var crew := float(data.get("life_support_capacity", 0.0))
+			var capabilities: Variant = data.get("capabilities", [])
+			var habitat := false
+			if typeof(capabilities) == TYPE_ARRAY:
+				habitat = capabilities.has("ls_habitat")
+			var meta := "%.0f crew · %s" % [crew, "Habitat" if habitat else "Transport"]
+			if typeof(capabilities) == TYPE_ARRAY:
+				if capabilities.has("ls_luxury"):
+					meta = "%s · Luxury" % meta
+				elif capabilities.has("ls_comfort"):
+					meta = "%s · Comfort" % meta
+			return meta
+		"weapon":
+			var weapon_type := str(data.get("weapon_type", ""))
+			var delivery := str(data.get("delivery_type", ""))
+			if weapon_type.is_empty():
+				return ""
+			var packets: Variant = data.get("damage_packets", {})
+			var packet_summary := ""
+			if typeof(packets) == TYPE_DICTIONARY and not packets.is_empty():
+				var parts: PackedStringArray = PackedStringArray()
+				for packet_key in packets.keys():
+					parts.append("%s %.0f" % [str(packet_key).capitalize(), float(packets[packet_key])])
+				packet_summary = " · " + ", ".join(parts)
+			elif not str(data.get("ammunition_type", "")).is_empty():
+				packet_summary = " · %s ammo" % str(data.get("ammunition_type", ""))
+			return "%s · %s%s" % [weapon_type.capitalize(), delivery.capitalize(), packet_summary]
+		"armour":
+			var hits := float(data.get("hits", 0.0))
+			if hits <= 0.0:
+				return ""
+			return "%.0f hits" % hits
+		"shield":
+			var shield_type := str(data.get("shield_type", ""))
+			var capacity := float(data.get("shield_capacity", 0.0))
+			if shield_type.is_empty():
+				return ""
+			return "%s · %.0f cap" % [shield_type.capitalize(), capacity]
+		"point_defence":
+			var intercept := float(data.get("intercept_chance", 0.0))
+			if intercept <= 0.0:
+				return ""
+			return "Intercept %.0f%%" % (intercept * 100.0)
+		"cyber_defence":
+			var protection: Variant = data.get("protection", {})
+			if typeof(protection) != TYPE_DICTIONARY:
+				return ""
+			var cyber := float(protection.get("cyber", 0.0))
+			if cyber <= 0.0:
+				return ""
+			return "Cyber %.0f%%" % (cyber * 100.0)
+	return ""
+
+
 static func format_signature_lines(signature: Variant) -> PackedStringArray:
 	if typeof(signature) != TYPE_DICTIONARY or signature.is_empty():
 		return PackedStringArray()

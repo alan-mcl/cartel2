@@ -60,10 +60,10 @@ func refresh() -> void:
 		add_child(summary)
 
 	if _show_name:
-		add_child(_headline_label(_ship.name))
+		add_child(UiPatterns.headline_item(_ship.name))
 
 	if _chassis_style == "row":
-		add_child(_detail_row("Chassis", str(assembled.chassis.get("name", _ship.chassis_id))))
+		add_child(UiPatterns.status_row("Chassis", str(assembled.chassis.get("name", _ship.chassis_id))))
 	elif _chassis_style == "fixed":
 		var chassis := Label.new()
 		chassis.text = "Chassis (fixed): %s" % str(assembled.chassis.get("name", _ship.chassis_id))
@@ -78,7 +78,7 @@ func refresh() -> void:
 			var slot := str(entry.get("slot", ""))
 			var module_data: ModuleDef = entry.get("data", null)
 			var module_name := module_data.name if module_data != null else str(entry.get("module_id", ""))
-			add_child(_detail_row(slot, module_name))
+			add_child(UiPatterns.status_row(slot, module_name))
 
 	var engineering := ShipAssembly.get_engineering_block(_catalog, _ship)
 	var stats: Dictionary = engineering.get("stats", {})
@@ -136,7 +136,7 @@ func refresh() -> void:
 			for key in _flight_keys:
 				if flight_stats.has(key):
 					if _flight_row_style == "HBox":
-						add_child(_detail_row(key, str(flight_stats[key])))
+						add_child(UiPatterns.status_row(key, str(flight_stats[key])))
 					else:
 						add_child(_detail_label(key, str(flight_stats[key])))
 
@@ -154,25 +154,6 @@ func _clear_children(node: Node) -> void:
 		child.queue_free()
 
 
-func _detail_row(label_text: String, value_text: String) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-
-	var key := Label.new()
-	key.text = "%s:" % label_text
-	key.theme_type_variation = &"Muted"
-	key.custom_minimum_size = Vector2(120, 0)
-	row.add_child(key)
-
-	var value := Label.new()
-	value.text = value_text
-	value.theme_type_variation = &"Numeric"
-	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(value)
-
-	return row
-
-
 func _detail_label(label_text: String, value_text: String) -> Label:
 	var label := Label.new()
 	label.text = "%s: %s" % [label_text, value_text]
@@ -184,11 +165,4 @@ func _section_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.theme_type_variation = &"Section"
-	return label
-
-
-func _headline_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Headline"
 	return label
