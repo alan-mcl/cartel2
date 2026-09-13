@@ -57,6 +57,30 @@ Source: `data/catalog/schema/chassis.schema.json` → `chassis.json`
 | `sprite` | string | no | `` |  |
 | `mounts` | #/$defs/mounts | yes | `` |  |
 
+## CommodityDef
+
+Source: `data/catalog/schema/commodities.schema.json` → `commodities.json`
+
+| Field | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | string | yes | `` |  |
+| `name` | string | yes | `` |  |
+| `mass` | number | yes | `` |  |
+| `base_price` | number | yes | `` |  |
+| `description` | string | yes | `` |  |
+
+## EconomyDef
+
+Source: `data/catalog/schema/economies.schema.json` → `economies.json`
+
+| Field | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | string | yes | `` |  |
+| `tier` | string | yes | `` | enum: `core`, `mid`, `outer` |
+| `wealth` | number | yes | `` |  |
+| `produce` | object | yes | `` |  |
+| `consume` | object | yes | `` |  |
+
 ## ModuleDef
 
 Source: `data/catalog/schema/modules.schema.json` → `modules/`

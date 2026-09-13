@@ -26,10 +26,9 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
-| `markets.json` | array | Legacy static listings (unused; quotes are runtime) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 
-Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. Typed getters (`get_module_def`, `list_module_defs`, …) are preferred in assembly/combat/sensors; `get_module()` still returns `Dictionary` via `to_dict()` for yard UI. Chassis/ships/sectors dictionary getters remain until a later pass.
+Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. Typed getters (`get_module_def`, `list_module_defs`, …) are preferred in assembly/combat/sensors; `get_module()` still returns `Dictionary` via `to_dict()` for yard UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
 ## ID conventions
 

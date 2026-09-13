@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "EconomyDef",
+  "x-catalog-file": "economies.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "tier", "wealth", "produce", "consume"],
+  "properties": {
+    "id": { "type": "string" },
+    "tier": { "type": "string", "enum": ["core", "mid", "outer"] },
+    "wealth": { "type": "number" },
+    "produce": {
+      "type": "object",
+      "additionalProperties": { "type": "number" },
+      "propertyNames": { "x-ref-catalog": "commodities" }
+    },
+    "consume": {
+      "type": "object",
+      "additionalProperties": { "type": "number" },
+      "propertyNames": { "x-ref-catalog": "commodities" }
+    }
+  }
+}

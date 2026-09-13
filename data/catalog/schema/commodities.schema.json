@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "CommodityDef",
+  "x-catalog-file": "commodities.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "mass", "base_price", "description"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "mass": { "type": "number" },
+    "base_price": { "type": "number" },
+    "description": { "type": "string" }
+  }
+}

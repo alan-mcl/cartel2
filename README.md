@@ -63,7 +63,7 @@ scripts/presentation/  Godot integration (ship, camera, world loader)
 scripts/ui/            HUD, menus, UiRoot, habitat/shipyard screens
 scenes/ui/             Full-screen habitat UI scenes
 scenes/dev/            Developer-only scenes (theme showcase, ship assembly sandbox)
-data/catalog/          JSON catalogs including commodities and markets
+data/catalog/          JSON catalogs including commodities and economies
 docs/                  Architecture, data model, setting bible
 ```
 

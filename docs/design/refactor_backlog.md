@@ -413,7 +413,7 @@ manual editing and one-off scripts (`generate_combat_catalog.py`,
 
 ## P3-3 Close the unvalidated reference edges
 
-**Status:** Not started. **Phase:** 3. **Depends on:** none.
+**Status:** Done. **Phase:** 3. **Depends on:** none.
 
 **Scope:** `economies.json` `produce`/`consume` keys are never checked against
 `commodities.json`, so a typo fails silently at quote time. Also resolve `markets.json`, which

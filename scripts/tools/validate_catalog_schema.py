@@ -14,7 +14,8 @@ SCHEMA_DIR = ROOT / "data" / "catalog" / "schema"
 REF_CATALOG_FILES = {
     "chassis": "chassis.json",
     "modules": "modules/",
-    "ammunition": "ammunition.json"
+    "ammunition": "ammunition.json",
+    "commodities": "commodities.json"
 }
 
 TYPE_CHECKS = {
@@ -29,6 +30,8 @@ TYPE_CHECKS = {
 SCHEMA_TARGETS = [
     ("ammunition.json", SCHEMA_DIR / "ammunition.schema.json"),
     ("chassis.json", SCHEMA_DIR / "chassis.schema.json"),
+    ("commodities.json", SCHEMA_DIR / "commodities.schema.json"),
+    ("economies.json", SCHEMA_DIR / "economies.schema.json"),
     ("modules/", SCHEMA_DIR / "modules.schema.json"),
     ("sectors.json", SCHEMA_DIR / "sectors.schema.json"),
     ("ships.json", SCHEMA_DIR / "ships.schema.json"),
@@ -151,6 +154,19 @@ def validate_refs(
                             errors.append(
                                 f"{catalog_file} {entry_id}: unknown {key} item '{ref_val}'"
                             )
+            if prop.get('type') == 'object':
+                property_names = prop.get('propertyNames', {})
+                ref_catalog = property_names.get('x-ref-catalog')
+                if ref_catalog:
+                    target_file = REF_CATALOG_FILES[ref_catalog]
+                    obj = entry.get(key, {})
+                    if isinstance(obj, dict):
+                        for sub_key in obj.keys():
+                            ref_val = str(sub_key)
+                            if ref_val and ref_val not in indexes.get(target_file, {}):
+                                errors.append(
+                                    f"{catalog_file} {entry_id}: unknown {key} key '{ref_val}'"
+                                )
     return errors
 
 def main() -> int:

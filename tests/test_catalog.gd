@@ -27,6 +27,15 @@ static func run(runner: TestRunner) -> void:
 
 	var chassis_def := catalog.get_chassis_def("pegasus_chassis")
 	var ammo_def := catalog.get_ammunition_def("mass_driver_round")
+	var commodity_def := catalog.get_commodity_def("food_products")
+	runner.check(commodity_def is CommodityDef, "get_commodity_def returns CommodityDef")
+	var commodity_dict := catalog.get_commodity("food_products")
+	runner.check(typeof(commodity_dict) == TYPE_DICTIONARY, "get_commodity still returns Dictionary")
+	var economy_def := catalog.get_economy_def("proxima")
+	runner.check(economy_def is EconomyDef, "get_economy_def returns EconomyDef")
+	runner.check(not economy_def.produce.is_empty(), "proxima economy has produce")
+	var economy_dict := catalog.get_economy("proxima")
+	runner.check(typeof(economy_dict) == TYPE_DICTIONARY, "get_economy still returns Dictionary")
 	runner.check(chassis_def.to_dict()["id"] == "pegasus_chassis", "chassis to_dict round-trip id")
 	runner.check(
 		ammo_def.to_dict()["damage_packets"]["kinetic"] > 0.0,

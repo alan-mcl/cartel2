@@ -29,6 +29,7 @@ REF_CATALOG_FILES = {
     "chassis": "chassis.json",
     "modules": "modules/",
     "ammunition": "ammunition.json",
+    "commodities": "commodities.json",
 }
 
 
@@ -564,6 +565,19 @@ def emit_validator_entrypoints(class_specs: list[ClassSpec]) -> str:
             "                            errors.append(",
             "                                f\"{catalog_file} {entry_id}: unknown {key} item '{ref_val}'\"",
             "                            )",
+            "            if prop.get('type') == 'object':",
+            "                property_names = prop.get('propertyNames', {})",
+            "                ref_catalog = property_names.get('x-ref-catalog')",
+            "                if ref_catalog:",
+            "                    target_file = REF_CATALOG_FILES[ref_catalog]",
+            "                    obj = entry.get(key, {})",
+            "                    if isinstance(obj, dict):",
+            "                        for sub_key in obj.keys():",
+            "                            ref_val = str(sub_key)",
+            "                            if ref_val and ref_val not in indexes.get(target_file, {}):",
+            "                                errors.append(",
+            "                                    f\"{catalog_file} {entry_id}: unknown {key} key '{ref_val}'\"",
+            "                                )",
             "    return errors",
             "",
             "def main() -> int:",

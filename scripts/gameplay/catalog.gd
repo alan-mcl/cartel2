@@ -14,7 +14,6 @@ const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
 const BACKGROUNDS_PATH := "res://data/catalog/backgrounds.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
-const MARKETS_PATH := "res://data/catalog/markets.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
@@ -31,11 +30,10 @@ var habitats_by_id: Dictionary = {}
 var interactables_by_id: Dictionary = {}
 var sectors_by_id: Dictionary = {}
 var routes_by_id: Dictionary = {}
-var economies_by_id: Dictionary = {}
 var unspaces_by_id: Dictionary = {}
 var worlds_by_id: Dictionary = {}
 var commodities_by_id: Dictionary = {}
-var markets_by_id: Dictionary = {}
+var economies_by_id: Dictionary = {}
 var player_data: Dictionary = {}
 var backgrounds_by_id: Dictionary = {}
 var default_background_id: String = "tester"
@@ -58,14 +56,13 @@ func load_all() -> void:
 	interactables_by_id = _load_indexed_array(INTERACTABLES_PATH)
 	sectors_by_id = _load_indexed_records(SECTORS_PATH, SectorDef)
 	routes_by_id = _load_indexed_array(ROUTES_PATH)
-	economies_by_id = _load_indexed_array(ECONOMIES_PATH)
+	economies_by_id = _load_indexed_records(ECONOMIES_PATH, EconomyDef)
 	_synthesize_sector_mappings()
 	unspaces_by_id = _load_indexed_array(UNSPACES_PATH)
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
 	_load_backgrounds()
-	commodities_by_id = _load_indexed_array(COMMODITIES_PATH)
-	markets_by_id = _load_indexed_array(MARKETS_PATH)
+	commodities_by_id = _load_indexed_records(COMMODITIES_PATH, CommodityDef)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
 
 
@@ -126,7 +123,11 @@ func get_route(id: String) -> Dictionary:
 
 
 func get_economy(sector_id: String) -> Dictionary:
-	return _require(economies_by_id, sector_id, "economy")
+	return _require_dict(economies_by_id, sector_id, "economy")
+
+
+func get_economy_def(sector_id: String) -> EconomyDef:
+	return _require_record(economies_by_id, sector_id, "economy") as EconomyDef
 
 
 func list_sectors() -> Array:
@@ -233,20 +234,15 @@ func get_traffic_config() -> Dictionary:
 
 
 func get_commodity(id: String) -> Dictionary:
-	return _require(commodities_by_id, id, "commodity")
+	return _require_dict(commodities_by_id, id, "commodity")
+
+
+func get_commodity_def(id: String) -> CommodityDef:
+	return _require_record(commodities_by_id, id, "commodity") as CommodityDef
 
 
 func has_commodity(id: String) -> bool:
 	return commodities_by_id.has(id)
-
-
-func get_market_for_building(building_id: String) -> Dictionary:
-	for market in markets_by_id.values():
-		if typeof(market) != TYPE_DICTIONARY:
-			continue
-		if str(market.get("building_id", "")) == building_id:
-			return market
-	return {}
 
 
 func get_building_type(building: Dictionary) -> String:
@@ -284,7 +280,7 @@ func get_habitat_art(habitat: Dictionary) -> String:
 
 
 func list_commodities() -> Array:
-	return commodities_by_id.values()
+	return _records_to_dicts(commodities_by_id)
 
 
 func list_chassis() -> Array:
