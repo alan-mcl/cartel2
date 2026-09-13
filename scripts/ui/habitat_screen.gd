@@ -1,7 +1,6 @@
 extends Control
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
-const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 
 @onready var _title: Label = $Layout/Header/HeaderBox/Title
 @onready var _description: Label = $Layout/Header/HeaderBox/Description
@@ -16,12 +15,10 @@ const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
 @onready var _content_scroll: ScrollContainer = $Layout/Body/Split/Right/ContentScroll
 @onready var _content_host: VBoxContainer = $Layout/Body/Split/Right/ContentScroll/ContentHost
 @onready var _terminal_host: VBoxContainer = $Layout/Body/Split/Right/TerminalHost
-@onready var _shipyard_host: Control = $Layout/Body/Split/Right/ShipyardHost
 @onready var _log: Label = $Layout/Body/Split/Right/Log
 
 var _context: UiContext
 var _art_frame: PanelContainer
-var _shipyard_panel: Control
 
 var _building_ids: PackedStringArray = PackedStringArray()
 var _suppress_building_select: bool = false
@@ -187,18 +184,24 @@ func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:
 
 func _show_building_content(habitat: Dictionary, building: Dictionary) -> void:
 	var building_type := _context.catalog.get_building_type(building)
-	match building_type:
-		"shipyard":
-			_show_shipyard_embedded()
-		"terminal":
-			_hide_shipyard_embedded()
-			_show_terminal_embedded(building)
+	match BuildingPanelRegistry.mode_for(building_type):
+		BuildingPanelRegistry.MODE_STACK:
+			_show_stack_panel(building_type)
+		BuildingPanelRegistry.MODE_EMBED:
+			_pop_stacked_panel_if_needed()
+			if building_type == "terminal":
+				_show_terminal_embedded(building)
+			else:
+				_hide_terminal_embedded()
+				_content_scroll.visible = true
+				_log.visible = true
+				_rebuild_content(building)
 		_:
-			_hide_shipyard_embedded()
+			_pop_stacked_panel_if_needed()
 			_hide_terminal_embedded()
 			_content_scroll.visible = true
 			_log.visible = true
-			_rebuild_content(building)
+			_show_placeholder_content(building)
 
 
 func _rebuild_content(building: Dictionary) -> void:
@@ -221,6 +224,90 @@ func _rebuild_content(building: Dictionary) -> void:
 			_build_chassis_dealer_content(building)
 		_:
 			pass
+
+
+func _show_stack_panel(building_type: String) -> void:
+	_hide_terminal_embedded()
+	_content_scroll.visible = false
+	_log.visible = false
+
+	if _context == null or _context.stack == null:
+		return
+
+	var scene_path := BuildingPanelRegistry.stack_scene_path(building_type)
+	if scene_path.is_empty():
+		return
+
+	var top := _context.stack.get_top_screen()
+	if top != null and top != self and _screen_matches_stack_scene(top, scene_path):
+		if top.has_method("configure_embedded"):
+			top.configure_embedded(false)
+		if top.has_method("bind"):
+			top.bind(_context)
+		if top.has_method("refresh"):
+			top.refresh()
+		return
+
+	_pop_stacked_panel_if_needed()
+
+	var scene := BuildingPanelRegistry.stack_scene(building_type)
+	if scene == null:
+		return
+
+	var panel: Control = scene.instantiate()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if panel.has_method("configure_embedded"):
+		panel.configure_embedded(false)
+	if panel.has_method("bind"):
+		panel.bind(_context)
+	_context.stack.push_screen(panel)
+
+
+func _pop_stacked_panel_if_needed() -> void:
+	if _context == null or _context.stack == null:
+		return
+	if _context.stack.get_depth() <= 1:
+		return
+	var top := _context.stack.get_top_screen()
+	if top == null or top == self:
+		return
+	if _screen_is_any_stack_panel(top):
+		_context.stack.pop_screen()
+
+
+func _screen_is_any_stack_panel(screen: Control) -> bool:
+	for building_type in BuildingPanelRegistry.stack_building_types():
+		var path := BuildingPanelRegistry.stack_scene_path(str(building_type))
+		if not path.is_empty() and _screen_matches_stack_scene(screen, path):
+			return true
+	return false
+
+
+func _screen_matches_stack_scene(screen: Control, scene_path: String) -> bool:
+	if screen.get_scene_file_path() == scene_path:
+		return true
+	var script: Variant = screen.get_script()
+	if script != null and str(script.resource_path).ends_with("shipyard_screen.gd"):
+		return scene_path.ends_with("shipyard_screen.tscn")
+	return false
+
+
+func _show_placeholder_content(building: Dictionary) -> void:
+	_clear_children(_content_host)
+	_commodity_item_list = null
+	_terminal_ship_item_list = null
+	_dealer_item_list = null
+
+	if building.is_empty():
+		return
+
+	var name := str(building.get("name", "This location"))
+	var label := Label.new()
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text = "%s — No services at this location yet." % name
+	_content_host.add_child(label)
 
 
 func _build_market_content(building: Dictionary) -> void:
@@ -599,27 +686,6 @@ func _on_rename_ship_submitted(new_name: String) -> void:
 	if index >= 0 and _terminal_ship_item_list != null:
 		_terminal_ship_item_list.set_item_text(index, new_name.strip_edges())
 	call_deferred("_rebuild_terminal_ship_panels")
-
-
-func _show_shipyard_embedded() -> void:
-	_content_scroll.visible = false
-	_terminal_host.visible = false
-	_log.visible = false
-	_shipyard_host.visible = true
-
-	if _shipyard_panel == null:
-		_shipyard_panel = SHIPYARD_SCREEN.instantiate()
-		_shipyard_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_shipyard_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		_shipyard_host.add_child(_shipyard_panel)
-		_shipyard_panel.configure_embedded(true)
-		_shipyard_panel.bind(_context)
-	elif _shipyard_panel.has_method("refresh"):
-		_shipyard_panel.refresh()
-
-
-func _hide_shipyard_embedded() -> void:
-	_shipyard_host.visible = false
 
 
 func _on_buy_commodity(commodity_id: String) -> void:

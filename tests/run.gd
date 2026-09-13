@@ -4,6 +4,7 @@ extends SceneTree
 func _init() -> void:
 	var runner := TestRunner.new()
 	TestCatalog.run(runner)
+	TestUiRegistry.run(runner)
 	TestSession.run(runner)
 	TestSave.run(runner)
 	TestAssembler.run(runner)

@@ -161,7 +161,14 @@ func refresh() -> void:
 		if art_host.get_child_count() == 0:
 			var art := LOCATION_ART.instantiate()
 			art_host.add_child(art)
-			art.set_art_path(_context.catalog.get_building_art(building), str(building.get("name", "")))
+		var art_frame: Variant = art_host.get_child(0)
+		if art_frame != null and art_frame.has_method("configure_header_mode"):
+			art_frame.configure_header_mode(true)
+		if art_frame != null and art_frame.has_method("set_art_path"):
+			art_frame.set_art_path(
+				_context.catalog.get_building_art(building),
+				str(building.get("name", ""))
+			)
 
 		_credits.text = "Credits: d%d" % _context.session.credits
 

@@ -8,8 +8,12 @@ var _screens: Array[Control] = []
 
 
 func push_screen(screen: Control) -> void:
+	if not _screens.is_empty():
+		_screens.back().visible = false
 	if screen.get_parent() != self:
 		add_child(screen)
+	else:
+		move_child(screen, -1)
 	screen.visible = true
 	_screens.append(screen)
 	screen_pushed.emit(screen)

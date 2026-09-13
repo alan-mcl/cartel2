@@ -463,7 +463,7 @@ route. Add to `validate_catalog_refs.py` or a sibling script wired into `check.s
 
 ## P4-3 Building type to panel registry
 
-**Status:** Not started. **Phase:** 4. **Depends on:** P1-2.
+**Status:** Done. **Phase:** 4. **Depends on:** P1-2.
 
 **Unblocks:** Comms panel, mission board, and the currently-empty `bar` building type (its
 `_rebuild_content` match arm falls through to `pass`, rendering a blank pane).
