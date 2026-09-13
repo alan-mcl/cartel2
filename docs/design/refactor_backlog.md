@@ -550,10 +550,12 @@ duck-typed methods unchanged). Far LOD and `ShipSimCore` untouched.
 
 ## P6-2 `FlightSandboxBase`
 
-**Status:** Not started. **Phase:** 6. **Depends on:** P2-4.
+**Status:** Done. **Phase:** 6. **Depends on:** P2-4.
 
-**Problem:** `combat_sandbox.gd` (532 lines) and `stealth_sandbox.gd` (616 lines) are parallel
-mini-`main` implementations that drift whenever `main.gd` changes.
+**Scope (done):** **`FlightSandboxBase`** owns shared flight-sandbox bootstrap, setup overlay,
+player configure, HUD nav/signature (via `FlightLoopController._active_sensors_hud_label`),
+traffic root, and Esc-to-setup. **`combat_sandbox.gd`** and **`stealth_sandbox.gd`** extend it;
+production controllers and **`ship_assembly_sandbox`** unchanged.
 
 ## P6-3 Object pooling
 

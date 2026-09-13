@@ -83,7 +83,7 @@ For fitting and engineering work without the full game loop, run `scenes/dev/shi
 
 ### Combat sandbox
 
-For 1v1 combat iteration without the full game loop, run `scenes/dev/combat_sandbox.tscn` (CLI `--scene` or editor **F6**). The setup overlay lists all manufacturer templates from `ships.json` with read-only stats and installed systems. **Begin bout** places player and opponent on the starfield just beyond combined weapon range, facing each other with zero velocity. Opponent attitude is **Fight to the death** (default, stays engaged) or **Standard NPC** (provoked fight-or-flight from `TrafficActor`). **Esc** ends the bout and returns to setup. Uses production `PlayerShip`, `NpcShip`, `ShipCombat`, and HUD; no world landmarks or traffic director.
+For 1v1 combat iteration without the full game loop, run `scenes/dev/combat_sandbox.tscn` (CLI `--scene` or editor **F6**). Combat and stealth sandboxes extend **`FlightSandboxBase`** for catalog/session bootstrap, setup overlay, player/HUD/camera chrome, and Esc-to-setup; bout vs drill spawn, tick, and detection logic stay in each subclass. The setup overlay lists all manufacturer templates from `ships.json` with read-only stats and installed systems. **Begin bout** places player and opponent on the starfield just beyond combined weapon range, facing each other with zero velocity. Opponent attitude is **Fight to the death** (default, stays engaged) or **Standard NPC** (provoked fight-or-flight from `TrafficActor`). **Esc** ends the bout and returns to setup. Uses production `PlayerShip`, `NpcShip`, `ShipCombat`, and HUD; no world landmarks or traffic director.
 
 ### Stealth sandbox
 
