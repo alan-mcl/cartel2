@@ -1,6 +1,25 @@
 extends Control
 
-const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
+const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
+
+const _TERMINAL_SHIP_DETAIL_OPTS := {
+	"show_name": true,
+	"chassis_style": "row",
+	"show_modules": true,
+	"show_flight": true,
+	"flight_section_title": "STATS",
+	"flight_row_style": "HBox",
+	"flight_keys": [
+		"dry_mass",
+		"loaded_mass",
+		"thrust",
+		"max_speed",
+		"boost_max_speed",
+		"maneuver",
+		"armour_hits",
+	],
+	"show_signature": true,
+}
 
 var _context: UiContext
 var _selected_terminal_ship_id: String = ""
@@ -115,50 +134,28 @@ func _rebuild_terminal_ship_panels() -> void:
 
 
 func _rebuild_terminal_ship_detail(detail: VBoxContainer) -> void:
-	_clear_children(detail)
-
 	if _selected_terminal_ship_id.is_empty():
+		_clear_children(detail)
 		return
 
 	var ship := _context.session.get_owned_ship(_selected_terminal_ship_id)
 	if ship == null:
+		_clear_children(detail)
 		return
 
-	var assembled := ShipAssembly.preview_stats(_context.catalog, ship)
-	var stats := ShipAssembly.get_stat_block(_context.catalog, ship)
-	var chassis := _context.catalog.get_chassis(ship.chassis_id)
+	var panel := _ensure_ship_detail_panel(detail)
+	panel.configure(_TERMINAL_SHIP_DETAIL_OPTS)
+	panel.bind_ship(_context.catalog, ship)
+	panel.refresh()
 
-	var art_host := VBoxContainer.new()
-	detail.add_child(art_host)
-	var art := LOCATION_ART.instantiate()
-	art_host.add_child(art)
-	var sprite_path := str(chassis.get("sprite", ""))
-	art.set_art_path(sprite_path, ship.name)
 
-	detail.add_child(_headline_label(ship.name))
-	detail.add_child(_detail_row("Chassis", str(assembled.chassis.get("name", ship.chassis_id))))
-
-	detail.add_child(_section_label("MODULES"))
-	for entry in assembled.installed_modules:
-		if typeof(entry) != TYPE_DICTIONARY:
-			continue
-		var slot := str(entry.get("slot", ""))
-		var module_data: ModuleDef = entry.get("data", null)
-		var module_name := module_data.name if module_data != null else str(entry.get("module_id", ""))
-		detail.add_child(_detail_row(slot, module_name))
-
-	if not stats.is_empty():
-		detail.add_child(_section_label("STATS"))
-		for key in ["dry_mass", "loaded_mass", "thrust", "max_speed", "boost_max_speed", "maneuver", "armour_hits"]:
-			if stats.has(key):
-				detail.add_child(_detail_row(key, str(stats[key])))
-
-	var engineering := ShipAssembly.get_engineering_block(_context.catalog, ship)
-	ModuleSpecText.append_ship_signature_rows(
-		detail,
-		engineering.get("signature", {}),
-		str(engineering.get("transponder_label", "off"))
-	)
+func _ensure_ship_detail_panel(detail: VBoxContainer) -> VBoxContainer:
+	for child in detail.get_children():
+		if child.has_method("bind_ship"):
+			return child as VBoxContainer
+	var panel: VBoxContainer = SHIP_DETAIL_PANEL.instantiate()
+	detail.add_child(panel)
+	return panel
 
 
 func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
@@ -272,6 +269,13 @@ func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
 	return null
 
 
+func _section_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.theme_type_variation = &"Section"
+	return label
+
+
 func _clear_children(node: Node) -> void:
 	for child in node.get_children():
 		node.remove_child(child)
@@ -292,35 +296,3 @@ func _select_item_by_id(
 		list.deselect_all()
 	set(suppress_flag_name, false)
 
-
-func _detail_row(label_text: String, value_text: String) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-
-	var key := Label.new()
-	key.text = "%s:" % label_text
-	key.theme_type_variation = &"Muted"
-	key.custom_minimum_size = Vector2(120, 0)
-	row.add_child(key)
-
-	var value := Label.new()
-	value.text = value_text
-	value.theme_type_variation = &"Numeric"
-	value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(value)
-
-	return row
-
-
-func _section_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Section"
-	return label
-
-
-func _headline_label(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.theme_type_variation = &"Headline"
-	return label

@@ -1,6 +1,18 @@
 extends Control
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
+const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
+
+const _YARD_SHIP_DETAIL_OPTS := {
+	"show_summary": true,
+	"chassis_style": "fixed",
+	"show_engineering": true,
+	"show_flight": true,
+	"flight_section_title": "FLIGHT",
+	"flight_row_style": "Label",
+	"flight_keys": ["loaded_mass", "thrust", "max_speed", "boost_max_speed", "maneuver"],
+	"show_signature": true,
+}
 const MODULE_SLOT := preload("res://scenes/ui/components/module_slot.tscn")
 const MODULE_STOCK_ITEM := preload("res://scenes/ui/components/module_stock_item.tscn")
 const INVENTORY_DROP_TARGET := preload("res://scripts/ui/components/inventory_drop_target.gd")
@@ -64,7 +76,7 @@ var _selected_slot: String = ""
 var _selected_stock_tab: int = 0
 var _ship_ids: PackedStringArray = PackedStringArray()
 var _suppress_ship_select: bool = false
-var _ship_art_frame: PanelContainer
+var _ship_detail_panel: VBoxContainer
 var _refresh_pending := false
 var _stock_sort: Dictionary = {
 	"propulsion": {"key": "price", "asc": true},
@@ -235,88 +247,27 @@ func _select_ship_at_index(index: int) -> void:
 func _rebuild_ship_detail() -> void:
 	for child in _ship_art_host.get_children():
 		child.queue_free()
-	for child in _ship_stats_body.get_children():
-		child.queue_free()
 	for child in _config_body.get_children():
 		child.queue_free()
 
 	var ship := _context.session.get_owned_ship(_selected_ship_id)
 	if ship == null:
+		for child in _ship_stats_body.get_children():
+			child.queue_free()
+		_ship_detail_panel = null
 		return
 
-	var engineering := ShipAssembly.get_engineering_block(_context.catalog, ship)
-	var stats: Dictionary = engineering.get("stats", {})
-	var capacities: Dictionary = engineering.get("capacities", {})
-	var envelope: Dictionary = engineering.get("envelope", {})
-	var mounts: Dictionary = engineering.get("mounts", {})
-	var assembled := ShipAssembly.preview_stats(_context.catalog, ship)
-	var chassis_data := _context.catalog.get_chassis(ship.chassis_id)
+	if _ship_detail_panel == null or not is_instance_valid(_ship_detail_panel):
+		for child in _ship_stats_body.get_children():
+			child.queue_free()
+		_ship_detail_panel = SHIP_DETAIL_PANEL.instantiate()
+		_ship_stats_body.add_child(_ship_detail_panel)
 
-	_ship_art_frame = LOCATION_ART.instantiate()
-	_ship_art_host.add_child(_ship_art_frame)
-	_ship_art_frame.set_art_path(str(chassis_data.get("sprite", "")), ship.name)
-
-	var summary := Label.new()
-	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	summary.text = assembled.get_summary()
-	_ship_stats_body.add_child(summary)
-
-	var chassis := Label.new()
-	chassis.text = "Chassis (fixed): %s" % str(assembled.chassis.get("name", ship.chassis_id))
-	chassis.theme_type_variation = &"Numeric"
-	_ship_stats_body.add_child(chassis)
+	_ship_detail_panel.configure(_YARD_SHIP_DETAIL_OPTS)
+	_ship_detail_panel.bind_ship(_context.catalog, ship)
+	_ship_detail_panel.refresh()
 
 	_add_slot_board(ship)
-
-	_ship_stats_body.add_child(_section_label("ENGINEERING"))
-	_ship_stats_body.add_child(_detail_label(
-		"MASS",
-		"%.1f / %.1f t" % [float(envelope.get("dry_mass", 0.0)), float(envelope.get("mass_limit", 0.0))]
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"VOLUME",
-		"%.1f / %.1f m³" % [float(envelope.get("volume_used", 0.0)), float(envelope.get("volume", 0.0))]
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"POWER",
-		"%.0f / %.0f MW idle" % [float(engineering.get("idle_power_requested", 0.0)), float(engineering.get("idle_power_available", 0.0))]
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"COMPUTE",
-		"%.0f / %.0f CU idle" % [float(engineering.get("idle_compute_demand", 0.0)), float(capacities.get("compute_capacity", 0.0))]
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"LIFE SUPPORT",
-		"%.0f people" % float(capacities.get("life_support_capacity", 0.0))
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"CARGO",
-		"%.0f t capacity" % float(capacities.get("cargo_capacity", 0.0))
-	))
-	_ship_stats_body.add_child(_detail_label(
-		"FUEL",
-		"%.0f / %.0f" % [ship.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
-	))
-	ModuleSpecText.append_ship_signature_rows(
-		_ship_stats_body,
-		engineering.get("signature", {}),
-		str(engineering.get("transponder_label", "off"))
-	)
-
-	for mount_type in ["light_weapon", "medium_weapon", "heavy_weapon"]:
-		if mounts.has(mount_type):
-			var usage: Dictionary = mounts[mount_type]
-			var mount_label: String = mount_type.replace("_", " ").capitalize()
-			_ship_stats_body.add_child(_detail_label(
-				mount_label.to_upper(),
-				"%d / %d" % [int(usage.get("used", 0)), int(usage.get("total", 0))]
-			))
-
-	if not stats.is_empty():
-		_ship_stats_body.add_child(_section_label("FLIGHT"))
-		for key in ["loaded_mass", "thrust", "max_speed", "boost_max_speed", "maneuver"]:
-			if stats.has(key):
-				_ship_stats_body.add_child(_detail_label(key, str(stats[key])))
 
 
 func _slot_group_for(slot: String) -> String:

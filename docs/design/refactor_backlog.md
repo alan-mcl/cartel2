@@ -507,10 +507,13 @@ outlying-area flavour or delete the dead path.
 
 ## P5-2 Shared `ShipDetailPanel`
 
-**Status:** Not started. **Phase:** 5. **Depends on:** P5-1.
+**Status:** Done. **Phase:** 5. **Depends on:** P5-1.
 
 **Problem:** The habitat terminal and the shipyard render overlapping module list, engineering,
 and signature views through separate code, both calling `ShipAssembly`.
+
+**Scope (done):** [`ship_detail_panel.gd`](scripts/ui/ship_detail_panel.gd) with section flags;
+wired from **TerminalPanel** and **ShipyardScreen** (slot board unchanged).
 
 ## P5-3 Adopt the pattern components that already exist
 

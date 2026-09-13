@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cartel_ship_detail_panel"]
+
+[ext_resource type="Script" path="res://scripts/ui/ship_detail_panel.gd" id="1"]
+
+[node name="ShipDetailPanel" type="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+script = ExtResource("1")
