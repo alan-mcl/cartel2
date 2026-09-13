@@ -496,13 +496,14 @@ outlying-area flavour or delete the dead path.
 
 ## P5-1 Split `habitat_screen.gd`
 
-**Status:** Not started. **Phase:** 5. **Depends on:** P4-3.
+**Status:** Done. **Phase:** 5. **Depends on:** P4-3.
 
-**Problem:** 969 lines acting as building router plus four embedded sub-UIs (terminal, market,
-ship dealer, chassis dealer). Two known leaks: it calls `CommodityEconomy.sell_price` directly
-for display, and constructs `OwnedShip.from_template()` for dealer previews.
+**Problem:** ~1000 lines acting as location router plus embedded building UIs. Two gameplay leaks:
+`CommodityEconomy.sell_price` and `OwnedShip.from_template()` in UI.
 
-**Scope:** Thin router plus `TerminalPanel`, `MarketPanel`, `DealerPanel`.
+**Scope (done):** Location shell unchanged (`ContentPane` expand-fill, no location scroll).
+`TerminalPanel`, `MarketPanel`, `DealerPanel`, and embedded `ShipyardScreen` via registry;
+`GameSession.commodity_sell_price` and `ShipAssembly.preview_from_template`.
 
 ## P5-2 Shared `ShipDetailPanel`
 

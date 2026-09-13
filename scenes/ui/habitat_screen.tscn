@@ -121,21 +121,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 2.0
 
-[node name="ContentScroll" type="ScrollContainer" parent="Layout/Body/Split/Right"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="ContentHost" type="VBoxContainer" parent="Layout/Body/Split/Right/ContentScroll"]
+[node name="ContentPane" type="Control" parent="Layout/Body/Split/Right"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="TerminalHost" type="VBoxContainer" parent="Layout/Body/Split/Right"]
-visible = false
-layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 8
 
 [node name="Log" type="Label" parent="Layout/Body/Split/Right"]
 layout_mode = 2

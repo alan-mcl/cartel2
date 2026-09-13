@@ -1,11 +1,20 @@
 extends PanelContainer
 
-@onready var _frame: AspectRatioContainer = $Frame
-@onready var _texture: TextureRect = $Frame/TextureRect
-@onready var _placeholder: Label = $Frame/Placeholder
+var _frame: AspectRatioContainer
+var _texture: TextureRect
+var _placeholder: Label
+
+
+func _bind_nodes() -> void:
+	if _texture != null:
+		return
+	_frame = $Frame
+	_texture = $Frame/TextureRect
+	_placeholder = $Frame/Placeholder
 
 
 func configure_header_mode(enabled: bool) -> void:
+	_bind_nodes()
 	if enabled:
 		custom_minimum_size = Vector2(0, 160)
 		size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -19,6 +28,7 @@ func configure_header_mode(enabled: bool) -> void:
 
 
 func set_art_path(art_path: String, label: String = "") -> void:
+	_bind_nodes()
 	if art_path.is_empty():
 		_texture.texture = null
 		_placeholder.text = label if not label.is_empty() else "No art"

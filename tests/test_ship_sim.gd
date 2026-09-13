@@ -9,6 +9,7 @@ static func run(runner: TestRunner) -> void:
 	_test_physics_uses_operating_thrust_factor(runner, catalog)
 	_test_stats_cadence(runner, catalog)
 	_test_step_weapons_returns_orders(runner, catalog)
+	_test_preview_from_template(runner, catalog)
 
 
 static func _bind_sim(catalog: Catalog) -> Dictionary:
@@ -110,3 +111,13 @@ static func _test_step_weapons_returns_orders(runner: TestRunner, catalog: Catal
 	runner.check(typeof(result) == TYPE_DICTIONARY, "step_weapons returns dictionary")
 	runner.check(result.has("orders"), "step_weapons includes orders key")
 	runner.check(typeof(result.get("orders", null)) == TYPE_ARRAY, "orders is an array")
+
+
+static func _test_preview_from_template(runner: TestRunner, catalog: Catalog) -> void:
+	var assembled := ShipAssembly.preview_from_template(catalog, "flare_on_ss")
+	runner.check(assembled != null, "preview_from_template returns assembled ship for flare_on_ss")
+	if assembled != null:
+		runner.check(
+			not assembled.installed_modules.is_empty(),
+			"preview_from_template includes installed modules"
+		)

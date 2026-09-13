@@ -8,6 +8,22 @@ static func preview_stats(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
 
+static func preview_from_template(catalog: Catalog, template_id: String) -> AssembledShip:
+	var template := catalog.get_ship(template_id)
+	if template.is_empty():
+		return null
+	var preview_ship := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "preview",
+			"name": str(template.get("name", template_id)),
+			"template_id": template_id,
+			"chassis_id": str(template.get("chassis", "")),
+		}
+	)
+	return preview_stats(catalog, preview_ship)
+
+
 static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
 	return ShipAssembler.get_stat_block(catalog, owned)
 

@@ -772,6 +772,10 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 	return true
 
 
+func commodity_sell_price(buy_price: int) -> int:
+	return CommodityEconomy.sell_price(buy_price)
+
+
 func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
 	if not world.docked:
 		return false

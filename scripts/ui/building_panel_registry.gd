@@ -5,7 +5,11 @@ const MODE_STACK := "stack"
 const MODE_EMBED := "embed"
 const MODE_PLACEHOLDER := "placeholder"
 
-const _STACK_SCENES: Dictionary = {
+const _EMBED_SCENES: Dictionary = {
+	"terminal": preload("res://scenes/ui/terminal_panel.tscn"),
+	"market": preload("res://scenes/ui/market_panel.tscn"),
+	"ship_dealer": preload("res://scenes/ui/dealer_panel.tscn"),
+	"chassis_dealer": preload("res://scenes/ui/dealer_panel.tscn"),
 	"shipyard": preload("res://scenes/ui/shipyard_screen.tscn"),
 }
 
@@ -14,30 +18,25 @@ const _EMBED_TYPES: Array[String] = [
 	"market",
 	"ship_dealer",
 	"chassis_dealer",
+	"shipyard",
 ]
 
 
 static func mode_for(building_type: String) -> String:
-	if _STACK_SCENES.has(building_type):
-		return MODE_STACK
 	if building_type in _EMBED_TYPES:
 		return MODE_EMBED
 	return MODE_PLACEHOLDER
 
 
-static func stack_scene(building_type: String) -> PackedScene:
-	var scene: Variant = _STACK_SCENES.get(building_type, null)
+static func embed_scene(building_type: String) -> PackedScene:
+	var scene: Variant = _EMBED_SCENES.get(building_type, null)
 	if scene is PackedScene:
 		return scene
 	return null
 
 
-static func stack_scene_path(building_type: String) -> String:
-	var scene := stack_scene(building_type)
+static func embed_scene_path(building_type: String) -> String:
+	var scene := embed_scene(building_type)
 	if scene == null:
 		return ""
 	return scene.resource_path
-
-
-static func stack_building_types() -> Array:
-	return _STACK_SCENES.keys()

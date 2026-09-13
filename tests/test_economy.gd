@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_determinism(runner, catalog)
 	_test_day_rollover(runner, catalog)
 	_test_sell_spread(runner)
+	_test_session_sell_price_wrapper(runner)
 	_test_friction_affects_prices(runner, catalog)
 
 
@@ -126,6 +127,15 @@ static func _test_sell_spread(runner: TestRunner) -> void:
 	runner.check(
 		CommodityEconomy.sell_price(1000) < 1000,
 		"economy: spread applied at scale"
+	)
+
+
+static func _test_session_sell_price_wrapper(runner: TestRunner) -> void:
+	var session := GameSession.new()
+	runner.check_eq(
+		session.commodity_sell_price(1000),
+		CommodityEconomy.sell_price(1000),
+		"session commodity_sell_price wraps CommodityEconomy"
 	)
 
 
