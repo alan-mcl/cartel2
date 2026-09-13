@@ -529,10 +529,12 @@ lived outside the theme.
 
 ## P5-4 Screen base class
 
-**Status:** Not started. **Phase:** 5. **Depends on:** P4-3.
+**Status:** Done. **Phase:** 5. **Depends on:** P4-3.
 
-**Scope:** A base with `bind(context)` / `refresh()` / `handle_back()` so "add a screen" is a
-recipe rather than four unrelated edits.
+**Scope (done):** **GameScreen** owns `bind(context)`, deferred `session.changed` → `refresh()`,
+default `handle_back()`, and optional `configure(building)`. **HabitatScreen** and building panels
+plus embedded **ShipyardScreen** extend it (yard coalesces refresh; embedded yard keeps
+`handle_back` → false). Recipe documented in `architecture.md`.
 
 ---
 

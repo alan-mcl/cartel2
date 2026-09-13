@@ -1,4 +1,4 @@
-extends Control
+extends GameScreen
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 
@@ -15,7 +15,6 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 @onready var _content_pane: Control = $Layout/Body/Split/Right/ContentPane
 @onready var _log: Label = $Layout/Body/Split/Right/Log
 
-var _context: UiContext
 var _art_frame: PanelContainer
 var _building_ids: PackedStringArray = PackedStringArray()
 var _suppress_building_select: bool = false
@@ -31,20 +30,9 @@ func _ready() -> void:
 
 
 func bind(context: UiContext) -> void:
-	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
+	super.bind(context)
 	if _gst_clock != null and _gst_clock.has_method("bind") and _context.session != null:
 		_gst_clock.bind(_context.session)
-	_refresh_when_ready()
-
-
-func _refresh_when_ready() -> void:
-	if is_node_ready():
-		refresh()
-	else:
-		if not ready.is_connected(refresh):
-			ready.connect(refresh, CONNECT_ONE_SHOT)
 
 
 func refresh() -> void:
@@ -67,13 +55,6 @@ func refresh() -> void:
 	_rebuild_building_list(habitat)
 	_update_building_header(habitat, building)
 	_show_building_content(habitat, building)
-
-
-func handle_back() -> bool:
-	if _context != null and _context.stack.get_depth() > 1:
-		_context.stack.pop_screen()
-		return true
-	return false
 
 
 func _rebuild_building_list(habitat: Dictionary) -> void:
@@ -112,12 +93,12 @@ func _select_building_at_index(index: int) -> void:
 	var building_id := _building_ids[index]
 	if building_id == _context.session.building_id:
 		return
-	var was_connected := _context.session.changed.is_connected(refresh)
+	var was_connected := _context.session.changed.is_connected(_on_session_changed)
 	if was_connected:
-		_context.session.changed.disconnect(refresh)
+		_context.session.changed.disconnect(_on_session_changed)
 	var visited := _context.session.visit(_context.catalog, building_id)
-	if was_connected and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
+	if was_connected and not _context.session.changed.is_connected(_on_session_changed):
+		_context.session.changed.connect(_on_session_changed, CONNECT_DEFERRED)
 	if not visited:
 		return
 	_embedded_panel_type = ""

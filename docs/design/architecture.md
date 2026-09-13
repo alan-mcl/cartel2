@@ -70,6 +70,11 @@ Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `modu
 
 UI scripts receive a **UiContext** (`catalog`, `session`, `stack`, callbacks). They never load JSON or run gameplay rules directly — they call `GameSession` / `ShipAssembly` and refresh on `session.changed`.
 
+**GameScreen** (`scripts/ui/game_screen.gd`) is the shared base for docked location UI: `bind(context)` stores **UiContext**, connects `session.changed` (deferred) to `refresh()`, and provides default `handle_back()` (pop **ScreenStack** when depth > 1). **HabitatScreen**, **TerminalPanel**, **MarketPanel**, **DealerPanel**, and **ShipyardScreen** extend it. CanvasLayer overlays (menu, pause, HUD, jump) stay plain `Control` / `CanvasLayer` nodes.
+
+- **New building panel** — scene root extends **GameScreen**; override `refresh()`; optional `configure(building)` for building-specific state; register the scene in **BuildingPanelRegistry** `_EMBED_SCENES`. Habitat embeds the panel in `ContentPane` and calls `bind(context)` plus `configure` when the building is selected.
+- **New stack screen** (rare) — same base; override `handle_back()` only if the default pop is wrong; push via **UiRoot** / habitat and call `bind(context)`.
+
 Location and building art paths live in catalog JSON under `assets/ui/locations/` (placeholder SVGs today).
 
 ### Ship assembly sandbox

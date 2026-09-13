@@ -1,8 +1,7 @@
-extends Control
+extends GameScreen
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 
-var _context: UiContext
 var _building: Dictionary = {}
 var _selected_dealer_stock_id: String = ""
 var _dealer_stock_ids: PackedStringArray = PackedStringArray()
@@ -10,13 +9,8 @@ var _dealer_item_list: ItemList
 var _suppress_dealer_select: bool = false
 
 
-func bind(context: UiContext) -> void:
-	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
-
-
 func configure(building: Dictionary) -> void:
+	super.configure(building)
 	_building = building
 
 

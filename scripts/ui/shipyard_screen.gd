@@ -1,4 +1,4 @@
-extends Control
+extends GameScreen
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
@@ -67,7 +67,6 @@ const SLOT_GROUPS := [
 @onready var _stock_tabs: TabContainer = $Layout/Body/Split/InventoryColumn/StockTabs
 @onready var _log: Label = $Layout/Footer/FooterBox/Log
 
-var _context: UiContext
 var _embedded := false
 var _sandbox := false
 var _selected_ship_id: String = ""
@@ -132,10 +131,11 @@ func _apply_embedded_chrome() -> void:
 
 
 func bind(context: UiContext) -> void:
-	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(_request_refresh):
-		_context.session.changed.connect(_request_refresh)
-	_refresh_when_ready()
+	super.bind(context)
+
+
+func _on_session_changed() -> void:
+	_request_refresh()
 
 
 func _request_refresh() -> void:
@@ -148,14 +148,6 @@ func _request_refresh() -> void:
 func _run_deferred_refresh() -> void:
 	_refresh_pending = false
 	refresh()
-
-
-func _refresh_when_ready() -> void:
-	if is_node_ready():
-		refresh()
-	else:
-		if not ready.is_connected(refresh):
-			ready.connect(refresh, CONNECT_ONE_SHOT)
 
 
 func refresh() -> void:

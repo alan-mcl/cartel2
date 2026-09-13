@@ -1,8 +1,13 @@
 class_name TestUiRegistry
 extends RefCounted
 
-
 static func run(runner: TestRunner) -> void:
+	var game_screen_script := load("res://scripts/ui/game_screen.gd") as GDScript
+	runner.check(
+		game_screen_script != null and game_screen_script.get_global_name() == &"GameScreen",
+		"GameScreen global class name"
+	)
+
 	for embed_type in ["terminal", "market", "ship_dealer", "chassis_dealer", "shipyard"]:
 		runner.check_eq(
 			BuildingPanelRegistry.mode_for(embed_type),

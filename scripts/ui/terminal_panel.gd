@@ -1,4 +1,4 @@
-extends Control
+extends GameScreen
 
 const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
 
@@ -21,22 +21,11 @@ const _TERMINAL_SHIP_DETAIL_OPTS := {
 	"show_signature": true,
 }
 
-var _context: UiContext
 var _selected_terminal_ship_id: String = ""
 var _terminal_ship_ids: PackedStringArray = PackedStringArray()
 var _terminal_ship_item_list: ItemList
 var _suppress_terminal_ship_select: bool = false
 var _show_rename_field: bool = false
-
-
-func bind(context: UiContext) -> void:
-	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
-
-
-func configure(_building: Dictionary) -> void:
-	pass
 
 
 func refresh() -> void:

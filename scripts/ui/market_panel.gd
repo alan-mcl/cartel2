@@ -1,22 +1,11 @@
-extends Control
+extends GameScreen
 
-var _context: UiContext
 var _selected_commodity_id: String = ""
 var _market_commodity_ids: PackedStringArray = PackedStringArray()
 var _market_listings: Array[Dictionary] = []
 var _commodity_item_list: ItemList
 var _suppress_commodity_select: bool = false
 var _cargo_ship_id: String = ""
-
-
-func bind(context: UiContext) -> void:
-	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(refresh):
-		_context.session.changed.connect(refresh, CONNECT_DEFERRED)
-
-
-func configure(_building: Dictionary) -> void:
-	pass
 
 
 func refresh() -> void:
