@@ -168,8 +168,9 @@ Terra Nova is a planetary resource extraction corporation specializing in mining
 
 OSC is an ancient trading corporation whose origins lie in the beginnings of commercial space travel. Over centuries it expanded into shipping, finance, resource extraction and general commerce, eventually becoming one of the largest diversified corporations in human space. The company is known for its relentless expansion and aggressive acquisition strategy, routinely entering markets where it has little previous presence and quickly establishing a challenging position.
 
+## DeepSpace Cooperative (DSC)
 
-
+DeepSpace Cooperative traces its origins to the first generation of humans born away from Earth. The early off-world communities pooled their resources to survive in isolated settlements, gradually developing a cooperative commercial structure that grew alongside the frontier. Today DSC is a vast diversified corporation owned collectively by its members, with interests spanning mining, shipping, manufacturing, finance and planetary development.
 
 
 
