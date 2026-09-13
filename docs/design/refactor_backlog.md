@@ -542,11 +542,11 @@ plus embedded **ShipyardScreen** extend it (yard coalesces refresh; embedded yar
 
 ## P6-1 Shared ship visual adapter
 
-**Status:** Not started. **Phase:** 6. **Depends on:** P2-3.
+**Status:** Done. **Phase:** 6. **Depends on:** P2-3.
 
-**Scope:** Hull visual setup, damage tint, weapon order spawning, and muzzle offset are ~110
-duplicated lines between `player_ship.gd` and `npc_ship.gd`. Extract once P2-3 has unified the
-simulation side.
+**Scope (done):** **`ShipVisual`** static helper for hull setup, damage tint, muzzle offset, and
+weapon-order spawn; **`player_ship.gd`** and **`npc_ship.gd`** are thin wrappers (NPC public
+duck-typed methods unchanged). Far LOD and `ShipSimCore` untouched.
 
 ## P6-2 `FlightSandboxBase`
 

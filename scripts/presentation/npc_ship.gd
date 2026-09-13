@@ -2,13 +2,6 @@ extends CharacterBody2D
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
-const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
-const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
-const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
-const _LaserBeam := preload("res://scripts/presentation/laser_beam.gd")
-const _MassDriverRound := preload("res://scripts/presentation/mass_driver_round.gd")
-const _RocketProjectile := preload("res://scripts/presentation/rocket_projectile.gd")
-
 const NPC_LAYER := 16
 const SOLID_MASK := 2
 const WEAPON_MASK := SOLID_MASK | NPC_LAYER | 1
@@ -51,9 +44,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
 func apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null:
 		return
-	var ratio := clampf(health_ratio, 0.25, 1.0)
-	var base := Color.WHITE
-	_hull.modulate = Color(base.r * ratio + (1.0 - ratio) * 0.2, base.g * ratio, base.b * ratio, base.a)
+	ShipVisual.apply_damage_tint(_hull, health_ratio)
 
 
 func play_destroyed() -> void:
@@ -67,58 +58,17 @@ func spawn_weapon_orders(orders: Array) -> void:
 	var world := _get_world_root()
 	if world == null or actor == null:
 		return
-
-	var direction := Vector2.from_angle(actor.motion.facing)
-	for order_variant in orders:
-		if typeof(order_variant) != TYPE_DICTIONARY:
-			continue
-		var order: Dictionary = order_variant
-		var delivery := str(order.get("delivery_type", order.get("delivery", "")))
-		var packets: Dictionary = order.get("packets", {})
-		var max_range := float(order.get("range", 0.0))
-		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
-		var weapon_type := str(order.get("weapon_type", ""))
-		var exclude: Array = [self]
-		if delivery in ["beam", "cyber"]:
-			_LaserBeam.spawn(
-				world,
-				_muzzle_position(),
-				direction,
-				max_range,
-				delivery,
-				packets,
-				WEAPON_MASK,
-				exclude,
-				self
-			)
-		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
-			_RocketProjectile.spawn(
-				world,
-				_muzzle_position(_RocketProjectile.ROCKET_RADIUS),
-				direction,
-				speed,
-				max_range,
-				delivery,
-				packets,
-				WEAPON_MASK,
-				exclude,
-				actor.motion.velocity,
-				self
-			)
-		elif delivery in ["ballistic", "plasma", "guided"]:
-			_MassDriverRound.spawn(
-				world,
-				_muzzle_position(_MassDriverRound.ROUND_RADIUS),
-				direction,
-				speed,
-				max_range,
-				delivery,
-				packets,
-				WEAPON_MASK,
-				exclude,
-				actor.motion.velocity,
-				self
-			)
+	ShipVisual.spawn_weapon_orders(
+		world,
+		orders,
+		global_position,
+		actor.motion.facing,
+		actor.motion.velocity,
+		WEAPON_MASK,
+		[self],
+		self,
+		actor.assembled_ship.chassis
+	)
 
 
 func _ready() -> void:
@@ -137,22 +87,10 @@ func _apply_hull_visual() -> void:
 
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
 	if not sprite_path.is_empty():
-		_hull.texture = ChassisSpriteScript.get_texture(sprite_path)
-		HullHitboxScript.apply_from_chassis_sprite(_collision_shape, sprite_path)
-		HullHitboxScript.apply_hull_and_thrust(_hull, _thrust_flame, sprite_path)
+		ShipVisual.apply_hull(_hull, _thrust_flame, _collision_shape, sprite_path)
 
 	var brightness: float = 1.0 + actor.hull_color_shift
 	_hull.modulate = Color(brightness, brightness, brightness, 1.0)
-
-
-func _muzzle_position(projectile_radius: float = 5.0) -> Vector2:
-	if actor == null:
-		return global_position
-	var offset := ShipWeapons.MUZZLE_OFFSET
-	if not actor.assembled_ship.chassis.is_empty():
-		var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
-		offset = HullHitboxScript.muzzle_offset(sprite_path, projectile_radius)
-	return global_position + Vector2.from_angle(actor.motion.facing) * offset
 
 
 func _get_world_root() -> Node2D:

@@ -12,7 +12,7 @@
 		"callsign": "FILE-1",
 		"portrait": ""
 	},
-	"saved_at": "2026-09-13T14:02:15",
+	"saved_at": "2026-09-13T14:37:08",
 	"session": {
 		"building_id": "proxima_habitat_terminal",
 		"compute_integrity_lost": 0.0,
@@ -98,7 +98,7 @@
 				}
 			],
 			"name": "Pegasus P101",
-			"registration": "VR-PGS-4518",
+			"registration": "VR-PGS-8535",
 			"template_id": "pegasus_p101",
 			"transponder_enabled": true
 		}
