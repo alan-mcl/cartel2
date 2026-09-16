@@ -178,9 +178,6 @@ func begin_new_game(callsign: String, background_id: String, portrait_path: Stri
 		return
 
 	_simulation.reset_save()
-	var missions := _simulation.get_subsystem("missions") as MissionSubsystem
-	if missions != null:
-		missions.accept(_main.session)
 	_current_slot = -1
 	_main_menu.close()
 	_new_game.close()
@@ -352,4 +349,3 @@ func _forward_session_event(evt: Dictionary) -> void:
 	if _simulation == null:
 		return
 	_simulation.dispatch_event(_main.session, _catalog, evt)
-

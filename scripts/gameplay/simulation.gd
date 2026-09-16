@@ -9,7 +9,6 @@ var _subsystems: Dictionary = {}
 
 func _init() -> void:
 	register(EconomySubsystem.new())
-	register(MissionSubsystem.new())
 
 
 func register(subsystem: SimSubsystem) -> bool:

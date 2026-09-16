@@ -24,6 +24,7 @@ RUN_VALIDATORS=1
 RUN_IMPORT=1
 RUN_SWEEP=1
 RUN_TESTS=1
+RUN_SMOKES=1
 JOBS="${CHECK_JOBS:-$(nproc 2>/dev/null || echo 4)}"
 
 usage() {
@@ -32,9 +33,10 @@ usage() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --fast)
-      RUN_IMPORT=0
-      RUN_SWEEP=0
+	--fast)
+		RUN_IMPORT=0
+		RUN_SWEEP=0
+		RUN_SMOKES=0
       ;;
     --scripts-only)
       RUN_VALIDATORS=0
@@ -154,6 +156,11 @@ if [[ $RUN_TESTS -eq 1 ]]; then
     echo "Unit test runner exited $TEST_EXIT." >&2
     exit 1
   fi
+fi
+
+if [[ $RUN_SMOKES -eq 1 ]]; then
+	echo "== Scene smoke suite =="
+	bash "$ROOT/scripts/ci/smoke_scenes.sh"
 fi
 
 echo "All checks passed."

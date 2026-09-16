@@ -26,7 +26,15 @@ func sync_from_actor(traffic_actor) -> void:
 		return
 	velocity = traffic_actor.motion.velocity
 	rotation = traffic_actor.motion.facing + PI / 2.0
-	move_and_slide()
+	# A newly added CharacterBody2D is not attached to a physics space until the
+	# engine has completed its next physics registration pass.  Presentation can
+	# still render the authoritative simulation position during that small window.
+	# This also keeps headless presentation smoke/benchmark runs honest instead of
+	# emitting PhysicsServer errors for a body that cannot collide yet.
+	if PhysicsServer2D.body_get_space(get_rid()).is_valid():
+		move_and_slide()
+	else:
+		global_position = traffic_actor.position
 	traffic_actor.sync_position(global_position)
 	_update_thrust_visual(traffic_actor.motion.is_thrusting())
 

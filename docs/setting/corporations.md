@@ -6,15 +6,15 @@ Galactic Outcomes has its roots in the turbulent African politics of the late tw
 
 ## Karaquazen Inc (KRQ)
 
-Karaquazen is a corporation respected for its monopoly as much as it is feared for its methods. It runs a galactic chain of mega-casinos and gambling houses, and operates 95% of all the planetary lotteries. Although it is not widely known, Karaquazen also has a controlling interest in nearly all medical aid and insurance providers.
+Karaquazen is a corporation respected for its monopoly as much as it is feared for its methods. It runs a galactic chain of mega-casinos and gambling houses, and operates 95% of all the planetary lotteries. Although it is not widely known, Karaquazen also has a controlling interest in nearly all medical aid and insurance providers. It's diversified Operations division maintains a surprising variety of manufacturing, logistics and property interests.
 
 ## Himalaya Triad (HT)
 
-The corporation traces its origins to Tibetan triads that emerged in the late twenty-first century. It has extensive interests in pharmaceuticals, personal services, security, finance and specialist contracting, and has a reputation for decisive and occasionally ruthless business practices.
+The corporation traces its origins to Tibetan triads that emerged in the late twenty-first century. It has extensive interests in pharmaceuticals, personal services, security, finance, resource extraction, mining, and specialist contracting and logistics. HT has a reputation in the market for decisive and occasionally ruthless business practices. 
 
 ## MicroDonald Franchise (MDF)
 
-Born of the merger between several Americano-descended companies, MicroDonald specialises in low cost, high volume consumer goods and services of all kinds. Behind its high-powered advertising campaign and cute mascot, MDF is a cunning and ruthless monopoly that has annihilated all competition. It is possible, and increasingly common, for a person to use exclusively MDF products from the moment he is delivered in a city-mall hospital to the day he is buried in an MDF coffin.
+Born of the merger between several Americano-descended companies, MicroDonald specialises in low cost, high volume consumer goods and services of all kinds. Behind its high-powered advertising campaign and cute mascot, MDF is a cunning and ruthless monopoly that has annihilated all competition. It is possible, and increasingly common on some worlds, for a person to use exclusively MDF products from the moment he is born in an MDF governed city-mall to the day he is buried in an MDF coffin.
 
 ## ParaRamcoVidia (PRV)
 
@@ -26,7 +26,7 @@ GRC is the youngest of the large corporations, and it is in direct competition w
 
 ## Creus Corporation (CRC)
 
-Creus is an old and respected investment bank and one of the richest corporations out there, at least in terms of declared assets. Their banking operations are under threat from the upstart GRC, but they still hold the monopoly when it comes to auction houses, micro loans and property markets.
+Creus is an old and respected investment bank and one of the richest corporations out there, at least in terms of declared assets. Their core banking operations are under threat from the upstart GRC, but they still hold the monopoly when it comes to auction houses, micro loans and property markets. By virtue of hundreds of years of private equity activity they operate a diverse portfolio of seemingly business units.
 
 ## Holt-Winters Corp (HW)
 
@@ -38,7 +38,7 @@ Tukey Enterprises is a diversified commercial conglomerate with interests across
 
 ## SnedeCorp (SNE)
 
-Software is the game of SnedeCorp. It has over time amalgamated thousands of different software companies to gain the monopoly in the market. They manufacture all kinds of software from games to commercial software to the complex systems found on modern space ships. SnedeCorp has a reputation as a paranoid and secretive company.
+Software is the game of SnedeCorp. It has over time amalgamated hundreds of thousands of different software companies to gain the monopoly in the market. They manufacture all kinds of software from games to commercial software to the complex systems found on modern space ships. SnedeCorp has a reputation as a paranoid and secretive company.
 
 ## Oklahoma Combine (OC)
 
@@ -158,7 +158,7 @@ Chimera began as an eccentric research enterprise and now owns an extraordinary 
 
 ## The Praetorium (PRAE)
 
-The Praetorium is a provider of private security, legal services and arbitration, complemented by an extensive luxury division offering secure residences, travel, hospitality and personal services to the galaxy's most powerful clients.
+The Praetorium is a provider of private security, legal services and arbitration, complemented by an extensive luxury division offering secure residences, travel, hospitality and personal services to the galaxy's most powerful clients. Their sideline in high-end weaponry and software systems is less well known.
 
 ## Terra Nova (TNI)
 
@@ -170,7 +170,7 @@ OSC is an ancient trading corporation whose origins lie in the beginnings of com
 
 ## DeepSpace Cooperative (DSC)
 
-DeepSpace Cooperative traces its origins to the first generation of humans born away from Earth. The early off-world communities pooled their resources to survive in isolated settlements, gradually developing a cooperative commercial structure that grew alongside the frontier. Today DSC is a vast diversified corporation owned collectively by its members, with interests spanning mining, shipping, manufacturing, finance and planetary development.
+DeepSpace Cooperative traces its origins to the first generation of humans born away from Earth. The early off-world communities pooled their resources to survive in isolated settlements, gradually developing a cooperative commercial structure that grew alongside the frontier. Today DSC is a vast diversified corporation owned collectively by its members, with interests spanning mining, shipping, aerospace, manufacturing, finance and planetary development.
 
 
 

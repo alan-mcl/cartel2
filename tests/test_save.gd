@@ -9,6 +9,7 @@ extends RefCounted
 ## Assert every persisted section survives a round-trip.
 
 const FLIGHT := {"x": 1234.5, "y": -678.25, "vx": 40.0, "vy": -12.5, "facing": 1.25}
+const BASELINE_FIXTURE_PATH := "res://tests/fixtures/save_v2_baseline.json"
 
 
 static func run(runner: TestRunner) -> void:
@@ -18,6 +19,7 @@ static func run(runner: TestRunner) -> void:
 	_test_validation(runner)
 	_test_legacy_cargo_migration(runner, catalog)
 	_test_subsystems_envelope(runner, catalog)
+	_test_baseline_v2_fixture(runner, catalog)
 	_test_file_round_trip(runner, catalog)
 
 
@@ -283,10 +285,30 @@ static func _test_subsystems_envelope(runner: TestRunner, catalog: Catalog) -> v
 	runner.check_eq(loaded_probe.tick_count, 0, "save: missing envelope resets subsystem state")
 
 
+static func _test_baseline_v2_fixture(runner: TestRunner, catalog: Catalog) -> void:
+	var file := FileAccess.open(BASELINE_FIXTURE_PATH, FileAccess.READ)
+	runner.check(file != null, "save: baseline v2 fixture opens")
+	if file == null:
+		return
+	var parser := JSON.new()
+	runner.check_eq(parser.parse(file.get_as_text()), OK, "save: baseline v2 fixture parses")
+	var data: Variant = parser.get_data()
+	runner.check(data is Dictionary, "save: baseline v2 fixture is an object")
+	if not data is Dictionary:
+		return
+	var fixture: Dictionary = data
+	runner.check_eq(int(fixture.get("version", 0)), 2, "save: baseline fixture remains v2")
+	var loaded := GameSession.new()
+	runner.check(loaded.from_save(catalog, fixture), "save: baseline v2 fixture loads")
+	runner.check_eq(loaded.callsign, "BASELINE-1", "save: baseline fixture identity survives")
+	runner.check_eq(loaded.get_spare_part_count("generic_part"), 2, "save: baseline fixture state survives")
+	runner.check_eq(loaded.get_current_owned_ship().get_cargo_count("food_products"), 2, "save: baseline fixture cargo survives")
+
+
 static func _writable_test_save_dir() -> String:
 	# Headless CI sandboxes may block `user://` writes; use a project-local temp dir.
 	var project_root := ProjectSettings.globalize_path("res://")
-	var dir := project_root.path_join(".test_saves")
+	var dir := project_root.path_join(".test_saves_runtime")
 	if not dir.ends_with("/"):
 		dir += "/"
 	return dir

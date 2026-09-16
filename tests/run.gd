@@ -18,6 +18,7 @@ func _init() -> void:
 	TestTraffic.run(runner)
 	TestShipSim.run(runner)
 	TestShipVisual.run(runner)
+	TestPresentation.run(runner)
 	TestFlightSandbox.run(runner)
 	TestMotion.run(runner)
 	TestDebris.run(runner)

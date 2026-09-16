@@ -1,7 +1,7 @@
 [
   {
     "id": "vessel_registration_beacon",
-    "name": "Vessel Registration Beacon",
+    "name": "Registration Transponder Beacon",
     "maker": "SnedeCorp",
     "category": "transponder",
     "mount": "system",

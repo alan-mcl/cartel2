@@ -1,7 +1,11 @@
 class_name MissionSubsystem
 extends SimSubsystem
 
-## Hardcoded delivery spike: buy food in Proxima, sell in Bela. Persisted via Simulation save registry.
+## Development-only delivery spike: buy food in Proxima, sell in Bela.
+##
+## Production Simulation deliberately does not register this subsystem. Tests or
+## a future mission vertical slice must opt in explicitly; this prevents a
+## hardcoded auto-accepted mission becoming default new-game content.
 
 const MISSION_ID := "spike_food_run"
 const PICKUP_SECTOR_ID := "proxima"

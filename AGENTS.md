@@ -19,6 +19,9 @@ This repository is the **production Godot build** of Cartel, not a throwaway POC
 | Dev/tools | `scripts/dev/`, `scripts/tools/` | Sandboxes and one-off generators — not gameplay |
 
 - Session state lives in **`GameSession`** (`scripts/gameplay/game_session.gd`), not `PrototypeSession`.
+- `GameSession`'s forwarding properties are a compatibility facade. New code must use
+  `session.player`, `session.world`, `session.fleet`, `session.wallet`, or `session.combat`
+  directly; do not add forwarding properties.
 - Content is JSON under `data/catalog/`. Lore and design intent: [docs/setting/](docs/setting/README.md). Implementation notes: [docs/design/architecture.md](docs/design/architecture.md).
 - **Setting before JSON:** edit setting docs when changing lore; then update catalogs to match.
 - Planned refactors are tracked as pickable work items in [docs/design/refactor_backlog.md](docs/design/refactor_backlog.md). Read the item's **Depends on** and **Explicitly do NOT** before starting, and update its **Status** in the same commit.

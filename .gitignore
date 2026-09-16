@@ -18,6 +18,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pyo
+.test_saves/
+.test_saves_runtime/
 
 # OS
 .DS_Store

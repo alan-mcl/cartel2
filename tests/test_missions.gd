@@ -1,11 +1,12 @@
 class_name TestMissions
 extends RefCounted
 
-## Hardcoded [MissionSubsystem] delivery spike coverage.
+## Explicitly registered development-only [MissionSubsystem] spike coverage.
 
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
+	_test_default_simulation_has_no_missions(runner)
 	_test_pickup_and_no_proxima_sell_complete(runner, catalog)
 	_test_full_delivery_pays_once(runner, catalog)
 	_test_wrong_commodity_and_sector(runner, catalog)
@@ -14,7 +15,16 @@ static func run(runner: TestRunner) -> void:
 
 
 static func _new_simulation_with_missions() -> Simulation:
-	return Simulation.new()
+	var simulation := Simulation.new()
+	simulation.register(MissionSubsystem.new())
+	return simulation
+
+
+static func _test_default_simulation_has_no_missions(runner: TestRunner) -> void:
+	runner.check(
+		not Simulation.new().has_subsystem("missions"),
+		"missions: production simulation does not install development spike"
+	)
 
 
 static func _wire_events(session: GameSession, catalog: Catalog, simulation: Simulation) -> void:
@@ -147,7 +157,7 @@ static func _test_save_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(missions.picked_up, "missions: mid-mission picked up")
 
 	var blob := simulation.collect_save()
-	var restored := Simulation.new()
+	var restored := _new_simulation_with_missions()
 	restored.apply_save(blob)
 	var restored_missions := _missions(restored)
 	runner.check(restored_missions != null, "missions: restored simulation has missions")
@@ -185,7 +195,7 @@ static func _test_envelope_round_trip(runner: TestRunner, catalog: Catalog) -> v
 	var loaded_session := GameSession.new()
 	runner.check(loaded_session.from_save(catalog, data), "missions: envelope session loads")
 
-	var loaded_simulation := Simulation.new()
+	var loaded_simulation := _new_simulation_with_missions()
 	loaded_simulation.apply_save(data.get("subsystems", {}))
 	var loaded_missions := _missions(loaded_simulation)
 	runner.check(loaded_missions != null, "missions: envelope restores missions subsystem")

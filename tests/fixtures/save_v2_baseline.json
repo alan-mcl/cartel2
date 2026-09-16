@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "game_version": "DEV",
+  "saved_at": "2026-09-14T00:00:00",
+  "player": {
+    "callsign": "BASELINE-1",
+    "portrait": "",
+    "background_id": "trader"
+  },
+  "session": {
+    "objective": "Baseline save fixture",
+    "last_log": "Docked at Proxima Habitat.",
+    "salvaged_ids": [],
+    "inspected_ids": [],
+    "spare_parts": {"generic_part": 2},
+    "credits": 5220,
+    "sector_id": "proxima",
+    "location_name": "Proxima Habitat / Proxima Habitat Terminal",
+    "docked": true,
+    "habitat_id": "proxima_habitat",
+    "building_id": "proxima_habitat_terminal",
+    "in_unspace": false,
+    "unspace_n": 0,
+    "unspace_world_id": "",
+    "unspace_solution": 0,
+    "pending_destination_id": "",
+    "orbital_phase_by_sector": {"proxima": 1.25},
+    "gst_seconds": 83215670400.0,
+    "route_friction_delta": {},
+    "current_ship_id": "pegasus_p101_1",
+    "hull": 40.0,
+    "max_hull": 40.0,
+    "power_integrity_lost": 0.0,
+    "compute_integrity_lost": 0.0,
+    "shield_charges": {}
+  },
+  "ships": [
+    {
+      "id": "pegasus_p101_1",
+      "name": "Pegasus P101",
+      "registration": "VR-PGS-8076",
+      "template_id": "pegasus_p101",
+      "chassis_id": "pegasus_chassis",
+      "location": "proxima_habitat",
+      "modules": [
+        {"slot": "power_1", "module_id": "gi_pp_18"},
+        {"slot": "main_engine_1", "module_id": "gi_ht_18"},
+        {"slot": "system_1", "module_id": "mdc_monday_core"},
+        {"slot": "system_2", "module_id": "gi_ls_4"},
+        {"slot": "system_3", "module_id": "hg_hermes_n6"},
+        {"slot": "system_4", "module_id": "vessel_registration_beacon"},
+        {"slot": "other_1", "module_id": "mass_driver_magazine_200"},
+        {"slot": "other_2", "module_id": "fuel_tank_medium"},
+        {"slot": "other_3", "module_id": "cargo_bay_10"},
+        {"slot": "other_4", "module_id": "chitanium_5mm"},
+        {"slot": "light_weapon_1", "module_id": "light_mass_driver"}
+      ],
+      "cargo": {"food_products": 2},
+      "fuel_current": 80.0,
+      "ammunition": {"mass_driver_round": 120.0},
+      "transponder_enabled": true,
+      "active_sensors_enabled": true
+    }
+  ],
+  "flight": {"x": 0.0, "y": 0.0, "vx": 0.0, "vy": 0.0, "facing": 0.0},
+  "subsystems": {
+    "economy": {"version": 1, "data": {}}
+  }
+}

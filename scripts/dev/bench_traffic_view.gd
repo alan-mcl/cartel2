@@ -13,6 +13,14 @@ const CROSSINGS_PER_FRAME := 4
 
 
 func _initialize() -> void:
+	# Let the SceneTree create a physics world before binding CharacterBody2D
+	# presentation nodes. The benchmark is invoked through the checked wrapper
+	# in scripts/ci so engine errors make the command fail.
+	call_deferred("_run")
+
+
+func _run() -> void:
+	await physics_frame
 	var catalog := Catalog.load_default()
 	var traffic_config := catalog.get_traffic_config()
 	var actors := _make_actors(catalog, traffic_config)
@@ -42,6 +50,7 @@ func _initialize() -> void:
 	_bench_sync_crossings(view, actors, catalog)
 	_bench_near_spawn_load_vs_cached(world_root, catalog, actors[0])
 	_bench_projectiles(world_root)
+	view.clear()
 
 	quit()
 

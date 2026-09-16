@@ -1,13 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_main_menu"]
+[gd_scene format=3 uid="uid://ow7ywqa5v7wh"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1"]
+[ext_resource type="Script" uid="uid://pmp40e7pt37w" path="res://scripts/ui/main_menu.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://xs1jgiyxk6xv" path="res://assets/logo/logo_large.png" id="2_ekxnf"]
 
-[node name="MainMenu" type="CanvasLayer"]
-visible = false
+[node name="MainMenu" type="CanvasLayer" unique_id=626500365]
 process_mode = 3
 script = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1879982986]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,54 +15,51 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.054902, 0.070588, 0.086275, 1)
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="TextureRect" type="TextureRect" parent="Background" unique_id=923378119]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_ekxnf")
 
-[node name="Panel" type="PanelContainer" parent="Center"]
+[node name="Center" type="CenterContainer" parent="." unique_id=989484211]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1575.0
+offset_top = 38.0
+offset_right = -41.0
+offset_bottom = -851.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=570278906]
 layout_mode = 2
-theme_type_variation = &"Surface"
+theme_type_variation = &"SurfaceTranslucent"
 
-[node name="VBox" type="VBoxContainer" parent="Center/Panel"]
+[node name="VBox" type="VBoxContainer" parent="Center/Panel" unique_id=95267711]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="Center/Panel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Title"
-text = "Cartel"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Center/Panel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Muted"
-text = "Main Menu"
-horizontal_alignment = 1
-
-[node name="VersionLabel" type="Label" parent="Center/Panel/VBox"]
-layout_mode = 2
-theme_type_variation = &"Meta"
-text = "DEV"
-horizontal_alignment = 1
-
-[node name="Spacer" type="Control" parent="Center/Panel/VBox"]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
-
-[node name="NewGameButton" type="Button" parent="Center/Panel/VBox"]
+[node name="NewGameButton" type="Button" parent="Center/Panel/VBox" unique_id=860257385]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "New Game"
 
-[node name="LoadButton" type="Button" parent="Center/Panel/VBox"]
+[node name="LoadButton" type="Button" parent="Center/Panel/VBox" unique_id=775994856]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Load"
 
-[node name="ExitButton" type="Button" parent="Center/Panel/VBox"]
+[node name="ExitButton" type="Button" parent="Center/Panel/VBox" unique_id=1231376204]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Exit"
+
+[node name="VersionLabel" type="Label" parent="Center/Panel/VBox" unique_id=276495493]
+layout_mode = 2
+theme_type_variation = &"Meta"
+text = "DEV"
+horizontal_alignment = 1
