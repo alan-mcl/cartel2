@@ -284,4 +284,3 @@ func _select_item_by_id(
 	else:
 		list.deselect_all()
 	set(suppress_flag_name, false)
-

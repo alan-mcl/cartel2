@@ -4,9 +4,9 @@
     "name": "Proxima Habitat Terminal",
     "type": "terminal",
     "kind": "terminal",
-    "description": "The central terminal on Proxima Habitat is the busiest spaceport in the galaxy. Swarms of ships transit every minute, and throngs of travellers, pilots and staff jostle eachother for space.",
+    "description": "The great Terminal is like a city unto itself. Beyond the docking concourse, thousands of ships occupy berths stretching into the distance, while cargo moves through vast automated handling systems and streams of passengers pour into and out of the Habitat. The constant movement of ships, people and freight makes it immediately clear that Proxima is the great crossroads of human space.",
     "short_desc": "The central arrivals and departures terminal on Proxima Habitat.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "davidsons",
