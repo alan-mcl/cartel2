@@ -18,7 +18,8 @@ func step(
 	rotate_right: bool,
 	boost: bool,
 	thrust_factor: float = 1.0,
-	boost_allowed: bool = true
+	boost_allowed: bool = true,
+	environment_scale: float = 1.0
 ) -> void:
 	_thrusting = thrust
 	_reversing = reverse
@@ -30,12 +31,13 @@ func step(
 	var forward := Vector2.from_angle(facing)
 	var thrust_force := 0.0
 
+	var env := maxf(environment_scale, 0.0)
 	if thrust:
-		thrust_force = stats.forward_thrust * clamp(thrust_factor, 0.0, 1.0)
+		thrust_force = stats.forward_thrust * clamp(thrust_factor, 0.0, 1.0) * env
 		if _boosting:
 			thrust_force *= stats.boost_multiplier
 	elif reverse:
-		thrust_force = -stats.reverse_thrust * clamp(thrust_factor, 0.0, 1.0)
+		thrust_force = -stats.reverse_thrust * clamp(thrust_factor, 0.0, 1.0) * env
 
 	velocity += forward * thrust_force * delta
 

@@ -471,7 +471,7 @@
     "fuel_consumption": 0.25,
     "power_demand": 5.0,
     "cost": 6800,
-    "description": "Experimental gravitic drive. Excellent near-orbit performance \u2014 catalog placeholder.",
+    "description": "Experimental gravitic drive. Thrust scales with local gravity \u2014 strongest near the planet and habitat ring.",
     "signature": {
       "thermal": 3.75,
       "gravitational": 27.0,

@@ -19,6 +19,21 @@
     "city_malls": { "type": "array", "items": { "type": "string" }, "default": [] },
     "play_bounds": { "type": "number" },
     "objective": { "type": "string", "default": "" },
-    "mappings": { "type": "array", "items": { "type": "object" }, "default": [] }
+    "mappings": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "neighborhood": { "$ref": "#/$defs/neighborhood" }
+  },
+  "$defs": {
+    "neighborhood": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "magnetic_surface": { "type": "number", "default": 1.0 },
+        "magnetic_fluctuation": { "type": "number", "default": 0.0 },
+        "radiant": { "type": "number", "default": 1.0 },
+        "radiant_fluctuation": { "type": "number", "default": 0.0 },
+        "charged_particle": { "type": "number", "default": 1.0 },
+        "charged_particle_fluctuation": { "type": "number", "default": 0.0 }
+      }
+    }
   }
 }

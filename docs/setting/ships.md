@@ -67,7 +67,7 @@ The Flare-ON SS is the base model and features a Sundancer Compact direct-fusion
 
 ### SK
 
-The Flare-ON SK is a cutting edge craft and is becoming an increasingly common sight near the resort worlds of the galaxy. It is driven by a Sundancer Loft gravitic engine that provides excellent near-orbit performance but limits its independent hyper-travel distance. It packs a punch with a powerful turbo laser turret and sports all the latest onboard software systems. Although intended as a rich man's toy, this craft has much potential as a second-generation planetary defence fighter.
+The Flare-ON SK is a cutting edge craft and is becoming an increasingly common sight near the resort worlds of the galaxy. It is driven by a Sundancer Loft gravitic engine that provides excellent thrust where local gravity is strong (near the planet and habitat ring) but falls off in deep orbit and only weak, fluctuating thrust in unspace. It packs a punch with a powerful turbo laser turret and sports all the latest onboard software systems. Although intended as a rich man's toy, this craft has much potential as a second-generation planetary defence fighter.
 
 ---
 

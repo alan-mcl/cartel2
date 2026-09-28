@@ -56,7 +56,8 @@ func tick(
 	player_thrusting: bool = false,
 	player_assembled: AssembledShip = null,
 	player_operating: ShipOperatingState = null,
-	player_broadcasting: bool = false
+	player_broadcasting: bool = false,
+	world: WorldPresence = null
 ) -> void:
 	if _catalog == null:
 		return
@@ -118,7 +119,8 @@ func tick(
 			world_loader,
 			player_vel,
 			player_facing,
-			player_thrusting
+			player_thrusting,
+			world
 		)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:

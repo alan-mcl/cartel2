@@ -5,6 +5,11 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
 @onready var _signature_panel: PanelContainer = $Root/SignaturePanel
+@onready var _field_panel: PanelContainer = $Root/FieldPanel
+@onready var _field_gravity_label: Label = $Root/FieldPanel/VBox/GravityLabel
+@onready var _field_magnetic_label: Label = $Root/FieldPanel/VBox/MagneticLabel
+@onready var _field_radiant_label: Label = $Root/FieldPanel/VBox/RadiantLabel
+@onready var _field_particles_label: Label = $Root/FieldPanel/VBox/ParticlesLabel
 @onready var _thermal_label: Label = $Root/SignaturePanel/VBox/ThermalLabel
 @onready var _grav_label: Label = $Root/SignaturePanel/VBox/GravLabel
 @onready var _em_label: Label = $Root/SignaturePanel/VBox/EmLabel
@@ -102,6 +107,21 @@ func set_signature_state(
 			_active_sensors_label.text = "Active sensors: %s" % active_sensors_label
 
 
+func set_field_state(sample: FieldConditions.FieldSample) -> void:
+	if not _has_capability("local_sensor"):
+		return
+	if sample == null:
+		return
+	if _field_gravity_label != null:
+		_field_gravity_label.text = "Gravity: %.2f G" % sample.gravity
+	if _field_magnetic_label != null:
+		_field_magnetic_label.text = "Magnetic: %.2f" % sample.magnetic
+	if _field_radiant_label != null:
+		_field_radiant_label.text = "Radiant: %.2f" % sample.radiant
+	if _field_particles_label != null:
+		_field_particles_label.text = "Particles: %.2f" % sample.charged_particle
+
+
 func set_nav_state(
 	nav_radius: float,
 	ship_pos: Vector2,
@@ -151,6 +171,8 @@ func _refresh_capabilities() -> void:
 		_status_panel.visible = has_basic
 	if _signature_panel != null:
 		_signature_panel.visible = has_basic
+	if _field_panel != null:
+		_field_panel.visible = has_sensor
 	if _local_sensor_map != null:
 		_local_sensor_map.set_feature_visible(has_sensor)
 	if _waypoint_arrows != null:

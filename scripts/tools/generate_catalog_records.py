@@ -23,6 +23,7 @@ GENERATED_HEADER = "## Generated — do not edit. Run scripts/tools/generate_cat
 SHARED_DEF_CLASS_NAMES = {
     "signature": "CatalogSignature",
     "damage_packets": "CatalogDamagePackets",
+    "neighborhood": "CatalogNeighborhood",
 }
 
 REF_CATALOG_FILES = {

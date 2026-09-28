@@ -15,6 +15,19 @@ Shared nested type (`$defs/damage_packets`).
 | `concussive` | float | no | `0.0` |
 | `cyber` | float | no | `0.0` |
 
+## CatalogNeighborhood
+
+Shared nested type (`$defs/neighborhood`).
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `magnetic_surface` | float | no | `1.0` |
+| `magnetic_fluctuation` | float | no | `0.0` |
+| `radiant` | float | no | `1.0` |
+| `radiant_fluctuation` | float | no | `0.0` |
+| `charged_particle` | float | no | `1.0` |
+| `charged_particle_fluctuation` | float | no | `0.0` |
+
 ## CatalogSignature
 
 Shared nested type (`$defs/signature`).
@@ -155,6 +168,7 @@ Source: `data/catalog/schema/sectors.schema.json` → `sectors.json`
 | `play_bounds` | number | yes | `` |  |
 | `objective` | string | no | `` |  |
 | `mappings` | array | no | `[]` |  |
+| `neighborhood` | CatalogNeighborhood | no | `` |  |
 
 ## ShipDef
 

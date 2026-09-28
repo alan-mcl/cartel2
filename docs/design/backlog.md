@@ -20,7 +20,7 @@ Deferred **design and content** features. For what is **not implemented in code 
 
 ## Gravitic propulsion line
 
-**Status:** Single catalog placeholder (`hw_sundancer_loft` on Flare-ON SK). No gravitic product line or unique near-orbit / hyper-travel mechanics.
+**Status:** Single catalog placeholder (`hw_sundancer_loft` on Flare-ON SK). **Local field coupling** is implemented: gravitic thrust scales with ambient gravity; unspace gives only weak fluctuating gravitic acceleration. No expanded gravitic SKU line or independent hyper-travel range mechanics yet.
 
 ## Integrated sail
 

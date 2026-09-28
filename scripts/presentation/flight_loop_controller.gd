@@ -92,7 +92,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				_player.motion.is_thrusting(),
 				_player.assembled_ship,
 				_player.operating_state,
-				player_broadcasting
+				player_broadcasting,
+				_main.session.world
 			)
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog)
@@ -133,6 +134,13 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_player.operating_state
 	)
 	_hud.set_signature_state(player_signature, transponder_label, active_sensors_label)
+	if _catalog != null:
+		var field_sample := FieldConditions.sample(
+			_catalog,
+			_main.session.world,
+			_player.global_position
+		)
+		_hud.set_field_state(field_sample)
 
 
 func can_toggle_active_sensors() -> bool:

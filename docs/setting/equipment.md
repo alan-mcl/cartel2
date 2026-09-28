@@ -88,7 +88,7 @@ Five types are in the commercial catalog today. All share the same fitting rules
 | **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
 | **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
 | **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme. **Fuel type differentiation** (expensive antimatter stores) is deferred — see [backlog](../design/backlog.md). | Top thrust/speed/boost, tiny fuel use on shared pool |
-| **Gravitic** | Placeholder only — not a filled product line. | Near-orbit performance (mechanics TBD) |
+| **Gravitic** | Placeholder only — not a filled product line. | Thrust scales with local **gravity** (strongest near the planet and habitat ring; none in unspace). See [field_conditions.md](field_conditions.md). |
 
 Propulsion marques are **distinct from** power/compute/life-support brands (e.g. Sundancer for HW engines vs Helios for plants and LSS).
 
@@ -250,7 +250,7 @@ Products combine passive and active instruments in marketing copy. The schema st
 | `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen — calculus wave detector (comp) |
 | `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus — local geometry scanner (comp, active-only) |
 
-Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina nav lines above.
+Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina nav lines above.
 
 The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.
 

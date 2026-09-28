@@ -99,11 +99,16 @@ text = "Power: —"
 [node name="GstClockLabel" parent="Root/StatusPanel/VBox" instance=ExtResource("2")]
 
 [node name="SignaturePanel" type="PanelContainer" parent="Root"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 104.0
+offset_top = -132.0
 offset_right = 332.0
-offset_bottom = 224.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_type_variation = &"SurfaceTranslucent"
 
 [node name="VBox" type="VBoxContainer" parent="Root/SignaturePanel"]
@@ -143,6 +148,48 @@ text = "Transponder: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Active sensors: —"
+
+[node name="FieldPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = -332.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 112.0
+grow_horizontal = 0
+theme_type_variation = &"SurfaceTranslucent"
+
+[node name="VBox" type="VBoxContainer" parent="Root/FieldPanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+text = "FIELDS"
+
+[node name="GravityLabel" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Gravity: —"
+
+[node name="MagneticLabel" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Magnetic: —"
+
+[node name="RadiantLabel" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Radiant: —"
+
+[node name="ParticlesLabel" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Particles: —"
 
 [node name="LocalSensorMap" type="Control" parent="Root"]
 layout_mode = 1

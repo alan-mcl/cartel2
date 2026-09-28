@@ -20,7 +20,15 @@
     ],
     "play_bounds": 8000,
     "objective": "Explore Proxima near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.0,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 1.0,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "tycho",
@@ -36,7 +44,15 @@
     "city_malls": ["Ozero"],
     "play_bounds": 8000,
     "objective": "Explore Tycho near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.7,
+      "magnetic_fluctuation": 0.45,
+      "radiant": 2.2,
+      "radiant_fluctuation": 0.35,
+      "charged_particle": 1.8,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "bela",
@@ -52,7 +68,15 @@
     "city_malls": ["Oberon", "Santa Margarita"],
     "play_bounds": 8000,
     "objective": "Explore La Bella Vista near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.8,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.6,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 1.15,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "irasia",
@@ -68,7 +92,15 @@
     "city_malls": ["La Palma", "Fairhaven"],
     "play_bounds": 8000,
     "objective": "Explore Irasia near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.05,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.0,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 1.0,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "tokirev",
@@ -84,7 +116,15 @@
     "city_malls": ["Kaliningrad"],
     "play_bounds": 8000,
     "objective": "Explore Tokirev near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.15,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.0,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 1.0,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "fennet",
@@ -100,7 +140,15 @@
     "city_malls": ["Belfast"],
     "play_bounds": 8000,
     "objective": "Explore Fennet near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 0.95,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 0.95,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "fortuna",
@@ -116,7 +164,15 @@
     "city_malls": ["Jubilee", "New Venice", "Bellagio"],
     "play_bounds": 8000,
     "objective": "Explore Fortuna near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 0.8,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 0.45,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "new_carthage",
@@ -132,7 +188,15 @@
     "city_malls": ["Carthage", "New Tyre", "Leptis", "Utica"],
     "play_bounds": 8000,
     "objective": "Explore New Carthage near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.9,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 0.55,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 0.5,
+      "charged_particle_fluctuation": 0.0
+    }
   },
   {
     "id": "horizon",
@@ -148,7 +212,15 @@
     "city_malls": ["Horizon", "Meridian", "Providence", "New Geneva", "Ascension"],
     "play_bounds": 8000,
     "objective": "Explore Horizon near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.0,
+      "radiant_fluctuation": 0.0,
+      "charged_particle": 1.6,
+      "charged_particle_fluctuation": 0.25
+    }
   },
   {
     "id": "titania",
@@ -164,7 +236,15 @@
     "city_malls": ["Titania Central", "Skygarden"],
     "play_bounds": 8000,
     "objective": "Explore Titania IX near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 0.35,
+      "radiant_fluctuation": 0.55,
+      "charged_particle": 2.4,
+      "charged_particle_fluctuation": 0.7
+    }
   },
   {
     "id": "pelagos",
@@ -180,6 +260,14 @@
     "city_malls": ["Mediran", "Twin Cities", "New Cambridge"],
     "play_bounds": 8000,
     "objective": "Explore Pelagos near orbit",
-    "mappings": []
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.0,
+      "magnetic_fluctuation": 0.0,
+      "radiant": 1.0,
+      "radiant_fluctuation": 0.3,
+      "charged_particle": 1.0,
+      "charged_particle_fluctuation": 0.0
+    }
   }
 ]

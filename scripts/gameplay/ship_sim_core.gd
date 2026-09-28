@@ -100,7 +100,12 @@ func step_weapons(delta: float, firing: bool) -> Dictionary:
 	)
 
 
-func step_physics(delta: float, inputs: Dictionary, use_full_thrust_authority: bool = false) -> void:
+func step_physics(
+	delta: float,
+	inputs: Dictionary,
+	use_full_thrust_authority: bool = false,
+	environment_scale: float = 1.0
+) -> void:
 	if _assembled == null or _motion == null:
 		return
 
@@ -119,7 +124,8 @@ func step_physics(delta: float, inputs: Dictionary, use_full_thrust_authority: b
 		bool(inputs.get("rotate_right", false)),
 		bool(inputs.get("boost", false)),
 		thrust_factor,
-		boost_allowed
+		boost_allowed,
+		environment_scale
 	)
 
 

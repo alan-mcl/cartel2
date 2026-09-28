@@ -240,7 +240,8 @@ func tick(
 	world_loader: WorldLoader = null,
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
-	player_thrusting: bool = false
+	player_thrusting: bool = false,
+	world: WorldPresence = null
 ) -> void:
 	pending_weapon_orders.clear()
 	cycle_pending = false
@@ -265,7 +266,8 @@ func tick(
 			traffic_config,
 			traffic_envelope,
 			world_loader,
-			prev_position
+			prev_position,
+			world
 		)
 		return
 
@@ -280,7 +282,8 @@ func tick(
 		anchors,
 		traffic_envelope,
 		world_loader,
-		prev_position
+		prev_position,
+		world
 	)
 
 
@@ -303,7 +306,8 @@ func _tick_full_sim(
 	anchors: Array,
 	traffic_envelope: float,
 	world_loader: WorldLoader,
-	prev_position: Vector2
+	prev_position: Vector2,
+	world: WorldPresence = null
 ) -> void:
 	_ensure_sim(catalog)
 	var inputs := _build_ai_inputs(
@@ -345,7 +349,8 @@ func _tick_full_sim(
 	):
 		begin_flee(traffic_config)
 
-	sim.step_physics(delta, inputs)
+	var environment_scale := _field_thrust_scale(catalog, world, position)
+	sim.step_physics(delta, inputs, false, environment_scale)
 
 	if not use_cruise_cap:
 		motion.velocity = _clamp_velocity(motion.velocity, cruise_speed_cap)
@@ -379,7 +384,8 @@ func _tick_kinematic(
 	traffic_config: Dictionary,
 	traffic_envelope: float,
 	world_loader: WorldLoader,
-	prev_position: Vector2
+	prev_position: Vector2,
+	world: WorldPresence = null
 ) -> void:
 	_ensure_sim(catalog)
 	operating_state.transponder_broadcasting = (
@@ -414,9 +420,10 @@ func _tick_kinematic(
 
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	var use_peaceful_blend := ai_state != AiState.ENGAGE
+	var environment_scale := _field_thrust_scale(catalog, world, position)
 
 	if sim != null:
-		sim.step_physics(delta, inputs, true)
+		sim.step_physics(delta, inputs, true, environment_scale)
 	else:
 		motion.step(
 			assembled_ship.stats,
@@ -427,7 +434,8 @@ func _tick_kinematic(
 			bool(inputs.get("rotate_right", false)),
 			bool(inputs.get("boost", false)),
 			1.0,
-			true
+			true,
+			environment_scale
 		)
 
 	if not use_cruise_cap:
@@ -442,6 +450,12 @@ func _tick_kinematic(
 		self, traffic_config, world_loader, prev_position, anchors, traffic_envelope
 	)
 	TrafficRouting.check_traffic_envelope(self, traffic_envelope)
+
+
+func _field_thrust_scale(catalog: Catalog, world: WorldPresence, ship_pos: Vector2) -> float:
+	if catalog == null or world == null or assembled_ship == null:
+		return 1.0
+	return FieldConditions.thrust_scale_for_ship(catalog, world, ship_pos, assembled_ship)
 
 
 func request_cycle(hint: Dictionary) -> void:

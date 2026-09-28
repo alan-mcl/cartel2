@@ -19,6 +19,7 @@ var city_malls: Array = []
 var play_bounds: float = 0
 var objective: String = ""
 var mappings: Array = []
+var neighborhood: CatalogNeighborhood = CatalogNeighborhood.new()
 
 static func from_dict(data: Dictionary) -> SectorDef:
 	var def := SectorDef.new()
@@ -45,6 +46,7 @@ static func from_dict(data: Dictionary) -> SectorDef:
 	var raw_mappings: Variant = data.get("mappings", [])
 	if typeof(raw_mappings) == TYPE_ARRAY:
 		def.mappings = raw_mappings.duplicate()
+	def.neighborhood = CatalogNeighborhood.from_dict(data.get("neighborhood", {}))
 	return def
 
 func to_dict() -> Dictionary:
@@ -74,10 +76,12 @@ func to_dict() -> Dictionary:
 		out["objective"] = objective
 	if _present_keys.has("mappings") or not mappings.is_empty():
 		out["mappings"] = mappings.duplicate()
+	if _present_keys.has("neighborhood") or not CatalogNeighborhood.is_empty(neighborhood):
+		out["neighborhood"] = neighborhood.to_dict()
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star_system", "classification", "gravity", "population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings"])
+	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star_system", "classification", "gravity", "population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings", "neighborhood"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "play_bounds"])

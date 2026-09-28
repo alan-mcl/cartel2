@@ -146,7 +146,15 @@ func _physics_process(delta: float) -> void:
 		if firing and bool(weapon_result.get("out_of_ammo", false)):
 			session.last_log = "Out of ammunition."
 
-	_sim.step_physics(delta, physics_inputs)
+	var environment_scale := 1.0
+	if session != null and catalog != null:
+		environment_scale = FieldConditions.thrust_scale_for_ship(
+			catalog,
+			session.world,
+			global_position,
+			assembled_ship
+		)
+	_sim.step_physics(delta, physics_inputs, false, environment_scale)
 
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity

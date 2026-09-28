@@ -10,6 +10,7 @@ func _init() -> void:
 	TestAssembler.run(runner)
 	TestCombat.run(runner)
 	TestSensors.run(runner)
+	TestFieldConditions.run(runner)
 	TestEconomy.run(runner)
 	TestClock.run(runner)
 	TestSimulation.run(runner)
