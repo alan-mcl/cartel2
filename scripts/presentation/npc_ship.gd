@@ -52,7 +52,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
 func apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null:
 		return
-	ShipVisual.apply_damage_tint(_hull, health_ratio)
+	ShipVisual.apply_damage_tint(_hull, health_ratio, _hull_base_modulate())
 
 
 func play_destroyed() -> void:
@@ -99,6 +99,13 @@ func _apply_hull_visual() -> void:
 
 	var brightness: float = 1.0 + actor.hull_color_shift
 	_hull.modulate = Color(brightness, brightness, brightness, 1.0)
+
+
+func _hull_base_modulate() -> Color:
+	if actor == null:
+		return Color.WHITE
+	var brightness: float = 1.0 + actor.hull_color_shift
+	return Color(brightness, brightness, brightness, 1.0)
 
 
 func _get_world_root() -> Node2D:

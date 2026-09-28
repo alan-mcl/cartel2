@@ -167,15 +167,15 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 		return
 
 	if ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
-		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or _should_engage(traffic_config):
+		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or should_engage(traffic_config):
 			ai_state = AiState.ENGAGE
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
 			begin_combat_pilot()
 		else:
-			_begin_flee(traffic_config)
+			begin_flee(traffic_config)
 
 
-func _begin_flee(traffic_config: Dictionary) -> void:
+func begin_flee(traffic_config: Dictionary) -> void:
 	ai_state = AiState.FLEE
 	flee_timer = float(traffic_config.get("flee_timeout_seconds", 20.0))
 	flee_anchor_id = ""
@@ -343,7 +343,7 @@ func _tick_full_sim(
 		and bool(weapon_result.get("out_of_ammo", false))
 		and combat_attitude != CombatAttitude.FIGHT_TO_DEATH
 	):
-		_begin_flee(traffic_config)
+		begin_flee(traffic_config)
 
 	sim.step_physics(delta, inputs)
 
@@ -505,7 +505,7 @@ func _combat_target_pos(player_pos: Vector2) -> Vector2:
 	return player_pos
 
 
-func _should_engage(traffic_config: Dictionary) -> bool:
+func should_engage(traffic_config: Dictionary) -> bool:
 	if not is_armed() or not has_ammo():
 		return false
 	var hull_ratio := hull_current / maxf(hull_max, 1.0)

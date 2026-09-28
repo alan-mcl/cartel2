@@ -255,7 +255,7 @@ func _try_npc_acquire(
 
 	if (
 		actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
-		or actor._should_engage(traffic_config)
+		or actor.should_engage(traffic_config)
 	):
 		actor.ai_state = TrafficActorScript.STATE_ENGAGE
 		if actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH:
@@ -265,7 +265,7 @@ func _try_npc_acquire(
 		actor.begin_combat_pilot()
 		_apply_pilot_skill(actor, _current_pilot_skill)
 	else:
-		actor._begin_flee(traffic_config)
+		actor.begin_flee(traffic_config)
 
 
 func _apply_detection_visibility(actor, node: Node2D) -> void:

@@ -311,7 +311,7 @@ func _apply_pilot_skill(actor, pilot_skill: int) -> void:
 	if pilot_skill < 0 or actor == null or actor.combat_pilot == null:
 		return
 	actor.combat_pilot.skill = pilot_skill as CombatPilot.Skill
-	actor.combat_pilot._apply_skill_table()
+	actor.combat_pilot.apply_skill_table()
 
 
 func _ensure_traffic_root() -> Node2D:
@@ -371,7 +371,7 @@ func _update_hud_nav() -> void:
 		_player.operating_state
 	)
 	var transponder_label := "on" if _player.operating_state.transponder_broadcasting else "off"
-	var active_sensors_label := FlightLoopController._active_sensors_hud_label(
+	var active_sensors_label := FlightLoopController.active_sensors_hud_label(
 		_player.assembled_ship,
 		_player.operating_state
 	)

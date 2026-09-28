@@ -797,7 +797,7 @@ static func _test_combat_pilot_skill_feint(runner: TestRunner) -> void:
 	var elite := CombatPilot.new()
 	elite.reset()
 	elite.skill = CombatPilot.Skill.ELITE
-	elite._apply_skill_table()
+	elite.apply_skill_table()
 	elite._smoothed_target_vel = coast_vel
 	elite._vel_smoothing_initialized = true
 	elite._believing_feint = false
@@ -831,7 +831,7 @@ static func _test_combat_pilot_skill_feint(runner: TestRunner) -> void:
 	var novice := CombatPilot.new()
 	novice.reset()
 	novice.skill = CombatPilot.Skill.NOVICE
-	novice._apply_skill_table()
+	novice.apply_skill_table()
 	novice._smoothed_target_vel = coast_vel
 	novice._vel_smoothing_initialized = true
 	novice._believing_feint = true
@@ -852,7 +852,7 @@ static func _test_combat_pilot_orbit_hysteresis(runner: TestRunner) -> void:
 	var elite := CombatPilot.new()
 	elite.reset()
 	elite.skill = CombatPilot.Skill.ELITE
-	elite._apply_skill_table()
+	elite.apply_skill_table()
 	elite._orbit_latched = true
 	var still_orbiting := elite._update_orbit_latch(rel_pos, tangential_vel + tiny_radial, max_speed)
 	runner.check(still_orbiting, "elite orbit latch survives tiny radial thrust")

@@ -93,7 +93,7 @@ func reset() -> void:
 	_speed_bias = 0.9 + randf() * 0.2
 	_kill_sideslip_close = randf() < KILL_SIDESLIP_CLOSE_CHANCE
 	skill = _roll_skill()
-	_apply_skill_table()
+	apply_skill_table()
 	_smoothed_target_vel = Vector2.ZERO
 	_vel_smoothing_initialized = false
 	_believing_feint = false
@@ -119,7 +119,7 @@ func tick(snapshot: Dictionary) -> Dictionary:
 
 	if snapshot.has("skill"):
 		skill = int(snapshot["skill"]) as Skill
-		_apply_skill_table()
+		apply_skill_table()
 
 	_update_target_vel_smoothing(raw_target_vel)
 	_update_feint_belief(target_facing, target_thrusting)
@@ -715,7 +715,7 @@ func _roll_skill() -> Skill:
 	return Skill.ELITE
 
 
-func _apply_skill_table() -> void:
+func apply_skill_table() -> void:
 	_graze_radius = SKILL_GRAZE_RADIUS[skill]
 	_ema_alpha = SKILL_EMA_ALPHA[skill]
 	_orbit_exit_tangential_frac = ORBIT_EXIT_TANGENTIAL_FRAC[skill]

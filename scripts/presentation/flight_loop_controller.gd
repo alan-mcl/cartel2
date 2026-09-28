@@ -128,7 +128,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_player.operating_state
 	)
 	var transponder_label := "on" if _player.operating_state.transponder_broadcasting else "off"
-	var active_sensors_label := _active_sensors_hud_label(
+	var active_sensors_label := active_sensors_hud_label(
 		_player.assembled_ship,
 		_player.operating_state
 	)
@@ -162,7 +162,7 @@ func on_operating_state_changed(state: ShipOperatingState) -> void:
 	if _player.assembled_ship != null:
 		var signature := SensorSystem.live_signature(_player.assembled_ship, state)
 		var transponder_label := "on" if state.transponder_broadcasting else "off"
-		var active_sensors_label := _active_sensors_hud_label(_player.assembled_ship, state)
+		var active_sensors_label := active_sensors_hud_label(_player.assembled_ship, state)
 		_hud.set_signature_state(signature, transponder_label, active_sensors_label)
 
 
@@ -185,7 +185,7 @@ static func _filter_topology_contacts(contacts: Array) -> Array:
 	return filtered
 
 
-static func _active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:
+static func active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:
 	if assembled == null or not assembled.has_active_sensor_package():
 		return ""
 	if state == null:

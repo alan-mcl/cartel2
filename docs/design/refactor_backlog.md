@@ -5,6 +5,10 @@ cold by someone (or some agent) with no other context. For deferred **design and
 features see [backlog.md](backlog.md); for what exists in code today see
 [architecture.md](architecture.md).
 
+**Phases 0–6 are complete** (all items below are `Done`). New engineering work should be
+tracked in [backlog.md](backlog.md) or as ad-hoc items here only if a new refactor phase is
+opened deliberately.
+
 ## How to use this file
 
 - Work items are `P<phase>-<n>`. Lower phases first; within a phase, respect **Depends on**.
@@ -553,7 +557,7 @@ duck-typed methods unchanged). Far LOD and `ShipSimCore` untouched.
 **Status:** Done. **Phase:** 6. **Depends on:** P2-4.
 
 **Scope (done):** **`FlightSandboxBase`** owns shared flight-sandbox bootstrap, setup overlay,
-player configure, HUD nav/signature (via `FlightLoopController._active_sensors_hud_label`),
+player configure, HUD nav/signature (via `FlightLoopController.active_sensors_hud_label`),
 traffic root, and Esc-to-setup. **`combat_sandbox.gd`** and **`stealth_sandbox.gd`** extend it;
 production controllers and **`ship_assembly_sandbox`** unchanged.
 
