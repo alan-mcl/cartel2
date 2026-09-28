@@ -113,7 +113,7 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `description` | string | yes | `` |  |
 | `capabilities` | array | no | `[]` |  |
 | `signature` | CatalogSignature | yes | `` |  |
-| `engine_type` | string | no | `` | enum: ``, `chemical`, `hydro_thermal`, `electric_plasma`, `direct_fusion`, `antimatter`, `gravitic` |
+| `engine_type` | string | no | `` | enum: ``, `chemical`, `hydro_thermal`, `electric_plasma`, `direct_fusion`, `antimatter`, `gravitic`, `integrated_sail` |
 | `thrust` | number | no | `0.0` |  |
 | `max_speed` | number | no | `0.0` |  |
 | `boost_multiplier` | number | no | `0.0` |  |

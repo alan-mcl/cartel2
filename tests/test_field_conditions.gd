@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_tycho_magnetic_fluctuation(runner, catalog)
 	_test_unspace_profile(runner, catalog)
 	_test_gravitic_engine_scale(runner, catalog)
+	_test_integrated_sail_scale(runner, catalog)
 	_test_non_gravitic_engine_scale(runner, catalog)
 
 
@@ -165,10 +166,45 @@ static func _test_gravitic_engine_scale(runner: TestRunner, catalog: Catalog) ->
 	runner.check(unspace_scale < 0.12, "gravitic scale weak in unspace")
 
 
+static func _test_integrated_sail_scale(runner: TestRunner, catalog: Catalog) -> void:
+	var world := _world(catalog, "proxima")
+	var radii := _radii(catalog)
+	var ring: float = radii.ring_radius
+
+	var ring_sample := FieldConditions.sample(catalog, world, Vector2(ring, 0.0))
+	var ring_scale := FieldConditions.integrated_sail_thrust_scale("integrated_sail", ring_sample)
+	runner.check(absf(ring_scale - 1.0) < TOL, "sail scale ~1 at proxima habitat ring")
+
+	var unspace_sample := FieldConditions.sample(
+		catalog,
+		_world_unspace(catalog, 0.0),
+		Vector2.ZERO
+	)
+	var unspace_scale := FieldConditions.integrated_sail_thrust_scale("integrated_sail", unspace_sample)
+	runner.check(unspace_scale > 0.0, "sail scale non-zero in unspace")
+	runner.check(unspace_scale < 0.5, "sail scale weak in unspace")
+
+	var titania_world := _world(catalog, "titania")
+	var titania_radii := FieldConditions._world_radii(catalog, "titania")
+	var titania_ring := float(titania_radii.ring_radius)
+	var titania_sample := FieldConditions.sample(
+		catalog,
+		titania_world,
+		Vector2(titania_ring, 0.0)
+	)
+	var titania_scale := FieldConditions.integrated_sail_thrust_scale("integrated_sail", titania_sample)
+	runner.check(titania_scale > 0.35, "sail still works on titania without magnetic dipole")
+
+
 static func _test_non_gravitic_engine_scale(runner: TestRunner, catalog: Catalog) -> void:
 	var sample := FieldConditions.sample(catalog, _world(catalog, "proxima"), Vector2(1000.0, 0.0))
 	runner.check_eq(
-		FieldConditions.gravitic_thrust_scale("direct_fusion", sample),
+		FieldConditions.environment_thrust_scale("direct_fusion", sample),
 		1.0,
-		"non-gravitic engine ignores field scale"
+		"direct fusion ignores field scale"
+	)
+	runner.check_eq(
+		FieldConditions.integrated_sail_thrust_scale("direct_fusion", sample),
+		1.0,
+		"direct fusion ignores sail scale helper"
 	)

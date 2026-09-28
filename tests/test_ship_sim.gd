@@ -6,10 +6,37 @@ const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
+	_test_zero_fuel_integrated_sail(runner, catalog)
 	_test_physics_uses_operating_thrust_factor(runner, catalog)
 	_test_stats_cadence(runner, catalog)
 	_test_step_weapons_returns_orders(runner, catalog)
 	_test_preview_from_template(runner, catalog)
+
+
+static func _test_zero_fuel_integrated_sail(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "sail_ops_test",
+			"template_id": "pegasus_p101",
+			"chassis_id": "pegasus_chassis",
+		}
+	)
+	owned.set_module("main_engine_1", "tmc_rhumb_drift")
+	owned.fuel_current = 0.0
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var inputs := {"thrust": true, "boost": false, "in_flight": true, "fire": false}
+	var sail_state := ShipOperations.tick(catalog, assembled, owned, 1.0, inputs, 1)
+	runner.check(
+		sail_state.thrust_factor > 0.0,
+		"integrated sail thrusts on empty fuel tank when plant covers power"
+	)
+
+	owned.set_module("main_engine_1", "gi_ht_18")
+	owned.fuel_current = 0.0
+	assembled = ShipAssembler.assemble_owned(catalog, owned)
+	var hydro_state := ShipOperations.tick(catalog, assembled, owned, 1.0, inputs, 1)
+	runner.check_eq(hydro_state.thrust_factor, 0.0, "hydro-thermal stops when fuel empty")
 
 
 static func _bind_sim(catalog: Catalog) -> Dictionary:

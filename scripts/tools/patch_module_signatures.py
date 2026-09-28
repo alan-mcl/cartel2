@@ -58,6 +58,10 @@ def compute_signature(module: dict) -> dict[str, float]:
             sig["thermal"] = 4.5 * scale
             sig["electromagnetic"] = 5.0 * scale
             sig["gravitational"] = 0.45 * mass
+        elif engine_type == "integrated_sail":
+            sig["thermal"] = 1.2 * scale
+            sig["electromagnetic"] = 4.5 * scale
+            sig["gravitational"] = 0.25 * mass
         else:
             sig["thermal"] = 3.0 * scale
             sig["electromagnetic"] = 1.5 * scale

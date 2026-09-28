@@ -284,6 +284,7 @@ ENGINE_TYPES = {
     "direct_fusion",
     "antimatter",
     "gravitic",
+    "integrated_sail",
 }
 
 RETIRED_PROPULSION_IDS = {
@@ -294,8 +295,7 @@ RETIRED_PROPULSION_IDS = {
 }
 
 PROPULSION_SKU_FLOOR = 40
-# Every engine family must keep at least one SKU so a line cannot silently vanish. Gravitic is
-# intentionally a single placeholder — see docs/design/backlog.md.
+# Every engine family must keep at least one SKU so a line cannot silently vanish.
 PROPULSION_TYPE_FLOORS = {
     "chemical": 1,
     "hydro_thermal": 1,
@@ -303,6 +303,7 @@ PROPULSION_TYPE_FLOORS = {
     "direct_fusion": 1,
     "antimatter": 1,
     "gravitic": 1,
+    "integrated_sail": 1,
 }
 
 ENGINE_TYPE_LABELS = {
@@ -312,6 +313,7 @@ ENGINE_TYPE_LABELS = {
     "direct_fusion": "Direct fusion",
     "antimatter": "Antimatter",
     "gravitic": "Gravitic",
+    "integrated_sail": "Integrated sail",
 }
 
 WEAPON_MAKERS = {
@@ -612,6 +614,10 @@ def main() -> int:
             propulsion_type_counts[engine_type] += 1
         if str(module.get("mount", "")) != "main_engine":
             errors.append(f"propulsion module {module_id}: mount must be 'main_engine'")
+        if engine_type == "integrated_sail" and float(module.get("fuel_consumption", -1.0)) != 0.0:
+            errors.append(
+                f"propulsion module {module_id}: integrated_sail fuel_consumption must be 0"
+            )
     if propulsion_count < PROPULSION_SKU_FLOOR:
         errors.append(
             f"modules.json: expected at least {PROPULSION_SKU_FLOOR} propulsion SKUs, "

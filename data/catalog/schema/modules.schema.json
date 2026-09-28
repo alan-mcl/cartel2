@@ -29,7 +29,7 @@
     "engine_type": {
       "type": "string",
       "default": "",
-      "enum": ["", "chemical", "hydro_thermal", "electric_plasma", "direct_fusion", "antimatter", "gravitic"]
+      "enum": ["", "chemical", "hydro_thermal", "electric_plasma", "direct_fusion", "antimatter", "gravitic", "integrated_sail"]
     },
     "thrust": { "type": "number", "default": 0.0 },
     "max_speed": { "type": "number", "default": 0.0 },

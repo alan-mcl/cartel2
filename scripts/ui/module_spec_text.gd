@@ -356,6 +356,8 @@ static func _format_type_label(key: String, value: String) -> String:
 				return "Antimatter"
 			"gravitic":
 				return "Gravitic"
+			"integrated_sail":
+				return "Integrated sail"
 			_:
 				return value.capitalize()
 	if key in ["plant_type", "core_type", "weapon_type", "shield_type"]:

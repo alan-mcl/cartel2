@@ -101,7 +101,7 @@ static func tick_into(
 
 	if assembled.get_propulsion_module_def() == null:
 		state.thrust_factor = 0.0
-	elif state.fuel_empty and thrusting:
+	elif state.fuel_empty and thrusting and _propulsion_needs_fuel(assembled):
 		state.thrust_factor = 0.0
 	elif state.power_deficit > 0.0 and thrusting:
 		var propulsion_requested := float(state.power_requested_by_category.get("propulsion", 0.0))
@@ -318,3 +318,10 @@ static func _compare_power_priority(a: Dictionary, b: Dictionary) -> bool:
 
 static func _compare_compute_priority(a: Dictionary, b: Dictionary) -> bool:
 	return int(a.get("priority", 0)) < int(b.get("priority", 0))
+
+
+static func _propulsion_needs_fuel(assembled: AssembledShip) -> bool:
+	var engine := assembled.get_propulsion_module_def()
+	if engine == null:
+		return true
+	return engine.fuel_consumption > 0.0

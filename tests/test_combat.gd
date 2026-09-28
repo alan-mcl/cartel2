@@ -2,6 +2,7 @@ class_name TestCombat
 extends RefCounted
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+const TrafficRoutingScript := preload("res://scripts/gameplay/traffic_routing.gd")
 
 
 static func run(runner: TestRunner) -> void:
@@ -298,7 +299,7 @@ static func _test_traffic_runabout_and_flee(runner: TestRunner) -> void:
 	var config := _traffic_config()
 	config["runabout_anchor_waypoint_chance"] = 0.0
 	var envelope := 5000.0
-	actor._pick_runabout_waypoint([], config, envelope)
+	TrafficRoutingScript.pick_runabout_waypoint(actor, [], config, envelope)
 	var waypoint_dist: float = actor.wander_target.length()
 	runner.check(
 		waypoint_dist >= envelope * 0.15 and waypoint_dist <= envelope * 0.85,

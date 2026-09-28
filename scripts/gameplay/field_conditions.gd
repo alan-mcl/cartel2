@@ -8,6 +8,12 @@ const UNSPACE_RADIANT := 0.06
 ## Nominal near-orbit G for rating gravitic thrust in unspace (absolute field stays much lower).
 const UNSPACE_GRAVITIC_REFERENCE := 0.38
 const GRAVITIC_SCALE_MAX := 1.5
+const SAIL_SCALE_MAX := 1.6
+## Weighted radiant / particle / magnetic index at Proxima habitat ring (gst=0).
+const SAIL_REFERENCE := 0.72284
+const SAIL_WEIGHT_RADIANT := 0.50
+const SAIL_WEIGHT_PARTICLE := 0.30
+const SAIL_WEIGHT_MAGNETIC := 0.20
 
 
 class FieldSample:
@@ -78,6 +84,34 @@ static func gravitic_thrust_scale(engine_type: String, sample: FieldSample) -> f
 	return clampf(sample.gravity / sample.reference_gravity, 0.0, GRAVITIC_SCALE_MAX)
 
 
+static func sail_field_index(sample: FieldSample) -> float:
+	if sample == null:
+		return 0.0
+	return (
+		SAIL_WEIGHT_RADIANT * sample.radiant
+		+ SAIL_WEIGHT_PARTICLE * sample.charged_particle
+		+ SAIL_WEIGHT_MAGNETIC * sample.magnetic
+	)
+
+
+static func integrated_sail_thrust_scale(engine_type: String, sample: FieldSample) -> float:
+	if engine_type != "integrated_sail":
+		return 1.0
+	if sample == null or SAIL_REFERENCE <= 0.0:
+		return 0.0
+	return clampf(sail_field_index(sample) / SAIL_REFERENCE, 0.0, SAIL_SCALE_MAX)
+
+
+static func environment_thrust_scale(engine_type: String, sample: FieldSample) -> float:
+	match engine_type:
+		"gravitic":
+			return gravitic_thrust_scale(engine_type, sample)
+		"integrated_sail":
+			return integrated_sail_thrust_scale(engine_type, sample)
+		_:
+			return 1.0
+
+
 static func thrust_scale_for_ship(
 	catalog: Catalog,
 	world: WorldPresence,
@@ -88,8 +122,8 @@ static func thrust_scale_for_ship(
 		return 1.0
 	var engine := assembled.get_propulsion_module_def()
 	var engine_type := engine.engine_type if engine != null else ""
-	var sample := sample(catalog, world, position)
-	return gravitic_thrust_scale(engine_type, sample)
+	var field_sample := sample(catalog, world, position)
+	return environment_thrust_scale(engine_type, field_sample)
 
 
 static func _world_radii(catalog: Catalog, sector_id: String) -> Dictionary:

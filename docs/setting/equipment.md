@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, forty-eight branded propulsion SKUs (five commercial engine types plus one gravitic placeholder), power plants, compute cores, life support, sensors, branded weapons/armour/shields/point-defence/cyber-defence lines, cargo/fuel modules, and an alpha hyperdrive catalog entry (no translation gameplay). **Phase 1 combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Light laser, mass driver, plasma, scatter, rockets, and missiles fire in orbital flight.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, fifty-eight branded propulsion SKUs (five reaction-mass types, gravitic line, integrated sail line), power plants, compute cores, life support, sensors, branded weapons/armour/shields/point-defence/cyber-defence lines, cargo/fuel modules, and an alpha hyperdrive catalog entry (no translation gameplay). **Phase 1 combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Light laser, mass driver, plasma, scatter, rockets, and missiles fire in orbital flight.
 
 ## Design layers
 
@@ -79,7 +79,7 @@ Manufacturer tiers for propulsion are defined in [manufacturers.txt](../design/m
 
 #### Engine types
 
-Five types are in the commercial catalog today. All share the same fitting rules; type drives stats, marketing, and future mechanics. **Gravitic** is reserved as a single placeholder SKU (Flare-ON SK); Integrated Sail is not catalogued yet.
+Seven `engine_type` values are in the catalog. All share the same fitting rules; type drives stats, marketing, field coupling, and future fuel rules.
 
 | Type | Role | Typical profile |
 |------|------|-----------------|
@@ -88,19 +88,21 @@ Five types are in the commercial catalog today. All share the same fitting rules
 | **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
 | **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
 | **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme. **Fuel type differentiation** (expensive antimatter stores) is deferred — see [backlog](../design/backlog.md). | Top thrust/speed/boost, tiny fuel use on shared pool |
-| **Gravitic** | Placeholder only — not a filled product line. | Thrust scales with local **gravity** (strongest near the planet and habitat ring; none in unspace). See [field_conditions.md](field_conditions.md). |
+| **Gravitic** | Couples to local **gravity** — strongest near the planet and habitat ring, weak in deep orbit and unspace. Five SKUs (Sundancer, Bellatrix, Ionique, Fable). High gravitational signature. | High catalog thrust, field-scaled effective thrust |
+| **Integrated sail** | Couples to **radiant**, **particle**, and **magnetic** fields. **Zero fuel**; power from the plant only. Low catalog thrust, modest cruise speed. Six SKUs (Daybreak, Lumen, Rhumb, Washi, Ionique, Sideline). | Very low thrust, quiet thermal signature |
 
 Propulsion marques are **distinct from** power/compute/life-support brands (e.g. Sundancer for HW engines vs Helios for plants and LSS).
 
 #### In prototype JSON
 
-Forty-eight branded SKUs across nineteen manufacturers (~12 chemical, ~16 hydro-thermal, ~8 electric plasma, ~7 direct fusion, ~4 antimatter, 1 gravitic). Examples:
+Fifty-eight branded SKUs across nineteen manufacturers (~12 chemical, ~16 hydro-thermal, ~8 electric plasma, ~7 direct fusion, ~4 antimatter, 5 gravitic, 6 integrated sail). Examples:
 
 | id | Maker | Brand | Type | Notes |
 |----|-------|-------|------|-------|
 | `gi_ht_18` | General Industrial | GI | hydro_thermal | Pegasus P101/P103 default |
 | `hw_sundancer_compact` | Holt-Winters Corp | Sundancer | direct_fusion | Flare-ON SS |
-| `hw_sundancer_loft` | Holt-Winters Corp | Sundancer | gravitic | Flare-ON SK placeholder |
+| `hw_sundancer_loft` | Holt-Winters Corp | Sundancer | gravitic | Flare-ON SK |
+| `tmc_rhumb_drift` | The Meridian Company | Rhumb | integrated_sail | Zero fuel, long-haul sail |
 | `ora_bellatrix_trace` | Orion Aerospace | Bellatrix | antimatter | Krypton K3 |
 | `prv_ionique_annihilon` | ParaRamcoVidia | Ionique | antimatter | Glossy law-enforcement tier |
 
@@ -468,7 +470,7 @@ Planned: homing missiles, scatter cones, hyperdrive translation — see [archite
 When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
-2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`). Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Weapon modules require `maker`, `brand`, `weapon_type`, `delivery_type`, and `damage_packets` (or ammo-supplied packets). Armour requires `protection`; shields require `shield_type`, `shield_capacity`, `protection`, `regen`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
+2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`). Integrated sail SKUs must set `fuel_consumption` to 0. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Weapon modules require `maker`, `brand`, `weapon_type`, `delivery_type`, and `damage_packets` (or ammo-supplied packets). Armour requires `protection`; shields require `shield_type`, `shield_capacity`, `protection`, `regen`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
 3. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

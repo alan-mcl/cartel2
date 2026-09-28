@@ -233,6 +233,7 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 		"direct_fusion": 0,
 		"antimatter": 0,
 		"gravitic": 0,
+		"integrated_sail": 0,
 	}
 	for module_def in propulsion_modules:
 		if typeof(module_def) != TYPE_DICTIONARY:
@@ -251,8 +252,13 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 		)
 		if type_counts.has(engine_type):
 			type_counts[engine_type] += 1
+		if engine_type == "integrated_sail":
+			runner.check_eq(
+				float(module_def.get("fuel_consumption", -1.0)),
+				0.0,
+				"%s sail has zero fuel burn" % module_id
+			)
 
-	# Includes the single gravitic placeholder — see backlog.md "Gravitic propulsion line".
 	_check_subtypes_present(runner, type_counts, "engines")
 
 	for ship_dict in catalog.list_ships():
