@@ -22,6 +22,12 @@ func get_title() -> String:
 	return definition.title if definition != null else "Unknown"
 
 
+func get_interaction_prompt() -> String:
+	if not is_focused:
+		return ""
+	return _format_prompt_text()
+
+
 func can_interact() -> bool:
 	if definition == null or is_consumed:
 		return false
@@ -69,25 +75,25 @@ func _set_focused(value: bool) -> void:
 	_update_prompt()
 
 
-func _update_prompt() -> void:
-	if _prompt == null:
-		return
+func _format_prompt_text() -> String:
+	if is_consumed or definition == null:
+		return ""
+	match definition.kind:
+		InteractableDef.Kind.SALVAGE:
+			return "[E] Salvage %s" % definition.title
+		InteractableDef.Kind.DOCK:
+			return "[E] Dock %s" % definition.title
+		InteractableDef.Kind.TRANSLATE:
+			return "[E] Translate via %s" % definition.title
+		InteractableDef.Kind.ARRIVE:
+			return "[E] Emerge via %s" % definition.title
+		_:
+			return "[E] Inspect %s" % definition.title
 
-	if is_consumed:
-		_prompt.text = ""
-	elif is_focused and definition != null:
-		match definition.kind:
-			InteractableDef.Kind.SALVAGE:
-				_prompt.text = "[E] Salvage %s" % definition.title
-			InteractableDef.Kind.DOCK:
-				_prompt.text = "[E] Dock %s" % definition.title
-			InteractableDef.Kind.TRANSLATE:
-				_prompt.text = "[E] Translate via %s" % definition.title
-			InteractableDef.Kind.ARRIVE:
-				_prompt.text = "[E] Emerge via %s" % definition.title
-			_:
-				_prompt.text = "[E] Inspect %s" % definition.title
-	else:
+
+func _update_prompt() -> void:
+	if _prompt != null:
+		_prompt.visible = false
 		_prompt.text = ""
 
 	if _ring:

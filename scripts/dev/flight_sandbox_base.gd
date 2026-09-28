@@ -39,6 +39,7 @@ func _ready() -> void:
 
 	_player.motion_changed.connect(_on_motion_changed)
 	_player.operating_state_changed.connect(_on_operating_state_changed)
+	_player.interaction_target_changed.connect(_on_interaction_target_changed)
 
 	_populate_ship_options()
 	_populate_attitude_options()
@@ -407,6 +408,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_end_run()
 		get_viewport().set_input_as_handled()
+
+
+func _on_interaction_target_changed(target: Interactable) -> void:
+	_hud.set_interaction_target(target)
 
 
 func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> void:

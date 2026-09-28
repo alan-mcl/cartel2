@@ -165,8 +165,8 @@ func _on_session_changed() -> void:
 	_hud.refresh()
 
 
-func _on_interaction_target_changed(_target: Interactable) -> void:
-	pass
+func _on_interaction_target_changed(target: Interactable) -> void:
+	_hud.set_interaction_target(target)
 
 
 func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> void:

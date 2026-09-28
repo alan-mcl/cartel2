@@ -20,9 +20,8 @@ Rebuild after token or style changes:
 
 `project.godot`:
 
-- `1920×1080` design baseline
-- `window/stretch/mode="canvas_items"`
-- `window/stretch/aspect="expand"` — smaller windows scale down; extra pixels go to layout
+- `1920×1080` design baseline (layout authored at this size)
+- `window/stretch/mode="disabled"` — one UI unit equals one framebuffer pixel so labels and 1px borders stay crisp; smaller windows show less content instead of scaling the whole frame
 - `gui/theme/custom="res://themes/cartel_theme.tres"`
 
 ## Design tokens (`Cartel` theme type)

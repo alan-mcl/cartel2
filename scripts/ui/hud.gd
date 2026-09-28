@@ -19,6 +19,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 @onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
+@onready var _interact_prompt: Control = $Root/InteractPromptOverlay
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
 
 var _session: GameSession
@@ -54,6 +55,11 @@ func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 
 func refresh() -> void:
 	_refresh_capabilities()
+
+
+func set_interaction_target(target: Interactable) -> void:
+	if _interact_prompt != null and _interact_prompt.has_method("set_target"):
+		_interact_prompt.set_target(target)
 
 
 func set_motion(speed: float, heading_deg: float, _boosting: bool) -> void:
@@ -114,6 +120,9 @@ func set_nav_state(
 		_waypoint_arrows.set_nav_state(ship_pos, contacts, camera)
 	if _has_capability("sensor_read_beacons") and _beacon_labels != null:
 		_beacon_labels.set_overlay_state(contacts, camera)
+
+	if _interact_prompt != null and _interact_prompt.has_method("set_camera"):
+		_interact_prompt.set_camera(camera)
 
 	_update_player_hover_probe(ship_pos, camera)
 
