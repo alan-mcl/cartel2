@@ -10,6 +10,7 @@ var actor
 var catalog: Catalog
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
+@onready var _engine_exhaust: EngineExhaust = $Visual/EngineExhaust
 @onready var _hull: Sprite2D = $Visual/Hull
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 
@@ -96,6 +97,12 @@ func _apply_hull_visual() -> void:
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
 	if not sprite_path.is_empty():
 		ShipVisual.apply_hull(_hull, _thrust_flame, _collision_shape, sprite_path)
+		ShipVisual.sync_engine_exhaust(
+			_engine_exhaust,
+			_thrust_flame,
+			actor.assembled_ship,
+			sprite_path
+		)
 
 	var brightness: float = 1.0 + actor.hull_color_shift
 	_hull.modulate = Color(brightness, brightness, brightness, 1.0)
@@ -119,4 +126,6 @@ func _get_world_root() -> Node2D:
 
 func _update_thrust_visual(active: bool) -> void:
 	if _thrust_flame:
-		_thrust_flame.visible = active
+		_thrust_flame.visible = false
+	if _engine_exhaust:
+		_engine_exhaust.set_thrusting(active, 1.0 if active else 0.0)

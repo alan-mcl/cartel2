@@ -14,7 +14,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 | Path | Role |
 |------|------|
 | `scripts/gameplay/` | `Catalog`, generated catalog records (`AmmunitionDef`, `ChassisDef`, `CommodityDef`, `EconomyDef`, `ModuleDef`, `ShipDef`, `SectorDef`, plus shared `CatalogSignature` / `CatalogDamagePackets` / `CatalogNeighborhood`), `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `FieldConditions`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `TrafficSpawn`, `TrafficDetection`, `TrafficRouting`, `InteractableDef` |
-| `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `ShipVisual`, `TrafficView`, `PresentationNodePool`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
+| `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `EngineExhaust`, `ShipVisual`, `TrafficView`, `PresentationNodePool`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
 | `data/catalog/` | JSON catalogs; machine-readable schema subset under `data/catalog/schema/` (field tables: [catalog_schema.md](catalog_schema.md); narrative: [data_model.md](data_model.md)) |
@@ -222,7 +222,7 @@ The dust ring is a `Line2D` octagon generated from `play_bounds` at 3-space sect
 - **Cruise** — peaceful traffic capped at `cruise_speed_fraction` (default 33%) of each hull's assembled `max_speed`; engage/flee uses full engine rating.
 - **Bounds** — NPC recycle envelope is `gate_radius × 1.25`; player flight has no position clamp.
 
-Catalog: `data/catalog/traffic.json`. Presentation: `TrafficView`, `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`. Near-ship hull setup, damage tint, muzzle offset, and weapon-order spawning for player and slotted NPCs go through **`ShipVisual`** (`ChassisSprite` / `HullHitbox` underneath); far-LOD traffic sprites stay in `TrafficView`.
+Catalog: `data/catalog/traffic.json`. Presentation: `TrafficView`, `scenes/npc_ship.tscn`, `scripts/presentation/npc_ship.gd`. Near-ship hull setup, damage tint, muzzle offset, and weapon-order spawning for player and slotted NPCs go through **`ShipVisual`** (`ChassisSprite` / `HullHitbox` underneath); **`EngineExhaust`** draws procedural thrust by fitted `engine_type` on the player, near NPCs, and far traffic (hidden `ThrustFlame` keeps stern alignment). Far-LOD traffic sprites stay in `TrafficView`.
 
 ## Graphics convention
 

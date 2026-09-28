@@ -6,6 +6,8 @@ const NPC_SHIP_SCENE_PATH := "res://scenes/npc_ship.tscn"
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
+const EngineExhaustScript := preload("res://scripts/presentation/engine_exhaust.gd")
+const FAR_TRAIL_CAP := 20
 
 const NEAR_POOL_MAX := 25
 const FAR_POOL_MAX := 80
@@ -13,6 +15,7 @@ const FAR_POOL_MAX := 80
 var _traffic_root: Node2D
 var _nodes_by_id: Dictionary = {}
 var _far_thrust_by_id: Dictionary = {}
+var _far_exhaust_by_id: Dictionary = {}
 var _near_lod_by_id: Dictionary = {}
 var _destroy_fx_started: Dictionary = {}
 
@@ -39,6 +42,7 @@ func clear() -> void:
 			node.queue_free()
 	_nodes_by_id.clear()
 	_far_thrust_by_id.clear()
+	_far_exhaust_by_id.clear()
 	_near_lod_by_id.clear()
 	_destroy_fx_started.clear()
 	_near_pool.clear()
@@ -78,6 +82,7 @@ func sync(actors: Array, catalog: Catalog) -> void:
 				_release_lod_node(node, was_near)
 				_nodes_by_id.erase(actor.id)
 				_far_thrust_by_id.erase(actor.id)
+				_far_exhaust_by_id.erase(actor.id)
 			if is_near:
 				_spawn_near_ship(actor, catalog)
 			else:
@@ -151,6 +156,7 @@ func _start_destroy_fx(actor) -> void:
 			node.queue_free()
 	_nodes_by_id.erase(actor.id)
 	_far_thrust_by_id.erase(actor.id)
+	_far_exhaust_by_id.erase(actor.id)
 	_near_lod_by_id.erase(actor.id)
 	_destroy_fx_started[actor.id] = true
 
@@ -168,6 +174,7 @@ func _prune_stale_nodes(active_ids: Dictionary) -> void:
 			_release_lod_node(node, was_near)
 		_nodes_by_id.erase(actor_id)
 		_far_thrust_by_id.erase(actor_id)
+		_far_exhaust_by_id.erase(actor_id)
 		_near_lod_by_id.erase(actor_id)
 		_destroy_fx_started.erase(actor_id)
 
@@ -208,18 +215,25 @@ func _spawn_far_sprite(actor) -> void:
 	var thrust_flame: Sprite2D = root.get_node_or_null("ThrustFlame") as Sprite2D
 	if thrust_flame != null:
 		_far_thrust_by_id[actor.id] = thrust_flame
+	var exhaust: EngineExhaust = root.get_node_or_null("EngineExhaust") as EngineExhaust
+	if exhaust != null:
+		_far_exhaust_by_id[actor.id] = exhaust
 
 
 func _build_far_sprite_root(actor) -> Node2D:
 	var root := Node2D.new()
 	root.name = "TrafficRemote_%s" % actor.callsign
-	var hull := Sprite2D.new()
-	hull.name = "Hull"
-	root.add_child(hull)
 	var thrust_flame := Sprite2D.new()
 	thrust_flame.name = "ThrustFlame"
 	thrust_flame.visible = false
+	thrust_flame.z_index = -1
 	root.add_child(thrust_flame)
+	var exhaust: EngineExhaust = EngineExhaustScript.new()
+	exhaust.name = "EngineExhaust"
+	root.add_child(exhaust)
+	var hull := Sprite2D.new()
+	hull.name = "Hull"
+	root.add_child(hull)
 	_apply_far_sprite_actor(root, actor)
 	return root
 
@@ -227,6 +241,7 @@ func _build_far_sprite_root(actor) -> Node2D:
 func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 	var hull: Sprite2D = root.get_node_or_null("Hull") as Sprite2D
 	var thrust_flame: Sprite2D = root.get_node_or_null("ThrustFlame") as Sprite2D
+	var exhaust: EngineExhaust = root.get_node_or_null("EngineExhaust") as EngineExhaust
 	if hull == null or thrust_flame == null:
 		return
 	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
@@ -241,6 +256,15 @@ func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 		thrust_flame.texture = _thrust_texture
 	if not sprite_path.is_empty():
 		HullHitboxScript.apply_hull_and_thrust(hull, thrust_flame, sprite_path)
+	if exhaust != null:
+		exhaust.scale = Vector2(0.65, 0.65)
+		ShipVisual.sync_engine_exhaust(
+			exhaust,
+			thrust_flame,
+			actor.assembled_ship,
+			sprite_path,
+			FAR_TRAIL_CAP
+		)
 
 
 func _sync_far_node(actor, node: Node2D) -> void:
@@ -248,7 +272,11 @@ func _sync_far_node(actor, node: Node2D) -> void:
 	node.rotation = actor.motion.facing + PI / 2.0
 	var thrust_flame: Sprite2D = _far_thrust_by_id.get(actor.id)
 	if thrust_flame != null and is_instance_valid(thrust_flame):
-		thrust_flame.visible = actor.motion.is_thrusting()
+		thrust_flame.visible = false
+	var exhaust: EngineExhaust = _far_exhaust_by_id.get(actor.id)
+	if exhaust != null and is_instance_valid(exhaust):
+		var thrusting: bool = actor.motion.is_thrusting()
+		exhaust.set_thrusting(thrusting, 1.0 if thrusting else 0.0)
 
 
 func _spawn_actor_weapons(actor, node: Node2D) -> void:

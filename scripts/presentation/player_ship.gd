@@ -21,6 +21,7 @@ var weapons: ShipWeapons = ShipWeapons.new()
 var _sim: ShipSimCore = ShipSimCoreScript.new()
 
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
+@onready var _engine_exhaust: EngineExhaust = $Visual/EngineExhaust
 @onready var _hull: Sprite2D = $Visual/Hull
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _interact_area: Area2D = $InteractSensor
@@ -54,6 +55,7 @@ func _apply_hull_visual() -> void:
 		push_error("Chassis '%s' is missing sprite path." % str(assembled_ship.chassis.get("id", "")))
 	else:
 		ShipVisual.apply_hull(_hull, _thrust_flame, _collision_shape, sprite_path)
+		ShipVisual.sync_engine_exhaust(_engine_exhaust, _thrust_flame, assembled_ship, sprite_path)
 
 	_hull.modulate = Color.WHITE
 
@@ -226,8 +228,12 @@ func get_current_target() -> Interactable:
 
 
 func _update_thrust_visual(active: bool) -> void:
+	var thrusting := active and motion.is_thrusting()
 	if _thrust_flame:
-		_thrust_flame.visible = active and motion.is_thrusting()
+		_thrust_flame.visible = false
+	if _engine_exhaust:
+		var strength := operating_state.thrust_factor if thrusting else 0.0
+		_engine_exhaust.set_thrusting(thrusting, strength)
 
 
 func _on_interact_area_entered(area: Area2D) -> void:

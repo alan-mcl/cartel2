@@ -19,6 +19,32 @@ static func apply_hull(
 	HullHitbox.apply_hull_and_thrust(hull, thrust, sprite_path)
 
 
+static func sync_engine_exhaust(
+	exhaust: EngineExhaust,
+	thrust_flame: Sprite2D,
+	assembled: AssembledShip,
+	hull_sprite_path: String = "",
+	trail_cap: int = 48
+) -> void:
+	if exhaust == null:
+		return
+	exhaust.position = Vector2.ZERO
+	if not hull_sprite_path.is_empty():
+		exhaust.set_hull_extents(
+			HullHitbox.stern_extent(hull_sprite_path),
+			HullHitbox.nose_extent(hull_sprite_path)
+		)
+	exhaust.set_trail_cap(trail_cap)
+	var engine_type := ""
+	if assembled != null:
+		var module_def := assembled.get_propulsion_module_def()
+		if module_def != null:
+			engine_type = module_def.engine_type
+	exhaust.set_engine_type(engine_type)
+	if thrust_flame != null:
+		thrust_flame.visible = false
+
+
 static func apply_damage_tint(hull: Sprite2D, health_ratio: float, base: Color = Color.WHITE) -> void:
 	if hull == null:
 		return
