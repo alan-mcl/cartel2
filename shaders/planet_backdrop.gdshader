@@ -36,7 +36,7 @@ void fragment() {
 		base_color *= planet_tint.rgb;
 	}
 
-	float day = smoothstep(0.12, 0.42, ndotl);
+	float day = smoothstep(0.06, 0.50, ndotl);
 	float night = 1.0 - day;
 	vec3 day_tint = mix(vec3(1.0), sun_color, 0.35);
 	float lit_scale = mix(0.035, sun_intensity, day);
@@ -44,7 +44,9 @@ void fragment() {
 
 	vec3 night_glow = vec3(0.0);
 	if (use_night_lights > 0.5) {
-		night_glow = texture(night_lights, UV).rgb * night_emission_strength * night;
+		// Match the same night factor as the surface; ramp through the terminator band.
+		float city_night = smoothstep(0.6, 0.75, night);
+		night_glow = texture(night_lights, UV).rgb * night_emission_strength * city_night;
 	}
 
 	float fresnel = pow(1.0 - clamp(abs(dot(normal, view_dir)), 0.0, 1.0), 2.8);
