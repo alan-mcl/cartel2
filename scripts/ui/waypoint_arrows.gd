@@ -7,7 +7,9 @@ const LABEL_INSET := 18.0
 var _ship_pos: Vector2 = Vector2.ZERO
 var _contacts: Array = []
 var _camera: Camera2D = null
-var _waypoint_ids: PackedStringArray = PackedStringArray(["habitat", "jump_gate", "exit_portal"])
+var _waypoint_ids: PackedStringArray = PackedStringArray(
+	["habitat", "jump_gate", "exit_portal", "local_star"]
+)
 
 
 func set_nav_state(ship_pos: Vector2, contacts: Array, camera: Camera2D) -> void:
@@ -54,7 +56,14 @@ func _draw() -> void:
 		if direction.length_squared() < 0.001:
 			direction = Vector2.UP
 
-		_draw_arrow(edge_pos, direction, accent)
+		var arrow_color := accent
+		if contact_id == "local_star":
+			var tint: Variant = contact.get("nav_color", null)
+			if tint is Color:
+				arrow_color = tint as Color
+			else:
+				arrow_color = Color(1.0, 0.88, 0.55, 1.0)
+		_draw_arrow(edge_pos, direction, arrow_color)
 		var name := str(contact.get("name", ""))
 		if not name.is_empty():
 			var text_size := font.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)

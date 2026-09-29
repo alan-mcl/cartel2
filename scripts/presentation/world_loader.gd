@@ -4,6 +4,12 @@ extends RefCounted
 const OrbitalRingScript := preload("res://scripts/presentation/orbital_ring.gd")
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
+const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
+
+const STAR_MIN_RADIUS := 7000.0
+const STAR_MAX_RADIUS := 12000.0
+const STAR_GATE_CLEARANCE := 800.0
+const STAR_HABITAT_ALIGN_MAX := 0.35
 
 const SCENES := {
 	"habitat": "res://scenes/world/habitat.tscn",
@@ -195,13 +201,15 @@ func _spawn_planetary_layout(
 	sector_id: String
 ) -> void:
 	var planet_data: Dictionary = world_data.get("planet", {})
-	_spawn_planet(world_root, planet_data)
+	var planet := _spawn_planet(world_root, planet_data)
 
 	var ring_data: Dictionary = world_data.get("orbital_ring", {})
 	_spawn_orbital_ring(world_root, ring_data, catalog, session, sector_id)
 
 	var gate_data: Dictionary = world_data.get("jump_gate", {})
 	_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
+
+	_spawn_local_star(world_root, world_data, planet)
 
 	var entities: Variant = world_data.get("entities", [])
 	if typeof(entities) == TYPE_ARRAY:
@@ -210,12 +218,86 @@ func _spawn_planetary_layout(
 				_spawn_entity(world_root, entity_variant, catalog, session)
 
 
-func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> void:
+func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> Node2D:
 	var planet := PlanetBackdropScript.new()
 	planet.name = "Planet"
 	world_root.add_child(planet)
 	planet.configure(planet_data, _sector_id)
 	spawned_by_id["planet"] = planet
+	return planet
+
+
+func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2D) -> void:
+	var star_data: Variant = world_data.get("star", {})
+	if typeof(star_data) != TYPE_DICTIONARY:
+		star_data = {"temperature_k": 5800.0, "luminosity": 1.0}
+
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var ref_pos := get_habitat_world_position()
+	var star_pos := _pick_star_position(rng, ref_pos)
+
+	var star := LocalStarScript.new()
+	star.name = "LocalStar"
+	world_root.add_child(star)
+	star.configure(star_data, star_pos)
+	spawned_by_id["local_star"] = star
+
+	if planet != null and planet.has_method("set_sun"):
+		planet.call("set_sun", star_pos, star.get_light_color(), star.get_luminosity())
+
+
+func get_local_star_display() -> Dictionary:
+	var star: Variant = spawned_by_id.get("local_star")
+	if star == null or not is_instance_valid(star):
+		return {}
+	if not star.has_method("get_light_color"):
+		return {}
+	return {
+		"world_position": star.global_position,
+		"color": star.get_light_color(),
+		"luminosity": star.get_luminosity() if star.has_method("get_luminosity") else 1.0,
+	}
+
+
+func _pick_star_position(rng: RandomNumberGenerator, ref_pos: Vector2) -> Vector2:
+	var gate_pos := Vector2(cos(_gate_angle) * _gate_radius, sin(_gate_angle) * _gate_radius)
+	if ref_pos.length_squared() < 1.0:
+		ref_pos = Vector2(_ring_radius, 0.0)
+
+	var best_pos := Vector2.ZERO
+	var best_score := -INF
+	for _attempt in range(48):
+		var angle := rng.randf() * TAU
+		var radius := rng.randf_range(STAR_MIN_RADIUS, STAR_MAX_RADIUS)
+		var pos := Vector2(cos(angle), sin(angle)) * radius
+		if pos.distance_to(gate_pos) < STAR_GATE_CLEARANCE:
+			continue
+		var score := _star_visibility_score(pos, ref_pos)
+		if score > best_score:
+			best_score = score
+			best_pos = pos
+		if not _star_hidden_behind_planet_from_ref(pos, ref_pos):
+			return pos
+
+	if best_pos.length_squared() > 1.0:
+		return best_pos
+
+	var away := ref_pos.angle() + PI + rng.randf_range(-0.9, 0.9)
+	return Vector2.from_angle(away) * rng.randf_range(STAR_MIN_RADIUS, STAR_MAX_RADIUS)
+
+
+func _star_hidden_behind_planet_from_ref(star_pos: Vector2, ref_pos: Vector2) -> bool:
+	if star_pos.length_squared() < 1.0 or ref_pos.length_squared() < 1.0:
+		return false
+	var cos_align := star_pos.normalized().dot(ref_pos.normalized())
+	return cos_align > STAR_HABITAT_ALIGN_MAX
+
+
+func _star_visibility_score(star_pos: Vector2, ref_pos: Vector2) -> float:
+	if star_pos.length_squared() < 1.0 or ref_pos.length_squared() < 1.0:
+		return 0.0
+	return -star_pos.normalized().dot(ref_pos.normalized())
 
 
 ## Returns the live sector nav cache. Callers must not mutate entries; compose a new Array if appending.
@@ -275,6 +357,14 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 			"contact_kind": "landmark",
 			"position": Vector2.ZERO,
 		})
+	if spawned_by_id.has("local_star"):
+		_sector_nav_cache.append({
+			"id": "local_star",
+			"name": "Local Star",
+			"short_label": "S",
+			"contact_kind": "star",
+			"position": Vector2.ZERO,
+		})
 	for entry_variant in _orbital_entries:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
@@ -301,6 +391,13 @@ func _refresh_sector_nav_positions() -> void:
 				entry["position"] = get_habitat_world_position()
 			"jump_gate":
 				entry["position"] = get_jump_gate_world_position()
+			"local_star":
+				var star_display := get_local_star_display()
+				if star_display.is_empty():
+					entry["position"] = Vector2.ZERO
+				else:
+					entry["position"] = star_display.get("world_position", Vector2.ZERO)
+					entry["nav_color"] = star_display.get("color", Color.WHITE)
 			"planet":
 				entry["position"] = Vector2.ZERO
 			_:

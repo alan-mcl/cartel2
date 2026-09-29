@@ -25,6 +25,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 @onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
 @onready var _interact_prompt: Control = $Root/InteractPromptOverlay
+@onready var _star_lens_flare: Control = $Root/StarLensFlare
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
 
 var _session: GameSession
@@ -145,6 +146,27 @@ func set_nav_state(
 		_interact_prompt.set_camera(camera)
 
 	_update_player_hover_probe(ship_pos, camera)
+
+
+func set_star_lens_flare(
+	star_info: Dictionary,
+	ship_pos: Vector2,
+	player_facing: float,
+	camera: Camera2D
+) -> void:
+	if _star_lens_flare == null or not _star_lens_flare.has_method("update_flare"):
+		return
+	if star_info.is_empty():
+		_star_lens_flare.update_flare(Vector2.ZERO, Color.WHITE, 0.0, ship_pos, player_facing, camera)
+		return
+	_star_lens_flare.update_flare(
+		star_info.get("world_position", Vector2.ZERO),
+		star_info.get("color", Color.WHITE),
+		float(star_info.get("luminosity", 1.0)),
+		ship_pos,
+		player_facing,
+		camera
+	)
 
 
 func _update_player_hover_probe(ship_pos: Vector2, camera: Camera2D) -> void:

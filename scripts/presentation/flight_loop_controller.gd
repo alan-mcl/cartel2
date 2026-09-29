@@ -71,6 +71,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if not _main.game_active:
 		return
 	if _main.session.docked or _jump.visible or _tree.paused:
+		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
@@ -124,6 +125,15 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_camera,
 		player_broadcast
 	)
+	if _main.session.in_unspace:
+		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
+	else:
+		_hud.set_star_lens_flare(
+			_world_loader.get_local_star_display(),
+			_player.global_position,
+			_player.motion.facing,
+			_camera
+		)
 	var player_signature := SensorSystem.live_signature(
 		_player.assembled_ship,
 		_player.operating_state

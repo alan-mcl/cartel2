@@ -38,7 +38,7 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 |--------|-------|-------|
 | Distant traffic hulls | `traffic_director.gd` | `scale = 0.65` |
 | Starfield near layer | `starfield.gd` | tile scale `1.15` |
-| Planet disc on screen | `planet_backdrop.gd` | `sprite.scale = diameter / 512` (catalog `diameter` = 2000 → ~3.9×) |
+| Planet disc on screen | `planet_backdrop.gd` | `sprite.scale = diameter / 2048` (catalog `diameter` = 2000 → ~0.98× viewport tex) |
 
 ---
 
@@ -134,11 +134,11 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 |-------|------|---------|---------------|-------|
 | Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08 |
 | Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 — do **not** bake 1.15 into the PNG |
-| Planet albedo | `assets/world/planets/<sector_id>_albedo.png` | 1024×512 placeholders | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1; wired in `worlds.json` `planet.albedo` |
-| Planet night lights | `assets/world/planets/<sector_id>_night.png` | 1024×512 placeholders | Same as albedo | Same UV layout; `planet.night_lights` |
+| Planet albedo | `assets/world/planets/<sector_id>_albedo.png` | 2048×1024 placeholders | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1; wired in `worlds.json` `planet.albedo` |
+| Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same UV layout; `planet.night_lights` |
 | Planet disc (legacy) | `assets/world/planet.png` | 512×512 | — | **Unused** for globe mesh; do not replace as a flat disc |
 
-Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **1024** px SubViewport and is scaled to `diameter / 1024`. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate missing placeholders: `python3 scripts/tools/generate_placeholder_art.py` (skips existing planet PNGs).
+Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **2048** px SubViewport and is scaled to `diameter / 2048`. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present).
 
 ---
 

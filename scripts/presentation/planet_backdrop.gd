@@ -2,9 +2,13 @@ extends Node2D
 
 const PLANET_SHADER := preload("res://shaders/planet_backdrop.gdshader")
 
-const VIEWPORT_SIZE := 1024
+const VIEWPORT_SIZE := 2048
 const SPHERE_RADIUS := 1.0
 const CAMERA_DISTANCE := 3.2
+const STAR_NEAR_RADIUS := 7000.0
+const STAR_FAR_RADIUS := 12000.0
+const SUN_Z_NEAR := 0.55
+const SUN_Z_FAR := 0.0
 
 var _viewport: SubViewport
 var _planet_root: Node3D
@@ -93,12 +97,14 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	_material.set_shader_parameter("use_albedo_map", 0.0)
 	_material.set_shader_parameter("use_night_lights", 0.0)
 	_apply_optional_textures(planet_data)
+	_material.set_shader_parameter("sun_intensity", 1.0)
+	_material.set_shader_parameter("sun_color", Vector3(1.0, 0.98, 0.94))
 
 	var sphere_mesh := SphereMesh.new()
 	sphere_mesh.radius = SPHERE_RADIUS
 	sphere_mesh.height = SPHERE_RADIUS * 2.0
-	sphere_mesh.radial_segments = 64
-	sphere_mesh.rings = 32
+	sphere_mesh.radial_segments = 96
+	sphere_mesh.rings = 48
 
 	var sphere := MeshInstance3D.new()
 	sphere.name = "PlanetSphere"
@@ -133,6 +139,29 @@ func _apply_optional_textures(planet_data: Dictionary) -> void:
 			if night_tex != null:
 				_material.set_shader_parameter("night_lights", night_tex)
 				_material.set_shader_parameter("use_night_lights", 1.0)
+
+
+func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> void:
+	if _material == null:
+		return
+	var star_radius := world_direction.length()
+	var direction := world_direction
+	if star_radius < 0.001:
+		direction = Vector2(1.0, 0.0)
+		star_radius = STAR_NEAR_RADIUS
+	direction = direction.normalized()
+	var distance_t := pow(
+		inverse_lerp(STAR_NEAR_RADIUS, STAR_FAR_RADIUS, star_radius),
+		1.35
+	)
+	var sun_z := lerpf(SUN_Z_NEAR, SUN_Z_FAR, distance_t)
+	var sun_3d := Vector3(direction.x, -direction.y, sun_z).normalized()
+	_material.set_shader_parameter("sun_direction", sun_3d)
+	_material.set_shader_parameter(
+		"sun_color",
+		Vector3(star_color.r, star_color.g, star_color.b)
+	)
+	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.05))
 
 
 func _process(delta: float) -> void:

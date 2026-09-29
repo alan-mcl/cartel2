@@ -88,25 +88,28 @@ def _planet_ocean_land(tint_hex: str) -> tuple[tuple[int, int, int], tuple[int, 
 
 def planet_albedo_equirect_png(width: int, height: int, tint_hex: str, seed: int):
     ocean, land = _planet_ocean_land(tint_hex)
-    blob_centers: list[tuple[float, float]] = []
-    for index in range(5):
+    blob_centers: list[tuple[float, float, float]] = []
+    for index in range(12):
         cx = math.sin(seed * 0.013 + index * 2.1) * 0.5 + 0.5
-        cy = math.cos(seed * 0.017 + index * 1.7) * 0.3 + 0.35
-        blob_centers.append((cx, cy))
+        cy = math.cos(seed * 0.017 + index * 1.7) * 0.35 + 0.32
+        radius_scale = 4.5 + (index % 5) * 2.2
+        blob_centers.append((cx, cy, radius_scale))
 
     def land_strength(u: float, v: float) -> float:
         wave_a = math.sin(u * 6.28318 * 3.0 + math.sin(v * 6.28318 * 2.0) * 1.7) * 0.5 + 0.5
         wave_b = math.cos(v * 6.28318 * 4.0 + math.cos(u * 6.28318 * 2.5) * 1.3) * 0.5 + 0.5
+        wave_c = math.sin(u * 6.28318 * 9.0 + v * 6.28318 * 7.0 + seed * 0.001) * 0.5 + 0.5
+        wave_d = math.cos(v * 6.28318 * 11.0 + u * 6.28318 * 8.0) * 0.5 + 0.5
         blob = 0.0
-        for cx, cy in blob_centers:
+        for cx, cy, radius_scale in blob_centers:
             dist = ((u - cx) ** 2 + (v - cy) ** 2) ** 0.5
-            blob = max(blob, max(0.0, 1.0 - dist * 6.0))
-        mix_val = wave_a * 0.45 + wave_b * 0.35 + blob * 0.35
-        if mix_val < 0.42:
+            blob = max(blob, max(0.0, 1.0 - dist * radius_scale))
+        mix_val = wave_a * 0.28 + wave_b * 0.22 + wave_c * 0.18 + wave_d * 0.12 + blob * 0.38
+        if mix_val < 0.40:
             return 0.0
-        if mix_val > 0.58:
+        if mix_val > 0.60:
             return 1.0
-        return (mix_val - 0.42) / 0.16
+        return (mix_val - 0.40) / 0.20
 
     def rgba(x: int, y: int, w: int, h: int):
         u = x / max(w - 1, 1)
@@ -120,23 +123,42 @@ def planet_albedo_equirect_png(width: int, height: int, tint_hex: str, seed: int
     return rgba
 
 
-def planet_night_lights_equirect_png(width: int, height: int, seed: int):
+def _build_planet_night_glow_grid(width: int, height: int, seed: int) -> list[int]:
     rng = random.Random(seed + 991)
-    cities: list[tuple[float, float, int]] = []
-    for _ in range(48):
-        cities.append((rng.uniform(0.0, 1.0), rng.uniform(0.15, 0.85), rng.randint(140, 255)))
+    glow = [0] * (width * height)
+    core_px = max(2, int(0.009 * width))
+    halo_px = max(core_px + 1, int(0.024 * width))
+
+    for _ in range(140):
+        cx = rng.randint(0, width - 1)
+        cy = rng.randint(int(height * 0.12), int(height * 0.88))
+        intensity = rng.randint(100, 255)
+        for dy in range(-halo_px, halo_px + 1):
+            for dx in range(-halo_px, halo_px + 1):
+                dist = math.hypot(dx, dy)
+                if dist > halo_px:
+                    continue
+                value = 0
+                if dist <= core_px:
+                    value = intensity
+                else:
+                    falloff = 1.0 - (dist - core_px) / max(halo_px - core_px, 1)
+                    value = int(intensity * falloff * 0.4)
+                px = cy + dy
+                py_x = cx + dx
+                if px < 0 or px >= height or py_x < 0 or py_x >= width:
+                    continue
+                index = py_x + px * width
+                if value > glow[index]:
+                    glow[index] = value
+    return glow
+
+
+def planet_night_lights_equirect_png(width: int, height: int, seed: int):
+    glow_grid = _build_planet_night_glow_grid(width, height, seed)
 
     def rgba(x: int, y: int, w: int, h: int):
-        u = x / max(w - 1, 1)
-        v = y / max(h - 1, 1)
-        glow = 0
-        for cu, cv, intensity in cities:
-            dist = ((u - cu) ** 2 + (v - cv) ** 2) ** 0.5
-            if dist < 0.018:
-                glow = max(glow, intensity)
-            elif dist < 0.045:
-                falloff = 1.0 - (dist - 0.018) / 0.027
-                glow = max(glow, int(intensity * falloff * 0.35))
+        glow = glow_grid[x + y * w]
         if glow <= 0:
             return bytes((0, 0, 0, 255))
         return bytes((min(255, glow + 40), min(255, int(glow * 0.75)), min(255, int(glow * 0.35)), 255))
@@ -152,20 +174,20 @@ def write_png_if_missing(path: Path, width: int, height: int, rgba_fn) -> None:
 
 
 def generate_planet_texture_placeholders() -> None:
-    width, height = 1024, 512
+    width, height = 2048, 1024
     planets_dir = ASSETS / "world/planets"
     planets_dir.mkdir(parents=True, exist_ok=True)
     for sector_id, tint_hex in SECTOR_PLANET_TINTS.items():
         seed = int(hashlib.md5(sector_id.encode("utf-8")).hexdigest()[:8], 16)
         albedo_path = planets_dir / f"{sector_id}_albedo.png"
         night_path = planets_dir / f"{sector_id}_night.png"
-        write_png_if_missing(
+        write_png(
             albedo_path,
             width,
             height,
             planet_albedo_equirect_png(width, height, tint_hex, seed),
         )
-        write_png_if_missing(
+        write_png(
             night_path,
             width,
             height,

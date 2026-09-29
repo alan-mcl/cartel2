@@ -8,6 +8,8 @@ const TRAFFIC_DRAW_RADIUS := 1.5
 const TRAFFIC_BEACON_DRAW_RADIUS := 2.5
 const ASCIDIAN_DRAW_RADIUS := 2.0
 const ORBITAL_DRAW_RADIUS := 3.0
+const STAR_DRAW_RADIUS := 5.0
+const STAR_RIM_INSET := 6.0
 const BACKGROUND_ALPHA := 0.25
 const BORDER_WIDTH := 1.5
 
@@ -105,6 +107,28 @@ func _world_to_map(world_pos: Vector2, center: Vector2, scale: float) -> Vector2
 	return center + (world_pos - _ship_pos) * scale
 
 
+func _contact_map_pos(
+	world_pos: Vector2,
+	center: Vector2,
+	map_radius: float,
+	scale: float,
+	contact_kind: String,
+	draw_radius: float
+) -> Vector2:
+	var map_pos := _world_to_map(world_pos, center, scale)
+	if _is_inside_map(map_pos, center, map_radius, draw_radius):
+		return map_pos
+	if contact_kind != "star":
+		return Vector2(INF, INF)
+
+	var offset := map_pos - center
+	if offset.length_squared() < 0.001:
+		return Vector2(INF, INF)
+
+	var rim := maxf(map_radius - STAR_RIM_INSET - draw_radius, 1.0)
+	return center + offset.normalized() * rim
+
+
 func _is_inside_map(map_pos: Vector2, center: Vector2, radius: float, inset: float = 0.0) -> bool:
 	var effective_radius := maxf(radius - inset, 0.0)
 	return map_pos.distance_squared_to(center) <= effective_radius * effective_radius
@@ -120,10 +144,10 @@ func _draw_contacts(center: Vector2, map_radius: float, scale: float, color: Col
 			continue
 
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
-		var map_pos := _world_to_map(world_pos, center, scale)
 		var contact_kind := str(contact.get("contact_kind", "landmark"))
 		var draw_radius := _contact_draw_radius(contact_kind, contact)
-		if not _is_inside_map(map_pos, center, map_radius, draw_radius):
+		var map_pos := _contact_map_pos(world_pos, center, map_radius, scale, contact_kind, draw_radius)
+		if map_pos.x == INF:
 			continue
 
 		var dot_color := _contact_color(contact_kind, color, label_color, contact)
@@ -153,6 +177,8 @@ func _contact_draw_radius(contact_kind: String, contact: Dictionary = {}) -> flo
 			return ASCIDIAN_DRAW_RADIUS
 		"orbital":
 			return ORBITAL_DRAW_RADIUS
+		"star":
+			return STAR_DRAW_RADIUS
 		_:
 			return CONTACT_DRAW_RADIUS
 
@@ -172,6 +198,11 @@ func _contact_color(
 			return Color(info.r, info.g, info.b, info.a * 0.42)
 		"orbital":
 			return Color(info.r, info.g, info.b, info.a * 0.65)
+		"star":
+			var tint: Variant = contact.get("nav_color", null)
+			if tint is Color:
+				return tint as Color
+			return Color(1.0, 0.88, 0.55, 1.0)
 		_:
 			return info
 
@@ -228,10 +259,13 @@ func _find_contact_at(local_pos: Vector2) -> Dictionary:
 		if str(contact.get("id", "")) == "player":
 			continue
 
+		var contact_kind := str(contact.get("contact_kind", "landmark"))
+		var draw_radius := _contact_draw_radius(contact_kind, contact)
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
-		var map_pos := _world_to_map(world_pos, map_center, scale)
-		var draw_radius := _contact_draw_radius(str(contact.get("contact_kind", "landmark")), contact)
-		if not _is_inside_map(map_pos, map_center, map_radius, draw_radius):
+		var map_pos := _contact_map_pos(
+			world_pos, map_center, map_radius, scale, contact_kind, draw_radius
+		)
+		if map_pos.x == INF:
 			continue
 		if map_pos.distance_squared_to(local_pos) <= hit_radius_sq:
 			return contact
