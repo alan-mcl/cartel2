@@ -31,8 +31,8 @@ void fragment() {
 		vec3 ocean = vec3(0.07, 0.14, 0.34);
 		vec3 land_color = vec3(0.16, 0.30, 0.20);
 		base_color = mix(ocean, land_color, land);
+		base_color *= planet_tint.rgb;
 	}
-	base_color *= planet_tint.rgb;
 
 	float day = clamp(ndotl * 0.55 + 0.45, 0.0, 1.0);
 	float night = 1.0 - day;

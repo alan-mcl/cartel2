@@ -180,7 +180,7 @@ flowchart TD
 
 3-space sectors (`proxima`, `bela`, and the nine additional worlds in `sectors.json`) use a structured layout in `worlds.json`:
 
-- **`planet`** — lit 3D globe rendered in an isolated `SubViewport` and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Slow axial spin with a sun-lit day/night terminator; optional catalog `albedo` / `night_lights` wrap maps (legacy `sprite` is ignored for the globe mesh).
+- **`planet`** — lit 3D globe rendered in an isolated `SubViewport` (1024 px) and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Each sector references `albedo` and `night_lights` equirectangular PNGs under `assets/world/planets/<sector_id>_*.png`; drop-in replacements keep the same paths. `modulate` tints the procedural fallback only, not mapped textures. Legacy `sprite` is ignored for the globe mesh.
 - **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
 - **`jump_gate`** — static gate farther out (angle derived from sector id)
 - **`entities`** (optional) — free-floating world objects spawned after the ring and gate (e.g. shootable **debris** rocks); not used for unspace worlds

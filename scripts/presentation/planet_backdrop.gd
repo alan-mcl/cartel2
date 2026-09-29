@@ -2,7 +2,7 @@ extends Node2D
 
 const PLANET_SHADER := preload("res://shaders/planet_backdrop.gdshader")
 
-const VIEWPORT_SIZE := 512
+const VIEWPORT_SIZE := 1024
 const SPHERE_RADIUS := 1.0
 const CAMERA_DISTANCE := 3.2
 
