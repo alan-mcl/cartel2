@@ -1,5 +1,7 @@
 # Corporations
 
+Every megacorporation listed below operates on every settled world to some degree — subsidiaries, contractors, retail, finance, or logistics — but **local strength** differs by planet. In-system corporate traffic and future mission hooks follow that mix; the numeric shares live in catalog data (`corporate_presence.json`), not in this document.
+
 ## Galactic Outcomes(GO)
 
 Galactic Outcomes has its roots in the turbulent African politics of the late twentieth and early twenty-first century. The company began by supplying local mercenaries to the highest bidder, a lucrative market at the time. Today they are by far the largest supplier of all forms of hired muscle from bouncers and bodyguards to soldiers and assassins. They include a profitable subdivision that manufactures all forms of small arms and ammunition for both the personal and corporate market, and another that specializes in non-combat personnel like scientists, engineers and accountants.

@@ -1,0 +1,217 @@
+[
+  {
+    "id": "andean_consolidated",
+    "name": "Andean Consolidated",
+    "callsign_prefix": "AC"
+  },
+  {
+    "id": "atlas_concern",
+    "name": "Atlas Concern",
+    "callsign_prefix": "ATL"
+  },
+  {
+    "id": "biogenesis",
+    "name": "BioGenesis Life Sciences",
+    "callsign_prefix": "BLS"
+  },
+  {
+    "id": "carthage_mercantile",
+    "name": "Carthage Mercantile",
+    "callsign_prefix": "CM"
+  },
+  {
+    "id": "chettiar",
+    "name": "Chettiar Holdings",
+    "callsign_prefix": "CHET"
+  },
+  {
+    "id": "chimera",
+    "name": "Chimera Corporation",
+    "callsign_prefix": "CHI"
+  },
+  {
+    "id": "continuity_foundation",
+    "name": "Continuity Foundation",
+    "callsign_prefix": "CON"
+  },
+  {
+    "id": "creus",
+    "name": "Creus Corporation",
+    "callsign_prefix": "CRC"
+  },
+  {
+    "id": "crown_and_anchor",
+    "name": "Crown & Anchor",
+    "callsign_prefix": "CA"
+  },
+  {
+    "id": "cult_of_apex",
+    "name": "Cult of Apex",
+    "callsign_prefix": "APEX"
+  },
+  {
+    "id": "dar_al_nour",
+    "name": "Dar al-Nour Trust",
+    "callsign_prefix": "DAN"
+  },
+  {
+    "id": "deepspace",
+    "name": "DeepSpace Cooperative",
+    "callsign_prefix": "DSC"
+  },
+  {
+    "id": "evergreen",
+    "name": "Evergreen Group",
+    "callsign_prefix": "EG"
+  },
+  {
+    "id": "four_rivers_zaibatsu",
+    "name": "Four Rivers Zaibatsu",
+    "callsign_prefix": "FRZ"
+  },
+  {
+    "id": "galactic_outcomes",
+    "name": "Galactic Outcomes",
+    "callsign_prefix": "GO"
+  },
+  {
+    "id": "general_industrial",
+    "name": "General Industrial",
+    "callsign_prefix": "GI"
+  },
+  {
+    "id": "grc",
+    "name": "GRC Inc",
+    "callsign_prefix": "GRC"
+  },
+  {
+    "id": "greenfields",
+    "name": "Greenfields Corporation",
+    "callsign_prefix": "GC"
+  },
+  {
+    "id": "guangzhou_mercantile",
+    "name": "Guangzhou Mercantile",
+    "callsign_prefix": "GZ"
+  },
+  {
+    "id": "hanseatic_guild",
+    "name": "The Hanseatic Guild",
+    "callsign_prefix": "HANS"
+  },
+  {
+    "id": "himalaya_triad",
+    "name": "Himalaya Triad",
+    "callsign_prefix": "HT"
+  },
+  {
+    "id": "holt_winters",
+    "name": "Holt-Winters Corp",
+    "callsign_prefix": "HW"
+  },
+  {
+    "id": "house_of_roth",
+    "name": "House of Roth",
+    "callsign_prefix": "ROTH"
+  },
+  {
+    "id": "karaquazen",
+    "name": "Karaquazen Inc",
+    "callsign_prefix": "KRQ"
+  },
+  {
+    "id": "liveworlds",
+    "name": "LiveWorlds",
+    "callsign_prefix": "LW"
+  },
+  {
+    "id": "mercury_communications",
+    "name": "Mercury Communications",
+    "callsign_prefix": "HG"
+  },
+  {
+    "id": "meridian",
+    "name": "The Meridian Company",
+    "callsign_prefix": "TMC"
+  },
+  {
+    "id": "microdonald",
+    "name": "MicroDonald Franchise",
+    "callsign_prefix": "MDF"
+  },
+  {
+    "id": "monday",
+    "name": "Monday Corporation",
+    "callsign_prefix": "MDC"
+  },
+  {
+    "id": "morrow_and_sons",
+    "name": "Morrow & Sons",
+    "callsign_prefix": "MNS"
+  },
+  {
+    "id": "octagon",
+    "name": "The Octagon",
+    "callsign_prefix": "OCT"
+  },
+  {
+    "id": "oklahoma_combine",
+    "name": "Oklahoma Combine",
+    "callsign_prefix": "OC"
+  },
+  {
+    "id": "orion_aerospace",
+    "name": "Orion Aerospace",
+    "callsign_prefix": "ORA"
+  },
+  {
+    "id": "orion_spur",
+    "name": "Orion Spur Company",
+    "callsign_prefix": "OSC"
+  },
+  {
+    "id": "pacific_triad",
+    "name": "Pacific Triad",
+    "callsign_prefix": "PT"
+  },
+  {
+    "id": "pararamcovidia",
+    "name": "ParaRamcoVidia",
+    "callsign_prefix": "PRV"
+  },
+  {
+    "id": "praetorium",
+    "name": "The Praetorium",
+    "callsign_prefix": "PRAE"
+  },
+  {
+    "id": "sakuraya_shinise",
+    "name": "Sakuraya Shinise",
+    "callsign_prefix": "SS"
+  },
+  {
+    "id": "seven_bells",
+    "name": "Seven Bells Inc",
+    "callsign_prefix": "SBI"
+  },
+  {
+    "id": "snedecorp",
+    "name": "SnedeCorp",
+    "callsign_prefix": "SNE"
+  },
+  {
+    "id": "terra_nova",
+    "name": "Terra Nova",
+    "callsign_prefix": "TNI"
+  },
+  {
+    "id": "tukey",
+    "name": "Tukey Enterprises",
+    "callsign_prefix": "TE"
+  },
+  {
+    "id": "universal_house",
+    "name": "Universal House",
+    "callsign_prefix": "UNI"
+  }
+]

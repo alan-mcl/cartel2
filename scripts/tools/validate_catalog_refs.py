@@ -416,6 +416,78 @@ def life_support_volume_floor(crew: float, capabilities: list) -> float:
     return floor
 
 
+def check_corporate_presence(
+    sectors: dict[str, dict],
+    corporations: dict[str, dict],
+    presence: dict[str, object],
+    traffic: dict,
+) -> list[str]:
+    errors: list[str] = []
+    sector_ids = set(sectors.keys())
+    corp_ids = set(corporations.keys())
+
+    deepspace = corporations.get("deepspace")
+    if not isinstance(deepspace, dict):
+        errors.append("corporations.json: missing deepspace entry")
+    else:
+        if str(deepspace.get("name", "")) != "DeepSpace Cooperative":
+            errors.append("corporations.json: deepspace name must be 'DeepSpace Cooperative'")
+        if str(deepspace.get("callsign_prefix", "")) != "DSC":
+            errors.append("corporations.json: deepspace callsign_prefix must be 'DSC'")
+
+    for entry in traffic.get("affiliations", []):
+        if not isinstance(entry, dict):
+            continue
+        if str(entry.get("kind", "")) == "corporate":
+            errors.append(
+                "traffic.json: corporate affiliations belong in corporations.json"
+            )
+            break
+
+    if set(presence.keys()) != sector_ids:
+        missing = sector_ids - set(presence.keys())
+        extra = set(presence.keys()) - sector_ids
+        if missing:
+            errors.append(
+                f"corporate_presence.json: missing sectors {sorted(missing)}"
+            )
+        if extra:
+            errors.append(
+                f"corporate_presence.json: unknown sectors {sorted(extra)}"
+            )
+
+    for sector_id, block in presence.items():
+        if not isinstance(block, dict):
+            errors.append(f"corporate_presence.json: sector {sector_id} must be an object")
+            continue
+        block_ids = set(block.keys())
+        if block_ids != corp_ids:
+            missing = corp_ids - block_ids
+            extra = block_ids - corp_ids
+            if missing:
+                errors.append(
+                    f"corporate_presence {sector_id}: missing corporations {sorted(missing)}"
+                )
+            if extra:
+                errors.append(
+                    f"corporate_presence {sector_id}: unknown corporations {sorted(extra)}"
+                )
+        total = 0.0
+        for corp_id, percent in block.items():
+            value = float(percent)
+            if value <= 0.0:
+                errors.append(
+                    f"corporate_presence {sector_id}: {corp_id} must be > 0"
+                )
+            total += value
+        if abs(total - 100.0) > 0.011:
+            errors.append(
+                f"corporate_presence {sector_id}: percents sum to {total:.2f}, expected 100.00"
+            )
+
+    return errors
+
+
 def collect_interactable_refs(value: object, found: set[str]) -> None:
     if isinstance(value, dict):
         interactable_id = value.get("interactable")
@@ -439,8 +511,15 @@ def main() -> int:
     worlds = load_object(CATALOG / "worlds.json")
     player = load_object(CATALOG / "player.json")
     backgrounds_doc = load_object(CATALOG / "backgrounds.json")
+    corporations = index_by_id(load_array(CATALOG / "corporations.json"))
+    corporate_presence = load_object(CATALOG / "corporate_presence.json")
+    traffic = load_object(CATALOG / "traffic.json")
 
     errors: list[str] = []
+
+    errors.extend(
+        check_corporate_presence(sectors, corporations, corporate_presence, traffic)
+    )
 
     if "gst" not in player:
         errors.append("player.json: missing gst block")

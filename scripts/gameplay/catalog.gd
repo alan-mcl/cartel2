@@ -15,6 +15,8 @@ const PLAYER_PATH := "res://data/catalog/player.json"
 const BACKGROUNDS_PATH := "res://data/catalog/backgrounds.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
+const CORPORATIONS_PATH := "res://data/catalog/corporations.json"
+const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 
@@ -38,6 +40,8 @@ var player_data: Dictionary = {}
 var backgrounds_by_id: Dictionary = {}
 var default_background_id: String = "tester"
 var traffic_config: Dictionary = {}
+var corporations_by_id: Dictionary = {}
+var corporate_presence: Dictionary = {}
 
 
 static func load_default() -> Catalog:
@@ -64,6 +68,8 @@ func load_all() -> void:
 	_load_backgrounds()
 	commodities_by_id = _load_indexed_records(COMMODITIES_PATH, CommodityDef)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
+	corporations_by_id = _load_indexed_array(CORPORATIONS_PATH)
+	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -244,6 +250,22 @@ func get_default_background_id() -> String:
 
 func get_traffic_config() -> Dictionary:
 	return traffic_config
+
+
+func get_corporation(id: String) -> Dictionary:
+	return _require(corporations_by_id, id, "corporation")
+
+
+func list_corporations() -> Array:
+	var corps: Array = corporations_by_id.values()
+	corps.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return str(left.get("name", "")) < str(right.get("name", ""))
+	)
+	return corps
+
+
+func get_corporate_presence() -> Dictionary:
+	return corporate_presence
 
 
 func get_commodity(id: String) -> Dictionary:

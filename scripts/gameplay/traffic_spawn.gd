@@ -22,7 +22,7 @@ static func create(
 	actor.role = role_name
 	actor.template_id = template
 	actor.hull_color_shift = randf_range(-0.06, 0.06)
-	var affiliation_record := _pick_affiliation_record(traffic_config)
+	var affiliation_record := _pick_affiliation_record(catalog, traffic_config, sector_id)
 	actor.affiliation = str(affiliation_record.get("name", ""))
 	var is_independent := str(affiliation_record.get("kind", "corporate")) == "independent"
 	actor.callsign = TransponderBroadcastScript.generate_callsign_for_affiliation(
@@ -74,31 +74,29 @@ static func _create_owned_ship(
 	return owned
 
 
-static func _pick_affiliation_record(traffic_config: Dictionary) -> Dictionary:
-	var affiliations: Variant = traffic_config.get("affiliations", [])
-	if typeof(affiliations) != TYPE_ARRAY or affiliations.is_empty():
-		return {"kind": "independent", "name": "Independent Operator"}
-
+static func _pick_affiliation_record(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	sector_id: String
+) -> Dictionary:
+	var independent := _independent_affiliation_record(traffic_config)
 	var independent_weight := float(traffic_config.get("independent_weight", 0.30))
-	var corporate: Array = []
-	var independent: Dictionary = {}
 
+	if randf() < independent_weight and not independent.is_empty():
+		return independent
+	return CorporatePresence.pick_corporation(catalog, sector_id)
+
+
+static func _independent_affiliation_record(traffic_config: Dictionary) -> Dictionary:
+	var affiliations: Variant = traffic_config.get("affiliations", [])
+	if typeof(affiliations) != TYPE_ARRAY:
+		return {"kind": "independent", "name": "Independent Operator"}
 	for entry_variant in affiliations:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
-		match str(entry.get("kind", "")):
-			"independent":
-				independent = entry
-			"corporate":
-				corporate.append(entry)
-
-	if randf() < independent_weight and not independent.is_empty():
-		return independent
-	if not corporate.is_empty():
-		return corporate[randi() % corporate.size()]
-	if not independent.is_empty():
-		return independent
+		if str(entry.get("kind", "")) == "independent":
+			return entry
 	return {"kind": "independent", "name": "Independent Operator"}
 
 

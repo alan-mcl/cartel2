@@ -27,6 +27,8 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
+| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`) |
+| `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
@@ -317,12 +319,24 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `role_ship_templates` | object | Template id(s) per role |
 | `callsign_prefixes` | object | Hull template id → registration prefix (`VR-{prefix}-{NNNN}`) |
 | `independent_weight` | number | Fraction of NPC traffic assigned `Independent Operator` (default 0.30) |
-| `affiliations` | array | Operator records: `{ id, kind, name, callsign_prefix? }`. `kind` is `corporate` or `independent`. Corporate `callsign_prefix` is the stock ticker from [corporations.md](../setting/corporations.md) (e.g. `HW`, `SNE`). |
+| `affiliations` | array | Independent operator only (`kind: independent`). Corporate identity lives in `corporations.json`. |
 | `independent_callsigns` | array | Full personal pilot callsigns for independents and New Game defaults |
 | `independent_callsign_prefixes` / `independent_callsign_roots` | array | Optional combinatoric parts (`{Prefix} {Root}`) when both are non-empty |
 | `vanity_ship_names` | array | Hull given names; always assigned to independent operators, never to corporate |
 
-**NPC identity:** corporate ships broadcast `{TICKER}-{NNN}` callsigns (e.g. `HW-447`) and affiliation only — no hull name. Independent ships always receive a name from `vanity_ship_names` and a personal callsign from the independent lists. Player callsign at New Game is pre-filled from `independent_callsigns` but remains editable.
+**NPC identity:** corporate ships broadcast `{TICKER}-{NNN}` callsigns (e.g. `HW-447`) and affiliation only — no hull name. Corporate affiliation is weighted by `corporate_presence.json` for the current sector (`CorporatePresence.pick_corporation`). Independent ships always receive a name from `vanity_ship_names` and a personal callsign from the independent lists. Player callsign at New Game is pre-filled from `independent_callsigns` but remains editable.
+
+### `corporations.json` and `corporate_presence.json`
+
+| Field | File | Description |
+|-------|------|-------------|
+| `id` | corporations | Lowercase snake_case corporation id |
+| `name` | corporations | Display name (transponder affiliation) |
+| `callsign_prefix` | corporations | Stock ticker for `{TICKER}-{NNN}` callsigns |
+| *(sector id)* | corporate_presence | Key matching `sectors.json` |
+| *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
+
+Regenerate the presence matrix after adding a corporation: `python3 scripts/tools/generate_corporate_presence.py` (then hand-tune if needed).
 
 ### `sectors.json` (addition)
 

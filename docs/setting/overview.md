@@ -4,7 +4,7 @@
 
 ## Fantasy
 
-**Cartel** is a corporate-space-trader game set centuries after Earth became uninhabitable. Humanity spreads across **E-type planets** linked by **Unspace** jump routes. Power rests with **sixteen megacorporations** holding sector monopolies — legal industrial giants, financial houses, media empires, and at least one outright criminal syndicate (Hamatomo Triad).
+**Cartel** is a corporate-space-trader game set centuries after Earth became uninhabitable. Humanity spreads across **E-type planets** linked by **Unspace** jump routes. Power rests with dozens of **megacorporations** that dominate product lines and regional markets — legal industrial giants, financial houses, media empires, and criminal syndicates such as the Pacific Triad — while every major corp still maintains at least a foothold on every settled world.
 
 The player is an **independent operator**: trader, mercenary, outlaw, or entrepreneur carving a living between monopolies — moving goods, buying ships, and navigating a galaxy where law, media, and commerce rarely align.
 
@@ -58,7 +58,7 @@ Details: [planets.md](planets.md). Catalog: all eleven worlds as near-orbit sect
 
 ## Megacorporations
 
-Sixteen named corps appear in world data as **economic factions**, not military alliances. Summaries in [corporations.md](corporations.md); full prose for each.
+Megacorporations appear in world data as **economic factions**, not military alliances. Summaries in [corporations.md](corporations.md); full prose for each. Per-planet presence weights are catalogued for traffic and future quests.
 
 Ten corps have lore but had **empty product lists** in the original Java design catalog.
 
