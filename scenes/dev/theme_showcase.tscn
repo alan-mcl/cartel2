@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cartel_theme_showcase"]
+[gd_scene load_steps=9 format=3 uid="uid://cartel_theme_showcase"]
 
 [ext_resource type="Script" path="res://scripts/dev/theme_showcase.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_metric" path="res://scenes/ui/patterns/metric_block.tscn" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_alert" path="res://scenes/ui/patterns/alert_banner.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_toolbar" path="res://scenes/ui/patterns/compact_toolbar.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_data_table" path="res://scenes/ui/patterns/data_table.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="8"]
 
 [node name="ThemeShowcase" type="Control"]
 layout_mode = 3
@@ -409,6 +410,9 @@ metadata/_tab_index = 2
 layout_mode = 2
 theme_type_variation = &"Title"
 text = "Media sample — Sector wire"
+
+[node name="WireTicker" parent="Layout/VBox/Tabs/Media" instance=ExtResource("8")]
+layout_mode = 2
 
 [node name="MediaAlert" parent="Layout/VBox/Tabs/Media" instance=ExtResource("5")]
 layout_mode = 2

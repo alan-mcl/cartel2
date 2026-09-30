@@ -65,7 +65,7 @@ const SLOT_GROUPS := [
 @onready var _config_body: VBoxContainer = $Layout/Body/Split/ConfigColumn/ConfigScroll/ConfigBody
 @onready var _inventory_column = $Layout/Body/Split/InventoryColumn
 @onready var _stock_tabs: TabContainer = $Layout/Body/Split/InventoryColumn/StockTabs
-@onready var _log: Label = $Layout/Footer/FooterBox/Log
+@onready var _log: Control = $Layout/Footer/FooterBox/Log
 
 var _embedded := false
 var _sandbox := false
@@ -176,11 +176,18 @@ func refresh() -> void:
 
 		_credits.text = "Credits: d%d" % _context.session.credits
 
-	_log.text = _context.session.last_log
+	_sync_log()
 	_rebuild_ship_list()
 	_rebuild_ship_detail()
 	_rebuild_stock_tabs()
 	_update_actions()
+
+
+func _sync_log() -> void:
+	var bar := _log as MessageBar
+	if bar == null or _context == null or _context.session == null:
+		return
+	bar.play_line(_context.session.last_log)
 
 
 func handle_back() -> bool:

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cartel_habitat_screen"]
+[gd_scene load_steps=4 format=3 uid="uid://cartel_habitat_screen"]
 
 [ext_resource type="Script" path="res://scripts/ui/habitat_screen.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="3"]
 
 [node name="HabitatScreen" type="Control"]
 layout_mode = 3
@@ -126,11 +127,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Log" type="Label" parent="Layout/Body/Split/Right"]
+[node name="Log" parent="Layout/Body/Split/Right" instance=ExtResource("3")]
 layout_mode = 2
-theme_type_variation = &"Muted"
-autowrap_mode = 3
-text = ""
 
 [node name="Footer" type="HBoxContainer" parent="Layout"]
 layout_mode = 2

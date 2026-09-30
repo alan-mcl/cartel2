@@ -24,6 +24,7 @@ func _init() -> void:
 	TestFlightSandbox.run(runner)
 	TestMotion.run(runner)
 	TestDebris.run(runner)
+	TestMessageBar.run(runner, self)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)

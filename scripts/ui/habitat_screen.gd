@@ -13,7 +13,7 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 @onready var _building_description: Label = $Layout/Body/Split/Right/BuildingHeader/BuildingInfo/BuildingDescription
 @onready var _art_host: VBoxContainer = $Layout/Body/Split/Right/BuildingHeader/ArtHost
 @onready var _content_pane: Control = $Layout/Body/Split/Right/ContentPane
-@onready var _log: Label = $Layout/Body/Split/Right/Log
+@onready var _log: Control = $Layout/Body/Split/Right/Log
 
 var _art_frame: PanelContainer
 var _building_ids: PackedStringArray = PackedStringArray()
@@ -50,7 +50,7 @@ func refresh() -> void:
 	_pilot.text = 'Pilot: "%s"' % _context.session.callsign
 	_update_portrait(_context.session.portrait_path)
 	_credits.text = "Credits: d%d" % _context.session.credits
-	_log.text = _context.session.last_log
+	_sync_log()
 
 	_rebuild_building_list(habitat)
 	_update_building_header(habitat, building)
@@ -102,20 +102,43 @@ func _select_building_at_index(index: int) -> void:
 	if not visited:
 		return
 	_embedded_panel_type = ""
+	if not is_node_ready():
+		call_deferred("_update_building_panels")
+		return
 	_update_building_panels()
 
 
 func _update_building_panels() -> void:
+	if not is_node_ready():
+		return
 	if _context == null or _context.session == null or _context.catalog == null:
 		return
 	var habitat := _context.session.get_current_habitat(_context.catalog)
 	var building := _context.session.get_current_building(_context.catalog)
 	if habitat.is_empty():
 		return
-	_log.text = _context.session.last_log
+	_sync_log()
 	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
 	_update_building_header(habitat, building)
 	_show_building_content(habitat, building)
+
+
+func _sync_log() -> void:
+	var bar := _message_bar()
+	if bar == null or _context == null or _context.session == null:
+		return
+	bar.play_line(_context.session.last_log)
+
+
+func _message_bar() -> MessageBar:
+	if _log == null or not is_instance_valid(_log):
+		return null
+	return _log as MessageBar
+
+
+func _set_log_visible(should_show: bool) -> void:
+	if _log != null:
+		_log.visible = should_show
 
 
 func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:
@@ -150,12 +173,12 @@ func _show_building_content(habitat: Dictionary, building: Dictionary) -> void:
 		_:
 			_pop_stacked_shipyard_if_needed()
 			_clear_embed_panel()
-			_log.visible = true
+			_set_log_visible(true)
 			_show_placeholder_content(building)
 
 
 func _show_embed_panel(building_type: String, building: Dictionary) -> void:
-	_log.visible = building_type != "shipyard"
+	_set_log_visible(building_type != "shipyard")
 
 	var scene_path := BuildingPanelRegistry.embed_scene_path(building_type)
 	if scene_path.is_empty():

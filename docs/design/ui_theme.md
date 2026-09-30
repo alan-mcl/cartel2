@@ -90,6 +90,7 @@ Under `scenes/ui/patterns/` (native Controls only):
 - `metric_block.tscn` — label + numeric value
 - `status_row.tscn` — key / value row
 - `headline_item.tscn` — headline + meta line
+- `message_bar.tscn` — queued log labels (`play_line`, one pass each) or looping wire feed (`set_feed`)
 - `alert_banner.tscn` — compact alert strip
 - `compact_toolbar.tscn` — button row
 - `data_table.tscn` — header grid + ItemList

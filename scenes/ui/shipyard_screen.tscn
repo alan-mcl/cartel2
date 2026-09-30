@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxunnumg4q2q4"]
+[gd_scene load_steps=4 format=3 uid="uid://dxunnumg4q2q4"]
 
 [ext_resource type="Script" uid="uid://36dgr4wqf4h7" path="res://scripts/ui/shipyard_screen.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/components/inventory_drop_target.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="3"]
 
 [node name="ShipyardScreen" type="Control" unique_id=408352300]
 layout_mode = 3
@@ -155,8 +156,6 @@ theme_override_constants/separation = 8
 layout_mode = 2
 text = "Back"
 
-[node name="Log" type="Label" parent="Layout/Footer/FooterBox" unique_id=156358949]
+[node name="Log" parent="Layout/Footer/FooterBox" instance=ExtResource("3")]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"Muted"
-autowrap_mode = 3

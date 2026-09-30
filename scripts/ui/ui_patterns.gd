@@ -4,6 +4,7 @@ extends RefCounted
 const STATUS_ROW := preload("res://scenes/ui/patterns/status_row.tscn")
 const HEADLINE_ITEM := preload("res://scenes/ui/patterns/headline_item.tscn")
 const METRIC_BLOCK := preload("res://scenes/ui/patterns/metric_block.tscn")
+const MESSAGE_BAR := preload("res://scenes/ui/patterns/message_bar.tscn")
 
 
 static func status_row(label_text: String, value_text: String, key_min_width: float = 120.0) -> Control:
@@ -25,3 +26,7 @@ static func metric_block(label_text: String, value_text: String) -> Control:
 	if block.has_method("configure"):
 		block.configure(label_text, value_text)
 	return block
+
+
+static func message_bar() -> MessageBar:
+	return MESSAGE_BAR.instantiate() as MessageBar
