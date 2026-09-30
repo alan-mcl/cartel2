@@ -17,6 +17,7 @@ const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
 const CORPORATIONS_PATH := "res://data/catalog/corporations.json"
 const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
+const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 
@@ -42,6 +43,7 @@ var default_background_id: String = "tester"
 var traffic_config: Dictionary = {}
 var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
+var passenger_missions_config: Dictionary = {}
 
 
 static func load_default() -> Catalog:
@@ -70,6 +72,7 @@ func load_all() -> void:
 	traffic_config = _load_json_object(TRAFFIC_PATH)
 	corporations_by_id = _load_indexed_array(CORPORATIONS_PATH)
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
+	passenger_missions_config = _load_json_object(PASSENGER_MISSIONS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -266,6 +269,18 @@ func list_corporations() -> Array:
 
 func get_corporate_presence() -> Dictionary:
 	return corporate_presence
+
+
+func get_passenger_missions_config() -> Dictionary:
+	return passenger_missions_config
+
+
+func list_habitat_dicts() -> Array:
+	var habitats: Array = habitats_by_id.values()
+	habitats.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return str(left.get("id", "")) < str(right.get("id", ""))
+	)
+	return habitats
 
 
 func get_commodity(id: String) -> Dictionary:

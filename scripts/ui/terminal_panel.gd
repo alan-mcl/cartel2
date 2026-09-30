@@ -1,6 +1,7 @@
 extends GameScreen
 
 const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
+const CHARTER_PANEL := preload("res://scenes/ui/passenger_charter_panel.tscn")
 
 const _TERMINAL_SHIP_DETAIL_OPTS := {
 	"show_name": true,
@@ -26,6 +27,7 @@ var _terminal_ship_ids: PackedStringArray = PackedStringArray()
 var _terminal_ship_item_list: ItemList
 var _suppress_terminal_ship_select: bool = false
 var _show_rename_field: bool = false
+var _view_mode: String = "ships"
 
 
 func refresh() -> void:
@@ -37,12 +39,60 @@ func refresh() -> void:
 
 
 func _build_content() -> void:
+	var outer := VBoxContainer.new()
+	outer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	outer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	outer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	outer.add_theme_constant_override("separation", 8)
+	add_child(outer)
+
+	var tab_row := HBoxContainer.new()
+	tab_row.add_theme_constant_override("separation", 8)
+	outer.add_child(tab_row)
+
+	var ships_tab := Button.new()
+	ships_tab.text = "Ships"
+	ships_tab.disabled = _view_mode == "ships"
+	ships_tab.pressed.connect(func() -> void:
+		_view_mode = "ships"
+		refresh()
+	)
+	tab_row.add_child(ships_tab)
+
+	var departures_tab := Button.new()
+	departures_tab.text = "Departures"
+	departures_tab.disabled = _view_mode == "departures"
+	departures_tab.pressed.connect(func() -> void:
+		_view_mode = "departures"
+		refresh()
+	)
+	tab_row.add_child(departures_tab)
+
+	if _view_mode == "departures":
+		_sync_terminal_ship_selection()
+		var charter_host := Control.new()
+		_fill_remaining_area(charter_host)
+		outer.add_child(charter_host)
+		var charter_panel: Control = CHARTER_PANEL.instantiate()
+		_fill_remaining_area(charter_panel)
+		charter_panel.board_mode = PassengerCharters.BOARD_TERMINAL
+		charter_host.add_child(charter_panel)
+		if charter_panel.has_method("bind"):
+			charter_panel.bind(_context)
+		if charter_panel.has_method("set_ship_resolver"):
+			charter_panel.set_ship_resolver(func() -> String:
+				return _selected_terminal_ship_id
+			)
+		if charter_panel.has_method("refresh"):
+			charter_panel.refresh()
+		return
+
 	var ships := _context.session.ships_at(_context.session.habitat_id)
 
 	var columns := HBoxContainer.new()
-	columns.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_fill_remaining_area(columns)
 	columns.add_theme_constant_override("separation", 12)
-	add_child(columns)
+	outer.add_child(columns)
 
 	var left := VBoxContainer.new()
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -89,10 +139,7 @@ func _build_content() -> void:
 		_terminal_ship_ids.append(ship.id)
 		_terminal_ship_item_list.add_item(ship.name)
 
-	if _selected_terminal_ship_id.is_empty() and not _terminal_ship_ids.is_empty():
-		_selected_terminal_ship_id = _terminal_ship_ids[0]
-	elif not _terminal_ship_ids.has(_selected_terminal_ship_id):
-		_selected_terminal_ship_id = _terminal_ship_ids[0] if not _terminal_ship_ids.is_empty() else ""
+	_sync_terminal_ship_selection()
 
 	_select_item_by_id(
 		_terminal_ship_item_list,
@@ -109,8 +156,28 @@ func _on_terminal_ship_item_selected(index: int) -> void:
 	if index < 0 or index >= _terminal_ship_ids.size():
 		return
 	_selected_terminal_ship_id = _terminal_ship_ids[index]
+	if _context != null:
+		_context.charter_ship_id = _selected_terminal_ship_id
 	_show_rename_field = false
 	_rebuild_terminal_ship_panels()
+
+
+func _sync_terminal_ship_selection() -> void:
+	if _terminal_ship_ids.is_empty():
+		for ship in _context.session.ships_at(_context.session.habitat_id):
+			_terminal_ship_ids.append(ship.id)
+	if _terminal_ship_ids.is_empty():
+		_selected_terminal_ship_id = ""
+		return
+	if _terminal_ship_ids.has(_selected_terminal_ship_id):
+		return
+	var preferred := _context.session.current_ship_id
+	if _terminal_ship_ids.has(preferred):
+		_selected_terminal_ship_id = preferred
+	else:
+		_selected_terminal_ship_id = _terminal_ship_ids[0]
+	if _context != null:
+		_context.charter_ship_id = _selected_terminal_ship_id
 
 
 func _rebuild_terminal_ship_panels() -> void:
@@ -256,6 +323,12 @@ func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
 		if found != null:
 			return found
 	return null
+
+
+func _fill_remaining_area(control: Control) -> void:
+	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	control.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 func _section_label(text: String) -> Label:

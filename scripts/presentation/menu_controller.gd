@@ -115,6 +115,7 @@ func show_main_menu() -> void:
 	_ui_root.configure(
 		_catalog,
 		_main.session,
+		_simulation,
 		_ui_callbacks.get("ship_changed"),
 		_ui_callbacks.get("undock_requested"),
 		_ui_callbacks.get("save_requested"),
@@ -213,6 +214,7 @@ func load_slot(slot_index: int) -> void:
 	_ui_root.configure(
 		_catalog,
 		_main.session,
+		_simulation,
 		_ui_callbacks.get("ship_changed"),
 		_ui_callbacks.get("undock_requested"),
 		_ui_callbacks.get("save_requested"),

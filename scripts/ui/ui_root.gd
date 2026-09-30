@@ -5,6 +5,7 @@ extends CanvasLayer
 
 var catalog: Catalog
 var session: GameSession
+var simulation: Simulation
 var context := UiContext.new()
 
 var on_ship_changed: Callable = Callable()
@@ -21,6 +22,7 @@ func _ready() -> void:
 func configure(
 	p_catalog: Catalog,
 	p_session: GameSession,
+	p_simulation: Simulation,
 	ship_changed: Callable,
 	undock: Callable,
 	save: Callable,
@@ -28,6 +30,7 @@ func configure(
 ) -> void:
 	catalog = p_catalog
 	session = p_session
+	simulation = p_simulation
 	on_ship_changed = ship_changed
 	on_undock_requested = undock
 	on_save_requested = save
@@ -35,6 +38,7 @@ func configure(
 
 	context.catalog = catalog
 	context.session = session
+	context.simulation = p_simulation
 	context.stack = _stack
 	context.on_ship_changed = on_ship_changed
 	context.on_save_requested = on_save_requested
@@ -47,6 +51,7 @@ func open_habitat() -> void:
 		return
 	context.session = session
 	context.catalog = catalog
+	context.simulation = simulation
 	var habitat_screen := preload("res://scenes/ui/habitat_screen.tscn").instantiate()
 	_stack.replace_screen(habitat_screen)
 	habitat_screen.bind(context)

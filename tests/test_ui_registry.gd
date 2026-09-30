@@ -8,7 +8,7 @@ static func run(runner: TestRunner) -> void:
 		"GameScreen global class name"
 	)
 
-	for embed_type in ["terminal", "market", "ship_dealer", "chassis_dealer", "shipyard"]:
+	for embed_type in ["terminal", "market", "ship_dealer", "chassis_dealer", "shipyard", "bar"]:
 		runner.check_eq(
 			BuildingPanelRegistry.mode_for(embed_type),
 			BuildingPanelRegistry.MODE_EMBED,
@@ -27,8 +27,8 @@ static func run(runner: TestRunner) -> void:
 
 	runner.check_eq(
 		BuildingPanelRegistry.mode_for("bar"),
-		BuildingPanelRegistry.MODE_PLACEHOLDER,
-		"bar uses placeholder mode"
+		BuildingPanelRegistry.MODE_EMBED,
+		"bar uses embed mode"
 	)
 	runner.check_eq(
 		BuildingPanelRegistry.mode_for("comms"),

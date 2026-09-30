@@ -123,6 +123,7 @@ func _bind_controllers() -> void:
 	_ui_root.configure(
 		catalog,
 		session,
+		_simulation,
 		_world.on_ui_ship_changed,
 		_world.on_ui_undock_requested,
 		_menu.on_ui_save_requested,

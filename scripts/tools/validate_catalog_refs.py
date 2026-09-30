@@ -416,6 +416,81 @@ def life_support_volume_floor(crew: float, capabilities: list) -> float:
     return floor
 
 
+def check_passenger_missions(doc: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("passenger_missions.json must be an object")
+        return errors
+
+    for key in ("terminal_offers_per_day", "bar_offers_per_day", "base_pay", "friction_pay"):
+        if key not in doc:
+            errors.append(f"passenger_missions.json: missing {key}")
+
+    fraction = doc.get("cancel_penalty_fraction")
+    if fraction is not None and not (0.0 < float(fraction) < 1.0):
+        errors.append("passenger_missions.json: cancel_penalty_fraction must be between 0 and 1")
+
+    allowed_ls = {"spartan", "comfort", "luxury"}
+    allowed_aff = {"civilian", "corporate"}
+    allowed_boards = {"terminal", "bar"}
+    role_ids: set[str] = set()
+    for role in doc.get("roles", []):
+        if not isinstance(role, dict):
+            errors.append("passenger_missions.json: role entry must be object")
+            continue
+        role_id = str(role.get("id", ""))
+        if not role_id:
+            errors.append("passenger_missions.json: role missing id")
+            continue
+        if role_id in role_ids:
+            errors.append(f"passenger_missions.json: duplicate role id '{role_id}'")
+        role_ids.add(role_id)
+        if str(role.get("life_support", "")) not in allowed_ls:
+            errors.append(f"passenger_missions role {role_id}: invalid life_support")
+        if str(role.get("affiliation", "")) not in allowed_aff:
+            errors.append(f"passenger_missions role {role_id}: invalid affiliation")
+        if bool(role.get("requires_player_affiliation", False)):
+            if str(role.get("affiliation", "")) != "corporate":
+                errors.append(
+                    f"passenger_missions role {role_id}: affiliation gate requires corporate"
+                )
+        boards = role.get("boards", ["terminal"])
+        if not isinstance(boards, list) or not boards:
+            errors.append(f"passenger_missions role {role_id}: boards must be a non-empty array")
+        else:
+            for board in boards:
+                if str(board) not in allowed_boards:
+                    errors.append(
+                        f"passenger_missions role {role_id}: invalid board '{board}'"
+                    )
+            if "bar" in [str(b) for b in boards] and str(role.get("affiliation", "")) != "civilian":
+                errors.append(
+                    f"passenger_missions role {role_id}: bar roles must be civilian"
+                )
+
+    for entry in doc.get("descriptions", []):
+        if not isinstance(entry, dict):
+            errors.append("passenger_missions.json: description entry must be object")
+            continue
+        if not str(entry.get("id", "")):
+            errors.append("passenger_missions.json: description missing id")
+        if not str(entry.get("text", "")):
+            errors.append("passenger_missions.json: description missing text")
+        desc_boards = entry.get("boards", [])
+        if not isinstance(desc_boards, list) or not desc_boards:
+            errors.append(
+                f"passenger_missions description {entry.get('id', '?')}: boards required"
+            )
+        else:
+            for board in desc_boards:
+                if str(board) not in allowed_boards:
+                    errors.append(
+                        f"passenger_missions description {entry.get('id', '?')}: invalid board"
+                    )
+
+    return errors
+
+
 def check_corporate_presence(
     sectors: dict[str, dict],
     corporations: dict[str, dict],
@@ -514,9 +589,11 @@ def main() -> int:
     corporations = index_by_id(load_array(CATALOG / "corporations.json"))
     corporate_presence = load_object(CATALOG / "corporate_presence.json")
     traffic = load_object(CATALOG / "traffic.json")
+    passenger_missions = load_object(CATALOG / "passenger_missions.json")
 
     errors: list[str] = []
 
+    errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
     )

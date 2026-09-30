@@ -29,6 +29,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 | `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`) |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
+| `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
@@ -337,6 +338,18 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
 Regenerate the presence matrix after adding a corporation: `python3 scripts/tools/generate_corporate_presence.py` (then hand-tune if needed).
+
+### Passenger charters (`passenger_missions.json`, `MissionSubsystem`)
+
+Daily offers are generated per habitat (terminal board; bar board where a `bar` building exists). Each role and description lists which `boards` it applies to (`terminal` vs `bar`); bar fares use separate smaller-party roles and lower pay multipliers. Destinations are neighboring sectors on `routes.json` (one hop). Pay scales with route `friction`, party size, and role `pay_multiplier`.
+
+| Field | Description |
+|-------|-------------|
+| `roles[]` | Party profile: affiliation, life_support tier, quantity range, pay multiplier, optional affiliation gate |
+| `descriptions[]` | Flavor text templates with `{quantity}`, `{destination}`, `{corporation}` |
+| `cancel_penalty_fraction` | Share of unpaid reward charged when cancelling before undock from origin |
+
+Accepted charters persist under `Simulation` save key `missions` (`accepted`, `offers_by_habitat`, `generated_day`). Completion fires on `SimEvent.DOCKED` at the destination habitat with the contracted ship active. `PlayerAffiliation.is_affiliated` is a stub (always false) until standing exists.
 
 ### `sectors.json` (addition)
 

@@ -11,6 +11,7 @@ const _EMBED_SCENES: Dictionary = {
 	"ship_dealer": preload("res://scenes/ui/dealer_panel.tscn"),
 	"chassis_dealer": preload("res://scenes/ui/dealer_panel.tscn"),
 	"shipyard": preload("res://scenes/ui/shipyard_screen.tscn"),
+	"bar": preload("res://scenes/ui/bar_panel.tscn"),
 }
 
 const _EMBED_TYPES: Array[String] = [
@@ -19,6 +20,7 @@ const _EMBED_TYPES: Array[String] = [
 	"ship_dealer",
 	"chassis_dealer",
 	"shipyard",
+	"bar",
 ]
 
 

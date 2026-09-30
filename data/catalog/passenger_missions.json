@@ -1,0 +1,119 @@
+{
+  "terminal_offers_per_day": 4,
+  "bar_offers_per_day": 2,
+  "base_pay": 120,
+  "friction_pay": 8,
+  "cancel_penalty_fraction": 0.25,
+  "roles": [
+    {
+      "id": "steerage",
+      "title": "Steerage passengers",
+      "boards": ["terminal"],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 4,
+      "quantity_max": 12,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "tourists",
+      "title": "Tourist party",
+      "boards": ["terminal"],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "corporate_staff",
+      "title": "Corporate staff",
+      "boards": ["terminal"],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 3,
+      "quantity_max": 8,
+      "pay_multiplier": 1.5,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "principal",
+      "title": "Corporate principal",
+      "boards": ["terminal"],
+      "affiliation": "corporate",
+      "life_support": "luxury",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 2.4,
+      "requires_player_affiliation": true
+    },
+    {
+      "id": "bar_drifters",
+      "title": "Bar drifters",
+      "boards": ["bar"],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 0.75,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "bar_couple",
+      "title": "Off-duty pair",
+      "boards": ["bar"],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 2,
+      "pay_multiplier": 0.9,
+      "requires_player_affiliation": false
+    }
+  ],
+  "descriptions": [
+    {
+      "id": "quiet_run",
+      "boards": ["terminal"],
+      "text": "{quantity} passengers need a quiet run to {destination}. No fuss, no delays.",
+      "roles": []
+    },
+    {
+      "id": "holiday_booking",
+      "boards": ["terminal"],
+      "text": "Holiday booking: {quantity} tourists headed for {destination}. Keep the cabin presentable.",
+      "roles": ["tourists"]
+    },
+    {
+      "id": "shift_change",
+      "boards": ["terminal"],
+      "text": "Shift change for {corporation}: {quantity} staff to {destination}.",
+      "roles": ["corporate_staff"]
+    },
+    {
+      "id": "executive_discreet",
+      "boards": ["terminal"],
+      "text": "{corporation} requires discreet transport for {quantity} executive(s) to {destination}.",
+      "roles": ["principal"]
+    },
+    {
+      "id": "bar_word",
+      "boards": ["bar"],
+      "text": "Word at the bar: {quantity} travellers will pay cash to reach {destination}.",
+      "roles": []
+    },
+    {
+      "id": "bar_last_call",
+      "boards": ["bar"],
+      "text": "Last-call deal — {quantity} need a lift to {destination} before the lanes get busy.",
+      "roles": ["bar_drifters"]
+    },
+    {
+      "id": "bar_two_stools",
+      "boards": ["bar"],
+      "text": "Two stools down, {quantity} pilots' friends want a hop to {destination}.",
+      "roles": ["bar_couple"]
+    }
+  ]
+}

@@ -33,6 +33,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
 | [commodities.md](commodities.md) | Closed eleven-category trade roster |
 | [trade_network.md](trade_network.md) | Public Unspace route graph, friction, daily markets |
+| [missions.md](missions.md) | Passenger charters and mission intent |
 
 ## Current implementation
 

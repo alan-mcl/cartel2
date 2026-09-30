@@ -143,10 +143,10 @@ Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_t
 
 Successful gameplay mutations publish typed events on `GameSession.events` (`EventBus` + `SimEvent` factories — e.g. `commodity_traded`, `sector_entered`, `docked`). **MenuController** forwards those events to `Simulation.dispatch_event(session, catalog, evt)`, which calls `SimSubsystem.on_event(session, catalog, evt)`. UI still refreshes on the coarse `session.changed` signal; typed events are for simulation subsystems and future mission/faction hooks, not HUD wiring.
 
-`MissionSubsystem` remains a development-only spike (not a content system): its hardcoded
-Proxima→Bela delivery is registered explicitly by tests, never by production `Simulation`,
-and is not auto-accepted on new game. A future mission vertical slice will replace it with
-catalog-backed content and a production subsystem registration.
+`MissionSubsystem` is registered on production `Simulation` and drives daily passenger
+charter offers from `passenger_missions.json` (terminal departures and civilian fares at
+bars). Accepted charters persist in subsystem save data; completion and cancellation are
+handled in gameplay, not UI.
 
 | Context | GST behaviour |
 |---------|---------------|
