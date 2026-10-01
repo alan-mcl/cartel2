@@ -73,13 +73,13 @@ func set_tag(text: String) -> void:
 
 
 ## Queue one log line: enters from the right (or after the previous tail + gap) and scrolls off once.
-func play_line(text: String) -> void:
+func play_line(text: String, allow_repeat: bool = false) -> bool:
 	_bind_nodes()
 	var line := text.strip_edges()
 	if line.is_empty():
-		return
-	if line == _last_enqueued_log:
-		return
+		return false
+	if not allow_repeat and line == _last_enqueued_log:
+		return false
 	_last_enqueued_log = line
 
 	if _mode == DisplayMode.FEED_LOOP:
@@ -94,6 +94,29 @@ func play_line(text: String) -> void:
 	_feed_track.visible = false
 	_resolve_pending_placements()
 	set_process(true)
+	return true
+
+
+## True when another line should be queued so the scroll train extends past the clip's right edge.
+func wants_more_log_lines(extra_lead_px: float = -1.0) -> bool:
+	_bind_nodes()
+	var clip_w := _clip.size.x
+	if clip_w <= 0.0:
+		return false
+	if _log_labels.is_empty():
+		return true
+	var lead := extra_lead_px if extra_lead_px >= 0.0 else clip_w
+	return log_tail_x() < clip_w + lead
+
+
+func log_tail_x() -> float:
+	_bind_nodes()
+	if _log_labels.is_empty():
+		return 0.0
+	var last: Label = _log_labels[_log_labels.size() - 1]
+	if last.has_meta(PENDING_PLACE_META):
+		return _clip.size.x
+	return last.position.x + _label_width(last)
 
 
 func set_feed(items: Array, loop: bool = true) -> void:
@@ -138,8 +161,7 @@ func _resolve_pending_placements() -> void:
 			label.position.x = clip_w
 		else:
 			var prev: Label = _log_labels[i - 1]
-			var tail: float = prev.position.x + _label_width(prev) + LOG_GAP_PX
-			label.position.x = maxf(clip_w, tail)
+			label.position.x = prev.position.x + _label_width(prev) + LOG_GAP_PX
 		label.position.y = 1.0
 
 

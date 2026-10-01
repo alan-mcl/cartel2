@@ -1,5 +1,7 @@
 extends GameScreen
 
+const TAPE_TOP_UP_MAX_TRIES := 12
+
 var _selected_commodity_id: String = ""
 var _market_commodity_ids: PackedStringArray = PackedStringArray()
 var _market_listings: Array[Dictionary] = []
@@ -7,13 +9,71 @@ var _commodity_item_list: ItemList
 var _suppress_commodity_select: bool = false
 var _cargo_ship_id: String = ""
 
+var _listings_host: VBoxContainer
+var _tape_bar: MessageBar
+var _tape_rng := RandomNumberGenerator.new()
+var _tape_started := false
+
+
+func _ready() -> void:
+	var layout := VBoxContainer.new()
+	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_theme_constant_override("separation", 8)
+	add_child(layout)
+
+	_tape_bar = UiPatterns.message_bar()
+	_tape_bar.set_tag("PRICE DATA")
+	layout.add_child(_tape_bar)
+
+	_listings_host = VBoxContainer.new()
+	_listings_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_listings_host.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	layout.add_child(_listings_host)
+
+	_tape_rng.randomize()
+	set_process(false)
+
+
+func _process(_delta: float) -> void:
+	if not _tape_started or not is_inside_tree():
+		return
+	if _context == null or _context.session == null or _context.catalog == null:
+		return
+	_top_up_tape()
+
+
+func _enqueue_tape_line() -> bool:
+	var line := ExchangePriceTape.next_print(_context.session, _context.catalog, _tape_rng)
+	if line.is_empty():
+		return false
+	return _tape_bar.play_line(line, true)
+
+
+func _top_up_tape() -> void:
+	var tries := 0
+	while _tape_bar.wants_more_log_lines() and tries < TAPE_TOP_UP_MAX_TRIES:
+		if not _enqueue_tape_line():
+			break
+		tries += 1
+
 
 func refresh() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
-	_clear_children(self)
+	if not _tape_started:
+		_start_tape()
+	_clear_children(_listings_host)
 	_commodity_item_list = null
 	_build_content()
+
+
+func _start_tape() -> void:
+	_tape_bar.play_line("Today's latest prices:")
+	_tape_started = true
+	set_process(true)
+	_top_up_tape()
 
 
 func _build_content() -> void:
@@ -22,7 +82,7 @@ func _build_content() -> void:
 	if listings.is_empty():
 		var empty := Label.new()
 		empty.text = "No market listings available."
-		add_child(empty)
+		_listings_host.add_child(empty)
 		return
 
 	_market_commodity_ids.clear()
@@ -32,7 +92,7 @@ func _build_content() -> void:
 	split.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	split.custom_minimum_size = Vector2(0, 320)
-	add_child(split)
+	_listings_host.add_child(split)
 
 	var left := VBoxContainer.new()
 	left.custom_minimum_size = Vector2(320, 0)
@@ -206,6 +266,8 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 
 
 func _find_meta_host(meta_name: String) -> VBoxContainer:
+	if _listings_host != null:
+		return _find_meta_host_in(_listings_host, meta_name)
 	return _find_meta_host_in(self, meta_name)
 
 

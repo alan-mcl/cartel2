@@ -28,6 +28,7 @@ func _init() -> void:
 	TestMotion.run(runner)
 	TestDebris.run(runner)
 	TestMessageBar.run(runner, self)
+	TestExchangePriceTape.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)
