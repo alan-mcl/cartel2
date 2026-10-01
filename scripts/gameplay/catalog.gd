@@ -18,6 +18,7 @@ const TRAFFIC_PATH := "res://data/catalog/traffic.json"
 const CORPORATIONS_PATH := "res://data/catalog/corporations.json"
 const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
 const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
+const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 
@@ -44,6 +45,7 @@ var traffic_config: Dictionary = {}
 var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
 var passenger_missions_config: Dictionary = {}
+var freight_missions_config: Dictionary = {}
 
 
 static func load_default() -> Catalog:
@@ -73,6 +75,7 @@ func load_all() -> void:
 	corporations_by_id = _load_indexed_array(CORPORATIONS_PATH)
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
 	passenger_missions_config = _load_json_object(PASSENGER_MISSIONS_PATH)
+	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -273,6 +276,10 @@ func get_corporate_presence() -> Dictionary:
 
 func get_passenger_missions_config() -> Dictionary:
 	return passenger_missions_config
+
+
+func get_freight_missions_config() -> Dictionary:
+	return freight_missions_config
 
 
 func list_habitat_dicts() -> Array:

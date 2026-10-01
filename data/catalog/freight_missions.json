@@ -1,0 +1,915 @@
+{
+  "offers_per_day": 12,
+  "base_pay": 90,
+  "friction_pay": 6,
+  "cancel_penalty_fraction": 0.25,
+  "cargos": [
+    {
+      "id": "freight_food",
+      "title": "Fresh harvest produce",
+      "commodity_id": "food_products",
+      "quantity_min": 1,
+      "quantity_max": 6,
+      "pay_multiplier": 1.15
+    },
+    {
+      "id": "freight_bakery",
+      "title": "Artisan bakery starter",
+      "commodity_id": "food_products",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.25
+    },
+    {
+      "id": "freight_hops",
+      "title": "Fresh harvest hops",
+      "commodity_id": "food_products",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.3,
+      "requires_capabilities": [
+        "refrigerated"
+      ]
+    },
+    {
+      "id": "freight_seed",
+      "title": "Certified seed stock",
+      "commodity_id": "food_products",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.25
+    },
+    {
+      "id": "freight_pharma",
+      "title": "Specialist pharmaceutical lot",
+      "commodity_id": "pharmaceuticals",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.35
+    },
+    {
+      "id": "freight_vaccine",
+      "title": "Cold-chain vaccine shipment",
+      "commodity_id": "pharmaceuticals",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.6,
+      "requires_capabilities": [
+        "refrigerated"
+      ]
+    },
+    {
+      "id": "freight_transplant",
+      "title": "Transplant tissue case",
+      "commodity_id": "pharmaceuticals",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 2.0,
+      "requires_capabilities": [
+        "refrigerated",
+        "biohazard"
+      ]
+    },
+    {
+      "id": "freight_chemicals",
+      "title": "Industrial reagent drums",
+      "commodity_id": "chemicals",
+      "quantity_min": 1,
+      "quantity_max": 6,
+      "pay_multiplier": 1.1
+    },
+    {
+      "id": "freight_reagent",
+      "title": "Catalyst reagent cases",
+      "commodity_id": "chemicals",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.35,
+      "requires_capabilities": [
+        "biohazard"
+      ]
+    },
+    {
+      "id": "freight_data",
+      "title": "Locked archival data",
+      "commodity_id": "data",
+      "quantity_min": 1,
+      "quantity_max": 8,
+      "pay_multiplier": 1.2,
+      "requires_capabilities": [
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_compute",
+      "title": "Compute chassis",
+      "commodity_id": "compute_cores",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.35
+    },
+    {
+      "id": "freight_datacenter",
+      "title": "Live data-center rack",
+      "commodity_id": "compute_cores",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 2.1,
+      "requires_capabilities": [
+        "compute_integrated"
+      ]
+    },
+    {
+      "id": "freight_ai",
+      "title": "Cognition substrate",
+      "commodity_id": "compute_cores",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.8,
+      "requires_capabilities": [
+        "compute_integrated",
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_luxury",
+      "title": "Bonded luxury goods",
+      "commodity_id": "luxury_goods",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.45,
+      "requires_capabilities": [
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_art",
+      "title": "Private collection piece",
+      "commodity_id": "luxury_goods",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 2.0,
+      "requires_capabilities": [
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_wine",
+      "title": "Estate fermentation lot",
+      "commodity_id": "luxury_goods",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.35,
+      "requires_capabilities": [
+        "refrigerated"
+      ]
+    },
+    {
+      "id": "freight_military",
+      "title": "Military equipment case",
+      "commodity_id": "military_goods",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.5,
+      "requires_capabilities": [
+        "military_grade"
+      ]
+    },
+    {
+      "id": "freight_ordnance",
+      "title": "Sealed ordnance container",
+      "commodity_id": "military_goods",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.8,
+      "requires_capabilities": [
+        "military_grade",
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_uniforms",
+      "title": "Regimental stores",
+      "commodity_id": "military_goods",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.25,
+      "requires_capabilities": [
+        "military_grade"
+      ]
+    },
+    {
+      "id": "freight_consumer",
+      "title": "Replacement appliance lot",
+      "commodity_id": "consumer_goods",
+      "quantity_min": 1,
+      "quantity_max": 8,
+      "pay_multiplier": 1.0
+    },
+    {
+      "id": "freight_fashion",
+      "title": "Seasonal fashion cases",
+      "commodity_id": "consumer_goods",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.25,
+      "requires_capabilities": [
+        "secure_cargo"
+      ]
+    },
+    {
+      "id": "freight_industrial",
+      "title": "Precision industrial components",
+      "commodity_id": "industrial_components",
+      "quantity_min": 1,
+      "quantity_max": 6,
+      "pay_multiplier": 1.15
+    },
+    {
+      "id": "freight_machine",
+      "title": "Factory calibration assembly",
+      "commodity_id": "industrial_components",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 1.5
+    },
+    {
+      "id": "freight_superconductor",
+      "title": "Superconducting assembly",
+      "commodity_id": "industrial_components",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.7,
+      "requires_capabilities": [
+        "refrigerated"
+      ]
+    },
+    {
+      "id": "livestock",
+      "title": "Breeding livestock",
+      "mass_per_unit": 0.8,
+      "requires_capabilities": [
+        "life_support_integrated"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.6,
+      "life_support_per_unit": 1
+    },
+    {
+      "id": "livestock_race",
+      "title": "Race animals",
+      "mass_per_unit": 0.8,
+      "requires_capabilities": [
+        "life_support_integrated",
+        "secure_cargo"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 2.1,
+      "life_support_per_unit": 1
+    },
+    {
+      "id": "aquaculture",
+      "title": "Live broodstock",
+      "mass_per_unit": 0.4,
+      "requires_capabilities": [
+        "life_support_integrated"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.8,
+      "life_support_per_unit": 0.8
+    },
+    {
+      "id": "culture_vault",
+      "title": "Living culture collection",
+      "mass_per_unit": 0.2,
+      "requires_capabilities": [
+        "biohazard"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.7,
+      "power_per_unit": 0.8
+    },
+    {
+      "id": "organics",
+      "title": "Engineered biological samples",
+      "mass_per_unit": 0.2,
+      "requires_capabilities": [
+        "biohazard",
+        "refrigerated"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 2.0,
+      "power_per_unit": 0.6
+    },
+    {
+      "id": "cognition_crate",
+      "title": "Cognition crate",
+      "mass_per_unit": 0.25,
+      "requires_capabilities": [
+        "compute_integrated"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.8,
+      "compute_per_unit": 2.5
+    },
+    {
+      "id": "secure_archive",
+      "title": "Sealed institutional archive",
+      "mass_per_unit": 0.3,
+      "requires_capabilities": [
+        "secure_cargo"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.55
+    },
+    {
+      "id": "prototype",
+      "title": "One-off prototype",
+      "mass_per_unit": 0.5,
+      "requires_capabilities": [
+        "secure_cargo"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 2.2
+    },
+    {
+      "id": "museum",
+      "title": "Museum object under seal",
+      "mass_per_unit": 0.5,
+      "requires_capabilities": [
+        "secure_cargo"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 2.0
+    },
+    {
+      "id": "culture_locker",
+      "title": "Culture locker",
+      "mass_per_unit": 0.3,
+      "requires_capabilities": [
+        "biohazard"
+      ],
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.7,
+      "power_per_unit": 0.8
+    }
+  ],
+  "descriptions": [
+    {
+      "id": "food_market",
+      "cargos": [
+        "freight_food"
+      ],
+      "text": "{quantity} cases of just-picked orchard fruit for the market at {destination}."
+    },
+    {
+      "id": "food_mushrooms",
+      "cargos": [
+        "freight_food"
+      ],
+      "text": "{quantity} insulated crates of fresh cultivated mushrooms for {destination}."
+    },
+    {
+      "id": "food_cheese",
+      "cargos": [
+        "freight_food"
+      ],
+      "text": "{quantity} wheels of mountain cheese, sealed at the creamery for {destination}."
+    },
+    {
+      "id": "food_spice",
+      "cargos": [
+        "freight_food"
+      ],
+      "text": "{quantity} cases of this season's saffron harvest for a restaurant consortium at {destination}."
+    },
+    {
+      "id": "food_fish",
+      "cargos": [
+        "freight_food"
+      ],
+      "text": "{quantity} cases of line-caught reef fish landed this morning for {destination}."
+    },
+    {
+      "id": "bakery_yeast",
+      "cargos": [
+        "freight_bakery"
+      ],
+      "text": "{quantity} cases of a proprietary bakery starter culture for the ovens at {destination}."
+    },
+    {
+      "id": "bakery_flour",
+      "cargos": [
+        "freight_bakery"
+      ],
+      "text": "{quantity} sacks of a miller's first-run flour, contracted for a festival bakery at {destination}."
+    },
+    {
+      "id": "hops_fresh",
+      "cargos": [
+        "freight_hops"
+      ],
+      "text": "{quantity} bales of fresh harvest hops, picked yesterday and urgently wanted by a brewer at {destination}."
+    },
+    {
+      "id": "hops_brewer",
+      "cargos": [
+        "freight_hops"
+      ],
+      "text": "{quantity} crates of this year's experimental hop cultivar for the brewhouse at {destination}."
+    },
+    {
+      "id": "seed_heirloom",
+      "cargos": [
+        "freight_seed"
+      ],
+      "text": "{quantity} sealed cases of heirloom seed stock for a reclamation farm at {destination}."
+    },
+    {
+      "id": "seed_orchard",
+      "cargos": [
+        "freight_seed"
+      ],
+      "text": "{quantity} certified orchard cuttings and seed lots for {destination}."
+    },
+    {
+      "id": "pharma_orphan",
+      "cargos": [
+        "freight_pharma"
+      ],
+      "text": "{quantity} treatment courses for an orphan-disease clinic at {destination}."
+    },
+    {
+      "id": "pharma_antivenom",
+      "cargos": [
+        "freight_pharma"
+      ],
+      "text": "{quantity} cases of antivenom reserved for the emergency service at {destination}."
+    },
+    {
+      "id": "pharma_dental",
+      "cargos": [
+        "freight_pharma"
+      ],
+      "text": "{quantity} cases of specialist dental compounds for a clinic network at {destination}."
+    },
+    {
+      "id": "vaccine_outbreak",
+      "cargos": [
+        "freight_vaccine"
+      ],
+      "text": "{quantity} cold-chain vaccine cases for a public-health campaign at {destination}."
+    },
+    {
+      "id": "vaccine_veterinary",
+      "cargos": [
+        "freight_vaccine"
+      ],
+      "text": "{quantity} veterinary vaccine consignments for the livestock authority at {destination}."
+    },
+    {
+      "id": "transplant_kidney",
+      "cargos": [
+        "freight_transplant"
+      ],
+      "text": "{quantity} transplant tissue cases for the surgical center at {destination}; arrival window is strict."
+    },
+    {
+      "id": "transplant_cornea",
+      "cargos": [
+        "freight_transplant"
+      ],
+      "text": "{quantity} corneal graft cases for the eye hospital at {destination}."
+    },
+    {
+      "id": "chem_catalyst",
+      "cargos": [
+        "freight_chemicals"
+      ],
+      "text": "{quantity} drums of catalyst precursor for the refinery at {destination}."
+    },
+    {
+      "id": "chem_solvent",
+      "cargos": [
+        "freight_chemicals"
+      ],
+      "text": "{quantity} sealed drums of a specialty solvent needed for a production run at {destination}."
+    },
+    {
+      "id": "chem_dye",
+      "cargos": [
+        "freight_chemicals"
+      ],
+      "text": "{quantity} cases of custom dye intermediates for the textile works at {destination}."
+    },
+    {
+      "id": "reagent_lab",
+      "cargos": [
+        "freight_reagent"
+      ],
+      "text": "{quantity} reagent cases for a synthesis laboratory at {destination}."
+    },
+    {
+      "id": "reagent_biofoundry",
+      "cargos": [
+        "freight_reagent"
+      ],
+      "text": "{quantity} sealed enzyme reagent cases for the biofoundry at {destination}."
+    },
+    {
+      "id": "data_legal",
+      "cargos": [
+        "freight_data"
+      ],
+      "text": "{quantity} sealed evidence archives for counsel at {destination}."
+    },
+    {
+      "id": "data_corporate",
+      "cargos": [
+        "freight_data"
+      ],
+      "text": "{quantity} encrypted corporate archive cases for an audit team at {destination}."
+    },
+    {
+      "id": "data_family",
+      "cargos": [
+        "freight_data"
+      ],
+      "text": "{quantity} private family archive vaults entrusted to a registrar at {destination}."
+    },
+    {
+      "id": "compute_rack",
+      "cargos": [
+        "freight_compute"
+      ],
+      "text": "{quantity} compute chassis for the new machine room at {destination}."
+    },
+    {
+      "id": "compute_simulation",
+      "cargos": [
+        "freight_compute"
+      ],
+      "text": "{quantity} accelerator assemblies for a weather simulation center at {destination}."
+    },
+    {
+      "id": "datacenter_live",
+      "cargos": [
+        "freight_datacenter"
+      ],
+      "text": "{quantity} live data-center rack(s) migrating between facilities; keep them powered to {destination}."
+    },
+    {
+      "id": "datacenter_exchange",
+      "cargos": [
+        "freight_datacenter"
+      ],
+      "text": "{quantity} active exchange rack(s) for a new interplanetary communications node at {destination}."
+    },
+    {
+      "id": "ai_training",
+      "cargos": [
+        "freight_ai"
+      ],
+      "text": "{quantity} cognition substrate units for a training cluster at {destination}; continuous power required."
+    },
+    {
+      "id": "ai_inference",
+      "cargos": [
+        "freight_ai"
+      ],
+      "text": "{quantity} sealed inference modules for a medical AI installation at {destination}."
+    },
+    {
+      "id": "luxury_jewels",
+      "cargos": [
+        "freight_luxury"
+      ],
+      "text": "{quantity} bonded cases of commissioned jewelry for clients at {destination}."
+    },
+    {
+      "id": "luxury_perfume",
+      "cargos": [
+        "freight_luxury"
+      ],
+      "text": "{quantity} cases of a limited perfume distillation, sold out before it left the source world."
+    },
+    {
+      "id": "luxury_watch",
+      "cargos": [
+        "freight_luxury"
+      ],
+      "text": "{quantity} bonded cases of precision timepieces for a collector's house at {destination}."
+    },
+    {
+      "id": "art_painting",
+      "cargos": [
+        "freight_art"
+      ],
+      "text": "{quantity} sealed collection piece(s) being reunited with their owner at {destination}."
+    },
+    {
+      "id": "art_sculpture",
+      "cargos": [
+        "freight_art"
+      ],
+      "text": "{quantity} museum sculpture crate(s) for a private exhibition at {destination}."
+    },
+    {
+      "id": "wine_estate",
+      "cargos": [
+        "freight_wine"
+      ],
+      "text": "{quantity} cases from a single estate's first vintage in twenty years, bound for {destination}."
+    },
+    {
+      "id": "wine_fermentation",
+      "cargos": [
+        "freight_wine"
+      ],
+      "text": "{quantity} active fermentation containers from the experimental winery at {destination}."
+    },
+    {
+      "id": "military_sensor",
+      "cargos": [
+        "freight_military"
+      ],
+      "text": "{quantity} sealed reconnaissance sensor cases for a unit at {destination}."
+    },
+    {
+      "id": "military_medical",
+      "cargos": [
+        "freight_military"
+      ],
+      "text": "{quantity} field surgical kits for the expeditionary hospital at {destination}."
+    },
+    {
+      "id": "military_spares",
+      "cargos": [
+        "freight_military"
+      ],
+      "text": "{quantity} sealed vehicle spares urgently requested by the garrison at {destination}."
+    },
+    {
+      "id": "ordnance_small",
+      "cargos": [
+        "freight_ordnance"
+      ],
+      "text": "{quantity} sealed ordnance containers under military seal for {destination}."
+    },
+    {
+      "id": "ordnance_demo",
+      "cargos": [
+        "freight_ordnance"
+      ],
+      "text": "{quantity} controlled demolition charges for a sanctioned engineering operation at {destination}."
+    },
+    {
+      "id": "uniforms",
+      "cargos": [
+        "freight_uniforms"
+      ],
+      "text": "{quantity} cases of ceremonial uniforms needed before the parade at {destination}."
+    },
+    {
+      "id": "uniforms_field",
+      "cargos": [
+        "freight_uniforms"
+      ],
+      "text": "{quantity} cases of replacement field clothing for personnel at {destination}."
+    },
+    {
+      "id": "consumer_heater",
+      "cargos": [
+        "freight_consumer"
+      ],
+      "text": "{quantity} replacement household heat pumps for a housing block at {destination}."
+    },
+    {
+      "id": "consumer_tools",
+      "cargos": [
+        "freight_consumer"
+      ],
+      "text": "{quantity} cases of hand tools ordered by a remote settlement cooperative at {destination}."
+    },
+    {
+      "id": "consumer_festival",
+      "cargos": [
+        "freight_consumer"
+      ],
+      "text": "{quantity} cases of festival merchandise that missed the regular freighter at {destination}."
+    },
+    {
+      "id": "fashion_runway",
+      "cargos": [
+        "freight_fashion"
+      ],
+      "text": "{quantity} garment cases for a designer's opening night at {destination}."
+    },
+    {
+      "id": "fashion_uniform",
+      "cargos": [
+        "freight_fashion"
+      ],
+      "text": "{quantity} bespoke uniform cases for staff at a luxury resort on {destination}."
+    },
+    {
+      "id": "industrial_valves",
+      "cargos": [
+        "freight_industrial"
+      ],
+      "text": "{quantity} precision valve crates for a maintenance shutdown at {destination}."
+    },
+    {
+      "id": "industrial_bearings",
+      "cargos": [
+        "freight_industrial"
+      ],
+      "text": "{quantity} matched bearing sets for a turbine overhaul at {destination}."
+    },
+    {
+      "id": "industrial_robot",
+      "cargos": [
+        "freight_machine"
+      ],
+      "text": "{quantity} factory calibration assembly(ies) for a production line at {destination}."
+    },
+    {
+      "id": "industrial_sensor",
+      "cargos": [
+        "freight_machine"
+      ],
+      "text": "{quantity} calibrated machine-tool heads for the plant at {destination}."
+    },
+    {
+      "id": "superconductor_lab",
+      "cargos": [
+        "freight_superconductor"
+      ],
+      "text": "{quantity} superconducting assemblies for a fusion laboratory at {destination}."
+    },
+    {
+      "id": "superconductor_magnet",
+      "cargos": [
+        "freight_superconductor"
+      ],
+      "text": "{quantity} precision superconducting magnet modules for the collider at {destination}."
+    },
+    {
+      "id": "horses",
+      "cargos": [
+        "livestock"
+      ],
+      "text": "{quantity} stud horses, papers in order, for the breeding stables at {destination}."
+    },
+    {
+      "id": "ewes",
+      "cargos": [
+        "livestock"
+      ],
+      "text": "{quantity} breeding ewes; they need air throughout the hop to {destination}."
+    },
+    {
+      "id": "alpacas",
+      "cargos": [
+        "livestock"
+      ],
+      "text": "{quantity} registered alpacas for a new bloodline at {destination}."
+    },
+    {
+      "id": "race_animals",
+      "cargos": [
+        "livestock_race"
+      ],
+      "text": "{quantity} race animals traveling ahead of the circuit event at {destination}."
+    },
+    {
+      "id": "show_animals",
+      "cargos": [
+        "livestock_race"
+      ],
+      "text": "{quantity} prize breeding animals for the agricultural exhibition at {destination}."
+    },
+    {
+      "id": "broodstock",
+      "cargos": [
+        "aquaculture"
+      ],
+      "text": "{quantity} live broodstock from a closed-cycle fishery for {destination}."
+    },
+    {
+      "id": "coral",
+      "cargos": [
+        "aquaculture"
+      ],
+      "text": "{quantity} live reef specimens for restoration work at {destination}."
+    },
+    {
+      "id": "culture_vial",
+      "cargos": [
+        "culture_vault"
+      ],
+      "text": "{quantity} live culture lockers for the biofoundry at {destination}."
+    },
+    {
+      "id": "culture_seed",
+      "cargos": [
+        "culture_vault"
+      ],
+      "text": "{quantity} microbial seed collections for the fermentation works at {destination}."
+    },
+    {
+      "id": "organ_sample",
+      "cargos": [
+        "organics"
+      ],
+      "text": "{quantity} engineered tissue sample cases for the research hospital at {destination}."
+    },
+    {
+      "id": "gene_bank",
+      "cargos": [
+        "organics"
+      ],
+      "text": "{quantity} cryopreserved biological sample cases for the gene bank at {destination}."
+    },
+    {
+      "id": "cognition_shard",
+      "cargos": [
+        "cognition_crate"
+      ],
+      "text": "{quantity} cognition crate(s) — keep the vault powered all the way to {destination}."
+    },
+    {
+      "id": "cognition_archive",
+      "cargos": [
+        "cognition_crate"
+      ],
+      "text": "{quantity} sealed cognition archive crates for the laboratory at {destination}."
+    },
+    {
+      "id": "archive_court",
+      "cargos": [
+        "secure_archive"
+      ],
+      "text": "{quantity} sealed court archive cases for the registrar at {destination}."
+    },
+    {
+      "id": "archive_foundation",
+      "cargos": [
+        "secure_archive"
+      ],
+      "text": "{quantity} institutional archive cases being returned to the foundation at {destination}."
+    },
+    {
+      "id": "archive_family",
+      "cargos": [
+        "secure_archive"
+      ],
+      "text": "{quantity} private estate records under seal for a family office at {destination}."
+    },
+    {
+      "id": "prototype_engine",
+      "cargos": [
+        "prototype"
+      ],
+      "text": "{quantity} one-off propulsion prototype(s) for the test facility at {destination}; client requests no questions."
+    },
+    {
+      "id": "prototype_medical",
+      "cargos": [
+        "prototype"
+      ],
+      "text": "{quantity} experimental medical device prototype(s) for evaluation at {destination}."
+    },
+    {
+      "id": "prototype_robot",
+      "cargos": [
+        "prototype"
+      ],
+      "text": "{quantity} prototype industrial manipulators for a closed demonstration at {destination}."
+    },
+    {
+      "id": "museum_relic",
+      "cargos": [
+        "museum"
+      ],
+      "text": "{quantity} museum object(s) under seal, transferred between curators at {destination}."
+    },
+    {
+      "id": "museum_heritage",
+      "cargos": [
+        "museum"
+      ],
+      "text": "{quantity} heritage artifacts returning from conservation to the collection at {destination}."
+    }
+  ]
+}

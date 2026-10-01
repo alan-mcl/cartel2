@@ -30,6 +30,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`) |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
+| `freight_missions.json` | object | Freight charter cargos, descriptions, and pay tuning |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
@@ -353,6 +354,10 @@ Daily offers are generated per habitat (terminal board; bar board where a `bar` 
 | `cancel_penalty_fraction` | Share of unpaid reward charged when cancelling before undock from origin |
 
 Accepted charters persist under `Simulation` save key `missions` (`accepted`, `offers_by_habitat`, `generated_day`). Completion fires on `SimEvent.DOCKED` at the destination habitat with the contracted ship active. `PlayerAffiliation.is_affiliated` is a stub (always false) until standing exists.
+
+### Freight charters (`freight_missions.json`, `MissionSubsystem`)
+
+Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Offers reference a cargo profile (`cargos[]`) and a formatted blurb from `descriptions[]`. Commodity-linked cargos inherit mass and `requires_capabilities` from `commodities.json` and must not set extra seat/compute/power rates. Special cargos supply `mass_per_unit`, hold flags, and optional `life_support_per_unit`, `compute_per_unit`, or `power_per_unit`. Accepting reserves tonnes (and budgets) without writing `OwnedShip.cargo`. Save version **3** adds freight fields; v2 saves migrate with empty freight state.
 
 ### `sectors.json` (addition)
 

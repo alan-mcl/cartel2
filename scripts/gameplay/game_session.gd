@@ -661,7 +661,7 @@ func rename_ship(ship_id: String, new_name: String) -> bool:
 	return true
 
 
-func undock(catalog: Catalog, ship_id: String) -> bool:
+func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null) -> bool:
 	if not world.docked:
 		return false
 
@@ -669,7 +669,22 @@ func undock(catalog: Catalog, ship_id: String) -> bool:
 	if ship == null or ship.location != world.habitat_id:
 		return false
 
-	var blockers := ShipAssembly.undock_blockers(catalog, ship)
+	var occupant_count := 1
+	var freight_power := 0.0
+	var freight_compute := 0.0
+	if missions != null:
+		occupant_count = missions.launch_occupant_count(ship_id)
+		var reserves := missions.committed_freight_reserves_for_ship(ship_id)
+		freight_power = float(reserves.get("power", 0.0))
+		freight_compute = float(reserves.get("compute", 0.0))
+
+	var blockers := ShipAssembly.undock_blockers(
+		catalog,
+		ship,
+		occupant_count,
+		freight_power,
+		freight_compute
+	)
 	if not blockers.is_empty():
 		return fail_action(blockers[0])
 

@@ -309,7 +309,7 @@ static func _test_cancel_after_undock_fails(runner: TestRunner, catalog: Catalog
 		"missions: accept for undock cancel test"
 	)
 	var charter_id := str(missions.list_accepted()[0].get("charter_id", ""))
-	runner.check(session.undock(catalog, ship.id), "missions: undock leaves origin")
+	runner.check(session.undock(catalog, ship.id, missions), "missions: undock leaves origin")
 	runner.check(
 		not missions.cancel_charter(session, catalog, charter_id),
 		"missions: cancel blocked after departure"
@@ -339,7 +339,7 @@ static func _test_dock_completion_pays(runner: TestRunner, catalog: Catalog) -> 
 	)
 	var reward := int(picked.get("reward", 0))
 	var credits_before := session.credits
-	runner.check(session.undock(catalog, ship.id), "missions: launch for delivery")
+	runner.check(session.undock(catalog, ship.id, missions), "missions: launch for delivery")
 	runner.check(session.enter_sector(catalog, "bela", false), "missions: travel to bela")
 	runner.check(session.dock(catalog, "bela_orbital_habitat"), "missions: dock at destination")
 	runner.check(missions.list_accepted().is_empty(), "missions: charter completes on dock")

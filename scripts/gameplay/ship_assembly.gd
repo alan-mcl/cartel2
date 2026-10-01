@@ -53,7 +53,13 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
 
-static func undock_blockers(catalog: Catalog, owned: OwnedShip, occupant_count: int = 1) -> PackedStringArray:
+static func undock_blockers(
+	catalog: Catalog,
+	owned: OwnedShip,
+	occupant_count: int = 1,
+	freight_power_mw: float = 0.0,
+	freight_compute_cu: float = 0.0
+) -> PackedStringArray:
 	var blockers: PackedStringArray = PackedStringArray()
 	if owned == null:
 		blockers.append("No ship selected.")
@@ -102,6 +108,18 @@ static func undock_blockers(catalog: Catalog, owned: OwnedShip, occupant_count: 
 		)
 	elif not owned.transponder_enabled:
 		blockers.append("Transponder is deactivated.")
+
+	if freight_compute_cu > 0.0:
+		if launch_state.compute_demand + freight_compute_cu > launch_state.compute_capacity + 0.001:
+			blockers.append(
+				"Not enough compute for freight load — upgrade ship systems at the Shipyard."
+			)
+
+	if freight_power_mw > 0.0:
+		if launch_state.power_requested + freight_power_mw > launch_state.power_available + 0.001:
+			blockers.append(
+				"Not enough power for freight load — upgrade ship systems at the Shipyard."
+			)
 
 	return blockers
 

@@ -235,7 +235,8 @@ func on_ui_undock_requested(ship_id: String) -> void:
 	if ship_id.is_empty() or not _main.session.docked:
 		return
 
-	if not _main.session.undock(_catalog, ship_id):
+	var missions := _simulation.get_subsystem("missions") as MissionSubsystem
+	if not _main.session.undock(_catalog, ship_id, missions):
 		return
 
 	_main.player_ship = assemble_current_ship()

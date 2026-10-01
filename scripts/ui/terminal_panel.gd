@@ -2,6 +2,7 @@ extends GameScreen
 
 const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
 const CHARTER_PANEL := preload("res://scenes/ui/passenger_charter_panel.tscn")
+const FREIGHT_PANEL := preload("res://scenes/ui/freight_charter_panel.tscn")
 
 const _TERMINAL_SHIP_DETAIL_OPTS := {
 	"show_name": true,
@@ -67,6 +68,33 @@ func _build_content() -> void:
 		refresh()
 	)
 	tab_row.add_child(departures_tab)
+
+	var freight_tab := Button.new()
+	freight_tab.text = "Freight Charters"
+	freight_tab.disabled = _view_mode == "freight"
+	freight_tab.pressed.connect(func() -> void:
+		_view_mode = "freight"
+		refresh()
+	)
+	tab_row.add_child(freight_tab)
+
+	if _view_mode == "freight":
+		_sync_terminal_ship_selection()
+		var freight_host := Control.new()
+		_fill_remaining_area(freight_host)
+		outer.add_child(freight_host)
+		var freight_panel: Control = FREIGHT_PANEL.instantiate()
+		_fill_remaining_area(freight_panel)
+		freight_host.add_child(freight_panel)
+		if freight_panel.has_method("bind"):
+			freight_panel.bind(_context)
+		if freight_panel.has_method("set_ship_resolver"):
+			freight_panel.set_ship_resolver(func() -> String:
+				return _selected_terminal_ship_id
+			)
+		if freight_panel.has_method("refresh"):
+			freight_panel.refresh()
+		return
 
 	if _view_mode == "departures":
 		_sync_terminal_ship_selection()
@@ -249,7 +277,23 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 
 	admin.add_child(_section_label("LAUNCH STATUS"))
 
-	var blockers := ShipAssembly.undock_blockers(_context.catalog, ship)
+	var occupant_count := 1
+	var freight_power := 0.0
+	var freight_compute := 0.0
+	if _context.simulation != null:
+		var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
+		if missions != null:
+			occupant_count = missions.launch_occupant_count(ship.id)
+			var reserves := missions.committed_freight_reserves_for_ship(ship.id)
+			freight_power = float(reserves.get("power", 0.0))
+			freight_compute = float(reserves.get("compute", 0.0))
+	var blockers := ShipAssembly.undock_blockers(
+		_context.catalog,
+		ship,
+		occupant_count,
+		freight_power,
+		freight_compute
+	)
 	if blockers.is_empty():
 		var cleared := Label.new()
 		cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

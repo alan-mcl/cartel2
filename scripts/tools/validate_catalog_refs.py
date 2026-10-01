@@ -546,6 +546,93 @@ def check_passenger_missions(doc: object) -> list[str]:
     return errors
 
 
+def check_freight_missions(doc: object, commodities: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("freight_missions.json must be an object")
+        return errors
+
+    for key in ("offers_per_day", "base_pay", "friction_pay", "cancel_penalty_fraction"):
+        if key not in doc:
+            errors.append(f"freight_missions.json: missing {key}")
+
+    fraction = doc.get("cancel_penalty_fraction")
+    if fraction is not None and not (0.0 < float(fraction) < 1.0):
+        errors.append("freight_missions.json: cancel_penalty_fraction must be between 0 and 1")
+
+    cargo_ids: set[str] = set()
+    for cargo in doc.get("cargos", []):
+        if not isinstance(cargo, dict):
+            errors.append("freight_missions.json: cargo entry must be object")
+            continue
+        cargo_id = str(cargo.get("id", ""))
+        if not cargo_id:
+            errors.append("freight_missions.json: cargo missing id")
+            continue
+        if cargo_id in cargo_ids:
+            errors.append(f"freight_missions.json: duplicate cargo id '{cargo_id}'")
+        cargo_ids.add(cargo_id)
+
+        qty_min = int(cargo.get("quantity_min", 0))
+        qty_max = int(cargo.get("quantity_max", qty_min))
+        if qty_min <= 0 or qty_max < qty_min:
+            errors.append(f"freight_missions cargo {cargo_id}: invalid quantity range")
+
+        commodity_id = str(cargo.get("commodity_id", ""))
+        if commodity_id:
+            if commodity_id not in commodities:
+                errors.append(f"freight_missions cargo {cargo_id}: unknown commodity '{commodity_id}'")
+            for rate_key in ("life_support_per_unit", "compute_per_unit", "power_per_unit"):
+                rate = float(cargo.get(rate_key, 0.0) or 0.0)
+                if rate > 0.0:
+                    errors.append(
+                        f"freight_missions cargo {cargo_id}: {rate_key} must be zero when commodity_id is set"
+                    )
+        else:
+            mass = float(cargo.get("mass_per_unit", 0.0) or 0.0)
+            if mass <= 0.0:
+                errors.append(f"freight_missions cargo {cargo_id}: mass_per_unit required without commodity_id")
+
+        for rate_key in ("life_support_per_unit", "compute_per_unit", "power_per_unit"):
+            rate = cargo.get(rate_key)
+            if rate is not None and float(rate) < 0.0:
+                errors.append(f"freight_missions cargo {cargo_id}: {rate_key} must be non-negative")
+
+        caps = cargo.get("requires_capabilities", [])
+        if caps is not None:
+            if not isinstance(caps, list):
+                errors.append(f"freight_missions cargo {cargo_id}: requires_capabilities must be array")
+            else:
+                for cap_id in caps:
+                    if str(cap_id) not in CARGO_CAPABILITY_FLAGS:
+                        errors.append(
+                            f"freight_missions cargo {cargo_id}: invalid capability '{cap_id}'"
+                        )
+
+    for entry in doc.get("descriptions", []):
+        if not isinstance(entry, dict):
+            errors.append("freight_missions.json: description entry must be object")
+            continue
+        if not str(entry.get("id", "")):
+            errors.append("freight_missions.json: description missing id")
+        if not str(entry.get("text", "")):
+            errors.append("freight_missions.json: description missing text")
+        allowed = entry.get("cargos", [])
+        if not isinstance(allowed, list) or not allowed:
+            errors.append(
+                f"freight_missions description {entry.get('id', '?')}: cargos required"
+            )
+        else:
+            for ref in allowed:
+                ref_id = str(ref)
+                if ref_id not in cargo_ids:
+                    errors.append(
+                        f"freight_missions description {entry.get('id', '?')}: unknown cargo '{ref_id}'"
+                    )
+
+    return errors
+
+
 def check_corporate_presence(
     sectors: dict[str, dict],
     corporations: dict[str, dict],
@@ -645,12 +732,15 @@ def main() -> int:
     corporate_presence = load_object(CATALOG / "corporate_presence.json")
     traffic = load_object(CATALOG / "traffic.json")
     passenger_missions = load_object(CATALOG / "passenger_missions.json")
+    freight_missions = load_object(CATALOG / "freight_missions.json")
     commodities = load_array(CATALOG / "commodities.json")
+    commodities_by_id = index_by_id(commodities)
 
     errors: list[str] = []
 
     errors.extend(check_commodities(commodities))
     errors.extend(check_passenger_missions(passenger_missions))
+    errors.extend(check_freight_missions(freight_missions, commodities_by_id))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
     )

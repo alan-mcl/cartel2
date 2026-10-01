@@ -17,6 +17,7 @@ func _init() -> void:
 	TestSimulation.run(runner)
 	TestEvents.run(runner)
 	TestMissions.run(runner)
+	TestFreight.run(runner)
 	TestTraffic.run(runner)
 	TestCorporatePresence.run(runner)
 	TestShipSim.run(runner)
