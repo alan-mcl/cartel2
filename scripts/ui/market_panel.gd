@@ -135,12 +135,23 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		detail.add_child(UiPatterns.status_row("Ship cargo", str(cargo_qty)))
 		detail.add_child(UiPatterns.status_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
 
+	var hold_req := CargoRequirements.commodity_requirement_phrase(commodity)
+	if not hold_req.is_empty():
+		detail.add_child(UiPatterns.status_row("Hold requires", hold_req))
+
 	var actions := HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 8)
 	detail.add_child(actions)
 
 	var buy := Button.new()
 	buy.text = "Buy 1"
+	if cargo_ship != null:
+		buy.disabled = not _context.session.cargo_carry_block_reason(
+			_context.catalog,
+			cargo_ship,
+			_selected_commodity_id,
+			1
+		).is_empty()
 	buy.pressed.connect(_on_buy_commodity.bind(_selected_commodity_id))
 	actions.add_child(buy)
 

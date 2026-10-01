@@ -10,6 +10,21 @@
     "name": { "type": "string" },
     "mass": { "type": "number" },
     "base_price": { "type": "number" },
-    "description": { "type": "string" }
+    "description": { "type": "string" },
+    "requires_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "life_support_integrated",
+          "refrigerated",
+          "compute_integrated",
+          "biohazard",
+          "secure_cargo",
+          "military_grade"
+        ]
+      },
+      "default": []
+    }
   }
 }

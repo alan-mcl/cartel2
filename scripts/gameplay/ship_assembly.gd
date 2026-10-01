@@ -206,6 +206,15 @@ static func install_module(
 		if not session.remove_spare_part(part_id, 1):
 			return false
 
+	var trial := OwnedShip.from_dict(ship.to_dict())
+	trial.remove_module(slot)
+	trial.set_module(slot, part_id)
+	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
+	if not cargo_block.is_empty():
+		session.last_log = cargo_block
+		session.changed.emit()
+		return false
+
 	var previous := ship.remove_module(slot)
 	if not session.sandbox and not previous.is_empty():
 		session.add_spare_part(previous, 1)
@@ -261,6 +270,15 @@ static func relocate_module(
 			session.last_log = str(second_validation.get("reason", "Cannot swap modules."))
 			session.changed.emit()
 			return false
+		trial.set_module(from_slot, target)
+	else:
+		trial.set_module(to_slot, moving)
+
+	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
+	if not cargo_block.is_empty():
+		session.last_log = cargo_block
+		session.changed.emit()
+		return false
 
 	ship.remove_module(from_slot)
 	if not target.is_empty():
@@ -292,12 +310,21 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 		session.changed.emit()
 		return false
 
-	var previous := ship.remove_module(slot)
+	var previous := ship.get_module_id(slot)
 	if previous.is_empty():
 		session.last_log = "No module installed in that slot."
 		session.changed.emit()
 		return false
 
+	var trial := OwnedShip.from_dict(ship.to_dict())
+	trial.remove_module(slot)
+	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
+	if not cargo_block.is_empty():
+		session.last_log = cargo_block
+		session.changed.emit()
+		return false
+
+	ship.remove_module(slot)
 	if not session.sandbox:
 		session.add_spare_part(previous, 1)
 	var part := catalog.get_module(previous)

@@ -4,76 +4,87 @@
     "name": "Food Products",
     "mass": 1.0,
     "base_price": 50,
-    "description": "Agricultural and processed foodstuffs for human consumption. Bulk staples, preserved rations, and nutritional products."
+    "description": "Agricultural and processed foodstuffs for human consumption. Bulk staples, preserved rations, and nutritional products.",
+    "requires_capabilities": ["refrigerated"]
   },
   {
     "id": "pharmaceuticals",
     "name": "Pharmaceuticals",
     "mass": 0.4,
     "base_price": 180,
-    "description": "Standardized medicines and pharmaceutical products traded between worlds. Compact, high-value medical cargo."
+    "description": "Standardized medicines and pharmaceutical products traded between worlds. Compact, high-value medical cargo.",
+    "requires_capabilities": ["biohazard"]
   },
   {
     "id": "consumer_goods",
     "name": "Consumer Goods",
     "mass": 0.8,
     "base_price": 90,
-    "description": "Ordinary manufactured goods for civilian consumption. Everyday products of an industrial consumer economy."
+    "description": "Ordinary manufactured goods for civilian consumption. Everyday products of an industrial consumer economy.",
+    "requires_capabilities": []
   },
   {
     "id": "data",
     "name": "Data",
     "mass": 0.2,
     "base_price": 220,
-    "description": "Commercially valuable information on physical storage media. Occupies cargo capacity despite representing vast quantities of data."
+    "description": "Commercially valuable information on physical storage media. Occupies cargo capacity despite representing vast quantities of data.",
+    "requires_capabilities": ["compute_integrated"]
   },
   {
     "id": "entertainment",
     "name": "Entertainment",
     "mass": 0.5,
     "base_price": 140,
-    "description": "Cultural and entertainment products distributed between worlds. Distinct from raw data — the product is the experience itself."
+    "description": "Cultural and entertainment products distributed between worlds. Distinct from raw data — the product is the experience itself.",
+    "requires_capabilities": []
   },
   {
     "id": "industrial_components",
     "name": "Industrial Components",
     "mass": 1.2,
     "base_price": 110,
-    "description": "Manufactured components and equipment for industrial production and infrastructure. Hardware for maintenance, repair, and expansion."
+    "description": "Manufactured components and equipment for industrial production and infrastructure. Hardware for maintenance, repair, and expansion.",
+    "requires_capabilities": []
   },
   {
     "id": "chemicals",
     "name": "Chemicals",
     "mass": 1.0,
     "base_price": 70,
-    "description": "Commodity chemical products used as industrial, agricultural, and production inputs. Broad category without per-substance simulation."
+    "description": "Commodity chemical products used as industrial, agricultural, and production inputs. Broad category without per-substance simulation.",
+    "requires_capabilities": ["biohazard"]
   },
   {
     "id": "advanced_raw_materials",
     "name": "Advanced Raw Materials",
     "mass": 0.8,
     "base_price": 200,
-    "description": "Specialized raw and advanced physical materials for high-value industrial production. Distinct from ordinary chemicals and components."
+    "description": "Specialized raw and advanced physical materials for high-value industrial production. Distinct from ordinary chemicals and components.",
+    "requires_capabilities": []
   },
   {
     "id": "luxury_goods",
     "name": "Luxury Goods",
     "mass": 0.5,
     "base_price": 280,
-    "description": "High-value discretionary goods for affluent populations. Sensitive to wealth and market demand differences between worlds."
+    "description": "High-value discretionary goods for affluent populations. Sensitive to wealth and market demand differences between worlds.",
+    "requires_capabilities": ["secure_cargo"]
   },
   {
     "id": "military_goods",
     "name": "Military Goods",
     "mass": 1.0,
     "base_price": 250,
-    "description": "Equipment and supplies for military, security, and defense applications. Broad category without individual weapons simulation."
+    "description": "Equipment and supplies for military, security, and defense applications. Broad category without individual weapons simulation.",
+    "requires_capabilities": ["military_grade"]
   },
   {
     "id": "compute_cores",
     "name": "Compute Cores",
     "mass": 0.3,
     "base_price": 400,
-    "description": "Specialized computational hardware. Compact, high-value industrial goods distinct from data cargo — the processors, not the information."
+    "description": "Specialized computational hardware. Compact, high-value industrial goods distinct from data cargo — the processors, not the information.",
+    "requires_capabilities": ["compute_integrated"]
   }
 ]

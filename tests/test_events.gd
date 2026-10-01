@@ -60,12 +60,12 @@ static func _test_commodity_traded(runner: TestRunner, catalog: Catalog) -> void
 		session,
 		catalog,
 		market_sector_id,
-		"food_products"
+		"consumer_goods"
 	)
 	var price := int(listing.get("price", 0))
 
 	runner.check(
-		session.buy_commodity(catalog, "proxima_exchange", "food_products", 2),
+		session.buy_commodity(catalog, "proxima_exchange", "consumer_goods", 2),
 		"events: buy succeeds"
 	)
 	runner.check_eq(trade_events.size(), 1, "events: buy publishes commodity_traded")
@@ -75,7 +75,7 @@ static func _test_commodity_traded(runner: TestRunner, catalog: Catalog) -> void
 	var evt: Dictionary = trade_events[0]
 	runner.check_eq(str(evt.get("type", "")), SimEvent.COMMODITY_TRADED, "events: trade event type")
 	runner.check_eq(str(evt.get("sector_id", "")), market_sector_id, "events: trade sector_id")
-	runner.check_eq(str(evt.get("commodity_id", "")), "food_products", "events: trade commodity_id")
+	runner.check_eq(str(evt.get("commodity_id", "")), "consumer_goods", "events: trade commodity_id")
 	runner.check_eq(int(evt.get("quantity", 0)), 2, "events: trade quantity")
 	runner.check_eq(int(evt.get("unit_price", 0)), price, "events: trade unit_price")
 	runner.check_eq(str(evt.get("side", "")), "buy", "events: trade side")
@@ -96,7 +96,7 @@ static func _test_failed_buy_no_trade_event(runner: TestRunner, catalog: Catalog
 	session.credits = 0
 
 	runner.check(
-		not session.buy_commodity(catalog, "proxima_exchange", "food_products", 1),
+		not session.buy_commodity(catalog, "proxima_exchange", "consumer_goods", 1),
 		"events: buy rejected for insufficient credits"
 	)
 	runner.check_eq(trade_events.size(), 0, "events: failed buy publishes no commodity_traded")

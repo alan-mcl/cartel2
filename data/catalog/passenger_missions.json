@@ -115,7 +115,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -180,12 +180,12 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "government",
+      "affiliation": "civilian",
       "life_support": "luxury",
       "quantity_min": 1,
       "quantity_max": 5,
       "pay_multiplier": 2.1,
-      "requires_player_affiliation": true
+      "requires_player_affiliation": false
     },
     {
       "id": "retirees",
@@ -328,7 +328,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "media",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -341,7 +341,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "media",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 5,
@@ -383,7 +383,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 8,
@@ -397,7 +397,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -410,7 +410,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -423,7 +423,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 1,
       "quantity_max": 5,
@@ -436,7 +436,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -449,7 +449,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -463,7 +463,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "technical",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -476,7 +476,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -490,7 +490,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 3,
       "quantity_max": 10,
@@ -516,7 +516,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -529,7 +529,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 8,
@@ -542,7 +542,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -595,7 +595,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "sport",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 5,
@@ -636,7 +636,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "sport",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 5,
@@ -677,7 +677,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "sport",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -718,7 +718,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "sport",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 5,
@@ -758,7 +758,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 8,
@@ -771,7 +771,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "government",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 7,
@@ -784,12 +784,12 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "government",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
       "pay_multiplier": 1.3,
-      "requires_player_affiliation": true
+      "requires_player_affiliation": false
     },
     {
       "id": "legal_professionals",
@@ -811,7 +811,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "corporate",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 3,
@@ -825,7 +825,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "corporate",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -838,7 +838,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -851,7 +851,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 6,
@@ -907,12 +907,12 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "corporate",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
       "pay_multiplier": 1.45,
-      "requires_player_affiliation": true
+      "requires_player_affiliation": false
     },
     {
       "id": "salvage_crews",
@@ -921,7 +921,7 @@
         "terminal",
         "bar"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 2,
       "quantity_max": 8,
@@ -934,7 +934,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "industrial",
+      "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 3,
       "quantity_max": 10,
@@ -947,7 +947,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "scientific",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 5,
@@ -960,7 +960,7 @@
       "boards": [
         "terminal"
       ],
-      "affiliation": "technical",
+      "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 1,
       "quantity_max": 4,
@@ -1020,7 +1020,7 @@
       "boards": [
         "bar"
       ],
-      "text": "Last-call deal — {quantity} need a lift to {destination} before the lanes get busy.",
+      "text": "Last-call deal \u2014 {quantity} need a lift to {destination} before the lanes get busy.",
       "roles": [
         "bar_drifters"
       ]
@@ -1433,7 +1433,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Travel content contract — {quantity} creators to {destination}.",
+      "text": "Travel content contract \u2014 {quantity} creators to {destination}.",
       "roles": [
         "influencers"
       ]
@@ -1940,7 +1940,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Bar deal: {quantity} musicians, one destination, no appetite for missing soundcheck — {destination}.",
+      "text": "Bar deal: {quantity} musicians, one destination, no appetite for missing soundcheck \u2014 {destination}.",
       "roles": [
         "musicians"
       ]
@@ -1984,7 +1984,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Fault response booking — {quantity} technical staff to {destination}.",
+      "text": "Fault response booking \u2014 {quantity} technical staff to {destination}.",
       "roles": [
         "technicians"
       ]
@@ -2950,7 +2950,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Crop season transfer — {quantity} workers to {destination}.",
+      "text": "Crop season transfer \u2014 {quantity} workers to {destination}.",
       "roles": [
         "agricultural_workers"
       ]
@@ -3535,7 +3535,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Cricket weekend booking — {quantity} spectators to {destination}.",
+      "text": "Cricket weekend booking \u2014 {quantity} spectators to {destination}.",
       "roles": [
         "cricket_spectators"
       ]
@@ -3822,7 +3822,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Tournament crowd booking — {quantity} passengers to {destination}.",
+      "text": "Tournament crowd booking \u2014 {quantity} passengers to {destination}.",
       "roles": [
         "buzkashi_spectators"
       ]
@@ -4363,7 +4363,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Fight-night fan club booking — {quantity} to {destination}.",
+      "text": "Fight-night fan club booking \u2014 {quantity} to {destination}.",
       "roles": [
         "boxing_fans"
       ]

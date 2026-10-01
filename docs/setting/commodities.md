@@ -107,9 +107,19 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialized materials whose particular properties make them economically valuable. |
 | **Industrial Components vs ship spare parts** | Industrial Components are tradable cargo. Ship module spare parts (`spare_parts` in session state) are a separate shipyard inventory system. |
 
-## Cargo hold requirements (planned)
+## Cargo hold requirements
 
-Broad categories may eventually require installed cargo-bay **capabilities** on the carrying ship (for example refrigerated food, biohazard chemicals and pharma, compute-integrated cores, secure bonded luxury, military goods). See [equipment.md](equipment.md) (Cargo bays). The Exchange does **not** enforce these yet so the starter trade loop stays open.
+Seven categories require installed cargo-bay **capabilities** on the carrying ship (AND of flags; any bay may supply each flag). See [equipment.md](equipment.md) (Cargo bays).
+
+| Category | Required capability |
+|----------|-------------------|
+| Food Products | `refrigerated` |
+| Pharmaceuticals, Chemicals | `biohazard` |
+| Data, Compute Cores | `compute_integrated` |
+| Luxury Goods | `secure_cargo` |
+| Military Goods | `military_grade` |
+
+Consumer Goods, Entertainment, Industrial Components, and Advanced Raw Materials use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
 
 ## Current implementation
 
@@ -117,7 +127,8 @@ Broad categories may eventually require installed cargo-bay **capabilities** on 
 |---------|--------|
 | Eleven categories in catalog | Implemented |
 | Per-ship cargo holds | Implemented |
-| Cargo-bay capability flags on modules | Implemented (catalog only; no trade gate) |
+| Cargo-bay capability flags on modules | Implemented |
+| Exchange buy gated by hold capabilities | Implemented |
 | Habitat Exchange buy/sell | Implemented (daily quotes, all eleven habitats) |
 | Multi-market arbitrage | Implemented (graph-driven price differences) |
 | Market stock depletion | Not implemented (contract depth is display-only) |

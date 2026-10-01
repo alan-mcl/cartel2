@@ -81,6 +81,7 @@ Source: `data/catalog/schema/commodities.schema.json` → `commodities.json`
 | `mass` | number | yes | `` |  |
 | `base_price` | number | yes | `` |  |
 | `description` | string | yes | `` |  |
+| `requires_capabilities` | array | no | `[]` |  |
 
 ## EconomyDef
 

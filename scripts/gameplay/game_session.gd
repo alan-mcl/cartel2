@@ -728,10 +728,38 @@ func can_add_cargo(catalog: Catalog, ship: OwnedShip, commodity_id: String, amou
 	var commodity := catalog.get_commodity(commodity_id)
 	if commodity.is_empty():
 		return false
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	if not CargoRequirements.assembled_meets_commodity(assembled, commodity):
+		return false
 	var capacity := get_ship_cargo_capacity(catalog, ship)
 	var current_mass := get_ship_cargo_mass(catalog, ship)
 	var added_mass := float(commodity.get("mass", 0.0)) * amount
 	return current_mass + added_mass <= capacity + 0.001
+
+
+func cargo_carry_block_reason(
+	catalog: Catalog,
+	ship: OwnedShip,
+	commodity_id: String,
+	amount: int = 1
+) -> String:
+	if ship == null:
+		return "No ship selected for cargo."
+	if amount <= 0:
+		return "Invalid amount."
+	var commodity := catalog.get_commodity(commodity_id)
+	if commodity.is_empty():
+		return "Unknown commodity."
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var cap_reason := CargoRequirements.cannot_carry_reason(catalog, assembled, commodity)
+	if not cap_reason.is_empty():
+		return cap_reason
+	var capacity := get_ship_cargo_capacity(catalog, ship)
+	var current_mass := get_ship_cargo_mass(catalog, ship)
+	var added_mass := float(commodity.get("mass", 0.0)) * amount
+	if current_mass + added_mass > capacity + 0.001:
+		return "Not enough cargo capacity on %s." % ship.name
+	return ""
 
 
 func get_spare_part_count(part_id: String) -> int:
@@ -853,8 +881,9 @@ func buy_commodity(
 	if commodity.is_empty():
 		return false
 
-	if not can_add_cargo(catalog, ship, commodity_id, amount):
-		return fail_action("Not enough cargo capacity on %s." % ship.name)
+	var block_reason := cargo_carry_block_reason(catalog, ship, commodity_id, amount)
+	if not block_reason.is_empty():
+		return fail_action(block_reason)
 
 	var price := int(listing.get("price", commodity.get("base_price", 0)))
 	var total_cost := price * amount

@@ -447,6 +447,30 @@ def life_support_volume_floor(crew: float, capabilities: list) -> float:
     return floor
 
 
+def check_commodities(commodities: list) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(commodities, list):
+        return ["commodities.json: root must be an array"]
+    for entry in commodities:
+        if not isinstance(entry, dict):
+            continue
+        commodity_id = str(entry.get("id", ""))
+        caps = entry.get("requires_capabilities", [])
+        if caps is None:
+            errors.append(f"commodity {commodity_id}: requires_capabilities must be present")
+            continue
+        if not isinstance(caps, list):
+            errors.append(f"commodity {commodity_id}: requires_capabilities must be an array")
+            continue
+        for cap in caps:
+            cap_id = str(cap)
+            if cap_id not in CARGO_CAPABILITY_FLAGS:
+                errors.append(
+                    f"commodity {commodity_id}: invalid requires_capabilities '{cap_id}'"
+                )
+    return errors
+
+
 def check_passenger_missions(doc: object) -> list[str]:
     errors: list[str] = []
     if not isinstance(doc, dict):
@@ -621,9 +645,11 @@ def main() -> int:
     corporate_presence = load_object(CATALOG / "corporate_presence.json")
     traffic = load_object(CATALOG / "traffic.json")
     passenger_missions = load_object(CATALOG / "passenger_missions.json")
+    commodities = load_array(CATALOG / "commodities.json")
 
     errors: list[str] = []
 
+    errors.extend(check_commodities(commodities))
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)

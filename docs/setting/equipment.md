@@ -396,7 +396,7 @@ Cargo modules (`category: cargo`) store bulk freight in **`cargo_capacity`** (to
 
 A hold may combine several flags or carry none (general dry bulk). Specialty bays cost more and often draw modest **`power_demand`** / **`compute_demand`** for plant (cold chain, containment, compute vaults).
 
-**Exchange trade** does not yet require these flags; starter templates keep plain Tukey **`cargo_bay_*`** holds. Future **freight charters** and optional commodity **`requires_capabilities`** will use the same tags.
+**Exchange buys** require the matching flags on the selected ship; **sells** stay open. Starter templates keep plain Tukey **`cargo_bay_*`** holds for dry bulk. Future **freight charters** will use the same tags.
 
 Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Cargo & other infra column). Data: `data/catalog/modules/cargo.json`.
 
