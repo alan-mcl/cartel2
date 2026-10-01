@@ -1068,7 +1068,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Research transfer: {quantity} members of a research team bound for {destination}.",
+      "text": "Research field assignment: {quantity} members of a research team bound for {destination}.",
       "roles": [
         "researchers"
       ]
@@ -1108,7 +1108,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Medical travel: {quantity} passenger(s) need to reach {destination} for an appointment.",
+      "text": "Medical travel: {quantity} passenger(s) need to reach {destination} for an urgent appointment.",
       "roles": [
         "medical_travellers"
       ]
@@ -1128,7 +1128,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Official transport requested for {quantity} representatives travelling to {destination}.",
+      "text": "Discreet transport requested for {quantity} representatives travelling to {destination}.",
       "roles": [
         "diplomatic_party"
       ]
@@ -1168,7 +1168,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Touring company needs {quantity} people moved on to {destination}.",
+      "text": "Touring company needs {quantity} performers moved on to {destination} for an event.",
       "roles": [
         "performers"
       ]
@@ -1188,7 +1188,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "{quantity} independent workers need a ride to {destination}.",
+      "text": "{quantity} gig workers looking for new markets need a ride to {destination}.",
       "roles": [
         "freelancers"
       ]
@@ -1198,7 +1198,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Ordinary passage request: {quantity} passengers to {destination}.",
+      "text": "Private passage request: {quantity} civilian passengers to {destination}.",
       "roles": []
     },
     {
@@ -1214,7 +1214,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "{quantity} passengers want a direct run to {destination}.",
+      "text": "{quantity} passengers want a fast run to {destination}, no questions asked.",
       "roles": []
     },
     {
@@ -1254,7 +1254,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Work travel: {quantity} passengers need to report to {destination}.",
+      "text": "Work travel: {quantity} passengers need to report to {destination} for a short term contract.",
       "roles": [
         "corporate_staff",
         "field_contractors"
@@ -1276,7 +1276,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Site visit for {corporation}: {quantity} personnel to {destination}.",
+      "text": "Site visit for {corporation}: {quantity} inspection personnel to {destination}.",
       "roles": [
         "corporate_staff",
         "field_contractors"
@@ -1318,7 +1318,7 @@
       "boards": [
         "bar"
       ],
-      "text": "Stranded travellers are looking for a ship to {destination}. {quantity} seats, cash up front.",
+      "text": "Stranded travellers are looking for a ship to {destination}. {quantity} seats, payment guaranteed.",
       "roles": [
         "stranded_travellers"
       ]
@@ -1338,7 +1338,7 @@
       "boards": [
         "bar"
       ],
-      "text": "{quantity} gamblers have had enough of this station and want to get to {destination}.",
+      "text": "{quantity} gamblers have run out of luck here and want to get to {destination}.",
       "roles": [
         "gamblers"
       ]
@@ -1386,7 +1386,7 @@
       "boards": [
         "bar"
       ],
-      "text": "Cash offer at the bar: {quantity} people, {destination}, departure as soon as possible.",
+      "text": "Verbal offer at the bar: {quantity} people, {destination}, departure as soon as possible.",
       "roles": []
     },
     {
@@ -1402,7 +1402,7 @@
       "boards": [
         "bar"
       ],
-      "text": "Some regulars are heading out: {quantity} passengers to {destination}.",
+      "text": "Some regulars are heading out-system: {quantity} passengers to {destination}.",
       "roles": []
     },
     {
@@ -1419,7 +1419,7 @@
         "terminal",
         "bar"
       ],
-      "text": "Creator booking: {quantity} influencer(s) headed to {destination}.",
+      "text": "Creator booking: {quantity} influencer(s) headed to {destination} for promotional purposes.",
       "roles": [
         "influencers"
       ]

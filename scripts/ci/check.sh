@@ -84,6 +84,9 @@ if [[ $RUN_VALIDATORS -eq 1 ]]; then
 
   echo "== Sector bundle tests =="
   python3 scripts/tools/test_sector_bundle.py
+
+  echo "== Catalog sheet tests =="
+  python3 scripts/tools/test_catalog_sheet.py
 fi
 
 if [[ $RUN_IMPORT -eq 1 ]]; then
