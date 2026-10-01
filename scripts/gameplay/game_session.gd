@@ -91,6 +91,10 @@ var gst_seconds: float:
 	get: return world.gst_seconds
 	set(value): world.gst_seconds = value
 
+var run_seed: int:
+	get: return world.run_seed
+	set(value): world.run_seed = value
+
 var orbital_phase_by_sector: Dictionary:
 	get: return world.orbital_phase_by_sector
 	set(value): world.orbital_phase_by_sector = value
@@ -221,6 +225,7 @@ func start_new_game(
 	player.spare_parts.clear()
 	world.orbital_phase_by_sector.clear()
 	world.gst_seconds = GalacticCalendar.start_seconds_from_player(player_data)
+	world.run_seed = randi()
 	world.market_quotes.clear()
 	world.market_quotes_day = -1
 	world.route_friction_delta.clear()

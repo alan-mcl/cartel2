@@ -16,6 +16,7 @@ func _run() -> void:
 	await _smoke_embedded_shipyard(catalog)
 	await _smoke_save_loaded_world(catalog)
 	await _smoke_combat_motion()
+	await _smoke_system_render_tester()
 	if _failures > 0:
 		push_error("Scene smoke suite failed with %d assertion(s)." % _failures)
 		quit(1)
@@ -95,6 +96,17 @@ func _smoke_combat_motion() -> void:
 		)
 	paused = false
 	sandbox.queue_free()
+	await process_frame
+
+
+func _smoke_system_render_tester() -> void:
+	var tester := preload("res://scenes/dev/system_render_tester.tscn").instantiate()
+	root.add_child(tester)
+	await process_frame
+	var world: Node2D = tester.get_node("World")
+	_check(world.get_node_or_null("Planet") != null, "system render tester loads planet")
+	_check(tester.get_node_or_null("PlayerShip") == null, "system render tester has no player ship")
+	tester.queue_free()
 	await process_frame
 
 

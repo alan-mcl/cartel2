@@ -193,6 +193,7 @@ func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
 	var cfg := PassengerCharters.config(catalog)
 	var terminal_count := int(cfg.get("terminal_offers_per_day", 4))
 	var bar_count := int(cfg.get("bar_offers_per_day", 2))
+	var run_seed := session.run_seed
 
 	for habitat in catalog.list_habitat_dicts():
 		if typeof(habitat) != TYPE_DICTIONARY:
@@ -206,7 +207,8 @@ func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
 				habitat_id,
 				PassengerCharters.BOARD_TERMINAL,
 				day,
-				terminal_count
+				terminal_count,
+				run_seed
 			),
 		}
 		if PassengerCharters.habitat_has_bar(catalog, habitat_id):
@@ -215,7 +217,8 @@ func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
 				habitat_id,
 				PassengerCharters.BOARD_BAR,
 				day,
-				bar_count
+				bar_count,
+				run_seed
 			)
 		offers_by_habitat[habitat_id] = boards
 

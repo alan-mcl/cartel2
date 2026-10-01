@@ -1,6 +1,6 @@
 {
-  "terminal_offers_per_day": 4,
-  "bar_offers_per_day": 2,
+  "terminal_offers_per_day": 12,
+  "bar_offers_per_day": 6,
   "base_pay": 120,
   "friction_pay": 8,
   "cancel_penalty_fraction": 0.25,
@@ -8,7 +8,9 @@
     {
       "id": "steerage",
       "title": "Steerage passengers",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 4,
@@ -19,7 +21,9 @@
     {
       "id": "tourists",
       "title": "Tourist party",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
@@ -30,7 +34,9 @@
     {
       "id": "corporate_staff",
       "title": "Corporate staff",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "affiliation": "corporate",
       "life_support": "comfort",
       "quantity_min": 3,
@@ -41,7 +47,9 @@
     {
       "id": "principal",
       "title": "Corporate principal",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "affiliation": "corporate",
       "life_support": "luxury",
       "quantity_min": 1,
@@ -52,7 +60,9 @@
     {
       "id": "bar_drifters",
       "title": "Bar drifters",
-      "boards": ["bar"],
+      "boards": [
+        "bar"
+      ],
       "affiliation": "civilian",
       "life_support": "spartan",
       "quantity_min": 1,
@@ -63,57 +73,6558 @@
     {
       "id": "bar_couple",
       "title": "Off-duty pair",
-      "boards": ["bar"],
+      "boards": [
+        "bar"
+      ],
       "affiliation": "civilian",
       "life_support": "comfort",
       "quantity_min": 2,
       "quantity_max": 2,
       "pay_multiplier": 0.9,
       "requires_player_affiliation": false
+    },
+    {
+      "id": "families",
+      "title": "Family group",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 3,
+      "quantity_max": 7,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "students",
+      "title": "Students",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 0.85,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "researchers",
+      "title": "Research team",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "field_contractors",
+      "title": "Field contractors",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "corporate",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.25,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "corporate_recruits",
+      "title": "Corporate recruits",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.4,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "pilgrims",
+      "title": "Pilgrims",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 3,
+      "quantity_max": 10,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "medical_travellers",
+      "title": "Medical travellers",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.55,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "diplomatic_party",
+      "title": "Diplomatic party",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "government",
+      "life_support": "luxury",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 2.1,
+      "requires_player_affiliation": true
+    },
+    {
+      "id": "retirees",
+      "title": "Retiring couple",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 1.05,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "seasonal_workers",
+      "title": "Seasonal workers",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 4,
+      "quantity_max": 12,
+      "pay_multiplier": 0.9,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "performers",
+      "title": "Touring performers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "prospectors",
+      "title": "Prospectors",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.1,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "freelancers",
+      "title": "Freelancers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "stranded_travellers",
+      "title": "Stranded travellers",
+      "boards": [
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.25,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "off_shift_crew",
+      "title": "Off-shift crew",
+      "boards": [
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 0.8,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "gamblers",
+      "title": "Gamblers",
+      "boards": [
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "couriers",
+      "title": "Independent couriers",
+      "boards": [
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 2,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "influencers",
+      "title": "Influencer / creator",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.45,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "journalists",
+      "title": "Journalist / reporter",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "media",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "documentarians",
+      "title": "Documentary crew",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "media",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 5,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "artists",
+      "title": "Artists / cultural workers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.1,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "musicians",
+      "title": "Musicians",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "technicians",
+      "title": "Technicians",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "engineers",
+      "title": "Engineers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "industrial",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "surveyors",
+      "title": "Surveyors",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "geologists",
+      "title": "Planetary geologists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.25,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "ecologists",
+      "title": "Ecologists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "roboticists",
+      "title": "Robotics specialists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.45,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "software_specialists",
+      "title": "Systems specialists",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "technical",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.4,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "fabricators",
+      "title": "Fabrication specialists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "miners",
+      "title": "Mining crews",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 3,
+      "quantity_max": 10,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "agricultural_workers",
+      "title": "Agricultural workers",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 3,
+      "quantity_max": 10,
+      "pay_multiplier": 0.9,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "habitat_operators",
+      "title": "Habitat operators",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "shipyard_workers",
+      "title": "Shipyard workers",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.1,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "life_support_specialists",
+      "title": "Life-support specialists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "medical_staff",
+      "title": "Medical staff",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "veterinarians",
+      "title": "Veterinary specialists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "cricket_spectators",
+      "title": "Cricket spectators",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "cricket_officials",
+      "title": "Cricket officials",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "sport",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "cricket_fans",
+      "title": "Cricket fans",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 10,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "buzkashi_spectators",
+      "title": "Buzkashi spectators",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "buzkashi_officials",
+      "title": "Buzkashi officials",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "sport",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "buzkashi_fans",
+      "title": "Buzkashi fans",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 10,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "boxing_spectators",
+      "title": "Boxing spectators",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 8,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "boxing_officials",
+      "title": "Boxing officials",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "sport",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "boxing_fans",
+      "title": "Boxing fans",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 8,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "pylon_spectators",
+      "title": "Pylon racing spectators",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.05,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "pylon_officials",
+      "title": "Pylon racing officials",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "sport",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "pylon_fans",
+      "title": "Pylon racing fans",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 10,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "teachers",
+      "title": "Teachers / educators",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.05,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "research_assistants",
+      "title": "Research assistants",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "civil_service",
+      "title": "Civil service staff",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "government",
+      "life_support": "comfort",
+      "quantity_min": 2,
+      "quantity_max": 7,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "inspectors",
+      "title": "Inspectors",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "government",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.3,
+      "requires_player_affiliation": true
+    },
+    {
+      "id": "legal_professionals",
+      "title": "Legal professionals",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.5,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "insurance_adjusters",
+      "title": "Insurance adjusters",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 3,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "auctioneers",
+      "title": "Auctioneers / brokers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.25,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "archivists",
+      "title": "Archivists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "archaeologists",
+      "title": "Archaeologists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 6,
+      "pay_multiplier": 1.25,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "religious_workers",
+      "title": "Religious workers",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.0,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "food_specialists",
+      "title": "Food specialists",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.15,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "hospitality_staff",
+      "title": "Hospitality staff",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "civilian",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 0.95,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "security_consultants",
+      "title": "Security consultants",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "corporate",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.45,
+      "requires_player_affiliation": true
+    },
+    {
+      "id": "salvage_crews",
+      "title": "Salvage crews",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 2,
+      "quantity_max": 8,
+      "pay_multiplier": 1.1,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "terraforming_crews",
+      "title": "Terraforming crews",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "industrial",
+      "life_support": "spartan",
+      "quantity_min": 3,
+      "quantity_max": 10,
+      "pay_multiplier": 1.2,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "climate_specialists",
+      "title": "Climate specialists",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "scientific",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 5,
+      "pay_multiplier": 1.35,
+      "requires_player_affiliation": false
+    },
+    {
+      "id": "orbital_mechanics",
+      "title": "Orbital mechanics",
+      "boards": [
+        "terminal"
+      ],
+      "affiliation": "technical",
+      "life_support": "comfort",
+      "quantity_min": 1,
+      "quantity_max": 4,
+      "pay_multiplier": 1.4,
+      "requires_player_affiliation": false
     }
   ],
   "descriptions": [
     {
       "id": "quiet_run",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "text": "{quantity} passengers need a quiet run to {destination}. No fuss, no delays.",
       "roles": []
     },
     {
       "id": "holiday_booking",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "text": "Holiday booking: {quantity} tourists headed for {destination}. Keep the cabin presentable.",
-      "roles": ["tourists"]
+      "roles": [
+        "tourists"
+      ]
     },
     {
       "id": "shift_change",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "text": "Shift change for {corporation}: {quantity} staff to {destination}.",
-      "roles": ["corporate_staff"]
+      "roles": [
+        "corporate_staff"
+      ]
     },
     {
       "id": "executive_discreet",
-      "boards": ["terminal"],
+      "boards": [
+        "terminal"
+      ],
       "text": "{corporation} requires discreet transport for {quantity} executive(s) to {destination}.",
-      "roles": ["principal"]
+      "roles": [
+        "principal"
+      ]
     },
     {
       "id": "bar_word",
-      "boards": ["bar"],
-      "text": "Word at the bar: {quantity} travellers will pay cash to reach {destination}.",
+      "boards": [
+        "bar"
+      ],
+      "text": "Word at the bar: {quantity} travellers will pay in advance to reach {destination}.",
       "roles": []
     },
     {
       "id": "bar_last_call",
-      "boards": ["bar"],
+      "boards": [
+        "bar"
+      ],
       "text": "Last-call deal — {quantity} need a lift to {destination} before the lanes get busy.",
-      "roles": ["bar_drifters"]
+      "roles": [
+        "bar_drifters"
+      ]
     },
     {
       "id": "bar_two_stools",
-      "boards": ["bar"],
+      "boards": [
+        "bar"
+      ],
       "text": "Two stools down, {quantity} pilots' friends want a hop to {destination}.",
-      "roles": ["bar_couple"]
+      "roles": [
+        "bar_couple"
+      ]
+    },
+    {
+      "id": "family_visit",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Family booking: {quantity} travellers making the trip to {destination}.",
+      "roles": [
+        "families"
+      ]
+    },
+    {
+      "id": "student_break",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Student group looking for passage to {destination}. {quantity} seats, modest budget.",
+      "roles": [
+        "students"
+      ]
+    },
+    {
+      "id": "research_transfer",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research transfer: {quantity} members of a research team bound for {destination}.",
+      "roles": [
+        "researchers"
+      ]
+    },
+    {
+      "id": "field_team",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{corporation} is sending {quantity} field contractors to {destination}.",
+      "roles": [
+        "field_contractors"
+      ]
+    },
+    {
+      "id": "new_hires",
+      "boards": [
+        "terminal"
+      ],
+      "text": "New-hire transport for {corporation}: {quantity} recruits to {destination}.",
+      "roles": [
+        "corporate_recruits"
+      ]
+    },
+    {
+      "id": "pilgrim_group",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{quantity} pilgrims require passage to {destination}. Quiet, straightforward travel preferred.",
+      "roles": [
+        "pilgrims"
+      ]
+    },
+    {
+      "id": "medical_appointment",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Medical travel: {quantity} passenger(s) need to reach {destination} for an appointment.",
+      "roles": [
+        "medical_travellers"
+      ]
+    },
+    {
+      "id": "medical_referral",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Referral booking for {quantity} travellers headed to {destination}. Prompt arrival requested.",
+      "roles": [
+        "medical_travellers"
+      ]
+    },
+    {
+      "id": "official_party",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official transport requested for {quantity} representatives travelling to {destination}.",
+      "roles": [
+        "diplomatic_party"
+      ]
+    },
+    {
+      "id": "retirement_move",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Retirement move: {quantity} passengers leaving for a quieter life on {destination}.",
+      "roles": [
+        "retirees"
+      ]
+    },
+    {
+      "id": "seasonal_hire",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Seasonal labour booking: {quantity} workers headed to {destination}.",
+      "roles": [
+        "seasonal_workers"
+      ]
+    },
+    {
+      "id": "festival_booking",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Festival booking: {quantity} performers need passage to {destination}.",
+      "roles": [
+        "performers"
+      ]
+    },
+    {
+      "id": "touring_show",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Touring company needs {quantity} people moved on to {destination}.",
+      "roles": [
+        "performers"
+      ]
+    },
+    {
+      "id": "prospector_outbound",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Prospecting party: {quantity} travellers looking for passage to {destination}.",
+      "roles": [
+        "prospectors"
+      ]
+    },
+    {
+      "id": "freelancer_hop",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{quantity} independent workers need a ride to {destination}.",
+      "roles": [
+        "freelancers"
+      ]
+    },
+    {
+      "id": "ordinary_booking",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Ordinary passage request: {quantity} passengers to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "private_trip",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Private travel for {quantity} passengers to {destination}. No special requirements.",
+      "roles": []
+    },
+    {
+      "id": "direct_passage",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{quantity} passengers want a direct run to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "early_departure",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{quantity} travellers are ready to leave for {destination} immediately.",
+      "roles": []
+    },
+    {
+      "id": "flexible_booking",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Flexible booking: {quantity} passengers need passage to {destination} sometime in the next few days.",
+      "roles": []
+    },
+    {
+      "id": "returning_home",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Homeward booking: {quantity} passengers are looking for passage to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "relocation",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Relocation party: {quantity} people moving their lives to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "work_commute",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Work travel: {quantity} passengers need to report to {destination}.",
+      "roles": [
+        "corporate_staff",
+        "field_contractors"
+      ]
+    },
+    {
+      "id": "conference_trip",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Conference travel: {quantity} delegates headed for {destination}.",
+      "roles": [
+        "corporate_staff",
+        "researchers"
+      ]
+    },
+    {
+      "id": "site_visit",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Site visit for {corporation}: {quantity} personnel to {destination}.",
+      "roles": [
+        "corporate_staff",
+        "field_contractors"
+      ]
+    },
+    {
+      "id": "quiet_executive",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{corporation} wants {quantity} executive passenger(s) delivered to {destination} without unnecessary attention.",
+      "roles": [
+        "principal"
+      ]
+    },
+    {
+      "id": "executive_meeting",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Executive travel: {quantity} principal(s) require passage to {destination} for a meeting.",
+      "roles": [
+        "principal"
+      ]
+    },
+    {
+      "id": "corporate_transfer",
+      "boards": [
+        "terminal"
+      ],
+      "text": "{corporation} personnel transfer: {quantity} staff to {destination}.",
+      "roles": [
+        "corporate_staff",
+        "corporate_recruits"
+      ]
+    },
+    {
+      "id": "bar_stranded",
+      "boards": [
+        "bar"
+      ],
+      "text": "Stranded travellers are looking for a ship to {destination}. {quantity} seats, cash up front.",
+      "roles": [
+        "stranded_travellers"
+      ]
+    },
+    {
+      "id": "bar_off_shift",
+      "boards": [
+        "bar"
+      ],
+      "text": "Off-shift crew are heading to {destination}. {quantity} need a ride.",
+      "roles": [
+        "off_shift_crew"
+      ]
+    },
+    {
+      "id": "bar_gamblers",
+      "boards": [
+        "bar"
+      ],
+      "text": "{quantity} gamblers have had enough of this station and want to get to {destination}.",
+      "roles": [
+        "gamblers"
+      ]
+    },
+    {
+      "id": "bar_freelancers",
+      "boards": [
+        "bar"
+      ],
+      "text": "{quantity} freelancers are between jobs and looking for passage to {destination}.",
+      "roles": [
+        "freelancers"
+      ]
+    },
+    {
+      "id": "bar_prospectors",
+      "boards": [
+        "bar"
+      ],
+      "text": "A prospecting crew is talking up {destination}. {quantity} want passage.",
+      "roles": [
+        "prospectors"
+      ]
+    },
+    {
+      "id": "bar_performers",
+      "boards": [
+        "bar"
+      ],
+      "text": "Touring performers need a ship to {destination}. {quantity} travellers, gear already packed.",
+      "roles": [
+        "performers"
+      ]
+    },
+    {
+      "id": "bar_dead_run",
+      "boards": [
+        "bar"
+      ],
+      "text": "They're going that way anyway: {quantity} travellers are looking for a cheap ride to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "bar_cash",
+      "boards": [
+        "bar"
+      ],
+      "text": "Cash offer at the bar: {quantity} people, {destination}, departure as soon as possible.",
+      "roles": []
+    },
+    {
+      "id": "bar_no_questions",
+      "boards": [
+        "bar"
+      ],
+      "text": "{quantity} travellers need to get to {destination}. They aren't asking for conversation.",
+      "roles": []
+    },
+    {
+      "id": "bar_regulars",
+      "boards": [
+        "bar"
+      ],
+      "text": "Some regulars are heading out: {quantity} passengers to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "bar_split_fare",
+      "boards": [
+        "bar"
+      ],
+      "text": "A few travellers are pooling their money for passage to {destination}: {quantity} passengers.",
+      "roles": []
+    },
+    {
+      "id": "influencers_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Creator booking: {quantity} influencer(s) headed to {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Audience event at {destination}; {quantity} creator(s) need passage.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Travel content contract — {quantity} creators to {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The feed says {destination} is next. {quantity} traveller(s) are ready to go.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Brand trip: {quantity} creator(s) booked for {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Media personality travel: {quantity} passenger(s), destination {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A small creator crew is looking for a ship to {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Sponsored itinerary: {quantity} travellers to {destination}. Keep the cabin presentable.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "They need to be at {destination} before their audience notices they're late: {quantity} passengers.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "influencers_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar chatter: somebody with a large following wants a ride to {destination}.",
+      "roles": [
+        "influencers"
+      ]
+    },
+    {
+      "id": "journalists_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Press booking: {quantity} reporter(s) travelling to {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "News desk requests transport for {quantity} journalist(s) to {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Assignment: {quantity} reporter(s), destination {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A correspondent needs to get to {destination} before the story goes stale.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Press transit: {quantity} media personnel headed for {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Field reporting team, {quantity} passenger(s), bound for {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The bureau has approved passage for {quantity} reporter(s) to {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "News crew seeking a direct run to {destination}. {quantity} aboard.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Late filing, later flight: {quantity} journalist(s) need {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "journalists_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar tip: a reporter is looking for a discreet ride to {destination}.",
+      "roles": [
+        "journalists"
+      ]
+    },
+    {
+      "id": "documentarians_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Documentary crew: {quantity} passengers heading to {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Production booking for {quantity} crew members travelling to {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field shoot at {destination}; {quantity} documentary staff require passage.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Production schedule: {quantity} people to {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "A documentary team is packing cameras for {destination}. {quantity} passengers.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Location shoot requires {quantity} crew at {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The production wants a direct run to {destination}: {quantity} aboard.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Independent film crew seeking transport to {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Archive project: {quantity} researchers and crew to {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "documentarians_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar posting: camera cases packed, {quantity} people, {destination}.",
+      "roles": [
+        "documentarians"
+      ]
+    },
+    {
+      "id": "artists_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cultural booking: {quantity} artist(s) travelling to {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Gallery engagement at {destination}; {quantity} passengers require passage.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Residency booking: {quantity} artist(s) headed for {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A small cultural delegation is bound for {destination}: {quantity} travellers.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Exhibition opening at {destination}. {quantity} people need transport.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The next commission is on {destination}. {quantity} artists are ready to leave.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Touring artist(s) seeking a ship to {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Studio exchange: {quantity} passengers to {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A few patrons have funded passage for {quantity} artists to {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "artists_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar notice: artists, luggage, and one very large case need to reach {destination}.",
+      "roles": [
+        "artists"
+      ]
+    },
+    {
+      "id": "musicians_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Performance booking: {quantity} musician(s) travelling to {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tour leg: {quantity} performers need passage to {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The next show is at {destination}; {quantity} band members need a ship.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Music circuit booking for {quantity} passengers to {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Gig at {destination}: {quantity} musicians, instruments packed.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tour manager requests transport for {quantity} performers to {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A travelling ensemble is looking for passage to {destination}. {quantity} aboard.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Late-night board: musicians with instruments need a ride to {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Festival call time at {destination}. {quantity} performers need to arrive.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "musicians_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar deal: {quantity} musicians, one destination, no appetite for missing soundcheck — {destination}.",
+      "roles": [
+        "musicians"
+      ]
+    },
+    {
+      "id": "technicians_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Service call: {quantity} technicians to {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Maintenance contractor requires passage for {quantity} technicians to {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Repair team headed for {destination}: {quantity} passengers.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fault response booking — {quantity} technical staff to {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The machinery is waiting at {destination}. {quantity} technicians need a ride.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Scheduled maintenance at {destination}; {quantity} personnel require transport.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Emergency service dispatch: {quantity} technicians, destination {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A maintenance crew is looking for a direct run to {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Workshop staff transfer: {quantity} technicians to {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "technicians_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: tools packed, {quantity} techs, {destination}.",
+      "roles": [
+        "technicians"
+      ]
+    },
+    {
+      "id": "engineers_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Engineering assignment: {quantity} engineers to {destination}.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Project transfer for {quantity} engineers travelling to {destination}.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Design team requires transport to {destination}: {quantity} passengers.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Commissioning job at {destination}; {quantity} engineers need passage.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Engineering inspection at {destination}. {quantity} specialists booked.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The plant at {destination} has questions. {quantity} engineers are going.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Technical project team, {quantity} passengers, bound for {destination}.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Engineering consultancy booking: {quantity} to {destination}.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Field engineers need a ship to {destination}.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "engineers_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar lead: engineering crew looking for a ride to {destination}, {quantity} aboard.",
+      "roles": [
+        "engineers"
+      ]
+    },
+    {
+      "id": "surveyors_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Survey contract: {quantity} surveyors to {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field survey team headed to {destination}: {quantity} passengers.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Mapping assignment requires {quantity} surveyors at {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Survey crew booking for {destination}; {quantity} travellers.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Terrain survey at {destination}. {quantity} specialists require passage.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Infrastructure survey team to {destination}: {quantity} aboard.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The instruments are calibrated. {quantity} surveyors need a ride to {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field mapping work is scheduled at {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Survey office requests transport for {quantity} personnel to {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "surveyors_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: survey gear and {quantity} passengers bound for {destination}.",
+      "roles": [
+        "surveyors"
+      ]
+    },
+    {
+      "id": "geologists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Planetary geology team: {quantity} to {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field geology assignment at {destination}; {quantity} passengers.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Rock survey booking: {quantity} geologists to {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research expedition requires transport for {quantity} geologists.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Sample campaign at {destination}. {quantity} specialists need passage.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Geology department has a field party bound for {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Expedition booking: {quantity} geologists, destination {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Survey instruments and {quantity} scientists need transport to {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Fieldwork window is open at {destination}. {quantity} geologists need to be there.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "geologists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar offer: geologists looking for a practical ride to {destination}.",
+      "roles": [
+        "geologists"
+      ]
+    },
+    {
+      "id": "ecologists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Ecology field team: {quantity} passengers to {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental survey at {destination}; {quantity} ecologists require passage.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Habitat study booking for {quantity} researchers to {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field ecology project needs {quantity} staff at {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Biosphere monitoring team headed for {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Restoration survey: {quantity} ecologists to {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental assessment requires passage for {quantity} specialists.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The field station at {destination} is expecting {quantity} ecologists.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research window at {destination}: {quantity} passengers.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "ecologists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: field scientists need transport to {destination}.",
+      "roles": [
+        "ecologists"
+      ]
+    },
+    {
+      "id": "roboticists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Robotics deployment: {quantity} specialists to {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Automation project at {destination}; {quantity} roboticists require passage.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Machine systems team headed for {destination}: {quantity} aboard.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Robot commissioning work requires {quantity} specialists at {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Control systems assignment: {quantity} roboticists to {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Maintenance of autonomous systems at {destination}. {quantity} passengers.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Robotics engineers booked for {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The machines are ready; the people need a ship. {quantity} to {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field robotics team requests direct transport to {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "roboticists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar lead: robotics specialists with a job at {destination}.",
+      "roles": [
+        "roboticists"
+      ]
+    },
+    {
+      "id": "software_specialists_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Systems contract: {quantity} specialists to {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Software deployment team travelling to {destination}: {quantity} passengers.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Network migration at {destination}; {quantity} systems staff require passage.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Infrastructure engineers booked for {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Systems incident response: {quantity} specialists to {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A platform upgrade is waiting at {destination}. {quantity} personnel need transport.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Technical consultancy booking for {quantity} to {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Remote systems team travelling to {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Security and systems staff require a direct run to {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "software_specialists_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: systems people, laptops, {quantity} passengers, {destination}.",
+      "roles": [
+        "software_specialists"
+      ]
+    },
+    {
+      "id": "fabricators_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Fabrication crew: {quantity} specialists to {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Manufacturing contract at {destination}; {quantity} passengers.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Precision fabrication team headed for {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Production line commissioning requires {quantity} fabricators.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Workshop transfer: {quantity} specialists to {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The shop floor at {destination} is waiting on {quantity} fabrication staff.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Manufacturing support booking for {quantity} to {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Fabrication technicians require transport to {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Tooling crew, {quantity} aboard, destination {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "fabricators_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar notice: workshop crew looking for a ship to {destination}.",
+      "roles": [
+        "fabricators"
+      ]
+    },
+    {
+      "id": "miners_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Mining crew transfer: {quantity} workers to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Mine shift booking for {quantity} passengers bound for {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Extraction crew headed to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A new shift is due at {destination}; {quantity} miners need transport.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Mining contractor requires passage for {quantity} workers.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Ore operation transfer: {quantity} passengers to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Field crew booking, destination {destination}, {quantity} aboard.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The shuttle is full. {quantity} miners still need a ride to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Shift rotation: {quantity} workers travelling to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "miners_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: miners looking for a cheap run to {destination}.",
+      "roles": [
+        "miners"
+      ]
+    },
+    {
+      "id": "agricultural_workers_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Agricultural labour booking: {quantity} workers to {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Seasonal farm crew travelling to {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Harvest contract: {quantity} passengers bound for {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Growing cycle begins at {destination}; {quantity} workers need passage.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Agricultural station requests transport for {quantity} staff.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field hands booked for {destination}: {quantity} travellers.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Crop season transfer — {quantity} workers to {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Food production site at {destination} is hiring. {quantity} need transport.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Work crew ready to leave for {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "agricultural_workers_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: farm workers pooling fares for {destination}.",
+      "roles": [
+        "agricultural_workers"
+      ]
+    },
+    {
+      "id": "habitat_operators_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Habitat operations team: {quantity} to {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Station management transfer for {quantity} personnel.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Habitat operations assignment at {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Residential systems staff need transport to {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Life-support and facilities team booked for {destination}: {quantity}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Habitat management shift change: {quantity} passengers to {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Operations contractor requires {quantity} staff at {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The habitat is short-handed. {quantity} operators need a ride.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Facilities team transfer to {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "habitat_operators_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: habitat operators heading for {destination}.",
+      "roles": [
+        "habitat_operators"
+      ]
+    },
+    {
+      "id": "shipyard_workers_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Shipyard labour transfer: {quantity} workers to {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Dockyard crew booked for {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Yard shift change: {quantity} passengers bound for {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Shipbuilding contract requires {quantity} workers at {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Hull works are starting at {destination}; {quantity} personnel need passage.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Dock crew transfer: {quantity} workers to {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Yard management requests transport for {quantity} staff.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The keel is laid; the crew still needs a ship to {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Shipyard overtime crew heading for {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "shipyard_workers_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: yard workers looking for a ride to {destination}.",
+      "roles": [
+        "shipyard_workers"
+      ]
+    },
+    {
+      "id": "life_support_specialists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Life-support service team: {quantity} specialists to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Atmosphere systems inspection at {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Closed-environment engineering crew booked for {destination}: {quantity}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Habitat life-support maintenance requires {quantity} specialists.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental control technicians travelling to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Pressure, air and water systems team: {quantity} to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Life-support contractor requires transport for {quantity} personnel.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "A habitat has a systems problem. {quantity} specialists are going to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Emergency environmental systems response: {quantity} to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "life_support_specialists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar lead: life-support crew need a ship to {destination}.",
+      "roles": [
+        "life_support_specialists"
+      ]
+    },
+    {
+      "id": "medical_staff_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Medical transfer: {quantity} staff to {destination}.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Clinic staffing assignment for {quantity} medical personnel.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Hospital rotation: {quantity} passengers travelling to {destination}.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Medical team required at {destination}.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Locum booking: {quantity} medical staff to {destination}.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Clinical support crew headed for {destination}.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Health service requests transport for {quantity} personnel.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The clinic at {destination} is expecting {quantity} staff.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Medical rotation departs for {destination}: {quantity} aboard.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "medical_staff_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Urgent staffing requirement at {destination}; {quantity} passengers.",
+      "roles": [
+        "medical_staff"
+      ]
+    },
+    {
+      "id": "veterinarians_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Veterinary booking: {quantity} specialists to {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Animal health team travelling to {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Veterinary field visit: {quantity} passengers.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Livestock health inspection requires {quantity} specialists at {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Veterinary clinic rotation: {quantity} to {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Animal care team headed for {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Biosecurity veterinary assignment for {quantity} travellers.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The agricultural station at {destination} has requested veterinary staff.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field vets need a direct run to {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "veterinarians_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: animal health specialists looking for transport to {destination}.",
+      "roles": [
+        "veterinarians"
+      ]
+    },
+    {
+      "id": "cricket_spectators_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Match day: {quantity} cricket spectators headed for {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tickets are bought. {quantity} cricket spectators need passage to {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cricket crowd travelling to {destination}: {quantity} passengers.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A match at {destination} has attracted {quantity} travellers.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cricket weekend booking — {quantity} spectators to {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fans have arranged a group trip to {destination}. {quantity} aboard.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The stands are calling: {quantity} cricket spectators want a ride to {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Match travel: {quantity} passengers, destination {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cricket supporters looking for a ship to {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_spectators_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} spectators are splitting a fare to {destination}.",
+      "roles": [
+        "cricket_spectators"
+      ]
+    },
+    {
+      "id": "cricket_officials_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Cricket appointment: {quantity} officials to {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Match officials require transport to {destination}: {quantity} passengers.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Tournament duty at {destination}; {quantity} cricket officials booked.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Umpiring crew transfer to {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Competition staff travelling to {destination}: {quantity} aboard.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official cricket party, {quantity}, bound for {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The match cannot start without them. {quantity} officials need passage to {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Tournament logistics requests a direct run for {quantity} officials.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Cricket governing staff booked for {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_officials_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Appointment notice: {quantity} officials, destination {destination}.",
+      "roles": [
+        "cricket_officials"
+      ]
+    },
+    {
+      "id": "cricket_fans_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cricket fans on tour: {quantity} passengers to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Supporters want to see the match at {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fan club booking for {quantity} to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The travelling supporters' section is going to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Cricket faithful pooling fares for {destination}: {quantity} aboard.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Match tickets in hand, {quantity} fans need transport to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Away match: {quantity} supporters headed to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A noisy little cricket party is looking for a ship to {destination}.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fan trip to {destination}; {quantity} seats wanted.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "cricket_fans_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: cricket fans are talking about {destination} and looking for a ride.",
+      "roles": [
+        "cricket_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi day: {quantity} spectators travelling to {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tournament crowd booking — {quantity} passengers to {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The field at {destination} is drawing {quantity} spectators.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi event travel: {quantity} passengers bound for {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Festival booking for {quantity} spectators headed to {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A tournament is underway at {destination}; {quantity} people need passage.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi crowd wants a ride to {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Match day at {destination}: {quantity} spectators ready to depart.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The grandstand is filling up. {quantity} travellers need {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_spectators_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar chatter: {quantity} people are splitting a fare to the buzkashi grounds at {destination}.",
+      "roles": [
+        "buzkashi_spectators"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Buzkashi officials booked for {destination}: {quantity} passengers.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Tournament officials require transport to {destination}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field officials travelling to {destination}: {quantity} aboard.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Competition duty: {quantity} buzkashi officials to {destination}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Event administration team headed for {destination}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The tournament needs its officials on site. {quantity} to {destination}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Buzkashi organizing staff request passage for {quantity}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official party bound for {destination}: {quantity} passengers.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Tournament appointment at {destination}; transport required.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_officials_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Schedule notice: {quantity} officials, destination {destination}.",
+      "roles": [
+        "buzkashi_officials"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi supporters travelling to {destination}: {quantity} passengers.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tournament fans want a ride to {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fan party booking for {quantity} to {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The supporters' group is heading for {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi fans pooling fares: {quantity} aboard.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Match tickets secured; {quantity} fans need passage.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Away tournament trip to {destination}: {quantity} passengers.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A lively group of fans is looking for transport to {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Buzkashi weekend: {quantity} supporters bound for {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "buzkashi_fans_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} fans are talking horses and looking for a ship to {destination}.",
+      "roles": [
+        "buzkashi_fans"
+      ]
+    },
+    {
+      "id": "boxing_spectators_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight night: {quantity} boxing spectators to {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Ringside booking for {quantity} passengers travelling to {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Boxing event at {destination}; {quantity} spectators need passage.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight card has drawn {quantity} travellers to {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Boxing night transport: {quantity} passengers.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Spectator group headed for {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The bout is at {destination}; {quantity} people want a ride.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tickets are paid for. {quantity} boxing spectators need transport.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight-night party seeking passage to {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_spectators_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} boxing fans are pooling a fare to {destination}.",
+      "roles": [
+        "boxing_spectators"
+      ]
+    },
+    {
+      "id": "boxing_officials_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Boxing officials travelling to {destination}: {quantity} passengers.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Fight officials require transport to {destination}.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Commission appointment at {destination}; {quantity} officials.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Judges and officials booked for {destination}.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Boxing event staff: {quantity} to {destination}.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The ring is ready; {quantity} officials need passage.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Fight administration party bound for {destination}.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official boxing booking: {quantity} passengers.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Event duty at {destination}; transport requested.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_officials_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Schedule notice: boxing officials to {destination}, {quantity} aboard.",
+      "roles": [
+        "boxing_officials"
+      ]
+    },
+    {
+      "id": "boxing_fans_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight fans heading to {destination}: {quantity} passengers.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Boxing supporters want a ride to {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight-night fan club booking — {quantity} to {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The away crowd is travelling to {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Tickets secured, {quantity} boxing fans need passage.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bout weekend: {quantity} supporters headed for {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A group of fight fans is splitting a fare to {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Boxing crowd looking for transport to {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Fight night at {destination}; {quantity} passengers ready.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "boxing_fans_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} fans are talking about the card at {destination}.",
+      "roles": [
+        "boxing_fans"
+      ]
+    },
+    {
+      "id": "pylon_spectators_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon race day: {quantity} spectators headed to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Racing weekend booking for {quantity} passengers to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon racing event at {destination}; spectators require passage.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The pylons are going up at {destination}. {quantity} spectators want a ride.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Race crowd travelling to {destination}: {quantity} aboard.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon event tickets are booked. {quantity} need transport.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Spectator group seeking a ship to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Racing fans have arranged a group run to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Race-day transfer: {quantity} passengers to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_spectators_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} race spectators are splitting a fare to {destination}.",
+      "roles": [
+        "pylon_spectators"
+      ]
+    },
+    {
+      "id": "pylon_officials_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Pylon racing officials booked for {destination}: {quantity} passengers.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Race control staff require transport to {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Course officials travelling to {destination}: {quantity} aboard.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Race administration party bound for {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Pylon event duty: {quantity} officials to {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Timing and course staff need passage to {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The course cannot certify itself. {quantity} officials need a ship.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Race officials request a direct run to {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Competition staff transfer: {quantity} to {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_officials_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Schedule notice: pylon officials, {quantity} passengers, destination {destination}.",
+      "roles": [
+        "pylon_officials"
+      ]
+    },
+    {
+      "id": "pylon_fans_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon racing fans heading to {destination}: {quantity} passengers.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Race fans want a ride to {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon weekend: {quantity} supporters travelling to {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The racing crowd is moving on {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Race tickets secured; {quantity} fans need passage.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon supporters pooling fares for {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "A group of racing fans is looking for a ship to {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Race-day trip to {destination}: {quantity} aboard.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pylon fan club booking for {quantity}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "pylon_fans_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: {quantity} race fans are heading for {destination}.",
+      "roles": [
+        "pylon_fans"
+      ]
+    },
+    {
+      "id": "teachers_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Education posting: {quantity} teachers to {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "School staff transfer to {destination}: {quantity} passengers.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Teaching appointment at {destination}; {quantity} educators require passage.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Term posting: {quantity} teachers bound for {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Faculty travel booking for {quantity} to {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The next class is at {destination}. {quantity} teachers need transport.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Education service requests passage for {quantity} staff.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "School rotation: {quantity} educators to {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Teaching staff looking for a direct run to {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "teachers_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: educators heading to {destination}.",
+      "roles": [
+        "teachers"
+      ]
+    },
+    {
+      "id": "research_assistants_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research transfer: {quantity} assistants to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Lab team booking for {quantity} passengers to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research station at {destination} requests {quantity} assistants.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field research assignment: {quantity} to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Project staff travelling to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The lab is waiting for {quantity} research assistants.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Scientific support crew bound for {destination}: {quantity}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research rotation: {quantity} passengers.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Academic project requires transport to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "research_assistants_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: research staff looking for a ride to {destination}.",
+      "roles": [
+        "research_assistants"
+      ]
+    },
+    {
+      "id": "civil_service_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Civil service transfer: {quantity} staff to {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Administrative posting at {destination}; {quantity} passengers.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Government office requests passage for {quantity} personnel.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Public service rotation: {quantity} to {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official transfer booking for {quantity} staff.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The department needs {quantity} people at {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Administrative team bound for {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Civil service appointment: {quantity} passengers.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Routine government travel to {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "civil_service_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official board: {quantity} staff, destination {destination}.",
+      "roles": [
+        "civil_service"
+      ]
+    },
+    {
+      "id": "inspectors_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Inspection assignment: {quantity} inspectors to {destination}.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Regulatory inspection at {destination}; transport required.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Compliance team bound for {destination}: {quantity}.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Inspection office requests passage for {quantity} personnel.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Site inspection booking: {quantity} to {destination}.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The facility at {destination} is due for inspection.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Regulatory team travelling to {destination}.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Audit and inspection staff: {quantity} passengers.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Inspection window at {destination}; {quantity} officials need transport.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "inspectors_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Official posting: inspectors to {destination}.",
+      "roles": [
+        "inspectors"
+      ]
+    },
+    {
+      "id": "legal_professionals_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Legal appointment: {quantity} professionals to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Counsel travelling to {destination}: {quantity} passengers.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Corporate legal team requires passage to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Hearing at {destination}; {quantity} legal staff booked.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Legal consultation: {quantity} passengers to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Case team travelling to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Counsel requests direct transport for {quantity}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Legal department transfer to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The docket is at {destination}; {quantity} need passage.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "legal_professionals_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar posting: legal professionals looking for a ride to {destination}.",
+      "roles": [
+        "legal_professionals"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Claims assignment: {quantity} adjusters to {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Insurance inspection at {destination}; {quantity} passengers.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Loss assessment team bound for {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Claims office requests transport for {quantity}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Adjustment appointment at {destination}: {quantity}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Field claims team travelling to {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Insurance survey booking for {quantity} passengers.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Damage assessment requires {quantity} staff at {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Claims inspectors need a direct run to {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "insurance_adjusters_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: adjusters heading for {destination}.",
+      "roles": [
+        "insurance_adjusters"
+      ]
+    },
+    {
+      "id": "auctioneers_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Auction booking: {quantity} brokers to {destination}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Commercial sale at {destination}; {quantity} passengers.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Trade delegation travelling to {destination}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Auction house requests passage for {quantity} staff.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Brokerage appointment at {destination}: {quantity} aboard.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The sale is at {destination}; {quantity} people need transport.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Dealmakers headed for {destination}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Commercial auction team booking for {quantity}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Broker group looking for a direct run to {destination}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "auctioneers_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: brokers talking business and needing a ride to {destination}.",
+      "roles": [
+        "auctioneers"
+      ]
+    },
+    {
+      "id": "archivists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Archive project: {quantity} archivists to {destination}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Records transfer team travelling to {destination}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Historical archive appointment at {destination}; {quantity} passengers.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Preservation team requires passage for {quantity}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Archive survey at {destination}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Cataloguing staff bound for {destination}: {quantity}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The collection at {destination} needs specialists.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research archive booking for {quantity} travellers.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Records staff travelling to {destination}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archivists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Quiet booking: {quantity} archivists to {destination}.",
+      "roles": [
+        "archivists"
+      ]
+    },
+    {
+      "id": "archaeologists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Archaeology field team: {quantity} to {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Excavation assignment at {destination}; {quantity} passengers.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Site survey booking for {quantity} archaeologists.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field expedition bound for {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Archaeological survey requires transport for {quantity}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The dig at {destination} is opening for the season.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Research expedition: {quantity} archaeologists to {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Cultural site assessment at {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field team requests a direct run to {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "archaeologists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: archaeologists looking for transport to {destination}.",
+      "roles": [
+        "archaeologists"
+      ]
+    },
+    {
+      "id": "religious_workers_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Religious service travel: {quantity} passengers to {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Clergy and staff transfer to {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Community service appointment at {destination}; {quantity} travellers.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Pilgrimage support staff travelling to {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Religious delegation booking for {quantity}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Community workers headed for {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Service rotation: {quantity} passengers to {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The congregation at {destination} is expecting {quantity} visitors.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Faith community travel booking.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "religious_workers_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: community workers looking for a ride to {destination}.",
+      "roles": [
+        "religious_workers"
+      ]
+    },
+    {
+      "id": "food_specialists_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Culinary booking: {quantity} specialists to {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Food production team travelling to {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Kitchen staff transfer: {quantity} passengers.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Culinary event at {destination}; {quantity} staff require passage.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Food science team headed for {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Restaurant opening at {destination}: {quantity} personnel.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Provisioning specialists require transport to {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Hospitality project booking for {quantity}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The kitchen is waiting at {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "food_specialists_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: food people heading for {destination}.",
+      "roles": [
+        "food_specialists"
+      ]
+    },
+    {
+      "id": "hospitality_staff_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Hospitality staffing transfer: {quantity} to {destination}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Hotel crew booking for {quantity} passengers.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Hospitality opening at {destination}; staff required.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Service team travelling to {destination}: {quantity}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Resort staffing contract for {quantity} passengers.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Station hotel rotation: {quantity} to {destination}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Guest-services team headed for {destination}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Hospitality contractor requests transport for {quantity}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The new season starts at {destination}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "hospitality_staff_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: hospitality workers pooling a fare to {destination}.",
+      "roles": [
+        "hospitality_staff"
+      ]
+    },
+    {
+      "id": "security_consultants_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Security consultancy: {quantity} personnel to {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Corporate security assignment at {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Risk assessment team requires passage for {quantity}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Security review booking: {quantity} to {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Protective systems audit at {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Security contractors travelling to {destination}: {quantity}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Corporate risk team requests a direct run to {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Security assessment appointment at {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The client at {destination} has requested {quantity} specialists.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "security_consultants_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: security professionals looking for transport to {destination}.",
+      "roles": [
+        "security_consultants"
+      ]
+    },
+    {
+      "id": "salvage_crews_01",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Salvage contract: {quantity} crew to {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_02",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Recovery team headed for {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_03",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Wreck survey requires {quantity} passengers.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_04",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Salvage operation booking for {quantity} to {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_05",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Recovery crew transfer: {quantity} workers.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_06",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "The salvage window at {destination} is open.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_07",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Field recovery team travelling to {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_08",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Scrap and recovery crew request passage.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_09",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Salvage contractors need a ship to {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "salvage_crews_10",
+      "boards": [
+        "terminal",
+        "bar"
+      ],
+      "text": "Bar board: recovery crew looking for a ride to {destination}.",
+      "roles": [
+        "salvage_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Terraforming contract: {quantity} workers to {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Planetary works crew travelling to {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Atmospheric project staffing: {quantity} passengers.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Terraforming operation at {destination}; crew required.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental engineering team bound for {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Surface works crew transfer: {quantity}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The next phase starts at {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Planetary engineering contractors request passage.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Terraforming staff need a direct run to {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "terraforming_crews_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: terraforming workers heading for {destination}.",
+      "roles": [
+        "terraforming_crews"
+      ]
+    },
+    {
+      "id": "climate_specialists_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Climate study team: {quantity} to {destination}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Atmospheric assessment at {destination}; {quantity} specialists.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Climate engineering consultation requires passage for {quantity}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental modelling team bound for {destination}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Climate station rotation: {quantity} passengers.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Atmospheric research booking for {destination}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The weather systems at {destination} need specialists.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Climate field team requests transport for {quantity}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Environmental monitoring assignment to {destination}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "climate_specialists_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: climate specialists looking for a ride to {destination}.",
+      "roles": [
+        "climate_specialists"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_01",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Orbital operations assignment: {quantity} specialists to {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_02",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Flight dynamics team travelling to {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_03",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Orbital planning contract for {quantity} passengers.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_04",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Navigation engineering assignment at {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_05",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Trajectory specialists bound for {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_06",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Orbital systems review requires {quantity} personnel.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_07",
+      "boards": [
+        "terminal"
+      ],
+      "text": "The station at {destination} needs orbital mechanics support.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_08",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Flight dynamics team requests passage to {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_09",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Navigation consultancy: {quantity} to {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "orbital_mechanics_10",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Bar board: orbital specialists looking for transport to {destination}.",
+      "roles": [
+        "orbital_mechanics"
+      ]
+    },
+    {
+      "id": "mixed_event_travel",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Event travel: {quantity} passengers headed for {destination}.",
+      "roles": []
+    },
+    {
+      "id": "professional_appointment",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Professional appointment: {quantity} travellers to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "field_assignment",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Field assignment: {quantity} personnel require passage to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "short_notice_travel",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Short-notice travel: {quantity} passengers ready for {destination}.",
+      "roles": []
+    },
+    {
+      "id": "station_transfer",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Station transfer: {quantity} travellers to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "contractor_board",
+      "boards": [
+        "terminal"
+      ],
+      "text": "Contractor posting: {quantity} personnel bound for {destination}.",
+      "roles": []
+    },
+    {
+      "id": "bar_cash_offer",
+      "boards": [
+        "bar"
+      ],
+      "text": "Cash offer: {quantity} people, destination {destination}, ready to leave.",
+      "roles": []
+    },
+    {
+      "id": "bar_quiet_deal",
+      "boards": [
+        "bar"
+      ],
+      "text": "Quiet deal at the bar: {quantity} passengers to {destination}.",
+      "roles": []
+    },
+    {
+      "id": "bar_crew_pool",
+      "boards": [
+        "bar"
+      ],
+      "text": "A small crew is pooling fares for passage to {destination}: {quantity} aboard.",
+      "roles": []
     }
-  ]
+  ],
+  "notes": {
+    "design_intent": "Passenger charters are ordinary transport work generated from passenger roles and reusable flavour descriptions.",
+    "board_split": {
+      "terminal": "More formal bookings: ordinary travellers, groups, companies, institutions and scheduled travel.",
+      "bar": "Informal bookings: opportunistic travel, cash offers, stranded travellers and socially sourced work."
+    },
+    "role_generation": "A description with an empty roles list can be used with any compatible civilian passenger role; otherwise its roles constrain generation.",
+    "economy": "Pay multipliers distinguish passenger markets without requiring bespoke mission logic.",
+    "role_count": 72,
+    "description_count": 545,
+    "expanded_role_families": [
+      "media_and_culture",
+      "industrial_and_technical",
+      "science_and_environment",
+      "health_and_services",
+      "sports_and_events",
+      "government_and_professional"
+    ]
+  }
 }

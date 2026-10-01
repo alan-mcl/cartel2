@@ -208,6 +208,7 @@ Fuel lives on the owned ship. Heat/signature simulation is deferred beyond the c
 | `spare_parts` | `{ module_id: qty }` uninstalled modules in player inventory |
 | `hull` / `max_hull` | Hull stress during 4-space (from chassis + armour hits) |
 | `gst_seconds` | Elapsed GST since 1 January Q1, year 0 (float; persisted in saves) |
+| `run_seed` | Per-save int mixed into daily procedural rolls (e.g. passenger charter boards); set on new game |
 
 Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected docked ship (defaults to `current_ship_id`).
 

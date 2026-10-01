@@ -179,8 +179,8 @@ static func pick_description(
 	return str(picked.get("text", ""))
 
 
-static func board_seed(day: int, habitat_id: String, board: String) -> int:
-	return int(hash("%d:%s:%s" % [day, habitat_id, board]))
+static func board_seed(day: int, habitat_id: String, board: String, run_seed: int) -> int:
+	return int(hash("%d:%d:%s:%s" % [run_seed, day, habitat_id, board]))
 
 
 static func generate_offers(
@@ -188,7 +188,8 @@ static func generate_offers(
 	origin_habitat_id: String,
 	board: String,
 	day: int,
-	count: int
+	count: int,
+	run_seed: int = 0
 ) -> Array:
 	var cfg := config(catalog)
 	var destinations := neighbor_destinations(catalog, origin_habitat_id)
@@ -199,7 +200,7 @@ static func generate_offers(
 	var origin := catalog.get_habitat(origin_habitat_id)
 	var origin_sector := str(origin.get("sector_id", ""))
 	var rng := RandomNumberGenerator.new()
-	rng.seed = board_seed(day, origin_habitat_id, board)
+	rng.seed = board_seed(day, origin_habitat_id, board, run_seed)
 
 	var offers: Array = []
 	for index in count:

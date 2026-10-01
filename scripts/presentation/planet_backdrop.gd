@@ -15,6 +15,12 @@ var _planet_root: Node3D
 var _material: ShaderMaterial
 var _sprite: Sprite2D
 var _spin_period: float = 600.0
+var _auto_spin_enabled: bool = true
+var _auto_spin_yaw: float = 0.0
+var _inspection_yaw: float = 0.0
+var _inspection_pitch: float = 0.0
+
+const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
 
 
 func configure(planet_data: Dictionary, sector_id: String = "") -> void:
@@ -164,9 +170,35 @@ func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> v
 	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.05))
 
 
+func set_auto_spin_enabled(enabled: bool) -> void:
+	_auto_spin_enabled = enabled
+
+
+func add_inspection_rotation(yaw_delta: float, pitch_delta: float) -> void:
+	_inspection_yaw += yaw_delta
+	_inspection_pitch = clampf(
+		_inspection_pitch + pitch_delta,
+		-INSPECTION_PITCH_LIMIT,
+		INSPECTION_PITCH_LIMIT
+	)
+	_apply_planet_rotation()
+
+
+func _apply_planet_rotation() -> void:
+	if _planet_root == null:
+		return
+	_planet_root.rotation = Vector3(
+		_inspection_pitch,
+		_inspection_yaw + _auto_spin_yaw,
+		0.0
+	)
+
+
 func _process(delta: float) -> void:
 	if _planet_root == null or _spin_period <= 0.0:
 		return
 	if get_tree().paused:
 		return
-	_planet_root.rotation.y += TAU / _spin_period * delta
+	if _auto_spin_enabled:
+		_auto_spin_yaw = fposmod(_auto_spin_yaw + TAU / _spin_period * delta, TAU)
+	_apply_planet_rotation()

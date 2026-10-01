@@ -12,6 +12,8 @@ var unspace_world_id: String = ""
 var unspace_solution: int = 0
 var pending_destination_id: String = ""
 var gst_seconds: float = 0.0
+## Per-save RNG salt for daily procedural content (e.g. passenger charter boards).
+var run_seed: int = 0
 var orbital_phase_by_sector: Dictionary = {}
 var market_quotes: Dictionary = {}
 var market_quotes_day: int = -1
@@ -89,6 +91,7 @@ func to_session_dict() -> Dictionary:
 		"pending_destination_id": pending_destination_id,
 		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
 		"gst_seconds": gst_seconds,
+		"run_seed": run_seed,
 		"route_friction_delta": route_friction_delta.duplicate(),
 	}
 
@@ -109,6 +112,7 @@ func load_session_dict(data: Dictionary, default_gst_seconds: float) -> void:
 		gst_seconds = float(data.get("gst_seconds", 0.0))
 	else:
 		gst_seconds = default_gst_seconds
+	run_seed = int(data.get("run_seed", 0))
 	route_friction_delta = _float_dict_from_variant(data.get("route_friction_delta", {}))
 	market_quotes.clear()
 	market_quotes_day = -1

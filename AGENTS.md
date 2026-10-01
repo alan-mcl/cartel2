@@ -96,6 +96,9 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
 # Stealth sandbox (F6)
 # res://scenes/dev/stealth_sandbox.tscn
+
+# System render tester (F6)
+# res://scenes/dev/system_render_tester.tscn
 ```
 
 ## Documentation map

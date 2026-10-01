@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_bar_roles_civilian(runner, catalog)
 	_test_boards_use_distinct_roles(runner, catalog)
 	_test_docked_ship_can_accept_spartan_offer(runner, catalog)
+	_test_run_seed_varies_boards(runner, catalog)
 	_test_reward_scales_with_friction(runner, catalog)
 	_test_affiliation_gate_blocks(runner, catalog)
 	_test_cancel_before_departure(runner, catalog)
@@ -206,6 +207,31 @@ static func _test_docked_ship_can_accept_spartan_offer(runner: TestRunner, catal
 		if found_eligible:
 			break
 	runner.check(found_eligible, "missions: spartan offer eligible for best docked ship")
+
+
+static func _test_run_seed_varies_boards(runner: TestRunner, catalog: Catalog) -> void:
+	var day := 100
+	var a := PassengerCharters.generate_offers(
+		catalog, "proxima_habitat", PassengerCharters.BOARD_TERMINAL, day, 4, 111
+	)
+	var b := PassengerCharters.generate_offers(
+		catalog, "proxima_habitat", PassengerCharters.BOARD_TERMINAL, day, 4, 222
+	)
+	runner.check(a.size() >= 1 and b.size() >= 1, "missions: run seed test has offers")
+	var same := true
+	for index in mini(a.size(), b.size()):
+		var left: Dictionary = a[index]
+		var right: Dictionary = b[index]
+		if str(left.get("role_id", "")) != str(right.get("role_id", "")):
+			same = false
+			break
+		if int(left.get("quantity", 0)) != int(right.get("quantity", 0)):
+			same = false
+			break
+		if str(left.get("destination_habitat_id", "")) != str(right.get("destination_habitat_id", "")):
+			same = false
+			break
+	runner.check(not same, "missions: different run seeds change board content")
 
 
 static func _test_reward_scales_with_friction(runner: TestRunner, catalog: Catalog) -> void:

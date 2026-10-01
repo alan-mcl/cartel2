@@ -1,5 +1,7 @@
 extends GameScreen
 
+const TILE_COLUMNS := 3
+
 var board_mode: String = PassengerCharters.BOARD_TERMINAL
 var _resolve_ship_id: Callable = Callable()
 
@@ -55,40 +57,44 @@ func _build_content() -> void:
 		if offers.is_empty():
 			body.add_child(_plain_label("No departures posted today."))
 	if not offers.is_empty():
+		var offer_grid := _new_tile_grid()
 		for offer_variant in offers:
 			if typeof(offer_variant) != TYPE_DICTIONARY:
 				continue
-			body.add_child(_offer_row(missions, offer_variant))
+			offer_grid.add_child(_offer_tile(missions, offer_variant))
+		body.add_child(offer_grid)
 
 	body.add_child(_section_label("YOUR CHARTERS"))
 	if accepted.is_empty():
 		body.add_child(_plain_label("No accepted charters."))
 	else:
+		var accepted_grid := _new_tile_grid()
 		for charter_variant in accepted:
 			if typeof(charter_variant) != TYPE_DICTIONARY:
 				continue
-			body.add_child(_accepted_row(missions, charter_variant))
+			accepted_grid.add_child(_accepted_tile(missions, charter_variant))
+		body.add_child(accepted_grid)
 
 
-func _offer_row(missions: MissionSubsystem, offer: Dictionary) -> VBoxContainer:
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 4)
+func _new_tile_grid() -> GridContainer:
+	var grid := GridContainer.new()
+	grid.columns = TILE_COLUMNS
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	return grid
 
-	var title := _plain_label(
-		"%s · d%d · %s" % [
-			str(offer.get("role_title", "Charter")),
-			int(offer.get("reward", 0)),
-			str(offer.get("destination_name", "")),
-		]
-	)
-	box.add_child(title)
 
-	var detail := _plain_label(str(offer.get("description", "")))
-	box.add_child(detail)
+func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContainer:
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", 4)
 
-	var corp := str(offer.get("corporation_name", ""))
-	if not corp.is_empty():
-		box.add_child(_plain_label("Affiliation: %s" % corp))
+	inner.add_child(_one_line_label(str(offer.get("role_title", "Charter"))))
+
+	var meta := _offer_meta_line(offer)
+	inner.add_child(_one_line_label(meta, &"Muted"))
+	inner.add_child(_one_line_label(_life_support_tile_line(offer), &"Muted"))
+	inner.add_child(_tile_body_label(str(offer.get("description", ""))))
 
 	var ship_id := _active_ship_id()
 	var check := missions.evaluate_offer(
@@ -97,8 +103,6 @@ func _offer_row(missions: MissionSubsystem, offer: Dictionary) -> VBoxContainer:
 		str(offer.get("id", "")),
 		ship_id
 	)
-	if not bool(check.get("ok", false)):
-		box.add_child(_plain_label(str(check.get("reason", ""))))
 
 	var accept := Button.new()
 	accept.text = "Accept"
@@ -108,31 +112,36 @@ func _offer_row(missions: MissionSubsystem, offer: Dictionary) -> VBoxContainer:
 		if missions.accept_offer(_context.session, _context.catalog, offer_id, ship_id):
 			refresh()
 	)
-	box.add_child(accept)
-	return box
+	inner.add_child(accept)
+
+	var tooltip := _tile_tooltip_from_lines(
+		[
+			str(offer.get("role_title", "Charter")),
+			meta,
+			_life_support_tile_line(offer),
+			str(offer.get("description", "")),
+		],
+		str(check.get("reason", ""))
+	)
+	return _surface_tile(inner, tooltip)
 
 
-func _accepted_row(missions: MissionSubsystem, charter: Dictionary) -> VBoxContainer:
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 4)
+func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelContainer:
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", 4)
+
+	inner.add_child(_one_line_label(str(charter.get("role_title", "Charter"))))
 
 	var ship := _context.session.get_owned_ship(str(charter.get("ship_id", "")))
 	var ship_name := ship.name if ship != null else str(charter.get("ship_id", ""))
 	var origin := _habitat_name(str(charter.get("origin_habitat_id", "")))
-	box.add_child(
-		_plain_label(
-			"%s · %s → %s · %s · d%d" % [
-				str(charter.get("role_title", "Charter")),
-				origin,
-				str(charter.get("destination_name", "")),
-				ship_name,
-				int(charter.get("reward", 0)),
-			]
-		)
-	)
-	box.add_child(_plain_label(str(charter.get("description", ""))))
+	var meta := _accepted_meta_line(charter, origin, ship_name)
+	inner.add_child(_one_line_label(meta, &"Muted"))
+	inner.add_child(_one_line_label(_life_support_tile_line(charter), &"Muted"))
+	inner.add_child(_tile_body_label(str(charter.get("description", ""))))
 
 	var charter_id := str(charter.get("charter_id", ""))
+	var status_line := ""
 	if missions.cancel_charter_eligible(_context.session, charter_id):
 		var cfg := PassengerCharters.config(_context.catalog)
 		var penalty := PassengerCharters.cancel_penalty(cfg, int(charter.get("reward", 0)))
@@ -142,10 +151,70 @@ func _accepted_row(missions: MissionSubsystem, charter: Dictionary) -> VBoxConta
 			if missions.cancel_charter(_context.session, _context.catalog, charter_id):
 				refresh()
 		)
-		box.add_child(cancel)
+		inner.add_child(cancel)
 	else:
-		box.add_child(_plain_label("In transit — cannot cancel."))
-	return box
+		status_line = "In transit — cannot cancel."
+		inner.add_child(_one_line_label(status_line, &"Muted"))
+
+	var tooltip := _tile_tooltip_from_lines(
+		[
+			str(charter.get("role_title", "Charter")),
+			meta,
+			_life_support_tile_line(charter),
+			str(charter.get("description", "")),
+			status_line,
+		],
+		""
+	)
+	return _surface_tile(inner, tooltip)
+
+
+func _offer_meta_line(offer: Dictionary) -> String:
+	var meta := "%s · %d pax · d%d" % [
+		str(offer.get("destination_name", "")),
+		int(offer.get("quantity", 0)),
+		int(offer.get("reward", 0)),
+	]
+	var corp := str(offer.get("corporation_name", ""))
+	if not corp.is_empty():
+		meta += " · %s" % corp
+	return meta
+
+
+func _accepted_meta_line(charter: Dictionary, origin: String, ship_name: String) -> String:
+	return "%s → %s · %s · d%d" % [
+		origin,
+		str(charter.get("destination_name", "")),
+		ship_name,
+		int(charter.get("reward", 0)),
+	]
+
+
+func _life_support_tile_line(entry: Dictionary) -> String:
+	var tier := str(entry.get("life_support", "spartan"))
+	return "Life support: %s" % _life_support_tier_name(tier)
+
+
+func _life_support_tier_name(tier: String) -> String:
+	match tier:
+		"luxury":
+			return "Luxury"
+		"comfort":
+			return "Comfort"
+		_:
+			return "Spartan"
+
+
+func _tile_tooltip_from_lines(tile_lines: Array[String], extra: String) -> String:
+	var parts: PackedStringArray = PackedStringArray()
+	for line in tile_lines:
+		var trimmed := line.strip_edges()
+		if not trimmed.is_empty():
+			parts.append(trimmed)
+	var extra_trimmed := extra.strip_edges()
+	if not extra_trimmed.is_empty():
+		parts.append(extra_trimmed)
+	return "\n".join(parts)
 
 
 func _active_ship_id() -> String:
@@ -235,6 +304,38 @@ func _section_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.theme_type_variation = &"Section"
+	return label
+
+
+func _surface_tile(inner: VBoxContainer, tooltip: String = "") -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.theme_type_variation = &"Surface"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inner.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_child(inner)
+	if not tooltip.is_empty():
+		panel.tooltip_text = tooltip
+	return panel
+
+
+func _one_line_label(text: String, variation: StringName = &"") -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.clip_text = true
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if not variation.is_empty():
+		label.theme_type_variation = variation
+	return label
+
+
+func _tile_body_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.theme_type_variation = &"Muted"
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return label
 
 
