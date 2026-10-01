@@ -88,6 +88,9 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 	var meta := _offer_meta_line(offer)
 	inner.add_child(_one_line_label(meta, &"Muted"))
 	inner.add_child(_one_line_label(_budget_line(offer), &"Muted"))
+	var timing := _charter_timing_line(offer)
+	if not timing.is_empty():
+		inner.add_child(_one_line_label(timing, &"Muted"))
 	inner.add_child(_one_line_label(str(offer.get("hold_label", "Dry hold")), &"Muted"))
 
 	var ship_id := _active_ship_id()
@@ -132,6 +135,9 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 	var meta := _accepted_meta_line(charter, origin, ship_name)
 	inner.add_child(_one_line_label(meta, &"Muted"))
 	inner.add_child(_one_line_label(_budget_line(charter), &"Muted"))
+	var timing := _charter_timing_line(charter)
+	if not timing.is_empty():
+		inner.add_child(_one_line_label(timing, &"Muted"))
 
 	var charter_id := str(charter.get("charter_id", ""))
 	var status_line := ""
@@ -156,9 +162,26 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 	return _surface_tile(inner, tooltip)
 
 
+func _destination_label(entry: Dictionary) -> String:
+	return str(entry.get("destination_name", "")) + str(entry.get("via_label", ""))
+
+
+func _charter_timing_line(entry: Dictionary) -> String:
+	var parts: PackedStringArray = PackedStringArray()
+	var hours := int(entry.get("deadline_hours", 0))
+	if hours > 0:
+		parts.append("Within %d h" % hours)
+	var hops := int(entry.get("hops", 1))
+	if hops > 1:
+		parts.append("%d-hop" % hops)
+	if parts.is_empty():
+		return ""
+	return ", ".join(parts)
+
+
 func _offer_meta_line(offer: Dictionary) -> String:
 	return "%s · %.1f t · d%d" % [
-		str(offer.get("destination_name", "")),
+		_destination_label(offer),
 		float(offer.get("tonnes", 0.0)),
 		int(offer.get("reward", 0)),
 	]
@@ -167,7 +190,7 @@ func _offer_meta_line(offer: Dictionary) -> String:
 func _accepted_meta_line(charter: Dictionary, origin: String, ship_name: String) -> String:
 	return "%s → %s · %s · d%d" % [
 		origin,
-		str(charter.get("destination_name", "")),
+		_destination_label(charter),
 		ship_name,
 		int(charter.get("reward", 0)),
 	]

@@ -4,6 +4,14 @@
   "base_pay": 120,
   "friction_pay": 8,
   "cancel_penalty_fraction": 0.25,
+  "max_hops": 3,
+  "deadline_slack_hours": 8,
+  "deadline_orbit_hours_per_hop": 2,
+  "hop_offer_weights": {
+    "1": 70,
+    "2": 25,
+    "3": 5
+  },
   "roles": [
     {
       "id": "steerage",

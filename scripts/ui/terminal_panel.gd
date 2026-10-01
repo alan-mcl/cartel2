@@ -52,7 +52,7 @@ func _build_content() -> void:
 	outer.add_child(tab_row)
 
 	var ships_tab := Button.new()
-	ships_tab.text = "Ships"
+	ships_tab.text = "Docking Bay"
 	ships_tab.disabled = _view_mode == "ships"
 	ships_tab.pressed.connect(func() -> void:
 		_view_mode = "ships"
@@ -61,7 +61,7 @@ func _build_content() -> void:
 	tab_row.add_child(ships_tab)
 
 	var departures_tab := Button.new()
-	departures_tab.text = "Departures"
+	departures_tab.text = "Departures Terminal"
 	departures_tab.disabled = _view_mode == "departures"
 	departures_tab.pressed.connect(func() -> void:
 		_view_mode = "departures"
@@ -70,7 +70,7 @@ func _build_content() -> void:
 	tab_row.add_child(departures_tab)
 
 	var freight_tab := Button.new()
-	freight_tab.text = "Freight Charters"
+	freight_tab.text = "Freight Terminal"
 	freight_tab.disabled = _view_mode == "freight"
 	freight_tab.pressed.connect(func() -> void:
 		_view_mode = "freight"

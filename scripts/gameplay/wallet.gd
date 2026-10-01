@@ -19,6 +19,12 @@ func try_spend(cost: int) -> bool:
 	return true
 
 
+func assess_penalty(cost: int) -> void:
+	if cost <= 0:
+		return
+	credits -= cost
+
+
 func to_session_dict() -> Dictionary:
 	return {"credits": credits}
 

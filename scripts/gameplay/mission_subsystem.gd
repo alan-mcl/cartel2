@@ -21,12 +21,17 @@ func on_day(session: GameSession, catalog: Catalog, day: int) -> void:
 	_refresh_boards(session, catalog, day)
 
 
+func on_hour(session: GameSession, catalog: Catalog, _hour: int) -> void:
+	_enforce_late_passengers_at_dock(session, catalog)
+
+
 func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 	if session == null or evt.is_empty():
 		return
 	if str(evt.get("type", "")) != SimEvent.DOCKED:
 		return
 	var habitat_id := str(evt.get("habitat_id", ""))
+	_enforce_late_passengers_at_dock(session, catalog)
 	_try_complete_charters(session, catalog, habitat_id)
 	_try_complete_freight_charters(session, catalog, habitat_id)
 
@@ -215,6 +220,7 @@ func accept_offer(
 	var charter := offer.duplicate(true)
 	charter["charter_id"] = charter_id
 	charter["ship_id"] = ship_id
+	_apply_charter_deadline(session, charter)
 	accepted.append(charter)
 
 	session.last_log = (
@@ -253,6 +259,7 @@ func accept_freight_offer(
 	var charter := offer.duplicate(true)
 	charter["charter_id"] = charter_id
 	charter["ship_id"] = ship_id
+	_apply_charter_deadline(session, charter)
 	freight_accepted.append(charter)
 
 	session.last_log = (
@@ -274,10 +281,7 @@ func cancel_charter(session: GameSession, catalog: Catalog, charter_id: String) 
 
 	var cfg := PassengerCharters.config(catalog)
 	var penalty := PassengerCharters.cancel_penalty(cfg, int(charter.get("reward", 0)))
-	if penalty > 0 and not session.try_spend_credits(penalty):
-		session.last_log = "Cannot pay cancellation fee (d%d)." % penalty
-		session.changed.emit()
-		return false
+	session.assess_penalty_credits(penalty)
 
 	_remove_charter(charter_id)
 	if penalty > 0:
@@ -299,10 +303,7 @@ func cancel_freight_charter(session: GameSession, catalog: Catalog, charter_id: 
 
 	var cfg := FreightCharters.config(catalog)
 	var penalty := FreightCharters.cancel_penalty(cfg, int(charter.get("reward", 0)))
-	if penalty > 0 and not session.try_spend_credits(penalty):
-		session.last_log = "Cannot pay cancellation fee (d%d)." % penalty
-		session.changed.emit()
-		return false
+	session.assess_penalty_credits(penalty)
 
 	_remove_freight_charter(charter_id)
 	if penalty > 0:
@@ -429,7 +430,7 @@ func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
 		)
 
 
-func _try_complete_charters(session: GameSession, _catalog: Catalog, habitat_id: String) -> void:
+func _try_complete_charters(session: GameSession, catalog: Catalog, habitat_id: String) -> void:
 	if habitat_id.is_empty():
 		return
 	var current_ship := session.get_current_owned_ship()
@@ -448,10 +449,10 @@ func _try_complete_charters(session: GameSession, _catalog: Catalog, habitat_id:
 		completed.append(str(entry.get("charter_id", "")))
 
 	for charter_id in completed:
-		_complete_charter(session, charter_id)
+		_resolve_passenger_charter_on_dock(session, catalog, charter_id)
 
 
-func _try_complete_freight_charters(session: GameSession, _catalog: Catalog, habitat_id: String) -> void:
+func _try_complete_freight_charters(session: GameSession, catalog: Catalog, habitat_id: String) -> void:
 	if habitat_id.is_empty():
 		return
 	var current_ship := session.get_current_owned_ship()
@@ -470,36 +471,107 @@ func _try_complete_freight_charters(session: GameSession, _catalog: Catalog, hab
 		completed.append(str(entry.get("charter_id", "")))
 
 	for charter_id in completed:
-		_complete_freight_charter(session, charter_id)
+		_resolve_freight_charter_on_dock(session, catalog, charter_id)
 
 
-func _complete_charter(session: GameSession, charter_id: String) -> void:
+func _apply_charter_deadline(session: GameSession, charter: Dictionary) -> void:
+	var hours := int(charter.get("deadline_hours", 0))
+	if hours <= 0:
+		return
+	charter["deadline_gst"] = (
+		session.gst_seconds + float(hours) * float(GalacticCalendar.SECONDS_PER_HOUR)
+	)
+
+
+func _charter_is_late(session: GameSession, charter: Dictionary) -> bool:
+	if not charter.has("deadline_gst"):
+		return false
+	return session.gst_seconds > float(charter.get("deadline_gst", 0.0))
+
+
+func _enforce_late_passengers_at_dock(session: GameSession, catalog: Catalog) -> void:
+	if not session.docked:
+		return
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		return
+	var habitat_id := session.habitat_id
+	var failed: Array = []
+	for entry_variant in accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("ship_id", "")) != ship.id:
+			continue
+		if not _charter_is_late(session, entry):
+			continue
+		if str(entry.get("destination_habitat_id", "")) == habitat_id:
+			continue
+		failed.append(str(entry.get("charter_id", "")))
+	for charter_id in failed:
+		_fail_passenger_charter_missed_deadline(session, catalog, charter_id)
+
+
+func _fail_passenger_charter_missed_deadline(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String
+) -> void:
 	var charter := _find_charter(charter_id)
 	if charter.is_empty():
 		return
 	var reward := int(charter.get("reward", 0))
+	var cfg := PassengerCharters.config(catalog)
+	var penalty := PassengerCharters.cancel_penalty(cfg, reward)
 	_remove_charter(charter_id)
-	if reward > 0:
-		session.add_credits(reward)
-	session.last_log = "Charter complete to %s. +d%d." % [
-		str(charter.get("destination_name", "")),
-		reward,
-	]
+	session.assess_penalty_credits(penalty)
+	session.last_log = "Passengers left charter after deadline. Fee d%d." % penalty
 	session.changed.emit()
 
 
-func _complete_freight_charter(session: GameSession, charter_id: String) -> void:
+func _resolve_passenger_charter_on_dock(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String
+) -> void:
+	var charter := _find_charter(charter_id)
+	if charter.is_empty():
+		return
+	var reward := int(charter.get("reward", 0))
+	var dest_name := str(charter.get("destination_name", ""))
+	_remove_charter(charter_id)
+	if _charter_is_late(session, charter):
+		var penalty := PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward)
+		session.assess_penalty_credits(penalty)
+		session.last_log = "Charter late to %s. Fee d%d." % [dest_name, penalty]
+	elif reward > 0:
+		session.add_credits(reward)
+		session.last_log = "Charter complete to %s. +d%d." % [dest_name, reward]
+	else:
+		session.last_log = "Charter complete to %s." % dest_name
+	session.changed.emit()
+
+
+func _resolve_freight_charter_on_dock(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String
+) -> void:
 	var charter := _find_freight_charter(charter_id)
 	if charter.is_empty():
 		return
 	var reward := int(charter.get("reward", 0))
+	var dest_name := str(charter.get("destination_name", ""))
 	_remove_freight_charter(charter_id)
-	if reward > 0:
+	if _charter_is_late(session, charter):
+		var penalty := FreightCharters.cancel_penalty(FreightCharters.config(catalog), reward)
+		session.assess_penalty_credits(penalty)
+		session.last_log = "Freight late to %s. Fee d%d." % [dest_name, penalty]
+	elif reward > 0:
 		session.add_credits(reward)
-	session.last_log = "Freight delivered to %s. +d%d." % [
-		str(charter.get("destination_name", "")),
-		reward,
-	]
+		session.last_log = "Freight delivered to %s. +d%d." % [dest_name, reward]
+	else:
+		session.last_log = "Freight delivered to %s." % dest_name
 	session.changed.emit()
 
 

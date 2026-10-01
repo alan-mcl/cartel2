@@ -133,12 +133,11 @@ static func generate_offers(
 	run_seed: int = 0
 ) -> Array:
 	var cfg := config(catalog)
-	var destinations := PassengerCharters.neighbor_destinations(catalog, origin_habitat_id)
 	var cargos: Array = []
 	for cargo_variant in cfg.get("cargos", []):
 		if typeof(cargo_variant) == TYPE_DICTIONARY:
 			cargos.append(cargo_variant)
-	if destinations.is_empty() or cargos.is_empty() or count <= 0:
+	if cargos.is_empty() or count <= 0:
 		return []
 
 	var rng := RandomNumberGenerator.new()
@@ -148,7 +147,15 @@ static func generate_offers(
 	for index in count:
 		var cargo: Dictionary = cargos[rng.randi() % cargos.size()]
 		var cargo_id := str(cargo.get("id", ""))
-		var dest: Dictionary = destinations[rng.randi() % destinations.size()]
+		var dest: Dictionary = PassengerCharters.pick_destination(
+			catalog,
+			origin_habitat_id,
+			PassengerCharters.BOARD_TERMINAL,
+			cfg,
+			rng
+		)
+		if dest.is_empty():
+			continue
 		var qty_min := int(cargo.get("quantity_min", 1))
 		var qty_max := int(cargo.get("quantity_max", qty_min))
 		if qty_max < qty_min:
@@ -156,6 +163,9 @@ static func generate_offers(
 		var quantity := rng.randi_range(qty_min, qty_max)
 		var pay_multiplier := float(cargo.get("pay_multiplier", 1.0))
 		var friction := int(dest.get("friction", 0))
+		var hops := int(dest.get("hops", 1))
+		var path_sectors: Array = dest.get("path_sectors", [])
+		var deadline_hours := PassengerCharters.offer_deadline_hours(catalog, cfg, path_sectors)
 		var resolved := resolve_cargo(catalog, cargo)
 		var mass_per_unit := float(resolved.get("mass_per_unit", 0.0))
 		var reward := compute_reward(cfg, quantity, mass_per_unit, pay_multiplier, friction)
@@ -167,10 +177,11 @@ static func generate_offers(
 			commodity_name = str(commodity.get("name", commodity_id))
 
 		var desc_template := pick_description(cfg, cargo_id, rng)
+		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))
 		var description := format_description(
 			desc_template,
 			quantity,
-			str(dest.get("habitat_name", "")),
+			destination_label,
 			commodity_name
 		)
 		var tonnes := float(quantity) * mass_per_unit
@@ -186,6 +197,10 @@ static func generate_offers(
 			"destination_name": str(dest.get("habitat_name", "")),
 			"destination_sector_id": str(dest.get("sector_id", "")),
 			"friction": friction,
+			"hops": hops,
+			"via_label": str(dest.get("via_label", "")),
+			"path_sectors": path_sectors.duplicate(),
+			"deadline_hours": deadline_hours,
 			"cargo_id": cargo_id,
 			"cargo_title": str(cargo.get("title", cargo_id)),
 			"commodity_id": commodity_id,

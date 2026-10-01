@@ -485,6 +485,19 @@ def check_passenger_missions(doc: object) -> list[str]:
     if fraction is not None and not (0.0 < float(fraction) < 1.0):
         errors.append("passenger_missions.json: cancel_penalty_fraction must be between 0 and 1")
 
+    for key in ("max_hops", "deadline_slack_hours"):
+        if key not in doc:
+            errors.append(f"passenger_missions.json: missing {key}")
+    max_hops = int(doc.get("max_hops", 0) or 0)
+    if max_hops < 1:
+        errors.append("passenger_missions.json: max_hops must be at least 1")
+    slack = doc.get("deadline_slack_hours")
+    if slack is not None and float(slack) < 0.0:
+        errors.append("passenger_missions.json: deadline_slack_hours must be non-negative")
+    orbit = doc.get("deadline_orbit_hours_per_hop")
+    if orbit is not None and float(orbit) < 0.0:
+        errors.append("passenger_missions.json: deadline_orbit_hours_per_hop must be non-negative")
+
     allowed_ls = {"spartan", "comfort", "luxury"}
     allowed_aff = {"civilian", "corporate"}
     allowed_boards = {"terminal", "bar"}
@@ -559,6 +572,19 @@ def check_freight_missions(doc: object, commodities: dict[str, dict]) -> list[st
     fraction = doc.get("cancel_penalty_fraction")
     if fraction is not None and not (0.0 < float(fraction) < 1.0):
         errors.append("freight_missions.json: cancel_penalty_fraction must be between 0 and 1")
+
+    for key in ("max_hops", "deadline_slack_hours"):
+        if key not in doc:
+            errors.append(f"freight_missions.json: missing {key}")
+    max_hops = int(doc.get("max_hops", 0) or 0)
+    if max_hops < 1:
+        errors.append("freight_missions.json: max_hops must be at least 1")
+    slack = doc.get("deadline_slack_hours")
+    if slack is not None and float(slack) < 0.0:
+        errors.append("freight_missions.json: deadline_slack_hours must be non-negative")
+    orbit = doc.get("deadline_orbit_hours_per_hop")
+    if orbit is not None and float(orbit) < 0.0:
+        errors.append("freight_missions.json: deadline_orbit_hours_per_hop must be non-negative")
 
     cargo_ids: set[str] = set()
     for cargo in doc.get("cargos", []):

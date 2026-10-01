@@ -162,6 +162,14 @@ func try_spend_credits(cost: int) -> bool:
 	return true
 
 
+func assess_penalty_credits(cost: int) -> void:
+	if cost <= 0:
+		return
+	wallet.assess_penalty(cost)
+	_publish_credits_changed(-cost)
+	changed.emit()
+
+
 func add_credits(delta: int) -> void:
 	if delta == 0:
 		return

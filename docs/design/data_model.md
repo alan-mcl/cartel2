@@ -345,19 +345,20 @@ Regenerate the presence matrix after adding a corporation: `python3 scripts/tool
 
 ### Passenger charters (`passenger_missions.json`, `MissionSubsystem`)
 
-Daily offers are generated per habitat (terminal board; bar board where a `bar` building exists). Each role and description lists which `boards` it applies to (`terminal` vs `bar`); bar fares use separate smaller-party roles and lower pay multipliers. Destinations are neighboring sectors on `routes.json` (one hop). Pay scales with route `friction`, party size, and role `pay_multiplier`.
+Daily offers are generated per habitat (terminal board; bar board where a `bar` building exists). Each role and description lists which `boards` it applies to (`terminal` vs `bar`); bar fares stay one hop. Terminal boards may roll multi-hop destinations on `routes.json` (BFS up to `max_hops`); pay and deadlines use **summed path friction**. Offers store `hops`, `deadline_hours`, and `deadline_gst` on accept. Multi-hop passengers require `ls_habitat`. Late completion withholds pay and charges `cancel_penalty_fraction` via `GameSession.assess_penalty_credits` (may overdraw); only penalties may leave credits negative.
 
 | Field | Description |
 |-------|-------------|
 | `roles[]` | Party profile: affiliation, life_support tier, quantity range, pay multiplier, optional affiliation gate |
 | `descriptions[]` | Flavor text templates with `{quantity}`, `{destination}`, `{corporation}` |
-| `cancel_penalty_fraction` | Share of unpaid reward charged when cancelling before undock from origin |
+| `cancel_penalty_fraction` | Share of reward charged on origin cancel or missed deadline |
+| `max_hops`, `deadline_slack_hours`, `deadline_orbit_hours_per_hop`, `hop_offer_weights` | Multi-hop generation and deadline tuning (deadlines count entry+exit GST per edge) |
 
 Accepted charters persist under `Simulation` save key `missions` (`accepted`, `offers_by_habitat`, `generated_day`). Completion fires on `SimEvent.DOCKED` at the destination habitat with the contracted ship active. `PlayerAffiliation.is_affiliated` is a stub (always false) until standing exists.
 
 ### Freight charters (`freight_missions.json`, `MissionSubsystem`)
 
-Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Offers reference a cargo profile (`cargos[]`) and a formatted blurb from `descriptions[]`. Commodity-linked cargos inherit mass and `requires_capabilities` from `commodities.json` and must not set extra seat/compute/power rates. Special cargos supply `mass_per_unit`, hold flags, and optional `life_support_per_unit`, `compute_per_unit`, or `power_per_unit`. Accepting reserves tonnes (and budgets) without writing `OwnedShip.cargo`. Save version **3** adds freight fields; v2 saves migrate with empty freight state.
+Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Offers reference a cargo profile (`cargos[]`) and a formatted blurb from `descriptions[]`. Commodity-linked cargos inherit mass and `requires_capabilities` from `commodities.json` and must not set extra seat/compute/power rates. Special cargos supply `mass_per_unit`, hold flags, and optional `life_support_per_unit`, `compute_per_unit`, or `power_per_unit`. Accepting reserves tonnes (and budgets) without writing `OwnedShip.cargo`. Multi-hop destinations and GST deadlines mirror passenger terminal rules (no habitat LS gate on freight). Save version **3** adds freight fields; v2 saves migrate with empty freight state.
 
 ### `sectors.json` (addition)
 
