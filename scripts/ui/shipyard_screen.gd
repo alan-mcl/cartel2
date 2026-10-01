@@ -128,6 +128,8 @@ func _apply_sandbox_chrome() -> void:
 func _apply_embedded_chrome() -> void:
 	_header.visible = not _embedded
 	_back_button.visible = not _embedded
+	if _log != null:
+		_log.visible = not _embedded
 
 
 func bind(context: UiContext) -> void:
@@ -184,6 +186,8 @@ func refresh() -> void:
 
 
 func _sync_log() -> void:
+	if _embedded:
+		return
 	var bar := _log as MessageBar
 	if bar == null or _context == null or _context.session == null:
 		return

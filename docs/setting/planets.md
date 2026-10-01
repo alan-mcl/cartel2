@@ -22,7 +22,7 @@ Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharb
 ### Oribtals
 
 Proxima Habitat
-Habitat buildings in game: Terminal, Davidsons (pilot bar), Concord Scouts (used fitted ships), Skyedge Space Ships (unfitted chassis frames), Habitat Workshop (Shipyard), Proxima Exchange.
+Habitat buildings in game: Terminal, Davidsons (pilot bar), Concord Scouts (used fitted ships), Skyedge Space Ships (unfitted chassis frames), Habitat Workshop (Shipyard), Proxima Exchange. Crews move between buildings on the habitat tram; each hop costs about fifteen minutes of local time.
 
 ### Current orbit (JSON)
 

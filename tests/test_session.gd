@@ -13,6 +13,8 @@ static func run(runner: TestRunner) -> void:
 	runner.check_eq(session.sector_id, "proxima", "tester starts in proxima")
 	runner.check(session.docked, "tester begins docked")
 
+	_test_habitat_tram_hop(runner, catalog)
+
 	var parked := session.ships_at("proxima_habitat")
 	runner.check(parked.size() >= 2, "tester ships parked at proxima_habitat")
 
@@ -178,6 +180,46 @@ static func run(runner: TestRunner) -> void:
 	runner.check_eq(session.credits, credits_before + 50, "salvage credits applied")
 	runner.check(not session.salvage(salvage_def), "duplicate salvage rejected")
 	runner.check(salvage_def.id in session.salvaged_ids, "salvage id recorded")
+
+
+static func _test_habitat_tram_hop(runner: TestRunner, catalog: Catalog) -> void:
+	var tram_session := GameSession.new()
+	runner.check(
+		tram_session.start_new_game(catalog, "TRAM-1", "tester"),
+		"tram: session starts docked"
+	)
+	var gst_before := tram_session.gst_seconds
+	runner.check_eq(
+		tram_session.building_id,
+		"proxima_habitat_terminal",
+		"tram: starts at default building"
+	)
+
+	runner.check(
+		tram_session.visit(catalog, "skyedge_space_ships"),
+		"tram: visit another building"
+	)
+	runner.check_eq(
+		tram_session.gst_seconds,
+		gst_before + 15.0 * float(GalacticCalendar.SECONDS_PER_MINUTE),
+		"tram: visit advances GST fifteen minutes"
+	)
+	runner.check_eq(
+		tram_session.last_log,
+		"Took a tram over to Skyedge Space Ships.",
+		"tram: visit sets log message"
+	)
+
+	var gst_after_hop := tram_session.gst_seconds
+	runner.check(
+		tram_session.visit(catalog, "skyedge_space_ships"),
+		"tram: repeat visit to same building succeeds"
+	)
+	runner.check_eq(
+		tram_session.gst_seconds,
+		gst_after_hop,
+		"tram: same building does not advance GST"
+	)
 
 
 static func _blockers_include(catalog: Catalog, ship: OwnedShip, needle: String) -> bool:

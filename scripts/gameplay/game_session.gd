@@ -630,8 +630,14 @@ func visit(catalog: Catalog, target_building_id: String) -> bool:
 	if habitat.is_empty():
 		return false
 
+	if target_building_id == world.building_id:
+		return true
+
 	world.building_id = target_building_id
-	world.location_name = "%s / %s" % [str(habitat.get("name", world.habitat_id)), str(building.get("name", target_building_id))]
+	var building_name := str(building.get("name", target_building_id))
+	world.location_name = "%s / %s" % [str(habitat.get("name", world.habitat_id)), building_name]
+	advance_gst(15.0 * float(GalacticCalendar.SECONDS_PER_MINUTE))
+	player.last_log = "Took a tram over to %s." % building_name
 	changed.emit()
 	return true
 

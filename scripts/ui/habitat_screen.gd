@@ -136,11 +136,6 @@ func _message_bar() -> MessageBar:
 	return _log as MessageBar
 
 
-func _set_log_visible(should_show: bool) -> void:
-	if _log != null:
-		_log.visible = should_show
-
-
 func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:
 	if building.is_empty():
 		_building_title.text = ""
@@ -173,13 +168,10 @@ func _show_building_content(habitat: Dictionary, building: Dictionary) -> void:
 		_:
 			_pop_stacked_shipyard_if_needed()
 			_clear_embed_panel()
-			_set_log_visible(true)
 			_show_placeholder_content(building)
 
 
 func _show_embed_panel(building_type: String, building: Dictionary) -> void:
-	_set_log_visible(building_type != "shipyard")
-
 	var scene_path := BuildingPanelRegistry.embed_scene_path(building_type)
 	if scene_path.is_empty():
 		return

@@ -92,6 +92,7 @@ with the same event potentially expressed in a different local time by observers
 The game advances GST as follows:
 
 - **Realspace flight** and **habitat/building menus** — one GST second per real second (visible on HUD and habitat header with seconds resolution).
+- **Changing buildings within a docked habitat** — fifteen GST minutes per tram hop (logged in the status strip).
 - **Entering unspace** at a jump gate — discrete GST lump from the route mapping (`entry_seconds`, with small random jitter).
 - **Flying in unspace** — irregular pulses: time stalls, then jumps forward; higher N-space depth is more erratic.
 - **Exiting unspace** at the portal — discrete GST lump from the same mapping (`exit_seconds`, with jitter).
