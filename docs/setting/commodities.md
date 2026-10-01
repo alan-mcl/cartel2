@@ -107,12 +107,17 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialized materials whose particular properties make them economically valuable. |
 | **Industrial Components vs ship spare parts** | Industrial Components are tradable cargo. Ship module spare parts (`spare_parts` in session state) are a separate shipyard inventory system. |
 
+## Cargo hold requirements (planned)
+
+Broad categories may eventually require installed cargo-bay **capabilities** on the carrying ship (for example refrigerated food, biohazard chemicals and pharma, compute-integrated cores, secure bonded luxury, military goods). See [equipment.md](equipment.md) (Cargo bays). The Exchange does **not** enforce these yet so the starter trade loop stays open.
+
 ## Current implementation
 
 | Feature | Status |
 |---------|--------|
 | Eleven categories in catalog | Implemented |
 | Per-ship cargo holds | Implemented |
+| Cargo-bay capability flags on modules | Implemented (catalog only; no trade gate) |
 | Habitat Exchange buy/sell | Implemented (daily quotes, all eleven habitats) |
 | Multi-market arbitrage | Implemented (graph-driven price differences) |
 | Market stock depletion | Not implemented (contract depth is display-only) |

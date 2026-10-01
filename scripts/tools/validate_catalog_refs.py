@@ -87,6 +87,37 @@ LIFE_SUPPORT_MAKERS = {
 }
 
 LIFE_SUPPORT_FLAGS = {"ls_comfort", "ls_luxury", "ls_habitat"}
+
+CARGO_MAKERS = {
+    "Oklahoma Combine",
+    "Atlas Concern",
+    "The Meridian Company",
+    "Crown & Anchor",
+    "The Hanseatic Guild",
+    "General Industrial",
+    "Four Rivers Zaibatsu",
+    "Guangzhou Mercantile",
+    "Carthage Mercantile",
+    "Chettiar Holdings",
+    "Pacific Triad",
+    "Orion Spur Company",
+    "Tukey Enterprises",
+    "Universal House",
+    "Evergreen Group",
+    "Terra Nova",
+    "Andean Consolidated",
+    "Sakuraya Shinise",
+}
+
+CARGO_CAPABILITY_FLAGS = {
+    "life_support_integrated",
+    "refrigerated",
+    "compute_integrated",
+    "biohazard",
+    "secure_cargo",
+    "military_grade",
+}
+CARGO_SKU_FLOOR = 18
 RETIRED_LIFE_SUPPORT_IDS = {"life_support_mk1", "life_support_a3"}
 RETIRED_SENSOR_IDS = {
     "sensor_basic",
@@ -740,6 +771,39 @@ def main() -> int:
         errors.append(
             f"modules.json: expected at least {LIFE_SUPPORT_SKU_FLOOR} life support SKUs, "
             f"found {life_support_count}"
+        )
+
+    cargo_count = 0
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("id", ""))
+        if str(module.get("category", "")) != "cargo":
+            continue
+        cargo_count += 1
+        for field in ("maker", "brand", "cargo_capacity"):
+            if field not in module:
+                errors.append(f"cargo module {module_id}: missing {field}")
+        maker = str(module.get("maker", ""))
+        if maker and maker not in CARGO_MAKERS:
+            errors.append(f"cargo module {module_id}: unknown maker '{maker}'")
+        capabilities = module.get("capabilities", [])
+        if capabilities is None:
+            errors.append(f"cargo module {module_id}: capabilities must be present (use [])")
+            continue
+        if not isinstance(capabilities, list):
+            errors.append(f"cargo module {module_id}: capabilities must be an array")
+            continue
+        for cap in capabilities:
+            cap_id = str(cap)
+            if cap_id not in CARGO_CAPABILITY_FLAGS:
+                errors.append(f"cargo module {module_id}: invalid capability '{cap_id}'")
+        capacity = float(module.get("cargo_capacity", 0.0))
+        if capacity <= 0.0:
+            errors.append(f"cargo module {module_id}: cargo_capacity must be > 0")
+    if cargo_count < CARGO_SKU_FLOOR:
+        errors.append(
+            f"modules.json: expected at least {CARGO_SKU_FLOOR} cargo SKUs, found {cargo_count}"
         )
 
     propulsion_count = 0

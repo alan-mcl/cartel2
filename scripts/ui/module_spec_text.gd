@@ -35,6 +35,15 @@ const STAT_ROWS: Array[Dictionary] = [
 	{"key": "ammunition_per_shot", "label": "Ammo per shot", "float": true},
 ]
 
+const CARGO_CAPABILITY_LABELS := {
+	"life_support_integrated": "Live cargo",
+	"refrigerated": "Refrigerated",
+	"compute_integrated": "Compute vault",
+	"biohazard": "Biohazard",
+	"secure_cargo": "Secure / bonded",
+	"military_grade": "Military grade",
+}
+
 const SKIP_EXTRA_KEYS := {
 	"id": true,
 	"name": true,
@@ -139,7 +148,8 @@ static func format_tooltip(module_def: Dictionary) -> String:
 			lines.append("")
 		var cap_parts: PackedStringArray = PackedStringArray()
 		for entry in capabilities:
-			cap_parts.append(str(entry))
+			var cap_id := str(entry)
+			cap_parts.append(CARGO_CAPABILITY_LABELS.get(cap_id, cap_id))
 		lines.append("Capabilities: %s" % ", ".join(cap_parts))
 
 	var mounts: Variant = module_def.get("mounts", [])

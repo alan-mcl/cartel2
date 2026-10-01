@@ -381,6 +381,27 @@ The POC `life_support_mk1` and `life_support_a3` placeholders are retired.
 
 ---
 
+## Cargo bays
+
+Cargo modules (`category: cargo`) store bulk freight in **`cargo_capacity`** (tonnes). Like other modules they carry **`maker`**, **`brand`**, and optional **`capabilities`** tags that aggregate onto the assembled ship. If **any** installed bay provides a flag, the whole ship is treated as able to carry that cargo class; tonnage is summed across bays and is **not** split per flag. Per-bay load assignment is not simulated yet.
+
+| Flag | Intended cargo |
+|------|----------------|
+| `life_support_integrated` | Livestock, live plants |
+| `refrigerated` | Food products needing cold chain |
+| `compute_integrated` | Data-center conditions for compute hardware |
+| `biohazard` | Chemicals, pharmaceuticals |
+| `secure_cargo` | Bonded / chain-of-custody cargo |
+| `military_grade` | Weapons, explosives, military supplies |
+
+A hold may combine several flags or carry none (general dry bulk). Specialty bays cost more and often draw modest **`power_demand`** / **`compute_demand`** for plant (cold chain, containment, compute vaults).
+
+**Exchange trade** does not yet require these flags; starter templates keep plain Tukey **`cargo_bay_*`** holds. Future **freight charters** and optional commodity **`requires_capabilities`** will use the same tags.
+
+Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Cargo & other infra column). Data: `data/catalog/modules/cargo.json`.
+
+---
+
 ## Ship weapons
 
 Weapons (`category: weapon`) require `maker`, `brand`, `weapon_type`, and `delivery_type`. Damage is expressed as `damage_packets` on the weapon or on consumed ammunition.
@@ -471,6 +492,6 @@ When extending JSON after editing this bible:
 
 1. Add module entries to `modules.json` with consistent ids and category
 2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`). Integrated sail SKUs must set `fuel_consumption` to 0. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Weapon modules require `maker`, `brand`, `weapon_type`, `delivery_type`, and `damage_packets` (or ammo-supplied packets). Armour requires `protection`; shields require `shield_type`, `shield_capacity`, `protection`, `regen`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
-3. Reference in `ships.json` templates and `player.json` instances
+3. Cargo modules require `maker`, `brand`, and `cargo_capacity`; optional cargo capability flags as above. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
 5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)

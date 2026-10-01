@@ -83,7 +83,7 @@ Common fields (omit zero-valued properties):
 | `volume` | number | m³ |
 | `cost` | number | Yard purchase price |
 | `description` | string | |
-| `capabilities` | string[] | Optional feature tags aggregated onto `AssembledShip` (e.g. `basic_hud`, `local_sensor`) |
+| `capabilities` | string[] | Optional feature tags aggregated onto `AssembledShip` (e.g. `basic_hud`, `local_sensor`; cargo bays: `refrigerated`, `biohazard`, `compute_integrated`, `secure_cargo`, `military_grade`, `life_support_integrated`) |
 
 Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `engine_type` (propulsion: `chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`), `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 

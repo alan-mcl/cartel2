@@ -1,14 +1,35 @@
 [
   {
+    "id": "cargo_bay_4",
+    "name": "Cargo Bay 4",
+    "maker": "Tukey Enterprises",
+    "brand": "BulkLine",
+    "category": "cargo",
+    "mass": 0.5,
+    "volume": 3.0,
+    "cargo_capacity": 4.0,
+    "cost": 400,
+    "description": "Compact internal cargo hold.",
+    "capabilities": [],
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.26,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
     "id": "cargo_bay_10",
     "name": "Cargo Bay 10",
     "maker": "Tukey Enterprises",
+    "brand": "BulkLine",
     "category": "cargo",
     "mass": 0.8,
     "volume": 6.0,
     "cargo_capacity": 10.0,
     "cost": 750,
     "description": "Standard freighter cargo bay.",
+    "capabilities": [],
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.44,
@@ -20,12 +41,14 @@
     "id": "cargo_bay_20",
     "name": "Cargo Bay 20",
     "maker": "Tukey Enterprises",
+    "brand": "BulkLine",
     "category": "cargo",
     "mass": 1.2,
     "volume": 10.0,
     "cargo_capacity": 20.0,
     "cost": 1100,
     "description": "Large internal cargo hold.",
+    "capabilities": [],
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.68,
@@ -34,18 +57,468 @@
     }
   },
   {
-    "id": "cargo_bay_4",
-    "name": "Cargo Bay 4",
-    "maker": "Tukey Enterprises",
+    "id": "gi_dry_hold_4",
+    "name": "Dry Hold 4",
+    "maker": "General Industrial",
+    "brand": "GI Freight",
     "category": "cargo",
-    "mass": 0.5,
+    "mass": 0.55,
     "volume": 3.0,
     "cargo_capacity": 4.0,
-    "cost": 400,
-    "description": "Compact internal cargo hold.",
+    "cost": 420,
+    "description": "GI's entry dry bulk cell for light couriers.",
+    "capabilities": [],
     "signature": {
       "thermal": 0.3,
-      "gravitational": 0.26,
+      "gravitational": 0.28,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_hold_20",
+    "name": "Loadmaster Hold 20",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "cargo",
+    "mass": 1.25,
+    "volume": 10.0,
+    "cargo_capacity": 20.0,
+    "cost": 1250,
+    "description": "Atlas industrial dry hold sized for heavy haulers.",
+    "capabilities": [],
+    "signature": {
+      "thermal": 0.32,
+      "gravitational": 0.7,
+      "electromagnetic": 0.22,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ok_coolstore_10",
+    "name": "Coolstore 10",
+    "maker": "Oklahoma Combine",
+    "brand": "Heartland",
+    "category": "cargo",
+    "mass": 1.0,
+    "volume": 6.5,
+    "cargo_capacity": 10.0,
+    "power_demand": 1.4,
+    "compute_demand": 0.4,
+    "cost": 1400,
+    "description": "Refrigerated hold for agri cold chain between worlds.",
+    "capabilities": [
+      "refrigerated"
+    ],
+    "signature": {
+      "thermal": 1.8,
+      "gravitational": 0.46,
+      "electromagnetic": 0.35,
+      "computational": 0.15
+    }
+  },
+  {
+    "id": "gf_agri_live_10",
+    "name": "AgriLive 10",
+    "maker": "Evergreen Group",
+    "brand": "AgriLive",
+    "category": "cargo",
+    "mass": 1.15,
+    "volume": 7.0,
+    "cargo_capacity": 10.0,
+    "power_demand": 2.0,
+    "compute_demand": 0.8,
+    "cost": 1850,
+    "description": "Climate-controlled live cargo for stock and nursery shipments.",
+    "capabilities": [
+      "life_support_integrated"
+    ],
+    "signature": {
+      "thermal": 2.2,
+      "gravitational": 0.48,
+      "electromagnetic": 0.4,
+      "computational": 0.25
+    }
+  },
+  {
+    "id": "chettiar_compute_vault_10",
+    "name": "Compute Vault 10",
+    "maker": "Chettiar Holdings",
+    "brand": "VaultLine",
+    "category": "cargo",
+    "mass": 1.05,
+    "volume": 6.0,
+    "cargo_capacity": 10.0,
+    "power_demand": 2.2,
+    "compute_demand": 3.5,
+    "cost": 3200,
+    "description": "Data-center grade conditioning for shipped compute cores.",
+    "capabilities": [
+      "compute_integrated"
+    ],
+    "signature": {
+      "thermal": 1.4,
+      "gravitational": 0.45,
+      "electromagnetic": 0.55,
+      "computational": 1.2
+    }
+  },
+  {
+    "id": "gi_chemlock_10",
+    "name": "ChemLock 10",
+    "maker": "General Industrial",
+    "brand": "ChemLock",
+    "category": "cargo",
+    "mass": 1.1,
+    "volume": 6.5,
+    "cargo_capacity": 10.0,
+    "power_demand": 1.6,
+    "compute_demand": 1.0,
+    "cost": 2100,
+    "description": "Containment-rated hold for chemicals and pharma.",
+    "capabilities": [
+      "biohazard"
+    ],
+    "signature": {
+      "thermal": 1.0,
+      "gravitational": 0.48,
+      "electromagnetic": 0.45,
+      "computational": 0.35
+    }
+  },
+  {
+    "id": "caa_bonded_10",
+    "name": "Bonded Hold 10",
+    "maker": "Crown & Anchor",
+    "brand": "Bonded",
+    "category": "cargo",
+    "mass": 0.95,
+    "volume": 6.0,
+    "cargo_capacity": 10.0,
+    "power_demand": 0.6,
+    "compute_demand": 1.2,
+    "cost": 2400,
+    "description": "Chain-of-custody hold for insured and high-value freight.",
+    "capabilities": [
+      "secure_cargo"
+    ],
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.44,
+      "electromagnetic": 0.3,
+      "computational": 0.5
+    }
+  },
+  {
+    "id": "ok_armory_cell_10",
+    "name": "Armory Cell 10",
+    "maker": "Oklahoma Combine",
+    "brand": "Heartland",
+    "category": "cargo",
+    "mass": 1.35,
+    "volume": 6.5,
+    "cargo_capacity": 10.0,
+    "power_demand": 0.4,
+    "compute_demand": 0.5,
+    "cost": 3500,
+    "description": "Blast-rated magazine cell for military goods and ordnance.",
+    "capabilities": [
+      "military_grade"
+    ],
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.52,
+      "electromagnetic": 0.25,
+      "computational": 0.2
+    }
+  },
+  {
+    "id": "mer_coldchain_4",
+    "name": "Coldchain 4",
+    "maker": "The Meridian Company",
+    "brand": "Meridian Cold",
+    "category": "cargo",
+    "mass": 0.65,
+    "volume": 3.2,
+    "cargo_capacity": 4.0,
+    "power_demand": 1.0,
+    "compute_demand": 0.3,
+    "cost": 950,
+    "description": "Compact refrigerated cell for courier food runs.",
+    "capabilities": [
+      "refrigerated"
+    ],
+    "signature": {
+      "thermal": 1.5,
+      "gravitational": 0.3,
+      "electromagnetic": 0.32,
+      "computational": 0.12
+    }
+  },
+  {
+    "id": "hanseatic_pharma_4",
+    "name": "PharmaSeal 4",
+    "maker": "The Hanseatic Guild",
+    "brand": "PharmaSeal",
+    "category": "cargo",
+    "mass": 0.7,
+    "volume": 3.5,
+    "cargo_capacity": 4.0,
+    "power_demand": 1.2,
+    "compute_demand": 0.6,
+    "cost": 1200,
+    "description": "Small biohazard-rated box for high-value medical cargo.",
+    "capabilities": [
+      "biohazard"
+    ],
+    "signature": {
+      "thermal": 0.9,
+      "gravitational": 0.32,
+      "electromagnetic": 0.38,
+      "computational": 0.28
+    }
+  },
+  {
+    "id": "frz_custody_4",
+    "name": "Custody 4",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "Custody",
+    "category": "cargo",
+    "mass": 0.6,
+    "volume": 3.0,
+    "cargo_capacity": 4.0,
+    "power_demand": 0.5,
+    "compute_demand": 0.9,
+    "cost": 1100,
+    "description": "Bonded courier cell with audit logging.",
+    "capabilities": [
+      "secure_cargo"
+    ],
+    "signature": {
+      "thermal": 0.32,
+      "gravitational": 0.28,
+      "electromagnetic": 0.28,
+      "computational": 0.45
+    }
+  },
+  {
+    "id": "ok_armory_4",
+    "name": "Armory 4",
+    "maker": "Oklahoma Combine",
+    "brand": "Heartland",
+    "category": "cargo",
+    "mass": 0.85,
+    "volume": 3.5,
+    "cargo_capacity": 4.0,
+    "power_demand": 0.3,
+    "compute_demand": 0.2,
+    "cost": 1600,
+    "description": "Reinforced small cell for licensed military shipments.",
+    "capabilities": [
+      "military_grade"
+    ],
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.34,
+      "electromagnetic": 0.22,
+      "computational": 0.15
+    }
+  },
+  {
+    "id": "carthage_live_4",
+    "name": "LiveBox 4",
+    "maker": "Carthage Mercantile",
+    "brand": "LiveBox",
+    "category": "cargo",
+    "mass": 0.75,
+    "volume": 3.8,
+    "cargo_capacity": 4.0,
+    "power_demand": 1.5,
+    "compute_demand": 0.5,
+    "cost": 1300,
+    "description": "Short-hop live cargo pod for feeder routes.",
+    "capabilities": [
+      "life_support_integrated"
+    ],
+    "signature": {
+      "thermal": 1.9,
+      "gravitational": 0.3,
+      "electromagnetic": 0.35,
+      "computational": 0.2
+    }
+  },
+  {
+    "id": "guangzhou_edge_vault_4",
+    "name": "Edge Vault 4",
+    "maker": "Guangzhou Mercantile",
+    "brand": "Edge Vault",
+    "category": "cargo",
+    "mass": 0.68,
+    "volume": 3.2,
+    "cargo_capacity": 4.0,
+    "power_demand": 1.8,
+    "compute_demand": 2.5,
+    "cost": 2100,
+    "description": "Compact compute vault for high-value silicon freight.",
+    "capabilities": [
+      "compute_integrated"
+    ],
+    "signature": {
+      "thermal": 1.2,
+      "gravitational": 0.29,
+      "electromagnetic": 0.48,
+      "computational": 0.95
+    }
+  },
+  {
+    "id": "evergreen_cool_live_10",
+    "name": "CoolLive 10",
+    "maker": "Evergreen Group",
+    "brand": "AgriLive",
+    "category": "cargo",
+    "mass": 1.25,
+    "volume": 7.5,
+    "cargo_capacity": 10.0,
+    "power_demand": 2.6,
+    "compute_demand": 1.0,
+    "cost": 2600,
+    "description": "Dual-mode hold for chilled produce and live nursery stock.",
+    "capabilities": [
+      "refrigerated",
+      "life_support_integrated"
+    ],
+    "signature": {
+      "thermal": 2.5,
+      "gravitational": 0.5,
+      "electromagnetic": 0.42,
+      "computational": 0.3
+    }
+  },
+  {
+    "id": "gi_pharma_cold_10",
+    "name": "PharmaCold 10",
+    "maker": "General Industrial",
+    "brand": "ChemLock",
+    "category": "cargo",
+    "mass": 1.2,
+    "volume": 7.0,
+    "cargo_capacity": 10.0,
+    "power_demand": 2.0,
+    "compute_demand": 1.2,
+    "cost": 2800,
+    "description": "Cold-chain biohazard hold for temperature-sensitive pharma.",
+    "capabilities": [
+      "biohazard",
+      "refrigerated"
+    ],
+    "signature": {
+      "thermal": 2.0,
+      "gravitational": 0.5,
+      "electromagnetic": 0.48,
+      "computational": 0.4
+    }
+  },
+  {
+    "id": "chettiar_secure_compute_10",
+    "name": "Secure Compute 10",
+    "maker": "Chettiar Holdings",
+    "brand": "VaultLine",
+    "category": "cargo",
+    "mass": 1.15,
+    "volume": 6.5,
+    "cargo_capacity": 10.0,
+    "power_demand": 2.4,
+    "compute_demand": 4.0,
+    "cost": 4200,
+    "description": "Bonded vault with data-center conditioning for classified hardware.",
+    "capabilities": [
+      "compute_integrated",
+      "secure_cargo"
+    ],
+    "signature": {
+      "thermal": 1.5,
+      "gravitational": 0.48,
+      "electromagnetic": 0.52,
+      "computational": 1.35
+    }
+  },
+  {
+    "id": "caa_arsenal_bonded_20",
+    "name": "Arsenal Bonded 20",
+    "maker": "Crown & Anchor",
+    "brand": "Bonded",
+    "category": "cargo",
+    "mass": 1.55,
+    "volume": 11.0,
+    "cargo_capacity": 20.0,
+    "power_demand": 0.8,
+    "compute_demand": 1.5,
+    "cost": 5200,
+    "description": "Large bonded magazine for licensed ordnance and military freight.",
+    "capabilities": [
+      "military_grade",
+      "secure_cargo"
+    ],
+    "signature": {
+      "thermal": 0.45,
+      "gravitational": 0.72,
+      "electromagnetic": 0.32,
+      "computational": 0.55
+    }
+  },
+  {
+    "id": "atl_heavy_dry_20",
+    "name": "Heavy Dry 20",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "cargo",
+    "mass": 1.2,
+    "volume": 10.0,
+    "cargo_capacity": 20.0,
+    "cost": 1180,
+    "description": "Unmarked dry bulk for industrial feedstock and components.",
+    "capabilities": [],
+    "signature": {
+      "thermal": 0.32,
+      "gravitational": 0.68,
+      "electromagnetic": 0.22,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "pacific_triad_general_10",
+    "name": "Triad Hold 10",
+    "maker": "Pacific Triad",
+    "brand": "Triad",
+    "category": "cargo",
+    "mass": 0.82,
+    "volume": 6.0,
+    "cargo_capacity": 10.0,
+    "cost": 780,
+    "description": "Pacific Triad general-purpose internal hold.",
+    "capabilities": [],
+    "signature": {
+      "thermal": 0.31,
+      "gravitational": 0.43,
+      "electromagnetic": 0.21,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "universal_house_tank_10",
+    "name": "Universal Tank 10",
+    "maker": "Universal House",
+    "brand": "Universal",
+    "category": "cargo",
+    "mass": 0.9,
+    "volume": 6.2,
+    "cargo_capacity": 10.0,
+    "cost": 820,
+    "description": "House-standard dry hold for mixed merchant fleets.",
+    "capabilities": [],
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.44,
       "electromagnetic": 0.2,
       "computational": 0.0
     }

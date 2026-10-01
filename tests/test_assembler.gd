@@ -11,7 +11,30 @@ static func run(runner: TestRunner) -> void:
 		runner.check(assembled.stats.max_speed > 0.0, "%s max_speed > 0" % ship_id)
 		runner.check(assembled.stats.forward_thrust > 0.0, "%s forward_thrust > 0" % ship_id)
 
+	_test_cargo_capabilities(runner, catalog)
 	_test_stock_list_meta(runner, catalog)
+
+
+static func _test_cargo_capabilities(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "cargo_cap_test",
+			"template_id": "flare_on_ss",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	owned.set_module("other_1", "cargo_bay_10")
+	var plain := ShipAssembler.assemble_owned(catalog, owned)
+	runner.check(not plain.has_capability("refrigerated"), "assembler: plain cargo bay lacks refrigerated")
+	owned.set_module("other_1", "ok_coolstore_10")
+	var cold := ShipAssembler.assemble_owned(catalog, owned)
+	runner.check(cold.has_capability("refrigerated"), "assembler: refrigerated bay grants flag")
+	owned.set_module("other_1", "cargo_bay_10")
+	owned.set_module("other_2", "gi_pharma_cold_10")
+	var mixed := ShipAssembler.assemble_owned(catalog, owned)
+	runner.check(mixed.has_capability("biohazard"), "assembler: mixed bays OR biohazard")
+	runner.check(mixed.has_capability("refrigerated"), "assembler: mixed bays OR refrigerated")
 
 
 static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:
