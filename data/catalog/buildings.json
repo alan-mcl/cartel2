@@ -15,7 +15,7 @@
     "kind": "landmark",
     "description": "Pilot bar where off-duty crews trade rumours and bad jokes. The lights are low and the air smells of synth-whiskey.",
     "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes.",
-    "art": "res://assets/ui/locations/davidsons.svg"
+    "art": "res://assets/ui/locations/davidsons.png"
   },
   {
     "id": "skyedge_space_ships",
@@ -24,7 +24,7 @@
     "kind": "merchant",
     "description": "The premier provider of duty-free light space craft chassis. Large or small, we have a frame to suit your needs — register your hull and fit it out at the Shipyard.",
     "short_desc": "Ship chassis dealer and frame registrar.",
-    "art": "res://assets/ui/locations/skyedge.svg",
+    "art": "res://assets/ui/locations/skyedge.png",
     "stock": [
       "flare_on_chassis",
       "pegasus_chassis",
@@ -42,7 +42,7 @@
     "kind": "merchant",
     "description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly.",
     "short_desc": "No finer place to purchase new or used space craft.",
-    "art": "res://assets/ui/locations/concord_scouts.svg",
+    "art": "res://assets/ui/locations/concord_scouts.png",
     "stock": [
       "flare_on_ss",
       "flare_on_sk",
@@ -67,7 +67,7 @@
     "kind": "workshop",
     "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. You must supply at least a registered chassis.",
     "short_desc": "Outfitting bays for installing systems on docked ships.",
-    "art": "res://assets/ui/locations/proxima_shipyard.svg",
+    "art": "res://assets/ui/locations/proxima_shipyard.png",
     "services": ["assembly", "parts"]
   },
   {
@@ -75,9 +75,9 @@
     "name": "Proxima Central Exchange",
     "type": "market",
     "kind": "merchant",
-    "description": "Automated commodity exchange. Open contracts across the eleven principal trade categories.",
+    "description": "Automated commodity exchange. Open contracts across the principal trade categories.",
     "short_desc": "Automated commodity exchange for interplanetary trade categories.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/proxima_exchange.png"
   },
   {
     "id": "tycho_habitat_terminal",
@@ -86,7 +86,7 @@
     "kind": "terminal",
     "description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
     "short_desc": "Hard-worn terminal above Tycho.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "bela_habitat_terminal",
@@ -95,7 +95,7 @@
     "kind": "terminal",
     "description": "Resort terminal with customs and docking lanes overlooking the ocean.",
     "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
-    "art": "res://assets/ui/locations/bela_terminal.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "irasia_habitat_terminal",
@@ -104,7 +104,7 @@
     "kind": "terminal",
     "description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
     "short_desc": "Commercial terminal on a major trade route.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "tokirev_habitat_terminal",
@@ -113,7 +113,7 @@
     "kind": "terminal",
     "description": "Factory-world terminal. Automated cargo handlers outnumber passengers.",
     "short_desc": "Factory-world terminal with automated cargo handlers.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "fennet_habitat_terminal",
@@ -122,7 +122,7 @@
     "kind": "terminal",
     "description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
     "short_desc": "Rim terminal that still feels like a frontier stop.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "fortuna_habitat_terminal",
@@ -131,7 +131,7 @@
     "kind": "terminal",
     "description": "Quiet, expensive terminal. Private shuttles outnumber tramp freighters.",
     "short_desc": "Quiet, expensive terminal above a finance world.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "new_carthage_habitat_terminal",
@@ -140,7 +140,7 @@
     "kind": "terminal",
     "description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
     "short_desc": "Shipping terminal above an oceanic mercantile hub.",
-    "art": "res://assets/ui/locations/bela_terminal.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "horizon_habitat_terminal",
@@ -149,7 +149,7 @@
     "kind": "terminal",
     "description": "Busy civic terminal above a great population centre. Suburban shuttles mix with long-haul traffic.",
     "short_desc": "Busy civic terminal above a great population centre.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "titania_habitat_terminal",
@@ -158,7 +158,7 @@
     "kind": "terminal",
     "description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
     "short_desc": "Tourist terminal with low-gravity docking lanes.",
-    "art": "res://assets/ui/locations/bela_terminal.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "concordia_orbital_terminal",
@@ -167,7 +167,7 @@
     "kind": "terminal",
     "description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
     "short_desc": "Commerce terminal above Pelagos.",
-    "art": "res://assets/ui/locations/proxima_terminal.svg"
+    "art": "res://assets/ui/locations/proxima_terminal.png"
   },
   {
     "id": "tycho_exchange",
@@ -176,7 +176,7 @@
     "kind": "merchant",
     "description": "Automated commodity exchange for Tycho orbital contracts.",
     "short_desc": "Automated commodity exchange for Tycho orbital contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "bela_exchange",
@@ -185,7 +185,7 @@
     "kind": "merchant",
     "description": "Resort-world exchange listing daily contracts across the eleven trade categories.",
     "short_desc": "Resort-world exchange listing daily trade contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "irasia_exchange",
@@ -194,7 +194,7 @@
     "kind": "merchant",
     "description": "Commercial exchange on a major trade spine.",
     "short_desc": "Commercial exchange on a major trade spine.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "tokirev_exchange",
@@ -203,7 +203,7 @@
     "kind": "merchant",
     "description": "Factory-world exchange for industrial cargo contracts.",
     "short_desc": "Factory-world exchange for industrial cargo contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "fennet_exchange",
@@ -212,7 +212,7 @@
     "kind": "merchant",
     "description": "Rim exchange listing agricultural and industrial contracts.",
     "short_desc": "Rim exchange listing agricultural and industrial contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "fortuna_exchange",
@@ -221,7 +221,7 @@
     "kind": "merchant",
     "description": "Finance-world exchange with polished contract listings.",
     "short_desc": "Finance-world exchange with polished contract listings.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "new_carthage_exchange",
@@ -230,7 +230,7 @@
     "kind": "merchant",
     "description": "Mercantile exchange for shipping and commodity contracts.",
     "short_desc": "Mercantile exchange for shipping and commodity contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "horizon_exchange",
@@ -239,7 +239,7 @@
     "kind": "merchant",
     "description": "Population-centre exchange with broad daily contract listings.",
     "short_desc": "Population-centre exchange with broad daily contract listings.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "titania_exchange",
@@ -248,7 +248,7 @@
     "kind": "merchant",
     "description": "Tourist-world exchange listing resort and import contracts.",
     "short_desc": "Tourist-world exchange listing resort and import contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   },
   {
     "id": "concordia_exchange",
@@ -257,6 +257,6 @@
     "kind": "merchant",
     "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
     "short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
-    "art": "res://assets/ui/locations/proxima_exchange.svg"
+    "art": "res://assets/ui/locations/location_placeholder.png"
   }
 ]

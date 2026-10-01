@@ -15,8 +15,8 @@ if str(TOOLS) not in sys.path:
 from catalog_io import CATALOG, index_by_id, load_array, load_object
 
 DEFAULT_HABITAT_SPRITE = "res://assets/world/habitat_proxima.svg"
-DEFAULT_TERMINAL_ART = "res://assets/ui/locations/proxima_terminal.svg"
-DEFAULT_EXCHANGE_ART = "res://assets/ui/locations/proxima_exchange.svg"
+DEFAULT_TERMINAL_ART = "res://assets/ui/locations/proxima_terminal.png"
+DEFAULT_EXCHANGE_ART = "res://assets/ui/locations/location_placeholder.png"
 DEFAULT_PLANET_SPRITE = "res://assets/world/planet.png"
 ORBITAL_SPRITE_DIR = Path(__file__).resolve().parents[2] / "assets" / "world" / "orbitals"
 
@@ -123,7 +123,7 @@ def build_bundle(spec: dict) -> dict:
         )
     )
     habitat_short = str(habitat_spec.get("short_desc", habitat_desc))
-    habitat_art = str(habitat_spec.get("art", "res://assets/ui/locations/proxima_habitat.svg"))
+    habitat_art = str(habitat_spec.get("art", "res://assets/ui/locations/proxima_habitat.png"))
     habitat_sprite = str(habitat_spec.get("sprite", DEFAULT_HABITAT_SPRITE))
 
     economy = spec.get("economy", spec)

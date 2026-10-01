@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctsac4eo8xxl7"
-path="res://.godot/imported/skyedge.svg-6dc1de8e857cc715567dea09ce6da7b2.ctex"
+uid="uid://057klxbpeydv"
+path="res://.godot/imported/proxima_shipyard.png-e0dba99b6ca4a5a8b9491c9a219e1929.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/locations/skyedge.svg"
-dest_files=["res://.godot/imported/skyedge.svg-6dc1de8e857cc715567dea09ce6da7b2.ctex"]
+source_file="res://assets/ui/locations/proxima_shipyard.png"
+dest_files=["res://.godot/imported/proxima_shipyard.png-e0dba99b6ca4a5a8b9491c9a219e1929.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

@@ -20,7 +20,7 @@
     "name": "Example Habitat",
     "description": "Template orbital hub for generator documentation.",
     "short_desc": "Template orbital hub.",
-    "art": "res://assets/ui/locations/proxima_habitat.svg"
+    "art": "res://assets/ui/locations/proxima_habitat.png"
   },
   "economy": {
     "tier": "mid",

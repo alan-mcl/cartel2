@@ -11,6 +11,7 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_play_line_dedupe(runner, tree)
 	_test_play_line_queue(runner, tree)
 	_test_play_line_scroll_off(runner, tree)
+	_test_play_line_reenters_from_right(runner, tree)
 	_test_set_feed(runner, tree)
 
 
@@ -80,6 +81,30 @@ static func _test_play_line_scroll_off(runner: TestRunner, tree: SceneTree) -> v
 		bar._process(0.05)
 		steps += 1
 	runner.check_eq(bar.get_log_label_count_for_tests(), 1, "message bar: front label removed after scrolling off")
+	bar.get_parent().queue_free()
+
+
+static func _test_play_line_reenters_from_right(runner: TestRunner, tree: SceneTree) -> void:
+	var bar := _spawn_bar(runner, tree)
+	if bar == null:
+		return
+	bar.play_line("First message")
+	var clip := bar.get_node("HBox/Clip") as Control
+	var clip_w := clip.size.x
+	for _i in range(500):
+		if bar.get_log_label_count_for_tests() == 0:
+			runner.check(false, "message bar: first status line still on screen")
+			break
+		if bar.log_tail_x() + 32.0 <= clip_w:
+			break
+		bar._process(0.05)
+	bar.play_line("Second message")
+	runner.check_eq(bar.get_log_label_count_for_tests(), 2, "message bar: status queue keeps prior line")
+	runner.check_eq(
+		bar.get_log_label_x_for_tests(1),
+		clip_w,
+		"message bar: new status line enters from clip right edge"
+	)
 	bar.get_parent().queue_free()
 
 

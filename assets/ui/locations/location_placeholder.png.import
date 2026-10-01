@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5qmabmm1y4wx"
-path="res://.godot/imported/proxima_exchange.svg-fbc39754a5a8271a281b5ed5ae2af388.ctex"
+uid="uid://crgw6vmsvpdqy"
+path="res://.godot/imported/location_placeholder.png-3cb6febdfa0aa72ca230ee287c21352a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/locations/proxima_exchange.svg"
-dest_files=["res://.godot/imported/proxima_exchange.svg-fbc39754a5a8271a281b5ed5ae2af388.ctex"]
+source_file="res://assets/ui/locations/location_placeholder.png"
+dest_files=["res://.godot/imported/location_placeholder.png-3cb6febdfa0aa72ca230ee287c21352a.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

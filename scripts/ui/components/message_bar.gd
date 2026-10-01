@@ -5,6 +5,7 @@ const SEPARATOR := "  ·  "
 const SCROLL_PX_PER_SEC := 48.0
 const LOG_GAP_PX := 32.0
 const PENDING_PLACE_META := &"pending_place"
+const TAPE_CHAIN_META := &"tape_chain"
 
 enum DisplayMode { IDLE, STATUS_LABELS, FEED_LOOP }
 
@@ -73,7 +74,8 @@ func set_tag(text: String) -> void:
 
 
 ## Queue one log line: enters from the right (or after the previous tail + gap) and scrolls off once.
-func play_line(text: String, allow_repeat: bool = false) -> bool:
+## When [param tape_chain] is true, lines attach to the prior tail even if that is left of the clip (exchange tape).
+func play_line(text: String, allow_repeat: bool = false, tape_chain: bool = false) -> bool:
 	_bind_nodes()
 	var line := text.strip_edges()
 	if line.is_empty():
@@ -87,6 +89,8 @@ func play_line(text: String, allow_repeat: bool = false) -> bool:
 
 	var label := _create_log_label(line)
 	label.set_meta(PENDING_PLACE_META, true)
+	if tape_chain:
+		label.set_meta(TAPE_CHAIN_META, true)
 	label.visible = false
 	_clip.add_child(label)
 	_log_labels.append(label)
@@ -161,7 +165,11 @@ func _resolve_pending_placements() -> void:
 			label.position.x = clip_w
 		else:
 			var prev: Label = _log_labels[i - 1]
-			label.position.x = prev.position.x + _label_width(prev) + LOG_GAP_PX
+			var tail: float = prev.position.x + _label_width(prev) + LOG_GAP_PX
+			if label.has_meta(TAPE_CHAIN_META):
+				label.position.x = tail
+			else:
+				label.position.x = maxf(clip_w, tail)
 		label.position.y = 1.0
 
 

@@ -33,4 +33,4 @@ static func run(runner: TestRunner) -> void:
 
 	var line := ExchangePriceTape.next_print(session, catalog, rng)
 	runner.check(not line.is_empty(), "exchange tape: next_print returns text")
-	runner.check("  d" in line, "exchange tape: line includes price prefix")
+	runner.check(" - d" in line, "exchange tape: line includes price prefix")

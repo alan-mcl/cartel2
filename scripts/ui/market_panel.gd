@@ -48,7 +48,7 @@ func _enqueue_tape_line() -> bool:
 	var line := ExchangePriceTape.next_print(_context.session, _context.catalog, _tape_rng)
 	if line.is_empty():
 		return false
-	return _tape_bar.play_line(line, true)
+	return _tape_bar.play_line(line, true, true)
 
 
 func _top_up_tape() -> void:

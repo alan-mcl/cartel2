@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dn358j7k2gabp"
-path="res://.godot/imported/davidsons.svg-da998815e0a04182e500f53eee0c4bec.ctex"
+uid="uid://bdtiwlyilavax"
+path="res://.godot/imported/concord_scouts.png-4a3f7350068c732cba4fe08c9af7ee50.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/locations/davidsons.svg"
-dest_files=["res://.godot/imported/davidsons.svg-da998815e0a04182e500f53eee0c4bec.ctex"]
+source_file="res://assets/ui/locations/concord_scouts.png"
+dest_files=["res://.godot/imported/concord_scouts.png-4a3f7350068c732cba4fe08c9af7ee50.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
