@@ -6,7 +6,7 @@
     "type": "habitat",
     "description": "Orbital city hub above Proxima, and the largest orbital by population in any system.",
     "short_desc": "Orbital city hub.",
-    "art": "res://assets/ui/locations/proxima_habitat.svg",
+    "art": "res://assets/ui/locations/proxima_habitat.png",
     "default_building": "proxima_habitat_terminal",
     "buildings": [
       "proxima_habitat_terminal",

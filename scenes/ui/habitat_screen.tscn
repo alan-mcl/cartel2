@@ -26,43 +26,76 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_type_variation = &"Surface"
 
-[node name="HeaderBox" type="VBoxContainer" parent="Layout/Header"]
+[node name="HeaderSplit" type="HSplitContainer" parent="Layout/Header"]
+layout_mode = 2
+split_offset = 280
+
+[node name="PilotColumn" type="VBoxContainer" parent="Layout/Header/HeaderSplit"]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Title" type="Label" parent="Layout/Header/HeaderBox"]
+[node name="PilotRow" type="HBoxContainer" parent="Layout/Header/HeaderSplit/PilotColumn"]
 layout_mode = 2
-theme_type_variation = &"Title"
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Portrait" type="TextureRect" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PilotInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="Pilot" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "—"
+vertical_alignment = 1
+
+[node name="Credits" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Wallet: d0"
+
+[node name="GstClockLabel" parent="Layout/Header/HeaderSplit/PilotColumn" instance=ExtResource("2")]
+layout_mode = 2
+size_flags_horizontal = 3
+multiline_date_time = true
+
+[node name="HeaderRight" type="HBoxContainer" parent="Layout/Header/HeaderSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="HabitatInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/HeaderRight"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 1.0
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Layout/Header/HeaderSplit/HeaderRight/HabitatInfo"]
+layout_mode = 2
+theme_type_variation = &"Headline"
 text = "Proxima Habitat"
 
-[node name="Description" type="Label" parent="Layout/Header/HeaderBox"]
+[node name="Description" type="Label" parent="Layout/Header/HeaderSplit/HeaderRight/HabitatInfo"]
 layout_mode = 2
 autowrap_mode = 3
 text = "Orbital city hub."
 
-[node name="PilotRow" type="HBoxContainer" parent="Layout/Header/HeaderBox"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Portrait" type="TextureRect" parent="Layout/Header/HeaderBox/PilotRow"]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Pilot" type="Label" parent="Layout/Header/HeaderBox/PilotRow"]
+[node name="HabitatArtHost" type="VBoxContainer" parent="Layout/Header/HeaderSplit/HeaderRight"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"Section"
-text = "Pilot: —"
-vertical_alignment = 1
-
-[node name="Credits" type="Label" parent="Layout/Header/HeaderBox"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Credits: d0"
-
-[node name="GstClockLabel" parent="Layout/Header/HeaderBox" instance=ExtResource("2")]
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
 
 [node name="Body" type="PanelContainer" parent="Layout"]
 layout_mode = 2

@@ -123,6 +123,11 @@ static func format_date_only(total_seconds: float) -> String:
 	]
 
 
+static func format_time_only(total_seconds: float) -> String:
+	var parts := from_seconds(total_seconds)
+	return "%02d:%02d:%02d GST" % [parts.hour, parts.minute, parts.second]
+
+
 static func format_duration(total_seconds: float) -> String:
 	var remaining := maxi(0, int(round(total_seconds)))
 	if remaining <= 0:

@@ -2,12 +2,15 @@ extends GameScreen
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 
-@onready var _title: Label = $Layout/Header/HeaderBox/Title
-@onready var _description: Label = $Layout/Header/HeaderBox/Description
-@onready var _portrait: TextureRect = $Layout/Header/HeaderBox/PilotRow/Portrait
-@onready var _pilot: Label = $Layout/Header/HeaderBox/PilotRow/Pilot
-@onready var _credits: Label = $Layout/Header/HeaderBox/Credits
-@onready var _gst_clock: Label = $Layout/Header/HeaderBox/GstClockLabel
+@onready var _header_split: HSplitContainer = $Layout/Header/HeaderSplit
+@onready var _body_split: HSplitContainer = $Layout/Body/Split
+@onready var _title: Label = $Layout/Header/HeaderSplit/HeaderRight/HabitatInfo/Title
+@onready var _description: Label = $Layout/Header/HeaderSplit/HeaderRight/HabitatInfo/Description
+@onready var _portrait: TextureRect = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/Portrait
+@onready var _pilot: Label = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/Pilot
+@onready var _credits: Label = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/Credits
+@onready var _gst_clock: Label = $Layout/Header/HeaderSplit/PilotColumn/GstClockLabel
+@onready var _habitat_art_host: VBoxContainer = $Layout/Header/HeaderSplit/HeaderRight/HabitatArtHost
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
 @onready var _building_title: Label = $Layout/Body/Split/Right/BuildingHeader/BuildingInfo/BuildingTitle
 @onready var _building_description: Label = $Layout/Body/Split/Right/BuildingHeader/BuildingInfo/BuildingDescription
@@ -16,6 +19,8 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 @onready var _log: Control = $Layout/Body/Split/Right/Log
 
 var _art_frame: PanelContainer
+var _habitat_art_frame: PanelContainer
+var _syncing_splits: bool = false
 var _building_ids: PackedStringArray = PackedStringArray()
 var _suppress_building_select: bool = false
 var _embedded_panel: Control = null
@@ -27,6 +32,8 @@ func _ready() -> void:
 	$Layout/Footer/MenuButton.pressed.connect(_on_menu_pressed)
 	_building_item_list.item_selected.connect(_on_building_item_selected)
 	_building_item_list.item_clicked.connect(_on_building_item_clicked)
+	_header_split.dragged.connect(_on_header_split_dragged)
+	_body_split.dragged.connect(_on_body_split_dragged)
 
 
 func bind(context: UiContext) -> void:
@@ -47,9 +54,10 @@ func refresh() -> void:
 	_title.text = str(habitat.get("name", "Habitat"))
 	var habitat_desc := str(habitat.get("description", habitat.get("short_desc", "")))
 	_description.text = habitat_desc
-	_pilot.text = 'Pilot: "%s"' % _context.session.callsign
+	_pilot.text = '"%s"' % _context.session.callsign
 	_update_portrait(_context.session.portrait_path)
-	_credits.text = "Credits: d%d" % _context.session.credits
+	_credits.text = "Wallet: d%d" % _context.session.credits
+	_update_habitat_header(habitat)
 	_sync_log()
 
 	_rebuild_building_list(habitat)
@@ -134,6 +142,33 @@ func _message_bar() -> MessageBar:
 	if _log == null or not is_instance_valid(_log):
 		return null
 	return _log as MessageBar
+
+
+func _on_header_split_dragged(offset: int) -> void:
+	if _syncing_splits:
+		return
+	_syncing_splits = true
+	_body_split.split_offset = offset
+	_syncing_splits = false
+
+
+func _on_body_split_dragged(offset: int) -> void:
+	if _syncing_splits:
+		return
+	_syncing_splits = true
+	_header_split.split_offset = offset
+	_syncing_splits = false
+
+
+func _update_habitat_header(habitat: Dictionary) -> void:
+	if _habitat_art_frame == null:
+		_habitat_art_frame = LOCATION_ART.instantiate()
+		_habitat_art_host.add_child(_habitat_art_frame)
+	if _habitat_art_frame.has_method("configure_header_mode"):
+		_habitat_art_frame.configure_header_mode(true)
+	var art_path := _context.catalog.get_habitat_art(habitat)
+	var label := str(habitat.get("name", ""))
+	_habitat_art_frame.set_art_path(art_path, label)
 
 
 func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:

@@ -1,5 +1,7 @@
 extends Label
 
+@export var multiline_date_time: bool = false
+
 var _session: GameSession
 
 
@@ -22,4 +24,10 @@ func _refresh() -> void:
 	if _session == null:
 		text = ""
 		return
-	text = _session.get_gst_timestamp()
+	if multiline_date_time:
+		text = "%s\n%s" % [
+			GalacticCalendar.format_date_only(_session.gst_seconds),
+			GalacticCalendar.format_time_only(_session.gst_seconds),
+		]
+	else:
+		text = _session.get_gst_timestamp()
