@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://depj557b8eb17"
-path="res://.godot/imported/portrait_pilot_blonde_01.png-bb97e72abd4906bc5329deb28c35bed4.ctex"
+uid="uid://dr02jsilrhbp0"
+path="res://.godot/imported/p15.png-f095207175d2ca4fc3e81ce4921da08f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/portraits/portrait_pilot_blonde_01.png"
-dest_files=["res://.godot/imported/portrait_pilot_blonde_01.png-bb97e72abd4906bc5329deb28c35bed4.ctex"]
+source_file="res://assets/ui/portraits/p15.png"
+dest_files=["res://.godot/imported/p15.png-f095207175d2ca4fc3e81ce4921da08f.ctex"]
 
 [params]
 

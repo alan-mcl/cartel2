@@ -10,6 +10,7 @@ const STAT_ROWS: Array[Dictionary] = [
 	{"key": "plant_type", "label": "Plant type"},
 	{"key": "core_type", "label": "Core type"},
 	{"key": "engine_type", "label": "Engine type"},
+	{"key": "fuel_type", "label": "Fuel type"},
 	{"key": "weapon_type", "label": "Weapon type"},
 	{"key": "delivery_type", "label": "Delivery type"},
 	{"key": "shield_type", "label": "Shield type"},

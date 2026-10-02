@@ -641,6 +641,8 @@ def emit_docs(class_specs: list[ClassSpec], shared_specs: dict[str, ClassSpec]) 
     schema_paths = sorted(SCHEMA_DIR.glob("*.schema.json"))
     for schema_path in schema_paths:
         schema = load_schema(schema_path)
+        if "x-gdscript-class" not in schema:
+            continue
         spec = next(s for s in class_specs if s.class_name == schema["x-gdscript-class"])
         lines.append(f"## {spec.class_name}")
         lines.append("")
@@ -672,8 +674,13 @@ def generate_outputs() -> dict[str, str]:
     if not schema_paths:
         raise SystemExit(f"No schemas found in {SCHEMA_DIR}")
 
-    shared_specs = build_shared_def_specs(schema_paths)
-    class_specs = [build_class_spec(path) for path in schema_paths]
+    record_schema_paths = [
+        path
+        for path in schema_paths
+        if "x-gdscript-class" in load_schema(path)
+    ]
+    shared_specs = build_shared_def_specs(record_schema_paths)
+    class_specs = [build_class_spec(path) for path in record_schema_paths]
 
     outputs: dict[str, str] = {}
     for class_name, spec in shared_specs.items():

@@ -113,10 +113,7 @@ func refresh() -> void:
 			"CARGO",
 			"%.0f t capacity" % float(capacities.get("cargo_capacity", 0.0))
 		))
-		add_child(_detail_label(
-			"FUEL",
-			"%.0f / %.0f" % [_ship.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
-		))
+		add_child(_detail_label("FUEL", ShipFuel.format_gauge(_catalog, _ship)))
 
 		for mount_type in ["light_weapon", "medium_weapon", "heavy_weapon"]:
 			if mounts.has(mount_type):

@@ -80,7 +80,16 @@ func set_operating_state(state: ShipOperatingState) -> void:
 	_operating_state = state
 	if not _has_capability("basic_hud") or state == null:
 		return
-	_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
+	if not state.propulsion_requires_fuel:
+		_fuel.text = "Fuel: —"
+	elif state.propulsion_fuel_label.is_empty():
+		_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
+	else:
+		_fuel.text = "%s: %.0f / %.0f" % [
+			state.propulsion_fuel_label,
+			state.fuel_current,
+			state.fuel_capacity,
+		]
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
 
 

@@ -4,21 +4,9 @@ Deferred **design and content** features. For what is **not implemented in code 
 
 ## Propulsion fuel types
 
-**Status:** Not started. All main engines consume the same `fuel_current` pool on owned ships.
+**Status:** Implemented. Reaction engines store typed fuel in `OwnedShip.fuels`; each propulsion SKU carries a small built-in bunker (`fuel_capacity` on the engine module) plus untyped `category: fuel` tank addons. Daily habitat prices live in `data/catalog/fuels.json` and roll per sector/GST day (`FuelEconomy`). Gravitic and integrated sail consume no propulsion fuel. Reactor fuel for power plants remains deferred.
 
-**Goal:** Split propulsion fuels by `engine_type` so operating cost reflects chemistry, not only engine list price:
-
-| `engine_type` | Intended fuel |
-|---------------|---------------|
-| `chemical` | Chemical propellant |
-| `hydro_thermal` | Hydrogen |
-| `electric_plasma` | Reaction mass (power-limited; plant MW caps thrust) |
-| `direct_fusion` | Fusion fuel (dedicated reactor in the engine) |
-| `antimatter` | Antimatter — **expensive to buy and scarce to carry** |
-| `gravitic` | (TBD — may stay field-coupled only) |
-| `integrated_sail` | None — zero propulsion fuel |
-
-**Follow-on work:** `commodities.json` entries, fuel tank modules or capacity by type, refuel pricing at habitats, `ShipOperations` consumption rules, shipyard UI, save migration. Until then, antimatter engines are gated by SKU cost and low `fuel_consumption` on the shared pool only.
+**Follow-on (not done):** Exchange-traded fuel commodities, per-chemistry tank SKUs, reactor fuel for fission/fusion plants.
 
 ## Gravitic propulsion line
 

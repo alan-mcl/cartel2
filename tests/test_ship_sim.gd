@@ -23,7 +23,7 @@ static func _test_zero_fuel_integrated_sail(runner: TestRunner, catalog: Catalog
 		}
 	)
 	owned.set_module("main_engine_1", "tmc_rhumb_drift")
-	owned.fuel_current = 0.0
+	owned.fuels.clear()
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	var inputs := {"thrust": true, "boost": false, "in_flight": true, "fire": false}
 	var sail_state := ShipOperations.tick(catalog, assembled, owned, 1.0, inputs, 1)
@@ -33,7 +33,7 @@ static func _test_zero_fuel_integrated_sail(runner: TestRunner, catalog: Catalog
 	)
 
 	owned.set_module("main_engine_1", "gi_ht_18")
-	owned.fuel_current = 0.0
+	owned.fuels.clear()
 	assembled = ShipAssembler.assemble_owned(catalog, owned)
 	var hydro_state := ShipOperations.tick(catalog, assembled, owned, 1.0, inputs, 1)
 	runner.check_eq(hydro_state.thrust_factor, 0.0, "hydro-thermal stops when fuel empty")
@@ -50,7 +50,7 @@ static func _bind_sim(catalog: Catalog) -> Dictionary:
 	)
 	ShipAssembler.seed_ammunition(catalog, owned)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	owned.fuel_current = float(assembled.capacities.get("fuel_capacity", 100.0))
+	ShipFuel.fill_active_to_capacity(catalog, owned)
 	var motion := ShipMotion.new()
 	var operating := ShipOperatingState.new()
 	var weapons := ShipWeapons.new()
@@ -124,7 +124,8 @@ static func _test_stats_cadence(runner: TestRunner, catalog: Catalog) -> void:
 		"interval cadence refreshes after counter elapses"
 	)
 
-	owned.fuel_current -= 1.0
+	var fuel_id := ShipFuel.active_fuel_id(catalog, owned)
+	ShipFuel.set_amount(owned, fuel_id, ShipFuel.get_amount(owned, fuel_id) - 1.0)
 	runner.check(
 		sim.refresh_stats(ShipSimCore.StatsCadence.INTERVAL),
 		"interval cadence refreshes when fuel changes"

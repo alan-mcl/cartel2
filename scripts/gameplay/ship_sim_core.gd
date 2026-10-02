@@ -75,7 +75,7 @@ func refresh_stats(cadence: StatsCadence) -> bool:
 		_recompute_stats()
 		return true
 
-	if _owned != null and not is_equal_approx(_last_mass_fuel, _owned.fuel_current):
+	if _owned != null and not is_equal_approx(_last_mass_fuel, ShipFuel.active_amount(_catalog, _owned)):
 		_mass_stats_dirty = true
 	_stats_refresh_counter += 1
 	if not _mass_stats_dirty and _stats_refresh_counter < STATS_REFRESH_INTERVAL:
@@ -131,6 +131,6 @@ func step_physics(
 
 func _recompute_stats() -> void:
 	if _owned != null:
-		_last_mass_fuel = _owned.fuel_current
+		_last_mass_fuel = ShipFuel.active_amount(_catalog, _owned)
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(_catalog, _owned, _assembled)
 	_assembled.stats = ShipAssembler.derive_stats(_assembled, loaded_mass)

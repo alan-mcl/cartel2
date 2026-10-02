@@ -220,7 +220,7 @@ func _rebuild_spec_panel(host: VBoxContainer, template_id: String) -> void:
 	))
 	host.add_child(_detail_label(
 		"FUEL",
-		"%.0f / %.0f" % [owned.fuel_current, float(capacities.get("fuel_capacity", 0.0))]
+		ShipFuel.format_gauge(catalog, owned)
 	))
 	ModuleSpecText.append_ship_signature_rows(
 		host,

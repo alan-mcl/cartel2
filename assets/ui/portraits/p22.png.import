@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://geuucehggoth"
-path="res://.godot/imported/portrait_helmet_pink_03.png-93f198c5bf577ca3c851e35397bdd6bc.ctex"
+uid="uid://c3a8nrmx856j1"
+path="res://.godot/imported/p22.png-fd99065552ac1aa0f9ccd84fb71f9fad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/portraits/portrait_helmet_pink_03.png"
-dest_files=["res://.godot/imported/portrait_helmet_pink_03.png-93f198c5bf577ca3c851e35397bdd6bc.ctex"]
+source_file="res://assets/ui/portraits/p22.png"
+dest_files=["res://.godot/imported/p22.png-fd99065552ac1aa0f9ccd84fb71f9fad.ctex"]
 
 [params]
 

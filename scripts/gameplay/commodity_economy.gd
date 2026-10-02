@@ -16,9 +16,11 @@ static func gst_day(gst_seconds: float) -> int:
 static func ensure_quotes(session: GameSession, catalog: Catalog) -> bool:
 	var day: int = gst_day(session.gst_seconds)
 	if session.market_quotes_day == day and not session.market_quotes.is_empty():
+		FuelEconomy.ensure_quotes(session, catalog)
 		return false
 	session.market_quotes = compute_quotes(catalog, day, session.route_friction_delta)
 	session.market_quotes_day = day
+	FuelEconomy.ensure_quotes(session, catalog)
 	return true
 
 

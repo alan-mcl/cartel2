@@ -30,10 +30,67 @@ var _suppress_terminal_ship_select: bool = false
 var _show_rename_field: bool = false
 var _view_mode: String = "ships"
 
+const _FUEL_TAPE_TOP_UP_MAX_TRIES := 12
+
+var _fuel_tape_bar: MessageBar
+var _fuel_tape := FuelPriceTape.new()
+var _fuel_tape_active := false
+
+
+func _ready() -> void:
+	set_process(false)
+
+
+func _process(_delta: float) -> void:
+	if not _fuel_tape_active or _fuel_tape_bar == null:
+		return
+	if _context == null or _context.session == null or _context.catalog == null:
+		return
+	var tries := 0
+	while _fuel_tape_bar.wants_more_log_lines() and tries < _FUEL_TAPE_TOP_UP_MAX_TRIES:
+		var line := _fuel_tape.next_line(_context.session, _context.catalog)
+		if line.is_empty() or not _fuel_tape_bar.play_line(line, true, true):
+			break
+		tries += 1
+
 
 func refresh() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
+	if _can_soft_refresh_docking_bay():
+		_soft_refresh_docking_bay()
+		return
+	_full_rebuild()
+
+
+func _can_soft_refresh_docking_bay() -> bool:
+	return (
+		_view_mode == "ships"
+		and _fuel_tape_bar != null
+		and is_instance_valid(_fuel_tape_bar)
+		and _fuel_tape_active
+	)
+
+
+func _soft_refresh_docking_bay() -> void:
+	_sync_docked_ship_list_labels()
+	_rebuild_terminal_ship_panels()
+
+
+func _sync_docked_ship_list_labels() -> void:
+	if _terminal_ship_item_list == null:
+		return
+	for i in range(_terminal_ship_ids.size()):
+		var ship := _context.session.get_owned_ship(_terminal_ship_ids[i])
+		if ship != null:
+			_terminal_ship_item_list.set_item_text(i, ship.name)
+
+
+func _full_rebuild() -> void:
+	_fuel_tape_active = false
+	set_process(false)
+	_fuel_tape_bar = null
+	_fuel_tape.reset()
 	_clear_children(self)
 	_terminal_ship_item_list = null
 	_build_content()
@@ -55,8 +112,9 @@ func _build_content() -> void:
 	ships_tab.text = "Docking Bay"
 	ships_tab.disabled = _view_mode == "ships"
 	ships_tab.pressed.connect(func() -> void:
-		_view_mode = "ships"
-		refresh()
+		if _view_mode != "ships":
+			_view_mode = "ships"
+			_full_rebuild()
 	)
 	tab_row.add_child(ships_tab)
 
@@ -64,8 +122,9 @@ func _build_content() -> void:
 	departures_tab.text = "Departures Terminal"
 	departures_tab.disabled = _view_mode == "departures"
 	departures_tab.pressed.connect(func() -> void:
-		_view_mode = "departures"
-		refresh()
+		if _view_mode != "departures":
+			_view_mode = "departures"
+			_full_rebuild()
 	)
 	tab_row.add_child(departures_tab)
 
@@ -73,8 +132,9 @@ func _build_content() -> void:
 	freight_tab.text = "Freight Terminal"
 	freight_tab.disabled = _view_mode == "freight"
 	freight_tab.pressed.connect(func() -> void:
-		_view_mode = "freight"
-		refresh()
+		if _view_mode != "freight":
+			_view_mode = "freight"
+			_full_rebuild()
 	)
 	tab_row.add_child(freight_tab)
 
@@ -150,7 +210,28 @@ func _build_content() -> void:
 	_terminal_ship_item_list.item_selected.connect(_on_terminal_ship_item_selected)
 	left.add_child(_terminal_ship_item_list)
 
-	var detail := _add_scroll_pane(columns, "terminal_detail_host")
+	var right_pane := VBoxContainer.new()
+	right_pane.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_pane.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_pane.size_flags_stretch_ratio = 2.0
+	right_pane.add_theme_constant_override("separation", 8)
+	columns.add_child(right_pane)
+
+	_fuel_tape_bar = UiPatterns.message_bar()
+	_fuel_tape_bar.set_tag("FUEL PRICES")
+	right_pane.add_child(_fuel_tape_bar)
+	_fuel_tape.reset()
+	_fuel_tape_bar.play_line("Today's propulsion fuel prices:")
+	_fuel_tape_active = true
+	set_process(true)
+
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 12)
+	right_pane.add_child(content_row)
+
+	var detail := _add_scroll_pane(content_row, "terminal_detail_host")
 	var detail_scroll := detail.get_parent() as ScrollContainer
 	if detail_scroll != null:
 		detail_scroll.size_flags_stretch_ratio = 1.0
@@ -161,7 +242,7 @@ func _build_content() -> void:
 	admin.size_flags_stretch_ratio = 1.0
 	admin.add_theme_constant_override("separation", 8)
 	admin.set_meta("terminal_admin_host", true)
-	columns.add_child(admin)
+	content_row.add_child(admin)
 
 	for ship in ships:
 		_terminal_ship_ids.append(ship.id)
@@ -252,29 +333,6 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 	if ship == null:
 		return
 
-	var rename := Button.new()
-	rename.text = "Rename Ship"
-	rename.pressed.connect(_on_rename_ship_pressed)
-	admin.add_child(rename)
-
-	if _show_rename_field:
-		var rename_row := HBoxContainer.new()
-		rename_row.add_theme_constant_override("separation", 8)
-		admin.add_child(rename_row)
-
-		var field := LineEdit.new()
-		field.text = ship.name
-		field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		field.text_submitted.connect(_on_rename_ship_submitted)
-		rename_row.add_child(field)
-
-		var confirm := Button.new()
-		confirm.text = "Confirm"
-		confirm.pressed.connect(func() -> void:
-			_on_rename_ship_submitted(field.text)
-		)
-		rename_row.add_child(confirm)
-
 	admin.add_child(_section_label("LAUNCH STATUS"))
 
 	var occupant_count := 1
@@ -311,6 +369,36 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			hint.text = reason
 			admin.add_child(hint)
 
+	var refuel_quote := ShipAssembly.refuel_quote(_context.session, _context.catalog, ship.id)
+	var refuel := Button.new()
+	refuel.text = str(refuel_quote.get("button_text", "Refuel"))
+	refuel.disabled = not bool(refuel_quote.get("enabled", false))
+	refuel.pressed.connect(_on_refuel_ship_pressed)
+	admin.add_child(refuel)
+
+	var rename := Button.new()
+	rename.text = "Rename Ship"
+	rename.pressed.connect(_on_rename_ship_pressed)
+	admin.add_child(rename)
+
+	if _show_rename_field:
+		var rename_row := HBoxContainer.new()
+		rename_row.add_theme_constant_override("separation", 8)
+		admin.add_child(rename_row)
+
+		var field := LineEdit.new()
+		field.text = ship.name
+		field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		field.text_submitted.connect(_on_rename_ship_submitted)
+		rename_row.add_child(field)
+
+		var confirm := Button.new()
+		confirm.text = "Confirm"
+		confirm.pressed.connect(func() -> void:
+			_on_rename_ship_submitted(field.text)
+		)
+		rename_row.add_child(confirm)
+
 
 func _on_rename_ship_pressed() -> void:
 	_show_rename_field = true
@@ -338,6 +426,15 @@ func _on_rename_ship_submitted(new_name: String) -> void:
 func _on_undock_ship(ship_id: String) -> void:
 	if _context.on_undock_requested.is_valid():
 		_context.on_undock_requested.call(ship_id)
+
+
+func _on_refuel_ship_pressed() -> void:
+	if _selected_terminal_ship_id.is_empty():
+		return
+	if ShipAssembly.refuel_ship(_context.session, _context.catalog, _selected_terminal_ship_id):
+		_rebuild_terminal_ship_panels()
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_terminal_ship_id)
 
 
 func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:

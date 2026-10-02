@@ -111,6 +111,14 @@ var market_quotes_day: int:
 	get: return world.market_quotes_day
 	set(value): world.market_quotes_day = value
 
+var fuel_quotes: Dictionary:
+	get: return world.fuel_quotes
+	set(value): world.fuel_quotes = value
+
+var fuel_quotes_day: int:
+	get: return world.fuel_quotes_day
+	set(value): world.fuel_quotes_day = value
+
 var route_friction_delta: Dictionary:
 	get: return world.route_friction_delta
 	set(value): world.route_friction_delta = value
@@ -242,6 +250,8 @@ func start_new_game(
 	world.run_seed = randi()
 	world.market_quotes.clear()
 	world.market_quotes_day = -1
+	world.fuel_quotes.clear()
+	world.fuel_quotes_day = -1
 	world.route_friction_delta.clear()
 
 	var ships: Variant = kit.get("ships", [])
@@ -840,7 +850,7 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 	ship.chassis_id = chassis_id
 	ship.template_id = ""
 	ship.modules = []
-	ship.fuel_current = 0.0
+	ship.fuels.clear()
 	ship.location = world.habitat_id
 	OwnedShip.finalize_loaded_ship(ship, catalog)
 

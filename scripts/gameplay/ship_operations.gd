@@ -60,7 +60,10 @@ static func tick_into(
 	state.compute_capacity = ShipCombat.get_effective_compute_capacity(assembled, combat_state)
 	state.life_support_capacity = float(assembled.capacities.get("life_support_capacity", 0.0))
 	state.power_available = ShipCombat.get_effective_power_generation(assembled, combat_state)
-	state.fuel_current = owned.fuel_current
+	state.propulsion_fuel_id = ShipFuel.active_fuel_id(catalog, owned)
+	state.propulsion_requires_fuel = ShipFuel.propulsion_requires_fuel(assembled)
+	state.propulsion_fuel_label = ShipFuel.display_name(catalog, state.propulsion_fuel_id)
+	state.fuel_current = ShipFuel.active_amount(catalog, owned)
 	state.fuel_capacity = float(assembled.capacities.get("fuel_capacity", 0.0))
 
 	var thrusting := bool(inputs.get("thrust", false))
@@ -91,10 +94,16 @@ static func tick_into(
 	_allocate_power(state, demands)
 
 	state.fuel_consumption = _collect_fuel_consumption(assembled, state.active_systems, demands)
-	if state.fuel_current > 0.0 and state.fuel_consumption > 0.0:
-		owned.fuel_current = max(0.0, state.fuel_current - state.fuel_consumption * delta)
-		state.fuel_current = owned.fuel_current
-	state.fuel_empty = state.fuel_current <= 0.0
+	if (
+		state.propulsion_requires_fuel
+		and not state.propulsion_fuel_id.is_empty()
+		and state.fuel_current > 0.0
+		and state.fuel_consumption > 0.0
+	):
+		var burned := maxf(0.0, state.fuel_current - state.fuel_consumption * delta)
+		ShipFuel.set_amount(owned, state.propulsion_fuel_id, burned)
+		state.fuel_current = burned
+	state.fuel_empty = state.propulsion_requires_fuel and state.fuel_current <= 0.0
 
 	state.thrust_factor = 1.0
 	state.boost_allowed = true
@@ -162,6 +171,9 @@ static func _reset_operating_state(state: ShipOperatingState) -> void:
 	state.fuel_current = 0.0
 	state.fuel_capacity = 0.0
 	state.fuel_empty = false
+	state.propulsion_fuel_id = ""
+	state.propulsion_requires_fuel = false
+	state.propulsion_fuel_label = ""
 	state.thrust_factor = 1.0
 	state.boost_allowed = true
 	state.weapon_power_requested = 0.0
@@ -259,9 +271,7 @@ static func _collect_fuel_consumption(assembled: AssembledShip, active_systems: 
 			continue
 
 		var category := module_def.category
-		if category == "power":
-			total += module_def.fuel_consumption
-		elif category == "propulsion" and bool(active_systems.get("engine", false)):
+		if category == "propulsion" and bool(active_systems.get("engine", false)):
 			var rate := module_def.fuel_consumption
 			if bool(active_systems.get("boost", false)):
 				rate *= 1.6

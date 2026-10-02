@@ -1,0 +1,32 @@
+[
+  {
+    "id": "chemical",
+    "name": "Chemical propellant",
+    "price_min": 2,
+    "price_max": 6
+  },
+  {
+    "id": "hydrogen",
+    "name": "Hydrogen",
+    "price_min": 4,
+    "price_max": 10
+  },
+  {
+    "id": "reaction_mass",
+    "name": "Reaction mass",
+    "price_min": 8,
+    "price_max": 18
+  },
+  {
+    "id": "fusion",
+    "name": "Fusion fuel",
+    "price_min": 20,
+    "price_max": 50
+  },
+  {
+    "id": "antimatter",
+    "name": "Antimatter",
+    "price_min": 200,
+    "price_max": 800
+  }
+]

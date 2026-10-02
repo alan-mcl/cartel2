@@ -24,7 +24,6 @@ const PROVIDES_KEYS := [
 	"compute_capacity",
 	"life_support_capacity",
 	"cargo_capacity",
-	"fuel_capacity",
 ]
 
 const MOUNT_CATEGORIES := [
@@ -225,7 +224,7 @@ static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipSt
 
 static func calculate_loaded_mass(catalog: Catalog, owned: OwnedShip, assembled: AssembledShip) -> float:
 	var mass := float(assembled.envelope.get("dry_mass", 0.0))
-	mass += owned.fuel_current * FUEL_MASS_PER_UNIT
+	mass += ShipFuel.propulsion_fuel_mass(catalog, owned)
 
 	for commodity_id in owned.cargo.keys():
 		var qty := owned.get_cargo_count(str(commodity_id))
@@ -401,7 +400,24 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 				current + int(module_def.ammunition_capacity[ammo_id])
 			)
 
+	capacities["fuel_capacity"] = _propulsion_fuel_capacity(assembled)
 	return capacities
+
+
+static func _propulsion_fuel_capacity(assembled: AssembledShip) -> float:
+	var total := 0.0
+	var engine := assembled.get_propulsion_module_def()
+	if engine != null:
+		total += engine.fuel_capacity
+	for entry in assembled.installed_modules:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: Variant = entry.get("data", null)
+		if module_def == null or not module_def is ModuleDef:
+			continue
+		if module_def.category == "fuel":
+			total += module_def.fuel_capacity
+	return total
 
 
 static func _aggregate_capabilities(assembled: AssembledShip) -> Dictionary:

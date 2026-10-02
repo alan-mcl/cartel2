@@ -129,7 +129,7 @@ func _on_strip_pressed() -> void:
 		return
 
 	ship.modules.clear()
-	ship.fuel_current = 0.0
+	ship.fuels.clear()
 	ship.ammunition.clear()
 	_session.last_log = "Stripped %s." % ship.name
 	_session.changed.emit()
@@ -162,7 +162,7 @@ func _on_restore_pressed() -> void:
 
 	ship.modules = ShipAssembler.assign_modules_to_slots(_catalog, chassis, module_ids)
 	var assembled := ShipAssembler.assemble_owned(_catalog, ship)
-	ship.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
+	ShipFuel.fill_active_to_capacity(_catalog, ship)
 	ship.ammunition.clear()
 	ShipAssembler.seed_ammunition(_catalog, ship)
 

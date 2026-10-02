@@ -140,7 +140,7 @@ New Game reads this template once; runtime progress is stored in save slots unde
 | `template_id` | string | Reference to `ships.json` |
 | `chassis_id` | string | Fixed chassis |
 | `modules` | array | `{ slot, module_id }` installed configuration |
-| `fuel_current` | number | Stored propulsion fuel |
+| `fuels` | object | Map of propulsion fuel id → stored units (active engine chemistry only) |
 | `ammunition` | object | `{ ammo_type_id: qty }` |
 | `cargo` | object | `{ commodity_id: qty }` per-ship hold |
 | `location` | string | `"aboard"` or habitat id |
@@ -196,7 +196,7 @@ In-system ships require an installed `vessel_registration_beacon` (`category: tr
 `ShipOperations.tick` each physics frame:
 
 - Allocates power by priority (life support + propulsion critical; sensors/computer high; weapons normal)
-- Consumes fuel from `owned.fuel_current`
+- Consumes propulsion fuel from `owned.fuels` for the fitted engine’s `fuel_type` (power-plant `fuel_consumption` does not draw this pool yet)
 - Sets `thrust_factor` when fuel empty or power deficit
 
 Fuel lives on the owned ship. Heat/signature simulation is deferred beyond the current build.

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jjc7src3420g"
-path="res://.godot/imported/portrait_aviator_orange_02.png-9e4b2adc405a673a4b85de4fdb9df61d.ctex"
+uid="uid://c43j5bovneuvp"
+path="res://.godot/imported/p26.png-511aa14e5f7f734972de353a96372651.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/portraits/portrait_aviator_orange_02.png"
-dest_files=["res://.godot/imported/portrait_aviator_orange_02.png-9e4b2adc405a673a4b85de4fdb9df61d.ctex"]
+source_file="res://assets/ui/portraits/p26.png"
+dest_files=["res://.godot/imported/p26.png-511aa14e5f7f734972de353a96372651.ctex"]
 
 [params]
 

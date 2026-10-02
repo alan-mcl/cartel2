@@ -70,7 +70,9 @@ Commercial main engines are branded products: **maker** (corporation), **brand**
 | Weight | `mass` | Ship mass |
 | Thrust | `thrust` | Forward acceleration |
 | Max speed | `max_speed` | Speed cap km/s |
-| Fuel use | `fuel_consumption` | Consumed in flight (shared pool today — see [backlog](../design/backlog.md)) |
+| Fuel use | `fuel_consumption` | Consumed in flight from the fitted engine’s fuel type (`fuels` on the ship) |
+| Fuel type | `fuel_type` | `chemical`, `hydrogen`, `reaction_mass`, `fusion`, or `antimatter` (reaction engines only) |
+| Bunker | `fuel_capacity` (engine) | Built-in storage on the propulsion module; fuel tanks add untyped capacity |
 | Boost | `boost_multiplier` | Boost speed factor |
 | Power | `power_demand` | Operating budget |
 | Type | `engine_type` | Technology class (see below) |
@@ -79,7 +81,7 @@ Manufacturer tiers for propulsion are defined in [manufacturers.txt](../design/m
 
 #### Engine types
 
-Seven `engine_type` values are in the catalog. All share the same fitting rules; type drives stats, marketing, field coupling, and future fuel rules.
+Seven `engine_type` values are in the catalog. All share the same fitting rules; type drives stats, marketing, field coupling, and propulsion fuel chemistry (except gravitic and integrated sail, which use no propulsion fuel).
 
 | Type | Role | Typical profile |
 |------|------|-----------------|
@@ -87,7 +89,7 @@ Seven `engine_type` values are in the catalog. All share the same fitting rules;
 | **Hydro-thermal** | Heats hydrogen and expels exhaust. Better fuel than chemical while retaining substantial thrust; **hungry for ship power**. Mature everyday engine. | Balanced thrust/speed, moderate fuel, high `power_demand` |
 | **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
 | **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
-| **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme. **Fuel type differentiation** (expensive antimatter stores) is deferred — see [backlog](../design/backlog.md). | Top thrust/speed/boost, tiny fuel use on shared pool |
+| **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme; **antimatter** fuel is expensive at the yard and scarce in the small engine bunker. | Top thrust/speed/boost, tiny fuel burn |
 | **Gravitic** | Couples to local **gravity** — strongest near the planet and habitat ring, weak in deep orbit and unspace. Five SKUs (Sundancer, Bellatrix, Ionique, Fable). High gravitational signature. | High catalog thrust, field-scaled effective thrust |
 | **Integrated sail** | Couples to **radiant**, **particle**, and **magnetic** fields. **Zero fuel**; power from the plant only. Low catalog thrust, modest cruise speed. Six SKUs (Daybreak, Lumen, Rhumb, Washi, Ionique, Sideline). | Very low thrust, quiet thermal signature |
 

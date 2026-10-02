@@ -65,7 +65,22 @@ func _scan_portraits() -> void:
 			if ext in PORTRAIT_EXTENSIONS:
 				_portrait_paths.append(PORTRAITS_DIR.path_join(file_name))
 		file_name = dir.get_next()
-	_portrait_paths.sort()
+	var sorted_paths: Array[String] = []
+	for path in _portrait_paths:
+		sorted_paths.append(path)
+	sorted_paths.sort_custom(
+		func(a: String, b: String) -> bool: return _portrait_path_sort_key(a) < _portrait_path_sort_key(b)
+	)
+	_portrait_paths = PackedStringArray(sorted_paths)
+
+
+static func _portrait_path_sort_key(path: String) -> int:
+	var base := path.get_file().get_basename()
+	if base.begins_with("p") and base.length() > 1:
+		var suffix := base.substr(1)
+		if suffix.is_valid_int():
+			return int(suffix)
+	return 1_000_000
 
 
 func _rebuild_background_list() -> void:

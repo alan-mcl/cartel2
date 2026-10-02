@@ -115,7 +115,7 @@ static func run(runner: TestRunner) -> void:
 	)
 
 	var no_fuel := OwnedShip.from_dict(gate_ship.to_dict())
-	no_fuel.fuel_current = 0.0
+	no_fuel.fuels.clear()
 	runner.check(_blockers_include(catalog, no_fuel, "fuel"), "zero fuel blocks launch")
 
 	var no_ls := OwnedShip.from_dict(gate_ship.to_dict())

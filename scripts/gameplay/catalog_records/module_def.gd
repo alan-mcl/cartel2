@@ -19,6 +19,7 @@ var description: String = ""
 var capabilities: Array = []
 var signature: CatalogSignature = CatalogSignature.new()
 var engine_type: String = ""
+var fuel_type: String = ""
 var thrust: float = 0.0
 var max_speed: float = 0.0
 var boost_multiplier: float = 0.0
@@ -81,6 +82,7 @@ static func from_dict(data: Dictionary) -> ModuleDef:
 			def.capabilities.append(str(item))
 	def.signature = CatalogSignature.from_dict(data.get("signature", {}))
 	def.engine_type = str(data.get("engine_type", ""))
+	def.fuel_type = str(data.get("fuel_type", ""))
 	def.thrust = float(data.get("thrust", 0.0))
 	def.max_speed = float(data.get("max_speed", 0.0))
 	def.boost_multiplier = float(data.get("boost_multiplier", 0.0))
@@ -141,6 +143,8 @@ func to_dict() -> Dictionary:
 	out["signature"] = signature.to_dict()
 	if _present_keys.has("engine_type") or engine_type != "":
 		out["engine_type"] = engine_type
+	if _present_keys.has("fuel_type") or fuel_type != "":
+		out["fuel_type"] = fuel_type
 	if _present_keys.has("thrust") or thrust != 0.0:
 		out["thrust"] = thrust
 	if _present_keys.has("max_speed") or max_speed != 0.0:
@@ -214,7 +218,7 @@ func to_dict() -> Dictionary:
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "intercept_chance", "nav_rating", "translation_capacity"])
+	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "fuel_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "intercept_chance", "nav_rating", "translation_capacity"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "maker", "category", "mass", "volume", "cost", "description", "signature"])

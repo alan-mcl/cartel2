@@ -1,9 +1,6 @@
 class_name ShipAssembly
 extends RefCounted
 
-const REFUEL_COST_PER_UNIT := 3
-
-
 static func preview_stats(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
@@ -73,8 +70,8 @@ static func undock_blockers(
 			"%s has no propulsion. Fit an engine at the Shipyard first." % ship_name
 		)
 
-	if owned.fuel_current <= 0.0:
-		blockers.append("No fuel — refuel at the Shipyard.")
+	if ShipFuel.propulsion_requires_fuel(assembled) and ShipFuel.active_amount(catalog, owned) <= 0.0:
+		blockers.append("No fuel — refuel at the Docking Bay or Shipyard.")
 
 	var life_support_capacity := float(assembled.capacities.get("life_support_capacity", 0.0))
 	var life_support_demand := maxf(1.0, float(occupant_count))
@@ -238,7 +235,10 @@ static func install_module(
 		session.add_spare_part(previous, 1)
 
 	ship.set_module(slot, part_id)
+	var vented := ShipFuel.reconcile_after_fit(catalog, ship)
 	session.last_log = "Installed %s on %s." % [str(part.get("name", part_id)), ship.name]
+	if vented:
+		session.last_log += " Previous propulsion fuel vented."
 	session.events.publish(SimEvent.module_installed(ship_id, slot, part_id))
 	session.changed.emit()
 	return true
@@ -305,6 +305,8 @@ static func relocate_module(
 	if not target.is_empty():
 		ship.set_module(from_slot, target)
 
+	ShipFuel.reconcile_after_fit(catalog, ship)
+
 	var part := catalog.get_module(moving)
 	if target.is_empty():
 		session.last_log = "Moved %s to %s." % [str(part.get("name", moving)), to_slot]
@@ -343,6 +345,7 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 		return false
 
 	ship.remove_module(slot)
+	ShipFuel.reconcile_after_fit(catalog, ship)
 	if not session.sandbox:
 		session.add_spare_part(previous, 1)
 	var part := catalog.get_module(previous)
@@ -351,42 +354,92 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 	return true
 
 
+static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+	var result := {
+		"enabled": false,
+		"cost": 0,
+		"button_text": "Refuel",
+		"log_reason": "",
+	}
+
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		result["log_reason"] = "No ship selected."
+		return result
+
+	if ship.location != session.habitat_id:
+		result["log_reason"] = "Ship must be docked at this habitat."
+		return result
+
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var fuel_id := ShipFuel.active_fuel_id(catalog, ship)
+	if fuel_id.is_empty():
+		result["button_text"] = "Refuel (N/A)"
+		result["log_reason"] = "Ship has no reaction-fuel engine fitted."
+		return result
+
+	var capacity := float(assembled.capacities.get("fuel_capacity", 0.0))
+	if capacity <= 0.0:
+		result["button_text"] = "Refuel (N/A)"
+		result["log_reason"] = "Ship has no propulsion fuel storage."
+		return result
+
+	var current := ShipFuel.active_amount(catalog, ship)
+	var needed := capacity - current
+	if needed <= 0.01:
+		result["button_text"] = "Refuel (full)"
+		result["log_reason"] = "Propulsion fuel already full."
+		return result
+
+	if session.sandbox:
+		result["enabled"] = true
+		result["cost"] = 0
+		result["button_text"] = "Refuel"
+		return result
+
+	var sector_id := session.world.get_market_sector_id(catalog)
+	var unit_price := FuelEconomy.price_for_sector(session, catalog, sector_id, fuel_id)
+	if unit_price <= 0:
+		result["button_text"] = "Refuel (N/A)"
+		result["log_reason"] = "Fuel price unavailable at this habitat."
+		return result
+
+	var cost := int(ceil(needed * float(unit_price)))
+	result["cost"] = cost
+	result["button_text"] = "Refuel (d%d)" % cost
+	result["enabled"] = session.can_afford_credits(cost)
+	if not result["enabled"]:
+		result["log_reason"] = "Insufficient credits to refuel. Need d%d." % cost
+	return result
+
+
 static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
+	var quote := refuel_quote(session, catalog, ship_id)
+	if not bool(quote.get("enabled", false)):
+		var reason := str(quote.get("log_reason", ""))
+		if reason.is_empty():
+			return false
+		if reason.begins_with("Insufficient credits"):
+			return session.fail_action(reason)
+		session.last_log = reason
+		session.changed.emit()
+		return false
+
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return false
 
-	if ship.location != session.habitat_id:
-		session.last_log = "Ship must be docked at this habitat."
-		session.changed.emit()
-		return false
+	var cost := int(quote.get("cost", 0))
+	if cost > 0:
+		session.apply_credits_delta(-cost)
 
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	var capacity := float(assembled.capacities.get("fuel_capacity", 0.0))
-	if capacity <= 0.0:
-		session.last_log = "Ship has no fuel tank installed."
-		session.changed.emit()
-		return false
-
-	var needed := capacity - ship.fuel_current
-	if needed <= 0.01:
-		session.last_log = "Fuel tank already full."
-		session.changed.emit()
-		return false
-
-	if session.sandbox:
-		ship.fuel_current = capacity
+	ShipFuel.fill_active_to_capacity(catalog, ship)
+	var fuel_id := ShipFuel.active_fuel_id(catalog, ship)
+	var fuel_name := str(catalog.get_fuel(fuel_id).get("name", fuel_id))
+	if cost > 0:
+		session.last_log = "Refuelled %s with %s for d%d." % [ship.name, fuel_name, cost]
+	else:
 		session.last_log = "Refuelled %s." % ship.name
-		session.changed.emit()
-		return true
-
-	var cost := int(ceil(needed * REFUEL_COST_PER_UNIT))
-	if not session.can_afford_credits(cost):
-		return session.fail_action("Insufficient credits to refuel. Need d%d." % cost)
-
-	session.apply_credits_delta(-cost)
-	ship.fuel_current = capacity
-	session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
 	session.changed.emit()
 	return true
 

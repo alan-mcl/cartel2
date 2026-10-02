@@ -17,6 +17,9 @@ var fuel_consumption: float = 0.0
 var fuel_current: float = 0.0
 var fuel_capacity: float = 0.0
 var fuel_empty: bool = false
+var propulsion_fuel_id: String = ""
+var propulsion_requires_fuel: bool = false
+var propulsion_fuel_label: String = ""
 
 var thrust_factor: float = 1.0
 var boost_allowed: bool = true

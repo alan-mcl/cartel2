@@ -69,7 +69,7 @@ static func _create_owned_ship(
 			module_ids.append(str(module_id))
 	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	owned.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
+	ShipFuel.fill_active_to_capacity(catalog, owned)
 	ShipAssembler.seed_ammunition(catalog, owned)
 	return owned
 

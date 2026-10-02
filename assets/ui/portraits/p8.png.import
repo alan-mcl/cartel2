@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1lgyktq1jgef"
-path="res://.godot/imported/portrait_officer_ginger_01.png-6b698058552ecbaccb9ce9e42867d681.ctex"
+uid="uid://chsgvw5vabgn1"
+path="res://.godot/imported/p8.png-2a02d925393e334e35c26cce31af7bce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/portraits/portrait_officer_ginger_01.png"
-dest_files=["res://.godot/imported/portrait_officer_ginger_01.png-6b698058552ecbaccb9ce9e42867d681.ctex"]
+source_file="res://assets/ui/portraits/p8.png"
+dest_files=["res://.godot/imported/p8.png-2a02d925393e334e35c26cce31af7bce.ctex"]
 
 [params]
 

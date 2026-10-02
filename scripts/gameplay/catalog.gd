@@ -14,6 +14,7 @@ const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
 const BACKGROUNDS_PATH := "res://data/catalog/backgrounds.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
+const FUELS_PATH := "res://data/catalog/fuels.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
 const CORPORATIONS_PATH := "res://data/catalog/corporations.json"
 const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
@@ -37,6 +38,7 @@ var routes_by_id: Dictionary = {}
 var unspaces_by_id: Dictionary = {}
 var worlds_by_id: Dictionary = {}
 var commodities_by_id: Dictionary = {}
+var fuels_by_id: Dictionary = {}
 var economies_by_id: Dictionary = {}
 var player_data: Dictionary = {}
 var backgrounds_by_id: Dictionary = {}
@@ -75,6 +77,7 @@ func load_all() -> void:
 	player_data = _load_json_object(PLAYER_PATH)
 	_load_backgrounds()
 	commodities_by_id = _load_indexed_records(COMMODITIES_PATH, CommodityDef)
+	fuels_by_id = _load_indexed_array(FUELS_PATH)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
 	corporations_by_id = _load_indexed_array(CORPORATIONS_PATH)
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
@@ -323,6 +326,18 @@ func list_habitat_dicts() -> Array:
 
 func get_commodity(id: String) -> Dictionary:
 	return _require_dict(commodities_by_id, id, "commodity")
+
+
+func get_fuel(id: String) -> Dictionary:
+	return _require(fuels_by_id, id, "fuel")
+
+
+func list_fuels() -> Array:
+	var fuels: Array = fuels_by_id.values()
+	fuels.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return str(left.get("id", "")) < str(right.get("id", ""))
+	)
+	return fuels
 
 
 func get_commodity_def(id: String) -> CommodityDef:

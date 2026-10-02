@@ -11,10 +11,11 @@ var chassis_id: String = ""
 var location: String = "aboard"
 var modules: Array = []
 var cargo: Dictionary = {}
-var fuel_current: float = 0.0
+var fuels: Dictionary = {}
 var ammunition: Dictionary = {}
 var transponder_enabled: bool = true
 var active_sensors_enabled: bool = true
+var pending_legacy_fuel: float = -1.0
 
 
 static func from_dict(data: Dictionary) -> OwnedShip:
@@ -25,7 +26,9 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 	ship.template_id = str(data.get("template_id", ""))
 	ship.chassis_id = str(data.get("chassis_id", ""))
 	ship.location = str(data.get("location", "aboard"))
-	ship.fuel_current = float(data.get("fuel_current", 0.0))
+	ship.fuels = ShipFuel.fuels_dict_from_variant(data.get("fuels", {}))
+	if data.has("fuel_current") and ship.fuels.is_empty():
+		ship.pending_legacy_fuel = float(data.get("fuel_current", 0.0))
 	ship.transponder_enabled = bool(data.get("transponder_enabled", true))
 	ship.active_sensors_enabled = bool(data.get("active_sensors_enabled", true))
 
@@ -43,6 +46,11 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 static func finalize_loaded_ship(ship: OwnedShip, catalog: Catalog) -> void:
 	if ship == null:
 		return
+	if ship.pending_legacy_fuel >= 0.0:
+		ShipFuel.migrate_legacy_pool(catalog, ship, ship.pending_legacy_fuel)
+		ship.pending_legacy_fuel = -1.0
+	ShipFuel.reconcile_after_fit(catalog, ship)
+	ShipFuel.ensure_stored_if_empty(catalog, ship)
 	ship.ensure_registration(catalog)
 
 
@@ -54,6 +62,7 @@ static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 	ship.template_id = str(ship_data.get("template_id", ""))
 	ship.chassis_id = str(ship_data.get("chassis_id", ""))
 	ship.location = str(ship_data.get("location", "aboard"))
+	ship.fuels = ShipFuel.fuels_dict_from_variant(ship_data.get("fuels", {}))
 
 	var modules_data: Variant = ship_data.get("modules", [])
 	if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
@@ -68,10 +77,13 @@ static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 				module_ids.append(str(module_id))
 		ship.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
 
-	ship.fuel_current = float(ship_data.get("fuel_current", 0.0))
-	if ship.fuel_current <= 0.0:
-		var assembled := ShipAssembler.assemble_owned(catalog, ship)
-		ship.fuel_current = float(assembled.capacities.get("fuel_capacity", 0.0))
+	if ship.fuels.is_empty():
+		if ship_data.has("fuel_current"):
+			ShipFuel.migrate_legacy_pool(catalog, ship, float(ship_data.get("fuel_current", 0.0)))
+		else:
+			ShipFuel.ensure_stored_if_empty(catalog, ship)
+	else:
+		ShipFuel.reconcile_after_fit(catalog, ship)
 
 	ship.cargo = _dict_from_variant(ship_data.get("cargo", {}))
 	ship.ammunition = _float_dict_from_variant(ship_data.get("ammunition", {}))
@@ -100,7 +112,7 @@ func to_dict() -> Dictionary:
 		"location": location,
 		"modules": modules.duplicate(true),
 		"cargo": cargo.duplicate(),
-		"fuel_current": fuel_current,
+		"fuels": ShipFuel.fuels_to_dict(self),
 		"ammunition": ammunition.duplicate(),
 		"transponder_enabled": transponder_enabled,
 		"active_sensors_enabled": active_sensors_enabled,

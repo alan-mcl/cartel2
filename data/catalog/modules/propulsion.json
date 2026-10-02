@@ -21,7 +21,9 @@
       "gravitational": 0.8,
       "electromagnetic": 1.58,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "atl_keystone_fusion",
@@ -45,7 +47,9 @@
       "gravitational": 1.7,
       "electromagnetic": 4.59,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "atl_keystone_h20",
@@ -69,7 +73,9 @@
       "gravitational": 1.08,
       "electromagnetic": 1.6,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "atl_keystone_h40",
@@ -93,7 +99,9 @@
       "gravitational": 1.2,
       "electromagnetic": 1.9,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "atl_pithead_kick",
@@ -117,7 +125,9 @@
       "gravitational": 0.98,
       "electromagnetic": 1.78,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "ca_blue_ensign_hydro_24",
@@ -141,7 +151,9 @@
       "gravitational": 0.88,
       "electromagnetic": 1.62,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "ca_capstan_chemical_16",
@@ -165,7 +177,9 @@
       "gravitational": 0.7,
       "electromagnetic": 1.48,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "chi_fable_core",
@@ -183,13 +197,15 @@
     "fuel_consumption": 0.11,
     "power_demand": 4.8,
     "cost": 3700,
-    "description": "Fable direct-fusion — half science project, half ship engine.",
+    "description": "Fable direct-fusion \u2014 half science project, half ship engine.",
     "signature": {
       "thermal": 6.81,
       "gravitational": 1.25,
       "electromagnetic": 4.09,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "chi_fable_drift",
@@ -204,7 +220,7 @@
     "thrust": 2650.0,
     "max_speed": 730.0,
     "boost_multiplier": 2.08,
-    "fuel_consumption": 0.23,
+    "fuel_consumption": 0.0,
     "power_demand": 5.2,
     "cost": 7100,
     "description": "Gravitic drive with a whimsical brochure and serious near-orbit punch.",
@@ -213,7 +229,8 @@
       "gravitational": 29.81,
       "electromagnetic": 4.97,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "chi_fable_kiss",
@@ -237,7 +254,9 @@
       "gravitational": 1.62,
       "electromagnetic": 7.75,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 3,
+    "fuel_type": "antimatter"
   },
   {
     "id": "chi_ouroboros_coil",
@@ -255,13 +274,15 @@
     "fuel_consumption": 0.06,
     "power_demand": 26.0,
     "cost": 2900,
-    "description": "Experimental plasma coil — Chimera's brochure never explains the warranty.",
+    "description": "Experimental plasma coil \u2014 Chimera's brochure never explains the warranty.",
     "signature": {
       "thermal": 3.04,
       "gravitational": 0.72,
       "electromagnetic": 3.38,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "frz_mikuni_type_12",
@@ -279,13 +300,15 @@
     "fuel_consumption": 0.26,
     "power_demand": 9.0,
     "cost": 980,
-    "description": "Conservative Mikuni hydro-thermal — long service intervals, modest numbers.",
+    "description": "Conservative Mikuni hydro-thermal \u2014 long service intervals, modest numbers.",
     "signature": {
       "thermal": 5.9,
       "gravitational": 0.84,
       "electromagnetic": 1.48,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "frz_mikuni_type_28",
@@ -309,7 +332,9 @@
       "gravitational": 0.92,
       "electromagnetic": 1.77,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "frz_tensho_fusion_8",
@@ -327,13 +352,15 @@
     "fuel_consumption": 0.09,
     "power_demand": 5.5,
     "cost": 4000,
-    "description": "Tensho direct-fusion — zaibatsu engineering without the marketing fuss.",
+    "description": "Tensho direct-fusion \u2014 zaibatsu engineering without the marketing fuss.",
     "signature": {
       "thermal": 7.34,
       "gravitational": 1.6,
       "electromagnetic": 4.41,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "gi_ht_18",
@@ -357,7 +384,9 @@
       "gravitational": 0.96,
       "electromagnetic": 1.5,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "gi_standard_thrust_civic_30",
@@ -381,7 +410,9 @@
       "gravitational": 0.92,
       "electromagnetic": 1.69,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "gz_junk_rig_ch8",
@@ -399,13 +430,15 @@
     "fuel_consumption": 0.79,
     "power_demand": 2.0,
     "cost": 480,
-    "description": "Merchant-house chemical — eight-tonne nominal class, negotiable quality.",
+    "description": "Merchant-house chemical \u2014 eight-tonne nominal class, negotiable quality.",
     "signature": {
       "thermal": 3.04,
       "gravitational": 0.66,
       "electromagnetic": 1.52,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "hw_daybreak_film",
@@ -423,13 +456,14 @@
     "fuel_consumption": 0.0,
     "power_demand": 8.0,
     "cost": 1400,
-    "description": "Integrated sail — zero reaction mass, draws power from the plant.",
+    "description": "Integrated sail \u2014 zero reaction mass, draws power from the plant.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.23,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "hw_sundancer_apex",
@@ -444,16 +478,17 @@
     "thrust": 2800.0,
     "max_speed": 760.0,
     "boost_multiplier": 2.15,
-    "fuel_consumption": 0.22,
+    "fuel_consumption": 0.0,
     "power_demand": 5.5,
     "cost": 8200,
-    "description": "HW gravitic flagship — more thrust than Loft, still gravity-coupled.",
+    "description": "HW gravitic flagship \u2014 more thrust than Loft, still gravity-coupled.",
     "signature": {
       "thermal": 4.38,
       "gravitational": 31.5,
       "electromagnetic": 5.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "hw_sundancer_arc",
@@ -477,7 +512,9 @@
       "gravitational": 0.63,
       "electromagnetic": 3.06,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "hw_sundancer_compact",
@@ -495,13 +532,15 @@
     "fuel_consumption": 0.12,
     "power_demand": 4.0,
     "cost": 2400,
-    "description": "Compact direct-fusion — the Flare-ON SS default and HW's best-seller.",
+    "description": "Compact direct-fusion \u2014 the Flare-ON SS default and HW's best-seller.",
     "signature": {
       "thermal": 6.5,
       "gravitational": 0.9,
       "electromagnetic": 3.9,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "hw_sundancer_dart",
@@ -525,7 +564,9 @@
       "gravitational": 0.56,
       "electromagnetic": 1.73,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "hw_sundancer_loft",
@@ -540,16 +581,17 @@
     "thrust": 2400.0,
     "max_speed": 720.0,
     "boost_multiplier": 2.1,
-    "fuel_consumption": 0.25,
+    "fuel_consumption": 0.0,
     "power_demand": 5.0,
     "cost": 6800,
-    "description": "Experimental gravitic drive. Thrust scales with local gravity — strongest near the planet and habitat ring.",
+    "description": "Experimental gravitic drive. Thrust scales with local gravity \u2014 strongest near the planet and habitat ring.",
     "signature": {
       "thermal": 3.75,
       "gravitational": 27.0,
       "electromagnetic": 4.5,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "hw_sundancer_slipstream",
@@ -567,13 +609,15 @@
     "fuel_consumption": 0.26,
     "power_demand": 14.0,
     "cost": 2100,
-    "description": "HW's hydro-thermal line — sporty exhaust without Sundancer Compact pricing.",
+    "description": "HW's hydro-thermal line \u2014 sporty exhaust without Sundancer Compact pricing.",
     "signature": {
       "thermal": 8.4,
       "gravitational": 0.68,
       "electromagnetic": 2.1,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "oc_drawbar_30",
@@ -591,13 +635,15 @@
     "fuel_consumption": 0.32,
     "power_demand": 16.0,
     "cost": 1400,
-    "description": "Drawbar hydro-thermal — tactical fighter and gunship staple.",
+    "description": "Drawbar hydro-thermal \u2014 tactical fighter and gunship staple.",
     "signature": {
       "thermal": 7.25,
       "gravitational": 1.0,
       "electromagnetic": 1.81,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "oc_drawbar_36",
@@ -621,7 +667,9 @@
       "gravitational": 1.04,
       "electromagnetic": 1.73,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "oc_drawbar_spark",
@@ -639,13 +687,15 @@
     "fuel_consumption": 0.07,
     "power_demand": 24.0,
     "cost": 2650,
-    "description": "The Combine's slightly off-brand electric line — still Drawbar branded.",
+    "description": "The Combine's slightly off-brand electric line \u2014 still Drawbar branded.",
     "signature": {
       "thermal": 2.95,
       "gravitational": 0.95,
       "electromagnetic": 3.28,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "oc_prairie_fire_torch",
@@ -669,7 +719,9 @@
       "gravitational": 0.84,
       "electromagnetic": 1.64,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "ora_bellatrix_ap_f2",
@@ -693,7 +745,9 @@
       "gravitational": 1.3,
       "electromagnetic": 4.28,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "ora_bellatrix_ap_p40",
@@ -717,7 +771,9 @@
       "gravitational": 0.85,
       "electromagnetic": 3.44,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "ora_bellatrix_main_28",
@@ -741,7 +797,9 @@
       "gravitational": 0.88,
       "electromagnetic": 1.65,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "ora_bellatrix_main_44",
@@ -759,13 +817,15 @@
     "fuel_consumption": 0.28,
     "power_demand": 12.0,
     "cost": 950,
-    "description": "Mid-tier hydro-thermal — deliberately modest so medium hulls still feel weighty.",
+    "description": "Mid-tier hydro-thermal \u2014 deliberately modest so medium hulls still feel weighty.",
     "signature": {
       "thermal": 6.0,
       "gravitational": 0.92,
       "electromagnetic": 1.5,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "ora_bellatrix_trace",
@@ -783,13 +843,15 @@
     "fuel_consumption": 0.08,
     "power_demand": 6.0,
     "cost": 5400,
-    "description": "Antimatter trace engine — law-enforcement and interceptor tier.",
+    "description": "Antimatter trace engine \u2014 law-enforcement and interceptor tier.",
     "signature": {
       "thermal": 12.0,
       "gravitational": 1.68,
       "electromagnetic": 8.0,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 3,
+    "fuel_type": "antimatter"
   },
   {
     "id": "ora_bellatrix_well",
@@ -804,7 +866,7 @@
     "thrust": 2520.0,
     "max_speed": 710.0,
     "boost_multiplier": 2.05,
-    "fuel_consumption": 0.24,
+    "fuel_consumption": 0.0,
     "power_demand": 5.0,
     "cost": 6400,
     "description": "OEM gravitic matched to Orion yard schedules.",
@@ -813,7 +875,8 @@
       "gravitational": 28.35,
       "electromagnetic": 4.72,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "ora_bellatrix_yard_c14",
@@ -837,7 +900,9 @@
       "gravitational": 0.7,
       "electromagnetic": 1.5,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "ora_lumen_yard",
@@ -861,7 +926,8 @@
       "gravitational": 0.25,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "osc_outstation_packet",
@@ -879,13 +945,15 @@
     "fuel_consumption": 0.77,
     "power_demand": 2.2,
     "cost": 460,
-    "description": "Rim packet-runner chemical — bought in bulk, installed in haste.",
+    "description": "Rim packet-runner chemical \u2014 bought in bulk, installed in haste.",
     "signature": {
       "thermal": 2.91,
       "gravitational": 0.63,
       "electromagnetic": 1.45,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "prv_ionique_annihilon",
@@ -909,7 +977,9 @@
       "gravitational": 1.74,
       "electromagnetic": 7.88,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 3,
+    "fuel_type": "antimatter"
   },
   {
     "id": "prv_ionique_gossamer",
@@ -933,7 +1003,8 @@
       "gravitational": 0.24,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "prv_ionique_hover",
@@ -948,16 +1019,17 @@
     "thrust": 2180.0,
     "max_speed": 690.0,
     "boost_multiplier": 2.0,
-    "fuel_consumption": 0.2,
+    "fuel_consumption": 0.0,
     "power_demand": 4.5,
     "cost": 7200,
-    "description": "Light gravitic with Ionique packaging — resort-world favourite.",
+    "description": "Light gravitic with Ionique packaging \u2014 resort-world favourite.",
     "signature": {
       "thermal": 3.41,
       "gravitational": 24.53,
       "electromagnetic": 4.09,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "prv_ionique_p3",
@@ -975,13 +1047,15 @@
     "fuel_consumption": 0.04,
     "power_demand": 18.0,
     "cost": 2400,
-    "description": "Consumer plasma with the Ionique badge — brochure photography included.",
+    "description": "Consumer plasma with the Ionique badge \u2014 brochure photography included.",
     "signature": {
       "thermal": 2.59,
       "gravitational": 0.68,
       "electromagnetic": 2.88,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "prv_ionique_p7",
@@ -999,13 +1073,15 @@
     "fuel_consumption": 0.05,
     "power_demand": 32.0,
     "cost": 3400,
-    "description": "The P7 line — more cruise speed, same glossy packaging.",
+    "description": "The P7 line \u2014 more cruise speed, same glossy packaging.",
     "signature": {
       "thermal": 3.32,
       "gravitational": 0.77,
       "electromagnetic": 3.69,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "prv_novajet_series_drive",
@@ -1029,7 +1105,9 @@
       "gravitational": 0.88,
       "electromagnetic": 1.57,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "prv_novajet_torch",
@@ -1053,7 +1131,9 @@
       "gravitational": 1.2,
       "electromagnetic": 4.12,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "pt_jade_wake_burn",
@@ -1071,13 +1151,15 @@
     "fuel_consumption": 0.71,
     "power_demand": 3.0,
     "cost": 600,
-    "description": "Rim-world chemical burn — cheap, loud, everywhere.",
+    "description": "Rim-world chemical burn \u2014 cheap, loud, everywhere.",
     "signature": {
       "thermal": 3.22,
       "gravitational": 0.63,
       "electromagnetic": 1.61,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "pt_nine_dragons_hydro_20",
@@ -1101,7 +1183,9 @@
       "gravitational": 0.88,
       "electromagnetic": 1.68,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "roth_albedo_dampf",
@@ -1119,13 +1203,15 @@
     "fuel_consumption": 0.31,
     "power_demand": 17.0,
     "cost": 1650,
-    "description": "Old-money hydro-thermal — quiet, heavy, and built to outlast the mortgage.",
+    "description": "Old-money hydro-thermal \u2014 quiet, heavy, and built to outlast the mortgage.",
     "signature": {
       "thermal": 7.0,
       "gravitational": 0.96,
       "electromagnetic": 1.75,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "roth_privy_seal_f11",
@@ -1149,7 +1235,9 @@
       "gravitational": 1.4,
       "electromagnetic": 4.54,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 6,
+    "fuel_type": "fusion"
   },
   {
     "id": "roth_privy_seal_null",
@@ -1173,7 +1261,9 @@
       "gravitational": 1.8,
       "electromagnetic": 8.12,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 3,
+    "fuel_type": "antimatter"
   },
   {
     "id": "sbi_change_ring_arc",
@@ -1191,13 +1281,15 @@
     "fuel_consumption": 0.05,
     "power_demand": 21.0,
     "cost": 2700,
-    "description": "Change Ring plasma arc — communications-house hardware repurposed for thrust.",
+    "description": "Change Ring plasma arc \u2014 communications-house hardware repurposed for thrust.",
     "signature": {
       "thermal": 2.81,
       "gravitational": 0.77,
       "electromagnetic": 3.12,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "ss_washi_quiet",
@@ -1215,13 +1307,14 @@
     "fuel_consumption": 0.0,
     "power_demand": 6.0,
     "cost": 1100,
-    "description": "Quiet sail fabric — traditional patience, modern fields.",
+    "description": "Quiet sail fabric \u2014 traditional patience, modern fields.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.21,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "te_knock_off_burner",
@@ -1239,13 +1332,15 @@
     "fuel_consumption": 0.82,
     "power_demand": 2.5,
     "cost": 450,
-    "description": "Tukey sideline chemical — suspiciously affordable.",
+    "description": "Tukey sideline chemical \u2014 suspiciously affordable.",
     "signature": {
       "thermal": 2.81,
       "gravitational": 0.59,
       "electromagnetic": 1.41,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "te_sideline_rag",
@@ -1263,13 +1358,14 @@
     "fuel_consumption": 0.0,
     "power_demand": 6.0,
     "cost": 650,
-    "description": "Tukey sideline sail — suspiciously cheap membrane.",
+    "description": "Tukey sideline sail \u2014 suspiciously cheap membrane.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.2,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "tmc_rhumb_drift",
@@ -1287,13 +1383,14 @@
     "fuel_consumption": 0.0,
     "power_demand": 7.0,
     "cost": 1200,
-    "description": "Long-haul sail — no fuel burn, only corridor time.",
+    "description": "Long-haul sail \u2014 no fuel burn, only corridor time.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.28,
       "electromagnetic": 2.25,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 0
   },
   {
     "id": "tmc_rhumb_longhaul",
@@ -1311,13 +1408,15 @@
     "fuel_consumption": 0.05,
     "power_demand": 20.0,
     "cost": 2550,
-    "description": "Rhumb plasma cruise — built for routes measured in weeks, not burns.",
+    "description": "Rhumb plasma cruise \u2014 built for routes measured in weeks, not burns.",
     "signature": {
       "thermal": 2.87,
       "gravitational": 0.81,
       "electromagnetic": 3.19,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 8,
+    "fuel_type": "reaction_mass"
   },
   {
     "id": "tmc_wake_hydro_22",
@@ -1341,7 +1440,9 @@
       "gravitational": 0.8,
       "electromagnetic": 1.55,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 12,
+    "fuel_type": "hydrogen"
   },
   {
     "id": "tmc_wake_kick",
@@ -1359,13 +1460,15 @@
     "fuel_consumption": 0.7,
     "power_demand": 2.8,
     "cost": 640,
-    "description": "Wake chemical — the exception in a hydro-heavy catalogue.",
+    "description": "Wake chemical \u2014 the exception in a hydro-heavy catalogue.",
     "signature": {
       "thermal": 3.19,
       "gravitational": 0.66,
       "electromagnetic": 1.59,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   },
   {
     "id": "tni_overburden_chemical_14",
@@ -1383,12 +1486,14 @@
     "fuel_consumption": 0.85,
     "power_demand": 3.5,
     "cost": 500,
-    "description": "Frontier chemical for extraction tugs — optimized for dirt, not elegance.",
+    "description": "Frontier chemical for extraction tugs \u2014 optimized for dirt, not elegance.",
     "signature": {
       "thermal": 3.41,
       "gravitational": 0.91,
       "electromagnetic": 1.71,
       "computational": 0.0
-    }
+    },
+    "fuel_capacity": 15,
+    "fuel_type": "chemical"
   }
 ]

@@ -31,6 +31,8 @@ SCHEMA_TARGETS = [
     ("ammunition.json", SCHEMA_DIR / "ammunition.schema.json"),
     ("chassis.json", SCHEMA_DIR / "chassis.schema.json"),
     ("commodities.json", SCHEMA_DIR / "commodities.schema.json"),
+    ("fuels.json", SCHEMA_DIR / "fuels.schema.json"),
+    ("fuels.json", SCHEMA_DIR / "fuels.schema.json"),
     ("economies.json", SCHEMA_DIR / "economies.schema.json"),
     ("modules/", SCHEMA_DIR / "modules.schema.json"),
     ("sectors.json", SCHEMA_DIR / "sectors.schema.json"),

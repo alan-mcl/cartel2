@@ -58,7 +58,10 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 
 	var first_ship: OwnedShip = session.owned_ships[0]
 	first_ship.add_cargo("food_products", 4)
-	first_ship.fuel_current = 33.5
+	var fuel_id := ShipFuel.active_fuel_id(catalog, first_ship)
+	if fuel_id.is_empty():
+		fuel_id = "chemical"
+	ShipFuel.set_amount(first_ship, fuel_id, 33.5)
 	var expected_ship_ids: Array[String] = []
 	for ship in session.owned_ships:
 		expected_ship_ids.append(ship.id)
@@ -116,7 +119,11 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(loaded_first != null, "save: first ship resolves by id")
 	if loaded_first != null:
 		runner.check_eq(loaded_first.get_cargo_count("food_products"), 4, "save: ship cargo survives")
-		runner.check_eq(loaded_first.fuel_current, 33.5, "save: ship fuel survives")
+		runner.check_eq(
+			ShipFuel.get_amount(loaded_first, fuel_id),
+			33.5,
+			"save: ship fuel survives"
+		)
 		runner.check_eq(loaded_first.location, first_ship.location, "save: ship location survives")
 		runner.check_eq(
 			loaded_first.modules.size(),

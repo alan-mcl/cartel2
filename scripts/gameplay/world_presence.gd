@@ -18,6 +18,8 @@ var run_seed: int = 0
 var orbital_phase_by_sector: Dictionary = {}
 var market_quotes: Dictionary = {}
 var market_quotes_day: int = -1
+var fuel_quotes: Dictionary = {}
+var fuel_quotes_day: int = -1
 var route_friction_delta: Dictionary = {}
 
 
@@ -119,6 +121,8 @@ func load_session_dict(data: Dictionary, default_gst_seconds: float) -> void:
 	route_friction_delta = _float_dict_from_variant(data.get("route_friction_delta", {}))
 	market_quotes.clear()
 	market_quotes_day = -1
+	fuel_quotes.clear()
+	fuel_quotes_day = -1
 
 
 static func _float_dict_from_variant(value: Variant) -> Dictionary:

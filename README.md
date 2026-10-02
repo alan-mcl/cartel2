@@ -86,7 +86,7 @@ $GODOT --path . --scene res://scenes/dev/theme_showcase.tscn
 
 Other sandboxes: `ship_assembly_sandbox`, `combat_sandbox`, `stealth_sandbox`, `system_render_tester`.
 
-Player portraits: drop PNG, WebP, or JPG files into `assets/ui/portraits/` and reimport.
+Player portraits: drop PNG, WebP, or JPG files into `assets/ui/portraits/` as `p1.png`, `p2.png`, … and reimport.
 
 ## Documentation
 
