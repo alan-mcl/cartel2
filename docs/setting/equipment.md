@@ -441,8 +441,6 @@ Despite futuristic weapons, weight-conscious pilots favour **22-millimeter solid
 - Penetrates light body armour; most pilots avoid heavy armour bulk
 - Ship internals typically proof against .22; larger kinetic or energy weapons risk hull damage and EM emissions
 
-See [overview.md](overview.md).
-
 ---
 
 ## Damage model (Phase 1)

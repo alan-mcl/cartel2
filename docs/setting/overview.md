@@ -1,133 +1,92 @@
 # Setting overview
 
-**Status:** Full setting intent from original design notes. The catalog includes **eleven** near-orbit sectors from [planets.md](planets.md); Unspace travel is still **Proxima ↔ La Bella Vista** only. Corporations and lore topics remain documented here for future catch-up.
+## Premise
 
-## Fantasy
+Cartel is a space-trader game set in 2646, centuries after Earth became uninhabitable.
 
-**Cartel** is a corporate-space-trader game set centuries after Earth became uninhabitable. Humanity spreads across **E-type planets** linked by **Unspace** jump routes. Power rests with dozens of **megacorporations** that dominate product lines and regional markets — legal industrial giants, financial houses, media empires, and criminal syndicates such as the Pacific Triad — while every major corp still maintains at least a foothold on every settled world.
+Humanity did not collapse when Earth was lost, it spread. Multiple inhabited systems are connected by a network of N-space translations, known to everyone as Unspace. People live on Earth-like worlds, in orbital habitats and enormous city-malls, and conduct business through institutions that have been accumulating for centuries. These corporations are the driving institutional structure of humanity.
 
-The player is an **independent operator**: trader, mercenary, outlaw, or entrepreneur carving a living between monopolies — moving goods, buying ships, and navigating a galaxy where law, media, and commerce rarely align.
+The player is an independent ship operator. You buy and fit a small ship, find cargo and passengers, exploit differences between markets, take contracts, and build enough capital to buy better ships and pursue more ambitious work. You are not trying to conquer the galaxy. You are trying to make payroll, clear the next jump, and keep a balance in SolCoin.
 
-## Era and tone
+## Background
 
-- Intended in-game calendar: **~2646 AD**.
-- Hard-SF leaning: Unspace physics, cryogenic sleepers, recovered Earth time capsules, **Media Reality**, **Atomic Problems**.
-- Ascidians: intelligent natives of Unspace (from design notes; now appear as ambient fauna in 4-space).
+The first Old Earth colonists arrived in orbit around Proxima on sublight sleeper ships. In the decades that followed the planet was colonised and N-space translation technology was invented. Multiple easy translations to other inhabitable worlds were found and humanity spread rapidly. Translations back to Old Earth, however, are difficult and when one was discovered, several centuries later, the planet was found to be uninhabited. Melted polar caps have drowned most of the landmasses, and the atmosphere is choked with radioactive clouds. In the present, while the translation to Old Earth isn't a secret, it's not well known and seldom used because there's little profit in going back.
 
-## Currency
+## The Player
 
-- **d** — galactic dollars.
-- **Cash** — carried on the person; spent first.
-- **Credit (eCash)** — bank balance; used when cash is insufficient.
+At New Game the player chooses a callsign, a portrait, and a background. A background is a starting location and possessions, usually including a ship and some liquid funds.
+Starting backgrounds include **Trader**, **Hotshot**, **Entrepreneur**, **Outlaw**, and **Soldier**.
 
-The game tracks a single **credits** integer (no cash/credit split yet). Starting-kit credit values combine the original POC cash and eCash figures.
+## Worlds
 
-## Player backgrounds
+Eleven inhabited systems. Each has an orbital habitat where ships dock, trade, and take work.
 
-At **New Game** the player chooses a **callsign**, a **portrait**, and a **background** — a starting kit, not a class with exclusive mechanics. Backgrounds define credits, docked habitat, starter ships, and flavour text. The original Java POC called these **Profiles**.
+| World | In brief |
+|-------|----------|
+| **Proxima** | Galactic capital. First settled E-type world; lush and crowded. |
+| **Tycho** | Harsh industrial world beside a fierce blue star. |
+| **La Bella Vista** | Water-world resort, often called Bela. |
+| **Irasia** | Prosperous centre of industry and commerce. |
+| **Tokirev** | Cold, wealthy factory world. |
+| **Fennet** | Temperate world that grew out of a frontier settlement. |
+| **Fortuna** | Banks, exchanges, and a comfortable standard of living. |
+| **New Carthage** | Oceanic world built on shipping and old mercantile money. |
+| **Horizon** | A great population centre spread across one equatorial continent. |
+| **Titania IX** | Cold moon of a gas giant; tourism and winter sports under a dim flare star. |
+| **Pelagos** | Prosperous world orbiting a binary star. |
 
-| Background | Flavour | Credits | Habitat | Ships |
-|------------|---------|---------|---------|-------|
-| **Tester** (default) | Development kit with the full template fleet | d3000 | Proxima Habitat | All catalog templates (shipyard testing) |
-| **Trader** | Respectable free trader | d5220 | Proxima Habitat | Pegasus P101 (fitted) |
-| **Hotshot** | Affluent rebel | d3000 | La Bella Vista Habitat | Flare-ON SS (fitted) |
-| **Entrepreneur** | Self-made businessman, no hull yet | d32000 | Proxima Habitat | None (buy a used ship at Concord Scouts or a frame at Skyedge) |
-| **Outlaw** | Rim smuggler with a warrant | d250 | Tycho Habitat | Wolff Warrior |
-| **Soldier** | Ex-corporate army pilot | d2000 | Proxima Habitat | Juno 1088 |
+## N-space
 
-**Location mapping:** the POC placed some kits in surface cities (Concord, Loch Grumman) that are not implemented yet. Trader, Entrepreneur, and Soldier start at **Proxima Habitat** instead. Hotshot starts at **La Bella Vista Habitat** (POC: Bela Orbital Habitat). Outlaw starts at **Tycho Habitat**.
+"Unspace" is the public name for the higher-dimensional spaces used for interstellar travel. The scientific term is N-space: 4-space, 5-space, 6-space and so on. Ordinary physical space is 3-space.
 
-**Portrait:** the player picks from images in `assets/ui/portraits/` at New Game. The path is stored in save data and shown on the habitat header.
+Each N-space offers a different way to cross between points in 3-space. Higher-order spaces generally permit faster translations, but are more difficult and dangerous to navigate. In practice, human navigation uses only the lower single-digit spaces, with most established commercial routes running through 4-space or 5-space. Jump gate infrastructure exists at major systems and provides access to a public translation network. A ship enters the appropriate N-space at a gate, follows a programmed route, and emerges from the corresponding exit in the destination system's near orbit. Public routes with well known, safe translations are pre-programmed into most navigation computers.
 
-Catalog: `data/catalog/backgrounds.json`. GST start time remains in `data/catalog/player.json`.
+Some ships can fit private translation equipment, allowing them to make translations without using the public gate network. Finding or developing a faster translation through a higher N-space can therefore be commercially valuable, and particularly useful routes may be closely guarded intellectual property. The public network currently connects the inhabited systems through established translation routes. In theory, a translation exists through some N-space between any two points. The practical limits are navigation, danger, infrastructure and cost.
 
-## Starter playground
+Only small ships can make interstellar translations. Scouts, light freighters, gunships and sport craft cross between systems, with holds measured in tonnes. Nothing carries information between stars except a ship. News, mail, entertainment, software, prices, and SolCoin legders arrive when a hull docks, so each world runs on local knowledge until the next arrival. Bulk industry and population stay in-system. Unspace trade is whatever is worth a small hold: people, data media, medicines, luxury goods, prototypes, and anything perishable or irreplaceable.
 
-The original design world was six connected sectors. [planets.md](planets.md) now lists **eleven** E-type worlds; all eleven are in the catalog as near-orbit sectors.
+Mysterious **Ascidians** are luminous natives of Unspace. A few drift through most crossings.
 
-| Sector | Role |
-|--------|------|
-| Proxima | Galactic capital |
-| Tycho | Harsh rim world |
-| La Bella Vista | Water-world resort |
-| Irasia | Commerce / industry |
-| Tokirev | Factory world |
-| Fennet | Underdeveloped rim |
+## Corporations
 
-Details: [planets.md](planets.md). Catalog: all eleven worlds as near-orbit sectors; public Unspace trade graph in [trade_network.md](trade_network.md).
+Dozens of megacorporations operate on every settled world, with local strength that varies by planet. 
 
-## Megacorporations
+Many of their origins are Old Earth institutions that outlived the planet. Some are family houses and merchant leagues that never stopped: Sakuraya Shinise from a Japanese tea shop, Four Rivers Zaibatsu, Chettiar's Indo merchant banks, Guangzhou Mercantile, Carthage Mercantile, the Hanseatic Guild, House of Roth, and endowments such as Dar al-Nour. Others are twentieth- and twenty-first-century mergers that swallowed a market and kept going - MicroDonald's consumer monopoly, the Oklahoma Combine, Monday Corporation, SnedeCorp's amalgamation of software houses, ParaRamcoVidia.
 
-Megacorporations appear in world data as **economic factions**, not military alliances. Summaries in [corporations.md](corporations.md); full prose for each. Per-planet presence weights are catalogued for traffic and future quests.
+A smaller set incorporated a criminal or mercenary past and now trades on the same exchanges as the banks. The Himalaya Triad grew out of Tibetan triads; the Pacific Triad out of a Sino-Americano-Hanguk fraternity. Both still run on family obligation, with particular weight on the rim. Galactic Outcomes began by selling mercenaries. The Cult of Apex is a faith that became a corporation after a recovered time capsule. 
 
-Ten corps have lore but had **empty product lists** in the original Java design catalog.
+Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company originated in the beginnings of human space travel. Others, Holt-Winters and GRC among them, are still within living memory of their founding and compete with firms centuries older. 
 
-## Unspace
+## Trade, ships, and work
 
-The scientific term for the higher-order dimensions through which matter can be moved is **n-space**. The public universally says **unspace**. **3-space** is ordinary realspace (planetary orbits). Higher N-spaces are abstract transit layers — routes go *deeper* into N-space.
+Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, entertainment, industrial components, chemicals, advanced raw materials, luxury goods, military goods, and compute cores.
 
-Each known route stores a **solution** (integer code) and an **N-space depth**. Deeper N is **faster but more dangerous** (stronger signature hazards and hostile phenomena). The game currently implements only **4-space** — the shallowest Unspace layer above realspace.
+Ships are a chassis plus fitted modules. All parts are manufactured and branded by one of the mega corps. A wide variety of standard ship models and trims are on the market, but many pilots end up customising their craft to fit their preferred mission profiles. The small craft that can translate to N-space have very limited tonnage and every build needs to make tradeoffs between propulsion, compute, offense, defense, and life support and cargo capacity.
 
-**4-space family (implemented):** dark void with an **irregular Delaunay topographic field** rendered in an isolated 3D backdrop under the ship — Poisson-scattered vertices with independent random height, built once per transit so polygon shapes vary. The mesh is static for now (no edge kicks, ripples, or radial bound). The exit portal sits on a fixed host face as a 3D disc; sensors with **`4_space_topology`** can label it. **Ascidians** — luminous, translucent amoeba-like natives — wander at mid depth and are occluded behind peaks via 3D depth; they appear as faint radar blips. Deeper N-spaces will reuse this pattern with escalating hazards and dedicated topology capabilities; higher N may later project 3D geometry into the play plane.
+Every inhabited planet has extensive orbital infrastructure. Orbital habitats house hundreds of millions of inhabitants and are functionally similar to city-malls in space. Many pilots never end up planet-side at all, indeed Proxima Habitat, the largest orbital community, has a good claim on being the center of human space. Other orbitals include manufacturing, agriculture, resorts, stadiums, and corporate headquarters. 
 
-### Translation flow (current)
+While the mega corps employ and equip their own pilots, there is always excess demand for independent operators to fill. Orbital terminals post passenger charters and freight charters between habitats. 
 
-1. At a **jump gate** in 3-space, pick destination and confirm **4-space**.
-2. Ship enters the 4-space topographic field and flies over the irregular mesh toward the **exit portal** on a fixed host face.
-3. `[E]` at the exit portal to emerge in the destination sector's near orbit.
+## Culture and Setting Flavour
 
-**Jump gates** inject travellers at a fixed entry point. **Hyperdrive-equipped ships** (future) will translate from other 4-space regions without needing the gate portal — see [equipment.md](equipment.md).
+**Time.** Civil time is **Galactic Standard Time**. The system is derived from the historical Gregorian calendar but was redesigned for a civilization no longer dependent on Earth's orbital cycle. It is a 4-4-5 calendar that retains familiar month names and the seven-day week while eliminating astronomical corrections and irregular month lengths. Each quarter contains exactly 91 days, or 13 weeks.
 
-Solution **typing** at the gate is not implemented; known solutions are shown as flavour only.
+**Sports.** Cricket, boxing, buzkashi, and pylon racing are the sports that fill a terminal. Cricket teams often represent city-malls or continents; tours between systems are popular, with scoresheets making their way back daily via courier. Celebrity boxers, often affiliated with a corporate patron, travel the worlds to compete for a variety of different titles. Buzkashi players and their horses, both also celebrities, gather to compete in battle royale tournament spectacles. The pylon racing circuit tours the major worlds, where each different environment presents a unique engineering and piloting challenge for the propeller drive planes. Spectators, officials, and fans book passage for match day; race animals and planes ship ahead of the circuit. 
 
-## Media Reality
+**SolCoin.** SolCoin is the common money of human space: a distributed digital currency named for Old Earth's star. Pilots, exchanges, and charters settle in it. A balance on another world is only as current as the last ship that carried the ledger.
 
-Truth and mass media were never close allies. Corporate sponsors, politics, and competition pushed reporting further from reality until laws required fiction labelled **MR** (Media Reality). MR reports appear beside genuine news but bear no relation to events. Teams of writers collaborate on MR content full-time.
+**Sleepers.** Some people defer death in cryogenic storage. Morrow & Sons, which began in funerary services, also keeps many preservation facilities, memorial habitats, and cemeteries, and manages the business of death and remembrance across human space.
 
-## Saint Apex
+**Time capsules.** Old Earth's last centuries launched capsules of writings, artefacts, and personal effects. Recovery still happens, centuries late, and the finds still move between museums, family offices, and archives under seal. The Cult of Apex grew from one such capsule into a mass faith with corporate institutions.
 
-Of all time capsules recovered from Earth, the most influential was launched by **Samson Thornton** — hacker alias **Apex**, later **Saint Apex** to followers.
+**Gambling and resorts.** Karaquazen runs the mega-casinos, the gambling houses, and nearly all planetary lotteries, and quietly much of medical insurance. La Bella Vista is the water-world holiday, with atolls and orbital hotels. Gamblers who have run out of luck are a regular bar fare.
 
-Born near Sweetwater, Texas, late twenty-first century; isolated until thirteen, then given a computer. By fifteen he had hacked a major share-trading system and become one of America's most wanted cyber criminals — and probably the wealthiest, though he gave much away online.
+**Media and celebrity.** Broadcast networks and studios are planetary. ParaRamcoVidia owns the large ones; LiveWorlds runs stadiums, resorts, and celebrity. Influencers, journalists, musicians, and performers travel in person, and entertainment between worlds moves as cargo. Independent pilots can also be celebrities - callsigns like Reaper Cosmos, Ivanova, Stone Token and Clarity are known across systems, along with their distinctive ships.
 
-Thornton preached a cynical, defiant Christianity to millions he never met. At eighteen he and armed followers seized a NASA launch at New Orleans, replacing the payload with a **time capsule**: revised bible, journals, personal items. The rocket was aimed into deep space; Thornton was killed in Brownwood, Texas, weeks later.
+**City-malls.** The bulk of the population on most systems live in City-malls - giant retail and residential arcology-like habitations. On some worlds a life can be lived inside one corporation's enclosure. MicroDonald's city-malls run from birth to burial on its own goods and services. Universal House franchises the hotels, food, and household goods around that kind of convenience.
 
-The capsule drifted centuries until recovery; his writings seeded a new cult.
+## History and Lore
 
-## Sleepers
+**Jerusalem Ridge.** When the first travellers returned to Old Earth to discover the uninhabitable planet that it is now, they also discovered that the solar system was not wholly devoid of human life.  One colony on the red planet had survived.  It called itself Jerusalem Ridge, and wanted nothing to do with the newcomers.
 
-Some seek to defer death until medicine can cure them: cryogenic freezing plus **mind upload** into fault-tolerant hardware, sealed with century-strength encryption — while the body is clinically dead. Rumours persist about virtual worlds inside and whether sleepers will ever wake.
-
-## Time capsules
-
-Earth's last centuries produced probes and rockets carrying artefacts outward at sub-light speed. Occasional recovery revives lost culture — musicians, writers, religions centuries late.
-
-## Jerusalem Ridge, Mars
-
-When travellers returned to uninhabitable Earth, one human colony survived on Mars: **Jerusalem Ridge**, which wanted nothing to do with newcomers.
-
-## Crimson Land
-
-Common name for planet **BJE356DF** — red dust and exceptionally ferocious native life.
-
-## Ascidians
-
-Intelligent creatures inhabiting unspace dimensions. Humanity is not alone, but contact remains marginal in playable scope. In **4-space**, one to three Ascidians typically drift through each transit — luminous, colour-shifting forms that pass through the topographic mesh and are unaffected by edge crossings or terrain deformation.
-
-## Artificial intelligence and Atomic Problems
-
-True self-aware AI remains unachieved — classified among **Atomic Problems**: problems that cannot be solved by decomposition into smaller problems (named after the abandoned search for fundamental particles).
-
-Geoffrey Tensing proved the KPF n-space matrix must admit a root without infinite descent; he claimed the proof came in a dream of letters of fire. Most atomic problems remain open.
-
-## Personal arms culture
-
-Despite futuristic weapons, weight-conscious pilots favour **22-millimeter solid projectile pistols**: best mass efficiency, penetrates light armour, unlikely to breach ship internals unlike heavier kinetic or energy weapons. See [equipment.md](equipment.md).
-
-## Design authority (for rebuilds)
-
-1. Original Office design notes — intent and balance
-2. Starter-world catalogs — topology and identities
-3. Current implementation — what is wired in this game
-
-When notes and instance data disagree, **design intent follows the notes** unless this setting bible is deliberately revised here first.
+**Geoffrey Tensing.** Born on Old Earth, the mathematician was amongst the first wave of colonists on Proxima. He famously published the first solution to the KPF n-space matrix problem (claiming to have dreamed the proof in letters of fire) thus enabling the development of FTL transportation technology.

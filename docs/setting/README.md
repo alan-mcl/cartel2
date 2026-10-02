@@ -25,7 +25,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 
 | File | Contents |
 |------|----------|
-| [overview.md](overview.md) | Fantasy, era, currency, Unspace, Media Reality, Saint Apex, Sleepers, Ascidians, Atomic Problems |
+| [overview.md](overview.md) | Premise, backgrounds, worlds, Unspace, corporations, trade, culture |
 | [date_time.md](date_time.md) | Galactic Standard Calendar and Time |
 | [planets.md](planets.md) | Eleven E-type worlds, stats, cities, habitats |
 | [corporations.md](corporations.md) | Sixteen megacorporations |

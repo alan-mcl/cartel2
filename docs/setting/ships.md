@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see [overview.md](overview.md#player-backgrounds).
+**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see `data/catalog/backgrounds.json`.
 
 **Hull sales at Proxima Habitat:** **Concord Scouts** stocks used, manufacturer-fitted scout templates from the catalog. **Skyedge Space Ships** sells unfitted chassis frames; the Habitat Workshop fits modules. Used ship price is chassis list cost plus half the fitted module value.
 
