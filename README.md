@@ -1,158 +1,104 @@
-# Cartel — 2D spaceship game
+# Cartel 2
 
-**Cartel** is a 2D near-orbit spaceship game built in Godot 4.7. Current version: **DEV**.
+![Cartel 2 logo](assets/logo/logo_banner.png)
 
-Fly with inertia, explore orbital space, dock at habitats, trade at the Exchange, outfit ships at the Shipyard, and jump between sectors via Unspace gates.
+**Cartel** is a 2D near-orbit spaceship game for [Godot 4.7+](https://godotengine.org/) (GL Compatibility). Fly with inertia, dock at habitats, trade commodities, outfit ships at the yard, and jump between sectors through Unspace gates.
+
+**Status:** early development — in-game version **DEV**. Gameplay and content are incomplete; see [Project status](#project-status) below.
+
+## Features
+
+- Newtonian flight, boost, sensors, and orbital navigation
+- Habitat hubs: terminal, exchange, shipyard, and building interactions
+- Modular ship assembly with catalog-driven parts and engineering budgets
+- Commodity trading at habitat Exchanges
+- Passenger and freight charter missions
+- Save/load to three slots under `user://saves/`
 
 ## Requirements
 
-- [Godot 4.7+](https://godotengine.org/) (GL Compatibility renderer)
+- Godot **4.7.2** or newer (4.7 feature tag, GL Compatibility renderer)
+- **Python 3** — optional; used by art/catalog tooling under `scripts/tools/`
 
-Godot binary used for development: `~/opt/Godot_v4.7.2-stable_linux.x86_64`
+Set `GODOT` to your Godot binary if it is not on `PATH`. The CI script defaults to `$HOME/opt/Godot_v4.7.2-stable_linux.x86_64` when `GODOT` is unset.
 
-## Run
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path .
-```
-
-Or open `project.godot` in the Godot editor and press **F5**.
-
-The game opens at the **main menu** (version shown as **DEV**). Choose **New Game** to enter your callsign, pick a portrait, and choose a starting **background** kit. The default **Tester** background begins docked at **Proxima Habitat** with the full template fleet. Progress saves to `user://saves/slot_1.json` … `slot_3.json`.
-
-## Controls
-
-| Action | Keys |
-|--------|------|
-| Thrust | W, Up |
-| Reverse / brake | S, Down |
-| Rotate left | A, Left |
-| Rotate right | D, Right |
-| Boost | Shift (while thrusting) |
-| Toggle active sensors | R (mixed/active packages only) |
-| Interact / Dock / Translate / Emerge | E |
-| Pause | Escape (disabled while docked or jump overlay open) |
-| Back (habitat UI) | Escape |
-| Save / Load | Pause menu (in flight) or Save on habitat footer |
-| Quit to menu | Pause menu or Menu on habitat footer |
-| Undock | Terminal: select docked ship, then Undock |
-
-## Core loop
-
-1. Start at the **main menu** — New Game, Load, or Exit.
-2. **New Game:** enter callsign, portrait, and background; default **Tester** kit begins docked at **Proxima Habitat** with the full template fleet.
-3. Visit buildings from the habitat screen — **Terminal**, **Davidsons** (flavour), **Proxima Exchange** (buy/sell commodities), **Shipyard** (parts + assembly).
-4. At the **Shipyard**, buy spare modules, drag them onto chassis slots to install (chassis fixed), inspect configuration and engineering budgets, refuel. Yard stock is grouped by module category tabs.
-5. **Terminal** — select a docked ship and **Undock** to launch into **Proxima Sector** orbit beside the habitat ring.
-6. Fly the orbital ring (slowly rotating) and visit the **Jump Gate** to pick **La Bella Vista Sector**, confirm **4-space** translation.
-7. Navigate **4-space** through the undulating lattice to the **Exit Portal**, then `[E]` to emerge in La Bella Vista orbit near the jump gate.
-8. Dock at **La Bella Vista Habitat**, use terminal and shipyard, jump back to Proxima.
-9. **Save** progress from the pause menu or habitat footer.
-
-## Project layout
-
-```
-assets/ui/fonts/       IBM Plex Sans/Mono (OFL)
-assets/ui/locations/   Placeholder habitat/building art (SVG)
-assets/ui/portraits/   Player portrait images (add PNG/WebP/JPG manually)
-scenes/ui/patterns/    Reusable themed UI pattern scenes
-themes/                cartel_theme.tres (project default)
-scripts/tools/         Theme builder, art generator
-scripts/gameplay/      Catalog, session, ship assembly, save store, version
-scripts/presentation/  Godot integration (ship, camera, world loader)
-scripts/ui/            HUD, menus, UiRoot, habitat/shipyard screens
-scenes/ui/             Full-screen habitat UI scenes
-scenes/dev/            Developer-only scenes (theme showcase, ship assembly sandbox)
-data/catalog/          JSON catalogs including commodities and economies
-docs/                  Architecture, data model, setting bible
-```
-
-Regenerate placeholder art (runs Godot import for new SVG/PNG assets):
+## Quick start
 
 ```bash
+git clone <repository-url>
+cd cartel2
+```
+
+**Editor:** open `project.godot` in Godot and press **F5**.
+
+**CLI:**
+
+```bash
+GODOT=/path/to/Godot --path . --editor   # or omit --editor and press F5 in the GUI
+```
+
+On **New Game**, choose callsign, portrait, and starting background. The default **Tester** kit begins docked at **Proxima Habitat** with the template fleet.
+
+
+## Repository layout
+
+| Path | Purpose |
+|------|---------|
+| `scripts/gameplay/` | Rules and session state (`RefCounted`; no scene tree) |
+| `scripts/presentation/` | World loading, ship motion, Godot integration |
+| `scripts/ui/` | Menus, HUD, habitat and shipyard screens |
+| `data/catalog/` | JSON content (ships, commodities, economies, worlds) |
+| `assets/` | Art, fonts, logos |
+| `docs/` | Architecture, data model, and setting bible |
+| `tests/` | Headless unit tests (custom `TestRunner`, not GUT) |
+| `scenes/dev/` | Sandboxes for theme, combat, stealth, and rendering |
+
+Layering and conventions: [docs/design/architecture.md](docs/design/architecture.md) and [AGENTS.md](AGENTS.md).
+
+## Development
+
+After changing GDScript or files under `data/catalog/`, run the full verification gate:
+
+```bash
+GODOT=/path/to/Godot ./scripts/ci/check.sh
+```
+
+The script validates catalogs, imports assets, parses scripts, and runs unit tests. Use `./scripts/ci/check.sh --fast` for a quicker loop (validators + tests only).
+
+**Useful commands** (from repo root, with `GODOT` set):
+
+```bash
+# Reimport assets after adding art
+$GODOT --path . --headless --import --quit
+
+# Regenerate placeholder location art
 python3 scripts/tools/generate_placeholder_art.py
+
+# Rebuild UI theme after token changes
+$GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 ```
 
-If chassis sprites or player portraits fail to load after adding art manually, run:
+**Dev sandboxes** — open a scene under `scenes/dev/` in the editor and press **F6**, or run one directly, for example:
 
 ```bash
-godot --path . --import --headless --quit
+$GODOT --path . --scene res://scenes/dev/theme_showcase.tscn
 ```
 
-Drop portrait images into `assets/ui/portraits/` (PNG, WebP, or JPG). They appear in the New Game picker after import.
+Other sandboxes: `ship_assembly_sandbox`, `combat_sandbox`, `stealth_sandbox`, `system_render_tester`.
 
-Rebuild UI theme after token changes:
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --headless -s res://scripts/tools/build_cartel_theme.gd
-```
-
-Open the theme developer showcase:
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
-  --scene res://scenes/dev/theme_showcase.tscn
-```
-
-Open the ship assembly sandbox (no economy, fitting rules only):
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
-  --scene res://scenes/dev/ship_assembly_sandbox.tscn
-```
-
-Open the combat sandbox (1v1 manufacturer hulls, starfield only):
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
-  --scene res://scenes/dev/combat_sandbox.tscn
-```
-
-Open the stealth sandbox (transponders off, scattered targets beyond sensor range):
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
-  --scene res://scenes/dev/stealth_sandbox.tscn
-```
-
-Open the system render tester (planetary layout only, free camera, globe spin):
-
-```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
-  --scene res://scenes/dev/system_render_tester.tscn
-```
-
-In the editor, open any dev sandbox scene and press **F6** to run it standalone. **F5** still launches the full game.
-
-## Checks
-
-Agents and contributors should run the local gate after GDScript or catalog changes:
-
-```bash
-GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
-```
-
-This validates ship templates and catalog references, imports assets, runs Godot `--check-only` on gameplay/presentation/ui scripts, and executes headless unit tests. See [AGENTS.md](AGENTS.md) for project conventions.
-
-## License
-
-Cartel is licensed under the [GNU Affero General Public License v3.0](LICENSE). IBM Plex Sans and IBM Plex Mono in `assets/ui/fonts/` are under the [SIL Open Font License 1.1](assets/ui/fonts/LICENSE.txt).
+Player portraits: drop PNG, WebP, or JPG files into `assets/ui/portraits/` and reimport.
 
 ## Documentation
 
-Specification and setting lore live in [`docs/`](docs/README.md):
+- [docs/README.md](docs/README.md) — index
+- **Design** — [architecture](docs/design/architecture.md), [data model](docs/design/data_model.md), [UI theme](docs/design/ui_theme.md)
+- **Setting** — [overview](docs/setting/overview.md) and [setting index](docs/setting/README.md)
 
-- **Design** — architecture and JSON data model for this game
-- **Setting** — planets, corporations, ships, and equipment (working bible)
+Setting docs are the lore target; catalogs implement the current playable subset.
 
-## Versioning
+## License
 
-Game version is defined in `scripts/gameplay/game_version.gd` (`GameVersion.VERSION`, currently **DEV**). Saves include a `game_version` field for diagnostics; save schema version is separate (`SaveStore.SAVE_VERSION`).
+Cartel is licensed under the [GNU Affero General Public License v3.0](LICENSE).
 
-## Placeholders
+IBM Plex Sans and IBM Plex Mono in `assets/ui/fonts/` are under the [SIL Open Font License 1.1](assets/ui/fonts/LICENSE.txt).
 
-- Location art under `assets/ui/locations/` are placeholders; replace with final paintings when ready.
-- No named NPCs or dialogue yet — store interactions only.
-- Market stock is catalog-defined and restocks each session (not persisted).
-- Only **4-space** is playable; deeper N-space routes are future work.
-- Hull merchants on Proxima Habitat only (Concord Scouts used ships, Skyedge chassis frames).
