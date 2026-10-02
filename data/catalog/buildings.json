@@ -13,7 +13,7 @@
     "name": "Davidsons",
     "type": "bar",
     "kind": "landmark",
-    "description": "Pilot bar where off-duty crews trade rumours and bad jokes. The lights are low and the air smells of synth-whiskey.",
+    "description": "A legendary bar where off-duty crews trade rumours and bad jokes, open 24/7. The lights and the ceiling are low and the air smells of synth-whiskey and beer. Windows look directly onto the docking concourse; ships drift slowly past while crews come and go. The unofficial passenger charter market is simply another part of the background conversation.",
     "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes.",
     "art": "res://assets/ui/locations/davidsons.png"
   },
@@ -22,7 +22,7 @@
     "name": "Skyedge Space Ships",
     "type": "chassis_dealer",
     "kind": "merchant",
-    "description": "The premier provider of duty-free light space craft chassis. Large or small, we have a frame to suit your needs — register your hull and fit it out at the Shipyard.",
+    "description": "Skyedge is where you go when you don't want to buy a ship, you want to build one. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
     "short_desc": "Ship chassis dealer and frame registrar.",
     "art": "res://assets/ui/locations/skyedge.png",
     "stock": [
@@ -40,7 +40,7 @@
     "name": "Concord Scouts",
     "type": "ship_dealer",
     "kind": "merchant",
-    "description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly.",
+    "description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly. The showroom occupies a sprawling orbital lot within the Habitat, with completed light civilian vessels arranged in long rows beneath enormous illuminated canopies. Everything is presented with the immaculate confidence of a luxury dealership.",
     "short_desc": "No finer place to purchase new or used space craft.",
     "art": "res://assets/ui/locations/concord_scouts.png",
     "stock": [
@@ -65,7 +65,7 @@
     "name": "Centauri Shipyard",
     "type": "shipyard",
     "kind": "workshop",
-    "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. You must supply at least a registered chassis.",
+    "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. The main warehouses seem to stretch endlessly into the distance. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
     "short_desc": "Outfitting bays for installing systems on docked ships.",
     "art": "res://assets/ui/locations/proxima_shipyard.png",
     "services": ["assembly", "parts"]
@@ -75,7 +75,7 @@
     "name": "Proxima Central Exchange",
     "type": "market",
     "kind": "merchant",
-    "description": "Automated commodity exchange. Open contracts across the principal trade categories.",
+    "description": "Enormous market displays track commodities and contracts in real time while automated systems continuously adjust prices and execute transactions. Traders, brokers and corporate representatives occupy quieter workspaces overlooking the exchange, intervening when they need to negotiate unusual contracts or manage large positions.",
     "short_desc": "Automated commodity exchange for interplanetary trade categories.",
     "art": "res://assets/ui/locations/proxima_exchange.png"
   },

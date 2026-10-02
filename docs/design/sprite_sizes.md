@@ -147,7 +147,7 @@ Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000*
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
 | Location / building art | `assets/ui/locations/*.svg` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
-| Pilot portraits | `assets/ui/portraits/pN.png` | 1024×1024 | **1024×1024** | New-game preview 160²; habitat header 48² |
+| Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 (e.g. 696×928) | **3:4** | Center-cropped from 4:3 sources; mipmaps; `PortraitTextureRect` at 160² (new game) / 128² (habitat) |
 
 Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`art` field).
 

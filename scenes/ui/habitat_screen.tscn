@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cartel_habitat_screen"]
+[gd_scene load_steps=5 format=3 uid="uid://cartel_habitat_screen"]
 
 [ext_resource type="Script" path="res://scripts/ui/habitat_screen.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/components/portrait_texture_rect.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="3"]
 
@@ -41,11 +42,9 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="Portrait" type="TextureRect" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-size_flags_vertical = 4
-expand_mode = 1
-stretch_mode = 5
+script = ExtResource("4")
+display_size = Vector2i(128, 128)
 
 [node name="PilotInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
 layout_mode = 2

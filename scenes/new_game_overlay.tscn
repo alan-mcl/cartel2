@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_new_game"]
+[gd_scene load_steps=3 format=3 uid="uid://cartel_new_game"]
 
 [ext_resource type="Script" path="res://scripts/ui/new_game_overlay.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/components/portrait_texture_rect.gd" id="2"]
 
 [node name="NewGameOverlay" type="CanvasLayer"]
 visible = false
@@ -109,11 +110,9 @@ layout_mode = 2
 text = "<"
 
 [node name="PortraitPreview" type="TextureRect" parent="Background/Center/Panel/VBox/BodySplit/Right/PortraitRow"]
-custom_minimum_size = Vector2(160, 160)
 layout_mode = 2
-size_flags_horizontal = 3
-expand_mode = 1
-stretch_mode = 5
+script = ExtResource("2")
+display_size = Vector2i(160, 160)
 
 [node name="NextPortrait" type="Button" parent="Background/Center/Panel/VBox/BodySplit/Right/PortraitRow"]
 layout_mode = 2

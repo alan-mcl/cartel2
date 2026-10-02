@@ -10,11 +10,11 @@
     "default_building": "proxima_habitat_terminal",
     "buildings": [
       "proxima_habitat_terminal",
-      "davidsons",
-      "concord_scouts",
-      "skyedge_space_ships",
       "habitat_workshop",
-      "proxima_exchange"
+      "skyedge_space_ships",
+      "concord_scouts",
+      "proxima_exchange",
+      "davidsons"
     ]
   },
   {
