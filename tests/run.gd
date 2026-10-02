@@ -6,6 +6,7 @@ func _init() -> void:
 	TestCatalog.run(runner)
 	TestUiRegistry.run(runner)
 	TestSession.run(runner)
+	TestTranslation.run(runner)
 	TestSave.run(runner)
 	TestAssembler.run(runner)
 	TestCombat.run(runner)

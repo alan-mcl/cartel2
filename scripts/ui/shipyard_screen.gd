@@ -33,6 +33,7 @@ const STOCK_CATEGORIES := [
 	"propulsion",
 	"power",
 	"computer",
+	"navigation",
 	"life_support",
 	"sensor",
 	"transponder",

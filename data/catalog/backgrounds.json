@@ -46,6 +46,10 @@
               "module_id": "vessel_registration_beacon"
             },
             {
+              "slot": "system_5",
+              "module_id": "mdc_almanac"
+            },
+            {
               "slot": "other_1",
               "module_id": "fuel_tank_small"
             },
@@ -91,6 +95,10 @@
             {
               "slot": "system_4",
               "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "system_5",
+              "module_id": "mdc_almanac"
             },
             {
               "slot": "other_1",
@@ -236,6 +244,10 @@
               "module_id": "vessel_registration_beacon"
             },
             {
+              "slot": "system_5",
+              "module_id": "mdc_almanac"
+            },
+            {
               "slot": "other_1",
               "module_id": "mass_driver_magazine_200"
             },
@@ -305,6 +317,10 @@
             {
               "slot": "system_4",
               "module_id": "vessel_registration_beacon"
+            },
+            {
+              "slot": "system_5",
+              "module_id": "mdc_almanac"
             },
             {
               "slot": "other_1",

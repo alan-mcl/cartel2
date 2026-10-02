@@ -1,6 +1,6 @@
 # Local field conditions
 
-**Status:** Implemented in flight. Four ambient strengths are sampled at the player ship: **gravity** (G), **magnetic**, **radiant** (stellar flux), and **charged particle** (stellar wind, magnetically shaded when a dipole exists). Values are relative indices except gravity, which is expressed in G.
+**Status:** Implemented in flight. **Translation stability** (percent for the current jump) appears on the top-right **Fields** panel while in Unspace (`Stability: N%`); it is not one of the ambient field samples below. Four ambient strengths are sampled at the player ship: **gravity** (G), **magnetic**, **radiant** (stellar flux), and **charged particle** (stellar wind, magnetically shaded when a dipole exists). Values are relative indices except gravity, which is expressed in G.
 
 Sector instances carry a **`neighborhood`** block on `sectors.json` (see [planets.md](planets.md) per-world notes). Unspace uses a fixed profile: very low fluctuating gravity (~0.005–0.03 G), low constant radiant, fluctuating magnetic and particle indices.
 

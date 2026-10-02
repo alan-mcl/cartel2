@@ -21,6 +21,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _fuel: Label = $Root/StatusPanel/VBox/SystemsRow/FuelLabel
 @onready var _power: Label = $Root/StatusPanel/VBox/SystemsRow/PowerLabel
 @onready var _gst_clock: Label = $Root/StatusPanel/VBox/GstClockLabel
+@onready var _stability_label: Label = $Root/FieldPanel/VBox/StabilityLabel
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 @onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
@@ -106,6 +107,15 @@ func set_signature_state(
 		else:
 			_active_sensors_label.visible = true
 			_active_sensors_label.text = "Active sensors: %s" % active_sensors_label
+
+
+func set_translation_stability(stability: float, in_unspace: bool) -> void:
+	if _stability_label == null:
+		return
+	var show := in_unspace and stability >= 0.0 and _has_capability("local_sensor")
+	_stability_label.visible = show
+	if show:
+		_stability_label.text = "Stability: %d%%" % int(round(stability))
 
 
 func set_field_state(sample: FieldConditions.FieldSample) -> void:

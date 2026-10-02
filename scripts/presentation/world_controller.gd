@@ -157,24 +157,48 @@ func open_jump_overlay(gate_title: String) -> void:
 
 	_tree.paused = true
 	_pause.close()
+	if _jump.has_method("set_assembled_ship"):
+		_jump.set_assembled_ship(_main.player_ship)
 	_jump.open(gate_title)
 	_on_interaction_target_changed.call(_player.get_current_target())
 
 
-func on_jump_requested(target_sector_id: String, n: int) -> void:
+func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 	if target_sector_id.is_empty():
 		return
 
 	var origin_id: String = _main.session.sector_id
-	if not _main.session.enter_unspace(_catalog, target_sector_id, n, _main.player_ship):
+	var mapping := _catalog.get_translation(origin_id, solution)
+	if mapping.is_empty():
 		return
 
-	var mapping := _catalog.get_mapping(origin_id, target_sector_id, n)
+	var offer_accuracy := TranslationNav.compute_accuracy(
+		float(TranslationNav.nav_stats_from_ship(_main.player_ship, _catalog).get("nav_rating", 0.0)),
+		n,
+		float(mapping.get("ease", 0.5))
+	)
+	var combat_state: ShipCombatState = _main.session.build_combat_state(_main.player_ship)
+	_main.session.translation_stability = TranslationNav.roll_stability(
+		offer_accuracy,
+		n,
+		_player.operating_state,
+		_main.player_ship,
+		combat_state
+	)
+
+	if not _main.session.enter_unspace(_catalog, target_sector_id, n, _main.player_ship, solution):
+		_main.session.translation_stability = -1.0
+		return
+
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "entry_seconds", _catalog)
 	if applied > 0.0:
 		_main.session.last_log = (
-			"Translated into %d-space. Entry lag: %s GST."
-			% [n, GalacticCalendar.format_duration(applied)]
+			"Translated into %d-space. Entry lag: %s GST. Stability %d%%."
+			% [
+				n,
+				GalacticCalendar.format_duration(applied),
+				int(round(_main.session.translation_stability)),
+			]
 		)
 	_simulation.reset_unspace_pulse()
 
@@ -191,12 +215,14 @@ func arrive_from_unspace() -> void:
 
 	var origin_id: String = _main.session.sector_id
 	var dest_id: String = _main.session.pending_destination_id
-	var n: int = _main.session.unspace_n
+	var solution: int = _main.session.unspace_solution
 
 	if not _main.session.arrive_from_unspace(_catalog):
 		return
 
-	var mapping := _catalog.get_mapping(origin_id, dest_id, n)
+	var mapping := _catalog.get_translation(origin_id, solution)
+	if mapping.is_empty():
+		mapping = _catalog.get_public_translation(origin_id, dest_id, 4)
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "exit_seconds", _catalog)
 	if applied > 0.0:
 		_main.session.last_log = (
@@ -276,6 +302,8 @@ func on_ui_ship_changed(ship_id: String) -> void:
 		_main.session
 	)
 	_hud.set_assembled_ship(_main.player_ship)
+	if _jump.has_method("set_assembled_ship"):
+		_jump.set_assembled_ship(_main.player_ship)
 
 
 func assemble_current_ship() -> AssembledShip:

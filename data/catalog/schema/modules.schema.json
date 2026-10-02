@@ -13,7 +13,7 @@
     "category": {
       "type": "string",
       "enum": [
-        "propulsion", "power", "computer", "life_support", "sensor", "hyperdrive",
+        "propulsion", "power", "computer", "life_support", "sensor", "navigation", "hyperdrive",
         "weapon", "armour", "cargo", "fuel", "ammunition", "shield", "point_defence",
         "cyber_defence", "transponder"
       ]
@@ -71,7 +71,9 @@
     "sensor_sensitivity": { "$ref": "#/$defs/signature" },
     "sensor_sensitivity_passive": { "$ref": "#/$defs/signature" },
     "area_effect": { "type": "boolean", "default": false },
-    "intercept_chance": { "type": "number", "default": 0.0 }
+    "intercept_chance": { "type": "number", "default": 0.0 },
+    "nav_rating": { "type": "number", "default": 0.0 },
+    "translation_capacity": { "type": "number", "default": 0.0 }
   },
   "$defs": {
     "signature": {

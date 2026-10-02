@@ -269,9 +269,13 @@ def build_bundle(spec: dict) -> dict:
                 "a": peer,
                 "b": sector_id,
                 "friction": friction,
-                "n": n,
-                "solution_ab": int(route_spec["solution_ab"]),
-                "solution_ba": int(route_spec["solution_ba"]),
+                "translations": [
+                    {
+                        "n": n,
+                        "solution_ab": int(route_spec["solution_ab"]),
+                        "solution_ba": int(route_spec["solution_ba"]),
+                    }
+                ],
             }
         )
 

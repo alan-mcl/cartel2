@@ -10,6 +10,7 @@ var in_unspace: bool = false
 var unspace_n: int = 0
 var unspace_world_id: String = ""
 var unspace_solution: int = 0
+var translation_stability: float = -1.0
 var pending_destination_id: String = ""
 var gst_seconds: float = 0.0
 ## Per-save RNG salt for daily procedural content (e.g. passenger charter boards).
@@ -88,6 +89,7 @@ func to_session_dict() -> Dictionary:
 		"unspace_n": unspace_n,
 		"unspace_world_id": unspace_world_id,
 		"unspace_solution": unspace_solution,
+		"translation_stability": translation_stability,
 		"pending_destination_id": pending_destination_id,
 		"orbital_phase_by_sector": orbital_phase_by_sector.duplicate(),
 		"gst_seconds": gst_seconds,
@@ -106,6 +108,7 @@ func load_session_dict(data: Dictionary, default_gst_seconds: float) -> void:
 	unspace_n = int(data.get("unspace_n", 0))
 	unspace_world_id = str(data.get("unspace_world_id", ""))
 	unspace_solution = int(data.get("unspace_solution", 0))
+	translation_stability = float(data.get("translation_stability", -1.0))
 	pending_destination_id = str(data.get("pending_destination_id", ""))
 	orbital_phase_by_sector = _float_dict_from_variant(data.get("orbital_phase_by_sector", {}))
 	if data.has("gst_seconds"):

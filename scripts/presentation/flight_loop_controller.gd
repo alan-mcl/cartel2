@@ -151,6 +151,10 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			_player.global_position
 		)
 		_hud.set_field_state(field_sample)
+	_hud.set_translation_stability(
+		_main.session.translation_stability,
+		_main.session.in_unspace
+	)
 
 
 func can_toggle_active_sensors() -> bool:

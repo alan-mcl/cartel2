@@ -20,7 +20,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
 | `sectors.json` | array | Sector identity, bounds, spawn (mappings synthesized from `routes.json`) |
-| `routes.json` | array | Public Unspace trade network (undirected edges, friction, solutions) |
+| `routes.json` | array | Public Unspace trade network (undirected edges, friction, `translations[]` per edge) |
 | `economies.json` | array | Per-sector production/consumption profiles and network tier |
 | `unspaces.json` | array | N-space transit layouts (depth, spawn, world link) |
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |

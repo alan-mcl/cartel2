@@ -1,0 +1,112 @@
+[
+  {
+    "id": "oc_section",
+    "name": "Section",
+    "maker": "Oklahoma Combine",
+    "brand": "Section",
+    "category": "navigation",
+    "mount": "system",
+    "mass": 0.35,
+    "volume": 0.45,
+    "compute_demand": 1.5,
+    "power_demand": 0.8,
+    "nav_rating": 40,
+    "translation_capacity": 56,
+    "cost": 420,
+    "description": "Combine yard stock navigation computer. Loads the public 4-space route tables and little else.",
+    "signature": {
+      "thermal": 0.6,
+      "gravitational": 0.08,
+      "electromagnetic": 1.2,
+      "computational": 2.0
+    }
+  },
+  {
+    "id": "mdc_almanac",
+    "name": "Almanac",
+    "maker": "Monday Corporation",
+    "brand": "Almanac",
+    "category": "navigation",
+    "mount": "system",
+    "mass": 0.38,
+    "volume": 0.48,
+    "compute_demand": 1.8,
+    "power_demand": 0.9,
+    "nav_rating": 48,
+    "translation_capacity": 56,
+    "cost": 520,
+    "description": "Monday municipal nav computer. Public commercial translations with conservative higher-order headroom.",
+    "signature": {
+      "thermal": 0.7,
+      "gravitational": 0.09,
+      "electromagnetic": 1.4,
+      "computational": 2.4
+    }
+  },
+  {
+    "id": "frz_compass",
+    "name": "Compass",
+    "maker": "Four Rivers Zaibatsu",
+    "brand": "Compass",
+    "category": "navigation",
+    "mount": "system",
+    "mass": 0.42,
+    "volume": 0.52,
+    "compute_demand": 2.2,
+    "power_demand": 1.0,
+    "nav_rating": 62,
+    "translation_capacity": 68,
+    "cost": 680,
+    "description": "Four Rivers Compass line for operators who want catalogued 5-space alternatives on the same hull.",
+    "signature": {
+      "thermal": 0.75,
+      "gravitational": 0.1,
+      "electromagnetic": 1.6,
+      "computational": 2.8
+    }
+  },
+  {
+    "id": "sbi_sextant",
+    "name": "Sextant",
+    "maker": "Seven Bells Inc",
+    "brand": "Sextant",
+    "category": "navigation",
+    "mount": "system",
+    "mass": 0.48,
+    "volume": 0.58,
+    "compute_demand": 2.6,
+    "power_demand": 1.2,
+    "nav_rating": 78,
+    "translation_capacity": 72,
+    "cost": 920,
+    "description": "Seven Bells survey-grade navigation computer with deep translation inventory and 6-space support.",
+    "signature": {
+      "thermal": 0.85,
+      "gravitational": 0.11,
+      "electromagnetic": 1.8,
+      "computational": 3.2
+    }
+  },
+  {
+    "id": "sne_astrolabe",
+    "name": "Astrolabe",
+    "maker": "SnedeCorp",
+    "brand": "Astrolabe",
+    "category": "navigation",
+    "mount": "system",
+    "mass": 0.52,
+    "volume": 0.62,
+    "compute_demand": 3.0,
+    "power_demand": 1.3,
+    "nav_rating": 92,
+    "translation_capacity": 128,
+    "cost": 1450,
+    "description": "Snede attested deep-route navigator. Maximum catalog depth for experimental translations.",
+    "signature": {
+      "thermal": 0.9,
+      "gravitational": 0.12,
+      "electromagnetic": 2.0,
+      "computational": 3.6
+    }
+  }
+]

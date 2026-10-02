@@ -14,7 +14,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | **City Mall (CM)** | Enclosed consumer habitat (MicroDonald-style) |
 | **Building** | Visitable location within a city or habitat |
 | **Unspace / n-space** | Higher-order dimensions used for inter-sector travel |
-| **Solution** | Integer code required to traverse a known Unspace route (stored in data; typing not yet implemented) |
+| **Solution** | Integer identifying a stored Unspace translation from a source sector (see [translations.md](translations.md)) |
 | **d** | Galactic dollar |
 | **Cash** | Carried on the person |
 | **Credit (eCash)** | Bank balance |
@@ -33,6 +33,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
 | [commodities.md](commodities.md) | Closed eleven-category trade roster |
 | [trade_network.md](trade_network.md) | Public Unspace route graph, friction, daily markets |
+| [translations.md](translations.md) | Nav inventory, accuracy, stability, translation data |
 | [missions.md](missions.md) | Passenger charters and mission intent |
 
 ## Current implementation
@@ -42,7 +43,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Sectors in catalog | Eleven near-orbit worlds from [planets.md](planets.md); New Game background selects starting habitat |
 | Player backgrounds | Six kits in `backgrounds.json` (Tester default); callsign + portrait at New Game |
 | Habitats | One dockable habitat per sector (Proxima Habitat, La Bella Vista Habitat, …) |
-| Jump routes listed | Full public graph (28 routes) via **4-space**; synthesized from `routes.json` |
+| Jump routes listed | Public graph plus selected higher-order translations; nav computer inventory and player library |
 | Unspace hazards | Static irregular Delaunay topo in 4-space (no player velocity perturbations for now); fixed exit portal on a host face; 1–3 ambient Ascidians per visit |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Background kits + buy at Proxima **Concord Scouts** (used fitted) or **Skyedge** (unfitted chassis) |

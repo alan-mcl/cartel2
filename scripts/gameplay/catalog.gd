@@ -46,6 +46,10 @@ var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
 var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
+## Directed translation records keyed by "source_sector:solution".
+var translations_by_key: Dictionary = {}
+## All directed translations from a sector (unsorted).
+var translations_by_source: Dictionary = {}
 
 
 static func load_default() -> Catalog:
@@ -196,7 +200,11 @@ func get_unspace_for_n(n: int) -> Dictionary:
 	return {}
 
 
-func get_mapping(from_sector_id: String, to_sector_id: String, n: int) -> Dictionary:
+func get_mapping(from_sector_id: String, to_sector_id: String, n: int = 4) -> Dictionary:
+	return get_public_translation(from_sector_id, to_sector_id, n)
+
+
+func get_public_translation(from_sector_id: String, to_sector_id: String, n: int = 4) -> Dictionary:
 	var sector := get_sector(from_sector_id)
 	if sector.is_empty():
 		return {}
@@ -216,6 +224,29 @@ func get_mapping(from_sector_id: String, to_sector_id: String, n: int) -> Dictio
 		return mapping
 
 	return {}
+
+
+func get_translation(source_sector_id: String, solution: int) -> Dictionary:
+	var key := _translation_key(source_sector_id, solution)
+	var record: Variant = translations_by_key.get(key, {})
+	if typeof(record) == TYPE_DICTIONARY:
+		return record
+	return {}
+
+
+func list_translations_from(source_sector_id: String) -> Array:
+	var list: Variant = translations_by_source.get(source_sector_id, [])
+	if typeof(list) == TYPE_ARRAY:
+		return list.duplicate()
+	return []
+
+
+static func ease_from_friction(friction: int) -> float:
+	return clampf(1.0 - float(friction) / 100.0, 0.15, 0.95)
+
+
+static func _translation_key(source_sector_id: String, solution: int) -> String:
+	return "%s:%d" % [source_sector_id, solution]
 
 
 func get_world(sector_id: String) -> Dictionary:
@@ -374,9 +405,12 @@ func list_ammunition_types() -> Array:
 
 
 func _synthesize_sector_mappings() -> void:
+	translations_by_key.clear()
+	translations_by_source.clear()
 	var mappings_by_sector: Dictionary = {}
 	for sector_id in sectors_by_id.keys():
 		mappings_by_sector[sector_id] = []
+		translations_by_source[sector_id] = []
 
 	for route in routes_by_id.values():
 		if typeof(route) != TYPE_DICTIONARY:
@@ -386,18 +420,69 @@ func _synthesize_sector_mappings() -> void:
 		if a.is_empty() or b.is_empty():
 			continue
 		var friction := int(route.get("friction", 0))
-		var n := int(route.get("n", 4))
-		var lump_seconds := friction * ROUTE_SECONDS_PER_FRICTION
-		_append_route_mapping(mappings_by_sector, a, b, int(route.get("solution_ab", 0)), friction, n, lump_seconds)
-		_append_route_mapping(mappings_by_sector, b, a, int(route.get("solution_ba", 0)), friction, n, lump_seconds)
+		var route_id := str(route.get("id", ""))
+		var translation_entries: Array = _route_translation_entries(route)
+		for entry_variant in translation_entries:
+			if typeof(entry_variant) != TYPE_DICTIONARY:
+				continue
+			var entry: Dictionary = entry_variant
+			var n := int(entry.get("n", 4))
+			var duration_scale := float(entry.get("duration_scale", 1.0))
+			if duration_scale <= 0.0:
+				duration_scale = 1.0
+			var lump_seconds := float(friction) * ROUTE_SECONDS_PER_FRICTION * duration_scale
+			var ease := float(entry.get("ease", -1.0))
+			if ease < 0.0:
+				ease = ease_from_friction(friction) if n == 4 else 0.25
+			_append_route_mapping(
+				mappings_by_sector,
+				a,
+				b,
+				int(entry.get("solution_ab", 0)),
+				friction,
+				n,
+				lump_seconds,
+				ease,
+				duration_scale,
+				route_id
+			)
+			_append_route_mapping(
+				mappings_by_sector,
+				b,
+				a,
+				int(entry.get("solution_ba", 0)),
+				friction,
+				n,
+				lump_seconds,
+				ease,
+				duration_scale,
+				route_id
+			)
 
 	for sector_id in sectors_by_id.keys():
 		var sector: SectorDef = sectors_by_id[sector_id]
 		var mappings: Array = mappings_by_sector.get(sector_id, [])
 		mappings.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
-			return int(left.get("friction", 999)) < int(right.get("friction", 999))
+			var left_label := str(left.get("label", ""))
+			var right_label := str(right.get("label", ""))
+			if left_label != right_label:
+				return left_label < right_label
+			return int(left.get("n", 99)) < int(right.get("n", 99))
 		)
 		sector.mappings = mappings
+
+
+func _route_translation_entries(route: Dictionary) -> Array:
+	var translations: Variant = route.get("translations", [])
+	if typeof(translations) == TYPE_ARRAY and not translations.is_empty():
+		return translations
+	if route.has("solution_ab") and route.has("solution_ba"):
+		return [{
+			"n": int(route.get("n", 4)),
+			"solution_ab": int(route.get("solution_ab", 0)),
+			"solution_ba": int(route.get("solution_ba", 0)),
+		}]
+	return []
 
 
 func _append_route_mapping(
@@ -407,15 +492,18 @@ func _append_route_mapping(
 	solution: int,
 	friction: int,
 	n: int,
-	lump_seconds: float
+	lump_seconds: float,
+	ease: float,
+	duration_scale: float,
+	route_id: String
 ) -> void:
 	if not sectors_by_id.has(from_id) or not sectors_by_id.has(to_id):
 		push_error("Route references unknown sector: %s -> %s" % [from_id, to_id])
 		return
 
 	var target_sector: SectorDef = sectors_by_id[to_id]
-	var mappings: Array = mappings_by_sector.get(from_id, [])
-	mappings.append({
+	var record := {
+		"source": from_id,
 		"target": to_id,
 		"solution": solution,
 		"n": n,
@@ -424,8 +512,19 @@ func _append_route_mapping(
 		"entry_seconds": lump_seconds,
 		"exit_seconds": lump_seconds,
 		"time_jitter": ROUTE_TIME_JITTER,
-	})
+		"ease": ease,
+		"duration_scale": duration_scale,
+		"route_id": route_id,
+	}
+	var mappings: Array = mappings_by_sector.get(from_id, [])
+	mappings.append(record)
 	mappings_by_sector[from_id] = mappings
+
+	var key := _translation_key(from_id, solution)
+	translations_by_key[key] = record
+	var by_source: Array = translations_by_source.get(from_id, [])
+	by_source.append(record)
+	translations_by_source[from_id] = by_source
 
 
 func _load_indexed_records_from_directory(dir_path: String, record_class: Variant) -> Dictionary:

@@ -252,7 +252,21 @@ Products combine passive and active instruments in marketing copy. The schema st
 | `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen — calculus wave detector (comp) |
 | `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus — local geometry scanner (comp, active-only) |
 
-Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina nav lines above.
+Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina sensor lines above.
+
+### Navigation (`category: navigation`, mount: `system`)
+
+Unspace translation inventory lives on a **navigation computer**, not on the sensor package or compute core. The computer consumes power and compute demand while translating; the core only supplies CU.
+
+| id | Maker | Brand | Nav rating | Translation capacity |
+|----|-------|-------|------------|----------------------|
+| `oc_section` | Oklahoma Combine | Section | 40 | 56 |
+| `mdc_almanac` | Monday Corporation | Almanac | 48 | 56 |
+| `frz_compass` | Four Rivers Zaibatsu | Compass | 62 | 68 |
+| `sbi_sextant` | Seven Bells Inc | Sextant | 78 | 72 |
+| `sne_astrolabe` | SnedeCorp | Astrolabe | 92 | 128 |
+
+See [translations.md](translations.md) for fill policy and jump selection.
 
 The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.
 

@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-signal jump_requested(target_sector_id: String, n: int)
+signal jump_requested(target_sector_id: String, n: int, solution: int)
 signal cancelled
 
 @onready var _title: Label = $Background/Center/Panel/VBox/TitleLabel
@@ -13,11 +13,10 @@ signal cancelled
 
 var _catalog: Catalog
 var _session: GameSession
+var _assembled_ship: AssembledShip
 var _gate_title: String = ""
-var _selected_target_id: String = ""
-var _selected_n: int = 4
-var _selected_solution: int = 0
-var _selected_label: String = ""
+var _offers: Array = []
+var _selected_index: int = -1
 
 
 func _ready() -> void:
@@ -27,105 +26,109 @@ func _ready() -> void:
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 
 
-func bind(catalog: Catalog, session: GameSession) -> void:
+func bind(catalog: Catalog, session: GameSession, assembled_ship: AssembledShip = null) -> void:
 	_catalog = catalog
 	_session = session
+	_assembled_ship = assembled_ship
+
+
+func set_assembled_ship(assembled_ship: AssembledShip) -> void:
+	_assembled_ship = assembled_ship
 
 
 func open(gate_title: String) -> void:
 	_gate_title = gate_title
-	_selected_target_id = ""
+	_selected_index = -1
 	visible = true
 	_refresh()
 
 
 func close() -> void:
 	visible = false
-	_selected_target_id = ""
+	_selected_index = -1
+	_offers.clear()
 
 
 func _refresh() -> void:
 	_title.text = _gate_title
-	_description.text = "Select a destination, then confirm translation depth."
+	_description.text = "Select a translation, then confirm."
 
 	_clear_container(_route_list)
+	_offers.clear()
 
 	if _catalog == null or _session == null:
 		return
 
-	var sector := _catalog.get_sector(_session.sector_id)
-	var mappings: Variant = sector.get("mappings", [])
-	var route_count := 0
-	if typeof(mappings) == TYPE_ARRAY:
-		for mapping_variant in mappings:
-			if typeof(mapping_variant) != TYPE_DICTIONARY:
-				continue
+	var library: Array = _session.player.translation_library if _session.player != null else []
+	_offers = TranslationNav.list_offered_translations(
+		_catalog,
+		_session.sector_id,
+		_assembled_ship,
+		library
+	)
 
-			var mapping: Dictionary = mapping_variant
-			var target_id := str(mapping.get("target", ""))
-			if target_id.is_empty():
-				continue
-
-			var target_sector := _catalog.get_sector(target_id)
-			var label := str(mapping.get("label", target_sector.get("name", target_id)))
-			var friction := int(mapping.get("friction", 0))
-			var band := _catalog.friction_band_label(friction)
-
-			var button := Button.new()
-			var prefix := "> " if target_id == _selected_target_id else ""
-			button.text = "%s%s — %s" % [prefix, label, band]
-			button.pressed.connect(_on_route_pressed.bind(mapping))
-			_route_list.add_child(button)
-			route_count += 1
+	for index in _offers.size():
+		var offer_variant: Variant = _offers[index]
+		if typeof(offer_variant) != TYPE_DICTIONARY:
+			continue
+		var offer: Dictionary = offer_variant
+		var translation: Dictionary = offer.get("translation", {})
+		var line := TranslationNav.format_offer_line(
+			translation,
+			float(offer.get("accuracy", 0.0)),
+			float(offer.get("duration_seconds", 0.0))
+		)
+		var button := Button.new()
+		var prefix := "> " if index == _selected_index else ""
+		button.text = "%s%s" % [prefix, line]
+		button.pressed.connect(_on_route_pressed.bind(index))
+		_route_list.add_child(button)
 
 	_hint.text = "Esc or Cancel to stay in orbit"
-	if route_count == 0:
-		_solution_label.text = "No known Unspace routes from this gate."
+	if _offers.is_empty():
+		_solution_label.text = "No translations available from this gate."
 		_confirm_button.disabled = true
 		return
 
 	_update_selection_ui()
 
 
-func _on_route_pressed(mapping: Dictionary) -> void:
-	_selected_target_id = str(mapping.get("target", ""))
-	_selected_n = int(mapping.get("n", 4))
-	_selected_solution = int(mapping.get("solution", 0))
-	_selected_label = str(mapping.get("label", _selected_target_id))
+func _on_route_pressed(index: int) -> void:
+	_selected_index = index
 	_refresh()
 
 
 func _update_selection_ui() -> void:
-	if _selected_target_id.is_empty():
-		_solution_label.text = "No destination selected."
+	if _selected_index < 0 or _selected_index >= _offers.size():
+		_solution_label.text = "No translation selected."
 		_confirm_button.disabled = true
 		return
 
-	var mapping := _catalog.get_mapping(_session.sector_id, _selected_target_id, _selected_n)
-	var friction := int(mapping.get("friction", 0))
-	var band := _catalog.friction_band_label(friction)
+	var offer: Dictionary = _offers[_selected_index]
+	var translation: Dictionary = offer.get("translation", {})
+	var accuracy := float(offer.get("accuracy", 0.0))
+	var n := int(translation.get("n", 4))
+	var label := str(translation.get("label", translation.get("target", "")))
+	var solution := int(translation.get("solution", 0))
 	_solution_label.text = (
-		"Route: %s via %d-space (%s transit, known solution %d)."
-		% [_selected_label, _selected_n, band, _selected_solution]
+		"Selected: %d → %s via %d-space. Nav accuracy %d%% before jump."
+		% [solution, label, n, int(round(accuracy))]
 	)
-	var entry_seconds := float(mapping.get("entry_seconds", 0.0))
-	var exit_seconds := float(mapping.get("exit_seconds", 0.0))
-	if entry_seconds > 0.0 or exit_seconds > 0.0:
-		_solution_label.text += (
-			" Nominal translation lag: %s entry, %s exit GST."
-			% [
-				GalacticCalendar.format_duration(entry_seconds),
-				GalacticCalendar.format_duration(exit_seconds),
-			]
-		)
 	_confirm_button.disabled = false
-	_confirm_button.text = "Translate via %d-space" % _selected_n
+	_confirm_button.text = "Translate via %d-space" % n
 
 
 func _on_confirm_pressed() -> void:
-	if _selected_target_id.is_empty():
+	if _selected_index < 0 or _selected_index >= _offers.size():
 		return
-	jump_requested.emit(_selected_target_id, _selected_n)
+	var offer: Dictionary = _offers[_selected_index]
+	var translation: Dictionary = offer.get("translation", {})
+	var target_id := str(translation.get("target", ""))
+	var n := int(translation.get("n", 4))
+	var solution := int(translation.get("solution", 0))
+	if target_id.is_empty():
+		return
+	jump_requested.emit(target_id, n, solution)
 
 
 func _on_cancel_pressed() -> void:

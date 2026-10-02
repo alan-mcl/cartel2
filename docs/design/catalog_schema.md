@@ -105,7 +105,7 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `name` | string | yes | `` |  |
 | `maker` | string | yes | `` |  |
 | `brand` | string | no | `` |  |
-| `category` | string | yes | `` | enum: `propulsion`, `power`, `computer`, `life_support`, `sensor`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`, `shield`, `point_defence`, `cyber_defence`, `transponder` |
+| `category` | string | yes | `` | enum: `propulsion`, `power`, `computer`, `life_support`, `sensor`, `navigation`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`, `shield`, `point_defence`, `cyber_defence`, `transponder` |
 | `mount` | string | no | `` |  |
 | `mounts` | array | no | `[]` |  |
 | `mass` | number | yes | `` |  |
@@ -148,6 +148,8 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `sensor_sensitivity_passive` | CatalogSignature | no | `` |  |
 | `area_effect` | boolean | no | `False` |  |
 | `intercept_chance` | number | no | `0.0` |  |
+| `nav_rating` | number | no | `0.0` |  |
+| `translation_capacity` | number | no | `0.0` |  |
 
 ## SectorDef
 

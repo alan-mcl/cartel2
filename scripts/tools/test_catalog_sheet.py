@@ -84,8 +84,8 @@ class CatalogSheetTests(unittest.TestCase):
         self.assertTrue(import_target(t, csv_path, drop_missing=False, catalog=self.catalog_dir))
         after_lines = t.path.read_text(encoding="utf-8").splitlines()
         changed = [i for i, (a, b) in enumerate(zip(before_lines, after_lines)) if a != b]
-        self.assertEqual(changed, [1])
-        self.assertIn('"friction": 16', after_lines[1])
+        self.assertEqual(len(changed), 1, msg=f"expected one line change, got {changed}")
+        self.assertIn('"friction": 16', after_lines[changed[0]])
 
     def test_blank_vs_empty_array(self) -> None:
         t = self._target("passenger.descriptions")

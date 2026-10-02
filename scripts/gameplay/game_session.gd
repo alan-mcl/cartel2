@@ -83,6 +83,10 @@ var unspace_solution: int:
 	get: return world.unspace_solution
 	set(value): world.unspace_solution = value
 
+var translation_stability: float:
+	get: return world.translation_stability
+	set(value): world.translation_stability = value
+
 var pending_destination_id: String:
 	get: return world.pending_destination_id
 	set(value): world.pending_destination_id = value
@@ -227,7 +231,9 @@ func start_new_game(
 	world.unspace_n = 0
 	world.unspace_world_id = ""
 	world.unspace_solution = 0
+	world.translation_stability = -1.0
 	world.pending_destination_id = ""
+	player.translation_library.clear()
 	combat.hull = 0.0
 	combat.max_hull = 0.0
 	player.spare_parts.clear()
@@ -383,6 +389,7 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	world.unspace_n = 0
 	world.unspace_world_id = ""
 	world.unspace_solution = 0
+	world.translation_stability = -1.0
 	world.pending_destination_id = ""
 	world.location_name = str(sector.get("orbit_name", new_sector_id))
 	player.objective = str(sector.get("objective", ""))
@@ -399,25 +406,36 @@ func enter_unspace(
 	catalog: Catalog,
 	destination_id: String,
 	n: int,
-	assembled_ship: AssembledShip
+	assembled_ship: AssembledShip,
+	solution: int = 0
 ) -> bool:
 	var dest := catalog.get_sector(destination_id)
 	if dest.is_empty():
 		return false
 
-	var unspace := catalog.get_unspace_for_n(n)
+	var mapping := catalog.get_translation(world.sector_id, solution)
+	if mapping.is_empty():
+		mapping = catalog.get_public_translation(world.sector_id, destination_id, n)
+	if mapping.is_empty():
+		return false
+	if str(mapping.get("target", "")) != destination_id:
+		return false
+	if int(mapping.get("n", 0)) != n:
+		return false
+
+	var presentation_n := 4
+	var unspace := catalog.get_unspace_for_n(presentation_n)
 	if unspace.is_empty():
 		return false
 
-	var mapping := catalog.get_mapping(world.sector_id, destination_id, n)
 	world.pending_destination_id = destination_id
 	world.in_unspace = true
 	world.unspace_n = n
 	world.unspace_world_id = str(unspace.get("id", ""))
-	world.unspace_solution = int(mapping.get("solution", 0))
+	world.unspace_solution = int(mapping.get("solution", solution))
 	combat.init_hull_from_ship(assembled_ship)
 
-	world.location_name = str(unspace.get("orbit_name", "4-space"))
+	world.location_name = "%d-space" % n
 	player.objective = "Navigate to the exit portal en route to %s" % str(dest.get("name", destination_id))
 	player.last_log = "Translated into %d-space. Find the exit portal." % n
 	changed.emit()
@@ -432,6 +450,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	world.in_unspace = false
 	world.unspace_n = 0
 	world.unspace_world_id = ""
+	world.translation_stability = -1.0
 	world.pending_destination_id = ""
 
 	if not enter_sector(catalog, dest_id):

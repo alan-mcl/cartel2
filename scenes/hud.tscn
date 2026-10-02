@@ -171,7 +171,7 @@ anchor_bottom = 0.0
 offset_left = -332.0
 offset_top = 12.0
 offset_right = -12.0
-offset_bottom = 112.0
+offset_bottom = 132.0
 grow_horizontal = 0
 theme_type_variation = &"SurfaceTranslucent"
 
@@ -202,6 +202,11 @@ text = "Radiant: —"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Particles: —"
+
+[node name="StabilityLabel" type="Label" parent="Root/FieldPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = ""
 
 [node name="LocalSensorMap" type="Control" parent="Root"]
 layout_mode = 1

@@ -10,6 +10,8 @@ var sandbox: bool = false
 var salvaged_ids: Array[String] = []
 var inspected_ids: Array[String] = []
 var spare_parts: Dictionary = {}
+## Learned translations: `{ "source", "solution" }` records (unioned at jump gates).
+var translation_library: Array = []
 
 
 func player_to_dict() -> Dictionary:
@@ -33,6 +35,7 @@ func to_session_dict() -> Dictionary:
 		"salvaged_ids": salvaged_ids.duplicate(),
 		"inspected_ids": inspected_ids.duplicate(),
 		"spare_parts": spare_parts.duplicate(),
+		"translation_library": _translation_library_to_save(translation_library),
 	}
 
 
@@ -42,6 +45,7 @@ func load_session_dict(data: Dictionary) -> void:
 	salvaged_ids = _string_array_from_variant(data.get("salvaged_ids", []))
 	inspected_ids = _string_array_from_variant(data.get("inspected_ids", []))
 	spare_parts = _int_dict_from_variant(data.get("spare_parts", {}))
+	translation_library = _translation_library_from_variant(data.get("translation_library", []))
 
 
 func is_salvaged(interactable_id: String) -> bool:
@@ -79,6 +83,40 @@ static func _int_dict_from_variant(value: Variant) -> Dictionary:
 	for key in value.keys():
 		result[str(key)] = int(value[key])
 	return result
+
+
+static func _translation_library_to_save(library: Array) -> Array:
+	var out: Array = []
+	for entry_variant in library:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var source := str(entry.get("source", ""))
+		if source.is_empty():
+			continue
+		out.append({
+			"source": source,
+			"solution": int(entry.get("solution", 0)),
+		})
+	return out
+
+
+static func _translation_library_from_variant(value: Variant) -> Array:
+	var out: Array = []
+	if typeof(value) != TYPE_ARRAY:
+		return out
+	for entry_variant in value:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var source := str(entry.get("source", ""))
+		if source.is_empty():
+			continue
+		out.append({
+			"source": source,
+			"solution": int(entry.get("solution", 0)),
+		})
+	return out
 
 
 static func _string_array_from_variant(value: Variant) -> Array[String]:

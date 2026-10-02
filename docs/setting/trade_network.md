@@ -16,7 +16,7 @@ Three conceptual layers:
 
 ## Route graph
 
-28 undirected public connections are defined in [routes.json](../data/catalog/routes.json). Jump gates list every route from the player's current sector; the economy uses the same graph for trade friction.
+28 undirected public connections are defined in [routes.json](../data/catalog/routes.json). Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
 
 ### Core network
 

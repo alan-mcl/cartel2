@@ -129,7 +129,7 @@ func _bind_controllers() -> void:
 		_menu.on_ui_save_requested,
 		_menu.on_quit_to_menu_requested
 	)
-	_jump.bind(catalog, session)
+	_jump.bind(catalog, session, _player.assembled_ship)
 
 
 func _process(delta: float) -> void:

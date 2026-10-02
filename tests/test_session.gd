@@ -160,7 +160,7 @@ static func run(runner: TestRunner) -> void:
 	)
 
 	runner.check(
-		session.enter_unspace(catalog, "bela", 4, assembled),
+		session.enter_unspace(catalog, "bela", 4, assembled, 42),
 		"enter_unspace proxima→bela"
 	)
 	runner.check(session.in_unspace, "session marks in_unspace")

@@ -127,7 +127,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 | `inspect` | Log flavour text; track `inspected_ids` |
 | `salvage` | One-time credits; id tracked in `salvaged_ids`; host `WorldObject` visual modulated (not a dedicated wreck scene) |
 | `dock` | Pause tree, hide HUD, open UiRoot habitat screen, park current ship at habitat |
-| `translate` | Pause tree, open jump overlay with sector `mappings` (pick destination + N-space depth) |
+| `translate` | Pause tree, open jump overlay with nav-computer translations (solution, N, accuracy, duration) |
 | `arrive` | At 4-space exit portal: complete transit into destination 3-space orbit |
 
 Dock and jump-route selection set `get_tree().paused = true` until the overlay closes. **4-space transit itself is unpaused** — same inertial flight with hazards.
@@ -157,18 +157,18 @@ handled in gameplay, not UI.
 | Realspace flight | 1:1 with real time |
 | Habitat / building UI | 1:1 (tree may be paused; clock uses `PROCESS_MODE_ALWAYS`) |
 | Unspace flight | Irregular pulses — stutter and jumps, more erratic at higher N |
-| Jump gate entry / exit portal | Discrete lump from sector `mappings[]` (`entry_seconds`, `exit_seconds`, `time_jitter`) |
+| Jump gate entry / exit portal | Discrete lump from the selected translation (`entry_seconds`, `exit_seconds`, `time_jitter`) |
 | Main menu, pause, save/load, jump picker | Frozen |
 
 HUD and **HabitatScreen** header show `GstClockLabel` at seconds resolution. `session.changed` is **not** emitted every second — widgets poll `gst_seconds` directly.
 
 ### Jump travel (3-space ↔ 4-space ↔ 3-space)
 
-1. `[E]` at jump gate (3-space only) → jump overlay lists destinations from `mappings[]`.
-2. Select destination → confirm **4-space (n=4)** route. Known `solution` integer shown as flavour; no typing yet.
-3. Confirm → `session.enter_unspace` → entry translation lump applied → `WorldLoader.load_unspace` → player at 4-space entry spawn, dim starfield behind undulating geometry.
-4. Fly through 4-space: an **irregular Delaunay topographic mesh** (Poisson-scattered vertices, random per-vertex height) fills the play disk under the ship as a static ground plane in 3D. Player perturbations (edge kicks, ripples, radial bound) are disabled for now. GST advances irregularly while in transit.
-5. `[E]` at **Exit Portal** (3D disc on a fixed host face; hidden 2D interactable for input; labelled only with `4_space_topology` sensors) → exit translation lump applied → `session.arrive_from_unspace` → load destination sector orbit.
+1. `[E]` at jump gate (3-space only) → jump overlay lists offered translations from `TranslationNav` (nav computer inventory plus player library).
+2. Select a line (`solution`, destination, N, accuracy, expected duration) → confirm.
+3. Confirm → roll **translation stability** → `session.enter_unspace` (by solution) → entry lump from that translation → `WorldLoader.load_unspace` (presentation world is `n4_default`; session stores real N) → player at entry spawn.
+4. Fly through transit field: irregular Delaunay topo mesh; **Fields** panel shows **Stability** for this jump. GST advances irregularly while in transit.
+5. `[E]` at **Exit Portal** → exit lump from the same stored translation → `session.arrive_from_unspace` (clears stability) → load destination sector orbit.
 
 Hyperdrive-equipped ships may later translate without a gate or from other 4-space regions — not implemented.
 

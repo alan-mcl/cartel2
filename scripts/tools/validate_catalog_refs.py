@@ -1265,17 +1265,46 @@ def main() -> int:
                     f"building {building_id}: unknown chassis '{stock_id}'"
                 )
 
+    solutions_by_source: dict[str, set[int]] = {}
     for route in routes:
         route_id = str(route.get("id", "?"))
         for end in ("a", "b"):
             sector_id = str(route.get(end, ""))
             if sector_id and sector_id not in sectors:
                 errors.append(f"route {route_id}: unknown sector '{sector_id}'")
-        n = int(route.get("n", 0))
-        if n <= 0:
-            errors.append(f"route {route_id}: invalid n={n}")
-        if "solution_ab" not in route or "solution_ba" not in route:
-            errors.append(f"route {route_id}: missing solution_ab/solution_ba")
+        translations = route.get("translations")
+        if not isinstance(translations, list) or not translations:
+            errors.append(f"route {route_id}: missing translations array")
+            continue
+        has_n4 = False
+        a = str(route.get("a", ""))
+        b = str(route.get("b", ""))
+        for entry in translations:
+            if not isinstance(entry, dict):
+                errors.append(f"route {route_id}: translation entry must be object")
+                continue
+            n = int(entry.get("n", 0))
+            if n <= 0:
+                errors.append(f"route {route_id}: invalid translation n={n}")
+            if n == 4:
+                has_n4 = True
+            if "solution_ab" not in entry or "solution_ba" not in entry:
+                errors.append(f"route {route_id}: translation missing solution_ab/solution_ba")
+                continue
+            if a:
+                ab = int(entry["solution_ab"])
+                solutions_by_source.setdefault(a, set())
+                if ab in solutions_by_source[a]:
+                    errors.append(f"route {route_id}: duplicate solution {ab} for source '{a}'")
+                solutions_by_source[a].add(ab)
+            if b:
+                ba = int(entry["solution_ba"])
+                solutions_by_source.setdefault(b, set())
+                if ba in solutions_by_source[b]:
+                    errors.append(f"route {route_id}: duplicate solution {ba} for source '{b}'")
+                solutions_by_source[b].add(ba)
+        if not has_n4:
+            errors.append(f"route {route_id}: translations must include n=4 public entry")
 
     for unspace in unspaces:
         unspace_id = str(unspace.get("id", ""))
