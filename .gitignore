@@ -21,6 +21,12 @@ __pycache__/
 .test_saves/
 .test_saves_runtime/
 
+# Mobile / IDE
+android/
+ios/
+.vscode/
+.idea/
+
 # OS
 .DS_Store
 Thumbs.db

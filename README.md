@@ -13,7 +13,7 @@ Godot binary used for development: `~/opt/Godot_v4.7.2-stable_linux.x86_64`
 ## Run
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path .
 ```
 
 Or open `project.godot` in the Godot editor and press **F5**.
@@ -90,35 +90,35 @@ Rebuild UI theme after token changes:
 Open the theme developer showcase:
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/theme_showcase.tscn
 ```
 
 Open the ship assembly sandbox (no economy, fitting rules only):
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/ship_assembly_sandbox.tscn
 ```
 
 Open the combat sandbox (1v1 manufacturer hulls, starfield only):
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/combat_sandbox.tscn
 ```
 
 Open the stealth sandbox (transponders off, scattered targets beyond sensor range):
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/stealth_sandbox.tscn
 ```
 
 Open the system render tester (planetary layout only, free camera, globe spin):
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/system_render_tester.tscn
 ```
 
@@ -133,6 +133,10 @@ GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
 ```
 
 This validates ship templates and catalog references, imports assets, runs Godot `--check-only` on gameplay/presentation/ui scripts, and executes headless unit tests. See [AGENTS.md](AGENTS.md) for project conventions.
+
+## License
+
+Cartel is licensed under the [GNU Affero General Public License v3.0](LICENSE). IBM Plex Sans and IBM Plex Mono in `assets/ui/fonts/` are under the [SIL Open Font License 1.1](assets/ui/fonts/LICENSE.txt).
 
 ## Documentation
 

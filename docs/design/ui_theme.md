@@ -100,7 +100,7 @@ Under `scenes/ui/patterns/` (native Controls only):
 Static scene with System, Operational, and Media samples:
 
 ```bash
-~/opt/Godot_v4.7.2-stable_linux.x86_64 --path /mnt/data/gitws/cartel2 \
+~/opt/Godot_v4.7.2-stable_linux.x86_64 --path . \
   --scene res://scenes/dev/theme_showcase.tscn
 ```
 
