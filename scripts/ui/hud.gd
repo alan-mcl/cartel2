@@ -28,6 +28,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _interact_prompt: Control = $Root/InteractPromptOverlay
 @onready var _star_lens_flare: Control = $Root/StarLensFlare
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
+@onready var _message_bar: MessageBar = $Root/MessageBar
 
 var _session: GameSession
 var _assembled_ship: AssembledShip
@@ -62,6 +63,7 @@ func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 
 func refresh() -> void:
 	_refresh_capabilities()
+	_sync_log()
 
 
 func set_interaction_target(target: Interactable) -> void:
@@ -78,6 +80,7 @@ func set_motion(speed: float, heading_deg: float, _boosting: bool) -> void:
 
 func set_operating_state(state: ShipOperatingState) -> void:
 	_operating_state = state
+	_sync_log()
 	if not _has_capability("basic_hud") or state == null:
 		return
 	if not state.propulsion_requires_fuel:
@@ -212,6 +215,8 @@ func _refresh_capabilities() -> void:
 		_status_panel.visible = has_basic
 	if _signature_panel != null:
 		_signature_panel.visible = has_basic
+	if _message_bar != null:
+		_message_bar.visible = has_basic
 	if _field_panel != null:
 		_field_panel.visible = has_sensor
 	if _local_sensor_map != null:
@@ -224,6 +229,12 @@ func _refresh_capabilities() -> void:
 
 func _has_capability(id: String) -> bool:
 	return _assembled_ship != null and _assembled_ship.has_capability(id)
+
+
+func _sync_log() -> void:
+	if _message_bar == null or _session == null or not _has_capability("basic_hud"):
+		return
+	_message_bar.play_line(_session.last_log)
 
 
 func _ready() -> void:
