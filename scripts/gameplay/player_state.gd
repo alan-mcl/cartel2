@@ -35,6 +35,15 @@ func load_player_dict(data: Dictionary) -> void:
 		reputation = 5 if background_id == "outlaw" else 0
 
 
+## Adds `delta` to reputation, never below 0. Returns the amount actually applied.
+func adjust_reputation(delta: int) -> int:
+	if delta == 0:
+		return 0
+	var before := reputation
+	reputation = maxi(0, reputation + delta)
+	return reputation - before
+
+
 func to_session_dict() -> Dictionary:
 	return {
 		"objective": objective,

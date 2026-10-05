@@ -17,6 +17,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cancel_before_departure(runner, catalog)
 	_test_cancel_after_undock_fails(runner, catalog)
 	_test_dock_completion_pays(runner, catalog)
+	_test_reputation_charter_outcomes(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -369,3 +370,68 @@ static func _test_dock_completion_pays(runner: TestRunner, catalog: Catalog) -> 
 		session.credits >= credits_before + reward,
 		"missions: destination dock pays reward"
 	)
+	runner.check_eq(session.player.reputation, 1, "missions: on-time delivery gains reputation")
+
+
+static func _test_reputation_charter_outcomes(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MIS-REP-DELTA")
+	_wire_events(session, catalog, simulation)
+	runner.check_eq(session.player.reputation, 0, "missions: trader starts at zero reputation")
+	var ship := _best_docked_ship(session, catalog, "proxima_habitat")
+	if ship == null:
+		return
+
+	session.player.reputation = 1
+	var cancel_offer := _inject_test_offer(
+		missions,
+		session,
+		catalog,
+		"proxima_habitat",
+		"irasia_habitat",
+		"rep_cancel"
+	)
+	runner.check(
+		missions.accept_offer(session, catalog, str(cancel_offer.get("id", "")), ship.id),
+		"missions: accept for reputation cancel"
+	)
+	var cancel_id := str(missions.list_accepted()[0].get("charter_id", ""))
+	runner.check(missions.cancel_charter(session, catalog, cancel_id), "missions: cancel for reputation loss")
+	runner.check_eq(session.player.reputation, 0, "missions: cancel lowers reputation to zero")
+
+	session.player.reputation = 1
+	runner.check(
+		not missions.cancel_charter(session, catalog, "missing"),
+		"missions: failed cancel does not change reputation"
+	)
+	runner.check_eq(session.player.reputation, 1, "missions: failed cancel leaves reputation")
+
+	var late_offer := _inject_test_offer(
+		missions,
+		session,
+		catalog,
+		"proxima_habitat",
+		"bela_orbital_habitat",
+		"rep_late"
+	)
+	late_offer["deadline_hours"] = 1
+	session.player.reputation = 1
+	runner.check(
+		missions.accept_offer(session, catalog, str(late_offer.get("id", "")), ship.id),
+		"missions: accept for late reputation"
+	)
+	var reward := int(late_offer.get("reward", 0))
+	session.credits = PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward) + 5
+	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 2))
+	runner.check(session.undock(catalog, ship.id, missions), "missions: undock for late reputation")
+	runner.check(session.enter_sector(catalog, "bela", false), "missions: travel for late reputation")
+	runner.check(session.dock(catalog, "bela_orbital_habitat"), "missions: late dock for reputation")
+	runner.check_eq(session.player.reputation, 0, "missions: late delivery lowers reputation to zero")
+
+	session.player.reputation = 0
+	runner.check(
+		not missions.cancel_charter(session, catalog, "still_missing"),
+		"missions: cancel miss at zero reputation"
+	)
+	runner.check_eq(session.player.reputation, 0, "missions: reputation stays at zero floor")

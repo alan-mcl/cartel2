@@ -12,6 +12,8 @@ Some passenger **roles** require a minimum pilot **reputation** (touring perform
 
 Some **freight** cargo types use the same gate (bonded luxury, prototypes, race animals, museum objects under seal). Legal penalties on the pilot record will be a separate future gate.
 
+**Reputation from charters.** Completing a passenger or freight contract on time increases pilot reputation by 1. Arriving late at the destination (fee instead of pay), losing passengers who walk off after the deadline at an intermediate habitat, or cancelling at the origin before departure each decrease reputation by 1. The score cannot go below zero; fifteen clean deliveries is enough to reach the threshold for touring performers and bonded luxury freight.
+
 Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances.
 
 ## Freight charters

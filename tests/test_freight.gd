@@ -339,6 +339,7 @@ static func _test_dock_pays_and_clears(runner: TestRunner, catalog: Catalog) -> 
 	runner.check(session.dock(catalog, "bela_orbital_habitat"), "freight: dock at destination")
 	runner.check(missions.list_freight_accepted().is_empty(), "freight: dock clears contract")
 	runner.check(session.credits >= credits_before + reward, "freight: dock pays reward")
+	runner.check_eq(session.player.reputation, 1, "freight: on-time delivery gains reputation")
 
 
 static func _test_reputation_gate(runner: TestRunner, catalog: Catalog) -> void:

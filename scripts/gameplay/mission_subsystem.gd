@@ -284,10 +284,8 @@ func cancel_charter(session: GameSession, catalog: Catalog, charter_id: String) 
 	session.assess_penalty_credits(penalty)
 
 	_remove_charter(charter_id)
-	if penalty > 0:
-		session.last_log = "Charter cancelled. Fee d%d." % penalty
-	else:
-		session.last_log = "Charter cancelled."
+	var log := "Charter cancelled. Fee d%d." % penalty if penalty > 0 else "Charter cancelled."
+	_log_with_reputation_delta(session, -1, log)
 	session.changed.emit()
 	return true
 
@@ -306,10 +304,8 @@ func cancel_freight_charter(session: GameSession, catalog: Catalog, charter_id: 
 	session.assess_penalty_credits(penalty)
 
 	_remove_freight_charter(charter_id)
-	if penalty > 0:
-		session.last_log = "Freight cancelled. Fee d%d." % penalty
-	else:
-		session.last_log = "Freight cancelled."
+	var log := "Freight cancelled. Fee d%d." % penalty if penalty > 0 else "Freight cancelled."
+	_log_with_reputation_delta(session, -1, log)
 	session.changed.emit()
 	return true
 
@@ -525,7 +521,11 @@ func _fail_passenger_charter_missed_deadline(
 	var penalty := PassengerCharters.cancel_penalty(cfg, reward)
 	_remove_charter(charter_id)
 	session.assess_penalty_credits(penalty)
-	session.last_log = "Passengers left charter after deadline. Fee d%d." % penalty
+	_log_with_reputation_delta(
+		session,
+		-1,
+		"Passengers left charter after deadline. Fee d%d." % penalty
+	)
 	session.changed.emit()
 
 
@@ -543,12 +543,20 @@ func _resolve_passenger_charter_on_dock(
 	if _charter_is_late(session, charter):
 		var penalty := PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward)
 		session.assess_penalty_credits(penalty)
-		session.last_log = "Charter late to %s. Fee d%d." % [dest_name, penalty]
+		_log_with_reputation_delta(
+			session,
+			-1,
+			"Charter late to %s. Fee d%d." % [dest_name, penalty]
+		)
 	elif reward > 0:
 		session.add_credits(reward)
-		session.last_log = "Charter complete to %s. +d%d." % [dest_name, reward]
+		_log_with_reputation_delta(
+			session,
+			1,
+			"Charter complete to %s. +d%d." % [dest_name, reward]
+		)
 	else:
-		session.last_log = "Charter complete to %s." % dest_name
+		_log_with_reputation_delta(session, 1, "Charter complete to %s." % dest_name)
 	session.changed.emit()
 
 
@@ -566,12 +574,20 @@ func _resolve_freight_charter_on_dock(
 	if _charter_is_late(session, charter):
 		var penalty := FreightCharters.cancel_penalty(FreightCharters.config(catalog), reward)
 		session.assess_penalty_credits(penalty)
-		session.last_log = "Freight late to %s. Fee d%d." % [dest_name, penalty]
+		_log_with_reputation_delta(
+			session,
+			-1,
+			"Freight late to %s. Fee d%d." % [dest_name, penalty]
+		)
 	elif reward > 0:
 		session.add_credits(reward)
-		session.last_log = "Freight delivered to %s. +d%d." % [dest_name, reward]
+		_log_with_reputation_delta(
+			session,
+			1,
+			"Freight delivered to %s. +d%d." % [dest_name, reward]
+		)
 	else:
-		session.last_log = "Freight delivered to %s." % dest_name
+		_log_with_reputation_delta(session, 1, "Freight delivered to %s." % dest_name)
 	session.changed.emit()
 
 
@@ -646,3 +662,13 @@ func _remove_freight_offer(offer_id: String) -> void:
 			if str(offer.get("id", "")) == offer_id:
 				offers.remove_at(index)
 				return
+
+
+static func _log_with_reputation_delta(session: GameSession, delta: int, message: String) -> void:
+	var applied := session.player.adjust_reputation(delta)
+	if applied > 0:
+		session.last_log = "%s Reputation +%d." % [message, applied]
+	elif applied < 0:
+		session.last_log = "%s Reputation %d." % [message, applied]
+	else:
+		session.last_log = message
