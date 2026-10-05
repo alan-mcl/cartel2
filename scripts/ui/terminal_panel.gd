@@ -351,12 +351,9 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			if typeof(entry_variant) != TYPE_DICTIONARY:
 				continue
 			var entry: Dictionary = entry_variant
-			var infraction_id := str(entry.get("infraction_id", ""))
-			var label := Sanctions.infraction_label(_context.catalog, infraction_id)
-			var fine := int(entry.get("fine", 0))
 			var line := Label.new()
 			line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			line.text = "%s — d%d" % [label, fine]
+			line.text = Sanctions.format_terminal_line(_context.catalog, entry)
 			admin.add_child(line)
 		var pay := Button.new()
 		pay.text = "Pay sanctions (d%d)" % sanction_total

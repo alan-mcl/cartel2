@@ -23,6 +23,10 @@ static func _test_outlaw_start_pay_launch(runner: TestRunner, catalog: Catalog) 
 		"unlawful_fire",
 		"sanctions: outlaw infraction type"
 	)
+	runner.check(
+		session.player.sanctions[0].has("recorded_gst"),
+		"sanctions: outlaw sanction has timestamp"
+	)
 	var ship := session.get_current_owned_ship()
 	if ship == null:
 		runner.check(false, "sanctions: outlaw has ship")
@@ -59,6 +63,11 @@ static func _test_save_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 		int(loaded.player.sanctions[0].get("fine", 0)),
 		500,
 		"sanctions: save round-trip fine"
+	)
+	runner.check_eq(
+		float(loaded.player.sanctions[0].get("recorded_gst", -1.0)),
+		float(session.player.sanctions[0].get("recorded_gst", -2.0)),
+		"sanctions: save round-trip timestamp"
 	)
 
 

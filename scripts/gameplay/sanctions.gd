@@ -33,7 +33,8 @@ static func add_from_infraction(
 	player: PlayerState,
 	catalog: Catalog,
 	infraction_id: String,
-	target_id: String = ""
+	target_id: String = "",
+	recorded_gst: float = 0.0
 ) -> bool:
 	var def := catalog.get_sanction_infraction(infraction_id)
 	if def.is_empty():
@@ -48,8 +49,24 @@ static func add_from_infraction(
 		"infraction_id": infraction_id,
 		"fine": fine,
 		"target_id": target_id,
+		"recorded_gst": maxf(0.0, recorded_gst),
 	})
 	return true
+
+
+static func format_recorded_at(entry: Dictionary) -> String:
+	if not entry.has("recorded_gst"):
+		return ""
+	return GalacticCalendar.format_timestamp(float(entry.get("recorded_gst", 0.0)))
+
+
+static func format_terminal_line(catalog: Catalog, entry: Dictionary) -> String:
+	var label := infraction_label(catalog, str(entry.get("infraction_id", "")))
+	var fine := int(entry.get("fine", 0))
+	var stamp := format_recorded_at(entry)
+	if stamp.is_empty():
+		return "%s — d%d" % [label, fine]
+	return "%s — %s — d%d" % [stamp, label, fine]
 
 
 static func infraction_label(catalog: Catalog, infraction_id: String) -> String:
@@ -78,14 +95,22 @@ static func record_player_weapon_hit(
 	if target_id.is_empty():
 		return
 
-	var added_fire := add_from_infraction(session.player, catalog, "unlawful_fire", target_id)
+	var recorded_gst := float(session.gst_seconds)
+	var added_fire := add_from_infraction(
+		session.player,
+		catalog,
+		"unlawful_fire",
+		target_id,
+		recorded_gst
+	)
 	var added_destroy := false
 	if _target_destroyed(collider):
 		added_destroy = add_from_infraction(
 			session.player,
 			catalog,
 			"ship_destroyed",
-			target_id
+			target_id,
+			recorded_gst
 		)
 
 	if not added_fire and not added_destroy:

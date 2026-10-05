@@ -89,7 +89,7 @@ While the mega corps employ and equip their own pilots, there is always excess d
 
 **City-malls.** The bulk of the population on most systems live in City-malls - giant retail and residential arcology-like habitations. On some worlds a life can be lived inside one corporation's enclosure. MicroDonald's city-malls run from birth to burial on its own goods and services. Universal House franchises the hotels, food, and household goods around that kind of convenience.
 
-**Concord Commercial Convention.** The CCC is a set of agreements that is the de facto framework for interstellar law and free trade. They were signed at Concord, Proxima soon after N-space travel resulted in the discovery of further inhabtable planets. The Convention consists of 92 Articles and 38 Addendums.
+**Concord Commercial Charter.** The CCC is a set of agreements that form the de facto framework for interstellar law and free trade. It was drafted at Concord, Proxima soon after N-space travel resulted in the discovery of further inhabitable planets. The Charter consists of 92 Articles and 38 Addendums; Article 1, "Free Commercial Passage", states that signatory worlds and corporations shall be free from duties, tariffs, quotas, discriminatory charges, and other restrictions imposed solely on the basis of the origin or destination of lawful goods, services, vessels, or capital.
 
 ## History and Lore
 

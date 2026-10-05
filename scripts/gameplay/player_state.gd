@@ -6,7 +6,7 @@ var portrait_path: String = ""
 var background_id: String = ""
 ## How well known the pilot is; higher is better. Seeded from the starting background kit.
 var reputation: int = 0
-## Outstanding infractions: `{ "id", "infraction_id", "fine", "target_id" }`.
+## Outstanding infractions: `{ "id", "infraction_id", "fine", "target_id", "recorded_gst" }`.
 var sanctions: Array = []
 var objective: String = "Explore Proxima near orbit"
 var last_log: String = "Flare-ON SS ready. Thrusters online."
@@ -52,14 +52,14 @@ func _sanctions_lib() -> GDScript:
 	return load("res://scripts/gameplay/sanctions.gd") as GDScript
 
 
-func seed_sanctions_from_kit(catalog: Catalog, kit: Dictionary) -> void:
+func seed_sanctions_from_kit(catalog: Catalog, kit: Dictionary, recorded_gst: float) -> void:
 	sanctions.clear()
 	var kit_sanctions: Variant = kit.get("sanctions", [])
 	if typeof(kit_sanctions) != TYPE_ARRAY:
 		return
 	var lib := _sanctions_lib()
 	for infraction_variant in kit_sanctions:
-		lib.add_from_infraction(self, catalog, str(infraction_variant), "")
+		lib.add_from_infraction(self, catalog, str(infraction_variant), "", recorded_gst)
 
 
 func outstanding_sanction_fine() -> int:
@@ -187,12 +187,15 @@ static func _sanctions_to_save(entries: Array) -> Array:
 		var infraction_id := str(entry.get("infraction_id", ""))
 		if infraction_id.is_empty():
 			continue
-		out.append({
+		var saved := {
 			"id": str(entry.get("id", "")),
 			"infraction_id": infraction_id,
 			"fine": maxi(0, int(entry.get("fine", 0))),
 			"target_id": str(entry.get("target_id", "")),
-		})
+		}
+		if entry.has("recorded_gst"):
+			saved["recorded_gst"] = maxf(0.0, float(entry.get("recorded_gst", 0.0)))
+		out.append(saved)
 	return out
 
 
@@ -210,10 +213,13 @@ static func _sanctions_from_variant(value: Variant) -> Array:
 		var sanction_id := str(entry.get("id", ""))
 		if sanction_id.is_empty():
 			sanction_id = "san_%d" % (out.size() + 1)
-		out.append({
+		var loaded := {
 			"id": sanction_id,
 			"infraction_id": infraction_id,
 			"fine": maxi(0, int(entry.get("fine", 0))),
 			"target_id": str(entry.get("target_id", "")),
-		})
+		}
+		if entry.has("recorded_gst"):
+			loaded["recorded_gst"] = maxf(0.0, float(entry.get("recorded_gst", 0.0)))
+		out.append(loaded)
 	return out

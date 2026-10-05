@@ -230,7 +230,6 @@ func start_new_game(
 	var player_data := catalog.get_player()
 	wallet.credits = int(kit.get("credits", wallet.credits))
 	player.reputation = maxi(0, int(kit.get("reputation", 0)))
-	player.seed_sanctions_from_kit(catalog, kit)
 	fleet.owned_ships.clear()
 	player.salvaged_ids.clear()
 	player.inspected_ids.clear()
@@ -249,6 +248,7 @@ func start_new_game(
 	player.spare_parts.clear()
 	world.orbital_phase_by_sector.clear()
 	world.gst_seconds = GalacticCalendar.start_seconds_from_player(player_data)
+	player.seed_sanctions_from_kit(catalog, kit, world.gst_seconds)
 	world.run_seed = randi()
 	world.market_quotes.clear()
 	world.market_quotes_day = -1
