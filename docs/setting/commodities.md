@@ -38,11 +38,11 @@ Data is treated as a tradable commodity rather than as an abstract service. The 
 
 The category includes commercially valuable information and digital products where the information itself is the object being transported.
 
-### 5. Entertainment
+### 5. Energy
 
-Cultural and entertainment products.
+Energy stored in transportable media.
 
-Entertainment is distinct from Data. Data concerns information being transported as a commodity, while Entertainment represents the cultural product or experience being distributed.
+This category covers charged storage cells, packs, and capacitors shipped to markets that consume more power than they store locally. It is physical cargo, not grid electricity as an abstract service.
 
 ### 6. Industrial Components
 
@@ -90,7 +90,7 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | 2 | Pharmaceuticals | `pharmaceuticals` |
 | 3 | Consumer Goods | `consumer_goods` |
 | 4 | Data | `data` |
-| 5 | Entertainment | `entertainment` |
+| 5 | Energy | `energy` |
 | 6 | Industrial Components | `industrial_components` |
 | 7 | Chemicals | `chemicals` |
 | 8 | Advanced Raw Materials | `advanced_raw_materials` |
@@ -102,7 +102,7 @@ They are potentially high-value, compact industrial goods and can therefore be e
 
 | Pair | Distinction |
 |------|-------------|
-| **Data vs Entertainment** | Data is information transported on storage media; Entertainment is the cultural product or experience being distributed. |
+| **Energy vs Chemicals** | Energy is stored power in transportable media; Chemicals are production inputs, not a power source. |
 | **Data vs Compute Cores** | Data is the information itself; Compute Cores are the physical hardware required to process it. |
 | **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialized materials whose particular properties make them economically valuable. |
 | **Industrial Components vs ship spare parts** | Industrial Components are tradable cargo. Ship module spare parts (`spare_parts` in session state) are a separate shipyard inventory system. |
@@ -119,7 +119,7 @@ Seven categories require installed cargo-bay **capabilities** on the carrying sh
 | Luxury Goods | `secure_cargo` |
 | Military Goods | `military_grade` |
 
-Consumer Goods, Entertainment, Industrial Components, and Advanced Raw Materials use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
+Consumer Goods, Energy, Industrial Components, and Advanced Raw Materials use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
 
 ## Current implementation
 

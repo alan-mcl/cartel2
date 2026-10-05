@@ -59,7 +59,7 @@ Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company
 
 ## Trade, ships, and work
 
-Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, entertainment, industrial components, chemicals, advanced raw materials, luxury goods, military goods, and compute cores.
+Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, energy, industrial components, chemicals, advanced raw materials, luxury goods, military goods, and compute cores.
 
 Ships are a chassis plus fitted modules. All parts are manufactured and branded by one of the mega corps. A wide variety of standard ship models and trims are on the market, but many pilots end up customising their craft to fit their preferred mission profiles. The small craft that can translate to N-space have very limited tonnage and every build needs to make tradeoffs between propulsion, compute, offense, defense, and life support and cargo capacity.
 
@@ -81,9 +81,11 @@ While the mega corps employ and equip their own pilots, there is always excess d
 
 **Gambling and resorts.** Karaquazen runs the mega-casinos, the gambling houses, and nearly all planetary lotteries, and quietly much of medical insurance. La Bella Vista is the water-world holiday, with atolls and orbital hotels. Gamblers who have run out of luck are a regular bar fare.
 
-**Media and celebrity.** Broadcast networks and studios are planetary. ParaRamcoVidia owns the large ones; LiveWorlds runs stadiums, resorts, and celebrity. Influencers, journalists, musicians, and performers travel in person, and entertainment between worlds moves as cargo. Independent pilots can also be celebrities - callsigns like Reaper Cosmos, Ivanova, Stone Token and Clarity are known across systems, along with their distinctive ships.
+**Media and celebrity.** Broadcast networks and studios are planetary. ParaRamcoVidia owns the large ones; LiveWorlds runs stadiums, resorts, and celebrity. Influencers, journalists, musicians, and performers travel in person; cultural product between worlds moves as data media and consumer goods, not its own cargo class. Independent pilots can also be celebrities - callsigns like Reaper Cosmos, Ivanova, Stone Token and Clarity are known across systems, along with their distinctive ships.
 
 **City-malls.** The bulk of the population on most systems live in City-malls - giant retail and residential arcology-like habitations. On some worlds a life can be lived inside one corporation's enclosure. MicroDonald's city-malls run from birth to burial on its own goods and services. Universal House franchises the hotels, food, and household goods around that kind of convenience.
+
+**Concord Commercial Convention.** The CCC is a set of agreements that is the de facto framework for interstellar law and free trade. They were signed at Concord, Proxima soon after N-space travel resulted in the discovery of further inhabtable planets. The Convention consists of 92 Articles and 38 Addendums.
 
 ## History and Lore
 
