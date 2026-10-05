@@ -28,9 +28,9 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 - Hull paint lives in the inner **`(W − 10) × (H − 10)`** box.
 - Aspect ratio is part of the silhouette (dart vs saucer vs block freighter).
 
-### Color
+### Colour
 
-- SVG paint owns color. Hull sprites render at `Color.WHITE` (no `hull_color` modulate). See [architecture.md](architecture.md#graphics-convention).
+- SVG paint owns colour. Hull sprites render at `Color.WHITE` (no `hull_color` modulate). See [architecture.md](architecture.md#graphics-convention).
 
 ### Known runtime exceptions (do not bake into art)
 
@@ -124,7 +124,7 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 | Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
 | Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON; shootable catalog rocks |
 
-World entity `modulate` in JSON still tints some sprites today. For a clean SVG pipeline, author final color in the file and set catalog `modulate` to `#ffffff` when replacing placeholders.
+World entity `modulate` in JSON still tints some sprites today. For a clean SVG pipeline, author final colour in the file and set catalog `modulate` to `#ffffff` when replacing placeholders.
 
 ---
 
@@ -147,7 +147,7 @@ Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000*
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
 | Location / building art | `assets/ui/locations/*.svg` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
-| Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 (e.g. 696×928) | **3:4** | Center-cropped from 4:3 sources; mipmaps; `PortraitTextureRect` at 160² (new game) / 128² (habitat) |
+| Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 (e.g. 696×928) | **3:4** | Centre-cropped from 4:3 sources; mipmaps; `PortraitTextureRect` at 160² (new game) / 128² (habitat) |
 
 Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`art` field).
 

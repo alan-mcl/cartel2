@@ -118,7 +118,7 @@
     },
     {
       "id": "freight_datacenter",
-      "title": "Live data-center rack",
+      "title": "Live data-centre rack",
       "commodity_id": "compute_cores",
       "quantity_min": 1,
       "quantity_max": 2,
@@ -490,7 +490,7 @@
       "cargos": [
         "freight_transplant"
       ],
-      "text": "{quantity} transplant tissue cases for the surgical center at {destination}; arrival window is strict."
+      "text": "{quantity} transplant tissue cases for the surgical centre at {destination}; arrival window is strict."
     },
     {
       "id": "transplant_cornea",
@@ -567,14 +567,14 @@
       "cargos": [
         "freight_compute"
       ],
-      "text": "{quantity} accelerator assemblies for a weather simulation center at {destination}."
+      "text": "{quantity} accelerator assemblies for a weather simulation centre at {destination}."
     },
     {
       "id": "datacenter_live",
       "cargos": [
         "freight_datacenter"
       ],
-      "text": "{quantity} live data-center rack(s) migrating between facilities; keep them powered to {destination}."
+      "text": "{quantity} live data-centre rack(s) migrating between facilities; keep them powered to {destination}."
     },
     {
       "id": "datacenter_exchange",
@@ -798,7 +798,7 @@
       "cargos": [
         "livestock_race"
       ],
-      "text": "{quantity} race animals traveling ahead of the circuit event at {destination}."
+      "text": "{quantity} race animals travelling ahead of the circuit event at {destination}."
     },
     {
       "id": "show_animals",

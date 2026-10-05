@@ -29,7 +29,7 @@ The months follow a 4-4-5 pattern within each quarter:
 
 Each quarter contains exactly **91 days**, or **13 weeks**.
 
-There are no leap years and no leap days. The calendar is not synchronized with Earth's orbit, the seasons, or any other astronomical cycle.
+There are no leap years and no leap days. The calendar is not synchronised with Earth's orbit, the seasons, or any other astronomical cycle.
 
 The month names are retained from the historical Gregorian calendar for continuity and familiarity. Their original association with Earth's seasons and orbital position has no significance within the Standard Calendar.
 

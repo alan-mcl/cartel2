@@ -9,4 +9,5 @@ alwaysApply: true
 - Gameplay logic: `scripts/gameplay/` as `RefCounted` only (no nodes). Session type is `GameSession`.
 - Presentation/UI adapt data; do not put game rules in `@onready` UI scripts.
 - Edit `docs/setting/` before changing lore in JSON catalogs.
+- British English in setting docs and player-facing catalog prose — see `british-english.mdc`.
 - Do not commit `.godot/`. See root `AGENTS.md` for run commands and scope guardrails.

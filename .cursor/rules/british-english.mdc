@@ -1,0 +1,24 @@
+---
+description: British English for player-facing and setting prose
+alwaysApply: true
+---
+
+# British English
+
+Use **British English** spelling and vocabulary in:
+
+- `docs/setting/` and `docs/design/` prose
+- Catalog **descriptions**, mission **text**, building copy, and other player-facing strings in `data/catalog/`
+- New commits messages and PR text when authoring in-repo docs
+
+Common pairs: **-ise** not -ize (`specialised`, `standardised`, `optimised`, `recognisable`, `organising`); **-our** (`colour`, `armour`, `honour` where appropriate); **-re** (`centre`, `metre` in prose); **defence/offence** not defense/offense in prose.
+
+**Do not change** for spelling alone:
+
+- Godot APIs and types (`Color`, `get_theme_color`, node paths like `$Center`)
+- JSON **keys**, schema field names, and stable **ids** (`hull_color`, `neighborhood`, `freight_datacenter`, damage packet type `energy`)
+- Third-party or engine identifiers (`text_overrun_behavior`, `convert_colors_with_editor_theme`)
+- Fictional proper names in `traffic.json` unless explicitly retconning lore
+- SVG/metadata attributes (`inkscape:window-maximized`)
+
+When documenting graphics, prefer **colour** in prose but cite Godot as `Color.WHITE`. Technical geometry may keep “origin-centered” where it means mathematical centre of rotation.

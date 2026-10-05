@@ -4,7 +4,7 @@ Every megacorporation listed below operates on every settled world to some degre
 
 ## Galactic Outcomes(GO)
 
-Galactic Outcomes has its roots in the turbulent African politics of the late twentieth and early twenty-first century. The company began by supplying local mercenaries to the highest bidder, a lucrative market at the time. Today they are by far the largest supplier of all forms of hired muscle from bouncers and bodyguards to soldiers and assassins. They include a profitable subdivision that manufactures all forms of small arms and ammunition for both the personal and corporate market, and another that specializes in non-combat personnel like scientists, engineers and accountants.
+Galactic Outcomes has its roots in the turbulent African politics of the late twentieth and early twenty-first century. The company began by supplying local mercenaries to the highest bidder, a lucrative market at the time. Today they are by far the largest supplier of all forms of hired muscle from bouncers and bodyguards to soldiers and assassins. They include a profitable subdivision that manufactures all forms of small arms and ammunition for both the personal and corporate market, and another that specialises in non-combat personnel like scientists, engineers and accountants.
 
 ## Karaquazen Inc (KRQ)
 
@@ -64,7 +64,7 @@ Descended from the Sino-Americano-Hanguk criminal fraternity. Today the Triad's 
 
 ## Monday Corporation (MDC)
 
-Monday Corporation began as a modest software company and grew through centuries of acquisitions into a sprawling technology and services conglomerate. Today it operates across software, communications, finance, consumer technology, entertainment and infrastructure. Its famously unremarkable name has survived every merger and rebranding campaign, becoming one of the most recognizable corporate identities in human space.
+Monday Corporation began as a modest software company and grew through centuries of acquisitions into a sprawling technology and services conglomerate. Today it operates across software, communications, finance, consumer technology, entertainment and infrastructure. Its famously unremarkable name has survived every merger and rebranding campaign, becoming one of the most recognisable corporate identities in human space.
 
 ## House of Roth (ROTH)
 
@@ -104,7 +104,7 @@ Evergreen Group is a diversified corporation built around agriculture, natural r
 
 ## Atlas Concern (ATL)
 
-Atlas Concern is a vast industrial and infrastructure conglomerate with interests in mining, construction, energy, transportation and planetary development. It specializes in projects too large, remote or difficult for most corporations to undertake, from deep-space extraction to entire cities and orbital facilities. Its immense engineering capacity and appetite for expansion have made Atlas indispensable to the growth of human space.
+Atlas Concern is a vast industrial and infrastructure conglomerate with interests in mining, construction, energy, transportation and planetary development. It specialises in projects too large, remote or difficult for most corporations to undertake, from deep-space extraction to entire cities and orbital facilities. Its immense engineering capacity and appetite for expansion have made Atlas indispensable to the growth of human space.
 
 ## The Hanseatic Guild (HANS)
 
@@ -152,7 +152,7 @@ BioGenesis Life Sciences is a major pharmaceutical and biotechnology corporation
 
 ## LiveWorlds (LW)
 
-LiveWorlds is an entertainment conglomerate specializing in live experiences, interactive media, sports, gaming, virtual reality, social media, celebrity culture, and it operates a seldom-mentioned sideline in propaganda and industrial espionage. It operates stadiums, arenas, resorts, virtual worlds and entertainment networks throughout human space, while representing many of its most famous performers and athletes. Its business is built around turning audiences into participants, and experiences into enormous recurring revenues.
+LiveWorlds is an entertainment conglomerate specialising in live experiences, interactive media, sports, gaming, virtual reality, social media, celebrity culture, and it operates a seldom-mentioned sideline in propaganda and industrial espionage. It operates stadiums, arenas, resorts, virtual worlds and entertainment networks throughout human space, while representing many of its most famous performers and athletes. Its business is built around turning audiences into participants, and experiences into enormous recurring revenues.
 
 ## Chimera Corporation (CHI)
 
@@ -164,7 +164,7 @@ The Praetorium is a provider of private security, legal services and arbitration
 
 ## Terra Nova (TNI)
 
-Terra Nova is a planetary resource extraction corporation specializing in mining, agriculture and environmental engineering. It operates mines, industrial plantations and genetically engineered food systems, alongside water extraction, forestry and terraforming. Terra Nova's philosophy is simple: a planet is a resource to be optimized, and its enormous appetite for land and materials makes it a dominant force in frontier development.
+Terra Nova is a planetary resource extraction corporation specialising in mining, agriculture and environmental engineering. It operates mines, industrial plantations and genetically engineered food systems, alongside water extraction, forestry and terraforming. Terra Nova's philosophy is simple: a planet is a resource to be optimised, and its enormous appetite for land and materials makes it a dominant force in frontier development.
 
 ## Orion Spur Company (OSC)
 

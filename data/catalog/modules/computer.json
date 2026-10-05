@@ -87,7 +87,7 @@
       "basic_hud"
     ],
     "cost": 14000,
-    "description": "Deep-well quantum for optimization and simulation. Delicate, expensive, occasionally sentient-adjacent.",
+    "description": "Deep-well quantum for optimisation and simulation. Delicate, expensive, occasionally sentient-adjacent.",
     "signature": {
       "thermal": 1.72,
       "gravitational": 0.25,

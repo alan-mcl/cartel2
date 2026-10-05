@@ -4,7 +4,7 @@
     "name": "Food Products",
     "mass": 1.0,
     "base_price": 50,
-    "description": "Agricultural and processed foodstuffs and nutritional products for human consumption. Most worlds and habitats produce some of their own food but local agriculture varies with climate, available land, population, and industrial capacity. Interstellar trade allows locations to supplement local production with imported staples, fresh produce, preserved foods, and other products where doing so is cheaper or more convenient than producing them locally.",
+    "description": "Agricultural and processed foodstuffs and nutritional products for human and animal consumption. Most worlds and habitats produce some of their own food but local agriculture varies with climate, available land, population, and industrial capacity. Interstellar trade allows locations to supplement local production with imported staples, fresh produce, preserved foods, and other products where doing so is cheaper or more convenient than producing them locally.",
     "requires_capabilities": ["refrigerated"]
   },
   {
@@ -12,7 +12,7 @@
     "name": "Pharmaceuticals",
     "mass": 0.4,
     "base_price": 180,
-    "description": "Medicines, vaccines, cosmetics, and other pharmaceutical products. Many locations maintain some pharmaceutical production capacity but specialized facilities and manufacturing processes are concentrated in particular markets. Compact and high-value, pharmaceuticals can be transported economically between worlds to supplement local production or meet temporary increases in demand.",
+    "description": "Medicines, vaccines, cosmetics, and other pharmaceutical products. Many locations maintain some pharmaceutical production capacity but specialised facilities and manufacturing processes are concentrated in particular markets. Compact and high-value, pharmaceuticals can be transported economically between worlds to supplement local production or meet temporary increases in demand.",
     "requires_capabilities": ["biohazard"]
   },
   {
@@ -36,7 +36,7 @@
     "name": "Energy",
     "mass": 1.0,
     "base_price": 85,
-    "description": "Stored energy shipped in standardized high-density storage modules. Most locations can generate their own power but the cost of doing so varies with local infrastructure, industrial demand, and available resources. High-density storage makes it practical to transport energy between worlds, creating a market wherever imported power is cheaper or more convenient than generating it locally.",
+    "description": "Stored energy shipped in standardised high-density storage modules. Most locations can generate their own power but the cost of doing so varies with local infrastructure, industrial demand, and available resources. High-density storage makes it practical to transport energy between worlds, creating a market wherever imported power is cheaper or more convenient than generating it locally.",
     "requires_capabilities": []
   },
   {
@@ -44,7 +44,7 @@
     "name": "Industrial Components",
     "mass": 1.2,
     "base_price": 110,
-    "description": "Manufactured components and equipment used for industrial production, maintenance, and repair. While infrastructure hubs can manufacture common components locally, specialized production is concentrated in particular industrial centers. Differences in manufacturing capability and local demand create markets for imported machinery, replacement parts, production equipment, and other industrial hardware.",
+    "description": "Manufactured components and equipment used for industrial production, maintenance, and repair. While infrastructure hubs can manufacture common components locally, specialised production is concentrated in particular industrial centres. Differences in manufacturing capability and local demand create markets for imported machinery, replacement parts, production equipment, and other industrial hardware.",
     "requires_capabilities": []
   },
   {
@@ -52,7 +52,7 @@
     "name": "Chemicals",
     "mass": 1.0,
     "base_price": 70,
-    "description": "Industrial and agricultural chemicals used as production inputs. Common chemicals are often available locally but specialized compounds and large-scale chemical production are concentrated in particular industrial centers. Differences in production costs and local demand create markets for imported solvents, reagents, fertilisers, polymers, and other chemical products.",
+    "description": "Industrial and agricultural chemicals used as production inputs. Common chemicals are often available locally but specialised compounds and large-scale chemical production are concentrated in particular industrial centres. Differences in production costs and local demand create markets for imported solvents, reagents, fertilisers, polymers, and other chemical products.",
     "requires_capabilities": ["biohazard"]
   },
   {
@@ -68,7 +68,7 @@
     "name": "Luxury Goods",
     "mass": 0.5,
     "base_price": 280,
-    "description": "High-value discretionary goods intended for affluent consumers. Fashionable, prestigious, or highly specialized goods tend to be concentrated in particular markets. Differences in wealth, tastes, and availability create opportunities for importing luxury foods, clothing, art, collectibles, and other status goods.",
+    "description": "High-value discretionary goods intended for affluent consumers. Fashionable, prestigious, or highly specialised goods tend to be concentrated in particular markets. Differences in wealth, tastes, and availability create opportunities for importing luxury foods, clothing, art, collectibles, and other status goods.",
     "requires_capabilities": ["secure_cargo"]
   },
   {
@@ -76,7 +76,7 @@
     "name": "Military Goods",
     "mass": 1.0,
     "base_price": 250,
-    "description": "Equipment and supplies intended for military, security, and defense applications. Differences in local production capacity, security requirements, and military demand create markets for imported weapons, armor, ammunition, explosives, drones, specialised compute architectures, surveillance equipment, and other defense products.",
+    "description": "Equipment and supplies intended for military, security, and defence applications. Differences in local production capacity, security requirements, and military demand create markets for imported weapons, armour, ammunition, explosives, drones, specialised compute architectures, surveillance equipment, and other defence products.",
     "requires_capabilities": ["military_grade"]
   },
   {

@@ -152,7 +152,7 @@
     "power_demand": 2.2,
     "compute_demand": 3.5,
     "cost": 3200,
-    "description": "Data-center grade conditioning for shipped compute cores.",
+    "description": "Data-centre grade conditioning for shipped compute cores.",
     "capabilities": [
       "compute_integrated"
     ],
@@ -211,7 +211,7 @@
   },
   {
     "id": "ok_armory_cell_10",
-    "name": "Armory Cell 10",
+    "name": "Armoury Cell 10",
     "maker": "Oklahoma Combine",
     "brand": "Heartland",
     "category": "cargo",
@@ -303,7 +303,7 @@
   },
   {
     "id": "ok_armory_4",
-    "name": "Armory 4",
+    "name": "Armoury 4",
     "maker": "Oklahoma Combine",
     "brand": "Heartland",
     "category": "cargo",
@@ -430,7 +430,7 @@
     "power_demand": 2.4,
     "compute_demand": 4.0,
     "cost": 4200,
-    "description": "Bonded vault with data-center conditioning for classified hardware.",
+    "description": "Bonded vault with data-centre conditioning for classified hardware.",
     "capabilities": [
       "compute_integrated",
       "secure_cargo"

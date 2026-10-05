@@ -60,6 +60,10 @@ Gameplay is `RefCounted` with no scene-tree dependency, so it is testable headle
 - New `class_name` scripts are not visible to other scripts until an import pass runs, so run `./scripts/ci/check.sh` (or `--scripts-only`) rather than the test runner alone after adding a file.
 - No GUT or gdUnit4 in this repo.
 
+## Language
+
+Use **British English** in setting docs, design prose, and player-facing catalog text (`description`, mission `text`, and similar). Keep American spellings only where required by Godot APIs, JSON keys, or stable catalog ids. See [.cursor/rules/british-english.mdc](.cursor/rules/british-english.mdc).
+
 ## GDScript conventions
 
 - Typed GDScript 2.0; use existing `class_name` types (`Catalog`, `GameSession`, `OwnedShip`, …)

@@ -22,7 +22,7 @@ This includes ordinary foodstuffs, preserved foods, nutritional products, and ot
 
 Medicines and pharmaceutical products.
 
-This represents medical commodities that are sufficiently valuable and standardized to be traded between worlds.
+This represents medical commodities that are sufficiently valuable and standardised to be traded between worlds.
 
 ### 3. Consumer Goods
 
@@ -58,7 +58,7 @@ The category encompasses commodity chemicals without requiring individual chemic
 
 ### 8. Advanced Raw Materials
 
-Specialized raw materials and advanced physical materials used in high-value industrial production.
+Specialised raw materials and advanced physical materials used in high-value industrial production.
 
 These are distinct from ordinary Chemicals and Industrial Components and represent materials whose particular properties make them economically valuable.
 
@@ -70,13 +70,13 @@ Luxury Goods are primarily consumed by affluent populations and are therefore pa
 
 ### 10. Military Goods
 
-Goods intended for military, security, and defense applications.
+Goods intended for military, security, and defence applications.
 
 This provides a single broad commodity category for military equipment and supplies rather than modelling individual weapons or military systems.
 
 ### 11. Compute Cores
 
-Specialized computational hardware.
+Specialised computational hardware.
 
 Compute Cores are distinct from Data: Data represents information being transported, while Compute Cores represent the physical computational infrastructure required to process that information.
 
@@ -104,7 +104,7 @@ They are potentially high-value, compact industrial goods and can therefore be e
 |------|-------------|
 | **Energy vs Chemicals** | Energy is stored power in transportable media; Chemicals are production inputs, not a power source. |
 | **Data vs Compute Cores** | Data is the information itself; Compute Cores are the physical hardware required to process it. |
-| **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialized materials whose particular properties make them economically valuable. |
+| **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialised materials whose particular properties make them economically valuable. |
 | **Industrial Components vs ship spare parts** | Industrial Components are tradable cargo. Ship module spare parts (`spare_parts` in session state) are a separate shipyard inventory system. |
 
 ## Cargo hold requirements

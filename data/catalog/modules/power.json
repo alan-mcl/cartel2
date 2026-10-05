@@ -978,7 +978,7 @@
     "power_generation": 26.0,
     "fuel_consumption": 0.13,
     "cost": 1400,
-    "description": "Strip-mine spec fission. Optimized for uptime, not elegance.",
+    "description": "Strip-mine spec fission. Optimised for uptime, not elegance.",
     "signature": {
       "thermal": 6.08,
       "gravitational": 0.42,

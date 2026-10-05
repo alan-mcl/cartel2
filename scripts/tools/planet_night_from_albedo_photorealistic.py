@@ -270,7 +270,7 @@ def _draw_settlement_network(
     area_factor = (width * height) / 1_000_000.0
 
     # Primary cities are deliberately fewer than the individual lights they
-    # contain. This gives recognizable concentrations without visible blobs.
+    # contain. This gives recognisable concentrations without visible blobs.
     city_count = max(12, int((28 + 380 * density) * area_factor))
     cities: list[tuple[int, int, float]] = []
 

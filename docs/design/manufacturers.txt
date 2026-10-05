@@ -46,7 +46,7 @@ Tier 3: BioGenesis Life Sciences; Greenfields Corporation; Four Rivers Zaibatsu;
 Tier 4: Morrow & Sons; Universal House; Evergreen Group; Atlas Concern
 Tier 5: Tukey Enterprises; The Meridian Company
 
-Armour & Shields (incl other defense like PDC)
+Armour & Shields (incl other defence like PDC)
 
 Tier 1: Holt-Winters Corp; Oklahoma Combine; Orion Aerospace
 Tier 2: ParaRamcoVidia; General Industrial; Chimera Corporation; Atlas Concern

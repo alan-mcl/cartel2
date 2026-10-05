@@ -61,9 +61,9 @@ Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company
 
 Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, energy, industrial components, chemicals, advanced raw materials, luxury goods, military goods, and compute cores.
 
-Ships are a chassis plus fitted modules. All parts are manufactured and branded by one of the mega corps. A wide variety of standard ship models and trims are on the market, but many pilots end up customising their craft to fit their preferred mission profiles. The small craft that can translate to N-space have very limited tonnage and every build needs to make tradeoffs between propulsion, compute, offense, defense, and life support and cargo capacity.
+Ships are a chassis plus fitted modules. All parts are manufactured and branded by one of the mega corps. A wide variety of standard ship models and trims are on the market, but many pilots end up customising their craft to fit their preferred mission profiles. The small craft that can translate to N-space have very limited tonnage and every build needs to make tradeoffs between propulsion, compute, offence, defence, and life support and cargo capacity.
 
-Every inhabited planet has extensive orbital infrastructure. Orbital habitats house hundreds of millions of inhabitants and are functionally similar to city-malls in space. Many pilots never end up planet-side at all, indeed Proxima Habitat, the largest orbital community, has a good claim on being the center of human space. Other orbitals include manufacturing, agriculture, resorts, stadiums, and corporate headquarters. 
+Every inhabited planet has extensive orbital infrastructure. Orbital habitats house hundreds of millions of inhabitants and are functionally similar to city-malls in space. Many pilots never end up planet-side at all, indeed Proxima Habitat, the largest orbital community, has a good claim on being the centre of human space. Other orbitals include manufacturing, agriculture, resorts, stadiums, and corporate headquarters. 
 
 While the mega corps employ and equip their own pilots, there is always excess demand for independent operators to fill. Orbital terminals post passenger charters and freight charters between habitats. 
 

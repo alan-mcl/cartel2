@@ -3988,7 +3988,7 @@
       "boards": [
         "terminal"
       ],
-      "text": "Buzkashi organizing staff request passage for {quantity}.",
+      "text": "Buzkashi organising staff request passage for {quantity}.",
       "roles": [
         "buzkashi_officials"
       ]

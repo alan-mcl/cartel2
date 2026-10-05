@@ -1486,7 +1486,7 @@
     "fuel_consumption": 0.85,
     "power_demand": 3.5,
     "cost": 500,
-    "description": "Frontier chemical for extraction tugs \u2014 optimized for dirt, not elegance.",
+    "description": "Frontier chemical for extraction tugs \u2014 optimised for dirt, not elegance.",
     "signature": {
       "thermal": 3.41,
       "gravitational": 0.91,

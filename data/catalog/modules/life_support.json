@@ -943,7 +943,7 @@
     "power_demand": 1.15,
     "compute_demand": 1.5,
     "cost": 1100,
-    "description": "Franchise seating for four from the mall conglomerate. Recognizable anywhere.",
+    "description": "Franchise seating for four from the mall conglomerate. Recognisable anywhere.",
     "capabilities": [
       "ls_comfort"
     ],

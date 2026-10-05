@@ -53,7 +53,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 
 Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at the Workshop before they can undock.
 
-Each chassis references a hull **sprite** path (SVG paint owns color). Optional **hull_color** is identity metadata, not a runtime sprite tint.
+Each chassis references a hull **sprite** path (SVG paint owns colour). Optional **hull_color** is identity metadata, not a runtime sprite tint.
 
 ---
 
@@ -179,7 +179,7 @@ Three types are in the catalog today. All share the same fitting and operating r
 |------|------|------------|-------|
 | **Silicon** | Conventional semiconductor computing. Cheap, mature, robust, ubiquitous. | 8–28 | Default for older, cheaper, and frontier ships. Best CU per credit. |
 | **Photon** | Photonic computing — light for computation and data movement. Excellent bandwidth for parallel workloads. | 22–48 | Attractive for sensor-heavy, communications, and sporty hulls. Best CU per tonne and watt. |
-| **Quantum** | Quantum computing — specialized, not simply faster. Useful for particular mathematical, optimization, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimization, simulation) in addition to CU. |
+| **Quantum** | Quantum computing — specialised, not simply faster. Useful for particular mathematical, optimisation, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimisation, simulation) in addition to CU. |
 
 #### In prototype JSON
 
@@ -405,7 +405,7 @@ Cargo modules (`category: cargo`) store bulk freight in **`cargo_capacity`** (to
 |------|----------------|
 | `life_support_integrated` | Livestock, live plants |
 | `refrigerated` | Food products needing cold chain |
-| `compute_integrated` | Data-center conditions for compute hardware |
+| `compute_integrated` | Data-centre conditions for compute hardware |
 | `biohazard` | Chemicals, pharmaceuticals |
 | `secure_cargo` | Bonded / chain-of-custody cargo |
 | `military_grade` | Weapons, explosives, military supplies |

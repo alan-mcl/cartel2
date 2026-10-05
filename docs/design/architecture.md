@@ -185,7 +185,7 @@ flowchart TD
 3-space sectors (`proxima`, `bela`, and the nine additional worlds in `sectors.json`) use a structured layout in `worlds.json`:
 
 - **`planet`** — lit 3D globe rendered in an isolated `SubViewport` (2048 px) and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Each sector references `albedo` and `night_lights` equirectangular PNGs (2048×1024 placeholders) under `assets/world/planets/<sector_id>_*.png`; drop-in replacements keep the same paths. `modulate` tints the procedural fallback only, not mapped textures. Legacy `sprite` is ignored for the globe mesh. Day/night terminator follows the sector **`star`** (visit-random position 7000–12000, procedural `LocalStar` at `z_index -40`). Farther stars drop the sun toward the play plane so the disc reads as side-lit; the globe shader uses a narrowed day cone and darker night cap than wrap lighting (luminosity scales brightness only).
-- **`star`** — presentation-only block on each 3-space world: `temperature_k`, `luminosity`, optional `disc_radius`. Drives apparent disc size, corona color, and planet `sun_direction` / intensity (not saved between visits).
+- **`star`** — presentation-only block on each 3-space world: `temperature_k`, `luminosity`, optional `disc_radius`. Drives apparent disc size, corona colour, and planet `sun_direction` / intensity (not saved between visits).
 - **`orbital_ring`** — evenly spaced orbitals on a rotating ring (`OrbitalRing`); habitat is the largest and dockable; unnamed orbitals are visual-only
 - **`jump_gate`** — static gate farther out (angle derived from sector id)
 - **`entities`** (optional) — free-floating world objects spawned after the ring and gate (e.g. shootable **debris** rocks); not used for unspace worlds
@@ -236,7 +236,7 @@ Catalog: `data/catalog/traffic.json`. Presentation: `TrafficView`, `scenes/npc_s
 | **SVG** | Ships, stations, gates, debris, orbitals |
 | **PNG** | Starfield tiles, planet disc, painterly backgrounds |
 
-Chassis entries reference hull **sprites**; SVG paint is the source of color (hull sprites render at `Color.WHITE`). The optional `hull_color` field is identity metadata (e.g. future radar/livery), not a sprite tint. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
+Chassis entries reference hull **sprites**; SVG paint is the source of colour (hull sprites render at `Color.WHITE`). The optional `hull_color` field is identity metadata (e.g. future radar/livery), not a sprite tint. World entities may override `sprite` and `modulate` in JSON. Workshop chassis swaps update both stats and hull appearance immediately.
 
 **Production dimensions:** [sprite_sizes.md](sprite_sizes.md) — author-at canvas sizes so 1 SVG pixel = 1 world unit (no import-scale compensation).
 
