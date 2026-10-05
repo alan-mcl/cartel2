@@ -6,7 +6,7 @@
     "kind": "terminal",
     "description": "The great Terminal is like a city unto itself. Beyond the docking concourse, thousands of ships occupy berths stretching into the distance, while cargo moves through vast automated handling systems and streams of passengers pour into and out of the Habitat. The constant movement of ships, people and freight makes it immediately clear that Proxima is the great crossroads of human space.",
     "short_desc": "The central arrivals and departures terminal on Proxima Habitat.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/proxima_habitat_terminal.png"
   },
   {
     "id": "davidsons",
@@ -61,7 +61,7 @@
     ]
   },
   {
-    "id": "habitat_workshop",
+    "id": "proxima_shipyard",
     "name": "Centauri Shipyard",
     "type": "shipyard",
     "kind": "workshop",
@@ -86,7 +86,17 @@
     "kind": "terminal",
     "description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
     "short_desc": "Hard-worn terminal above Tycho.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/tycho_habitat_terminal.png"
+  },
+  {
+    "id": "tycho_shipyard",
+    "name": "Tycho Heavy Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Ore-hauler cradles and quake-braced gantries dominate the Tycho yards. Crews fit armour and industrial systems while eclipse shutters roll across the observation decks.",
+    "short_desc": "Heavy outfitting bays for industrial traffic above Tycho.",
+    "art": "res://assets/ui/locations/tycho_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "bela_habitat_terminal",
@@ -95,7 +105,17 @@
     "kind": "terminal",
     "description": "Resort terminal with customs and docking lanes overlooking the ocean.",
     "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/bela_habitat_terminal.png"
+  },
+  {
+    "id": "bela_shipyard",
+    "name": "Vista Fitting Docks",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Polished fitting docks above La Bella Vista's oceans. Yacht crews mix with charter pilots while modules are installed behind tinted viewports.",
+    "short_desc": "Resort orbital outfitting docks with ocean views.",
+    "art": "res://assets/ui/locations/bela_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "irasia_habitat_terminal",
@@ -104,7 +124,17 @@
     "kind": "terminal",
     "description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
     "short_desc": "Commercial terminal on a major trade route.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/irasia_habitat_terminal.png"
+  },
+  {
+    "id": "irasia_shipyard",
+    "name": "Irasia Commercial Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "High-throughput commercial yards on the Irasia trade spine. Manifest queues and parallel bays keep manufacturing traffic moving.",
+    "short_desc": "Commercial outfitting yards on a major trade spine.",
+    "art": "res://assets/ui/locations/irasia_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "tokirev_habitat_terminal",
@@ -113,7 +143,17 @@
     "kind": "terminal",
     "description": "Factory-world terminal. Automated cargo handlers outnumber passengers.",
     "short_desc": "Factory-world terminal with automated cargo handlers.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/tokirev_habitat_terminal.png"
+  },
+  {
+    "id": "tokirev_shipyard",
+    "name": "Tokirev Automated Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Cold factory-world yards where robotic arms outnumber fitters. Modules slide from warehouse to cradle on tracked lines.",
+    "short_desc": "Automated outfitting yards above Tokirev.",
+    "art": "res://assets/ui/locations/tokirev_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "fennet_habitat_terminal",
@@ -122,7 +162,17 @@
     "kind": "terminal",
     "description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
     "short_desc": "Rim terminal that still feels like a frontier stop.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/fennet_habitat_terminal.png"
+  },
+  {
+    "id": "fennet_shipyard",
+    "name": "Fennet Rim Works",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Rim works that grew from a frontier stop into a regional yard. Mixed stock, honest prices, and bays that still smell of weld smoke.",
+    "short_desc": "Regional rim outfitting works.",
+    "art": "res://assets/ui/locations/fennet_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "fortuna_habitat_terminal",
@@ -131,7 +181,17 @@
     "kind": "terminal",
     "description": "Quiet, expensive terminal. Private shuttles outnumber tramp freighters.",
     "short_desc": "Quiet, expensive terminal above a finance world.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/fortuna_habitat_terminal.png"
+  },
+  {
+    "id": "fortuna_shipyard",
+    "name": "Fortuna Private Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Discrete private yards above Fortuna. Wealthy owners expect quiet bays, vetted crews, and finishes that match the finance districts below.",
+    "short_desc": "Private outfitting yards above a finance world.",
+    "art": "res://assets/ui/locations/fortuna_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "new_carthage_habitat_terminal",
@@ -140,7 +200,17 @@
     "kind": "terminal",
     "description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
     "short_desc": "Shipping terminal above an oceanic mercantile hub.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/new_carthage_habitat_terminal.png"
+  },
+  {
+    "id": "new_carthage_shipyard",
+    "name": "Carthage Slipways",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Mercantile slipways where old trading houses still set the tone. Hulls sit in open-water cradles while crews negotiate spare parts on the quay.",
+    "short_desc": "Mercantile slipways above New Carthage.",
+    "art": "res://assets/ui/locations/new_carthage_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "horizon_habitat_terminal",
@@ -149,7 +219,17 @@
     "kind": "terminal",
     "description": "Busy civic terminal above a great population centre. Suburban shuttles mix with long-haul traffic.",
     "short_desc": "Busy civic terminal above a great population centre.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/horizon_habitat_terminal.png"
+  },
+  {
+    "id": "horizon_shipyard",
+    "name": "Horizon Civic Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Spacious civic yards above Horizon's green belts. Suburban shuttles share berths with long-haul freighters in orderly civic bays.",
+    "short_desc": "Civic outfitting yards above a great population centre.",
+    "art": "res://assets/ui/locations/horizon_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "titania_habitat_terminal",
@@ -158,7 +238,17 @@
     "kind": "terminal",
     "description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
     "short_desc": "Tourist terminal with low-gravity docking lanes.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/titania_habitat_terminal.png"
+  },
+  {
+    "id": "titania_shipyard",
+    "name": "Titania Low-G Docks",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Low-gravity fitting docks with panoramic views of Titania's storms. Tourist charters and winter-sport traffic share the same gentle berths.",
+    "short_desc": "Low-gravity outfitting docks above Titania IX.",
+    "art": "res://assets/ui/locations/titania_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "concordia_orbital_terminal",
@@ -167,7 +257,17 @@
     "kind": "terminal",
     "description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
     "short_desc": "Commerce terminal above Pelagos.",
-    "art": "res://assets/ui/locations/proxima_terminal.png"
+    "art": "res://assets/ui/locations/concordia_orbital_terminal.png"
+  },
+  {
+    "id": "concordia_shipyard",
+    "name": "Concordia Twin Yards",
+    "type": "shipyard",
+    "kind": "workshop",
+    "description": "Manufacturing yards tuned to Pelagos' twin-sun cycle. Observation decks filter the glare while crews install systems in parallel bays.",
+    "short_desc": "Manufacturing outfitting yards above Pelagos.",
+    "art": "res://assets/ui/locations/concordia_shipyard.png",
+    "services": ["assembly", "parts"]
   },
   {
     "id": "tycho_exchange",
@@ -176,7 +276,7 @@
     "kind": "merchant",
     "description": "Automated commodity exchange for Tycho orbital contracts.",
     "short_desc": "Automated commodity exchange for Tycho orbital contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/tycho_exchange.png"
   },
   {
     "id": "bela_exchange",
@@ -185,7 +285,7 @@
     "kind": "merchant",
     "description": "Resort-world exchange listing daily contracts across the eleven trade categories.",
     "short_desc": "Resort-world exchange listing daily trade contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/bela_exchange.png"
   },
   {
     "id": "irasia_exchange",
@@ -194,7 +294,7 @@
     "kind": "merchant",
     "description": "Commercial exchange on a major trade spine.",
     "short_desc": "Commercial exchange on a major trade spine.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/irasia_exchange.png"
   },
   {
     "id": "tokirev_exchange",
@@ -203,7 +303,7 @@
     "kind": "merchant",
     "description": "Factory-world exchange for industrial cargo contracts.",
     "short_desc": "Factory-world exchange for industrial cargo contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/tokirev_exchange.png"
   },
   {
     "id": "fennet_exchange",
@@ -212,7 +312,7 @@
     "kind": "merchant",
     "description": "Rim exchange listing agricultural and industrial contracts.",
     "short_desc": "Rim exchange listing agricultural and industrial contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/fennet_exchange.png"
   },
   {
     "id": "fortuna_exchange",
@@ -221,7 +321,7 @@
     "kind": "merchant",
     "description": "Finance-world exchange with polished contract listings.",
     "short_desc": "Finance-world exchange with polished contract listings.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/fortuna_exchange.png"
   },
   {
     "id": "new_carthage_exchange",
@@ -230,7 +330,7 @@
     "kind": "merchant",
     "description": "Mercantile exchange for shipping and commodity contracts.",
     "short_desc": "Mercantile exchange for shipping and commodity contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/new_carthage_exchange.png"
   },
   {
     "id": "horizon_exchange",
@@ -239,7 +339,7 @@
     "kind": "merchant",
     "description": "Population-centre exchange with broad daily contract listings.",
     "short_desc": "Population-centre exchange with broad daily contract listings.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/horizon_exchange.png"
   },
   {
     "id": "titania_exchange",
@@ -248,7 +348,7 @@
     "kind": "merchant",
     "description": "Tourist-world exchange listing resort and import contracts.",
     "short_desc": "Tourist-world exchange listing resort and import contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/titania_exchange.png"
   },
   {
     "id": "concordia_exchange",
@@ -257,6 +357,6 @@
     "kind": "merchant",
     "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
     "short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
-    "art": "res://assets/ui/locations/location_placeholder.png"
+    "art": "res://assets/ui/locations/concordia_exchange.png"
   }
 ]

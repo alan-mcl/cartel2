@@ -70,8 +70,9 @@ static func run(runner: TestRunner) -> void:
 	)
 
 	var broke := GameSession.new()
-	runner.check(broke.start_new_game(catalog, "POOR-1", "outlaw"), "outlaw session starts")
-	runner.check(broke.visit(catalog, "concord_scouts"), "outlaw visits Concord Scouts")
+	runner.check(broke.start_new_game(catalog, "POOR-1", "entrepreneur"), "poor buyer session starts")
+	broke.credits = 750
+	runner.check(broke.visit(catalog, "concord_scouts"), "poor buyer visits Concord Scouts")
 	runner.check(
 		not broke.buy_used_ship(catalog, "dragon_gold"),
 		"unaffordable used ship rejected"
@@ -84,7 +85,11 @@ static func run(runner: TestRunner) -> void:
 	)
 	runner.check(beacon_only.visit(catalog, "skyedge_space_ships"), "beacon-only visits Skyedge")
 	runner.check(beacon_only.buy_chassis(catalog, "flare_on_chassis"), "beacon-only buys chassis")
-	runner.check(beacon_only.visit(catalog, "habitat_workshop"), "beacon-only visits shipyard")
+	runner.check(beacon_only.visit(catalog, "proxima_shipyard"), "beacon-only visits shipyard")
+	runner.check(
+		not beacon_only.visit(catalog, "tycho_exchange"),
+		"cannot visit exchange on another habitat"
+	)
 	runner.check(
 		ShipAssembly.buy_part(beacon_only, catalog, "vessel_registration_beacon"),
 		"beacon-only buys transponder"

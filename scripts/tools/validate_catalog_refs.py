@@ -767,6 +767,74 @@ def check_corporate_presence(
     return errors
 
 
+def catalog_art_to_path(art: str) -> Path | None:
+    if not art.startswith("res://"):
+        return None
+    return ROOT / art.removeprefix("res://")
+
+
+def check_habitat_building_uniqueness(
+    habitats: dict[str, dict],
+    buildings: dict[str, dict],
+) -> list[str]:
+    errors: list[str] = []
+    building_owner: dict[str, str] = {}
+    art_owner: dict[str, str] = {}
+
+    def register_art(art: str, label: str) -> None:
+        if not art:
+            errors.append(f"{label}: missing art path")
+            return
+        prior = art_owner.get(art)
+        if prior and prior != label:
+            errors.append(f"{label}: art '{art}' already used by {prior}")
+        else:
+            art_owner[art] = label
+        path = catalog_art_to_path(art)
+        if path is None:
+            errors.append(f"{label}: art must be under res://assets/ui/locations/")
+            return
+        if not path.is_file():
+            errors.append(f"{label}: art file not found '{path.relative_to(ROOT)}'")
+
+    for habitat_id, habitat in sorted(habitats.items()):
+        register_art(str(habitat.get("art", "")), f"habitat {habitat_id}")
+
+        building_ids = habitat.get("buildings", [])
+        if not isinstance(building_ids, list):
+            errors.append(f"habitat {habitat_id}: buildings must be an array")
+            continue
+
+        shipyard_count = 0
+        for building_id_variant in building_ids:
+            building_id = str(building_id_variant)
+            if not building_id:
+                continue
+            prior_habitat = building_owner.get(building_id)
+            if prior_habitat:
+                errors.append(
+                    f"building {building_id}: listed on habitats "
+                    f"'{prior_habitat}' and '{habitat_id}'"
+                )
+            else:
+                building_owner[building_id] = habitat_id
+
+            building = buildings.get(building_id)
+            if not building:
+                continue
+            register_art(str(building.get("art", "")), f"building {building_id}")
+            if str(building.get("type", "")) == "shipyard":
+                shipyard_count += 1
+
+        if shipyard_count != 1:
+            errors.append(
+                f"habitat {habitat_id}: expected exactly one shipyard building, "
+                f"found {shipyard_count}"
+            )
+
+    return errors
+
+
 def collect_interactable_refs(value: object, found: set[str]) -> None:
     if isinstance(value, dict):
         interactable_id = value.get("interactable")
@@ -782,6 +850,7 @@ def collect_interactable_refs(value: object, found: set[str]) -> None:
 def main() -> int:
     sectors = index_by_id(load_array(CATALOG / "sectors.json"))
     habitats = index_by_id(load_array(CATALOG / "habitats.json"))
+    buildings_by_id = index_by_id(load_array(CATALOG / "buildings.json"))
     chassis = index_by_id(load_array(CATALOG / "chassis.json"))
     ships = index_by_id(load_array(CATALOG / "ships.json"))
     interactables = index_by_id(load_array(CATALOG / "interactables.json"))
@@ -1395,6 +1464,7 @@ def main() -> int:
                 f"unspace {unspace_id}: unknown portal interactable '{interactable_id}'"
             )
 
+    errors.extend(check_habitat_building_uniqueness(habitats, buildings_by_id))
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))
     errors.extend(check_world_entity_kinds(worlds))

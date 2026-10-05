@@ -381,6 +381,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		if catalog.get_habitat(world.habitat_id).is_empty():
 			push_error("Save file references unknown habitat '%s'." % world.habitat_id)
 			return false
+		world.building_id = catalog.normalize_docked_building_id(world.habitat_id, world.building_id)
 		if not world.building_id.is_empty() and catalog.get_building(world.building_id).is_empty():
 			push_error("Save file references unknown building '%s'." % world.building_id)
 			return false
@@ -667,6 +668,9 @@ func visit(catalog: Catalog, target_building_id: String) -> bool:
 
 	var habitat := catalog.get_habitat(world.habitat_id)
 	if habitat.is_empty():
+		return false
+
+	if not catalog.habitat_allows_building(habitat, target_building_id):
 		return false
 
 	if target_building_id == world.building_id:

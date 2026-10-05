@@ -51,7 +51,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 | `juno_chassis` | Bayes Inc | medium | Light scout |
 | `silhouette_chassis` | Oklahoma Combine | high | Tactical fighter |
 
-Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at the Workshop before they can undock.
+Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at **Centauri Shipyard** (or the local habitat shipyard elsewhere) before they can undock.
 
 Each chassis references a hull **sprite** path (SVG paint owns colour). Optional **hull_color** is identity metadata, not a runtime sprite tint.
 
@@ -280,7 +280,7 @@ The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are r
 
 | id | Notes |
 |----|-------|
-| `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). Sold at the Habitat Workshop (Transponder tab). |
+| `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). Sold at habitat shipyards (Transponder tab). |
 
 **Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. When broadcasting, any observer with **`local_sensor`** detects the vessel out to sensor range regardless of how quiet the rest of the fit is — that is the point of the beacon. Without `local_sensor`, the beacon does not appear on radar (visual range still applies). Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay when broadcasting.
 
@@ -489,7 +489,7 @@ Ship computer and onboard software monopoly in lore. Flare-ON SK markets "latest
 
 ## Prototype workshop behaviour
 
-At **Habitat Workshop** (`kind: "workshop"`):
+At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 
 - Lists ships with `location` matching current habitat
 - Buy/sell/install/remove modules from unified catalogue

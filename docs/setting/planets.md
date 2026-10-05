@@ -22,7 +22,7 @@ Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharb
 ### Oribtals
 
 Proxima Habitat
-Habitat buildings in game: Terminal, Davidsons (pilot bar), Concord Scouts (used fitted ships), Skyedge Space Ships (unfitted chassis frames), Habitat Workshop (Shipyard), Proxima Exchange. Crews move between buildings on the habitat tram; each hop costs about fifteen minutes of local time.
+Habitat buildings in game: Terminal, Davidsons (pilot bar), Concord Scouts (used fitted ships), Skyedge Space Ships (unfitted chassis frames), Centauri Shipyard, Proxima Exchange. Crews move between buildings on the habitat tram; each hop costs about fifteen minutes of local time.
 
 ### Current orbit (JSON)
 
@@ -48,6 +48,7 @@ Ozero.
 ### Orbitals
 
 Tycho Habitat
+Habitat buildings: Tycho Terminal, Tycho Heavy Yards, Tycho Exchange.
 
 ### Current orbit (JSON)
 
@@ -74,7 +75,7 @@ Notable landmark: Watershed Stadium (Oberon cricket) — from original world cat
 ### Orbitals
 
 La Bella Vista Habitat
-Habitat buildings: La Bella Vista Orbital Terminal, Habitat Workshop.
+Habitat buildings: La Bella Vista Orbital Terminal, Vista Fitting Docks, La Bella Vista Exchange.
 
 ### Current orbit (JSON)
 
@@ -101,6 +102,7 @@ Fairhaven
 ### Orbitals
 
 Irasia Habitat
+Habitat buildings: Irasia Terminal, Irasia Commercial Yards, Irasia Exchange.
 
 ## Tokirev
 
@@ -122,6 +124,7 @@ Kaliningrad
 ### Orbitals
 
 Tokirev Habitat
+Habitat buildings: Tokirev Terminal, Tokirev Automated Yards, Tokirev Exchange.
 
 ## Fennet
 
@@ -143,6 +146,7 @@ Belfast
 ### Orbitals
 
 Fennet Habitat
+Habitat buildings: Fennet Terminal, Fennet Rim Works, Fennet Exchange.
 
 ## Fortuna
 
@@ -164,6 +168,7 @@ Jubilee, New Venice, Bellagio
 ### Orbitals
 
 Fortuna Habitat
+Habitat buildings: Fortuna Terminal, Fortuna Private Yards, Fortuna Exchange.
 
 ## New Carthage
 
@@ -185,6 +190,7 @@ Carthage, New Tyre, Leptis, Utica
 ### Orbitals
 
 New Carthage Habitat
+Habitat buildings: New Carthage Terminal, Carthage Slipways, New Carthage Exchange.
 
 ## Horizon
 
@@ -206,6 +212,7 @@ Horizon, Meridian, Providence, New Geneva, Ascension
 ### Orbitals
 
 Horizon Habitat
+Habitat buildings: Horizon Terminal, Horizon Civic Yards, Horizon Exchange.
 
 ## Titania IX
 
@@ -227,6 +234,7 @@ Titania Central, Skygarden
 ### Orbitals
 
 Titania Habitat
+Habitat buildings: Titania Terminal, Titania Low-G Docks, Titania Exchange.
 
 ## Pelagos
 
@@ -245,5 +253,7 @@ Pelagos is a prosperous world orbiting two suns, with enormous coastal cities an
 Mediran, Twin Cities, New Cambridge
 
 ### Orbitals
-Concordia Habitat, Concordia Orbital Terminal
+
+Concordia Habitat
+Habitat buildings: Concordia Orbital Terminal, Concordia Twin Yards, Concordia Exchange.
 

@@ -389,6 +389,40 @@ func get_habitat_art(habitat: Dictionary) -> String:
 	return str(habitat.get("art", ""))
 
 
+func habitat_allows_building(habitat: Dictionary, building_id: String) -> bool:
+	if habitat.is_empty() or building_id.is_empty():
+		return false
+	for entry in habitat.get("buildings", []):
+		if str(entry) == building_id:
+			return true
+	return false
+
+
+func shipyard_id_for_habitat(habitat: Dictionary) -> String:
+	for entry in habitat.get("buildings", []):
+		var building_id := str(entry)
+		var building := get_building(building_id)
+		if get_building_type(building) == "shipyard":
+			return building_id
+	return ""
+
+
+func normalize_docked_building_id(habitat_id: String, building_id: String) -> String:
+	var habitat := get_habitat(habitat_id)
+	if habitat.is_empty():
+		return building_id
+
+	var resolved := building_id
+	if resolved == "habitat_workshop":
+		resolved = shipyard_id_for_habitat(habitat)
+		if resolved.is_empty():
+			resolved = building_id
+
+	if habitat_allows_building(habitat, resolved):
+		return resolved
+	return str(habitat.get("default_building", ""))
+
+
 func list_commodities() -> Array:
 	return _records_to_dicts(commodities_by_id)
 

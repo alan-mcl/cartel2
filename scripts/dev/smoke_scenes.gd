@@ -28,7 +28,7 @@ func _run() -> void:
 func _smoke_embedded_shipyard(catalog: Catalog) -> void:
 	var session := GameSession.new()
 	_check(session.start_new_game(catalog, "SMOKE-UI", "trader"), "UI session starts")
-	_check(session.visit(catalog, "habitat_workshop"), "UI can select shipyard building")
+	_check(session.visit(catalog, "proxima_shipyard"), "UI can select shipyard building")
 	var stack := ScreenStack.new()
 	root.add_child(stack)
 	var screen := preload("res://scenes/ui/habitat_screen.tscn").instantiate()

@@ -35,7 +35,7 @@ func _build_session() -> GameSession:
 	session.sandbox = true
 	session.docked = true
 	session.habitat_id = SANDBOX_HABITAT_ID
-	session.building_id = "habitat_workshop"
+	session.building_id = "proxima_shipyard"
 	session.callsign = "SBX"
 	session.last_log = "Assembly sandbox ready."
 

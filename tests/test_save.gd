@@ -22,6 +22,7 @@ static func run(runner: TestRunner) -> void:
 	_test_baseline_v2_fixture(runner, catalog)
 	_test_reputation_starts_and_save(runner, catalog)
 	_test_file_round_trip(runner, catalog)
+	_test_legacy_habitat_workshop_building(runner, catalog)
 
 
 static func _build_save(session: GameSession, subsystems: Dictionary = {}) -> Dictionary:
@@ -385,3 +386,26 @@ static func _test_file_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check_eq(loaded_probe.tick_count, 21, "save: file round-trip preserves subsystem state")
 
 	SaveStore.save_dir = original_dir
+
+
+static func _test_legacy_habitat_workshop_building(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	if not session.start_new_game(catalog, "LEG-YARD-1", "entrepreneur"):
+		runner.check(false, "legacy yard: session starts")
+		return
+	runner.check(session.visit(catalog, "proxima_shipyard"), "legacy yard: at proxima shipyard")
+	session.world.building_id = "habitat_workshop"
+	var data := SaveStore.build_save_data(
+		session.player_to_dict(),
+		session.to_dict(),
+		session.ships_to_array(),
+		{},
+		{}
+	)
+	var loaded := GameSession.new()
+	runner.check(loaded.from_save(catalog, data), "legacy yard: save with habitat_workshop loads")
+	runner.check_eq(
+		loaded.building_id,
+		"proxima_shipyard",
+		"legacy yard: habitat_workshop remapped to local shipyard"
+	)

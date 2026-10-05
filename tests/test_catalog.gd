@@ -81,6 +81,45 @@ static func run(runner: TestRunner) -> void:
 	_validate_life_support(runner, catalog)
 	_validate_propulsion(runner, catalog)
 	_validate_combat(runner, catalog)
+	_validate_habitat_buildings(runner, catalog)
+
+
+static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) -> void:
+	var seen_buildings: Dictionary = {}
+	var art_paths: Dictionary = {}
+	var shipyard_count := 0
+
+	for habitat in catalog.list_habitat_dicts():
+		if typeof(habitat) != TYPE_DICTIONARY:
+			continue
+		var habitat_id := str(habitat.get("id", ""))
+		var art := str(habitat.get("art", ""))
+		runner.check(not art.is_empty(), "habitat %s has art" % habitat_id)
+		runner.check(
+			not art_paths.has(art),
+			"habitat %s art path unique" % habitat_id
+		)
+		art_paths[art] = habitat_id
+
+		shipyard_count = 0
+		for building_id_variant in habitat.get("buildings", []):
+			var building_id := str(building_id_variant)
+			runner.check(
+				not seen_buildings.has(building_id),
+				"building %s on one habitat only" % building_id
+			)
+			seen_buildings[building_id] = habitat_id
+			var building := catalog.get_building(building_id)
+			runner.check(not building.is_empty(), "habitat building %s exists" % building_id)
+			var building_art := catalog.get_building_art(building)
+			runner.check(
+				not art_paths.has(building_art),
+				"building %s art path unique" % building_id
+			)
+			art_paths[building_art] = building_id
+			if catalog.get_building_type(building) == "shipyard":
+				shipyard_count += 1
+		runner.check_eq(shipyard_count, 1, "habitat %s has one shipyard" % habitat_id)
 
 
 ## Catalog sizes are content, not contract. Assert a floor so accidental bulk deletion is still

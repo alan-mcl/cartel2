@@ -10,7 +10,7 @@
     "default_building": "proxima_habitat_terminal",
     "buildings": [
       "proxima_habitat_terminal",
-      "habitat_workshop",
+      "proxima_shipyard",
       "skyedge_space_ships",
       "concord_scouts",
       "proxima_exchange",
@@ -24,11 +24,11 @@
     "type": "habitat",
     "description": "Industrial orbital above a restless world. Eclipses and quakes keep the docks busy with ore and parts.",
     "short_desc": "Industrial orbital above a restless, resource-rich world.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/tycho_habitat.png",
     "default_building": "tycho_habitat_terminal",
     "buildings": [
       "tycho_habitat_terminal",
-      "habitat_workshop",
+      "tycho_shipyard",
       "tycho_exchange"
     ]
   },
@@ -39,11 +39,11 @@
     "type": "habitat",
     "description": "Resort orbital city above La Bella Vista's endless oceans.",
     "short_desc": "Resort orbital city above La Bella Vista's endless oceans.",
-    "art": "res://assets/ui/locations/location_placeholder.png",
+    "art": "res://assets/ui/locations/bela_orbital_habitat.png",
     "default_building": "bela_habitat_terminal",
     "buildings": [
       "bela_habitat_terminal",
-      "habitat_workshop",
+      "bela_shipyard",
       "bela_exchange"
     ]
   },
@@ -54,11 +54,11 @@
     "type": "habitat",
     "description": "Busy commercial orbital on a major trade spine. Manufacturing traffic never quite sleeps.",
     "short_desc": "Busy commercial orbital on a major trade spine.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/irasia_habitat.png",
     "default_building": "irasia_habitat_terminal",
     "buildings": [
       "irasia_habitat_terminal",
-      "habitat_workshop",
+      "irasia_shipyard",
       "irasia_exchange"
     ]
   },
@@ -69,11 +69,11 @@
     "type": "habitat",
     "description": "Utilitarian orbital city above a cold factory world. Automated yards fill the skyline.",
     "short_desc": "Utilitarian orbital city above a cold factory world.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/tokirev_habitat.png",
     "default_building": "tokirev_habitat_terminal",
     "buildings": [
       "tokirev_habitat_terminal",
-      "habitat_workshop",
+      "tokirev_shipyard",
       "tokirev_exchange"
     ]
   },
@@ -84,11 +84,11 @@
     "type": "habitat",
     "description": "Rim orbital that grew from a frontier stop into a regional hub. Industry and new money sit side by side.",
     "short_desc": "Rim orbital that grew from a frontier stop into a regional hub.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/fennet_habitat.png",
     "default_building": "fennet_habitat_terminal",
     "buildings": [
       "fennet_habitat_terminal",
-      "habitat_workshop",
+      "fennet_shipyard",
       "fennet_exchange"
     ]
   },
@@ -99,11 +99,11 @@
     "type": "habitat",
     "description": "Polished orbital above a finance world. Banks, exchanges, and luxury suites look down on temperate farmland.",
     "short_desc": "Polished orbital above a finance world.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/fortuna_habitat.png",
     "default_building": "fortuna_habitat_terminal",
     "buildings": [
       "fortuna_habitat_terminal",
-      "habitat_workshop",
+      "fortuna_shipyard",
       "fortuna_exchange"
     ]
   },
@@ -114,11 +114,11 @@
     "type": "habitat",
     "description": "Mercantile orbital above an oceanic shipping hub. Old trading houses still set the tone.",
     "short_desc": "Mercantile orbital above an oceanic mercantile hub.",
-    "art": "res://assets/ui/locations/location_placeholder.png",
+    "art": "res://assets/ui/locations/new_carthage_habitat.png",
     "default_building": "new_carthage_habitat_terminal",
     "buildings": [
       "new_carthage_habitat_terminal",
-      "habitat_workshop",
+      "new_carthage_shipyard",
       "new_carthage_exchange"
     ]
   },
@@ -129,11 +129,11 @@
     "type": "habitat",
     "description": "Spacious orbital above one of the galaxy's great population centres. Green belts show through the cloud.",
     "short_desc": "Spacious orbital above a great population centre.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/horizon_habitat.png",
     "default_building": "horizon_habitat_terminal",
     "buildings": [
       "horizon_habitat_terminal",
-      "habitat_workshop",
+      "horizon_shipyard",
       "horizon_exchange"
     ]
   },
@@ -144,11 +144,11 @@
     "type": "habitat",
     "description": "Low-gravity tourist orbital above Titania IX. Winter sports and spectacular skies sell the view.",
     "short_desc": "Low-gravity tourist orbital above Titania IX.",
-    "art": "res://assets/ui/locations/location_placeholder.png",
+    "art": "res://assets/ui/locations/titania_habitat.png",
     "default_building": "titania_habitat_terminal",
     "buildings": [
       "titania_habitat_terminal",
-      "habitat_workshop",
+      "titania_shipyard",
       "titania_exchange"
     ]
   },
@@ -159,11 +159,11 @@
     "type": "habitat",
     "description": "Commerce and manufacturing orbital above Pelagos. Twin suns make the daylight cycle a local sport.",
     "short_desc": "Commerce and manufacturing orbital above Pelagos.",
-    "art": "res://assets/ui/locations/proxima_habitat.png",
+    "art": "res://assets/ui/locations/concordia_habitat.png",
     "default_building": "concordia_orbital_terminal",
     "buildings": [
       "concordia_orbital_terminal",
-      "habitat_workshop",
+      "concordia_shipyard",
       "concordia_exchange"
     ]
   }

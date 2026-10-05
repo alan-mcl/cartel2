@@ -15,8 +15,6 @@ if str(TOOLS) not in sys.path:
 from catalog_io import CATALOG, index_by_id, load_array, load_object
 
 DEFAULT_HABITAT_SPRITE = "res://assets/world/habitat_proxima.svg"
-DEFAULT_TERMINAL_ART = "res://assets/ui/locations/proxima_terminal.png"
-DEFAULT_EXCHANGE_ART = "res://assets/ui/locations/location_placeholder.png"
 DEFAULT_PLANET_SPRITE = "res://assets/world/planet.png"
 ORBITAL_SPRITE_DIR = Path(__file__).resolve().parents[2] / "assets" / "world" / "orbitals"
 
@@ -123,7 +121,6 @@ def build_bundle(spec: dict) -> dict:
         )
     )
     habitat_short = str(habitat_spec.get("short_desc", habitat_desc))
-    habitat_art = str(habitat_spec.get("art", "res://assets/ui/locations/proxima_habitat.png"))
     habitat_sprite = str(habitat_spec.get("sprite", DEFAULT_HABITAT_SPRITE))
 
     economy = spec.get("economy", spec)
@@ -133,15 +130,19 @@ def build_bundle(spec: dict) -> dict:
     consume = dict(economy.get("consume", {}))
 
     terminal_id = f"{sector_id}_habitat_terminal"
+    shipyard_id = f"{sector_id}_shipyard"
     exchange_id = f"{sector_id}_exchange"
     habitat_id = f"{sector_id}_habitat"
+    habitat_art = str(
+        habitat_spec.get("art", f"res://assets/ui/locations/{habitat_id}.png")
+    )
     dock_interactable_id = f"{sector_id}_habitat"
     gate_interactable_id = f"{sector_id}_jump_gate"
 
     extra_buildings = [
         str(b) for b in spec.get("extra_buildings", []) if str(b)
     ]
-    building_ids = [terminal_id, *extra_buildings, "habitat_workshop", exchange_id]
+    building_ids = [terminal_id, *extra_buildings, shipyard_id, exchange_id]
 
     sector = {
         "id": sector_id,
@@ -227,7 +228,20 @@ def build_bundle(spec: dict) -> dict:
         "kind": "terminal",
         "description": habitat_desc,
         "short_desc": habitat_short,
-        "art": DEFAULT_TERMINAL_ART,
+        "art": f"res://assets/ui/locations/{terminal_id}.png",
+    }
+
+    shipyard = {
+        "id": shipyard_id,
+        "name": f"{habitat_name} Shipyard",
+        "type": "shipyard",
+        "kind": "workshop",
+        "description": (
+            f"Outfitting bays for installing systems on ships docked at {habitat_name}."
+        ),
+        "short_desc": f"Outfitting bays at {habitat_name}.",
+        "art": f"res://assets/ui/locations/{shipyard_id}.png",
+        "services": ["assembly", "parts"],
     }
 
     exchange = {
@@ -237,7 +251,7 @@ def build_bundle(spec: dict) -> dict:
         "kind": "merchant",
         "description": f"Automated commodity exchange for {planet_name} orbital contracts.",
         "short_desc": f"Automated commodity exchange for {planet_name} orbital contracts.",
-        "art": DEFAULT_EXCHANGE_ART,
+        "art": f"res://assets/ui/locations/{exchange_id}.png",
     }
 
     dock_interactable = {
@@ -286,7 +300,7 @@ def build_bundle(spec: dict) -> dict:
         "world": world,
         "economy": economy_record,
         "habitat": habitat,
-        "buildings": [terminal, exchange],
+        "buildings": [terminal, shipyard, exchange],
         "interactables": [dock_interactable, gate_interactable],
         "routes": routes,
         "traffic_override": traffic_override,
