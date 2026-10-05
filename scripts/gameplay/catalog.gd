@@ -22,6 +22,7 @@ const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
+const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
 const ROUTE_TIME_JITTER := 0.08
@@ -48,6 +49,7 @@ var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
 var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
+var sanction_infractions_by_id: Dictionary = {}
 ## Directed translation records keyed by "source_sector:solution".
 var translations_by_key: Dictionary = {}
 ## All directed translations from a sector (unsorted).
@@ -83,6 +85,7 @@ func load_all() -> void:
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
 	passenger_missions_config = _load_json_object(PASSENGER_MISSIONS_PATH)
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
+	_load_sanctions()
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -314,6 +317,10 @@ func get_passenger_missions_config() -> Dictionary:
 
 func get_freight_missions_config() -> Dictionary:
 	return freight_missions_config
+
+
+func get_sanction_infraction(id: String) -> Dictionary:
+	return sanction_infractions_by_id.get(id, {})
 
 
 func list_habitat_dicts() -> Array:
@@ -711,6 +718,27 @@ func _load_backgrounds() -> void:
 		if backgrounds_by_id.has(background_id):
 			push_error("Duplicate background id '%s'." % background_id)
 		backgrounds_by_id[background_id] = entry
+
+
+func _load_sanctions() -> void:
+	sanction_infractions_by_id.clear()
+	var data := _load_json_object(SANCTIONS_PATH)
+	if data.is_empty():
+		return
+	var infractions: Variant = data.get("infractions", [])
+	if typeof(infractions) != TYPE_ARRAY:
+		push_error("sanctions.json must contain an infractions array.")
+		return
+	for entry in infractions:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var infraction_id := str(entry.get("id", ""))
+		if infraction_id.is_empty():
+			push_error("Sanction infraction entry is missing id.")
+			continue
+		if sanction_infractions_by_id.has(infraction_id):
+			push_error("Duplicate sanction infraction id '%s'." % infraction_id)
+		sanction_infractions_by_id[infraction_id] = entry
 
 
 func _load_json_array(path: String) -> Array:

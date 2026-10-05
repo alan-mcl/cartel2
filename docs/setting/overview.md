@@ -19,7 +19,7 @@ Starting backgrounds include **Trader**, **Hotshot**, **Entrepreneur**, **Outlaw
 
 Each pilot carries a **reputation** score: how well known they are among brokers, terminals, and charter desks. Higher is better. Most backgrounds begin at **0** (unknown). The **Outlaw** begins at **5** — a name on the rim from smuggling and merc work, not yet someone institutions book. Rough bands: around **15** a working name, **25–40** recognised, **50** trusted for sealed institutional freight, **75** the sort of pilot officials put on diplomatic parties. An on-time passenger or freight delivery raises reputation by **1**; a late delivery, passengers abandoning a late charter at the wrong habitat, or cancelling at the origin lowers it by **1**. The score never falls below **0**. Some charter types already require a minimum reputation to accept.
 
-That score is separate from **legal standing**. The Outlaw’s outstanding warrant is a future gate on sensitive work (inspectors, military freight, and similar) until a fine is cleared at a habitat legal office — it does not replace reputation.
+That score is separate from **sanctions**: recorded infractions with a monetary fine. Any outstanding sanction blocks launch from a habitat until the pilot pays the total at the terminal. Firing on another ship in settled space adds an unlawful-fire sanction; destroying a ship adds a heavier one. Shots in Unspace are not recorded yet. The **Outlaw** begins with one unlawful-fire sanction and enough cash to pay it and keep d250. Charter desks may later refuse pilots with certain sanctions; that gate is not implemented yet.
 
 ## Worlds
 

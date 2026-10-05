@@ -230,6 +230,7 @@ func start_new_game(
 	var player_data := catalog.get_player()
 	wallet.credits = int(kit.get("credits", wallet.credits))
 	player.reputation = maxi(0, int(kit.get("reputation", 0)))
+	player.seed_sanctions_from_kit(catalog, kit)
 	fleet.owned_ships.clear()
 	player.salvaged_ids.clear()
 	player.inspected_ids.clear()
@@ -680,6 +681,15 @@ func visit(catalog: Catalog, target_building_id: String) -> bool:
 	return true
 
 
+func pay_sanctions(catalog: Catalog) -> bool:
+	var total := player.outstanding_sanction_fine()
+	var ok := player.try_pay_sanctions(wallet, catalog)
+	if ok and total > 0:
+		_publish_credits_changed(-total)
+	changed.emit()
+	return ok
+
+
 func rename_ship(ship_id: String, new_name: String) -> bool:
 	if not world.docked:
 		return false
@@ -706,6 +716,10 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 	var ship := fleet.get_owned_ship(ship_id)
 	if ship == null or ship.location != world.habitat_id:
 		return false
+
+	var sanction_total := player.outstanding_sanction_fine()
+	if sanction_total > 0:
+		return fail_action("Outstanding sanctions (d%d). Pay them before launch." % sanction_total)
 
 	var occupant_count := 1
 	var freight_power := 0.0

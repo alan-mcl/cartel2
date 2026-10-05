@@ -149,22 +149,22 @@ func take_weapon_hit(damage: float, traffic_config: Dictionary) -> void:
 	take_combat_hit("ballistic", {"kinetic": damage}, traffic_config)
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config: Dictionary) -> void:
+func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config: Dictionary) -> Dictionary:
 	if ai_state == AiState.DESTROYED:
-		return
+		return {"intercepted": false, "hull_damage": 0.0}
 	if combat_state == null:
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
 
 	var result := ShipCombat.resolve_hit(assembled_ship, combat_state, delivery_type, packets)
 	if bool(result.get("intercepted", false)):
-		return
+		return result
 
 	hull_current = combat_state.hull_current
 	hull_max = combat_state.hull_max
 
 	if hull_current <= 0.0:
 		ai_state = AiState.DESTROYED
-		return
+		return result
 
 	if ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
 		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or should_engage(traffic_config):
@@ -173,6 +173,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 			begin_combat_pilot()
 		else:
 			begin_flee(traffic_config)
+	return result
 
 
 func begin_flee(traffic_config: Dictionary) -> void:

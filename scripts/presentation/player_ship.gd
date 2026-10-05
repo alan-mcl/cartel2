@@ -176,11 +176,12 @@ func _update_operating_warnings(session: GameSession, firing: bool = false) -> v
 		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
+func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	if session == null or catalog == null or assembled_ship == null:
-		return
-	session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
+		return {}
+	var result := session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
 	_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+	return result
 
 
 func take_weapon_hit(damage: float) -> void:

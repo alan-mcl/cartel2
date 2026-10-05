@@ -1,0 +1,16 @@
+{
+  "infractions": [
+    {
+      "id": "unlawful_fire",
+      "name": "Unlawful fire",
+      "description": "Fired on a ship in settled space.",
+      "fine": 500
+    },
+    {
+      "id": "ship_destroyed",
+      "name": "Ship destroyed",
+      "description": "Destroyed a ship in settled space.",
+      "fine": 2500
+    }
+  ]
+}

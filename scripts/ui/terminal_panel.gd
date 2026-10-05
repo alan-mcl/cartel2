@@ -345,29 +345,47 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			var reserves := missions.committed_freight_reserves_for_ship(ship.id)
 			freight_power = float(reserves.get("power", 0.0))
 			freight_compute = float(reserves.get("compute", 0.0))
-	var blockers := ShipAssembly.undock_blockers(
-		_context.catalog,
-		ship,
-		occupant_count,
-		freight_power,
-		freight_compute
-	)
-	if blockers.is_empty():
-		var cleared := Label.new()
-		cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		cleared.text = "All checks green - cleared for launch."
-		admin.add_child(cleared)
-
-		var launch := Button.new()
-		launch.text = "Launch"
-		launch.pressed.connect(_on_undock_ship.bind(ship.id))
-		admin.add_child(launch)
+	var sanction_total := Sanctions.total_fine(_context.session.player.sanctions)
+	if sanction_total > 0:
+		for entry_variant in _context.session.player.sanctions:
+			if typeof(entry_variant) != TYPE_DICTIONARY:
+				continue
+			var entry: Dictionary = entry_variant
+			var infraction_id := str(entry.get("infraction_id", ""))
+			var label := Sanctions.infraction_label(_context.catalog, infraction_id)
+			var fine := int(entry.get("fine", 0))
+			var line := Label.new()
+			line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			line.text = "%s — d%d" % [label, fine]
+			admin.add_child(line)
+		var pay := Button.new()
+		pay.text = "Pay sanctions (d%d)" % sanction_total
+		pay.pressed.connect(_on_pay_sanctions_pressed)
+		admin.add_child(pay)
 	else:
-		for reason in blockers:
-			var hint := Label.new()
-			hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			hint.text = reason
-			admin.add_child(hint)
+		var blockers := ShipAssembly.undock_blockers(
+			_context.catalog,
+			ship,
+			occupant_count,
+			freight_power,
+			freight_compute
+		)
+		if blockers.is_empty():
+			var cleared := Label.new()
+			cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			cleared.text = "All checks green - cleared for launch."
+			admin.add_child(cleared)
+
+			var launch := Button.new()
+			launch.text = "Launch"
+			launch.pressed.connect(_on_undock_ship.bind(ship.id))
+			admin.add_child(launch)
+		else:
+			for reason in blockers:
+				var hint := Label.new()
+				hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				hint.text = reason
+				admin.add_child(hint)
 
 	var refuel_quote := ShipAssembly.refuel_quote(_context.session, _context.catalog, ship.id)
 	var refuel := Button.new()
@@ -421,6 +439,13 @@ func _on_rename_ship_submitted(new_name: String) -> void:
 	if index >= 0 and _terminal_ship_item_list != null:
 		_terminal_ship_item_list.set_item_text(index, new_name.strip_edges())
 	call_deferred("_rebuild_terminal_ship_panels")
+
+
+func _on_pay_sanctions_pressed() -> void:
+	if _context == null or _context.session == null or _context.catalog == null:
+		return
+	_context.session.pay_sanctions(_context.catalog)
+	refresh()
 
 
 func _on_undock_ship(ship_id: String) -> void:

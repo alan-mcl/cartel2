@@ -206,7 +206,7 @@
       "id": "trader",
       "name": "Trader",
       "description": "A respected free trader between star systems.",
-      "background": "You have been working as a mover of goods and cargo for a few years now, running the 4-space routes between the core systems. It got boring, and you're ready to try some riskier routes for the promise of greater profit.",
+      "background": "You have been working as a mover of goods and cargo for a few years now, running the 4-space commodity routes between the core systems. It got boring, and you're ready to try something riskier for the promise of greater profit.",
       "starting_location": "Proxima Habitat, heart of commerce.",
       "ship": "Your trusty Pegasus P101 is fitted for cargo hauling.",
       "money": "d5220 in combined savings.",
@@ -348,7 +348,7 @@
       "id": "entrepreneur",
       "name": "Entrepreneur",
       "description": "A self-made businessman planning to buy a new ship.",
-      "background": "Your last startup was a mixed success but you managed to exit with a small profit. Always on the lookout for an opportunity, you reckon that now might be a good time to get into the aeronautics industry.",
+      "background": "Your last startup was a mixed success but you managed to exit with a small profit. Always on the lookout for an opportunity, you reckon that now might be a good time to get into the shipping industry.",
       "starting_location": "Proxima Habitat.",
       "ship": "None, but a hull is at the top of your shopping list.",
       "money": "d32000 left from your last venture.",
@@ -361,13 +361,16 @@
     {
       "id": "outlaw",
       "name": "Outlaw",
-      "description": "A known trouble maker with an outstanding arrest warrant.",
-      "background": "Several years experience of smuggling, merc work and bounty hunting on the rim paid your bills. The last job wasn't a success however, and you need a sure thing next up to stay afloat.",
+      "description": "A known trouble maker grounded at Tycho until an unlawful-fire sanction is paid.",
+      "background": "Several years experience of smuggling, merc work and bounty hunting on the rim paid your bills. The last job wasn't a success, and you need a sure thing next up to stay afloat.",
       "starting_location": "Tycho Habitat.",
       "ship": "You pilot a battle scarred Wolff Warrior.",
-      "money": "Down on your luck, you've got d250 in your back pocket.",
-      "credits": 250,
+      "money": "d750, which should just about cover the sanction you picked up on the way in.",
+      "credits": 750,
       "reputation": 5,
+      "sanctions": [
+        "unlawful_fire"
+      ],
       "habitat_id": "tycho_habitat",
       "spare_parts": {},
       "ships": [

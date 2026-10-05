@@ -6,6 +6,8 @@ var portrait_path: String = ""
 var background_id: String = ""
 ## How well known the pilot is; higher is better. Seeded from the starting background kit.
 var reputation: int = 0
+## Outstanding infractions: `{ "id", "infraction_id", "fine", "target_id" }`.
+var sanctions: Array = []
 var objective: String = "Explore Proxima near orbit"
 var last_log: String = "Flare-ON SS ready. Thrusters online."
 var sandbox: bool = false
@@ -22,6 +24,7 @@ func player_to_dict() -> Dictionary:
 		"portrait": portrait_path,
 		"background_id": background_id,
 		"reputation": reputation,
+		"sanctions": _sanctions_to_save(sanctions),
 	}
 
 
@@ -33,6 +36,7 @@ func load_player_dict(data: Dictionary) -> void:
 		reputation = maxi(0, int(data.get("reputation", 0)))
 	else:
 		reputation = 5 if background_id == "outlaw" else 0
+	sanctions = _sanctions_from_variant(data.get("sanctions", []))
 
 
 ## Adds `delta` to reputation, never below 0. Returns the amount actually applied.
@@ -42,6 +46,36 @@ func adjust_reputation(delta: int) -> int:
 	var before := reputation
 	reputation = maxi(0, reputation + delta)
 	return reputation - before
+
+
+func _sanctions_lib() -> GDScript:
+	return load("res://scripts/gameplay/sanctions.gd") as GDScript
+
+
+func seed_sanctions_from_kit(catalog: Catalog, kit: Dictionary) -> void:
+	sanctions.clear()
+	var kit_sanctions: Variant = kit.get("sanctions", [])
+	if typeof(kit_sanctions) != TYPE_ARRAY:
+		return
+	var lib := _sanctions_lib()
+	for infraction_variant in kit_sanctions:
+		lib.add_from_infraction(self, catalog, str(infraction_variant), "")
+
+
+func outstanding_sanction_fine() -> int:
+	return int(_sanctions_lib().total_fine(sanctions))
+
+
+func try_pay_sanctions(wallet: Wallet, _catalog: Catalog) -> bool:
+	var total := outstanding_sanction_fine()
+	if total <= 0:
+		return true
+	if wallet == null or not wallet.try_spend(total):
+		last_log = "Not enough credits to pay sanctions (d%d)." % total
+		return false
+	sanctions.clear()
+	last_log = "Sanctions paid. -d%d." % total
+	return true
 
 
 func to_session_dict() -> Dictionary:
@@ -142,3 +176,44 @@ static func _string_array_from_variant(value: Variant) -> Array[String]:
 	for item in value:
 		result.append(str(item))
 	return result
+
+
+static func _sanctions_to_save(entries: Array) -> Array:
+	var out: Array = []
+	for entry_variant in entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var infraction_id := str(entry.get("infraction_id", ""))
+		if infraction_id.is_empty():
+			continue
+		out.append({
+			"id": str(entry.get("id", "")),
+			"infraction_id": infraction_id,
+			"fine": maxi(0, int(entry.get("fine", 0))),
+			"target_id": str(entry.get("target_id", "")),
+		})
+	return out
+
+
+static func _sanctions_from_variant(value: Variant) -> Array:
+	var out: Array = []
+	if typeof(value) != TYPE_ARRAY:
+		return out
+	for entry_variant in value:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var infraction_id := str(entry.get("infraction_id", ""))
+		if infraction_id.is_empty():
+			continue
+		var sanction_id := str(entry.get("id", ""))
+		if sanction_id.is_empty():
+			sanction_id = "san_%d" % (out.size() + 1)
+		out.append({
+			"id": sanction_id,
+			"infraction_id": infraction_id,
+			"fine": maxi(0, int(entry.get("fine", 0))),
+			"target_id": str(entry.get("target_id", "")),
+		})
+	return out

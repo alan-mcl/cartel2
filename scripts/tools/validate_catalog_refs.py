@@ -471,6 +471,31 @@ def check_commodities(commodities: list) -> list[str]:
     return errors
 
 
+def check_sanctions(doc: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("sanctions.json must be an object")
+        return errors
+    infraction_ids: set[str] = set()
+    for entry in doc.get("infractions", []):
+        if not isinstance(entry, dict):
+            errors.append("sanctions.json: infraction entry must be object")
+            continue
+        infraction_id = str(entry.get("id", ""))
+        if not infraction_id:
+            errors.append("sanctions.json: infraction missing id")
+            continue
+        if infraction_id in infraction_ids:
+            errors.append(f"sanctions.json: duplicate infraction id '{infraction_id}'")
+        infraction_ids.add(infraction_id)
+        fine = entry.get("fine")
+        if fine is None:
+            errors.append(f"sanctions infraction {infraction_id}: missing fine")
+        elif int(fine) < 0:
+            errors.append(f"sanctions infraction {infraction_id}: fine must be non-negative")
+    return errors
+
+
 def check_passenger_missions(doc: object) -> list[str]:
     errors: list[str] = []
     if not isinstance(doc, dict):
@@ -770,11 +795,13 @@ def main() -> int:
     traffic = load_object(CATALOG / "traffic.json")
     passenger_missions = load_object(CATALOG / "passenger_missions.json")
     freight_missions = load_object(CATALOG / "freight_missions.json")
+    sanctions_doc = load_object(CATALOG / "sanctions.json")
     commodities = load_array(CATALOG / "commodities.json")
     commodities_by_id = index_by_id(commodities)
 
     errors: list[str] = []
 
+    errors.extend(check_sanctions(sanctions_doc))
     errors.extend(check_commodities(commodities))
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))
@@ -806,6 +833,22 @@ def main() -> int:
         rep = background.get("reputation")
         if rep is not None and int(rep) < 0:
             errors.append(f"background {background_id}: reputation must be non-negative")
+
+        kit_sanctions = background.get("sanctions", [])
+        if kit_sanctions is not None:
+            if not isinstance(kit_sanctions, list):
+                errors.append(f"background {background_id}: sanctions must be an array")
+            else:
+                infraction_ids = {
+                    str(entry.get("id", ""))
+                    for entry in sanctions_doc.get("infractions", [])
+                    if isinstance(entry, dict)
+                }
+                for infraction_id in kit_sanctions:
+                    if str(infraction_id) not in infraction_ids:
+                        errors.append(
+                            f"background {background_id}: unknown sanction '{infraction_id}'"
+                        )
 
         habitat_id = str(background.get("habitat_id", ""))
         if habitat_id and habitat_id not in habitats:

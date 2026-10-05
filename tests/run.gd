@@ -8,6 +8,7 @@ func _init() -> void:
 	TestSession.run(runner)
 	TestTranslation.run(runner)
 	TestSave.run(runner)
+	TestSanctions.run(runner)
 	TestAssembler.run(runner)
 	TestCombat.run(runner)
 	TestSensors.run(runner)

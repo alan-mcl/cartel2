@@ -44,10 +44,10 @@ func take_weapon_hit(damage: float) -> void:
 	take_combat_hit("ballistic", {"kinetic": damage})
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary) -> void:
+func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	if actor == null or catalog == null:
-		return
-	actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
+		return {}
+	return actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
 
 
 func apply_hull_damage_visual(health_ratio: float) -> void:
