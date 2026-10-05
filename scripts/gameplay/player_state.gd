@@ -4,6 +4,8 @@ extends RefCounted
 var callsign: String = ""
 var portrait_path: String = ""
 var background_id: String = ""
+## How well known the pilot is; higher is better. Seeded from the starting background kit.
+var reputation: int = 0
 var objective: String = "Explore Proxima near orbit"
 var last_log: String = "Flare-ON SS ready. Thrusters online."
 var sandbox: bool = false
@@ -19,6 +21,7 @@ func player_to_dict() -> Dictionary:
 		"callsign": callsign,
 		"portrait": portrait_path,
 		"background_id": background_id,
+		"reputation": reputation,
 	}
 
 
@@ -26,6 +29,10 @@ func load_player_dict(data: Dictionary) -> void:
 	callsign = str(data.get("callsign", ""))
 	portrait_path = str(data.get("portrait", ""))
 	background_id = str(data.get("background_id", ""))
+	if data.has("reputation"):
+		reputation = maxi(0, int(data.get("reputation", 0)))
+	else:
+		reputation = 5 if background_id == "outlaw" else 0
 
 
 func to_session_dict() -> Dictionary:

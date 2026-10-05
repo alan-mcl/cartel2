@@ -8,6 +8,10 @@ Routine habitat-to-habitat passages sold at orbital **terminals** (posted depart
 
 Role titles, comfort requirements, blurbs, and pay tuning live in `data/catalog/passenger_missions.json`. Terminal boards may post **multi-hop** routes (up to catalog `max_hops` on the public route graph); bar fares stay one hop. Multi-hop passenger contracts require **habitat** life support (`ls_habitat`) so the party can live aboard between jumps. Each offer includes a **deadline** in GST hours: per-hop **entry and exit** jump-gate translation (matching route mappings), catalog **orbit time** per hop while GST runs in-sector, plus extra slack. Pay on delivery at the destination if the pilot arrives on time; a late arrival withholds pay and charges the cancellation fee. Passengers who miss the deadline while docked anywhere other than the destination leave the charter and pay that same fee. Charter penalties may overdraw credits; ordinary purchases cannot.
 
+Some passenger **roles** require a minimum pilot **reputation** (touring performers, influencer parties, security consultants, diplomatic parties). The terminal shows the threshold on the offer tile; the pilot cannot accept until their score meets it. Corporate principals still expect affiliation with the posting corporation (standing not implemented yet).
+
+Some **freight** cargo types use the same gate (bonded luxury, prototypes, race animals, museum objects under seal). Legal penalties on the pilot record will be a separate future gate.
+
 Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances.
 
 ## Freight charters

@@ -522,6 +522,11 @@ def check_passenger_missions(doc: object) -> list[str]:
                 errors.append(
                     f"passenger_missions role {role_id}: affiliation gate requires corporate"
                 )
+        min_rep = role.get("min_reputation")
+        if min_rep is not None and int(min_rep) < 0:
+            errors.append(
+                f"passenger_missions role {role_id}: min_reputation must be non-negative"
+            )
         boards = role.get("boards", ["terminal"])
         if not isinstance(boards, list) or not boards:
             errors.append(f"passenger_missions role {role_id}: boards must be a non-empty array")
@@ -634,6 +639,12 @@ def check_freight_missions(doc: object, commodities: dict[str, dict]) -> list[st
                         errors.append(
                             f"freight_missions cargo {cargo_id}: invalid capability '{cap_id}'"
                         )
+
+        min_rep = cargo.get("min_reputation")
+        if min_rep is not None and int(min_rep) < 0:
+            errors.append(
+                f"freight_missions cargo {cargo_id}: min_reputation must be non-negative"
+            )
 
     for entry in doc.get("descriptions", []):
         if not isinstance(entry, dict):
@@ -791,6 +802,10 @@ def main() -> int:
         if background_id in background_ids:
             errors.append(f"backgrounds.json: duplicate background id '{background_id}'")
         background_ids.add(background_id)
+
+        rep = background.get("reputation")
+        if rep is not None and int(rep) < 0:
+            errors.append(f"background {background_id}: reputation must be non-negative")
 
         habitat_id = str(background.get("habitat_id", ""))
         if habitat_id and habitat_id not in habitats:

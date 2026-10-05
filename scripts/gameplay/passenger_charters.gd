@@ -445,6 +445,7 @@ static func generate_offers(
 			"quantity": quantity,
 			"pay_multiplier": pay_multiplier,
 			"requires_player_affiliation": bool(role.get("requires_player_affiliation", false)),
+			"min_reputation": maxi(0, int(role.get("min_reputation", 0))),
 			"corporation_id": corporation_id,
 			"corporation_name": corporation_name,
 			"description": description,
@@ -487,5 +488,13 @@ static func evaluate_offer_for_ship(
 		var corp_id := str(offer.get("corporation_id", ""))
 		if not PlayerAffiliation.is_affiliated(session, corp_id):
 			return {"ok": false, "reason": "Requires affiliation with %s." % offer.get("corporation_name", corp_id)}
+
+	var min_reputation := int(offer.get("min_reputation", 0))
+	if min_reputation > 0 and session.player.reputation < min_reputation:
+		return {
+			"ok": false,
+			"reason": "Requires reputation %d (yours is %d)."
+			% [min_reputation, session.player.reputation],
+		}
 
 	return {"ok": true, "reason": ""}

@@ -212,6 +212,7 @@ static func generate_offers(
 			"compute_demand": compute_cu,
 			"power_demand": power_mw,
 			"pay_multiplier": pay_multiplier,
+			"min_reputation": maxi(0, int(cargo.get("min_reputation", 0))),
 			"description": description,
 			"hold_label": hold_requirement_phrase(caps),
 			"reward": reward,
@@ -279,6 +280,14 @@ static func evaluate_offer_for_ship(
 	var spare_power := idle.power_available - idle.power_requested - committed_power
 	if offer_power > spare_power + 0.001:
 		return {"ok": false, "reason": "Not enough spare power for this lot."}
+
+	var min_reputation := int(offer.get("min_reputation", 0))
+	if min_reputation > 0 and session.player.reputation < min_reputation:
+		return {
+			"ok": false,
+			"reason": "Requires reputation %d (yours is %d)."
+			% [min_reputation, session.player.reputation],
+		}
 
 	return {"ok": true, "reason": ""}
 

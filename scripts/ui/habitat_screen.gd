@@ -9,6 +9,7 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 @onready var _portrait: TextureRect = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/Portrait
 @onready var _pilot: Label = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/Pilot
 @onready var _credits: Label = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/Credits
+@onready var _reputation: Label = $Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/Reputation
 @onready var _gst_clock: Label = $Layout/Header/HeaderSplit/PilotColumn/GstClockLabel
 @onready var _habitat_art_host: VBoxContainer = $Layout/Header/HeaderSplit/HeaderRight/HabitatArtHost
 @onready var _building_item_list: ItemList = $Layout/Body/Split/Left/BuildingItemList
@@ -57,6 +58,7 @@ func refresh() -> void:
 	_pilot.text = '"%s"' % _context.session.callsign
 	_update_portrait(_context.session.portrait_path)
 	_credits.text = "Wallet: d%d" % _context.session.credits
+	_reputation.text = "Reputation: %d" % _context.session.player.reputation
 	_update_habitat_header(habitat)
 	_sync_log()
 

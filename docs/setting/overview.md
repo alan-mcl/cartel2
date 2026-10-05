@@ -17,6 +17,10 @@ The first Old Earth colonists arrived in orbit around Proxima on sublight sleepe
 At New Game the player chooses a callsign, a portrait, and a background. A background is a starting location and possessions, usually including a ship and some liquid funds.
 Starting backgrounds include **Trader**, **Hotshot**, **Entrepreneur**, **Outlaw**, and **Soldier**.
 
+Each pilot carries a **reputation** score: how well known they are among brokers, terminals, and charter desks. Higher is better. Most backgrounds begin at **0** (unknown). The **Outlaw** begins at **5** — a name on the rim from smuggling and merc work, not yet someone institutions book. Rough bands for later play: around **15** a working name, **25–40** recognised, **50** trusted for sealed institutional freight, **75** the sort of pilot officials put on diplomatic parties. Gaining and losing reputation is not implemented yet; some charter types already require a minimum.
+
+That score is separate from **legal standing**. The Outlaw’s outstanding warrant is a future gate on sensitive work (inspectors, military freight, and similar) until a fine is cleared at a habitat legal office — it does not replace reputation.
+
 ## Worlds
 
 Eleven inhabited systems. Each has an orbital habitat where ships dock, trade, and take work.

@@ -193,7 +193,8 @@
       "quantity_min": 1,
       "quantity_max": 5,
       "pay_multiplier": 2.1,
-      "requires_player_affiliation": false
+      "requires_player_affiliation": false,
+      "min_reputation": 75
     },
     {
       "id": "retirees",
@@ -233,7 +234,8 @@
       "quantity_min": 2,
       "quantity_max": 6,
       "pay_multiplier": 1.2,
-      "requires_player_affiliation": false
+      "requires_player_affiliation": false,
+      "min_reputation": 15
     },
     {
       "id": "prospectors",
@@ -327,7 +329,8 @@
       "quantity_min": 1,
       "quantity_max": 3,
       "pay_multiplier": 1.45,
-      "requires_player_affiliation": false
+      "requires_player_affiliation": false,
+      "min_reputation": 25
     },
     {
       "id": "journalists",
@@ -920,7 +923,8 @@
       "quantity_min": 1,
       "quantity_max": 4,
       "pay_multiplier": 1.45,
-      "requires_player_affiliation": false
+      "requires_player_affiliation": false,
+      "min_reputation": 40
     },
     {
       "id": "salvage_crews",

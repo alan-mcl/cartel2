@@ -10,6 +10,7 @@
       "ship": "Every catalog template is parked here for fitting tests.",
       "money": "d3000 and a spare GI-HT-18 in the parts locker.",
       "credits": 3000,
+      "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {
         "gi_ht_18": 1
@@ -210,6 +211,7 @@
       "ship": "Your trusty Pegasus P101 is fitted for cargo hauling.",
       "money": "d5220 in combined savings.",
       "credits": 5220,
+      "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {},
       "ships": [
@@ -285,6 +287,7 @@
       "ship": "Daddy bought you a Flare-ON SS for your last birthday.",
       "money": "Your irate folks have frozen your accounts, but you have d3000 in a wallet they didn't know about.",
       "credits": 3000,
+      "reputation": 0,
       "habitat_id": "bela_orbital_habitat",
       "spare_parts": {},
       "ships": [
@@ -350,6 +353,7 @@
       "ship": "None, but a hull is at the top of your shopping list.",
       "money": "d32000 left from your last venture.",
       "credits": 32000,
+      "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {},
       "ships": []
@@ -363,6 +367,7 @@
       "ship": "You pilot a battle scarred Wolff Warrior.",
       "money": "Down on your luck, you've got d250 in your back pocket.",
       "credits": 250,
+      "reputation": 5,
       "habitat_id": "tycho_habitat",
       "spare_parts": {},
       "ships": [
@@ -383,6 +388,7 @@
       "ship": "Your savings have bought you a battered but sound Juno 1088, rather a step down from the Dragon you used to pilot.",
       "money": "After the ship you have d2000 left.",
       "credits": 2000,
+      "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {},
       "ships": [

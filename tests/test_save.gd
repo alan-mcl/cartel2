@@ -20,6 +20,7 @@ static func run(runner: TestRunner) -> void:
 	_test_legacy_cargo_migration(runner, catalog)
 	_test_subsystems_envelope(runner, catalog)
 	_test_baseline_v2_fixture(runner, catalog)
+	_test_reputation_starts_and_save(runner, catalog)
 	_test_file_round_trip(runner, catalog)
 
 
@@ -42,6 +43,7 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 
 	# Dirty every section so defaults cannot mask a dropped field.
 	session.credits = 4242
+	session.player.reputation = 42
 	session.objective = "Round-trip objective"
 	session.last_log = "Round-trip log"
 	session.salvaged_ids = ["wreck_a", "wreck_b"]
@@ -77,6 +79,7 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(loaded.from_save(catalog, data), "save: round-trip loads")
 
 	runner.check_eq(loaded.credits, 4242, "save: credits survive")
+	runner.check_eq(loaded.player.reputation, 42, "save: reputation survives")
 	runner.check_eq(loaded.objective, "Round-trip objective", "save: objective survives")
 	runner.check_eq(loaded.last_log, "Round-trip log", "save: last_log survives")
 	runner.check_eq(loaded.sector_id, session.sector_id, "save: sector survives")
@@ -153,6 +156,8 @@ static func _test_identity_round_trip(runner: TestRunner, catalog: Catalog) -> v
 	runner.check_eq(loaded.callsign, "IDENT-1", "save: callsign survives")
 	runner.check_eq(loaded.portrait_path, "res://portrait_outlaw.png", "save: portrait survives")
 	runner.check_eq(loaded.background_id, "outlaw", "save: background_id survives")
+	runner.check_eq(loaded.player.reputation, 5, "save: outlaw reputation survives")
+	runner.check_eq(session.player.reputation, 5, "save: outlaw reputation on new game")
 
 	# The slot browser reads the player section directly rather than building a session.
 	var player: Dictionary = _build_save(session).get("player", {})
@@ -162,6 +167,25 @@ static func _test_identity_round_trip(runner: TestRunner, catalog: Catalog) -> v
 		"res://portrait_outlaw.png",
 		"save: slot metadata portrait"
 	)
+	runner.check_eq(int(player.get("reputation", -1)), 5, "save: slot metadata reputation")
+
+
+static func _test_reputation_starts_and_save(runner: TestRunner, catalog: Catalog) -> void:
+	var trader := GameSession.new()
+	runner.check(trader.start_new_game(catalog, "REP-T", "trader"), "save: trader starts for reputation")
+	runner.check_eq(trader.player.reputation, 0, "save: trader reputation zero")
+
+	var outlaw := GameSession.new()
+	runner.check(outlaw.start_new_game(catalog, "REP-O", "outlaw"), "save: outlaw starts for reputation")
+	runner.check_eq(outlaw.player.reputation, 5, "save: outlaw reputation five")
+
+	var legacy_player := PlayerState.new()
+	legacy_player.load_player_dict({
+		"callsign": "LEG-REP",
+		"portrait": "",
+		"background_id": "outlaw",
+	})
+	runner.check_eq(legacy_player.reputation, 5, "save: legacy outlaw defaults reputation to five")
 
 
 ## The version gate reports rejections with `push_error`, so a passing run of this suite prints
@@ -308,6 +332,7 @@ static func _test_baseline_v2_fixture(runner: TestRunner, catalog: Catalog) -> v
 	var loaded := GameSession.new()
 	runner.check(loaded.from_save(catalog, fixture), "save: baseline v2 fixture loads")
 	runner.check_eq(loaded.callsign, "BASELINE-1", "save: baseline fixture identity survives")
+	runner.check_eq(loaded.player.reputation, 0, "save: baseline fixture reputation defaults to zero")
 	runner.check_eq(loaded.get_spare_part_count("generic_part"), 2, "save: baseline fixture state survives")
 	runner.check_eq(loaded.get_current_owned_ship().get_cargo_count("food_products"), 2, "save: baseline fixture cargo survives")
 

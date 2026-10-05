@@ -229,6 +229,7 @@ func start_new_game(
 
 	var player_data := catalog.get_player()
 	wallet.credits = int(kit.get("credits", wallet.credits))
+	player.reputation = maxi(0, int(kit.get("reputation", 0)))
 	fleet.owned_ships.clear()
 	player.salvaged_ids.clear()
 	player.inspected_ids.clear()

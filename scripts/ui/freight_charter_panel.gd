@@ -92,6 +92,9 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 	if not timing.is_empty():
 		inner.add_child(_one_line_label(timing, &"Muted"))
 	inner.add_child(_one_line_label(str(offer.get("hold_label", "Dry hold")), &"Muted"))
+	var reputation_line := _reputation_requirement_line(offer)
+	if not reputation_line.is_empty():
+		inner.add_child(_one_line_label(reputation_line, &"Muted"))
 
 	var ship_id := _active_ship_id()
 	var check := missions.evaluate_freight_offer(
@@ -111,15 +114,15 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 	)
 	inner.add_child(accept)
 
-	var tooltip := _tile_tooltip_from_lines(
-		[
-			str(offer.get("description", "")),
-			meta,
-			_budget_line(offer),
-			str(offer.get("hold_label", "Dry hold")),
-		],
-		str(check.get("reason", ""))
-	)
+	var tooltip_lines: Array[String] = [
+		str(offer.get("description", "")),
+		meta,
+		_budget_line(offer),
+		str(offer.get("hold_label", "Dry hold")),
+	]
+	if not reputation_line.is_empty():
+		tooltip_lines.append(reputation_line)
+	var tooltip := _tile_tooltip_from_lines(tooltip_lines, str(check.get("reason", "")))
 	return _surface_tile(inner, tooltip)
 
 
@@ -194,6 +197,13 @@ func _accepted_meta_line(charter: Dictionary, origin: String, ship_name: String)
 		ship_name,
 		int(charter.get("reward", 0)),
 	]
+
+
+func _reputation_requirement_line(entry: Dictionary) -> String:
+	var minimum := int(entry.get("min_reputation", 0))
+	if minimum <= 0:
+		return ""
+	return "Requires reputation %d" % minimum
 
 
 func _budget_line(entry: Dictionary) -> String:

@@ -13,6 +13,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cognition_compute_cap(runner, catalog)
 	_test_cancel_at_origin(runner, catalog)
 	_test_dock_pays_and_clears(runner, catalog)
+	_test_reputation_gate(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -338,3 +339,26 @@ static func _test_dock_pays_and_clears(runner: TestRunner, catalog: Catalog) -> 
 	runner.check(session.dock(catalog, "bela_orbital_habitat"), "freight: dock at destination")
 	runner.check(missions.list_freight_accepted().is_empty(), "freight: dock clears contract")
 	runner.check(session.credits >= credits_before + reward, "freight: dock pays reward")
+
+
+static func _test_reputation_gate(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "FRT-REP")
+	var ship := session.get_cargo_ship()
+	if ship == null:
+		runner.check(false, "freight: cargo ship for reputation gate")
+		return
+	const MIN_REP := 50
+	var offer := {
+		"quantity": 0,
+		"tonnes": 0.0,
+		"requires_capabilities": [],
+		"life_support_seats": 0,
+		"compute_demand": 0.0,
+		"power_demand": 0.0,
+		"min_reputation": MIN_REP,
+	}
+	var check := FreightCharters.evaluate_offer_for_ship(session, catalog, offer, ship.id, {})
+	runner.check(not bool(check.get("ok", false)), "freight: reputation gate blocks default pilot")
+	session.player.reputation = MIN_REP
+	check = FreightCharters.evaluate_offer_for_ship(session, catalog, offer, ship.id, {})
+	runner.check(bool(check.get("ok", false)), "freight: reputation gate passes at minimum")

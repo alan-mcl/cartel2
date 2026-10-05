@@ -141,6 +141,8 @@ func _update_background_detail() -> void:
 	if not str(kit.get("money", "")).is_empty():
 		lines.append("")
 		lines.append("Funds: "+str(kit.get("money", "")))
+	lines.append("")
+	lines.append("Reputation: %d" % int(kit.get("reputation", 0)))
 	_detail_label.text = "\n".join(lines)
 
 

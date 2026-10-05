@@ -63,6 +63,11 @@ layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Wallet: d0"
 
+[node name="Reputation" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Reputation: 0"
+
 [node name="GstClockLabel" parent="Layout/Header/HeaderSplit/PilotColumn" instance=ExtResource("2")]
 layout_mode = 2
 size_flags_horizontal = 3

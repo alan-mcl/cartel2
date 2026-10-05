@@ -13,6 +13,7 @@ static func run(runner: TestRunner) -> void:
 	_test_run_seed_varies_boards(runner, catalog)
 	_test_reward_scales_with_friction(runner, catalog)
 	_test_affiliation_gate_blocks(runner, catalog)
+	_test_reputation_gate(runner, catalog)
 	_test_cancel_before_departure(runner, catalog)
 	_test_cancel_after_undock_fails(runner, catalog)
 	_test_dock_completion_pays(runner, catalog)
@@ -239,6 +240,27 @@ static func _test_reward_scales_with_friction(runner: TestRunner, catalog: Catal
 	var low := PassengerCharters.compute_reward(cfg, 4, 1.0, 15)
 	var high := PassengerCharters.compute_reward(cfg, 4, 1.0, 75)
 	runner.check(high > low, "missions: higher friction pays more")
+
+
+static func _test_reputation_gate(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "MIS-REP", "outlaw"), "missions: outlaw session for reputation")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		runner.check(false, "missions: outlaw ship for reputation gate")
+		return
+	const MIN_REP := 75
+	var offer := {
+		"quantity": 1,
+		"life_support": "spartan",
+		"requires_player_affiliation": false,
+		"min_reputation": MIN_REP,
+	}
+	var check := PassengerCharters.evaluate_offer_for_ship(session, catalog, offer, ship.id, 0)
+	runner.check(not bool(check.get("ok", false)), "missions: reputation gate blocks outlaw")
+	session.player.reputation = MIN_REP
+	check = PassengerCharters.evaluate_offer_for_ship(session, catalog, offer, ship.id, 0)
+	runner.check(bool(check.get("ok", false)), "missions: reputation gate passes at minimum")
 
 
 static func _test_affiliation_gate_blocks(runner: TestRunner, catalog: Catalog) -> void:

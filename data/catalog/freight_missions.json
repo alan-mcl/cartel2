@@ -148,7 +148,8 @@
       "pay_multiplier": 1.45,
       "requires_capabilities": [
         "secure_cargo"
-      ]
+      ],
+      "min_reputation": 15
     },
     {
       "id": "freight_art",
@@ -275,7 +276,8 @@
       "quantity_min": 1,
       "quantity_max": 3,
       "pay_multiplier": 2.1,
-      "life_support_per_unit": 1
+      "life_support_per_unit": 1,
+      "min_reputation": 30
     },
     {
       "id": "aquaculture",
@@ -346,7 +348,8 @@
       ],
       "quantity_min": 1,
       "quantity_max": 2,
-      "pay_multiplier": 2.2
+      "pay_multiplier": 2.2,
+      "min_reputation": 25
     },
     {
       "id": "museum",
@@ -357,7 +360,8 @@
       ],
       "quantity_min": 1,
       "quantity_max": 2,
-      "pay_multiplier": 2.0
+      "pay_multiplier": 2.0,
+      "min_reputation": 50
     },
     {
       "id": "culture_locker",
