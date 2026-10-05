@@ -258,13 +258,23 @@ static func evaluate_offer_for_ship(
 	var committed_passengers := int(committed.get("passengers", 0))
 	var committed_freight_ls := int(committed.get("life_support_seats", 0))
 	var offer_ls := int(offer.get("life_support_seats", 0))
-	var ls_needed := committed_passengers + committed_freight_ls + offer_ls
+	var ls_needed := (
+		PassengerCharters.PILOT_LIFE_SUPPORT_SEATS
+		+ committed_passengers
+		+ committed_freight_ls
+		+ offer_ls
+	)
 	var ls_capacity := float(assembled.capacities.get("life_support_capacity", 0.0))
 	if ls_capacity < float(ls_needed):
 		return {
 			"ok": false,
 			"reason": "Need %d life support seats (%d committed)."
-			% [ls_needed, committed_passengers + committed_freight_ls],
+			% [
+				ls_needed,
+				PassengerCharters.PILOT_LIFE_SUPPORT_SEATS
+				+ committed_passengers
+				+ committed_freight_ls,
+			],
 		}
 
 	var occupant_for_idle := maxi(1, ls_needed)

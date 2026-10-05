@@ -3,6 +3,8 @@ extends RefCounted
 
 const BOARD_TERMINAL := "terminal"
 const BOARD_BAR := "bar"
+## Pilot always occupies one life-support seat when launched; must match `MissionSubsystem.launch_occupant_count`.
+const PILOT_LIFE_SUPPORT_SEATS := 1
 
 
 static func config(catalog: Catalog) -> Dictionary:
@@ -470,11 +472,12 @@ static func evaluate_offer_for_ship(
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	var capacity := float(assembled.capacities.get("life_support_capacity", 0.0))
 	var quantity := int(offer.get("quantity", 0))
-	var needed := committed_passengers + quantity
+	var needed := PILOT_LIFE_SUPPORT_SEATS + committed_passengers + quantity
 	if capacity < float(needed):
 		return {
 			"ok": false,
-			"reason": "Need %d life support seats (%d committed)." % [needed, committed_passengers],
+			"reason": "Need %d life support seats (%d committed)."
+			% [needed, committed_passengers + PILOT_LIFE_SUPPORT_SEATS],
 		}
 
 	var tier := str(offer.get("life_support", "spartan"))

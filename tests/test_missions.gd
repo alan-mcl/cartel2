@@ -18,6 +18,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cancel_after_undock_fails(runner, catalog)
 	_test_dock_completion_pays(runner, catalog)
 	_test_reputation_charter_outcomes(runner, catalog)
+	_test_full_charter_manifest_can_launch(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -435,3 +436,46 @@ static func _test_reputation_charter_outcomes(runner: TestRunner, catalog: Catal
 		"missions: cancel miss at zero reputation"
 	)
 	runner.check_eq(session.player.reputation, 0, "missions: reputation stays at zero floor")
+
+
+static func _test_full_charter_manifest_can_launch(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MIS-FULL-LS")
+	var ship := _best_docked_ship(session, catalog, "proxima_habitat")
+	if ship == null:
+		return
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var capacity := int(assembled.capacities.get("life_support_capacity", 0.0))
+	if capacity < 2:
+		runner.check(false, "missions: full manifest test needs life support capacity >= 2")
+		return
+	var party_size := capacity - PassengerCharters.PILOT_LIFE_SUPPORT_SEATS
+	var offer := _inject_test_offer(
+		missions,
+		session,
+		catalog,
+		"proxima_habitat",
+		"irasia_habitat",
+		"full_ls_manifest"
+	)
+	offer["quantity"] = party_size
+	offer["life_support"] = "spartan"
+	runner.check(
+		missions.accept_offer(session, catalog, str(offer.get("id", "")), ship.id),
+		"missions: accept charter filling remaining life support"
+	)
+	runner.check_eq(
+		missions.launch_occupant_count(ship.id),
+		capacity,
+		"missions: launch occupant count matches capacity"
+	)
+	runner.check(
+		ShipAssembly.undock_blockers(
+			catalog,
+			ship,
+			missions.launch_occupant_count(ship.id)
+		).is_empty(),
+		"missions: full charter manifest does not block launch"
+	)
+	runner.check(session.undock(catalog, ship.id, missions), "missions: undock with full charter manifest")

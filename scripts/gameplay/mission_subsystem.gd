@@ -139,7 +139,7 @@ func committed_freight_reserves_for_ship(ship_id: String) -> Dictionary:
 
 func launch_occupant_count(ship_id: String) -> int:
 	return (
-		1
+		PassengerCharters.PILOT_LIFE_SUPPORT_SEATS
 		+ committed_passengers_for_ship(ship_id)
 		+ committed_freight_life_support_for_ship(ship_id)
 	)
