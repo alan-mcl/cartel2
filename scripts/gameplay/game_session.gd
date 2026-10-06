@@ -449,8 +449,6 @@ func enter_unspace(
 	combat.init_hull_from_ship(assembled_ship)
 
 	world.location_name = "%d-space" % n
-	player.objective = "Navigate to the exit portal en route to %s" % str(dest.get("name", destination_id))
-	player.last_log = "Translated into %d-space. Find the exit portal." % n
 	changed.emit()
 	return true
 
@@ -470,7 +468,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 		return false
 
 	combat.hull = combat.max_hull
-	player.last_log = "Emergence complete. Welcome to %s." % world.location_name
+	player.last_log = "Translation complete. Welcome to %s." % world.location_name
 	changed.emit()
 	return true
 
@@ -751,8 +749,8 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 	world.building_id = ""
 
 	var sector := catalog.get_sector(world.sector_id)
-	world.location_name = str(sector.get("orbit_name", "Near orbit"))
-	player.last_log = "Launched %s. Thrusters online." % ship.name
+	world.location_name = str(sector.get("orbit_name", "High orbit"))
+	player.last_log = "Launched %s. Propulsion online." % ship.name
 	events.publish(SimEvent.undocked(ship_id, world.sector_id))
 	changed.emit()
 	return true

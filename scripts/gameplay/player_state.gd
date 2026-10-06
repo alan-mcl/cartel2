@@ -8,8 +8,8 @@ var background_id: String = ""
 var reputation: int = 0
 ## Outstanding infractions: `{ "id", "infraction_id", "fine", "target_id", "recorded_gst" }`.
 var sanctions: Array = []
-var objective: String = "Explore Proxima near orbit"
-var last_log: String = "Flare-ON SS ready. Thrusters online."
+var objective: String = "Explore Proxima high orbit"
+var last_log: String = "Flare-ON SS ready. Propulsion online."
 var sandbox: bool = false
 var salvaged_ids: Array[String] = []
 var inspected_ids: Array[String] = []

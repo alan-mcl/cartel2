@@ -2,7 +2,7 @@ class_name WorldPresence
 extends RefCounted
 
 var sector_id: String = "proxima"
-var location_name: String = "Proxima near orbit"
+var location_name: String = "Proxima high orbit"
 var docked: bool = false
 var habitat_id: String = ""
 var building_id: String = ""

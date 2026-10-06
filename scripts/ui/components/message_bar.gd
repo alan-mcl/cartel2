@@ -75,6 +75,14 @@ func set_tag(text: String) -> void:
 
 ## Queue one log line: enters from the right (or after the previous tail + gap) and scrolls off once.
 ## When [param tape_chain] is true, lines attach to the prior tail even if that is left of the clip (exchange tape).
+## Drop scrolling log labels and reset dedupe state (e.g. when leaving habitat UI for flight).
+func clear_queued_lines() -> void:
+	_bind_nodes()
+	_clear_log_labels()
+	_clear_feed()
+	_last_enqueued_log = ""
+
+
 func play_line(text: String, allow_repeat: bool = false, tape_chain: bool = false) -> bool:
 	_bind_nodes()
 	var line := text.strip_edges()

@@ -74,7 +74,7 @@ Goods intended for military, security, and defence applications.
 
 This provides a single broad commodity category for military equipment and supplies rather than modelling individual weapons or military systems.
 
-### 11. Compute Cores
+### 11. Compute
 
 Specialised computational hardware.
 
@@ -96,7 +96,7 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | 8 | Advanced Raw Materials | `advanced_raw_materials` |
 | 9 | Luxury Goods | `luxury_goods` |
 | 10 | Military Goods | `military_goods` |
-| 11 | Compute Cores | `compute_cores` |
+| 11 | Compute | `compute_cores` |
 
 ## Distinctions
 
@@ -115,8 +115,7 @@ Seven categories require installed cargo-bay **capabilities** on the carrying sh
 |----------|-------------------|
 | Food Products | `refrigerated` |
 | Pharmaceuticals, Chemicals | `biohazard` |
-| Data, Compute Cores | `compute_integrated` |
-| Luxury Goods | `secure_cargo` |
+| Luxury Goods, Data | `secure_cargo` |
 | Military Goods | `military_grade` |
 
 Consumer Goods, Energy, Industrial Components, and Advanced Raw Materials use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.

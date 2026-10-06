@@ -104,7 +104,7 @@ def build_bundle(spec: dict) -> dict:
     sector_id = str(spec["id"])
     name = str(spec["name"])
     planet_name = str(spec.get("planet_name", name))
-    orbit_name = str(spec.get("orbit_name", f"{planet_name} near orbit"))
+    orbit_name = str(spec.get("orbit_name", f"{planet_name} high orbit"))
     objective = str(spec.get("objective", f"Explore {orbit_name}"))
 
     planet = spec.get("planet", {})

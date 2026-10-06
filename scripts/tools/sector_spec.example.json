@@ -6,7 +6,7 @@
   "classification": "E3",
   "population_billions": 8.0,
   "climate": "Temperate",
-  "objective": "Explore Example near orbit",
+  "objective": "Explore Example high orbit",
   "planet": {
     "sprite": "res://assets/world/planet.png",
     "diameter": 2000,

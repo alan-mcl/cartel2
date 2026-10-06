@@ -12,6 +12,7 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_play_line_queue(runner, tree)
 	_test_play_line_scroll_off(runner, tree)
 	_test_play_line_reenters_from_right(runner, tree)
+	_test_clear_queued_lines(runner, tree)
 	_test_set_feed(runner, tree)
 
 
@@ -106,6 +107,20 @@ static func _test_play_line_reenters_from_right(runner: TestRunner, tree: SceneT
 		"message bar: new status line enters from clip right edge"
 	)
 	bar.get_parent().queue_free()
+
+
+static func _test_clear_queued_lines(runner: TestRunner, tree: SceneTree) -> void:
+	var bar := _spawn_bar(runner, tree)
+	if bar == null:
+		return
+	bar.play_line("Docked at terminal.")
+	bar.play_line("Purchased fuel.")
+	runner.check_eq(bar.get_log_label_count_for_tests(), 2, "message bar: clear has queued labels")
+	bar.clear_queued_lines()
+	runner.check_eq(bar.get_log_label_count_for_tests(), 0, "message bar: clear removes queued labels")
+	bar.play_line("Launched.")
+	runner.check_eq(bar.get_log_label_count_for_tests(), 1, "message bar: play_line after clear")
+	_flush_bar(bar)
 
 
 static func _test_set_feed(runner: TestRunner, tree: SceneTree) -> void:

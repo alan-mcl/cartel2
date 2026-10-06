@@ -66,6 +66,11 @@ func refresh() -> void:
 	_sync_log()
 
 
+func clear_message_log() -> void:
+	if _message_bar != null:
+		_message_bar.clear_queued_lines()
+
+
 func set_interaction_target(target: Interactable) -> void:
 	if _interact_prompt != null and _interact_prompt.has_method("set_target"):
 		_interact_prompt.set_target(target)
@@ -232,6 +237,8 @@ func _has_capability(id: String) -> bool:
 
 
 func _sync_log() -> void:
+	if not visible:
+		return
 	if _message_bar == null or _session == null or not _has_capability("basic_hud"):
 		return
 	_message_bar.play_line(_session.last_log)

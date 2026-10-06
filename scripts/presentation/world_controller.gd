@@ -193,10 +193,10 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "entry_seconds", _catalog)
 	if applied > 0.0:
 		_main.session.last_log = (
-			"Translated into %d-space. Entry lag: %s GST. Stability %d%%."
+			"Translation complete. Entry lag %s. %s-space stability %d%%."
 			% [
-				n,
 				GalacticCalendar.format_duration(applied),
+				n,
 				int(round(_main.session.translation_stability)),
 			]
 		)
@@ -283,6 +283,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 	_tree.paused = false
 	_ui_root.close_ui()
 	_hud.visible = true
+	_hud.clear_message_log()
 	_pause.close()
 	_on_session_changed.call()
 
