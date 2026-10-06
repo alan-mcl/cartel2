@@ -100,7 +100,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 - **Starfield** — parallax background bound to follow camera.
 - **World** — empty at edit time; populated at runtime by `WorldLoader`.
 - **PlayerShip** — inertial flight, interaction sensor, camera.
-- **HUD** — capability-gated flight chrome: top-left instrument cluster (`basic_hud`: speed, fuel, GST clock), top-right **Fields** (`local_sensor`), bottom-left **signature** (thermal / gravitational / EM / computational totals, transponder, active sensors), bottom-right local radar and viewport-edge waypoint arrows (`local_sensor` / waypoints), transponder label overlay (`sensor_read_beacons`). Hidden when docked.
+- **HUD** — capability-gated flight chrome: top-left **SHIP** (`basic_hud`: power, fuel, compute, life support, hull), centred top strip (callsign aboard ship name, speed, heading, GST clock), top-right **Fields** (`local_sensor`), bottom-left **signature** (thermal / gravitational / EM / computational totals, transponder, active sensors), bottom-centre message bar, bottom-right local radar and viewport-edge waypoint arrows (`local_sensor` / waypoints), transponder label overlay (`sensor_read_beacons`). Hidden when docked.
 - **MainMenu** — New Game, Load, Exit.
 - **NewGameOverlay** — callsign, portrait picker, and background kit form.
 - **SaveOverlay** — three-slot save/load browser.

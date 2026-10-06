@@ -4,6 +4,7 @@ const PLAYER_HOVER_RADIUS := 24.0
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
+@onready var _flight_strip: PanelContainer = $Root/FlightStrip
 @onready var _signature_panel: PanelContainer = $Root/SignaturePanel
 @onready var _field_panel: PanelContainer = $Root/FieldPanel
 @onready var _field_gravity_label: Label = $Root/FieldPanel/VBox/GravityLabel
@@ -13,14 +14,18 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _thermal_label: Label = $Root/SignaturePanel/VBox/ThermalLabel
 @onready var _grav_label: Label = $Root/SignaturePanel/VBox/GravLabel
 @onready var _em_label: Label = $Root/SignaturePanel/VBox/EmLabel
-@onready var _compute_label: Label = $Root/SignaturePanel/VBox/ComputeLabel
+@onready var _compute_signature_label: Label = $Root/SignaturePanel/VBox/ComputeLabel
 @onready var _transponder_label: Label = $Root/SignaturePanel/VBox/TransponderLabel
 @onready var _active_sensors_label: Label = $Root/SignaturePanel/VBox/ActiveSensorsLabel
-@onready var _speed: Label = $Root/StatusPanel/VBox/StatsRow/SpeedLabel
-@onready var _heading: Label = $Root/StatusPanel/VBox/StatsRow/HeadingLabel
-@onready var _fuel: Label = $Root/StatusPanel/VBox/SystemsRow/FuelLabel
-@onready var _power: Label = $Root/StatusPanel/VBox/SystemsRow/PowerLabel
-@onready var _gst_clock: Label = $Root/StatusPanel/VBox/GstClockLabel
+@onready var _power: Label = $Root/StatusPanel/VBox/PowerLabel
+@onready var _fuel: Label = $Root/StatusPanel/VBox/FuelLabel
+@onready var _compute: Label = $Root/StatusPanel/VBox/ComputeLabel
+@onready var _life_support: Label = $Root/StatusPanel/VBox/LifeSupportLabel
+@onready var _hull: Label = $Root/StatusPanel/VBox/HullLabel
+@onready var _identity: Label = $Root/FlightStrip/HBox/IdentityLabel
+@onready var _speed: Label = $Root/FlightStrip/HBox/SpeedLabel
+@onready var _heading: Label = $Root/FlightStrip/HBox/HeadingLabel
+@onready var _gst_clock: Label = $Root/FlightStrip/HBox/GstClockLabel
 @onready var _stability_label: Label = $Root/FieldPanel/VBox/StabilityLabel
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
@@ -40,6 +45,7 @@ func bind(session: GameSession, _player: CharacterBody2D, assembled_ship: Assemb
 	_session = session
 	_bind_gst_clock()
 	set_assembled_ship(assembled_ship)
+	_refresh_identity()
 
 
 func _bind_gst_clock() -> void:
@@ -51,18 +57,20 @@ func _bind_gst_clock() -> void:
 func _get_gst_clock() -> Label:
 	if _gst_clock != null:
 		return _gst_clock
-	return get_node_or_null("Root/StatusPanel/VBox/GstClockLabel") as Label
+	return get_node_or_null("Root/FlightStrip/HBox/GstClockLabel") as Label
 
 
 func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 	_assembled_ship = assembled_ship
 	_refresh_capabilities()
+	_refresh_identity()
 	if _operating_state != null:
 		set_operating_state(_operating_state)
 
 
 func refresh() -> void:
 	_refresh_capabilities()
+	_refresh_identity()
 	_sync_log()
 
 
@@ -99,6 +107,15 @@ func set_operating_state(state: ShipOperatingState) -> void:
 			state.fuel_capacity,
 		]
 	_power.text = "Power: %.0f / %.0f MW" % [state.power_allocated, state.power_available]
+	_compute.text = "Compute: %.0f / %.0f CU" % [state.compute_demand, state.compute_capacity]
+	var ls_text := "Life support: %.0f / %.0f" % [
+		state.life_support_demand,
+		state.life_support_capacity,
+	]
+	if state.life_support_overloaded:
+		ls_text += " overloaded"
+	_life_support.text = ls_text
+	_refresh_hull()
 
 
 func set_signature_state(
@@ -114,8 +131,8 @@ func set_signature_state(
 		_grav_label.text = "Gravitational: %.1f" % float(signature.get("gravitational", 0.0))
 	if _em_label != null:
 		_em_label.text = "EM: %.1f" % float(signature.get("electromagnetic", 0.0))
-	if _compute_label != null:
-		_compute_label.text = "Computational: %.1f" % float(signature.get("computational", 0.0))
+	if _compute_signature_label != null:
+		_compute_signature_label.text = "Computational: %.1f" % float(signature.get("computational", 0.0))
 	if _transponder_label != null:
 		_transponder_label.text = "Transponder: %s" % transponder_label
 	if _active_sensors_label != null:
@@ -210,6 +227,32 @@ func _update_player_hover_probe(ship_pos: Vector2, camera: Camera2D) -> void:
 	_player_hover_probe.tooltip_text = _player_broadcast_text if hovering else ""
 
 
+func _refresh_identity() -> void:
+	if _identity == null:
+		return
+	var callsign := ""
+	var ship_name := ""
+	if _session != null:
+		callsign = _session.callsign.strip_edges()
+	if _assembled_ship != null:
+		ship_name = _assembled_ship.name.strip_edges()
+	if callsign.is_empty():
+		callsign = "—"
+	if ship_name.is_empty():
+		ship_name = "—"
+	_identity.text = "%s aboard %s" % [callsign, ship_name]
+
+
+func _refresh_hull() -> void:
+	if _hull == null or _session == null:
+		return
+	var max_hull := _session.max_hull
+	if max_hull <= 0.0:
+		_hull.text = "Hull: —"
+	else:
+		_hull.text = "Hull: %.0f / %.0f" % [_session.hull, max_hull]
+
+
 func _refresh_capabilities() -> void:
 	var has_basic := _has_capability("basic_hud")
 	var has_sensor := _has_capability("local_sensor")
@@ -218,6 +261,8 @@ func _refresh_capabilities() -> void:
 
 	if _status_panel != null:
 		_status_panel.visible = has_basic
+	if _flight_strip != null:
+		_flight_strip.visible = has_basic
 	if _signature_panel != null:
 		_signature_panel.visible = has_basic
 	if _message_bar != null:

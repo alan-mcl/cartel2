@@ -74,42 +74,75 @@ layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 332.0
-offset_bottom = 96.0
+offset_bottom = 132.0
 theme_type_variation = &"SurfaceTranslucent"
 
 [node name="VBox" type="VBoxContainer" parent="Root/StatusPanel"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 2
 
-[node name="StatsRow" type="HBoxContainer" parent="Root/StatusPanel/VBox"]
+[node name="Title" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 16
+text = "SHIP"
 
-[node name="SpeedLabel" type="Label" parent="Root/StatusPanel/VBox/StatsRow"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Speed: 0"
-
-[node name="HeadingLabel" type="Label" parent="Root/StatusPanel/VBox/StatsRow"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Heading: 0°"
-
-[node name="SystemsRow" type="HBoxContainer" parent="Root/StatusPanel/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="FuelLabel" type="Label" parent="Root/StatusPanel/VBox/SystemsRow"]
-layout_mode = 2
-theme_type_variation = &"Numeric"
-text = "Fuel: —"
-
-[node name="PowerLabel" type="Label" parent="Root/StatusPanel/VBox/SystemsRow"]
+[node name="PowerLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Power: —"
 
-[node name="GstClockLabel" parent="Root/StatusPanel/VBox" instance=ExtResource("2")]
+[node name="FuelLabel" type="Label" parent="Root/StatusPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Fuel: —"
+
+[node name="ComputeLabel" type="Label" parent="Root/StatusPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Compute: —"
+
+[node name="LifeSupportLabel" type="Label" parent="Root/StatusPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Life support: —"
+
+[node name="HullLabel" type="Label" parent="Root/StatusPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Hull: —"
+
+[node name="FlightStrip" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 340.0
+offset_top = 12.0
+offset_right = -340.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_type_variation = &"SurfaceTranslucent"
+
+[node name="HBox" type="HBoxContainer" parent="Root/FlightStrip"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="IdentityLabel" type="Label" parent="Root/FlightStrip/HBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "— aboard —"
+
+[node name="SpeedLabel" type="Label" parent="Root/FlightStrip/HBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Speed: 0"
+
+[node name="HeadingLabel" type="Label" parent="Root/FlightStrip/HBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Heading: 0°"
+
+[node name="GstClockLabel" parent="Root/FlightStrip/HBox" instance=ExtResource("2")]
 
 [node name="SignaturePanel" type="PanelContainer" parent="Root"]
 layout_mode = 1
