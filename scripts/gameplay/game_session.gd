@@ -464,12 +464,10 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	world.translation_stability = -1.0
 	world.pending_destination_id = ""
 
-	if not enter_sector(catalog, dest_id):
+	if not enter_sector(catalog, dest_id, false):
 		return false
 
 	combat.hull = combat.max_hull
-	player.last_log = "Translation complete. Welcome to %s." % world.location_name
-	changed.emit()
 	return true
 
 

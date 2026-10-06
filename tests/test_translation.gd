@@ -156,8 +156,14 @@ static func _test_enter_unspace_higher_n(runner: TestRunner, catalog: Catalog) -
 	runner.check_eq(session.unspace_n, 5, "session stores real N")
 	runner.check_eq(session.unspace_world_id, "n4_default", "5-space uses n4 presentation world")
 	runner.check_eq(session.translation_stability, 87.0, "stability preserved on entry")
+	session.last_log = "Still in transit."
 	runner.check(session.arrive_from_unspace(catalog), "arrive clears unspace")
 	runner.check(session.translation_stability < 0.0, "stability cleared after emergence")
+	runner.check_eq(
+		session.last_log,
+		"Still in transit.",
+		"arrive_from_unspace leaves the log for the emergence line"
+	)
 
 
 static func _test_save_library_and_stability(runner: TestRunner, catalog: Catalog) -> void:

@@ -224,11 +224,12 @@ func arrive_from_unspace() -> void:
 	if mapping.is_empty():
 		mapping = _catalog.get_public_translation(origin_id, dest_id, 4)
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "exit_seconds", _catalog)
-	if applied > 0.0:
-		_main.session.last_log = (
-			"Emergence complete. Exit lag: %s GST."
-			% GalacticCalendar.format_duration(applied)
-		)
+	var sector := _catalog.get_sector(dest_id)
+	var sector_name := str(sector.get("name", dest_id))
+	_main.session.last_log = (
+		"Translation complete. Exit lag %s. Welcome to %s."
+		% [GalacticCalendar.format_duration(applied), sector_name]
+	)
 
 	load_current_sector(true, "jump_gate")
 	_on_session_changed.call()
