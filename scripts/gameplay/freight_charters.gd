@@ -93,27 +93,44 @@ static func format_description(
 	)
 
 
+static func description_index(cfg: Dictionary) -> Dictionary:
+	var index: Dictionary = {}
+	for entry_variant in cfg.get("descriptions", []):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var text := str(entry.get("text", ""))
+		var allowed: Variant = entry.get("cargos", [])
+		if typeof(allowed) != TYPE_ARRAY:
+			continue
+		for ref in allowed:
+			var cargo_key := str(ref)
+			var bucket: Variant = index.get(cargo_key, [])
+			if typeof(bucket) != TYPE_ARRAY:
+				bucket = []
+			bucket.append(text)
+			index[cargo_key] = bucket
+	return index
+
+
+static func pick_description_from_index(
+	description_index: Dictionary,
+	cargo_id: String,
+	rng: RandomNumberGenerator
+) -> String:
+	var matches: Variant = description_index.get(cargo_id, [])
+	if typeof(matches) != TYPE_ARRAY or matches.is_empty():
+		return "{quantity} freight lot for {destination}."
+	var picked: String = str(matches[rng.randi() % matches.size()])
+	return picked
+
+
 static func pick_description(
 	cfg: Dictionary,
 	cargo_id: String,
 	rng: RandomNumberGenerator
 ) -> String:
-	var matches: Array = []
-	for entry_variant in cfg.get("descriptions", []):
-		if typeof(entry_variant) != TYPE_DICTIONARY:
-			continue
-		var entry: Dictionary = entry_variant
-		var allowed: Variant = entry.get("cargos", [])
-		if typeof(allowed) != TYPE_ARRAY:
-			continue
-		for ref in allowed:
-			if str(ref) == cargo_id:
-				matches.append(entry)
-				break
-	if matches.is_empty():
-		return "{quantity} freight lot for {destination}."
-	var picked: Dictionary = matches[rng.randi() % matches.size()]
-	return str(picked.get("text", ""))
+	return pick_description_from_index(description_index(cfg), cargo_id, rng)
 
 
 static func hold_requirement_phrase(caps: Array) -> String:
@@ -142,14 +159,24 @@ static func generate_offers(
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = board_seed(day, origin_habitat_id, run_seed)
+	var max_hops := PassengerCharters.max_hops_from_config(cfg)
+	var adjacency := PassengerCharters.sector_adjacency(catalog)
+	var sector_habitats := PassengerCharters.sector_habitat_index(catalog)
+	var destination_pool := PassengerCharters.multi_hop_destinations(
+		catalog,
+		origin_habitat_id,
+		max_hops,
+		adjacency,
+		sector_habitats
+	)
+	var desc_by_cargo := description_index(cfg)
 
 	var offers: Array = []
 	for index in count:
 		var cargo: Dictionary = cargos[rng.randi() % cargos.size()]
 		var cargo_id := str(cargo.get("id", ""))
-		var dest: Dictionary = PassengerCharters.pick_destination(
-			catalog,
-			origin_habitat_id,
+		var dest: Dictionary = PassengerCharters.pick_destination_from_pool(
+			destination_pool,
 			PassengerCharters.BOARD_TERMINAL,
 			cfg,
 			rng
@@ -165,7 +192,12 @@ static func generate_offers(
 		var friction := int(dest.get("friction", 0))
 		var hops := int(dest.get("hops", 1))
 		var path_sectors: Array = dest.get("path_sectors", [])
-		var deadline_hours := PassengerCharters.offer_deadline_hours(catalog, cfg, path_sectors)
+		var deadline_hours := PassengerCharters.offer_deadline_hours(
+			catalog,
+			cfg,
+			path_sectors,
+			adjacency
+		)
 		var resolved := resolve_cargo(catalog, cargo)
 		var mass_per_unit := float(resolved.get("mass_per_unit", 0.0))
 		var reward := compute_reward(cfg, quantity, mass_per_unit, pay_multiplier, friction)
@@ -176,7 +208,7 @@ static func generate_offers(
 			var commodity := catalog.get_commodity(commodity_id)
 			commodity_name = str(commodity.get("name", commodity_id))
 
-		var desc_template := pick_description(cfg, cargo_id, rng)
+		var desc_template := pick_description_from_index(desc_by_cargo, cargo_id, rng)
 		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))
 		var description := format_description(
 			desc_template,

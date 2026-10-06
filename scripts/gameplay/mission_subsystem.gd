@@ -17,8 +17,8 @@ func _init() -> void:
 	save_version = 3
 
 
-func on_day(session: GameSession, catalog: Catalog, day: int) -> void:
-	_refresh_boards(session, catalog, day)
+func on_day(_session: GameSession, _catalog: Catalog, day: int) -> void:
+	_invalidate_boards(day)
 
 
 func on_hour(session: GameSession, catalog: Catalog, _hour: int) -> void:
@@ -39,7 +39,11 @@ func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 func ensure_boards(session: GameSession, catalog: Catalog) -> void:
 	var day := CommodityEconomy.gst_day(session.gst_seconds)
 	if generated_day != day:
-		_refresh_boards(session, catalog, day)
+		_invalidate_boards(day)
+	var habitat_id := str(session.habitat_id)
+	if habitat_id.is_empty():
+		return
+	_ensure_habitat_boards(session, catalog, habitat_id, day)
 
 
 func list_offers(habitat_id: String, board: String) -> Array:
@@ -380,23 +384,29 @@ func from_dict(data: Dictionary) -> void:
 	_next_freight_charter_id = int(data.get("next_freight_charter_id", 1))
 
 
-func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
+func _invalidate_boards(day: int) -> void:
 	generated_day = day
 	offers_by_habitat = {}
 	freight_offers_by_habitat = {}
+
+
+func _ensure_habitat_boards(
+	session: GameSession,
+	catalog: Catalog,
+	habitat_id: String,
+	day: int
+) -> void:
+	var need_passenger := not offers_by_habitat.has(habitat_id)
+	var need_freight := not freight_offers_by_habitat.has(habitat_id)
+	if not need_passenger and not need_freight:
+		return
 	var cfg := PassengerCharters.config(catalog)
 	var terminal_count := int(cfg.get("terminal_offers_per_day", 4))
 	var bar_count := int(cfg.get("bar_offers_per_day", 2))
 	var freight_cfg := FreightCharters.config(catalog)
 	var freight_count := int(freight_cfg.get("offers_per_day", 4))
 	var run_seed := session.run_seed
-
-	for habitat in catalog.list_habitat_dicts():
-		if typeof(habitat) != TYPE_DICTIONARY:
-			continue
-		var habitat_id := str(habitat.get("id", ""))
-		if habitat_id.is_empty():
-			continue
+	if need_passenger:
 		var boards := {
 			PassengerCharters.BOARD_TERMINAL: PassengerCharters.generate_offers(
 				catalog,
@@ -417,6 +427,7 @@ func _refresh_boards(session: GameSession, catalog: Catalog, day: int) -> void:
 				run_seed
 			)
 		offers_by_habitat[habitat_id] = boards
+	if need_freight:
 		freight_offers_by_habitat[habitat_id] = FreightCharters.generate_offers(
 			catalog,
 			habitat_id,

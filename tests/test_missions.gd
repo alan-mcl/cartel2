@@ -19,6 +19,8 @@ static func run(runner: TestRunner) -> void:
 	_test_dock_completion_pays(runner, catalog)
 	_test_reputation_charter_outcomes(runner, catalog)
 	_test_full_charter_manifest_can_launch(runner, catalog)
+	_test_lazy_habitat_board_generation(runner, catalog)
+	_test_generate_offers_determinism(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -132,11 +134,13 @@ static func _test_day_refresh_keeps_accepted(runner: TestRunner, catalog: Catalo
 		missions.accept_offer(session, catalog, str(picked.get("id", "")), ship.id),
 		"missions: accept for day refresh test"
 	)
-	var day := CommodityEconomy.gst_day(session.gst_seconds)
-	missions._refresh_boards(session, catalog, day + 1)
+	session.advance_gst(float(GalacticCalendar.SECONDS_PER_DAY))
+	var new_day := CommodityEconomy.gst_day(session.gst_seconds)
+	missions.on_day(session, catalog, new_day)
+	missions.ensure_boards(session, catalog)
 	runner.check(missions.list_accepted().size() == 1, "missions: accepted survives day refresh")
 	runner.check(
-		missions.generated_day == day + 1,
+		missions.generated_day == new_day,
 		"missions: board day advances"
 	)
 
@@ -479,3 +483,69 @@ static func _test_full_charter_manifest_can_launch(runner: TestRunner, catalog: 
 		"missions: full charter manifest does not block launch"
 	)
 	runner.check(session.undock(catalog, ship.id, missions), "missions: undock with full charter manifest")
+
+
+static func _test_lazy_habitat_board_generation(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MIS-LAZY")
+	runner.check_eq(
+		session.habitat_id,
+		"proxima_habitat",
+		"missions: lazy board test starts at proxima"
+	)
+	missions.ensure_boards(session, catalog)
+	runner.check(
+		missions.list_offers("proxima_habitat", PassengerCharters.BOARD_TERMINAL).size() >= 1,
+		"missions: proxima board generated on ensure"
+	)
+	runner.check(
+		not missions.offers_by_habitat.has("bela_orbital_habitat"),
+		"missions: bela board not built while docked elsewhere"
+	)
+	runner.check(
+		missions.list_offers("bela_orbital_habitat", PassengerCharters.BOARD_TERMINAL).is_empty(),
+		"missions: bela offers empty before visit"
+	)
+	session.habitat_id = "bela_orbital_habitat"
+	missions.ensure_boards(session, catalog)
+	runner.check(
+		missions.list_freight_offers("bela_orbital_habitat").size() >= 1,
+		"missions: bela freight board generated on first ensure there"
+	)
+
+
+static func _test_generate_offers_determinism(runner: TestRunner, catalog: Catalog) -> void:
+	var day := 99
+	var run_seed := 4242
+	var count := 12
+	var first := PassengerCharters.generate_offers(
+		catalog,
+		"proxima_habitat",
+		PassengerCharters.BOARD_TERMINAL,
+		day,
+		count,
+		run_seed
+	)
+	var second := PassengerCharters.generate_offers(
+		catalog,
+		"proxima_habitat",
+		PassengerCharters.BOARD_TERMINAL,
+		day,
+		count,
+		run_seed
+	)
+	runner.check_eq(first.size(), second.size(), "missions: generate_offers count stable")
+	for index in first.size():
+		var left: Dictionary = first[index]
+		var right: Dictionary = second[index]
+		runner.check_eq(
+			str(left.get("id", "")),
+			str(right.get("id", "")),
+			"missions: offer id stable at index %d" % index
+		)
+		runner.check_eq(
+			str(left.get("destination_habitat_id", "")),
+			str(right.get("destination_habitat_id", "")),
+			"missions: destination stable at index %d" % index
+		)

@@ -149,8 +149,10 @@ Successful gameplay mutations publish typed events on `GameSession.events` (`Eve
 
 `MissionSubsystem` is registered on production `Simulation` and drives daily passenger
 charter offers from `passenger_missions.json` (terminal departures and civilian fares at
-bars). Accepted charters persist in subsystem save data; completion and cancellation are
-handled in gameplay, not UI.
+bars) plus freight lots from `freight_missions.json`. Daily boards invalidate at GST day
+rollover; the first charter UI open at a docked habitat generates that habitat’s passenger
+and freight offers only (not every habitat in the catalog). Accepted charters persist in
+subsystem save data; completion and cancellation are handled in gameplay, not UI.
 
 | Context | GST behaviour |
 |---------|---------------|

@@ -22,8 +22,60 @@ static func habitat_has_bar(catalog: Catalog, habitat_id: String) -> bool:
 	return false
 
 
-static func friction_between(catalog: Catalog, sector_a: String, sector_b: String) -> int:
+static func sector_adjacency(catalog: Catalog) -> Dictionary:
+	var adj: Dictionary = {}
+	for route_variant in catalog.list_routes():
+		if typeof(route_variant) != TYPE_DICTIONARY:
+			continue
+		var route: Dictionary = route_variant
+		var left := str(route.get("a", ""))
+		var right := str(route.get("b", ""))
+		if left.is_empty() or right.is_empty():
+			continue
+		var friction := int(route.get("friction", 0))
+		_append_adjacency_edge(adj, left, right, friction)
+		_append_adjacency_edge(adj, right, left, friction)
+	return adj
+
+
+static func _append_adjacency_edge(adj: Dictionary, from_sector: String, to_sector: String, friction: int) -> void:
+	var edges: Variant = adj.get(from_sector, [])
+	if typeof(edges) != TYPE_ARRAY:
+		edges = []
+	edges.append({"sector": to_sector, "friction": friction})
+	adj[from_sector] = edges
+
+
+static func sector_habitat_index(catalog: Catalog) -> Dictionary:
+	var index: Dictionary = {}
+	for habitat_variant in catalog.list_habitat_dicts():
+		if typeof(habitat_variant) != TYPE_DICTIONARY:
+			continue
+		var habitat: Dictionary = habitat_variant
+		var sector_id := str(habitat.get("sector_id", ""))
+		if sector_id.is_empty():
+			continue
+		index[sector_id] = str(habitat.get("id", ""))
+	return index
+
+
+static func friction_between(
+	catalog: Catalog,
+	sector_a: String,
+	sector_b: String,
+	adjacency: Variant = null
+) -> int:
 	if sector_a.is_empty() or sector_b.is_empty() or sector_a == sector_b:
+		return -1
+	if typeof(adjacency) == TYPE_DICTIONARY:
+		var edges: Variant = adjacency.get(sector_a, [])
+		if typeof(edges) == TYPE_ARRAY:
+			for edge_variant in edges:
+				if typeof(edge_variant) != TYPE_DICTIONARY:
+					continue
+				var edge: Dictionary = edge_variant
+				if str(edge.get("sector", "")) == sector_b:
+					return int(edge.get("friction", 0))
 		return -1
 	for route in catalog.list_routes():
 		if typeof(route) != TYPE_DICTIONARY:
@@ -36,26 +88,25 @@ static func friction_between(catalog: Catalog, sector_a: String, sector_b: Strin
 
 
 static func habitat_for_sector(catalog: Catalog, sector_id: String) -> String:
-	for habitat in catalog.list_habitat_dicts():
-		if typeof(habitat) != TYPE_DICTIONARY:
-			continue
-		if str(habitat.get("sector_id", "")) == sector_id:
-			return str(habitat.get("id", ""))
-	return ""
+	return str(sector_habitat_index(catalog).get(sector_id, ""))
 
 
 static func max_hops_from_config(cfg: Dictionary) -> int:
 	return maxi(1, int(cfg.get("max_hops", 3)))
 
 
-static func path_translation_seconds(catalog: Catalog, path_sectors: Array) -> float:
+static func path_translation_seconds(
+	catalog: Catalog,
+	path_sectors: Array,
+	adjacency: Variant = null
+) -> float:
 	var total := 0.0
 	if path_sectors.size() < 2:
 		return total
 	for index in path_sectors.size() - 1:
 		var from_sector := str(path_sectors[index])
 		var to_sector := str(path_sectors[index + 1])
-		var friction := friction_between(catalog, from_sector, to_sector)
+		var friction := friction_between(catalog, from_sector, to_sector, adjacency)
 		if friction < 0:
 			continue
 		var lump := float(friction) * Catalog.ROUTE_SECONDS_PER_FRICTION
@@ -66,12 +117,13 @@ static func path_translation_seconds(catalog: Catalog, path_sectors: Array) -> f
 static func offer_deadline_hours(
 	catalog: Catalog,
 	cfg: Dictionary,
-	path_sectors: Array
+	path_sectors: Array,
+	adjacency: Variant = null
 ) -> int:
 	var slack := int(cfg.get("deadline_slack_hours", 8))
 	var hops := maxi(0, path_sectors.size() - 1)
 	var orbit_hours_per_hop := float(cfg.get("deadline_orbit_hours_per_hop", 2.0))
-	var translation := path_translation_seconds(catalog, path_sectors)
+	var translation := path_translation_seconds(catalog, path_sectors, adjacency)
 	var orbit_seconds := float(hops) * orbit_hours_per_hop * float(GalacticCalendar.SECONDS_PER_HOUR)
 	var total_seconds := translation + orbit_seconds
 	var transit_hours := ceili(total_seconds / float(GalacticCalendar.SECONDS_PER_HOUR))
@@ -106,12 +158,18 @@ static func roll_offer_hops(cfg: Dictionary, board: String, rng: RandomNumberGen
 static func multi_hop_destinations(
 	catalog: Catalog,
 	origin_habitat_id: String,
-	max_hops: int
+	max_hops: int,
+	adjacency: Variant = null,
+	sector_habitats: Variant = null
 ) -> Array:
 	var origin := catalog.get_habitat(origin_habitat_id)
 	var origin_sector := str(origin.get("sector_id", ""))
 	if origin_sector.is_empty() or max_hops < 1:
 		return []
+	if typeof(adjacency) != TYPE_DICTIONARY:
+		adjacency = sector_adjacency(catalog)
+	if typeof(sector_habitats) != TYPE_DICTIONARY:
+		sector_habitats = sector_habitat_index(catalog)
 
 	var results: Array = []
 	var queue: Array = [
@@ -125,7 +183,7 @@ static func multi_hop_destinations(
 		var path: Array = node.get("path", [])
 
 		if hops > 0:
-			var dest_habitat := habitat_for_sector(catalog, sector)
+			var dest_habitat := str(sector_habitats.get(sector, ""))
 			if not dest_habitat.is_empty() and dest_habitat != origin_habitat_id:
 				var dest := catalog.get_habitat(dest_habitat)
 				results.append({
@@ -135,24 +193,20 @@ static func multi_hop_destinations(
 					"friction": friction,
 					"hops": hops,
 					"path_sectors": path.duplicate(),
-					"via_label": via_label_for_path(catalog, path),
+					"via_label": via_label_for_path(catalog, path, sector_habitats),
 				})
 
 		if hops >= max_hops:
 			continue
 
-		for route in catalog.list_routes():
-			if typeof(route) != TYPE_DICTIONARY:
+		var edges: Variant = adjacency.get(sector, [])
+		if typeof(edges) != TYPE_ARRAY:
+			continue
+		for edge_variant in edges:
+			if typeof(edge_variant) != TYPE_DICTIONARY:
 				continue
-			var left := str(route.get("a", ""))
-			var right := str(route.get("b", ""))
-			var next_sector := ""
-			if left == sector:
-				next_sector = right
-			elif right == sector:
-				next_sector = left
-			else:
-				continue
+			var edge: Dictionary = edge_variant
+			var next_sector := str(edge.get("sector", ""))
 			if next_sector.is_empty():
 				continue
 			var visited := false
@@ -167,19 +221,25 @@ static func multi_hop_destinations(
 			queue.append({
 				"sector": next_sector,
 				"hops": hops + 1,
-				"friction": friction + int(route.get("friction", 0)),
+				"friction": friction + int(edge.get("friction", 0)),
 				"path": next_path,
 			})
 	return results
 
 
-static func via_label_for_path(catalog: Catalog, path_sectors: Array) -> String:
+static func via_label_for_path(
+	catalog: Catalog,
+	path_sectors: Array,
+	sector_habitats: Variant = null
+) -> String:
 	if path_sectors.size() <= 2:
 		return ""
+	if typeof(sector_habitats) != TYPE_DICTIONARY:
+		sector_habitats = sector_habitat_index(catalog)
 	var parts: PackedStringArray = PackedStringArray()
 	for index in range(1, path_sectors.size() - 1):
 		var sector := str(path_sectors[index])
-		var habitat_id := habitat_for_sector(catalog, sector)
+		var habitat_id := str(sector_habitats.get(sector, ""))
 		if habitat_id.is_empty():
 			continue
 		var habitat := catalog.get_habitat(habitat_id)
@@ -189,21 +249,30 @@ static func via_label_for_path(catalog: Catalog, path_sectors: Array) -> String:
 	return " via " + ", ".join(parts)
 
 
-static func destinations_for_hops(
-	catalog: Catalog,
-	origin_habitat_id: String,
-	desired_hops: int,
-	max_hops: int
-) -> Array:
-	var all := multi_hop_destinations(catalog, origin_habitat_id, max_hops)
+static func destinations_for_hops(pool: Array, desired_hops: int) -> Array:
 	var filtered: Array = []
-	for entry_variant in all:
+	for entry_variant in pool:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
 		if int(entry.get("hops", 0)) == desired_hops:
 			filtered.append(entry)
 	return filtered
+
+
+static func pick_destination_from_pool(
+	pool: Array,
+	board: String,
+	cfg: Dictionary,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var desired_hops := roll_offer_hops(cfg, board, rng)
+	var matches := destinations_for_hops(pool, desired_hops)
+	if matches.is_empty():
+		matches = pool
+	if matches.is_empty():
+		return {}
+	return matches[rng.randi() % matches.size()]
 
 
 static func pick_destination(
@@ -214,13 +283,8 @@ static func pick_destination(
 	rng: RandomNumberGenerator
 ) -> Dictionary:
 	var max_hops := max_hops_from_config(cfg)
-	var desired_hops := roll_offer_hops(cfg, board, rng)
-	var matches := destinations_for_hops(catalog, origin_habitat_id, desired_hops, max_hops)
-	if matches.is_empty():
-		matches = multi_hop_destinations(catalog, origin_habitat_id, max_hops)
-	if matches.is_empty():
-		return {}
-	return matches[rng.randi() % matches.size()]
+	var pool := multi_hop_destinations(catalog, origin_habitat_id, max_hops)
+	return pick_destination_from_pool(pool, board, cfg, rng)
 
 
 static func neighbor_destinations(catalog: Catalog, origin_habitat_id: String) -> Array:
@@ -339,33 +403,61 @@ static func roles_for_board(cfg: Dictionary, board: String) -> Array:
 	return roles
 
 
-static func pick_description(
-	cfg: Dictionary,
-	board: String,
-	role_id: String,
-	rng: RandomNumberGenerator
-) -> String:
-	var matches: Array = []
+static func description_index_for_board(cfg: Dictionary, board: String) -> Dictionary:
+	var index := {"shared": [], "by_role": {}}
 	for entry_variant in cfg.get("descriptions", []):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
 		if board not in description_boards(entry):
 			continue
+		var text := str(entry.get("text", ""))
 		var allowed: Variant = entry.get("roles", [])
 		if typeof(allowed) != TYPE_ARRAY or allowed.is_empty():
-			matches.append(entry)
+			index["shared"].append(text)
 			continue
 		for role_ref in allowed:
-			if str(role_ref) == role_id:
-				matches.append(entry)
-				break
+			var role_key := str(role_ref)
+			var bucket: Variant = index["by_role"].get(role_key, [])
+			if typeof(bucket) != TYPE_ARRAY:
+				bucket = []
+			bucket.append(text)
+			index["by_role"][role_key] = bucket
+	return index
+
+
+static func pick_description_from_index(
+	description_index: Dictionary,
+	board: String,
+	role_id: String,
+	rng: RandomNumberGenerator
+) -> String:
+	var matches: Array = []
+	var shared: Variant = description_index.get("shared", [])
+	if typeof(shared) == TYPE_ARRAY:
+		for text_variant in shared:
+			matches.append({"text": str(text_variant)})
+	var by_role: Variant = description_index.get("by_role", {})
+	if typeof(by_role) == TYPE_DICTIONARY:
+		var role_bucket: Variant = by_role.get(role_id, [])
+		if typeof(role_bucket) == TYPE_ARRAY:
+			for text_variant in role_bucket:
+				matches.append({"text": str(text_variant)})
 	if matches.is_empty():
 		if board == BOARD_BAR:
 			return "Informal fare: {quantity} need a lift to {destination}."
 		return "Passengers need transport to {destination}."
 	var picked: Dictionary = matches[rng.randi() % matches.size()]
 	return str(picked.get("text", ""))
+
+
+static func pick_description(
+	cfg: Dictionary,
+	board: String,
+	role_id: String,
+	rng: RandomNumberGenerator
+) -> String:
+	return pick_description_from_index(description_index_for_board(cfg, board), board, role_id, rng)
 
 
 static func board_seed(day: int, habitat_id: String, board: String, run_seed: int) -> int:
@@ -389,11 +481,22 @@ static func generate_offers(
 	var origin_sector := str(origin.get("sector_id", ""))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = board_seed(day, origin_habitat_id, board, run_seed)
+	var max_hops := max_hops_from_config(cfg)
+	var adjacency := sector_adjacency(catalog)
+	var sector_habitats := sector_habitat_index(catalog)
+	var destination_pool := multi_hop_destinations(
+		catalog,
+		origin_habitat_id,
+		max_hops,
+		adjacency,
+		sector_habitats
+	)
+	var description_index := description_index_for_board(cfg, board)
 
 	var offers: Array = []
 	for index in count:
 		var role: Dictionary = roles[rng.randi() % roles.size()]
-		var dest: Dictionary = pick_destination(catalog, origin_habitat_id, board, cfg, rng)
+		var dest: Dictionary = pick_destination_from_pool(destination_pool, board, cfg, rng)
 		if dest.is_empty():
 			continue
 		var qty_min := int(role.get("quantity_min", 1))
@@ -405,7 +508,7 @@ static func generate_offers(
 		var friction := int(dest.get("friction", 0))
 		var hops := int(dest.get("hops", 1))
 		var path_sectors: Array = dest.get("path_sectors", [])
-		var deadline_hours := offer_deadline_hours(catalog, cfg, path_sectors)
+		var deadline_hours := offer_deadline_hours(catalog, cfg, path_sectors, adjacency)
 		var reward := compute_reward(cfg, quantity, pay_multiplier, friction)
 
 		var corporation_id := ""
@@ -419,7 +522,12 @@ static func generate_offers(
 			corporation_id = str(corp.get("id", ""))
 			corporation_name = str(corp.get("name", ""))
 
-		var desc_template := pick_description(cfg, board, str(role.get("id", "")), rng)
+		var desc_template := pick_description_from_index(
+			description_index,
+			board,
+			str(role.get("id", "")),
+			rng
+		)
 		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))
 		var description := format_description(
 			desc_template,
