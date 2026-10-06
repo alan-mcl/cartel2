@@ -114,15 +114,7 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 	)
 	inner.add_child(accept)
 
-	var tooltip_lines: Array[String] = [
-		str(offer.get("description", "")),
-		meta,
-		_budget_line(offer),
-		str(offer.get("hold_label", "Dry hold")),
-	]
-	if not reputation_line.is_empty():
-		tooltip_lines.append(reputation_line)
-	var tooltip := _tile_tooltip_from_lines(tooltip_lines, str(check.get("reason", "")))
+	var tooltip := CharterTooltipText.format_freight(offer, str(check.get("reason", "")))
 	return _surface_tile(inner, tooltip)
 
 
@@ -158,9 +150,11 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 		status_line = "In transit — cannot cancel."
 		inner.add_child(_one_line_label(status_line, &"Muted"))
 
-	var tooltip := _tile_tooltip_from_lines(
-		[str(charter.get("description", "")), meta, _budget_line(charter), status_line],
-		""
+	var tooltip := CharterTooltipText.format_freight(
+		charter,
+		status_line,
+		origin,
+		ship_name
 	)
 	return _surface_tile(inner, tooltip)
 
@@ -220,18 +214,6 @@ func _budget_line(entry: Dictionary) -> String:
 	if parts.is_empty():
 		return "No extra ship budgets"
 	return "Draw: " + ", ".join(parts)
-
-
-func _tile_tooltip_from_lines(tile_lines: Array[String], extra: String) -> String:
-	var parts: PackedStringArray = PackedStringArray()
-	for line in tile_lines:
-		var trimmed := line.strip_edges()
-		if not trimmed.is_empty():
-			parts.append(trimmed)
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		parts.append(extra_trimmed)
-	return "\n".join(parts)
 
 
 func _active_ship_id() -> String:

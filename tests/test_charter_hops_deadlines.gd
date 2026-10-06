@@ -15,6 +15,7 @@ static func run(runner: TestRunner) -> void:
 	_test_late_freight_elsewhere_keeps_contract(runner, catalog)
 	_test_legacy_charter_without_deadline_pays(runner, catalog)
 	_test_deadline_covers_jump_gate_lag(runner, catalog)
+	_test_charter_tooltip_layout(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -344,3 +345,94 @@ static func _test_legacy_charter_without_deadline_pays(runner: TestRunner, catal
 	runner.check(session.dock(catalog, "bela_orbital_habitat"), "charter hops: legacy dock")
 	runner.check(missions.list_accepted().is_empty(), "charter hops: legacy clears")
 	runner.check(session.credits >= credits_before + 200, "charter hops: legacy pays without deadline_gst")
+
+
+static func _test_charter_tooltip_layout(runner: TestRunner, catalog: Catalog) -> void:
+	var passenger := {
+		"role_title": "Tourist party",
+		"destination_name": "Bela",
+		"via_label": " via Proxima Exchange",
+		"hops": 2,
+		"deadline_hours": 24,
+		"life_support": "comfort",
+		"quantity": 4,
+		"reward": 500,
+		"min_reputation": 15,
+		"requires_player_affiliation": false,
+		"description": "Four tourists for Bela.",
+	}
+	var passenger_tooltip := CharterTooltipText.format_passenger(passenger)
+	runner.check(
+		passenger_tooltip.contains("\n\n"),
+		"charter tooltip: passenger sections separated by blank lines"
+	)
+	runner.check(
+		passenger_tooltip.contains("Suggested route: 2 hops via Proxima Exchange"),
+		"charter tooltip: passenger suggested route"
+	)
+	runner.check(
+		passenger_tooltip.contains("Requirements"),
+		"charter tooltip: passenger requirements heading"
+	)
+	runner.check(
+		passenger_tooltip.contains("• Habitat life support"),
+		"charter tooltip: passenger habitat life support bullet"
+	)
+	runner.check(
+		passenger_tooltip.contains("• Comfort life support"),
+		"charter tooltip: passenger comfort tier bullet"
+	)
+	runner.check(
+		passenger_tooltip.contains("• 4 passenger seats"),
+		"charter tooltip: passenger seat bullet"
+	)
+	runner.check(
+		passenger_tooltip.contains("• Reputation 15"),
+		"charter tooltip: passenger reputation bullet"
+	)
+	var req_index := passenger_tooltip.find("Requirements")
+	var suggested_index := passenger_tooltip.find("Suggested route")
+	runner.check(
+		req_index > suggested_index and not passenger_tooltip.substr(req_index).contains("Suggested route"),
+		"charter tooltip: hop count not listed under requirements"
+	)
+	runner.check(
+		not passenger_tooltip.substr(req_index).contains("via Proxima"),
+		"charter tooltip: via habitats not listed under requirements"
+	)
+
+	var freight := {
+		"cargo_title": "Cold-chain vaccine shipment",
+		"description": "2 vaccine cases for Bela.",
+		"destination_name": "Bela",
+		"hops": 1,
+		"deadline_hours": 12,
+		"tonnes": 1.5,
+		"reward": 300,
+		"requires_capabilities": ["refrigerated", "biohazard"],
+		"life_support_seats": 0,
+		"compute_demand": 0.0,
+		"power_demand": 0.0,
+		"min_reputation": 0,
+	}
+	var freight_tooltip := CharterTooltipText.format_freight(freight)
+	runner.check(
+		freight_tooltip.contains("Cold-chain vaccine shipment"),
+		"charter tooltip: freight cargo title"
+	)
+	runner.check(
+		freight_tooltip.contains("• refrigerated"),
+		"charter tooltip: freight hold capability bullet"
+	)
+	runner.check(
+		freight_tooltip.contains("• biohazard"),
+		"charter tooltip: freight second hold capability bullet"
+	)
+	runner.check(
+		freight_tooltip.contains("• 1.5 t cargo"),
+		"charter tooltip: freight tonne bullet"
+	)
+	runner.check(
+		not freight_tooltip.contains("Suggested route"),
+		"charter tooltip: one-hop freight omits suggested route"
+	)

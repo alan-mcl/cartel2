@@ -120,15 +120,7 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 	)
 	inner.add_child(accept)
 
-	var tooltip_lines: Array[String] = [
-		str(offer.get("role_title", "Charter")),
-		meta,
-		_life_support_tile_line(offer),
-	]
-	if not reputation_line.is_empty():
-		tooltip_lines.append(reputation_line)
-	tooltip_lines.append(str(offer.get("description", "")))
-	var tooltip := _tile_tooltip_from_lines(tooltip_lines, str(check.get("reason", "")))
+	var tooltip := CharterTooltipText.format_passenger(offer, str(check.get("reason", "")))
 	return _surface_tile(inner, tooltip)
 
 
@@ -165,15 +157,11 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 		status_line = "In transit — cannot cancel."
 		inner.add_child(_one_line_label(status_line, &"Muted"))
 
-	var tooltip := _tile_tooltip_from_lines(
-		[
-			str(charter.get("role_title", "Charter")),
-			meta,
-			_life_support_tile_line(charter),
-			str(charter.get("description", "")),
-			status_line,
-		],
-		""
+	var tooltip := CharterTooltipText.format_passenger(
+		charter,
+		status_line,
+		origin,
+		ship_name
 	)
 	return _surface_tile(inner, tooltip)
 
@@ -235,18 +223,6 @@ func _life_support_tier_name(tier: String) -> String:
 			return "Comfort"
 		_:
 			return "Spartan"
-
-
-func _tile_tooltip_from_lines(tile_lines: Array[String], extra: String) -> String:
-	var parts: PackedStringArray = PackedStringArray()
-	for line in tile_lines:
-		var trimmed := line.strip_edges()
-		if not trimmed.is_empty():
-			parts.append(trimmed)
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		parts.append(extra_trimmed)
-	return "\n".join(parts)
 
 
 func _active_ship_id() -> String:

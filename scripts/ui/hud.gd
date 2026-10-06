@@ -132,7 +132,7 @@ func set_translation_stability(stability: float, in_unspace: bool) -> void:
 	var show := in_unspace and stability >= 0.0 and _has_capability("local_sensor")
 	_stability_label.visible = show
 	if show:
-		_stability_label.text = "Stability: %d%%" % int(round(stability))
+		_stability_label.text = "N-space stability: %d%%" % int(round(stability))
 
 
 func set_field_state(sample: FieldConditions.FieldSample) -> void:
