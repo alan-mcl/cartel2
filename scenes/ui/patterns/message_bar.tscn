@@ -15,7 +15,7 @@ theme_override_constants/separation = 8
 visible = false
 layout_mode = 2
 theme_type_variation = &"Section"
-text = "WIRE"
+text = "HEADLINES"
 
 [node name="Clip" type="Control" parent="HBox"]
 clip_contents = true

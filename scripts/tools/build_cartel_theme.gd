@@ -196,6 +196,17 @@ func _style_panels(theme: Theme) -> void:
 		_flat(translucent_bg, translucent_border, 12, 0)
 	)
 
+	var hud_ticker_bg := C.elevated
+	hud_ticker_bg.a = 0.85
+	var hud_ticker_border := C.border
+	hud_ticker_border.a = 0.9
+	theme.set_type_variation(&"HudTicker", &"PanelContainer")
+	theme.set_stylebox(
+		&"panel",
+		&"HudTicker",
+		_flat(hud_ticker_bg, hud_ticker_border, 12, 0)
+	)
+
 	theme.set_type_variation(&"Elevated", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"Elevated", _flat(C.elevated, C.border, 12, 0))
 

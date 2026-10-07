@@ -122,7 +122,7 @@ func show_main_menu() -> void:
 		_ui_callbacks.get("quit_to_menu")
 	)
 	_jump.bind(_catalog, _main.session)
-	_hud.bind(_main.session, _player, AssembledShip.new())
+	_hud.bind(_main.session, _player, AssembledShip.new(), _simulation, _catalog)
 	_refresh_session_bindings()
 	_simulation.reset_save()
 	_main_menu.open()
@@ -141,7 +141,7 @@ func start_game_from_session() -> void:
 		_main.session
 	)
 	_refresh_session_bindings()
-	_hud.bind(_main.session, _player, _main.player_ship)
+	_hud.bind(_main.session, _player, _main.player_ship, _simulation, _catalog)
 	_hud.visible = true
 	_main.game_active = true
 
@@ -184,7 +184,7 @@ func begin_new_game(callsign: String, background_id: String, portrait_path: Stri
 	_new_game.close()
 	_ui_root.session = _main.session
 	_jump.bind(_catalog, _main.session)
-	_hud.bind(_main.session, _player, AssembledShip.new())
+	_hud.bind(_main.session, _player, AssembledShip.new(), _simulation, _catalog)
 	_refresh_session_bindings()
 	start_game_from_session()
 
@@ -221,7 +221,7 @@ func load_slot(slot_index: int) -> void:
 		_ui_callbacks.get("quit_to_menu")
 	)
 	_jump.bind(_catalog, _main.session)
-	_hud.bind(_main.session, _player, AssembledShip.new())
+	_hud.bind(_main.session, _player, AssembledShip.new(), _simulation, _catalog)
 	_refresh_session_bindings()
 
 	_current_slot = slot_index

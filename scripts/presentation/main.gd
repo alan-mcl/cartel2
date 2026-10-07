@@ -36,7 +36,7 @@ func _ready() -> void:
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
 
-	_hud.bind(session, _player, AssembledShip.new())
+	_hud.bind(session, _player, AssembledShip.new(), _simulation, catalog)
 	_bind_controllers()
 	_bind_session_events(session)
 

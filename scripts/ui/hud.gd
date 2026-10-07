@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const PLAYER_HOVER_RADIUS := 24.0
+const WIRE_TAPE_TOP_UP_MAX_TRIES := 12
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
@@ -33,19 +34,34 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _interact_prompt: Control = $Root/InteractPromptOverlay
 @onready var _star_lens_flare: Control = $Root/StarLensFlare
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
+@onready var _wire_message_bar: MessageBar = $Root/WireMessageBar
 @onready var _message_bar: MessageBar = $Root/MessageBar
 
 var _session: GameSession
+var _catalog: Catalog
+var _simulation: Simulation
 var _assembled_ship: AssembledShip
 var _operating_state: ShipOperatingState
 var _player_broadcast_text: String = ""
+var _wire_rng := RandomNumberGenerator.new()
+var _wire_tape_active := false
+var _wire_started := false
 
 
-func bind(session: GameSession, _player: CharacterBody2D, assembled_ship: AssembledShip) -> void:
+func bind(
+	session: GameSession,
+	_player: CharacterBody2D,
+	assembled_ship: AssembledShip,
+	simulation: Simulation = null,
+	catalog: Catalog = null
+) -> void:
 	_session = session
+	_simulation = simulation
+	_catalog = catalog
 	_bind_gst_clock()
 	set_assembled_ship(assembled_ship)
 	_refresh_identity()
+	_sync_wire_tape_state()
 
 
 func _bind_gst_clock() -> void:
@@ -72,11 +88,20 @@ func refresh() -> void:
 	_refresh_capabilities()
 	_refresh_identity()
 	_sync_log()
+	_sync_wire_tape_state()
 
 
 func clear_message_log() -> void:
 	if _message_bar != null:
 		_message_bar.clear_queued_lines()
+	if _wire_message_bar != null:
+		_wire_message_bar.clear_queued_lines()
+	_wire_tape_active = false
+	_wire_started = false
+	set_process(false)
+	var messages := _messages_subsystem()
+	if messages != null:
+		messages.clear_channel(MessageChannels.HEADLINES)
 
 
 func set_interaction_target(target: Interactable) -> void:
@@ -267,6 +292,8 @@ func _refresh_capabilities() -> void:
 		_signature_panel.visible = has_basic
 	if _message_bar != null:
 		_message_bar.visible = has_basic
+	if _wire_message_bar != null:
+		_wire_message_bar.visible = has_basic and _wire_headlines_enabled()
 	if _field_panel != null:
 		_field_panel.visible = has_sensor
 	if _local_sensor_map != null:
@@ -289,7 +316,81 @@ func _sync_log() -> void:
 	_message_bar.play_line(_session.last_log)
 
 
+func _process(_delta: float) -> void:
+	if not _wire_tape_active or not visible:
+		return
+	_top_up_wire_tape()
+
+
+func _wire_headlines_enabled() -> bool:
+	if _session == null or _catalog == null:
+		return false
+	if _session.world.in_unspace:
+		return false
+	return ExchangePriceTape.is_planetary_hub(_catalog, _session.sector_id)
+
+
+func _messages_subsystem() -> MessageSubsystem:
+	if _simulation == null:
+		return null
+	return _simulation.get_subsystem("messages") as MessageSubsystem
+
+
+func _sync_wire_tape_state() -> void:
+	var enabled := visible and _has_capability("basic_hud") and _wire_headlines_enabled()
+	if _wire_message_bar != null:
+		_wire_message_bar.visible = enabled
+	if not enabled:
+		_wire_tape_active = false
+		_wire_started = false
+		set_process(false)
+		return
+	var messages := _messages_subsystem()
+	var headlines_sector_changed := false
+	if messages != null:
+		headlines_sector_changed = messages.note_headlines_sector(_session.sector_id)
+	if headlines_sector_changed and _wire_message_bar != null:
+		_wire_message_bar.clear_queued_lines()
+	if not _wire_started:
+		_wire_started = true
+		_wire_tape_active = true
+		_wire_rng.randomize()
+		set_process(true)
+	_top_up_wire_tape()
+
+
+func _enqueue_wire_line() -> bool:
+	var messages := _messages_subsystem()
+	if messages == null or _session == null or _catalog == null or _wire_message_bar == null:
+		return false
+	var sample := messages.next_line(MessageChannels.HEADLINES, _session, _catalog, _wire_rng)
+	var line := str(sample.get("text", "")).strip_edges()
+	if line.is_empty():
+		return false
+	return _wire_message_bar.play_line(line, true, true)
+
+
+func _top_up_wire_tape() -> void:
+	if _wire_message_bar == null or not _wire_headlines_enabled():
+		return
+	var tries := 0
+	while _wire_message_bar.wants_more_log_lines() and tries < WIRE_TAPE_TOP_UP_MAX_TRIES:
+		if not _enqueue_wire_line():
+			break
+		tries += 1
+
+
 func _ready() -> void:
 	if _session != null:
 		_bind_gst_clock()
+	_apply_hud_ticker_panels()
 	_refresh_capabilities()
+	if _wire_message_bar != null:
+		_wire_message_bar.set_tag("HEADLINES")
+
+
+func _apply_hud_ticker_panels() -> void:
+	for bar in [_message_bar, _wire_message_bar]:
+		if bar == null:
+			continue
+		bar.theme_type_variation = &"HudTicker"

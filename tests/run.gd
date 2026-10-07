@@ -30,6 +30,7 @@ func _init() -> void:
 	TestMotion.run(runner)
 	TestDebris.run(runner)
 	TestMessageBar.run(runner, self)
+	TestMessageEmitters.run(runner)
 	TestExchangePriceTape.run(runner)
 	TestFuel.run(runner)
 

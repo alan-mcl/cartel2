@@ -273,7 +273,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 		_catalog,
 		_main.session
 	)
-	_hud.bind(_main.session, _player, _main.player_ship)
+	_hud.bind(_main.session, _player, _main.player_ship, _simulation, _catalog)
 
 	var launch_pos := _world_loader.get_habitat_launch_position()
 	var habitat_pos := _world_loader.get_habitat_world_position()

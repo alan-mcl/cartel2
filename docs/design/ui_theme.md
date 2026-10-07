@@ -71,7 +71,8 @@ Set on nodes: `theme_type_variation = &"Title"`.
 `PanelContainer` type variations:
 
 - `Surface` — default operational panel
-- `SurfaceTranslucent` — flight HUD panels (25% alpha surface/border)
+- `SurfaceTranslucent` — flight HUD corner panels (25% alpha surface/border)
+- `HudTicker` — bottom HUD gameplay and WIRE ticker bars (elevated fill at ~85% opacity — slightly translucent)
 - `Elevated` — footer bars, selected contexts
 - `Media` — editorial / art frames
 - `Alert` — breaking strip with left status bar
