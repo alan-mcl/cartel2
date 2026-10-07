@@ -1,32 +1,39 @@
 # Planets and sectors
 
-Ambient **field conditions** (gravity, magnetic, radiant, charged particle) for each sector are authored in `sectors.json` `neighborhood` and summarized below. See [field_conditions.md](field_conditions.md).
-
 ## Proxima
 
 **Classification:** E1  
-**System:** Alpha Centauri  
+**System:** Alpha Centauri A  
 **Gravity:** .98 G  
 **Population:** 60 billion  
 **Ocean coverage:** 71%  
 **Climate:** Temperate
 
-Proxima was the first E-type planet discovered and colonised by humans, and is today the **galactic capital**. It is a lush, densely populated world with many large cities.
-
-**Field neighborhood:** Sunlike Alpha Centauri flux; nominal magnetic dipole and particle wind; steady radiant (no strong fluctuations).
+Proxima was the first E-type planet discovered and colonised by humans, and is today the galactic capital. It is a lush, densely populated world with many large cities.
 
 ### City Malls
 
 Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharbour.
 
-### Oribtals
+### Planetary Orbit
 
-Proxima Habitat
-Habitat buildings in game: Terminal, Davidsons (pilot bar), Concord Scouts (used fitted ships), Skyedge Space Ships (unfitted chassis frames), Centauri Shipyard, Proxima Exchange. Crews move between buildings on the habitat tram; each hop costs about fifteen minutes of local time.
+ - Proxima Habitat
+ - 6 other habitats TBD
+ - Jump gate
 
-### Current orbit (JSON)
+### Solar neighbourhood
 
-Large planet disc backdrop, rotating ring of seven orbitals (Proxima Habitat plus six unnamed stations), and a static jump gate farther out.
+Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-class star. Beyond its orbit lies a broad asteroid and debris belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
+
+Alpha Centauri B, the system's K-class companion star, has its own small planetary system of several uninhabitable worlds and industrial related installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
+
+Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and it's ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
+
+## Field Conditions
+
+ - Solar influence: Stable Alpha Centauri A with fluctuating influence from the nearby Alpha Centauri B
+ - Magnetic: nominal magnetic dipole
+
 
 ## Tycho
 
@@ -57,7 +64,7 @@ Large planet disc backdrop (warm tint), rotating ring of three orbitals (Tycho H
 ## La Bella Vista
 
 **Classification:** E4  
-**System:** Beta Piscium
+**System:** Delta Pavonis
 **Gravity:** 0.95 G  
 **Population:** 15 billion  
 **Ocean coverage:** 92%  
@@ -65,12 +72,12 @@ Large planet disc backdrop (warm tint), rotating ring of three orbitals (Tycho H
 
 La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting the star also known as Fum-al-Samakah. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
-**Field neighborhood:** Warm Fum-al-Samakah — elevated radiant, moderate wind, slightly weaker dipole than a capital world.
+**Field neighborhood:** Warm Delta Pavonis - elevated radiant, moderate wind, slightly weaker dipole than a capital world.
 
 ### City Malls
 
 Oberon, Santa Margarita
-Notable landmark: Watershed Stadium (Oberon cricket) — from original world catalog.
+Notable landmark: Watershed Stadium (Oberon cricket) - from original world catalog.
 
 ### Orbitals
 
@@ -84,7 +91,7 @@ Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (La Bel
 ## Irasia
 
 **Classification:** E5  
-**System:** Epsilon Hydra
+**System:** 61 Virginis
 **Gravity:** .99 G
 **Population:** 46 billion  
 **Ocean coverage:** 76%  
@@ -92,7 +99,7 @@ Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (La Bel
 
 Irasia is a prosperous and heavily industrialised world, with enormous coastal cities and extensive manufacturing districts. Its temperate climate and abundant oceans support a large population, while its position on major trade routes has made it one of the galaxy’s principal centres of commerce.
 
-**Field neighborhood:** Epsilon Hydra — near-baseline sunlike radiant, wind, and dipole (trade-hub calm).
+**Field neighborhood:** 61 Virginis near-baseline sunlike radiant, wind, and dipole (trade-hub calm).
 
 ### City Malls
 
@@ -107,7 +114,7 @@ Habitat buildings: Irasia Terminal, Irasia Commercial Yards, Irasia Exchange.
 ## Tokirev
 
 **Classification:** E2  
-**System:** HD 73256
+**System:** 61 Ursae Majoris
 **Gravity:** 1.02 G
 **Population:** 56 billion  
 **Ocean coverage:** 62%  
@@ -115,7 +122,7 @@ Habitat buildings: Irasia Terminal, Irasia Commercial Yards, Irasia Exchange.
 
 Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
 
-**Field neighborhood:** HD 73256 — slightly elevated magnetic dipole; otherwise typical main-sequence indices.
+**Field neighborhood:** 61 Ursae Majoris - slightly elevated magnetic dipole; otherwise typical main-sequence indices.
 
 ### City Malls
 
@@ -129,7 +136,7 @@ Habitat buildings: Tokirev Terminal, Tokirev Automated Yards, Tokirev Exchange.
 ## Fennet
 
 **Classification:** E1  
-**System:** Tau¹ Eridani
+**System:** 18 Scorpii
 **Gravity:** .95 G
 **Population:** 29 billion  
 **Ocean coverage:** 78%  
@@ -137,7 +144,7 @@ Habitat buildings: Tokirev Terminal, Tokirev Automated Yards, Tokirev Exchange.
 
 Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
 
-**Field neighborhood:** Tau¹ Eridani — quiet radiant and wind, standard dipole.
+**Field neighborhood:** 18 Scorpii — quiet radiant and wind, standard dipole.
 
 ### City Malls
 
