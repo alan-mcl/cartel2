@@ -32,7 +32,7 @@ Alpha Centauri B, the system's K-type companion star, has its own small planetar
 
  - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
  - ACB1: hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes
- - ACB2: also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support including a Jump Gate
+ - ACB2: also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
  - ACB3: a small ice covered planet near Alpha Centauri B's orbital boundary
  - Terminus: a large frozen planet on a distant circum-binary orbit
 
@@ -71,8 +71,8 @@ Two volatile gas giants keep tight orbits around the pair, then a good deal furt
 
  - Regulus Belt Station: habitat central to mining the asteroid belt beyond Tycho
  - Vulcan: The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in orbit.
- - Denarius II: The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure, including a jump gate.
- - Typhon XVI: The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure and a jump gate.
+ - Denarius II: The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure.
+ - Typhon XVI: The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure.
  - others TBD
 
 

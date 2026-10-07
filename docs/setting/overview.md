@@ -23,7 +23,7 @@ That score is separate from **sanctions**: recorded infractions with a monetary 
 
 ## Worlds
 
-Eleven inhabited systems. Each has an orbital habitat where ships dock, trade, and take work.
+Eleven major inhabited systems. Each has an orbital habitat where ships dock, trade, and take work.
 
 | World | In brief |
 |-------|----------|
@@ -39,13 +39,11 @@ Eleven inhabited systems. Each has an orbital habitat where ships dock, trade, a
 | **Titania IX** | Cold moon of a gas giant; tourism and winter sports under a dim flare star. |
 | **Pelagos** | Prosperous world orbiting a binary star. |
 
-**Centauri A Beltworks** is a public-route mining habitat in the Alpha Centauri A asteroid belt, reachable from Proxima’s jump gate. It is not a twelfth inhabited star system.
-
 ## N-space
 
 "Unspace" is the public name for the higher-dimensional spaces used for interstellar travel. The scientific term is N-space: 4-space, 5-space, 6-space and so on. Ordinary physical space is 3-space.
 
-Each N-space offers a different way to cross between points in 3-space. Higher-order spaces generally permit faster translations, but are more difficult and dangerous to navigate. In practice, human navigation uses only the lower single-digit spaces, with most established commercial routes running through 4-space or 5-space. Jump gate infrastructure exists at major systems and provides access to a public translation network. A ship enters the appropriate N-space at a gate, follows a programmed route, and emerges from the corresponding exit in the destination system's high orbit. Public routes with well known, safe translations are pre-programmed into most navigation computers.
+Each N-space offers a different way to cross between points in 3-space. Higher-order spaces generally permit faster translations, but are more difficult and dangerous to navigate. In practice, human navigation uses only the lower single-digit spaces, with most established commercial routes running through 4-space or 5-space. Jump gate infrastructure exists at major systems and provides access to a public translation network. A ship enters the appropriate N-space at a gate, follows a programmed route, and emerges from the corresponding exit in the destination system's high orbit. Public routes with well known, safe translations are pre-programmed into most navigation computers. Smaller translation beacons support one destination jump, and serve to connect remote locations to the large jump gate hubs.
 
 Some ships can fit private translation equipment, allowing them to make translations without using the public gate network. Finding or developing a faster translation through a higher N-space can therefore be commercially valuable, and particularly useful routes may be closely guarded intellectual property. The public network currently connects the inhabited systems through established translation routes. In theory, a translation exists through some N-space between any two points. The practical limits are navigation, danger, infrastructure and cost.
 
