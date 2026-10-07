@@ -11,6 +11,7 @@ static func run(runner: TestRunner) -> void:
 	_test_enter_unspace_higher_n(runner, catalog)
 	_test_save_library_and_stability(runner, catalog)
 	_test_tester_flare_offers_translations(runner, catalog)
+	_test_offer_grouping(runner, catalog)
 
 
 static func _assembled_with_nav(catalog: Catalog, nav_module_id: String) -> AssembledShip:
@@ -34,6 +35,40 @@ static func _assembled_with_nav(catalog: Catalog, nav_module_id: String) -> Asse
 			return ShipAssembler.assemble_owned(catalog, owned)
 	owned.set_module("system_5", nav_module_id)
 	return ShipAssembler.assemble_owned(catalog, owned)
+
+
+static func _test_offer_grouping(runner: TestRunner, catalog: Catalog) -> void:
+	var lumina := _assembled_with_nav(catalog, "sne_astrolabe")
+	var offers := TranslationNav.list_offered_translations(catalog, "proxima", lumina, [])
+	var grouped := TranslationNav.group_offered_translations(catalog, "proxima", offers)
+	var local: Array = grouped.get("local", [])
+	var other: Array = grouped.get("other", [])
+
+	var beltworks_local := false
+	for row_variant in local:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("destination_id", "")) == "centauri_a_beltworks":
+			beltworks_local = true
+	runner.check(beltworks_local, "grouping: beltworks is local to proxima")
+	runner.check(
+		TranslationNav.same_star_system(catalog, "proxima", "centauri_a_beltworks"),
+		"grouping: proxima and beltworks share star system"
+	)
+
+	var irasia_row: Dictionary = {}
+	for row_variant in other:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("destination_id", "")) == "irasia":
+			irasia_row = row
+			break
+	runner.check(not irasia_row.is_empty(), "grouping: irasia is other hub from proxima")
+	var by_n: Dictionary = irasia_row.get("by_n", {})
+	runner.check(by_n.has(4), "grouping: irasia row has 4-space offer")
+	runner.check(by_n.has(5), "grouping: irasia row has 5-space offer on same destination")
 
 
 static func _test_tester_flare_offers_translations(runner: TestRunner, catalog: Catalog) -> void:

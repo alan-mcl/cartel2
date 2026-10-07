@@ -191,6 +191,76 @@ static func roll_stability(
 	return clampf(base, ACCURACY_MIN, ACCURACY_MAX)
 
 
+static func destination_display_label(catalog: Catalog, sector_id: String) -> String:
+	if catalog == null or sector_id.is_empty():
+		return sector_id
+	var sector := catalog.get_sector(sector_id)
+	var label := str(sector.get("planet_name", ""))
+	if label.is_empty():
+		label = str(sector.get("name", sector_id))
+	return label
+
+
+static func same_star_system(catalog: Catalog, sector_a: String, sector_b: String) -> bool:
+	if catalog == null or sector_a.is_empty() or sector_b.is_empty():
+		return false
+	var sys_a := str(catalog.get_sector(sector_a).get("star_system", ""))
+	var sys_b := str(catalog.get_sector(sector_b).get("star_system", ""))
+	return not sys_a.is_empty() and sys_a == sys_b
+
+
+static func group_offered_translations(
+	catalog: Catalog,
+	source_sector_id: String,
+	offers: Array
+) -> Dictionary:
+	var local_by_dest: Dictionary = {}
+	var other_by_dest: Dictionary = {}
+
+	for offer_variant in offers:
+		if typeof(offer_variant) != TYPE_DICTIONARY:
+			continue
+		var offer: Dictionary = offer_variant
+		var translation: Dictionary = offer.get("translation", {})
+		var dest_id := str(translation.get("target", ""))
+		if dest_id.is_empty():
+			continue
+		var bucket: Dictionary = (
+			local_by_dest if same_star_system(catalog, source_sector_id, dest_id) else other_by_dest
+		)
+		if not bucket.has(dest_id):
+			bucket[dest_id] = {
+				"destination_id": dest_id,
+				"label": destination_display_label(catalog, dest_id),
+				"by_n": {},
+			}
+		var row: Dictionary = bucket[dest_id]
+		var by_n: Dictionary = row.get("by_n", {})
+		var n := int(translation.get("n", 4))
+		by_n[n] = offer
+		row["by_n"] = by_n
+
+	return {
+		"local": _sorted_destination_rows(local_by_dest),
+		"other": _sorted_destination_rows(other_by_dest),
+	}
+
+
+static func format_cell_summary(accuracy: float, duration_seconds: float) -> String:
+	var duration_text := GalacticCalendar.format_duration(duration_seconds)
+	return "%d%%\n%s" % [int(round(accuracy)), duration_text]
+
+
+static func _sorted_destination_rows(by_dest: Dictionary) -> Array:
+	var rows: Array = []
+	for dest_id in by_dest.keys():
+		rows.append(by_dest[dest_id])
+	rows.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		return str(left.get("label", "")) < str(right.get("label", ""))
+	)
+	return rows
+
+
 static func format_offer_line(translation: Dictionary, accuracy: float, duration_seconds: float) -> String:
 	var solution := int(translation.get("solution", 0))
 	var label := str(translation.get("label", translation.get("target", "")))
