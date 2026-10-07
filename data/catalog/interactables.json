@@ -131,7 +131,7 @@
   },
   {
     "id": "concordia_habitat",
-    "title": "Concordia Habitat",
+    "title": "Pelagos Habitat",
     "inspect_text": "Commerce orbital above Pelagos. Docking lanes are open; twin suns glare off the hulls.",
     "kind": "dock",
     "dock_location_id": "concordia_habitat"

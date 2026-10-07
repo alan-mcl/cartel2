@@ -575,7 +575,7 @@
         {
           "id": "concordia_habitat_obj",
           "kind": "habitat",
-          "label": "Concordia Habitat",
+          "label": "Pelagos Habitat",
           "interactable": "concordia_habitat",
           "sprite": "res://assets/world/habitat_proxima.svg",
           "modulate": "#d4a050"

@@ -11,23 +11,30 @@
 
 Proxima was the first E-type planet discovered and colonised by humans, and is today the galactic capital. It is a lush, densely populated world with many large cities.
 
-### City Malls
+### Planet Surface
 
-Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharbour.
+ - City Malls: Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharbour.
 
 ### Planetary Orbit
 
+Proxima high orbit is bustling with civilian and commercial traffic.
+ 
  - Proxima Habitat
- - 6 other habitats TBD
- - Jump gate
+ - others TBD
 
 ### Solar neighbourhood
 
-Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-class star. Beyond its orbit lies a broad asteroid and debris belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
+Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-class star. Beyond its orbit lies a broad asteroid belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
 
 Alpha Centauri B, the system's K-class companion star, has its own small planetary system of several uninhabitable worlds and industrial related installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
 
 Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and it's ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
+
+ - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
+ - ACB1: hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes, uninhabitable and useless
+ - ACB2: also called "The Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
+ - ACB3: a small ice covered planet at the limit of Alpha Centauri B's orbital boundary, no operations present
+ - Terminus: a large frozen planet on a distant circum-binary orbit.
 
 ### Field Conditions
 
@@ -45,7 +52,7 @@ Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible e
 
 Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
 
-### City Malls
+### Planet Surface
 
 Ozero.
 
@@ -74,7 +81,7 @@ TBD
 
 La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting a quiet G-type star. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
-### City Malls
+### Planet Surface
 
 Oberon, Santa Margarita
 Notable landmark: Watershed Stadium (Oberon cricket) - from original world catalog.
@@ -104,7 +111,7 @@ TBD
 
 Irasia is a prosperous and heavily industrialised world, with enormous coastal cities and extensive manufacturing districts. Its temperate climate and abundant oceans support a large population, while its position on major trade routes has made it one of the galaxy’s principal centres of commerce.
 
-### City Malls
+### Planet Surface
 
 La Palma, Fairhaven
 
@@ -133,7 +140,7 @@ TBD
 
 Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
 
-### City Malls
+### Planet Surface
 
 Kaliningrad
 
@@ -162,7 +169,7 @@ TBD
 
 Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
 
-### City Malls
+### Planet Surface
 
 Belfast
 
@@ -191,7 +198,7 @@ TBD
 
 Fortuna is a wealthy and densely populated world whose prosperity was built on finance, trade and speculation. Its cities are filled with banks, exchanges, corporate headquarters and luxury developments, while enormous agricultural regions provide food for its population. The planet is known for its comfortable standard of living and its unusually active commercial culture.
 
-### City Malls
+### Planet Surface
 
 Jubilee, New Venice, Bellagio
 
@@ -220,7 +227,7 @@ TBD
 
 New Carthage is a largely oceanic world whose major population centres developed around a network of artificial islands and enormous coastal cities. Originally settled as a trading colony, it became a major shipping and financial hub. Much of the planet's culture remains shaped by commerce, with old mercantile institutions sitting alongside vast modern corporate developments.
 
-### City Malls
+### Planet Surface
 
 Carthage, New Tyre, Leptis, Utica
 
@@ -249,7 +256,7 @@ TBD
 
 Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
 
-### City Malls
+### Planet Surface
 
 Horizon, Meridian, Providence, New Geneva, Ascension
 
@@ -278,7 +285,7 @@ TBD
 
 The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
 
-### City Malls
+### Planet Surface
 
 Titania Central, Skygarden
 
@@ -308,7 +315,7 @@ TBD
 
 Pelagos is a prosperous world orbiting two suns, with enormous coastal cities and extensive mineral resources. The binary system gives the planet unusually complex seasonal and daylight cycles, but its inhabitants have long since adapted. Pelagos Habitat is a major centre of commerce and manufacturing, with a reputation for innovation and enterprise.
 
-### City Malls
+### Planet Surface
 
 Mediran, Twin Cities, New Cambridge
 

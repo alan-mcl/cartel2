@@ -252,7 +252,7 @@
   },
   {
     "id": "concordia_orbital_terminal",
-    "name": "Concordia Orbital Terminal",
+    "name": "Pelagos Orbital Terminal",
     "type": "terminal",
     "kind": "terminal",
     "description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
@@ -261,7 +261,7 @@
   },
   {
     "id": "concordia_shipyard",
-    "name": "Concordia Twin Yards",
+    "name": "Pelagos Twin Yards",
     "type": "shipyard",
     "kind": "workshop",
     "description": "Manufacturing yards tuned to Pelagos' twin-sun cycle. Observation decks filter the glare while crews install systems in parallel bays.",
@@ -352,7 +352,7 @@
   },
   {
     "id": "concordia_exchange",
-    "name": "Concordia Exchange",
+    "name": "Pelagos Exchange",
     "type": "market",
     "kind": "merchant",
     "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
