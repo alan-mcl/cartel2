@@ -9,7 +9,9 @@
  - **Ocean coverage:** 71%  
  - **Climate:** Temperate
 
-Proxima was the first E-type planet discovered and colonised by humans, and is today the galactic capital. It is a lush, densely populated world with many large cities.
+Proxima was the first E-class planet discovered and colonised by humans, and is today the galactic capital. It is a lush, densely populated world with many large cities.
+
+Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and its ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
 
 ### Planet Surface
 
@@ -24,37 +26,37 @@ Proxima high orbit is bustling with civilian and commercial traffic.
 
 ### Solar neighbourhood
 
-Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-class star. Beyond its orbit lies a broad asteroid belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
+Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-type star. Beyond its orbit lies a broad asteroid belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
 
-Alpha Centauri B, the system's K-class companion star, has its own small planetary system of several uninhabitable worlds and industrial related installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
-
-Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and it's ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
+Alpha Centauri B, the system's K-type companion star, has its own small planetary system of several uninhabitable worlds and industrial installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
 
  - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
- - ACB1: hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes, uninhabitable and useless
- - ACB2: also called "The Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
- - ACB3: a small ice covered planet at the limit of Alpha Centauri B's orbital boundary, no operations present
- - Terminus: a large frozen planet on a distant circum-binary orbit.
+ - ACB1: hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes
+ - ACB2: also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support including a Jump Gate
+ - ACB3: a small ice covered planet near Alpha Centauri B's orbital boundary
+ - Terminus: a large frozen planet on a distant circum-binary orbit
 
 ### Field Conditions
 
- - Solar influence: Stable Alpha Centauri A with fluctuating influence from the nearby Alpha Centauri B
+ - Solar: Stable Alpha Centauri A with fluctuating influence from the nearby Alpha Centauri B
  - Magnetic: nominal magnetic dipole
 
 ## Tycho
 
  - **Classification:** E3  
- - **System:** Regulus  
+ - **System:** Regulus A
  - **Gravity:** 1.07 G
  - **Population:** 3.5 billion  
  - **Ocean coverage:** 62%  
  - **Climate:** Arid
 
-Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
+Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-class planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
+
+Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-visible white companion dominate the day. They are often eclipsed by one of the inner giants, Denarius in particular often being visible in the dayside sky. At night the two inner gas giants are prominently visible and their distant relatives march across the skies on various trajectories. The distant stellar companions Regulus BC are the brightest star in the night sky.
 
 ### Planet Surface
 
-Ozero.
+ - City Malls: Ozero.
 
 ### Planetary Orbit
 
@@ -63,11 +65,20 @@ Ozero.
 
 ### Solar neighbourhood
 
-TBD
+Regulus A is itself a close binary: a rapidly rotating bright blue star with a faint white dwarf companion (called The Widow by the earliest Tycho settlers) at only 0.35 AU.
+
+Two volatile gas giants keep tight orbits around the pair, then a good deal further out lies Tycho in a narrow habitable zone. Beyond Tycho is an asteroid belt, followed by a gaggle of increasingly distant gas giants, some in very eccentric orbits, and their numerous moons.
+
+ - Regulus Belt Station: habitat central to mining the asteroid belt beyond Tycho
+ - Vulcan: The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in orbit.
+ - Denarius II: The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure, including a jump gate.
+ - Typhon XVI: The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure and a jump gate.
+ - others TBD
+
 
 ### Field conditions
 
- - Solar influence: Regulus very radiant and windy
+ - Solar: Regulus very radiant and windy
  - Magnetic: large, restless magnetic dipole with high fluctuation
 
 ## La Bella Vista
