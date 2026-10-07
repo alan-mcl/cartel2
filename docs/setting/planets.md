@@ -2,12 +2,12 @@
 
 ## Proxima
 
-**Classification:** E1  
-**System:** Alpha Centauri A  
-**Gravity:** .98 G  
-**Population:** 60 billion  
-**Ocean coverage:** 71%  
-**Climate:** Temperate
+ - **Classification:** E1  
+ - **System:** Alpha Centauri A  
+ - **Gravity:** .98 G  
+ - **Population:** 60 billion  
+ - **Ocean coverage:** 71%  
+ - **Climate:** Temperate
 
 Proxima was the first E-type planet discovered and colonised by humans, and is today the galactic capital. It is a lush, densely populated world with many large cities.
 
@@ -29,238 +29,299 @@ Alpha Centauri B, the system's K-class companion star, has its own small planeta
 
 Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and it's ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
 
-## Field Conditions
+### Field Conditions
 
  - Solar influence: Stable Alpha Centauri A with fluctuating influence from the nearby Alpha Centauri B
  - Magnetic: nominal magnetic dipole
 
-
 ## Tycho
 
-**Classification:** E3  
-**System:** Regulus  
-**Gravity:** 1.07 G
-**Population:** 3.5 billion  
-**Ocean coverage:** 62%  
-**Climate:** Arid
+ - **Classification:** E3  
+ - **System:** Regulus  
+ - **Gravity:** 1.07 G
+ - **Population:** 3.5 billion  
+ - **Ocean coverage:** 62%  
+ - **Climate:** Arid
 
-Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen G-type gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
-
-**Field neighborhood:** Strong Regulus radiant and wind; large, restless magnetic dipole with high fluctuation; eclipse-like radiant swings.
+Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-type planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from frequent eclipses, wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
 
 ### City Malls
 
 Ozero.
 
-### Orbitals
+### Planetary Orbit
 
-Tycho Habitat
-Habitat buildings: Tycho Terminal, Tycho Heavy Yards, Tycho Exchange.
+ - Tycho Habitat
+ - others TBD
 
-### Current orbit (JSON)
+### Solar neighbourhood
 
-Large planet disc backdrop (warm tint), rotating ring of three orbitals (Tycho Habitat plus two unnamed stations), static jump gate farther out, and a few **debris rocks** between the ring and the gate — leftover ore and slag from industrial traffic, shootable but not salvaged.
+TBD
+
+### Field conditions
+
+ - Solar influence: Regulus very radiant and windy
+ - Magnetic: large, restless magnetic dipole with high fluctuation
 
 ## La Bella Vista
 
-**Classification:** E4  
-**System:** Delta Pavonis
-**Gravity:** 0.95 G  
-**Population:** 15 billion  
-**Ocean coverage:** 92%  
-**Climate:** Warm  
+ - **Classification:** E4  
+ - **System:** Delta Pavonis
+ - **Gravity:** 0.95 G  
+ - **Population:** 15 billion  
+ - **Ocean coverage:** 92%  
+ - **Climate:** Warm  
 
-La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting the star also known as Fum-al-Samakah. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
-
-**Field neighborhood:** Warm Delta Pavonis - elevated radiant, moderate wind, slightly weaker dipole than a capital world.
+La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting a quiet G-type star. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
 ### City Malls
 
 Oberon, Santa Margarita
 Notable landmark: Watershed Stadium (Oberon cricket) - from original world catalog.
 
-### Orbitals
+### Planetary Orbit
 
-La Bella Vista Habitat
-Habitat buildings: La Bella Vista Orbital Terminal, Vista Fitting Docks, La Bella Vista Exchange.
+ - La Bella Vista Habitat
+ - others TBD
 
-### Current orbit (JSON)
+### Solar neighbourhood
 
-Large planet disc backdrop (blue-tinted), rotating ring of four orbitals (La Bella Vista Habitat plus three unnamed stations), and a static jump gate farther out.
+TBD
+
+### Field conditions
+
+ - Solar influence: Delta Pavonis is warm with elevated radiance and moderate wind
+ - Magnetic: slightly weaker dipole than a capital world
 
 ## Irasia
 
-**Classification:** E5  
-**System:** 61 Virginis
-**Gravity:** .99 G
-**Population:** 46 billion  
-**Ocean coverage:** 76%  
-**Climate:** Temperate
+ - **Classification:** E5  
+ - **System:** 61 Virginis
+ - **Gravity:** .99 G
+ - **Population:** 46 billion  
+ - **Ocean coverage:** 76%  
+ - **Climate:** Temperate
 
 Irasia is a prosperous and heavily industrialised world, with enormous coastal cities and extensive manufacturing districts. Its temperate climate and abundant oceans support a large population, while its position on major trade routes has made it one of the galaxy’s principal centres of commerce.
 
-**Field neighborhood:** 61 Virginis near-baseline sunlike radiant, wind, and dipole (trade-hub calm).
-
 ### City Malls
 
-La Palma
-Fairhaven
+La Palma, Fairhaven
 
-### Orbitals
+### Planetary Orbit
 
-Irasia Habitat
-Habitat buildings: Irasia Terminal, Irasia Commercial Yards, Irasia Exchange.
+ - Irasia Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar influence: 61 Virginis near-baseline sunlike radiance and wind
+ - Magnetic: calm dipole
 
 ## Tokirev
 
-**Classification:** E2  
-**System:** 61 Ursae Majoris
-**Gravity:** 1.02 G
-**Population:** 56 billion  
-**Ocean coverage:** 62%  
-**CLimate:** Cold
+ - **Classification:** E2  
+ - **System:** 61 Ursae Majoris
+ - **Gravity:** 1.02 G
+ - **Population:** 56 billion  
+ - **Ocean coverage:** 62%  
+ - **CLimate:** Cold
 
 Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
-
-**Field neighborhood:** 61 Ursae Majoris - slightly elevated magnetic dipole; otherwise typical main-sequence indices.
 
 ### City Malls
 
 Kaliningrad
 
-### Orbitals
+### Planetary Orbit
 
-Tokirev Habitat
-Habitat buildings: Tokirev Terminal, Tokirev Automated Yards, Tokirev Exchange.
+ - Tokirev Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar influence: 61 Ursae Majoris with typical main-sequence indices
+ - Magnetic: slightly elevated magnetic dipole
 
 ## Fennet
 
-**Classification:** E1  
-**System:** 18 Scorpii
-**Gravity:** .95 G
-**Population:** 29 billion  
-**Ocean coverage:** 78%  
-**Average temperature:** 20°C  
+ - **Classification:** E1  
+ - **System:** 18 Scorpii
+ - **Gravity:** .95 G
+ - **Population:** 29 billion  
+ - **Ocean coverage:** 78%  
+ - **Average temperature:** 20°C  
 
 Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
-
-**Field neighborhood:** 18 Scorpii — quiet radiant and wind, standard dipole.
 
 ### City Malls
 
 Belfast
 
-### Orbitals
+### Planetary orbit
 
-Fennet Habitat
-Habitat buildings: Fennet Terminal, Fennet Rim Works, Fennet Exchange.
+ - Fennet Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field neighborhood
+
+ - Solar influence: 18 Scorpii with quiet radiance and wind
+ - Magnetic: standard dipole.
 
 ## Fortuna
 
-**Classification:** E2
-**System:** Tau Ceti
-**Gravity:** 1.01 G
-**Population:** 34 billion
-**Ocean coverage:** 68%
-**Climate:** Temperate
+ - **Classification:** E2
+ - **System:** Tau Ceti
+ - **Gravity:** 1.01 G
+ - **Population:** 34 billion
+ - **Ocean coverage:** 68%
+ - **Climate:** Temperate
 
 Fortuna is a wealthy and densely populated world whose prosperity was built on finance, trade and speculation. Its cities are filled with banks, exchanges, corporate headquarters and luxury developments, while enormous agricultural regions provide food for its population. The planet is known for its comfortable standard of living and its unusually active commercial culture.
-
-**Field neighborhood:** Quiet Tau Ceti — lower radiant and particle wind; stable dipole.
 
 ### City Malls
 
 Jubilee, New Venice, Bellagio
 
-### Orbitals
+### Planetary Orbit
 
-Fortuna Habitat
-Habitat buildings: Fortuna Terminal, Fortuna Private Yards, Fortuna Exchange.
+ - Fortuna Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar influence: Quiet Tau Ceti - lower radiant and particle wind
+ - Magnetic: stable dipole
 
 ## New Carthage
 
-**Classification:** E4
-**System:** 61 Cygni
-**Gravity:** 0.98 G
-**Population:** 27 billion
-**Ocean coverage:** 84%
-**Climate:** Warm
+ - **Classification:** E4
+ - **System:** 61 Cygni
+ - **Gravity:** 0.98 G
+ - **Population:** 27 billion
+ - **Ocean coverage:** 84%
+ - **Climate:** Warm
 
 New Carthage is a largely oceanic world whose major population centres developed around a network of artificial islands and enormous coastal cities. Originally settled as a trading colony, it became a major shipping and financial hub. Much of the planet's culture remains shaped by commerce, with old mercantile institutions sitting alongside vast modern corporate developments.
-
-**Field neighborhood:** Dim 61 Cygni — low radiant and wind; modest dipole.
 
 ### City Malls
 
 Carthage, New Tyre, Leptis, Utica
 
-### Orbitals
+### Planetary orbit
 
-New Carthage Habitat
-Habitat buildings: New Carthage Terminal, Carthage Slipways, New Carthage Exchange.
+ - New Carthage Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar influence: Dim 61 Cygni, low radiant and wind
+ - Magnetic: modest dipole
 
 ## Horizon
 
-**Classification:** E1
-**System:** Epsilon Eridani
-**Gravity:** 0.97 G
-**Population:** 43 billion
-**Ocean coverage:** 77%
-**Climate:** Temperate
+ - **Classification:** E1
+ - **System:** Epsilon Eridani
+ - **Gravity:** 0.97 G
+ - **Population:** 43 billion
+ - **Ocean coverage:** 77%
+ - **Climate:** Temperate
 
 Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
-
-**Field neighborhood:** Epsilon Eridani — elevated particle wind with moderate fluctuation; typical dipole and radiant.
 
 ### City Malls
 
 Horizon, Meridian, Providence, New Geneva, Ascension
 
-### Orbitals
+### Planetary Orbit
 
-Horizon Habitat
-Habitat buildings: Horizon Terminal, Horizon Civic Yards, Horizon Exchange.
+ - Horizon Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field neighborhood
+
+ - Solar: Epsilon Eridani with elevated particle wind with moderate fluctuation, typical radiance.
+ - Magnetic: typical dipole
 
 ## Titania IX
 
-**Classification:** E4.9
-**System:** Wolf 359
-**Gravity:** 0.86 G
-**Population:** 6.5 billion
-**Ocean coverage:** 78%
-**Climate:** Cold
+ - **Classification:** E4.9
+ - **System:** Wolf 359
+ - **Gravity:** 0.86 G
+ - **Population:** 6.5 billion
+ - **Ocean coverage:** 78%
+ - **Climate:** Cold
 
 The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
-
-**Field neighborhood:** No intrinsic planetary dipole (moon body). Wolf 359 is a dim flare star: low mean radiant, high radiant and particle fluctuation, heavy unshielded wind at orbit.
 
 ### City Malls
 
 Titania Central, Skygarden
 
-### Orbitals
+### Planetary orbit
 
-Titania Habitat
-Habitat buildings: Titania Terminal, Titania Low-G Docks, Titania Exchange.
+ - Titania Habitat
+ - others TBD
+
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar: Wolf 359 is a dim flare star: low mean radiant, high radiant and particle fluctuation, heavy unshielded wind at orbit.
+ - Magnetic: No intrinsic planetary dipole (moon body). 
+ - general high fluctuations due to the gas giant primary nearby
 
 ## Pelagos
 
-**Classification:** E2
-**System:** Kepler-16
-**Gravity:** 1.01 G
-**Population:** 21 billion
-**Ocean coverage:** 69%
-**Climate:** Arid
+ - **Classification:** E2
+ - **System:** Kepler-16
+ - **Gravity:** 1.01 G
+ - **Population:** 21 billion
+ - **Ocean coverage:** 69%
+ - **Climate:** Arid
 
-Pelagos is a prosperous world orbiting two suns, with enormous coastal cities and extensive mineral resources. The binary system gives the planet unusually complex seasonal and daylight cycles, but its inhabitants have long since adapted. Concordia is a major centre of commerce and manufacturing, with a reputation for innovation and enterprise.
-
-**Field neighborhood:** Kepler-16 binary — radiant swings with orbital phase; otherwise near-baseline dipole and wind.
+Pelagos is a prosperous world orbiting two suns, with enormous coastal cities and extensive mineral resources. The binary system gives the planet unusually complex seasonal and daylight cycles, but its inhabitants have long since adapted. Pelagos Habitat is a major centre of commerce and manufacturing, with a reputation for innovation and enterprise.
 
 ### City Malls
+
 Mediran, Twin Cities, New Cambridge
 
 ### Orbitals
 
-Concordia Habitat
-Habitat buildings: Concordia Orbital Terminal, Concordia Twin Yards, Concordia Exchange.
+ - Pelagos Habitat
+ - others TBD
 
+### Solar neighbourhood
+
+TBD
+
+### Field conditions
+
+ - Solar: Kepler-16 binary with radiant swings with orbital phase, near basline wind
+ - Magnetic: near-baseline dipole
