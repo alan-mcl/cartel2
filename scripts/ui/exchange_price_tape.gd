@@ -37,7 +37,12 @@ static func remote_quote_entry(
 		return {}
 
 	var noise := NOISE_MIN + rng.randf() * (NOISE_MAX - NOISE_MIN)
-	var shown_price := maxi(1, int(round(float(true_price) * noise)))
+	# Integer rounding must stay inside the test suite's 3% band (see test_exchange_price_tape.gd).
+	var ratio_min := NOISE_MIN - 0.001
+	var ratio_max := NOISE_MAX + 0.001
+	var low := maxi(1, int(ceil(float(true_price) * ratio_min - 0.0001)))
+	var high := maxi(low, int(floor(float(true_price) * ratio_max + 0.0001)))
+	var shown_price := clampi(maxi(1, int(round(float(true_price) * noise))), low, high)
 
 	var sector := catalog.get_sector(sector_id)
 	var location := str(sector.get("planet_name", ""))

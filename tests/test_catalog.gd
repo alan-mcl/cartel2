@@ -70,6 +70,7 @@ static func run(runner: TestRunner) -> void:
 	runner.check(int(mapping.get("solution", 0)) == 42, "proxima→bela solution is 42")
 
 	_test_centauri_a_beltworks_public_route(runner, catalog)
+	_test_neighbourhood_beacon_sectors(runner, catalog)
 
 	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
 	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
@@ -121,8 +122,19 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 			art_paths[building_art] = building_id
 			if catalog.get_building_type(building) == "shipyard":
 				shipyard_count += 1
-		if habitat_id == "centauri_a_beltworks_habitat":
-			runner.check_eq(shipyard_count, 0, "beltworks habitat has no shipyard")
+		var no_shipyard_habitats: Array[String] = [
+			"centauri_a_beltworks_habitat",
+			"acb1_habitat",
+			"acb2_habitat",
+			"acb3_habitat",
+			"terminus_habitat",
+			"vulcan_research_habitat",
+			"regulus_belt_habitat",
+			"denarius_ii_habitat",
+			"typhon_xvi_habitat",
+		]
+		if habitat_id in no_shipyard_habitats:
+			runner.check_eq(shipyard_count, 0, "habitat %s has no shipyard" % habitat_id)
 		else:
 			runner.check_eq(shipyard_count, 1, "habitat %s has one shipyard" % habitat_id)
 
@@ -503,3 +515,53 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 	runner.check(typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty(), "beltworks has translation_beacon")
 	runner.check(not belt_world.has("jump_gate"), "beltworks has no jump_gate")
 	runner.check_eq(str(beacon.get("destination", "")), "proxima", "beltworks beacon tuned to proxima")
+
+
+static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Catalog) -> void:
+	var proxima_sites: Array[String] = ["acb1", "acb2", "acb3", "terminus"]
+	for sector_id in proxima_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "proxima")
+	var tycho_sites: Array[String] = [
+		"vulcan_research",
+		"regulus_belt",
+		"denarius_ii",
+		"typhon_xvi",
+	]
+	for sector_id in tycho_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "tycho")
+
+
+static func _test_beacon_outpost_route(
+	runner: TestRunner, catalog: Catalog, sector_id: String, hub_id: String
+) -> void:
+	runner.check(not catalog.get_sector(sector_id).is_empty(), "sector %s exists" % sector_id)
+	var world := catalog.get_world(sector_id)
+	runner.check(world.has("orbital_ring"), "%s world has orbital ring" % sector_id)
+
+	var route_count := 0
+	var partner := ""
+	for route_variant in catalog.list_routes():
+		if typeof(route_variant) != TYPE_DICTIONARY:
+			continue
+		var route: Dictionary = route_variant
+		var a := str(route.get("a", ""))
+		var b := str(route.get("b", ""))
+		if a == sector_id or b == sector_id:
+			route_count += 1
+			partner = b if a == sector_id else a
+
+	runner.check_eq(route_count, 1, "%s has exactly one public route" % sector_id)
+	runner.check_eq(partner, hub_id, "%s public route partner is %s" % [sector_id, hub_id])
+	runner.check(
+		not catalog.get_mapping(hub_id, sector_id, 4).is_empty(),
+		"%s→%s n=4 mapping exists" % [hub_id, sector_id]
+	)
+	runner.check(
+		not catalog.get_mapping(sector_id, hub_id, 4).is_empty(),
+		"%s→%s n=4 mapping exists" % [sector_id, hub_id]
+	)
+
+	var beacon: Variant = world.get("translation_beacon", {})
+	runner.check(typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty(), "%s has translation_beacon" % sector_id)
+	runner.check(not world.has("jump_gate"), "%s has no jump_gate" % sector_id)
+	runner.check_eq(str(beacon.get("destination", "")), hub_id, "%s beacon tuned to hub" % sector_id)

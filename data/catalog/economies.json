@@ -194,5 +194,125 @@
       "industrial_components": 1.2,
       "pharmaceuticals": 1.05
     }
+  },
+  {
+    "id": "acb1",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
+  },
+  {
+    "id": "acb2",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
+  },
+  {
+    "id": "acb3",
+    "tier": "outer",
+    "wealth": 0.8,
+    "produce": {
+      "chemicals": 2.2,
+      "advanced_raw_materials": 2.5,
+      "energy": 1.2
+    },
+    "consume": {
+      "food_products": 4.5,
+      "industrial_components": 1.15,
+      "pharmaceuticals": 1.0
+    }
+  },
+  {
+    "id": "terminus",
+    "tier": "outer",
+    "wealth": 0.8,
+    "produce": {
+      "chemicals": 2.2,
+      "advanced_raw_materials": 2.5,
+      "energy": 1.2
+    },
+    "consume": {
+      "food_products": 4.5,
+      "industrial_components": 1.15,
+      "pharmaceuticals": 1.0
+    }
+  },
+  {
+    "id": "vulcan_research",
+    "tier": "outer",
+    "wealth": 0.95,
+    "produce": {
+      "data": 1.8,
+      "energy": 1.1
+    },
+    "consume": {
+      "energy": 3.5,
+      "industrial_components": 2.2,
+      "pharmaceuticals": 1.4,
+      "food_products": 2.0
+    }
+  },
+  {
+    "id": "regulus_belt",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
+  },
+  {
+    "id": "denarius_ii",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
+  },
+  {
+    "id": "typhon_xvi",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
   }
 ]

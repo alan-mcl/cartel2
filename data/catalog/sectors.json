@@ -4,7 +4,8 @@
     "name": "Proxima Sector",
     "orbit_name": "Proxima near orbit",
     "planet_name": "Proxima",
-    "star_system": "Alpha Centauri A",
+    "star": "Alpha Centauri A",
+    "star_system": "Alpha Centauri",
     "classification": "E1",
     "gravity": 0.98,
     "population_billions": 60,
@@ -35,13 +36,16 @@
     "name": "Tycho Sector",
     "orbit_name": "Tycho near orbit",
     "planet_name": "Tycho",
+    "star": "Regulus A",
     "star_system": "Regulus",
     "classification": "E3",
     "gravity": 1.07,
     "population_billions": 3.5,
     "ocean_coverage": 0.62,
     "climate": "Arid",
-    "city_malls": ["Ozero"],
+    "city_malls": [
+      "Ozero"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Tycho near orbit",
     "mappings": [],
@@ -65,7 +69,10 @@
     "population_billions": 15,
     "ocean_coverage": 0.92,
     "climate": "Warm",
-    "city_malls": ["Oberon", "Santa Margarita"],
+    "city_malls": [
+      "Oberon",
+      "Santa Margarita"
+    ],
     "play_bounds": 8000,
     "objective": "Explore La Bella Vista near orbit",
     "mappings": [],
@@ -89,7 +96,10 @@
     "population_billions": 46,
     "ocean_coverage": 0.76,
     "climate": "Temperate",
-    "city_malls": ["La Palma", "Fairhaven"],
+    "city_malls": [
+      "La Palma",
+      "Fairhaven"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Irasia near orbit",
     "mappings": [],
@@ -113,7 +123,9 @@
     "population_billions": 56,
     "ocean_coverage": 0.62,
     "climate": "Cold",
-    "city_malls": ["Kaliningrad"],
+    "city_malls": [
+      "Kaliningrad"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Tokirev near orbit",
     "mappings": [],
@@ -137,7 +149,9 @@
     "population_billions": 29,
     "ocean_coverage": 0.78,
     "climate": "Temperate",
-    "city_malls": ["Belfast"],
+    "city_malls": [
+      "Belfast"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Fennet near orbit",
     "mappings": [],
@@ -161,7 +175,11 @@
     "population_billions": 34,
     "ocean_coverage": 0.68,
     "climate": "Temperate",
-    "city_malls": ["Jubilee", "New Venice", "Bellagio"],
+    "city_malls": [
+      "Jubilee",
+      "New Venice",
+      "Bellagio"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Fortuna near orbit",
     "mappings": [],
@@ -185,7 +203,12 @@
     "population_billions": 27,
     "ocean_coverage": 0.84,
     "climate": "Warm",
-    "city_malls": ["Carthage", "New Tyre", "Leptis", "Utica"],
+    "city_malls": [
+      "Carthage",
+      "New Tyre",
+      "Leptis",
+      "Utica"
+    ],
     "play_bounds": 8000,
     "objective": "Explore New Carthage near orbit",
     "mappings": [],
@@ -209,7 +232,13 @@
     "population_billions": 43,
     "ocean_coverage": 0.77,
     "climate": "Temperate",
-    "city_malls": ["Horizon", "Meridian", "Providence", "New Geneva", "Ascension"],
+    "city_malls": [
+      "Horizon",
+      "Meridian",
+      "Providence",
+      "New Geneva",
+      "Ascension"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Horizon near orbit",
     "mappings": [],
@@ -233,7 +262,10 @@
     "population_billions": 6.5,
     "ocean_coverage": 0.78,
     "climate": "Cold",
-    "city_malls": ["Titania Central", "Skygarden"],
+    "city_malls": [
+      "Titania Central",
+      "Skygarden"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Titania IX near orbit",
     "mappings": [],
@@ -257,7 +289,11 @@
     "population_billions": 21,
     "ocean_coverage": 0.69,
     "climate": "Arid",
-    "city_malls": ["Mediran", "Twin Cities", "New Cambridge"],
+    "city_malls": [
+      "Mediran",
+      "Twin Cities",
+      "New Cambridge"
+    ],
     "play_bounds": 8000,
     "objective": "Explore Pelagos near orbit",
     "mappings": [],
@@ -274,7 +310,8 @@
     "id": "centauri_a_beltworks",
     "name": "Centauri A Beltworks Sector",
     "orbit_name": "Centauri A Beltworks near orbit",
-    "star_system": "Alpha Centauri A",
+    "star": "Alpha Centauri A",
+    "star_system": "Alpha Centauri",
     "gravity": 0.2,
     "population_billions": 0.5,
     "play_bounds": 8000,
@@ -287,6 +324,171 @@
       "radiant_fluctuation": 0.15,
       "charged_particle": 0.85,
       "charged_particle_fluctuation": 0.1
+    }
+  },
+  {
+    "id": "acb1",
+    "name": "ACB1 Sector",
+    "orbit_name": "ACB1 near orbit",
+    "planet_name": "ACB1",
+    "star": "Alpha Centauri B",
+    "star_system": "Alpha Centauri",
+    "gravity": 0.35,
+    "population_billions": 0.15,
+    "play_bounds": 8000,
+    "objective": "Explore ACB1 near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.85,
+      "magnetic_fluctuation": 0.2,
+      "radiant": 1.45,
+      "radiant_fluctuation": 0.25,
+      "charged_particle": 1.2,
+      "charged_particle_fluctuation": 0.15
+    }
+  },
+  {
+    "id": "acb2",
+    "name": "Scar Sector",
+    "orbit_name": "Scar near orbit",
+    "planet_name": "Scar",
+    "star": "Alpha Centauri B",
+    "star_system": "Alpha Centauri",
+    "gravity": 0.28,
+    "population_billions": 0.35,
+    "play_bounds": 8000,
+    "objective": "Explore Scar near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.75,
+      "magnetic_fluctuation": 0.1,
+      "radiant": 1.35,
+      "radiant_fluctuation": 0.2,
+      "charged_particle": 1.15,
+      "charged_particle_fluctuation": 0.1
+    }
+  },
+  {
+    "id": "acb3",
+    "name": "ACB3 Sector",
+    "orbit_name": "ACB3 near orbit",
+    "planet_name": "ACB3",
+    "star": "Alpha Centauri B",
+    "star_system": "Alpha Centauri",
+    "gravity": 0.22,
+    "population_billions": 0.12,
+    "play_bounds": 8000,
+    "objective": "Explore ACB3 near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.7,
+      "magnetic_fluctuation": 0.08,
+      "radiant": 1.1,
+      "radiant_fluctuation": 0.18,
+      "charged_particle": 1.0,
+      "charged_particle_fluctuation": 0.08
+    }
+  },
+  {
+    "id": "terminus",
+    "name": "Terminus Sector",
+    "orbit_name": "Terminus near orbit",
+    "planet_name": "Terminus",
+    "star_system": "Alpha Centauri",
+    "gravity": 0.4,
+    "population_billions": 0.08,
+    "play_bounds": 8000,
+    "objective": "Explore Terminus near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.55,
+      "magnetic_fluctuation": 0.05,
+      "radiant": 0.45,
+      "radiant_fluctuation": 0.12,
+      "charged_particle": 0.5,
+      "charged_particle_fluctuation": 0.08
+    }
+  },
+  {
+    "id": "vulcan_research",
+    "name": "Vulcan Research Station Sector",
+    "orbit_name": "Vulcan Research Station near orbit",
+    "star": "Regulus A",
+    "star_system": "Regulus",
+    "gravity": 0.15,
+    "population_billions": 0.06,
+    "play_bounds": 8000,
+    "objective": "Explore Vulcan Research Station near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 2.0,
+      "magnetic_fluctuation": 0.55,
+      "radiant": 2.8,
+      "radiant_fluctuation": 0.45,
+      "charged_particle": 2.2,
+      "charged_particle_fluctuation": 0.2
+    }
+  },
+  {
+    "id": "regulus_belt",
+    "name": "Regulus Belt Station Sector",
+    "orbit_name": "Regulus Belt Station near orbit",
+    "star": "Regulus A",
+    "star_system": "Regulus",
+    "gravity": 0.18,
+    "population_billions": 0.4,
+    "play_bounds": 8000,
+    "objective": "Explore Regulus Belt Station near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.2,
+      "magnetic_fluctuation": 0.35,
+      "radiant": 1.6,
+      "radiant_fluctuation": 0.3,
+      "charged_particle": 1.4,
+      "charged_particle_fluctuation": 0.1
+    }
+  },
+  {
+    "id": "denarius_ii",
+    "name": "Denarius II Sector",
+    "orbit_name": "Denarius II near orbit",
+    "planet_name": "Denarius II",
+    "star": "Regulus A",
+    "star_system": "Regulus",
+    "gravity": 0.25,
+    "population_billions": 0.22,
+    "play_bounds": 8000,
+    "objective": "Explore Denarius II near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.5,
+      "magnetic_fluctuation": 0.4,
+      "radiant": 1.9,
+      "radiant_fluctuation": 0.32,
+      "charged_particle": 1.6,
+      "charged_particle_fluctuation": 0.12
+    }
+  },
+  {
+    "id": "typhon_xvi",
+    "name": "Typhon XVI Sector",
+    "orbit_name": "Typhon XVI near orbit",
+    "planet_name": "Typhon XVI",
+    "star": "Regulus A",
+    "star_system": "Regulus",
+    "gravity": 0.3,
+    "population_billions": 0.18,
+    "play_bounds": 8000,
+    "objective": "Explore Typhon XVI near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 1.45,
+      "magnetic_fluctuation": 0.42,
+      "radiant": 1.75,
+      "radiant_fluctuation": 0.28,
+      "charged_particle": 1.55,
+      "charged_particle_fluctuation": 0.15
     }
   }
 ]

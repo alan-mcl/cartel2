@@ -68,7 +68,10 @@
     "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. The main warehouses seem to stretch endlessly into the distance. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
     "short_desc": "Outfitting bays for installing systems on docked ships.",
     "art": "res://assets/ui/locations/proxima_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "proxima_exchange",
@@ -96,7 +99,10 @@
     "description": "Ore-hauler cradles and quake-braced gantries dominate the Tycho yards. Crews fit armour and industrial systems while eclipse shutters roll across the observation decks.",
     "short_desc": "Heavy outfitting bays for industrial traffic above Tycho.",
     "art": "res://assets/ui/locations/tycho_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "bela_habitat_terminal",
@@ -115,7 +121,10 @@
     "description": "Polished fitting docks above La Bella Vista's oceans. Yacht crews mix with charter pilots while modules are installed behind tinted viewports.",
     "short_desc": "Resort orbital outfitting docks with ocean views.",
     "art": "res://assets/ui/locations/bela_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "irasia_habitat_terminal",
@@ -134,7 +143,10 @@
     "description": "High-throughput commercial yards on the Irasia trade spine. Manifest queues and parallel bays keep manufacturing traffic moving.",
     "short_desc": "Commercial outfitting yards on a major trade spine.",
     "art": "res://assets/ui/locations/irasia_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "tokirev_habitat_terminal",
@@ -153,7 +165,10 @@
     "description": "Cold factory-world yards where robotic arms outnumber fitters. Modules slide from warehouse to cradle on tracked lines.",
     "short_desc": "Automated outfitting yards above Tokirev.",
     "art": "res://assets/ui/locations/tokirev_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "fennet_habitat_terminal",
@@ -172,7 +187,10 @@
     "description": "Rim works that grew from a frontier stop into a regional yard. Mixed stock, honest prices, and bays that still smell of weld smoke.",
     "short_desc": "Regional rim outfitting works.",
     "art": "res://assets/ui/locations/fennet_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "fortuna_habitat_terminal",
@@ -191,7 +209,10 @@
     "description": "Discrete private yards above Fortuna. Wealthy owners expect quiet bays, vetted crews, and finishes that match the finance districts below.",
     "short_desc": "Private outfitting yards above a finance world.",
     "art": "res://assets/ui/locations/fortuna_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "new_carthage_habitat_terminal",
@@ -210,7 +231,10 @@
     "description": "Mercantile slipways where old trading houses still set the tone. Hulls sit in open-water cradles while crews negotiate spare parts on the quay.",
     "short_desc": "Mercantile slipways above New Carthage.",
     "art": "res://assets/ui/locations/new_carthage_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "horizon_habitat_terminal",
@@ -229,7 +253,10 @@
     "description": "Spacious civic yards above Horizon's green belts. Suburban shuttles share berths with long-haul freighters in orderly civic bays.",
     "short_desc": "Civic outfitting yards above a great population centre.",
     "art": "res://assets/ui/locations/horizon_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "titania_habitat_terminal",
@@ -248,7 +275,10 @@
     "description": "Low-gravity fitting docks with panoramic views of Titania's storms. Tourist charters and winter-sport traffic share the same gentle berths.",
     "short_desc": "Low-gravity outfitting docks above Titania IX.",
     "art": "res://assets/ui/locations/titania_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "concordia_orbital_terminal",
@@ -267,7 +297,10 @@
     "description": "Manufacturing yards tuned to Pelagos' twin-sun cycle. Observation decks filter the glare while crews install systems in parallel bays.",
     "short_desc": "Manufacturing outfitting yards above Pelagos.",
     "art": "res://assets/ui/locations/concordia_shipyard.png",
-    "services": ["assembly", "parts"]
+    "services": [
+      "assembly",
+      "parts"
+    ]
   },
   {
     "id": "tycho_exchange",
@@ -376,5 +409,149 @@
     "description": "Commodity exchange for belt ore contracts and Proxima supply runs.",
     "short_desc": "Exchange for belt ore and supply contracts.",
     "art": "res://assets/ui/locations/centauri_a_beltworks_exchange.png"
+  },
+  {
+    "id": "acb1_terminal",
+    "name": "ACB1 Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for ACB1.",
+    "short_desc": "Terminal for ACB1 traffic.",
+    "art": "res://assets/ui/locations/acb1_terminal.png"
+  },
+  {
+    "id": "acb1_exchange",
+    "name": "ACB1 Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for ACB1 contracts and hub supply runs.",
+    "short_desc": "Exchange at ACB1.",
+    "art": "res://assets/ui/locations/acb1_exchange.png"
+  },
+  {
+    "id": "acb2_terminal",
+    "name": "Scar Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Scar.",
+    "short_desc": "Terminal for Scar traffic.",
+    "art": "res://assets/ui/locations/acb2_terminal.png"
+  },
+  {
+    "id": "acb2_exchange",
+    "name": "Scar Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Scar contracts and hub supply runs.",
+    "short_desc": "Exchange at Scar.",
+    "art": "res://assets/ui/locations/acb2_exchange.png"
+  },
+  {
+    "id": "acb3_terminal",
+    "name": "ACB3 Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for ACB3.",
+    "short_desc": "Terminal for ACB3 traffic.",
+    "art": "res://assets/ui/locations/acb3_terminal.png"
+  },
+  {
+    "id": "acb3_exchange",
+    "name": "ACB3 Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for ACB3 contracts and hub supply runs.",
+    "short_desc": "Exchange at ACB3.",
+    "art": "res://assets/ui/locations/acb3_exchange.png"
+  },
+  {
+    "id": "terminus_terminal",
+    "name": "Terminus Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Terminus.",
+    "short_desc": "Terminal for Terminus traffic.",
+    "art": "res://assets/ui/locations/terminus_terminal.png"
+  },
+  {
+    "id": "terminus_exchange",
+    "name": "Terminus Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Terminus contracts and hub supply runs.",
+    "short_desc": "Exchange at Terminus.",
+    "art": "res://assets/ui/locations/terminus_exchange.png"
+  },
+  {
+    "id": "vulcan_research_terminal",
+    "name": "Vulcan Research Station Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Vulcan Research Station.",
+    "short_desc": "Terminal for Vulcan Research Station traffic.",
+    "art": "res://assets/ui/locations/vulcan_research_terminal.png"
+  },
+  {
+    "id": "vulcan_research_exchange",
+    "name": "Vulcan Research Station Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Vulcan Research Station contracts and hub supply runs.",
+    "short_desc": "Exchange at Vulcan Research Station.",
+    "art": "res://assets/ui/locations/vulcan_research_exchange.png"
+  },
+  {
+    "id": "regulus_belt_terminal",
+    "name": "Regulus Belt Station Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Regulus Belt Station.",
+    "short_desc": "Terminal for Regulus Belt Station traffic.",
+    "art": "res://assets/ui/locations/regulus_belt_terminal.png"
+  },
+  {
+    "id": "regulus_belt_exchange",
+    "name": "Regulus Belt Station Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Regulus Belt Station contracts and hub supply runs.",
+    "short_desc": "Exchange at Regulus Belt Station.",
+    "art": "res://assets/ui/locations/regulus_belt_exchange.png"
+  },
+  {
+    "id": "denarius_ii_terminal",
+    "name": "Denarius II Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Denarius II.",
+    "short_desc": "Terminal for Denarius II traffic.",
+    "art": "res://assets/ui/locations/denarius_ii_terminal.png"
+  },
+  {
+    "id": "denarius_ii_exchange",
+    "name": "Denarius II Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Denarius II contracts and hub supply runs.",
+    "short_desc": "Exchange at Denarius II.",
+    "art": "res://assets/ui/locations/denarius_ii_exchange.png"
+  },
+  {
+    "id": "typhon_xvi_terminal",
+    "name": "Typhon XVI Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for Typhon XVI.",
+    "short_desc": "Terminal for Typhon XVI traffic.",
+    "art": "res://assets/ui/locations/typhon_xvi_terminal.png"
+  },
+  {
+    "id": "typhon_xvi_exchange",
+    "name": "Typhon XVI Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for Typhon XVI contracts and hub supply runs.",
+    "short_desc": "Exchange at Typhon XVI.",
+    "art": "res://assets/ui/locations/typhon_xvi_exchange.png"
   }
 ]

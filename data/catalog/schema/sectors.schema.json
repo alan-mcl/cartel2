@@ -10,6 +10,7 @@
     "name": { "type": "string" },
     "orbit_name": { "type": "string", "default": "" },
     "planet_name": { "type": "string", "default": "" },
+    "star": { "type": "string", "default": "" },
     "star_system": { "type": "string", "default": "" },
     "classification": { "type": "string", "default": "" },
     "gravity": { "type": "number", "default": 1.0 },

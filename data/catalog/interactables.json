@@ -160,5 +160,109 @@
     "title": "Exit Portal",
     "inspect_text": "Stabilised portal leading back toward 3-space. Translate through to complete the jump.",
     "kind": "arrive"
+  },
+  {
+    "id": "acb1_habitat",
+    "title": "ACB1",
+    "inspect_text": "Docking at ACB1. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "acb1_habitat"
+  },
+  {
+    "id": "acb1_jump_gate",
+    "title": "ACB1 Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "acb2_habitat",
+    "title": "Scar",
+    "inspect_text": "Docking at Scar. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "acb2_habitat"
+  },
+  {
+    "id": "acb2_jump_gate",
+    "title": "Scar Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "acb3_habitat",
+    "title": "ACB3",
+    "inspect_text": "Docking at ACB3. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "acb3_habitat"
+  },
+  {
+    "id": "acb3_jump_gate",
+    "title": "ACB3 Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "terminus_habitat",
+    "title": "Terminus",
+    "inspect_text": "Docking at Terminus. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "terminus_habitat"
+  },
+  {
+    "id": "terminus_jump_gate",
+    "title": "Terminus Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "vulcan_research_habitat",
+    "title": "Vulcan Research Station",
+    "inspect_text": "Docking at Vulcan Research Station. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "vulcan_research_habitat"
+  },
+  {
+    "id": "vulcan_research_jump_gate",
+    "title": "Vulcan Research Station Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "regulus_belt_habitat",
+    "title": "Regulus Belt Station",
+    "inspect_text": "Docking at Regulus Belt Station. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "regulus_belt_habitat"
+  },
+  {
+    "id": "regulus_belt_jump_gate",
+    "title": "Regulus Belt Station Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "denarius_ii_habitat",
+    "title": "Denarius II",
+    "inspect_text": "Docking at Denarius II. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "denarius_ii_habitat"
+  },
+  {
+    "id": "denarius_ii_jump_gate",
+    "title": "Denarius II Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+    "kind": "translate"
+  },
+  {
+    "id": "typhon_xvi_habitat",
+    "title": "Typhon XVI",
+    "inspect_text": "Docking at Typhon XVI. Supply and ore traffic uses the outer lanes.",
+    "kind": "dock",
+    "dock_location_id": "typhon_xvi_habitat"
+  },
+  {
+    "id": "typhon_xvi_jump_gate",
+    "title": "Typhon XVI Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+    "kind": "translate"
   }
 ]

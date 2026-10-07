@@ -56,6 +56,38 @@ static func _test_offer_grouping(runner: TestRunner, catalog: Catalog) -> void:
 		TranslationNav.same_star_system(catalog, "proxima", "centauri_a_beltworks"),
 		"grouping: proxima and beltworks share star system"
 	)
+	runner.check_eq(
+		str(catalog.get_sector("proxima").get("star", "")),
+		"Alpha Centauri A",
+		"grouping: proxima star is Alpha Centauri A"
+	)
+	runner.check_eq(
+		str(catalog.get_sector("proxima").get("star_system", "")),
+		"Alpha Centauri",
+		"grouping: proxima star_system is Alpha Centauri"
+	)
+	runner.check(
+		TranslationNav.same_star_system(catalog, "proxima", "acb2"),
+		"grouping: proxima and scar share star_system"
+	)
+	runner.check(
+		not TranslationNav.same_star_system(catalog, "proxima", "tycho"),
+		"grouping: proxima and tycho differ star_system"
+	)
+
+	var scar_local := false
+	var terminus_local := false
+	for row_variant in local:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		var dest := str(row.get("destination_id", ""))
+		if dest == "acb2":
+			scar_local = true
+		if dest == "terminus":
+			terminus_local = true
+	runner.check(scar_local, "grouping: scar is local to proxima")
+	runner.check(terminus_local, "grouping: terminus is local to proxima")
 
 	var irasia_row: Dictionary = {}
 	for row_variant in other:
@@ -69,6 +101,19 @@ static func _test_offer_grouping(runner: TestRunner, catalog: Catalog) -> void:
 	var by_n: Dictionary = irasia_row.get("by_n", {})
 	runner.check(by_n.has(4), "grouping: irasia row has 4-space offer")
 	runner.check(by_n.has(5), "grouping: irasia row has 5-space offer on same destination")
+
+	var tycho_lumina := _assembled_with_nav(catalog, "sne_astrolabe")
+	var tycho_offers := TranslationNav.list_offered_translations(catalog, "tycho", tycho_lumina, [])
+	var tycho_grouped := TranslationNav.group_offered_translations(catalog, "tycho", tycho_offers)
+	var tycho_local: Array = tycho_grouped.get("local", [])
+	var denarius_local := false
+	for row_variant in tycho_local:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("destination_id", "")) == "denarius_ii":
+			denarius_local = true
+	runner.check(denarius_local, "grouping: denarius ii is local to tycho")
 
 
 static func _test_tester_flare_offers_translations(runner: TestRunner, catalog: Catalog) -> void:

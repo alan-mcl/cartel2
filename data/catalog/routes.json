@@ -438,5 +438,109 @@
         "solution_ba": -47003
       }
     ]
+  },
+  {
+    "id": "proxima_acb1",
+    "a": "proxima",
+    "b": "acb1",
+    "friction": 8,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48101,
+        "solution_ba": -48102
+      }
+    ]
+  },
+  {
+    "id": "proxima_acb2",
+    "a": "proxima",
+    "b": "acb2",
+    "friction": 8,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48103,
+        "solution_ba": -48104
+      }
+    ]
+  },
+  {
+    "id": "proxima_acb3",
+    "a": "proxima",
+    "b": "acb3",
+    "friction": 10,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48105,
+        "solution_ba": -48106
+      }
+    ]
+  },
+  {
+    "id": "proxima_terminus",
+    "a": "proxima",
+    "b": "terminus",
+    "friction": 16,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48107,
+        "solution_ba": -48108
+      }
+    ]
+  },
+  {
+    "id": "tycho_vulcan_research",
+    "a": "tycho",
+    "b": "vulcan_research",
+    "friction": 6,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48109,
+        "solution_ba": -48110
+      }
+    ]
+  },
+  {
+    "id": "tycho_regulus_belt",
+    "a": "tycho",
+    "b": "regulus_belt",
+    "friction": 5,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48111,
+        "solution_ba": -48112
+      }
+    ]
+  },
+  {
+    "id": "tycho_denarius_ii",
+    "a": "tycho",
+    "b": "denarius_ii",
+    "friction": 7,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48113,
+        "solution_ba": -48114
+      }
+    ]
+  },
+  {
+    "id": "tycho_typhon_xvi",
+    "a": "tycho",
+    "b": "typhon_xvi",
+    "friction": 14,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 48115,
+        "solution_ba": -48116
+      }
+    ]
   }
 ]

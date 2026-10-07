@@ -75,7 +75,6 @@ Two volatile gas giants keep tight orbits around the pair, then a good deal furt
  - Typhon XVI: The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure.
  - others TBD
 
-
 ### Field conditions
 
  - Solar: Regulus very radiant and windy

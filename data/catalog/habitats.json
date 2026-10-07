@@ -180,5 +180,117 @@
       "centauri_a_beltworks_terminal",
       "centauri_a_beltworks_exchange"
     ]
+  },
+  {
+    "id": "acb1_habitat",
+    "sector_id": "acb1",
+    "name": "ACB1",
+    "type": "habitat",
+    "description": "Orbital support for magma-side surveys on Alpha Centauri B's inner world. Heat-shielded docks see constant ore assay traffic.",
+    "short_desc": "Volcanic inner-world mining orbitals.",
+    "art": "res://assets/ui/locations/acb1_habitat.png",
+    "default_building": "acb1_terminal",
+    "buildings": [
+      "acb1_terminal",
+      "acb1_exchange"
+    ]
+  },
+  {
+    "id": "acb2_habitat",
+    "sector_id": "acb2",
+    "name": "Scar",
+    "type": "habitat",
+    "description": "Surface and orbital mining around Scar, the airless inner world of Alpha Centauri B. Convoys feed Proxima refineries.",
+    "short_desc": "Mining orbitals at Scar.",
+    "art": "res://assets/ui/locations/acb2_habitat.png",
+    "default_building": "acb2_terminal",
+    "buildings": [
+      "acb2_terminal",
+      "acb2_exchange"
+    ]
+  },
+  {
+    "id": "acb3_habitat",
+    "sector_id": "acb3",
+    "name": "ACB3",
+    "type": "habitat",
+    "description": "Ice-harvest and assay habitat at the outer edge of Alpha Centauri B's planetary zone.",
+    "short_desc": "Ice-world mining habitat.",
+    "art": "res://assets/ui/locations/acb3_habitat.png",
+    "default_building": "acb3_terminal",
+    "buildings": [
+      "acb3_terminal",
+      "acb3_exchange"
+    ]
+  },
+  {
+    "id": "terminus_habitat",
+    "sector_id": "terminus",
+    "name": "Terminus",
+    "type": "habitat",
+    "description": "Circumbinary outpost on the frozen giant Terminus. Supply runs from Proxima keep the deep-cold refineries fed.",
+    "short_desc": "Circumbinary ice-world station.",
+    "art": "res://assets/ui/locations/terminus_habitat.png",
+    "default_building": "terminus_terminal",
+    "buildings": [
+      "terminus_terminal",
+      "terminus_exchange"
+    ]
+  },
+  {
+    "id": "vulcan_research_habitat",
+    "sector_id": "vulcan_research",
+    "name": "Vulcan Research Station",
+    "type": "habitat",
+    "description": "Heavily shielded observation habitat in orbit around the inner gas giant Vulcan. Instrument traffic only; no shipyard.",
+    "short_desc": "Shielded research habitat at Vulcan.",
+    "art": "res://assets/ui/locations/vulcan_research_habitat.png",
+    "default_building": "vulcan_research_terminal",
+    "buildings": [
+      "vulcan_research_terminal",
+      "vulcan_research_exchange"
+    ]
+  },
+  {
+    "id": "regulus_belt_habitat",
+    "sector_id": "regulus_belt",
+    "name": "Regulus Belt Station",
+    "type": "habitat",
+    "description": "Central habitat for the asteroid belt beyond Tycho. Mining convoys and Tycho supply shuttles share the lanes.",
+    "short_desc": "Belt mining habitat beyond Tycho.",
+    "art": "res://assets/ui/locations/regulus_belt_habitat.png",
+    "default_building": "regulus_belt_terminal",
+    "buildings": [
+      "regulus_belt_terminal",
+      "regulus_belt_exchange"
+    ]
+  },
+  {
+    "id": "denarius_ii_habitat",
+    "sector_id": "denarius_ii",
+    "name": "Denarius II",
+    "type": "habitat",
+    "description": "Surface and orbital mining infrastructure on Denarius II, moon of the inner giant Denarius.",
+    "short_desc": "Mining moon orbitals at Denarius II.",
+    "art": "res://assets/ui/locations/denarius_ii_habitat.png",
+    "default_building": "denarius_ii_terminal",
+    "buildings": [
+      "denarius_ii_terminal",
+      "denarius_ii_exchange"
+    ]
+  },
+  {
+    "id": "typhon_xvi_habitat",
+    "sector_id": "typhon_xvi",
+    "name": "Typhon XVI",
+    "type": "habitat",
+    "description": "Unstable rocky moon of Typhon with surface and orbital mining. Tremor warnings are routine in the docking briefing.",
+    "short_desc": "Mining orbitals at Typhon XVI.",
+    "art": "res://assets/ui/locations/typhon_xvi_habitat.png",
+    "default_building": "typhon_xvi_terminal",
+    "buildings": [
+      "typhon_xvi_terminal",
+      "typhon_xvi_exchange"
+    ]
   }
 ]

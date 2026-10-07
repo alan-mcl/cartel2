@@ -162,6 +162,7 @@ Source: `data/catalog/schema/sectors.schema.json` → `sectors.json`
 | `name` | string | yes | `` |  |
 | `orbit_name` | string | no | `` |  |
 | `planet_name` | string | no | `` |  |
+| `star` | string | no | `` |  |
 | `star_system` | string | no | `` |  |
 | `classification` | string | no | `` |  |
 | `gravity` | number | no | `1.0` |  |

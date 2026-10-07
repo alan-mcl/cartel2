@@ -124,10 +124,10 @@ func _build_route_tables(local_rows: Array, other_rows: Array) -> void:
 		_route_list.add_child(tabs)
 		var local_scroll := _build_table_scroll(local_rows)
 		tabs.add_child(local_scroll)
-		tabs.set_tab_title(0, "This system")
+		tabs.set_tab_title(0, "Local Star System")
 		var other_scroll := _build_table_scroll(other_rows)
 		tabs.add_child(other_scroll)
-		tabs.set_tab_title(1, "Other systems")
+		tabs.set_tab_title(1, "Other star systems")
 	elif has_local:
 		_route_list.add_child(_build_table_scroll(local_rows))
 	elif has_other:

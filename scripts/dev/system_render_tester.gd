@@ -139,8 +139,10 @@ func _populate_sector_options() -> void:
 		var display_name := str(sector.get("planet_name", ""))
 		if display_name.is_empty():
 			display_name = str(sector.get("name", sector_id))
-		var star_system := str(sector.get("star_system", ""))
-		var label := display_name if star_system.is_empty() else "%s — %s" % [display_name, star_system]
+		var star_label := str(sector.get("star", ""))
+		if star_label.is_empty():
+			star_label = str(sector.get("star_system", ""))
+		var label := display_name if star_label.is_empty() else "%s — %s" % [display_name, star_label]
 		entries.append({"id": sector_id, "label": label})
 
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
