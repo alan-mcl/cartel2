@@ -93,8 +93,8 @@ La Bella Vista, often called Bela, is a water world with only one continental la
 
 ### Planet Surface
 
-Oberon, Santa Margarita
-Notable landmark: Watershed Stadium (Oberon cricket) - from original world catalog.
+ - City Malls: Oberon, Santa Margarita
+ - Other: Watershed Stadium near Oberon is a famous outdoor cricket stadium
 
 ### Planetary Orbit
 
