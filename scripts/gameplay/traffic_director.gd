@@ -161,17 +161,34 @@ func _touch_stale_detection(actor) -> void:
 
 func _population_counts(sector: Dictionary) -> Dictionary:
 	var pop := float(sector.get("population_billions", 15.0))
-	var pop_min := float(_traffic_config.get("population_min_billions", 3.0))
+	var pop_min := float(_traffic_config.get("population_min_billions", 0.25))
+	var pop_busy := float(_traffic_config.get("population_busy_billions", 3.0))
 	var pop_max := float(_traffic_config.get("population_max_billions", 60.0))
+	if pop_busy < pop_min:
+		pop_busy = pop_min
 	pop = clampf(pop, pop_min, pop_max)
-	var t := 0.0
-	if pop_max > pop_min:
-		t = log(pop / pop_min) / log(pop_max / pop_min)
 
 	var near_min := int(_traffic_config.get("near_count_min", 12))
 	var near_max := int(_traffic_config.get("near_count_max", 22))
 	var far_min := int(_traffic_config.get("far_count_min", 4))
 	var far_max := int(_traffic_config.get("far_count_max", 58))
+	var sparse_near := int(_traffic_config.get("sparse_near_count", 2))
+	var sparse_far := int(_traffic_config.get("sparse_far_count", 1))
+
+	# Below the old 3-billion floor, scale down toward a sparse works-station count.
+	# At and above that floor the inhabited curve is unchanged.
+	if pop <= pop_busy:
+		var t_sparse := 0.0
+		if pop_busy > pop_min:
+			t_sparse = log(pop / pop_min) / log(pop_busy / pop_min)
+		return {
+			"near": int(round(lerpf(float(sparse_near), float(near_min), t_sparse))),
+			"far": int(round(lerpf(float(sparse_far), float(far_min), t_sparse))),
+		}
+
+	var t := 0.0
+	if pop_max > pop_busy:
+		t = log(pop / pop_busy) / log(pop_max / pop_busy)
 	return {
 		"near": int(round(lerpf(float(near_min), float(near_max), t))),
 		"far": int(round(lerpf(float(far_min), float(far_max), t))),

@@ -69,6 +69,8 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not mapping.is_empty(), "proxima→bela n=4 mapping exists")
 	runner.check(int(mapping.get("solution", 0)) == 42, "proxima→bela solution is 42")
 
+	_test_centauri_a_beltworks_public_route(runner, catalog)
+
 	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
 	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
 	runner.check(not catalog.get_background("hotshot").is_empty(), "hotshot background exists")
@@ -119,7 +121,10 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 			art_paths[building_art] = building_id
 			if catalog.get_building_type(building) == "shipyard":
 				shipyard_count += 1
-		runner.check_eq(shipyard_count, 1, "habitat %s has one shipyard" % habitat_id)
+		if habitat_id == "centauri_a_beltworks_habitat":
+			runner.check_eq(shipyard_count, 0, "beltworks habitat has no shipyard")
+		else:
+			runner.check_eq(shipyard_count, 1, "habitat %s has one shipyard" % habitat_id)
 
 
 ## Catalog sizes are content, not contract. Assert a floor so accidental bulk deletion is still
@@ -464,3 +469,32 @@ static func _life_support_volume_floor(crew: float, capabilities: Array) -> floa
 	if not habitat and crew <= 1.0:
 		floor = maxf(floor, 4.0)
 	return floor
+
+
+static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog: Catalog) -> void:
+	runner.check(not catalog.get_sector("centauri_a_beltworks").is_empty(), "centauri_a_beltworks sector exists")
+	var belt_world := catalog.get_world("centauri_a_beltworks")
+	runner.check(not belt_world.has("planet"), "beltworks world has no planet block")
+	runner.check(belt_world.has("orbital_ring"), "beltworks world has orbital ring")
+
+	var route_count := 0
+	var partner := ""
+	for route_variant in catalog.list_routes():
+		if typeof(route_variant) != TYPE_DICTIONARY:
+			continue
+		var route: Dictionary = route_variant
+		var a := str(route.get("a", ""))
+		var b := str(route.get("b", ""))
+		if a == "centauri_a_beltworks" or b == "centauri_a_beltworks":
+			route_count += 1
+			partner = b if a == "centauri_a_beltworks" else a
+
+	runner.check_eq(route_count, 1, "beltworks has exactly one public route")
+	runner.check_eq(partner, "proxima", "beltworks public route partner is proxima")
+
+	var mapping := catalog.get_mapping("proxima", "centauri_a_beltworks", 4)
+	runner.check(not mapping.is_empty(), "proxima→beltworks n=4 mapping exists")
+	runner.check(
+		catalog.get_mapping("centauri_a_beltworks", "proxima", 4).is_empty() == false,
+		"beltworks→proxima n=4 mapping exists"
+	)

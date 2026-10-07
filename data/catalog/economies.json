@@ -179,5 +179,20 @@
       "pharmaceuticals": 1.05,
       "energy": 1.3
     }
+  },
+  {
+    "id": "centauri_a_beltworks",
+    "tier": "outer",
+    "wealth": 0.85,
+    "produce": {
+      "advanced_raw_materials": 5.5,
+      "energy": 1.45,
+      "industrial_components": 1.1
+    },
+    "consume": {
+      "food_products": 6.0,
+      "industrial_components": 1.2,
+      "pharmaceuticals": 1.05
+    }
   }
 ]

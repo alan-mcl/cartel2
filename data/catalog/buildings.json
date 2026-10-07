@@ -358,5 +358,23 @@
     "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
     "short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
     "art": "res://assets/ui/locations/concordia_exchange.png"
+  },
+  {
+    "id": "centauri_a_beltworks_terminal",
+    "name": "Beltworks Terminal",
+    "type": "terminal",
+    "kind": "terminal",
+    "description": "Customs and convoy scheduling for the Alpha Centauri A belt. Dust-scoured observation decks look out over the mining lanes.",
+    "short_desc": "Terminal for belt mining traffic.",
+    "art": "res://assets/ui/locations/centauri_a_beltworks_terminal.png"
+  },
+  {
+    "id": "centauri_a_beltworks_exchange",
+    "name": "Beltworks Exchange",
+    "type": "market",
+    "kind": "merchant",
+    "description": "Commodity exchange for belt ore contracts and Proxima supply runs.",
+    "short_desc": "Exchange for belt ore and supply contracts.",
+    "art": "res://assets/ui/locations/centauri_a_beltworks_exchange.png"
   }
 ]

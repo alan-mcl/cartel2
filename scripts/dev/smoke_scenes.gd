@@ -104,7 +104,11 @@ func _smoke_system_render_tester() -> void:
 	root.add_child(tester)
 	await process_frame
 	var world: Node2D = tester.get_node("World")
-	_check(world.get_node_or_null("Planet") != null, "system render tester loads planet")
+	var has_layout := (
+		world.get_node_or_null("Planet") != null
+		or world.get_node_or_null("OrbitalRing") != null
+	)
+	_check(has_layout, "system render tester loads sector layout")
 	_check(tester.get_node_or_null("PlayerShip") == null, "system render tester has no player ship")
 	tester.queue_free()
 	await process_frame

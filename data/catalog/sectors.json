@@ -269,5 +269,24 @@
       "charged_particle": 1.0,
       "charged_particle_fluctuation": 0.0
     }
+  },
+  {
+    "id": "centauri_a_beltworks",
+    "name": "Centauri A Beltworks Sector",
+    "orbit_name": "Centauri A Beltworks near orbit",
+    "star_system": "Alpha Centauri A",
+    "gravity": 0.2,
+    "population_billions": 0.5,
+    "play_bounds": 8000,
+    "objective": "Explore Centauri A Beltworks near orbit",
+    "mappings": [],
+    "neighborhood": {
+      "magnetic_surface": 0.7,
+      "magnetic_fluctuation": 0.05,
+      "radiant": 0.85,
+      "radiant_fluctuation": 0.15,
+      "charged_particle": 0.85,
+      "charged_particle_fluctuation": 0.1
+    }
   }
 ]

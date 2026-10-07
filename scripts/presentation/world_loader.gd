@@ -74,6 +74,9 @@ func load_sector(
 	if world_data.has("planet"):
 		_sector_id = sector_id
 		_spawn_planetary_layout(world_root, world_data, catalog, session, sector_id)
+	elif world_data.has("orbital_ring") or world_data.has("jump_gate"):
+		_sector_id = sector_id
+		_spawn_orbital_station_layout(world_root, world_data, catalog, session, sector_id)
 	else:
 		_spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
 
@@ -202,7 +205,17 @@ func _spawn_planetary_layout(
 ) -> void:
 	var planet_data: Dictionary = world_data.get("planet", {})
 	var planet := _spawn_planet(world_root, planet_data)
+	_spawn_orbital_station_layout(world_root, world_data, catalog, session, sector_id, planet)
 
+
+func _spawn_orbital_station_layout(
+	world_root: Node2D,
+	world_data: Dictionary,
+	catalog: Catalog,
+	session: GameSession,
+	sector_id: String,
+	planet: Node2D = null
+) -> void:
 	var ring_data: Dictionary = world_data.get("orbital_ring", {})
 	_spawn_orbital_ring(world_root, ring_data, catalog, session, sector_id)
 
@@ -334,13 +347,14 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 
 	_sector_nav_cache.clear()
 	var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
-	_sector_nav_cache.append({
-		"id": "planet",
-		"name": str(sector.get("name", "Planet")),
-		"short_label": "P",
-		"contact_kind": "landmark",
-		"position": Vector2.ZERO,
-	})
+	if spawned_by_id.has("planet"):
+		_sector_nav_cache.append({
+			"id": "planet",
+			"name": str(sector.get("name", "Planet")),
+			"short_label": "P",
+			"contact_kind": "landmark",
+			"position": Vector2.ZERO,
+		})
 	if _habitat_node != null:
 		_sector_nav_cache.append({
 			"id": "habitat",

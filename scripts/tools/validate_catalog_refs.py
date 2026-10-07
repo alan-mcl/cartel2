@@ -826,9 +826,9 @@ def check_habitat_building_uniqueness(
             if str(building.get("type", "")) == "shipyard":
                 shipyard_count += 1
 
-        if shipyard_count != 1:
+        if shipyard_count > 1:
             errors.append(
-                f"habitat {habitat_id}: expected exactly one shipyard building, "
+                f"habitat {habitat_id}: expected at most one shipyard building, "
                 f"found {shipyard_count}"
             )
 

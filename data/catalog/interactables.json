@@ -143,6 +143,19 @@
     "kind": "translate"
   },
   {
+    "id": "centauri_a_beltworks_habitat",
+    "title": "Centauri A Beltworks",
+    "inspect_text": "Mining habitat in the Alpha Centauri A belt. Docking lanes are open for ore convoys and supply traffic.",
+    "kind": "dock",
+    "dock_location_id": "centauri_a_beltworks_habitat"
+  },
+  {
+    "id": "centauri_a_beltworks_jump_gate",
+    "title": "Centauri A Beltworks Jump Gate",
+    "inspect_text": "Unspace translation ring. Public routes connect to Proxima near orbit.",
+    "kind": "translate"
+  },
+  {
     "id": "unspace_exit",
     "title": "Exit Portal",
     "inspect_text": "Stabilised portal leading back toward 3-space. Translate through to complete the jump.",

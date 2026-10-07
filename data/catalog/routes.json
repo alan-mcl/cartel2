@@ -425,5 +425,18 @@
         "ease": 0.28
       }
     ]
+  },
+  {
+    "id": "proxima_centauri_a_beltworks",
+    "a": "proxima",
+    "b": "centauri_a_beltworks",
+    "friction": 5,
+    "translations": [
+      {
+        "n": 4,
+        "solution_ab": 47002,
+        "solution_ba": -47003
+      }
+    ]
   }
 ]

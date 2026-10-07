@@ -39,8 +39,12 @@ func _ready() -> void:
 	_camera.zoom = Vector2.ONE * 0.35
 
 	if _sector_ids.is_empty():
-		push_error("System render tester: no planetary sectors in catalog.")
+		push_error("System render tester: no renderable sectors in catalog.")
 		return
+
+	var default_idx := _sector_ids.find("proxima")
+	if default_idx >= 0:
+		_sector_option.selected = default_idx
 
 	_load_selected_sector()
 
@@ -128,11 +132,15 @@ func _populate_sector_options() -> void:
 		if sector_id.is_empty():
 			continue
 		var world_data := catalog.get_world(sector_id)
-		if world_data.is_empty() or not world_data.has("planet"):
+		if world_data.is_empty():
 			continue
-		var planet_name := str(sector.get("planet_name", sector_id))
+		if not world_data.has("planet") and not world_data.has("orbital_ring"):
+			continue
+		var display_name := str(sector.get("planet_name", ""))
+		if display_name.is_empty():
+			display_name = str(sector.get("name", sector_id))
 		var star_system := str(sector.get("star_system", ""))
-		var label := planet_name if star_system.is_empty() else "%s — %s" % [planet_name, star_system]
+		var label := display_name if star_system.is_empty() else "%s — %s" % [display_name, star_system]
 		entries.append({"id": sector_id, "label": label})
 
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

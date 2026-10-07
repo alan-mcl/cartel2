@@ -166,5 +166,19 @@
       "concordia_shipyard",
       "concordia_exchange"
     ]
+  },
+  {
+    "id": "centauri_a_beltworks_habitat",
+    "sector_id": "centauri_a_beltworks",
+    "name": "Centauri A Beltworks",
+    "type": "habitat",
+    "description": "Central mining habitat in the Alpha Centauri A asteroid belt. Ore convoys and refinery traffic share the lanes with Proxima-bound shuttles.",
+    "short_desc": "Mining habitat in the Alpha Centauri A belt.",
+    "art": "res://assets/ui/locations/centauri_a_beltworks_habitat.png",
+    "default_building": "centauri_a_beltworks_terminal",
+    "buildings": [
+      "centauri_a_beltworks_terminal",
+      "centauri_a_beltworks_exchange"
+    ]
   }
 ]

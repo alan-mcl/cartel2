@@ -39,6 +39,8 @@ Eleven inhabited systems. Each has an orbital habitat where ships dock, trade, a
 | **Titania IX** | Cold moon of a gas giant; tourism and winter sports under a dim flare star. |
 | **Pelagos** | Prosperous world orbiting a binary star. |
 
+**Centauri A Beltworks** is a public-route mining habitat in the Alpha Centauri A asteroid belt, reachable from Proxima’s jump gate. It is not a twelfth inhabited star system.
+
 ## N-space
 
 "Unspace" is the public name for the higher-dimensional spaces used for interstellar travel. The scientific term is N-space: 4-space, 5-space, 6-space and so on. Ordinary physical space is 3-space.
