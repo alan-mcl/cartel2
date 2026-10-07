@@ -69,5 +69,17 @@ static func _remote_sector_ids(session: GameSession, catalog: Catalog) -> Array[
 		var sector_id := str(sector_variant.get("id", ""))
 		if sector_id.is_empty() or sector_id == current:
 			continue
+		if not is_planetary_hub(catalog, sector_id):
+			continue
 		remote.append(sector_id)
 	return remote
+
+
+static func is_planetary_hub(catalog: Catalog, sector_id: String) -> bool:
+	if catalog == null or sector_id.is_empty():
+		return false
+	var world := catalog.get_world(sector_id)
+	if world.is_empty():
+		return false
+	var jump_gate: Variant = world.get("jump_gate", {})
+	return typeof(jump_gate) == TYPE_DICTIONARY and not jump_gate.is_empty()

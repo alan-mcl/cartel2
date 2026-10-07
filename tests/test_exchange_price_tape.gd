@@ -22,6 +22,10 @@ static func run(runner: TestRunner) -> void:
 			sector_id != current,
 			"exchange tape: print never uses local sector"
 		)
+		runner.check(
+			ExchangePriceTape.is_planetary_hub(catalog, sector_id),
+			"exchange tape: quote sector is a planetary hub"
+		)
 		var true_price := int(entry.get("true_price", 0))
 		var shown_price := int(entry.get("shown_price", 0))
 		if true_price > 0:
