@@ -498,3 +498,8 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 		catalog.get_mapping("centauri_a_beltworks", "proxima", 4).is_empty() == false,
 		"beltworks→proxima n=4 mapping exists"
 	)
+
+	var beacon: Variant = belt_world.get("translation_beacon", {})
+	runner.check(typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty(), "beltworks has translation_beacon")
+	runner.check(not belt_world.has("jump_gate"), "beltworks has no jump_gate")
+	runner.check_eq(str(beacon.get("destination", "")), "proxima", "beltworks beacon tuned to proxima")

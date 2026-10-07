@@ -23,7 +23,7 @@ This repository is the **production Godot build** of Cartel, not a throwaway POC
   `session.player`, `session.world`, `session.fleet`, `session.wallet`, or `session.combat`
   directly; do not add forwarding properties.
 - Content is JSON under `data/catalog/`. Lore and design intent: [docs/setting/](docs/setting/README.md). Implementation notes: [docs/design/architecture.md](docs/design/architecture.md).
-- **Setting before JSON:** edit setting docs when changing lore; then update catalogs to match.
+- **`docs/setting/` is frozen** unless the user explicitly asks for a setting-doc change in that request. Do not edit setting lore on your own; update catalogs and code to match frozen canon, and do not invent lore in JSON alone.
 - Planned refactors are tracked as pickable work items in [docs/design/refactor_backlog.md](docs/design/refactor_backlog.md). Read the item's **Depends on** and **Explicitly do NOT** before starting, and update its **Status** in the same commit.
 - **The project stays on GDScript.** A port to Godot .NET/C# was assessed and rejected; see the standing decision in the refactor backlog before proposing one.
 
@@ -74,7 +74,7 @@ Use **British English** in setting docs, design prose, and player-facing catalog
 ## Scope guardrails (unless explicitly asked)
 
 - Only **4-space** Unspace is implemented; do not wire n>5 routes or hyperdrive translation without a plan
-- Do not invent new setting canon in JSON alone — update `docs/setting/` first
+- Do not invent new setting canon in JSON alone — `docs/setting/` is frozen unless the user explicitly requests a setting-doc edit
 - Merchants beyond Proxima Exchange remain partial; check README placeholders
 
 ## Useful commands

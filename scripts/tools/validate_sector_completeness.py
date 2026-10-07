@@ -8,6 +8,40 @@ from pathlib import Path
 from catalog_io import index_by_id, load_array, load_object
 
 
+def _has_public_n4_route(routes: list, sector_a: str, sector_b: str) -> bool:
+    for route in routes:
+        if not isinstance(route, dict):
+            continue
+        a = str(route.get("a", ""))
+        b = str(route.get("b", ""))
+        if not ((a == sector_a and b == sector_b) or (a == sector_b and b == sector_a)):
+            continue
+        translations = route.get("translations", [])
+        if not isinstance(translations, list):
+            continue
+        for entry in translations:
+            if isinstance(entry, dict) and int(entry.get("n", 0)) == 4:
+                return True
+    return False
+
+
+def _validate_translate_interactable(
+    errors: list[str],
+    label: str,
+    interactable_id: str,
+    interactables: dict[str, dict],
+) -> None:
+    if not interactable_id:
+        errors.append(f"{label}: missing interactable")
+        return
+    if interactable_id not in interactables:
+        errors.append(f"{label}: unknown interactable '{interactable_id}'")
+        return
+    gate = interactables[interactable_id]
+    if str(gate.get("kind", "")) != "translate":
+        errors.append(f"{label}: interactable '{interactable_id}' must be kind translate")
+
+
 def check(catalog_dir: Path) -> list[str]:
     errors: list[str] = []
     sectors = index_by_id(load_array(catalog_dir / "sectors.json"))
@@ -128,23 +162,37 @@ def check(catalog_dir: Path) -> list[str]:
                         f"dock_location_id '{dock_location}' != habitat id '{habitat_id}'"
                     )
 
-        jump_gate = world_data.get("jump_gate", {})
-        if not isinstance(jump_gate, dict):
-            errors.append(f"{label}: world missing jump_gate")
-            jump_gate = {}
-
-        gate_interactable_id = str(jump_gate.get("interactable", ""))
-        if not gate_interactable_id:
-            errors.append(f"{label}: jump_gate missing interactable")
-        elif gate_interactable_id not in interactables:
-            errors.append(
-                f"{label}: unknown jump_gate interactable '{gate_interactable_id}'"
+        jump_gate = world_data.get("jump_gate")
+        translation_beacon = world_data.get("translation_beacon")
+        has_gate = isinstance(jump_gate, dict) and bool(jump_gate)
+        has_beacon = isinstance(translation_beacon, dict) and bool(translation_beacon)
+        if has_gate and has_beacon:
+            errors.append(f"{label}: world has both jump_gate and translation_beacon")
+        elif not has_gate and not has_beacon:
+            errors.append(f"{label}: world needs jump_gate or translation_beacon")
+        elif has_gate:
+            gate_interactable_id = str(jump_gate.get("interactable", ""))
+            _validate_translate_interactable(
+                errors, f"{label} jump_gate", gate_interactable_id, interactables
             )
         else:
-            gate = interactables[gate_interactable_id]
-            if str(gate.get("kind", "")) != "translate":
+            beacon_interactable_id = str(translation_beacon.get("interactable", ""))
+            _validate_translate_interactable(
+                errors,
+                f"{label} translation_beacon",
+                beacon_interactable_id,
+                interactables,
+            )
+            destination = str(translation_beacon.get("destination", ""))
+            if not destination:
+                errors.append(f"{label}: translation_beacon missing destination")
+            elif destination not in sectors:
                 errors.append(
-                    f"{label}: interactable '{gate_interactable_id}' must be kind translate"
+                    f"{label}: translation_beacon unknown destination '{destination}'"
+                )
+            elif not _has_public_n4_route(routes, sector_id, destination):
+                errors.append(
+                    f"{label}: no public n=4 route between '{sector_id}' and '{destination}'"
                 )
 
     for sector_id, matched in habitats_by_sector.items():
@@ -158,6 +206,8 @@ def check(catalog_dir: Path) -> list[str]:
 
 
 def main() -> int:
+    import sys
+
     catalog_dir = Path(__file__).resolve().parents[2] / "data" / "catalog"
     errors = check(catalog_dir)
     if errors:

@@ -633,10 +633,11 @@
         }
       ]
     },
-    "jump_gate": {
-      "id": "centauri_a_beltworks_jump_gate_obj",
-      "label": "Centauri A Beltworks Jump Gate",
+    "translation_beacon": {
+      "id": "centauri_a_beltworks_beacon_obj",
+      "label": "Centauri A Beltworks Translation Beacon",
       "interactable": "centauri_a_beltworks_jump_gate",
+      "destination": "proxima",
       "radius": 5400
     },
     "entities": [

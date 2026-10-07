@@ -36,6 +36,7 @@ var _sector_id: String = ""
 var _sector_nav_cache: Array = []
 var _sector_nav_cache_ready: bool = false
 var _nspace_field: NspaceField = null
+var _uses_translation_beacon: bool = false
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -55,6 +56,7 @@ func clear_world(world_root: Node2D) -> void:
 	_sector_nav_cache.clear()
 	_sector_nav_cache_ready = false
 	_nspace_field = null
+	_uses_translation_beacon = false
 
 
 func load_sector(
@@ -74,7 +76,11 @@ func load_sector(
 	if world_data.has("planet"):
 		_sector_id = sector_id
 		_spawn_planetary_layout(world_root, world_data, catalog, session, sector_id)
-	elif world_data.has("orbital_ring") or world_data.has("jump_gate"):
+	elif (
+		world_data.has("orbital_ring")
+		or world_data.has("jump_gate")
+		or world_data.has("translation_beacon")
+	):
 		_sector_id = sector_id
 		_spawn_orbital_station_layout(world_root, world_data, catalog, session, sector_id)
 	else:
@@ -219,8 +225,12 @@ func _spawn_orbital_station_layout(
 	var ring_data: Dictionary = world_data.get("orbital_ring", {})
 	_spawn_orbital_ring(world_root, ring_data, catalog, session, sector_id)
 
-	var gate_data: Dictionary = world_data.get("jump_gate", {})
-	_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
+	var beacon_data: Variant = world_data.get("translation_beacon", {})
+	if typeof(beacon_data) == TYPE_DICTIONARY and not beacon_data.is_empty():
+		_spawn_sector_translation_beacon(world_root, beacon_data, catalog, session, sector_id)
+	else:
+		var gate_data: Dictionary = world_data.get("jump_gate", {})
+		_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
 
 	_spawn_local_star(world_root, world_data, planet)
 
@@ -364,10 +374,12 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 			"position": Vector2.ZERO,
 		})
 	if _jump_gate_node != null:
+		var gate_short := "B" if _uses_translation_beacon else "G"
+		var gate_default := "Translation Beacon" if _uses_translation_beacon else "Jump Gate"
 		_sector_nav_cache.append({
 			"id": "jump_gate",
-			"name": _resolve_contact_name(_jump_gate_node, catalog, "Jump Gate"),
-			"short_label": "G",
+			"name": _resolve_contact_name(_jump_gate_node, catalog, gate_default),
+			"short_label": gate_short,
 			"contact_kind": "landmark",
 			"position": Vector2.ZERO,
 		})
@@ -664,6 +676,20 @@ func _configure_orbital_instance(
 			instance.call("configure", orbital_def, catalog, session)
 
 
+func uses_translation_beacon() -> bool:
+	return _uses_translation_beacon
+
+
+func get_translation_beacon_destination(catalog: Catalog) -> String:
+	if not _uses_translation_beacon or catalog == null or _sector_id.is_empty():
+		return ""
+	var world_data := catalog.get_world(_sector_id)
+	var beacon: Variant = world_data.get("translation_beacon", {})
+	if typeof(beacon) != TYPE_DICTIONARY:
+		return ""
+	return str(beacon.get("destination", ""))
+
+
 func _spawn_sector_jump_gate(
 	world_root: Node2D,
 	gate_data: Dictionary,
@@ -671,11 +697,42 @@ func _spawn_sector_jump_gate(
 	session: GameSession,
 	sector_id: String
 ) -> void:
-	var gate_radius := float(gate_data.get("radius", 5400.0))
+	_uses_translation_beacon = false
+	var instance := _spawn_translate_structure(
+		world_root, gate_data, catalog, session, sector_id, false
+	)
+	if instance is Node2D:
+		_jump_gate_node = instance
+
+
+func _spawn_sector_translation_beacon(
+	world_root: Node2D,
+	beacon_data: Dictionary,
+	catalog: Catalog,
+	session: GameSession,
+	sector_id: String
+) -> void:
+	_uses_translation_beacon = true
+	var instance := _spawn_translate_structure(
+		world_root, beacon_data, catalog, session, sector_id, true
+	)
+	if instance is Node2D:
+		_jump_gate_node = instance
+
+
+func _spawn_translate_structure(
+	world_root: Node2D,
+	structure_data: Dictionary,
+	catalog: Catalog,
+	session: GameSession,
+	sector_id: String,
+	is_beacon: bool
+) -> Node:
+	var gate_radius := float(structure_data.get("radius", 5400.0))
 	_gate_radius = gate_radius
 	_gate_angle = _gate_angle_for_sector(sector_id)
 
-	var entity := gate_data.duplicate()
+	var entity := structure_data.duplicate()
 	entity["kind"] = "jump_gate"
 	entity["position"] = {
 		"x": cos(_gate_angle) * gate_radius,
@@ -683,8 +740,9 @@ func _spawn_sector_jump_gate(
 	}
 
 	var instance := _spawn_entity(world_root, entity, catalog, session)
-	if instance is Node2D:
-		_jump_gate_node = instance
+	if is_beacon and instance is Node2D:
+		instance.scale = Vector2(0.5, 0.5)
+	return instance
 
 
 func _gate_angle_for_sector(sector_id: String) -> float:

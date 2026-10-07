@@ -28,9 +28,15 @@ The player also has a **translation library** (saved, empty on a new game). Libr
 
 Mechanics to acquire, buy, or copy translations are future work.
 
+## Jump gates and translation beacons
+
+**Jump gates** are large, expensive installations at populous central locations (the eleven settled worlds and similar hubs). At a jump gate, only translations whose **source** is the current sector are offered, subject to the navigation computer fill policy above: all public 4-space routes from the sector, eligible higher-order translations, and matching library entries.
+
+**Translation beacons** are smaller devices used at minor sites where a full gate is uneconomic. A beacon is programmed for **one destination sector** only. In play it offers the single **public 4-space** translation to that destination. Higher-order translations and library-only solutions are not available from a beacon, even if the ship could use them at a gate.
+
 ## Jump selection
 
-At a jump gate, only translations whose **source** is the current sector are offered. Each line shows:
+At a jump gate or translation beacon, the player initiates through the same orbit interaction. Each offered line shows:
 
 `solution: destination via N-space, Accuracy X%, expected duration Y`
 

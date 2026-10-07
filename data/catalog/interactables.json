@@ -151,8 +151,8 @@
   },
   {
     "id": "centauri_a_beltworks_jump_gate",
-    "title": "Centauri A Beltworks Jump Gate",
-    "inspect_text": "Unspace translation ring. Public routes connect to Proxima near orbit.",
+    "title": "Centauri A Beltworks Translation Beacon",
+    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
     "kind": "translate"
   },
   {

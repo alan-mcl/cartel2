@@ -51,7 +51,6 @@ func close() -> void:
 
 func _refresh() -> void:
 	_title.text = _gate_title
-	_description.text = "Select a translation, then confirm."
 
 	_clear_container(_route_list)
 	_offers.clear()
@@ -59,13 +58,39 @@ func _refresh() -> void:
 	if _catalog == null or _session == null:
 		return
 
+	var beacon_destination := _translation_beacon_destination()
+	if beacon_destination.is_empty():
+		_description.text = "Select a translation, then confirm."
+	else:
+		var dest_sector := _catalog.get_sector(beacon_destination)
+		var dest_label := str(dest_sector.get("planet_name", ""))
+		if dest_label.is_empty():
+			dest_label = str(dest_sector.get("name", beacon_destination))
+		_description.text = (
+			"This translation beacon is tuned to %s. Only the public 4-space hop is available."
+			% dest_label
+		)
+
 	var library: Array = _session.player.translation_library if _session.player != null else []
-	_offers = TranslationNav.list_offered_translations(
+	var all_offers := TranslationNav.list_offered_translations(
 		_catalog,
 		_session.sector_id,
 		_assembled_ship,
 		library
 	)
+	if beacon_destination.is_empty():
+		_offers = all_offers
+	else:
+		for offer_variant in all_offers:
+			if typeof(offer_variant) != TYPE_DICTIONARY:
+				continue
+			var offer: Dictionary = offer_variant
+			var translation: Dictionary = offer.get("translation", {})
+			if int(translation.get("n", 0)) != 4:
+				continue
+			if str(translation.get("target", "")) != beacon_destination:
+				continue
+			_offers.append(offer)
 
 	for index in _offers.size():
 		var offer_variant: Variant = _offers[index]
@@ -86,7 +111,10 @@ func _refresh() -> void:
 
 	_hint.text = "Esc or Cancel to stay in orbit"
 	if _offers.is_empty():
-		_solution_label.text = "No translations available from this gate."
+		if beacon_destination.is_empty():
+			_solution_label.text = "No translations available from this gate."
+		else:
+			_solution_label.text = "No public translation to the tuned destination."
 		_confirm_button.disabled = true
 		return
 
@@ -148,3 +176,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func _clear_container(container: Node) -> void:
 	for child in container.get_children():
 		child.queue_free()
+
+
+func _translation_beacon_destination() -> String:
+	if _catalog == null or _session == null:
+		return ""
+	var world_data := _catalog.get_world(_session.sector_id)
+	var beacon: Variant = world_data.get("translation_beacon", {})
+	if typeof(beacon) != TYPE_DICTIONARY or beacon.is_empty():
+		return ""
+	return str(beacon.get("destination", ""))

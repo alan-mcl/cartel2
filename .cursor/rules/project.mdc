@@ -8,6 +8,6 @@ alwaysApply: true
 - Run `./scripts/ci/check.sh` after GDScript or `data/catalog/` changes before marking work complete.
 - Gameplay logic: `scripts/gameplay/` as `RefCounted` only (no nodes). Session type is `GameSession`.
 - Presentation/UI adapt data; do not put game rules in `@onready` UI scripts.
-- Edit `docs/setting/` before changing lore in JSON catalogs.
+- **`docs/setting/` is frozen.** Do not create or edit files there unless the user explicitly asks for a setting-doc change in that request. Catalog and code may still change; do not invent lore in JSON to fill gaps the frozen docs do not cover.
 - British English in setting docs and player-facing catalog prose — see `british-english.mdc`.
 - Do not commit `.godot/`. See root `AGENTS.md` for run commands and scope guardrails.
