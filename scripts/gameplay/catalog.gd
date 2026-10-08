@@ -24,6 +24,7 @@ const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
+const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
 const ROUTE_TIME_JITTER := 0.08
@@ -52,6 +53,7 @@ var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
+var celebrity_pilots_by_id: Dictionary = {}
 ## Directed translation records keyed by "source_sector:solution".
 var translations_by_key: Dictionary = {}
 ## All directed translations from a sector (unsorted).
@@ -89,6 +91,7 @@ func load_all() -> void:
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
+	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -316,6 +319,14 @@ func get_message_emitter(id: String) -> Dictionary:
 
 func list_message_emitters() -> Array:
 	return message_emitters_by_id.values()
+
+
+func get_celebrity_pilot(id: String) -> Dictionary:
+	return _require(celebrity_pilots_by_id, id, "celebrity_pilot")
+
+
+func list_celebrity_pilots() -> Array:
+	return celebrity_pilots_by_id.values()
 
 
 func get_corporate_presence() -> Dictionary:

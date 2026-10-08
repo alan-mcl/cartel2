@@ -154,7 +154,7 @@ rollover; the first charter UI open at a docked habitat generates that habitatâ€
 and freight offers only (not every habitat in the catalog). Accepted charters persist in
 subsystem save data; completion and cancellation are handled in gameplay, not UI.
 
-[`MessageSubsystem`](scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, and `{planet}` from the current sector; the commodities emitter also binds live `{commodity}`, `{price}`, and `{move}`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
+[`MessageSubsystem`](scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, `{planet}`, `{city-mall}`, `{celebrity-pilot}`, `{local-star-system-location}`, `{jump-destination}`, and a commodity name; the commodities emitter also binds live `{price}` and `{move}`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
 
 | Context | GST behaviour |
 |---------|---------------|

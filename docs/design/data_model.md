@@ -32,6 +32,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
 | `freight_missions.json` | object | Freight charter cargos, descriptions, and pay tuning |
 | `message_emitters.json` | array | Weighted flavour pools for headline and gossip tickers |
+| `celebrity_pilots.json` | array | Celebrity pilot names for message ticker tokens |
 
 Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
@@ -359,7 +360,7 @@ Accepted charters persist under `Simulation` save key `missions` (`accepted`, `o
 
 ### Message emitters (`message_emitters.json`, `MessageSubsystem`)
 
-Each record: `id`, `weight`, and `templates[]` with `channel` (`headlines` | `gossip`), `text` (optional `{token}` placeholders), and optional `tone` (`info`, `warning`, `positive`, `negative`). Starter ids: `corporate_politics`, `sports`, `commodities`, `setting_flavour`. Tokens are filled at sample time from sector corporate presence, habitats, commodity quotes, and sector names. Not persisted in save yet except via any future caller of `MessageSubsystem.push`.
+Each record: `id`, `weight`, and `templates[]` with `channel` (`headlines` | `gossip`), `text` (optional `{token}` placeholders), and optional `tone` (`info`, `warning`, `positive`, `negative`). Emitter ids include `corporate_politics`, `sports`, `commodities`, `setting_flavour`, `unspace`, `celebrity_pilot`, and `corporate_news`. Tokens are filled at sample time from sector data (`{city-mall}` from `sectors.json` `city_malls`, `{local-star-system-location}` from same `star_system`, `{jump-destination}` from public `routes.json` edges), `celebrity_pilots.json`, corporate presence, habitats, commodity names (all emitters), and live `{price}` / `{move}` on the commodities emitter only. Templates with unfilled placeholders are skipped. Not persisted in save yet except via any future caller of `MessageSubsystem.push`.
 
 ### Freight charters (`freight_missions.json`, `MissionSubsystem`)
 

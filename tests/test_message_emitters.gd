@@ -6,6 +6,7 @@ static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_starter_emitters_have_both_channels(runner, catalog)
 	_test_headlines_and_gossip_no_placeholders(runner, catalog)
+	_test_sector_token_bindings(runner, catalog)
 	_test_commodities_headline_includes_price(runner, catalog)
 	_test_push_preempts_random_sample(runner, catalog)
 	_test_headlines_sector_change_clears_push(runner, catalog)
@@ -27,6 +28,9 @@ static func _test_starter_emitters_have_both_channels(runner: TestRunner, catalo
 		"sports",
 		"commodities",
 		"setting_flavour",
+		"unspace",
+		"celebrity_pilot",
+		"corporate_news",
 	]
 	for emitter_id in required:
 		var def := catalog.get_message_emitter(emitter_id)
@@ -60,6 +64,55 @@ static func _test_headlines_and_gossip_no_placeholders(runner: TestRunner, catal
 			text.find("{") < 0,
 			"message emitters: %s line has no unfilled tokens" % channel
 		)
+
+
+static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(catalog)
+	runner.check_eq(session.sector_id, "proxima", "message emitters: test session starts at proxima")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+	var bindings := MessageEmitterTokens.build_sector_bindings(session, catalog, rng)
+
+	var sector := catalog.get_sector("proxima")
+	var malls: Variant = sector.get("city_malls", [])
+	runner.check(bindings.has("city-mall"), "message emitters: proxima bindings include city-mall")
+	if bindings.has("city-mall"):
+		runner.check(
+			malls.has(bindings["city-mall"]),
+			"message emitters: city-mall comes from sector list"
+		)
+
+	var pilot_names: Array[String] = []
+	for pilot_variant in catalog.list_celebrity_pilots():
+		if typeof(pilot_variant) != TYPE_DICTIONARY:
+			continue
+		pilot_names.append(str(pilot_variant.get("name", "")))
+	runner.check(bindings.has("celebrity-pilot"), "message emitters: bindings include celebrity-pilot")
+	if bindings.has("celebrity-pilot"):
+		runner.check(
+			pilot_names.has(str(bindings["celebrity-pilot"])),
+			"message emitters: celebrity-pilot from catalog list"
+		)
+
+	runner.check(
+		bindings.has("local-star-system-location"),
+		"message emitters: proxima bindings include local-star-system-location"
+	)
+	var home_label := MessageEmitterTokens.sector_display_label(catalog, "proxima")
+	if bindings.has("local-star-system-location"):
+		runner.check(
+			str(bindings["local-star-system-location"]) != home_label,
+			"message emitters: local-star-system-location is not current sector"
+		)
+
+	runner.check(bindings.has("jump-destination"), "message emitters: proxima bindings include jump-destination")
+	if bindings.has("jump-destination"):
+		runner.check(
+			str(bindings["jump-destination"]) != home_label,
+			"message emitters: jump-destination is not current sector"
+		)
+
+	runner.check(bindings.has("commodity"), "message emitters: bindings include commodity name")
 
 
 static func _test_commodities_headline_includes_price(runner: TestRunner, catalog: Catalog) -> void:
