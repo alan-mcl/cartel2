@@ -17,6 +17,7 @@
     "maneuver": { "type": "string", "enum": ["low", "medium", "high"] },
     "hull_color": { "type": "string", "default": "" },
     "sprite": { "type": "string", "default": "" },
+    "header": { "type": "string", "default": "" },
     "mounts": { "$ref": "#/$defs/mounts" }
   },
   "$defs": {

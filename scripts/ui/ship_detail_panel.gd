@@ -1,7 +1,5 @@
 extends VBoxContainer
 
-const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
-
 var _catalog: Catalog
 var _ship: OwnedShip
 
@@ -15,6 +13,7 @@ var _flight_keys: Array[String] = []
 var _flight_section_title: String = "STATS"
 var _flight_row_style: String = "HBox"
 var _show_signature: bool = true
+var _show_chassis_art: bool = true
 
 
 func configure(opts: Dictionary) -> void:
@@ -27,6 +26,7 @@ func configure(opts: Dictionary) -> void:
 	_flight_section_title = str(opts.get("flight_section_title", "STATS"))
 	_flight_row_style = str(opts.get("flight_row_style", "HBox"))
 	_show_signature = bool(opts.get("show_signature", true))
+	_show_chassis_art = bool(opts.get("show_chassis_art", true))
 	_flight_keys.clear()
 	var keys: Variant = opts.get("flight_keys", [])
 	if typeof(keys) == TYPE_ARRAY:
@@ -47,11 +47,10 @@ func refresh() -> void:
 	var assembled := ShipAssembly.preview_stats(_catalog, _ship)
 	var chassis_data := _catalog.get_chassis(_ship.chassis_id)
 
-	var art_host := VBoxContainer.new()
-	add_child(art_host)
-	var art := LOCATION_ART.instantiate()
-	art_host.add_child(art)
-	art.set_art_path(str(chassis_data.get("sprite", "")), _ship.name)
+	if _show_chassis_art:
+		add_child(
+			LocationArtFactory.create_banner(str(chassis_data.get("header", "")), _ship.name)
+		)
 
 	if _show_summary:
 		var summary := Label.new()
@@ -78,7 +77,8 @@ func refresh() -> void:
 			var slot := str(entry.get("slot", ""))
 			var module_data: ModuleDef = entry.get("data", null)
 			var module_name := module_data.name if module_data != null else str(entry.get("module_id", ""))
-			add_child(UiPatterns.status_row(slot, module_name))
+			var category := module_data.category if module_data != null else ""
+			add_child(ModuleIcons.make_module_status_row(slot, module_name, category))
 
 	var engineering := ShipAssembly.get_engineering_block(_catalog, _ship)
 	var stats: Dictionary = engineering.get("stats", {})

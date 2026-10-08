@@ -11,6 +11,7 @@
     "maneuver": "high",
     "hull_color": "#5ee0ff",
     "sprite": "res://assets/ships/chassis/flare_on_chassis.svg",
+    "header": "res://assets/ui/ships/flare_on_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -33,6 +34,7 @@
     "maneuver": "low",
     "hull_color": "#b8a878",
     "sprite": "res://assets/ships/chassis/pegasus_chassis.svg",
+    "header": "res://assets/ui/ships/pegasus_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -55,6 +57,7 @@
     "maneuver": "high",
     "hull_color": "#c8e878",
     "sprite": "res://assets/ships/chassis/krypton_chassis.svg",
+    "header": "res://assets/ui/ships/krypton_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -77,6 +80,7 @@
     "maneuver": "medium",
     "hull_color": "#8898a8",
     "sprite": "res://assets/ships/chassis/wolff_chassis.svg",
+    "header": "res://assets/ui/ships/wolff_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -99,6 +103,7 @@
     "maneuver": "high",
     "hull_color": "#ffd060",
     "sprite": "res://assets/ships/chassis/dragon_chassis.svg",
+    "header": "res://assets/ui/ships/dragon_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -121,6 +126,7 @@
     "maneuver": "medium",
     "hull_color": "#a8b8d0",
     "sprite": "res://assets/ships/chassis/juno_chassis.svg",
+    "header": "res://assets/ui/ships/juno_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,
@@ -143,6 +149,7 @@
     "maneuver": "high",
     "hull_color": "#d87888",
     "sprite": "res://assets/ships/chassis/silhouette_chassis.svg",
+    "header": "res://assets/ui/ships/silhouette_chassis.png",
     "mounts": {
       "main_engine": 1,
       "power": 1,

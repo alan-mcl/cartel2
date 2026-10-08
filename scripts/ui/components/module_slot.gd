@@ -10,8 +10,10 @@ var module_name: String = ""
 var ship_id: String = ""
 var compatible_module_id: String = ""
 var drop_validator: Callable = Callable()
+var _module_category: String = ""
 var _click_pending := false
 
+@onready var _module_icon: TextureRect = $HBox/ModuleIcon
 @onready var _slot_label: Label = $HBox/SlotLabel
 @onready var _module_label: Label = $HBox/ModuleLabel
 
@@ -23,7 +25,8 @@ func configure(
 	p_ship_id: String,
 	p_compatible_module_id: String = "",
 	p_drop_validator: Callable = Callable(),
-	p_tooltip: String = ""
+	p_tooltip: String = "",
+	p_module_category: String = ""
 ) -> void:
 	slot_id = p_slot_id
 	module_id = p_module_id
@@ -32,6 +35,7 @@ func configure(
 	compatible_module_id = p_compatible_module_id
 	drop_validator = p_drop_validator
 	tooltip_text = p_tooltip
+	_module_category = p_module_category
 	if is_node_ready():
 		_apply_labels()
 
@@ -48,6 +52,12 @@ func _apply_labels() -> void:
 		_slot_label.text = slot_id
 	if _module_label:
 		_module_label.text = module_name if not module_name.is_empty() else "(empty)"
+	if _module_icon:
+		if module_id.is_empty():
+			_module_icon.visible = false
+			_module_icon.texture = null
+		else:
+			ModuleIcons.configure_texture_rect(_module_icon, _module_category)
 
 
 func _on_gui_input(event: InputEvent) -> void:
@@ -68,9 +78,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	if module_id.is_empty():
 		return null
 	_click_pending = false
-	var preview := Label.new()
-	preview.text = module_name
-	set_drag_preview(preview)
+	set_drag_preview(ModuleIcons.make_drag_preview(module_name, _module_category))
 	return {
 		"type": "slot",
 		"slot": slot_id,

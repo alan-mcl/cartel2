@@ -4,6 +4,7 @@ const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
 const SHIP_DETAIL_PANEL := preload("res://scenes/ui/ship_detail_panel.tscn")
 
 const _YARD_SHIP_DETAIL_OPTS := {
+	"show_chassis_art": false,
 	"show_summary": true,
 	"chassis_style": "fixed",
 	"show_engineering": true,
@@ -61,7 +62,7 @@ const SLOT_GROUPS := [
 @onready var _credits: Label = $Layout/Header/HeaderBox/Credits
 @onready var _back_button: Button = $Layout/Footer/FooterBox/BackButton
 @onready var _ship_item_list: ItemList = $Layout/Body/Split/ShipColumn/ShipItemList
-@onready var _ship_art_host: VBoxContainer = $Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo/ShipArtHost
+@onready var _ship_art_host: VBoxContainer = $Layout/Body/Split/ShipColumn/ShipArtHost
 @onready var _ship_stats_body: VBoxContainer = $Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo/ShipStatsBody
 @onready var _config_body: VBoxContainer = $Layout/Body/Split/ConfigColumn/ConfigScroll/ConfigBody
 @onready var _inventory_column = $Layout/Body/Split/InventoryColumn
@@ -249,17 +250,18 @@ func _select_ship_at_index(index: int) -> void:
 
 
 func _rebuild_ship_detail() -> void:
-	for child in _ship_art_host.get_children():
-		child.queue_free()
 	for child in _config_body.get_children():
 		child.queue_free()
 
 	var ship := _context.session.get_owned_ship(_selected_ship_id)
 	if ship == null:
+		_clear_ship_chassis_banner()
 		for child in _ship_stats_body.get_children():
 			child.queue_free()
 		_ship_detail_panel = null
 		return
+
+	_refresh_ship_chassis_banner(ship)
 
 	if _ship_detail_panel == null or not is_instance_valid(_ship_detail_panel):
 		for child in _ship_stats_body.get_children():
@@ -272,6 +274,20 @@ func _rebuild_ship_detail() -> void:
 	_ship_detail_panel.refresh()
 
 	_add_slot_board(ship)
+
+
+func _clear_ship_chassis_banner() -> void:
+	for child in _ship_art_host.get_children():
+		child.queue_free()
+
+
+func _refresh_ship_chassis_banner(ship: OwnedShip) -> void:
+	_clear_ship_chassis_banner()
+	var chassis := _context.catalog.get_chassis(ship.chassis_id)
+	var header := str(chassis.get("header", ""))
+	if header.is_empty():
+		return
+	_ship_art_host.add_child(LocationArtFactory.create_banner(header, ship.name))
 
 
 func _slot_group_for(slot: String) -> String:
@@ -305,10 +321,12 @@ func _add_slot_board(ship: OwnedShip) -> void:
 			var module_id := ship.get_module_id(slot_id)
 			var module_name := "(empty)"
 			var slot_tooltip := ""
+			var module_category := ""
 			if not module_id.is_empty():
 				var module_def := _context.catalog.get_module(module_id)
 				module_name = str(module_def.get("name", module_id))
 				slot_tooltip = ModuleSpecText.format_tooltip(module_def)
+				module_category = str(module_def.get("category", ""))
 
 			var slot_panel := MODULE_SLOT.instantiate()
 			var compatible := _selected_part_id if not _selected_part_id.is_empty() else ""
@@ -319,7 +337,8 @@ func _add_slot_board(ship: OwnedShip) -> void:
 				ship.id,
 				compatible,
 				Callable(self, "_validate_slot_drop"),
-				slot_tooltip
+				slot_tooltip,
+				module_category
 			)
 			slot_panel.slot_clicked.connect(_on_slot_clicked)
 			slot_panel.module_dropped.connect(_on_module_dropped_on_slot)

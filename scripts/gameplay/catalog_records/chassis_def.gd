@@ -16,6 +16,7 @@ var volume: float = 0
 var maneuver: String = ""
 var hull_color: String = ""
 var sprite: String = ""
+var header: String = ""
 var mounts: Dictionary = {}
 
 static func from_dict(data: Dictionary) -> ChassisDef:
@@ -33,6 +34,7 @@ static func from_dict(data: Dictionary) -> ChassisDef:
 	def.maneuver = str(data.get("maneuver", ""))
 	def.hull_color = str(data.get("hull_color", ""))
 	def.sprite = str(data.get("sprite", ""))
+	def.header = str(data.get("header", ""))
 	var raw_mounts: Variant = data.get("mounts", {})
 	if typeof(raw_mounts) == TYPE_DICTIONARY:
 		def.mounts = raw_mounts.duplicate()
@@ -54,11 +56,13 @@ func to_dict() -> Dictionary:
 		out["hull_color"] = hull_color
 	if _present_keys.has("sprite") or sprite != "":
 		out["sprite"] = sprite
+	if _present_keys.has("header") or header != "":
+		out["header"] = header
 	out["mounts"] = mounts.duplicate()
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "cost", "mass", "hits", "mass_limit", "volume", "maneuver", "hull_color", "sprite", "mounts"])
+	return PackedStringArray(["id", "name", "maker", "cost", "mass", "hits", "mass_limit", "volume", "maneuver", "hull_color", "sprite", "header", "mounts"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "maker", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"])

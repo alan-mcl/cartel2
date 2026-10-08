@@ -72,6 +72,10 @@ size_flags_stretch_ratio = 0.35
 select_mode = 1
 allow_reselect = true
 
+[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn" unique_id=1409077569]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="ShipInfoScroll" type="ScrollContainer" parent="Layout/Body/Split/ShipColumn" unique_id=1262612191]
 layout_mode = 2
 size_flags_vertical = 3
@@ -82,9 +86,6 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
-
-[node name="ShipArtHost" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo" unique_id=1409077569]
-layout_mode = 2
 
 [node name="ShipStatsBody" type="VBoxContainer" parent="Layout/Body/Split/ShipColumn/ShipInfoScroll/ShipInfo" unique_id=1097284895]
 layout_mode = 2

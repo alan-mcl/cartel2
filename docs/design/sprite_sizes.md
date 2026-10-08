@@ -146,10 +146,12 @@ Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000*
 
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
-| Location / building art | `assets/ui/locations/*.svg` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
+| Location / building art | `assets/ui/locations/*.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
+| Chassis UI header | `assets/ui/ships/<chassis_id>.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9 banner via `LocationArtFactory.create_banner()` (cover + left fade); Shipyard hosts above stats scroll |
+| Module category icon | `assets/ui/modules/<category>.png` | 64×64 | **64×64** | One PNG per module `category`; list rows at 24 px |
 | Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 (e.g. 696×928) | **3:4** | Centre-cropped from 4:3 sources; mipmaps; `PortraitTextureRect` at 160² (new game) / 128² (habitat) |
 
-Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`art` field).
+Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`art` field). Chassis headers live in `data/catalog/chassis.json` (`header` field); world hull SVGs stay in `sprite`. Placeholder PNGs: `python3 scripts/tools/generate_ui_ship_module_art.py` (skip-if-present).
 
 ---
 

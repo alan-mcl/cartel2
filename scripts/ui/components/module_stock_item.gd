@@ -14,6 +14,7 @@ var _name_text: String = ""
 var _cost: int = 0
 var _meta_detail: String = ""
 
+@onready var _module_icon: TextureRect = $HBox/ModuleIcon
 @onready var _label: Label = $HBox/NameLabel
 @onready var _meta: Label = $HBox/MetaLabel
 
@@ -58,6 +59,8 @@ func set_selected_state(is_selected: bool) -> void:
 
 
 func _apply_labels(name_text: String, cost: int, spare: int, is_selected: bool) -> void:
+	if _module_icon:
+		ModuleIcons.configure_texture_rect(_module_icon, category_text)
 	if _label:
 		var prefix := "> " if is_selected else ""
 		_label.text = "%s%s" % [prefix, name_text]
@@ -90,9 +93,8 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 		return null
 	if not sandbox_mode and spare_count <= 0:
 		return null
-	var preview := Label.new()
-	preview.text = _label.text if _label else module_id
-	set_drag_preview(preview)
+	var preview_name := _label.text if _label else module_id
+	set_drag_preview(ModuleIcons.make_drag_preview(preview_name, category_text))
 	stock_drag_started.emit(module_id)
 	return {
 		"type": "stock",

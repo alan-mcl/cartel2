@@ -68,6 +68,7 @@ Source: `data/catalog/schema/chassis.schema.json` → `chassis.json`
 | `maneuver` | string | yes | `` | enum: `low`, `medium`, `high` |
 | `hull_color` | string | no | `` |  |
 | `sprite` | string | no | `` |  |
+| `header` | string | no | `` |  |
 | `mounts` | #/$defs/mounts | yes | `` |  |
 
 ## CommodityDef

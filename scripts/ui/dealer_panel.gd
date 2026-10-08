@@ -1,7 +1,5 @@
 extends GameScreen
 
-const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
-
 var _building: Dictionary = {}
 var _selected_dealer_stock_id: String = ""
 var _dealer_stock_ids: PackedStringArray = PackedStringArray()
@@ -167,11 +165,12 @@ func _rebuild_ship_dealer_detail(detail: VBoxContainer) -> void:
 	var assembled := ShipAssembly.preview_from_template(_context.catalog, _selected_dealer_stock_id)
 	var price := ShipAssembly.used_ship_price(_context.catalog, _selected_dealer_stock_id)
 
-	var art_host := VBoxContainer.new()
-	detail.add_child(art_host)
-	var art := LOCATION_ART.instantiate()
-	art_host.add_child(art)
-	art.set_art_path(str(chassis.get("sprite", "")), str(template.get("name", _selected_dealer_stock_id)))
+	detail.add_child(
+		LocationArtFactory.create_banner(
+			str(chassis.get("header", "")),
+			str(template.get("name", _selected_dealer_stock_id))
+		)
+	)
 
 	detail.add_child(UiPatterns.headline_item(str(template.get("name", _selected_dealer_stock_id))))
 	detail.add_child(UiPatterns.status_row("Maker", str(template.get("maker", ""))))
@@ -201,11 +200,12 @@ func _rebuild_chassis_dealer_detail(detail: VBoxContainer) -> void:
 
 	var price := ShipAssembly.chassis_price(_context.catalog, _selected_dealer_stock_id)
 
-	var art_host := VBoxContainer.new()
-	detail.add_child(art_host)
-	var art := LOCATION_ART.instantiate()
-	art_host.add_child(art)
-	art.set_art_path(str(chassis.get("sprite", "")), str(chassis.get("name", _selected_dealer_stock_id)))
+	detail.add_child(
+		LocationArtFactory.create_banner(
+			str(chassis.get("header", "")),
+			str(chassis.get("name", _selected_dealer_stock_id))
+		)
+	)
 
 	detail.add_child(UiPatterns.headline_item(str(chassis.get("name", _selected_dealer_stock_id))))
 	detail.add_child(UiPatterns.status_row("Maker", str(chassis.get("maker", ""))))

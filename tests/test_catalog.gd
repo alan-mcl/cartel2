@@ -71,6 +71,7 @@ static func run(runner: TestRunner) -> void:
 
 	_test_centauri_a_beltworks_public_route(runner, catalog)
 	_test_neighbourhood_beacon_sectors(runner, catalog)
+	_test_ui_ship_module_art(runner, catalog)
 
 	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
 	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
@@ -515,6 +516,27 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 	runner.check(typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty(), "beltworks has translation_beacon")
 	runner.check(not belt_world.has("jump_gate"), "beltworks has no jump_gate")
 	runner.check_eq(str(beacon.get("destination", "")), "proxima", "beltworks beacon tuned to proxima")
+
+
+static func _test_ui_ship_module_art(runner: TestRunner, catalog: Catalog) -> void:
+	for category in ModuleIcons.MODULE_CATEGORIES:
+		var icon_path := ModuleIcons.path_for_category(category)
+		runner.check(
+			ResourceLoader.exists(icon_path),
+			"module category icon exists: %s" % category
+		)
+	for entry in catalog.list_chassis():
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var chassis_id := str(entry.get("id", ""))
+		var header := str(entry.get("header", ""))
+		var sprite := str(entry.get("sprite", ""))
+		runner.check(not header.is_empty(), "chassis %s has header art path" % chassis_id)
+		runner.check(header != sprite, "chassis %s header differs from world sprite" % chassis_id)
+		runner.check(
+			ResourceLoader.exists(header),
+			"chassis %s header texture exists" % chassis_id
+		)
 
 
 static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Catalog) -> void:

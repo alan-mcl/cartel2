@@ -773,6 +773,61 @@ def catalog_art_to_path(art: str) -> Path | None:
     return ROOT / art.removeprefix("res://")
 
 
+MODULE_ICON_CATEGORIES = [
+    "propulsion",
+    "power",
+    "computer",
+    "life_support",
+    "sensor",
+    "navigation",
+    "hyperdrive",
+    "weapon",
+    "armour",
+    "cargo",
+    "fuel",
+    "ammunition",
+    "shield",
+    "point_defence",
+    "cyber_defence",
+    "transponder",
+]
+
+
+def check_module_category_icons() -> list[str]:
+    errors: list[str] = []
+    for category in MODULE_ICON_CATEGORIES:
+        path = ROOT / "assets" / "ui" / "modules" / f"{category}.png"
+        if not path.is_file():
+            errors.append(
+                f"module icon: missing assets/ui/modules/{category}.png"
+            )
+    return errors
+
+
+def check_chassis_ui_headers(chassis: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    for chassis_id, entry in sorted(chassis.items()):
+        header = str(entry.get("header", ""))
+        if not header:
+            errors.append(f"chassis {chassis_id}: missing header")
+            continue
+        sprite = str(entry.get("sprite", ""))
+        if header == sprite:
+            errors.append(
+                f"chassis {chassis_id}: header must differ from world sprite"
+            )
+        if not header.startswith("res://assets/ui/ships/"):
+            errors.append(
+                f"chassis {chassis_id}: header must be under res://assets/ui/ships/"
+            )
+            continue
+        path = catalog_art_to_path(header)
+        if path is None or not path.is_file():
+            rel = header.removeprefix("res://")
+            errors.append(f"chassis {chassis_id}: header file not found '{rel}'")
+    return errors
+
+
 def check_habitat_building_uniqueness(
     habitats: dict[str, dict],
     buildings: dict[str, dict],
@@ -1464,6 +1519,8 @@ def main() -> int:
                 f"unspace {unspace_id}: unknown portal interactable '{interactable_id}'"
             )
 
+    errors.extend(check_module_category_icons())
+    errors.extend(check_chassis_ui_headers(chassis))
     errors.extend(check_habitat_building_uniqueness(habitats, buildings_by_id))
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))

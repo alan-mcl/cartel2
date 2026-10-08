@@ -29,8 +29,11 @@ func configure_header_mode(enabled: bool) -> void:
 		size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		clip_contents = true
 		add_theme_stylebox_override(&"panel", StyleBoxEmpty.new())
-		_frame.visible = false
-		_reparent_art_children(self)
+		_frame.visible = true
+		_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_frame.stretch_mode = AspectRatioContainer.STRETCH_COVER
 		_apply_full_rect_art()
 		_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		_apply_banner_fade(true)
@@ -41,7 +44,13 @@ func configure_header_mode(enabled: bool) -> void:
 		clip_contents = false
 		remove_theme_stylebox_override(&"panel")
 		_frame.visible = true
-		_reparent_art_children(_frame)
+		_frame.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		_frame.offset_left = 0
+		_frame.offset_top = 0
+		_frame.offset_right = 0
+		_frame.offset_bottom = 0
+		_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_frame.size_flags_vertical = Control.SIZE_SHRINK_END
 		_apply_frame_art()
 		_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		_texture.material = null
@@ -69,12 +78,6 @@ func _update_banner_fade_width() -> void:
 		return
 	var fade_end := clampf(float(LEFT_FADE_WIDTH_PX) / size.x, 0.02, 0.35)
 	_banner_fade_material.set_shader_parameter(&"fade_end", fade_end)
-
-
-func _reparent_art_children(new_parent: Node) -> void:
-	for node in [_texture, _placeholder]:
-		if node.get_parent() != new_parent:
-			node.reparent(new_parent)
 
 
 func _apply_full_rect_art() -> void:
