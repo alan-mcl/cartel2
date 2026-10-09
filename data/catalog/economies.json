@@ -4,18 +4,28 @@
     "tier": "core",
     "wealth": 1.2,
     "produce": {
-      "consumer_goods": 1.35,
-      "data": 1.3,
-      "pharmaceuticals": 1.1
+      "consumer_goods": 13.5,
+      "data": 13.0,
+      "pharmaceuticals": 11.0,
+      "food_products": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "luxury_goods": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.45,
-      "advanced_raw_materials": 1.35,
-      "industrial_components": 1.15,
-      "chemicals": 1.1,
-      "energy": 1.4,
-      "minerals": 1.25,
-      "water_ice": 1.25
+      "food_products": 14.5,
+      "advanced_raw_materials": 13.5,
+      "industrial_components": 11.5,
+      "chemicals": 11.0,
+      "energy": 14.0,
+      "minerals": 12.5,
+      "water_ice": 12.5
     }
   },
   {
@@ -23,16 +33,24 @@
     "tier": "core",
     "wealth": 1.1,
     "produce": {
-      "industrial_components": 1.45,
-      "chemicals": 1.35,
-      "consumer_goods": 1.2,
-      "compute_cores": 1.1,
-      "energy": 1.35
+      "industrial_components": 14.5,
+      "chemicals": 13.5,
+      "consumer_goods": 12.0,
+      "compute_cores": 11.0,
+      "energy": 13.5,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "data": 1.0,
+      "advanced_raw_materials": 1.0,
+      "luxury_goods": 1.0,
+      "military_goods": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.15,
-      "luxury_goods": 1.2,
-      "minerals": 1.4
+      "food_products": 11.5,
+      "luxury_goods": 12.0,
+      "minerals": 14.0
     }
   },
   {
@@ -40,19 +58,26 @@
     "tier": "core",
     "wealth": 1.0,
     "produce": {
-      "industrial_components": 1.5,
-      "chemicals": 1.45,
-      "compute_cores": 1.35,
-      "advanced_raw_materials": 1.35,
-      "military_goods": 1.1,
-      "energy": 1.5
+      "industrial_components": 15.0,
+      "chemicals": 14.5,
+      "compute_cores": 13.5,
+      "advanced_raw_materials": 13.5,
+      "military_goods": 11.0,
+      "energy": 15.0,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "consumer_goods": 1.0,
+      "data": 1.0,
+      "luxury_goods": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.3,
-      "consumer_goods": 1.1,
-      "luxury_goods": 1.05,
-      "minerals": 1.5,
-      "water_ice": 1.4
+      "food_products": 13.0,
+      "consumer_goods": 11.0,
+      "luxury_goods": 10.5,
+      "minerals": 15.0,
+      "water_ice": 14.0
     }
   },
   {
@@ -60,16 +85,26 @@
     "tier": "core",
     "wealth": 1.15,
     "produce": {
-      "luxury_goods": 1.35,
-      "data": 1.35,
-      "consumer_goods": 1.25
+      "luxury_goods": 8.1,
+      "data": 8.1,
+      "consumer_goods": 7.5,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "industrial_components": 1.25,
-      "chemicals": 1.2,
-      "food_products": 1.1,
-      "energy": 1.1,
-      "minerals": 1.15
+      "industrial_components": 7.5,
+      "chemicals": 7.2,
+      "food_products": 6.6,
+      "energy": 6.6,
+      "minerals": 6.9
     }
   },
   {
@@ -77,16 +112,26 @@
     "tier": "mid",
     "wealth": 1.25,
     "produce": {
-      "luxury_goods": 1.45,
-      "data": 1.35,
-      "consumer_goods": 1.15
+      "luxury_goods": 8.7,
+      "data": 8.1,
+      "consumer_goods": 6.9,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "industrial_components": 1.25,
-      "military_goods": 1.15,
-      "advanced_raw_materials": 1.1,
-      "energy": 1.2,
-      "minerals": 1.1
+      "industrial_components": 7.5,
+      "military_goods": 6.9,
+      "advanced_raw_materials": 6.6,
+      "energy": 7.2,
+      "minerals": 6.6
     }
   },
   {
@@ -94,16 +139,26 @@
     "tier": "mid",
     "wealth": 1.05,
     "produce": {
-      "consumer_goods": 1.35,
-      "food_products": 1.25,
-      "pharmaceuticals": 1.25
+      "consumer_goods": 8.1,
+      "food_products": 7.5,
+      "pharmaceuticals": 7.5,
+      "data": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "luxury_goods": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "advanced_raw_materials": 1.25,
-      "compute_cores": 1.25,
-      "industrial_components": 1.1,
-      "energy": 1.15,
-      "minerals": 1.1
+      "advanced_raw_materials": 7.5,
+      "compute_cores": 7.5,
+      "industrial_components": 6.6,
+      "energy": 6.9,
+      "minerals": 6.6
     }
   },
   {
@@ -111,15 +166,26 @@
     "tier": "mid",
     "wealth": 1.2,
     "produce": {
-      "luxury_goods": 1.55,
-      "consumer_goods": 1.1
+      "luxury_goods": 6.2,
+      "consumer_goods": 4.4,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "data": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.35,
-      "industrial_components": 1.25,
-      "chemicals": 1.15,
-      "pharmaceuticals": 1.05,
-      "energy": 1.35
+      "food_products": 5.4,
+      "industrial_components": 5.0,
+      "chemicals": 4.6,
+      "pharmaceuticals": 4.2,
+      "energy": 5.4
     }
   },
   {
@@ -127,16 +193,23 @@
     "tier": "mid",
     "wealth": 1.0,
     "produce": {
-      "advanced_raw_materials": 1.35,
-      "chemicals": 1.35,
-      "industrial_components": 1.25,
-      "military_goods": 1.05,
-      "energy": 1.3,
-      "minerals": 1.35
+      "advanced_raw_materials": 5.4,
+      "chemicals": 5.4,
+      "industrial_components": 5.0,
+      "military_goods": 4.2,
+      "energy": 5.2,
+      "minerals": 5.4,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "consumer_goods": 1.0,
+      "data": 1.0,
+      "luxury_goods": 1.0,
+      "compute_cores": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "luxury_goods": 1.25,
-      "consumer_goods": 1.1
+      "luxury_goods": 5.0,
+      "consumer_goods": 4.4
     }
   },
   {
@@ -144,18 +217,25 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 1.45,
-      "chemicals": 1.35,
-      "military_goods": 1.25,
-      "industrial_components": 1.15,
-      "energy": 1.25,
-      "minerals": 1.45
+      "advanced_raw_materials": 5.8,
+      "chemicals": 5.4,
+      "military_goods": 5.0,
+      "industrial_components": 4.6,
+      "energy": 5.0,
+      "minerals": 5.8,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "consumer_goods": 1.0,
+      "data": 1.0,
+      "luxury_goods": 1.0,
+      "compute_cores": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.75,
-      "consumer_goods": 1.25,
-      "pharmaceuticals": 1.25,
-      "water_ice": 1.8
+      "food_products": 7.0,
+      "consumer_goods": 5.0,
+      "pharmaceuticals": 5.0,
+      "water_ice": 7.2
     }
   },
   {
@@ -163,17 +243,26 @@
     "tier": "outer",
     "wealth": 0.9,
     "produce": {
-      "food_products": 1.65,
-      "chemicals": 1.25,
-      "consumer_goods": 1.05,
-      "water_ice": 1.25
+      "food_products": 6.6,
+      "chemicals": 5.0,
+      "consumer_goods": 4.2,
+      "water_ice": 5.0,
+      "pharmaceuticals": 1.0,
+      "data": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "advanced_raw_materials": 1.0,
+      "luxury_goods": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0
     },
     "consume": {
-      "industrial_components": 1.25,
-      "compute_cores": 1.25,
-      "luxury_goods": 1.15,
-      "advanced_raw_materials": 1.1,
-      "energy": 1.2
+      "industrial_components": 5.0,
+      "compute_cores": 5.0,
+      "luxury_goods": 4.6,
+      "advanced_raw_materials": 4.4,
+      "energy": 4.8
     }
   },
   {
@@ -181,15 +270,26 @@
     "tier": "outer",
     "wealth": 1.1,
     "produce": {
-      "luxury_goods": 1.35,
-      "consumer_goods": 1.05
+      "luxury_goods": 5.4,
+      "consumer_goods": 4.2,
+      "food_products": 1.0,
+      "pharmaceuticals": 1.0,
+      "data": 1.0,
+      "energy": 1.0,
+      "industrial_components": 1.0,
+      "chemicals": 1.0,
+      "advanced_raw_materials": 1.0,
+      "military_goods": 1.0,
+      "compute_cores": 1.0,
+      "minerals": 1.0,
+      "water_ice": 1.0
     },
     "consume": {
-      "food_products": 1.35,
-      "industrial_components": 1.25,
-      "military_goods": 1.15,
-      "pharmaceuticals": 1.05,
-      "energy": 1.3
+      "food_products": 5.4,
+      "industrial_components": 5.0,
+      "military_goods": 4.6,
+      "pharmaceuticals": 4.2,
+      "energy": 5.2
     }
   },
   {
@@ -197,17 +297,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   },
   {
@@ -215,17 +315,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   },
   {
@@ -233,17 +333,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   },
   {
@@ -251,17 +351,17 @@
     "tier": "outer",
     "wealth": 0.8,
     "produce": {
-      "chemicals": 2.2,
-      "advanced_raw_materials": 2.5,
-      "energy": 1.2,
-      "minerals": 3.0,
-      "water_ice": 2.5
+      "chemicals": 4.4,
+      "advanced_raw_materials": 5.0,
+      "energy": 2.4,
+      "minerals": 6.0,
+      "water_ice": 5.0
     },
     "consume": {
-      "food_products": 4.5,
-      "industrial_components": 1.15,
-      "pharmaceuticals": 1.0,
-      "water_ice": 1.5
+      "food_products": 9.0,
+      "industrial_components": 2.3,
+      "pharmaceuticals": 2.0,
+      "water_ice": 3.0
     }
   },
   {
@@ -269,17 +369,17 @@
     "tier": "outer",
     "wealth": 0.8,
     "produce": {
-      "chemicals": 2.2,
-      "advanced_raw_materials": 2.5,
-      "energy": 1.2,
-      "minerals": 3.0,
-      "water_ice": 2.5
+      "chemicals": 4.4,
+      "advanced_raw_materials": 5.0,
+      "energy": 2.4,
+      "minerals": 6.0,
+      "water_ice": 5.0
     },
     "consume": {
-      "food_products": 4.5,
-      "industrial_components": 1.15,
-      "pharmaceuticals": 1.0,
-      "water_ice": 1.5
+      "food_products": 9.0,
+      "industrial_components": 2.3,
+      "pharmaceuticals": 2.0,
+      "water_ice": 3.0
     }
   },
   {
@@ -287,16 +387,16 @@
     "tier": "outer",
     "wealth": 0.95,
     "produce": {
-      "data": 1.8,
-      "energy": 1.1
+      "data": 3.6,
+      "energy": 2.2
     },
     "consume": {
-      "energy": 3.5,
-      "industrial_components": 2.2,
-      "pharmaceuticals": 1.4,
-      "food_products": 2.0,
-      "minerals": 1.2,
-      "water_ice": 2.5
+      "energy": 7.0,
+      "industrial_components": 4.4,
+      "pharmaceuticals": 2.8,
+      "food_products": 4.0,
+      "minerals": 2.4,
+      "water_ice": 5.0
     }
   },
   {
@@ -304,17 +404,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   },
   {
@@ -322,17 +422,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   },
   {
@@ -340,17 +440,17 @@
     "tier": "outer",
     "wealth": 0.85,
     "produce": {
-      "advanced_raw_materials": 5.5,
-      "energy": 1.45,
-      "industrial_components": 1.1,
-      "minerals": 5.5,
-      "water_ice": 4.5
+      "advanced_raw_materials": 11.0,
+      "energy": 2.9,
+      "industrial_components": 2.2,
+      "minerals": 11.0,
+      "water_ice": 9.0
     },
     "consume": {
-      "food_products": 6.0,
-      "industrial_components": 1.2,
-      "pharmaceuticals": 1.05,
-      "water_ice": 1.5
+      "food_products": 12.0,
+      "industrial_components": 2.4,
+      "pharmaceuticals": 2.1,
+      "water_ice": 3.0
     }
   }
 ]

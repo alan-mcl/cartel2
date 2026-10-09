@@ -1,6 +1,6 @@
 # Commodity roster
 
-**Status:** The closed thirteen-category roster is implemented in `data/catalog/commodities.json`. Every habitat Exchange lists daily quotes from `CommodityEconomy`. See [trade_network.md](trade_network.md).
+**Status:** The closed thirteen-category roster is implemented in `data/catalog/commodities.json`. Every habitat Exchange lists daily quotes from `CommodityEconomy`. Trade network fiction: [trade_network.md](trade_network.md). Pricing algorithm: [commodity_economy.md](../design/commodity_economy.md).
 
 ## Overview
 

@@ -8,6 +8,21 @@ const MAX_PRICE_RATIO := 2.2
 const NOISE_SPAN := 0.08
 const SELL_SPREAD := 0.97
 
+## Eleven settled worlds from docs/setting/planets.md — each produces at least 1 of every commodity.
+const SETTLED_WORLD_SECTOR_IDS: Array[String] = [
+	"proxima",
+	"tycho",
+	"bela",
+	"irasia",
+	"tokirev",
+	"fennet",
+	"fortuna",
+	"new_carthage",
+	"horizon",
+	"titania",
+	"pelagos",
+]
+
 
 static func gst_day(gst_seconds: float) -> int:
 	return int(floor(gst_seconds / float(GalacticCalendar.SECONDS_PER_DAY)))
@@ -35,13 +50,10 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 
 	var distances := _all_pair_distances(catalog, sector_ids, friction_delta)
 	var nets_by_sector: Dictionary = {}
-	var pops_by_sector: Dictionary = {}
 
 	for sector_id in sector_ids:
-		var sector := catalog.get_sector(sector_id)
 		var economy := catalog.get_economy(sector_id)
-		pops_by_sector[sector_id] = float(sector.get("population_billions", 1.0))
-		nets_by_sector[sector_id] = _sector_nets(catalog, sector_id, sector, economy)
+		nets_by_sector[sector_id] = _sector_nets(catalog, sector_id, economy)
 
 	var quotes_by_sector: Dictionary = {}
 	for sector_id in sector_ids:
@@ -76,12 +88,19 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 				supply_eff += float(surpluses[other_id]) * reach
 				demand_eff += float(deficits[other_id]) * reach
 
-			var ratio: float = (demand_eff + EPSILON) / (supply_eff + EPSILON)
-			ratio = clampf(ratio, MIN_PRICE_RATIO, MAX_PRICE_RATIO)
+			var local_net: float = nets_by_sector[sector_id].get(commodity_id, 0.0)
+			var local_supply: float = maxf(local_net, 0.0)
+			var local_demand: float = maxf(-local_net, 0.0)
+			var graph_ratio: float = _price_ratio(demand_eff, supply_eff)
+			var local_ratio: float = _price_ratio(local_demand, local_supply)
+			var ratio: float = graph_ratio
+			if local_net > 0.0:
+				ratio = minf(graph_ratio, local_ratio)
+			elif local_net < 0.0:
+				ratio = maxf(graph_ratio, local_ratio)
 			var noise: float = 1.0 + _deterministic_noise(day, sector_id, commodity_id) * NOISE_SPAN
 			var tier_multiplier: float = _tier_price_multiplier(economy.get("tier", ""))
 			var price: int = maxi(1, int(round(float(base_price) * ratio * noise * tier_multiplier)))
-			var local_net: float = nets_by_sector[sector_id].get(commodity_id, 0.0)
 			var quantity: int = maxi(1, int(round(absf(local_net) * 10.0)))
 			quotes_by_sector[sector_id][commodity_id] = {
 				"price": price,
@@ -106,17 +125,89 @@ static func sell_price(buy_price: int) -> int:
 	return maxi(1, int(round(float(buy_price) * SELL_SPREAD)))
 
 
-static func _sector_nets(
+## Test seam — documented in docs/design/commodity_economy.md.
+static func price_ratio_for_test(demand: float, supply: float) -> float:
+	return _price_ratio(demand, supply)
+
+
+## Test seam — sign rule on precomputed effective flows.
+static func chosen_ratio_for_test(local_net: float, supply_eff: float, demand_eff: float) -> float:
+	var graph_ratio: float = _price_ratio(demand_eff, supply_eff)
+	var local_supply: float = maxf(local_net, 0.0)
+	var local_demand: float = maxf(-local_net, 0.0)
+	var local_ratio: float = _price_ratio(local_demand, local_supply)
+	if local_net > 0.0:
+		return minf(graph_ratio, local_ratio)
+	if local_net < 0.0:
+		return maxf(graph_ratio, local_ratio)
+	return graph_ratio
+
+
+## Test seam — effective flows, reach, and ratios for one sector/commodity (no noise or tier).
+static func quote_analysis(
 	catalog: Catalog,
 	sector_id: String,
-	sector: Dictionary,
-	economy: Dictionary
+	commodity_id: String,
+	friction_delta: Dictionary = {}
 ) -> Dictionary:
-	var pop := float(sector.get("population_billions", 1.0))
-	var wealth := float(economy.get("wealth", 1.0))
+	var sector_ids: Array[String] = []
+	for sector in catalog.list_sectors():
+		if typeof(sector) != TYPE_DICTIONARY:
+			continue
+		var sid := str(sector.get("id", ""))
+		if not sid.is_empty():
+			sector_ids.append(sid)
+
+	var distances := _all_pair_distances(catalog, sector_ids, friction_delta)
+	var nets_by_sector: Dictionary = {}
+	for sid in sector_ids:
+		nets_by_sector[sid] = _sector_nets(catalog, sid, catalog.get_economy(sid))
+
+	var surpluses: Dictionary = {}
+	var deficits: Dictionary = {}
+	for sid in sector_ids:
+		var net: float = nets_by_sector[sid].get(commodity_id, 0.0)
+		surpluses[sid] = maxf(net, 0.0)
+		deficits[sid] = maxf(-net, 0.0)
+
+	var supply_eff: float = float(surpluses[sector_id])
+	var demand_eff: float = float(deficits[sector_id])
+	var reach_from: Dictionary = {}
+	for other_id in sector_ids:
+		if other_id == sector_id:
+			continue
+		var dist: float = distances[sector_id].get(other_id, INF)
+		var reach: float = 0.0
+		if not is_inf(dist):
+			reach = 1.0 / (1.0 + dist / DISTANCE_SCALE)
+		reach_from[other_id] = reach
+		supply_eff += float(surpluses[other_id]) * reach
+		demand_eff += float(deficits[other_id]) * reach
+
+	var local_net: float = nets_by_sector[sector_id].get(commodity_id, 0.0)
+	var local_supply: float = maxf(local_net, 0.0)
+	var local_demand: float = maxf(-local_net, 0.0)
+	var graph_ratio: float = _price_ratio(demand_eff, supply_eff)
+	var local_ratio: float = _price_ratio(local_demand, local_supply)
+	var chosen_ratio: float = chosen_ratio_for_test(local_net, supply_eff, demand_eff)
+
+	return {
+		"local_net": local_net,
+		"supply_eff": supply_eff,
+		"demand_eff": demand_eff,
+		"graph_ratio": graph_ratio,
+		"local_ratio": local_ratio,
+		"chosen_ratio": chosen_ratio,
+		"reach_from": reach_from,
+		"shortest_path": distances[sector_id].duplicate(),
+	}
+
+
+static func _sector_nets(catalog: Catalog, sector_id: String, economy: Dictionary) -> Dictionary:
 	var produce: Dictionary = economy.get("produce", {})
 	var consume: Dictionary = economy.get("consume", {})
 	var nets: Dictionary = {}
+	var settled_floor := SETTLED_WORLD_SECTOR_IDS.has(sector_id)
 
 	for commodity in catalog.list_commodities():
 		if typeof(commodity) != TYPE_DICTIONARY:
@@ -124,11 +215,17 @@ static func _sector_nets(
 		var commodity_id := str(commodity.get("id", ""))
 		if commodity_id.is_empty():
 			continue
-		var output: float = pop * float(produce.get(commodity_id, 1.0))
-		var demand: float = pop * wealth * float(consume.get(commodity_id, 1.0))
+		var output: float = float(produce.get(commodity_id, 0.0))
+		if settled_floor:
+			output = maxf(output, 1.0)
+		var demand: float = float(consume.get(commodity_id, 0.0))
 		nets[commodity_id] = output - demand
 
 	return nets
+
+
+static func _price_ratio(demand: float, supply: float) -> float:
+	return clampf((demand + EPSILON) / (supply + EPSILON), MIN_PRICE_RATIO, MAX_PRICE_RATIO)
 
 
 static func _all_pair_distances(

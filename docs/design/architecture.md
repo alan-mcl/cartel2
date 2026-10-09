@@ -144,7 +144,7 @@ Ships parked at a habitat **stay there when jumping sectors** (only the aboard s
 
 ### Galactic Standard Time (GST)
 
-Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame (GST freeze from **MenuController** when paused, in menus, or docked in habitat UI) and dispatches registered subsystems (economy reposts market quotes on day rollover). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
+Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame (GST freeze from **MenuController** when paused, in menus, or docked in habitat UI) and dispatches registered subsystems (economy reposts market quotes on day rollover). Daily commodity pricing is specified in [commodity_economy.md](commodity_economy.md). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
 
 Successful gameplay mutations publish typed events on `GameSession.events` (`EventBus` + `SimEvent` factories — e.g. `commodity_traded`, `sector_entered`, `docked`). **MenuController** forwards those events to `Simulation.dispatch_event(session, catalog, evt)`, which calls `SimSubsystem.on_event(session, catalog, evt)`. UI still refreshes on the coarse `session.changed` signal; typed events are for simulation subsystems and future mission/faction hooks, not HUD wiring.
 

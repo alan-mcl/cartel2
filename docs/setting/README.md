@@ -48,7 +48,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Background kits + buy at Proxima **Concord Scouts** (used fitted) or **Skyedge** (unfitted chassis) |
 | Commodities | Thirteen categories; daily quotes at every habitat Exchange |
-| Market simulation | Daily GST reset from production/consumption + route friction |
+| Market simulation | Daily GST reset from fixed sector flows + public route graph ([commodity_economy.md](../design/commodity_economy.md)) |
 | Surface cities | Not implemented |
 
 When redesigning, edit these markdown files first; then update JSON catalogs to match.

@@ -57,16 +57,11 @@ In play, friction drives:
 
 ## Daily commodity markets
 
-Each GST day (midnight reset), `CommodityEconomy` recalculates prices for all thirteen categories at every habitat Exchange:
+Each GST day (midnight reset), habitat Exchanges post buy and sell quotes for all thirteen commodity categories. Quotes are fixed until the next GST midnight; player trades do not move the board. Flows and specialisation come from per-sector profiles in [economies.json](../data/catalog/economies.json); par anchors from [commodities.json](../data/catalog/commodities.json). Settled worlds maintain a small baseline output of every category; belts and stations specialise without that floor (see [planets.md](planets.md) and [commodities.md](commodities.md)).
 
-1. Planet production and consumption profiles ([economies.json](../data/catalog/economies.json))
-2. Local surplus or deficit per commodity
-3. Public route graph (shortest-path friction)
-4. Deterministic daily noise (±8%)
+**Implementation specification** (equations, constants, sign rule, descoped behaviour): [commodity_economy.md](../design/commodity_economy.md).
 
-Prices stay fixed until the next GST day. Player trades do not move the daily quote.
-
-Each habitat has an Exchange building. Sell price is 97% of the day's buy quote (small spread; graph arbitrage remains viable).
+Each habitat has an Exchange building. Sell quotes sit slightly below buy quotes so graph arbitrage remains viable in fiction and in play.
 
 ## Public vs unknown routes
 

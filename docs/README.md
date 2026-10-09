@@ -13,6 +13,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | Document | Contents |
 |----------|----------|
 | [architecture.md](design/architecture.md) | Code layering, data flow, main loops, not-yet-implemented features |
+| [commodity_economy.md](design/commodity_economy.md) | Daily Exchange quotes: fixed flows, graph reach, pricing equations |
 | [sensors_signatures.txt](design/sensors_signatures.txt) | Phase 1 sensor vs signature design spec |
 | [backlog.md](design/backlog.md) | Deferred design passes (fuel types, gravitic line, integrated sail) |
 | [refactor_backlog.md](design/refactor_backlog.md) | Phased engineering work items, pickable one at a time |
