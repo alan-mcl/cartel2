@@ -37,6 +37,7 @@ func _ready() -> void:
 		_starfield.bind_camera(_camera)
 
 	_hud.bind(session, _player, AssembledShip.new(), _simulation, catalog)
+	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
 	_bind_controllers()
 	_bind_session_events(session)
 

@@ -89,6 +89,7 @@ var route_from_id: String = ""
 var route_to_id: String = ""
 var route_offset: Vector2 = Vector2.ZERO
 var pending_weapon_orders: Array = []
+var _fire_pressed_prev: bool = false
 var near_lod: bool = false
 var has_sim_slot: bool = false
 var player_detected: bool = false
@@ -293,6 +294,7 @@ func _ensure_sim(catalog: Catalog) -> void:
 		return
 	sim = ShipSimCoreScript.new()
 	if assembled_ship != null and owned_ship != null:
+		weapons.sync_selection(assembled_ship)
 		sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 
 
@@ -331,12 +333,19 @@ func _tick_full_sim(
 		return
 
 	# Sim-slot cadence: full ops/weapons/stats every slotted tick; stats refresh on interval.
+	var fire_requested := bool(inputs.get("fire", false))
+	if fire_requested and not _fire_pressed_prev:
+		weapons.arm_next(assembled_ship)
+	_fire_pressed_prev = fire_requested
+
+	inputs["active_weapon_slot"] = weapons.selected_slot if fire_requested else ""
+
 	sim.tick_shields(combat_state, delta)
 	sim.step_operating(delta, inputs, 1, combat_state)
 	sim.refresh_signature(delta)
 	sim.refresh_stats(ShipSimCore.StatsCadence.INTERVAL)
 
-	var firing := bool(inputs.get("fire", false)) and operating_state.weapons_allowed
+	var firing := fire_requested and operating_state.weapons_allowed
 	var weapon_result: Dictionary = sim.step_weapons(delta, firing)
 	pending_weapon_orders = weapon_result.get("orders", [])
 

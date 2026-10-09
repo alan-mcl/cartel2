@@ -10,6 +10,9 @@ static func run(runner: TestRunner) -> void:
 	_test_physics_uses_operating_thrust_factor(runner, catalog)
 	_test_stats_cadence(runner, catalog)
 	_test_step_weapons_returns_orders(runner, catalog)
+	_test_single_weapon_selection(runner, catalog)
+	_test_npc_weapon_stagger(runner, catalog)
+	_test_arm_next_preserves_fire_cooldown(runner, catalog)
 	_test_preview_from_template(runner, catalog)
 
 
@@ -62,6 +65,7 @@ static func _bind_sim(catalog: Catalog) -> Dictionary:
 		"owned": owned,
 		"motion": motion,
 		"operating": operating,
+		"weapons": weapons,
 	}
 
 
@@ -139,6 +143,110 @@ static func _test_step_weapons_returns_orders(runner: TestRunner, catalog: Catal
 	runner.check(typeof(result) == TYPE_DICTIONARY, "step_weapons returns dictionary")
 	runner.check(result.has("orders"), "step_weapons includes orders key")
 	runner.check(typeof(result.get("orders", null)) == TYPE_ARRAY, "orders is an array")
+
+
+static func _test_single_weapon_selection(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "weapon_select_test",
+			"template_id": "flare_on_ss",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var weapons := ShipWeapons.new()
+	weapons.sync_selection(assembled)
+	var slots := ShipWeapons.weapon_slot_order(assembled)
+	runner.check(slots.size() >= 1, "flare_on_ss has at least one weapon slot")
+	if slots.is_empty():
+		return
+	var first_slot := slots[0]
+	weapons.select_slot(first_slot)
+	var result := weapons.tick(catalog, assembled, owned, 0.1, true, true)
+	var orders: Array = result.get("orders", [])
+	runner.check(not orders.is_empty(), "selected weapon fires")
+	if not orders.is_empty():
+		runner.check_eq(str(orders[0].get("slot", "")), first_slot, "order uses selected slot only")
+
+	if slots.size() >= 2:
+		var other_slot := slots[1]
+		weapons.select_slot(other_slot)
+		# Burn cooldown on first weapon by ticking with fire false
+		weapons.tick(catalog, assembled, owned, 0.0, false, true)
+		var dual := weapons.tick(catalog, assembled, owned, 0.1, true, true)
+		var dual_orders: Array = dual.get("orders", [])
+		runner.check(not dual_orders.is_empty(), "second selected weapon can fire")
+		if not dual_orders.is_empty():
+			runner.check_eq(str(dual_orders[0].get("slot", "")), other_slot, "only second slot fires")
+
+	weapons.select_slot("missing_slot")
+	var none := weapons.tick(catalog, assembled, owned, 0.1, true, true)
+	runner.check((none.get("orders", []) as Array).is_empty(), "missing slot fires nothing")
+
+
+static func _test_npc_weapon_stagger(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "weapon_stagger_test",
+			"template_id": "flare_on_sk",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	ShipAssembler.seed_ammunition(catalog, owned)
+	owned.set_module("light_weapon_2", "light_laser")
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var weapons := ShipWeapons.new()
+	var slots := ShipWeapons.weapon_slot_order(assembled)
+	runner.check(slots.size() >= 2, "stagger test ship has two weapons")
+	if slots.size() < 2:
+		return
+	weapons.arm_next(assembled)
+	runner.check_eq(weapons.selected_slot, slots[0], "first arm_next selects first weapon")
+	weapons.arm_next(assembled)
+	runner.check_eq(weapons.selected_slot, slots[1], "second arm_next advances weapon")
+	runner.check(
+		weapons.cooldown_remaining(slots[1]) >= ShipWeapons.NPC_STAGGER_SECONDS * 0.9,
+		"second weapon gets stagger cooldown"
+	)
+	var blocked := weapons.tick(catalog, assembled, owned, 0.05, true, true)
+	runner.check((blocked.get("orders", []) as Array).is_empty(), "stagger blocks first shot")
+
+
+static func _test_arm_next_preserves_fire_cooldown(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "arm_next_cooldown_test",
+			"template_id": "pegasus_p103a",
+			"chassis_id": "pegasus_chassis",
+		}
+	)
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var weapons := ShipWeapons.new()
+	weapons.sync_selection(assembled)
+	var fired := weapons.tick(catalog, assembled, owned, 0.1, true, true)
+	runner.check(not (fired.get("orders", []) as Array).is_empty(), "pegasus fires once")
+	var slot := weapons.selected_slot
+	var module_def: ModuleDef = null
+	for entry in assembled.modules_in_category("weapon"):
+		if typeof(entry) == TYPE_DICTIONARY and str(entry.get("slot", "")) == slot:
+			module_def = entry.get("data", null)
+			break
+	var cycle := ShipWeapons.fire_cycle_seconds(module_def)
+	runner.check(cycle > 0.0, "pegasus weapon has fire cycle")
+	runner.check(
+		weapons.cooldown_remaining(slot) >= cycle * 0.9,
+		"fire cycle cooldown applied"
+	)
+	weapons.arm_next(assembled)
+	runner.check(
+		weapons.cooldown_remaining(slot) >= cycle * 0.9,
+		"arm_next does not clear active fire cooldown on single-weapon ship"
+	)
 
 
 static func _test_preview_from_template(runner: TestRunner, catalog: Catalog) -> void:

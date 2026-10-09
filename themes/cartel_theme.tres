@@ -513,6 +513,30 @@ border_color = Color(0.7882353, 0.63529414, 0.15294118, 1)
 color = Color(0.2, 0.2509804, 0.2901961, 1)
 vertical = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qq6j"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.13725491, 0.17254902, 0.20784314, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2509804, 0.2901961, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_igtcs"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.13725491, 0.17254902, 0.20784314, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7882353, 0.63529414, 0.15294118, 1)
+
 [resource]
 Alert/base_type = &"PanelContainer"
 Alert/colors/font_color = Color(0.76862746, 0.36078432, 0.2901961, 1)
@@ -685,3 +709,7 @@ Warning/base_type = &"Label"
 Warning/colors/font_color = Color(0.7882353, 0.5372549, 0.18039216, 1)
 Warning/font_sizes/font_size = 15
 Warning/fonts/font = SubResource("FontFile_6s6yw")
+WeaponHudChit/base_type = &"PanelContainer"
+WeaponHudChit/styles/panel = SubResource("StyleBoxFlat_1qq6j")
+WeaponHudChitSelected/base_type = &"PanelContainer"
+WeaponHudChitSelected/styles/panel = SubResource("StyleBoxFlat_igtcs")

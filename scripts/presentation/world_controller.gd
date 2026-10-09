@@ -274,6 +274,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 		_main.session
 	)
 	_hud.bind(_main.session, _player, _main.player_ship, _simulation, _catalog)
+	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
 
 	var launch_pos := _world_loader.get_habitat_launch_position()
 	var habitat_pos := _world_loader.get_habitat_world_position()

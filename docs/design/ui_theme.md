@@ -73,6 +73,8 @@ Set on nodes: `theme_type_variation = &"Title"`.
 - `Surface` — default operational panel
 - `SurfaceTranslucent` — flight HUD corner panels (25% alpha surface/border)
 - `HudTicker` — bottom HUD gameplay and WIRE ticker bars (elevated fill at ~85% opacity — slightly translucent)
+- `WeaponHudChit` — flight HUD weapon chits (same ~85% elevated fill as `HudTicker`)
+- `WeaponHudChitSelected` — active weapon chit (`accent` gold border)
 - `Elevated` — footer bars, selected contexts
 - `Media` — editorial / art frames
 - `Alert` — breaking strip with left status bar

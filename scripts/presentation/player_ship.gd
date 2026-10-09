@@ -3,6 +3,7 @@ extends CharacterBody2D
 signal interaction_target_changed(interactable: Interactable)
 signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 signal operating_state_changed(state: ShipOperatingState)
+signal weapon_selection_changed
 
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
@@ -41,6 +42,7 @@ func configure(
 	catalog = game_catalog
 	session = game_session
 	weapons.reset()
+	weapons.sync_selection(ship)
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 	_apply_hull_visual()
 	_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
@@ -107,12 +109,7 @@ func _physics_process(delta: float) -> void:
 	var rotate_left := Input.is_action_pressed("rotate_left")
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
-	var firing := (
-		Input.is_action_pressed("fire")
-		and session != null
-		and not session.docked
-		and not get_tree().paused
-	)
+	var firing := _wants_to_fire()
 	var physics_inputs := {
 		"thrust": thrust,
 		"reverse": reverse,
@@ -132,6 +129,7 @@ func _physics_process(delta: float) -> void:
 			"boost": boost,
 			"in_flight": not session.docked,
 			"fire": firing,
+			"active_weapon_slot": weapons.selected_slot if firing else "",
 		}
 		_sim.step_operating(delta, inputs, 1, combat_state)
 		_sim.refresh_signature(delta)
@@ -165,6 +163,65 @@ func _physics_process(delta: float) -> void:
 
 	_update_thrust_visual(thrust or reverse)
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
+
+
+func select_weapon_slot(slot: String) -> void:
+	if assembled_ship == null:
+		return
+	weapons.select_slot(slot)
+	weapons.sync_selection(assembled_ship)
+	weapon_selection_changed.emit()
+
+
+func _input(event: InputEvent) -> void:
+	if not _weapon_select_input_allowed():
+		return
+	if event.is_echo():
+		return
+	for i in range(9):
+		if event.is_action_pressed("weapon_select_%d" % (i + 1), true):
+			select_weapon_hotkey_index(i)
+			get_viewport().set_input_as_handled()
+			return
+
+
+func _weapon_select_input_allowed() -> bool:
+	return (
+		session != null
+		and not session.docked
+		and not get_tree().paused
+		and assembled_ship != null
+	)
+
+
+func select_weapon_hotkey_index(index: int) -> void:
+	var slots := ShipWeapons.weapon_slot_order(assembled_ship)
+	if index < 0 or index >= slots.size():
+		return
+	select_weapon_slot(slots[index])
+
+
+func _wants_to_fire() -> bool:
+	if not Input.is_action_pressed("fire"):
+		return false
+	if session == null or session.docked or get_tree().paused:
+		return false
+	# LMB is bound to fire; over a weapon chit it selects — block mouse-only fire, not Space.
+	if _pointer_over_weapon_chit():
+		var lmb := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+		var space := Input.is_physical_key_pressed(KEY_SPACE)
+		if lmb and not space:
+			return false
+	return true
+
+
+func _pointer_over_weapon_chit() -> bool:
+	var node: Node = get_viewport().gui_get_hovered_control()
+	while node != null:
+		if node is WeaponHudChit:
+			return true
+		node = node.get_parent()
+	return false
 
 
 func _update_operating_warnings(session: GameSession, firing: bool = false) -> void:

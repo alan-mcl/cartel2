@@ -86,7 +86,10 @@ static func tick_into(
 		"transponder": in_flight and assembled.has_transponder() and owned.transponder_enabled,
 	}
 
-	var demands: Array = _collect_power_demands(assembled, state.active_systems, in_flight)
+	var active_weapon_slot := str(inputs.get("active_weapon_slot", ""))
+	var demands: Array = _collect_power_demands(
+		assembled, state.active_systems, in_flight, active_weapon_slot
+	)
 	state.compute_demand = _collect_compute_demand(assembled, state.active_systems, in_flight)
 	state.life_support_demand = max(1.0, float(occupant_count))
 	state.life_support_overloaded = state.life_support_demand > state.life_support_capacity
@@ -188,7 +191,8 @@ static func _reset_operating_state(state: ShipOperatingState) -> void:
 static func _collect_power_demands(
 	assembled: AssembledShip,
 	active_systems: Dictionary,
-	in_flight: bool
+	in_flight: bool,
+	active_weapon_slot: String = ""
 ) -> Array:
 	var demands: Array = []
 	for entry in assembled.installed_modules:
@@ -210,6 +214,13 @@ static func _collect_power_demands(
 		if category == "transponder" and not bool(active_systems.get("transponder", false)):
 			continue
 		if category == "weapon" and not bool(active_systems.get("weapons", false)):
+			continue
+		if (
+			category == "weapon"
+			and bool(active_systems.get("weapons", false))
+			and not active_weapon_slot.is_empty()
+			and str(entry.get("slot", "")) != active_weapon_slot
+		):
 			continue
 		if category in ["shield", "point_defence"] and not in_flight:
 			continue

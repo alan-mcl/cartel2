@@ -207,6 +207,19 @@ func _style_panels(theme: Theme) -> void:
 		_flat(hud_ticker_bg, hud_ticker_border, 12, 0)
 	)
 
+	var weapon_chit_bg := C.elevated
+	weapon_chit_bg.a = 0.85
+	var weapon_chit_border := C.border
+	weapon_chit_border.a = 0.9
+	var weapon_chit_panel := _flat(weapon_chit_bg, weapon_chit_border, 12, 0)
+	theme.set_type_variation(&"WeaponHudChit", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"WeaponHudChit", weapon_chit_panel)
+	var weapon_chit_selected := weapon_chit_panel.duplicate() as StyleBoxFlat
+	weapon_chit_selected.border_color = C.accent
+	weapon_chit_selected.set_border_width_all(2)
+	theme.set_type_variation(&"WeaponHudChitSelected", &"PanelContainer")
+	theme.set_stylebox(&"panel", &"WeaponHudChitSelected", weapon_chit_selected)
+
 	theme.set_type_variation(&"Elevated", &"PanelContainer")
 	theme.set_stylebox(&"panel", &"Elevated", _flat(C.elevated, C.border, 12, 0))
 

@@ -294,16 +294,20 @@ func _configure_player_for_run(player_owned: OwnedShip) -> AssembledShip:
 
 func _enter_run_ui(player_assembled: AssembledShip) -> void:
 	_camera.make_current()
-	_hud.bind(session, _player, player_assembled)
+	_hud.bind(session, _player, player_assembled, null, catalog)
+	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
 	_hud.visible = true
 	_setup_layer.visible = false
+	_setup_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	_status_label.text = ""
+	get_viewport().gui_release_focus()
 	get_tree().paused = false
 
 
 func _return_to_setup_ui() -> void:
 	_player.freeze_motion()
 	_hud.visible = false
+	_setup_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	_setup_layer.visible = true
 	get_tree().paused = true
 
@@ -400,6 +404,13 @@ func _clear_projectiles(preserve: Array = []) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_run_active():
 		return
+	if event.is_echo():
+		return
+	for i in range(9):
+		if event.is_action_pressed("weapon_select_%d" % (i + 1), true):
+			_player.select_weapon_hotkey_index(i)
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("toggle_active_sensors"):
 		if _player.owned_ship != null and _player.assembled_ship.has_active_sensor_package():
 			_player.owned_ship.active_sensors_enabled = not _player.owned_ship.active_sensors_enabled

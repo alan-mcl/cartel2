@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const PLAYER_HOVER_RADIUS := 24.0
 const WIRE_TAPE_TOP_UP_MAX_TRIES := 12
+const WEAPON_CHIT_STACK_GAP := 10.0
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
@@ -36,6 +37,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
 @onready var _wire_message_bar: MessageBar = $Root/WireMessageBar
 @onready var _message_bar: MessageBar = $Root/MessageBar
+@onready var _weapon_chit_stack: WeaponHudStack = $Root/WeaponChitStack
 
 var _session: GameSession
 var _catalog: Catalog
@@ -46,22 +48,30 @@ var _player_broadcast_text: String = ""
 var _wire_rng := RandomNumberGenerator.new()
 var _wire_tape_active := false
 var _wire_started := false
+var _player_ship: CharacterBody2D
+var _weapon_select_handler: Callable = Callable()
+var _weapon_selection_player: CharacterBody2D = null
 
 
 func bind(
 	session: GameSession,
-	_player: CharacterBody2D,
+	player_ship: CharacterBody2D,
 	assembled_ship: AssembledShip,
 	simulation: Simulation = null,
 	catalog: Catalog = null
 ) -> void:
+	_unbind_weapon_selection_listener()
 	_session = session
+	_player_ship = player_ship
 	_simulation = simulation
 	_catalog = catalog
 	_bind_gst_clock()
 	set_assembled_ship(assembled_ship)
 	_refresh_identity()
 	_sync_wire_tape_state()
+	_bind_weapon_chits()
+	_bind_weapon_selection_listener()
+	call_deferred("_sync_process_enabled")
 
 
 func _bind_gst_clock() -> void:
@@ -80,8 +90,80 @@ func set_assembled_ship(assembled_ship: AssembledShip) -> void:
 	_assembled_ship = assembled_ship
 	_refresh_capabilities()
 	_refresh_identity()
+	_refresh_weapon_chits(true)
 	if _operating_state != null:
 		set_operating_state(_operating_state)
+
+
+func set_weapon_select_handler(handler: Callable) -> void:
+	_weapon_select_handler = handler
+
+
+func _bind_weapon_chits() -> void:
+	if _weapon_chit_stack == null:
+		return
+	if not _weapon_chit_stack.weapon_selected.is_connected(_on_weapon_chit_selected):
+		_weapon_chit_stack.weapon_selected.connect(_on_weapon_chit_selected)
+
+
+func _bind_weapon_selection_listener() -> void:
+	if _player_ship == null:
+		return
+	if not _player_ship.weapon_selection_changed.is_connected(_on_player_weapon_selection_changed):
+		_player_ship.weapon_selection_changed.connect(_on_player_weapon_selection_changed)
+	_weapon_selection_player = _player_ship
+
+
+func _unbind_weapon_selection_listener() -> void:
+	if _weapon_selection_player == null:
+		return
+	if (
+		is_instance_valid(_weapon_selection_player)
+		and _weapon_selection_player.weapon_selection_changed.is_connected(
+			_on_player_weapon_selection_changed
+		)
+	):
+		_weapon_selection_player.weapon_selection_changed.disconnect(
+			_on_player_weapon_selection_changed
+		)
+	_weapon_selection_player = null
+
+
+func _on_player_weapon_selection_changed() -> void:
+	_refresh_weapon_chits(false)
+
+
+func _on_weapon_chit_selected(slot_id: String) -> void:
+	if _weapon_select_handler.is_valid():
+		_weapon_select_handler.call(slot_id)
+
+
+func _process(_delta: float) -> void:
+	_refresh_weapon_chits(false)
+	if not _wire_tape_active or not visible:
+		return
+	_top_up_wire_tape()
+
+
+func _refresh_weapon_chits(force_rebuild: bool) -> void:
+	if _weapon_chit_stack == null or not _has_capability("basic_hud"):
+		if _weapon_chit_stack != null:
+			_weapon_chit_stack.visible = false
+		return
+	var weapons: ShipWeapons = null
+	var owned: OwnedShip = null
+	if _player_ship != null:
+		var weapons_variant: Variant = _player_ship.get("weapons")
+		if weapons_variant is ShipWeapons:
+			weapons = weapons_variant
+		var owned_variant: Variant = _player_ship.get("owned_ship")
+		if owned_variant is OwnedShip:
+			owned = owned_variant
+	if _assembled_ship == null or weapons == null:
+		_weapon_chit_stack.visible = false
+		return
+	_weapon_chit_stack.rebuild_if_needed(_assembled_ship, weapons, owned)
+	_weapon_chit_stack.refresh_states(_assembled_ship, weapons, owned)
 
 
 func refresh() -> void:
@@ -98,7 +180,7 @@ func clear_message_log() -> void:
 		_wire_message_bar.clear_queued_lines()
 	_wire_tape_active = false
 	_wire_started = false
-	set_process(false)
+	_sync_process_enabled()
 	var messages := _messages_subsystem()
 	if messages != null:
 		messages.clear_channel(MessageChannels.HEADLINES)
@@ -141,6 +223,7 @@ func set_operating_state(state: ShipOperatingState) -> void:
 		ls_text += " overloaded"
 	_life_support.text = ls_text
 	_refresh_hull()
+	call_deferred("_sync_status_panel_layout")
 
 
 func set_signature_state(
@@ -302,6 +385,26 @@ func _refresh_capabilities() -> void:
 		_waypoint_arrows.set_feature_visible(has_waypoints)
 	if _beacon_labels != null:
 		_beacon_labels.set_feature_visible(has_beacon_reader)
+	call_deferred("_sync_status_panel_layout")
+
+
+func _sync_status_panel_layout() -> void:
+	if _status_panel == null or _weapon_chit_stack == null:
+		return
+	if not _status_panel.visible:
+		return
+	var vbox := _status_panel.get_node_or_null("VBox") as Control
+	if vbox == null:
+		return
+	var style := _status_panel.get_theme_stylebox(&"panel")
+	var margin_y := 0.0
+	if style != null:
+		margin_y = style.get_content_margin(SIDE_TOP) + style.get_content_margin(SIDE_BOTTOM)
+	var panel_height := vbox.get_combined_minimum_size().y + margin_y
+	_status_panel.offset_bottom = _status_panel.offset_top + panel_height
+	_weapon_chit_stack.offset_left = _status_panel.offset_left
+	_weapon_chit_stack.offset_right = _status_panel.offset_right
+	_weapon_chit_stack.offset_top = _status_panel.offset_top + panel_height + WEAPON_CHIT_STACK_GAP
 
 
 func _has_capability(id: String) -> bool:
@@ -314,12 +417,6 @@ func _sync_log() -> void:
 	if _message_bar == null or _session == null or not _has_capability("basic_hud"):
 		return
 	_message_bar.play_line(_session.last_log)
-
-
-func _process(_delta: float) -> void:
-	if not _wire_tape_active or not visible:
-		return
-	_top_up_wire_tape()
 
 
 func _wire_headlines_enabled() -> bool:
@@ -343,7 +440,7 @@ func _sync_wire_tape_state() -> void:
 	if not enabled:
 		_wire_tape_active = false
 		_wire_started = false
-		set_process(false)
+		_sync_process_enabled()
 		return
 	var messages := _messages_subsystem()
 	var headlines_sector_changed := false
@@ -355,8 +452,14 @@ func _sync_wire_tape_state() -> void:
 		_wire_started = true
 		_wire_tape_active = true
 		_wire_rng.randomize()
-		set_process(true)
+	_sync_process_enabled()
 	_top_up_wire_tape()
+
+
+func _sync_process_enabled() -> void:
+	var want_wire := _wire_tape_active and visible
+	var want_weapon_chits := visible and _has_capability("basic_hud") and _weapon_chit_stack != null
+	set_process(want_wire or want_weapon_chits)
 
 
 func _enqueue_wire_line() -> bool:
@@ -385,6 +488,7 @@ func _ready() -> void:
 		_bind_gst_clock()
 	_apply_hud_ticker_panels()
 	_refresh_capabilities()
+	call_deferred("_sync_status_panel_layout")
 	if _wire_message_bar != null:
 		_wire_message_bar.set_tag("HEADLINES")
 

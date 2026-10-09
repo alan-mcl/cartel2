@@ -305,7 +305,7 @@
     { "channel": "gossip", "text": "They say the client for the {label} going to {destination} is paying extra for discretion.", "tone": "warning" },
     { "channel": "gossip", "text": "If you're going to {destination}, I heard there are folks at the {desk} willing to pay.", "tone": "info" },
     { "channel": "gossip", "text": "That's a fair price at the {desk} for {destination}, especially when you're hauling {label}.", "tone": "info" },
-    { "channel": "gossip", "text": "They say the {label} charter to {destination} is routine.", "tone": "warning" },
+    { "channel": "gossip", "text": "They say the {label} charter to {destination} is routine.", "tone": "warning" }
   ]
 }
 ]
