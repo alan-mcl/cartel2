@@ -3,6 +3,8 @@ extends CanvasLayer
 const PLAYER_HOVER_RADIUS := 24.0
 const WIRE_TAPE_TOP_UP_MAX_TRIES := 12
 const WEAPON_CHIT_STACK_GAP := 10.0
+const RIGHT_CHIT_STACK_GAP := 10.0
+const RIGHT_CHIT_STACK_TOP := 12.0
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 
 @onready var _status_panel: PanelContainer = $Root/StatusPanel
@@ -27,7 +29,6 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _identity: Label = $Root/FlightStrip/HBox/IdentityLabel
 @onready var _speed: Label = $Root/FlightStrip/HBox/SpeedLabel
 @onready var _heading: Label = $Root/FlightStrip/HBox/HeadingLabel
-@onready var _autopilot_label: Label = $Root/FlightStrip/HBox/AutopilotLabel
 @onready var _gst_clock: Label = $Root/FlightStrip/HBox/GstClockLabel
 @onready var _stability_label: Label = $Root/FieldPanel/VBox/StabilityLabel
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
@@ -40,6 +41,9 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _wire_message_bar: MessageBar = $Root/WireMessageBar
 @onready var _message_bar: MessageBar = $Root/MessageBar
 @onready var _weapon_chit_stack: WeaponHudStack = $Root/WeaponChitStack
+@onready var _right_chit_stack: VBoxContainer = $Root/RightChitStack
+@onready var _target_lock_chit: TargetLockHudChit = $Root/RightChitStack/TargetLockHudChit
+@onready var _autopilot_chit: AutopilotHudChit = $Root/RightChitStack/AutopilotHudChit
 
 var _session: GameSession
 var _catalog: Catalog
@@ -194,9 +198,12 @@ func set_interaction_target(target: Interactable) -> void:
 
 
 func set_autopilot_mode(mode: int) -> void:
-	if _autopilot_label == null:
+	if _autopilot_chit == null:
 		return
-	_autopilot_label.text = "AP: %s" % Autopilot.mode_label(mode as Autopilot.Mode)
+	if _has_capability("autopilot_basic"):
+		_autopilot_chit.set_mode(mode)
+	else:
+		_autopilot_chit.visible = false
 
 
 func set_motion(speed: float, heading_deg: float, _boosting: bool) -> void:
@@ -266,6 +273,7 @@ func set_translation_stability(stability: float, in_unspace: bool) -> void:
 	_stability_label.visible = show
 	if show:
 		_stability_label.text = "N-space stability: %d%%" % int(round(stability))
+	call_deferred("_sync_right_chit_stack_layout")
 
 
 func set_field_state(sample: FieldConditions.FieldSample) -> void:
@@ -305,6 +313,10 @@ func set_nav_state(
 	if _has_capability("basic_target_lock") and _target_lock_overlay != null:
 		if _target_lock_overlay.has_method("set_lock_state"):
 			_target_lock_overlay.set_lock_state(locked_contact, camera)
+	if _has_capability("basic_target_lock") and _target_lock_chit != null:
+		_target_lock_chit.update_lock(ship_pos, locked_contact)
+	elif _target_lock_chit != null:
+		_target_lock_chit.update_lock(ship_pos, {})
 
 	if _interact_prompt != null and _interact_prompt.has_method("set_camera"):
 		_interact_prompt.set_camera(camera)
@@ -401,11 +413,14 @@ func _refresh_capabilities() -> void:
 		_beacon_labels.set_feature_visible(has_beacon_reader)
 	if _target_lock_overlay != null:
 		_target_lock_overlay.set_feature_visible(has_target_lock)
-	if _autopilot_label != null:
-		_autopilot_label.visible = has_autopilot
-		if has_autopilot and _player_ship != null and _player_ship.has_method("get_autopilot_mode"):
-			set_autopilot_mode(_player_ship.get_autopilot_mode())
+	if has_autopilot and _player_ship != null and _player_ship.has_method("get_autopilot_mode"):
+		set_autopilot_mode(_player_ship.get_autopilot_mode())
+	elif _autopilot_chit != null:
+		_autopilot_chit.visible = false
+	if _target_lock_chit != null and not has_target_lock:
+		_target_lock_chit.update_lock(Vector2.ZERO, {})
 	call_deferred("_sync_status_panel_layout")
+	call_deferred("_sync_right_chit_stack_layout")
 
 
 func _sync_status_panel_layout() -> void:
@@ -425,6 +440,24 @@ func _sync_status_panel_layout() -> void:
 	_weapon_chit_stack.offset_left = _status_panel.offset_left
 	_weapon_chit_stack.offset_right = _status_panel.offset_right
 	_weapon_chit_stack.offset_top = _status_panel.offset_top + panel_height + WEAPON_CHIT_STACK_GAP
+
+
+func _sync_right_chit_stack_layout() -> void:
+	if _right_chit_stack == null:
+		return
+	var stack_top := RIGHT_CHIT_STACK_TOP
+	if _field_panel != null and _field_panel.visible:
+		var vbox := _field_panel.get_node_or_null("VBox") as Control
+		if vbox != null:
+			var style := _field_panel.get_theme_stylebox(&"panel")
+			var margin_y := 0.0
+			if style != null:
+				margin_y = style.get_content_margin(SIDE_TOP) + style.get_content_margin(SIDE_BOTTOM)
+			var panel_height := vbox.get_combined_minimum_size().y + margin_y
+			stack_top = _field_panel.offset_top + panel_height + RIGHT_CHIT_STACK_GAP
+	_right_chit_stack.offset_left = -332.0
+	_right_chit_stack.offset_right = -12.0
+	_right_chit_stack.offset_top = stack_top
 
 
 func _has_capability(id: String) -> bool:

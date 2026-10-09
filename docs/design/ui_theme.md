@@ -73,7 +73,7 @@ Set on nodes: `theme_type_variation = &"Title"`.
 - `Surface` — default operational panel
 - `SurfaceTranslucent` — flight HUD corner panels (25% alpha surface/border)
 - `HudTicker` — bottom HUD gameplay and WIRE ticker bars (elevated fill at ~85% opacity — slightly translucent)
-- `WeaponHudChit` — flight HUD weapon chits (same ~85% elevated fill as `HudTicker`)
+- `WeaponHudChit` — flight HUD weapon chits and right-edge lock/autopilot chits (same ~85% elevated fill as `HudTicker`)
 - `WeaponHudChitSelected` — active weapon chit (`accent` gold border)
 - `Elevated` — footer bars, selected contexts
 - `Media` — editorial / art frames
@@ -114,4 +114,4 @@ Not the main scene — for visual QA and onboarding only.
 - Prefer `theme_type_variation` over `theme_override_*` in scenes.
 - Do not hardcode cyan/gold sci-fi colours in UI scripts.
 - Dynamic labels: use `theme_type_variation = &"Section"` etc., or `get_theme_color()` for token lookups.
-- HUD **SHIP** status (power, fuel, compute, life support, hull) sits in the top-left `SurfaceTranslucent` panel when the ship has `basic_hud`; identity, speed, heading, GST clock, and **AP:** autopilot mode (`autopilot_basic`) share a matching top-centre strip between the corner panels. **Fields** (`local_sensor`) is top-right; ship **signature** is bottom-left; local radar is bottom-right; waypoint arrows stay at the viewport edge. With `basic_target_lock`, `TargetLockOverlay` draws amber (`accent`) corner brackets on the locked ship in screen space.
+- HUD **SHIP** status (power, fuel, compute, life support, hull) sits in the top-left `SurfaceTranslucent` panel when the ship has `basic_hud`; identity, speed, heading, and GST clock share a matching top-centre strip between the corner panels. **Fields** (`local_sensor`) is top-right; beneath it, a **target-lock chit** (`basic_target_lock`, weapon-chit size: hull sprite with heading, range, registration/ship name, callsign/affiliation when broadcasting) and an **autopilot chit** (`autopilot_basic`, `Meta` header “Autopilot mode” plus active mode, hidden in manual) stack on the right edge. Ship **signature** is bottom-left; local radar is bottom-right; waypoint arrows stay at the viewport edge. With `basic_target_lock`, `TargetLockOverlay` draws amber (`accent`) corner brackets on the locked ship in screen space.
