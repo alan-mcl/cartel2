@@ -268,6 +268,8 @@ Unspace translation inventory lives on a **navigation computer**, not on the sen
 | `sbi_sextant` | Seven Bells Inc | Sextant | 78 | 72 |
 | `sne_astrolabe` | SnedeCorp | Astrolabe | 92 | 128 |
 
+**Autopilot:** **`autopilot_basic`** is on Almanac, Compass, Sextant, and Astrolabe — not on yard-stock **Section**. In flight, **F1–F9** select modes when a capable navigation computer is fitted (**F1** always returns to manual). Target-relative modes use the current **target lock**; F5 matches the target’s world velocity, F6 holds the world velocity latched at entry. F9 stops in world space. F4 precision flight caps speed at 20% of the hull’s assembled maximum. The flight strip shows **AP:** mode.
+
 See [translations.md](translations.md) for fill policy and jump selection.
 
 The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.

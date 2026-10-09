@@ -4,6 +4,7 @@ signal interaction_target_changed(interactable: Interactable)
 signal motion_changed(speed: float, heading_deg: float, boosting: bool)
 signal operating_state_changed(state: ShipOperatingState)
 signal weapon_selection_changed
+signal autopilot_mode_changed(mode: int)
 
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
@@ -30,6 +31,8 @@ var _sim: ShipSimCore = ShipSimCoreScript.new()
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
 var locked_target_id: String = ""
+var _autopilot := Autopilot.new()
+var _autopilot_target: Dictionary = {}
 
 
 func configure(
@@ -45,6 +48,7 @@ func configure(
 	weapons.reset()
 	weapons.sync_selection(ship)
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
+	_autopilot.reset_to_manual()
 	_apply_hull_visual()
 	_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
 
@@ -111,13 +115,31 @@ func _physics_process(delta: float) -> void:
 	var rotate_right := Input.is_action_pressed("rotate_right")
 	var boost := Input.is_action_pressed("boost")
 	var firing := _wants_to_fire()
-	var physics_inputs := {
+	var stick := {
 		"thrust": thrust,
 		"reverse": reverse,
 		"rotate_left": rotate_left,
 		"rotate_right": rotate_right,
 		"boost": boost,
 	}
+	var physics_inputs := stick.duplicate()
+	var precision_clamp := false
+	if Autopilot.has_capability(assembled_ship):
+		var ap_result := _autopilot.tick(
+			global_position,
+			motion.facing,
+			motion.velocity,
+			_autopilot_target,
+			stick,
+			stats.max_speed
+		)
+		physics_inputs = ap_result.get("physics", stick)
+		precision_clamp = bool(ap_result.get("precision_clamp", false))
+		var snap_facing: Variant = ap_result.get("snap_facing", null)
+		if snap_facing != null:
+			motion.facing = float(snap_facing)
+		if bool(ap_result.get("mode_changed", false)):
+			autopilot_mode_changed.emit(_autopilot.mode)
 
 	if session != null and catalog != null and owned_ship != null and assembled_ship != null:
 		# Display-rate cadence: HUD ops telemetry and signature readout need every-frame updates.
@@ -126,8 +148,8 @@ func _physics_process(delta: float) -> void:
 		session.apply_combat_state(combat_state)
 
 		var inputs := {
-			"thrust": thrust,
-			"boost": boost,
+			"thrust": bool(physics_inputs.get("thrust", false)),
+			"boost": bool(physics_inputs.get("boost", false)),
 			"in_flight": not session.docked,
 			"fire": firing,
 			"active_weapon_slot": weapons.selected_slot if firing else "",
@@ -156,13 +178,19 @@ func _physics_process(delta: float) -> void:
 			assembled_ship
 		)
 	_sim.step_physics(delta, physics_inputs, false, environment_scale)
+	if precision_clamp:
+		var speed_cap := Autopilot.precision_speed_cap(stats.max_speed)
+		if motion.velocity.length() > speed_cap:
+			motion.velocity = motion.velocity.normalized() * speed_cap
 
 	rotation = motion.facing + PI / 2.0
 	velocity = motion.velocity
 	move_and_slide()
 	motion.velocity = velocity
 
-	_update_thrust_visual(thrust or reverse)
+	_update_thrust_visual(
+		bool(physics_inputs.get("thrust", false)) or bool(physics_inputs.get("reverse", false))
+	)
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
 
 
@@ -186,6 +214,34 @@ func retain_target_lock(contacts: Array) -> void:
 
 func clear_target_lock() -> void:
 	locked_target_id = TargetLock.clear()
+
+
+func set_autopilot_target(contact: Dictionary) -> void:
+	_autopilot_target = contact
+
+
+func reset_autopilot() -> void:
+	if _autopilot.mode == Autopilot.Mode.MANUAL:
+		return
+	_autopilot.reset_to_manual()
+	autopilot_mode_changed.emit(_autopilot.mode)
+
+
+func get_autopilot_mode() -> int:
+	return _autopilot.mode
+
+
+func request_autopilot_hotkey(index: int) -> void:
+	var requested := Autopilot.mode_from_hotkey(index)
+	if index == 1:
+		if _autopilot.request_mode(Autopilot.Mode.MANUAL, false, motion.velocity, true):
+			autopilot_mode_changed.emit(_autopilot.mode)
+		return
+	if not Autopilot.has_capability(assembled_ship):
+		return
+	var has_target := Autopilot.has_target(_autopilot_target)
+	if _autopilot.request_mode(requested, has_target, motion.velocity, true):
+		autopilot_mode_changed.emit(_autopilot.mode)
 
 
 func select_weapon_slot(slot: String) -> void:

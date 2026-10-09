@@ -296,6 +296,8 @@ func _enter_run_ui(player_assembled: AssembledShip) -> void:
 	_camera.make_current()
 	_hud.bind(session, _player, player_assembled, null, catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
+	if not _player.autopilot_mode_changed.is_connected(_hud.set_autopilot_mode):
+		_player.autopilot_mode_changed.connect(_hud.set_autopilot_mode)
 	_hud.visible = true
 	_setup_layer.visible = false
 	_setup_layer.process_mode = Node.PROCESS_MODE_DISABLED
@@ -366,6 +368,8 @@ func _update_hud_nav() -> void:
 	if _player.has_method("retain_target_lock"):
 		_player.retain_target_lock(contacts)
 	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
+	if _player.has_method("set_autopilot_target"):
+		_player.set_autopilot_target(locked_contact)
 	_hud.set_nav_state(
 		_nav_radius_for_hud(),
 		_player.global_position,
@@ -436,6 +440,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			_player.cycle_target_lock(contacts)
 			get_viewport().set_input_as_handled()
 			return
+	for autopilot_index in range(1, 10):
+		if event.is_action_pressed("autopilot_%d" % autopilot_index):
+			if autopilot_index == 1 or (
+				_player.assembled_ship != null
+				and Autopilot.has_capability(_player.assembled_ship)
+			):
+				_player.request_autopilot_hotkey(autopilot_index)
+				get_viewport().set_input_as_handled()
+				return
 	if event.is_action_pressed("ui_cancel"):
 		_end_run()
 		get_viewport().set_input_as_handled()

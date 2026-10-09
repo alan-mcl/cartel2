@@ -32,6 +32,7 @@ func _ready() -> void:
 	_player.interaction_target_changed.connect(_on_interaction_target_changed)
 	_player.motion_changed.connect(_on_motion_changed)
 	_player.operating_state_changed.connect(_on_operating_state_changed)
+	_player.autopilot_mode_changed.connect(_hud.set_autopilot_mode)
 
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
@@ -159,6 +160,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			_flight.cycle_target_lock()
 			get_viewport().set_input_as_handled()
 			return
+	for autopilot_index in range(1, 10):
+		if event.is_action_pressed("autopilot_%d" % autopilot_index):
+			if _flight.can_use_autopilot_hotkey(autopilot_index):
+				_flight.request_autopilot_hotkey(autopilot_index)
+				get_viewport().set_input_as_handled()
+				return
 	if event.is_action_pressed("pause"):
 		if _ui_root.visible and _ui_root.handle_back():
 			return

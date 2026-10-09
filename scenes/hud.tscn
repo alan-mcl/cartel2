@@ -163,6 +163,11 @@ layout_mode = 2
 theme_type_variation = &"Numeric"
 text = "Heading: 0°"
 
+[node name="AutopilotLabel" type="Label" parent="Root/FlightStrip/HBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "AP: Manual"
+
 [node name="GstClockLabel" parent="Root/FlightStrip/HBox" instance=ExtResource("2")]
 
 [node name="SignaturePanel" type="PanelContainer" parent="Root"]

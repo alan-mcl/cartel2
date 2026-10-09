@@ -71,8 +71,11 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if not _main.game_active:
 		return
 	if _main.session.docked or _jump.visible or _tree.paused:
-		if _main.session.docked and _player.has_method("clear_target_lock"):
-			_player.clear_target_lock()
+		if _main.session.docked:
+			if _player.has_method("clear_target_lock"):
+				_player.clear_target_lock()
+			if _player.has_method("reset_autopilot"):
+				_player.reset_autopilot()
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
@@ -105,6 +108,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if _player.has_method("retain_target_lock"):
 		_player.retain_target_lock(contacts)
 	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
+	if _player.has_method("set_autopilot_target"):
+		_player.set_autopilot_target(locked_contact)
 
 	var nav_radius: float = _main.play_bounds
 	if not _main.session.in_unspace:
@@ -201,6 +206,25 @@ func cycle_target_lock() -> void:
 	var contacts := _collect_nav_contacts()
 	if _player.has_method("cycle_target_lock"):
 		_player.cycle_target_lock(contacts)
+
+
+func can_use_autopilot_hotkey(index: int) -> bool:
+	if not _main.game_active or _main.session.docked or _jump.visible or _ui_root.visible:
+		return false
+	if _tree.paused:
+		return false
+	if _player.assembled_ship == null:
+		return false
+	if index == 1:
+		return true
+	return Autopilot.has_capability(_player.assembled_ship)
+
+
+func request_autopilot_hotkey(index: int) -> void:
+	if not can_use_autopilot_hotkey(index):
+		return
+	if _player.has_method("request_autopilot_hotkey"):
+		_player.request_autopilot_hotkey(index)
 
 
 func _collect_nav_contacts() -> Array:

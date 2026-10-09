@@ -138,6 +138,7 @@ static func get_cached_player_contact(actor) -> Dictionary:
 	if not actor.player_detected or actor._cached_player_contact.is_empty():
 		return {}
 	actor._cached_player_contact["position"] = actor.position
+	actor._cached_player_contact["velocity"] = actor.motion.velocity
 	return actor._cached_player_contact
 
 
@@ -171,6 +172,7 @@ static func update_player_contact(actor, broadcasting: bool, observer_reads_beac
 	var lock_fields := TargetLock.lock_contact_fields(actor)
 	for key in lock_fields.keys():
 		actor._cached_player_contact[key] = lock_fields[key]
+	actor._cached_player_contact["velocity"] = actor.motion.velocity
 	if broadcasting and observer_reads_beacons:
 		actor._cached_player_contact["name"] = "\n".join(actor._cached_beacon_lines)
 		actor._cached_player_contact["beacon_lines"] = actor._cached_beacon_lines
@@ -201,6 +203,7 @@ static func build_player_contact(actor, broadcasting: bool, observer_reads_beaco
 		"affiliation": actor.affiliation if broadcasting else "",
 	}
 	contact.merge(TargetLock.lock_contact_fields(actor))
+	contact["velocity"] = actor.motion.velocity
 	return contact
 
 

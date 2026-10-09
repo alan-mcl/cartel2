@@ -13,6 +13,7 @@ func _init() -> void:
 	TestCombat.run(runner)
 	TestSensors.run(runner)
 	TestTargetLock.run(runner)
+	TestAutopilot.run(runner)
 	TestFieldConditions.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)

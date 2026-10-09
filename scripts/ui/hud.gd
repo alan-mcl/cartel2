@@ -27,6 +27,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _identity: Label = $Root/FlightStrip/HBox/IdentityLabel
 @onready var _speed: Label = $Root/FlightStrip/HBox/SpeedLabel
 @onready var _heading: Label = $Root/FlightStrip/HBox/HeadingLabel
+@onready var _autopilot_label: Label = $Root/FlightStrip/HBox/AutopilotLabel
 @onready var _gst_clock: Label = $Root/FlightStrip/HBox/GstClockLabel
 @onready var _stability_label: Label = $Root/FieldPanel/VBox/StabilityLabel
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
@@ -190,6 +191,12 @@ func clear_message_log() -> void:
 func set_interaction_target(target: Interactable) -> void:
 	if _interact_prompt != null and _interact_prompt.has_method("set_target"):
 		_interact_prompt.set_target(target)
+
+
+func set_autopilot_mode(mode: int) -> void:
+	if _autopilot_label == null:
+		return
+	_autopilot_label.text = "AP: %s" % Autopilot.mode_label(mode as Autopilot.Mode)
 
 
 func set_motion(speed: float, heading_deg: float, _boosting: bool) -> void:
@@ -372,6 +379,7 @@ func _refresh_capabilities() -> void:
 	var has_waypoints := _has_capability("local_system_waypoints")
 	var has_beacon_reader := _has_capability("sensor_read_beacons")
 	var has_target_lock := _has_capability("basic_target_lock")
+	var has_autopilot := _has_capability("autopilot_basic")
 
 	if _status_panel != null:
 		_status_panel.visible = has_basic
@@ -393,6 +401,10 @@ func _refresh_capabilities() -> void:
 		_beacon_labels.set_feature_visible(has_beacon_reader)
 	if _target_lock_overlay != null:
 		_target_lock_overlay.set_feature_visible(has_target_lock)
+	if _autopilot_label != null:
+		_autopilot_label.visible = has_autopilot
+		if has_autopilot and _player_ship != null and _player_ship.has_method("get_autopilot_mode"):
+			set_autopilot_mode(_player_ship.get_autopilot_mode())
 	call_deferred("_sync_status_panel_layout")
 
 
