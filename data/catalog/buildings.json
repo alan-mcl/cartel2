@@ -316,7 +316,7 @@
     "name": "La Bella Vista Exchange",
     "type": "market",
     "kind": "merchant",
-    "description": "Resort-world exchange listing daily contracts across the eleven trade categories.",
+    "description": "Resort-world exchange listing daily contracts across the thirteen trade categories.",
     "short_desc": "Resort-world exchange listing daily trade contracts.",
     "art": "res://assets/ui/locations/bela_exchange.png"
   },

@@ -506,6 +506,13 @@ func get_sector_quote_listings(catalog: Catalog, market_sector_id: String = "") 
 			"price": int(quote.get("price", commodity.get("base_price", 0))),
 			"quantity": int(quote.get("quantity", 0)),
 		})
+	listings.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var id_a := str(a.get("commodity_id", ""))
+		var id_b := str(b.get("commodity_id", ""))
+		var name_a := str(catalog.get_commodity(id_a).get("name", id_a))
+		var name_b := str(catalog.get_commodity(id_b).get("name", id_b))
+		return name_a.naturalnocasecmp_to(name_b) < 0
+	)
 	return listings
 
 

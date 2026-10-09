@@ -404,7 +404,7 @@ Cargo modules (`category: cargo`) store bulk freight in **`cargo_capacity`** (to
 | Flag | Intended cargo |
 |------|----------------|
 | `life_support_integrated` | Livestock, live plants |
-| `refrigerated` | Food products needing cold chain |
+| `refrigerated` | Food products and water ice needing cold chain |
 | `compute_integrated` | Data-centre conditions for compute hardware |
 | `biohazard` | Chemicals, pharmaceuticals |
 | `secure_cargo` | Bonded / chain-of-custody cargo |

@@ -85,5 +85,21 @@
     "mass": 0.3,
     "base_price": 400,
     "description": "Computational hardware cores shipped between worlds for industrial, commercial, and civilian use. Compute capacity is always in demand across all sectors and requires highly developed manufacturing facilities to produce. High performance and compact size make compute particularly suitable for interstellar trade between locations with different levels of demand and production capacity."
+  },
+  {
+    "id": "minerals",
+    "name": "Minerals",
+    "mass": 1.2,
+    "base_price": 40,
+    "description": "Raw minerals and mineral concentrates extracted from planetary crusts, asteroids, and other deposits. Industrial economies require a steady supply of mineral feedstocks, but the availability and cost of extraction vary widely between locations. Interstellar trade moves ores and concentrates from resource-rich regions to industrial centres where they can be refined or processed more economically.",
+    "requires_capabilities": []
+  },
+  {
+    "id": "water_ice",
+    "name": "Water Ice",
+    "mass": 1.0,
+    "base_price": 35,
+    "description": "Water extracted from the natural environment and transported in frozen form (often extracted in that form too). Water is essential for life support, agriculture, industrial processes, and the production of propellant, but transporting it out of the gravity well is expensive. Remote extraction sites can supply nearby infrastructure and distant markets where locally available water is insufficient or more costly to obtain.",
+    "requires_capabilities": ["refrigerated"]
   }
 ]

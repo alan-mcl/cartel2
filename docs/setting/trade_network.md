@@ -57,7 +57,7 @@ In play, friction drives:
 
 ## Daily commodity markets
 
-Each GST day (midnight reset), `CommodityEconomy` recalculates prices for all eleven categories at every habitat Exchange:
+Each GST day (midnight reset), `CommodityEconomy` recalculates prices for all thirteen categories at every habitat Exchange:
 
 1. Planet production and consumption profiles ([economies.json](../data/catalog/economies.json))
 2. Local surplus or deficit per commodity

@@ -31,7 +31,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | [setting/corporations.md](setting/corporations.md) | Sixteen megacorporations |
 | [setting/ships.md](setting/ships.md) | Ship families and configurations |
 | [setting/equipment.md](setting/equipment.md) | Components, weapons, shields, LSS, hyperdrives |
-| [setting/commodities.md](setting/commodities.md) | Closed eleven-category trade roster |
+| [setting/commodities.md](setting/commodities.md) | Closed thirteen-category trade roster |
 
 ## Source material
 

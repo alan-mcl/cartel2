@@ -63,7 +63,7 @@ Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company
 
 ## Trade, ships, and work
 
-Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, energy, industrial components, chemicals, advanced raw materials, luxury goods, military goods, and compute cores.
+Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, energy, industrial components, chemicals, advanced raw materials, luxury goods, military goods, compute cores, minerals, and water ice.
 
 Ships are a chassis plus fitted modules. All parts are manufactured and branded by one of the mega corps. A wide variety of standard ship models and trims are on the market, but many pilots end up customising their craft to fit their preferred mission profiles. The small craft that can translate to N-space have very limited tonnage and every build needs to make tradeoffs between propulsion, compute, offence, defence, and life support and cargo capacity.
 

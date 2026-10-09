@@ -31,7 +31,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | [corporations.md](corporations.md) | Sixteen megacorporations |
 | [ships.md](ships.md) | Ship families and configurations |
 | [equipment.md](equipment.md) | Chassis, engines, armour, weapons, shields, LSS, hyperdrives |
-| [commodities.md](commodities.md) | Closed eleven-category trade roster |
+| [commodities.md](commodities.md) | Closed thirteen-category trade roster |
 | [trade_network.md](trade_network.md) | Public Unspace route graph, friction, daily markets |
 | [translations.md](translations.md) | Nav inventory, accuracy, stability, translation data |
 | [missions.md](missions.md) | Passenger charters and mission intent |
@@ -47,7 +47,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | Unspace hazards | Static irregular Delaunay topo in 4-space (no player velocity perturbations for now); fixed exit portal on a host face; 1–3 ambient Ascidians per visit |
 | GST clock | HUD + habitat; 1:1 in orbit/docked; friction-scaled mapping lumps + irregular unspace flow |
 | Ship instances | Background kits + buy at Proxima **Concord Scouts** (used fitted) or **Skyedge** (unfitted chassis) |
-| Commodities | Eleven categories; daily quotes at every habitat Exchange |
+| Commodities | Thirteen categories; daily quotes at every habitat Exchange |
 | Market simulation | Daily GST reset from production/consumption + route friction |
 | Surface cities | Not implemented |
 

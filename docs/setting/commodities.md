@@ -1,10 +1,10 @@
 # Commodity roster
 
-**Status:** The closed eleven-category roster is implemented in `data/catalog/commodities.json`. Every habitat Exchange lists daily quotes from `CommodityEconomy`. See [trade_network.md](trade_network.md).
+**Status:** The closed thirteen-category roster is implemented in `data/catalog/commodities.json`. Every habitat Exchange lists daily quotes from `CommodityEconomy`. See [trade_network.md](trade_network.md).
 
 ## Overview
 
-The interplanetary economy uses eleven broad commodity categories. These represent the principal classes of physical and informational goods traded through the Unspace network.
+The interplanetary economy uses thirteen broad commodity categories. These represent the principal classes of physical and informational goods traded through the Unspace network.
 
 Categories are deliberately broad. Individual products are not simulated separately unless a particular gameplay system requires that level of detail.
 
@@ -82,6 +82,18 @@ Compute Cores are distinct from Data: Data represents information being transpor
 
 They are potentially high-value, compact industrial goods and can therefore be economically significant despite the limited cargo capacity of Unspace-capable ships.
 
+### 12. Minerals
+
+Raw minerals and mineral concentrates extracted from planetary crusts, asteroids, and other deposits.
+
+Industrial economies require a steady supply of mineral feedstocks, but the availability and cost of extraction vary widely between locations. Interstellar trade moves ores and concentrates from resource-rich regions to industrial centres where they can be refined or processed more economically.
+
+### 13. Water Ice
+
+Water extracted from the natural environment and transported in frozen form (often extracted in that form too).
+
+Water is essential for life support, agriculture, industrial processes, and the production of propellant, but transporting it out of the gravity well is expensive. Remote extraction sites can supply nearby infrastructure and distant markets where locally available water is insufficient or more costly to obtain.
+
 ## Summary
 
 | # | Commodity | Catalog id |
@@ -97,6 +109,8 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | 9 | Luxury Goods | `luxury_goods` |
 | 10 | Military Goods | `military_goods` |
 | 11 | Compute | `compute_cores` |
+| 12 | Minerals | `minerals` |
+| 13 | Water Ice | `water_ice` |
 
 ## Distinctions
 
@@ -106,25 +120,27 @@ They are potentially high-value, compact industrial goods and can therefore be e
 | **Data vs Compute Cores** | Data is the information itself; Compute Cores are the physical hardware required to process it. |
 | **Chemicals vs Advanced Raw Materials** | Chemicals are commodity production inputs; Advanced Raw Materials are specialised materials whose particular properties make them economically valuable. |
 | **Industrial Components vs ship spare parts** | Industrial Components are tradable cargo. Ship module spare parts (`spare_parts` in session state) are a separate shipyard inventory system. |
+| **Minerals vs Advanced Raw Materials** | Minerals are ordinary ores and concentrates; Advanced Raw Materials are specialised inputs whose particular properties make them economically valuable. |
+| **Water Ice vs Food Products** | Water Ice is frozen water for life support, industry, and propellant; Food Products are agricultural and processed food. |
 
 ## Cargo hold requirements
 
-Seven categories require installed cargo-bay **capabilities** on the carrying ship (AND of flags; any bay may supply each flag). See [equipment.md](equipment.md) (Cargo bays).
+Eight categories require installed cargo-bay **capabilities** on the carrying ship (AND of flags; any bay may supply each flag). See [equipment.md](equipment.md) (Cargo bays).
 
 | Category | Required capability |
 |----------|-------------------|
-| Food Products | `refrigerated` |
+| Food Products, Water Ice | `refrigerated` |
 | Pharmaceuticals, Chemicals | `biohazard` |
 | Luxury Goods, Data | `secure_cargo` |
 | Military Goods | `military_grade` |
 
-Consumer Goods, Energy, Industrial Components, and Advanced Raw Materials use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
+Consumer Goods, Energy, Industrial Components, Advanced Raw Materials, and Minerals use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
 
 ## Current implementation
 
 | Feature | Status |
 |---------|--------|
-| Eleven categories in catalog | Implemented |
+| Thirteen categories in catalog | Implemented |
 | Per-ship cargo holds | Implemented |
 | Cargo-bay capability flags on modules | Implemented |
 | Exchange buy gated by hold capabilities | Implemented |
