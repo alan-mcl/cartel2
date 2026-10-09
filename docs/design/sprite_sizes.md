@@ -38,7 +38,7 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 |--------|-------|-------|
 | Distant traffic hulls | `traffic_director.gd` | `scale = 0.65` |
 | Starfield near layer | `starfield.gd` | tile scale `1.15` |
-| Planet disc on screen | `planet_backdrop.gd` | `sprite.scale = diameter / 2048` (catalog `diameter` = 2000 → ~0.98× viewport tex) |
+| Planet disc on screen | `planet_backdrop.gd` | `sprite.scale = diameter / 1024` (catalog `diameter` = 2000 → ~1.95× viewport tex) |
 
 ---
 
@@ -138,7 +138,7 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 | Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same pixel size and equirect UV as albedo; **RGB emission** (black = none). Shader adds `texture * night_emission_strength` on the night side only. Generate from albedo: `python3 scripts/tools/planet_night_from_albedo.py assets/world/planets/<sector>_albedo.png --density 0.4 -o assets/world/planets/<sector>_night.png` (requires `pip install pillow`). |
 | Planet disc (legacy) | `assets/world/planet.png` | 512×512 | — | **Unused** for globe mesh; do not replace as a flat disc |
 
-Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **2048** px SubViewport and is scaled to `diameter / 2048`. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present).
+Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **1024** px SubViewport (throttled refresh in flight) and is scaled to `diameter / 1024`. Albedo and night PNGs remain **2048×1024** equirectangular maps. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present).
 
 ---
 

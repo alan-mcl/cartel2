@@ -24,7 +24,8 @@ static func sync_engine_exhaust(
 	thrust_flame: Sprite2D,
 	assembled: AssembledShip,
 	hull_sprite_path: String = "",
-	trail_cap: int = 48
+	trail_cap: int = 48,
+	wake_enabled: bool = true
 ) -> void:
 	if exhaust == null:
 		return
@@ -34,6 +35,7 @@ static func sync_engine_exhaust(
 			HullHitbox.stern_extent(hull_sprite_path),
 			HullHitbox.nose_extent(hull_sprite_path)
 		)
+	exhaust.set_wake_enabled(wake_enabled)
 	exhaust.set_trail_cap(trail_cap)
 	var engine_type := ""
 	if assembled != null:

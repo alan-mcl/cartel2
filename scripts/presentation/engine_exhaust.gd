@@ -43,6 +43,7 @@ var _strength: float = 0.0
 var _stern_extent_y: float = 18.0
 var _bow_extent_y: float = 18.0
 var _trail_cap: int = 48
+var _wake_enabled: bool = true
 var _trail: Array = []
 var _trail_emit_accum: float = 0.0
 
@@ -53,7 +54,9 @@ func set_engine_type(engine_type: String) -> void:
 		return
 	_engine_type = normalized
 	_trail.clear()
-	queue_redraw()
+	if _thrusting:
+		queue_redraw()
+	_update_process_enabled()
 
 
 func set_hull_extents(stern_y: float, bow_y: float) -> void:
@@ -65,34 +68,66 @@ func set_trail_cap(cap: int) -> void:
 	_trail_cap = maxi(cap, 8)
 
 
+func set_wake_enabled(enabled: bool) -> void:
+	if _wake_enabled == enabled:
+		return
+	_wake_enabled = enabled
+	if not enabled:
+		_trail.clear()
+	_update_process_enabled()
+	if _thrusting or not _trail.is_empty():
+		queue_redraw()
+
+
 func set_thrusting(active: bool, strength: float = 1.0) -> void:
 	var next_strength := clampf(strength, 0.0, 1.0) if active else 0.0
-	var changed := _thrusting != active or not is_equal_approx(_strength, next_strength)
-	_thrusting = active and next_strength > 0.001
+	var next_thrusting := active and next_strength > 0.001
+	var changed := _thrusting != next_thrusting or not is_equal_approx(_strength, next_strength)
+	_thrusting = next_thrusting
 	_strength = next_strength
 	if changed:
 		queue_redraw()
+	_update_process_enabled()
 
 
 func _ready() -> void:
 	z_index = -1
-	set_process(true)
+	set_process(false)
 
 
 func _process(delta: float) -> void:
-	var style := style_for_engine_type(_engine_type)
-	var wake: int = int(style.get("wake", WakeMode.NONE))
+	var wake := _effective_wake_mode()
+	var trail_changed := false
 	for i in range(_trail.size() - 1, -1, -1):
 		var entry: Dictionary = _trail[i]
 		entry["age"] = float(entry.get("age", 0.0)) + delta
 		if float(entry["age"]) >= float(entry.get("life", 1.0)):
 			_trail.remove_at(i)
+			trail_changed = true
 		else:
 			_trail[i] = entry
 
 	if _thrusting and wake != WakeMode.NONE:
+		var before := _trail.size()
 		_emit_trail_samples(delta, wake)
-	queue_redraw()
+		trail_changed = trail_changed or _trail.size() != before
+
+	if _thrusting or not _trail.is_empty():
+		queue_redraw()
+	elif trail_changed:
+		queue_redraw()
+	_update_process_enabled()
+
+
+func _effective_wake_mode() -> int:
+	if not _wake_enabled:
+		return WakeMode.NONE
+	var style := style_for_engine_type(_engine_type)
+	return int(style.get("wake", WakeMode.NONE))
+
+
+func _update_process_enabled() -> void:
+	set_process(_thrusting or not _trail.is_empty())
 
 
 func _emit_trail_samples(delta: float, wake: int) -> void:
@@ -124,8 +159,7 @@ func _draw() -> void:
 	if not _thrusting and _trail.is_empty():
 		return
 
-	var style := style_for_engine_type(_engine_type)
-	var wake: int = int(style.get("wake", WakeMode.NONE))
+	var wake := _effective_wake_mode()
 	if wake != WakeMode.NONE:
 		_draw_wake(wake)
 

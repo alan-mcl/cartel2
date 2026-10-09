@@ -2,7 +2,10 @@ extends Node2D
 
 const PLANET_SHADER := preload("res://shaders/planet_backdrop.gdshader")
 
-const VIEWPORT_SIZE := 2048
+const VIEWPORT_SIZE := 1024
+const SPHERE_RADIAL_SEGMENTS := 48
+const SPHERE_RINGS := 24
+const VIEWPORT_RENDER_INTERVAL := 0.1
 const SPHERE_RADIUS := 1.0
 const CAMERA_DISTANCE := 3.2
 const STAR_NEAR_RADIUS := 7000.0
@@ -19,6 +22,7 @@ var _auto_spin_enabled: bool = true
 var _auto_spin_yaw: float = 0.0
 var _inspection_yaw: float = 0.0
 var _inspection_pitch: float = 0.0
+var _viewport_render_accum: float = 0.0
 
 const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
 
@@ -41,6 +45,7 @@ func configure(planet_data: Dictionary, sector_id: String = "") -> void:
 	_build_viewport_scene(planet_data, tint)
 	_sprite.scale = Vector2.ONE * (diameter / float(VIEWPORT_SIZE))
 	_sprite.modulate = Color.WHITE
+	_request_viewport_render()
 
 
 func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
@@ -58,7 +63,7 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	_viewport.transparent_bg = true
 	_viewport.handle_input_locally = false
 	_viewport.disable_3d = false
-	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	add_child(_viewport)
 
 	var world_env := WorldEnvironment.new()
@@ -109,8 +114,8 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	var sphere_mesh := SphereMesh.new()
 	sphere_mesh.radius = SPHERE_RADIUS
 	sphere_mesh.height = SPHERE_RADIUS * 2.0
-	sphere_mesh.radial_segments = 96
-	sphere_mesh.rings = 48
+	sphere_mesh.radial_segments = SPHERE_RADIAL_SEGMENTS
+	sphere_mesh.rings = SPHERE_RINGS
 
 	var sphere := MeshInstance3D.new()
 	sphere.name = "PlanetSphere"
@@ -168,6 +173,7 @@ func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> v
 		Vector3(star_color.r, star_color.g, star_color.b)
 	)
 	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.05))
+	_request_viewport_render()
 
 
 func set_auto_spin_enabled(enabled: bool) -> void:
@@ -182,6 +188,13 @@ func add_inspection_rotation(yaw_delta: float, pitch_delta: float) -> void:
 		INSPECTION_PITCH_LIMIT
 	)
 	_apply_planet_rotation()
+	_request_viewport_render()
+
+
+func _request_viewport_render() -> void:
+	if _viewport == null or not is_instance_valid(_viewport):
+		return
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func _apply_planet_rotation() -> void:
@@ -202,3 +215,7 @@ func _process(delta: float) -> void:
 	if _auto_spin_enabled:
 		_auto_spin_yaw = fposmod(_auto_spin_yaw + TAU / _spin_period * delta, TAU)
 	_apply_planet_rotation()
+	_viewport_render_accum += delta
+	if _viewport_render_accum >= VIEWPORT_RENDER_INTERVAL:
+		_viewport_render_accum = fmod(_viewport_render_accum, VIEWPORT_RENDER_INTERVAL)
+		_request_viewport_render()

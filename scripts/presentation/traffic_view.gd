@@ -263,7 +263,8 @@ func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 			thrust_flame,
 			actor.assembled_ship,
 			sprite_path,
-			FAR_TRAIL_CAP
+			FAR_TRAIL_CAP,
+			false
 		)
 
 

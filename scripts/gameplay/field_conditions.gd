@@ -122,6 +122,8 @@ static func thrust_scale_for_ship(
 		return 1.0
 	var engine := assembled.get_propulsion_module_def()
 	var engine_type := engine.engine_type if engine != null else ""
+	if engine_type != "gravitic" and engine_type != "integrated_sail":
+		return 1.0
 	var field_sample := sample(catalog, world, position)
 	return environment_thrust_scale(engine_type, field_sample)
 
