@@ -254,7 +254,7 @@ Products combine passive and active instruments in marketing copy. The schema st
 | `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen — calculus wave detector (comp) |
 | `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus — local geometry scanner (comp, active-only) |
 
-Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina sensor lines above.
+Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. Every sensor SKU also carries **`basic_target_lock`** (one combat track on a ship contact the package already detects). **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina sensor lines above.
 
 ### Navigation (`category: navigation`, mount: `system`)
 
@@ -272,7 +272,7 @@ See [translations.md](translations.md) for fill policy and jump selection.
 
 The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.
 
-**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Observer sensitivity uses the full package profile with **Active sensors** on, or the quiet **`sensor_sensitivity_passive`** profile when off. Target lock is not implemented; unguided weapons do not require detection.
+**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Observer sensitivity uses the full package profile with **Active sensors** on, or the quiet **`sensor_sensitivity_passive`** profile when off. **Target lock** is separate from detection: with `basic_target_lock`, the pilot may hold one track on a detected ship — `` ` `` acquires the nearest contact or clears the lock; **Tab** cycles while a lock is held. The flight HUD draws corner brackets on that ship. NPCs with the capability lock the player while they have reciprocal player contact. Unguided weapons still do not require a lock or detection.
 
 **Active sensors toggle:** **`R`** in flight toggles active sensor pings (saved per ship as `active_sensors_enabled`, default on). Flight HUD shows **Active sensors: on/off** beside transponder status. NPC traffic always behaves as active on.
 

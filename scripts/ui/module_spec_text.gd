@@ -37,6 +37,7 @@ const STAT_ROWS: Array[Dictionary] = [
 ]
 
 const CARGO_CAPABILITY_LABELS := {
+	"basic_target_lock": "Target lock",
 	"life_support_integrated": "Live cargo",
 	"refrigerated": "Refrigerated",
 	"compute_integrated": "Compute vault",

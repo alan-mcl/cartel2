@@ -12,6 +12,7 @@ func _init() -> void:
 	TestAssembler.run(runner)
 	TestCombat.run(runner)
 	TestSensors.run(runner)
+	TestTargetLock.run(runner)
 	TestFieldConditions.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)

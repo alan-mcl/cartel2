@@ -94,6 +94,7 @@ var near_lod: bool = false
 var has_sim_slot: bool = false
 var player_detected: bool = false
 var has_player_contact: bool = false
+var locked_target_id: String = ""
 var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
 var cycle_pending: bool = false

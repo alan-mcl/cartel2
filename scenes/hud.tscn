@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=11 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/components/weapon_hud_stack.gd" id="9"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/ui/beacon_label_overlay.gd" id="5"]
 [ext_resource type="Script" path="res://scripts/ui/interact_prompt_overlay.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/ui/star_lens_flare.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/ui/target_lock_overlay.gd" id="10"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -41,6 +42,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5")
+
+[node name="TargetLockOverlay" type="Control" parent="Root"]
+z_index = 4
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10")
 
 [node name="InteractPromptOverlay" type="Control" parent="Root"]
 layout_mode = 1

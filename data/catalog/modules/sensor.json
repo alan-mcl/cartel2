@@ -15,7 +15,8 @@
       "local_sensor",
       "local_system_waypoints",
       "sensor_read_beacons",
-      "4_space_topology"
+      "4_space_topology",
+      "basic_target_lock"
     ],
     "cost": 950,
     "description": "Circinus extends the N6 stack with a gravimetric wave detector for survey and escort fits.",
@@ -55,7 +56,8 @@
       "local_sensor",
       "local_system_waypoints",
       "sensor_read_beacons",
-      "4_space_topology"
+      "4_space_topology",
+      "basic_target_lock"
     ],
     "cost": 550,
     "description": "Hermes N6 pairs an infrared receiver and EM array with a civilian radar \u2014 the municipal nav package on workhorse hulls.",
@@ -92,7 +94,8 @@
     "power_demand": 0.6,
     "has_active": false,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 480,
     "description": "Sideband is a listen-only EM array for operators who want emissions intelligence without painting the lane.",
@@ -123,7 +126,8 @@
     "power_demand": 0.5,
     "has_active": false,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 380,
     "description": "Ember is a passive infrared receiver for pilots who would rather stay dark than paint the belt.",
@@ -157,7 +161,8 @@
       "local_sensor",
       "local_system_waypoints",
       "sensor_read_beacons",
-      "4_space_topology"
+      "4_space_topology",
+      "basic_target_lock"
     ],
     "cost": 620,
     "description": "Glance keeps Holt-Winters sport hulls light: infrared receiver plus a short-range racing radar.",
@@ -197,7 +202,8 @@
       "local_sensor",
       "local_system_waypoints",
       "sensor_read_beacons",
-      "4_space_topology"
+      "4_space_topology",
+      "basic_target_lock"
     ],
     "cost": 780,
     "description": "Octant 12 bundles an infrared receiver, radar, and thermal lidar for operators who want active ranging on every approach.",
@@ -234,7 +240,8 @@
     "power_demand": 1.8,
     "has_active": true,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 1100,
     "description": "Plumb is a gravitational interferometer package \u2014 active gravimetric ranging for survey contractors who accept the ping.",
@@ -268,7 +275,8 @@
       "local_sensor",
       "local_system_waypoints",
       "sensor_read_beacons",
-      "4_space_topology"
+      "4_space_topology",
+      "basic_target_lock"
     ],
     "cost": 1400,
     "description": "Lumina Sight layers a spectral resonance array over infrared and EM listen \u2014 glossy law-enforcement nav without active pings.",
@@ -299,7 +307,8 @@
     "power_demand": 1.2,
     "has_active": false,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 2200,
     "description": "Wellhead mounts a neutrino receptor tuned for reactor and drive activity \u2014 strong gravimetric and EM listen, no transmitters.",
@@ -330,7 +339,8 @@
     "power_demand": 1.0,
     "has_active": false,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 880,
     "description": "Nexus Listen is a calculus wave detector for spotting active onboard compute workloads at range.",
@@ -361,7 +371,8 @@
     "power_demand": 1.5,
     "has_active": true,
     "capabilities": [
-      "local_sensor"
+      "local_sensor",
+      "basic_target_lock"
     ],
     "cost": 1050,
     "description": "Locus drives a local geometry scanner \u2014 active computational ranging for operators who need to map thinking ships.",

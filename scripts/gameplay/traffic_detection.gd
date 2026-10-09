@@ -62,6 +62,7 @@ static func refresh_player_detection(
 	if actor.assembled_ship == null:
 		actor.player_detected = false
 		actor.has_player_contact = false
+		actor.locked_target_id = ""
 		actor._cached_player_contact.clear()
 		return
 
@@ -130,6 +131,8 @@ static func refresh_player_detection(
 	else:
 		actor._cached_player_contact.clear()
 
+	TargetLock.refresh_npc_lock(actor, actor.has_player_contact)
+
 
 static func get_cached_player_contact(actor) -> Dictionary:
 	if not actor.player_detected or actor._cached_player_contact.is_empty():
@@ -165,6 +168,9 @@ static func update_player_contact(actor, broadcasting: bool, observer_reads_beac
 	actor._cached_player_contact["position"] = actor.position
 	actor._cached_player_contact["has_sim_slot"] = actor.has_sim_slot
 	actor._cached_player_contact["broadcasting"] = broadcasting
+	var lock_fields := TargetLock.lock_contact_fields(actor)
+	for key in lock_fields.keys():
+		actor._cached_player_contact[key] = lock_fields[key]
 	if broadcasting and observer_reads_beacons:
 		actor._cached_player_contact["name"] = "\n".join(actor._cached_beacon_lines)
 		actor._cached_player_contact["beacon_lines"] = actor._cached_beacon_lines
@@ -180,7 +186,7 @@ static func build_player_contact(actor, broadcasting: bool, observer_reads_beaco
 	if actor.owned_ship != null and not actor.owned_ship.name.is_empty():
 		ship_name = actor.owned_ship.name
 
-	return {
+	var contact := {
 		"id": actor.id,
 		"name": "\n".join(actor._cached_beacon_lines) if broadcasting and observer_reads_beacons else "",
 		"short_label": "",
@@ -194,6 +200,8 @@ static func build_player_contact(actor, broadcasting: bool, observer_reads_beaco
 		"ship_name": ship_name,
 		"affiliation": actor.affiliation if broadcasting else "",
 	}
+	contact.merge(TargetLock.lock_contact_fields(actor))
+	return contact
 
 
 static func is_broadcasting(actor) -> bool:

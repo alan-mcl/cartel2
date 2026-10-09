@@ -32,6 +32,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 @onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
+@onready var _target_lock_overlay: Control = $Root/TargetLockOverlay
 @onready var _interact_prompt: Control = $Root/InteractPromptOverlay
 @onready var _star_lens_flare: Control = $Root/StarLensFlare
 @onready var _player_hover_probe: Control = $Root/PlayerHoverProbe
@@ -281,7 +282,8 @@ func set_nav_state(
 	ship_heading_deg: float,
 	contacts: Array,
 	camera: Camera2D,
-	player_broadcast: Dictionary = {}
+	player_broadcast: Dictionary = {},
+	locked_contact: Dictionary = {}
 ) -> void:
 	_player_broadcast_text = TransponderBroadcastScript.format_tooltip(player_broadcast)
 
@@ -293,6 +295,9 @@ func set_nav_state(
 		_waypoint_arrows.set_nav_state(ship_pos, contacts, camera)
 	if _has_capability("sensor_read_beacons") and _beacon_labels != null:
 		_beacon_labels.set_overlay_state(contacts, camera)
+	if _has_capability("basic_target_lock") and _target_lock_overlay != null:
+		if _target_lock_overlay.has_method("set_lock_state"):
+			_target_lock_overlay.set_lock_state(locked_contact, camera)
 
 	if _interact_prompt != null and _interact_prompt.has_method("set_camera"):
 		_interact_prompt.set_camera(camera)
@@ -366,6 +371,7 @@ func _refresh_capabilities() -> void:
 	var has_sensor := _has_capability("local_sensor")
 	var has_waypoints := _has_capability("local_system_waypoints")
 	var has_beacon_reader := _has_capability("sensor_read_beacons")
+	var has_target_lock := _has_capability("basic_target_lock")
 
 	if _status_panel != null:
 		_status_panel.visible = has_basic
@@ -385,6 +391,8 @@ func _refresh_capabilities() -> void:
 		_waypoint_arrows.set_feature_visible(has_waypoints)
 	if _beacon_labels != null:
 		_beacon_labels.set_feature_visible(has_beacon_reader)
+	if _target_lock_overlay != null:
+		_target_lock_overlay.set_feature_visible(has_target_lock)
 	call_deferred("_sync_status_panel_layout")
 
 

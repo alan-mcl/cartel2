@@ -29,6 +29,7 @@ var _sim: ShipSimCore = ShipSimCoreScript.new()
 
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
+var locked_target_id: String = ""
 
 
 func configure(
@@ -163,6 +164,28 @@ func _physics_process(delta: float) -> void:
 
 	_update_thrust_visual(thrust or reverse)
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
+
+
+func toggle_target_lock(contacts: Array) -> void:
+	locked_target_id = TargetLock.toggle(
+		locked_target_id, assembled_ship, contacts, global_position
+	)
+
+
+func cycle_target_lock(contacts: Array) -> void:
+	locked_target_id = TargetLock.cycle_next(
+		locked_target_id, assembled_ship, contacts, global_position
+	)
+
+
+func retain_target_lock(contacts: Array) -> void:
+	locked_target_id = TargetLock.retain(
+		locked_target_id, assembled_ship, contacts, global_position
+	)
+
+
+func clear_target_lock() -> void:
+	locked_target_id = TargetLock.clear()
 
 
 func select_weapon_slot(slot: String) -> void:

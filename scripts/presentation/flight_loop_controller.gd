@@ -71,6 +71,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if not _main.game_active:
 		return
 	if _main.session.docked or _jump.visible or _tree.paused:
+		if _main.session.docked and _player.has_method("clear_target_lock"):
+			_player.clear_target_lock()
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
@@ -99,13 +101,10 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog)
 
-	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
-	var contacts: Array = []
-	contacts.append_array(landmark_contacts)
-	if _main.session.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
-		contacts = _filter_topology_contacts(contacts)
-	if not _main.session.in_unspace and _traffic_director != null:
-		contacts.append_array(_traffic_director.get_traffic_contacts())
+	var contacts := _collect_nav_contacts()
+	if _player.has_method("retain_target_lock"):
+		_player.retain_target_lock(contacts)
+	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
 
 	var nav_radius: float = _main.play_bounds
 	if not _main.session.in_unspace:
@@ -123,7 +122,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		rad_to_deg(_player.motion.facing),
 		contacts,
 		_camera,
-		player_broadcast
+		player_broadcast,
+		locked_contact
 	)
 	if _main.session.in_unspace:
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
@@ -173,6 +173,47 @@ func toggle_active_sensors() -> void:
 		return
 	owned.active_sensors_enabled = not owned.active_sensors_enabled
 	_main.session.changed.emit()
+
+
+func can_use_target_lock() -> bool:
+	if not _main.game_active or _main.session.docked or _jump.visible or _ui_root.visible:
+		return false
+	if _tree.paused:
+		return false
+	if _player.assembled_ship == null:
+		return false
+	return TargetLock.has_capability(_player.assembled_ship)
+
+
+func toggle_target_lock() -> void:
+	if not can_use_target_lock():
+		return
+	var contacts := _collect_nav_contacts()
+	if _player.has_method("toggle_target_lock"):
+		_player.toggle_target_lock(contacts)
+
+
+func cycle_target_lock() -> void:
+	if not can_use_target_lock():
+		return
+	if _player.locked_target_id.is_empty():
+		return
+	var contacts := _collect_nav_contacts()
+	if _player.has_method("cycle_target_lock"):
+		_player.cycle_target_lock(contacts)
+
+
+func _collect_nav_contacts() -> Array:
+	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
+	var contacts: Array = []
+	contacts.append_array(landmark_contacts)
+	if _main.session.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
+		contacts = _filter_topology_contacts(contacts)
+	if not _main.session.in_unspace:
+		_ensure_traffic_director()
+		if _traffic_director != null:
+			contacts.append_array(_traffic_director.get_traffic_contacts())
+	return contacts
 
 
 func on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> void:

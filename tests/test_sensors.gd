@@ -228,6 +228,7 @@ static func _test_catalog_sensor_skus(runner: TestRunner, catalog: Catalog) -> v
 		"local_system_waypoints",
 		"sensor_read_beacons",
 		"4_space_topology",
+		"basic_target_lock",
 	]
 	for module_def in sensors:
 		if typeof(module_def) != TYPE_DICTIONARY:
@@ -261,6 +262,7 @@ static func _test_catalog_sensor_skus(runner: TestRunner, catalog: Catalog) -> v
 			runner.check(
 				typeof(capabilities) == TYPE_ARRAY
 				and capabilities.has("local_sensor")
+				and capabilities.has("basic_target_lock")
 				and not capabilities.has("sensor_read_beacons"),
 				"%s specialist is local_sensor only" % module_id
 			)

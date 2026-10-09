@@ -147,6 +147,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_active_sensors"):
 		if _flight.can_toggle_active_sensors():
 			_flight.toggle_active_sensors()
+			get_viewport().set_input_as_handled()
+			return
+	if event.is_action_pressed("toggle_target_lock"):
+		if _flight.can_use_target_lock():
+			_flight.toggle_target_lock()
+			get_viewport().set_input_as_handled()
+			return
+	if event.is_action_pressed("cycle_target_lock"):
+		if _flight.can_use_target_lock():
+			_flight.cycle_target_lock()
+			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("pause"):
 		if _ui_root.visible and _ui_root.handle_back():

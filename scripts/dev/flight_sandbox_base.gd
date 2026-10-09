@@ -363,13 +363,17 @@ func _play_destroyed_or_free(node: Node2D) -> void:
 
 func _update_hud_nav() -> void:
 	var contacts: Array = _collect_nav_contacts()
+	if _player.has_method("retain_target_lock"):
+		_player.retain_target_lock(contacts)
+	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
 	_hud.set_nav_state(
 		_nav_radius_for_hud(),
 		_player.global_position,
 		rad_to_deg(_player.motion.facing),
 		contacts,
 		_camera,
-		{}
+		{},
+		locked_contact
 	)
 	var player_signature := SensorSystem.live_signature(
 		_player.assembled_ship,
@@ -414,6 +418,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_active_sensors"):
 		if _player.owned_ship != null and _player.assembled_ship.has_active_sensor_package():
 			_player.owned_ship.active_sensors_enabled = not _player.owned_ship.active_sensors_enabled
+			get_viewport().set_input_as_handled()
+			return
+	if event.is_action_pressed("toggle_target_lock"):
+		if _player.assembled_ship != null and TargetLock.has_capability(_player.assembled_ship):
+			var contacts: Array = _collect_nav_contacts()
+			_player.toggle_target_lock(contacts)
+			get_viewport().set_input_as_handled()
+			return
+	if event.is_action_pressed("cycle_target_lock"):
+		if (
+			_player.assembled_ship != null
+			and TargetLock.has_capability(_player.assembled_ship)
+			and not _player.locked_target_id.is_empty()
+		):
+			var contacts: Array = _collect_nav_contacts()
+			_player.cycle_target_lock(contacts)
 			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("ui_cancel"):
