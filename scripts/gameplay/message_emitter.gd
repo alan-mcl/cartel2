@@ -12,7 +12,13 @@ func has_templates_for_channel(channel: String) -> bool:
 	return false
 
 
-func sample(_channel: String, _session: GameSession, _catalog: Catalog, _rng: RandomNumberGenerator) -> Dictionary:
+func sample(
+	_channel: String,
+	_session: GameSession,
+	_catalog: Catalog,
+	_rng: RandomNumberGenerator,
+	_simulation: Simulation = null
+) -> Dictionary:
 	return {}
 
 

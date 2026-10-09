@@ -284,5 +284,28 @@
     { "channel": "gossip", "text": "Yeah the exec at {corporation} resigned before anyone could fire them.", "tone": "warning" },
     { "channel": "gossip", "text": "The {corporation} press are pretending the new acquisition was their idea.", "tone": "info" }
   ]
+},
+{
+  "id": "charters",
+  "weight": 100.0,
+  "templates": [
+    { "channel": "gossip", "text": "Someone at the {desk} is looking for a ride to {destination}.", "tone": "info" },
+    { "channel": "gossip", "text": "Heard there's work going to {destination}. {quantity} {label} at the {desk}.", "tone": "info" },
+    { "channel": "gossip", "text": "That job to {destination} is still on the board.", "tone": "warning" },
+    { "channel": "gossip", "text": "Some guy at the {desk} has been buying drinks for anyone willing to fly to {destination}.", "tone": "warning" },
+    { "channel": "gossip", "text": "Word is there's easy money in charters going to {destination}.", "tone": "info" },
+    { "channel": "gossip", "text": "Did you see the {label} going to {destination}?", "tone": "info" },
+    { "channel": "gossip", "text": "... and then she said it was for {destination}, but I'm not going that way.", "tone": "warning" },
+    { "channel": "gossip", "text": "Someone's trying to fill {quantity} {label} for {destination}.", "tone": "warning" },
+    { "channel": "gossip", "text": "This charter at the {desk} for {destination}? They apparently insist on interviewing the pilot personally.", "tone": "info" },
+    { "channel": "gossip", "text": "There's {quantity} {label} going to {destination} that pays well above rates, must be urgent.", "tone": "warning" },
+    { "channel": "gossip", "text": "Friend was gonna take those {label} to {destination}, but she found a better offer.", "tone": "info" },
+    { "channel": "gossip", "text": "{label} at the {desk}, need passage to {destination}. Urgent after the last pilot cancelled.", "tone": "warning" },
+    { "channel": "gossip", "text": "It's below rates for {destination}. Do you really want a holiday there?", "tone": "info" },
+    { "channel": "gossip", "text": "They say the client for the {label} going to {destination} is paying extra for discretion.", "tone": "warning" },
+    { "channel": "gossip", "text": "If you're going to {destination}, I heard there are folks at the {desk} willing to pay.", "tone": "info" },
+    { "channel": "gossip", "text": "That's a fair price at the {desk} for {destination}, especially when you're hauling {label}.", "tone": "info" },
+    { "channel": "gossip", "text": "They say the {label} charter to {destination} is routine.", "tone": "warning" },
+  ]
 }
 ]

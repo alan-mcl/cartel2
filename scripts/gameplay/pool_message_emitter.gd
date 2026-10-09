@@ -22,6 +22,12 @@ func has_templates_for_channel(channel: String) -> bool:
 	return false
 
 
-func sample(channel: String, session: GameSession, catalog: Catalog, rng: RandomNumberGenerator) -> Dictionary:
+func sample(
+	channel: String,
+	session: GameSession,
+	catalog: Catalog,
+	rng: RandomNumberGenerator,
+	simulation: Simulation = null
+) -> Dictionary:
 	var templates: Array = _def.get("templates", [])
 	return _sample_from_templates(channel, templates, session, catalog, rng)

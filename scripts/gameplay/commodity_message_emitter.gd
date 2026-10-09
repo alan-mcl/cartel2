@@ -2,7 +2,13 @@ class_name CommodityMessageEmitter
 extends PoolMessageEmitter
 
 
-func sample(channel: String, session: GameSession, catalog: Catalog, rng: RandomNumberGenerator) -> Dictionary:
+func sample(
+	channel: String,
+	session: GameSession,
+	catalog: Catalog,
+	rng: RandomNumberGenerator,
+	_simulation: Simulation = null
+) -> Dictionary:
 	var bindings := _commodity_bindings(session, catalog, rng)
 	if bindings.is_empty():
 		return _empty_sample()

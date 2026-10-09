@@ -70,7 +70,13 @@ func _enqueue_gossip_line() -> bool:
 	var messages := _messages_subsystem()
 	if messages == null or _context.session == null or _context.catalog == null or _gossip_bar == null:
 		return false
-	var sample := messages.next_line(MessageChannels.GOSSIP, _context.session, _context.catalog, _gossip_rng)
+	var sample := messages.next_line(
+		MessageChannels.GOSSIP,
+		_context.session,
+		_context.catalog,
+		_gossip_rng,
+		_context.simulation
+	)
 	var line := _format_overheard(str(sample.get("text", "")))
 	if line.is_empty():
 		return false

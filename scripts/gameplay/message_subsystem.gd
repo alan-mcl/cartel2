@@ -46,7 +46,8 @@ func next_line(
 	channel: String,
 	session: GameSession,
 	catalog: Catalog,
-	rng: RandomNumberGenerator
+	rng: RandomNumberGenerator,
+	simulation: Simulation = null
 ) -> Dictionary:
 	if session == null or catalog == null or rng == null:
 		return {}
@@ -62,7 +63,7 @@ func next_line(
 		var emitter := _pick_emitter(channel, session, catalog, rng)
 		if emitter == null:
 			break
-		var sample := emitter.sample(channel, session, catalog, rng)
+		var sample := emitter.sample(channel, session, catalog, rng, simulation)
 		var text := str(sample.get("text", "")).strip_edges()
 		if text.is_empty():
 			continue
@@ -128,6 +129,8 @@ static func _build_emitters(catalog: Catalog) -> Array[MessageEmitter]:
 		var emitter: MessageEmitter
 		if emitter_id == "commodities":
 			emitter = CommodityMessageEmitter.new(def)
+		elif emitter_id == "charters":
+			emitter = CharterMessageEmitter.new(def)
 		else:
 			emitter = PoolMessageEmitter.new(def)
 		built.append(emitter)

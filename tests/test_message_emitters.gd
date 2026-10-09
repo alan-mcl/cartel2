@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_commodities_headline_includes_price(runner, catalog)
 	_test_push_preempts_random_sample(runner, catalog)
 	_test_headlines_sector_change_clears_push(runner, catalog)
+	_test_charter_gossip_quotes_live_offer(runner, catalog)
 
 
 static func _messages(simulation: Simulation) -> MessageSubsystem:
@@ -31,6 +32,7 @@ static func _test_starter_emitters_have_both_channels(runner: TestRunner, catalo
 		"unspace",
 		"celebrity_pilot",
 		"corporate_news",
+		"charters",
 	]
 	for emitter_id in required:
 		var def := catalog.get_message_emitter(emitter_id)
@@ -45,6 +47,10 @@ static func _test_starter_emitters_have_both_channels(runner: TestRunner, catalo
 				has_headlines = true
 			if channel == MessageChannels.GOSSIP:
 				has_gossip = true
+		if emitter_id == "charters":
+			runner.check(not has_headlines, "message emitters: charters has no headlines templates")
+			runner.check(has_gossip, "message emitters: charters has gossip templates")
+			continue
 		runner.check(has_headlines, "message emitters: %s has headlines templates" % emitter_id)
 		runner.check(has_gossip, "message emitters: %s has gossip templates" % emitter_id)
 
@@ -190,3 +196,55 @@ static func _test_headlines_sector_change_clears_push(runner: TestRunner, catalo
 		str(sample.get("text", "")) != "Should not survive sector change.",
 		"message emitters: headlines push queue clears on sector change"
 	)
+
+
+static func _test_charter_gossip_quotes_live_offer(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := Simulation.new()
+	var missions := simulation.get_subsystem("missions") as MissionSubsystem
+	var session := _session(catalog)
+	runner.check(not session.habitat_id.is_empty(), "message emitters: docked session has habitat_id")
+	missions.ensure_boards(session, catalog)
+
+	var destinations := _charter_destination_names(missions, session.habitat_id)
+	runner.check(not destinations.is_empty(), "message emitters: proxima boards have charter destinations")
+	if destinations.is_empty():
+		return
+
+	var def := catalog.get_message_emitter("charters")
+	var emitter := CharterMessageEmitter.new(def)
+	runner.check(
+		not emitter.has_templates_for_channel(MessageChannels.HEADLINES),
+		"message emitters: charter emitter skips headlines channel"
+	)
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 99101
+	var sample := emitter.sample(MessageChannels.GOSSIP, session, catalog, rng, simulation)
+	var text := str(sample.get("text", "")).strip_edges()
+	runner.check(not text.is_empty(), "message emitters: charter gossip returns text")
+	runner.check_eq(str(sample.get("emitter_id", "")), "charters", "message emitters: charter sample tagged")
+
+	var quoted := false
+	for destination in destinations:
+		if text.find(destination) >= 0:
+			quoted = true
+			break
+	runner.check(quoted, "message emitters: charter gossip names a live board destination")
+
+
+static func _charter_destination_names(missions: MissionSubsystem, habitat_id: String) -> Array[String]:
+	var names: Array[String] = []
+	for board in [PassengerCharters.BOARD_BAR, PassengerCharters.BOARD_TERMINAL]:
+		for offer_variant in missions.list_offers(habitat_id, board):
+			if typeof(offer_variant) != TYPE_DICTIONARY:
+				continue
+			var name := str(offer_variant.get("destination_name", "")).strip_edges()
+			if not name.is_empty():
+				names.append(name)
+	for offer_variant in missions.list_freight_offers(habitat_id):
+		if typeof(offer_variant) != TYPE_DICTIONARY:
+			continue
+		var name := str(offer_variant.get("destination_name", "")).strip_edges()
+		if not name.is_empty():
+			names.append(name)
+	return names
