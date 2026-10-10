@@ -31,6 +31,38 @@ static func run(runner: TestRunner) -> void:
 	runner.check_eq(hotshot.sector_id, "bela", "hotshot starts in bela")
 	runner.check_eq(hotshot.ships_at("bela_orbital_habitat").size(), 1, "hotshot has one ship")
 
+	var old_money := GameSession.new()
+	runner.check(
+		old_money.start_new_game(catalog, "OLD-1", "old_money"),
+		"start_new_game old_money succeeds"
+	)
+	runner.check_eq(old_money.habitat_id, "proxima_habitat", "old_money starts at proxima")
+	runner.check(old_money.docked, "old_money begins docked")
+	runner.check_eq(old_money.credits, 1500, "old_money credits")
+	runner.check_eq(old_money.player.reputation, 8, "old_money reputation")
+	runner.check_eq(old_money.owned_ships.size(), 1, "old_money has one ship")
+	runner.check_eq(old_money.owned_ships[0].chassis_id, "silhouette_chassis", "old_money ship chassis")
+	runner.check(
+		ShipAssembly.undock_blockers(catalog, old_money.owned_ships[0]).is_empty(),
+		"old_money ship can launch"
+	)
+
+	var influencer := GameSession.new()
+	runner.check(
+		influencer.start_new_game(catalog, "INF-1", "influencer"),
+		"start_new_game influencer succeeds"
+	)
+	runner.check_eq(influencer.habitat_id, "proxima_habitat", "influencer starts at proxima")
+	runner.check(influencer.docked, "influencer begins docked")
+	runner.check_eq(influencer.credits, 4000, "influencer credits")
+	runner.check_eq(influencer.player.reputation, 25, "influencer reputation")
+	runner.check_eq(influencer.owned_ships.size(), 1, "influencer has one ship")
+	runner.check_eq(influencer.owned_ships[0].chassis_id, "krypton_chassis", "influencer ship chassis")
+	runner.check(
+		ShipAssembly.undock_blockers(catalog, influencer.owned_ships[0]).is_empty(),
+		"influencer ship can launch"
+	)
+
 	var entrepreneur := GameSession.new()
 	runner.check(
 		entrepreneur.start_new_game(catalog, "ENT-1", "entrepreneur"),

@@ -143,18 +143,6 @@ func _update_background_detail() -> void:
 		lines.append("Funds: "+str(kit.get("money", "")))
 	lines.append("")
 	lines.append("Reputation: %d" % int(kit.get("reputation", 0)))
-	var kit_sanctions: Variant = kit.get("sanctions", [])
-	if typeof(kit_sanctions) == TYPE_ARRAY and not kit_sanctions.is_empty():
-		lines.append("")
-		lines.append("Starting sanctions:")
-		for infraction_variant in kit_sanctions:
-			var infraction_id := str(infraction_variant)
-			if infraction_id.is_empty():
-				continue
-			var def := _catalog.get_sanction_infraction(infraction_id)
-			var fine := int(def.get("fine", 0))
-			var label := str(def.get("name", infraction_id))
-			lines.append("- %s (d%d)" % [label, fine])
 	_detail_label.text = "\n".join(lines)
 
 
