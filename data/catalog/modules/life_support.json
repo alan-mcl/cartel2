@@ -978,5 +978,26 @@
       "electromagnetic": 2.32,
       "computational": 1.44
     }
+  },
+  {
+    "id": "prae_aegis_seat",
+    "name": "Aegis Seat",
+    "maker": "The Praetorium",
+    "brand": "Aegis",
+    "category": "life_support",
+    "mount": "system",
+    "mass": 0.22,
+    "volume": 4.0,
+    "life_support_capacity": 1.0,
+    "power_demand": 0.45,
+    "compute_demand": 0.28,
+    "cost": 520,
+    "description": "Single-seat interceptor cockpit pack. Enough air for the pilot and nothing else.",
+    "signature": {
+      "thermal": 2.1,
+      "gravitational": 0.04,
+      "electromagnetic": 0.88,
+      "computational": 0.35
+    }
   }
 ]

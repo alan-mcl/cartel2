@@ -84,6 +84,7 @@ LIFE_SUPPORT_MAKERS = {
     "Atlas Concern",
     "Tukey Enterprises",
     "The Meridian Company",
+    "The Praetorium",
 }
 
 LIFE_SUPPORT_FLAGS = {"ls_comfort", "ls_luxury", "ls_habitat"}

@@ -60,6 +60,7 @@ Source: `data/catalog/schema/chassis.schema.json` → `chassis.json`
 | `id` | string | yes | `` |  |
 | `name` | string | yes | `` |  |
 | `maker` | string | yes | `` |  |
+| `description` | string | yes | `` |  |
 | `cost` | number | no | `0.0` |  |
 | `mass` | number | yes | `` |  |
 | `hits` | number | yes | `` |  |
@@ -185,6 +186,7 @@ Source: `data/catalog/schema/ships.schema.json` → `ships.json`
 | `id` | string | yes | `` |  |
 | `name` | string | yes | `` |  |
 | `maker` | string | yes | `` |  |
+| `description` | string | yes | `` |  |
 | `chassis` | string | yes | `` | ref → `chassis.json` |
 | `modules` | array | yes | `` |  |
 

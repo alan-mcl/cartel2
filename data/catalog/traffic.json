@@ -132,6 +132,9 @@
       "wolff_gladius",
       "silhouette_mk8",
       "dragon_gold",
+      "mantis_xf900",
+      "mantis_xf4400",
+      "mantis_xf5700",
       "flare_on_ss"
     ],
     "runabout": [
@@ -160,7 +163,10 @@
     "juno_1045": "JNO",
     "juno_1088": "JNO",
     "juno_1090": "JNO",
-    "silhouette_mk8": "SIL"
+    "silhouette_mk8": "SIL",
+    "mantis_xf900": "MX9",
+    "mantis_xf4400": "M44",
+    "mantis_xf5700": "M57"
   },
   "independent_weight": 0.3,
   "affiliations": [

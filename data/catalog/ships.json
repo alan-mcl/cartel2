@@ -3,6 +3,7 @@
     "id": "flare_on_ss",
     "name": "Flare-ON SS",
     "maker": "Holt-Winters Corp",
+    "description": "The standard Flare-ON: Sundancer Compact fusion, a light laser, and modest cargo. The configuration most pilots mean when they say \"Flare\".",
     "chassis": "flare_on_chassis",
     "modules": [
       "hw_helios_compact_40",
@@ -21,6 +22,7 @@
     "id": "flare_on_sk",
     "name": "Flare-ON SK",
     "maker": "Holt-Winters Corp",
+    "description": "The resort-world SK trim: gravitic Loft drive, turbo laser, and premium cabin kit. Marketed as a toy, flown like a hot rod where local gravity is strong.",
     "chassis": "flare_on_chassis",
     "modules": [
       "hw_helios_arc_9",
@@ -38,6 +40,7 @@
     "id": "pegasus_p101",
     "name": "Pegasus P101",
     "maker": "GVW Corp",
+    "description": "The everyday Pegasus: GI hydro-thermal drive, spartan four-berth life support, cargo bay, and a mass driver for defence. Still the galaxy's default private ship.",
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_pp_18",
@@ -58,6 +61,7 @@
     "id": "pegasus_p103",
     "name": "Pegasus P103",
     "maker": "GVW Corp",
+    "description": "The luxury Pegasus trim: same hydro-thermal backbone as the P101, but a two-berth VitaCore cabin and no nose gun. Comfort over firepower.",
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_pp_18",
@@ -76,6 +80,7 @@
     "id": "pegasus_p103a",
     "name": "Pegasus P103a",
     "maker": "GVW Corp",
+    "description": "GVW's late antimatter hot rod: Ionique Annihilon drive, plasma cannon, and law-enforcement sensors. Rare in civilian hands; common on patrol lots.",
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -95,6 +100,7 @@
     "id": "krypton_k2",
     "name": "Krypton K2",
     "maker": "Durbin-Watson Corp",
+    "description": "The workhorse K2: Bellatrix hydro-thermal, basic laser, and a ten-tonne cargo bay. Underpowered on paper, ubiquitous in practice.",
     "chassis": "krypton_chassis",
     "modules": [
       "ora_yardfit_24",
@@ -113,6 +119,7 @@
     "id": "krypton_k3",
     "name": "Krypton K3",
     "maker": "Durbin-Watson Corp",
+    "description": "The performance Krypton: Bellatrix Trace antimatter and a lighter cargo fit. For pilots who outgrew the K2's leisurely acceleration.",
     "chassis": "krypton_chassis",
     "modules": [
       "ora_ap_56",
@@ -131,6 +138,7 @@
     "id": "wolff_warrior",
     "name": "Wolff Warrior",
     "maker": "Bayes Inc",
+    "description": "Gunship conversion of the Wolff freighter: antimatter drive, missile and scatter mounts, no cargo bay. Built to win fights, not haul crates.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -152,6 +160,7 @@
     "id": "wolff_gladius",
     "name": "Wolff Gladius",
     "maker": "Bayes Inc",
+    "description": "A modernised Wolff gunship: Privy Seal Null antimatter, deflector shield, and heavier plate than the Warrior. Placeholder yard spec where lore is thin.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -174,6 +183,7 @@
     "id": "dragon_gold",
     "name": "Dragon Gold",
     "maker": "Kolmogorov-Smirnov",
+    "description": "The production Dragon interceptor: Bellatrix Trace antimatter, alpha hyperdrive, laser and plasma burst. Kolmogorov-Smirnov's tactical fighter in showroom trim.",
     "chassis": "dragon_chassis",
     "modules": [
       "ora_ap_56",
@@ -195,6 +205,7 @@
     "id": "juno_1045",
     "name": "Juno 1045",
     "maker": "Bayes Inc",
+    "description": "Budget Juno scout: Tukey burner and HandyAir pack, small cargo, light laser. A cheap first ship for hub traffic.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_pp_18",
@@ -213,6 +224,7 @@
     "id": "juno_1088",
     "name": "Juno 1088",
     "maker": "Bayes Inc",
+    "description": "Mid trim Juno with Rhumb hydro-thermal and Circinus sensors. Channel-hop courier fit with a little more range than the 1045.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_standard_civic_28",
@@ -231,6 +243,7 @@
     "id": "juno_1090",
     "name": "Juno 1090",
     "maker": "Bayes Inc",
+    "description": "Long-hop Juno: electric-plasma Rhumb drive, channel cabin, mass driver. Heavier electronics and a defensive punch for stubborn routes.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_type_40_industrial",
@@ -251,6 +264,7 @@
     "id": "silhouette_mk8",
     "name": "Silhouette Mk8",
     "maker": "Oklahoma Combine",
+    "description": "The common Silhouette fighter fit: Drawbar chemical punch, turbo and mass-driver pair, light plate. Combine yard standard for orbital defence contracts.",
     "chassis": "silhouette_chassis",
     "modules": [
       "oc_workhorse_dynamo",
@@ -265,6 +279,60 @@
       "turbo_laser",
       "light_mass_driver",
       "sbi_sextant"
+    ]
+  },
+  {
+    "id": "mantis_xf900",
+    "name": "Mantis XF900",
+    "maker": "The Praetorium",
+    "description": "Legacy Mantis series, out of production: Slipstream hydro-thermal, single Aegis seat, one light laser, small fuel. Still turns up on used lots and in reserve squadrons.",
+    "chassis": "mantis_chassis",
+    "modules": [
+      "prv_voltcore_x3",
+      "hw_sundancer_slipstream",
+      "prv_tensor_t4",
+      "prae_aegis_seat",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_small",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "mantis_xf4400",
+    "name": "Mantis XF4400",
+    "maker": "The Praetorium",
+    "description": "Current mid-tier Mantis: Privy Seal F-11 fusion, light and medium lasers, Praetorium avionics. Faster and meaner than the retired XF900, still sensible on fuel.",
+    "chassis": "mantis_chassis",
+    "modules": [
+      "prv_voltcore_x7",
+      "roth_privy_seal_f11",
+      "prv_lumina_lx",
+      "prae_aegis_seat",
+      "prv_lumina_sight",
+      "vessel_registration_beacon",
+      "fuel_tank_small",
+      "light_laser",
+      "turbo_laser"
+    ]
+  },
+  {
+    "id": "mantis_xf5700",
+    "name": "Mantis XF5700",
+    "maker": "The Praetorium",
+    "description": "Top-line Mantis interceptor: Privy Seal Null antimatter, turbo laser and plasma burst, no armour plate. Glass cannon for pilots who trust speed over chitanium.",
+    "chassis": "mantis_chassis",
+    "modules": [
+      "prv_voltcore_x7",
+      "roth_privy_seal_null",
+      "prv_lumina_lx",
+      "prae_aegis_seat",
+      "prv_lumina_sight",
+      "vessel_registration_beacon",
+      "plasma_magazine_100",
+      "fuel_tank_small",
+      "turbo_laser",
+      "plasma_burst"
     ]
   }
 ]

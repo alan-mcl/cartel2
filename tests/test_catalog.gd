@@ -72,6 +72,7 @@ static func run(runner: TestRunner) -> void:
 	_test_centauri_a_beltworks_public_route(runner, catalog)
 	_test_neighbourhood_beacon_sectors(runner, catalog)
 	_test_ui_ship_module_art(runner, catalog)
+	_validate_hull_descriptions(runner, catalog)
 
 	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
 	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
@@ -518,6 +519,27 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 	runner.check(typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty(), "beltworks has translation_beacon")
 	runner.check(not belt_world.has("jump_gate"), "beltworks has no jump_gate")
 	runner.check_eq(str(beacon.get("destination", "")), "proxima", "beltworks beacon tuned to proxima")
+
+
+static func _validate_hull_descriptions(runner: TestRunner, catalog: Catalog) -> void:
+	_check_min_count(runner, catalog.list_chassis().size(), 8, "chassis catalog entries")
+	for entry in catalog.list_chassis():
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var chassis_id := str(entry.get("id", ""))
+		runner.check(
+			not str(entry.get("description", "")).strip_edges().is_empty(),
+			"chassis %s has description" % chassis_id
+		)
+	_check_min_count(runner, catalog.list_ships().size(), 17, "ship template catalog entries")
+	for ship_dict in catalog.list_ships():
+		if typeof(ship_dict) != TYPE_DICTIONARY:
+			continue
+		var ship_id := str(ship_dict.get("id", ""))
+		runner.check(
+			not str(ship_dict.get("description", "")).strip_edges().is_empty(),
+			"ship template %s has description" % ship_id
+		)
 
 
 static func _test_ui_ship_module_art(runner: TestRunner, catalog: Catalog) -> void:

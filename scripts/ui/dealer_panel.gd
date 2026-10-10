@@ -177,6 +177,9 @@ func _rebuild_ship_dealer_detail(detail: VBoxContainer) -> void:
 	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
 	detail.add_child(UiPatterns.status_row("Chassis", str(chassis.get("name", ""))))
 
+	_add_description_label(detail, str(chassis.get("description", "")))
+	_add_description_label(detail, str(template.get("description", "")))
+
 	if assembled != null:
 		var summary := Label.new()
 		summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -212,6 +215,8 @@ func _rebuild_chassis_dealer_detail(detail: VBoxContainer) -> void:
 	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
 	detail.add_child(UiPatterns.status_row("Maneuver", str(chassis.get("maneuver", ""))))
 	detail.add_child(UiPatterns.status_row("Mass limit", str(chassis.get("mass_limit", ""))))
+
+	_add_description_label(detail, str(chassis.get("description", "")))
 
 	var note := Label.new()
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -282,6 +287,16 @@ func _select_item_by_id(
 	else:
 		list.deselect_all()
 	set(suppress_flag_name, false)
+
+
+func _add_description_label(parent: VBoxContainer, text: String) -> void:
+	var trimmed := text.strip_edges()
+	if trimmed.is_empty():
+		return
+	var label := Label.new()
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text = trimmed
+	parent.add_child(label)
 
 
 func _section_label(text: String) -> Label:

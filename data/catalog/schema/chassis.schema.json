@@ -4,11 +4,12 @@
   "x-catalog-file": "chassis.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "maker", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"],
+  "required": ["id", "name", "maker", "description", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"],
   "properties": {
     "id": { "type": "string" },
     "name": { "type": "string" },
     "maker": { "type": "string" },
+    "description": { "type": "string" },
     "cost": { "type": "number", "default": 0.0 },
     "mass": { "type": "number" },
     "hits": { "type": "number" },

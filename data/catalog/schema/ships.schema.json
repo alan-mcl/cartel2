@@ -4,11 +4,12 @@
   "x-catalog-file": "ships.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "maker", "chassis", "modules"],
+  "required": ["id", "name", "maker", "description", "chassis", "modules"],
   "properties": {
     "id": { "type": "string" },
     "name": { "type": "string" },
     "maker": { "type": "string" },
+    "description": { "type": "string" },
     "chassis": { "type": "string", "x-ref-catalog": "chassis" },
     "modules": {
       "type": "array",

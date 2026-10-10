@@ -8,6 +8,7 @@ var _present_keys: Dictionary = {}
 var id: String = ""
 var name: String = ""
 var maker: String = ""
+var description: String = ""
 var chassis: String = ""
 var modules: Array = []
 
@@ -18,6 +19,7 @@ static func from_dict(data: Dictionary) -> ShipDef:
 	def.id = str(data.get("id", ""))
 	def.name = str(data.get("name", ""))
 	def.maker = str(data.get("maker", ""))
+	def.description = str(data.get("description", ""))
 	def.chassis = str(data.get("chassis", ""))
 	def.modules = []
 	var raw_modules: Variant = data.get("modules", [])
@@ -31,15 +33,16 @@ func to_dict() -> Dictionary:
 	out["id"] = id
 	out["name"] = name
 	out["maker"] = maker
+	out["description"] = description
 	out["chassis"] = chassis
 	out["modules"] = modules.duplicate()
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "chassis", "modules"])
+	return PackedStringArray(["id", "name", "maker", "description", "chassis", "modules"])
 
 static func required_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "chassis", "modules"])
+	return PackedStringArray(["id", "name", "maker", "description", "chassis", "modules"])
 
 func has_source_key(key: String) -> bool:
 	return _present_keys.has(key)

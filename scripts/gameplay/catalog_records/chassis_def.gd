@@ -8,6 +8,7 @@ var _present_keys: Dictionary = {}
 var id: String = ""
 var name: String = ""
 var maker: String = ""
+var description: String = ""
 var cost: float = 0.0
 var mass: float = 0
 var hits: float = 0
@@ -26,6 +27,7 @@ static func from_dict(data: Dictionary) -> ChassisDef:
 	def.id = str(data.get("id", ""))
 	def.name = str(data.get("name", ""))
 	def.maker = str(data.get("maker", ""))
+	def.description = str(data.get("description", ""))
 	def.cost = float(data.get("cost", 0.0))
 	def.mass = float(data.get("mass", 0))
 	def.hits = float(data.get("hits", 0))
@@ -45,6 +47,7 @@ func to_dict() -> Dictionary:
 	out["id"] = id
 	out["name"] = name
 	out["maker"] = maker
+	out["description"] = description
 	if _present_keys.has("cost") or cost != 0.0:
 		out["cost"] = cost
 	out["mass"] = mass
@@ -62,10 +65,10 @@ func to_dict() -> Dictionary:
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "cost", "mass", "hits", "mass_limit", "volume", "maneuver", "hull_color", "sprite", "header", "mounts"])
+	return PackedStringArray(["id", "name", "maker", "description", "cost", "mass", "hits", "mass_limit", "volume", "maneuver", "hull_color", "sprite", "header", "mounts"])
 
 static func required_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"])
+	return PackedStringArray(["id", "name", "maker", "description", "mass", "hits", "mass_limit", "volume", "maneuver", "mounts"])
 
 func has_source_key(key: String) -> bool:
 	return _present_keys.has(key)

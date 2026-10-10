@@ -52,7 +52,7 @@ static func run(runner: TestRunner) -> void:
 		influencer.start_new_game(catalog, "INF-1", "influencer"),
 		"start_new_game influencer succeeds"
 	)
-	runner.check_eq(influencer.habitat_id, "proxima_habitat", "influencer starts at proxima")
+	runner.check_eq(influencer.habitat_id, "fortuna_habitat", "influencer starts at fortuna")
 	runner.check(influencer.docked, "influencer begins docked")
 	runner.check_eq(influencer.credits, 4000, "influencer credits")
 	runner.check_eq(influencer.player.reputation, 25, "influencer reputation")

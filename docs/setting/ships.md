@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Seven ship families below are **setting intent** from original `Ships.doc`. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see `data/catalog/backgrounds.json`.
+**Status:** Eight ship families below are **setting intent** from original `Ships.doc` plus the Mantis interceptor line. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see `data/catalog/backgrounds.json`.
 
 **Hull sales at Proxima Habitat:** **Concord Scouts** stocks used, manufacturer-fitted scout templates from the catalog. **Skyedge Space Ships** sells unfitted chassis frames; **Centauri Shipyard** fits modules. Used ship price is chassis list cost plus half the fitted module value.
 
@@ -32,6 +32,7 @@ SpaceShip
 | Dragon | Kolmogorov-Smirnov | Interceptor w/ hyperdrive | Gold |
 | Juno | Bayes Inc | Light scout | 1045, 1088, 1090 |
 | Silhouette | Oklahoma Combine | Tactical fighter | Mk8 |
+| Mantis | The Praetorium | Dedicated interceptor | XF900, XF4400, XF5700 |
 
 ---
 
@@ -121,6 +122,24 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 
 ---
 
+## Mantis
+
+The Mantis is an unusual hull in a galaxy of armed traders: **The Praetorium** designed it as a dedicated interceptor, optimised for manoeuvrability, speed, and firepower rather than cargo or crew comfort. Fittings assume a single pilot with minimal cabin life support and almost no hold space.
+
+### XF900
+
+The **XF900** is the original series, no longer in production. Survivors still appear on used lots and in reserve squadrons.
+
+### XF4400
+
+The **XF4400** is the current mid-tier production model — faster drives and a heavier weapons fit than the retired XF900.
+
+### XF5700
+
+The **XF5700** is the top-line interceptor configuration in current manufacture, pairing the fastest engines the frame can carry with twin medium hardpoints.
+
+---
+
 ## Current implementation vs design gaps
 
 | Item | Design | Original POC / notes |
@@ -134,7 +153,7 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 
 ### In prototype JSON (`ships.json`)
 
-All fourteen manufacturer templates are catalogued with placeholder loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations are **invented placeholders** where the design doc is sparse.
+All seventeen manufacturer templates are catalogued with placeholder loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations are **invented placeholders** where the design doc is sparse.
 
 | Template id | Chassis | Notes |
 |-------------|---------|-------|
@@ -145,3 +164,4 @@ All fourteen manufacturer templates are catalogued with placeholder loadouts. Ju
 | `dragon_gold` | `dragon_chassis` | Interceptor + alpha hyperdrive (catalog only) |
 | `juno_1045`, `1088`, `1090` | `juno_chassis` | Scout progression (placeholder) |
 | `silhouette_mk8` | `silhouette_chassis` | Tactical fighter |
+| `mantis_xf900`, `mantis_xf4400`, `mantis_xf5700` | `mantis_chassis` | Praetorium interceptors; XF900 legacy |

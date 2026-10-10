@@ -270,6 +270,14 @@ def main() -> None:
     )
 
     write_text(
+        ASSETS / "ships/chassis/mantis_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="-6 -12 12 24">
+  <polygon points="0,-10.8 3.6,-2.4 2.4,9.6 -2.4,9.6 -3.6,-2.4" fill="#c0c0c0" stroke="#e8e8e8" stroke-width="0.72"/>
+  <polygon points="0,-9.6 1.8,-3.6 1.2,7.2 -1.2,7.2 -1.8,-3.6" fill="#a8a8a8" stroke="#d0d0d0" stroke-width="0.48"/>
+</svg>""",
+    )
+
+    write_text(
         ASSETS / "ships/fx/thrust.svg",
         """<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-16 -16 32 32">
   <polygon points="-8,8 0,20 8,8" fill="#ff8c33" opacity="0.85"/>

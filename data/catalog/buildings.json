@@ -32,7 +32,8 @@
       "wolff_chassis",
       "dragon_chassis",
       "juno_chassis",
-      "silhouette_chassis"
+      "silhouette_chassis",
+      "mantis_chassis"
     ]
   },
   {
@@ -57,7 +58,10 @@
       "juno_1045",
       "juno_1088",
       "juno_1090",
-      "silhouette_mk8"
+      "silhouette_mk8",
+      "mantis_xf900",
+      "mantis_xf4400",
+      "mantis_xf5700"
     ]
   },
   {

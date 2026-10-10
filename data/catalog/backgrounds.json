@@ -199,6 +199,24 @@
           "name": "Silhouette Mk8",
           "template_id": "silhouette_mk8",
           "chassis_id": "silhouette_chassis"
+        },
+        {
+          "id": "mantis_xf900_1",
+          "name": "Mantis XF900",
+          "template_id": "mantis_xf900",
+          "chassis_id": "mantis_chassis"
+        },
+        {
+          "id": "mantis_xf4400_1",
+          "name": "Mantis XF4400",
+          "template_id": "mantis_xf4400",
+          "chassis_id": "mantis_chassis"
+        },
+        {
+          "id": "mantis_xf5700_1",
+          "name": "Mantis XF5700",
+          "template_id": "mantis_xf5700",
+          "chassis_id": "mantis_chassis"
         }
       ]
     },
@@ -434,7 +452,7 @@
       "money": "d4000 remains after the purchase and a few celebratory nights.",
       "credits": 4000,
       "reputation": 25,
-      "habitat_id": "proxima_habitat",
+      "habitat_id": "fortuna_habitat",
       "spare_parts": {},
       "ships": [
         {
