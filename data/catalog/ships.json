@@ -183,7 +183,7 @@
     "id": "wolff_bastion",
     "name": "Wolff Bastion",
     "maker": "Bayes Inc",
-    "description": "The original Wolff armed freighter: Bellatrix fusion, an unguided rocket launcher, and a twenty-tonne hold. The configuration the Warrior gunship was cut from.",
+    "description": "The original Wolff armed freighter: Bellatrix fusion, an unguided rocket launcher, 5mm chitanium, and a twenty-tonne hold. If there's money in the route, somebody has done it in a Wolff Bastion.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -204,7 +204,7 @@
     "id": "dragon_bronze",
     "name": "Dragon Bronze",
     "maker": "Seven Bells Inc",
-    "description": "An earlier Dragon without translation gear: compact fusion, light laser, and light plate. Gold is the hyperdrive fighter; Bronze is the in-system patrol trim.",
+    "description": "An earlier Dragon without translation gear: compact fusion, light laser, and light plate. A common in-system patrol trim.",
     "chassis": "dragon_chassis",
     "modules": [
       "ora_yardfit_24",
@@ -324,7 +324,7 @@
     "id": "silhouette_mk6",
     "name": "Silhouette Mk6",
     "maker": "Oklahoma Combine",
-    "description": "Older Silhouette patrol trim: hydro-thermal drive, light laser and mass driver, no turbo turret. Still on used lots, outclassed by the Mk8 contract fighter.",
+    "description": "Older Silhouette patrol trim: hydro-thermal drive, light laser and mass driver cannon. Still a common sight on coroprate militias, even if it is outclassed by the Mk8.",
     "chassis": "silhouette_chassis",
     "modules": [
       "oc_workhorse_dynamo",
