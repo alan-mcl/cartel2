@@ -361,7 +361,7 @@
     {
       "id": "outlaw",
       "name": "Outlaw",
-      "description": "A known trouble maker grounded at Tycho until an unlawful-fire sanction is paid.",
+      "description": "A known trouble maker with an outstanding sanction.",
       "background": "Several years experience of smuggling, merc work and bounty hunting on the rim paid your bills. The last job wasn't a success, and you need a sure thing next up to stay afloat.",
       "starting_location": "Tycho Habitat.",
       "ship": "You pilot a battle scarred Wolff Warrior.",

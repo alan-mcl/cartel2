@@ -112,7 +112,7 @@ text = "<"
 [node name="PortraitPreview" type="TextureRect" parent="Background/Center/Panel/VBox/BodySplit/Right/PortraitRow"]
 layout_mode = 2
 script = ExtResource("2")
-display_size = Vector2i(160, 160)
+display_size = Vector2i(120, 160)
 
 [node name="NextPortrait" type="Button" parent="Background/Center/Panel/VBox/BodySplit/Right/PortraitRow"]
 layout_mode = 2

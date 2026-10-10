@@ -44,7 +44,7 @@ theme_override_constants/separation = 8
 [node name="Portrait" type="TextureRect" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
 layout_mode = 2
 script = ExtResource("4")
-display_size = Vector2i(128, 128)
+display_size = Vector2i(120, 160)
 
 [node name="PilotInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
 layout_mode = 2
@@ -73,17 +73,13 @@ layout_mode = 2
 theme_type_variation = &"Numeric"
 text = ""
 
-[node name="GstClockLabel" parent="Layout/Header/HeaderSplit/PilotColumn" instance=ExtResource("2")]
-layout_mode = 2
-size_flags_horizontal = 3
-multiline_date_time = true
-
 [node name="HeaderRight" type="HBoxContainer" parent="Layout/Header/HeaderSplit"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
 [node name="HabitatInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/HeaderRight"]
+custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -100,7 +96,17 @@ layout_mode = 2
 autowrap_mode = 3
 text = "Orbital city hub."
 
+[node name="ClockSpacer" type="Control" parent="Layout/Header/HeaderSplit/HeaderRight/HabitatInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GstClockLabel" parent="Layout/Header/HeaderSplit/HeaderRight/HabitatInfo" instance=ExtResource("2")]
+layout_mode = 2
+size_flags_horizontal = 3
+multiline_date_time = false
+
 [node name="HabitatArtHost" type="VBoxContainer" parent="Layout/Header/HeaderSplit/HeaderRight"]
+custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
