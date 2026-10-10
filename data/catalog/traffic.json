@@ -119,7 +119,8 @@
       "pegasus_p101",
       "pegasus_p103",
       "krypton_k2",
-      "juno_1045"
+      "juno_1045",
+      "wolff_bastion"
     ],
     "shuttle": [
       "pegasus_p101",
@@ -131,7 +132,9 @@
       "wolff_warrior",
       "wolff_gladius",
       "silhouette_mk8",
+      "silhouette_mk6",
       "dragon_gold",
+      "dragon_bronze",
       "mantis_xf900",
       "mantis_xf4400",
       "mantis_xf5700",
@@ -146,7 +149,8 @@
     "dock_cycle": [
       "pegasus_p101",
       "pegasus_p103",
-      "juno_1045"
+      "juno_1045",
+      "wolff_bastion"
     ]
   },
   "callsign_prefixes": {
@@ -159,11 +163,14 @@
     "krypton_k3": "DW",
     "wolff_warrior": "WLF",
     "wolff_gladius": "WLF",
+    "wolff_bastion": "WLF",
     "dragon_gold": "DRG",
+    "dragon_bronze": "DRG",
     "juno_1045": "JNO",
     "juno_1088": "JNO",
     "juno_1090": "JNO",
     "silhouette_mk8": "SIL",
+    "silhouette_mk6": "SIL",
     "mantis_xf900": "MX9",
     "mantis_xf4400": "M44",
     "mantis_xf5700": "M57"

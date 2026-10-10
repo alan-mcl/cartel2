@@ -531,7 +531,7 @@ static func _validate_hull_descriptions(runner: TestRunner, catalog: Catalog) ->
 			not str(entry.get("description", "")).strip_edges().is_empty(),
 			"chassis %s has description" % chassis_id
 		)
-	_check_min_count(runner, catalog.list_ships().size(), 17, "ship template catalog entries")
+	_check_min_count(runner, catalog.list_ships().size(), 20, "ship template catalog entries")
 	for ship_dict in catalog.list_ships():
 		if typeof(ship_dict) != TYPE_DICTIONARY:
 			continue

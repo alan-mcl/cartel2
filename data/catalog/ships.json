@@ -180,6 +180,45 @@
     ]
   },
   {
+    "id": "wolff_bastion",
+    "name": "Wolff Bastion",
+    "maker": "Bayes Inc",
+    "description": "The original Wolff armed freighter: Bellatrix fusion, an unguided rocket launcher, and a twenty-tonne hold. The configuration the Warrior gunship was cut from.",
+    "chassis": "wolff_chassis",
+    "modules": [
+      "gi_utility_fusion_55",
+      "ora_bellatrix_ap_f2",
+      "oc_workhorse_brain",
+      "oc_workhorse_lungs",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "rocket_magazine_16",
+      "fuel_tank_large",
+      "cargo_bay_20",
+      "chitanium_5mm",
+      "missile_launcher",
+      "mdc_almanac"
+    ]
+  },
+  {
+    "id": "dragon_bronze",
+    "name": "Dragon Bronze",
+    "maker": "Seven Bells Inc",
+    "description": "An earlier Dragon without translation gear: compact fusion, light laser, and light plate. Gold is the hyperdrive fighter; Bronze is the in-system patrol trim.",
+    "chassis": "dragon_chassis",
+    "modules": [
+      "ora_yardfit_24",
+      "hw_sundancer_compact",
+      "ora_yardfit_nav",
+      "ora_glasspack_air",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "light_laser"
+    ]
+  },
+  {
     "id": "dragon_gold",
     "name": "Dragon Gold",
     "maker": "Seven Bells Inc",
@@ -279,6 +318,26 @@
       "turbo_laser",
       "light_mass_driver",
       "sbi_sextant"
+    ]
+  },
+  {
+    "id": "silhouette_mk6",
+    "name": "Silhouette Mk6",
+    "maker": "Oklahoma Combine",
+    "description": "Older Silhouette patrol trim: hydro-thermal drive, light laser and mass driver, no turbo turret. Still on used lots, outclassed by the Mk8 contract fighter.",
+    "chassis": "silhouette_chassis",
+    "modules": [
+      "oc_workhorse_dynamo",
+      "atl_keystone_h20",
+      "oc_workhorse_brain",
+      "oc_red_dirt_recycle",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "mass_driver_magazine_200",
+      "fuel_tank_small",
+      "chitanium_5mm",
+      "light_laser",
+      "light_mass_driver"
     ]
   },
   {

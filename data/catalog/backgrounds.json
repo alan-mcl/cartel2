@@ -171,9 +171,21 @@
           "chassis_id": "wolff_chassis"
         },
         {
+          "id": "wolff_bastion_1",
+          "name": "Wolff Bastion",
+          "template_id": "wolff_bastion",
+          "chassis_id": "wolff_chassis"
+        },
+        {
           "id": "dragon_gold_1",
           "name": "Dragon Gold",
           "template_id": "dragon_gold",
+          "chassis_id": "dragon_chassis"
+        },
+        {
+          "id": "dragon_bronze_1",
+          "name": "Dragon Bronze",
+          "template_id": "dragon_bronze",
           "chassis_id": "dragon_chassis"
         },
         {
@@ -198,6 +210,12 @@
           "id": "silhouette_mk8_1",
           "name": "Silhouette Mk8",
           "template_id": "silhouette_mk8",
+          "chassis_id": "silhouette_chassis"
+        },
+        {
+          "id": "silhouette_mk6_1",
+          "name": "Silhouette Mk6",
+          "template_id": "silhouette_mk6",
           "chassis_id": "silhouette_chassis"
         },
         {
