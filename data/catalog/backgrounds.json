@@ -135,6 +135,12 @@
           "chassis_id": "flare_on_chassis"
         },
         {
+          "id": "flare_on_cx_1",
+          "name": "Flare-ON CX",
+          "template_id": "flare_on_cx",
+          "chassis_id": "flare_on_chassis"
+        },
+        {
           "id": "pegasus_p103_1",
           "name": "Pegasus P103",
           "template_id": "pegasus_p103",
@@ -147,6 +153,42 @@
           "chassis_id": "pegasus_chassis"
         },
         {
+          "id": "pegasus_p105_1",
+          "name": "Pegasus P105",
+          "template_id": "pegasus_p105",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p107_1",
+          "name": "Pegasus P107",
+          "template_id": "pegasus_p107",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p109_1",
+          "name": "Pegasus P109",
+          "template_id": "pegasus_p109",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p111_1",
+          "name": "Pegasus P111",
+          "template_id": "pegasus_p111",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p113_1",
+          "name": "Pegasus P113",
+          "template_id": "pegasus_p113",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
+          "id": "pegasus_p115_1",
+          "name": "Pegasus P115",
+          "template_id": "pegasus_p115",
+          "chassis_id": "pegasus_chassis"
+        },
+        {
           "id": "krypton_k2_1",
           "name": "Krypton K2",
           "template_id": "krypton_k2",
@@ -156,6 +198,12 @@
           "id": "krypton_k3_1",
           "name": "Krypton K3",
           "template_id": "krypton_k3",
+          "chassis_id": "krypton_chassis"
+        },
+        {
+          "id": "krypton_k4_1",
+          "name": "Krypton K4",
+          "template_id": "krypton_k4",
           "chassis_id": "krypton_chassis"
         },
         {
@@ -177,6 +225,12 @@
           "chassis_id": "wolff_chassis"
         },
         {
+          "id": "wolff_logistico_1",
+          "name": "Wolff Logistico",
+          "template_id": "wolff_logistico",
+          "chassis_id": "wolff_chassis"
+        },
+        {
           "id": "dragon_gold_1",
           "name": "Dragon Gold",
           "template_id": "dragon_gold",
@@ -189,9 +243,27 @@
           "chassis_id": "dragon_chassis"
         },
         {
+          "id": "dragon_post_1",
+          "name": "Dragon Post",
+          "template_id": "dragon_post",
+          "chassis_id": "dragon_chassis"
+        },
+        {
+          "id": "juno_1030_1",
+          "name": "Juno 1030",
+          "template_id": "juno_1030",
+          "chassis_id": "juno_chassis"
+        },
+        {
           "id": "juno_1045_1",
           "name": "Juno 1045",
           "template_id": "juno_1045",
+          "chassis_id": "juno_chassis"
+        },
+        {
+          "id": "juno_1060_1",
+          "name": "Juno 1060",
+          "template_id": "juno_1060",
           "chassis_id": "juno_chassis"
         },
         {
@@ -216,6 +288,12 @@
           "id": "silhouette_mk6_1",
           "name": "Silhouette Mk6",
           "template_id": "silhouette_mk6",
+          "chassis_id": "silhouette_chassis"
+        },
+        {
+          "id": "silhouette_warden_1",
+          "name": "Silhouette Warden",
+          "template_id": "silhouette_warden",
           "chassis_id": "silhouette_chassis"
         },
         {

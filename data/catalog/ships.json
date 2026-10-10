@@ -19,6 +19,23 @@
     ]
   },
   {
+    "id": "flare_on_cx",
+    "name": "Flare-ON CX",
+    "maker": "Holt-Winters Corp",
+    "description": "Courier Flare-ON: Sundancer Compact fusion, a parcel bay, and solo transit air. Unarmed; the SS is the sport hull with a laser.",
+    "chassis": "flare_on_chassis",
+    "modules": [
+      "hw_helios_compact_40",
+      "hw_sundancer_compact",
+      "hw_helios_spark",
+      "tmc_transit_solo",
+      "hw_glimmer_glance",
+      "vessel_registration_beacon",
+      "fuel_tank_small",
+      "cargo_bay_4"
+    ]
+  },
+  {
     "id": "flare_on_sk",
     "name": "Flare-ON SK",
     "maker": "Holt-Winters Corp",
@@ -97,6 +114,116 @@
     ]
   },
   {
+    "id": "pegasus_p105",
+    "name": "Pegasus P105",
+    "maker": "GVW Corp",
+    "description": "Long-haul Pegasus: spartan habitat bunks, a twenty-tonne hold, large fuel tank, and hydro-thermal drive. Built to sleep aboard between ports.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_pp_18",
+      "gi_ht_18",
+      "mdc_monday_core",
+      "gi_ls_4",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_large",
+      "cargo_bay_20",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "pegasus_p107",
+    "name": "Pegasus P107",
+    "maker": "GVW Corp",
+    "description": "Survey Pegasus: Lumina Wellhead listen array, modest fuel, and a light laser. A picket hull that trades cargo for reach.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_pp_18",
+      "gi_ht_18",
+      "prv_tensor_t4",
+      "tmc_transit_air",
+      "prv_lumina_wellhead",
+      "vessel_registration_beacon",
+      "fuel_tank_small",
+      "light_laser",
+      "sbi_sextant"
+    ]
+  },
+  {
+    "id": "pegasus_p109",
+    "name": "Pegasus P109",
+    "maker": "GVW Corp",
+    "description": "Budget interceptor Pegasus: hot chemical drive, light plate, light and medium lasers. Slower and cheaper than the P103a law ship.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_pp_18",
+      "ca_capstan_chemical_16",
+      "mdc_monday_core",
+      "tmc_transit_air",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "light_laser",
+      "turbo_laser"
+    ]
+  },
+  {
+    "id": "pegasus_p111",
+    "name": "Pegasus P111",
+    "maker": "GVW Corp",
+    "description": "Charter Pegasus: VitaCore luxury cabin, deflector shield, and no cargo bay. The P103 still hauls freight; the P111 carries guests.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_pp_18",
+      "gi_ht_18",
+      "mdc_workplace_12",
+      "prv_vitacore_l",
+      "prv_lumina_sight",
+      "vessel_registration_beacon",
+      "hw_deflector_mk1",
+      "fuel_tank_medium",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "pegasus_p113",
+    "name": "Pegasus P113",
+    "maker": "GVW Corp",
+    "description": "Escort Pegasus: rocket launcher, plate, and a small hold for convoy work. Support gunship, not a Wolff-class heavy.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_utility_fusion_55",
+      "gi_ht_18",
+      "mdc_monday_core",
+      "gi_ls_4",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "rocket_magazine_16",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "chitanium_5mm",
+      "missile_launcher",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "pegasus_p115",
+    "name": "Pegasus P115",
+    "maker": "GVW Corp",
+    "description": "Hopper Pegasus: four-berth habitat, small fuel, no weapons and no hold. Station-to-station shuttle on a familiar frame.",
+    "chassis": "pegasus_chassis",
+    "modules": [
+      "gi_pp_18",
+      "gi_ht_18",
+      "mdc_monday_core",
+      "gi_ls_4",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_small"
+    ]
+  },
+  {
     "id": "krypton_k2",
     "name": "Krypton K2",
     "maker": "Orion Aerospace",
@@ -132,6 +259,24 @@
       "cargo_bay_4",
       "light_laser",
       "mdc_almanac"
+    ]
+  },
+  {
+    "id": "krypton_k4",
+    "name": "Krypton K4",
+    "maker": "Orion Aerospace",
+    "description": "Passenger Krypton: Orion cabin life support, small cargo, and a light laser. The K2 hauls freight; the K3 is fast; the K4 carries people.",
+    "chassis": "krypton_chassis",
+    "modules": [
+      "ora_yardfit_24",
+      "ora_bellatrix_main_44",
+      "ora_avionics_a40",
+      "ora_cabin_a20",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "light_laser"
     ]
   },
   {
@@ -201,6 +346,24 @@
     ]
   },
   {
+    "id": "wolff_logistico",
+    "name": "Wolff Logistico",
+    "maker": "Bayes Inc",
+    "description": "Bulk Wolff freighter: twenty-tonne hold, habitat bunks, fusion drive, and one light laser. The Bastion is armed; the Logistico is the hold.",
+    "chassis": "wolff_chassis",
+    "modules": [
+      "gi_utility_fusion_55",
+      "ora_bellatrix_ap_f2",
+      "oc_workhorse_brain",
+      "oc_workhorse_lungs",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_large",
+      "cargo_bay_20",
+      "light_laser"
+    ]
+  },
+  {
     "id": "dragon_bronze",
     "name": "Dragon Bronze",
     "maker": "Seven Bells Inc",
@@ -213,6 +376,25 @@
       "ora_glasspack_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "light_laser"
+    ]
+  },
+  {
+    "id": "dragon_post",
+    "name": "Dragon Post",
+    "maker": "Seven Bells Inc",
+    "description": "Translation courier Dragon: alpha hyperdrive, compact fusion, light laser, no plasma. Bronze patrols in-system; Gold is the fighter.",
+    "chassis": "dragon_chassis",
+    "modules": [
+      "ora_yardfit_24",
+      "hw_sundancer_compact",
+      "ora_yardfit_nav",
+      "ora_glasspack_air",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "hyperdrive_alpha",
       "fuel_tank_medium",
       "chitanium_5mm",
       "light_laser"
@@ -300,6 +482,41 @@
     ]
   },
   {
+    "id": "juno_1030",
+    "name": "Juno 1030",
+    "maker": "General Industrial",
+    "description": "Unarmed Juno freighter: hydro-thermal drive, HandyAir life support, and fourteen tonnes of hold. No weapons — pure cargo.",
+    "chassis": "juno_chassis",
+    "modules": [
+      "gi_pp_18",
+      "gi_ht_18",
+      "mdc_monday_core",
+      "te_handy_air",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "cargo_bay_10",
+      "cargo_bay_4"
+    ]
+  },
+  {
+    "id": "juno_1060",
+    "name": "Juno 1060",
+    "maker": "General Industrial",
+    "description": "Scout Juno: Circinus sensors, small fuel, one light laser, no cargo bay. Cheaper picket than the armed 1088.",
+    "chassis": "juno_chassis",
+    "modules": [
+      "gi_standard_civic_28",
+      "tmc_wake_hydro_22",
+      "hg_caduceus_c30",
+      "tmc_transit_air",
+      "hg_hermes_circinus",
+      "vessel_registration_beacon",
+      "fuel_tank_small",
+      "light_laser"
+    ]
+  },
+  {
     "id": "silhouette_mk8",
     "name": "Silhouette Mk8",
     "maker": "Oklahoma Combine",
@@ -338,6 +555,24 @@
       "chitanium_5mm",
       "light_laser",
       "light_mass_driver"
+    ]
+  },
+  {
+    "id": "silhouette_warden",
+    "name": "Silhouette Warden",
+    "maker": "Oklahoma Combine",
+    "description": "Patrol Silhouette: Circinus sensors, one medium laser, light plate. The Mk8 is the contract fighter; the Warden is the picket.",
+    "chassis": "silhouette_chassis",
+    "modules": [
+      "oc_workhorse_dynamo",
+      "atl_keystone_h20",
+      "oc_workhorse_brain",
+      "oc_red_dirt_recycle",
+      "hg_hermes_circinus",
+      "vessel_registration_beacon",
+      "fuel_tank_medium",
+      "chitanium_5mm",
+      "turbo_laser"
     ]
   },
   {
