@@ -3,7 +3,7 @@
     "id": "flare_on_ss",
     "name": "Flare-ON SS",
     "maker": "Holt-Winters Corp",
-    "description": "The standard Flare-ON: Sundancer Compact fusion, a light laser, and modest cargo. The configuration most pilots mean when they say \"Flare\".",
+    "description": "The standard Flare-ON: Sundancer Compact fusion, a light laser, and modest cargo capacity. The configuration most pilots mean when they say \"Flare\".",
     "chassis": "flare_on_chassis",
     "modules": [
       "hw_helios_compact_40",
@@ -40,7 +40,7 @@
     "id": "pegasus_p101",
     "name": "Pegasus P101",
     "maker": "GVW Corp",
-    "description": "The everyday Pegasus: GI hydro-thermal drive, spartan four-berth life support, cargo bay, and a mass driver for defence. Still the galaxy's default private ship.",
+    "description": "The everyday Pegasus: GI hydro-thermal drive, spartan four-berth life support, useful cargo bay, and a mass driver for defence. Still the galaxy's most common private craft.",
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_pp_18",
@@ -80,7 +80,7 @@
     "id": "pegasus_p103a",
     "name": "Pegasus P103a",
     "maker": "GVW Corp",
-    "description": "GVW's late antimatter hot rod: Ionique Annihilon drive, plasma cannon, and law-enforcement sensors. Rare in civilian hands; common on patrol lots.",
+    "description": "GVW's late antimatter hot rod: Ionique Annihilon drive, plasma cannon, and law-enforcement grade sensors.",
     "chassis": "pegasus_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -99,8 +99,8 @@
   {
     "id": "krypton_k2",
     "name": "Krypton K2",
-    "maker": "Durbin-Watson Corp",
-    "description": "The workhorse K2: Bellatrix hydro-thermal, basic laser, and a ten-tonne cargo bay. Underpowered on paper, ubiquitous in practice.",
+    "maker": "Orion Aerospace",
+    "description": "The workhorse K2: Bellatrix hydro-thermal, basic laser, and a ten-tonne cargo bay. An underpowered but versatile fit for a variety of roles.",
     "chassis": "krypton_chassis",
     "modules": [
       "ora_yardfit_24",
@@ -118,7 +118,7 @@
   {
     "id": "krypton_k3",
     "name": "Krypton K3",
-    "maker": "Durbin-Watson Corp",
+    "maker": "Orion Aerospace",
     "description": "The performance Krypton: Bellatrix Trace antimatter and a lighter cargo fit. For pilots who outgrew the K2's leisurely acceleration.",
     "chassis": "krypton_chassis",
     "modules": [
@@ -138,7 +138,7 @@
     "id": "wolff_warrior",
     "name": "Wolff Warrior",
     "maker": "Bayes Inc",
-    "description": "Gunship conversion of the Wolff freighter: antimatter drive, missile and scatter mounts, no cargo bay. Built to win fights, not haul crates.",
+    "description": "Gunship conversion of the Wolff freighter: antimatter drive, missile and scatter mounts, no cargo bay. Built take the punch and then win the fight.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -160,7 +160,7 @@
     "id": "wolff_gladius",
     "name": "Wolff Gladius",
     "maker": "Bayes Inc",
-    "description": "A modernised Wolff gunship: Privy Seal Null antimatter, deflector shield, and heavier plate than the Warrior. Placeholder yard spec where lore is thin.",
+    "description": "A modernised Wolff gunship: Privy Seal Null antimatter, deflector shield, and heavier plate than the Warrior.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -182,8 +182,8 @@
   {
     "id": "dragon_gold",
     "name": "Dragon Gold",
-    "maker": "Kolmogorov-Smirnov",
-    "description": "The production Dragon interceptor: Bellatrix Trace antimatter, alpha hyperdrive, laser and plasma burst. Kolmogorov-Smirnov's tactical fighter in showroom trim.",
+    "maker": "Seven Bells Inc",
+    "description": "The production Dragon interceptor: Bellatrix Trace antimatter, alpha hyperdrive, laser and plasma burst. SBI's tactical fighter in showroom trim.",
     "chassis": "dragon_chassis",
     "modules": [
       "ora_ap_56",
@@ -204,8 +204,8 @@
   {
     "id": "juno_1045",
     "name": "Juno 1045",
-    "maker": "Bayes Inc",
-    "description": "Budget Juno scout: Tukey burner and HandyAir pack, small cargo, light laser. A cheap first ship for hub traffic.",
+    "maker": "General Industrial",
+    "description": "Budget Juno scout with a Tukey burner and HandyAir life support accomodations, a modest cargo capacity and a light laser. A cheap first ship for various roles.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_pp_18",
@@ -223,8 +223,8 @@
   {
     "id": "juno_1088",
     "name": "Juno 1088",
-    "maker": "Bayes Inc",
-    "description": "Mid trim Juno with Rhumb hydro-thermal and Circinus sensors. Channel-hop courier fit with a little more range than the 1045.",
+    "maker": "General Industrial",
+    "description": "Mid trim Juno with Rhumb hydro-thermal propulsion and Circinus sensors. The fit for those who need a little more legs than the 1045 provides.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_standard_civic_28",
@@ -242,8 +242,8 @@
   {
     "id": "juno_1090",
     "name": "Juno 1090",
-    "maker": "Bayes Inc",
-    "description": "Long-hop Juno: electric-plasma Rhumb drive, channel cabin, mass driver. Heavier electronics and a defensive punch for stubborn routes.",
+    "maker": "General Industrial",
+    "description": "Long-hop Juno model: electric-plasma Rhumb drive, channel cabin, mass driver. Heavier electronics and a defensive punch for more dangerous routes.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_type_40_industrial",
@@ -264,7 +264,7 @@
     "id": "silhouette_mk8",
     "name": "Silhouette Mk8",
     "maker": "Oklahoma Combine",
-    "description": "The common Silhouette fighter fit: Drawbar chemical punch, turbo and mass-driver pair, light plate. Combine yard standard for orbital defence contracts.",
+    "description": "The common Silhouette fighter fit. Drawbar chemical drive provides a punchy performance envelope. A laser and an MDC pair with light plate. The Combine's standard for orbital defence contracts.",
     "chassis": "silhouette_chassis",
     "modules": [
       "oc_workhorse_dynamo",
@@ -302,7 +302,7 @@
     "id": "mantis_xf4400",
     "name": "Mantis XF4400",
     "maker": "The Praetorium",
-    "description": "Current mid-tier Mantis: Privy Seal F-11 fusion, light and medium lasers, Praetorium avionics. Faster and meaner than the retired XF900, still sensible on fuel.",
+    "description": "Current mid-tier Mantis: Privy Seal F-11 fusion drive, light and medium lasers, Praetorium avionics. Faster and meaner than the retired XF900, still sensible on fuel.",
     "chassis": "mantis_chassis",
     "modules": [
       "prv_voltcore_x7",
@@ -320,7 +320,7 @@
     "id": "mantis_xf5700",
     "name": "Mantis XF5700",
     "maker": "The Praetorium",
-    "description": "Top-line Mantis interceptor: Privy Seal Null antimatter, turbo laser and plasma burst, no armour plate. Glass cannon for pilots who trust speed over chitanium.",
+    "description": "Top-line Mantis interceptor: Privy Seal Null antimatter, turbo laser and plasma burst for offense. It's a glass cannon for pilots who trust speed over chitanium.",
     "chassis": "mantis_chassis",
     "modules": [
       "prv_voltcore_x7",

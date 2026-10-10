@@ -50,8 +50,8 @@
   {
     "id": "krypton_chassis",
     "name": "Krypton Chassis",
-    "maker": "Durbin-Watson Corp",
-    "description": "Durbin-Watson's distinctive saucer hull for the mid-range market. Agile for its class, with room for cargo or passenger fittings and a sensible spread of weapon hardpoints.",
+    "maker": "Orion Aerospace",
+    "description": "Orion Aerospace's distinctive saucer hull for the mid-range market. Agile for its class, with room for cargo or passenger fittings and a sensible spread of weapon hardpoints.",
     "cost": 12000,
     "mass": 6.0,
     "hits": 22,
@@ -98,8 +98,8 @@
   {
     "id": "dragon_chassis",
     "name": "Dragon Chassis",
-    "maker": "Kolmogorov-Smirnov",
-    "description": "Kolmogorov-Smirnov's compact interceptor frame, sized to carry a versatile payload. High manoeuvre and tight internal volume favour speed and firepower over cargo.",
+    "maker": "Seven Bells Inc",
+    "description": "Seven Bells Inc's compact interceptor frame, sized to carry a versatile payload. High manoeuvre and tight internal volume favour speed and firepower over cargo.",
     "cost": 16000,
     "mass": 7.5,
     "hits": 24,
@@ -122,8 +122,8 @@
   {
     "id": "juno_chassis",
     "name": "Juno Chassis",
-    "maker": "Bayes Inc",
-    "description": "A stubby light scout hull from Bayes Inc, only a step behind the Pegasus in popularity. Modest volume and mounts suit short hops, couriers, and budget custom builds.",
+    "maker": "General Industrial",
+    "description": "A stubby light scout hull from General Industrial, only a step behind the Pegasus in popularity. Modest volume and mounts suit short hops, couriers, and budget custom builds.",
     "cost": 10000,
     "mass": 5.0,
     "hits": 20,
