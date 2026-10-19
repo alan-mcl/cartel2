@@ -5,6 +5,9 @@ const OrbitalRingScript := preload("res://scripts/presentation/orbital_ring.gd")
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
 const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
+const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
+
+const DEBRIS_SPRITE := "res://assets/world/debris.svg"
 
 const STAR_MIN_RADIUS := 7000.0
 const STAR_MAX_RADIUS := 12000.0
@@ -37,6 +40,12 @@ var _sector_nav_cache: Array = []
 var _sector_nav_cache_ready: bool = false
 var _nspace_field: NspaceField = null
 var _uses_translation_beacon: bool = false
+var _debris_entity_ids: Array[String] = []
+var _planet_diameter: float = 2000.0
+var _habitat_interactable_id: String = ""
+var _gate_interactable_id: String = ""
+var _habitat_sprite_path: String = ""
+var _gate_sprite_path: String = ""
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -57,6 +66,12 @@ func clear_world(world_root: Node2D) -> void:
 	_sector_nav_cache_ready = false
 	_nspace_field = null
 	_uses_translation_beacon = false
+	_debris_entity_ids.clear()
+	_planet_diameter = 2000.0
+	_habitat_interactable_id = ""
+	_gate_interactable_id = ""
+	_habitat_sprite_path = ""
+	_gate_sprite_path = ""
 
 
 func load_sector(
@@ -66,6 +81,9 @@ func load_sector(
 	sector_id: String
 ) -> float:
 	clear_world(world_root)
+
+	if VolatileTranslation.is_volatile_sector_id(sector_id):
+		return _load_volatile_sector(world_root, catalog, session, sector_id)
 
 	var sector := catalog.get_sector(sector_id)
 	var play_bounds := float(sector.get("play_bounds", 3500.0))
@@ -87,6 +105,79 @@ func load_sector(
 		_spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
 
 	return play_bounds
+
+
+func _load_volatile_sector(
+	world_root: Node2D,
+	catalog: Catalog,
+	session: GameSession,
+	sector_id: String
+) -> float:
+	var record := VolatileTranslation.find_by_sector_id(session, sector_id)
+	if record.is_empty():
+		return 8000.0
+
+	_sector_id = sector_id
+	var setup: Dictionary = record.get("setup", {})
+	var play_bounds := VolatileTranslation.play_bounds_for(record)
+	_spawn_dust_ring(world_root, play_bounds)
+
+	_gate_radius = 5400.0
+	_gate_angle = _gate_angle_for_sector(sector_id)
+
+	var star_data: Dictionary = setup.get("star", {})
+	if typeof(star_data) != TYPE_DICTIONARY:
+		star_data = {"temperature_k": 4200.0, "luminosity": 0.35}
+	_spawn_volatile_star(world_root, star_data, setup, str(record.get("id", sector_id)))
+
+	if VolatileTranslation.return_gate_open(session, sector_id):
+		var gate_entity := {
+			"id": "volatile_return_gate",
+			"kind": "jump_gate",
+			"label": "Temporary return gate",
+			"interactable": "volatile_return_gate",
+		}
+		_spawn_sector_jump_gate(world_root, gate_entity, catalog, session, sector_id)
+
+	var entities: Variant = setup.get("entities", [])
+	if typeof(entities) == TYPE_ARRAY:
+		for entity_variant in entities:
+			if typeof(entity_variant) == TYPE_DICTIONARY:
+				_spawn_entity(world_root, entity_variant, catalog, session)
+
+	return play_bounds
+
+
+func _spawn_volatile_star(
+	world_root: Node2D,
+	star_data: Dictionary,
+	setup: Dictionary,
+	seed_key: String
+) -> void:
+	var rng := RandomNumberGenerator.new()
+	var seed_text := str(setup.get("seed", seed_key))
+	rng.seed = absi(seed_text.hash())
+	var ref_pos := Vector2(_gate_radius * 0.35, 0.0)
+	var star_pos := _pick_star_position(rng, ref_pos)
+
+	var star := LocalStarScript.new()
+	star.name = "LocalStar"
+	world_root.add_child(star)
+	star.configure(star_data, star_pos)
+	spawned_by_id["local_star"] = star
+
+
+func refresh_volatile_return_gate(session: GameSession) -> void:
+	if not VolatileTranslation.is_volatile_sector_id(_sector_id):
+		return
+	if VolatileTranslation.return_gate_open(session, _sector_id):
+		return
+	if _jump_gate_node == null or not is_instance_valid(_jump_gate_node):
+		return
+	_jump_gate_node.queue_free()
+	_jump_gate_node = null
+	spawned_by_id.erase("volatile_return_gate")
+	_sector_nav_cache_ready = false
 
 
 func load_unspace(
@@ -242,6 +333,7 @@ func _spawn_orbital_station_layout(
 
 
 func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> Node2D:
+	_planet_diameter = float(planet_data.get("diameter", 2000.0))
 	var planet := PlanetBackdropScript.new()
 	planet.name = "Planet"
 	world_root.add_child(planet)
@@ -330,7 +422,10 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 
 	_ensure_sector_nav_cache(catalog)
 	_refresh_sector_nav_positions()
-	return _sector_nav_cache
+	var contacts: Array = []
+	contacts.append_array(_sector_nav_cache)
+	contacts.append_array(_build_debris_contacts())
+	return contacts
 
 
 func _build_unspace_nav_contacts(catalog: Catalog) -> Array:
@@ -342,13 +437,23 @@ func _build_unspace_nav_contacts(catalog: Catalog) -> Array:
 	if not interactable_data.is_empty():
 		portal_title = str(interactable_data.get("title", portal_title))
 
-	return [{
+	var portal_contact := {
 		"id": "exit_portal",
 		"name": portal_title,
 		"short_label": "X",
 		"contact_kind": "landmark",
 		"position": _nspace_field.get_portal_position(),
-	}] + _nspace_field.get_inhabitant_contacts()
+		"interactable_id": "unspace_exit",
+	}
+	_merge_lock_display_fields(portal_contact, "", 120.0)
+	var contacts: Array = [portal_contact]
+	for inhabitant_variant in _nspace_field.get_inhabitant_contacts():
+		if typeof(inhabitant_variant) != TYPE_DICTIONARY:
+			continue
+		var inhabitant: Dictionary = inhabitant_variant
+		_merge_lock_display_fields(inhabitant, "", 36.0)
+		contacts.append(inhabitant)
+	return contacts
 
 
 func _ensure_sector_nav_cache(catalog: Catalog) -> void:
@@ -357,53 +462,76 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 
 	_sector_nav_cache.clear()
 	var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
+	var world_data := catalog.get_world(_sector_id) if not _sector_id.is_empty() else {}
+	var star_data: Dictionary = world_data.get("star", {})
 	if spawned_by_id.has("planet"):
-		_sector_nav_cache.append({
+		var planet_contact := {
 			"id": "planet",
 			"name": str(sector.get("name", "Planet")),
 			"short_label": "P",
 			"contact_kind": "landmark",
+			"landmark_role": "planet",
 			"position": Vector2.ZERO,
-		})
+			"planet_diameter_m": _planet_diameter,
+		}
+		_merge_lock_display_fields(planet_contact, "", _planet_diameter * 0.5)
+		_sector_nav_cache.append(planet_contact)
 	if _habitat_node != null:
-		_sector_nav_cache.append({
+		var habitat_contact := {
 			"id": "habitat",
 			"name": _resolve_contact_name(_habitat_node, catalog, "Habitat"),
 			"short_label": "H",
 			"contact_kind": "landmark",
+			"landmark_role": "habitat",
 			"position": Vector2.ZERO,
-		})
+			"interactable_id": _habitat_interactable_id,
+		}
+		_merge_lock_display_fields(habitat_contact, _habitat_sprite_path)
+		_sector_nav_cache.append(habitat_contact)
 	if _jump_gate_node != null:
 		var gate_short := "B" if _uses_translation_beacon else "G"
 		var gate_default := "Translation Beacon" if _uses_translation_beacon else "Jump Gate"
-		_sector_nav_cache.append({
+		var gate_contact := {
 			"id": "jump_gate",
 			"name": _resolve_contact_name(_jump_gate_node, catalog, gate_default),
 			"short_label": gate_short,
 			"contact_kind": "landmark",
+			"landmark_role": "jump_gate" if not _uses_translation_beacon else "translation_beacon",
 			"position": Vector2.ZERO,
-		})
+			"interactable_id": _gate_interactable_id,
+			"translation_beacon": _uses_translation_beacon,
+		}
+		_merge_lock_display_fields(gate_contact, _gate_sprite_path, 140.0)
+		_sector_nav_cache.append(gate_contact)
 	if spawned_by_id.has("local_star"):
-		_sector_nav_cache.append({
+		var star_contact := {
 			"id": "local_star",
 			"name": "Local Star",
 			"short_label": "S",
 			"contact_kind": "star",
 			"position": Vector2.ZERO,
-		})
+			"star_temperature_k": float(star_data.get("temperature_k", 0.0)),
+			"star_luminosity": float(star_data.get("luminosity", 0.0)),
+		}
+		_merge_lock_display_fields(star_contact, "", 220.0)
+		_sector_nav_cache.append(star_contact)
 	for entry_variant in _orbital_entries:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
 		var orbital_node: Variant = entry.get("node")
 		if orbital_node is Node2D and _orbital_ring != null:
-			_sector_nav_cache.append({
+			var orbital_sprite := str(entry.get("sprite", ""))
+			var orbital_contact := {
 				"id": str(entry.get("id", "")),
 				"name": str(entry.get("label", "")),
 				"short_label": "",
 				"contact_kind": "orbital",
 				"position": Vector2.ZERO,
-			})
+				"orbital_sprite": orbital_sprite,
+			}
+			_merge_lock_display_fields(orbital_contact, orbital_sprite, 48.0)
+			_sector_nav_cache.append(orbital_contact)
 	_sector_nav_cache_ready = true
 
 
@@ -429,6 +557,7 @@ func _refresh_sector_nav_positions() -> void:
 			_:
 				if str(entry.get("contact_kind", "")) == "orbital":
 					entry["position"] = _orbital_contact_position(str(entry.get("id", "")))
+					entry["heading_rad"] = _orbital_contact_heading(str(entry.get("id", "")))
 
 
 func _orbital_contact_position(orbital_id: String) -> Vector2:
@@ -442,6 +571,65 @@ func _orbital_contact_position(orbital_id: String) -> Vector2:
 		if orbital_node is Node2D and _orbital_ring != null:
 			return _orbital_ring.global_transform * orbital_node.position
 	return Vector2.ZERO
+
+
+func _orbital_contact_heading(orbital_id: String) -> float:
+	for entry_variant in _orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("id", "")) != orbital_id:
+			continue
+		var orbital_node: Variant = entry.get("node")
+		if orbital_node is Node2D and _orbital_ring != null:
+			return orbital_node.global_rotation - PI * 0.5
+	return 0.0
+
+
+func _merge_lock_display_fields(
+	contact: Dictionary,
+	sprite_path: String,
+	radius_override: float = -1.0
+) -> void:
+	contact["sprite_path"] = sprite_path
+	contact["lock_hull_display_scale"] = 1.0
+	if not sprite_path.is_empty():
+		var canvas: Vector2 = HullHitboxScript.sprite_canvas_size(sprite_path)
+		var half := maxf(canvas.x, canvas.y) * 0.5
+		contact["lock_hull_radius"] = maxf(half, TargetLock.MIN_HULL_RADIUS)
+	elif radius_override >= 0.0:
+		contact["lock_hull_radius"] = radius_override
+	else:
+		contact["lock_hull_radius"] = 18.0
+	contact["heading_rad"] = float(contact.get("heading_rad", 0.0))
+
+
+func _build_debris_contacts() -> Array:
+	var contacts: Array = []
+	var surviving_ids: Array[String] = []
+	for debris_id in _debris_entity_ids:
+		var node: Variant = spawned_by_id.get(debris_id)
+		if node == null or not is_instance_valid(node) or not (node is Node2D):
+			continue
+		surviving_ids.append(debris_id)
+		var debris_node := node as Node2D
+		var health_ratio := 1.0
+		if debris_node.has_method("health_ratio"):
+			health_ratio = float(debris_node.call("health_ratio"))
+		var debris_contact := {
+			"id": debris_id,
+			"name": "Debris",
+			"short_label": "",
+			"contact_kind": "debris",
+			"position": debris_node.global_position,
+			"velocity": Vector2.ZERO,
+			"debris_health_ratio": health_ratio,
+			"heading_rad": debris_node.global_rotation - PI * 0.5,
+		}
+		_merge_lock_display_fields(debris_contact, DEBRIS_SPRITE)
+		contacts.append(debris_contact)
+	_debris_entity_ids = surviving_ids
+	return contacts
 
 
 func get_traffic_anchors() -> Array:
@@ -626,12 +814,15 @@ func _spawn_orbital_ring(
 		if kind == "habitat":
 			_habitat_node = instance
 			_habitat_slot_angle = angle
+			_habitat_sprite_path = str(orbital_def.get("sprite", ""))
+			_habitat_interactable_id = str(orbital_def.get("interactable", ""))
 		elif kind == "orbital":
 			_orbital_entries.append({
 				"id": entity_id,
 				"node": instance,
 				"kind": "orbital",
 				"label": str(orbital_def.get("label", "")),
+				"sprite": str(orbital_def.get("sprite", "")),
 			})
 
 	world_root.add_child(ring)
@@ -732,6 +923,9 @@ func _spawn_translate_structure(
 	_gate_radius = gate_radius
 	_gate_angle = _gate_angle_for_sector(sector_id)
 
+	_gate_interactable_id = str(structure_data.get("interactable", ""))
+	_gate_sprite_path = str(structure_data.get("sprite", ""))
+
 	var entity := structure_data.duplicate()
 	entity["kind"] = "jump_gate"
 	entity["position"] = {
@@ -793,6 +987,8 @@ func _spawn_entity(
 
 	if not entity_id.is_empty():
 		spawned_by_id[entity_id] = instance
+		if kind == "debris":
+			_debris_entity_ids.append(entity_id)
 
 	if kind == "debris":
 		_configure_debris(instance, entity)

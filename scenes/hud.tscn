@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=15 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/components/weapon_hud_stack.gd" id="9"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/ui/star_lens_flare.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/ui/target_lock_overlay.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/ui/flight_manifest_overlay.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/ui/target_scan_overlay.gd" id="14"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -445,3 +446,54 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
+
+[node name="TargetScanOverlay" type="Control" parent="Root"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14")
+
+[node name="Center" type="CenterContainer" parent="Root/TargetScanOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Root/TargetScanOverlay/Center"]
+custom_minimum_size = Vector2(520, 360)
+layout_mode = 2
+theme_type_variation = &"HudTicker"
+
+[node name="VBox" type="VBoxContainer" parent="Root/TargetScanOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Root/TargetScanOverlay/Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Target"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Root/TargetScanOverlay/Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "Y or click the target chit"
+horizontal_alignment = 1
+
+[node name="RowsScroll" type="ScrollContainer" parent="Root/TargetScanOverlay/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RowsList" type="VBoxContainer" parent="Root/TargetScanOverlay/Center/Panel/VBox/RowsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4

@@ -72,14 +72,28 @@ func _refresh() -> void:
 			% dest_label
 		)
 
-	var library: Array = _session.player.translation_library if _session.player != null else []
-	var all_offers := TranslationNav.list_offered_translations(
-		_catalog,
-		_session.sector_id,
-		_assembled_ship,
-		library
-	)
-	var offers := _filter_beacon_offers(all_offers, beacon_destination)
+	var on_volatile_site := VolatileTranslation.is_volatile_sector_id(_session.sector_id)
+	var all_offers: Array = []
+	if on_volatile_site:
+		all_offers = TranslationNav.list_volatile_site_offers(
+			_session,
+			_catalog,
+			_session.sector_id,
+			_assembled_ship
+		)
+		_description.text = (
+			"Temporary return gate. Translate back before the gate collapses."
+		)
+	else:
+		var library: Array = _session.player.translation_library if _session.player != null else []
+		all_offers = TranslationNav.list_offered_translations(
+			_catalog,
+			_session.sector_id,
+			_assembled_ship,
+			library,
+			_session
+		)
+	var offers := all_offers if on_volatile_site else _filter_beacon_offers(all_offers, beacon_destination)
 	var grouped := TranslationNav.group_offered_translations(_catalog, _session.sector_id, offers)
 	var local_rows: Array = grouped.get("local", [])
 	var other_rows: Array = grouped.get("other", [])
@@ -88,7 +102,9 @@ func _refresh() -> void:
 
 	_hint.text = "Esc or Cancel to stay in orbit"
 	if local_rows.is_empty() and other_rows.is_empty():
-		if beacon_destination.is_empty():
+		if on_volatile_site:
+			_solution_label.text = "The temporary return gate is no longer available."
+		elif beacon_destination.is_empty():
 			_solution_label.text = "No translations available from this gate."
 		else:
 			_solution_label.text = "No public translation to the tuned destination."
@@ -256,10 +272,25 @@ func _update_selection_ui() -> void:
 	var n := int(translation.get("n", 4))
 	var label := str(translation.get("label", translation.get("target", "")))
 	var solution := int(translation.get("solution", 0))
-	_solution_label.text = (
+	var detail := (
 		"Selected: %d → %s via %d-space. Nav accuracy %d%% before jump."
 		% [solution, label, n, int(round(accuracy))]
 	)
+	if bool(_selected_offer.get("volatile", false)) and bool(translation.get("volatile", false)):
+		var record := VolatileTranslation.find_by_solution(_session, _session.sector_id, solution)
+		if not record.is_empty():
+			var remaining := float(record.get("expires_gst", 0.0)) - _session.gst_seconds
+			if remaining > 0.0:
+				detail += " Single-use; offer expires in %s." % GalacticCalendar.format_duration(remaining)
+			else:
+				detail += " Single-use."
+	elif bool(_selected_offer.get("volatile_return", false)):
+		var record := VolatileTranslation.find_by_sector_id(_session, _session.sector_id)
+		if not record.is_empty():
+			var remaining := float(record.get("return_expires_gst", 0.0)) - _session.gst_seconds
+			if remaining > 0.0:
+				detail += " Gate collapses in %s." % GalacticCalendar.format_duration(remaining)
+	_solution_label.text = detail
 	_confirm_button.disabled = false
 	_confirm_button.text = "Translate via %d-space" % n
 

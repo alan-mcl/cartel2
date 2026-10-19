@@ -170,6 +170,15 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 	var origin_id: String = _main.session.sector_id
 	var mapping := _catalog.get_translation(origin_id, solution)
 	if mapping.is_empty():
+		mapping = VolatileTranslation.resolve_mapping(
+			_main.session,
+			_catalog,
+			origin_id,
+			target_sector_id,
+			n,
+			solution
+		)
+	if mapping.is_empty():
 		return
 
 	var offer_accuracy := TranslationNav.compute_accuracy(
@@ -222,10 +231,24 @@ func arrive_from_unspace() -> void:
 
 	var mapping := _catalog.get_translation(origin_id, solution)
 	if mapping.is_empty():
+		mapping = VolatileTranslation.resolve_mapping(
+			_main.session,
+			_catalog,
+			origin_id,
+			dest_id,
+			_main.session.unspace_n,
+			solution
+		)
+	if mapping.is_empty():
 		mapping = _catalog.get_public_translation(origin_id, dest_id, 4)
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "exit_seconds", _catalog)
-	var sector := _catalog.get_sector(dest_id)
-	var sector_name := str(sector.get("name", dest_id))
+	var sector_name := dest_id
+	if VolatileTranslation.is_volatile_sector_id(dest_id):
+		var volatile_record := VolatileTranslation.find_by_sector_id(_main.session, dest_id)
+		sector_name = str(volatile_record.get("label", dest_id))
+	else:
+		var sector := _catalog.get_sector(dest_id)
+		sector_name = str(sector.get("name", dest_id))
 	_main.session.last_log = (
 		"Translation complete. Exit lag %s. Welcome to %s."
 		% [GalacticCalendar.format_duration(applied), sector_name]

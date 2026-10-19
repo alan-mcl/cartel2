@@ -13,9 +13,13 @@ var last_log: String = "Flare-ON SS ready. Propulsion online."
 var sandbox: bool = false
 var salvaged_ids: Array[String] = []
 var inspected_ids: Array[String] = []
+## Active target scans for mission hooks: `{ "contact_id", "contact_kind", "sector_id", "recorded_gst" }`.
+var scanned_contacts: Array = []
 var spare_parts: Dictionary = {}
 ## Learned translations: `{ "source", "solution" }` records (unioned at jump gates).
 var translation_library: Array = []
+## One-shot expiring translations to generated off-network sites (`VolatileTranslation` records).
+var volatile_translations: Array = []
 
 
 func player_to_dict() -> Dictionary:
@@ -84,8 +88,10 @@ func to_session_dict() -> Dictionary:
 		"last_log": last_log,
 		"salvaged_ids": salvaged_ids.duplicate(),
 		"inspected_ids": inspected_ids.duplicate(),
+		"scanned_contacts": _scanned_contacts_to_save(scanned_contacts),
 		"spare_parts": spare_parts.duplicate(),
 		"translation_library": _translation_library_to_save(translation_library),
+		"volatile_translations": VolatileTranslation.to_save_array(volatile_translations),
 	}
 
 
@@ -94,12 +100,76 @@ func load_session_dict(data: Dictionary) -> void:
 	last_log = str(data.get("last_log", ""))
 	salvaged_ids = _string_array_from_variant(data.get("salvaged_ids", []))
 	inspected_ids = _string_array_from_variant(data.get("inspected_ids", []))
+	scanned_contacts = _scanned_contacts_from_variant(data.get("scanned_contacts", []))
 	spare_parts = _int_dict_from_variant(data.get("spare_parts", {}))
 	translation_library = _translation_library_from_variant(data.get("translation_library", []))
+	volatile_translations = VolatileTranslation.from_save_array(data.get("volatile_translations", []))
 
 
 func is_salvaged(interactable_id: String) -> bool:
 	return interactable_id in salvaged_ids
+
+
+func has_scanned(contact_id: String) -> bool:
+	if contact_id.is_empty():
+		return false
+	for entry_variant in scanned_contacts:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		if str((entry_variant as Dictionary).get("contact_id", "")) == contact_id:
+			return true
+	return false
+
+
+func record_target_scan(
+	contact_id: String,
+	contact_kind: String,
+	sector_id: String,
+	recorded_gst: float
+) -> void:
+	if contact_id.is_empty() or has_scanned(contact_id):
+		return
+	scanned_contacts.append({
+		"contact_id": contact_id,
+		"contact_kind": contact_kind,
+		"sector_id": sector_id,
+		"recorded_gst": recorded_gst,
+	})
+
+
+static func _scanned_contacts_to_save(entries: Array) -> Array:
+	var out: Array = []
+	for entry_variant in entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		out.append({
+			"contact_id": str(entry.get("contact_id", "")),
+			"contact_kind": str(entry.get("contact_kind", "")),
+			"sector_id": str(entry.get("sector_id", "")),
+			"recorded_gst": float(entry.get("recorded_gst", 0.0)),
+		})
+	return out
+
+
+static func _scanned_contacts_from_variant(raw: Variant) -> Array:
+	var out: Array = []
+	if typeof(raw) != TYPE_ARRAY:
+		return out
+	for entry_variant in raw:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var contact_id := str(entry.get("contact_id", ""))
+		if contact_id.is_empty():
+			continue
+		out.append({
+			"contact_id": contact_id,
+			"contact_kind": str(entry.get("contact_kind", "")),
+			"sector_id": str(entry.get("sector_id", "")),
+			"recorded_gst": float(entry.get("recorded_gst", 0.0)),
+		})
+	return out
 
 
 func get_spare_part_count(part_id: String) -> int:

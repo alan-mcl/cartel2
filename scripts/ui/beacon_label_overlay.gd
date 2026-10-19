@@ -60,6 +60,8 @@ func _draw() -> void:
 
 func _lines_for_contact(contact: Dictionary) -> PackedStringArray:
 	var contact_kind := str(contact.get("contact_kind", "landmark"))
+	if contact_kind == "debris":
+		return PackedStringArray()
 	if contact_kind == "traffic_npc":
 		if not bool(contact.get("has_sim_slot", false)):
 			return PackedStringArray()

@@ -1,0 +1,471 @@
+class_name VolatileTranslation
+extends RefCounted
+
+const SECTOR_PREFIX := "volatile:"
+const SOLUTION_BASE := 900_000_000
+const DEFAULT_FRICTION := 10
+const ALLOWED_N := [4, 5, 6]
+const ALLOWED_ENTITY_KINDS: Array[String] = ["debris", "orbital"]
+
+static var _next_grant_index: int = 0
+
+
+static func is_volatile_sector_id(sector_id: String) -> bool:
+	return sector_id.begins_with(SECTOR_PREFIX)
+
+
+static func sector_id_for(record_id: String) -> String:
+	return SECTOR_PREFIX + record_id
+
+
+static func record_id_from_sector(sector_id: String) -> String:
+	if not is_volatile_sector_id(sector_id):
+		return ""
+	return sector_id.substr(SECTOR_PREFIX.length())
+
+
+static func grant(session: GameSession, catalog: Catalog, params: Dictionary) -> String:
+	if session == null or catalog == null:
+		return ""
+	var source_sector_id := str(params.get("source_sector_id", ""))
+	if source_sector_id.is_empty() or catalog.get_sector(source_sector_id).is_empty():
+		return ""
+	var label := str(params.get("label", "")).strip_edges()
+	if label.is_empty():
+		return ""
+	var duration_hours := int(params.get("duration_hours", 0))
+	if duration_hours <= 0:
+		return ""
+	var n := int(params.get("n", 0))
+	if n not in ALLOWED_N:
+		return ""
+	var return_hours := int(params.get("return_duration_hours", duration_hours))
+	if return_hours <= 0:
+		return_hours = duration_hours
+
+	var setup: Dictionary = params.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		return ""
+	if not _validate_setup(setup):
+		return ""
+
+	var ease := float(params.get("ease", 0.5))
+	ease = clampf(ease, 0.0, 1.0)
+	var lump := float(DEFAULT_FRICTION) * Catalog.ROUTE_SECONDS_PER_FRICTION
+	var entry_seconds := float(params.get("entry_seconds", lump))
+	var exit_seconds := float(params.get("exit_seconds", lump))
+	var time_jitter := clampf(float(params.get("time_jitter", 0.08)), 0.0, 0.5)
+
+	_next_grant_index += 1
+	var record_id := "vt_%d" % _next_grant_index
+	var solution := _allocate_solution(session, catalog, source_sector_id)
+	var return_solution := _allocate_solution(session, catalog, sector_id_for(record_id))
+	if solution == 0 or return_solution == 0:
+		return ""
+
+	var hour_seconds := float(GalacticCalendar.SECONDS_PER_HOUR)
+	var expires_gst := session.gst_seconds + float(duration_hours) * hour_seconds
+	var return_expires_gst := session.gst_seconds + float(return_hours) * hour_seconds
+
+	var record := {
+		"id": record_id,
+		"source_sector_id": source_sector_id,
+		"solution": solution,
+		"return_solution": return_solution,
+		"label": label,
+		"n": n,
+		"ease": ease,
+		"entry_seconds": entry_seconds,
+		"exit_seconds": exit_seconds,
+		"time_jitter": time_jitter,
+		"expires_gst": expires_gst,
+		"return_expires_gst": return_expires_gst,
+		"consumed": false,
+		"collapse_announced": false,
+		"setup": setup.duplicate(true),
+	}
+	session.player.volatile_translations.append(record)
+	session.changed.emit()
+	return record_id
+
+
+static func find_by_id(session: GameSession, record_id: String) -> Dictionary:
+	if session == null or record_id.is_empty():
+		return {}
+	for entry_variant in session.player.volatile_translations:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("id", "")) == record_id:
+			return entry
+	return {}
+
+
+static func find_by_sector_id(session: GameSession, sector_id: String) -> Dictionary:
+	var record_id := record_id_from_sector(sector_id)
+	if record_id.is_empty():
+		return {}
+	return find_by_id(session, record_id)
+
+
+static func find_by_solution(session: GameSession, source_sector_id: String, solution: int) -> Dictionary:
+	if session == null:
+		return {}
+	for entry_variant in session.player.volatile_translations:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("source_sector_id", "")) == source_sector_id:
+			if int(entry.get("solution", 0)) == solution:
+				return entry
+		var volatile_sector := sector_id_for(str(entry.get("id", "")))
+		if source_sector_id == volatile_sector and int(entry.get("return_solution", 0)) == solution:
+			return entry
+	return {}
+
+
+static func mapping_from_record(record: Dictionary, source_sector_id: String, target_sector_id: String, solution: int) -> Dictionary:
+	if record.is_empty():
+		return {}
+	return {
+		"source": source_sector_id,
+		"target": target_sector_id,
+		"solution": solution,
+		"n": int(record.get("n", 4)),
+		"label": str(record.get("label", target_sector_id)),
+		"entry_seconds": float(record.get("entry_seconds", 0.0)),
+		"exit_seconds": float(record.get("exit_seconds", 0.0)),
+		"time_jitter": float(record.get("time_jitter", 0.08)),
+		"ease": float(record.get("ease", 0.5)),
+		"volatile": true,
+	}
+
+
+static func resolve_mapping(
+	session: GameSession,
+	catalog: Catalog,
+	origin_sector_id: String,
+	destination_id: String,
+	n: int,
+	solution: int
+) -> Dictionary:
+	var catalog_mapping := catalog.get_translation(origin_sector_id, solution)
+	if not catalog_mapping.is_empty():
+		return catalog_mapping
+	var record := find_by_solution(session, origin_sector_id, solution)
+	if record.is_empty():
+		return {}
+	if int(record.get("n", 0)) != n:
+		return {}
+	var volatile_sector := sector_id_for(str(record.get("id", "")))
+	if origin_sector_id == str(record.get("source_sector_id", "")):
+		if destination_id != volatile_sector:
+			return {}
+		if _outbound_usable(session, record):
+			return mapping_from_record(
+				record,
+				origin_sector_id,
+				volatile_sector,
+				int(record.get("solution", 0))
+			)
+	elif origin_sector_id == volatile_sector:
+		if destination_id != str(record.get("source_sector_id", "")):
+			return {}
+		if _return_usable(session, record):
+			return mapping_from_record(
+				record,
+				volatile_sector,
+				str(record.get("source_sector_id", "")),
+				int(record.get("return_solution", 0))
+			)
+	return {}
+
+
+static func mark_outbound_consumed(session: GameSession, record: Dictionary) -> void:
+	if session == null or record.is_empty():
+		return
+	record["consumed"] = true
+	session.changed.emit()
+
+
+static func outbound_offers(session: GameSession, source_sector_id: String) -> Array:
+	var offers: Array = []
+	if session == null or source_sector_id.is_empty():
+		return offers
+	if is_volatile_sector_id(source_sector_id):
+		return offers
+	for entry_variant in session.player.volatile_translations:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var record: Dictionary = entry_variant
+		if str(record.get("source_sector_id", "")) != source_sector_id:
+			continue
+		if not _outbound_usable(session, record):
+			continue
+		var volatile_sector := sector_id_for(str(record.get("id", "")))
+		offers.append(
+			mapping_from_record(
+				record,
+				source_sector_id,
+				volatile_sector,
+				int(record.get("solution", 0))
+			)
+		)
+	return offers
+
+
+static func return_offer(
+	session: GameSession,
+	catalog: Catalog,
+	volatile_sector_id: String
+) -> Dictionary:
+	if session == null or not is_volatile_sector_id(volatile_sector_id):
+		return {}
+	var record := find_by_sector_id(session, volatile_sector_id)
+	if record.is_empty() or not _return_usable(session, record):
+		return {}
+	var mapping := mapping_from_record(
+		record,
+		volatile_sector_id,
+		str(record.get("source_sector_id", "")),
+		int(record.get("return_solution", 0))
+	)
+	var origin_id := str(record.get("source_sector_id", ""))
+	if catalog != null and not origin_id.is_empty():
+		var origin := catalog.get_sector(origin_id)
+		mapping["label"] = str(origin.get("name", origin_id))
+	return mapping
+
+
+static func return_gate_open(session: GameSession, volatile_sector_id: String) -> bool:
+	var record := find_by_sector_id(session, volatile_sector_id)
+	if record.is_empty():
+		return false
+	return _return_usable(session, record)
+
+
+static func sweep(session: GameSession) -> void:
+	if session == null:
+		return
+	var removed := false
+	var i := session.player.volatile_translations.size() - 1
+	while i >= 0:
+		var entry_variant = session.player.volatile_translations[i]
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			session.player.volatile_translations.remove_at(i)
+			removed = true
+			i -= 1
+			continue
+		var record: Dictionary = entry_variant
+		if _anchors_player(session, record):
+			i -= 1
+			continue
+		if _should_remove_unanchored(session, record):
+			session.player.volatile_translations.remove_at(i)
+			removed = true
+		i -= 1
+	if removed:
+		session.changed.emit()
+
+
+static func on_catalog_sector_entered(session: GameSession, arrived_sector_id: String) -> void:
+	if session == null or is_volatile_sector_id(arrived_sector_id):
+		return
+	var removed := false
+	var i := session.player.volatile_translations.size() - 1
+	while i >= 0:
+		var entry_variant = session.player.volatile_translations[i]
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			i -= 1
+			continue
+		var record: Dictionary = entry_variant
+		if not bool(record.get("consumed", false)):
+			i -= 1
+			continue
+		if str(record.get("source_sector_id", "")) != arrived_sector_id:
+			i -= 1
+			continue
+		session.player.volatile_translations.remove_at(i)
+		removed = true
+		i -= 1
+	if removed:
+		session.changed.emit()
+
+
+static func announce_gate_collapsed_if_needed(session: GameSession) -> void:
+	if session == null or not is_volatile_sector_id(session.sector_id):
+		return
+	var record := find_by_sector_id(session, session.sector_id)
+	if record.is_empty():
+		return
+	if bool(record.get("collapse_announced", false)):
+		return
+	if session.gst_seconds <= float(record.get("return_expires_gst", 0.0)):
+		return
+	record["collapse_announced"] = true
+	session.player.last_log = "The temporary return gate has collapsed."
+	session.changed.emit()
+
+
+static func play_bounds_for(record: Dictionary) -> float:
+	if record.is_empty():
+		return 8000.0
+	var setup: Variant = record.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		return 8000.0
+	return float(setup.get("play_bounds", 8000.0))
+
+
+static func to_save_array(records: Array) -> Array:
+	var out: Array = []
+	for entry_variant in records:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var record_id := str(entry.get("id", ""))
+		if record_id.is_empty():
+			continue
+		out.append({
+			"id": record_id,
+			"source_sector_id": str(entry.get("source_sector_id", "")),
+			"solution": int(entry.get("solution", 0)),
+			"return_solution": int(entry.get("return_solution", 0)),
+			"label": str(entry.get("label", "")),
+			"n": int(entry.get("n", 4)),
+			"ease": float(entry.get("ease", 0.5)),
+			"entry_seconds": float(entry.get("entry_seconds", 0.0)),
+			"exit_seconds": float(entry.get("exit_seconds", 0.0)),
+			"time_jitter": float(entry.get("time_jitter", 0.08)),
+			"expires_gst": float(entry.get("expires_gst", 0.0)),
+			"return_expires_gst": float(entry.get("return_expires_gst", 0.0)),
+			"consumed": bool(entry.get("consumed", false)),
+			"collapse_announced": bool(entry.get("collapse_announced", false)),
+			"setup": _setup_to_save(entry.get("setup", {})),
+		})
+	return out
+
+
+static func from_save_array(value: Variant) -> Array:
+	var out: Array = []
+	if typeof(value) != TYPE_ARRAY:
+		return out
+	for entry_variant in value:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var record_id := str(entry.get("id", ""))
+		if record_id.is_empty():
+			continue
+		var n := int(entry.get("n", 4))
+		if n not in ALLOWED_N:
+			continue
+		out.append({
+			"id": record_id,
+			"source_sector_id": str(entry.get("source_sector_id", "")),
+			"solution": int(entry.get("solution", 0)),
+			"return_solution": int(entry.get("return_solution", 0)),
+			"label": str(entry.get("label", "")),
+			"n": n,
+			"ease": float(entry.get("ease", 0.5)),
+			"entry_seconds": float(entry.get("entry_seconds", 0.0)),
+			"exit_seconds": float(entry.get("exit_seconds", 0.0)),
+			"time_jitter": float(entry.get("time_jitter", 0.08)),
+			"expires_gst": float(entry.get("expires_gst", 0.0)),
+			"return_expires_gst": float(entry.get("return_expires_gst", 0.0)),
+			"consumed": bool(entry.get("consumed", false)),
+			"collapse_announced": bool(entry.get("collapse_announced", false)),
+			"setup": _setup_from_variant(entry.get("setup", {})),
+		})
+	return out
+
+
+static func _outbound_usable(session: GameSession, record: Dictionary) -> bool:
+	if bool(record.get("consumed", false)):
+		return false
+	return session.gst_seconds <= float(record.get("expires_gst", 0.0))
+
+
+static func _return_usable(session: GameSession, record: Dictionary) -> bool:
+	if not bool(record.get("consumed", false)):
+		return false
+	return session.gst_seconds <= float(record.get("return_expires_gst", 0.0))
+
+
+static func _anchors_player(session: GameSession, record: Dictionary) -> bool:
+	var volatile_sector := sector_id_for(str(record.get("id", "")))
+	if session.sector_id == volatile_sector:
+		return true
+	if session.pending_destination_id == volatile_sector:
+		return true
+	if session.in_unspace:
+		if session.sector_id == volatile_sector:
+			return true
+		if session.pending_destination_id == volatile_sector:
+			return true
+	return false
+
+
+static func _should_remove_unanchored(session: GameSession, record: Dictionary) -> bool:
+	if not bool(record.get("consumed", false)):
+		return session.gst_seconds > float(record.get("expires_gst", 0.0))
+	return (
+		session.gst_seconds > float(record.get("return_expires_gst", 0.0))
+		and session.gst_seconds > float(record.get("expires_gst", 0.0))
+	)
+
+
+static func _allocate_solution(session: GameSession, catalog: Catalog, source_sector_id: String) -> int:
+	var used := {}
+	for entry_variant in session.player.volatile_translations:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		used[int(entry.get("solution", 0))] = true
+		used[int(entry.get("return_solution", 0))] = true
+	for offset in range(10000):
+		var candidate := SOLUTION_BASE + offset
+		if used.has(candidate):
+			continue
+		if not catalog.get_translation(source_sector_id, candidate).is_empty():
+			continue
+		return candidate
+	return 0
+
+
+static func _validate_setup(setup: Dictionary) -> bool:
+	var entities: Variant = setup.get("entities", [])
+	if typeof(entities) != TYPE_ARRAY:
+		return true
+	for entity_variant in entities:
+		if typeof(entity_variant) != TYPE_DICTIONARY:
+			return false
+		var kind := str(entity_variant.get("kind", ""))
+		if kind.is_empty():
+			return false
+		if kind not in ALLOWED_ENTITY_KINDS:
+			return false
+	return true
+
+
+static func _setup_to_save(setup: Variant) -> Dictionary:
+	if typeof(setup) != TYPE_DICTIONARY:
+		return {}
+	var src: Dictionary = setup
+	var out := {}
+	if src.has("play_bounds"):
+		out["play_bounds"] = float(src.get("play_bounds", 8000.0))
+	if src.has("seed"):
+		out["seed"] = str(src.get("seed", ""))
+	var star: Variant = src.get("star", {})
+	if typeof(star) == TYPE_DICTIONARY and not star.is_empty():
+		out["star"] = star.duplicate(true)
+	var entities: Variant = src.get("entities", [])
+	if typeof(entities) == TYPE_ARRAY and not entities.is_empty():
+		out["entities"] = entities.duplicate(true)
+	return out
+
+
+static func _setup_from_variant(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	return value.duplicate(true)

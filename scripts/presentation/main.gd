@@ -41,6 +41,8 @@ func _ready() -> void:
 
 	_hud.bind(session, _player, AssembledShip.new(), _simulation, catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
+	if not _hud.target_scan_requested.is_connected(_on_target_scan_requested):
+		_hud.target_scan_requested.connect(_on_target_scan_requested)
 	_bind_controllers()
 	_bind_session_events(session)
 
@@ -183,12 +185,21 @@ func _unhandled_input(event: InputEvent) -> void:
 				_flight.request_autopilot_hotkey(autopilot_index)
 				get_viewport().set_input_as_handled()
 				return
+	if event.is_action_pressed("scan_target"):
+		if _flight.can_use_target_lock():
+			_flight.request_target_scan()
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("manifest"):
 		if _menu.can_toggle_pause():
 			_hud.toggle_flight_manifest()
 			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("pause"):
+		if _hud.is_target_scan_open():
+			_hud.close_target_scan()
+			get_viewport().set_input_as_handled()
+			return
 		if _hud.is_flight_manifest_open():
 			_hud.close_flight_manifest()
 			get_viewport().set_input_as_handled()
@@ -197,6 +208,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if _menu.can_toggle_pause():
 			_menu.toggle_pause()
+
+
+func _on_target_scan_requested() -> void:
+	if _flight.can_use_target_lock():
+		_flight.request_target_scan()
 
 
 func try_interact(target: Interactable) -> void:

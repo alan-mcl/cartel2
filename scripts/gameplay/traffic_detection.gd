@@ -173,6 +173,7 @@ static func update_player_contact(actor, broadcasting: bool, observer_reads_beac
 	for key in lock_fields.keys():
 		actor._cached_player_contact[key] = lock_fields[key]
 	actor._cached_player_contact["velocity"] = actor.motion.velocity
+	_apply_scan_fields(actor._cached_player_contact, actor)
 	if broadcasting and observer_reads_beacons:
 		actor._cached_player_contact["name"] = "\n".join(actor._cached_beacon_lines)
 		actor._cached_player_contact["beacon_lines"] = actor._cached_beacon_lines
@@ -204,7 +205,19 @@ static func build_player_contact(actor, broadcasting: bool, observer_reads_beaco
 	}
 	contact.merge(TargetLock.lock_contact_fields(actor))
 	contact["velocity"] = actor.motion.velocity
+	_apply_scan_fields(contact, actor)
 	return contact
+
+
+static func _apply_scan_fields(contact: Dictionary, actor) -> void:
+	if actor.assembled_ship == null:
+		return
+	contact["chassis_name"] = str(actor.assembled_ship.chassis.get("name", ""))
+	contact["ship_mass"] = float(actor.assembled_ship.chassis.get("mass", 0.0))
+	contact["live_signature"] = SensorSystem.live_signature(
+		actor.assembled_ship,
+		actor.operating_state
+	)
 
 
 static func is_broadcasting(actor) -> bool:

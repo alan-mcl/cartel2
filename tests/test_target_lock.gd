@@ -13,6 +13,8 @@ static func run(runner: TestRunner) -> void:
 	_test_hull_radius_scales_with_mass(runner)
 	_test_npc_lock_on_player_contact(runner, catalog)
 	_test_peaceful_npc_no_lock(runner, catalog)
+	_test_acquire_landmark(runner)
+	_test_cycle_mixed_kinds(runner)
 
 
 static func _assembled_with_lock() -> AssembledShip:
@@ -54,7 +56,7 @@ static func _test_acquire_nearest(runner: TestRunner) -> void:
 		{"id": "gate", "contact_kind": "landmark", "position": Vector2(100.0, 0.0)},
 	]
 	var id := TargetLock.acquire_nearest(assembled, contacts, Vector2.ZERO)
-	runner.check_eq(id, "near", "acquire picks nearest traffic contact")
+	runner.check_eq(id, "gate", "acquire picks nearest lockable contact")
 
 
 static func _test_toggle_clear(runner: TestRunner) -> void:
@@ -186,6 +188,31 @@ static func _test_peaceful_npc_no_lock(runner: TestRunner, catalog: Catalog) -> 
 		false
 	)
 	runner.check_eq(actor.locked_target_id, "", "peaceful traffic does not lock player")
+
+
+static func _test_acquire_landmark(runner: TestRunner) -> void:
+	var assembled := _assembled_with_lock()
+	var contacts: Array = [
+		{"id": "habitat", "contact_kind": "landmark", "position": Vector2(800.0, 0.0)},
+	]
+	runner.check_eq(
+		TargetLock.acquire_nearest(assembled, contacts, Vector2.ZERO),
+		"habitat",
+		"acquire locks nearest landmark"
+	)
+
+
+static func _test_cycle_mixed_kinds(runner: TestRunner) -> void:
+	var assembled := _assembled_with_lock()
+	var contacts: Array = [
+		_traffic_contact("ship", Vector2(300.0, 0.0)),
+		{"id": "gate", "contact_kind": "landmark", "position": Vector2(100.0, 0.0)},
+	]
+	runner.check_eq(
+		TargetLock.cycle_next("gate", assembled, contacts, Vector2.ZERO),
+		"ship",
+		"cycle advances from landmark to ship"
+	)
 
 
 static func _assembled_with_sensor() -> AssembledShip:

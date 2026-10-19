@@ -52,6 +52,9 @@ func clear_traffic() -> void:
 
 
 func setup_traffic(world: Node2D) -> void:
+	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
+		clear_traffic()
+		return
 	_ensure_traffic_director()
 	if _traffic_director == null:
 		return
@@ -79,8 +82,15 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
+	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
+		VolatileTranslation.announce_gate_collapsed_if_needed(_main.session)
+		_world_loader.refresh_volatile_return_gate(_main.session)
+
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
-	if not _main.session.in_unspace:
+	if (
+		not _main.session.in_unspace
+		and not VolatileTranslation.is_volatile_sector_id(_main.session.sector_id)
+	):
 		_ensure_traffic_director()
 		if _traffic_director != null:
 			var player_broadcasting: bool = (
@@ -208,6 +218,29 @@ func cycle_target_lock() -> void:
 	var contacts := _collect_nav_contacts()
 	if _player.has_method("cycle_target_lock"):
 		_player.cycle_target_lock(contacts)
+
+
+func request_target_scan() -> void:
+	if not can_use_target_lock():
+		return
+	if _player.locked_target_id.is_empty():
+		_main.session.last_log = "No target lock held."
+		return
+	var contacts := _collect_nav_contacts()
+	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
+	if locked_contact.is_empty():
+		_main.session.last_log = "No target lock held."
+		return
+	var beacon_destination := ""
+	if not _main.session.in_unspace:
+		beacon_destination = _world_loader.get_translation_beacon_destination(_catalog)
+	_main.session.player.record_target_scan(
+		str(locked_contact.get("id", "")),
+		str(locked_contact.get("contact_kind", "")),
+		_main.session.sector_id,
+		_main.session.gst_seconds
+	)
+	_hud.open_target_scan(locked_contact, _player.global_position, beacon_destination)
 
 
 func can_use_autopilot_hotkey(index: int) -> bool:

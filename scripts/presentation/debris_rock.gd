@@ -3,6 +3,10 @@ extends StaticBody2D
 var _health := DebrisHealth.new()
 
 
+func health_ratio() -> float:
+	return _health.health_ratio()
+
+
 func take_weapon_hit(damage: float) -> void:
 	_health.apply_damage(damage)
 	if _health.is_destroyed():

@@ -48,7 +48,8 @@ static func list_offered_translations(
 	catalog: Catalog,
 	source_sector_id: String,
 	assembled: AssembledShip,
-	player_library: Array
+	player_library: Array,
+	session: GameSession = null
 ) -> Array:
 	if catalog == null or source_sector_id.is_empty():
 		return []
@@ -125,7 +126,62 @@ static func list_offered_translations(
 			"accuracy": accuracy,
 			"duration_seconds": duration_seconds,
 		})
+
+	if session != null:
+		var existing_translations: Array = []
+		for offer_variant in offered:
+			if typeof(offer_variant) != TYPE_DICTIONARY:
+				continue
+			existing_translations.append(offer_variant.get("translation", {}))
+		for volatile_mapping_variant in VolatileTranslation.outbound_offers(session, source_sector_id):
+			if typeof(volatile_mapping_variant) != TYPE_DICTIONARY:
+				continue
+			var volatile_mapping: Dictionary = volatile_mapping_variant
+			if _contains_translation(existing_translations, volatile_mapping):
+				continue
+			var accuracy := compute_accuracy(
+				nav_rating,
+				int(volatile_mapping.get("n", 4)),
+				float(volatile_mapping.get("ease", 0.5))
+			)
+			var duration_seconds := translation_duration_seconds(volatile_mapping)
+			offered.append({
+				"translation": volatile_mapping,
+				"accuracy": accuracy,
+				"duration_seconds": duration_seconds,
+				"volatile": true,
+			})
+
 	return offered
+
+
+static func list_volatile_site_offers(
+	session: GameSession,
+	catalog: Catalog,
+	volatile_sector_id: String,
+	assembled: AssembledShip
+) -> Array:
+	if session == null or catalog == null or not VolatileTranslation.is_volatile_sector_id(volatile_sector_id):
+		return []
+	var stats := nav_stats_from_ship(assembled, catalog)
+	var nav_rating := float(stats.get("nav_rating", 0.0))
+	if nav_rating <= 0.0:
+		return []
+	var mapping := VolatileTranslation.return_offer(session, catalog, volatile_sector_id)
+	if mapping.is_empty():
+		return []
+	var accuracy := compute_accuracy(
+		nav_rating,
+		int(mapping.get("n", 4)),
+		float(mapping.get("ease", 0.5))
+	)
+	var duration_seconds := translation_duration_seconds(mapping)
+	return [{
+		"translation": mapping,
+		"accuracy": accuracy,
+		"duration_seconds": duration_seconds,
+		"volatile_return": true,
+	}]
 
 
 static func translation_duration_seconds(translation: Dictionary) -> float:
@@ -228,10 +284,13 @@ static func group_offered_translations(
 		var bucket: Dictionary = (
 			local_by_dest if same_star_system(catalog, source_sector_id, dest_id) else other_by_dest
 		)
+		var row_label := str(translation.get("label", ""))
+		if row_label.is_empty():
+			row_label = destination_display_label(catalog, dest_id)
 		if not bucket.has(dest_id):
 			bucket[dest_id] = {
 				"destination_id": dest_id,
-				"label": destination_display_label(catalog, dest_id),
+				"label": row_label,
 				"by_n": {},
 			}
 		var row: Dictionary = bucket[dest_id]

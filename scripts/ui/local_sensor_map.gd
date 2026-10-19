@@ -175,6 +175,8 @@ func _contact_draw_radius(contact_kind: String, contact: Dictionary = {}) -> flo
 			return TRAFFIC_DRAW_RADIUS
 		"ascidian":
 			return ASCIDIAN_DRAW_RADIUS
+		"debris":
+			return TRAFFIC_DRAW_RADIUS * 0.65
 		"orbital":
 			return ORBITAL_DRAW_RADIUS
 		"star":
@@ -196,6 +198,8 @@ func _contact_color(
 			return muted
 		"ascidian":
 			return Color(info.r, info.g, info.b, info.a * 0.42)
+		"debris":
+			return muted
 		"orbital":
 			return Color(info.r, info.g, info.b, info.a * 0.65)
 		"star":

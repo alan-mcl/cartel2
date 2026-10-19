@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal target_scan_requested
+
 const PLAYER_HOVER_RADIUS := 24.0
 const WIRE_TAPE_TOP_UP_MAX_TRIES := 12
 const WEAPON_CHIT_STACK_GAP := 10.0
@@ -45,6 +47,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _target_lock_chit: TargetLockHudChit = $Root/RightChitStack/TargetLockHudChit
 @onready var _autopilot_chit: AutopilotHudChit = $Root/RightChitStack/AutopilotHudChit
 @onready var _flight_manifest: Control = $Root/FlightManifestOverlay
+@onready var _target_scan: Control = $Root/TargetScanOverlay
 
 var _session: GameSession
 var _catalog: Catalog
@@ -80,6 +83,8 @@ func bind(
 	_bind_weapon_selection_listener()
 	if _flight_manifest != null and _flight_manifest.has_method("bind"):
 		_flight_manifest.bind(session, catalog, simulation)
+	if _target_scan != null and _target_scan.has_method("bind"):
+		_target_scan.bind(session, catalog)
 	call_deferred("_sync_process_enabled")
 
 
@@ -189,7 +194,33 @@ func toggle_flight_manifest() -> void:
 		return
 	if not _has_capability("basic_hud"):
 		return
+	close_target_scan()
 	_flight_manifest.toggle()
+
+
+func open_target_scan(
+	locked_contact: Dictionary,
+	observer_pos: Vector2,
+	beacon_destination: String = ""
+) -> void:
+	if _target_scan == null or not _target_scan.has_method("open"):
+		return
+	if not _has_capability("basic_target_lock"):
+		return
+	close_flight_manifest()
+	_target_scan.open(locked_contact, observer_pos, beacon_destination)
+
+
+func close_target_scan() -> bool:
+	if _target_scan == null or not _target_scan.has_method("close"):
+		return false
+	return _target_scan.close()
+
+
+func is_target_scan_open() -> bool:
+	if _target_scan == null or not _target_scan.has_method("is_open"):
+		return false
+	return _target_scan.is_open()
 
 
 func close_flight_manifest() -> bool:
@@ -342,6 +373,8 @@ func set_nav_state(
 		_target_lock_chit.update_lock(ship_pos, locked_contact)
 	elif _target_lock_chit != null:
 		_target_lock_chit.update_lock(ship_pos, {})
+	if _target_scan != null and _target_scan.has_method("refresh_if_open"):
+		_target_scan.refresh_if_open(locked_contact, ship_pos)
 
 	if _interact_prompt != null and _interact_prompt.has_method("set_camera"):
 		_interact_prompt.set_camera(camera)
@@ -572,6 +605,8 @@ func _ready() -> void:
 	if _flight_strip != null:
 		_flight_strip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		_flight_strip.gui_input.connect(_on_flight_strip_gui_input)
+	if _target_lock_chit != null and not _target_lock_chit.scan_requested.is_connected(_on_target_lock_scan_requested):
+		_target_lock_chit.scan_requested.connect(_on_target_lock_scan_requested)
 	if not visibility_changed.is_connected(_on_hud_visibility_changed):
 		visibility_changed.connect(_on_hud_visibility_changed)
 
@@ -579,6 +614,13 @@ func _ready() -> void:
 func _on_hud_visibility_changed() -> void:
 	if not visible:
 		close_flight_manifest()
+		close_target_scan()
+
+
+func _on_target_lock_scan_requested() -> void:
+	if not _has_capability("basic_target_lock"):
+		return
+	target_scan_requested.emit()
 
 
 func _on_flight_strip_gui_input(event: InputEvent) -> void:

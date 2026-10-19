@@ -195,10 +195,7 @@ static func _requires_target(ap_mode: Mode) -> bool:
 
 
 static func has_target(contact: Dictionary) -> bool:
-	return (
-		not contact.is_empty()
-		and str(contact.get("contact_kind", "")) == "traffic_npc"
-	)
+	return not contact.is_empty() and not str(contact.get("id", "")).is_empty()
 
 
 static func _stick_physics(stick: Dictionary) -> Dictionary:

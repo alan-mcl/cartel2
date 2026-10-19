@@ -20,8 +20,6 @@ static func lockable_contacts(contacts: Array, observer_pos: Vector2) -> Array:
 		if typeof(contact_variant) != TYPE_DICTIONARY:
 			continue
 		var contact: Dictionary = contact_variant
-		if str(contact.get("contact_kind", "")) != "traffic_npc":
-			continue
 		var id := str(contact.get("id", ""))
 		if id.is_empty():
 			continue

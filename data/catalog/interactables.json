@@ -264,5 +264,11 @@
     "title": "Typhon XVI Translation Beacon",
     "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
     "kind": "translate"
+  },
+  {
+    "id": "volatile_return_gate",
+    "title": "Temporary return gate",
+    "inspect_text": "An unstable translation ring back toward the route you came from. It will not hold indefinitely.",
+    "kind": "translate"
   }
 ]

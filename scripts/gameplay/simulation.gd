@@ -51,6 +51,7 @@ func step(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 			session.career.record_flight_gst(gst_delta, session.in_unspace)
 
 	session.advance_orbital_phase(catalog, delta)
+	VolatileTranslation.sweep(session)
 
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant
@@ -95,6 +96,8 @@ func apply_mapping_lump(
 
 	if catalog == null:
 		return applied
+
+	VolatileTranslation.sweep(session)
 
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant

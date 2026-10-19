@@ -61,6 +61,17 @@ A smaller set incorporated a criminal or mercenary past and now trades on the sa
 
 Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company originated in the beginnings of human space travel. Others, Holt-Winters and GRC among them, are still within living memory of their founding and compete with firms centuries older. 
 
+## Concord Commercial Charter
+
+The CCC is a set of agreements that form the de facto framework for interstellar law and free trade. It was drafted at Concord, Proxima soon after N-space travel resulted in the discovery of further inhabitable planets. The Charter consists of 92 Articles and 38 Addendums.
+
+Article 1, "Free Commercial Passage", states that signatory worlds and corporations shall be free from duties, tariffs, quotas, discriminatory charges, and other restrictions imposed solely on the basis of the origin or destination of lawful goods, services, vessels, or capital.
+
+Article 2, "Equal Commercial Access", states that all operators shall enjoy equal rights of access to lawful markets and commercial opportunities throughout the Charter space.
+
+Article 3, "Judicial Independence", codifies the existance of an independent Charter Judiciary at each signatory planet, selected from the planetary population, independent of corporate influence, and empowered with authority to rule on violations of the CCC.
+
+
 ## Trade, ships, and work
 
 Habitat exchanges trade commodity categories: food, pharmaceuticals, consumer goods, data, energy, industrial components, chemicals, advanced raw materials, luxury goods, military goods, compute cores, minerals, and water ice.
@@ -88,8 +99,6 @@ While the mega corps employ and equip their own pilots, there is always excess d
 **Media and celebrity.** Broadcast networks and studios are planetary. ParaRamcoVidia owns the large ones; LiveWorlds runs stadiums, resorts, and celebrity. Influencers, journalists, musicians, and performers travel in person; cultural product between worlds moves as data media and consumer goods, not its own cargo class. Independent pilots can also be celebrities - callsigns like Reaper Cosmos, Ivanova, Stone Token and Clarity are known across systems, along with their distinctive ships.
 
 **City-malls.** The bulk of the population on most systems live in City-malls - giant retail and residential arcology-like habitations. On some worlds a life can be lived inside one corporation's enclosure. MicroDonald's city-malls run from birth to burial on its own goods and services. Universal House franchises the hotels, food, and household goods around that kind of convenience.
-
-**Concord Commercial Charter.** The CCC is a set of agreements that form the de facto framework for interstellar law and free trade. It was drafted at Concord, Proxima soon after N-space travel resulted in the discovery of further inhabitable planets. The Charter consists of 92 Articles and 38 Addendums; Article 1, "Free Commercial Passage", states that signatory worlds and corporations shall be free from duties, tariffs, quotas, discriminatory charges, and other restrictions imposed solely on the basis of the origin or destination of lawful goods, services, vessels, or capital.
 
 ## History and Lore
 

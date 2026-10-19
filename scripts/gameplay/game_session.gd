@@ -240,6 +240,7 @@ func start_new_game(
 	fleet.owned_ships.clear()
 	player.salvaged_ids.clear()
 	player.inspected_ids.clear()
+	player.scanned_contacts.clear()
 	world.docked = false
 	world.habitat_id = ""
 	world.building_id = ""
@@ -250,6 +251,7 @@ func start_new_game(
 	world.translation_stability = -1.0
 	world.pending_destination_id = ""
 	player.translation_library.clear()
+	player.volatile_translations.clear()
 	combat.hull = 0.0
 	combat.max_hull = 0.0
 	player.spare_parts.clear()
@@ -379,8 +381,22 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 		if catalog.get_unspace(world.unspace_world_id).is_empty():
 			push_error("Save file references unknown unspace '%s'." % world.unspace_world_id)
 			return false
-		if world.pending_destination_id.is_empty() or catalog.get_sector(world.pending_destination_id).is_empty():
+		if world.pending_destination_id.is_empty():
+			push_error("Save file has empty pending destination while in unspace.")
+			return false
+		if VolatileTranslation.is_volatile_sector_id(world.pending_destination_id):
+			if VolatileTranslation.find_by_sector_id(self, world.pending_destination_id).is_empty():
+				push_error(
+					"Save file has invalid volatile pending destination '%s'."
+					% world.pending_destination_id
+				)
+				return false
+		elif catalog.get_sector(world.pending_destination_id).is_empty():
 			push_error("Save file has invalid pending destination '%s'." % world.pending_destination_id)
+			return false
+	elif VolatileTranslation.is_volatile_sector_id(world.sector_id):
+		if VolatileTranslation.find_by_sector_id(self, world.sector_id).is_empty():
+			push_error("Save file references unknown volatile sector '%s'." % world.sector_id)
 			return false
 	elif catalog.get_sector(world.sector_id).is_empty():
 		push_error("Save file references unknown sector '%s'." % world.sector_id)
@@ -402,6 +418,25 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 
 
 func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true) -> bool:
+	if VolatileTranslation.is_volatile_sector_id(new_sector_id):
+		var record := VolatileTranslation.find_by_sector_id(self, new_sector_id)
+		if record.is_empty():
+			return false
+		world.sector_id = new_sector_id
+		world.in_unspace = false
+		world.unspace_n = 0
+		world.unspace_world_id = ""
+		world.unspace_solution = 0
+		world.translation_stability = -1.0
+		world.pending_destination_id = ""
+		world.location_name = str(record.get("label", new_sector_id))
+		player.objective = "Complete your assignment at %s." % str(record.get("label", "the site"))
+		if emit_log:
+			player.last_log = "Arrived at %s." % str(record.get("label", new_sector_id))
+		events.publish(SimEvent.sector_entered(world.sector_id))
+		changed.emit()
+		return true
+
 	var sector := catalog.get_sector(new_sector_id)
 	if sector.is_empty():
 		return false
@@ -419,6 +454,7 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	if emit_log:
 		player.last_log = "Arrived in %s." % str(sector.get("name", new_sector_id))
 
+	VolatileTranslation.on_catalog_sector_entered(self, new_sector_id)
 	events.publish(SimEvent.sector_entered(world.sector_id))
 	if _track_career_enabled():
 		career.record_sector_visited(world.sector_id)
@@ -433,11 +469,11 @@ func enter_unspace(
 	assembled_ship: AssembledShip,
 	solution: int = 0
 ) -> bool:
-	var dest := catalog.get_sector(destination_id)
-	if dest.is_empty():
-		return false
-
 	var mapping := catalog.get_translation(world.sector_id, solution)
+	if mapping.is_empty():
+		mapping = VolatileTranslation.resolve_mapping(
+			self, catalog, world.sector_id, destination_id, n, solution
+		)
 	if mapping.is_empty():
 		mapping = catalog.get_public_translation(world.sector_id, destination_id, n)
 	if mapping.is_empty():
@@ -447,10 +483,22 @@ func enter_unspace(
 	if int(mapping.get("n", 0)) != n:
 		return false
 
+	if bool(mapping.get("volatile", false)):
+		var record := VolatileTranslation.find_by_solution(self, world.sector_id, solution)
+		if (
+			not record.is_empty()
+			and not VolatileTranslation.is_volatile_sector_id(world.sector_id)
+		):
+			VolatileTranslation.mark_outbound_consumed(self, record)
+
 	var presentation_n := 4
 	var unspace := catalog.get_unspace_for_n(presentation_n)
 	if unspace.is_empty():
 		return false
+
+	if not VolatileTranslation.is_volatile_sector_id(destination_id):
+		if catalog.get_sector(destination_id).is_empty():
+			return false
 
 	world.pending_destination_id = destination_id
 	world.in_unspace = true

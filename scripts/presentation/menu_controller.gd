@@ -98,6 +98,8 @@ func toggle_pause() -> void:
 	else:
 		if _hud.has_method("close_flight_manifest"):
 			_hud.close_flight_manifest()
+		if _hud.has_method("close_target_scan"):
+			_hud.close_target_scan()
 		_tree.paused = true
 		_pause.open()
 
