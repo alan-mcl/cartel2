@@ -107,6 +107,8 @@ func configure(
 func _ready() -> void:
 	monitoring = true
 	body_entered.connect(_on_body_entered)
+	if _delivery_type == "ballistic":
+		add_to_group("interceptable_round")
 	queue_redraw()
 
 

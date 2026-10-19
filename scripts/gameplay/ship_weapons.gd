@@ -207,6 +207,7 @@ static func _append_weapon_order(
 		"weapon_type": module_def.weapon_type,
 		"facing_offset": 0.0,
 		"visual_variant": _visual_variant_for(module_def, delivery),
+		"splash": module_def.weapon_type in ["rocket", "missile"],
 	}
 	if delivery == "guided":
 		var target_id := str(guidance_context.get("target_id", ""))

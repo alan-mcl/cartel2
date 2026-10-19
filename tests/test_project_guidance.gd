@@ -6,6 +6,7 @@ static func run(runner: TestRunner) -> void:
 	_test_steer_toward_target(runner)
 	_test_divide_packets(runner)
 	_test_scatter_order_count(runner, Catalog.load_default())
+	_test_weapon_order_splash_flag(runner, Catalog.load_default())
 
 
 static func _test_steer_toward_target(runner: TestRunner) -> void:
@@ -58,3 +59,43 @@ static func _test_scatter_order_count(runner: TestRunner, catalog: Catalog) -> v
 	var result := weapons.tick(catalog, assembled, owned, 0.0, true, true, {})
 	var orders: Array = result.get("orders", [])
 	runner.check(orders.size() >= ShipWeapons.DEFAULT_SCATTER_PELLETS, "scatter emits pellet fan")
+
+
+static func _test_weapon_order_splash_flag(runner: TestRunner, catalog: Catalog) -> void:
+	_check_splash_on_fire(runner, catalog, "wolff_warrior", "wolff_chassis", ["rocket", "missile"], true)
+	_check_splash_on_fire(runner, catalog, "juno_1090", "juno_chassis", ["mass_driver"], false)
+
+
+static func _check_splash_on_fire(
+	runner: TestRunner,
+	catalog: Catalog,
+	template_id: String,
+	chassis_id: String,
+	weapon_types: Array,
+	expect_splash: bool
+) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{"id": "splash_%s" % template_id, "template_id": template_id, "chassis_id": chassis_id}
+	)
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var weapons := ShipWeapons.new()
+	weapons.sync_selection(assembled)
+	var matched := false
+	for entry in assembled.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null or not weapon_types.has(module_def.weapon_type):
+			continue
+		weapons.select_slot(str(entry.get("slot", "")))
+		var result := weapons.tick(catalog, assembled, owned, 0.0, true, true, {})
+		for order in result.get("orders", []):
+			if typeof(order) != TYPE_DICTIONARY:
+				continue
+			if not weapon_types.has(str(order.get("weapon_type", ""))):
+				continue
+			runner.check(bool(order.get("splash", false)) == expect_splash, "splash flag for %s" % template_id)
+			matched = true
+	runner.check(matched, "splash test fired %s on %s" % [str(weapon_types), template_id])

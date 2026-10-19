@@ -2,11 +2,9 @@ extends Area2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
 const ProjectGuidance := preload("res://scripts/gameplay/project_guidance.gd")
-const ROCKET_RADIUS := 7.0
-const ROCKET_COLOR := Color(0.95, 0.45, 0.25, 1.0)
-const ROCKET_OUTLINE := Color(0.85, 0.3, 0.15, 1.0)
-const GUIDED_CORE := Color(0.55, 0.95, 1.0, 1.0)
-const GUIDED_HALO := Color(0.35, 0.75, 1.0, 0.35)
+const WarheadBlast := preload("res://scripts/presentation/warhead_blast.gd")
+const INTERCEPTABLE_GROUP := "interceptable_round"
+const ROCKET_RADIUS := 10.0
 const DEFAULT_SOLID_MASK := 2
 const NPC_MASK := 16
 const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
@@ -28,6 +26,8 @@ var _homing := false
 var _guidance_target_id := ""
 var _guidance_turn_rate := 2.8
 var _visual_variant := "rocket"
+var _splash := false
+var _exhaust_phase := 0.0
 
 
 static func spawn(
@@ -43,7 +43,8 @@ static func spawn(
 	inherited_velocity: Vector2 = Vector2.ZERO,
 	shooter: Node = null,
 	guidance: Dictionary = {},
-	visual_variant: String = "rocket"
+	visual_variant: String = "rocket",
+	splash: bool = false
 ) -> void:
 	if _packed_scene == null:
 		_packed_scene = load(SCENE_PATH) as PackedScene
@@ -71,7 +72,8 @@ static func spawn(
 			inherited_velocity,
 			shooter,
 			guidance,
-			visual_variant
+			visual_variant,
+			splash
 		)
 
 
@@ -87,7 +89,8 @@ func configure(
 	inherited_velocity: Vector2 = Vector2.ZERO,
 	shooter: Node = null,
 	guidance: Dictionary = {},
-	visual_variant: String = "rocket"
+	visual_variant: String = "rocket",
+	splash: bool = false
 ) -> void:
 	_muzzle_speed = speed
 	_velocity = direction.normalized() * speed + inherited_velocity
@@ -101,8 +104,11 @@ func configure(
 	_guidance_target_id = str(guidance.get("target_id", ""))
 	_guidance_turn_rate = float(guidance.get("turn_rate", 2.8))
 	_visual_variant = visual_variant if not visual_variant.is_empty() else "rocket"
+	_splash = splash
 	if _delivery_type == "guided" and not _homing:
 		_visual_variant = "rocket"
+	if _delivery_type == "guided":
+		_visual_variant = "guided"
 	var travel_dir := _velocity.normalized() if _velocity.length_squared() > 1.0 else direction.normalized()
 	global_position = origin + travel_dir * SPAWN_SKIN
 	if _velocity.length_squared() > 1.0:
@@ -115,26 +121,60 @@ func configure(
 func _ready() -> void:
 	monitoring = true
 	body_entered.connect(_on_body_entered)
+	if _delivery_type in ["ballistic", "guided"]:
+		add_to_group(INTERCEPTABLE_GROUP)
 	queue_redraw()
 
 
 func _draw() -> void:
-	if _visual_variant == "guided":
-		draw_circle(Vector2.ZERO, ROCKET_RADIUS + 3.0, GUIDED_HALO)
-		draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
-		draw_circle(Vector2(0.0, -ROCKET_RADIUS * 0.35), ROCKET_RADIUS * 0.45, GUIDED_CORE)
-		draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
-	else:
-		draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
-		draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
+	var guided := _visual_variant == "guided"
+	var body_col := Color(0.82, 0.84, 0.88, 1.0) if guided else Color(0.75, 0.72, 0.68, 1.0)
+	var nose_col := Color(0.55, 0.95, 1.0, 1.0) if guided else Color(0.95, 0.55, 0.3, 1.0)
+	var fin_col := Color(0.45, 0.48, 0.52, 1.0) if guided else Color(0.55, 0.35, 0.25, 1.0)
+	var outline := Color(0.25, 0.28, 0.32, 1.0) if guided else Color(0.45, 0.22, 0.12, 1.0)
+
+	# Nose at -Y (forward). Tail exhaust at +Y.
+	var body := PackedVector2Array([
+		Vector2(0.0, -ROCKET_RADIUS * 1.35),
+		Vector2(ROCKET_RADIUS * 0.42, -ROCKET_RADIUS * 0.2),
+		Vector2(ROCKET_RADIUS * 0.38, ROCKET_RADIUS * 0.85),
+		Vector2(0.0, ROCKET_RADIUS * 0.55),
+		Vector2(-ROCKET_RADIUS * 0.38, ROCKET_RADIUS * 0.85),
+		Vector2(-ROCKET_RADIUS * 0.42, -ROCKET_RADIUS * 0.2),
+	])
+	draw_colored_polygon(body, body_col)
+	draw_polyline(body + PackedVector2Array([body[0]]), outline, 1.5)
+
+	var fin_w := ROCKET_RADIUS * 0.55
+	var fin_h := ROCKET_RADIUS * 0.45
+	for side in [-1.0, 1.0]:
+		var fin := PackedVector2Array([
+			Vector2(side * ROCKET_RADIUS * 0.35, ROCKET_RADIUS * 0.35),
+			Vector2(side * (ROCKET_RADIUS * 0.35 + fin_w), ROCKET_RADIUS * 0.95),
+			Vector2(side * ROCKET_RADIUS * 0.35, ROCKET_RADIUS * 0.75),
+		])
+		draw_colored_polygon(fin, fin_col)
+
+	draw_circle(Vector2(0.0, -ROCKET_RADIUS * 1.05), ROCKET_RADIUS * 0.22, nose_col)
+
+	var plume_len := ROCKET_RADIUS * (1.1 + 0.25 * sin(_exhaust_phase))
+	var plume := PackedVector2Array([
+		Vector2(0.0, ROCKET_RADIUS * 0.6),
+		Vector2(ROCKET_RADIUS * 0.28, ROCKET_RADIUS * 0.6 + plume_len * 0.35),
+		Vector2(0.0, ROCKET_RADIUS * 0.6 + plume_len),
+		Vector2(-ROCKET_RADIUS * 0.28, ROCKET_RADIUS * 0.6 + plume_len * 0.35),
+	])
+	var plume_col := Color(1.0, 0.55, 0.2, 0.55) if not guided else Color(0.45, 0.75, 1.0, 0.5)
+	draw_colored_polygon(plume, plume_col)
 
 
 func _physics_process(delta: float) -> void:
+	_exhaust_phase += delta * 18.0
 	_apply_guidance(delta)
 	var range_step := _velocity.length() * delta
 	var next_traveled := _traveled + range_step
 	if next_traveled >= _max_range:
-		queue_free()
+		_despawn(true)
 		return
 
 	var from := global_position
@@ -143,13 +183,23 @@ func _physics_process(delta: float) -> void:
 	if not hit.is_empty():
 		global_position = hit.position
 		_apply_hit(hit.collider)
-		queue_free()
+		_despawn(false)
 		return
 
 	global_position = to
 	_traveled = next_traveled
 	if _velocity.length_squared() > 1.0:
 		rotation = _velocity.angle() + PI / 2.0
+	queue_redraw()
+
+
+func _despawn(range_fizzle: bool) -> void:
+	if _splash:
+		var parent := get_parent()
+		if parent != null:
+			WarheadBlast.spawn(parent, global_position, range_fizzle)
+	remove_from_group(INTERCEPTABLE_GROUP)
+	queue_free()
 
 
 func _apply_guidance(delta: float) -> void:
@@ -196,4 +246,4 @@ func _sweep(from: Vector2, to: Vector2) -> Dictionary:
 
 func _on_body_entered(body: Node) -> void:
 	_apply_hit(body)
-	queue_free()
+	_despawn(false)

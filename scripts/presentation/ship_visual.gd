@@ -99,6 +99,7 @@ static func spawn_weapon_orders(
 		var direction := Vector2.from_angle(facing + facing_offset)
 		var visual_variant := str(order.get("visual_variant", ""))
 		var guidance: Dictionary = order.get("guidance", {})
+		var splash := bool(order.get("splash", false))
 
 		if delivery in ["beam", "cyber"]:
 			_LaserBeam.spawn(
@@ -127,7 +128,8 @@ static func spawn_weapon_orders(
 				ship_velocity,
 				shooter,
 				guidance,
-				visual_variant
+				visual_variant,
+				splash
 			)
 		elif delivery in ["ballistic", "plasma"]:
 			_MassDriverRound.spawn(

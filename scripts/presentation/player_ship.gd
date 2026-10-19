@@ -104,6 +104,7 @@ func _ready() -> void:
 
 	_defence_visual = CombatDefenceVisual.new()
 	_defence_visual.z_index = 2
+	_defence_visual.bind_owner(self)
 	if _visual_root != null:
 		_visual_root.add_child(_defence_visual)
 

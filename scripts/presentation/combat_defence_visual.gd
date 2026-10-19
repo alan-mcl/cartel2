@@ -1,14 +1,19 @@
 class_name CombatDefenceVisual
 extends Node2D
 
+const PointDefencePellet := preload("res://scripts/presentation/point_defence_pellet.gd")
 const FLASH_DURATION := 0.35
+const PD_ENVELOPE := 320.0
+const PD_SHOTS_PER_SEC := 16.0
 
 var _assembled: AssembledShip
 var _combat_state: ShipCombatState
+var _owner_ship: Node = null
 var _flash_time := 0.0
 var _flash_kind := ""
 var _flash_shield_type := ""
 var _hull_radius := 42.0
+var _pd_shot_accum := 0.0
 
 
 func bind_ship(assembled: AssembledShip, combat_state: ShipCombatState, hull_radius: float = 42.0) -> void:
@@ -16,6 +21,10 @@ func bind_ship(assembled: AssembledShip, combat_state: ShipCombatState, hull_rad
 	_combat_state = combat_state
 	_hull_radius = hull_radius
 	queue_redraw()
+
+
+func bind_owner(ship: Node) -> void:
+	_owner_ship = ship
 
 
 func play_hit_layers(layers: Dictionary) -> void:
@@ -50,6 +59,57 @@ func _process(delta: float) -> void:
 		queue_redraw()
 	elif _assembled != null:
 		queue_redraw()
+	_tick_point_defence(delta)
+
+
+func _tick_point_defence(delta: float) -> void:
+	if not _has_point_defence():
+		return
+	var threat := _nearest_interceptable_threat()
+	if threat == null:
+		return
+	_pd_shot_accum += delta * PD_SHOTS_PER_SEC
+	while _pd_shot_accum >= 1.0:
+		_pd_shot_accum -= 1.0
+		_fire_pd_shot(threat)
+
+
+func _has_point_defence() -> bool:
+	if _assembled == null:
+		return false
+	return not _assembled.modules_in_category("point_defence").is_empty()
+
+
+func _nearest_interceptable_threat() -> Node2D:
+	var best: Node2D = null
+	var best_dist_sq := PD_ENVELOPE * PD_ENVELOPE
+	var origin := global_position
+	for node in get_tree().get_nodes_in_group("interceptable_round"):
+		if not is_instance_valid(node) or not node is Node2D:
+			continue
+		if _is_own_projectile(node):
+			continue
+		var threat := node as Node2D
+		var dist_sq := origin.distance_squared_to(threat.global_position)
+		if dist_sq <= best_dist_sq:
+			best_dist_sq = dist_sq
+			best = threat
+	return best
+
+
+func _is_own_projectile(node: Node) -> bool:
+	if _owner_ship == null or not is_instance_valid(_owner_ship):
+		return false
+	return node.get("_shooter") == _owner_ship
+
+
+func _fire_pd_shot(threat: Node2D) -> void:
+	var local_threat := to_local(threat.global_position)
+	if local_threat.length_squared() < 1.0:
+		return
+	var local_dir := local_threat.normalized()
+	var local_muzzle := local_dir * _hull_radius * 0.85
+	PointDefencePellet.spawn(self, local_muzzle, local_dir)
 
 
 static func style_for_shield_type(shield_type: String) -> Dictionary:
