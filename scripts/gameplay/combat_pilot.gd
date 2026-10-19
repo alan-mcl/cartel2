@@ -549,13 +549,16 @@ func _dogfight_fight(
 		profile
 	)
 
-	if can_fire:
+	if can_fire and speed >= speed_floor:
 		inputs["thrust"] = false
 		inputs["boost"] = false
+	elif can_fire and speed < speed_floor:
+		if heading_error < SHOT_HOLD_ANGLE or _is_aligned(facing, aim_heading):
+			inputs["thrust"] = true
 	elif heading_error < SHOT_HOLD_ANGLE:
 		inputs["thrust"] = false
 		inputs["boost"] = false
-		if speed < speed_floor and not can_fire:
+		if speed < speed_floor:
 			inputs["thrust"] = true
 	else:
 		var aligned := _is_aligned(facing, aim_heading)

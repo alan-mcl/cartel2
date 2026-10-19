@@ -469,8 +469,25 @@ static func _test_combat_pilot_aim_and_fire(runner: TestRunner) -> void:
 	))
 	runner.check(bool(fire_inputs.get("fire", false)), "fires when aligned on aim point in dogfight band")
 	runner.check(
-		not bool(fire_inputs.get("thrust", false)),
-		"dogfight coasts while on a firing solution"
+		bool(fire_inputs.get("thrust", false)),
+		"dogfight builds speed from standstill on a firing solution"
+	)
+
+	var coast_pilot := CombatPilot.new()
+	var coast_inputs: Dictionary = coast_pilot.tick(_pilot_snapshot(
+		Vector2(400.0, 0.0),
+		PI,
+		Vector2(120.0, 0.0),
+		Vector2.ZERO,
+		Vector2.ZERO,
+		200.0,
+		"medium",
+		ballistic
+	))
+	runner.check(bool(coast_inputs.get("fire", false)), "coasting pilot still fires when in range")
+	runner.check(
+		not bool(coast_inputs.get("thrust", false)),
+		"dogfight coasts while on a firing solution above speed floor"
 	)
 
 	var near_aim_pilot := CombatPilot.new()
@@ -673,7 +690,7 @@ static func _test_combat_pilot_maneuver_interrupt(runner: TestRunner) -> void:
 	var close_inputs: Dictionary = close_pilot.tick(_pilot_snapshot(
 		Vector2(350.0, 0.0),
 		PI,
-		Vector2(-50.0, 0.0),
+		Vector2(-260.0, 0.0),
 		Vector2.ZERO,
 		Vector2.ZERO,
 		max_speed,
@@ -683,7 +700,7 @@ static func _test_combat_pilot_maneuver_interrupt(runner: TestRunner) -> void:
 	runner.check(bool(close_inputs.get("fire", false)), "dogfight fires when close and aligned")
 	runner.check(
 		not bool(close_inputs.get("thrust", false)),
-		"dogfight coasts on firing solution when close"
+		"dogfight coasts on firing solution when close above speed floor"
 	)
 
 	var pers_pilot := CombatPilot.new()

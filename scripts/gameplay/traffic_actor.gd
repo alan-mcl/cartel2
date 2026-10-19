@@ -291,11 +291,12 @@ func tick(
 
 
 func _ensure_sim(catalog: Catalog) -> void:
+	if assembled_ship != null and owned_ship != null:
+		weapons.sync_selection(assembled_ship)
 	if sim != null:
 		return
 	sim = ShipSimCoreScript.new()
 	if assembled_ship != null and owned_ship != null:
-		weapons.sync_selection(assembled_ship)
 		sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 
 

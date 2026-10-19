@@ -28,7 +28,7 @@ SpaceShip
 | Pegasus | GVW Corp (defunct) | Civilian cargo / workhorse | P101, P103, P103a, P105, P107, P109, P111, P113, P115 |
 | Flare-ON | Holt-Winters | Sporty light craft | SS, SK, CX |
 | Krypton | Orion Aerospace | Mid-range saucer | K2, K3, K4 |
-| Wolff | Bayes Inc | Armed freighter / gunship | Warrior, Gladius, Bastion, Logistico |
+| Wolff | Bayes Inc (defunct) | Armed freighter / gunship | Warrior, Gladius, Bastion, Logistico |
 | Dragon | Seven Bells Inc | Interceptor w/ hyperdrive | Bronze, Gold, Post |
 | Juno | General Industrial | Light scout / freighter | 1030, 1045, 1060, 1088, 1090 |
 | Silhouette | Oklahoma Combine | Tactical fighter | Mk8, Mk6, Warden |
@@ -42,9 +42,7 @@ Originally designed and manufactured fifty years ago by the now defunct **GVW Co
 
 ### P101
 
-The original model and still the most common civilian configuration. The P101 heralded a revolution in space travel when it was marketed as the first affordable private space ship. It is mounted with a basic GI-HT-18 hydro-thermal engine and in modern times a mass driver cannon for defence. The original had a basic A1 life support system, making it an uncomfortable vessel by modern standards.
-
-**Game instance:** Pegasus P101 — GI-HT-18 hydro-thermal, 5mm Chitanium armour, parked at Proxima Habitat.
+The original model and still the most common civilian configuration. The P101 heralded a revolution in space travel when it was marketed as the first affordable private space ship. It is mounted with a basic GI-HT-18 hydro-thermal engine and in modern times a mass driver cannon for defence. The original had a basic life support system, making it an uncomfortable vessel by modern standards.
 
 ### P103
 
