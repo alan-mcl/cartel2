@@ -98,6 +98,10 @@ static func _test_offer_grouping(runner: TestRunner, catalog: Catalog) -> void:
 			irasia_row = row
 			break
 	runner.check(not irasia_row.is_empty(), "grouping: irasia is other hub from proxima")
+	runner.check(
+		not str(irasia_row.get("description", "")).is_empty(),
+		"grouping: catalog destination row includes blurb"
+	)
 	var by_n: Dictionary = irasia_row.get("by_n", {})
 	runner.check(by_n.has(4), "grouping: irasia row has 4-space offer")
 	runner.check(by_n.has(5), "grouping: irasia row has 5-space offer on same destination")

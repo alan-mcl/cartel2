@@ -4,10 +4,11 @@ signal jump_requested(target_sector_id: String, n: int, solution: int)
 signal cancelled
 
 const N_COLUMNS: Array[int] = [4, 5, 6]
-const COL_DEST_MIN_WIDTH := 240
+const COL_DEST_MIN_WIDTH := 320
 const COL_N_MIN_WIDTH := 148
+const ROUTE_SCROLL_HEIGHT := 420.0
 ## Destination + three N-space columns + h_separation between them (8px × 3).
-const TABLE_MIN_WIDTH := 708
+const TABLE_MIN_WIDTH := 960
 
 @onready var _title: Label = $Background/Center/Panel/VBox/TitleLabel
 @onready var _description: Label = $Background/Center/Panel/VBox/DescriptionLabel
@@ -97,11 +98,12 @@ func _refresh() -> void:
 	var grouped := TranslationNav.group_offered_translations(_catalog, _session.sector_id, offers)
 	var local_rows: Array = grouped.get("local", [])
 	var other_rows: Array = grouped.get("other", [])
+	var volatile_rows: Array = grouped.get("volatile", [])
 
-	_build_route_tables(local_rows, other_rows)
+	_build_route_tables(local_rows, other_rows, volatile_rows)
 
 	_hint.text = "Esc or Cancel to stay in orbit"
-	if local_rows.is_empty() and other_rows.is_empty():
+	if local_rows.is_empty() and other_rows.is_empty() and volatile_rows.is_empty():
 		if on_volatile_site:
 			_solution_label.text = "The temporary return gate is no longer available."
 		elif beacon_destination.is_empty():
@@ -131,28 +133,35 @@ func _filter_beacon_offers(all_offers: Array, beacon_destination: String) -> Arr
 	return filtered
 
 
-func _build_route_tables(local_rows: Array, other_rows: Array) -> void:
-	var has_local := not local_rows.is_empty()
-	var has_other := not other_rows.is_empty()
-	if has_local and has_other:
-		var tabs := TabContainer.new()
-		tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_route_list.add_child(tabs)
-		var local_scroll := _build_table_scroll(local_rows)
-		tabs.add_child(local_scroll)
-		tabs.set_tab_title(0, "Local Star System")
-		var other_scroll := _build_table_scroll(other_rows)
-		tabs.add_child(other_scroll)
-		tabs.set_tab_title(1, "Other star systems")
-	elif has_local:
-		_route_list.add_child(_build_table_scroll(local_rows))
-	elif has_other:
-		_route_list.add_child(_build_table_scroll(other_rows))
+func _build_route_tables(local_rows: Array, other_rows: Array, volatile_rows: Array) -> void:
+	var sections: Array = []
+	if not local_rows.is_empty():
+		sections.append({"title": "Local Star System", "rows": local_rows})
+	if not other_rows.is_empty():
+		sections.append({"title": "Other star systems", "rows": other_rows})
+	if not volatile_rows.is_empty():
+		sections.append({"title": "Volatile translations", "rows": volatile_rows})
+
+	if sections.is_empty():
+		return
+	if sections.size() == 1:
+		_route_list.add_child(_build_table_scroll(sections[0].get("rows", [])))
+		return
+
+	var tabs := TabContainer.new()
+	tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_route_list.add_child(tabs)
+	for index in sections.size():
+		var section: Dictionary = sections[index]
+		var scroll := _build_table_scroll(section.get("rows", []))
+		tabs.add_child(scroll)
+		tabs.set_tab_title(index, str(section.get("title", "")))
 
 
 func _build_table_scroll(rows: Array) -> ScrollContainer:
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(float(TABLE_MIN_WIDTH), 280.0)
+	scroll.custom_minimum_size = Vector2(float(TABLE_MIN_WIDTH), ROUTE_SCROLL_HEIGHT)
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
@@ -168,7 +177,7 @@ func _build_table(rows: Array) -> VBoxContainer:
 	table.add_theme_constant_override("separation", 4)
 
 	var header := _new_table_row()
-	_add_dest_cell(header, "Destination", true)
+	_add_dest_cell(header, {}, true)
 	for n in N_COLUMNS:
 		_add_n_label_cell(header, "%d-space" % n, true)
 	table.add_child(header)
@@ -178,7 +187,7 @@ func _build_table(rows: Array) -> VBoxContainer:
 			continue
 		var row: Dictionary = row_variant
 		var data_row := _new_table_row()
-		_add_dest_cell(data_row, str(row.get("label", "")), false)
+		_add_dest_cell(data_row, row, false)
 		var by_n: Dictionary = row.get("by_n", {})
 		for n in N_COLUMNS:
 			var offer: Variant = by_n.get(n, null)
@@ -198,16 +207,41 @@ func _new_table_row() -> HBoxContainer:
 	return row
 
 
-func _add_dest_cell(row: HBoxContainer, text: String, header: bool) -> void:
-	var label := Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.custom_minimum_size = Vector2(float(COL_DEST_MIN_WIDTH), 0.0)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_stretch_ratio = 1.6
+func _add_dest_cell(row: HBoxContainer, row_data: Variant, header: bool) -> void:
 	if header:
-		label.add_theme_font_size_override("font_size", 14)
-	row.add_child(label)
+		var header_label := Label.new()
+		header_label.text = "Destination"
+		header_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		header_label.custom_minimum_size = Vector2(float(COL_DEST_MIN_WIDTH), 0.0)
+		header_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		header_label.size_flags_stretch_ratio = 1.6
+		header_label.add_theme_font_size_override("font_size", 14)
+		row.add_child(header_label)
+		return
+
+	if typeof(row_data) != TYPE_DICTIONARY:
+		return
+	var dest_row: Dictionary = row_data
+	var column := VBoxContainer.new()
+	column.custom_minimum_size = Vector2(float(COL_DEST_MIN_WIDTH), 0.0)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.size_flags_stretch_ratio = 1.6
+	column.add_theme_constant_override("separation", 2)
+
+	var name_label := Label.new()
+	name_label.text = str(dest_row.get("label", ""))
+	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(name_label)
+
+	var description := str(dest_row.get("description", "")).strip_edges()
+	if not description.is_empty():
+		var desc_label := Label.new()
+		desc_label.text = description
+		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc_label.theme_type_variation = &"Muted"
+		column.add_child(desc_label)
+
+	row.add_child(column)
 
 
 func _add_n_label_cell(row: HBoxContainer, text: String, header: bool) -> void:

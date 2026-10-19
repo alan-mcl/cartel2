@@ -259,6 +259,32 @@ static func destination_display_label(catalog: Catalog, sector_id: String) -> St
 	return label
 
 
+static func sector_destination_blurb(catalog: Catalog, sector_id: String) -> String:
+	if catalog == null or sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
+		return ""
+	var sector := catalog.get_sector(sector_id)
+	if sector.is_empty():
+		return ""
+
+	var climate := str(sector.get("climate", "")).strip_edges()
+	var classification := str(sector.get("classification", "")).strip_edges()
+	var star_system := str(sector.get("star_system", "")).strip_edges()
+
+	var summary := ""
+	if not climate.is_empty() and not classification.is_empty():
+		summary = "%s %s" % [climate, classification]
+	elif not classification.is_empty():
+		summary = classification
+	elif not climate.is_empty():
+		summary = climate
+
+	if not summary.is_empty() and not star_system.is_empty():
+		return "%s · %s" % [summary, star_system]
+	if not summary.is_empty():
+		return summary
+	return star_system
+
+
 static func same_star_system(catalog: Catalog, sector_a: String, sector_b: String) -> bool:
 	if catalog == null or sector_a.is_empty() or sector_b.is_empty():
 		return false
@@ -274,6 +300,7 @@ static func group_offered_translations(
 ) -> Dictionary:
 	var local_by_dest: Dictionary = {}
 	var other_by_dest: Dictionary = {}
+	var volatile_by_dest: Dictionary = {}
 
 	for offer_variant in offers:
 		if typeof(offer_variant) != TYPE_DICTIONARY:
@@ -283,16 +310,27 @@ static func group_offered_translations(
 		var dest_id := str(translation.get("target", ""))
 		if dest_id.is_empty():
 			continue
-		var bucket: Dictionary = (
-			local_by_dest if same_star_system(catalog, source_sector_id, dest_id) else other_by_dest
-		)
+		var bucket: Dictionary
+		if VolatileTranslation.is_volatile_sector_id(dest_id):
+			bucket = volatile_by_dest
+		elif same_star_system(catalog, source_sector_id, dest_id):
+			bucket = local_by_dest
+		else:
+			bucket = other_by_dest
 		var row_label := str(translation.get("label", ""))
 		if row_label.is_empty():
 			row_label = destination_display_label(catalog, dest_id)
+		var row_description := str(translation.get("description", "")).strip_edges()
+		if row_description.is_empty():
+			if VolatileTranslation.is_volatile_sector_id(dest_id):
+				row_description = VolatileTranslation.DEFAULT_DESTINATION_DESCRIPTION
+			else:
+				row_description = sector_destination_blurb(catalog, dest_id)
 		if not bucket.has(dest_id):
 			bucket[dest_id] = {
 				"destination_id": dest_id,
 				"label": row_label,
+				"description": row_description,
 				"by_n": {},
 			}
 		var row: Dictionary = bucket[dest_id]
@@ -304,6 +342,7 @@ static func group_offered_translations(
 	return {
 		"local": _sorted_destination_rows(local_by_dest),
 		"other": _sorted_destination_rows(other_by_dest),
+		"volatile": _sorted_destination_rows(volatile_by_dest),
 	}
 
 

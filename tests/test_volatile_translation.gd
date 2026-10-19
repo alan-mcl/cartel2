@@ -9,6 +9,7 @@ static func run(runner: TestRunner) -> void:
 	_test_outbound_consumed_and_expiry(runner, catalog)
 	_test_round_trip_and_sweep(runner, catalog)
 	_test_save_volatile_sector(runner, catalog)
+	_test_grouping_and_description(runner, catalog)
 
 
 static func _assembled_with_nav(catalog: Catalog) -> AssembledShip:
@@ -208,6 +209,43 @@ static func _test_round_trip_and_sweep(runner: TestRunner, catalog: Catalog) -> 
 		0,
 		"volatile: record removed after successful return"
 	)
+
+
+static func _test_grouping_and_description(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session_at_proxima(catalog)
+	var assembled := _assembled_with_nav(catalog)
+	var blurb := "Prospecting coordinates relayed by the guild."
+	VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Guild claim",
+		"description": blurb,
+		"duration_hours": 6,
+		"n": 4,
+	})
+	var offers := TranslationNav.list_offered_translations(
+		catalog, "proxima", assembled, [], session
+	)
+	var grouped := TranslationNav.group_offered_translations(catalog, "proxima", offers)
+	var volatile_rows: Array = grouped.get("volatile", [])
+	var other_rows: Array = grouped.get("other", [])
+
+	runner.check_eq(volatile_rows.size(), 1, "volatile grouping: one volatile row")
+	if volatile_rows.size() == 1:
+		var row: Dictionary = volatile_rows[0]
+		runner.check(
+			VolatileTranslation.is_volatile_sector_id(str(row.get("destination_id", ""))),
+			"volatile grouping: row target is volatile sector"
+		)
+		runner.check_eq(str(row.get("description", "")), blurb, "volatile grouping: description on row")
+
+	for row_variant in other_rows:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var other_row: Dictionary = row_variant
+		runner.check(
+			not VolatileTranslation.is_volatile_sector_id(str(other_row.get("destination_id", ""))),
+			"volatile grouping: volatile target not listed under other"
+		)
 
 
 static func _test_save_volatile_sector(runner: TestRunner, catalog: Catalog) -> void:

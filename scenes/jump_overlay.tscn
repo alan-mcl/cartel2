@@ -23,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Background/Center"]
-custom_minimum_size = Vector2(880, 0)
+custom_minimum_size = Vector2(1120, 560)
 layout_mode = 2
 theme_type_variation = &"Surface"
 
@@ -44,7 +44,7 @@ text = "Higher N-space is faster but less accurate."
 horizontal_alignment = 1
 
 [node name="RouteList" type="VBoxContainer" parent="Background/Center/Panel/VBox"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8

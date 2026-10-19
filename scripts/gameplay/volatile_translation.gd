@@ -6,6 +6,7 @@ const SOLUTION_BASE := 900_000_000
 const DEFAULT_FRICTION := 10
 const ALLOWED_N := [4, 5, 6]
 const ALLOWED_ENTITY_KINDS: Array[String] = ["debris", "orbital"]
+const DEFAULT_DESTINATION_DESCRIPTION := "Single-use off-network site"
 
 static var _next_grant_index: int = 0
 
@@ -68,12 +69,15 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 	var expires_gst := session.gst_seconds + float(duration_hours) * hour_seconds
 	var return_expires_gst := session.gst_seconds + float(return_hours) * hour_seconds
 
+	var description := str(params.get("description", "")).strip_edges()
+
 	var record := {
 		"id": record_id,
 		"source_sector_id": source_sector_id,
 		"solution": solution,
 		"return_solution": return_solution,
 		"label": label,
+		"description": description,
 		"n": n,
 		"ease": ease,
 		"entry_seconds": entry_seconds,
@@ -134,12 +138,20 @@ static func mapping_from_record(record: Dictionary, source_sector_id: String, ta
 		"solution": solution,
 		"n": int(record.get("n", 4)),
 		"label": str(record.get("label", target_sector_id)),
+		"description": destination_description(record),
 		"entry_seconds": float(record.get("entry_seconds", 0.0)),
 		"exit_seconds": float(record.get("exit_seconds", 0.0)),
 		"time_jitter": float(record.get("time_jitter", 0.08)),
 		"ease": float(record.get("ease", 0.5)),
 		"volatile": true,
 	}
+
+
+static func destination_description(record: Dictionary) -> String:
+	var text := str(record.get("description", "")).strip_edges()
+	if text.is_empty():
+		return DEFAULT_DESTINATION_DESCRIPTION
+	return text
 
 
 static func resolve_mapping(
@@ -332,6 +344,7 @@ static func to_save_array(records: Array) -> Array:
 			"solution": int(entry.get("solution", 0)),
 			"return_solution": int(entry.get("return_solution", 0)),
 			"label": str(entry.get("label", "")),
+			"description": str(entry.get("description", "")),
 			"n": int(entry.get("n", 4)),
 			"ease": float(entry.get("ease", 0.5)),
 			"entry_seconds": float(entry.get("entry_seconds", 0.0)),
@@ -366,6 +379,7 @@ static func from_save_array(value: Variant) -> Array:
 			"solution": int(entry.get("solution", 0)),
 			"return_solution": int(entry.get("return_solution", 0)),
 			"label": str(entry.get("label", "")),
+			"description": str(entry.get("description", "")),
 			"n": n,
 			"ease": float(entry.get("ease", 0.5)),
 			"entry_seconds": float(entry.get("entry_seconds", 0.0)),
