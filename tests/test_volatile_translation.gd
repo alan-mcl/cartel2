@@ -168,11 +168,20 @@ static func _test_round_trip_and_sweep(runner: TestRunner, catalog: Catalog) -> 
 	)
 	runner.check(session.arrive_from_unspace(catalog), "volatile: arrive at site")
 	runner.check_eq(session.sector_id, volatile_sector, "volatile: sector is generated id")
+	session.advance_orbital_phase(catalog, 10.0)
+	runner.check(true, "volatile: orbital phase advance at site does not require catalog world")
 
 	var return_offers := TranslationNav.list_volatile_site_offers(
 		session, catalog, volatile_sector, assembled
 	)
 	runner.check_eq(return_offers.size(), 1, "volatile: return offer while gate open")
+	var grouped := TranslationNav.group_offered_translations(
+		catalog, volatile_sector, return_offers
+	)
+	runner.check(
+		not grouped.get("other", []).is_empty() or not grouped.get("local", []).is_empty(),
+		"volatile: jump overlay grouping accepts volatile source sector"
+	)
 
 	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 3))
 	VolatileTranslation.sweep(session)

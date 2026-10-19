@@ -88,6 +88,51 @@ static func format_freight(
 	return "\n".join(lines)
 
 
+static func format_scan(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	var lines: PackedStringArray = PackedStringArray()
+
+	var title := str(entry.get("designation", "Survey")).strip_edges()
+	if not title.is_empty():
+		lines.append(title)
+
+	var contract := _scan_contract_line(entry, accepted_origin, accepted_ship, catalog)
+	if not contract.is_empty():
+		_append_section(lines, contract)
+
+	var description := str(entry.get("description", "")).strip_edges()
+	if not description.is_empty():
+		_append_section(lines, description)
+
+	var site_kind := _scan_site_kind_line(entry, catalog)
+	if not site_kind.is_empty():
+		_append_section(lines, site_kind)
+
+	_append_section(lines, "Fly to the site, active-scan the contracted contact, then dock back at origin.")
+
+	var deadline := _deadline_line(entry, reference_gst)
+	if not deadline.is_empty():
+		_append_section(lines, deadline)
+
+	var requirements := _scan_requirement_lines(entry)
+	if not requirements.is_empty():
+		_append_section(lines, "Requirements")
+		for req_line in requirements:
+			lines.append(BULLET + req_line)
+
+	var extra_trimmed := extra.strip_edges()
+	if not extra_trimmed.is_empty():
+		_append_section(lines, extra_trimmed)
+
+	return "\n".join(lines)
+
+
 static func _passenger_contract_line(
 	entry: Dictionary,
 	accepted_origin: String,
@@ -132,6 +177,55 @@ static func _freight_contract_line(
 	return " · ".join(parts)
 
 
+static func _scan_contract_line(
+	entry: Dictionary,
+	accepted_origin: String,
+	accepted_ship: String,
+	catalog: Catalog
+) -> String:
+	var site := str(entry.get("site_label", "")).strip_edges()
+	var reward := int(entry.get("reward", 0))
+	var origin := accepted_origin.strip_edges()
+	var ship := accepted_ship.strip_edges()
+	if origin.is_empty() and catalog != null:
+		var habitat_id := str(entry.get("origin_habitat_id", ""))
+		if not habitat_id.is_empty():
+			var habitat := catalog.get_habitat(habitat_id)
+			origin = str(habitat.get("name", habitat_id)).strip_edges()
+	if not origin.is_empty() and not ship.is_empty():
+		return "%s → %s → %s · %s · d%d" % [origin, site, origin, ship, reward]
+	if not origin.is_empty():
+		return "%s → %s → %s · d%d" % [origin, site, origin, reward]
+	var parts: PackedStringArray = PackedStringArray()
+	if not site.is_empty():
+		parts.append(site)
+	parts.append("d%d" % reward)
+	return " · ".join(parts)
+
+
+static func _scan_site_kind_line(entry: Dictionary, catalog: Catalog) -> String:
+	var target_kind := str(entry.get("target_kind", ""))
+	if target_kind == "planet":
+		var sector_id := str(entry.get("destination_sector_id", ""))
+		var sector_name := sector_id
+		if catalog != null and not sector_id.is_empty():
+			sector_name = str(catalog.get_sector(sector_id).get("name", sector_id))
+		return "In-system survey: %s." % sector_name
+	if target_kind.is_empty():
+		return ""
+	return "Volatile survey site (temporary translation)."
+
+
+static func _scan_requirement_lines(entry: Dictionary) -> PackedStringArray:
+	var out: PackedStringArray = PackedStringArray()
+	out.append("Docked ship at posting habitat")
+	out.append("Active target scan on site")
+	var min_reputation := int(entry.get("min_reputation", 0))
+	if min_reputation > 0:
+		out.append("Reputation %d" % min_reputation)
+	return out
+
+
 static func _freight_title(entry: Dictionary) -> String:
 	var title := str(entry.get("cargo_title", "")).strip_edges()
 	if not title.is_empty():
@@ -145,7 +239,12 @@ static func _freight_title(entry: Dictionary) -> String:
 	return description
 
 
-static func _deadline_line(entry: Dictionary) -> String:
+static func _deadline_line(entry: Dictionary, reference_gst: float = -1.0) -> String:
+	if entry.has("deadline_gst") and reference_gst >= 0.0:
+		var remaining := float(entry.get("deadline_gst", 0.0)) - reference_gst
+		if remaining <= 0.0:
+			return "Past deadline"
+		return "%s remaining" % GalacticCalendar.format_duration(remaining)
 	var hours := int(entry.get("deadline_hours", 0))
 	if hours <= 0:
 		return ""

@@ -59,7 +59,7 @@ On startup, `main.gd` wires three presentation controllers and delegates to them
 Docking opens **UiRoot** — a full-screen opaque Control UI (not a dim overlay). Navigation uses **ScreenStack** (`push_screen`, `pop_screen`, `replace_screen`):
 
 - **HabitatScreen** — location shell (future orbitals/malls reuse the same pattern): habitat header (name, description, pilot, credits, GST); two-column body with a narrow **building list** and a right column. Each building shows a **building header** (name + long description left, banner art right) and a non-scrollable **`ContentPane`** below it. Building types resolve through **BuildingPanelRegistry** (`embed` / `placeholder`). **TerminalPanel**, **MarketPanel**, **DealerPanel**, **BarPanel**, and embedded **ShipyardScreen** mount full-rect in `ContentPane` (`configure_embedded(true)` on the yard hides duplicate header/back). List+detail building UIs scroll **vertically only** inside the detail column, never at the location pane. Unknown types still show a placeholder label in `ContentPane`. Building `short_desc` is tooltips only — transactional messages use the habitat **`MessageBar`** strip (`play_line` queues independent scrolling labels).
-- **TerminalPanel** — docked ship list, **ShipDetailPanel**, admin column (rename, undock blockers, Launch), and a **Departures** tab with [`PassengerCharterPanel`](scripts/ui/passenger_charter_panel.gd) plus [`FreightCharterPanel`](scripts/ui/freight_charter_panel.gd): posted offers and accepted contracts render as a **three-column tile grid**; hover tooltips use [`CharterTooltipText`](scripts/ui/charter_tooltip_text.gd) (sectioned copy, suggested public route when multi-hop, bulleted requirements, accept blockers). **BarPanel** adds a **BAR** gossip ticker above the passenger charter panel (informal fares); lines are direct overheard speech wrapped in quotation marks at display time.
+- **TerminalPanel** — docked ship list, **ShipDetailPanel**, admin column (rename, undock blockers, Launch), and a **Departures** tab with [`PassengerCharterPanel`](scripts/ui/passenger_charter_panel.gd) plus [`FreightCharterPanel`](scripts/ui/freight_charter_panel.gd): posted offers and accepted contracts render as a **three-column tile grid**; hover tooltips use [`CharterTooltipText`](scripts/ui/charter_tooltip_text.gd) (sectioned copy, suggested public route when multi-hop, bulleted requirements, accept blockers). Peacekeeping, corporate, and bar scan desks use the same tile + tooltip pattern via [`ScanCharterPanel`](scripts/ui/scan_charter_panel.gd) and `CharterTooltipText.format_scan`. **BarPanel** adds a **BAR** gossip ticker above the passenger charter panel (informal fares); lines are direct overheard speech wrapped in quotation marks at display time.
 - **ShipDetailPanel** — shared owned-ship readout (art, optional summary, modules and/or engineering/flight blocks, signature via `ModuleSpecText`). **TerminalPanel** and **ShipyardScreen** configure section flags; the yard slot board stays shipyard-only.
 - **UI patterns** — production habitat panels use `scenes/ui/patterns/` (`status_row`, `headline_item`, `metric_block`, `message_bar`) via [`UiPatterns`](scripts/ui/ui_patterns.gd). Yard stock row subtitles use `ModuleSpecText.format_stock_list_meta`. Transactional status uses **`MessageBar.play_line`** when `session.last_log` changes (each line scrolls once; new lines queue with gap). `compact_toolbar`, `data_table`, and `alert_banner` remain showcase references for now.
 - **MarketPanel** — exchange listings plus scrollable commodity detail; buy/sell via `GameSession`. A **TAPE** message bar streams noisy off-system commodity prints (not the local board price).
@@ -150,10 +150,18 @@ Successful gameplay mutations publish typed events on `GameSession.events` (`Eve
 
 `MissionSubsystem` is registered on production `Simulation` and drives daily passenger
 charter offers from `passenger_missions.json` (terminal departures and civilian fares at
-bars) plus freight lots from `freight_missions.json`. Daily boards invalidate at GST day
-rollover; the first charter UI open at a docked habitat generates that habitat’s passenger
-and freight offers only (not every habitat in the catalog). Accepted charters persist in
-subsystem save data; completion and cancellation are handled in gameplay, not UI.
+bars), freight lots from `freight_missions.json`, and **scan charters** from
+`scan_missions.json`. Scan work is posted per desk (peacekeeping offices and corporate
+liaison offices on major-planet habitats, plus occasional bar tips at Davidsons): accept
+grants a volatile survey site or points at a neighbouring system’s planet, the pilot
+**active-scans** the contracted contact (`PlayerState.scan_satisfies_contract` matches
+sector and post-accept timestamp), then docks back at the **origin** habitat for pay.
+Volatile grants carry optional `setup.scan_contact` ship contacts spawned in
+`WorldLoader._load_volatile_sector`. Daily boards invalidate at GST day rollover; the first
+charter UI open at a docked habitat generates that habitat’s passenger, freight, and scan
+offers only (not every habitat in the catalog). Accepted charters persist in subsystem
+save data (missions save version 4); completion and cancellation are handled in gameplay,
+not UI.
 
 [`MessageSubsystem`](scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, `{planet}`, `{city-mall}`, `{celebrity-pilot}`, `{local-star-system-location}`, `{jump-destination}`, and a commodity name; the commodities emitter also binds live `{price}` and `{move}`. The gossip-only `charters` emitter binds `{destination}`, `{quantity}`, `{label}`, and `{desk}` from posted bar and terminal offers via `Simulation` → `MissionSubsystem`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
 

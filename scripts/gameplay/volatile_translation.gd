@@ -43,10 +43,8 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 	if return_hours <= 0:
 		return_hours = duration_hours
 
-	var setup: Dictionary = params.get("setup", {})
-	if typeof(setup) != TYPE_DICTIONARY:
-		return ""
-	if not _validate_setup(setup):
+	var setup_raw: Variant = params.get("setup", {})
+	if typeof(setup_raw) != TYPE_DICTIONARY:
 		return ""
 
 	var ease := float(params.get("ease", 0.5))
@@ -58,6 +56,9 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 
 	_next_grant_index += 1
 	var record_id := "vt_%d" % _next_grant_index
+	var setup: Dictionary = _bind_setup_record_id(setup_raw as Dictionary, record_id)
+	if not _validate_setup(setup):
+		return ""
 	var solution := _allocate_solution(session, catalog, source_sector_id)
 	var return_solution := _allocate_solution(session, catalog, sector_id_for(record_id))
 	if solution == 0 or return_solution == 0:
@@ -432,19 +433,56 @@ static func _allocate_solution(session: GameSession, catalog: Catalog, source_se
 	return 0
 
 
+static func _bind_setup_record_id(setup: Dictionary, record_id: String) -> Dictionary:
+	var out := setup.duplicate(true)
+	out["seed"] = str(out.get("seed", "")).replace("{{ID}}", record_id)
+	var entities: Variant = out.get("entities", [])
+	if typeof(entities) == TYPE_ARRAY:
+		var bound_entities: Array = []
+		for entity_variant in entities:
+			if typeof(entity_variant) != TYPE_DICTIONARY:
+				continue
+			var entity: Dictionary = entity_variant.duplicate(true)
+			entity["id"] = str(entity.get("id", "")).replace("{{ID}}", record_id)
+			bound_entities.append(entity)
+		out["entities"] = bound_entities
+	var scan_contact: Variant = out.get("scan_contact", {})
+	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
+		var contact: Dictionary = scan_contact.duplicate(true)
+		contact["id"] = str(contact.get("id", "")).replace("{{ID}}", record_id)
+		out["scan_contact"] = contact
+	return out
+
+
 static func _validate_setup(setup: Dictionary) -> bool:
 	var entities: Variant = setup.get("entities", [])
-	if typeof(entities) != TYPE_ARRAY:
-		return true
-	for entity_variant in entities:
-		if typeof(entity_variant) != TYPE_DICTIONARY:
-			return false
-		var kind := str(entity_variant.get("kind", ""))
-		if kind.is_empty():
-			return false
-		if kind not in ALLOWED_ENTITY_KINDS:
+	if typeof(entities) == TYPE_ARRAY:
+		for entity_variant in entities:
+			if typeof(entity_variant) != TYPE_DICTIONARY:
+				return false
+			var kind := str(entity_variant.get("kind", ""))
+			if kind.is_empty():
+				return false
+			if kind not in ALLOWED_ENTITY_KINDS:
+				return false
+	var scan_contact: Variant = setup.get("scan_contact", {})
+	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
+		if str(scan_contact.get("id", "")).is_empty():
 			return false
 	return true
+
+
+static func discard_record(session: GameSession, record_id: String) -> void:
+	if session == null or record_id.is_empty():
+		return
+	for index in range(session.player.volatile_translations.size()):
+		var entry_variant = session.player.volatile_translations[index]
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		if str((entry_variant as Dictionary).get("id", "")) == record_id:
+			session.player.volatile_translations.remove_at(index)
+			session.changed.emit()
+			return
 
 
 static func _setup_to_save(setup: Variant) -> Dictionary:
@@ -462,6 +500,9 @@ static func _setup_to_save(setup: Variant) -> Dictionary:
 	var entities: Variant = src.get("entities", [])
 	if typeof(entities) == TYPE_ARRAY and not entities.is_empty():
 		out["entities"] = entities.duplicate(true)
+	var scan_contact: Variant = src.get("scan_contact", {})
+	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
+		out["scan_contact"] = scan_contact.duplicate(true)
 	return out
 
 

@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_gravitic_engine_scale(runner, catalog)
 	_test_integrated_sail_scale(runner, catalog)
 	_test_non_gravitic_engine_scale(runner, catalog)
+	_test_volatile_site_sample(runner, catalog)
 
 
 static func _world(catalog: Catalog, sector_id: String) -> WorldPresence:
@@ -21,6 +22,14 @@ static func _world(catalog: Catalog, sector_id: String) -> WorldPresence:
 	world.sector_id = sector_id
 	world.in_unspace = false
 	world.gst_seconds = 0.0
+	return world
+
+
+static func _world_volatile(_catalog: Catalog, gst: float) -> WorldPresence:
+	var world := WorldPresence.new()
+	world.sector_id = VolatileTranslation.sector_id_for("vt_test")
+	world.in_unspace = false
+	world.gst_seconds = gst
 	return world
 
 
@@ -207,4 +216,16 @@ static func _test_non_gravitic_engine_scale(runner: TestRunner, catalog: Catalog
 		FieldConditions.integrated_sail_thrust_scale("direct_fusion", sample),
 		1.0,
 		"direct fusion ignores sail scale helper"
+	)
+
+
+static func _test_volatile_site_sample(runner: TestRunner, catalog: Catalog) -> void:
+	var world := _world_volatile(catalog, 120.0)
+	var sample := FieldConditions.sample(catalog, world, Vector2(4100.0, 1200.0))
+	runner.check(sample.gravity > 0.0, "volatile site: gravity sampled")
+	runner.check(sample.reference_gravity > 0.0, "volatile site: reference gravity set")
+	runner.check(sample.magnetic > 0.0, "volatile site: magnetic field")
+	runner.check(
+		FieldConditions.gravitic_thrust_scale("gravitic", sample) > 0.0,
+		"volatile site: gravitic scale defined"
 	)

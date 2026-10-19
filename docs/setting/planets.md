@@ -13,6 +13,8 @@ Proxima was the first E-class planet discovered and colonised by humans, and is 
 
 Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible even during the day, and the red dwarf Alpha Centauri C dominates the night starscape. For this, and its ceaseless commercial activity, Proxima is often called "the planet that never sleeps". 
 
+The Proxima Peaceforce is responsible for maintaining order in the shared commercial environment.
+
 ### Planet Surface
 
  - City Malls: Concord (capital hub), New Atlanta, Loch Grumman, Greenfields, Century, Safeharbour.

@@ -20,6 +20,7 @@ const CORPORATIONS_PATH := "res://data/catalog/corporations.json"
 const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
 const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
+const SCAN_MISSIONS_PATH := "res://data/catalog/scan_missions.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
@@ -51,6 +52,7 @@ var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
 var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
+var scan_missions_config: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
@@ -89,6 +91,7 @@ func load_all() -> void:
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
 	passenger_missions_config = _load_json_object(PASSENGER_MISSIONS_PATH)
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
+	scan_missions_config = _load_json_object(SCAN_MISSIONS_PATH)
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
@@ -139,10 +142,14 @@ func get_interactable(id: String) -> Dictionary:
 
 
 func get_sector(id: String) -> Dictionary:
+	if VolatileTranslation.is_volatile_sector_id(id):
+		return {}
 	return _require_dict(sectors_by_id, id, "sector")
 
 
 func get_sector_def(id: String) -> SectorDef:
+	if VolatileTranslation.is_volatile_sector_id(id):
+		return null
 	return _require_record(sectors_by_id, id, "sector") as SectorDef
 
 
@@ -217,6 +224,10 @@ func get_mapping(from_sector_id: String, to_sector_id: String, n: int = 4) -> Di
 
 
 func get_public_translation(from_sector_id: String, to_sector_id: String, n: int = 4) -> Dictionary:
+	if VolatileTranslation.is_volatile_sector_id(from_sector_id):
+		return {}
+	if VolatileTranslation.is_volatile_sector_id(to_sector_id):
+		return {}
 	var sector := get_sector(from_sector_id)
 	if sector.is_empty():
 		return {}
@@ -262,6 +273,8 @@ static func _translation_key(source_sector_id: String, solution: int) -> String:
 
 
 func get_world(sector_id: String) -> Dictionary:
+	if VolatileTranslation.is_volatile_sector_id(sector_id):
+		return {}
 	if not worlds_by_id.has(sector_id):
 		push_error("Unknown world id: %s" % sector_id)
 		return {}
@@ -339,6 +352,10 @@ func get_passenger_missions_config() -> Dictionary:
 
 func get_freight_missions_config() -> Dictionary:
 	return freight_missions_config
+
+
+func get_scan_missions_config() -> Dictionary:
+	return scan_missions_config
 
 
 func get_sanction_infraction(id: String) -> Dictionary:

@@ -16,6 +16,7 @@ static func run(runner: TestRunner) -> void:
 	_test_legacy_charter_without_deadline_pays(runner, catalog)
 	_test_deadline_covers_jump_gate_lag(runner, catalog)
 	_test_charter_tooltip_layout(runner, catalog)
+	_test_scan_charter_tooltip_layout(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -435,4 +436,44 @@ static func _test_charter_tooltip_layout(runner: TestRunner, catalog: Catalog) -
 	runner.check(
 		not freight_tooltip.contains("Suggested route"),
 		"charter tooltip: one-hop freight omits suggested route"
+	)
+
+
+static func _test_scan_charter_tooltip_layout(runner: TestRunner, catalog: Catalog) -> void:
+	var offer := {
+		"designation": "Reconnaissance",
+		"description": "Quiet orbital pass over the marker.",
+		"site_label": "Prospect marker",
+		"origin_habitat_id": "proxima_habitat",
+		"destination_sector_id": "tycho",
+		"target_kind": "volatile_orbital",
+		"reward": 320,
+		"deadline_hours": 8,
+		"min_reputation": 0,
+	}
+	var tooltip := CharterTooltipText.format_scan(offer, "", "", "", -1.0, catalog)
+	runner.check(tooltip.contains("Reconnaissance"), "scan tooltip: designation title")
+	runner.check(
+		tooltip.contains("Proxima Habitat → Prospect marker → Proxima Habitat"),
+		"scan tooltip: round-trip contract"
+	)
+	runner.check(
+		tooltip.contains("Volatile survey site"),
+		"scan tooltip: volatile site kind"
+	)
+	runner.check(
+		tooltip.contains("active-scan"),
+		"scan tooltip: scan instruction"
+	)
+	runner.check(tooltip.contains("Requirements"), "scan tooltip: requirements heading")
+	runner.check(
+		tooltip.contains("• Active target scan on site"),
+		"scan tooltip: active scan requirement"
+	)
+
+	offer["target_kind"] = "planet"
+	var planet_tooltip := CharterTooltipText.format_scan(offer, "", "", "", -1.0, catalog)
+	runner.check(
+		planet_tooltip.contains("In-system survey: Tycho"),
+		"scan tooltip: planet survey line"
 	)

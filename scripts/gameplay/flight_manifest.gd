@@ -31,6 +31,7 @@ static func build(
 		"trade_cargo_mass_t": hold_used,
 		"passengers": _build_passengers(session, catalog, missions, ship.id),
 		"freight": _build_freight(session, catalog, missions, ship.id),
+		"scans": _build_scans(session, catalog, missions, ship.id),
 	}
 
 
@@ -45,6 +46,7 @@ static func _empty_snapshot(ship_name: String) -> Dictionary:
 		"trade_cargo_mass_t": 0.0,
 		"passengers": [],
 		"freight": [],
+		"scans": [],
 	}
 
 
@@ -107,6 +109,23 @@ static func _build_passengers(
 	return rows
 
 
+static func _build_scans(
+	session: GameSession,
+	catalog: Catalog,
+	missions: MissionSubsystem,
+	ship_id: String
+) -> Array:
+	var rows: Array = []
+	for entry_variant in missions.list_scan_accepted():
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("ship_id", "")) != ship_id:
+			continue
+		rows.append(_scan_row(session, catalog, entry))
+	return rows
+
+
 static func _build_freight(
 	session: GameSession,
 	catalog: Catalog,
@@ -131,6 +150,17 @@ static func _passenger_row(session: GameSession, catalog: Catalog, entry: Dictio
 		"title": str(entry.get("role_title", "Charter")),
 		"route": "%s → %s" % [origin, destination],
 		"meta": "%d pax · d%d" % [int(entry.get("quantity", 0)), int(entry.get("reward", 0))],
+		"deadline": deadline_text(session, entry),
+	}
+
+
+static func _scan_row(session: GameSession, catalog: Catalog, entry: Dictionary) -> Dictionary:
+	var origin := _habitat_name(catalog, str(entry.get("origin_habitat_id", "")))
+	var site := str(entry.get("site_label", ""))
+	return {
+		"title": str(entry.get("designation", "Scan")),
+		"route": "%s → %s → %s" % [origin, site, origin],
+		"meta": "d%d" % int(entry.get("reward", 0)),
 		"deadline": deadline_text(session, entry),
 	}
 

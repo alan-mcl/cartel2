@@ -250,6 +250,8 @@ static func roll_stability(
 static func destination_display_label(catalog: Catalog, sector_id: String) -> String:
 	if catalog == null or sector_id.is_empty():
 		return sector_id
+	if VolatileTranslation.is_volatile_sector_id(sector_id):
+		return "Survey site"
 	var sector := catalog.get_sector(sector_id)
 	var label := str(sector.get("planet_name", ""))
 	if label.is_empty():

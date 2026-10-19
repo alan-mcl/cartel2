@@ -650,6 +650,8 @@ func set_orbital_phase(sector_key: String, phase: float) -> void:
 func advance_orbital_phase(catalog: Catalog, delta: float) -> void:
 	if docked or in_unspace or delta <= 0.0:
 		return
+	if VolatileTranslation.is_volatile_sector_id(sector_id):
+		return
 	var world_data: Dictionary = catalog.get_world(sector_id)
 	var ring_data: Dictionary = world_data.get("orbital_ring", {})
 	var period_seconds := float(ring_data.get("period_seconds", 720.0))

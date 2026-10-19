@@ -40,7 +40,12 @@ static func sample(catalog: Catalog, world: WorldPresence, position: Vector2) ->
 		out.reference_gravity = UNSPACE_GRAVITIC_REFERENCE
 		return out
 
+	if VolatileTranslation.is_volatile_sector_id(world.sector_id):
+		return _volatile_site_sample(gst, position)
+
 	var sector := catalog.get_sector_def(world.sector_id)
+	if sector == null:
+		return out
 	var radii := _world_radii(catalog, world.sector_id)
 	var planet_radius: float = radii.planet_radius
 	var ring_radius: float = radii.ring_radius
@@ -139,6 +144,20 @@ static func _world_radii(catalog: Catalog, sector_id: String) -> Dictionary:
 		"ring_radius": float(ring.get("radius", 1600.0)),
 		"gate_radius": float(gate.get("radius", 5400.0)),
 	}
+
+
+static func _volatile_site_sample(gst: float, position: Vector2) -> FieldSample:
+	var out := FieldSample.new()
+	var planet_radius := 800.0
+	var ring_radius := 3200.0
+	var surface_gravity := 0.35
+	var distance := maxf(position.length(), planet_radius)
+	out.gravity = surface_gravity * pow(planet_radius / distance, 2.0)
+	out.reference_gravity = surface_gravity * pow(planet_radius / ring_radius, 2.0)
+	out.magnetic = _unspace_magnetic(gst) * 0.45
+	out.radiant = UNSPACE_RADIANT * 1.25
+	out.charged_particle = _unspace_charged_particle(gst) * 0.55
+	return out
 
 
 static func _unspace_gravity(gst: float) -> float:

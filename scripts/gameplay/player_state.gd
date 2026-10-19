@@ -121,6 +121,27 @@ func has_scanned(contact_id: String) -> bool:
 	return false
 
 
+func scan_satisfies_contract(
+	contact_id: String,
+	sector_id: String,
+	accepted_gst: float
+) -> bool:
+	if contact_id.is_empty() or sector_id.is_empty():
+		return false
+	for entry_variant in scanned_contacts:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("contact_id", "")) != contact_id:
+			continue
+		if str(entry.get("sector_id", "")) != sector_id:
+			continue
+		if float(entry.get("recorded_gst", 0.0)) + 0.001 < accepted_gst:
+			continue
+		return true
+	return false
+
+
 func record_target_scan(
 	contact_id: String,
 	contact_kind: String,

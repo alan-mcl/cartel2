@@ -77,7 +77,9 @@ func _refresh_content() -> void:
 	_populate_modules(snapshot.get("modules", []) as Array)
 	_populate_cargo(snapshot)
 	_populate_passengers(snapshot.get("passengers", []) as Array)
-	_populate_freight(snapshot.get("freight", []) as Array)
+	var freight_rows: Array = snapshot.get("freight", []) as Array
+	freight_rows.append_array(snapshot.get("scans", []) as Array)
+	_populate_freight(freight_rows)
 
 
 func _missions_subsystem() -> MissionSubsystem:

@@ -1,577 +1,1096 @@
 [
-  {
-    "id": "proxima_habitat_terminal",
-    "name": "Proxima Habitat Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "The great Terminal is like a city unto itself. Beyond the docking concourse, thousands of ships occupy berths stretching into the distance, while cargo moves through vast automated handling systems and streams of passengers pour into and out of the Habitat. The constant movement of ships, people and freight makes it immediately clear that Proxima is the great crossroads of human space.",
-    "short_desc": "The central arrivals and departures terminal on Proxima Habitat.",
-    "art": "res://assets/ui/locations/proxima_habitat_terminal.png"
-  },
-  {
-    "id": "davidsons",
-    "name": "Davidsons",
-    "type": "bar",
-    "kind": "landmark",
-    "description": "A legendary bar where off-duty crews trade rumours and bad jokes, open 24/7. The lights and the ceiling are low and the air smells of synth-whiskey and beer. Windows look directly onto the docking concourse; ships drift slowly past while crews come and go. The unofficial passenger charter market is simply another part of the background conversation.",
-    "short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes.",
-    "art": "res://assets/ui/locations/davidsons.png"
-  },
-  {
-    "id": "skyedge_space_ships",
-    "name": "Skyedge Space Ships",
-    "type": "chassis_dealer",
-    "kind": "merchant",
-    "description": "Skyedge is where you go when you don't want to buy a ship, you want to build one. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
-    "short_desc": "Ship chassis dealer and frame registrar.",
-    "art": "res://assets/ui/locations/skyedge.png",
-    "stock": [
-      "flare_on_chassis",
-      "pegasus_chassis",
-      "krypton_chassis",
-      "wolff_chassis",
-      "dragon_chassis",
-      "juno_chassis",
-      "silhouette_chassis",
-      "mantis_chassis"
-    ]
-  },
-  {
-    "id": "concord_scouts",
-    "name": "Concord Scouts",
-    "type": "ship_dealer",
-    "kind": "merchant",
-    "description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly. The showroom occupies a sprawling orbital lot within the Habitat, with completed light civilian vessels arranged in long rows beneath enormous illuminated canopies. Everything is presented with the immaculate confidence of a luxury dealership.",
-    "short_desc": "No finer place to purchase new or used space craft.",
-    "art": "res://assets/ui/locations/concord_scouts.png",
-    "stock": [
-      "flare_on_ss",
-      "flare_on_sk",
-      "flare_on_cx",
-      "pegasus_p101",
-      "pegasus_p103",
-      "pegasus_p103a",
-      "pegasus_p105",
-      "pegasus_p107",
-      "pegasus_p109",
-      "pegasus_p111",
-      "pegasus_p113",
-      "pegasus_p115",
-      "krypton_k2",
-      "krypton_k3",
-      "krypton_k4",
-      "wolff_warrior",
-      "wolff_gladius",
-      "wolff_bastion",
-      "wolff_logistico",
-      "dragon_bronze",
-      "dragon_post",
-      "dragon_gold",
-      "juno_1030",
-      "juno_1045",
-      "juno_1060",
-      "juno_1088",
-      "juno_1090",
-      "silhouette_mk8",
-      "silhouette_mk6",
-      "silhouette_warden",
-      "mantis_xf900",
-      "mantis_xf4400",
-      "mantis_xf5700"
-    ]
-  },
-  {
-    "id": "proxima_shipyard",
-    "name": "Centauri Shipyard",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. The main warehouses seem to stretch endlessly into the distance. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
-    "short_desc": "Outfitting bays for installing systems on docked ships.",
-    "art": "res://assets/ui/locations/proxima_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "proxima_exchange",
-    "name": "Proxima Central Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Enormous market displays track commodities and contracts in real time while automated systems continuously adjust prices and execute transactions. Traders, brokers and corporate representatives occupy quieter workspaces overlooking the exchange, intervening when they need to negotiate unusual contracts or manage large positions.",
-    "short_desc": "Automated commodity exchange for interplanetary trade categories.",
-    "art": "res://assets/ui/locations/proxima_exchange.png"
-  },
-  {
-    "id": "tycho_habitat_terminal",
-    "name": "Tycho Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
-    "short_desc": "Hard-worn terminal above Tycho.",
-    "art": "res://assets/ui/locations/tycho_habitat_terminal.png"
-  },
-  {
-    "id": "tycho_shipyard",
-    "name": "Tycho Heavy Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Ore-hauler cradles and quake-braced gantries dominate the Tycho yards. Crews fit armour and industrial systems while eclipse shutters roll across the observation decks.",
-    "short_desc": "Heavy outfitting bays for industrial traffic above Tycho.",
-    "art": "res://assets/ui/locations/tycho_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "bela_habitat_terminal",
-    "name": "La Bella Vista Orbital Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Resort terminal with customs and docking lanes overlooking the ocean.",
-    "short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
-    "art": "res://assets/ui/locations/bela_habitat_terminal.png"
-  },
-  {
-    "id": "bela_shipyard",
-    "name": "Vista Fitting Docks",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Polished fitting docks above La Bella Vista's oceans. Yacht crews mix with charter pilots while modules are installed behind tinted viewports.",
-    "short_desc": "Resort orbital outfitting docks with ocean views.",
-    "art": "res://assets/ui/locations/bela_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "irasia_habitat_terminal",
-    "name": "Irasia Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
-    "short_desc": "Commercial terminal on a major trade route.",
-    "art": "res://assets/ui/locations/irasia_habitat_terminal.png"
-  },
-  {
-    "id": "irasia_shipyard",
-    "name": "Irasia Commercial Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "High-throughput commercial yards on the Irasia trade spine. Manifest queues and parallel bays keep manufacturing traffic moving.",
-    "short_desc": "Commercial outfitting yards on a major trade spine.",
-    "art": "res://assets/ui/locations/irasia_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "tokirev_habitat_terminal",
-    "name": "Tokirev Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Factory-world terminal. Automated cargo handlers outnumber passengers.",
-    "short_desc": "Factory-world terminal with automated cargo handlers.",
-    "art": "res://assets/ui/locations/tokirev_habitat_terminal.png"
-  },
-  {
-    "id": "tokirev_shipyard",
-    "name": "Tokirev Automated Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Cold factory-world yards where robotic arms outnumber fitters. Modules slide from warehouse to cradle on tracked lines.",
-    "short_desc": "Automated outfitting yards above Tokirev.",
-    "art": "res://assets/ui/locations/tokirev_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "fennet_habitat_terminal",
-    "name": "Fennet Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
-    "short_desc": "Rim terminal that still feels like a frontier stop.",
-    "art": "res://assets/ui/locations/fennet_habitat_terminal.png"
-  },
-  {
-    "id": "fennet_shipyard",
-    "name": "Fennet Rim Works",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Rim works that grew from a frontier stop into a regional yard. Mixed stock, honest prices, and bays that still smell of weld smoke.",
-    "short_desc": "Regional rim outfitting works.",
-    "art": "res://assets/ui/locations/fennet_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "fortuna_habitat_terminal",
-    "name": "Fortuna Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Quiet, expensive terminal. Private shuttles outnumber tramp freighters.",
-    "short_desc": "Quiet, expensive terminal above a finance world.",
-    "art": "res://assets/ui/locations/fortuna_habitat_terminal.png"
-  },
-  {
-    "id": "fortuna_shipyard",
-    "name": "Fortuna Private Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Discrete private yards above Fortuna. Wealthy owners expect quiet bays, vetted crews, and finishes that match the finance districts below.",
-    "short_desc": "Private outfitting yards above a finance world.",
-    "art": "res://assets/ui/locations/fortuna_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "new_carthage_habitat_terminal",
-    "name": "New Carthage Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
-    "short_desc": "Shipping terminal above an oceanic mercantile hub.",
-    "art": "res://assets/ui/locations/new_carthage_habitat_terminal.png"
-  },
-  {
-    "id": "new_carthage_shipyard",
-    "name": "Carthage Slipways",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Mercantile slipways where old trading houses still set the tone. Hulls sit in open-water cradles while crews negotiate spare parts on the quay.",
-    "short_desc": "Mercantile slipways above New Carthage.",
-    "art": "res://assets/ui/locations/new_carthage_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "horizon_habitat_terminal",
-    "name": "Horizon Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Busy civic terminal above a great population centre. Suburban shuttles mix with long-haul traffic.",
-    "short_desc": "Busy civic terminal above a great population centre.",
-    "art": "res://assets/ui/locations/horizon_habitat_terminal.png"
-  },
-  {
-    "id": "horizon_shipyard",
-    "name": "Horizon Civic Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Spacious civic yards above Horizon's green belts. Suburban shuttles share berths with long-haul freighters in orderly civic bays.",
-    "short_desc": "Civic outfitting yards above a great population centre.",
-    "art": "res://assets/ui/locations/horizon_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "titania_habitat_terminal",
-    "name": "Titania Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
-    "short_desc": "Tourist terminal with low-gravity docking lanes.",
-    "art": "res://assets/ui/locations/titania_habitat_terminal.png"
-  },
-  {
-    "id": "titania_shipyard",
-    "name": "Titania Low-G Docks",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Low-gravity fitting docks with panoramic views of Titania's storms. Tourist charters and winter-sport traffic share the same gentle berths.",
-    "short_desc": "Low-gravity outfitting docks above Titania IX.",
-    "art": "res://assets/ui/locations/titania_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "concordia_orbital_terminal",
-    "name": "Pelagos Orbital Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
-    "short_desc": "Commerce terminal above Pelagos.",
-    "art": "res://assets/ui/locations/concordia_orbital_terminal.png"
-  },
-  {
-    "id": "concordia_shipyard",
-    "name": "Pelagos Twin Yards",
-    "type": "shipyard",
-    "kind": "workshop",
-    "description": "Manufacturing yards tuned to Pelagos' twin-sun cycle. Observation decks filter the glare while crews install systems in parallel bays.",
-    "short_desc": "Manufacturing outfitting yards above Pelagos.",
-    "art": "res://assets/ui/locations/concordia_shipyard.png",
-    "services": [
-      "assembly",
-      "parts"
-    ]
-  },
-  {
-    "id": "tycho_exchange",
-    "name": "Tycho Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Automated commodity exchange for Tycho orbital contracts.",
-    "short_desc": "Automated commodity exchange for Tycho orbital contracts.",
-    "art": "res://assets/ui/locations/tycho_exchange.png"
-  },
-  {
-    "id": "bela_exchange",
-    "name": "La Bella Vista Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Resort-world exchange listing daily contracts across the thirteen trade categories.",
-    "short_desc": "Resort-world exchange listing daily trade contracts.",
-    "art": "res://assets/ui/locations/bela_exchange.png"
-  },
-  {
-    "id": "irasia_exchange",
-    "name": "Irasia Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commercial exchange on a major trade spine.",
-    "short_desc": "Commercial exchange on a major trade spine.",
-    "art": "res://assets/ui/locations/irasia_exchange.png"
-  },
-  {
-    "id": "tokirev_exchange",
-    "name": "Tokirev Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Factory-world exchange for industrial cargo contracts.",
-    "short_desc": "Factory-world exchange for industrial cargo contracts.",
-    "art": "res://assets/ui/locations/tokirev_exchange.png"
-  },
-  {
-    "id": "fennet_exchange",
-    "name": "Fennet Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Rim exchange listing agricultural and industrial contracts.",
-    "short_desc": "Rim exchange listing agricultural and industrial contracts.",
-    "art": "res://assets/ui/locations/fennet_exchange.png"
-  },
-  {
-    "id": "fortuna_exchange",
-    "name": "Fortuna Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Finance-world exchange with polished contract listings.",
-    "short_desc": "Finance-world exchange with polished contract listings.",
-    "art": "res://assets/ui/locations/fortuna_exchange.png"
-  },
-  {
-    "id": "new_carthage_exchange",
-    "name": "New Carthage Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Mercantile exchange for shipping and commodity contracts.",
-    "short_desc": "Mercantile exchange for shipping and commodity contracts.",
-    "art": "res://assets/ui/locations/new_carthage_exchange.png"
-  },
-  {
-    "id": "horizon_exchange",
-    "name": "Horizon Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Population-centre exchange with broad daily contract listings.",
-    "short_desc": "Population-centre exchange with broad daily contract listings.",
-    "art": "res://assets/ui/locations/horizon_exchange.png"
-  },
-  {
-    "id": "titania_exchange",
-    "name": "Titania Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Tourist-world exchange listing resort and import contracts.",
-    "short_desc": "Tourist-world exchange listing resort and import contracts.",
-    "art": "res://assets/ui/locations/titania_exchange.png"
-  },
-  {
-    "id": "concordia_exchange",
-    "name": "Pelagos Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Pelagos orbital exchange for resource and manufacturing contracts.",
-    "short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
-    "art": "res://assets/ui/locations/concordia_exchange.png"
-  },
-  {
-    "id": "centauri_a_beltworks_terminal",
-    "name": "Beltworks Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for the Alpha Centauri A belt. Dust-scoured observation decks look out over the mining lanes.",
-    "short_desc": "Terminal for belt mining traffic.",
-    "art": "res://assets/ui/locations/centauri_a_beltworks_terminal.png"
-  },
-  {
-    "id": "centauri_a_beltworks_exchange",
-    "name": "Beltworks Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for belt ore contracts and Proxima supply runs.",
-    "short_desc": "Exchange for belt ore and supply contracts.",
-    "art": "res://assets/ui/locations/centauri_a_beltworks_exchange.png"
-  },
-  {
-    "id": "acb1_terminal",
-    "name": "ACB1 Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for ACB1.",
-    "short_desc": "Terminal for ACB1 traffic.",
-    "art": "res://assets/ui/locations/acb1_terminal.png"
-  },
-  {
-    "id": "acb1_exchange",
-    "name": "ACB1 Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for ACB1 contracts and hub supply runs.",
-    "short_desc": "Exchange at ACB1.",
-    "art": "res://assets/ui/locations/acb1_exchange.png"
-  },
-  {
-    "id": "acb2_terminal",
-    "name": "Scar Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Scar.",
-    "short_desc": "Terminal for Scar traffic.",
-    "art": "res://assets/ui/locations/acb2_terminal.png"
-  },
-  {
-    "id": "acb2_exchange",
-    "name": "Scar Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Scar contracts and hub supply runs.",
-    "short_desc": "Exchange at Scar.",
-    "art": "res://assets/ui/locations/acb2_exchange.png"
-  },
-  {
-    "id": "acb3_terminal",
-    "name": "ACB3 Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for ACB3.",
-    "short_desc": "Terminal for ACB3 traffic.",
-    "art": "res://assets/ui/locations/acb3_terminal.png"
-  },
-  {
-    "id": "acb3_exchange",
-    "name": "ACB3 Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for ACB3 contracts and hub supply runs.",
-    "short_desc": "Exchange at ACB3.",
-    "art": "res://assets/ui/locations/acb3_exchange.png"
-  },
-  {
-    "id": "terminus_terminal",
-    "name": "Terminus Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Terminus.",
-    "short_desc": "Terminal for Terminus traffic.",
-    "art": "res://assets/ui/locations/terminus_terminal.png"
-  },
-  {
-    "id": "terminus_exchange",
-    "name": "Terminus Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Terminus contracts and hub supply runs.",
-    "short_desc": "Exchange at Terminus.",
-    "art": "res://assets/ui/locations/terminus_exchange.png"
-  },
-  {
-    "id": "vulcan_research_terminal",
-    "name": "Vulcan Research Station Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Vulcan Research Station.",
-    "short_desc": "Terminal for Vulcan Research Station traffic.",
-    "art": "res://assets/ui/locations/vulcan_research_terminal.png"
-  },
-  {
-    "id": "vulcan_research_exchange",
-    "name": "Vulcan Research Station Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Vulcan Research Station contracts and hub supply runs.",
-    "short_desc": "Exchange at Vulcan Research Station.",
-    "art": "res://assets/ui/locations/vulcan_research_exchange.png"
-  },
-  {
-    "id": "regulus_belt_terminal",
-    "name": "Regulus Belt Station Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Regulus Belt Station.",
-    "short_desc": "Terminal for Regulus Belt Station traffic.",
-    "art": "res://assets/ui/locations/regulus_belt_terminal.png"
-  },
-  {
-    "id": "regulus_belt_exchange",
-    "name": "Regulus Belt Station Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Regulus Belt Station contracts and hub supply runs.",
-    "short_desc": "Exchange at Regulus Belt Station.",
-    "art": "res://assets/ui/locations/regulus_belt_exchange.png"
-  },
-  {
-    "id": "denarius_ii_terminal",
-    "name": "Denarius II Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Denarius II.",
-    "short_desc": "Terminal for Denarius II traffic.",
-    "art": "res://assets/ui/locations/denarius_ii_terminal.png"
-  },
-  {
-    "id": "denarius_ii_exchange",
-    "name": "Denarius II Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Denarius II contracts and hub supply runs.",
-    "short_desc": "Exchange at Denarius II.",
-    "art": "res://assets/ui/locations/denarius_ii_exchange.png"
-  },
-  {
-    "id": "typhon_xvi_terminal",
-    "name": "Typhon XVI Terminal",
-    "type": "terminal",
-    "kind": "terminal",
-    "description": "Customs and convoy scheduling for Typhon XVI.",
-    "short_desc": "Terminal for Typhon XVI traffic.",
-    "art": "res://assets/ui/locations/typhon_xvi_terminal.png"
-  },
-  {
-    "id": "typhon_xvi_exchange",
-    "name": "Typhon XVI Exchange",
-    "type": "market",
-    "kind": "merchant",
-    "description": "Commodity exchange for Typhon XVI contracts and hub supply runs.",
-    "short_desc": "Exchange at Typhon XVI.",
-    "art": "res://assets/ui/locations/typhon_xvi_exchange.png"
-  }
+	{
+		"art": "res://assets/ui/locations/proxima_habitat_terminal.png",
+		"description": "The great Terminal is like a city unto itself. Beyond the docking concourse, thousands of ships occupy berths stretching into the distance, while cargo moves through vast automated handling systems and streams of passengers pour into and out of the Habitat. The constant movement of ships, people and freight makes it immediately clear that Proxima is the great crossroads of human space.",
+		"id": "proxima_habitat_terminal",
+		"kind": "terminal",
+		"name": "Proxima Habitat Terminal",
+		"short_desc": "The central arrivals and departures terminal on Proxima Habitat.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "A legendary bar where off-duty crews trade rumours and bad jokes, open 24/7. The lights and the ceiling are low and the air smells of synth-whiskey and beer. Windows look directly onto the docking concourse; ships drift slowly past while crews come and go. The unofficial passenger charter market is simply another part of the background conversation.",
+		"id": "davidsons",
+		"kind": "landmark",
+		"name": "Davidsons",
+		"short_desc": "Pilot bar where off-duty crews trade rumours and bad jokes.",
+		"type": "bar"
+	},
+	{
+		"art": "res://assets/ui/locations/skyedge.png",
+		"description": "Skyedge is where you go when you don't want to buy a ship, you want to build one. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
+		"id": "skyedge_space_ships",
+		"kind": "merchant",
+		"name": "Skyedge Space Ships",
+		"short_desc": "Ship chassis dealer and frame registrar.",
+		"stock": [
+			"flare_on_chassis",
+			"pegasus_chassis",
+			"krypton_chassis",
+			"wolff_chassis",
+			"dragon_chassis",
+			"juno_chassis",
+			"silhouette_chassis",
+			"mantis_chassis"
+		],
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/concord_scouts.png",
+		"description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly. The showroom occupies a sprawling orbital lot within the Habitat, with completed light civilian vessels arranged in long rows beneath enormous illuminated canopies. Everything is presented with the immaculate confidence of a luxury dealership.",
+		"id": "concord_scouts",
+		"kind": "merchant",
+		"name": "Concord Scouts",
+		"short_desc": "No finer place to purchase new or used space craft.",
+		"stock": [
+			"flare_on_ss",
+			"flare_on_sk",
+			"flare_on_cx",
+			"pegasus_p101",
+			"pegasus_p103",
+			"pegasus_p103a",
+			"pegasus_p105",
+			"pegasus_p107",
+			"pegasus_p109",
+			"pegasus_p111",
+			"pegasus_p113",
+			"pegasus_p115",
+			"krypton_k2",
+			"krypton_k3",
+			"krypton_k4",
+			"wolff_warrior",
+			"wolff_gladius",
+			"wolff_bastion",
+			"wolff_logistico",
+			"dragon_bronze",
+			"dragon_post",
+			"dragon_gold",
+			"juno_1030",
+			"juno_1045",
+			"juno_1060",
+			"juno_1088",
+			"juno_1090",
+			"silhouette_mk8",
+			"silhouette_mk6",
+			"silhouette_warden",
+			"mantis_xf900",
+			"mantis_xf4400",
+			"mantis_xf5700"
+		],
+		"type": "ship_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/proxima_shipyard.png",
+		"description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. The main warehouses seem to stretch endlessly into the distance. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
+		"id": "proxima_shipyard",
+		"kind": "workshop",
+		"name": "Centauri Shipyard",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Outfitting bays for installing systems on docked ships.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/proxima_exchange.png",
+		"description": "Enormous market displays track commodities and contracts in real time while automated systems continuously adjust prices and execute transactions. Traders, brokers and corporate representatives occupy quieter workspaces overlooking the exchange, intervening when they need to negotiate unusual contracts or manage large positions.",
+		"id": "proxima_exchange",
+		"kind": "merchant",
+		"name": "Proxima Central Exchange",
+		"short_desc": "Automated commodity exchange for interplanetary trade categories.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tycho_habitat_terminal.png",
+		"description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
+		"id": "tycho_habitat_terminal",
+		"kind": "terminal",
+		"name": "Tycho Terminal",
+		"short_desc": "Hard-worn terminal above Tycho.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tycho_shipyard.png",
+		"description": "Ore-hauler cradles and quake-braced gantries dominate the Tycho yards. Crews fit armour and industrial systems while eclipse shutters roll across the observation decks.",
+		"id": "tycho_shipyard",
+		"kind": "workshop",
+		"name": "Tycho Heavy Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Heavy outfitting bays for industrial traffic above Tycho.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_habitat_terminal.png",
+		"description": "Resort terminal with customs and docking lanes overlooking the ocean.",
+		"id": "bela_habitat_terminal",
+		"kind": "terminal",
+		"name": "La Bella Vista Orbital Terminal",
+		"short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_shipyard.png",
+		"description": "Polished fitting docks above La Bella Vista's oceans. Yacht crews mix with charter pilots while modules are installed behind tinted viewports.",
+		"id": "bela_shipyard",
+		"kind": "workshop",
+		"name": "Vista Fitting Docks",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Resort orbital outfitting docks with ocean views.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/irasia_habitat_terminal.png",
+		"description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
+		"id": "irasia_habitat_terminal",
+		"kind": "terminal",
+		"name": "Irasia Terminal",
+		"short_desc": "Commercial terminal on a major trade route.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/irasia_shipyard.png",
+		"description": "High-throughput commercial yards on the Irasia trade spine. Manifest queues and parallel bays keep manufacturing traffic moving.",
+		"id": "irasia_shipyard",
+		"kind": "workshop",
+		"name": "Irasia Commercial Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Commercial outfitting yards on a major trade spine.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_habitat_terminal.png",
+		"description": "Factory-world terminal. Automated cargo handlers outnumber passengers.",
+		"id": "tokirev_habitat_terminal",
+		"kind": "terminal",
+		"name": "Tokirev Terminal",
+		"short_desc": "Factory-world terminal with automated cargo handlers.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_shipyard.png",
+		"description": "Cold factory-world yards where robotic arms outnumber fitters. Modules slide from warehouse to cradle on tracked lines.",
+		"id": "tokirev_shipyard",
+		"kind": "workshop",
+		"name": "Tokirev Automated Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Automated outfitting yards above Tokirev.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_habitat_terminal.png",
+		"description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
+		"id": "fennet_habitat_terminal",
+		"kind": "terminal",
+		"name": "Fennet Terminal",
+		"short_desc": "Rim terminal that still feels like a frontier stop.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_shipyard.png",
+		"description": "Rim works that grew from a frontier stop into a regional yard. Mixed stock, honest prices, and bays that still smell of weld smoke.",
+		"id": "fennet_shipyard",
+		"kind": "workshop",
+		"name": "Fennet Rim Works",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Regional rim outfitting works.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_habitat_terminal.png",
+		"description": "Quiet, expensive terminal. Private shuttles outnumber tramp freighters.",
+		"id": "fortuna_habitat_terminal",
+		"kind": "terminal",
+		"name": "Fortuna Terminal",
+		"short_desc": "Quiet, expensive terminal above a finance world.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_shipyard.png",
+		"description": "Discrete private yards above Fortuna. Wealthy owners expect quiet bays, vetted crews, and finishes that match the finance districts below.",
+		"id": "fortuna_shipyard",
+		"kind": "workshop",
+		"name": "Fortuna Private Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Private outfitting yards above a finance world.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/new_carthage_habitat_terminal.png",
+		"description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
+		"id": "new_carthage_habitat_terminal",
+		"kind": "terminal",
+		"name": "New Carthage Terminal",
+		"short_desc": "Shipping terminal above an oceanic mercantile hub.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/new_carthage_shipyard.png",
+		"description": "Mercantile slipways where old trading houses still set the tone. Hulls sit in open-water cradles while crews negotiate spare parts on the quay.",
+		"id": "new_carthage_shipyard",
+		"kind": "workshop",
+		"name": "Carthage Slipways",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Mercantile slipways above New Carthage.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_habitat_terminal.png",
+		"description": "Busy civic terminal above a great population centre. Suburban shuttles mix with long-haul traffic.",
+		"id": "horizon_habitat_terminal",
+		"kind": "terminal",
+		"name": "Horizon Terminal",
+		"short_desc": "Busy civic terminal above a great population centre.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_shipyard.png",
+		"description": "Spacious civic yards above Horizon's green belts. Suburban shuttles share berths with long-haul freighters in orderly civic bays.",
+		"id": "horizon_shipyard",
+		"kind": "workshop",
+		"name": "Horizon Civic Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Civic outfitting yards above a great population centre.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_habitat_terminal.png",
+		"description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
+		"id": "titania_habitat_terminal",
+		"kind": "terminal",
+		"name": "Titania Terminal",
+		"short_desc": "Tourist terminal with low-gravity docking lanes.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_shipyard.png",
+		"description": "Low-gravity fitting docks with panoramic views of Titania's storms. Tourist charters and winter-sport traffic share the same gentle berths.",
+		"id": "titania_shipyard",
+		"kind": "workshop",
+		"name": "Titania Low-G Docks",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Low-gravity outfitting docks above Titania IX.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/concordia_orbital_terminal.png",
+		"description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
+		"id": "concordia_orbital_terminal",
+		"kind": "terminal",
+		"name": "Pelagos Orbital Terminal",
+		"short_desc": "Commerce terminal above Pelagos.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/concordia_shipyard.png",
+		"description": "Manufacturing yards tuned to Pelagos' twin-sun cycle. Observation decks filter the glare while crews install systems in parallel bays.",
+		"id": "concordia_shipyard",
+		"kind": "workshop",
+		"name": "Pelagos Twin Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Manufacturing outfitting yards above Pelagos.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/tycho_exchange.png",
+		"description": "Automated commodity exchange for Tycho orbital contracts.",
+		"id": "tycho_exchange",
+		"kind": "merchant",
+		"name": "Tycho Exchange",
+		"short_desc": "Automated commodity exchange for Tycho orbital contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_exchange.png",
+		"description": "Resort-world exchange listing daily contracts across the thirteen trade categories.",
+		"id": "bela_exchange",
+		"kind": "merchant",
+		"name": "La Bella Vista Exchange",
+		"short_desc": "Resort-world exchange listing daily trade contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/irasia_exchange.png",
+		"description": "Commercial exchange on a major trade spine.",
+		"id": "irasia_exchange",
+		"kind": "merchant",
+		"name": "Irasia Exchange",
+		"short_desc": "Commercial exchange on a major trade spine.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_exchange.png",
+		"description": "Factory-world exchange for industrial cargo contracts.",
+		"id": "tokirev_exchange",
+		"kind": "merchant",
+		"name": "Tokirev Exchange",
+		"short_desc": "Factory-world exchange for industrial cargo contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_exchange.png",
+		"description": "Rim exchange listing agricultural and industrial contracts.",
+		"id": "fennet_exchange",
+		"kind": "merchant",
+		"name": "Fennet Exchange",
+		"short_desc": "Rim exchange listing agricultural and industrial contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_exchange.png",
+		"description": "Finance-world exchange with polished contract listings.",
+		"id": "fortuna_exchange",
+		"kind": "merchant",
+		"name": "Fortuna Exchange",
+		"short_desc": "Finance-world exchange with polished contract listings.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/new_carthage_exchange.png",
+		"description": "Mercantile exchange for shipping and commodity contracts.",
+		"id": "new_carthage_exchange",
+		"kind": "merchant",
+		"name": "New Carthage Exchange",
+		"short_desc": "Mercantile exchange for shipping and commodity contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_exchange.png",
+		"description": "Population-centre exchange with broad daily contract listings.",
+		"id": "horizon_exchange",
+		"kind": "merchant",
+		"name": "Horizon Exchange",
+		"short_desc": "Population-centre exchange with broad daily contract listings.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_exchange.png",
+		"description": "Tourist-world exchange listing resort and import contracts.",
+		"id": "titania_exchange",
+		"kind": "merchant",
+		"name": "Titania Exchange",
+		"short_desc": "Tourist-world exchange listing resort and import contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/concordia_exchange.png",
+		"description": "Pelagos orbital exchange for resource and manufacturing contracts.",
+		"id": "concordia_exchange",
+		"kind": "merchant",
+		"name": "Pelagos Exchange",
+		"short_desc": "Pelagos orbital exchange for resource and manufacturing contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/centauri_a_beltworks_terminal.png",
+		"description": "Customs and convoy scheduling for the Alpha Centauri A belt. Dust-scoured observation decks look out over the mining lanes.",
+		"id": "centauri_a_beltworks_terminal",
+		"kind": "terminal",
+		"name": "Beltworks Terminal",
+		"short_desc": "Terminal for belt mining traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/centauri_a_beltworks_exchange.png",
+		"description": "Commodity exchange for belt ore contracts and Proxima supply runs.",
+		"id": "centauri_a_beltworks_exchange",
+		"kind": "merchant",
+		"name": "Beltworks Exchange",
+		"short_desc": "Exchange for belt ore and supply contracts.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/acb1_terminal.png",
+		"description": "Customs and convoy scheduling for ACB1.",
+		"id": "acb1_terminal",
+		"kind": "terminal",
+		"name": "ACB1 Terminal",
+		"short_desc": "Terminal for ACB1 traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/acb1_exchange.png",
+		"description": "Commodity exchange for ACB1 contracts and hub supply runs.",
+		"id": "acb1_exchange",
+		"kind": "merchant",
+		"name": "ACB1 Exchange",
+		"short_desc": "Exchange at ACB1.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/acb2_terminal.png",
+		"description": "Customs and convoy scheduling for Scar.",
+		"id": "acb2_terminal",
+		"kind": "terminal",
+		"name": "Scar Terminal",
+		"short_desc": "Terminal for Scar traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/acb2_exchange.png",
+		"description": "Commodity exchange for Scar contracts and hub supply runs.",
+		"id": "acb2_exchange",
+		"kind": "merchant",
+		"name": "Scar Exchange",
+		"short_desc": "Exchange at Scar.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/acb3_terminal.png",
+		"description": "Customs and convoy scheduling for ACB3.",
+		"id": "acb3_terminal",
+		"kind": "terminal",
+		"name": "ACB3 Terminal",
+		"short_desc": "Terminal for ACB3 traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/acb3_exchange.png",
+		"description": "Commodity exchange for ACB3 contracts and hub supply runs.",
+		"id": "acb3_exchange",
+		"kind": "merchant",
+		"name": "ACB3 Exchange",
+		"short_desc": "Exchange at ACB3.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/terminus_terminal.png",
+		"description": "Customs and convoy scheduling for Terminus.",
+		"id": "terminus_terminal",
+		"kind": "terminal",
+		"name": "Terminus Terminal",
+		"short_desc": "Terminal for Terminus traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/terminus_exchange.png",
+		"description": "Commodity exchange for Terminus contracts and hub supply runs.",
+		"id": "terminus_exchange",
+		"kind": "merchant",
+		"name": "Terminus Exchange",
+		"short_desc": "Exchange at Terminus.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/vulcan_research_terminal.png",
+		"description": "Customs and convoy scheduling for Vulcan Research Station.",
+		"id": "vulcan_research_terminal",
+		"kind": "terminal",
+		"name": "Vulcan Research Station Terminal",
+		"short_desc": "Terminal for Vulcan Research Station traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/vulcan_research_exchange.png",
+		"description": "Commodity exchange for Vulcan Research Station contracts and hub supply runs.",
+		"id": "vulcan_research_exchange",
+		"kind": "merchant",
+		"name": "Vulcan Research Station Exchange",
+		"short_desc": "Exchange at Vulcan Research Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/regulus_belt_terminal.png",
+		"description": "Customs and convoy scheduling for Regulus Belt Station.",
+		"id": "regulus_belt_terminal",
+		"kind": "terminal",
+		"name": "Regulus Belt Station Terminal",
+		"short_desc": "Terminal for Regulus Belt Station traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/regulus_belt_exchange.png",
+		"description": "Commodity exchange for Regulus Belt Station contracts and hub supply runs.",
+		"id": "regulus_belt_exchange",
+		"kind": "merchant",
+		"name": "Regulus Belt Station Exchange",
+		"short_desc": "Exchange at Regulus Belt Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/denarius_ii_terminal.png",
+		"description": "Customs and convoy scheduling for Denarius II.",
+		"id": "denarius_ii_terminal",
+		"kind": "terminal",
+		"name": "Denarius II Terminal",
+		"short_desc": "Terminal for Denarius II traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/denarius_ii_exchange.png",
+		"description": "Commodity exchange for Denarius II contracts and hub supply runs.",
+		"id": "denarius_ii_exchange",
+		"kind": "merchant",
+		"name": "Denarius II Exchange",
+		"short_desc": "Exchange at Denarius II.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/typhon_xvi_terminal.png",
+		"description": "Customs and convoy scheduling for Typhon XVI.",
+		"id": "typhon_xvi_terminal",
+		"kind": "terminal",
+		"name": "Typhon XVI Terminal",
+		"short_desc": "Terminal for Typhon XVI traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/typhon_xvi_exchange.png",
+		"description": "Commodity exchange for Typhon XVI contracts and hub supply runs.",
+		"id": "typhon_xvi_exchange",
+		"kind": "merchant",
+		"name": "Typhon XVI Exchange",
+		"short_desc": "Exchange at Typhon XVI.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/proxima_peaceforce.png",
+		"description": "Proxima Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "proxima_peaceforce",
+		"kind": "office",
+		"name": "Proxima Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_creus_proxima_office.png",
+		"corporation_id": "creus",
+		"description": "Corporate liaison desk for Creus Corporation. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_creus_proxima_office",
+		"kind": "office",
+		"name": "Creus Corporation Office",
+		"short_desc": "Creus Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_grc_proxima_office.png",
+		"corporation_id": "grc",
+		"description": "Corporate liaison desk for GRC Inc. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_grc_proxima_office",
+		"kind": "office",
+		"name": "GRC Inc Office",
+		"short_desc": "GRC Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/tycho_peaceforce.png",
+		"description": "Tycho Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "tycho_peaceforce",
+		"kind": "office",
+		"name": "Tycho Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_atlas_concern_tycho_office.png",
+		"corporation_id": "atlas_concern",
+		"description": "Corporate liaison desk for Atlas Concern. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_atlas_concern_tycho_office",
+		"kind": "office",
+		"name": "Atlas Concern Office",
+		"short_desc": "Atlas Concern charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_general_industrial_tycho_office.png",
+		"corporation_id": "general_industrial",
+		"description": "Corporate liaison desk for General Industrial. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_general_industrial_tycho_office",
+		"kind": "office",
+		"name": "General Industrial Office",
+		"short_desc": "General Industrial charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_deepspace_tycho_office.png",
+		"corporation_id": "deepspace",
+		"description": "Corporate liaison desk for DeepSpace Cooperative. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_deepspace_tycho_office",
+		"kind": "office",
+		"name": "DeepSpace Cooperative Office",
+		"short_desc": "DeepSpace Cooperative charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_terra_nova_tycho_office.png",
+		"corporation_id": "terra_nova",
+		"description": "Corporate liaison desk for Terra Nova. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_terra_nova_tycho_office",
+		"kind": "office",
+		"name": "Terra Nova Office",
+		"short_desc": "Terra Nova charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_oklahoma_combine_tycho_office.png",
+		"corporation_id": "oklahoma_combine",
+		"description": "Corporate liaison desk for Oklahoma Combine. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_oklahoma_combine_tycho_office",
+		"kind": "office",
+		"name": "Oklahoma Combine Office",
+		"short_desc": "Oklahoma Combine charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_peaceforce.png",
+		"description": "La Bella Vista Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "bela_peaceforce",
+		"kind": "office",
+		"name": "La Bella Vista Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_karaquazen_bela_office.png",
+		"corporation_id": "karaquazen",
+		"description": "Corporate liaison desk for Karaquazen Inc. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_karaquazen_bela_office",
+		"kind": "office",
+		"name": "Karaquazen Inc Office",
+		"short_desc": "Karaquazen Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_liveworlds_bela_office.png",
+		"corporation_id": "liveworlds",
+		"description": "Corporate liaison desk for LiveWorlds. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_liveworlds_bela_office",
+		"kind": "office",
+		"name": "LiveWorlds Office",
+		"short_desc": "LiveWorlds charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_carthage_mercantile_bela_office.png",
+		"corporation_id": "carthage_mercantile",
+		"description": "Corporate liaison desk for Carthage Mercantile. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_carthage_mercantile_bela_office",
+		"kind": "office",
+		"name": "Carthage Mercantile Office",
+		"short_desc": "Carthage Mercantile charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/irasia_peaceforce.png",
+		"description": "Irasia Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "irasia_peaceforce",
+		"kind": "office",
+		"name": "Irasia Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_guangzhou_mercantile_irasia_office.png",
+		"corporation_id": "guangzhou_mercantile",
+		"description": "Corporate liaison desk for Guangzhou Mercantile. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_guangzhou_mercantile_irasia_office",
+		"kind": "office",
+		"name": "Guangzhou Mercantile Office",
+		"short_desc": "Guangzhou Mercantile charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_meridian_irasia_office.png",
+		"corporation_id": "meridian",
+		"description": "Corporate liaison desk for The Meridian Company. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_meridian_irasia_office",
+		"kind": "office",
+		"name": "The Meridian Company Office",
+		"short_desc": "The Meridian Company charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_chettiar_irasia_office.png",
+		"corporation_id": "chettiar",
+		"description": "Corporate liaison desk for Chettiar Holdings. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_chettiar_irasia_office",
+		"kind": "office",
+		"name": "Chettiar Holdings Office",
+		"short_desc": "Chettiar Holdings charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_peaceforce.png",
+		"description": "Tokirev Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "tokirev_peaceforce",
+		"kind": "office",
+		"name": "Tokirev Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_atlas_concern_tokirev_office.png",
+		"corporation_id": "atlas_concern",
+		"description": "Corporate liaison desk for Atlas Concern. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_atlas_concern_tokirev_office",
+		"kind": "office",
+		"name": "Atlas Concern Office",
+		"short_desc": "Atlas Concern charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_general_industrial_tokirev_office.png",
+		"corporation_id": "general_industrial",
+		"description": "Corporate liaison desk for General Industrial. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_general_industrial_tokirev_office",
+		"kind": "office",
+		"name": "General Industrial Office",
+		"short_desc": "General Industrial charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_four_rivers_zaibatsu_tokirev_office.png",
+		"corporation_id": "four_rivers_zaibatsu",
+		"description": "Corporate liaison desk for Four Rivers Zaibatsu. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_four_rivers_zaibatsu_tokirev_office",
+		"kind": "office",
+		"name": "Four Rivers Zaibatsu Office",
+		"short_desc": "Four Rivers Zaibatsu charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_peaceforce.png",
+		"description": "Fennet Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "fennet_peaceforce",
+		"kind": "office",
+		"name": "Fennet Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_deepspace_fennet_office.png",
+		"corporation_id": "deepspace",
+		"description": "Corporate liaison desk for DeepSpace Cooperative. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_deepspace_fennet_office",
+		"kind": "office",
+		"name": "DeepSpace Cooperative Office",
+		"short_desc": "DeepSpace Cooperative charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_pacific_triad_fennet_office.png",
+		"corporation_id": "pacific_triad",
+		"description": "Corporate liaison desk for Pacific Triad. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_pacific_triad_fennet_office",
+		"kind": "office",
+		"name": "Pacific Triad Office",
+		"short_desc": "Pacific Triad charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_orion_spur_fennet_office.png",
+		"corporation_id": "orion_spur",
+		"description": "Corporate liaison desk for Orion Spur Company. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_orion_spur_fennet_office",
+		"kind": "office",
+		"name": "Orion Spur Company Office",
+		"short_desc": "Orion Spur Company charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_peaceforce.png",
+		"description": "Fortuna Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "fortuna_peaceforce",
+		"kind": "office",
+		"name": "Fortuna Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_creus_fortuna_office.png",
+		"corporation_id": "creus",
+		"description": "Corporate liaison desk for Creus Corporation. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_creus_fortuna_office",
+		"kind": "office",
+		"name": "Creus Corporation Office",
+		"short_desc": "Creus Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_grc_fortuna_office.png",
+		"corporation_id": "grc",
+		"description": "Corporate liaison desk for GRC Inc. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_grc_fortuna_office",
+		"kind": "office",
+		"name": "GRC Inc Office",
+		"short_desc": "GRC Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_octagon_fortuna_office.png",
+		"corporation_id": "octagon",
+		"description": "Corporate liaison desk for The Octagon. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_octagon_fortuna_office",
+		"kind": "office",
+		"name": "The Octagon Office",
+		"short_desc": "The Octagon charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_house_of_roth_fortuna_office.png",
+		"corporation_id": "house_of_roth",
+		"description": "Corporate liaison desk for House of Roth. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_house_of_roth_fortuna_office",
+		"kind": "office",
+		"name": "House of Roth Office",
+		"short_desc": "House of Roth charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_karaquazen_fortuna_office.png",
+		"corporation_id": "karaquazen",
+		"description": "Corporate liaison desk for Karaquazen Inc. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_karaquazen_fortuna_office",
+		"kind": "office",
+		"name": "Karaquazen Inc Office",
+		"short_desc": "Karaquazen Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/new_carthage_peaceforce.png",
+		"description": "New Carthage Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "new_carthage_peaceforce",
+		"kind": "office",
+		"name": "New Carthage Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_carthage_mercantile_new_carthage_office.png",
+		"corporation_id": "carthage_mercantile",
+		"description": "Corporate liaison desk for Carthage Mercantile. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_carthage_mercantile_new_carthage_office",
+		"kind": "office",
+		"name": "Carthage Mercantile Office",
+		"short_desc": "Carthage Mercantile charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_guangzhou_mercantile_new_carthage_office.png",
+		"corporation_id": "guangzhou_mercantile",
+		"description": "Corporate liaison desk for Guangzhou Mercantile. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_guangzhou_mercantile_new_carthage_office",
+		"kind": "office",
+		"name": "Guangzhou Mercantile Office",
+		"short_desc": "Guangzhou Mercantile charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_crown_and_anchor_new_carthage_office.png",
+		"corporation_id": "crown_and_anchor",
+		"description": "Corporate liaison desk for Crown & Anchor. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_crown_and_anchor_new_carthage_office",
+		"kind": "office",
+		"name": "Crown & Anchor Office",
+		"short_desc": "Crown & Anchor charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_peaceforce.png",
+		"description": "Horizon Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "horizon_peaceforce",
+		"kind": "office",
+		"name": "Horizon Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_microdonald_horizon_office.png",
+		"corporation_id": "microdonald",
+		"description": "Corporate liaison desk for MicroDonald Franchise. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_microdonald_horizon_office",
+		"kind": "office",
+		"name": "MicroDonald Franchise Office",
+		"short_desc": "MicroDonald Franchise charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_mercury_communications_horizon_office.png",
+		"corporation_id": "mercury_communications",
+		"description": "Corporate liaison desk for Mercury Communications. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_mercury_communications_horizon_office",
+		"kind": "office",
+		"name": "Mercury Communications Office",
+		"short_desc": "Mercury Communications charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_monday_horizon_office.png",
+		"corporation_id": "monday",
+		"description": "Corporate liaison desk for Monday Corporation. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_monday_horizon_office",
+		"kind": "office",
+		"name": "Monday Corporation Office",
+		"short_desc": "Monday Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_evergreen_horizon_office.png",
+		"corporation_id": "evergreen",
+		"description": "Corporate liaison desk for Evergreen Group. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_evergreen_horizon_office",
+		"kind": "office",
+		"name": "Evergreen Group Office",
+		"short_desc": "Evergreen Group charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_octagon_horizon_office.png",
+		"corporation_id": "octagon",
+		"description": "Corporate liaison desk for The Octagon. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_octagon_horizon_office",
+		"kind": "office",
+		"name": "The Octagon Office",
+		"short_desc": "The Octagon charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_peaceforce.png",
+		"description": "Titania IX Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "titania_peaceforce",
+		"kind": "office",
+		"name": "Titania IX Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_liveworlds_titania_office.png",
+		"corporation_id": "liveworlds",
+		"description": "Corporate liaison desk for LiveWorlds. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_liveworlds_titania_office",
+		"kind": "office",
+		"name": "LiveWorlds Office",
+		"short_desc": "LiveWorlds charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_deepspace_titania_office.png",
+		"corporation_id": "deepspace",
+		"description": "Corporate liaison desk for DeepSpace Cooperative. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_deepspace_titania_office",
+		"kind": "office",
+		"name": "DeepSpace Cooperative Office",
+		"short_desc": "DeepSpace Cooperative charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_peaceforce.png",
+		"description": "Pelagos Peaceforce liaison office posting reconnaissance and survey charters for the shared commercial lanes.",
+		"id": "pelagos_peaceforce",
+		"kind": "office",
+		"name": "Pelagos Peaceforce",
+		"short_desc": "System peacekeeping charter desk.",
+		"type": "peacekeeping"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_deepspace_pelagos_office.png",
+		"corporation_id": "deepspace",
+		"description": "Corporate liaison desk for DeepSpace Cooperative. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_deepspace_pelagos_office",
+		"kind": "office",
+		"name": "DeepSpace Cooperative Office",
+		"short_desc": "DeepSpace Cooperative charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_atlas_concern_pelagos_office.png",
+		"corporation_id": "atlas_concern",
+		"description": "Corporate liaison desk for Atlas Concern. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_atlas_concern_pelagos_office",
+		"kind": "office",
+		"name": "Atlas Concern Office",
+		"short_desc": "Atlas Concern charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_biogenesis_pelagos_office.png",
+		"corporation_id": "biogenesis",
+		"description": "Corporate liaison desk for BioGenesis Life Sciences. Posts inspection and assessment scan work for hulls operating in-system.",
+		"id": "corp_biogenesis_pelagos_office",
+		"kind": "office",
+		"name": "BioGenesis Life Sciences Office",
+		"short_desc": "BioGenesis Life Sciences charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_mercury_communications_proxima_office.png",
+		"corporation_id": "mercury_communications",
+		"description": "Corporate liaison desk for Mercury Communications.",
+		"id": "corp_mercury_communications_proxima_office",
+		"kind": "office",
+		"name": "Mercury Communications Office",
+		"short_desc": "Mercury Communications charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_orion_spur_irasia_office.png",
+		"corporation_id": "orion_spur",
+		"description": "Corporate liaison desk for Orion Spur Company.",
+		"id": "corp_orion_spur_irasia_office",
+		"kind": "office",
+		"name": "Orion Spur Company Office",
+		"short_desc": "Orion Spur Company charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_karaquazen_titania_office.png",
+		"corporation_id": "karaquazen",
+		"description": "Corporate liaison desk for Karaquazen Inc.",
+		"id": "corp_karaquazen_titania_office",
+		"kind": "office",
+		"name": "Karaquazen Inc Office",
+		"short_desc": "Karaquazen Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_evergreen_titania_office.png",
+		"corporation_id": "evergreen",
+		"description": "Corporate liaison desk for Evergreen Group.",
+		"id": "corp_evergreen_titania_office",
+		"kind": "office",
+		"name": "Evergreen Group Office",
+		"short_desc": "Evergreen Group charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_continuity_foundation_titania_office.png",
+		"corporation_id": "continuity_foundation",
+		"description": "Corporate liaison desk for Continuity Foundation.",
+		"id": "corp_continuity_foundation_titania_office",
+		"kind": "office",
+		"name": "Continuity Foundation Office",
+		"short_desc": "Continuity Foundation charter desk.",
+		"type": "corporate_office"
+	}
 ]

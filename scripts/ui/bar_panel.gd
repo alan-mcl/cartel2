@@ -1,11 +1,14 @@
 extends GameScreen
 
 const CHARTER_PANEL := preload("res://scenes/ui/passenger_charter_panel.tscn")
+const SCAN_PANEL := preload("res://scenes/ui/scan_charter_panel.tscn")
 const GOSSIP_TAPE_TOP_UP_MAX_TRIES := 12
 
 var _layout: VBoxContainer
 var _charter_host: Control
 var _charter_panel: Control
+var _scan_host: Control
+var _scan_panel: Control
 var _gossip_bar: MessageBar
 var _gossip_rng := RandomNumberGenerator.new()
 var _gossip_started := false
@@ -30,6 +33,12 @@ func _ready() -> void:
 	_charter_host.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_layout.add_child(_charter_host)
 
+	_scan_host = Control.new()
+	_scan_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_scan_host.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_scan_host.visible = false
+	_layout.add_child(_scan_host)
+
 	_gossip_rng.randomize()
 	set_process(false)
 
@@ -41,6 +50,7 @@ func refresh() -> void:
 	_ensure_charter_panel()
 	if _charter_panel != null and _charter_panel.has_method("refresh"):
 		_charter_panel.refresh()
+	_sync_scan_section()
 
 
 func _process(_delta: float) -> void:
@@ -114,6 +124,37 @@ func _ensure_charter_panel() -> void:
 	_charter_host.add_child(_charter_panel)
 	if _charter_panel.has_method("bind"):
 		_charter_panel.bind(_context)
+
+
+func _sync_scan_section() -> void:
+	if _scan_host == null or _context == null or _context.session == null or _context.catalog == null:
+		return
+	var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
+	var show_scan := ScanCharters.bar_scan_section_visible(missions, _context.catalog, _context.session)
+	_scan_host.visible = show_scan
+	if not show_scan:
+		_clear_children(_scan_host)
+		_scan_panel = null
+		return
+	_ensure_scan_panel()
+	if _scan_panel != null and _scan_panel.has_method("refresh"):
+		_scan_panel.refresh()
+
+
+func _ensure_scan_panel() -> void:
+	if _scan_host == null or not is_instance_valid(_scan_host):
+		return
+	if _scan_panel != null and is_instance_valid(_scan_panel):
+		return
+	_clear_children(_scan_host)
+	_scan_panel = SCAN_PANEL.instantiate()
+	_scan_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_scan_host.add_child(_scan_panel)
+	if _scan_panel.has_method("bind"):
+		_scan_panel.bind(_context)
+	var building := _context.catalog.get_building("davidsons")
+	if _scan_panel.has_method("configure"):
+		_scan_panel.configure(building)
 
 
 func _clear_children(node: Node) -> void:

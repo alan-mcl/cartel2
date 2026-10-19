@@ -225,6 +225,7 @@ func arrive_from_unspace() -> void:
 	var origin_id: String = _main.session.sector_id
 	var dest_id: String = _main.session.pending_destination_id
 	var solution: int = _main.session.unspace_solution
+	var unspace_n: int = _main.session.unspace_n
 
 	if not _main.session.arrive_from_unspace(_catalog):
 		return
@@ -236,11 +237,11 @@ func arrive_from_unspace() -> void:
 			_catalog,
 			origin_id,
 			dest_id,
-			_main.session.unspace_n,
+			unspace_n,
 			solution
 		)
-	if mapping.is_empty():
-		mapping = _catalog.get_public_translation(origin_id, dest_id, 4)
+	if mapping.is_empty() and not VolatileTranslation.is_volatile_sector_id(origin_id):
+		mapping = _catalog.get_public_translation(origin_id, dest_id, unspace_n if unspace_n > 0 else 4)
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "exit_seconds", _catalog)
 	var sector_name := dest_id
 	if VolatileTranslation.is_volatile_sector_id(dest_id):

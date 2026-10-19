@@ -1,0 +1,83 @@
+{
+  "peacekeeping_offers_per_day": 3,
+  "corporate_offers_per_day": 2,
+  "bar_scan_chance": 0.25,
+  "base_pay": 320,
+  "bar_pay_multiplier": 0.65,
+  "cancel_penalty_fraction": 0.25,
+  "volatile_duration_hours": 8,
+  "volatile_return_hours": 8,
+  "planet_survey_fraction": 0.2,
+  "designations": {
+    "reconnaissance": {
+      "label": "Reconnaissance",
+      "desks": [
+        "peacekeeping"
+      ],
+      "target_kinds": [
+        "volatile_orbital",
+        "volatile_ship"
+      ]
+    },
+    "intelligence": {
+      "label": "Intelligence",
+      "desks": [
+        "peacekeeping"
+      ],
+      "target_kinds": [
+        "volatile_ship",
+        "volatile_orbital"
+      ]
+    },
+    "survey": {
+      "label": "Survey",
+      "desks": [
+        "peacekeeping",
+        "corporate_office",
+        "bar"
+      ],
+      "target_kinds": [
+        "volatile_debris",
+        "planet"
+      ]
+    },
+    "inspection": {
+      "label": "Inspection",
+      "desks": [
+        "corporate_office"
+      ],
+      "target_kinds": [
+        "volatile_ship"
+      ]
+    },
+    "assessment": {
+      "label": "Assessment",
+      "desks": [
+        "corporate_office"
+      ],
+      "target_kinds": [
+        "volatile_ship"
+      ]
+    }
+  },
+  "blurbs": {
+    "reconnaissance": [
+      "Quiet orbital pass over {site}. Scan the marked contact and return with the file."
+    ],
+    "intelligence": [
+      "Unlisted contact at {site}. Get a full active scan and bring the readout back."
+    ],
+    "survey": [
+      "Survey work at {site}. Scan the subject and report back to the desk."
+    ],
+    "inspection": [
+      "{corp} wants an independent inspection at {site}. Scan the hull and return."
+    ],
+    "assessment": [
+      "{corp} needs an assessment scan at {site} before they commit assets."
+    ],
+    "bar": [
+      "Someone at the bar knows a pilot who'll pay for a scan at {site}."
+    ]
+  }
+}

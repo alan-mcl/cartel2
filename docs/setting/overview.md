@@ -59,7 +59,7 @@ Many of their origins are Old Earth institutions that outlived the planet. Some 
 
 A smaller set incorporated a criminal or mercenary past and now trades on the same exchanges as the banks. The Himalaya Triad grew out of Tibetan triads; the Pacific Triad out of a Sino-Americano-Hanguk fraternity. Both still run on family obligation, with particular weight on the rim. Galactic Outcomes began by selling mercenaries. The Cult of Apex is a faith that became a corporation after a recovered time capsule. 
 
-Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company originated in the beginnings of human space travel. Others, Holt-Winters and GRC among them, are still within living memory of their founding and compete with firms centuries older. 
+Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company originated in the beginnings of human space travel. Others, Holt-Winters and GRC among them, are still within living memory of their founding and compete with firms centuries older.
 
 ## Concord Commercial Charter
 
@@ -81,6 +81,8 @@ Ships are a chassis plus fitted modules. All parts are manufactured and branded 
 Every inhabited planet has extensive orbital infrastructure. Orbital habitats house hundreds of millions of inhabitants and are functionally similar to city-malls in space. Many pilots never end up planet-side at all, indeed Proxima Habitat, the largest orbital community, has a good claim on being the centre of human space. Other orbitals include manufacturing, agriculture, resorts, stadiums, and corporate headquarters. 
 
 While the mega corps employ and equip their own pilots, there is always excess demand for independent operators to fill. Orbital terminals post passenger charters and freight charters between habitats. 
+
+System peacekeeping forces exist at all major planets, responsible for maintaining order in the shared commercial environment. These peacekeeping forces are jointly funded by corporations operating in the system, as required by the CCC. Corporate armed services exist to protect and advance the interests of their respective corporations, rather than routinely policing the system.
 
 ## Culture and Setting Flavour
 

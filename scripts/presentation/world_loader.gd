@@ -46,6 +46,8 @@ var _habitat_interactable_id: String = ""
 var _gate_interactable_id: String = ""
 var _habitat_sprite_path: String = ""
 var _gate_sprite_path: String = ""
+var _volatile_scan_contact: Dictionary = {}
+var _volatile_orbital_entity_ids: Array[String] = []
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -72,6 +74,8 @@ func clear_world(world_root: Node2D) -> void:
 	_gate_interactable_id = ""
 	_habitat_sprite_path = ""
 	_gate_sprite_path = ""
+	_volatile_scan_contact = {}
+	_volatile_orbital_entity_ids.clear()
 
 
 func load_sector(
@@ -142,8 +146,17 @@ func _load_volatile_sector(
 	var entities: Variant = setup.get("entities", [])
 	if typeof(entities) == TYPE_ARRAY:
 		for entity_variant in entities:
-			if typeof(entity_variant) == TYPE_DICTIONARY:
-				_spawn_entity(world_root, entity_variant, catalog, session)
+			if typeof(entity_variant) != TYPE_DICTIONARY:
+				continue
+			var entity: Dictionary = entity_variant
+			_spawn_entity(world_root, entity, catalog, session)
+			var entity_id := str(entity.get("id", ""))
+			if str(entity.get("kind", "")) == "orbital" and not entity_id.is_empty():
+				_volatile_orbital_entity_ids.append(entity_id)
+
+	var scan_contact: Variant = setup.get("scan_contact", {})
+	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
+		_spawn_volatile_scan_contact(world_root, scan_contact as Dictionary)
 
 	return play_bounds
 
@@ -420,6 +433,9 @@ func get_nav_contacts(catalog: Catalog, in_unspace: bool) -> Array:
 	if in_unspace:
 		return _build_unspace_nav_contacts(catalog)
 
+	if VolatileTranslation.is_volatile_sector_id(_sector_id):
+		return _build_volatile_site_contacts(catalog)
+
 	_ensure_sector_nav_cache(catalog)
 	_refresh_sector_nav_positions()
 	var contacts: Array = []
@@ -602,6 +618,86 @@ func _merge_lock_display_fields(
 	else:
 		contact["lock_hull_radius"] = 18.0
 	contact["heading_rad"] = float(contact.get("heading_rad", 0.0))
+
+
+func _spawn_volatile_scan_contact(world_root: Node2D, scan_contact: Dictionary) -> void:
+	var contact_id := str(scan_contact.get("id", ""))
+	if contact_id.is_empty():
+		return
+	var pos_dict: Dictionary = scan_contact.get("position", {})
+	var pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+	var node := Node2D.new()
+	node.name = "ScanContact"
+	node.position = pos
+	node.rotation = float(scan_contact.get("heading_rad", 0.0)) + PI * 0.5
+	var sprite_path := str(scan_contact.get("sprite_path", ""))
+	if not sprite_path.is_empty():
+		var visual := Sprite2D.new()
+		var texture := load(sprite_path) as Texture2D
+		if texture != null:
+			visual.texture = texture
+			visual.centered = true
+		node.add_child(visual)
+	world_root.add_child(node)
+	spawned_by_id[contact_id] = node
+	_volatile_scan_contact = scan_contact.duplicate(true)
+
+
+func _build_volatile_site_contacts(_catalog: Catalog) -> Array:
+	var contacts: Array = []
+	if _jump_gate_node != null and is_instance_valid(_jump_gate_node):
+		var gate_contact := {
+			"id": "jump_gate",
+			"name": "Temporary return gate",
+			"short_label": "G",
+			"contact_kind": "landmark",
+			"landmark_role": "jump_gate",
+			"position": get_jump_gate_world_position(),
+			"interactable_id": "volatile_return_gate",
+		}
+		_merge_lock_display_fields(gate_contact, _gate_sprite_path, 140.0)
+		contacts.append(gate_contact)
+
+	for orbital_id in _volatile_orbital_entity_ids:
+		var node: Variant = spawned_by_id.get(orbital_id)
+		if node == null or not is_instance_valid(node) or not (node is Node2D):
+			continue
+		var orbital_node := node as Node2D
+		var orbital_contact := {
+			"id": orbital_id,
+			"name": "Survey contact",
+			"short_label": "",
+			"contact_kind": "orbital",
+			"position": orbital_node.global_position,
+			"heading_rad": orbital_node.global_rotation - PI * 0.5,
+		}
+		_merge_lock_display_fields(orbital_contact, "res://assets/world/orbitals/array.svg", 48.0)
+		contacts.append(orbital_contact)
+
+	contacts.append_array(_build_debris_contacts())
+
+	if not _volatile_scan_contact.is_empty():
+		var scan_id := str(_volatile_scan_contact.get("id", ""))
+		var scan_node: Variant = spawned_by_id.get(scan_id)
+		var world_pos: Vector2 = Vector2.ZERO
+		if scan_node is Node2D and is_instance_valid(scan_node):
+			world_pos = (scan_node as Node2D).global_position
+		else:
+			var pos_dict: Dictionary = _volatile_scan_contact.get("position", {})
+			world_pos = Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+		var ship_contact := _volatile_scan_contact.duplicate(true)
+		ship_contact["name"] = str(_volatile_scan_contact.get("ship_name", "Survey contact"))
+		ship_contact["contact_kind"] = "traffic_npc"
+		ship_contact["position"] = world_pos
+		ship_contact["velocity"] = Vector2.ZERO
+		ship_contact["has_sim_slot"] = true
+		_merge_lock_display_fields(
+			ship_contact,
+			str(_volatile_scan_contact.get("sprite_path", ""))
+		)
+		contacts.append(ship_contact)
+
+	return contacts
 
 
 func _build_debris_contacts() -> Array:
@@ -992,10 +1088,23 @@ func _spawn_entity(
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
-	elif instance is WorldObject:
-		instance.configure(entity, catalog, session)
-	elif instance.has_method("configure"):
-		instance.call("configure", entity, catalog, session)
+	else:
+		if instance is Node2D and entity.has("position"):
+			var pos: Dictionary = entity.get("position", {})
+			(instance as Node2D).position = Vector2(
+				float(pos.get("x", 0.0)),
+				float(pos.get("y", 0.0))
+			)
+		if instance is WorldObject:
+			instance.configure(entity, catalog, session)
+		elif instance is Node2D:
+			_configure_orbital_instance(instance as Node2D, entity, catalog, session)
+		elif instance.has_method("configure"):
+			var arg_count := instance.get_method_argument_count("configure")
+			if arg_count == 1:
+				instance.call("configure", entity)
+			else:
+				instance.call("configure", entity, catalog, session)
 
 	return instance
 
