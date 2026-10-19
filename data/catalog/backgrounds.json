@@ -60,7 +60,7 @@
             },
             {
               "slot": "light_weapon_1",
-              "module_id": "light_laser"
+              "module_id": "hw_helios_light_laser"
             }
           ],
           "fuel_current": 40.0,
@@ -103,7 +103,7 @@
             },
             {
               "slot": "other_1",
-              "module_id": "mass_driver_magazine_200"
+              "module_id": "oc_river_md_magazine_200"
             },
             {
               "slot": "other_2",
@@ -115,16 +115,16 @@
             },
             {
               "slot": "other_4",
-              "module_id": "chitanium_5mm"
+              "module_id": "oc_chitanium_5mm"
             },
             {
               "slot": "light_weapon_1",
-              "module_id": "light_mass_driver"
+              "module_id": "oc_river_light_mass_driver"
             }
           ],
           "fuel_current": 80.0,
           "ammunition": {
-            "mass_driver_round": 120
+            "oc_river_md_round": 120
           },
           "cargo": {}
         },
@@ -365,7 +365,7 @@
             },
             {
               "slot": "other_1",
-              "module_id": "mass_driver_magazine_200"
+              "module_id": "oc_river_md_magazine_200"
             },
             {
               "slot": "other_2",
@@ -377,16 +377,16 @@
             },
             {
               "slot": "other_4",
-              "module_id": "chitanium_5mm"
+              "module_id": "oc_chitanium_5mm"
             },
             {
               "slot": "light_weapon_1",
-              "module_id": "light_mass_driver"
+              "module_id": "oc_river_light_mass_driver"
             }
           ],
           "fuel_current": 80.0,
           "ammunition": {
-            "mass_driver_round": 120
+            "oc_river_md_round": 120
           },
           "cargo": {}
         }
@@ -449,7 +449,7 @@
             },
             {
               "slot": "light_weapon_1",
-              "module_id": "light_laser"
+              "module_id": "hw_helios_light_laser"
             }
           ],
           "fuel_current": 40.0,

@@ -150,6 +150,9 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `sensor_sensitivity` | CatalogSignature | no | `` |  |
 | `sensor_sensitivity_passive` | CatalogSignature | no | `` |  |
 | `area_effect` | boolean | no | `False` |  |
+| `pellet_count` | integer | no | `0` |  |
+| `pellet_spread_deg` | number | no | `0.0` |  |
+| `guidance_turn_rate` | number | no | `0.0` |  |
 | `intercept_chance` | number | no | `0.0` |  |
 | `nav_rating` | number | no | `0.0` |  |
 | `translation_capacity` | number | no | `0.0` |  |

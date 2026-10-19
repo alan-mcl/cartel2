@@ -196,7 +196,7 @@ static func _test_npc_weapon_stagger(runner: TestRunner, catalog: Catalog) -> vo
 		}
 	)
 	ShipAssembler.seed_ammunition(catalog, owned)
-	owned.set_module("light_weapon_2", "light_laser")
+	owned.set_module("light_weapon_2", "hw_helios_light_laser")
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	var weapons := ShipWeapons.new()
 	var slots := ShipWeapons.weapon_slot_order(assembled)

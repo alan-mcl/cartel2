@@ -27,10 +27,14 @@ var _sim: ShipSimCore = ShipSimCoreScript.new()
 @onready var _hull: Sprite2D = $Visual/Hull
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _interact_area: Area2D = $InteractSensor
+@onready var _visual_root: Node2D = $Visual
 
+var _defence_visual: CombatDefenceVisual
 var _focused_interactables: Array[Interactable] = []
 var _current_target: Interactable = null
 var locked_target_id: String = ""
+var _guidance_lock_position: Vector2 = Vector2.ZERO
+var _guidance_lock_active: bool = false
 var _autopilot := Autopilot.new()
 var _autopilot_target: Dictionary = {}
 
@@ -98,6 +102,11 @@ func _ready() -> void:
 	for child in get_tree().get_nodes_in_group("interactable"):
 		_register_interactable(child as Interactable)
 
+	_defence_visual = CombatDefenceVisual.new()
+	_defence_visual.z_index = 2
+	if _visual_root != null:
+		_visual_root.add_child(_defence_visual)
+
 
 func register_world_interactables() -> void:
 	for node in get_tree().get_nodes_in_group("interactable"):
@@ -146,6 +155,8 @@ func _physics_process(delta: float) -> void:
 		var combat_state := session.build_combat_state(assembled_ship)
 		_sim.tick_shields(combat_state, delta)
 		session.apply_combat_state(combat_state)
+		if _defence_visual != null and assembled_ship != null:
+			_defence_visual.bind_ship(assembled_ship, combat_state)
 
 		var inputs := {
 			"thrust": bool(physics_inputs.get("thrust", false)),
@@ -161,7 +172,7 @@ func _physics_process(delta: float) -> void:
 		operating_state_changed.emit(operating_state)
 		_update_operating_warnings(session, firing)
 
-		var weapon_result: Dictionary = _sim.step_weapons(delta, firing)
+		var weapon_result: Dictionary = _sim.step_weapons(delta, firing, _weapon_guidance_context())
 		if not weapon_result.get("orders", []).is_empty():
 			_spawn_weapon_orders(weapon_result["orders"])
 		if bool(weapon_result.get("ammo_changed", false)):
@@ -214,6 +225,26 @@ func retain_target_lock(contacts: Array) -> void:
 
 func clear_target_lock() -> void:
 	locked_target_id = TargetLock.clear()
+	_guidance_lock_active = false
+
+
+func set_guidance_lock_contact(contact: Dictionary) -> void:
+	_guidance_lock_active = not contact.is_empty()
+	if _guidance_lock_active:
+		_guidance_lock_position = contact.get("position", Vector2.ZERO)
+
+
+func query_weapon_guidance(target_id: String) -> Dictionary:
+	if locked_target_id != target_id or target_id.is_empty() or not _guidance_lock_active:
+		return {"active": false}
+	return {"active": true, "position": _guidance_lock_position}
+
+
+func _weapon_guidance_context() -> Dictionary:
+	return {
+		"lock_active": _guidance_lock_active and not locked_target_id.is_empty(),
+		"target_id": locked_target_id,
+	}
 
 
 func set_autopilot_target(contact: Dictionary) -> void:
@@ -317,6 +348,9 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 		return {}
 	var result := session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
 	_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+	if _defence_visual != null:
+		var layers: Dictionary = result.get("defence_layers", {})
+		_defence_visual.play_hit_layers(layers)
 	return result
 
 

@@ -1,9 +1,12 @@
 extends Area2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const ProjectGuidance := preload("res://scripts/gameplay/project_guidance.gd")
 const ROCKET_RADIUS := 7.0
 const ROCKET_COLOR := Color(0.95, 0.45, 0.25, 1.0)
 const ROCKET_OUTLINE := Color(0.85, 0.3, 0.15, 1.0)
+const GUIDED_CORE := Color(0.55, 0.95, 1.0, 1.0)
+const GUIDED_HALO := Color(0.35, 0.75, 1.0, 0.35)
 const DEFAULT_SOLID_MASK := 2
 const NPC_MASK := 16
 const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
@@ -21,6 +24,10 @@ var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
 var _shooter: Node = null
+var _homing := false
+var _guidance_target_id := ""
+var _guidance_turn_rate := 2.8
+var _visual_variant := "rocket"
 
 
 static func spawn(
@@ -34,7 +41,9 @@ static func spawn(
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = [],
 	inherited_velocity: Vector2 = Vector2.ZERO,
-	shooter: Node = null
+	shooter: Node = null,
+	guidance: Dictionary = {},
+	visual_variant: String = "rocket"
 ) -> void:
 	if _packed_scene == null:
 		_packed_scene = load(SCENE_PATH) as PackedScene
@@ -60,7 +69,9 @@ static func spawn(
 			collision_mask,
 			exclude,
 			inherited_velocity,
-			shooter
+			shooter,
+			guidance,
+			visual_variant
 		)
 
 
@@ -74,7 +85,9 @@ func configure(
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = [],
 	inherited_velocity: Vector2 = Vector2.ZERO,
-	shooter: Node = null
+	shooter: Node = null,
+	guidance: Dictionary = {},
+	visual_variant: String = "rocket"
 ) -> void:
 	_muzzle_speed = speed
 	_velocity = direction.normalized() * speed + inherited_velocity
@@ -84,6 +97,12 @@ func configure(
 	_collision_mask = collision_mask
 	_exclude = exclude
 	_shooter = shooter
+	_homing = bool(guidance.get("homing", false))
+	_guidance_target_id = str(guidance.get("target_id", ""))
+	_guidance_turn_rate = float(guidance.get("turn_rate", 2.8))
+	_visual_variant = visual_variant if not visual_variant.is_empty() else "rocket"
+	if _delivery_type == "guided" and not _homing:
+		_visual_variant = "rocket"
 	var travel_dir := _velocity.normalized() if _velocity.length_squared() > 1.0 else direction.normalized()
 	global_position = origin + travel_dir * SPAWN_SKIN
 	if _velocity.length_squared() > 1.0:
@@ -100,12 +119,19 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
-	draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
+	if _visual_variant == "guided":
+		draw_circle(Vector2.ZERO, ROCKET_RADIUS + 3.0, GUIDED_HALO)
+		draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
+		draw_circle(Vector2(0.0, -ROCKET_RADIUS * 0.35), ROCKET_RADIUS * 0.45, GUIDED_CORE)
+		draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
+	else:
+		draw_circle(Vector2.ZERO, ROCKET_RADIUS, ROCKET_COLOR)
+		draw_arc(Vector2.ZERO, ROCKET_RADIUS, 0.0, TAU, 24, ROCKET_OUTLINE, 2.0)
 
 
 func _physics_process(delta: float) -> void:
-	var range_step := _muzzle_speed * delta
+	_apply_guidance(delta)
+	var range_step := _velocity.length() * delta
 	var next_traveled := _traveled + range_step
 	if next_traveled >= _max_range:
 		queue_free()
@@ -122,6 +148,31 @@ func _physics_process(delta: float) -> void:
 
 	global_position = to
 	_traveled = next_traveled
+	if _velocity.length_squared() > 1.0:
+		rotation = _velocity.angle() + PI / 2.0
+
+
+func _apply_guidance(delta: float) -> void:
+	if not _homing or _guidance_target_id.is_empty():
+		return
+	if _shooter == null or not is_instance_valid(_shooter):
+		_homing = false
+		return
+	if not _shooter.has_method("query_weapon_guidance"):
+		_homing = false
+		return
+	var query: Dictionary = _shooter.query_weapon_guidance(_guidance_target_id)
+	if not bool(query.get("active", false)):
+		_homing = false
+		return
+	var target_pos: Vector2 = query.get("position", Vector2.ZERO)
+	_velocity = ProjectGuidance.steer_velocity(
+		_velocity,
+		global_position,
+		target_pos,
+		_guidance_turn_rate,
+		delta
+	)
 
 
 func _apply_hit(collider: Object) -> void:

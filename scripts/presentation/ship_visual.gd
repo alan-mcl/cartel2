@@ -86,7 +86,6 @@ static func spawn_weapon_orders(
 ) -> void:
 	if world == null:
 		return
-	var direction := Vector2.from_angle(facing)
 	for order_variant in orders:
 		if typeof(order_variant) != TYPE_DICTIONARY:
 			continue
@@ -96,22 +95,28 @@ static func spawn_weapon_orders(
 		var max_range := float(order.get("range", 0.0))
 		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
 		var weapon_type := str(order.get("weapon_type", ""))
+		var facing_offset := float(order.get("facing_offset", 0.0))
+		var direction := Vector2.from_angle(facing + facing_offset)
+		var visual_variant := str(order.get("visual_variant", ""))
+		var guidance: Dictionary = order.get("guidance", {})
+
 		if delivery in ["beam", "cyber"]:
 			_LaserBeam.spawn(
 				world,
-				muzzle_global(origin, facing, chassis),
+				muzzle_global(origin, facing + facing_offset, chassis),
 				direction,
 				max_range,
 				delivery,
 				packets,
 				collision_mask,
 				exclude,
-				shooter
+				shooter,
+				visual_variant
 			)
 		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
 			_RocketProjectile.spawn(
 				world,
-				muzzle_global(origin, facing, chassis, _RocketProjectile.ROCKET_RADIUS),
+				muzzle_global(origin, facing + facing_offset, chassis, _RocketProjectile.ROCKET_RADIUS),
 				direction,
 				speed,
 				max_range,
@@ -120,12 +125,14 @@ static func spawn_weapon_orders(
 				collision_mask,
 				exclude,
 				ship_velocity,
-				shooter
+				shooter,
+				guidance,
+				visual_variant
 			)
-		elif delivery in ["ballistic", "plasma", "guided"]:
+		elif delivery in ["ballistic", "plasma"]:
 			_MassDriverRound.spawn(
 				world,
-				muzzle_global(origin, facing, chassis, _MassDriverRound.ROUND_RADIUS),
+				muzzle_global(origin, facing + facing_offset, chassis, _MassDriverRound.ROUND_RADIUS),
 				direction,
 				speed,
 				max_range,
@@ -134,5 +141,6 @@ static func spawn_weapon_orders(
 				collision_mask,
 				exclude,
 				ship_velocity,
-				shooter
+				shooter,
+				visual_variant
 			)

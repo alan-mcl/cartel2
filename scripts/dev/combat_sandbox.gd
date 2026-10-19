@@ -19,7 +19,11 @@ func _sandbox_callsign() -> String:
 
 
 func _sandbox_ready_log() -> String:
-	return "Combat sandbox ready."
+	return (
+		"Combat sandbox ready. Try Wolff Warrior (rockets, scatter, guided, EMP), "
+		+ "Mantis XF5700 (electronic shield, cyber defence), Pegasus P111 (energy shield), "
+		+ "Silhouette Warden (point defence)."
+	)
 
 
 func _is_run_active() -> bool:

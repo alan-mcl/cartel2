@@ -52,6 +52,7 @@ static func resolve_hit(
 		"power_lost": 0.0,
 		"compute_lost": 0.0,
 		"remaining_packets": _normalize_packets(packets),
+		"defence_layers": _empty_defence_layers(),
 	}
 
 	if assembled == null or state == null:
@@ -65,11 +66,20 @@ static func resolve_hit(
 	if delivery_type in PD_DELIVERIES and _roll_point_defence_intercept(assembled):
 		result["intercepted"] = true
 		result["remaining_packets"] = {}
+		result["defence_layers"]["point_defence_intercepted"] = true
 		return result
 
-	working = _apply_shields(assembled, state, working)
-	working = _apply_armour(assembled, working)
-	working = _apply_cyber_defence(assembled, working)
+	var shield_out := _apply_shields(assembled, state, working)
+	working = shield_out.get("remaining", {})
+	result["defence_layers"]["shield_hits"] = shield_out.get("shield_hits", [])
+
+	var armour_out := _apply_armour(assembled, working)
+	working = armour_out.get("remaining", {})
+	result["defence_layers"]["armour_absorbed"] = armour_out.get("absorbed", {})
+
+	var cyber_out := _apply_cyber_defence(assembled, working)
+	working = cyber_out.get("remaining", {})
+	result["defence_layers"]["cyber_defence_absorbed"] = cyber_out.get("absorbed_cyber", 0.0)
 
 	var converted := _convert_packets_to_resources(working)
 	result["hull_damage"] = float(converted.get("hits", 0.0))
@@ -130,6 +140,17 @@ static func sum_packets(packets: Dictionary) -> float:
 	return _packets_total(packets)
 
 
+static func divide_packets(packets: Dictionary, divisor: int) -> Dictionary:
+	if divisor <= 1:
+		return _normalize_packets(packets)
+	var scaled: Dictionary = {}
+	for packet_type in PACKET_TYPES:
+		var amount := float(packets.get(packet_type, 0.0))
+		if amount > 0.0:
+			scaled[packet_type] = amount / float(divisor)
+	return _normalize_packets(scaled)
+
+
 static func _shield_entries(assembled: AssembledShip) -> Array:
 	return assembled.modules_in_category("shield")
 
@@ -163,12 +184,22 @@ static func _roll_point_defence_intercept(assembled: AssembledShip) -> bool:
 	return randf() >= miss_chance
 
 
+static func _empty_defence_layers() -> Dictionary:
+	return {
+		"point_defence_intercepted": false,
+		"shield_hits": [],
+		"armour_absorbed": {},
+		"cyber_defence_absorbed": 0.0,
+	}
+
+
 static func _apply_shields(
 	assembled: AssembledShip,
 	state: ShipCombatState,
 	packets: Dictionary
 ) -> Dictionary:
 	var remaining := packets.duplicate(true)
+	var shield_hits: Array = []
 	for entry in _shield_entries(assembled):
 		if remaining.is_empty():
 			break
@@ -181,42 +212,57 @@ static func _apply_shields(
 		if charge <= 0.0:
 			continue
 		var protection := module_def.protection.to_dict()
+		var absorbed_packets: Dictionary = {}
 		var next_remaining: Dictionary = {}
 		for packet_type in remaining.keys():
 			var amount := float(remaining[packet_type])
 			var absorb_frac := clampf(float(protection.get(packet_type, 0.0)), 0.0, 1.0)
 			var absorbed := amount * absorb_frac
 			var leaked := amount - absorbed
+			if absorbed > 0.0:
+				absorbed_packets[packet_type] = float(absorbed_packets.get(packet_type, 0.0)) + absorbed
 			charge = maxf(0.0, charge - absorbed)
 			if leaked > 0.0:
 				next_remaining[packet_type] = leaked
 		state.shield_charges[slot] = charge
+		if not absorbed_packets.is_empty():
+			shield_hits.append(
+				{
+					"shield_type": module_def.shield_type,
+					"absorbed": absorbed_packets,
+					"charge_fraction": charge / capacity if capacity > 0.0 else 0.0,
+				}
+			)
 		remaining = next_remaining
-	return remaining
+	return {"remaining": remaining, "shield_hits": shield_hits}
 
 
 static func _apply_armour(assembled: AssembledShip, packets: Dictionary) -> Dictionary:
 	var armour := assembled.get_armour_module_def()
 	if armour == null:
-		return packets.duplicate(true)
+		return {"remaining": packets.duplicate(true), "absorbed": {}}
 	var protection := armour.protection.to_dict()
 
 	var remaining: Dictionary = {}
+	var absorbed: Dictionary = {}
 	for packet_type in packets.keys():
 		if packet_type == "cyber":
 			remaining[packet_type] = float(packets[packet_type])
 			continue
 		var amount := float(packets[packet_type])
 		var resist := clampf(float(protection.get(packet_type, 0.0)), 0.0, 1.0)
-		var leaked := amount * (1.0 - resist)
+		var blocked := amount * resist
+		var leaked := amount - blocked
+		if blocked > 0.0:
+			absorbed[packet_type] = blocked
 		if leaked > 0.0:
 			remaining[packet_type] = leaked
-	return remaining
+	return {"remaining": remaining, "absorbed": absorbed}
 
 
 static func _apply_cyber_defence(assembled: AssembledShip, packets: Dictionary) -> Dictionary:
 	if not packets.has("cyber"):
-		return packets.duplicate(true)
+		return {"remaining": packets.duplicate(true), "absorbed_cyber": 0.0}
 
 	var remaining := packets.duplicate(true)
 	var cyber_amount := float(remaining.get("cyber", 0.0))
@@ -228,12 +274,13 @@ static func _apply_cyber_defence(assembled: AssembledShip, packets: Dictionary) 
 		var protection := module_def.protection.to_dict()
 		total_reduction += clampf(float(protection.get("cyber", 0.0)), 0.0, 1.0)
 	total_reduction = clampf(total_reduction, 0.0, 0.95)
-	var leaked := cyber_amount * (1.0 - total_reduction)
+	var absorbed_cyber := cyber_amount * total_reduction
+	var leaked := cyber_amount - absorbed_cyber
 	if leaked > 0.0:
 		remaining["cyber"] = leaked
 	else:
 		remaining.erase("cyber")
-	return remaining
+	return {"remaining": remaining, "absorbed_cyber": absorbed_cyber}
 
 
 static func _convert_packets_to_resources(packets: Dictionary) -> Dictionary:

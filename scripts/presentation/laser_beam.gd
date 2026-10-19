@@ -18,7 +18,8 @@ static func spawn(
 	packets: Dictionary,
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = [],
-	shooter: Node = null
+	shooter: Node = null,
+	visual_variant: String = ""
 ) -> void:
 	var travel := direction.normalized()
 	var start := origin + travel * 6.0
@@ -29,8 +30,13 @@ static func spawn(
 		WeaponHit.apply(hit.collider, delivery_type, packets, shooter)
 
 	var beam := Line2D.new()
-	beam.width = 2.5
-	beam.default_color = CYBER_COLOR if delivery_type == "cyber" else BEAM_COLOR
+	beam.width = 3.0 if visual_variant == "laser" else 2.5
+	if delivery_type == "cyber" or visual_variant == "cyber":
+		beam.default_color = CYBER_COLOR
+	elif visual_variant == "laser":
+		beam.default_color = Color(0.45, 0.95, 1.0, 0.98)
+	else:
+		beam.default_color = BEAM_COLOR
 	beam.points = PackedVector2Array([start, end])
 	parent.add_child(beam)
 

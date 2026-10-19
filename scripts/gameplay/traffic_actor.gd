@@ -133,6 +133,13 @@ func is_armed() -> bool:
 	return not assembled_ship.modules_in_category("weapon").is_empty()
 
 
+func weapon_guidance_context() -> Dictionary:
+	return {
+		"lock_active": not locked_target_id.is_empty(),
+		"target_id": locked_target_id,
+	}
+
+
 func has_ammo() -> bool:
 	for entry in assembled_ship.modules_in_category("weapon"):
 		if typeof(entry) != TYPE_DICTIONARY:
@@ -348,7 +355,7 @@ func _tick_full_sim(
 	sim.refresh_stats(ShipSimCore.StatsCadence.INTERVAL)
 
 	var firing := fire_requested and operating_state.weapons_allowed
-	var weapon_result: Dictionary = sim.step_weapons(delta, firing)
+	var weapon_result: Dictionary = sim.step_weapons(delta, firing, weapon_guidance_context())
 	pending_weapon_orders = weapon_result.get("orders", [])
 
 	if bool(weapon_result.get("ammo_changed", false)):

@@ -11,6 +11,7 @@ func _init() -> void:
 	TestSanctions.run(runner)
 	TestAssembler.run(runner)
 	TestCombat.run(runner)
+	TestProjectGuidance.run(runner)
 	TestSensors.run(runner)
 	TestTargetLock.run(runner)
 	TestAutopilot.run(runner)

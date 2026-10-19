@@ -1,6 +1,6 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot prototype JSON includes seven chassis, fourteen ship templates, fifty-eight branded propulsion SKUs (five reaction-mass types, gravitic line, integrated sail line), power plants, compute cores, life support, sensors, branded weapons/armour/shields/point-defence/cyber-defence lines, cargo/fuel modules, and an alpha hyperdrive catalog entry (no translation gameplay). **Phase 1 combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Light laser, mass driver, plasma, scatter, rockets, and missiles fire in orbital flight.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot catalog ships curated branded combat lines (Helios lasers, River mass drivers, Ionique plasma, Brutus scatter, Bellatrix rockets and guided missiles, SnedOS cyber suites, matching shields, point defence, and cyber defence) alongside propulsion, sensors, and support modules. **Combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Guided missiles home on a held target lock when one is available; scatter weapons fire pellet fans; unguided rockets fly straight. Catalog module ids use branded SKU names — alpha saves do not remap retired ids.
 
 ## Design layers
 
@@ -499,7 +499,7 @@ At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 - Refuel ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Planned: homing missiles, scatter cones, hyperdrive translation — see [architecture.md](../design/architecture.md). Phase 1 weapons, shields, armour, and packet combat are implemented in orbital flight; dock resets hull and integrity.
+Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned — see [architecture.md](../design/architecture.md). Dock resets hull and integrity.
 
 ---
 

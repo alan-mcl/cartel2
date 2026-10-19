@@ -253,6 +253,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 
 - Three fixed slots: `user://saves/slot_1.json` … `slot_3.json` (directory configurable via `SaveStore.save_dir` for tests).
 - Saves store pilot identity, full `GameSession` state (including `spare_parts`), owned ship instances (modules, per-ship cargo, fuel, ammunition), player flight position/velocity/facing, and `game_version` (from `GameVersion.VERSION`).
+- **Alpha catalog ids:** fitted module and ammunition ids are stored verbatim. Renaming or removing a catalog SKU invalidates existing save slots; there is no save migrator yet.
 - Optional top-level `subsystems` envelope: `Simulation.collect_save()` writes one versioned section per registered `SimSubsystem` (`{version, data}` keyed by subsystem `id`). `Simulation.apply_save()` restores each section (running `migrate` when the stored version is older). Missing envelope on v1/v2 saves is valid — subsystems reset to defaults. Session/UI fields are unchanged; market quotes remain derived on load.
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
@@ -264,7 +265,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Unspace solution typing (integers shown as flavour only)
 - Deeper N-space routes (n > 4)
 - Ship hyperdrive translation
-- Homing missiles, scatter pellet cones, combat game-over screen
+- Combat game-over screen
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)

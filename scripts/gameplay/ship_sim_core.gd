@@ -87,7 +87,7 @@ func refresh_stats(cadence: StatsCadence) -> bool:
 	return true
 
 
-func step_weapons(delta: float, firing: bool) -> Dictionary:
+func step_weapons(delta: float, firing: bool, guidance_context: Dictionary = {}) -> Dictionary:
 	if _catalog == null or _assembled == null or _owned == null or _weapons == null:
 		return {"orders": [], "out_of_ammo": false, "ammo_changed": false}
 	return _weapons.tick(
@@ -96,7 +96,8 @@ func step_weapons(delta: float, firing: bool) -> Dictionary:
 		_owned,
 		delta,
 		firing,
-		_operating_state.weapons_allowed
+		_operating_state.weapons_allowed,
+		guidance_context
 	)
 
 

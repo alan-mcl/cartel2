@@ -6,6 +6,8 @@ const ROUND_COLOR := Color(1.0, 0.7, 0.27, 1.0)
 const ROUND_OUTLINE := Color(1.0, 0.55, 0.2, 1.0)
 const PLASMA_COLOR := Color(0.95, 0.35, 1.0, 1.0)
 const PLASMA_OUTLINE := Color(0.75, 0.2, 0.95, 1.0)
+const SCATTER_COLOR := Color(0.85, 0.82, 0.75, 1.0)
+const SCATTER_OUTLINE := Color(0.55, 0.5, 0.45, 1.0)
 const DEFAULT_SOLID_MASK := 2
 const NPC_MASK := 16
 const DEFAULT_WEAPON_MASK := DEFAULT_SOLID_MASK | NPC_MASK
@@ -23,7 +25,7 @@ var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
 var _shooter: Node = null
-var _plasma := false
+var _visual_variant := "mass_driver"
 
 
 static func spawn(
@@ -37,7 +39,8 @@ static func spawn(
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = [],
 	inherited_velocity: Vector2 = Vector2.ZERO,
-	shooter: Node = null
+	shooter: Node = null,
+	visual_variant: String = ""
 ) -> void:
 	if _packed_scene == null:
 		_packed_scene = load(SCENE_PATH) as PackedScene
@@ -63,7 +66,8 @@ static func spawn(
 			collision_mask,
 			exclude,
 			inherited_velocity,
-			shooter
+			shooter,
+			visual_variant
 		)
 
 
@@ -77,7 +81,8 @@ func configure(
 	collision_mask: int = DEFAULT_WEAPON_MASK,
 	exclude: Array = [],
 	inherited_velocity: Vector2 = Vector2.ZERO,
-	shooter: Node = null
+	shooter: Node = null,
+	visual_variant: String = ""
 ) -> void:
 	_muzzle_speed = speed
 	_velocity = direction.normalized() * speed + inherited_velocity
@@ -87,7 +92,9 @@ func configure(
 	_collision_mask = collision_mask
 	_exclude = exclude
 	_shooter = shooter
-	_plasma = delivery_type == "plasma"
+	_visual_variant = visual_variant
+	if _visual_variant.is_empty():
+		_visual_variant = "plasma" if delivery_type == "plasma" else "mass_driver"
 	var travel_dir := _velocity.normalized() if _velocity.length_squared() > 1.0 else direction.normalized()
 	global_position = origin + travel_dir * SPAWN_SKIN
 	if _velocity.length_squared() > 1.0:
@@ -104,14 +111,24 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var fill := PLASMA_COLOR if _plasma else ROUND_COLOR
-	var outline := PLASMA_OUTLINE if _plasma else ROUND_OUTLINE
-	draw_circle(Vector2.ZERO, ROUND_RADIUS, fill)
-	draw_arc(Vector2.ZERO, ROUND_RADIUS, 0.0, TAU, 24, outline, 1.5)
+	var fill := ROUND_COLOR
+	var outline := ROUND_OUTLINE
+	var radius := ROUND_RADIUS
+	match _visual_variant:
+		"plasma":
+			fill = PLASMA_COLOR
+			outline = PLASMA_OUTLINE
+			radius = ROUND_RADIUS + 1.0
+		"scatter_pellet":
+			fill = SCATTER_COLOR
+			outline = SCATTER_OUTLINE
+			radius = ROUND_RADIUS * 0.75
+	draw_circle(Vector2.ZERO, radius, fill)
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 16, outline, 1.5)
 
 
 func _physics_process(delta: float) -> void:
-	var range_step := _muzzle_speed * delta
+	var range_step := _velocity.length() * delta
 	var next_traveled := _traveled + range_step
 	if next_traveled >= _max_range:
 		queue_free()

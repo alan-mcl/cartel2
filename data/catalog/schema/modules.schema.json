@@ -76,6 +76,9 @@
     "sensor_sensitivity": { "$ref": "#/$defs/signature" },
     "sensor_sensitivity_passive": { "$ref": "#/$defs/signature" },
     "area_effect": { "type": "boolean", "default": false },
+    "pellet_count": { "type": "integer", "minimum": 1, "default": 0 },
+    "pellet_spread_deg": { "type": "number", "minimum": 0, "default": 0.0 },
+    "guidance_turn_rate": { "type": "number", "minimum": 0, "default": 0.0 },
     "intercept_chance": { "type": "number", "default": 0.0 },
     "nav_rating": { "type": "number", "default": 0.0 },
     "translation_capacity": { "type": "number", "default": 0.0 }

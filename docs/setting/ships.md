@@ -66,7 +66,7 @@ Budget interceptor: chemical or compact fusion drive, light plate, light and med
 
 ### P111
 
-Charter and VIP transport: luxury cabin, deflector shield, no cargo bay. The P103 still hauls freight; the P111 carries guests.
+Charter and VIP transport: luxury cabin, Helios deflector and Ionique energy shields, no cargo bay. The P103 still hauls freight; the P111 carries guests.
 
 ### P113
 
@@ -122,7 +122,7 @@ The Wolff chassis was originally produced by **Bayes Inc**, and is still in regu
 
 ### Warrior
 
-The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a heavy scatter cannon to complement the existing unguided missile launcher. It also replaces the original fusion engine with a more powerful antimatter drive, making this a formidable craft in a fight.
+The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a Brutus scatter cannon alongside Bellatrix rocket and guided missile racks, plus a Disruptor EMP rocket for electronic strikes. It also replaces the original fusion engine with a more powerful antimatter drive, making this a formidable craft in a fight.
 
 ### Gladius
 
@@ -184,7 +184,7 @@ A lighter contract trim on the same chassis.
 
 ### Warden
 
-Patrol picket: strong sensors, one medium weapon, light plate. The Mk8 is the contract fighter; the Warden holds the orbit.
+Patrol picket: strong sensors, turbo laser, light plate, and Bellatrix point defence. The Mk8 is the contract fighter; the Warden holds the orbit.
 
 ---
 
@@ -202,7 +202,7 @@ The **XF4400** is the current mid-tier production model — faster drives and a 
 
 ### XF5700
 
-The **XF5700** is the top-line interceptor configuration in current manufacture, pairing the fastest engines the frame can carry with twin medium hardpoints.
+The **XF5700** is the top-line interceptor configuration in current manufacture, pairing Privy Seal Null antimatter with turbo laser and Chimera plasma burst, plus SnedOS electronic shielding and cyberwall for contested lanes.
 
 ---
 

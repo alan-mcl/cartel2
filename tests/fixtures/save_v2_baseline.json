@@ -49,15 +49,15 @@
         {"slot": "system_2", "module_id": "gi_ls_4"},
         {"slot": "system_3", "module_id": "hg_hermes_n6"},
         {"slot": "system_4", "module_id": "vessel_registration_beacon"},
-        {"slot": "other_1", "module_id": "mass_driver_magazine_200"},
+        {"slot": "other_1", "module_id": "oc_river_md_magazine_200"},
         {"slot": "other_2", "module_id": "fuel_tank_medium"},
         {"slot": "other_3", "module_id": "cargo_bay_10"},
-        {"slot": "other_4", "module_id": "chitanium_5mm"},
-        {"slot": "light_weapon_1", "module_id": "light_mass_driver"}
+        {"slot": "other_4", "module_id": "oc_chitanium_5mm"},
+        {"slot": "light_weapon_1", "module_id": "oc_river_light_mass_driver"}
       ],
       "cargo": {"food_products": 2},
       "fuel_current": 80.0,
-      "ammunition": {"mass_driver_round": 120.0},
+      "ammunition": {"oc_river_md_round": 120.0},
       "transponder_enabled": true,
       "active_sensors_enabled": true
     }

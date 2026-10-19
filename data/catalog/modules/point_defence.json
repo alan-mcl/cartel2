@@ -1,162 +1,122 @@
 [
   {
-    "id": "atl_pd_mk1",
-    "name": "Atlas Watchdog PD",
-    "maker": "Atlas Concern",
-    "brand": "Atlas",
     "category": "point_defence",
     "mount": "other",
     "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.33,
+    "volume": 0.6,
     "power_demand": 3.0,
-    "cost": 2000,
-    "description": "",
-    "signature": {
-      "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
-    }
-  },
-  {
-    "id": "frz_pd_mk1",
-    "name": "FRZ Intercept Grid",
-    "maker": "Four Rivers Zaibatsu",
-    "brand": "FRZ",
-    "category": "point_defence",
-    "mount": "other",
-    "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.3,
-    "power_demand": 3.0,
-    "cost": 1850,
-    "description": "",
-    "signature": {
-      "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
-    }
-  },
-  {
-    "id": "gi_pd_mk1",
-    "name": "GI Close-In PD",
-    "maker": "General Industrial",
-    "brand": "GI",
-    "category": "point_defence",
-    "mount": "other",
-    "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.22,
-    "power_demand": 3.0,
-    "cost": 1400,
-    "description": "",
-    "signature": {
-      "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
-    }
-  },
-  {
-    "id": "go_pd_mk1",
-    "name": "GO Point Defence Turret",
-    "maker": "Galactic Outcomes",
-    "brand": "GO",
-    "category": "point_defence",
-    "mount": "other",
-    "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.35,
-    "power_demand": 3.0,
-    "cost": 1900,
-    "description": "",
-    "signature": {
-      "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
-    }
-  },
-  {
-    "id": "hw_pd_mk1",
+    "id": "hw_helios_guard_pd",
     "name": "Helios Guard PD",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
-    "category": "point_defence",
-    "mount": "other",
-    "mass": 0.8,
-    "volume": 1.0,
     "intercept_chance": 0.32,
-    "power_demand": 3.0,
     "cost": 2100,
-    "description": "",
+    "description": "Helios close-in point defence turret.",
     "signature": {
       "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
     }
   },
   {
-    "id": "oc_pd_mk1",
-    "name": "OC Sentinel PD",
-    "maker": "Oklahoma Combine",
-    "brand": "OC",
     "category": "point_defence",
     "mount": "other",
     "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.28,
+    "volume": 0.6,
     "power_demand": 3.0,
-    "cost": 1700,
-    "description": "",
+    "id": "hw_helios_sentinel_pd",
+    "name": "Helios Sentinel PD",
+    "maker": "Holt-Winters Corp",
+    "brand": "Helios",
+    "intercept_chance": 0.26,
+    "cost": 1800,
+    "description": "Efficient Helios PD grid for escorts on a power budget.",
     "signature": {
       "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
     }
   },
   {
-    "id": "ora_pd_mk1",
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 0.6,
+    "power_demand": 3.0,
+    "id": "oc_river_pd",
+    "name": "River Sentinel PD",
+    "maker": "Oklahoma Combine",
+    "brand": "River",
+    "intercept_chance": 0.28,
+    "cost": 1700,
+    "description": "OC point defence for freighter escorts.",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
+    }
+  },
+  {
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 0.6,
+    "power_demand": 3.0,
+    "id": "ora_bellatrix_pd",
     "name": "Bellatrix PD Array",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
-    "category": "point_defence",
-    "mount": "other",
-    "mass": 0.8,
-    "volume": 1.0,
     "intercept_chance": 0.25,
-    "power_demand": 3.0,
     "cost": 1600,
-    "description": "",
+    "description": "Bellatrix intercept grid for missile-heavy lanes.",
     "signature": {
       "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
     }
   },
   {
-    "id": "sbi_pd_mk1",
-    "name": "Seven Bells PD Bell",
-    "maker": "Seven Bells Inc",
-    "brand": "Seven Bells",
     "category": "point_defence",
     "mount": "other",
     "mass": 0.8,
-    "volume": 1.0,
-    "intercept_chance": 0.27,
+    "volume": 0.6,
     "power_demand": 3.0,
-    "cost": 1750,
-    "description": "",
+    "id": "ora_bellatrix_pd_heavy",
+    "name": "Bellatrix Heavy PD",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "intercept_chance": 0.34,
+    "cost": 2200,
+    "description": "Heavy Bellatrix PD for dedicated picket hulls.",
     "signature": {
       "thermal": 0.8,
-      "gravitational": 0.12,
-      "electromagnetic": 3.5,
-      "computational": 0.6
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
+    }
+  },
+  {
+    "category": "point_defence",
+    "mount": "other",
+    "mass": 0.8,
+    "volume": 0.6,
+    "power_demand": 3.0,
+    "id": "go_brutus_pd",
+    "name": "Brutus PD Turret",
+    "maker": "Galactic Outcomes",
+    "brand": "Brutus",
+    "intercept_chance": 0.3,
+    "cost": 1900,
+    "description": "GO point defence for gunship hardpoints.",
+    "signature": {
+      "thermal": 0.8,
+      "gravitational": 0.1,
+      "electromagnetic": 2.0,
+      "computational": 0.3
     }
   }
 ]

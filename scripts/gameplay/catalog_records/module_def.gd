@@ -52,6 +52,9 @@ var sensor_range: float = 0.0
 var sensor_sensitivity: CatalogSignature = CatalogSignature.new()
 var sensor_sensitivity_passive: CatalogSignature = CatalogSignature.new()
 var area_effect: bool = false
+var pellet_count: int = 0
+var pellet_spread_deg: float = 0.0
+var guidance_turn_rate: float = 0.0
 var intercept_chance: float = 0.0
 var nav_rating: float = 0.0
 var translation_capacity: float = 0.0
@@ -117,6 +120,9 @@ static func from_dict(data: Dictionary) -> ModuleDef:
 	def.sensor_sensitivity = CatalogSignature.from_dict(data.get("sensor_sensitivity", {}))
 	def.sensor_sensitivity_passive = CatalogSignature.from_dict(data.get("sensor_sensitivity_passive", {}))
 	def.area_effect = bool(data.get("area_effect", false))
+	def.pellet_count = int(data.get("pellet_count", 0))
+	def.pellet_spread_deg = float(data.get("pellet_spread_deg", 0.0))
+	def.guidance_turn_rate = float(data.get("guidance_turn_rate", 0.0))
 	def.intercept_chance = float(data.get("intercept_chance", 0.0))
 	def.nav_rating = float(data.get("nav_rating", 0.0))
 	def.translation_capacity = float(data.get("translation_capacity", 0.0))
@@ -209,6 +215,12 @@ func to_dict() -> Dictionary:
 		out["sensor_sensitivity_passive"] = sensor_sensitivity_passive.to_dict()
 	if _present_keys.has("area_effect") or area_effect != false:
 		out["area_effect"] = area_effect
+	if _present_keys.has("pellet_count") or pellet_count != 0:
+		out["pellet_count"] = pellet_count
+	if _present_keys.has("pellet_spread_deg") or pellet_spread_deg != 0.0:
+		out["pellet_spread_deg"] = pellet_spread_deg
+	if _present_keys.has("guidance_turn_rate") or guidance_turn_rate != 0.0:
+		out["guidance_turn_rate"] = guidance_turn_rate
 	if _present_keys.has("intercept_chance") or intercept_chance != 0.0:
 		out["intercept_chance"] = intercept_chance
 	if _present_keys.has("nav_rating") or nav_rating != 0.0:
@@ -218,7 +230,7 @@ func to_dict() -> Dictionary:
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "fuel_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "intercept_chance", "nav_rating", "translation_capacity"])
+	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "fuel_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "pellet_count", "pellet_spread_deg", "guidance_turn_rate", "intercept_chance", "nav_rating", "translation_capacity"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "maker", "category", "mass", "volume", "cost", "description", "signature"])

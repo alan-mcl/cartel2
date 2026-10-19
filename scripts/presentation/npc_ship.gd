@@ -13,6 +13,9 @@ var catalog: Catalog
 @onready var _engine_exhaust: EngineExhaust = $Visual/EngineExhaust
 @onready var _hull: Sprite2D = $Visual/Hull
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var _visual_root: Node2D = $Visual
+
+var _defence_visual: CombatDefenceVisual
 
 
 func bind_actor(traffic_actor, game_catalog: Catalog) -> void:
@@ -38,6 +41,8 @@ func sync_from_actor(traffic_actor) -> void:
 		global_position = traffic_actor.position
 	traffic_actor.sync_position(global_position)
 	_update_thrust_visual(traffic_actor.motion.is_thrusting())
+	if _defence_visual != null and actor != null and actor.assembled_ship != null and actor.combat_state != null:
+		_defence_visual.bind_ship(actor.assembled_ship, actor.combat_state)
 
 
 func take_weapon_hit(damage: float) -> void:
@@ -47,7 +52,10 @@ func take_weapon_hit(damage: float) -> void:
 func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	if actor == null or catalog == null:
 		return {}
-	return actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
+	var result: Dictionary = actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
+	if _defence_visual != null:
+		_defence_visual.play_hit_layers(result.get("defence_layers", {}))
+	return result
 
 
 func apply_hull_damage_visual(health_ratio: float) -> void:
@@ -61,6 +69,16 @@ func play_destroyed() -> void:
 	var tween := create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.35)
 	tween.tween_callback(queue_free)
+
+
+func query_weapon_guidance(target_id: String) -> Dictionary:
+	if actor == null:
+		return {"active": false}
+	if actor.locked_target_id != target_id or target_id.is_empty():
+		return {"active": false}
+	if target_id == TargetLock.PLAYER_TARGET_ID:
+		return {"active": true, "position": actor.last_known_player_pos}
+	return {"active": false}
 
 
 func spawn_weapon_orders(orders: Array) -> void:
@@ -84,6 +102,10 @@ func _ready() -> void:
 	collision_layer = NPC_LAYER
 	collision_mask = SOLID_MASK
 	add_to_group("npc_ship")
+	_defence_visual = CombatDefenceVisual.new()
+	_defence_visual.z_index = 2
+	if _visual_root != null:
+		_visual_root.add_child(_defence_visual)
 
 	var thrust_texture := load(THRUST_SPRITE) as Texture2D
 	if _thrust_flame and thrust_texture:

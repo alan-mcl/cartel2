@@ -809,5 +809,5 @@ Point defence does not intercept beam, plasma, or cyber delivery.
 Armour adds Hits and provides a protection profile vs kinetic/concussive/energy; cyber
 ignores armour.
 
-Existing catalog module ids (light_laser, light_mass_driver, missile_launcher, etc.) are
-preserved; missile_launcher display name is Rocket Launcher (unguided).
+Combat module ids follow branded SKU names (maker_brand_product). Unguided rocket launchers
+use Rocket in the product name; guided launchers use Missile. Alpha saves do not remap ids.

@@ -368,6 +368,8 @@ func _update_hud_nav() -> void:
 	if _player.has_method("retain_target_lock"):
 		_player.retain_target_lock(contacts)
 	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
+	if _player.has_method("set_guidance_lock_contact"):
+		_player.set_guidance_lock_contact(locked_contact)
 	if _player.has_method("set_autopilot_target"):
 		_player.set_autopilot_target(locked_contact)
 	_hud.set_nav_state(

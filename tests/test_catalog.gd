@@ -8,15 +8,15 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not catalog.get_sector("proxima").is_empty(), "proxima sector exists")
 	runner.check(not catalog.get_sector("bela").is_empty(), "bela sector exists")
 
-	var module_def := catalog.get_module_def("light_laser")
-	runner.check(module_def is ModuleDef, "get_module_def(light_laser) is ModuleDef")
+	var module_def := catalog.get_module_def("hw_helios_light_laser")
+	runner.check(module_def is ModuleDef, "get_module_def(hw_helios_light_laser) is ModuleDef")
 	var weapon_defs: Array = catalog.list_module_defs("weapon")
 	runner.check(not weapon_defs.is_empty(), "list_module_defs(weapon) non-empty")
 	runner.check(weapon_defs[0] is ModuleDef, "list_module_defs returns ModuleDef")
-	runner.check_eq(module_def.category, "weapon", "light_laser category")
-	runner.check_eq(module_def.mount, "light_weapon", "light_laser mount")
+	runner.check_eq(module_def.category, "weapon", "hw_helios_light_laser category")
+	runner.check_eq(module_def.mount, "light_weapon", "hw_helios_light_laser mount")
 
-	var module_dict := catalog.get_module("light_laser")
+	var module_dict := catalog.get_module("hw_helios_light_laser")
 	runner.check(typeof(module_dict) == TYPE_DICTIONARY, "get_module still returns Dictionary")
 	runner.check(module_dict.has("id"), "module dict has id")
 	runner.check(module_dict.has("range"), "module dict has range")
@@ -26,7 +26,7 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not ship_def.chassis.is_empty(), "flare_on_ss chassis id")
 
 	var chassis_def := catalog.get_chassis_def("pegasus_chassis")
-	var ammo_def := catalog.get_ammunition_def("mass_driver_round")
+	var ammo_def := catalog.get_ammunition_def("oc_river_md_round")
 	var commodity_def := catalog.get_commodity_def("food_products")
 	runner.check(commodity_def is CommodityDef, "get_commodity_def returns CommodityDef")
 	var commodity_dict := catalog.get_commodity("food_products")
@@ -455,6 +455,26 @@ static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
 		{"kinetic": 40.0}
 	)
 	runner.check(float(result.get("hull_damage", 0.0)) > 0.0, "pegasus takes kinetic hull damage")
+	result = ShipCombat.resolve_hit(
+		assembled,
+		state,
+		"beam",
+		{"energy": 30.0}
+	)
+	runner.check(result.has("defence_layers"), "combat hit reports defence_layers")
+
+	var retired := [
+		"light_laser",
+		"scatter_cannon",
+		"hw_deflector_mk1",
+		"mass_driver_round",
+	]
+	var weapon_ids: Dictionary = {}
+	for module_def in catalog.list_modules("weapon"):
+		if typeof(module_def) == TYPE_DICTIONARY:
+			weapon_ids[str(module_def.get("id", ""))] = true
+	for old_id in retired:
+		runner.check(not weapon_ids.has(old_id), "retired weapon id absent: %s" % old_id)
 
 
 static func _life_support_volume_floor(crew: float, capabilities: Array) -> float:

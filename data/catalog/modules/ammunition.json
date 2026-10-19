@@ -1,8 +1,9 @@
 [
   {
-    "id": "mass_driver_magazine_200",
-    "name": "Mass Driver Magazine 200",
-    "maker": "Bayes Inc",
+    "id": "oc_river_md_magazine_200",
+    "name": "River MD Magazine 200",
+    "maker": "Oklahoma Combine",
+    "brand": "River",
     "category": "ammunition",
     "mounts": [
       "other",
@@ -13,10 +14,11 @@
     "mass": 0.4,
     "volume": 1.0,
     "ammunition_capacity": {
-      "mass_driver_round": 200
+      "oc_river_md_round": 200,
+      "oc_river_md_heavy_round": 80
     },
     "cost": 320,
-    "description": "Ammunition storage for mass driver weapons.",
+    "description": "River-line mass driver round storage.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.08,
@@ -25,33 +27,10 @@
     }
   },
   {
-    "id": "missile_magazine_24",
-    "name": "Missile Rack 24",
-    "maker": "Bayes Inc",
-    "category": "ammunition",
-    "mounts": [
-      "other",
-      "medium_weapon",
-      "light_weapon"
-    ],
-    "mass": 1.0,
-    "volume": 2.0,
-    "ammunition_capacity": {
-      "missile_light": 24
-    },
-    "cost": 680,
-    "description": "Internal missile storage rack.",
-    "signature": {
-      "thermal": 0.1,
-      "gravitational": 0.2,
-      "electromagnetic": 0.0,
-      "computational": 0.0
-    }
-  },
-  {
-    "id": "plasma_magazine_100",
-    "name": "Plasma Cell Magazine 100",
-    "maker": "Bayes Inc",
+    "id": "prv_ionique_plasma_magazine_100",
+    "name": "Ionique Plasma Magazine 100",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
     "category": "ammunition",
     "mounts": [
       "other",
@@ -62,10 +41,10 @@
     "mass": 0.6,
     "volume": 1.2,
     "ammunition_capacity": {
-      "plasma_cell": 100
+      "prv_plasma_cell": 100
     },
     "cost": 480,
-    "description": "Plasma cell storage for energy weapons.",
+    "description": "Ionique plasma cell storage.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.12,
@@ -74,9 +53,10 @@
     }
   },
   {
-    "id": "rocket_magazine_16",
-    "name": "Rocket Rack 16",
+    "id": "ora_bellatrix_rocket_magazine_16",
+    "name": "Bellatrix Rocket Rack 16",
     "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
     "category": "ammunition",
     "mounts": [
       "other",
@@ -86,11 +66,11 @@
     "mass": 0.9,
     "volume": 1.8,
     "ammunition_capacity": {
-      "rocket_he": 16,
-      "rocket_emp": 16
+      "ora_rocket_he": 16,
+      "go_rocket_emp": 8
     },
     "cost": 620,
-    "description": "Internal rocket storage rack.",
+    "description": "Bellatrix rocket storage with EMP slots.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.18,
@@ -99,9 +79,10 @@
     }
   },
   {
-    "id": "scatter_magazine_80",
-    "name": "Scatter Shell Magazine 80",
-    "maker": "Bayes Inc",
+    "id": "go_brutus_scatter_magazine_80",
+    "name": "Brutus Scatter Magazine 80",
+    "maker": "Galactic Outcomes",
+    "brand": "Brutus",
     "category": "ammunition",
     "mounts": [
       "other",
@@ -111,13 +92,38 @@
     "mass": 0.8,
     "volume": 1.4,
     "ammunition_capacity": {
-      "scatter_shell": 80
+      "go_scatter_shell": 80
     },
     "cost": 520,
-    "description": "Scatter shell storage for heavy cannons.",
+    "description": "Brutus scatter shell storage.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.16,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_bellatrix_missile_magazine_24",
+    "name": "Bellatrix Missile Rack 24",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 1.0,
+    "volume": 2.0,
+    "ammunition_capacity": {
+      "ora_missile_light": 24
+    },
+    "cost": 680,
+    "description": "Bellatrix guided missile storage rack.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.2,
       "electromagnetic": 0.0,
       "computational": 0.0
     }

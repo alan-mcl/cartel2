@@ -1,7 +1,7 @@
 [
   {
-    "id": "mass_driver_round",
-    "name": "Mass Driver Round",
+    "id": "oc_river_md_round",
+    "name": "River Mass Driver Round",
     "mass": 0.05,
     "cost": 2,
     "damage_packets": {
@@ -9,18 +9,18 @@
     }
   },
   {
-    "id": "missile_light",
-    "name": "Light Missile",
-    "mass": 1.2,
-    "cost": 85,
+    "id": "oc_river_md_heavy_round",
+    "name": "River Heavy Sabot",
+    "mass": 0.08,
+    "cost": 4,
     "damage_packets": {
-      "kinetic": 25,
-      "concussive": 35
+      "kinetic": 32,
+      "concussive": 8
     }
   },
   {
-    "id": "plasma_cell",
-    "name": "Plasma Cell",
+    "id": "prv_plasma_cell",
+    "name": "Ionique Plasma Cell",
     "mass": 0.15,
     "cost": 12,
     "damage_packets": {
@@ -29,8 +29,8 @@
     }
   },
   {
-    "id": "scatter_shell",
-    "name": "Scatter Shell",
+    "id": "go_scatter_shell",
+    "name": "Brutus Scatter Shell",
     "mass": 0.4,
     "cost": 18,
     "damage_packets": {
@@ -39,8 +39,8 @@
     }
   },
   {
-    "id": "rocket_he",
-    "name": "HE Rocket",
+    "id": "ora_rocket_he",
+    "name": "Bellatrix HE Rocket",
     "mass": 1.0,
     "cost": 65,
     "damage_packets": {
@@ -49,12 +49,22 @@
     }
   },
   {
-    "id": "rocket_emp",
-    "name": "EMP Rocket",
+    "id": "go_rocket_emp",
+    "name": "Disruptor EMP Rocket",
     "mass": 1.0,
     "cost": 95,
     "damage_packets": {
       "cyber": 32
+    }
+  },
+  {
+    "id": "ora_missile_light",
+    "name": "Bellatrix Light Missile",
+    "mass": 1.2,
+    "cost": 85,
+    "damage_packets": {
+      "kinetic": 25,
+      "concussive": 35
     }
   }
 ]
