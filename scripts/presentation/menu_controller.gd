@@ -7,6 +7,8 @@ var _main_menu: CanvasLayer
 var _new_game: CanvasLayer
 var _save_overlay: CanvasLayer
 var _pause: CanvasLayer
+var _career: CanvasLayer
+var _leaderboard: CanvasLayer
 var _jump: CanvasLayer
 var _hud: CanvasLayer
 var _ui_root: CanvasLayer
@@ -29,6 +31,8 @@ func bind(
 	new_game: CanvasLayer,
 	save_overlay: CanvasLayer,
 	pause: CanvasLayer,
+	career: CanvasLayer,
+	leaderboard: CanvasLayer,
 	jump: CanvasLayer,
 	hud: CanvasLayer,
 	ui_root: CanvasLayer,
@@ -46,6 +50,8 @@ func bind(
 	_new_game = new_game
 	_save_overlay = save_overlay
 	_pause = pause
+	_career = career
+	_leaderboard = leaderboard
 	_jump = jump
 	_hud = hud
 	_ui_root = ui_root
@@ -65,6 +71,10 @@ func is_gst_frozen() -> bool:
 	if _main_menu.visible or _new_game.visible:
 		return true
 	if _save_overlay.visible or _jump.visible:
+		return true
+	if _career != null and _career.visible:
+		return true
+	if _leaderboard != null and _leaderboard.visible:
 		return true
 	if _pause.visible and _tree.paused:
 		return true
@@ -101,6 +111,10 @@ func show_main_menu() -> void:
 	_jump.close()
 	_new_game.close()
 	_save_overlay.close()
+	if _career != null:
+		_career.close()
+	if _leaderboard != null:
+		_leaderboard.close()
 	_hud.visible = false
 	_player.freeze_motion()
 	_world.clear_world()
@@ -121,6 +135,8 @@ func show_main_menu() -> void:
 		_ui_callbacks.get("ship_changed"),
 		_ui_callbacks.get("undock_requested"),
 		_ui_callbacks.get("save_requested"),
+		_ui_callbacks.get("career_requested"),
+		_ui_callbacks.get("leaderboard_requested"),
 		_ui_callbacks.get("quit_to_menu")
 	)
 	_jump.bind(_catalog, _main.session)
@@ -184,7 +200,17 @@ func begin_new_game(callsign: String, background_id: String, portrait_path: Stri
 	_current_slot = -1
 	_main_menu.close()
 	_new_game.close()
-	_ui_root.session = _main.session
+	_ui_root.configure(
+		_catalog,
+		_main.session,
+		_simulation,
+		_ui_callbacks.get("ship_changed"),
+		_ui_callbacks.get("undock_requested"),
+		_ui_callbacks.get("save_requested"),
+		_ui_callbacks.get("career_requested"),
+		_ui_callbacks.get("leaderboard_requested"),
+		_ui_callbacks.get("quit_to_menu")
+	)
 	_jump.bind(_catalog, _main.session)
 	_hud.bind(_main.session, _player, AssembledShip.new(), _simulation, _catalog)
 	_refresh_session_bindings()
@@ -220,6 +246,8 @@ func load_slot(slot_index: int) -> void:
 		_ui_callbacks.get("ship_changed"),
 		_ui_callbacks.get("undock_requested"),
 		_ui_callbacks.get("save_requested"),
+		_ui_callbacks.get("career_requested"),
+		_ui_callbacks.get("leaderboard_requested"),
 		_ui_callbacks.get("quit_to_menu")
 	)
 	_jump.bind(_catalog, _main.session)
@@ -251,6 +279,8 @@ func save_to_slot(slot_index: int) -> bool:
 	)
 	if not SaveStore.write_slot(slot_index, save_data):
 		return false
+
+	LeaderboardStore.upsert_from_session(_main.session, str(save_data.get("saved_at", "")))
 
 	_current_slot = slot_index
 	_main.session.last_log = "Game saved to slot %d." % slot_index
@@ -330,6 +360,67 @@ func on_ui_save_requested() -> void:
 	_save_overlay_source = "habitat"
 	_tree.paused = true
 	_save_overlay.open(_save_overlay.Mode.SAVE)
+
+
+func on_ui_career_requested() -> void:
+	open_career_overlay()
+
+
+func on_ui_leaderboard_requested() -> void:
+	open_leaderboard_overlay()
+
+
+func on_main_menu_leaderboard_requested() -> void:
+	open_leaderboard_overlay()
+
+
+func on_pause_career_requested() -> void:
+	open_career_overlay()
+
+
+func on_pause_leaderboard_requested() -> void:
+	open_leaderboard_overlay()
+
+
+func open_career_overlay() -> void:
+	if not _main.game_active or _career == null:
+		return
+	_career.open(_main.session)
+	if not _main.session.docked and not _pause.visible:
+		_tree.paused = true
+
+
+func open_leaderboard_overlay() -> void:
+	if _leaderboard == null:
+		return
+	_leaderboard.open()
+
+
+func on_career_overlay_closed() -> void:
+	if _career != null:
+		_career.close()
+	_restore_pause_after_overlay()
+
+
+func on_leaderboard_overlay_closed() -> void:
+	if _leaderboard != null:
+		_leaderboard.close()
+	_restore_pause_after_overlay()
+
+
+func on_career_leaderboard_requested() -> void:
+	open_leaderboard_overlay()
+
+
+func _restore_pause_after_overlay() -> void:
+	if _career != null and _career.visible:
+		return
+	if _leaderboard != null and _leaderboard.visible:
+		return
+	if _pause.visible:
+		return
+	if _main.game_active and not _main.session.docked:
+		_tree.paused = false
 
 
 func _refresh_session_bindings() -> void:

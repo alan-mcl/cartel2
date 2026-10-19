@@ -178,8 +178,11 @@ func _physics_process(delta: float) -> void:
 		_update_operating_warnings(session, firing)
 
 		var weapon_result: Dictionary = _sim.step_weapons(delta, firing, _weapon_guidance_context())
-		if not weapon_result.get("orders", []).is_empty():
-			_spawn_weapon_orders(weapon_result["orders"])
+		var orders: Array = weapon_result.get("orders", [])
+		if not orders.is_empty():
+			if session != null and not session.player.sandbox:
+				session.career.record_shots(orders.size())
+			_spawn_weapon_orders(orders)
 		if bool(weapon_result.get("ammo_changed", false)):
 			session.changed.emit()
 		if firing and bool(weapon_result.get("out_of_ammo", false)):

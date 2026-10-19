@@ -163,6 +163,8 @@ static func buy_part(session: GameSession, catalog: Catalog, part_id: String) ->
 
 	session.add_spare_part(part_id, 1)
 	session.last_log = "Purchased %s for d%d." % [str(part.get("name", part_id)), cost]
+	if not session.player.sandbox:
+		session.career.record_part_purchase(cost)
 	session.changed.emit()
 	return true
 
@@ -182,6 +184,8 @@ static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -
 	session.remove_spare_part(part_id, 1)
 	session.apply_credits_delta(sell_price)
 	session.last_log = "Sold %s for d%d." % [str(part.get("name", part_id)), sell_price]
+	if not session.player.sandbox:
+		session.career.record_part_sale(sell_price)
 	session.changed.emit()
 	return true
 
@@ -438,6 +442,8 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	var fuel_name := str(catalog.get_fuel(fuel_id).get("name", fuel_id))
 	if cost > 0:
 		session.last_log = "Refuelled %s with %s for d%d." % [ship.name, fuel_name, cost]
+		if not session.player.sandbox:
+			session.career.record_fuel_spend(cost)
 	else:
 		session.last_log = "Refuelled %s." % ship.name
 	session.changed.emit()

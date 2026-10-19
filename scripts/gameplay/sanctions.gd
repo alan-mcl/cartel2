@@ -116,6 +116,12 @@ static func record_player_weapon_hit(
 	if not added_fire and not added_destroy:
 		return
 
+	if not session.player.sandbox:
+		if added_fire:
+			session.career.record_infraction_incurred()
+		if added_destroy:
+			session.career.record_infraction_incurred()
+
 	var parts: PackedStringArray = PackedStringArray()
 	if added_fire:
 		var fire_def := catalog.get_sanction_infraction("unlawful_fire")

@@ -8,6 +8,8 @@ var stack: ScreenStack
 var on_ship_changed: Callable = Callable()
 var on_undock_requested: Callable = Callable()
 var on_save_requested: Callable = Callable()
+var on_career_requested: Callable = Callable()
+var on_leaderboard_requested: Callable = Callable()
 var on_quit_to_menu_requested: Callable = Callable()
 ## Docked ship used for passenger charter accept checks (terminal + bar).
 var charter_ship_id: String = ""

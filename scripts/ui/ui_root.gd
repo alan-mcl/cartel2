@@ -11,6 +11,8 @@ var context := UiContext.new()
 var on_ship_changed: Callable = Callable()
 var on_undock_requested: Callable = Callable()
 var on_save_requested: Callable = Callable()
+var on_career_requested: Callable = Callable()
+var on_leaderboard_requested: Callable = Callable()
 var on_quit_to_menu_requested: Callable = Callable()
 
 
@@ -26,6 +28,8 @@ func configure(
 	ship_changed: Callable,
 	undock: Callable,
 	save: Callable,
+	career: Callable,
+	leaderboard: Callable,
 	quit_menu: Callable
 ) -> void:
 	catalog = p_catalog
@@ -34,6 +38,8 @@ func configure(
 	on_ship_changed = ship_changed
 	on_undock_requested = undock
 	on_save_requested = save
+	on_career_requested = career
+	on_leaderboard_requested = leaderboard
 	on_quit_to_menu_requested = quit_menu
 
 	context.catalog = catalog
@@ -42,8 +48,19 @@ func configure(
 	context.stack = _stack
 	context.on_ship_changed = on_ship_changed
 	context.on_save_requested = on_save_requested
+	context.on_career_requested = on_career_requested
+	context.on_leaderboard_requested = on_leaderboard_requested
 	context.on_quit_to_menu_requested = on_quit_to_menu_requested
 	context.on_undock_requested = on_undock_requested
+
+
+func sync_context_callbacks() -> void:
+	context.on_ship_changed = on_ship_changed
+	context.on_undock_requested = on_undock_requested
+	context.on_save_requested = on_save_requested
+	context.on_career_requested = on_career_requested
+	context.on_leaderboard_requested = on_leaderboard_requested
+	context.on_quit_to_menu_requested = on_quit_to_menu_requested
 
 
 func open_habitat() -> void:
@@ -52,6 +69,7 @@ func open_habitat() -> void:
 	context.session = session
 	context.catalog = catalog
 	context.simulation = simulation
+	sync_context_callbacks()
 	var habitat_screen := preload("res://scenes/ui/habitat_screen.tscn").instantiate()
 	_stack.replace_screen(habitat_screen)
 	habitat_screen.bind(context)

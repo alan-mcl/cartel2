@@ -8,6 +8,7 @@ var world := WorldPresence.new()
 var fleet := Fleet.new()
 var wallet := Wallet.new()
 var combat := CombatPersistence.new()
+var career := CareerStats.new()
 var events := EventBus.new()
 
 
@@ -160,6 +161,10 @@ func _publish_credits_changed(delta: int) -> void:
 	events.publish(SimEvent.credits_changed(delta, wallet.credits))
 
 
+func _track_career_enabled() -> bool:
+	return not player.sandbox
+
+
 func fail_action(message: String) -> bool:
 	player.last_log = message
 	changed.emit()
@@ -212,6 +217,8 @@ func start_new_game(
 	player.background_id = new_background_id.strip_edges()
 	if player.callsign.is_empty():
 		return false
+
+	career.reset_for_new_career()
 
 	var kit := catalog.get_background(player.background_id)
 	if kit.is_empty():
@@ -313,6 +320,7 @@ func to_dict() -> Dictionary:
 	data.merge(world.to_session_dict())
 	data.merge(fleet.to_session_dict())
 	data.merge(combat.to_session_dict())
+	data.merge(career.to_session_dict())
 	return data
 
 
@@ -332,6 +340,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	fleet.load_session_dict(session_data)
 	combat.load_session_dict(session_data)
 	player.load_session_dict(session_data)
+	career.load_session_dict(session_data)
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := PlayerState._int_dict_from_variant(session_data.get("cargo", {}))
@@ -411,6 +420,8 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 		player.last_log = "Arrived in %s." % str(sector.get("name", new_sector_id))
 
 	events.publish(SimEvent.sector_entered(world.sector_id))
+	if _track_career_enabled():
+		career.record_sector_visited(world.sector_id)
 	changed.emit()
 	return true
 
@@ -449,6 +460,8 @@ func enter_unspace(
 	combat.init_hull_from_ship(assembled_ship)
 
 	world.location_name = "%d-space" % n
+	if _track_career_enabled():
+		career.record_translation(n)
 	changed.emit()
 	return true
 
@@ -561,8 +574,13 @@ func repair_combat_at_dock(catalog: Catalog) -> void:
 
 func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_type: String, packets: Dictionary) -> Dictionary:
 	var state := combat.build_combat_state(assembled_ship)
+	var hull_was_disabled := state.is_hull_disabled()
 	var result := ShipCombat.resolve_hit(assembled_ship, state, delivery_type, packets)
 	combat.apply_combat_state(state)
+	if _track_career_enabled():
+		career.record_hull_damage(float(result.get("hull_damage", 0.0)))
+		if not hull_was_disabled and state.is_hull_disabled():
+			career.record_hull_breach()
 	if state.is_hull_disabled():
 		player.last_log = "Hull breached. Systems offline."
 	changed.emit()
@@ -632,6 +650,8 @@ func salvage(definition: InteractableDef) -> bool:
 	if reward != 0:
 		wallet.apply(reward)
 		_publish_credits_changed(reward)
+	if _track_career_enabled():
+		career.record_salvage(reward)
 	changed.emit()
 	return true
 
@@ -657,6 +677,10 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	repair_combat_at_dock(catalog)
 	player.last_log = "Docked at %s." % str(default_building.get("name", default_building_id))
 	events.publish(SimEvent.docked(world.habitat_id))
+	if _track_career_enabled():
+		career.record_dock()
+		career.record_habitat_visited(location_id)
+		career.record_building_visited(default_building_id)
 	changed.emit()
 	return true
 
@@ -684,6 +708,8 @@ func visit(catalog: Catalog, target_building_id: String) -> bool:
 	world.location_name = "%s / %s" % [str(habitat.get("name", world.habitat_id)), building_name]
 	advance_gst(15.0 * float(GalacticCalendar.SECONDS_PER_MINUTE))
 	player.last_log = "Took a tram over to %s." % building_name
+	if _track_career_enabled():
+		career.record_building_visited(target_building_id)
 	changed.emit()
 	return true
 
@@ -693,6 +719,8 @@ func pay_sanctions(catalog: Catalog) -> bool:
 	var ok := player.try_pay_sanctions(wallet, catalog)
 	if ok and total > 0:
 		_publish_credits_changed(-total)
+		if _track_career_enabled():
+			career.record_sanctions_paid(total)
 	changed.emit()
 	return ok
 
@@ -881,6 +909,8 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 		fleet.current_ship_id = ship.id
 	player.last_log = "Purchased %s for d%d. Visit the Shipyard to fit out." % [ship.name, cost]
 	events.publish(SimEvent.ship_purchased(ship.id, "chassis", cost))
+	if _track_career_enabled():
+		career.record_ship_purchase(cost)
 	changed.emit()
 	return true
 
@@ -920,6 +950,8 @@ func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
 		fleet.current_ship_id = ship.id
 	player.last_log = "Purchased %s for d%d." % [ship.name, cost]
 	events.publish(SimEvent.ship_purchased(ship.id, "used", cost))
+	if _track_career_enabled():
+		career.record_ship_purchase(cost)
 	changed.emit()
 	return true
 
@@ -970,6 +1002,9 @@ func buy_commodity(
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, price, "buy")
 	)
+	if _track_career_enabled():
+		var tonnes := float(commodity.get("mass", 0.0)) * float(amount)
+		career.record_commodity_buy(amount, tonnes, total_cost)
 	changed.emit()
 	return true
 
@@ -1019,6 +1054,9 @@ func sell_commodity(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, sell_price, "sell")
 	)
 	_publish_credits_changed(total)
+	if _track_career_enabled():
+		var tonnes := float(commodity.get("mass", 0.0)) * float(amount)
+		career.record_commodity_sell(amount, tonnes, total)
 	changed.emit()
 	return true
 

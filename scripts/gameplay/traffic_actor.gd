@@ -173,6 +173,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 
 	if hull_current <= 0.0:
 		ai_state = AiState.DESTROYED
+		result["destroyed"] = true
 		return result
 
 	if ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:

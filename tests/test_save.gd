@@ -58,6 +58,7 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	session.power_integrity_lost = 0.25
 	session.compute_integrity_lost = 0.5
 	session.shield_charges = {"forward": 2.0}
+	session.career.record_charter_reward(321)
 
 	var first_ship: OwnedShip = session.owned_ships[0]
 	first_ship.add_cargo("food_products", 4)
@@ -80,6 +81,7 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(loaded.from_save(catalog, data), "save: round-trip loads")
 
 	runner.check_eq(loaded.credits, 4242, "save: credits survive")
+	runner.check_eq(loaded.career.nett_profit(), 321, "save: career profit survives")
 	runner.check_eq(loaded.player.reputation, 42, "save: reputation survives")
 	runner.check_eq(loaded.objective, "Round-trip objective", "save: objective survives")
 	runner.check_eq(loaded.last_log, "Round-trip log", "save: last_log survives")

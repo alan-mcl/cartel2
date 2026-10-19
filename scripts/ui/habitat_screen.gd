@@ -30,6 +30,8 @@ var _embedded_panel_type: String = ""
 
 
 func _ready() -> void:
+	$Layout/Footer/CareerButton.pressed.connect(_on_career_pressed)
+	$Layout/Footer/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
 	$Layout/Footer/SaveButton.pressed.connect(_on_save_pressed)
 	$Layout/Footer/MenuButton.pressed.connect(_on_menu_pressed)
 	_building_item_list.item_selected.connect(_on_building_item_selected)
@@ -302,6 +304,16 @@ func _update_portrait(portrait_path: String) -> void:
 	var texture := load(portrait_path) as Texture2D
 	_portrait.texture = texture
 	_portrait.visible = texture != null
+
+
+func _on_career_pressed() -> void:
+	if _context.on_career_requested.is_valid():
+		_context.on_career_requested.call()
+
+
+func _on_leaderboard_pressed() -> void:
+	if _context.on_leaderboard_requested.is_valid():
+		_context.on_leaderboard_requested.call()
 
 
 func _on_save_pressed() -> void:

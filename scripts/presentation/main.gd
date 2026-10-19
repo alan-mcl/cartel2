@@ -20,6 +20,8 @@ var _menu := MenuController.new()
 @onready var _main_menu: CanvasLayer = $MainMenu
 @onready var _new_game: CanvasLayer = $NewGameOverlay
 @onready var _save_overlay: CanvasLayer = $SaveOverlay
+@onready var _career: CanvasLayer = $CareerOverlay
+@onready var _leaderboard: CanvasLayer = $LeaderboardOverlay
 @onready var _starfield: Node2D = $Starfield
 @onready var _camera: Camera2D = $PlayerShip/FollowCamera
 
@@ -49,10 +51,17 @@ func _ready() -> void:
 	_pause.save_requested.connect(_menu.on_pause_save_requested)
 	_pause.load_requested.connect(_menu.on_pause_load_requested)
 	_pause.quit_to_menu_requested.connect(_menu.on_quit_to_menu_requested)
+	_pause.career_requested.connect(_menu.on_pause_career_requested)
+	_pause.leaderboard_requested.connect(_menu.on_pause_leaderboard_requested)
 
 	_main_menu.new_game_requested.connect(_menu.on_main_menu_new_game)
 	_main_menu.load_requested.connect(_menu.on_main_menu_load)
+	_main_menu.leaderboard_requested.connect(_menu.on_main_menu_leaderboard_requested)
 	_main_menu.exit_requested.connect(_menu.on_main_menu_exit)
+
+	_career.closed.connect(_menu.on_career_overlay_closed)
+	_career.leaderboard_requested.connect(_menu.on_career_leaderboard_requested)
+	_leaderboard.closed.connect(_menu.on_leaderboard_overlay_closed)
 
 	_new_game.confirmed.connect(_menu.on_new_game_confirmed)
 	_new_game.cancelled.connect(_menu.on_new_game_cancelled)
@@ -66,6 +75,8 @@ func _ready() -> void:
 	_hud.visible = false
 	_new_game.close()
 	_save_overlay.close()
+	_career.close()
+	_leaderboard.close()
 
 	_menu.show_main_menu()
 
@@ -105,6 +116,8 @@ func _bind_controllers() -> void:
 		_new_game,
 		_save_overlay,
 		_pause,
+		_career,
+		_leaderboard,
 		_jump,
 		_hud,
 		_ui_root,
@@ -119,6 +132,8 @@ func _bind_controllers() -> void:
 			"ship_changed": _world.on_ui_ship_changed,
 			"undock_requested": _world.on_ui_undock_requested,
 			"save_requested": _menu.on_ui_save_requested,
+			"career_requested": _menu.on_ui_career_requested,
+			"leaderboard_requested": _menu.on_ui_leaderboard_requested,
 			"quit_to_menu": _menu.on_quit_to_menu_requested,
 		}
 	)
@@ -129,6 +144,8 @@ func _bind_controllers() -> void:
 		_world.on_ui_ship_changed,
 		_world.on_ui_undock_requested,
 		_menu.on_ui_save_requested,
+		_menu.on_ui_career_requested,
+		_menu.on_ui_leaderboard_requested,
 		_menu.on_quit_to_menu_requested
 	)
 	_jump.bind(catalog, session, _player.assembled_ship)

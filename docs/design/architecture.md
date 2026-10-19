@@ -257,6 +257,8 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Optional top-level `subsystems` envelope: `Simulation.collect_save()` writes one versioned section per registered `SimSubsystem` (`{version, data}` keyed by subsystem `id`). `Simulation.apply_save()` restores each section (running `migrate` when the stored version is older). Missing envelope on v1/v2 saves is valid — subsystems reset to defaults. Session/UI fields are unchanged; market quotes remain derived on load.
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
+- **Career statistics:** lifetime counters and revenue/expense ledgers live in the save `session` object (`CareerStats` on `GameSession`, keyed fields such as `career_id`, `revenue_by_source`, `expenses_by_source`). Missing keys on older saves default to zero and receive a new `career_id` on load.
+- **Hall of fame:** `user://leaderboard.json` (override `LeaderboardStore.store_dir` in tests) stores one row per career id, updated when a slot is saved. Default ranking is nett profit; rows persist after a save slot is overwritten.
 
 ## Not yet implemented
 

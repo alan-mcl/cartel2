@@ -31,18 +31,21 @@ func advance(
 		"previous_day": 0,
 		"current_hour": 0,
 		"current_day": 0,
+		"gst_delta": 0.0,
 	}
 	if frozen or session == null or delta <= 0.0:
 		return result
 
 	result["previous_day"] = CommodityEconomy.gst_day(session.gst_seconds)
 	result["previous_hour"] = gst_hour(session.gst_seconds)
+	var gst_before := session.gst_seconds
 
 	if session.in_unspace:
 		_tick_unspace(session, catalog, delta)
 	else:
 		session.gst_seconds += delta
 
+	result["gst_delta"] = session.gst_seconds - gst_before
 	result["current_day"] = CommodityEconomy.gst_day(session.gst_seconds)
 	result["current_hour"] = gst_hour(session.gst_seconds)
 	result["advanced"] = true

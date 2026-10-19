@@ -1,6 +1,8 @@
 extends CanvasLayer
 
 signal resume_requested
+signal career_requested
+signal leaderboard_requested
 signal save_requested
 signal load_requested
 signal quit_to_menu_requested
@@ -12,6 +14,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	_resume_button.pressed.connect(_on_resume_pressed)
+	$Center/Panel/VBox/CareerButton.pressed.connect(_on_career_pressed)
+	$Center/Panel/VBox/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
 	$Center/Panel/VBox/SaveButton.pressed.connect(_on_save_pressed)
 	$Center/Panel/VBox/LoadButton.pressed.connect(_on_load_pressed)
 	$Center/Panel/VBox/QuitButton.pressed.connect(_on_quit_pressed)
@@ -27,6 +31,14 @@ func close() -> void:
 
 func _on_resume_pressed() -> void:
 	resume_requested.emit()
+
+
+func _on_career_pressed() -> void:
+	career_requested.emit()
+
+
+func _on_leaderboard_pressed() -> void:
+	leaderboard_requested.emit()
 
 
 func _on_save_pressed() -> void:

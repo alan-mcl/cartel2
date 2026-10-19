@@ -2,6 +2,7 @@ extends CanvasLayer
 
 signal new_game_requested
 signal load_requested
+signal leaderboard_requested
 signal exit_requested
 
 @onready var _load_button: Button = $Center/Panel/VBox/LoadButton
@@ -15,6 +16,7 @@ func _ready() -> void:
 		_version_label.text = GameVersion.VERSION
 	$Center/Panel/VBox/NewGameButton.pressed.connect(_on_new_game_pressed)
 	_load_button.pressed.connect(_on_load_pressed)
+	$Center/Panel/VBox/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
 	$Center/Panel/VBox/ExitButton.pressed.connect(_on_exit_pressed)
 
 
@@ -42,6 +44,10 @@ func _on_new_game_pressed() -> void:
 
 func _on_load_pressed() -> void:
 	load_requested.emit()
+
+
+func _on_leaderboard_pressed() -> void:
+	leaderboard_requested.emit()
 
 
 func _on_exit_pressed() -> void:

@@ -29,6 +29,13 @@ static func apply(
 		collider.call("apply_weapon_impulse", delta)
 
 	var session := _shooter_session(shooter)
+	if (
+		session != null
+		and not session.player.sandbox
+		and bool(result.get("destroyed", false))
+	):
+		session.career.record_kill()
+
 	var catalog := _shooter_catalog(shooter)
 	if session == null or catalog == null:
 		return

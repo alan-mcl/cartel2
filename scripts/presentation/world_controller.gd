@@ -253,6 +253,7 @@ func dock_at(location_id: String) -> void:
 	_pause.close()
 	_hud.visible = false
 	_ui_root.session = _main.session
+	_ui_root.sync_context_callbacks()
 	_ui_root.open_habitat()
 	_on_session_changed.call()
 	_on_interaction_target_changed.call(_player.get_current_target())

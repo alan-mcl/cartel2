@@ -44,6 +44,12 @@ func step(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 	if not bool(advance_result.get("advanced", false)):
 		return
 
+	if not session.player.sandbox:
+		session.career.record_played_seconds(delta)
+		if not session.docked:
+			var gst_delta := float(advance_result.get("gst_delta", 0.0))
+			session.career.record_flight_gst(gst_delta, session.in_unspace)
+
 	session.advance_orbital_phase(catalog, delta)
 
 	for subsystem_variant in _subsystems.values():

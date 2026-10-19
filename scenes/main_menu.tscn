@@ -53,6 +53,11 @@ custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Load"
 
+[node name="LeaderboardButton" type="Button" parent="Center/Panel/VBox"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+text = "Leaderboard"
+
 [node name="ExitButton" type="Button" parent="Center/Panel/VBox" unique_id=1231376204]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2

@@ -41,6 +41,16 @@ custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 text = "Resume"
 
+[node name="CareerButton" type="Button" parent="Center/Panel/VBox"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Career"
+
+[node name="LeaderboardButton" type="Button" parent="Center/Panel/VBox"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Leaderboard"
+
 [node name="SaveButton" type="Button" parent="Center/Panel/VBox"]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2

@@ -235,6 +235,8 @@ func accept_offer(
 			int(offer.get("reward", 0)),
 		]
 	)
+	if not session.player.sandbox:
+		session.career.missions_accepted += 1
 	session.changed.emit()
 	return true
 
@@ -270,6 +272,8 @@ func accept_freight_offer(
 		"Freight accepted to %s for d%d."
 		% [str(offer.get("destination_name", "")), int(offer.get("reward", 0))]
 	)
+	if not session.player.sandbox:
+		session.career.missions_accepted += 1
 	session.changed.emit()
 	return true
 
@@ -290,6 +294,9 @@ func cancel_charter(session: GameSession, catalog: Catalog, charter_id: String) 
 	_remove_charter(charter_id)
 	var log := "Charter cancelled. Fee d%d." % penalty if penalty > 0 else "Charter cancelled."
 	_log_with_reputation_delta(session, -1, log)
+	if not session.player.sandbox:
+		session.career.missions_cancelled += 1
+		session.career.record_mission_penalty(penalty)
 	session.changed.emit()
 	return true
 
@@ -310,6 +317,9 @@ func cancel_freight_charter(session: GameSession, catalog: Catalog, charter_id: 
 	_remove_freight_charter(charter_id)
 	var log := "Freight cancelled. Fee d%d." % penalty if penalty > 0 else "Freight cancelled."
 	_log_with_reputation_delta(session, -1, log)
+	if not session.player.sandbox:
+		session.career.missions_cancelled += 1
+		session.career.record_mission_penalty(penalty)
 	session.changed.emit()
 	return true
 
@@ -537,6 +547,9 @@ func _fail_passenger_charter_missed_deadline(
 		-1,
 		"Passengers left charter after deadline. Fee d%d." % penalty
 	)
+	if not session.player.sandbox:
+		session.career.missions_missed_deadline += 1
+		session.career.record_mission_penalty(penalty)
 	session.changed.emit()
 
 
@@ -559,6 +572,9 @@ func _resolve_passenger_charter_on_dock(
 			-1,
 			"Charter late to %s. Fee d%d." % [dest_name, penalty]
 		)
+		if not session.player.sandbox:
+			session.career.missions_late += 1
+			session.career.record_mission_penalty(penalty)
 	elif reward > 0:
 		session.add_credits(reward)
 		_log_with_reputation_delta(
@@ -566,8 +582,13 @@ func _resolve_passenger_charter_on_dock(
 			1,
 			"Charter complete to %s. +d%d." % [dest_name, reward]
 		)
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
+			session.career.record_charter_reward(reward)
 	else:
 		_log_with_reputation_delta(session, 1, "Charter complete to %s." % dest_name)
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
 	session.changed.emit()
 
 
@@ -590,6 +611,9 @@ func _resolve_freight_charter_on_dock(
 			-1,
 			"Freight late to %s. Fee d%d." % [dest_name, penalty]
 		)
+		if not session.player.sandbox:
+			session.career.missions_late += 1
+			session.career.record_mission_penalty(penalty)
 	elif reward > 0:
 		session.add_credits(reward)
 		_log_with_reputation_delta(
@@ -597,8 +621,13 @@ func _resolve_freight_charter_on_dock(
 			1,
 			"Freight delivered to %s. +d%d." % [dest_name, reward]
 		)
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
+			session.career.record_charter_reward(reward)
 	else:
 		_log_with_reputation_delta(session, 1, "Freight delivered to %s." % dest_name)
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
 	session.changed.emit()
 
 
