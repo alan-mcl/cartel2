@@ -87,6 +87,8 @@ static func record_player_weapon_hit(
 		return
 	if session.in_unspace:
 		return
+	if VolatileTranslation.is_volatile_sector_id(session.sector_id):
+		return
 	if not _is_player_shooter(shooter):
 		return
 	if bool(result.get("intercepted", false)):

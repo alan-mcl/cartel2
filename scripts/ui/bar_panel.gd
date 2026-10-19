@@ -131,8 +131,9 @@ func _sync_scan_section() -> void:
 		return
 	var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
 	var show_scan := ScanCharters.bar_scan_section_visible(missions, _context.catalog, _context.session)
-	_scan_host.visible = show_scan
-	if not show_scan:
+	var show_bounty := BountyCharters.bar_bounty_section_visible(missions, _context.catalog, _context.session)
+	_scan_host.visible = show_scan or show_bounty
+	if not show_scan and not show_bounty:
 		_clear_children(_scan_host)
 		_scan_panel = null
 		return

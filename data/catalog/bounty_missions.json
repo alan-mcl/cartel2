@@ -1,0 +1,31 @@
+{
+  "peacekeeping_offers_per_day": 1,
+  "corporate_bounty_chance": 0.35,
+  "bar_bounty_chance": 0.08,
+  "base_pay": 1100,
+  "bar_pay_multiplier": 0.65,
+  "cancel_penalty_fraction": 0.25,
+  "volatile_duration_hours": 8,
+  "volatile_return_hours": 8,
+  "target_templates": [
+    "dragon_bronze",
+    "dragon_gold",
+    "wolff_warrior",
+    "wolff_gladius",
+    "flare_on_sk",
+    "silhouette_mk8",
+    "mantis_xf900",
+    "pegasus_p103a"
+  ],
+  "blurbs": {
+    "peacekeeping": [
+      "Peaceforce warrant: destroy {callsign} at {site}. Return to this desk for payment."
+    ],
+    "corporate_office": [
+      "{corp} has posted a bounty on {callsign} at {site}. Eliminate the target and report back."
+    ],
+    "bar": [
+      "Word at the bar: someone wants {callsign} gone at {site}. Cash on return if you pull it off."
+    ]
+  }
+}

@@ -696,6 +696,54 @@ def check_freight_missions(doc: object, commodities: dict[str, dict]) -> list[st
     return errors
 
 
+def check_bounty_missions(doc: object, ships: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("bounty_missions.json must be an object")
+        return errors
+
+    for key in (
+        "peacekeeping_offers_per_day",
+        "corporate_bounty_chance",
+        "bar_bounty_chance",
+        "base_pay",
+        "cancel_penalty_fraction",
+        "volatile_duration_hours",
+        "volatile_return_hours",
+    ):
+        if key not in doc:
+            errors.append(f"bounty_missions.json: missing {key}")
+
+    fraction = doc.get("cancel_penalty_fraction")
+    if fraction is not None and not (0.0 < float(fraction) < 1.0):
+        errors.append("bounty_missions.json: cancel_penalty_fraction must be between 0 and 1")
+
+    for chance_key in ("corporate_bounty_chance", "bar_bounty_chance"):
+        chance = doc.get(chance_key)
+        if chance is not None and not (0.0 <= float(chance) <= 1.0):
+            errors.append(f"bounty_missions.json: {chance_key} must be between 0 and 1")
+
+    templates = doc.get("target_templates", [])
+    if not isinstance(templates, list) or not templates:
+        errors.append("bounty_missions.json: target_templates must be a non-empty array")
+    else:
+        for template_id in templates:
+            tid = str(template_id)
+            if tid not in ships:
+                errors.append(f"bounty_missions.json: unknown ship template '{tid}'")
+
+    blurbs = doc.get("blurbs", {})
+    if not isinstance(blurbs, dict):
+        errors.append("bounty_missions.json: blurbs must be an object")
+    else:
+        for desk in ("peacekeeping", "corporate_office", "bar"):
+            lines = blurbs.get(desk, [])
+            if not isinstance(lines, list) or not lines:
+                errors.append(f"bounty_missions.json: blurbs.{desk} must be a non-empty array")
+
+    return errors
+
+
 def check_corporate_presence(
     sectors: dict[str, dict],
     corporations: dict[str, dict],
@@ -920,6 +968,7 @@ def main() -> int:
     traffic = load_object(CATALOG / "traffic.json")
     passenger_missions = load_object(CATALOG / "passenger_missions.json")
     freight_missions = load_object(CATALOG / "freight_missions.json")
+    bounty_missions = load_object(CATALOG / "bounty_missions.json")
     sanctions_doc = load_object(CATALOG / "sanctions.json")
     commodities = load_array(CATALOG / "commodities.json")
     commodities_by_id = index_by_id(commodities)
@@ -930,6 +979,7 @@ def main() -> int:
     errors.extend(check_commodities(commodities))
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))
+    errors.extend(check_bounty_missions(bounty_missions, ships))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
     )

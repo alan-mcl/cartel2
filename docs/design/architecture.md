@@ -163,6 +163,14 @@ offers only (not every habitat in the catalog). Accepted charters persist in sub
 save data (missions save version 4); completion and cancellation are handled in gameplay,
 not UI.
 
+**Bounty charters** from `bounty_missions.json` post on the same peacekeeping, corporate,
+and bar desks as scan work (peaceforce always one per day; corporate and bar roll at lower
+chance). Accepting grants a volatile site with `setup.bounty_target`; `FlightLoopController`
+spawns a single armed `TrafficActor` with fight-to-death attitude. Destroying the target
+records on `PlayerState` like a scan contact; pay lands when the pilot docks back at the
+origin habitat before the return gate expires. Sanctions do not apply in volatile sectors.
+Missions save version 5 adds bounty offer and accepted lists.
+
 [`MessageSubsystem`](scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, `{planet}`, `{city-mall}`, `{celebrity-pilot}`, `{local-star-system-location}`, `{jump-destination}`, and a commodity name; the commodities emitter also binds live `{price}` and `{move}`. The gossip-only `charters` emitter binds `{destination}`, `{quantity}`, `{label}`, and `{desk}` from posted bar and terminal offers via `Simulation` → `MissionSubsystem`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
 
 | Context | GST behaviour |

@@ -2,6 +2,7 @@ class_name TrafficSpawn
 extends RefCounted
 
 const ACTOR_SCRIPT_PATH := "res://scripts/gameplay/traffic_actor.gd"
+const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
 
@@ -45,6 +46,43 @@ static func create(
 	actor.sim = ShipSimCoreScript.new()
 	actor.sim.bind(catalog, actor.assembled_ship, actor.owned_ship, actor.motion, actor.operating_state, actor.weapons)
 	TrafficRouting.assign_route_endpoints(actor, sector_id)
+	return actor
+
+
+static func create_from_bounty_target(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	bounty_target: Dictionary,
+	sector_id: String
+) -> RefCounted:
+	var template := str(bounty_target.get("template_id", ""))
+	if template.is_empty() or catalog.get_ship(template).is_empty():
+		return null
+	var pos_dict: Dictionary = bounty_target.get("position", {})
+	var spawn_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+	var spawn_facing := float(bounty_target.get("heading_rad", 0.0))
+	var actor: RefCounted = create(
+		catalog,
+		traffic_config,
+		"loiter",
+		template,
+		spawn_pos,
+		spawn_facing,
+		sector_id
+	)
+	if actor == null:
+		return null
+	var target_id := str(bounty_target.get("id", ""))
+	if not target_id.is_empty():
+		actor.id = target_id
+	var callsign := str(bounty_target.get("callsign", ""))
+	if not callsign.is_empty():
+		actor.callsign = callsign
+	var affiliation := str(bounty_target.get("affiliation", ""))
+	if not affiliation.is_empty():
+		actor.affiliation = affiliation
+	actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+	actor.role = "bounty"
 	return actor
 
 

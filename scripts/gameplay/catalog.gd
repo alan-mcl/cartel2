@@ -21,6 +21,7 @@ const CORPORATE_PRESENCE_PATH := "res://data/catalog/corporate_presence.json"
 const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
 const SCAN_MISSIONS_PATH := "res://data/catalog/scan_missions.json"
+const BOUNTY_MISSIONS_PATH := "res://data/catalog/bounty_missions.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
@@ -54,6 +55,7 @@ var corporate_presence: Dictionary = {}
 var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
 var scan_missions_config: Dictionary = {}
+var bounty_missions_config: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
@@ -94,6 +96,7 @@ func load_all() -> void:
 	passenger_missions_config = _load_json_object(PASSENGER_MISSIONS_PATH)
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
 	scan_missions_config = _load_json_object(SCAN_MISSIONS_PATH)
+	bounty_missions_config = _load_json_object(BOUNTY_MISSIONS_PATH)
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
@@ -359,6 +362,10 @@ func get_freight_missions_config() -> Dictionary:
 
 func get_scan_missions_config() -> Dictionary:
 	return scan_missions_config
+
+
+func get_bounty_missions_config() -> Dictionary:
+	return bounty_missions_config
 
 
 func get_star(name: String) -> Dictionary:

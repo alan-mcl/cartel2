@@ -33,6 +33,8 @@ func _build_content() -> void:
 	_sync_charter_ship_id(docked)
 	var offers := missions.list_scan_offers(habitat_id, _building_id)
 	var accepted := _accepted_for_building(missions)
+	var bounty_offers := missions.list_bounty_offers(habitat_id, _building_id)
+	var bounty_accepted := _bounty_accepted_for_building(missions)
 
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -74,10 +76,44 @@ func _build_content() -> void:
 			accepted_grid.add_child(_accepted_tile(missions, charter_variant))
 		body.add_child(accepted_grid)
 
+	body.add_child(_section_label("POSTED BOUNTIES"))
+	if bounty_offers.is_empty():
+		body.add_child(_plain_label("No bounties posted today."))
+	else:
+		var bounty_grid := _new_tile_grid()
+		for offer_variant in bounty_offers:
+			if typeof(offer_variant) != TYPE_DICTIONARY:
+				continue
+			bounty_grid.add_child(_bounty_offer_tile(missions, offer_variant))
+		body.add_child(bounty_grid)
+
+	body.add_child(_section_label("YOUR BOUNTIES"))
+	if bounty_accepted.is_empty():
+		body.add_child(_plain_label("No accepted bounties."))
+	else:
+		var bounty_accepted_grid := _new_tile_grid()
+		for charter_variant in bounty_accepted:
+			if typeof(charter_variant) != TYPE_DICTIONARY:
+				continue
+			bounty_accepted_grid.add_child(_bounty_accepted_tile(missions, charter_variant))
+		body.add_child(bounty_accepted_grid)
+
 
 func _accepted_for_building(missions: MissionSubsystem) -> Array:
 	var out: Array = []
 	for entry_variant in missions.list_scan_accepted():
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("building_id", "")) != _building_id:
+			continue
+		out.append(entry)
+	return out
+
+
+func _bounty_accepted_for_building(missions: MissionSubsystem) -> Array:
+	var out: Array = []
+	for entry_variant in missions.list_bounty_accepted():
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
@@ -134,6 +170,88 @@ func _offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContaine
 		str(check.get("reason", "")),
 		"",
 		"",
+		_context.session.gst_seconds,
+		_context.catalog
+	)
+	return _surface_tile(inner, tooltip)
+
+
+func _bounty_offer_tile(missions: MissionSubsystem, offer: Dictionary) -> PanelContainer:
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", 4)
+
+	inner.add_child(_one_line_label(str(offer.get("target_callsign", "Target"))))
+	var meta := "%s · d%d" % [str(offer.get("site_label", "")), int(offer.get("reward", 0))]
+	inner.add_child(_one_line_label(meta, &"Muted"))
+	var timing := _charter_timing_line(offer)
+	if not timing.is_empty():
+		inner.add_child(_one_line_label(timing, &"Muted"))
+	inner.add_child(_tile_body_label(str(offer.get("description", ""))))
+
+	var ship_id := _active_ship_id()
+	var check := missions.evaluate_bounty_offer(
+		_context.session,
+		_context.catalog,
+		str(offer.get("id", "")),
+		ship_id
+	)
+
+	var accept := Button.new()
+	accept.text = "Accept"
+	accept.disabled = not bool(check.get("ok", false))
+	var offer_id := str(offer.get("id", ""))
+	accept.pressed.connect(func() -> void:
+		if missions.accept_bounty_offer(_context.session, _context.catalog, offer_id, ship_id):
+			refresh()
+	)
+	inner.add_child(accept)
+
+	var tooltip := CharterTooltipText.format_bounty(
+		offer,
+		str(check.get("reason", "")),
+		"",
+		"",
+		_context.session.gst_seconds,
+		_context.catalog
+	)
+	return _surface_tile(inner, tooltip)
+
+
+func _bounty_accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelContainer:
+	var inner := VBoxContainer.new()
+	inner.add_theme_constant_override("separation", 4)
+
+	inner.add_child(_one_line_label(str(charter.get("target_callsign", "Target"))))
+	var ship := _context.session.get_owned_ship(str(charter.get("ship_id", "")))
+	var ship_name := ship.name if ship != null else str(charter.get("ship_id", ""))
+	var origin := _habitat_name(str(charter.get("origin_habitat_id", "")))
+	inner.add_child(_one_line_label(_accepted_meta_line(charter, origin, ship_name), &"Muted"))
+	var timing := _charter_timing_line(charter)
+	if not timing.is_empty():
+		inner.add_child(_one_line_label(timing, &"Muted"))
+	inner.add_child(_tile_body_label(str(charter.get("description", ""))))
+
+	var charter_id := str(charter.get("charter_id", ""))
+	var status_line := ""
+	if missions.cancel_bounty_charter_eligible(_context.session, charter_id):
+		var cfg := BountyCharters.config(_context.catalog)
+		var penalty := BountyCharters.cancel_penalty(cfg, int(charter.get("reward", 0)))
+		var cancel := Button.new()
+		cancel.text = "Cancel (fee d%d)" % penalty
+		cancel.pressed.connect(func() -> void:
+			if missions.cancel_bounty_charter(_context.session, _context.catalog, charter_id):
+				refresh()
+		)
+		inner.add_child(cancel)
+	else:
+		status_line = "In progress — cannot cancel."
+		inner.add_child(_one_line_label(status_line, &"Muted"))
+
+	var tooltip := CharterTooltipText.format_bounty(
+		charter,
+		status_line,
+		origin,
+		ship_name,
 		_context.session.gst_seconds,
 		_context.catalog
 	)

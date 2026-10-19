@@ -4,6 +4,7 @@ extends RefCounted
 const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.gd")
 const TrafficViewScript := preload("res://scripts/presentation/traffic_view.gd")
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
+const TrafficSpawnScript := preload("res://scripts/gameplay/traffic_spawn.gd")
 
 var _traffic_director = null
 var _traffic_view = null
@@ -53,7 +54,7 @@ func clear_traffic() -> void:
 
 func setup_traffic(world: Node2D) -> void:
 	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
-		clear_traffic()
+		_setup_volatile_bounty_traffic(world)
 		return
 	_ensure_traffic_director()
 	if _traffic_director == null:
@@ -85,6 +86,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
 		VolatileTranslation.announce_gate_collapsed_if_needed(_main.session)
 		_world_loader.refresh_volatile_return_gate(_main.session)
+		_tick_volatile_bounty_traffic(delta, physics_frame)
 
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
 	if (
@@ -286,6 +288,75 @@ func on_operating_state_changed(state: ShipOperatingState) -> void:
 		var transponder_label := "on" if state.transponder_broadcasting else "off"
 		var active_sensors_label := active_sensors_hud_label(_player.assembled_ship, state)
 		_hud.set_signature_state(signature, transponder_label, active_sensors_label)
+
+
+func _setup_volatile_bounty_traffic(world: Node2D) -> void:
+	_ensure_traffic_director()
+	if _traffic_director == null:
+		return
+	var sector_id: String = _main.session.sector_id
+	var record := VolatileTranslation.find_by_sector_id(_main.session, sector_id)
+	if record.is_empty():
+		clear_traffic()
+		return
+	var setup: Dictionary = record.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		clear_traffic()
+		return
+	var bounty_target: Variant = setup.get("bounty_target", {})
+	if typeof(bounty_target) != TYPE_DICTIONARY or bounty_target.is_empty():
+		clear_traffic()
+		return
+	var target: Dictionary = bounty_target
+	var target_id := str(target.get("id", ""))
+	if (
+		not target_id.is_empty()
+		and _main.session.player.has_scanned(target_id)
+	):
+		clear_traffic()
+		return
+	var traffic_config := _catalog.get_traffic_config()
+	var actor = TrafficSpawnScript.create_from_bounty_target(
+		_catalog,
+		traffic_config,
+		target,
+		sector_id
+	)
+	_traffic_director.setup_lone_bounty_actor(
+		_catalog,
+		sector_id,
+		_world_loader.get_traffic_envelope_radius(),
+		_player.global_position,
+		actor
+	)
+	if _traffic_view != null:
+		_traffic_view.setup(world)
+		_traffic_view.sync(_traffic_director.actors, _catalog)
+
+
+func _tick_volatile_bounty_traffic(delta: float, physics_frame: int) -> void:
+	if _traffic_director == null or _traffic_director.actors.is_empty():
+		return
+	var player_broadcasting: bool = (
+		_player.operating_state.transponder_broadcasting
+		if _player.assembled_ship != null
+		else false
+	)
+	_traffic_director.tick(
+		delta,
+		_player.global_position,
+		_world_loader,
+		physics_frame,
+		_player.motion.velocity,
+		_player.motion.facing,
+		_player.motion.is_thrusting(),
+		_player.assembled_ship,
+		_player.operating_state,
+		player_broadcasting,
+		_main.session.world
+	)
+	if _traffic_view != null:
+		_traffic_view.sync(_traffic_director.actors, _catalog)
 
 
 func _ensure_traffic_director() -> void:

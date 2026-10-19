@@ -133,6 +133,63 @@ static func format_scan(
 	return "\n".join(lines)
 
 
+static func format_bounty(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	var lines: PackedStringArray = PackedStringArray()
+
+	var title := str(entry.get("target_callsign", "Target")).strip_edges()
+	if not title.is_empty():
+		lines.append(title)
+
+	var contract := _bounty_contract_line(entry, accepted_origin, accepted_ship)
+	if not contract.is_empty():
+		_append_section(lines, contract)
+
+	var description := str(entry.get("description", "")).strip_edges()
+	if not description.is_empty():
+		_append_section(lines, description)
+
+	var hull := str(entry.get("target_name", "")).strip_edges()
+	if not hull.is_empty():
+		_append_section(lines, "Target hull: %s" % hull)
+
+	_append_section(lines, "Fly to the volatile site, destroy the target, then dock back at origin.")
+
+	var deadline := _deadline_line(entry, reference_gst)
+	if not deadline.is_empty():
+		_append_section(lines, deadline)
+
+	var extra_trimmed := extra.strip_edges()
+	if not extra_trimmed.is_empty():
+		_append_section(lines, extra_trimmed)
+
+	return "\n".join(lines)
+
+
+static func _bounty_contract_line(
+	entry: Dictionary,
+	accepted_origin: String,
+	accepted_ship: String
+) -> String:
+	var site := str(entry.get("site_label", "")).strip_edges()
+	var reward := int(entry.get("reward", 0))
+	var origin := accepted_origin.strip_edges()
+	var ship := accepted_ship.strip_edges()
+	if not origin.is_empty() and not ship.is_empty():
+		return "%s → %s → %s · %s · d%d" % [origin, site, origin, ship, reward]
+	var parts: PackedStringArray = PackedStringArray()
+	if not site.is_empty():
+		parts.append(site)
+	parts.append("d%d" % reward)
+	return " · ".join(parts)
+
+
 static func _passenger_contract_line(
 	entry: Dictionary,
 	accepted_origin: String,

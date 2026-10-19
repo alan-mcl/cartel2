@@ -10,14 +10,17 @@ var freight_offers_by_habitat: Dictionary = {}
 var freight_accepted: Array = []
 var scan_offers_by_habitat: Dictionary = {}
 var scan_accepted: Array = []
+var bounty_offers_by_habitat: Dictionary = {}
+var bounty_accepted: Array = []
 var _next_charter_id: int = 1
 var _next_freight_charter_id: int = 1
 var _next_scan_charter_id: int = 1
+var _next_bounty_charter_id: int = 1
 
 
 func _init() -> void:
 	id = "missions"
-	save_version = 4
+	save_version = 5
 
 
 func on_day(_session: GameSession, _catalog: Catalog, day: int) -> void:
@@ -36,9 +39,11 @@ func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 	var habitat_id := str(evt.get("habitat_id", ""))
 	_enforce_late_passengers_at_dock(session, catalog)
 	_enforce_late_scan_charters_at_dock(session, catalog)
+	_enforce_late_bounty_charters_at_dock(session, catalog)
 	_try_complete_charters(session, catalog, habitat_id)
 	_try_complete_freight_charters(session, catalog, habitat_id)
 	_try_complete_scan_charters(session, catalog, habitat_id)
+	_try_complete_bounty_charters(session, catalog, habitat_id)
 
 
 func ensure_boards(session: GameSession, catalog: Catalog) -> void:
@@ -90,6 +95,20 @@ func list_scan_accepted() -> Array:
 	return scan_accepted.duplicate(true)
 
 
+func list_bounty_offers(habitat_id: String, building_id: String) -> Array:
+	var habitat_boards: Variant = bounty_offers_by_habitat.get(habitat_id, {})
+	if typeof(habitat_boards) != TYPE_DICTIONARY:
+		return []
+	var offers: Variant = habitat_boards.get(building_id, [])
+	if typeof(offers) != TYPE_ARRAY:
+		return []
+	return offers.duplicate(true)
+
+
+func list_bounty_accepted() -> Array:
+	return bounty_accepted.duplicate(true)
+
+
 func find_offer(offer_id: String) -> Dictionary:
 	for habitat_boards in offers_by_habitat.values():
 		if typeof(habitat_boards) != TYPE_DICTIONARY:
@@ -117,6 +136,20 @@ func find_freight_offer(offer_id: String) -> Dictionary:
 
 func find_scan_offer(offer_id: String) -> Dictionary:
 	for habitat_boards in scan_offers_by_habitat.values():
+		if typeof(habitat_boards) != TYPE_DICTIONARY:
+			continue
+		for building_id in habitat_boards.keys():
+			for offer_variant in habitat_boards[building_id]:
+				if typeof(offer_variant) != TYPE_DICTIONARY:
+					continue
+				var offer: Dictionary = offer_variant
+				if str(offer.get("id", "")) == offer_id:
+					return offer.duplicate(true)
+	return {}
+
+
+func find_bounty_offer(offer_id: String) -> Dictionary:
+	for habitat_boards in bounty_offers_by_habitat.values():
 		if typeof(habitat_boards) != TYPE_DICTIONARY:
 			continue
 		for building_id in habitat_boards.keys():
@@ -243,6 +276,18 @@ func evaluate_scan_offer(
 	if offer.is_empty():
 		return {"ok": false, "reason": "Offer no longer available."}
 	return ScanCharters.evaluate_offer_for_ship(session, catalog, offer, ship_id)
+
+
+func evaluate_bounty_offer(
+	session: GameSession,
+	catalog: Catalog,
+	offer_id: String,
+	ship_id: String
+) -> Dictionary:
+	var offer := find_bounty_offer(offer_id)
+	if offer.is_empty():
+		return {"ok": false, "reason": "Offer no longer available."}
+	return BountyCharters.evaluate_offer_for_ship(session, catalog, offer, ship_id)
 
 
 func accept_offer(
@@ -385,6 +430,62 @@ func accept_scan_offer(
 	return true
 
 
+func accept_bounty_offer(
+	session: GameSession,
+	catalog: Catalog,
+	offer_id: String,
+	ship_id: String
+) -> bool:
+	ensure_boards(session, catalog)
+	var check := evaluate_bounty_offer(session, catalog, offer_id, ship_id)
+	if not bool(check.get("ok", false)):
+		session.last_log = str(check.get("reason", "Cannot accept bounty."))
+		session.changed.emit()
+		return false
+
+	var offer := find_bounty_offer(offer_id)
+	if offer.is_empty():
+		return false
+
+	_remove_bounty_offer(offer_id)
+	var charter_id := "bounty_%d" % _next_bounty_charter_id
+	_next_bounty_charter_id += 1
+
+	var charter := offer.duplicate(true)
+	charter["charter_id"] = charter_id
+	charter["ship_id"] = ship_id
+	charter["accepted_gst"] = session.gst_seconds
+
+	var record_id := VolatileTranslation.grant(
+		session,
+		catalog,
+		BountyCharters.build_volatile_grant_params(catalog, offer)
+	)
+	if record_id.is_empty():
+		session.last_log = "Could not open bounty site."
+		session.changed.emit()
+		return false
+	charter["volatile_record_id"] = record_id
+	charter["bounty_target_id"] = BountyCharters.bounty_target_id_for_record(record_id)
+	var record := VolatileTranslation.find_by_id(session, record_id)
+	if not record.is_empty():
+		charter["deadline_gst"] = float(record.get("return_expires_gst", 0.0))
+
+	bounty_accepted.append(charter)
+	session.last_log = (
+		"Bounty accepted: %s at %s for d%d."
+		% [
+			str(offer.get("target_callsign", "")),
+			str(offer.get("site_label", "")),
+			int(offer.get("reward", 0)),
+		]
+	)
+	if not session.player.sandbox:
+		session.career.missions_accepted += 1
+	session.changed.emit()
+	return true
+
+
 func cancel_charter(session: GameSession, catalog: Catalog, charter_id: String) -> bool:
 	var charter := _find_charter(charter_id)
 	if charter.is_empty():
@@ -487,6 +588,48 @@ func cancel_scan_charter_eligible(session: GameSession, charter_id: String) -> b
 	return not bool(record.get("consumed", false))
 
 
+func cancel_bounty_charter(session: GameSession, catalog: Catalog, charter_id: String) -> bool:
+	var charter := _find_bounty_charter(charter_id)
+	if charter.is_empty():
+		return false
+	if not cancel_bounty_charter_eligible(session, charter_id):
+		session.last_log = "Cannot cancel bounty after departure."
+		session.changed.emit()
+		return false
+
+	var cfg := BountyCharters.config(catalog)
+	var penalty := BountyCharters.cancel_penalty(cfg, int(charter.get("reward", 0)))
+	session.assess_penalty_credits(penalty)
+
+	var volatile_id := str(charter.get("volatile_record_id", ""))
+	if not volatile_id.is_empty():
+		VolatileTranslation.discard_record(session, volatile_id)
+
+	_remove_bounty_charter(charter_id)
+	var log := "Bounty cancelled. Fee d%d." % penalty if penalty > 0 else "Bounty cancelled."
+	_log_with_reputation_delta(session, -1, log)
+	if not session.player.sandbox:
+		session.career.missions_cancelled += 1
+		session.career.record_mission_penalty(penalty)
+	session.changed.emit()
+	return true
+
+
+func cancel_bounty_charter_eligible(session: GameSession, charter_id: String) -> bool:
+	var charter := _find_bounty_charter(charter_id)
+	if charter.is_empty():
+		return false
+	if not _charter_at_origin(session, charter):
+		return false
+	var volatile_id := str(charter.get("volatile_record_id", ""))
+	if volatile_id.is_empty():
+		return true
+	var record := VolatileTranslation.find_by_id(session, volatile_id)
+	if record.is_empty():
+		return true
+	return not bool(record.get("consumed", false))
+
+
 func to_dict() -> Dictionary:
 	return {
 		"generated_day": generated_day,
@@ -496,9 +639,12 @@ func to_dict() -> Dictionary:
 		"freight_accepted": freight_accepted.duplicate(true),
 		"scan_offers_by_habitat": scan_offers_by_habitat.duplicate(true),
 		"scan_accepted": scan_accepted.duplicate(true),
+		"bounty_offers_by_habitat": bounty_offers_by_habitat.duplicate(true),
+		"bounty_accepted": bounty_accepted.duplicate(true),
 		"next_charter_id": _next_charter_id,
 		"next_freight_charter_id": _next_freight_charter_id,
 		"next_scan_charter_id": _next_scan_charter_id,
+		"next_bounty_charter_id": _next_bounty_charter_id,
 	}
 
 
@@ -520,6 +666,13 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 			out["scan_accepted"] = []
 		if not out.has("next_scan_charter_id"):
 			out["next_scan_charter_id"] = 1
+	if from_version <= 4:
+		if not out.has("bounty_offers_by_habitat"):
+			out["bounty_offers_by_habitat"] = {}
+		if not out.has("bounty_accepted"):
+			out["bounty_accepted"] = []
+		if not out.has("next_bounty_charter_id"):
+			out["next_bounty_charter_id"] = 1
 	return out
 
 
@@ -532,9 +685,12 @@ func from_dict(data: Dictionary) -> void:
 		freight_accepted = []
 		scan_offers_by_habitat = {}
 		scan_accepted = []
+		bounty_offers_by_habitat = {}
+		bounty_accepted = []
 		_next_charter_id = 1
 		_next_freight_charter_id = 1
 		_next_scan_charter_id = 1
+		_next_bounty_charter_id = 1
 		return
 	generated_day = int(data.get("generated_day", -1))
 	offers_by_habitat = data.get("offers_by_habitat", {})
@@ -558,9 +714,17 @@ func from_dict(data: Dictionary) -> void:
 	for entry_variant in data.get("scan_accepted", []):
 		if typeof(entry_variant) == TYPE_DICTIONARY:
 			scan_accepted.append(entry_variant)
+	bounty_offers_by_habitat = data.get("bounty_offers_by_habitat", {})
+	if typeof(bounty_offers_by_habitat) != TYPE_DICTIONARY:
+		bounty_offers_by_habitat = {}
+	bounty_accepted = []
+	for entry_variant in data.get("bounty_accepted", []):
+		if typeof(entry_variant) == TYPE_DICTIONARY:
+			bounty_accepted.append(entry_variant)
 	_next_charter_id = int(data.get("next_charter_id", 1))
 	_next_freight_charter_id = int(data.get("next_freight_charter_id", 1))
 	_next_scan_charter_id = int(data.get("next_scan_charter_id", 1))
+	_next_bounty_charter_id = int(data.get("next_bounty_charter_id", 1))
 
 
 func _invalidate_boards(day: int) -> void:
@@ -568,6 +732,7 @@ func _invalidate_boards(day: int) -> void:
 	offers_by_habitat = {}
 	freight_offers_by_habitat = {}
 	scan_offers_by_habitat = {}
+	bounty_offers_by_habitat = {}
 
 
 func _ensure_habitat_boards(
@@ -579,7 +744,8 @@ func _ensure_habitat_boards(
 	var need_passenger := not offers_by_habitat.has(habitat_id)
 	var need_freight := not freight_offers_by_habitat.has(habitat_id)
 	var need_scan := not scan_offers_by_habitat.has(habitat_id)
-	if not need_passenger and not need_freight and not need_scan:
+	var need_bounty := not bounty_offers_by_habitat.has(habitat_id)
+	if not need_passenger and not need_freight and not need_scan and not need_bounty:
 		return
 	var cfg := PassengerCharters.config(catalog)
 	var terminal_count := int(cfg.get("terminal_offers_per_day", 4))
@@ -618,6 +784,8 @@ func _ensure_habitat_boards(
 		)
 	if need_scan:
 		_ensure_scan_boards_for_habitat(session, catalog, habitat_id, day, run_seed)
+	if need_bounty:
+		_ensure_bounty_boards_for_habitat(session, catalog, habitat_id, day, run_seed)
 
 
 func _ensure_scan_boards_for_habitat(
@@ -648,6 +816,36 @@ func _ensure_scan_boards_for_habitat(
 		if not offers.is_empty():
 			boards[building_id] = offers
 	scan_offers_by_habitat[habitat_id] = boards
+
+
+func _ensure_bounty_boards_for_habitat(
+	session: GameSession,
+	catalog: Catalog,
+	habitat_id: String,
+	day: int,
+	run_seed: int
+) -> void:
+	var boards: Dictionary = {}
+	var next_index := 0
+	for building_id_variant in ScanCharters.scan_building_ids(catalog, habitat_id):
+		var building_id := str(building_id_variant)
+		var building := catalog.get_building(building_id)
+		if building.is_empty():
+			continue
+		var building_type := catalog.get_building_type(building)
+		var offers := BountyCharters.generate_offers_for_building(
+			catalog,
+			habitat_id,
+			building_id,
+			building_type,
+			day,
+			run_seed,
+			next_index
+		)
+		next_index += offers.size()
+		if not offers.is_empty():
+			boards[building_id] = offers
+	bounty_offers_by_habitat[habitat_id] = boards
 
 
 func _try_complete_charters(session: GameSession, catalog: Catalog, habitat_id: String) -> void:
@@ -808,6 +1006,125 @@ func _resolve_scan_charter_on_dock(
 			session.career.record_charter_reward(reward)
 	else:
 		_log_with_reputation_delta(session, 1, "Scan charter complete.")
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
+	session.changed.emit()
+
+
+func _try_complete_bounty_charters(session: GameSession, catalog: Catalog, habitat_id: String) -> void:
+	if habitat_id.is_empty():
+		return
+	var current_ship := session.get_current_owned_ship()
+	if current_ship == null:
+		return
+
+	var completed: Array = []
+	for entry_variant in bounty_accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("origin_habitat_id", "")) != habitat_id:
+			continue
+		if str(entry.get("ship_id", "")) != current_ship.id:
+			continue
+		if not _bounty_charter_satisfied(session, entry):
+			continue
+		completed.append(str(entry.get("charter_id", "")))
+
+	for charter_id in completed:
+		_resolve_bounty_charter_on_dock(session, catalog, charter_id)
+
+
+func _bounty_charter_satisfied(session: GameSession, charter: Dictionary) -> bool:
+	var target_id := str(charter.get("bounty_target_id", ""))
+	var sector_id := BountyCharters.bounty_sector_for_contract(charter)
+	var accepted_gst := float(charter.get("accepted_gst", 0.0))
+	return session.player.scan_satisfies_contract(target_id, sector_id, accepted_gst)
+
+
+func _enforce_late_bounty_charters_at_dock(session: GameSession, catalog: Catalog) -> void:
+	if not session.docked:
+		return
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		return
+	var habitat_id := session.habitat_id
+	var failed: Array = []
+	for entry_variant in bounty_accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("ship_id", "")) != ship.id:
+			continue
+		if str(entry.get("origin_habitat_id", "")) != habitat_id:
+			continue
+		if not _charter_is_late(session, entry):
+			continue
+		if _bounty_charter_satisfied(session, entry):
+			continue
+		failed.append(str(entry.get("charter_id", "")))
+	for charter_id in failed:
+		_fail_bounty_charter_missed_deadline(session, catalog, charter_id)
+
+
+func _fail_bounty_charter_missed_deadline(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String
+) -> void:
+	var charter := _find_bounty_charter(charter_id)
+	if charter.is_empty():
+		return
+	var reward := int(charter.get("reward", 0))
+	var cfg := BountyCharters.config(catalog)
+	var penalty := BountyCharters.cancel_penalty(cfg, reward)
+	_remove_bounty_charter(charter_id)
+	session.assess_penalty_credits(penalty)
+	_log_with_reputation_delta(
+		session,
+		-1,
+		"Bounty missed deadline. Fee d%d." % penalty
+	)
+	if not session.player.sandbox:
+		session.career.missions_missed_deadline += 1
+		session.career.record_mission_penalty(penalty)
+	session.changed.emit()
+
+
+func _resolve_bounty_charter_on_dock(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String
+) -> void:
+	var charter := _find_bounty_charter(charter_id)
+	if charter.is_empty():
+		return
+	var reward := int(charter.get("reward", 0))
+	var callsign := str(charter.get("target_callsign", ""))
+	_remove_bounty_charter(charter_id)
+	if _charter_is_late(session, charter):
+		var penalty := BountyCharters.cancel_penalty(BountyCharters.config(catalog), reward)
+		session.assess_penalty_credits(penalty)
+		_log_with_reputation_delta(
+			session,
+			-1,
+			"Bounty late (%s). Fee d%d." % [callsign, penalty]
+		)
+		if not session.player.sandbox:
+			session.career.missions_late += 1
+			session.career.record_mission_penalty(penalty)
+	elif reward > 0:
+		session.add_credits(reward)
+		_log_with_reputation_delta(
+			session,
+			1,
+			"Bounty complete (%s). +d%d." % [callsign, reward]
+		)
+		if not session.player.sandbox:
+			session.career.missions_completed_on_time += 1
+			session.career.record_charter_reward(reward)
+	else:
+		_log_with_reputation_delta(session, 1, "Bounty complete (%s)." % callsign)
 		if not session.player.sandbox:
 			session.career.missions_completed_on_time += 1
 	session.changed.emit()
@@ -998,6 +1315,16 @@ func _find_scan_charter(charter_id: String) -> Dictionary:
 	return {}
 
 
+func _find_bounty_charter(charter_id: String) -> Dictionary:
+	for entry_variant in bounty_accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("charter_id", "")) == charter_id:
+			return entry
+	return {}
+
+
 func _remove_charter(charter_id: String) -> void:
 	for index in accepted.size():
 		var entry: Dictionary = accepted[index]
@@ -1019,6 +1346,14 @@ func _remove_scan_charter(charter_id: String) -> void:
 		var entry: Dictionary = scan_accepted[index]
 		if str(entry.get("charter_id", "")) == charter_id:
 			scan_accepted.remove_at(index)
+			return
+
+
+func _remove_bounty_charter(charter_id: String) -> void:
+	for index in bounty_accepted.size():
+		var entry: Dictionary = bounty_accepted[index]
+		if str(entry.get("charter_id", "")) == charter_id:
+			bounty_accepted.remove_at(index)
 			return
 
 
@@ -1047,6 +1382,18 @@ func _remove_freight_offer(offer_id: String) -> void:
 func _remove_scan_offer(offer_id: String) -> void:
 	for habitat_id in scan_offers_by_habitat.keys():
 		var habitat_boards: Dictionary = scan_offers_by_habitat[habitat_id]
+		for building_id in habitat_boards.keys():
+			var offers: Array = habitat_boards[building_id]
+			for index in offers.size():
+				var offer: Dictionary = offers[index]
+				if str(offer.get("id", "")) == offer_id:
+					offers.remove_at(index)
+					return
+
+
+func _remove_bounty_offer(offer_id: String) -> void:
+	for habitat_id in bounty_offers_by_habitat.keys():
+		var habitat_boards: Dictionary = bounty_offers_by_habitat[habitat_id]
 		for building_id in habitat_boards.keys():
 			var offers: Array = habitat_boards[building_id]
 			for index in offers.size():

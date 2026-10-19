@@ -15,6 +15,7 @@ var _destroyed_timers: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var _sim_slot_pool: Array = []
 var _sim_slot_assign_counter: int = 0
+var _lone_actor_mode: bool = false
 
 
 func setup(
@@ -25,6 +26,7 @@ func setup(
 	world_loader: WorldLoader
 ) -> void:
 	clear()
+	_lone_actor_mode = false
 	_catalog = catalog
 	_traffic_config = catalog.get_traffic_config()
 	_sector_id = sector_id
@@ -44,6 +46,28 @@ func clear() -> void:
 	_sim_slot_pool.clear()
 	_sim_slot_assign_counter = 0
 	_target_fleet_size = 0
+	_lone_actor_mode = false
+
+
+func setup_lone_bounty_actor(
+	catalog: Catalog,
+	sector_id: String,
+	traffic_envelope: float,
+	player_pos: Vector2,
+	actor
+) -> void:
+	clear()
+	_lone_actor_mode = true
+	_catalog = catalog
+	_traffic_config = catalog.get_traffic_config()
+	_sector_id = sector_id
+	_traffic_envelope = traffic_envelope
+	_target_fleet_size = 1
+	if actor != null:
+		actors.append(actor)
+		actor.has_sim_slot = true
+		actor.near_lod = true
+	_sim_slot_assign_counter = 0
 
 
 func tick(
@@ -352,10 +376,14 @@ func _retire_and_replace(
 	if index >= 0:
 		actors.remove_at(index)
 	_destroyed_timers.erase(actor.id)
+	if _lone_actor_mode:
+		return
 	_spawn_replacement(hint, player_pos, anchors, world_loader)
 
 
 func _maintain_fleet_size(player_pos: Vector2, anchors: Array, world_loader: WorldLoader) -> void:
+	if _lone_actor_mode:
+		return
 	while actors.size() < _target_fleet_size:
 		_spawn_replacement({}, player_pos, anchors, world_loader)
 
@@ -375,6 +403,12 @@ func _handle_destroyed(
 	if float(_destroyed_timers[actor.id]) > 0.0:
 		return true
 
+	if _lone_actor_mode:
+		var index := actors.find(actor)
+		if index >= 0:
+			actors.remove_at(index)
+		_destroyed_timers.erase(actor.id)
+		return true
 	_retire_and_replace(actor, {"reason": "destroyed"}, player_pos, anchors, world_loader)
 	return true
 

@@ -26,6 +26,7 @@ func _init() -> void:
 	TestEvents.run(runner)
 	TestMissions.run(runner)
 	TestScanCharters.run(runner)
+	TestBountyCharters.run(runner)
 	TestFreight.run(runner)
 	TestCharterHopsDeadlines.run(runner)
 	TestTraffic.run(runner)

@@ -31,7 +31,7 @@ static func build(
 		"trade_cargo_mass_t": hold_used,
 		"passengers": _build_passengers(session, catalog, missions, ship.id),
 		"freight": _build_freight(session, catalog, missions, ship.id),
-		"scans": _build_scans(session, catalog, missions, ship.id),
+		"scans": _build_other_missions(session, catalog, missions, ship.id),
 	}
 
 
@@ -129,11 +129,13 @@ static func _mission_tooltip(
 			return CharterTooltipText.format_freight(entry, "", origin, ship_name)
 		"scan":
 			return CharterTooltipText.format_scan(entry, "", origin, ship_name, reference_gst, catalog)
+		"bounty":
+			return CharterTooltipText.format_bounty(entry, "", origin, ship_name, reference_gst, catalog)
 		_:
 			return ""
 
 
-static func _build_scans(
+static func _build_other_missions(
 	session: GameSession,
 	catalog: Catalog,
 	missions: MissionSubsystem,
@@ -147,6 +149,13 @@ static func _build_scans(
 		if str(entry.get("ship_id", "")) != ship_id:
 			continue
 		rows.append(_scan_row(session, catalog, entry))
+	for entry_variant in missions.list_bounty_accepted():
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("ship_id", "")) != ship_id:
+			continue
+		rows.append(_bounty_row(session, catalog, entry))
 	return rows
 
 
@@ -188,6 +197,18 @@ static func _scan_row(session: GameSession, catalog: Catalog, entry: Dictionary)
 		"meta": "d%d" % int(entry.get("reward", 0)),
 		"deadline": deadline_text(session, entry),
 		"tooltip": _mission_tooltip(session, catalog, entry, "scan"),
+	}
+
+
+static func _bounty_row(session: GameSession, catalog: Catalog, entry: Dictionary) -> Dictionary:
+	var origin := _habitat_name(catalog, str(entry.get("origin_habitat_id", "")))
+	var site := str(entry.get("site_label", ""))
+	return {
+		"title": "Bounty: %s" % str(entry.get("target_callsign", "Target")),
+		"route": "%s → %s → %s" % [origin, site, origin],
+		"meta": "d%d" % int(entry.get("reward", 0)),
+		"deadline": deadline_text(session, entry),
+		"tooltip": _mission_tooltip(session, catalog, entry, "bounty"),
 	}
 
 

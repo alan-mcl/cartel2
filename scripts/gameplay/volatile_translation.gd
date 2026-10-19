@@ -451,6 +451,11 @@ static func _bind_setup_record_id(setup: Dictionary, record_id: String) -> Dicti
 		var contact: Dictionary = scan_contact.duplicate(true)
 		contact["id"] = str(contact.get("id", "")).replace("{{ID}}", record_id)
 		out["scan_contact"] = contact
+	var bounty_target: Variant = out.get("bounty_target", {})
+	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
+		var target: Dictionary = bounty_target.duplicate(true)
+		target["id"] = str(target.get("id", "")).replace("{{ID}}", record_id)
+		out["bounty_target"] = target
 	return out
 
 
@@ -468,6 +473,12 @@ static func _validate_setup(setup: Dictionary) -> bool:
 	var scan_contact: Variant = setup.get("scan_contact", {})
 	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
 		if str(scan_contact.get("id", "")).is_empty():
+			return false
+	var bounty_target: Variant = setup.get("bounty_target", {})
+	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
+		if str(bounty_target.get("id", "")).is_empty():
+			return false
+		if str(bounty_target.get("template_id", "")).is_empty():
 			return false
 	return true
 
@@ -503,6 +514,9 @@ static func _setup_to_save(setup: Variant) -> Dictionary:
 	var scan_contact: Variant = src.get("scan_contact", {})
 	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
 		out["scan_contact"] = scan_contact.duplicate(true)
+	var bounty_target: Variant = src.get("bounty_target", {})
+	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
+		out["bounty_target"] = bounty_target.duplicate(true)
 	return out
 
 
