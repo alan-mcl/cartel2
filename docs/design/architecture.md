@@ -272,7 +272,7 @@ UI styling uses the shared **Cartel corporate theme** — see [docs/design/ui_th
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from HabitatScreen footer (while docked).
 - **Career statistics:** lifetime counters and revenue/expense ledgers live in the save `session` object (`CareerStats` on `GameSession`, keyed fields such as `career_id`, `revenue_by_source`, `expenses_by_source`). Missing keys on older saves default to zero and receive a new `career_id` on load.
-- **Hall of fame:** `user://leaderboard.json` (override `LeaderboardStore.store_dir` in tests) stores one row per career id, updated when a slot is saved. Default ranking is nett profit; rows persist after a save slot is overwritten.
+- **Hall of fame:** `user://leaderboard.json` (override `LeaderboardStore.store_dir` in tests) stores one row per career id, updated when a slot is saved. Each row snapshots profit, trade/combat figures, live reputation, fleet size (`ships_owned`), and total career time (`career_time` from `played_seconds`). Default ranking is nett profit; reputation and career time are sortable columns. Rows persist after a save slot is overwritten.
 
 ## Not yet implemented
 

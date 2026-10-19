@@ -13,6 +13,8 @@ enum SortColumn {
 	TONNES,
 	MISSIONS,
 	KILLS,
+	REPUTATION,
+	CAREER_TIME,
 }
 
 
@@ -67,6 +69,9 @@ static func upsert_from_session(session: GameSession, saved_at: String) -> bool:
 		"tonnes_traded": session.career.tonnes_traded(),
 		"missions_completed": session.career.missions_completed(),
 		"kills": session.career.kills,
+		"reputation": session.player.reputation,
+		"ships_owned": session.fleet.owned_ships.size(),
+		"career_time": session.career.played_seconds,
 		"saved_at": saved_at,
 	}
 	var replaced := false
@@ -113,4 +118,8 @@ static func _sort_value(entry: Dictionary, column: SortColumn) -> Variant:
 			return int(entry.get("missions_completed", 0))
 		SortColumn.KILLS:
 			return int(entry.get("kills", 0))
+		SortColumn.REPUTATION:
+			return int(entry.get("reputation", 0))
+		SortColumn.CAREER_TIME:
+			return float(entry.get("career_time", 0.0))
 	return 0

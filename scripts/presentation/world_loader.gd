@@ -385,6 +385,7 @@ func get_local_star_display() -> Dictionary:
 		"world_position": star.global_position,
 		"color": star.get_light_color(),
 		"luminosity": star.get_luminosity() if star.has_method("get_luminosity") else 1.0,
+		"temperature_k": star.get_temperature_k() if star.has_method("get_temperature_k") else 5800.0,
 	}
 
 
@@ -483,7 +484,7 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 	if spawned_by_id.has("planet"):
 		var planet_contact := {
 			"id": "planet",
-			"name": str(sector.get("name", "Planet")),
+			"name": _planet_contact_name(sector),
 			"short_label": "P",
 			"contact_kind": "landmark",
 			"landmark_role": "planet",
@@ -520,12 +521,14 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 		_merge_lock_display_fields(gate_contact, _gate_sprite_path, 140.0)
 		_sector_nav_cache.append(gate_contact)
 	if spawned_by_id.has("local_star"):
+		var star_label := _star_contact_name(sector)
 		var star_contact := {
 			"id": "local_star",
-			"name": "Local Star",
+			"name": star_label,
 			"short_label": "S",
 			"contact_kind": "star",
 			"position": Vector2.ZERO,
+			"star_name": star_label,
 			"star_temperature_k": float(star_data.get("temperature_k", 0.0)),
 			"star_luminosity": float(star_data.get("luminosity", 0.0)),
 		}
@@ -675,6 +678,23 @@ func _build_volatile_site_contacts(_catalog: Catalog) -> Array:
 		contacts.append(orbital_contact)
 
 	contacts.append_array(_build_debris_contacts())
+
+	if spawned_by_id.has("local_star"):
+		var star_display := get_local_star_display()
+		var volatile_star_name := "Survey star"
+		var star_contact := {
+			"id": "local_star",
+			"name": volatile_star_name,
+			"short_label": "S",
+			"contact_kind": "star",
+			"position": star_display.get("world_position", Vector2.ZERO),
+			"star_name": volatile_star_name,
+			"star_temperature_k": float(star_display.get("temperature_k", 0.0)),
+			"star_luminosity": float(star_display.get("luminosity", 0.0)),
+			"volatile_survey_star": true,
+		}
+		_merge_lock_display_fields(star_contact, "", 220.0)
+		contacts.append(star_contact)
 
 	if not _volatile_scan_contact.is_empty():
 		var scan_id := str(_volatile_scan_contact.get("id", ""))
@@ -1057,6 +1077,26 @@ func _spawn_dust_ring(
 		points.append(Vector2(cos(angle), sin(angle)) * radius)
 	ring.points = points
 	world_root.add_child(ring)
+
+
+static func _planet_contact_name(sector: Dictionary) -> String:
+	var planet_name := str(sector.get("planet_name", "")).strip_edges()
+	if not planet_name.is_empty():
+		return planet_name
+	var sector_name := str(sector.get("name", "Planet")).strip_edges()
+	if sector_name.ends_with(" Sector"):
+		return sector_name.substr(0, sector_name.length() - " Sector".length())
+	return sector_name
+
+
+static func _star_contact_name(sector: Dictionary) -> String:
+	var star := str(sector.get("star", "")).strip_edges()
+	if not star.is_empty():
+		return star
+	var system := str(sector.get("star_system", "")).strip_edges()
+	if not system.is_empty():
+		return system
+	return "Local star"
 
 
 func _spawn_entity(

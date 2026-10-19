@@ -10,6 +10,8 @@ static func run(runner: TestRunner) -> void:
 	_test_freight_filtered_by_ship(runner, catalog)
 	_test_hold_totals_include_freight_reserves(runner, catalog)
 	_test_empty_sections(runner, catalog)
+	_test_scans_separate_from_freight(runner, catalog)
+	_test_charter_row_tooltip_and_deadline_seconds(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -169,3 +171,61 @@ static func _test_empty_sections(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check((snap.get("cargo", []) as Array).is_empty(), "flight manifest: empty cargo list")
 	runner.check((snap.get("passengers", []) as Array).is_empty(), "flight manifest: empty passengers")
 	runner.check((snap.get("freight", []) as Array).is_empty(), "flight manifest: empty freight")
+	runner.check((snap.get("scans", []) as Array).is_empty(), "flight manifest: empty scans")
+
+
+static func _test_scans_separate_from_freight(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MNF-SCN")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		return
+	missions.scan_accepted.append({
+		"charter_id": "scn_mine",
+		"ship_id": ship.id,
+		"designation": "Field survey",
+		"origin_habitat_id": "proxima_habitat",
+		"site_label": "Proxima",
+		"reward": 75,
+		"deadline_hours": 12,
+	})
+	var snap := _snapshot(session, catalog, missions)
+	runner.check((snap.get("freight", []) as Array).is_empty(), "flight manifest: scans not listed under freight")
+	var scans: Array = snap.get("scans", [])
+	runner.check_eq(scans.size(), 1, "flight manifest: scan row under scans")
+	if scans.is_empty():
+		return
+	runner.check_eq(str((scans[0] as Dictionary).get("title", "")), "Field survey", "flight manifest: scan title")
+
+
+static func _test_charter_row_tooltip_and_deadline_seconds(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MNF-TIP")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		return
+	session.gst_seconds = 1000.0
+	missions.freight_accepted.append({
+		"charter_id": "frt_deadline",
+		"ship_id": ship.id,
+		"cargo_title": "Timed lot",
+		"origin_habitat_id": "proxima_habitat",
+		"destination_habitat_id": "irasia_habitat",
+		"destination_name": "Irasia",
+		"tonnes": 1.0,
+		"reward": 50,
+		"deadline_gst": 1000.0 + 3663.0,
+	})
+	var snap := _snapshot(session, catalog, missions)
+	var freight: Array = snap.get("freight", [])
+	runner.check_eq(freight.size(), 1, "flight manifest: freight for deadline test")
+	if freight.is_empty():
+		return
+	var row: Dictionary = freight[0]
+	var deadline := str(row.get("deadline", ""))
+	runner.check(deadline.contains("03s"), "flight manifest: deadline includes seconds")
+	var tooltip := str(row.get("tooltip", "")).strip_edges()
+	runner.check(not tooltip.is_empty(), "flight manifest: charter tooltip present")
+	runner.check(tooltip.contains("Timed lot"), "flight manifest: tooltip includes cargo title")

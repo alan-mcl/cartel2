@@ -155,3 +155,25 @@ static func format_duration(total_seconds: float) -> String:
 	if chunks.is_empty():
 		return "0s"
 	return " ".join(chunks)
+
+
+## Countdown for mission deadlines; always includes seconds (e.g. `2h 14m 03s`).
+static func format_countdown(total_seconds: float) -> String:
+	var remaining := maxi(0, int(floor(total_seconds)))
+	if remaining <= 0:
+		return "Past deadline"
+	var days := remaining / SECONDS_PER_DAY
+	remaining %= SECONDS_PER_DAY
+	var hours := remaining / SECONDS_PER_HOUR
+	remaining %= SECONDS_PER_HOUR
+	var minutes := remaining / SECONDS_PER_MINUTE
+	var seconds := remaining % SECONDS_PER_MINUTE
+	var parts: PackedStringArray = PackedStringArray()
+	if days > 0:
+		parts.append("%dd" % days)
+	if days > 0 or hours > 0:
+		parts.append("%dh" % hours)
+	if days > 0 or hours > 0 or minutes > 0:
+		parts.append("%02dm" % minutes)
+	parts.append("%02ds" % seconds)
+	return "%s remaining" % " ".join(parts)

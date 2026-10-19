@@ -37,6 +37,8 @@ func _rebuild() -> void:
 	var career := _session.career
 
 	_add_section("Accounts")
+	_add_row("Reputation", str(_session.player.reputation))
+	_add_row("Ships owned", str(_session.fleet.owned_ships.size()))
 	_add_row("Nett profit", CareerStatsFormat.format_credits(career.nett_profit()))
 	_add_row("Total revenue", CareerStatsFormat.format_credits(career.total_revenue()))
 	_add_money_map("Revenue", career.revenue_by_source, true)
@@ -48,7 +50,7 @@ func _rebuild() -> void:
 	_add_row("Flight time", CareerStatsFormat.format_flight_time(flight_total))
 	_add_row("Real-space flight", CareerStatsFormat.format_flight_time(career.flight_gst_seconds_real))
 	_add_row("N-space flight", CareerStatsFormat.format_flight_time(career.flight_gst_seconds_unspace))
-	_add_row("Time played", CareerStatsFormat.format_flight_time(career.played_seconds))
+	_add_row("Total career time", CareerStatsFormat.format_flight_time(career.played_seconds))
 
 	_add_section("Navigation")
 	_add_row("Translations", str(career.translations_count))

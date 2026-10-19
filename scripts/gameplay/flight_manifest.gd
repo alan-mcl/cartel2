@@ -109,6 +109,30 @@ static func _build_passengers(
 	return rows
 
 
+static func _mission_tooltip(
+	session: GameSession,
+	catalog: Catalog,
+	entry: Dictionary,
+	kind: String
+) -> String:
+	var origin := _habitat_name(catalog, str(entry.get("origin_habitat_id", "")))
+	var ship_name := ""
+	if session != null:
+		var ship := session.get_owned_ship(str(entry.get("ship_id", "")))
+		if ship != null:
+			ship_name = ship.name
+	var reference_gst := session.gst_seconds if session != null else -1.0
+	match kind:
+		"passenger":
+			return CharterTooltipText.format_passenger(entry, "", origin, ship_name)
+		"freight":
+			return CharterTooltipText.format_freight(entry, "", origin, ship_name)
+		"scan":
+			return CharterTooltipText.format_scan(entry, "", origin, ship_name, reference_gst, catalog)
+		_:
+			return ""
+
+
 static func _build_scans(
 	session: GameSession,
 	catalog: Catalog,
@@ -151,6 +175,7 @@ static func _passenger_row(session: GameSession, catalog: Catalog, entry: Dictio
 		"route": "%s → %s" % [origin, destination],
 		"meta": "%d pax · d%d" % [int(entry.get("quantity", 0)), int(entry.get("reward", 0))],
 		"deadline": deadline_text(session, entry),
+		"tooltip": _mission_tooltip(session, catalog, entry, "passenger"),
 	}
 
 
@@ -162,6 +187,7 @@ static func _scan_row(session: GameSession, catalog: Catalog, entry: Dictionary)
 		"route": "%s → %s → %s" % [origin, site, origin],
 		"meta": "d%d" % int(entry.get("reward", 0)),
 		"deadline": deadline_text(session, entry),
+		"tooltip": _mission_tooltip(session, catalog, entry, "scan"),
 	}
 
 
@@ -174,6 +200,7 @@ static func _freight_row(session: GameSession, catalog: Catalog, entry: Dictiona
 		"route": "%s → %s" % [origin, destination],
 		"meta": "%.1f t · d%d" % [float(entry.get("tonnes", 0.0)), int(entry.get("reward", 0))],
 		"deadline": deadline_text(session, entry),
+		"tooltip": _mission_tooltip(session, catalog, entry, "freight"),
 	}
 
 
@@ -182,7 +209,7 @@ static func deadline_text(session: GameSession, entry: Dictionary) -> String:
 		var remaining := float(entry.get("deadline_gst", 0.0)) - session.gst_seconds
 		if remaining <= 0.0:
 			return "Past deadline"
-		return "%s remaining" % GalacticCalendar.format_duration(remaining)
+		return GalacticCalendar.format_countdown(remaining)
 	var hours := int(entry.get("deadline_hours", 0))
 	if hours <= 0:
 		return ""

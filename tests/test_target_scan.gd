@@ -4,14 +4,16 @@ extends RefCounted
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
-	_test_ship_scan_hides_identity_when_silent(runner, catalog)
+	_test_ship_scan_shows_callsign_when_silent(runner, catalog)
 	_test_ship_scan_shows_identity_when_broadcasting(runner, catalog)
+	_test_planet_scan_uses_planet_name_and_population(runner, catalog)
+	_test_star_scan_uses_star_name_and_catalog_facts(runner, catalog)
 	_test_habitat_scan_includes_inspect_text(runner, catalog)
 	_test_debris_scan_includes_integrity(runner)
 	_test_scanned_contacts_save_round_trip(runner, catalog)
 
 
-static func _test_ship_scan_hides_identity_when_silent(runner: TestRunner, catalog: Catalog) -> void:
+static func _test_ship_scan_shows_callsign_when_silent(runner: TestRunner, catalog: Catalog) -> void:
 	var session := GameSession.new()
 	var contact := {
 		"id": "npc_a",
@@ -28,6 +30,7 @@ static func _test_ship_scan_hides_identity_when_silent(runner: TestRunner, catal
 	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
 	var rows: Array = snapshot.get("rows", [])
 	runner.check(_rows_contain_label(rows, "Registration") == false, "silent ship scan omits registration")
+	runner.check(_rows_contain_label(rows, "Callsign"), "silent ship scan shows callsign")
 	runner.check(_rows_contain_label(rows, "Chassis"), "ship scan lists chassis")
 
 
@@ -46,6 +49,44 @@ static func _test_ship_scan_shows_identity_when_broadcasting(runner: TestRunner,
 	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
 	var rows: Array = snapshot.get("rows", [])
 	runner.check(_rows_contain_label(rows, "Registration"), "broadcasting ship scan shows registration")
+
+
+static func _test_planet_scan_uses_planet_name_and_population(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	session.world.sector_id = "proxima"
+	var contact := {
+		"id": "planet_proxima",
+		"name": "Proxima",
+		"contact_kind": "landmark",
+		"landmark_role": "planet",
+		"position": Vector2(12000.0, 0.0),
+		"velocity": Vector2.ZERO,
+		"planet_diameter_m": 12742000.0,
+	}
+	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
+	runner.check_eq(str(snapshot.get("title", "")), "Proxima", "planet scan title is planet name")
+	var rows: Array = snapshot.get("rows", [])
+	runner.check(_rows_contain_label(rows, "Population"), "planet scan lists population")
+	runner.check(_row_value_contains(rows, "Population", "60"), "planet scan population from sector")
+
+
+static func _test_star_scan_uses_star_name_and_catalog_facts(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	var contact := {
+		"id": "star_proxima",
+		"contact_kind": "star",
+		"name": "Alpha Centauri A",
+		"star_name": "Alpha Centauri A",
+		"position": Vector2(-5000.0, 0.0),
+		"velocity": Vector2.ZERO,
+		"star_temperature_k": 5790.0,
+		"star_luminosity": 1.1,
+	}
+	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
+	runner.check_eq(str(snapshot.get("title", "")), "Alpha Centauri A", "star scan title is star name")
+	var rows: Array = snapshot.get("rows", [])
+	runner.check(_rows_contain_label(rows, "Spectral class"), "star scan lists spectral class")
+	runner.check(_row_value_contains(rows, "Spectral class", "G2V"), "star scan spectral class from catalog")
 
 
 static func _test_habitat_scan_includes_inspect_text(runner: TestRunner, catalog: Catalog) -> void:
@@ -103,4 +144,15 @@ static func _rows_contain_label(rows: Array, label_text: String) -> bool:
 			continue
 		if str((row_variant as Dictionary).get("label", "")) == label_text:
 			return true
+	return false
+
+
+static func _row_value_contains(rows: Array, label_text: String, fragment: String) -> bool:
+	for row_variant in rows:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("label", "")) != label_text:
+			continue
+		return str(row.get("value", "")).contains(fragment)
 	return false

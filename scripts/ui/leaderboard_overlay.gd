@@ -3,12 +3,14 @@ extends CanvasLayer
 signal closed
 
 const COLUMNS := [
-	{"id": LeaderboardStore.SortColumn.PROFIT, "label": "Nett profit", "width": 100},
-	{"id": LeaderboardStore.SortColumn.REVENUE, "label": "Revenue", "width": 90},
-	{"id": LeaderboardStore.SortColumn.EXPENSES, "label": "Expenses", "width": 90},
-	{"id": LeaderboardStore.SortColumn.TONNES, "label": "Tonnes", "width": 70},
-	{"id": LeaderboardStore.SortColumn.MISSIONS, "label": "Missions", "width": 80},
-	{"id": LeaderboardStore.SortColumn.KILLS, "label": "Kills", "width": 60},
+	{"id": LeaderboardStore.SortColumn.PROFIT, "label": "Nett profit", "width": 96},
+	{"id": LeaderboardStore.SortColumn.REVENUE, "label": "Revenue", "width": 88},
+	{"id": LeaderboardStore.SortColumn.EXPENSES, "label": "Expenses", "width": 88},
+	{"id": LeaderboardStore.SortColumn.TONNES, "label": "Tonnes", "width": 68},
+	{"id": LeaderboardStore.SortColumn.MISSIONS, "label": "Missions", "width": 76},
+	{"id": LeaderboardStore.SortColumn.KILLS, "label": "Kills", "width": 52},
+	{"id": LeaderboardStore.SortColumn.REPUTATION, "label": "Reputation", "width": 88},
+	{"id": LeaderboardStore.SortColumn.CAREER_TIME, "label": "Career time", "width": 96},
 ]
 
 @onready var _title: Label = $Center/Panel/VBox/TitleLabel
@@ -137,6 +139,10 @@ func _format_cell(entry: Dictionary, column: LeaderboardStore.SortColumn) -> Str
 			return str(int(entry.get("missions_completed", 0)))
 		LeaderboardStore.SortColumn.KILLS:
 			return str(int(entry.get("kills", 0)))
+		LeaderboardStore.SortColumn.REPUTATION:
+			return str(int(entry.get("reputation", 0)))
+		LeaderboardStore.SortColumn.CAREER_TIME:
+			return CareerStatsFormat.format_flight_time(float(entry.get("career_time", 0.0)))
 	return ""
 
 

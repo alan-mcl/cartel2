@@ -26,6 +26,7 @@ const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
+const STARS_PATH := "res://data/catalog/stars.json"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
 const ROUTE_TIME_JITTER := 0.08
@@ -56,6 +57,7 @@ var scan_missions_config: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
+var stars_by_name: Dictionary = {}
 ## Directed translation records keyed by "source_sector:solution".
 var translations_by_key: Dictionary = {}
 ## All directed translations from a sector (unsorted).
@@ -95,6 +97,7 @@ func load_all() -> void:
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
+	stars_by_name = _load_json_object(STARS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -356,6 +359,15 @@ func get_freight_missions_config() -> Dictionary:
 
 func get_scan_missions_config() -> Dictionary:
 	return scan_missions_config
+
+
+func get_star(name: String) -> Dictionary:
+	if name.is_empty():
+		return {}
+	var entry: Variant = stars_by_name.get(name, {})
+	if typeof(entry) != TYPE_DICTIONARY:
+		return {}
+	return entry as Dictionary
 
 
 func get_sanction_infraction(id: String) -> Dictionary:

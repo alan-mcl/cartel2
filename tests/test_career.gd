@@ -154,8 +154,27 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 	session_a.career.record_charter_reward(1000)
 	session_b.career.record_charter_reward(500)
 	session_b.career.record_mission_penalty(100)
+	session_a.player.reputation = 12
+	session_b.player.reputation = 3
+	session_a.career.played_seconds = 7200.0
 	LeaderboardStore.upsert_from_session(session_a, "2026-01-01T00:00:00")
 	LeaderboardStore.upsert_from_session(session_b, "2026-01-02T00:00:00")
+	var row_a: Dictionary = {}
+	for entry_variant in LeaderboardStore.read_all():
+		if str(entry_variant.get("career_id", "")) == "career_a":
+			row_a = entry_variant
+			break
+	runner.check_eq(int(row_a.get("reputation", 0)), 12, "career: leaderboard stores reputation")
+	runner.check(
+		int(row_a.get("ships_owned", 0)) >= 1,
+		"career: leaderboard stores ships owned"
+	)
+	runner.check(
+		absf(float(row_a.get("career_time", 0.0)) - 7200.0) < EPSILON,
+		"career: leaderboard stores career time"
+	)
+	var by_reputation := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.REPUTATION, true)
+	runner.check_eq(int(by_reputation[0].get("reputation", 0)), 12, "career: leaderboard reputation sort")
 	var by_profit := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.PROFIT, true)
 	runner.check(by_profit.size() >= 2, "career: leaderboard stores entries")
 	if by_profit.size() >= 2:

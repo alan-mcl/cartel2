@@ -9,6 +9,7 @@ var _sprite: Sprite2D
 var _material: ShaderMaterial
 var _star_color: Color = Color(1.0, 0.95, 0.85, 1.0)
 var _luminosity: float = 1.0
+var _temperature_k: float = 5800.0
 
 
 static func color_from_temperature_k(temperature_k: float) -> Color:
@@ -45,6 +46,7 @@ static func defaults_from_star_data(star_data: Dictionary) -> Dictionary:
 func configure(star_data: Dictionary, world_position: Vector2) -> void:
 	var resolved := defaults_from_star_data(star_data)
 	_luminosity = float(resolved.get("luminosity", 1.0))
+	_temperature_k = float(resolved.get("temperature_k", 5800.0))
 	_star_color = resolved.get("color", Color.WHITE)
 
 	position = world_position
@@ -59,6 +61,10 @@ func get_light_color() -> Color:
 
 func get_luminosity() -> float:
 	return _luminosity
+
+
+func get_temperature_k() -> float:
+	return _temperature_k
 
 
 func _build_sprite(resolved: Dictionary) -> void:

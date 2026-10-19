@@ -7,6 +7,7 @@ const REFRESH_INTERVAL_SEC := 1.0
 @onready var _cargo_list: VBoxContainer = $Center/Panel/VBox/Columns/LeftColumn/CargoScroll/CargoList
 @onready var _passengers_list: VBoxContainer = $Center/Panel/VBox/Columns/RightColumn/PassengersScroll/PassengersList
 @onready var _freight_list: VBoxContainer = $Center/Panel/VBox/Columns/RightColumn/FreightScroll/FreightList
+@onready var _other_missions_list: VBoxContainer = $Center/Panel/VBox/Columns/RightColumn/OtherMissionsScroll/OtherMissionsList
 
 var _session: GameSession
 var _catalog: Catalog
@@ -77,9 +78,8 @@ func _refresh_content() -> void:
 	_populate_modules(snapshot.get("modules", []) as Array)
 	_populate_cargo(snapshot)
 	_populate_passengers(snapshot.get("passengers", []) as Array)
-	var freight_rows: Array = snapshot.get("freight", []) as Array
-	freight_rows.append_array(snapshot.get("scans", []) as Array)
-	_populate_freight(freight_rows)
+	_populate_freight(snapshot.get("freight", []) as Array)
+	_populate_other_missions(snapshot.get("scans", []) as Array)
 
 
 func _missions_subsystem() -> MissionSubsystem:
@@ -147,6 +147,17 @@ func _populate_freight(freight: Array) -> void:
 		_freight_list.add_child(_charter_block(row_variant as Dictionary))
 
 
+func _populate_other_missions(missions: Array) -> void:
+	_clear_children(_other_missions_list)
+	if missions.is_empty():
+		_other_missions_list.add_child(_muted_label("No other missions"))
+		return
+	for row_variant in missions:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		_other_missions_list.add_child(_charter_block(row_variant as Dictionary))
+
+
 func _charter_block(row: Dictionary) -> Control:
 	var inner := VBoxContainer.new()
 	inner.add_theme_constant_override("separation", 2)
@@ -162,6 +173,9 @@ func _charter_block(row: Dictionary) -> Control:
 		inner.add_child(_one_line_label(deadline, &"Muted"))
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = &"HudTicker"
+	var tooltip := str(row.get("tooltip", "")).strip_edges()
+	if not tooltip.is_empty():
+		panel.tooltip_text = tooltip
 	panel.add_child(inner)
 	return panel
 

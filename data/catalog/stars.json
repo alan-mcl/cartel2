@@ -1,0 +1,20 @@
+{
+  "Alpha Centauri A": {
+    "spectral_class": "G2V",
+    "mass_solar": 1.1,
+    "radius_solar": 1.22,
+    "description": "Primary of the Alpha Centauri system; a Sun-like star and the anchor of human space."
+  },
+  "Alpha Centauri B": {
+    "spectral_class": "K1V",
+    "mass_solar": 0.907,
+    "radius_solar": 0.863,
+    "description": "Orange companion to Alpha Centauri A; its industrial worlds orbit under a dimmer, redder sky."
+  },
+  "Regulus A": {
+    "spectral_class": "B8 IVn",
+    "mass_solar": 3.8,
+    "radius_solar": 4.35,
+    "description": "Fast-rotating blue subgiant at the heart of the Regulus system; Tycho's fierce daylight comes from this star."
+  }
+}

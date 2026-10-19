@@ -34,6 +34,10 @@ static func _empty_snapshot() -> Dictionary:
 
 static func _title_for_contact(contact: Dictionary) -> String:
 	var kind := str(contact.get("contact_kind", ""))
+	if kind == "star":
+		var star_name := str(contact.get("star_name", contact.get("name", ""))).strip_edges()
+		if not star_name.is_empty():
+			return star_name
 	if kind == "traffic_npc":
 		var ship_name := str(contact.get("ship_name", "")).strip_edges()
 		if not ship_name.is_empty():
@@ -63,7 +67,7 @@ static func _detail_rows(
 		"landmark":
 			return _landmark_detail_rows(session, catalog, contact, beacon_destination)
 		"star":
-			return _star_detail_rows(contact)
+			return _star_detail_rows(catalog, contact)
 		"orbital":
 			return _orbital_detail_rows(contact)
 		"debris":
@@ -89,16 +93,16 @@ static func _ship_detail_rows(contact: Dictionary) -> Array:
 		rows.append(_row("EM", "%.1f" % float(sig.get("electromagnetic", 0.0))))
 		rows.append(_row("Computational", "%.1f" % float(sig.get("computational", 0.0))))
 
+	var callsign := str(contact.get("callsign", "")).strip_edges()
+	if not callsign.is_empty():
+		rows.append(_row("Callsign", callsign))
+	var affiliation := str(contact.get("affiliation", "")).strip_edges()
+	if not affiliation.is_empty():
+		rows.append(_row("Affiliation", affiliation))
 	if bool(contact.get("broadcasting", false)):
 		var registration := str(contact.get("registration", "")).strip_edges()
 		if not registration.is_empty():
 			rows.append(_row("Registration", registration))
-		var callsign := str(contact.get("callsign", "")).strip_edges()
-		if not callsign.is_empty():
-			rows.append(_row("Callsign", callsign))
-		var affiliation := str(contact.get("affiliation", "")).strip_edges()
-		if not affiliation.is_empty():
-			rows.append(_row("Affiliation", affiliation))
 	return rows
 
 
@@ -114,6 +118,7 @@ static func _landmark_detail_rows(
 		var diameter := float(contact.get("planet_diameter_m", 0.0))
 		if diameter > 0.0:
 			rows.append(_row("Diameter", "%.0f m" % diameter))
+		rows.append_array(_planet_setting_rows(session, catalog))
 		return rows
 
 	var interactable_id := str(contact.get("interactable_id", ""))
@@ -133,7 +138,39 @@ static func _landmark_detail_rows(
 	return rows
 
 
-static func _star_detail_rows(contact: Dictionary) -> Array:
+static func _planet_setting_rows(session: GameSession, catalog: Catalog) -> Array:
+	var rows: Array = []
+	if session == null or catalog == null:
+		return rows
+	var sector_id := str(session.world.sector_id)
+	if sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
+		return rows
+	var sector := catalog.get_sector(sector_id)
+	if sector.is_empty():
+		return rows
+
+	var classification := str(sector.get("classification", "")).strip_edges()
+	if not classification.is_empty():
+		rows.append(_row("Classification", classification))
+	var gravity := float(sector.get("gravity", 0.0))
+	if gravity > 0.0:
+		rows.append(_row("Gravity", "%.2f G" % gravity))
+	if sector.has("population_billions"):
+		var pop_b := float(sector.get("population_billions", 0.0))
+		rows.append(_row("Population", _format_population_billions(pop_b)))
+	if sector.has("ocean_coverage"):
+		var ocean := float(sector.get("ocean_coverage", 0.0))
+		rows.append(_row("Ocean coverage", "%.0f%%" % (ocean * 100.0)))
+	var climate := str(sector.get("climate", "")).strip_edges()
+	if not climate.is_empty():
+		rows.append(_row("Climate", climate))
+	var system := str(sector.get("star_system", "")).strip_edges()
+	if not system.is_empty():
+		rows.append(_row("System", system))
+	return rows
+
+
+static func _star_detail_rows(catalog: Catalog, contact: Dictionary) -> Array:
 	var rows: Array = []
 	var temp_k := float(contact.get("star_temperature_k", 0.0))
 	if temp_k > 0.0:
@@ -141,6 +178,26 @@ static func _star_detail_rows(contact: Dictionary) -> Array:
 	var lum := float(contact.get("star_luminosity", 0.0))
 	if lum > 0.0:
 		rows.append(_row("Luminosity", "%.1f" % lum))
+
+	if bool(contact.get("volatile_survey_star", false)):
+		rows.append(_row("Note", "Temporary survey lighting; not a catalog primary."))
+		return rows
+
+	var star_name := str(contact.get("star_name", contact.get("name", ""))).strip_edges()
+	var facts := catalog.get_star(star_name)
+	if facts.is_empty():
+		return rows
+
+	var spectral := str(facts.get("spectral_class", "")).strip_edges()
+	if not spectral.is_empty():
+		rows.append(_row("Spectral class", spectral))
+	if facts.has("mass_solar"):
+		rows.append(_row("Mass", "%.2f M☉" % float(facts.get("mass_solar", 0.0))))
+	if facts.has("radius_solar"):
+		rows.append(_row("Radius", "%.2f R☉" % float(facts.get("radius_solar", 0.0))))
+	var description := str(facts.get("description", "")).strip_edges()
+	if not description.is_empty():
+		rows.append(_row("Catalogue", description))
 	return rows
 
 
@@ -155,6 +212,16 @@ static func _orbital_detail_rows(contact: Dictionary) -> Array:
 static func _debris_detail_rows(contact: Dictionary) -> Array:
 	var ratio := float(contact.get("debris_health_ratio", 1.0))
 	return [_row("Integrity", "%.0f%%" % (ratio * 100.0))]
+
+
+static func _format_population_billions(value: float) -> String:
+	if value >= 10.0:
+		return "%.0f billion" % value
+	if value >= 1.0:
+		return "%.1f billion" % value
+	if value > 0.0:
+		return "%.0f million" % (value * 1000.0)
+	return "0"
 
 
 static func _orbital_structure_label(sprite_path: String) -> String:
