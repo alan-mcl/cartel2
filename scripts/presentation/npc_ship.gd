@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+const ShipBreakup := preload("res://scripts/presentation/ship_breakup.gd")
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const NPC_LAYER := 16
 const SOLID_MASK := 2
@@ -65,10 +66,14 @@ func apply_hull_damage_visual(health_ratio: float) -> void:
 
 
 func play_destroyed() -> void:
-	modulate = Color(1.5, 0.4, 0.2, 0.85)
-	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.35)
-	tween.tween_callback(queue_free)
+	var ship_velocity := Vector2.ZERO
+	if actor != null:
+		ship_velocity = actor.motion.velocity
+	var tint := _hull.modulate if _hull != null else Color.WHITE
+	var world := _get_world_root()
+	if world != null:
+		ShipBreakup.spawn(world, global_position, ship_velocity, tint)
+	queue_free()
 
 
 func query_weapon_guidance(target_id: String) -> Dictionary:

@@ -7,6 +7,7 @@ const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ChassisSpriteScript := preload("res://scripts/presentation/chassis_sprite.gd")
 const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
 const EngineExhaustScript := preload("res://scripts/presentation/engine_exhaust.gd")
+const ShipBreakupScript := preload("res://scripts/presentation/ship_breakup.gd")
 const FAR_TRAIL_CAP := 20
 
 const NEAR_POOL_MAX := 25
@@ -153,6 +154,13 @@ func _start_destroy_fx(actor) -> void:
 		if node.has_method("play_destroyed"):
 			node.call("play_destroyed")
 		else:
+			var tint := Color.WHITE
+			var hull: Sprite2D = node.get_node_or_null("Hull") as Sprite2D
+			if hull != null:
+				tint = hull.modulate
+			var parent := _traffic_root.get_parent() as Node2D
+			if parent != null:
+				ShipBreakupScript.spawn(parent, actor.position, actor.motion.velocity, tint)
 			node.queue_free()
 	_nodes_by_id.erase(actor.id)
 	_far_thrust_by_id.erase(actor.id)

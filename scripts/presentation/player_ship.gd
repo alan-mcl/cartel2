@@ -9,6 +9,7 @@ signal autopilot_mode_changed(mode: int)
 const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
+const ShipBreakup := preload("res://scripts/presentation/ship_breakup.gd")
 const _WEAPON_MASK := 2 | 16 | 1
 
 @export var ship_id: String = "flare_on_ss"
@@ -37,6 +38,7 @@ var _guidance_lock_position: Vector2 = Vector2.ZERO
 var _guidance_lock_active: bool = false
 var _autopilot := Autopilot.new()
 var _autopilot_target: Dictionary = {}
+var _hull_destroyed_fx_played := false
 
 
 func configure(
@@ -53,6 +55,7 @@ func configure(
 	weapons.sync_selection(ship)
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
 	_autopilot.reset_to_manual()
+	_reset_destroyed_presentation()
 	_apply_hull_visual()
 	_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
 
@@ -170,6 +173,7 @@ func _physics_process(delta: float) -> void:
 		_sim.refresh_signature(delta)
 		_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
 		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+		_maybe_play_hull_destroyed()
 		operating_state_changed.emit(operating_state)
 		_update_operating_warnings(session, firing)
 
@@ -349,6 +353,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 		return {}
 	var result := session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
 	_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+	_maybe_play_hull_destroyed()
 	if _defence_visual != null:
 		var layers: Dictionary = result.get("defence_layers", {})
 		_defence_visual.play_hit_layers(layers)
@@ -363,6 +368,34 @@ func _apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
 		return
 	ShipVisual.apply_damage_tint(_hull, health_ratio)
+
+
+func _reset_destroyed_presentation() -> void:
+	_hull_destroyed_fx_played = false
+	if _visual_root != null:
+		_visual_root.visible = true
+	if _collision_shape != null:
+		_collision_shape.disabled = false
+
+
+func _maybe_play_hull_destroyed() -> void:
+	if session == null or session.max_hull <= 0.0:
+		return
+	if session.hull > 0.0:
+		if _hull_destroyed_fx_played:
+			_reset_destroyed_presentation()
+		return
+	if _hull_destroyed_fx_played:
+		return
+	_hull_destroyed_fx_played = true
+	var tint := _hull.modulate if _hull != null else Color.WHITE
+	var world := _get_world_root()
+	if world != null:
+		ShipBreakup.spawn(world, global_position, motion.velocity, tint)
+	if _visual_root != null:
+		_visual_root.visible = false
+	if _collision_shape != null:
+		_collision_shape.disabled = true
 
 
 func _spawn_weapon_orders(orders: Array) -> void:
