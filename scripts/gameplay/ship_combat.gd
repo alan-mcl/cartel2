@@ -3,6 +3,7 @@ extends RefCounted
 
 const PACKET_TYPES := ["kinetic", "concussive", "energy", "cyber"]
 const PD_DELIVERIES := ["ballistic", "guided"]
+const IMPULSE_SCALE := 8.0
 
 const RESOURCE_CONVERSION := {
 	"kinetic": {"hits": 1.0, "power": 0.10, "compute": 0.0},
@@ -138,6 +139,22 @@ static func delivery_type_from_module(module_def: ModuleDef) -> String:
 
 static func sum_packets(packets: Dictionary) -> float:
 	return _packets_total(packets)
+
+
+static func impact_momentum_score(packets: Dictionary) -> float:
+	var norm := _normalize_packets(packets)
+	return (
+		float(norm.get("kinetic", 0.0)) * 1.0
+		+ float(norm.get("concussive", 0.0)) * 1.4
+		+ float(norm.get("energy", 0.0)) * 0.25
+	)
+
+
+static func impact_delta_v(packets: Dictionary, mass: float, direction: Vector2) -> Vector2:
+	var score := impact_momentum_score(packets)
+	if score <= 0.0 or direction.length_squared() < 0.0001:
+		return Vector2.ZERO
+	return direction.normalized() * score * IMPULSE_SCALE / maxf(mass, 0.1)
 
 
 static func divide_packets(packets: Dictionary, divisor: int) -> Dictionary:

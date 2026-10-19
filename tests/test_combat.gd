@@ -25,6 +25,7 @@ static func run(runner: TestRunner) -> void:
 	_test_hull_hitbox(runner)
 	_test_combat_pilot_guided_facing_gate(runner)
 	_test_unarmed_cannot_fire(runner)
+	_test_impact_delta_v(runner)
 
 
 static func _module_entry(slot: String, module_id: String, module_data: Dictionary) -> Dictionary:
@@ -1024,3 +1025,14 @@ static func _test_unarmed_cannot_fire(runner: TestRunner) -> void:
 	actor.motion.facing = PI
 	runner.check(not actor._can_fire_at(Vector2.ZERO), "unarmed ship cannot fire")
 	runner.check(not actor.is_armed(), "unarmed ship reports not armed")
+
+
+static func _test_impact_delta_v(runner: TestRunner) -> void:
+	var packets := {"kinetic": 18.0, "concussive": 8.0}
+	var direction := Vector2.RIGHT
+	var light := ShipCombat.impact_delta_v(packets, 5.0, direction)
+	var heavy := ShipCombat.impact_delta_v(packets, 20.0, direction)
+	runner.check(light.length() > heavy.length(), "lighter hull receives larger impulse")
+	runner.check(is_equal_approx(light.angle(), direction.angle()), "impulse follows shot direction")
+	var cyber := ShipCombat.impact_delta_v({"cyber": 32.0}, 10.0, direction)
+	runner.check(cyber.length_squared() < 0.01, "cyber-only hit does not shove")

@@ -6,7 +6,8 @@ static func apply(
 	collider: Object,
 	delivery_type: String,
 	packets: Dictionary,
-	shooter: Variant = null
+	shooter: Variant = null,
+	shot_velocity: Vector2 = Vector2.ZERO
 ) -> void:
 	if collider == null:
 		return
@@ -20,11 +21,35 @@ static func apply(
 	else:
 		return
 
+	if bool(result.get("intercepted", false)):
+		return
+
+	var delta := ShipCombat.impact_delta_v(packets, _target_mass(collider), shot_velocity)
+	if delta.length_squared() > 0.01 and collider.has_method("apply_weapon_impulse"):
+		collider.call("apply_weapon_impulse", delta)
+
 	var session := _shooter_session(shooter)
 	var catalog := _shooter_catalog(shooter)
 	if session == null or catalog == null:
 		return
 	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, result)
+
+
+static func _target_mass(collider: Object) -> float:
+	if collider == null:
+		return 10.0
+	var catalog: Variant = collider.get("catalog")
+	var owned: Variant = collider.get("owned_ship")
+	var assembled: Variant = collider.get("assembled_ship")
+	var actor: Variant = collider.get("actor")
+	if actor != null:
+		owned = actor.get("owned_ship")
+		assembled = actor.get("assembled_ship")
+	if catalog is Catalog and owned is OwnedShip and assembled is AssembledShip:
+		return ShipAssembler.calculate_loaded_mass(catalog, owned, assembled)
+	if assembled is AssembledShip:
+		return maxf(float(assembled.envelope.get("dry_mass", 10.0)), 0.1)
+	return 10.0
 
 
 static func _shooter_session(shooter: Node) -> GameSession:

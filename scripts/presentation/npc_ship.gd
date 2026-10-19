@@ -59,6 +59,11 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	return result
 
 
+func apply_weapon_impulse(delta_v: Vector2) -> void:
+	if actor != null:
+		actor.motion.velocity += delta_v
+
+
 func apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null:
 		return

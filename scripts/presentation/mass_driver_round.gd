@@ -150,7 +150,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _apply_hit(collider: Object) -> void:
-	WeaponHit.apply(collider, _delivery_type, _packets, _shooter)
+	WeaponHit.apply(collider, _delivery_type, _packets, _shooter, _velocity)
 
 
 func _sweep(from: Vector2, to: Vector2) -> Dictionary:

@@ -364,6 +364,11 @@ func take_weapon_hit(damage: float) -> void:
 	take_combat_hit("ballistic", {"kinetic": damage})
 
 
+func apply_weapon_impulse(delta_v: Vector2) -> void:
+	motion.velocity += delta_v
+	velocity = motion.velocity
+
+
 func _apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
 		return

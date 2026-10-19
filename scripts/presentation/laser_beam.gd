@@ -27,7 +27,7 @@ static func spawn(
 	var hit := _raycast(parent, start, direction, max_range, collision_mask, exclude)
 	if not hit.is_empty():
 		end = hit.position
-		WeaponHit.apply(hit.collider, delivery_type, packets, shooter)
+		WeaponHit.apply(hit.collider, delivery_type, packets, shooter, direction)
 
 	var beam := Line2D.new()
 	beam.width = 3.0 if visual_variant == "laser" else 2.5
