@@ -65,7 +65,7 @@ static func _maybe_record_bounty_target_destroyed(session: GameSession, collider
 	var actor = Sanctions._collider_actor(collider)
 	if actor == null:
 		return
-	if str(actor.get("id", "")) != target_id:
+	if str(actor.get("id")) != target_id:
 		return
 	session.player.record_target_scan(
 		target_id,
