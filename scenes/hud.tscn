@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=14 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/components/weapon_hud_stack.gd" id="9"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/ui/interact_prompt_overlay.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/ui/star_lens_flare.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/ui/target_lock_overlay.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/ui/flight_manifest_overlay.gd" id="13"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -328,3 +329,119 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("3")
+
+[node name="FlightManifestOverlay" type="Control" parent="Root"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("13")
+
+[node name="Center" type="CenterContainer" parent="Root/FlightManifestOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Root/FlightManifestOverlay/Center"]
+custom_minimum_size = Vector2(760, 440)
+layout_mode = 2
+theme_type_variation = &"HudTicker"
+
+[node name="VBox" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Ship"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "I or click the status strip"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="LeftColumn" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ModulesHeading" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "MODULES"
+
+[node name="ModulesScroll" type="ScrollContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ModulesList" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn/ModulesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="CargoHeading" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "CARGO"
+
+[node name="CargoScroll" type="ScrollContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CargoList" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/LeftColumn/CargoScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="RightColumn" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PassengersHeading" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "PASSENGERS"
+
+[node name="PassengersScroll" type="ScrollContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PassengersList" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn/PassengersScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="FreightHeading" type="Label" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "FREIGHT"
+
+[node name="FreightScroll" type="ScrollContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FreightList" type="VBoxContainer" parent="Root/FlightManifestOverlay/Center/Panel/VBox/Columns/RightColumn/FreightScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6

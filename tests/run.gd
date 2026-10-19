@@ -36,6 +36,7 @@ func _init() -> void:
 	TestMessageEmitters.run(runner)
 	TestExchangePriceTape.run(runner)
 	TestFuel.run(runner)
+	TestFlightManifest.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)

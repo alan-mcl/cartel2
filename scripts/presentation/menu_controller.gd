@@ -86,6 +86,8 @@ func toggle_pause() -> void:
 		_tree.paused = false
 		_pause.close()
 	else:
+		if _hud.has_method("close_flight_manifest"):
+			_hud.close_flight_manifest()
 		_tree.paused = true
 		_pause.open()
 

@@ -44,6 +44,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _right_chit_stack: VBoxContainer = $Root/RightChitStack
 @onready var _target_lock_chit: TargetLockHudChit = $Root/RightChitStack/TargetLockHudChit
 @onready var _autopilot_chit: AutopilotHudChit = $Root/RightChitStack/AutopilotHudChit
+@onready var _flight_manifest: Control = $Root/FlightManifestOverlay
 
 var _session: GameSession
 var _catalog: Catalog
@@ -77,6 +78,8 @@ func bind(
 	_sync_wire_tape_state()
 	_bind_weapon_chits()
 	_bind_weapon_selection_listener()
+	if _flight_manifest != null and _flight_manifest.has_method("bind"):
+		_flight_manifest.bind(session, catalog, simulation)
 	call_deferred("_sync_process_enabled")
 
 
@@ -177,6 +180,28 @@ func refresh() -> void:
 	_refresh_identity()
 	_sync_log()
 	_sync_wire_tape_state()
+	if _flight_manifest != null and _flight_manifest.has_method("refresh_if_open"):
+		_flight_manifest.refresh_if_open()
+
+
+func toggle_flight_manifest() -> void:
+	if _flight_manifest == null or not _flight_manifest.has_method("toggle"):
+		return
+	if not _has_capability("basic_hud"):
+		return
+	_flight_manifest.toggle()
+
+
+func close_flight_manifest() -> bool:
+	if _flight_manifest == null or not _flight_manifest.has_method("close"):
+		return false
+	return _flight_manifest.close()
+
+
+func is_flight_manifest_open() -> bool:
+	if _flight_manifest == null or not _flight_manifest.has_method("is_open"):
+		return false
+	return _flight_manifest.is_open()
 
 
 func clear_message_log() -> void:
@@ -544,6 +569,26 @@ func _ready() -> void:
 	call_deferred("_sync_status_panel_layout")
 	if _wire_message_bar != null:
 		_wire_message_bar.set_tag("HEADLINES")
+	if _flight_strip != null:
+		_flight_strip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		_flight_strip.gui_input.connect(_on_flight_strip_gui_input)
+	if not visibility_changed.is_connected(_on_hud_visibility_changed):
+		visibility_changed.connect(_on_hud_visibility_changed)
+
+
+func _on_hud_visibility_changed() -> void:
+	if not visible:
+		close_flight_manifest()
+
+
+func _on_flight_strip_gui_input(event: InputEvent) -> void:
+	if not _has_capability("basic_hud"):
+		return
+	if event is InputEventMouseButton:
+		var mouse := event as InputEventMouseButton
+		if mouse.button_index == MOUSE_BUTTON_LEFT and mouse.pressed:
+			toggle_flight_manifest()
+			_flight_strip.accept_event()
 
 
 func _apply_hud_ticker_panels() -> void:
