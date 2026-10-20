@@ -58,3 +58,48 @@ static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:
 		ModuleSpecText.format_stock_list_meta("unknown_category", {}).is_empty(),
 		"unknown stock category yields empty meta"
 	)
+	var ammo_weapon: Dictionary = {}
+	for mod in catalog.list_modules():
+		var data := mod as Dictionary
+		if str(data.get("category", "")) != "weapon":
+			continue
+		if str(data.get("ammunition_type", "")).is_empty():
+			continue
+		ammo_weapon = data
+		break
+	if not ammo_weapon.is_empty():
+		var weapon_meta := ModuleSpecText.format_stock_list_meta("weapon", ammo_weapon)
+		runner.check(
+			not weapon_meta.contains(str(ammo_weapon.get("ammunition_type", ""))),
+			"weapon stock meta omits ammunition type"
+		)
+		runner.check(weapon_meta.contains("·"), "weapon stock meta keeps type and delivery")
+		var ammo_tooltip := ModuleSpecText.format_tooltip(ammo_weapon)
+		runner.check(
+			ammo_tooltip.contains("Ammunition type"),
+			"weapon tooltip lists ammunition type"
+		)
+	var packet_weapon: Dictionary = {}
+	for mod in catalog.list_modules():
+		var data := mod as Dictionary
+		if str(data.get("category", "")) != "weapon":
+			continue
+		var packets: Variant = data.get("damage_packets", {})
+		if typeof(packets) != TYPE_DICTIONARY or packets.is_empty():
+			continue
+		packet_weapon = data
+		break
+	if not packet_weapon.is_empty():
+		var packet_meta := ModuleSpecText.format_stock_list_meta("weapon", packet_weapon)
+		var packets: Dictionary = packet_weapon.get("damage_packets", {})
+		for packet_key in packets.keys():
+			runner.check(
+				not packet_meta.contains(str(packet_key).capitalize()),
+				"weapon stock meta omits damage packets"
+			)
+			break
+		var packet_tooltip := ModuleSpecText.format_tooltip(packet_weapon)
+		runner.check(
+			packet_tooltip.contains("Damage packets"),
+			"weapon tooltip lists damage packets"
+		)

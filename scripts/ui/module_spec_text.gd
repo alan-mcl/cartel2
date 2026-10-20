@@ -231,16 +231,9 @@ static func format_stock_list_meta(category: String, data: Dictionary) -> String
 			var delivery := str(data.get("delivery_type", ""))
 			if weapon_type.is_empty():
 				return ""
-			var packets: Variant = data.get("damage_packets", {})
-			var packet_summary := ""
-			if typeof(packets) == TYPE_DICTIONARY and not packets.is_empty():
-				var parts: PackedStringArray = PackedStringArray()
-				for packet_key in packets.keys():
-					parts.append("%s %.0f" % [str(packet_key).capitalize(), float(packets[packet_key])])
-				packet_summary = " · " + ", ".join(parts)
-			elif not str(data.get("ammunition_type", "")).is_empty():
-				packet_summary = " · %s ammo" % str(data.get("ammunition_type", ""))
-			return "%s · %s%s" % [weapon_type.capitalize(), delivery.capitalize(), packet_summary]
+			if delivery.is_empty():
+				return weapon_type.capitalize()
+			return "%s · %s" % [weapon_type.capitalize(), delivery.capitalize()]
 		"armour":
 			var hits := float(data.get("hits", 0.0))
 			if hits <= 0.0:
