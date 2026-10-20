@@ -816,6 +816,71 @@ def check_corporate_presence(
     return errors
 
 
+VALID_CORPORATE_AD_VOICES = frozenset(
+    {"polished", "blunt", "cheerful", "severe", "slick", "courtly"}
+)
+
+
+def check_corporation_office_ticker(
+    corporations: dict[str, dict],
+    ships: dict[str, dict],
+    modules: list[dict],
+    ticker_config: dict,
+) -> list[str]:
+    errors: list[str] = []
+    voices = ticker_config.get("voices", {})
+    if not isinstance(voices, dict):
+        errors.append("corporate_office_ticker.json: voices must be an object")
+        return errors
+    for voice in sorted(VALID_CORPORATE_AD_VOICES):
+        if voice not in voices:
+            errors.append(f"corporate_office_ticker.json: missing voice '{voice}'")
+
+    sku_labels: set[str] = set()
+    for ship in ships.values():
+        if not isinstance(ship, dict):
+            continue
+        name = str(ship.get("name", "")).strip()
+        if name:
+            sku_labels.add(name)
+        brand = str(ship.get("brand", "")).strip()
+        if brand:
+            sku_labels.add(brand)
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        name = str(module.get("name", "")).strip()
+        if name:
+            sku_labels.add(name)
+        brand = str(module.get("brand", "")).strip()
+        if brand:
+            sku_labels.add(brand)
+
+    for corp_id, corp in sorted(corporations.items()):
+        if not isinstance(corp, dict):
+            continue
+        voice = str(corp.get("ad_voice", "")).strip()
+        if voice not in VALID_CORPORATE_AD_VOICES:
+            errors.append(
+                f"corporations.json: {corp_id} ad_voice '{voice}' is not a known office voice"
+            )
+        brands = corp.get("brands", [])
+        if not isinstance(brands, list) or not brands:
+            errors.append(f"corporations.json: {corp_id} brands must be a non-empty array")
+            continue
+        for brand_variant in brands:
+            label = str(brand_variant).strip()
+            if not label:
+                errors.append(f"corporations.json: {corp_id} brands must not contain empty strings")
+                continue
+            if label in sku_labels:
+                errors.append(
+                    f"corporations.json: {corp_id} brand '{label}' duplicates a catalogue SKU name or brand"
+                )
+
+    return errors
+
+
 def catalog_art_to_path(art: str) -> Path | None:
     if not art.startswith("res://"):
         return None
@@ -982,6 +1047,14 @@ def main() -> int:
     errors.extend(check_bounty_missions(bounty_missions, ships))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
+    )
+    errors.extend(
+        check_corporation_office_ticker(
+            corporations,
+            ships,
+            load_modules(),
+            load_object(CATALOG / "corporate_office_ticker.json"),
+        )
     )
 
     if "gst" not in player:

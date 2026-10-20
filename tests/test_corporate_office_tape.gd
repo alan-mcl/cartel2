@@ -7,6 +7,8 @@ static func run(runner: TestRunner) -> void:
 	_test_holt_winters_sku(runner, catalog)
 	_test_no_sku_never_other_maker(runner, catalog)
 	_test_posted_job_title(runner, catalog)
+	_test_creus_brand_line(runner, catalog)
+	_test_job_line_no_raw_brand_token(runner, catalog)
 	_test_no_corporation_yields_nothing(runner, catalog)
 
 
@@ -137,6 +139,77 @@ static func _test_posted_job_title(runner: TestRunner, catalog: Catalog) -> void
 		CorporateOfficeTape.SOURCE_JOB
 	)
 	runner.check(line.find("Mineral assay sweep") >= 0, "job line includes posted scan title")
+
+
+static func _test_creus_brand_line(runner: TestRunner, catalog: Catalog) -> void:
+	var building := {
+		"id": "corp_creus_proxima_office",
+		"corporation_id": "creus",
+		"type": "corporate_office",
+	}
+	var corp := catalog.get_corporation("creus")
+	var brands: Array = CorporateOfficeTape._corp_brands(corp)
+	runner.check(brands.size() >= 1, "creus has office brands")
+	var session := _session(runner, catalog)
+	var simulation := _simulation()
+	var rng := RandomNumberGenerator.new()
+	var line := CorporateOfficeTape.next_line(
+		catalog,
+		session,
+		simulation,
+		building,
+		rng,
+		CorporateOfficeTape.SOURCE_BRAND
+	)
+	runner.check(not line.is_empty(), "creus brand line non-empty")
+	runner.check(line.find("{brand}") < 0, "creus brand line must not contain raw token")
+	var names_creus_brand := false
+	for brand_variant in brands:
+		var label := str(brand_variant)
+		if line.find(label) >= 0:
+			names_creus_brand = true
+			break
+	runner.check(names_creus_brand, "creus brand line names a creus brand")
+
+
+static func _test_job_line_no_raw_brand_token(runner: TestRunner, catalog: Catalog) -> void:
+	var building_id := "corp_creus_proxima_office"
+	var building := _building(catalog, building_id)
+	var session := _session(runner, catalog)
+	var habitat_id := session.habitat_id
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var origin := catalog.get_habitat(habitat_id)
+	var sector_id := str(origin.get("sector_id", ""))
+	var offer := {
+		"id": "scan_tape_brand_test",
+		"desk": ScanCharters.BOARD_CORPORATE,
+		"building_id": building_id,
+		"designation": "Mineral assay sweep",
+		"target_kind": "volatile_debris",
+		"origin_habitat_id": habitat_id,
+		"origin_sector_id": sector_id,
+		"destination_sector_id": sector_id,
+		"site_label": "Grid 7 debris",
+		"destination_name": "Grid 7 debris",
+		"description": "Test scan.",
+		"reward": 400,
+		"deadline_hours": 8,
+		"min_reputation": 0,
+		"corporation_id": "creus",
+	}
+	_inject_scan_offer(missions, session, offer)
+	var rng := RandomNumberGenerator.new()
+	var line := CorporateOfficeTape.next_line(
+		catalog,
+		session,
+		simulation,
+		building,
+		rng,
+		CorporateOfficeTape.SOURCE_JOB
+	)
+	runner.check(not line.is_empty(), "job line for brand token test non-empty")
+	runner.check(line.find("{brand}") < 0, "job line must not contain raw {brand} token")
 
 
 static func _test_no_corporation_yields_nothing(runner: TestRunner, catalog: Catalog) -> void:

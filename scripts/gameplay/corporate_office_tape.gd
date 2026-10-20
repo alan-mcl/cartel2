@@ -2,11 +2,20 @@ class_name CorporateOfficeTape
 extends RefCounted
 
 const SOURCE_SKU := "sku"
+const SOURCE_BRAND := "brand"
 const SOURCE_JOB := "job"
 const SOURCE_TRADE := "trade"
 const SOURCE_RECRUITMENT := "recruitment"
 
 const _VOICE_FALLBACK := "polished"
+const _VALID_VOICES: Array[String] = [
+	"polished",
+	"blunt",
+	"cheerful",
+	"severe",
+	"slick",
+	"courtly",
+]
 
 
 static func next_line(
@@ -33,7 +42,7 @@ static func next_line(
 		return ""
 
 	var voice := str(corp.get("ad_voice", _VOICE_FALLBACK)).strip_edges()
-	if voice.is_empty():
+	if voice.is_empty() or voice not in _VALID_VOICES:
 		voice = _VOICE_FALLBACK
 
 	var voices: Dictionary = catalog.get_corporate_office_ticker_config().get("voices", {})
@@ -48,6 +57,8 @@ static func next_line(
 	else:
 		if not _sku_pool(catalog, maker_name).is_empty():
 			sources.append(SOURCE_SKU)
+		if not _corp_brands(corp).is_empty():
+			sources.append(SOURCE_BRAND)
 		if simulation != null and _job_pool(simulation, session, catalog, building_id).size() > 0:
 			sources.append(SOURCE_JOB)
 		var trade := str(corp.get("trade", "")).strip_edges()
@@ -61,15 +72,48 @@ static func next_line(
 	var pick := forced_source if not forced_source.is_empty() else sources[rng.randi_range(0, sources.size() - 1)]
 	match pick:
 		SOURCE_SKU:
-			return _sample_sku(catalog, maker_name, voice_def, rng)
+			return _sample_sku(catalog, corp, maker_name, voice_def, rng)
+		SOURCE_BRAND:
+			return _sample_brand(corp, voice_def, rng)
 		SOURCE_JOB:
-			return _sample_job(simulation, session, catalog, building_id, voice_def, rng)
+			return _sample_job(simulation, session, catalog, building_id, corp, voice_def, rng)
 		SOURCE_TRADE:
 			return str(corp.get("trade", "")).strip_edges()
 		SOURCE_RECRUITMENT:
-			return _sample_recruitment(voice_def, rng)
+			return _sample_recruitment(corp, voice_def, rng)
 		_:
 			return ""
+
+
+static func _corp_brands(corp: Dictionary) -> Array:
+	var raw: Variant = corp.get("brands", [])
+	if typeof(raw) != TYPE_ARRAY:
+		return []
+	var out: Array = []
+	for item in raw:
+		var label := str(item).strip_edges()
+		if not label.is_empty():
+			out.append(label)
+	return out
+
+
+static func _pick_corp_brand(corp: Dictionary, rng: RandomNumberGenerator) -> String:
+	var brands := _corp_brands(corp)
+	if brands.is_empty():
+		return str(corp.get("name", "")).strip_edges()
+	return str(brands[rng.randi_range(0, brands.size() - 1)])
+
+
+static func _corp_display_name(corp: Dictionary) -> String:
+	return str(corp.get("name", "")).strip_edges()
+
+
+static func _finalize_line(line: String, corp: Dictionary) -> String:
+	var out := line.replace("  ", " ").strip_edges()
+	var fallback := _corp_display_name(corp)
+	if fallback.is_empty():
+		return out.replace("{brand}", "")
+	return out.replace("{brand}", fallback)
 
 
 static func _sku_pool(catalog: Catalog, maker_name: String) -> Array:
@@ -89,7 +133,13 @@ static func _sku_pool(catalog: Catalog, maker_name: String) -> Array:
 	return pool
 
 
-static func _sample_sku(catalog: Catalog, maker_name: String, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
+static func _sample_sku(
+	catalog: Catalog,
+	corp: Dictionary,
+	maker_name: String,
+	voice_def: Dictionary,
+	rng: RandomNumberGenerator
+) -> String:
 	var pool := _sku_pool(catalog, maker_name)
 	if pool.is_empty():
 		return ""
@@ -98,15 +148,28 @@ static func _sample_sku(catalog: Catalog, maker_name: String, voice_def: Diction
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	return _apply_product_tokens(template, product_def)
+	return _apply_product_tokens(template, product_def, corp)
 
 
-static func _apply_product_tokens(template: String, product_def: Dictionary) -> String:
+static func _apply_product_tokens(template: String, product_def: Dictionary, corp: Dictionary) -> String:
 	var product := str(product_def.get("name", product_def.get("id", ""))).strip_edges()
 	var brand := str(product_def.get("brand", "")).strip_edges()
+	if brand.is_empty():
+		brand = _corp_display_name(corp)
 	var line := template.replace("{product}", product).replace("{brand}", brand)
-	line = line.replace("  ", " ").strip_edges()
-	return line
+	return _finalize_line(line, corp)
+
+
+static func _sample_brand(corp: Dictionary, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
+	var brands := _corp_brands(corp)
+	if brands.is_empty():
+		return ""
+	var templates: Array = _string_array(voice_def.get("brand", []))
+	if templates.is_empty():
+		return ""
+	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
+	var brand := _pick_corp_brand(corp, rng)
+	return _finalize_line(template.replace("{brand}", brand), corp)
 
 
 static func _job_pool(
@@ -154,6 +217,7 @@ static func _sample_job(
 	session: GameSession,
 	catalog: Catalog,
 	building_id: String,
+	corp: Dictionary,
 	voice_def: Dictionary,
 	rng: RandomNumberGenerator
 ) -> String:
@@ -165,19 +229,23 @@ static func _sample_job(
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	return (
+	var brand := _pick_corp_brand(corp, rng)
+	var line := (
 		template
 		.replace("{title}", str(entry.get("title", "")))
 		.replace("{destination}", str(entry.get("destination", "")))
-		.strip_edges()
+		.replace("{brand}", brand)
 	)
+	return _finalize_line(line, corp)
 
 
-static func _sample_recruitment(voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
+static func _sample_recruitment(corp: Dictionary, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
 	var templates: Array = _string_array(voice_def.get("recruitment", []))
 	if templates.is_empty():
 		return ""
-	return str(templates[rng.randi_range(0, templates.size() - 1)]).strip_edges()
+	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
+	var brand := _pick_corp_brand(corp, rng)
+	return _finalize_line(template.replace("{brand}", brand), corp)
 
 
 static func _string_array(value: Variant) -> Array:

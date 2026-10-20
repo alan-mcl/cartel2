@@ -8,7 +8,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "fennet"
-		}
+		},
+		"brands": [
+			"Cumbre Mining",
+			"Sierra Refining",
+			"Altiplano Bulk",
+			"Cordillera Haulage"
+		]
 	},
 	{
 		"id": "atlas_concern",
@@ -20,7 +26,13 @@
 			"placement": "outlying",
 			"sector_id": "regulus_belt",
 			"location_id": "regulus_belt_habitat"
-		}
+		},
+		"brands": [
+			"Foundation Habitat",
+			"Loadmaster Systems",
+			"Titan-class Yards",
+			"Keystone Extraction"
+		]
 	},
 	{
 		"id": "biogenesis",
@@ -32,30 +44,48 @@
 			"placement": "habitat",
 			"sector_id": "irasia",
 			"location_id": "irasia_habitat"
-		}
+		},
+		"brands": [
+			"Caduceus Therapeutics",
+			"VitaVault Containment",
+			"GeneSeal Labs",
+			"Clinical Compliance"
+		]
 	},
 	{
 		"id": "carthage_mercantile",
 		"name": "Carthage Mercantile",
 		"callsign_prefix": "CM",
-		"ad_voice": "blunt",
+		"ad_voice": "slick",
 		"trade": "Carthage Mercantile moves cargo where margins justify the risk.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "new_carthage",
 			"location_id": "new_carthage_habitat"
-		}
+		},
+		"brands": [
+			"Tyrian Shipping",
+			"Punic Commodities",
+			"Mediterranean Exchange",
+			"Carthage Intelligence"
+		]
 	},
 	{
 		"id": "chettiar",
 		"name": "Chettiar Holdings",
 		"callsign_prefix": "CHET",
 		"ad_voice": "polished",
-		"trade": "Chettiar Holdings — structured finance across the inner systems.",
+		"trade": "Chettiar Holdings \u2014 structured finance across the inner systems.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "fortuna"
-		}
+		},
+		"brands": [
+			"Nagarathar Finance",
+			"Steward Capital",
+			"Chettiar Commodity House",
+			"Temple Endowment Desk"
+		]
 	},
 	{
 		"id": "chimera",
@@ -67,19 +97,31 @@
 			"placement": "orbital",
 			"sector_id": "titania",
 			"location_id": "sta_chimera_titania"
-		}
+		},
+		"brands": [
+			"Chimera Labs",
+			"Glasspark Entertainment",
+			"Flex Security",
+			"Experimental Licensing"
+		]
 	},
 	{
 		"id": "continuity_foundation",
 		"name": "Continuity Foundation",
 		"callsign_prefix": "CON",
-		"ad_voice": "polished",
+		"ad_voice": "courtly",
 		"trade": "Continuity Foundation preserves infrastructure others neglect.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
-		}
+		},
+		"brands": [
+			"Archive Continuance",
+			"Genetic Repository",
+			"Continuity Schools",
+			"Long Horizon Trust"
+		]
 	},
 	{
 		"id": "creus",
@@ -91,19 +133,31 @@
 			"placement": "orbital",
 			"sector_id": "proxima",
 			"location_id": "sta_creus_proxima"
-		}
+		},
+		"brands": [
+			"Creus Escrow",
+			"House Auctions",
+			"MicroLoan Desk",
+			"Property Exchange"
+		]
 	},
 	{
 		"id": "crown_and_anchor",
 		"name": "Crown & Anchor",
 		"callsign_prefix": "CA",
 		"ad_voice": "polished",
-		"trade": "Crown & Anchor — insured freight and charter brokerage.",
+		"trade": "Crown & Anchor \u2014 insured freight and charter brokerage.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "new_carthage",
 			"location_id": "sta_crown_and_anchor_new_carthage"
-		}
+		},
+		"brands": [
+			"Anchor Insurance",
+			"Harbour Charter",
+			"Crown Freight",
+			"Admiralty Bonds"
+		]
 	},
 	{
 		"id": "cult_of_apex",
@@ -115,19 +169,31 @@
 			"placement": "orbital",
 			"sector_id": "titania",
 			"location_id": "sta_cult_of_apex_titania"
-		}
+		},
+		"brands": [
+			"Ascension Supply",
+			"Apex Initiation",
+			"Capsule Rites",
+			"Deep Vault Catalogue"
+		]
 	},
 	{
 		"id": "dar_al_nour",
 		"name": "Dar al-Nour Trust",
 		"callsign_prefix": "DAN",
-		"ad_voice": "polished",
-		"trade": "Dar al-Nour Trust — sharia-compliant trade finance.",
+		"ad_voice": "courtly",
+		"trade": "Dar al-Nour Trust \u2014 sharia-compliant trade finance.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "horizon",
 			"location_id": "horizon_habitat"
-		}
+		},
+		"brands": [
+			"Nour Endowment",
+			"Trust Healthcare",
+			"Waqf Property",
+			"Scholarly Foundation"
+		]
 	},
 	{
 		"id": "deepspace",
@@ -139,7 +205,13 @@
 			"placement": "outlying",
 			"sector_id": "pelagos_belt",
 			"location_id": "pelagos_belt_habitat"
-		}
+		},
+		"brands": [
+			"Member Co-op Trade",
+			"Frontier Pooling",
+			"Pelagos Collective",
+			"DeepSpace Shares"
+		]
 	},
 	{
 		"id": "evergreen",
@@ -150,7 +222,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "fennet"
-		}
+		},
+		"brands": [
+			"Canopy Agriculture",
+			"Rootstock Foods",
+			"Watershed Services",
+			"Greenfield Development"
+		]
 	},
 	{
 		"id": "four_rivers_zaibatsu",
@@ -161,19 +239,31 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "tokirev"
-		}
+		},
+		"brands": [
+			"Mikuni Industrial",
+			"Tensho Energy",
+			"Shirayuki Trading",
+			"Zaibatsu House Bank"
+		]
 	},
 	{
 		"id": "galactic_outcomes",
 		"name": "Galactic Outcomes",
 		"callsign_prefix": "GO",
 		"ad_voice": "blunt",
-		"trade": "Galactic Outcomes — extraction and salvage, no apologies.",
+		"trade": "Galactic Outcomes \u2014 extraction and salvage, no apologies.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "tycho",
 			"location_id": "sta_galactic_outcomes_tycho"
-		}
+		},
+		"brands": [
+			"Outcomes Security",
+			"Mercenary Bureau",
+			"Small Arms Division",
+			"Specialist Personnel"
+		]
 	},
 	{
 		"id": "general_industrial",
@@ -185,19 +275,31 @@
 			"placement": "orbital",
 			"sector_id": "tycho",
 			"location_id": "sta_general_industrial_tycho"
-		}
+		},
+		"brands": [
+			"GI Standard Issue",
+			"Utility Industrial",
+			"Mass Production Line",
+			"GI Logistics"
+		]
 	},
 	{
 		"id": "grc",
 		"name": "GRC Inc",
 		"callsign_prefix": "GRC",
 		"ad_voice": "polished",
-		"trade": "GRC Inc — corporate treasury and settlement rails.",
+		"trade": "GRC Inc \u2014 corporate treasury and settlement rails.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "fortuna",
 			"location_id": "sta_grc_fortuna"
-		}
+		},
+		"brands": [
+			"GRC Treasury",
+			"Speculation Desk",
+			"Settlement Rails",
+			"Competitive Banking"
+		]
 	},
 	{
 		"id": "greenfields",
@@ -208,7 +310,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "horizon"
-		}
+		},
+		"brands": [
+			"Harvest Foods",
+			"AgriLive Supply",
+			"Plantation Services",
+			"Fresh Distribution"
+		]
 	},
 	{
 		"id": "guangzhou_mercantile",
@@ -219,18 +327,30 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "new_carthage"
-		}
+		},
+		"brands": [
+			"Pearl River Trade",
+			"Merchant House Finance",
+			"Guangzhou Shipping",
+			"Jade Route Logistics"
+		]
 	},
 	{
 		"id": "hanseatic_guild",
 		"name": "The Hanseatic Guild",
 		"callsign_prefix": "HANS",
-		"ad_voice": "polished",
-		"trade": "The Hanseatic Guild — mutual credit among trusted houses.",
+		"ad_voice": "courtly",
+		"trade": "The Hanseatic Guild \u2014 mutual credit among trusted houses.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "new_carthage"
-		}
+		},
+		"brands": [
+			"Guild Mutual Credit",
+			"Hanse Warehouses",
+			"League Shipping",
+			"Merchant Obligation Desk"
+		]
 	},
 	{
 		"id": "himalaya_triad",
@@ -242,7 +362,13 @@
 			"placement": "habitat",
 			"sector_id": "horizon",
 			"location_id": "horizon_habitat"
-		}
+		},
+		"brands": [
+			"Triad Pharmaceuticals",
+			"High Pass Security",
+			"Tibetan Logistics",
+			"Mountain Extraction"
+		]
 	},
 	{
 		"id": "holt_winters",
@@ -254,31 +380,49 @@
 			"placement": "habitat",
 			"sector_id": "tokirev",
 			"location_id": "tokirev_habitat"
-		}
+		},
+		"brands": [
+			"Helios Drive",
+			"HW Shield Works",
+			"Compact Power",
+			"Winters Aerospace"
+		]
 	},
 	{
 		"id": "house_of_roth",
 		"name": "House of Roth",
 		"callsign_prefix": "ROTH",
-		"ad_voice": "polished",
+		"ad_voice": "courtly",
 		"trade": "House of Roth private banking for serious operators.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "fortuna",
 			"location_id": "fortuna_habitat"
-		}
+		},
+		"brands": [
+			"Roth Priv\u00e9 Banking",
+			"Roth Continental Energy",
+			"Inherited Commodities",
+			"Old House Finance"
+		]
 	},
 	{
 		"id": "karaquazen",
 		"name": "Karaquazen Inc",
 		"callsign_prefix": "KRQ",
-		"ad_voice": "cheerful",
-		"trade": "Karaquazen Inc — cheerful service and dependable shipyard work.",
+		"ad_voice": "slick",
+		"trade": "Karaquazen Inc \u2014 cheerful service and dependable shipyard work.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "bela",
 			"location_id": "bela_orbital_habitat"
-		}
+		},
+		"brands": [
+			"MegaCasino Network",
+			"Planetary Lotteries",
+			"Medical Aid Partners",
+			"Operations Franchise"
+		]
 	},
 	{
 		"id": "liveworlds",
@@ -289,19 +433,31 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "bela"
-		}
+		},
+		"brands": [
+			"Arena Live",
+			"Virtual Worlds",
+			"Celebrity Management",
+			"Experience Networks"
+		]
 	},
 	{
 		"id": "mercury_communications",
 		"name": "Mercury Communications",
 		"callsign_prefix": "HG",
-		"ad_voice": "cheerful",
+		"ad_voice": "slick",
 		"trade": "Mercury Communications keeps your manifest on the wire.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "proxima",
 			"location_id": "sta_mercury_communications_proxima"
-		}
+		},
+		"brands": [
+			"Mercury Wire",
+			"Relay Navigation",
+			"Broadcast Infrastructure",
+			"Data Services"
+		]
 	},
 	{
 		"id": "meridian",
@@ -313,18 +469,30 @@
 			"placement": "habitat",
 			"sector_id": "new_carthage",
 			"location_id": "new_carthage_habitat"
-		}
+		},
+		"brands": [
+			"Meridian Transit",
+			"Current Navigation",
+			"Spine Shipping",
+			"Connectivity Services"
+		]
 	},
 	{
 		"id": "microdonald",
 		"name": "MicroDonald Franchise",
 		"callsign_prefix": "MDF",
-		"ad_voice": "cheerful",
-		"trade": "MicroDonald Franchise — familiar food, every habitat.",
+		"ad_voice": "slick",
+		"trade": "MicroDonald Franchise \u2014 familiar food, every habitat.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "proxima"
-		}
+		},
+		"brands": [
+			"City-Mall Franchise",
+			"MDF Consumer Line",
+			"Everyday Essentials",
+			"MDF Hospitality"
+		]
 	},
 	{
 		"id": "monday",
@@ -336,31 +504,49 @@
 			"placement": "habitat",
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
-		}
+		},
+		"brands": [
+			"Monday Workplace",
+			"Monday Core Software",
+			"Monday Cloud Desk",
+			"365 Productivity"
+		]
 	},
 	{
 		"id": "morrow_and_sons",
 		"name": "Morrow & Sons",
 		"callsign_prefix": "MNS",
-		"ad_voice": "polished",
+		"ad_voice": "courtly",
 		"trade": "Morrow & Sons bespoke fittings for discerning captains.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "proxima",
 			"location_id": "sta_morrow_and_sons_proxima"
-		}
+		},
+		"brands": [
+			"Morrow Memorial",
+			"Preservation Vaults",
+			"Life Assurance",
+			"Cryogenic Services"
+		]
 	},
 	{
 		"id": "octagon",
 		"name": "The Octagon",
 		"callsign_prefix": "OCT",
 		"ad_voice": "polished",
-		"trade": "The Octagon — diversified holdings, single counterparty.",
+		"trade": "The Octagon \u2014 diversified holdings, single counterparty.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "fortuna",
 			"location_id": "sta_octagon_fortuna"
-		}
+		},
+		"brands": [
+			"Octagon Holdings",
+			"Opaque Finance",
+			"Subsidiary Network",
+			"Octagon Insurance"
+		]
 	},
 	{
 		"id": "oklahoma_combine",
@@ -371,7 +557,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "fennet"
-		}
+		},
+		"brands": [
+			"Combine Fieldplant",
+			"Prairie Bulk",
+			"Red Dirt Energy",
+			"Agri Machinery"
+		]
 	},
 	{
 		"id": "orion_aerospace",
@@ -383,7 +575,13 @@
 			"placement": "orbital",
 			"sector_id": "irasia",
 			"location_id": "sta_orion_aerospace_irasia"
-		}
+		},
+		"brands": [
+			"Orion Mainplant",
+			"YardFit Service",
+			"Orion Frames",
+			"AP Propulsion"
+		]
 	},
 	{
 		"id": "orion_spur",
@@ -395,7 +593,13 @@
 			"placement": "habitat",
 			"sector_id": "pelagos",
 			"location_id": "concordia_habitat"
-		}
+		},
+		"brands": [
+			"Spur Passenger",
+			"Longhaul Commerce",
+			"Spur Acquisition",
+			"Spur Finance"
+		]
 	},
 	{
 		"id": "pacific_triad",
@@ -406,7 +610,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "horizon"
-		}
+		},
+		"brands": [
+			"Triad House Finance",
+			"Pacific Entertainment",
+			"Family Network Trade",
+			"Triad Security"
+		]
 	},
 	{
 		"id": "pararamcovidia",
@@ -418,7 +628,13 @@
 			"placement": "habitat",
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
-		}
+		},
+		"brands": [
+			"PRV Broadcast",
+			"Studio Networks",
+			"Deepwell Energy",
+			"Infotainment Bundles"
+		]
 	},
 	{
 		"id": "praetorium",
@@ -430,18 +646,30 @@
 			"placement": "habitat",
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
-		}
+		},
+		"brands": [
+			"Praetorium Guard",
+			"Executive Protection",
+			"Luxury Residences",
+			"Arbitration Chamber"
+		]
 	},
 	{
 		"id": "sakuraya_shinise",
 		"name": "Sakuraya Shinise",
 		"callsign_prefix": "SS",
-		"ad_voice": "polished",
+		"ad_voice": "courtly",
 		"trade": "Sakuraya Shinise refined components and ceremonial quality.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "proxima"
-		}
+		},
+		"brands": [
+			"Shinise Tea House",
+			"Asahi Plant",
+			"Wakaba Trading",
+			"Founding Family Office"
+		]
 	},
 	{
 		"id": "seven_bells",
@@ -452,7 +680,13 @@
 		"hq": {
 			"placement": "planet",
 			"sector_id": "irasia"
-		}
+		},
+		"brands": [
+			"Seven Bells Signal",
+			"Peal Communications",
+			"Bell Industrial",
+			"Campana Systems"
+		]
 	},
 	{
 		"id": "snedecorp",
@@ -464,7 +698,13 @@
 			"placement": "orbital",
 			"sector_id": "proxima",
 			"location_id": "sta_snedecorp_proxima"
-		}
+		},
+		"brands": [
+			"SnedeOS Platform",
+			"Bridge Licensing",
+			"Cyberwall Security",
+			"Commercial Software"
+		]
 	},
 	{
 		"id": "terra_nova",
@@ -476,18 +716,30 @@
 			"placement": "orbital",
 			"sector_id": "pelagos",
 			"location_id": "sta_terra_nova_pelagos"
-		}
+		},
+		"brands": [
+			"TerraCore Harvest",
+			"Strip Mining",
+			"Colonial Logistics",
+			"Nova Settlement"
+		]
 	},
 	{
 		"id": "tukey",
 		"name": "Tukey Enterprises",
 		"callsign_prefix": "TE",
-		"ad_voice": "blunt",
+		"ad_voice": "slick",
 		"trade": "Tukey Enterprises aftermarket parts at yard prices.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "tokirev"
-		}
+		},
+		"brands": [
+			"Tukey Lot Specials",
+			"HandyParts Retail",
+			"Yardfit Aftermarket",
+			"Opportunist Supply"
+		]
 	},
 	{
 		"id": "universal_house",
@@ -499,6 +751,12 @@
 			"placement": "habitat",
 			"sector_id": "bela",
 			"location_id": "bela_orbital_habitat"
-		}
+		},
+		"brands": [
+			"Universal Retail",
+			"Mall Hospitality",
+			"House Chandlery",
+			"Franchise Everyday"
+		]
 	}
 ]

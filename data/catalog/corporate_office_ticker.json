@@ -34,6 +34,13 @@
         "Experienced crews are invited to join our independent contractor network.",
         "Flexible contracts for pilots who prefer to remain independent.",
         "If you have the experience, we have the work."
+      ],
+      "brand": [
+        "Ask at this desk about {brand}.",
+        "{brand} \u2014 services for serious operators.",
+        "Enquire regarding {brand}; particulars available here.",
+        "Our {brand} desk serves clients throughout the sector.",
+        "{brand}: established standards, clear terms."
       ]
     },
     "blunt": {
@@ -73,6 +80,13 @@
         "Your ship is yours. The contract is ours. Keep it simple.",
         "Qualified operators wanted. No hand-holding provided.",
         "If you can do the job, come talk to us."
+      ],
+      "brand": [
+        "{brand}. We do the work.",
+        "Need {brand}? Talk to the desk.",
+        "{brand} \u2014 no brochure required.",
+        "We run {brand} out of this office. Ask.",
+        "{brand}. Straight deal or walk."
       ]
     },
     "cheerful": {
@@ -111,6 +125,13 @@
         "Looking for flexible work? Our independent contracts could be just the ticket.",
         "Fly your way, work with us!",
         "New opportunities are opening for independent pilots and crews."
+      ],
+      "brand": [
+        "Come ask about {brand} \u2014 we'd love to help!",
+        "{brand} is available right here at the desk!",
+        "Looking for {brand}? You're in the right place!",
+        "Try {brand} \u2014 customers keep coming back!",
+        "Good news: {brand} is open for business today!"
       ]
     },
     "severe": {
@@ -149,6 +170,85 @@
         "All contracted crews are subject to inspection and compliance procedures.",
         "Operators are responsible for maintaining current certification.",
         "Contract access is conditional upon satisfactory compliance records."
+      ],
+      "brand": [
+        "{brand}. Compliance documentation available on request.",
+        "Authorised {brand} services only at this desk.",
+        "Operators must meet standards before {brand} engagement.",
+        "{brand} \u2014 mandatory procedures apply.",
+        "Procure {brand} through approved channels only."
+      ]
+    },
+    "slick": {
+      "sku": [
+        "{product} \u2014 ask how {brand} fits your ship.",
+        "Limited run on {product}. {brand} clients get first look.",
+        "{product} moves fast. {brand} desk can hold one.",
+        "You want {product}? {brand} makes it simple.",
+        "{product} \u2014 franchise pricing for {brand} partners.",
+        "Smart money buys {product} through {brand}.",
+        "{product} on the board today. {brand} terms apply.",
+        "Don't fly without {product}. {brand} has stock."
+      ],
+      "brand": [
+        "{brand} \u2014 limited availability, ask today.",
+        "Smart operators know {brand} when they see it.",
+        "Your next contract starts with {brand}.",
+        "{brand}: the desk favourite this quarter.",
+        "Don't leave without hearing about {brand}.",
+        "Everybody's talking {brand}. Find out why."
+      ],
+      "job": [
+        "{title} to {destination} \u2014 {brand} is paying.",
+        "Hot contract: {title}, {destination}. Ask {brand}.",
+        "{brand} needs a ship for {title} at {destination}.",
+        "Easy money: {title}, {destination}. {brand} desk.",
+        "{title} at {destination}. {brand} bonus if you leave today.",
+        "Still open: {title} bound for {destination}."
+      ],
+      "recruitment": [
+        "Independent? {brand} wants your callsign on file.",
+        "Join the {brand} network \u2014 terms you'll like.",
+        "Crew wanted. {brand} pays on time.",
+        "Bring your ship to {brand}. We keep you busy.",
+        "Qualified pilots: {brand} has contracts waiting.",
+        "Sign with {brand}. Flexible hops, real rates."
+      ]
+    },
+    "courtly": {
+      "sku": [
+        "{product} \u2014 supplied under {brand} warrant.",
+        "The house recommends {product} for discerning crews.",
+        "{product}, as offered through {brand}.",
+        "Enquire after {product}; {brand} maintains the line.",
+        "{product} \u2014 quality befitting {brand} clients.",
+        "Permit us to mention {product} from {brand}.",
+        "{product} remains available to {brand} patrons.",
+        "A considered choice: {product}, by {brand}."
+      ],
+      "brand": [
+        "The house is pleased to offer {brand}.",
+        "Enquire discreetly regarding {brand}.",
+        "{brand} \u2014 a long-standing obligation honoured here.",
+        "Guests may ask after {brand} at this desk.",
+        "It is our custom to provide {brand} to qualified clients.",
+        "{brand}, maintained as tradition demands."
+      ],
+      "job": [
+        "Contract notice: {title}, destination {destination}.",
+        "The desk posts {title} toward {destination}.",
+        "{brand} seeks an operator for {title} at {destination}.",
+        "Field service: {title}, {destination}. Enquire within.",
+        "Qualified crews may tender for {title}, {destination}.",
+        "{title} \u2014 passage to {destination} under published terms."
+      ],
+      "recruitment": [
+        "Independent operators of good standing may enquire.",
+        "The house retains experienced crews through {brand}.",
+        "Qualified pilots are welcome to discuss terms.",
+        "We honour long service among independent contractors.",
+        "Discreet enquiries regarding contract work are received here.",
+        "{brand} extends courtesy terms to proven operators."
       ]
     }
   }

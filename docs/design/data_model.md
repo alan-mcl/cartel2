@@ -27,8 +27,8 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
-| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, optional `ad_voice`, `trade`) |
-| `corporate_office_ticker.json` | object | Shared SKU/job/recruitment templates keyed by `ad_voice` |
+| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, `ad_voice`, `trade`, `brands`) |
+| `corporate_office_ticker.json` | object | Shared SKU/brand/job/recruitment templates keyed by `ad_voice` |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
 | `freight_missions.json` | object | Freight charter cargos, descriptions, and pay tuning |
@@ -341,8 +341,9 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `id` | corporations | Lowercase snake_case corporation id |
 | `name` | corporations | Display name (transponder affiliation) |
 | `callsign_prefix` | corporations | Stock ticker for `{TICKER}-{NNN}` callsigns |
-| `ad_voice` | corporations | Office ticker tone: `polished`, `blunt`, `cheerful`, or `severe` |
+| `ad_voice` | corporations | Office ticker tone: `polished`, `blunt`, `cheerful`, `severe`, `slick`, or `courtly` |
 | `trade` | corporations | One-sentence trade advertising line for corporate office ticker |
+| `brands` | corporations | Three to five non-SKU advertising labels (services, franchises, desks); must not duplicate catalogue module or ship `name` or `brand` |
 | *(sector id)* | corporate_presence | Key matching `sectors.json` |
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
