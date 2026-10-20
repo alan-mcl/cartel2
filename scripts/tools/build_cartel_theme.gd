@@ -62,6 +62,9 @@ func _build_theme() -> Theme:
 	_style_progress_bar(theme)
 	_style_item_list(theme)
 	_style_tree(theme)
+	_style_popup_menu(theme)
+	_style_window(theme)
+	_style_accept_dialog(theme)
 	_style_tooltip(theme)
 
 	return theme
@@ -90,7 +93,17 @@ func _register_fonts(theme: Theme) -> void:
 	var mono_medium := _load_font(FONT_MONO_MEDIUM)
 
 	# Default body typography.
-	for control_type in [&"Label", &"Button", &"LineEdit", &"ItemList", &"Tree", &"CheckBox", &"OptionButton", &"TabBar"]:
+	for control_type in [
+		&"Label",
+		&"Button",
+		&"LineEdit",
+		&"ItemList",
+		&"Tree",
+		&"CheckBox",
+		&"OptionButton",
+		&"TabBar",
+		&"PopupMenu",
+	]:
 		theme.set_font(&"font", control_type, sans_regular)
 		theme.set_font_size(&"font_size", control_type, TYPE.body)
 
@@ -378,6 +391,74 @@ func _style_tree(theme: Theme) -> void:
 	theme.set_color(&"guide_color", &"Tree", C.border)
 	theme.set_constant(&"item_margin", &"Tree", 4)
 	theme.set_constant(&"h_separation", &"Tree", 4)
+
+
+func _style_popup_menu(theme: Theme) -> void:
+	var panel := _flat(C.surface, C.border, 8, 0)
+	var hover := _flat_accent_left(C.elevated, 3)
+	var separator := StyleBoxLine.new()
+	separator.color = C.border
+	separator.thickness = 1
+	var labeled_sep := StyleBoxLine.new()
+	labeled_sep.color = C.border
+	labeled_sep.thickness = 1
+
+	theme.set_stylebox(&"panel", &"PopupMenu", panel)
+	theme.set_stylebox(&"hover", &"PopupMenu", hover)
+	theme.set_stylebox(&"separator", &"PopupMenu", separator)
+	theme.set_stylebox(&"labeled_separator_left", &"PopupMenu", labeled_sep)
+	theme.set_stylebox(&"labeled_separator_right", &"PopupMenu", labeled_sep)
+	theme.set_color(&"font_color", &"PopupMenu", C.text)
+	theme.set_color(&"font_hover_color", &"PopupMenu", C.text)
+	theme.set_color(&"font_disabled_color", &"PopupMenu", C.text_muted)
+	theme.set_color(&"font_accelerator_color", &"PopupMenu", C.text_muted)
+	theme.set_color(&"font_separator_color", &"PopupMenu", C.text_muted)
+	theme.set_constant(&"h_separation", &"PopupMenu", 8)
+	theme.set_constant(&"v_separation", &"PopupMenu", 4)
+	theme.set_constant(&"item_start_padding", &"PopupMenu", 8)
+	theme.set_constant(&"item_end_padding", &"PopupMenu", 8)
+
+
+func _window_embedded_frame(focused: bool) -> StyleBoxFlat:
+	var bg := C.surface if focused else C.surface.darkened(0.04)
+	var box := _flat(bg, C.border, 12, 0)
+	box.expand_margin_top = 36
+	return box
+
+
+func _style_window(theme: Theme) -> void:
+	var sans_medium := _load_font(FONT_SANS_MEDIUM)
+	var embedded := _window_embedded_frame(true)
+	var embedded_unfocused := _window_embedded_frame(false)
+
+	theme.set_stylebox(&"embedded_border", &"Window", embedded)
+	theme.set_stylebox(&"embedded_unfocused_border", &"Window", embedded_unfocused)
+	theme.set_color(&"title_color", &"Window", C.text)
+	theme.set_font(&"title_font", &"Window", sans_medium)
+	theme.set_font_size(&"title_font_size", &"Window", TYPE.section)
+	theme.set_constant(&"title_height", &"Window", 36)
+	theme.set_icon(&"close", &"Window", _window_close_icon(false))
+	theme.set_icon(&"close_pressed", &"Window", _window_close_icon(true))
+
+
+func _window_close_icon(pressed: bool) -> ImageTexture:
+	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var color := C.text_muted if pressed else C.text
+	for i in range(4, 12):
+		img.set_pixel(i, i, color)
+		img.set_pixel(i, 15 - i, color)
+	var tex := ImageTexture.create_from_image(img)
+	return tex
+
+
+func _style_accept_dialog(theme: Theme) -> void:
+	var panel := _flat(C.surface, C.border, 12, 0)
+	for dialog_type in [&"AcceptDialog", &"ConfirmationDialog"]:
+		theme.set_stylebox(&"panel", dialog_type, panel)
+		theme.set_constant(&"buttons_separation", dialog_type, 8)
+		theme.set_constant(&"buttons_min_height", dialog_type, 36)
+		theme.set_constant(&"buttons_min_width", dialog_type, 96)
 
 
 func _style_tooltip(theme: Theme) -> void:

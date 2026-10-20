@@ -29,9 +29,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 1575.0
-offset_top = 38.0
+offset_top = 35.0
 offset_right = -41.0
-offset_bottom = -851.0
+offset_bottom = -808.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -53,7 +53,7 @@ custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Load"
 
-[node name="LeaderboardButton" type="Button" parent="Center/Panel/VBox"]
+[node name="LeaderboardButton" type="Button" parent="Center/Panel/VBox" unique_id=1785261408]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Leaderboard"

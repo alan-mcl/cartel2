@@ -28,12 +28,24 @@ var _suppress_building_select: bool = false
 var _embedded_panel: Control = null
 var _embedded_panel_type: String = ""
 
+enum PilotMenuId { CAREER, LEADERBOARD, SAVE, QUIT }
+
+@onready var _pilot_menu_button: Button = (
+	$Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/PilotMenuButton
+)
+@onready var _pilot_menu: PopupMenu = $PilotMenu
+@onready var _confirm_quit_dialog: ConfirmationDialog = $ConfirmQuitDialog
+
 
 func _ready() -> void:
-	$Layout/Footer/CareerButton.pressed.connect(_on_career_pressed)
-	$Layout/Footer/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
-	$Layout/Footer/SaveButton.pressed.connect(_on_save_pressed)
-	$Layout/Footer/MenuButton.pressed.connect(_on_menu_pressed)
+	_pilot_menu.add_item("Career", PilotMenuId.CAREER)
+	_pilot_menu.add_item("Leaderboard", PilotMenuId.LEADERBOARD)
+	_pilot_menu.add_item("Save", PilotMenuId.SAVE)
+	_pilot_menu.add_separator()
+	_pilot_menu.add_item("Quit", PilotMenuId.QUIT)
+	_pilot_menu_button.pressed.connect(_on_pilot_menu_button_pressed)
+	_pilot_menu.id_pressed.connect(_on_pilot_menu_id_pressed)
+	_confirm_quit_dialog.confirmed.connect(_on_quit_confirmed)
 	_building_item_list.item_selected.connect(_on_building_item_selected)
 	_building_item_list.item_clicked.connect(_on_building_item_clicked)
 	_header_split.dragged.connect(_on_header_split_dragged)
@@ -321,8 +333,29 @@ func _on_save_pressed() -> void:
 		_context.on_save_requested.call()
 
 
-func _on_menu_pressed() -> void:
-	if _context.on_quit_to_menu_requested.is_valid():
+func _on_pilot_menu_button_pressed() -> void:
+	var button_rect := _pilot_menu_button.get_global_rect()
+	_pilot_menu.position = Vector2i(
+		int(button_rect.position.x),
+		int(button_rect.position.y + button_rect.size.y)
+	)
+	_pilot_menu.popup()
+
+
+func _on_pilot_menu_id_pressed(id: int) -> void:
+	match id:
+		PilotMenuId.CAREER:
+			_on_career_pressed()
+		PilotMenuId.LEADERBOARD:
+			_on_leaderboard_pressed()
+		PilotMenuId.SAVE:
+			_on_save_pressed()
+		PilotMenuId.QUIT:
+			_confirm_quit_dialog.popup_centered()
+
+
+func _on_quit_confirmed() -> void:
+	if _context != null and _context.on_quit_to_menu_requested.is_valid():
 		_context.on_quit_to_menu_requested.call()
 
 

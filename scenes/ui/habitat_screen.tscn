@@ -49,7 +49,7 @@ display_size = Vector2i(120, 160)
 [node name="PilotInfo" type="VBoxContainer" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+size_flags_vertical = 3
 theme_override_constants/separation = 4
 
 [node name="Pilot" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
@@ -72,6 +72,24 @@ text = "Reputation: 0"
 layout_mode = 2
 theme_type_variation = &"Numeric"
 text = ""
+
+[node name="PilotInfoSpacer" type="Control" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PilotMenuButton" type="Button" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+flat = true
+text = "☰"
+
+[node name="PilotMenu" type="PopupMenu" parent="."]
+
+[node name="ConfirmQuitDialog" type="ConfirmationDialog" parent="."]
+title = "Quit to main menu?"
+ok_button_text = "Quit"
+dialog_text = "Quit to the main menu? Unsaved progress will be lost."
 
 [node name="HeaderRight" type="HBoxContainer" parent="Layout/Header/HeaderSplit"]
 layout_mode = 2
@@ -177,23 +195,3 @@ size_flags_vertical = 3
 
 [node name="Log" parent="Layout/Body/Split/Right" instance=ExtResource("3")]
 layout_mode = 2
-
-[node name="Footer" type="HBoxContainer" parent="Layout"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="CareerButton" type="Button" parent="Layout/Footer"]
-layout_mode = 2
-text = "Career"
-
-[node name="LeaderboardButton" type="Button" parent="Layout/Footer"]
-layout_mode = 2
-text = "Leaderboard"
-
-[node name="SaveButton" type="Button" parent="Layout/Footer"]
-layout_mode = 2
-text = "Save"
-
-[node name="MenuButton" type="Button" parent="Layout/Footer"]
-layout_mode = 2
-text = "Menu"
