@@ -2,7 +2,7 @@
 #
 # Cartel verification script.
 #
-#   ./scripts/ci/check.sh                 full check (default) — run before marking work done
+#   ./scripts/ci/check.sh                 full check (default) - run before marking work done
 #   ./scripts/ci/check.sh --fast          validators + unit tests, no import or script sweep
 #   ./scripts/ci/check.sh --scripts-only  import + GDScript parse sweep
 #   ./scripts/ci/check.sh --tests-only    unit tests only

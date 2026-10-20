@@ -2,216 +2,302 @@
   {
     "id": "andean_consolidated",
     "name": "Andean Consolidated",
-    "callsign_prefix": "AC"
+    "callsign_prefix": "AC",
+    "ad_voice": "blunt",
+    "trade": "Bulk ore and refined metals from Andean Consolidated yards."
   },
   {
     "id": "atlas_concern",
     "name": "Atlas Concern",
-    "callsign_prefix": "ATL"
+    "callsign_prefix": "ATL",
+    "ad_voice": "polished",
+    "trade": "Atlas Concern life-support and habitat systems for long tours."
   },
   {
     "id": "biogenesis",
     "name": "BioGenesis Life Sciences",
-    "callsign_prefix": "BLS"
+    "callsign_prefix": "BLS",
+    "ad_voice": "severe",
+    "trade": "BioGenesis certified biologics and containment for regulated trade."
   },
   {
     "id": "carthage_mercantile",
     "name": "Carthage Mercantile",
-    "callsign_prefix": "CM"
+    "callsign_prefix": "CM",
+    "ad_voice": "blunt",
+    "trade": "Carthage Mercantile moves cargo where margins justify the risk."
   },
   {
     "id": "chettiar",
     "name": "Chettiar Holdings",
-    "callsign_prefix": "CHET"
+    "callsign_prefix": "CHET",
+    "ad_voice": "polished",
+    "trade": "Chettiar Holdings \u2014 structured finance across the inner systems."
   },
   {
     "id": "chimera",
     "name": "Chimera Corporation",
-    "callsign_prefix": "CHI"
+    "callsign_prefix": "CHI",
+    "ad_voice": "blunt",
+    "trade": "Chimera Corporation security contracts and licensed enforcement."
   },
   {
     "id": "continuity_foundation",
     "name": "Continuity Foundation",
-    "callsign_prefix": "CON"
+    "callsign_prefix": "CON",
+    "ad_voice": "polished",
+    "trade": "Continuity Foundation preserves infrastructure others neglect."
   },
   {
     "id": "creus",
     "name": "Creus Corporation",
-    "callsign_prefix": "CRC"
+    "callsign_prefix": "CRC",
+    "ad_voice": "polished",
+    "trade": "Creus Corporation banking and escrow for interstellar commerce."
   },
   {
     "id": "crown_and_anchor",
     "name": "Crown & Anchor",
-    "callsign_prefix": "CA"
+    "callsign_prefix": "CA",
+    "ad_voice": "polished",
+    "trade": "Crown & Anchor \u2014 insured freight and charter brokerage."
   },
   {
     "id": "cult_of_apex",
     "name": "Cult of Apex",
-    "callsign_prefix": "APEX"
+    "callsign_prefix": "APEX",
+    "ad_voice": "severe",
+    "trade": "Cult of Apex supplies ascension-grade components to initiates."
   },
   {
     "id": "dar_al_nour",
     "name": "Dar al-Nour Trust",
-    "callsign_prefix": "DAN"
+    "callsign_prefix": "DAN",
+    "ad_voice": "polished",
+    "trade": "Dar al-Nour Trust \u2014 sharia-compliant trade finance."
   },
   {
     "id": "deepspace",
     "name": "DeepSpace Cooperative",
-    "callsign_prefix": "DSC"
+    "callsign_prefix": "DSC",
+    "ad_voice": "blunt",
+    "trade": "DeepSpace Cooperative hauls for members who own the lanes."
   },
   {
     "id": "evergreen",
     "name": "Evergreen Group",
-    "callsign_prefix": "EG"
+    "callsign_prefix": "EG",
+    "ad_voice": "cheerful",
+    "trade": "Evergreen Group modules and spares with same-day habitat delivery."
   },
   {
     "id": "four_rivers_zaibatsu",
     "name": "Four Rivers Zaibatsu",
-    "callsign_prefix": "FRZ"
+    "callsign_prefix": "FRZ",
+    "ad_voice": "blunt",
+    "trade": "Four Rivers Zaibatsu industrial output for heavy industry."
   },
   {
     "id": "galactic_outcomes",
     "name": "Galactic Outcomes",
-    "callsign_prefix": "GO"
+    "callsign_prefix": "GO",
+    "ad_voice": "blunt",
+    "trade": "Galactic Outcomes \u2014 extraction and salvage, no apologies."
   },
   {
     "id": "general_industrial",
     "name": "General Industrial",
-    "callsign_prefix": "GI"
+    "callsign_prefix": "GI",
+    "ad_voice": "blunt",
+    "trade": "General Industrial: mass-produced modules that keep fleets flying."
   },
   {
     "id": "grc",
     "name": "GRC Inc",
-    "callsign_prefix": "GRC"
+    "callsign_prefix": "GRC",
+    "ad_voice": "polished",
+    "trade": "GRC Inc \u2014 corporate treasury and settlement rails."
   },
   {
     "id": "greenfields",
     "name": "Greenfields Corporation",
-    "callsign_prefix": "GC"
+    "callsign_prefix": "GC",
+    "ad_voice": "cheerful",
+    "trade": "Greenfields Corporation agri-tech and fresh provisions."
   },
   {
     "id": "guangzhou_mercantile",
     "name": "Guangzhou Mercantile",
-    "callsign_prefix": "GZ"
+    "callsign_prefix": "GZ",
+    "ad_voice": "blunt",
+    "trade": "Guangzhou Mercantile consolidates Pacific Rim freight."
   },
   {
     "id": "hanseatic_guild",
     "name": "The Hanseatic Guild",
-    "callsign_prefix": "HANS"
+    "callsign_prefix": "HANS",
+    "ad_voice": "polished",
+    "trade": "The Hanseatic Guild \u2014 mutual credit among trusted houses."
   },
   {
     "id": "himalaya_triad",
     "name": "Himalaya Triad",
-    "callsign_prefix": "HT"
+    "callsign_prefix": "HT",
+    "ad_voice": "severe",
+    "trade": "Himalaya Triad mining concessions and guarded convoys."
   },
   {
     "id": "holt_winters",
     "name": "Holt-Winters Corp",
-    "callsign_prefix": "HW"
+    "callsign_prefix": "HW",
+    "ad_voice": "polished",
+    "trade": "Holt-Winters Corp drives, hulls, and flight hardware."
   },
   {
     "id": "house_of_roth",
     "name": "House of Roth",
-    "callsign_prefix": "ROTH"
+    "callsign_prefix": "ROTH",
+    "ad_voice": "polished",
+    "trade": "House of Roth private banking for serious operators."
   },
   {
     "id": "karaquazen",
     "name": "Karaquazen Inc",
-    "callsign_prefix": "KRQ"
+    "callsign_prefix": "KRQ",
+    "ad_voice": "cheerful",
+    "trade": "Karaquazen Inc \u2014 cheerful service and dependable shipyard work."
   },
   {
     "id": "liveworlds",
     "name": "LiveWorlds",
-    "callsign_prefix": "LW"
+    "callsign_prefix": "LW",
+    "ad_voice": "cheerful",
+    "trade": "LiveWorlds entertainment and sim licences for long hauls."
   },
   {
     "id": "mercury_communications",
     "name": "Mercury Communications",
-    "callsign_prefix": "HG"
+    "callsign_prefix": "HG",
+    "ad_voice": "cheerful",
+    "trade": "Mercury Communications keeps your manifest on the wire."
   },
   {
     "id": "meridian",
     "name": "The Meridian Company",
-    "callsign_prefix": "TMC"
+    "callsign_prefix": "TMC",
+    "ad_voice": "polished",
+    "trade": "The Meridian Company precision instruments and nav suites."
   },
   {
     "id": "microdonald",
     "name": "MicroDonald Franchise",
-    "callsign_prefix": "MDF"
+    "callsign_prefix": "MDF",
+    "ad_voice": "cheerful",
+    "trade": "MicroDonald Franchise \u2014 familiar food, every habitat."
   },
   {
     "id": "monday",
     "name": "Monday Corporation",
-    "callsign_prefix": "MDC"
+    "callsign_prefix": "MDC",
+    "ad_voice": "cheerful",
+    "trade": "Monday Corporation productivity tools for busy crews."
   },
   {
     "id": "morrow_and_sons",
     "name": "Morrow & Sons",
-    "callsign_prefix": "MNS"
+    "callsign_prefix": "MNS",
+    "ad_voice": "polished",
+    "trade": "Morrow & Sons bespoke fittings for discerning captains."
   },
   {
     "id": "octagon",
     "name": "The Octagon",
-    "callsign_prefix": "OCT"
+    "callsign_prefix": "OCT",
+    "ad_voice": "polished",
+    "trade": "The Octagon \u2014 diversified holdings, single counterparty."
   },
   {
     "id": "oklahoma_combine",
     "name": "Oklahoma Combine",
-    "callsign_prefix": "OC"
+    "callsign_prefix": "OC",
+    "ad_voice": "blunt",
+    "trade": "Oklahoma Combine agri bulk and fuel derivatives."
   },
   {
     "id": "orion_aerospace",
     "name": "Orion Aerospace",
-    "callsign_prefix": "ORA"
+    "callsign_prefix": "ORA",
+    "ad_voice": "blunt",
+    "trade": "Orion Aerospace frames and thrusters built for workhorse fleets."
   },
   {
     "id": "orion_spur",
     "name": "Orion Spur Company",
-    "callsign_prefix": "OSC"
+    "callsign_prefix": "OSC",
+    "ad_voice": "cheerful",
+    "trade": "Orion Spur Company passenger services along the spur routes."
   },
   {
     "id": "pacific_triad",
     "name": "Pacific Triad",
-    "callsign_prefix": "PT"
+    "callsign_prefix": "PT",
+    "ad_voice": "blunt",
+    "trade": "Pacific Triad logistics across triad ports."
   },
   {
     "id": "pararamcovidia",
     "name": "ParaRamcoVidia",
-    "callsign_prefix": "PRV"
+    "callsign_prefix": "PRV",
+    "ad_voice": "cheerful",
+    "trade": "ParaRamcoVidia media bundles and shipboard infotainment."
   },
   {
     "id": "praetorium",
     "name": "The Praetorium",
-    "callsign_prefix": "PRAE"
+    "callsign_prefix": "PRAE",
+    "ad_voice": "severe",
+    "trade": "The Praetorium executive protection and risk mitigation."
   },
   {
     "id": "sakuraya_shinise",
     "name": "Sakuraya Shinise",
-    "callsign_prefix": "SS"
+    "callsign_prefix": "SS",
+    "ad_voice": "polished",
+    "trade": "Sakuraya Shinise refined components and ceremonial quality."
   },
   {
     "id": "seven_bells",
     "name": "Seven Bells Inc",
-    "callsign_prefix": "SBI"
+    "callsign_prefix": "SBI",
+    "ad_voice": "blunt",
+    "trade": "Seven Bells Inc salvage rights and recovery operations."
   },
   {
     "id": "snedecorp",
     "name": "SnedeCorp",
-    "callsign_prefix": "SNE"
+    "callsign_prefix": "SNE",
+    "ad_voice": "blunt",
+    "trade": "SnedeCorp industrial chemicals and process equipment."
   },
   {
     "id": "terra_nova",
     "name": "Terra Nova",
-    "callsign_prefix": "TNI"
+    "callsign_prefix": "TNI",
+    "ad_voice": "polished",
+    "trade": "Terra Nova settlement packages and colonial logistics."
   },
   {
     "id": "tukey",
     "name": "Tukey Enterprises",
-    "callsign_prefix": "TE"
+    "callsign_prefix": "TE",
+    "ad_voice": "blunt",
+    "trade": "Tukey Enterprises aftermarket parts at yard prices."
   },
   {
     "id": "universal_house",
     "name": "Universal House",
-    "callsign_prefix": "UNI"
+    "callsign_prefix": "UNI",
+    "ad_voice": "cheerful",
+    "trade": "Universal House retail and ship chandlery under one roof."
   }
 ]

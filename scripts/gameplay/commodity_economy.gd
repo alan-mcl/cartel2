@@ -8,7 +8,7 @@ const MAX_PRICE_RATIO := 2.2
 const NOISE_SPAN := 0.08
 const SELL_SPREAD := 0.97
 
-## Eleven settled worlds from docs/setting/planets.md — each produces at least 1 of every commodity.
+## Eleven settled worlds from docs/setting/planets.md - each produces at least 1 of every commodity.
 const SETTLED_WORLD_SECTOR_IDS: Array[String] = [
 	"proxima",
 	"tycho",
@@ -125,12 +125,12 @@ static func sell_price(buy_price: int) -> int:
 	return maxi(1, int(round(float(buy_price) * SELL_SPREAD)))
 
 
-## Test seam — documented in docs/design/commodity_economy.md.
+## Test seam - documented in docs/design/commodity_economy.md.
 static func price_ratio_for_test(demand: float, supply: float) -> float:
 	return _price_ratio(demand, supply)
 
 
-## Test seam — sign rule on precomputed effective flows.
+## Test seam - sign rule on precomputed effective flows.
 static func chosen_ratio_for_test(local_net: float, supply_eff: float, demand_eff: float) -> float:
 	var graph_ratio: float = _price_ratio(demand_eff, supply_eff)
 	var local_supply: float = maxf(local_net, 0.0)
@@ -143,7 +143,7 @@ static func chosen_ratio_for_test(local_net: float, supply_eff: float, demand_ef
 	return graph_ratio
 
 
-## Test seam — effective flows, reach, and ratios for one sector/commodity (no noise or tier).
+## Test seam - effective flows, reach, and ratios for one sector/commodity (no noise or tier).
 static func quote_analysis(
 	catalog: Catalog,
 	sector_id: String,

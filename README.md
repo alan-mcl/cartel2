@@ -4,7 +4,7 @@
 
 **Cartel** is a 2D near-orbit spaceship game for [Godot 4.7+](https://godotengine.org/) (GL Compatibility). Fly with inertia, dock at habitats, trade commodities, outfit ships at the yard, and jump between sectors through Unspace gates.
 
-**Status:** early development — in-game version **DEV**. Gameplay and content are incomplete; see [Project status](#project-status) below.
+**Status:** early development - in-game version **DEV**. Gameplay and content are incomplete; see [Project status](#project-status) below.
 
 ## Features
 
@@ -18,7 +18,7 @@
 ## Requirements
 
 - Godot **4.7.2** or newer (4.7 feature tag, GL Compatibility renderer)
-- **Python 3** — optional; used by art/catalog tooling under `scripts/tools/`
+- **Python 3** - optional; used by art/catalog tooling under `scripts/tools/`
 
 Set `GODOT` to your Godot binary if it is not on `PATH`. The CI script defaults to `$HOME/opt/Godot_v4.7.2-stable_linux.x86_64` when `GODOT` is unset.
 
@@ -78,7 +78,7 @@ python3 scripts/tools/generate_placeholder_art.py
 $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 ```
 
-**Dev sandboxes** — open a scene under `scenes/dev/` in the editor and press **F6**, or run one directly, for example:
+**Dev sandboxes** - open a scene under `scenes/dev/` in the editor and press **F6**, or run one directly, for example:
 
 ```bash
 $GODOT --path . --scene res://scenes/dev/theme_showcase.tscn
@@ -90,9 +90,9 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 
 ## Documentation
 
-- [docs/README.md](docs/README.md) — index
-- **Design** — [architecture](docs/design/architecture.md), [data model](docs/design/data_model.md), [UI theme](docs/design/ui_theme.md)
-- **Setting** — [overview](docs/setting/overview.md) and [setting index](docs/setting/README.md)
+- [docs/README.md](docs/README.md) - index
+- **Design** - [architecture](docs/design/architecture.md), [data model](docs/design/data_model.md), [UI theme](docs/design/ui_theme.md)
+- **Setting** - [overview](docs/setting/overview.md) and [setting index](docs/setting/README.md)
 
 Setting docs are the lore target; catalogs implement the current playable subset.
 

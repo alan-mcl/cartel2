@@ -26,9 +26,9 @@ Provide deterministic **daily buy quotes** for every catalog commodity at every 
 
 Each commodity has at least:
 
-- `id` — snake_case key used in economies and quotes
-- `base_price` — integer par value in credits before ratio, noise, and tier
-- `mass` — used for cargo, not for pricing
+- `id` - snake_case key used in economies and quotes
+- `base_price` - integer par value in credits before ratio, noise, and tier
+- `mass` - used for cargo, not for pricing
 
 All commodities listed in the catalog receive a quote at every sector every day.
 
@@ -147,8 +147,8 @@ For sector \(s\):
 
 | Local net | Chosen ratio |
 |-----------|--------------|
-| \(\text{net}_{s,c} > 0\) (surplus) | \(\min(\text{ratio}^{\text{graph}}_s, \text{ratio}^{\text{local}}_s)\) — exporter stays at or below par |
-| \(\text{net}_{s,c} < 0\) (deficit) | \(\max(\text{ratio}^{\text{graph}}_s, \text{ratio}^{\text{local}}_s)\) — importer stays at or above par |
+| \(\text{net}_{s,c} > 0\) (surplus) | \(\min(\text{ratio}^{\text{graph}}_s, \text{ratio}^{\text{local}}_s)\) - exporter stays at or below par |
+| \(\text{net}_{s,c} < 0\) (deficit) | \(\max(\text{ratio}^{\text{graph}}_s, \text{ratio}^{\text{local}}_s)\) - importer stays at or above par |
 | \(\text{net}_{s,c} = 0\) | \(\text{ratio}^{\text{graph}}_s\) only |
 
 Example intent: Proxima’s mineral deficit must not bid Centauri A Beltworks (mineral surplus) above par when friction is low.
@@ -248,11 +248,11 @@ Run economy tests only: `GODOT=… godot --headless --path . --script res://test
 - Sell spread never above buy
 - Route friction delta changes quotes
 - **Beltworks export:** on a fixed GST day, `centauri_a_beltworks` **minerals** and **water_ice** buy prices are below `base_price` and below `proxima` for the same commodities
-- **Local ratio saturation** — clamp thresholds via `price_ratio_for_test`
-- **Graph influence** — synthetic three-sector fixture via `quote_analysis`
-- **Network friction** — reach and supply_eff change under `route_friction_delta`; alternate-path reach
-- **Route disconnection** — pending (edge removal not implemented)
-- **Market usability** — multi-day route margin report (printed), positive spreads on representative routes (validates fixed flows + sign rule)
+- **Local ratio saturation** - clamp thresholds via `price_ratio_for_test`
+- **Graph influence** - synthetic three-sector fixture via `quote_analysis`
+- **Network friction** - reach and supply_eff change under `route_friction_delta`; alternate-path reach
+- **Route disconnection** - pending (edge removal not implemented)
+- **Market usability** - multi-day route margin report (printed), positive spreads on representative routes (validates fixed flows + sign rule)
 
 ## Related future work
 

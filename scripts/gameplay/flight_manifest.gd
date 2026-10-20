@@ -239,7 +239,7 @@ static func deadline_text(session: GameSession, entry: Dictionary) -> String:
 
 static func _habitat_name(catalog: Catalog, habitat_id: String) -> String:
 	if habitat_id.is_empty():
-		return "—"
+		return "-"
 	var habitat := catalog.get_habitat(habitat_id)
 	if habitat.is_empty():
 		return habitat_id

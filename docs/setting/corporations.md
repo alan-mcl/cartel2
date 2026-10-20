@@ -1,6 +1,6 @@
 # Corporations
 
-Every megacorporation listed below operates on every settled world to some degree — subsidiaries, contractors, retail, finance, or logistics — but **local strength** differs by planet. In-system corporate traffic and future mission hooks follow that mix; the numeric shares live in catalog data (`corporate_presence.json`), not in this document.
+Every megacorporation listed below operates on every settled world to some degree - subsidiaries, contractors, retail, finance, or logistics - but **local strength** differs by planet. In-system corporate traffic and future mission hooks follow that mix; the numeric shares live in catalog data (`corporate_presence.json`), not in this document.
 
 ## Galactic Outcomes(GO)
 

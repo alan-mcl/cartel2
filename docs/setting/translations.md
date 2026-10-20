@@ -44,7 +44,7 @@ The player picks one translation. Initiation is through the gate in the current 
 
 ## Accuracy vs stability
 
-**Accuracy** is the nav computer’s confidence in the chosen solution before the jump. It depends on equipment rating, translation ease, and N-space depth—not on current compute load.
+**Accuracy** is the nav computer’s confidence in the chosen solution before the jump. It depends on equipment rating, translation ease, and N-space depth-not on current compute load.
 
 **Stability** is rolled when the jump is confirmed. It reflects accuracy, N-space depth, available compute headroom, compute integrity, and a small random spread. Stability is shown in flight on the **Fields** HUD panel (`Stability: N%`) and is cleared on emergence; it is not a permanent ship stat.
 

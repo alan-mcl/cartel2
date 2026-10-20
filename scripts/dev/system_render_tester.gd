@@ -142,7 +142,7 @@ func _populate_sector_options() -> void:
 		var star_label := str(sector.get("star", ""))
 		if star_label.is_empty():
 			star_label = str(sector.get("star_system", ""))
-		var label := display_name if star_label.is_empty() else "%s — %s" % [display_name, star_label]
+		var label := display_name if star_label.is_empty() else "%s - %s" % [display_name, star_label]
 		entries.append({"id": sector_id, "label": label})
 
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

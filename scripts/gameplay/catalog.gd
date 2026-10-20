@@ -27,6 +27,7 @@ const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
+const CORPORATE_OFFICE_TICKER_PATH := "res://data/catalog/corporate_office_ticker.json"
 const STARS_PATH := "res://data/catalog/stars.json"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
@@ -59,6 +60,7 @@ var bounty_missions_config: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
+var corporate_office_ticker_config: Dictionary = {}
 var stars_by_name: Dictionary = {}
 ## Directed translation records keyed by "source_sector:solution".
 var translations_by_key: Dictionary = {}
@@ -100,6 +102,7 @@ func load_all() -> void:
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
+	corporate_office_ticker_config = _load_json_object(CORPORATE_OFFICE_TICKER_PATH)
 	stars_by_name = _load_json_object(STARS_PATH)
 
 
@@ -330,6 +333,10 @@ func list_corporations() -> Array:
 		return str(left.get("name", "")) < str(right.get("name", ""))
 	)
 	return corps
+
+
+func get_corporate_office_ticker_config() -> Dictionary:
+	return corporate_office_ticker_config
 
 
 func get_message_emitter(id: String) -> Dictionary:

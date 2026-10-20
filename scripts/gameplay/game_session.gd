@@ -309,7 +309,7 @@ func start_new_game(
 
 
 ## Player identity section of a save. Kept in the same file as `from_save`, which reads it back,
-## so the two cannot drift — losing `background_id` on every round-trip was the result of the
+## so the two cannot drift - losing `background_id` on every round-trip was the result of the
 ## writer living in `SaveStore` while the reader lived here.
 func player_to_dict() -> Dictionary:
 	return player.player_to_dict()

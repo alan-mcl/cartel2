@@ -1,0 +1,155 @@
+{
+  "voices": {
+    "polished": {
+      "sku": [
+        "{product} - specifications you can audit.",
+        "Ask about {product}; {brand} quality is standard issue.",
+        "Our line includes {product} for operators who read the fine print.",
+        "{product}. Engineered for the demands of professional operations.",
+        "When performance matters, specify {product}.",
+        "{product} - dependable performance, documented from manufacture to deployment.",
+        "Choose {product} when your operation cannot afford uncertainty.",
+        "{brand} presents {product}: considered engineering for serious operators.",
+        "The right equipment begins with {product}.",
+        "{product} - manufactured to specification, supplied with confidence.",
+        "For crews who know the difference: {product} from {brand}.",
+        "{product}. No compromises hidden in the small print."
+      ],
+      "job": [
+        "Contract posted: {title}, destination {destination}.",
+        "Field work available - {title} toward {destination}.",
+        "Experienced operators invited to tender for {title} at {destination}.",
+        "{title} - a straightforward contract for qualified operators bound for {destination}.",
+        "Professional opportunity: {title}, with operations at {destination}.",
+        "Contract available for {title}. Full particulars available for passage to {destination}.",
+        "{brand} is seeking capable operators for {title} at {destination}.",
+        "Put your ship to work: {title}, destination {destination}."
+      ],
+      "recruitment": [
+        "Independent operators are welcome to enquire at this desk.",
+        "We retain experienced crews on flexible terms.",
+        "Qualified independents are invited to discuss contract opportunities.",
+        "Your ship. Your schedule. A professional relationship with {brand}.",
+        "We work with operators who value clear terms and reliable payment.",
+        "Experienced crews are invited to join our independent contractor network.",
+        "Flexible contracts for pilots who prefer to remain independent.",
+        "If you have the experience, we have the work."
+      ]
+    },
+    "blunt": {
+      "sku": [
+        "{product}. Built to take a beating.",
+        "Need {product}? We sell what works, not brochures.",
+        "{brand} {product} - fit it and fly.",
+        "{product}. It works. That's the point.",
+        "Buy {product}. Stop replacing things that should have lasted.",
+        "{product} - no polish, no nonsense, no excuses.",
+        "Your ship needs {product}. Put one on it.",
+        "{brand} makes {product} for people who actually use their ships.",
+        "{product}. Tested by operators, not executives.",
+        "Cheap equipment gets expensive when it fails three jumps from home. Buy {product}.",
+        "We could tell you how advanced {product} is. You'd rather see it work.",
+        "{product} - because 'good enough' isn't a repair strategy."
+      ],
+      "job": [
+        "{title} at {destination}. Pay on completion.",
+        "Job board: {title}, {destination}. No tourists.",
+        "{title}. {destination}. You know the drill.",
+        "Got a ship and a spine? {title} at {destination}.",
+        "Work available: {title}, bound for {destination}. Don't waste our time.",
+        "{title} to {destination}. Terms are posted. Read them.",
+        "We need an operator for {title} at {destination}. Qualified means qualified.",
+        "{destination} needs a ship. {title} is the job.",
+        "Empty ship? Take the {title} contract to {destination}.",
+        "If you can do {title}, there's money waiting at {destination}."
+      ],
+      "recruitment": [
+        "Crew wanted. Show up qualified.",
+        "Contractors: read the terms, then sign.",
+        "Got experience? We have work. Got excuses? Try somewhere else.",
+        "Independent operators wanted. Bring your own ship and know how to use it.",
+        "We don't need enthusiasm. We need competent crews.",
+        "Good pilots get paid. Bad pilots get replaced.",
+        "Your ship is yours. The contract is ours. Keep it simple.",
+        "Qualified operators wanted. No hand-holding provided.",
+        "If you can do the job, come talk to us."
+      ]
+    },
+    "cheerful": {
+      "sku": [
+        "Try {product} - customers love the {brand} fit!",
+        "{product} is on the shelf today. Ask us!",
+        "Fresh stock: {product} for your next hop.",
+        "Make your next run better with {product}!",
+        "Good ships deserve good equipment. Try {product} from {brand}.",
+        "New shipment in: {product}! Come take a look.",
+        "Ready for your next adventure? Start with {product}!",
+        "{product} is here, and your ship is going to love it!",
+        "Fly farther, work smarter, enjoy the journey with {product}.",
+        "Another successful delivery of {product} - thanks for flying with {brand}!",
+        "Ask our friendly staff about {product} and see what the fuss is about.",
+        "{brand} {product}: a little upgrade that makes a big difference."
+      ],
+      "job": [
+        "Exciting work: {title} heading to {destination}!",
+        "Today's posting - {title}, {destination}. Grab it!",
+        "Looking for your next run? {title} is waiting at {destination}!",
+        "Adventure calls! Take {title} to {destination}.",
+        "Got some room in the schedule? There's {title} waiting for you at {destination}!",
+        "Next stop: {destination}! Contract available for {title}.",
+        "Put your ship to work with a new {title} contract at {destination}!",
+        "Ready for a new destination? {title} is now available for {destination}.",
+        "There's always another opportunity out there - today's is {title} at {destination}!"
+      ],
+      "recruitment": [
+        "Join our network - independents make great partners!",
+        "We're hiring friendly crews for short contracts.",
+        "Love flying independently? We'd love to work with you!",
+        "Bring your ship, your skills and your sense of adventure!",
+        "We're always happy to meet experienced independent operators.",
+        "Good crews make good business. Come join the {brand} network!",
+        "Looking for flexible work? Our independent contracts could be just the ticket.",
+        "Fly your way, work with us!",
+        "New opportunities are opening for independent pilots and crews."
+      ]
+    },
+    "severe": {
+      "sku": [
+        "{product}. Non-optional for compliant operations.",
+        "Catalogue item {product} - {brand} where mandated.",
+        "Procure {product} before your next inspection.",
+        "{product}. Approved specification. Approved application.",
+        "Failure to maintain {product} standards may result in operational restrictions.",
+        "{product} is required equipment for designated operations.",
+        "Operators are advised to verify {product} compliance before departure.",
+        "{brand} {product}. Install correctly. Maintain correctly. Operate correctly.",
+        "Do not substitute unapproved equipment for {product}.",
+        "{product} - compliance begins before launch.",
+        "Inspection deficiencies involving {product} will be recorded.",
+        "Ensure your vessel is equipped with approved {product} before commencing operations."
+      ],
+      "job": [
+        "Mandatory posting: {title}, {destination}.",
+        "Assigned contract: {title} - {destination}.",
+        "Qualified operators are required for {title} at {destination}.",
+        "Contract notice: {title}. Destination: {destination}.",
+        "Operators meeting published requirements may apply for {title} at {destination}.",
+        "{title} to {destination}. Eligibility requirements apply.",
+        "Authorised operators are required for work at {destination}. Contract: {title}.",
+        "Failure to complete assigned {title} obligations may affect future eligibility.",
+        "Operational requirement: {title}, {destination}. Review all terms before acceptance."
+      ],
+      "recruitment": [
+        "Personnel must meet published standards.",
+        "Operators: compliance training required before engagement.",
+        "Only qualified personnel will be considered.",
+        "Independent operators remain subject to all applicable operational standards.",
+        "Credentials will be verified before contract approval.",
+        "Do not apply unless you meet the stated requirements.",
+        "All contracted crews are subject to inspection and compliance procedures.",
+        "Operators are responsible for maintaining current certification.",
+        "Contract access is conditional upon satisfactory compliance records."
+      ]
+    }
+  }
+}

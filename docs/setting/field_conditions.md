@@ -8,6 +8,6 @@ Ships with a sensor module and the **`local_sensor`** capability show all four s
 
 **Gravitic drives** scale forward/reverse thrust by local gravity relative to the habitat ring in-sector (clamped 0–1.5×). Near the planet is strongest; deep orbit is weak. In unspace the ambient G is tiny but fluctuating, so gravitic thrust is a small fraction of catalog rating.
 
-**Integrated sail drives** scale thrust by a weighted mix of **radiant**, **charged particle**, and **magnetic** indices (50% / 30% / 20%), normalized so a typical habitat ring reads about 1.0× catalog thrust (cap 1.6×). They consume **no propulsion fuel** — only ship power while thrusting. Bright, windy sectors reward sails; unspace gives weak but non-zero drive. Worlds without a magnetic dipole still sail on stellar flux and particle wind.
+**Integrated sail drives** scale thrust by a weighted mix of **radiant**, **charged particle**, and **magnetic** indices (50% / 30% / 20%), normalized so a typical habitat ring reads about 1.0× catalog thrust (cap 1.6×). They consume **no propulsion fuel** - only ship power while thrusting. Bright, windy sectors reward sails; unspace gives weak but non-zero drive. Worlds without a magnetic dipole still sail on stellar flux and particle wind.
 
 All other engine types use full catalog thrust regardless of local fields (subject to power and fuel as usual).

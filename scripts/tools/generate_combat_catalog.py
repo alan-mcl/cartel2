@@ -832,7 +832,7 @@ def patch_ammunition() -> None:
 
 if __name__ == "__main__":
     print(
-        "generate_combat_catalog.py is retired — combat modules are hand-authored. "
+        "generate_combat_catalog.py is retired - combat modules are hand-authored. "
         "Use scripts/tools/rewrite_combat_catalog.py for bulk updates.",
         file=sys.stderr,
     )

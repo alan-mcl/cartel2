@@ -18,7 +18,7 @@ RECORDS_DIR = ROOT / "scripts" / "gameplay" / "catalog_records"
 VALIDATOR_PATH = ROOT / "scripts" / "tools" / "validate_catalog_schema.py"
 DOCS_PATH = ROOT / "docs" / "design" / "catalog_schema.md"
 
-GENERATED_HEADER = "## Generated — do not edit. Run scripts/tools/generate_catalog_records.py.\n"
+GENERATED_HEADER = "## Generated - do not edit. Run scripts/tools/generate_catalog_records.py.\n"
 
 SHARED_DEF_CLASS_NAMES = {
     "signature": "CatalogSignature",
@@ -417,7 +417,7 @@ def record_filename(class_name: str) -> str:
 def emit_validator_entrypoints(class_specs: list[ClassSpec]) -> str:
     lines = [
         "#!/usr/bin/env python3",
-        '"""Validate catalog JSON against schema rules. Generated — do not edit."""',
+        '"""Validate catalog JSON against schema rules. Generated - do not edit."""',
         "",
         "from __future__ import annotations",
         "",

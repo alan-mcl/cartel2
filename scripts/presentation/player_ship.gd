@@ -324,7 +324,7 @@ func _wants_to_fire() -> bool:
 		return false
 	if session == null or session.docked or get_tree().paused:
 		return false
-	# LMB is bound to fire; over a weapon chit it selects — block mouse-only fire, not Space.
+	# LMB is bound to fire; over a weapon chit it selects - block mouse-only fire, not Space.
 	if _pointer_over_weapon_chit():
 		var lmb := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 		var space := Input.is_physical_key_pressed(KEY_SPACE)

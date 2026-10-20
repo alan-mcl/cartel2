@@ -56,7 +56,7 @@ func update_lock(ship_pos: Vector2, contact: Dictionary) -> void:
 			"affiliation": str(contact.get("affiliation", "")),
 		}
 		var lines := TransponderBroadcastScript.format_lines(broadcast)
-		_line1.text = lines[0] if lines.size() > 0 else "—"
+		_line1.text = lines[0] if lines.size() > 0 else "-"
 		_line2.text = lines[1] if lines.size() > 1 else ""
 	else:
 		_line1.text = _display_name(contact)
@@ -78,7 +78,7 @@ func _display_name(contact: Dictionary) -> String:
 		"debris":
 			return "Debris"
 		_:
-			return "—"
+			return "-"
 
 
 func _kind_label(contact_kind: String) -> String:

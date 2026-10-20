@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate catalog JSON against schema rules. Generated — do not edit."""
+"""Validate catalog JSON against schema rules. Generated - do not edit."""
 
 from __future__ import annotations
 

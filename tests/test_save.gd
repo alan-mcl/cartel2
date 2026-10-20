@@ -192,7 +192,7 @@ static func _test_reputation_starts_and_save(runner: TestRunner, catalog: Catalo
 
 
 ## The version gate reports rejections with `push_error`, so a passing run of this suite prints
-## `ERROR: Unsupported save version: 999` to stderr. That line is expected output, not a failure —
+## `ERROR: Unsupported save version: 999` to stderr. That line is expected output, not a failure -
 ## `check.sh` only treats `SCRIPT ERROR`, `Parse Error`, and `Failed to load script` as fatal.
 static func _test_validation(runner: TestRunner) -> void:
 	runner.check(not SaveStore.validate_save_data({}), "save: empty data rejected")

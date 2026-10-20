@@ -1,4 +1,4 @@
-## Generated — do not edit. Run scripts/tools/generate_catalog_records.py.
+## Generated - do not edit. Run scripts/tools/generate_catalog_records.py.
 
 class_name ShipDef
 extends RefCounted

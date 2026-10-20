@@ -1,13 +1,13 @@
 # Equipment and components
 
-**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot catalog ships curated branded combat lines (Helios lasers, River mass drivers, Ionique plasma, Brutus scatter, Bellatrix rockets and guided missiles, SnedOS cyber suites, matching shields, point defence, and cyber defence) alongside propulsion, sensors, and support modules. **Combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Guided missiles home on a held target lock when one is available; scatter weapons fire pellet fans; unguided rockets fly straight. Catalog module ids use branded SKU names — alpha saves do not remap retired ids.
+**Status:** Full component taxonomy is **setting intent** from original design spreadsheet and notes. The Godot catalog ships curated branded combat lines (Helios lasers, River mass drivers, Ionique plasma, Brutus scatter, Bellatrix rockets and guided missiles, SnedOS cyber suites, matching shields, point defence, and cyber defence) alongside propulsion, sensors, and support modules. **Combat** resolves typed damage packets through point defence, shields, and armour into Hits / Power / Compute degradation. Guided missiles home on a held target lock when one is available; scatter weapons fire pellet fans; unguided rockets fly straight. Catalog module ids use branded SKU names - alpha saves do not remap retired ids.
 
 ## Design layers
 
 | Layer | Authority | Notes |
 |-------|-----------|-------|
 | **Full component model** | Original design spreadsheet | Stats for chassis, engines, weapons, shields, armour, LSS, hyperdrives, ammo |
-| **Ship families** | Ships design doc | Lore and intended loadouts — see [ships.md](ships.md) |
+| **Ship families** | Ships design doc | Lore and intended loadouts - see [ships.md](ships.md) |
 | **Prototype catalog** | `data/catalog/*.json` | Chassis, unified modules, ammunition types, ship templates |
 
 Rebuild should treat the spreadsheet as **target balance**; JSON as **current instance data**.
@@ -36,7 +36,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 | Mass limit | Maximum configured ship mass |
 | Volume | Internal volume envelope |
 | Hits | Structural integrity |
-| Maneuver | low / medium / high — affects rotation and damping |
+| Maneuver | low / medium / high - affects rotation and damping |
 | Mounts | Available hardpoints by category |
 
 ### In prototype JSON
@@ -86,12 +86,12 @@ Seven `engine_type` values are in the catalog. All share the same fitting rules;
 
 | Type | Role | Typical profile |
 |------|------|-----------------|
-| **Chemical** | High thrust, poor fuel efficiency, low power draw. Cheap and mature — dock tugs, budget scouts, emergency burn. | High thrust, moderate speed, strong boost, thirsty fuel |
+| **Chemical** | High thrust, poor fuel efficiency, low power draw. Cheap and mature - dock tugs, budget scouts, emergency burn. | High thrust, moderate speed, strong boost, thirsty fuel |
 | **Hydro-thermal** | Heats hydrogen and expels exhaust. Better fuel than chemical while retaining substantial thrust; **hungry for ship power**. Mature everyday engine. | Balanced thrust/speed, moderate fuel, high `power_demand` |
 | **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
 | **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
 | **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme; **antimatter** fuel is expensive at the yard and scarce in the small engine bunker. | Top thrust/speed/boost, tiny fuel burn |
-| **Gravitic** | Couples to local **gravity** — strongest near the planet and habitat ring, weak in deep orbit and unspace. Five SKUs (Sundancer, Bellatrix, Ionique, Fable). High gravitational signature. | High catalog thrust, field-scaled effective thrust |
+| **Gravitic** | Couples to local **gravity** - strongest near the planet and habitat ring, weak in deep orbit and unspace. Five SKUs (Sundancer, Bellatrix, Ionique, Fable). High gravitational signature. | High catalog thrust, field-scaled effective thrust |
 | **Integrated sail** | Couples to **radiant**, **particle**, and **magnetic** fields. **Zero fuel**; power from the plant only. Low catalog thrust, modest cruise speed. Six SKUs (Daybreak, Lumen, Rhumb, Washi, Ionique, Sideline). | Very low thrust, quiet thermal signature |
 
 Propulsion marques are **distinct from** power/compute/life-support brands (e.g. Sundancer for HW engines vs Helios for plants and LSS).
@@ -121,7 +121,7 @@ Shipboard reactors mount on the chassis `power` hardpoint. One plant is typical;
 | Weight | `mass` | Ship mass |
 | Envelope | `volume` | Fitting limit |
 | Fuel burn | `fuel_consumption` | Plant fuel use in flight |
-| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 | Type | `plant_type` | Technology class (see below) |
 
@@ -135,9 +135,9 @@ Three types are in the catalog today. All share the same fitting and operating r
 |------|------|----------------|------|
 | **Fission** | Mature, compact, reliable. Default for older, cheaper, smaller, and frontier ships. | 16–72 MW | Moderate |
 | **Fusion** | Newer, advanced. Higher output and better fuel burn at a premium. Sporty and refitted hulls. | 28–54 MW | Lower |
-| **Radioisotope** | Decay heat; always on, no refuelling. Low power — life support, beacon, sensors only on light hulls. | 6–12 MW | Zero |
+| **Radioisotope** | Decay heat; always on, no refuelling. Low power - life support, beacon, sensors only on light hulls. | 6–12 MW | Zero |
 
-Reserved for later (no SKUs yet): **solar**, **chemical** — may ignore ship fuel or gate on environment.
+Reserved for later (no SKUs yet): **solar**, **chemical** - may ignore ship fuel or gate on environment.
 
 #### In prototype JSON
 
@@ -164,13 +164,13 @@ Shipboard compute cores mount on the chassis `system` hardpoint. One core is typ
 | Weight | `mass` | Ship mass |
 | Envelope | `volume` | Fitting limit |
 | Power | `power_demand` | Operating budget (MW) |
-| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 | Type | `core_type` | Technology class (see below) |
 
 Manufacturer tiers for compute cores are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
-**Role:** cores **only supply compute (CU)** in the prototype. Targeting, fire-control, extra HUD features, and similar functions will be **separate system modules** that consume CU and grant capabilities. Every core still carries `basic_hud` so undocked ships show flight instruments — a temporary gate, not a product role.
+**Role:** cores **only supply compute (CU)** in the prototype. Targeting, fire-control, extra HUD features, and similar functions will be **separate system modules** that consume CU and grant capabilities. Every core still carries `basic_hud` so undocked ships show flight instruments - a temporary gate, not a product role.
 
 #### Core types
 
@@ -179,8 +179,8 @@ Three types are in the catalog today. All share the same fitting and operating r
 | Type | Role | Typical CU | Notes |
 |------|------|------------|-------|
 | **Silicon** | Conventional semiconductor computing. Cheap, mature, robust, ubiquitous. | 8–28 | Default for older, cheaper, and frontier ships. Best CU per credit. |
-| **Photon** | Photonic computing — light for computation and data movement. Excellent bandwidth for parallel workloads. | 22–48 | Attractive for sensor-heavy, communications, and sporty hulls. Best CU per tonne and watt. |
-| **Quantum** | Quantum computing — specialised, not simply faster. Useful for particular mathematical, optimisation, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimisation, simulation) in addition to CU. |
+| **Photon** | Photonic computing - light for computation and data movement. Excellent bandwidth for parallel workloads. | 22–48 | Attractive for sensor-heavy, communications, and sporty hulls. Best CU per tonne and watt. |
+| **Quantum** | Quantum computing - specialised, not simply faster. Useful for particular mathematical, optimisation, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimisation, simulation) in addition to CU. |
 
 #### In prototype JSON
 
@@ -195,7 +195,7 @@ Forty-one branded SKUs across sixteen manufacturers (~27 silicon, ~9 photon, 5 q
 
 Ship templates: workhorses and budget hulls carry silicon; sporty and late refits carry photon. No template defaults to a quantum core.
 
-SnedeCorp is the galactic software monopoly in lore, but still sells **sealed, attested hardware** — the box SnedOS runs on. ParaRamcoVidia is the glossy semiconductor house.
+SnedeCorp is the galactic software monopoly in lore, but still sells **sealed, attested hardware** - the box SnedOS runs on. ParaRamcoVidia is the glossy semiconductor house.
 
 The POC `nav_combat_core_mk1`, `nav_combat_core_mk2`, and `targeting_core_mk2` placeholders are retired. Targeting will return as a CU-consuming system module, not a core.
 
@@ -210,7 +210,7 @@ Every module carries a four-channel **`signature`** block in catalog JSON:
 | `electromagnetic` | Powered electronics and emissions |
 | `computational` | Detectable compute activity |
 
-A fitted ship's **fitted potential** is the **sum** of installed module contributions, plus a small hull-mass grav floor from the chassis. There is no separate stealth stat — fitting quieter gear (e.g. quantum cores with low computational signature) or avoiding loud engines (gravitic drives spike gravitational signature; hydro-thermal engines spike thermal) is how ships stay harder to detect.
+A fitted ship's **fitted potential** is the **sum** of installed module contributions, plus a small hull-mass grav floor from the chassis. There is no separate stealth stat - fitting quieter gear (e.g. quantum cores with low computational signature) or avoiding loud engines (gravitic drives spike gravitational signature; hydro-thermal engines spike thermal) is how ships stay harder to detect.
 
 In flight, the **live signature** applies each module only while that system is in use (with a ~1.5 s afterglow for propulsion and weapons). Power-plant emissions scale with load (minimum idle waste heat). The computational channel scales with compute demand vs capacity. Gravitational hull mass and passive modules (armour, life support) stay on.
 
@@ -218,7 +218,7 @@ The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engine
 
 ### Sensor (`category: sensor`, mount: `system`)
 
-Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units. Catalog JSON is **product-level** (maker, brand, name, stats) — bundled instruments are described in product copy, not as a `detectors[]` array.
+Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units. Catalog JSON is **product-level** (maker, brand, name, stats) - bundled instruments are described in product copy, not as a `detectors[]` array.
 
 Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Sensors & Navigation column). Sensor marques are distinct from propulsion, power, and compute brands (e.g. **Hermes** for Mercury nav packages vs **Helios** for Holt-Winters plants).
 
@@ -235,7 +235,7 @@ Products combine passive and active instruments in marketing copy. The schema st
 | Gravitational | Gravimetric Wave Detector | Gravitational Interferometer |
 | Computational | Calculus Wave Detector | Local Geometry Scanner |
 
-**Exotic multi-signature (lore)** — Spectral Resonance Array (thermal+EM); Quantum Intelligence Array (grav+comp); Quantum-state interferometer (grav+comp); Neutrino Receptor (grav+EM); Causal Structure Sniffer (comp+EM); Tidal-field imager (grav+thermal). Two exotics appear as named products this pass; no extra signature channels.
+**Exotic multi-signature (lore)** - Spectral Resonance Array (thermal+EM); Quantum Intelligence Array (grav+comp); Quantum-state interferometer (grav+comp); Neutrino Receptor (grav+EM); Causal Structure Sniffer (comp+EM); Tidal-field imager (grav+thermal). Two exotics appear as named products this pass; no extra signature channels.
 
 **Active vs passive:** active instruments ping when **Active sensors** is on (`R` in flight) and add to the ship's live signature. Passive listen-only instruments do not. Mixed packages use full **`sensor_sensitivity`** with active on and **`sensor_sensitivity_passive`** (or no active channels) with active off.
 
@@ -243,17 +243,17 @@ Products combine passive and active instruments in marketing copy. The schema st
 
 | id | Maker | Brand | Active | Notes |
 |----|-------|-------|--------|-------|
-| `hg_hermes_n6` | Mercury Communications | Hermes | yes | N6 — IR + EM array + radar; nav caps; ~6500 m |
-| `hg_hermes_circinus` | Mercury Communications | Hermes | yes | Circinus — N6 + gravimetric wave detector; ~8000 m |
-| `hg_hermes_sideband` | Mercury Communications | Hermes | no | Sideband — EM array listen-only |
-| `ora_octant_12` | Orion Aerospace | Octant | yes | Octant 12 — IR + radar + thermal lidar; nav caps |
-| `ora_octant_plumb` | Orion Aerospace | Octant | yes | Plumb — gravitational interferometer (active-only) |
-| `hw_glimmer_glance` | Holt-Winters Corp | Glimmer | yes | Glance — IR + radar; nav caps; light |
-| `hw_glimmer_ember` | Holt-Winters Corp | Glimmer | no | Ember — infrared receiver only |
-| `prv_lumina_sight` | ParaRamcoVidia | Lumina | no | Sight — IR + EM + spectral resonance; nav caps |
-| `prv_lumina_wellhead` | ParaRamcoVidia | Lumina | no | Wellhead — neutrino receptor (strong grav+EM) |
-| `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen — calculus wave detector (comp) |
-| `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus — local geometry scanner (comp, active-only) |
+| `hg_hermes_n6` | Mercury Communications | Hermes | yes | N6 - IR + EM array + radar; nav caps; ~6500 m |
+| `hg_hermes_circinus` | Mercury Communications | Hermes | yes | Circinus - N6 + gravimetric wave detector; ~8000 m |
+| `hg_hermes_sideband` | Mercury Communications | Hermes | no | Sideband - EM array listen-only |
+| `ora_octant_12` | Orion Aerospace | Octant | yes | Octant 12 - IR + radar + thermal lidar; nav caps |
+| `ora_octant_plumb` | Orion Aerospace | Octant | yes | Plumb - gravitational interferometer (active-only) |
+| `hw_glimmer_glance` | Holt-Winters Corp | Glimmer | yes | Glance - IR + radar; nav caps; light |
+| `hw_glimmer_ember` | Holt-Winters Corp | Glimmer | no | Ember - infrared receiver only |
+| `prv_lumina_sight` | ParaRamcoVidia | Lumina | no | Sight - IR + EM + spectral resonance; nav caps |
+| `prv_lumina_wellhead` | ParaRamcoVidia | Lumina | no | Wellhead - neutrino receptor (strong grav+EM) |
+| `prv_nexus_listen` | ParaRamcoVidia | Nexus | no | Listen - calculus wave detector (comp) |
+| `prv_nexus_locus` | ParaRamcoVidia | Nexus | yes | Locus - local geometry scanner (comp, active-only) |
 
 Nav caps = `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `4_space_topology`. Every sensor SKU also carries **`basic_target_lock`** (one combat track on a ship contact the package already detects). **`local_sensor`** also enables the flight HUD **Fields** readout (ambient gravity, magnetic, radiant, and charged-particle indices at the ship). Specialist packages are workshop stock only; templates use Hermes / Glimmer / Lumina sensor lines above.
 
@@ -269,13 +269,13 @@ Unspace translation inventory lives on a **navigation computer**, not on the sen
 | `sbi_sextant` | Seven Bells Inc | Sextant | 78 | 72 |
 | `sne_astrolabe` | SnedeCorp | Astrolabe | 92 | 128 |
 
-**Autopilot:** **`autopilot_basic`** is on Almanac, Compass, Sextant, and Astrolabe — not on yard-stock **Section**. In flight, **F1–F9** select modes when a capable navigation computer is fitted (**F1** always returns to manual). Target-relative modes use the current **target lock**; F5 matches the target’s world velocity, F6 holds the world velocity latched at entry. F9 stops in world space. F4 precision flight caps speed at 20% of the hull’s assembled maximum. The right-edge autopilot chit shows the active mode (hidden in manual).
+**Autopilot:** **`autopilot_basic`** is on Almanac, Compass, Sextant, and Astrolabe - not on yard-stock **Section**. In flight, **F1–F9** select modes when a capable navigation computer is fitted (**F1** always returns to manual). Target-relative modes use the current **target lock**; F5 matches the target’s world velocity, F6 holds the world velocity latched at entry. F9 stops in world space. F4 precision flight caps speed at 20% of the hull’s assembled maximum. The right-edge autopilot chit shows the active mode (hidden in manual).
 
 See [translations.md](translations.md) for fill policy and jump selection.
 
 The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are retired.
 
-**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override — Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Observer sensitivity uses the full package profile with **Active sensors** on, or the quiet **`sensor_sensitivity_passive`** profile when off. **Target lock** is separate from detection: with `basic_target_lock`, the pilot may hold one track on a detected ship — `` ` `` acquires the nearest contact or clears the lock; **Tab** cycles while a lock is held. The flight HUD draws corner brackets on that ship. NPCs with the capability lock the player while they have reciprocal player contact. Unguided weapons still do not require a lock or detection.
+**Detection (Phase 1):** undetected ships are invisible on radar and in the world view. The observer’s **`sensor_range`** is a hard envelope (power/compute can reduce effective range). Inside that bubble, a contact appears when (1) within **visual range** (250 m at default zoom), (2) the target is **broadcasting a transponder** and the observer has `local_sensor` (beacon override - Article 19; paints the whole envelope), or (3) any **live signature channel** meets `signature × sensitivity × range_weight ≥ threshold`, with slightly easier detection up close and slightly harder at the rim. Observer sensitivity uses the full package profile with **Active sensors** on, or the quiet **`sensor_sensitivity_passive`** profile when off. **Target lock** is separate from detection: with `basic_target_lock`, the pilot may hold one track on a detected ship - `` ` `` acquires the nearest contact or clears the lock; **Tab** cycles while a lock is held. The flight HUD draws corner brackets on that ship. NPCs with the capability lock the player while they have reciprocal player contact. Unguided weapons still do not require a lock or detection.
 
 **Active sensors toggle:** **`R`** in flight toggles active sensor pings (saved per ship as `active_sensors_enabled`, default on). Flight HUD shows **Active sensors: on/off** beside transponder status. NPC traffic always behaves as active on.
 
@@ -285,7 +285,7 @@ The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are r
 |----|-------|
 | `vessel_registration_beacon` | Commercial Article 19 identification transmitter. Required in-system. Broadcasts registration + pilot callsign when powered (~0.3 MW). Sold at habitat shipyards (Transponder tab). |
 
-**Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. When broadcasting, any observer with **`local_sensor`** detects the vessel out to sensor range regardless of how quiet the rest of the fit is — that is the point of the beacon. Without `local_sensor`, the beacon does not appear on radar (visual range still applies). Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay when broadcasting.
+**Article 19 (Commercial):** vessels operating in-system must carry an activated Vessel Registration Beacon broadcasting hull registration and pilot callsign. When broadcasting, any observer with **`local_sensor`** detects the vessel out to sensor range regardless of how quiet the rest of the fit is - that is the point of the beacon. Without `local_sensor`, the beacon does not appear on radar (visual range still applies). Ship name and corporate affiliation are optional broadcast fields (affiliation is NPC-only in the prototype). Player identity is shown on hover only; other vessels and landmarks appear via `sensor_read_beacons` overlay when broadcasting.
 
 ---
 
@@ -313,7 +313,7 @@ Multiple shields process incoming packets sequentially. Holt-Winters holds major
 
 **Point defence** (`category: point_defence`, mount `other`): passive intercept of ballistic and guided munitions. `intercept_chance` (0–1) stacks as \(1 - \prod (1 - p_i)\). Always-on in flight; consumes power (and optionally compute).
 
-**Cyber defence** (`category: cyber_defence`, mount `system`): reduces cyber packets after electronic shields. Consumes compute and power — trades offensive CU for resilience.
+**Cyber defence** (`category: cyber_defence`, mount `system`): reduces cyber packets after electronic shields. Consumes compute and power - trades offensive CU for resilience.
 
 ---
 
@@ -340,12 +340,12 @@ Shipboard life support systems mount on the chassis `system` hardpoint. One unit
 | Envelope | `volume` | Cabin + plant, counted against chassis `volume` |
 | Power | `power_demand` | Operating budget (MW) |
 | Compute | `compute_demand` | Operating budget (CU) |
-| Maker | `maker` | Corporation — see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 
 Manufacturer tiers for life support are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
-**Role:** life support **sustains crew** in the prototype. Launch requires installed life support with capacity ≥ occupant count (currently 1). Cabin mode and luxury are optional **capability flags** — not a type enum.
+**Role:** life support **sustains crew** in the prototype. Launch requires installed life support with capacity ≥ occupant count (currently 1). Cabin mode and luxury are optional **capability flags** - not a type enum.
 
 #### Transport vs habitat
 
@@ -387,7 +387,7 @@ Forty-one branded SKUs across fifteen manufacturers. Crew is 1, 2, 4, or 6. Exam
 
 | id | Maker | Brand | Crew | Mode | Flags |
 |----|-------|-------|------|------|-------|
-| `te_handy_air` | Tukey Enterprises | HandyAir | 1 | Transport | — |
+| `te_handy_air` | Tukey Enterprises | HandyAir | 1 | Transport | - |
 | `hw_helios_breath` | Holt-Winters Corp | Helios | 1 | Transport | `ls_comfort` |
 | `hw_helios_lounge` | Holt-Winters Corp | Helios | 1 | Habitat | `ls_habitat`, `ls_luxury` |
 | `gi_ls_4` | General Industrial | GI | 4 | Habitat | `ls_habitat` |
@@ -450,7 +450,7 @@ Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Weapons co
 | Stinger Automatic / St Luger .38 | Ranged (.22 calibre family) |
 | Blade, Blunt Instrument | Melee |
 
-**Galactic Outcomes** manufactures small arms in lore. Merchants in original world: Jasons Hardware, BCD Suppliers, Bobs Guns, Self Defence Emporium — closed in prototype.
+**Galactic Outcomes** manufactures small arms in lore. Merchants in original world: Jasons Hardware, BCD Suppliers, Bobs Guns, Self Defence Emporium - closed in prototype.
 
 ### .22 pistol culture
 
@@ -475,10 +475,10 @@ Despite futuristic weapons, weight-conscious pilots favour **22-millimeter solid
 
 ### Resolution order
 
-1. **Point defence** — ballistic / guided only
-2. **Shields** — per-packet absorption from `protection` profile; drains `shield_capacity`
-3. **Armour** — remaining kinetic / concussive / energy only
-4. **Resource conversion** — see [ship_offense_defense.txt](../design/ship_offense_defense.txt)
+1. **Point defence** - ballistic / guided only
+2. **Shields** - per-packet absorption from `protection` profile; drains `shield_capacity`
+3. **Armour** - remaining kinetic / concussive / energy only
+4. **Resource conversion** - see [ship_offense_defense.txt](../design/ship_offense_defense.txt)
 
 Integrity losses to Power and Compute reduce effective generation/CU in `ShipOperations` until repaired at dock.
 
@@ -499,7 +499,7 @@ At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 - Refuel ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned — see [architecture.md](../design/architecture.md). Dock resets hull and integrity.
+Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned - see [architecture.md](../design/architecture.md). Dock resets hull and integrity.
 
 ---
 

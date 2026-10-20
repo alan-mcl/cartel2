@@ -13,7 +13,7 @@ opened deliberately.
 
 - Work items are `P<phase>-<n>`. Lower phases first; within a phase, respect **Depends on**.
 - Before starting, check **Depends on** is `Done` and no in-progress item lists the same files
-  under **Scope** — parallel agents contending on `game_session.gd` or `main.gd` will conflict.
+  under **Scope** - parallel agents contending on `game_session.gd` or `main.gd` will conflict.
 - Read **Explicitly do NOT** before writing code. Those entries record decisions that were made
   deliberately and have been "helpfully" undone before.
 - Every item must satisfy **Acceptance** before being marked `Done`, including
@@ -27,7 +27,7 @@ any item here. The reasoning, briefly, so it does not get relitigated:
 
 - Measured hot-path costs in this codebase have been algorithmic, not language-bound. The
   `perf` pass (commit `da4be82`) got its wins from caching `modules_by_category`, precomputing
-  a signature basis, and using `PackedFloat32Array` — none of which C# would have made
+  a signature basis, and using `PackedFloat32Array` - none of which C# would have made
   unnecessary.
 - Godot's own guidance is that GDScript and C# are "within the same order of magnitude", that
   C# can be *slower* across heavy engine-API traffic due to marshalling, and that C# adds GC
@@ -43,7 +43,7 @@ possible.
 
 ---
 
-# Phase 0 — Backlog and safety net
+# Phase 0 - Backlog and safety net
 
 Phases 1-3 move persisted state and shared simulation code. The systems most likely to break
 are the ones with no tests. Do Phase 0 first.
@@ -60,7 +60,7 @@ Roadmap captured in this file and cross-linked from [backlog.md](backlog.md) and
 **Status:** Done. **Phase:** 0. **Depends on:** none.
 
 **Unblocks:** [P1-3](#p1-3-save-registry-with-per-section-versioning) (save registry) and all of
-Phase 2 — you cannot safely decompose `GameSession` without a round-trip test.
+Phase 2 - you cannot safely decompose `GameSession` without a round-trip test.
 
 **Problem:** Three defects in the save path, all of the same kind: the writer and the reader of
 a section lived in different files and drifted.
@@ -68,7 +68,7 @@ a section lived in different files and drifted.
 1. `GameSession.from_save` read `player.background_id`, but `SaveStore.build_save_data` never
    wrote it. Background was silently lost on every save/load round-trip.
 2. `SaveStore.validate_save_data` and `GameSession._validate_save_data` were byte-identical
-   copies, and the `SaveStore` one was **dead** — nothing called it.
+   copies, and the `SaveStore` one was **dead** - nothing called it.
 3. `build_save_data` took `callsign` and `portrait_path` as loose positional strings, so adding
    a fourth identity field meant remembering to touch two files. That is what caused (1).
 
@@ -81,7 +81,7 @@ instead of loose strings. `GameSession._validate_save_data` deleted in favour of
 references `SaveStore.SAVE_VERSION`, and making the dependency mutual risks a GDScript cyclic
 reference error. Pass dictionaries across that boundary.
 
-**Known gap — read before adding file-level save tests.** `tests/test_save.gd` deliberately stops
+**Known gap - read before adding file-level save tests.** `tests/test_save.gd` deliberately stops
 at the dictionary level and does not exercise `SaveStore.write_slot` / `read_slot`. `SAVE_DIR` is
 a hardcoded `const` pointing at `user://saves/`, and there are only three fixed slot paths, so a
 test that writes a slot **would overwrite the developer's real save files** every time the suite
@@ -97,7 +97,7 @@ or an overridable static) and point tests at a temporary directory. Worth foldin
 
 **Problem:** `SaveStore`, `CommodityEconomy`, `GameClock`, `ShipMotion`, and `TrafficDirector`
 had no direct tests, and Phase 1 rehosts the clock and economy onto a new tick model while
-Phase 2 moves the traffic director between layers. All five are cheap to test — gameplay is
+Phase 2 moves the traffic director between layers. All five are cheap to test - gameplay is
 `RefCounted` with no scene tree, so no game boot is needed.
 
 **Scope (done):** `tests/test_economy.gd` (quote determinism, day rollover, produce/consume
@@ -108,7 +108,7 @@ boost), `tests/test_save.gd` (round-trip, version gate, legacy v1 cargo migratio
 **Explicitly do NOT:** add GUT or gdUnit4. Use `TestRunner` and register the suite in
 `tests/run.gd`.
 
-**Note:** `TrafficDirector` is deliberately **not** covered here — it owns scene nodes today, so
+**Note:** `TrafficDirector` is deliberately **not** covered here - it owns scene nodes today, so
 testing it headlessly means fighting the very layer violation that
 [P2-2](#p2-2-move-traffic-node-ownership-out-of-the-gameplay-layer) removes. Write its tests as
 part of P2-2, once the node ownership has moved and the sim half is pure.
@@ -124,7 +124,7 @@ propulsion, 48 power, 41 compute, and so on), and `scripts/tools/validate_catalo
 duplicated the same constants. Adding one SKU meant editing a test and a validator that had
 nothing to say about correctness.
 
-**Scope (done):** Count assertions replaced with invariants that scale — non-empty categories,
+**Scope (done):** Count assertions replaced with invariants that scale - non-empty categories,
 required fields present on every entry, ids unique, referenced ammunition resolvable, mount
 points valid, signature channels present and non-negative. Minimum floors kept where a category
 genuinely must not regress to near-empty.
@@ -136,7 +136,7 @@ accidental *deletion*, assert a floor (`>= 20`), not equality.
 
 **Status:** Done. **Phase:** 0. **Depends on:** none.
 
-**Unblocks:** Every later phase — `check.sh` was ~77 s, which is long enough that it gets
+**Unblocks:** Every later phase - `check.sh` was ~77 s, which is long enough that it gets
 skipped during iteration.
 
 **Problem:** `tests/*.gd` were excluded from the `--check-only` sweep, so a parse error in a test
@@ -145,18 +145,18 @@ existed.
 
 **Scope (done):** `tests/` added to the check-only sweep. The sweep now runs one Godot process
 per script **in parallel** across `nproc` (override with `--jobs N` or `CHECK_JOBS`), which is
-where most of the wall-clock saving comes from — verified to detect a deliberately broken script
+where most of the wall-clock saving comes from - verified to detect a deliberately broken script
 identically at `--jobs 1` and `--jobs 8`. Mode flags added: `--fast` (validators plus unit tests,
 no import or sweep), `--scripts-only`, `--tests-only`, `--help`. Optional `gdlint` step runs when
 `gdlint` is on `PATH` and is skipped with a notice otherwise, so the check never hard-depends on
 `gdtoolkit` being installed.
 
 **Explicitly do NOT:** make `gdlint` mandatory (the codebase has never been linted; it would
-fail immediately). Do not trust Godot's exit code — it returns `0` on parse errors, which is why
+fail immediately). Do not trust Godot's exit code - it returns `0` on parse errors, which is why
 the script greps for `SCRIPT ERROR|Parse Error|Failed to load script`. Never pair `--check-only`
 with `--debug`. Do not treat `--fast` as sufficient for marking work complete.
 
-**Note:** A GitHub Actions workflow was **not** added — this repo has no git remote configured.
+**Note:** A GitHub Actions workflow was **not** added - this repo has no git remote configured.
 Add one when a remote exists; `check.sh` is already CI-shaped (non-zero exit on any failure).
 
 ## P0-6 Dead code and documentation drift
@@ -175,7 +175,7 @@ exists and is valid. No action needed.
 
 ---
 
-# Phase 1 — Simulation kernel and event bus
+# Phase 1 - Simulation kernel and event bus
 
 The keystone phase. Today `main.gd` hand-drives every tick and the only gameplay signal is
 `GameSession.changed`, so each new feature becomes a `GameSession` field plus a `main.gd` tick
@@ -198,7 +198,7 @@ nowhere to put a system that ticks once per in-game day across all sectors.
 - New `scripts/gameplay/sim_clock.gd`: owns GST, emits ticks at frame, in-game hour, and
   in-game day granularity. Absorbs `game_clock.gd`, including its unspace pulse and freeze
   behaviour.
-- New `scripts/gameplay/sim_subsystem.gd`: the contract — `id`, `on_tick(dt)`, `on_day(day)`,
+- New `scripts/gameplay/sim_subsystem.gd`: the contract - `id`, `on_tick(dt)`, `on_day(day)`,
   `on_event(evt)`, `to_dict()`, `from_dict()`. All optional except `id`.
 - New `scripts/gameplay/simulation.gd`: owns the registry and the clock, stepped **once** from
   `main.gd`.
@@ -206,14 +206,14 @@ nowhere to put a system that ticks once per in-game day across all sectors.
 
 **Design note:** Off-screen sector simulation is the motivating use case and it should be a
 subsystem implementing **only** `on_day`. Coarse, low-frequency, statistical updates for
-sectors the player is not in — not per-frame actors. The existing traffic LOD design (20 sim
+sectors the player is not in - not per-frame actors. The existing traffic LOD design (20 sim
 slots out of ~100 actors) is the right instinct applied at the wrong scale; this generalises it.
 
 **Explicitly do NOT:** make subsystems `Node`s, and do not let `Simulation` touch the scene
 tree. Gameplay stays `RefCounted`.
 
 **Acceptance:** `check.sh` passes. `main.gd` contains exactly one simulation step call. Economy
-and calendar behaviour unchanged — `tests/test_economy.gd` and `tests/test_clock.gd` pass
+and calendar behaviour unchanged - `tests/test_economy.gd` and `tests/test_clock.gd` pass
 untouched.
 
 ## P1-2 Typed event bus
@@ -225,10 +225,10 @@ single most important item for the mission system.
 
 **Problem:** `signal changed` in `game_session.gd` is the entire gameplay event vocabulary,
 emitted from ~50 sites between `GameSession` and `ShipAssembly`, and every emission triggers a
-full UI rebuild. A mission cannot ask "did the player just sell contraband in Proxima" — the
+full UI rebuild. A mission cannot ask "did the player just sell contraband in Proxima" - the
 information does not exist by the time the signal arrives.
 
-**Scope:** A typed event bus with a concrete event vocabulary — at minimum `SectorEntered`,
+**Scope:** A typed event bus with a concrete event vocabulary - at minimum `SectorEntered`,
 `Docked`, `Undocked`, `CommodityTraded`, `ShipPurchased`, `ModuleInstalled`, `CreditsChanged`,
 `ShipDestroyed`, `SalvageTaken`. Publishers replace bare `changed.emit()`. UI subscribes to what
 it needs.
@@ -255,7 +255,7 @@ use, and combat state is instead flattened onto session scalars.
 iterating the registry rather than by a central literal. Migration hooks per section.
 
 **Explicitly do NOT:** break existing saves without a migration path. `SAVE_VERSION` is 2 and v1
-legacy cargo migration must keep working — `tests/test_save.gd` covers it.
+legacy cargo migration must keep working - `tests/test_save.gd` covers it.
 
 ## P1-4 Mission system spike
 
@@ -263,7 +263,7 @@ legacy cargo migration must keep working — `tests/test_save.gd` covers it.
 
 **Problem:** The quest system today is `var objective: String`.
 
-**Scope:** One hardcoded delivery mission — accept, track via `CommodityTraded` and
+**Scope:** One hardcoded delivery mission - accept, track via `CommodityTraded` and
 `SectorEntered`, complete, pay out, persist across save/load. The point is to prove the three
 seams work end to end **before** content is built on them.
 
@@ -272,7 +272,7 @@ taxonomy in this item. It is a spike; keep it to one hardcoded mission.
 
 ---
 
-# Phase 2 — Decompose `GameSession`, fix layer violations
+# Phase 2 - Decompose `GameSession`, fix layer violations
 
 ## P2-1 Split `GameSession`
 
@@ -318,20 +318,20 @@ twice.
 **Problem:** `player_ship.gd` runs the full ops/combat/sensor/weapon simulation inline in
 `_physics_process`, while `npc_ship.gd` is an 8-line view (`sync_from_actor()`) over a
 simulation living in `traffic_actor.gd`. The two have **forked implementations of the same
-rules** — weapon order spawning is ~95% duplicated (~55 lines each), as are hull visual setup,
+rules** - weapon order spawning is ~95% duplicated (~55 lines each), as are hull visual setup,
 damage tint, and muzzle offset.
 
 **Scope:** One `ShipSimCore` holding the shared rules, consumed by both. Each recompute is a
 separately callable step (`step_physics`, `step_operating`, `refresh_signature`,
 `refresh_stats`) making no assumption about who calls what when. Nodes become input plus view.
 
-**Explicitly do NOT — read this before touching cadence:** the player and NPCs **should** update
+**Explicitly do NOT - read this before touching cadence:** the player and NPCs **should** update
 at different frequencies, and that difference is a requirement, not a bug.
 
 - The player needs live signature and operating telemetry every frame because the HUD displays
   it, even where it has no gameplay effect today. An NPC at far LOD does not.
 - Converge the code path; keep the frequencies independent. Cadence belongs in an explicit
-  policy on the owner — player controller at display rate, traffic director at its existing sim
+  policy on the owner - player controller at display rate, traffic director at its existing sim
   slot and LOD rates.
 - Make the difference legible at both call sites (a named cadence policy, or a comment saying
   why) so this does not get "fixed" later.
@@ -361,7 +361,7 @@ wiring in `main.gd`.
 **Status:** Done. **Phase:** 2. **Depends on:** none (can run parallel to P2-1).
 
 **Scope:** Small, independent fixes:
-- `debris_rock.gd` holds combat HP (`DEFAULT_HP := 40.0`) and death logic in presentation — move
+- `debris_rock.gd` holds combat HP (`DEFAULT_HP := 40.0`) and death logic in presentation - move
   the rule to gameplay.
 - `orbital_ring.gd` writes `session.set_orbital_phase()` from `_process`. Invert it: the
   simulation owns phase, presentation reads it for rotation.
@@ -374,7 +374,7 @@ wiring in `main.gd`.
 
 **Status:** Done. **Phase:** 2. **Depends on:** P2-2, P2-3.
 
-**Problem:** 1,385 lines — the largest file in the repo — mixing AI state machines, routing,
+**Problem:** 1,385 lines - the largest file in the repo - mixing AI state machines, routing,
 detection staging, and motion, with deep nesting. `combat_pilot.gd` (779 lines) has the same
 shape.
 
@@ -383,7 +383,7 @@ shape.
 
 ---
 
-# Phase 3 — Typed content records
+# Phase 3 - Typed content records
 
 ## P3-1 Schema-driven catalog records and validation
 
@@ -391,7 +391,7 @@ shape.
 
 **Unblocks:** The largest single win for agent-authored code correctness.
 
-**Problem:** The catalog never materialises typed content — `catalog.get_module(id)` returns a
+**Problem:** The catalog never materialises typed content - `catalog.get_module(id)` returns a
 raw `Dictionary`, and there are ~361 `Dictionary` references in the gameplay layer. A typo like
 `module.get("thurst", 0.0)` silently yields `0.0` forever, with no parse error, no test failure,
 and no runtime warning. Separately, `scripts/tools/validate_catalog_refs.py` is ~770 lines of
@@ -413,7 +413,7 @@ manual editing and one-off scripts (`generate_combat_catalog.py`,
 `patch_module_signatures.py`). It is the worst offender on every axis.
 
 **Scope:** `ModuleDef` records first, then chassis, ships, sectors, worlds. Either split
-`modules.json` by category or formalise the generators — stop hand-editing 158 KB.
+`modules.json` by category or formalise the generators - stop hand-editing 158 KB.
 
 ## P3-3 Close the unvalidated reference edges
 
@@ -428,9 +428,9 @@ is an empty `[]` stub with a dead `Catalog.get_market_for_building()` path.
 
 ---
 
-# Phase 4 — Content throughput and screen registry
+# Phase 4 - Content throughput and screen registry
 
-Framing note: outlying areas — moons, mining sectors — are **ordinary sectors** in the existing
+Framing note: outlying areas - moons, mining sectors - are **ordinary sectors** in the existing
 catalog. The variation is cosmetic: art, `modulate`, orbital count, traffic mix, flavour text.
 The goal of this phase is that adding the 50th sector costs what adding the 12th did.
 
@@ -444,9 +444,9 @@ one means coordinated entries in `sectors.json`, `worlds.json`, `economies.json`
 `habitats.json`, plus ~3 buildings, 2 interactables (`<id>_habitat`, `<id>_jump_gate`), 3-9
 routes, and traffic weights. All 11 existing sectors follow the pattern identically.
 
-**Scope:** A generator in `scripts/tools/` taking a compact per-sector spec — id, name, star
+**Scope:** A generator in `scripts/tools/` taking a compact per-sector spec - id, name, star
 system, classification, population, climate, planet art and `modulate`, orbital list, economy
-tier and produce/consume, habitat buildings, route links — and emitting or patching all seven
+tier and produce/consume, habitat buildings, route links - and emitting or patching all seven
 files.
 
 **Explicitly do NOT:** introduce new world or location *types*, a layout registry, or new
@@ -456,7 +456,7 @@ files.
 ## P4-2 Sector completeness validator
 
 **Status:** Done. **Phase:** 4. **Depends on:** none. **Can be pulled into Phase 0** if
-sector authoring starts before this phase — it is cheap and independently valuable.
+sector authoring starts before this phase - it is cheap and independently valuable.
 
 **Problem:** Nothing verifies that a sector is complete across the six files it spans.
 
@@ -483,7 +483,7 @@ route. Add to `validate_catalog_refs.py` or a sibling script wired into `check.s
 procedural constants, so deeper layers are code rather than content.
 
 **Explicitly do NOT:** wire n>5 routes or hyperdrive translation as part of this. The
-[AGENTS.md](../../AGENTS.md) scope guardrail stands — this item makes the data-driven field
+[AGENTS.md](../../AGENTS.md) scope guardrail stands - this item makes the data-driven field
 possible, it is not permission to enable deeper layers.
 
 ## P4-5 Decide the fate of the unused world entity kinds
@@ -496,7 +496,7 @@ outlying-area flavour or delete the dead path.
 
 ---
 
-# Phase 5 — UI decomposition
+# Phase 5 - UI decomposition
 
 ## P5-1 Split `habitat_screen.gd`
 
@@ -542,7 +542,7 @@ plus embedded **ShipyardScreen** extend it (yard coalesces refresh; embedded yar
 
 ---
 
-# Phase 6 — Presentation dedup and pooling
+# Phase 6 - Presentation dedup and pooling
 
 ## P6-1 Shared ship visual adapter
 

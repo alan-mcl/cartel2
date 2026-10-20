@@ -289,7 +289,7 @@ func _show_placeholder_content(building: Dictionary) -> void:
 	var name := str(building.get("name", "This location"))
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.text = "%s — No services at this location yet." % name
+	label.text = "%s - No services at this location yet." % name
 	label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	_content_pane.add_child(label)
 

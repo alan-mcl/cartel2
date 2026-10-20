@@ -197,7 +197,7 @@ func _build_table(rows: Array) -> VBoxContainer:
 			if typeof(offer) == TYPE_DICTIONARY and not offer.is_empty():
 				_add_offer_cell(data_row, offer)
 			else:
-				_add_n_label_cell(data_row, "—", false)
+				_add_n_label_cell(data_row, "-", false)
 		table.add_child(data_row)
 
 	return table

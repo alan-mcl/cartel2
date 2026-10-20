@@ -1,6 +1,6 @@
 # Setting index
 
-Working bible for the Cartel setting. Content is **setting intent** — editable prose that may run ahead of `data/catalog/` JSON in the current game.
+Working bible for the Cartel setting. Content is **setting intent** - editable prose that may run ahead of `data/catalog/` JSON in the current game.
 
 Each linked document opens with a **Status** note where relevant: what is playable today vs what is design target.
 
@@ -19,7 +19,7 @@ Each linked document opens with a **Status** note where relevant: what is playab
 | **Cash** | Carried on the person |
 | **Credit (eCash)** | Bank balance |
 | **E-type** | Earth-like planetary classification E1–E5 |
-| **GST / GSC** | Galactic Standard Time / Calendar — interstellar civil time (364-day year) |
+| **GST / GSC** | Galactic Standard Time / Calendar - interstellar civil time (364-day year) |
 
 ## Documents
 

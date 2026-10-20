@@ -275,7 +275,7 @@ func set_operating_state(state: ShipOperatingState) -> void:
 	if not _has_capability("basic_hud") or state == null:
 		return
 	if not state.propulsion_requires_fuel:
-		_fuel.text = "Fuel: —"
+		_fuel.text = "Fuel: -"
 	elif state.propulsion_fuel_label.is_empty():
 		_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]
 	else:
@@ -427,9 +427,9 @@ func _refresh_identity() -> void:
 	if _assembled_ship != null:
 		ship_name = _assembled_ship.name.strip_edges()
 	if callsign.is_empty():
-		callsign = "—"
+		callsign = "-"
 	if ship_name.is_empty():
-		ship_name = "—"
+		ship_name = "-"
 	_identity.text = "%s aboard %s" % [callsign, ship_name]
 
 
@@ -438,7 +438,7 @@ func _refresh_hull() -> void:
 		return
 	var max_hull := _session.max_hull
 	if max_hull <= 0.0:
-		_hull.text = "Hull: —"
+		_hull.text = "Hull: -"
 	else:
 		_hull.text = "Hull: %.0f / %.0f" % [_session.hull, max_hull]
 

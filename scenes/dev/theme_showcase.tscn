@@ -294,7 +294,7 @@ metadata/_tab_index = 1
 [node name="OpTitle" type="Label" parent="Layout/VBox/Tabs/Operational"]
 layout_mode = 2
 theme_type_variation = &"Title"
-text = "Operational sample — Shipyard / Market"
+text = "Operational sample - Shipyard / Market"
 
 [node name="OpToolbar" parent="Layout/VBox/Tabs/Operational" instance=ExtResource("6")]
 layout_mode = 2
@@ -409,7 +409,7 @@ metadata/_tab_index = 2
 [node name="MediaTitle" type="Label" parent="Layout/VBox/Tabs/Media"]
 layout_mode = 2
 theme_type_variation = &"Title"
-text = "Media sample — Sector wire"
+text = "Media sample - Sector wire"
 
 [node name="WireTicker" parent="Layout/VBox/Tabs/Media" instance=ExtResource("8")]
 layout_mode = 2

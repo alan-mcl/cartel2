@@ -163,7 +163,7 @@ static func display_name(catalog: Catalog, fuel_id: String) -> String:
 
 static func format_gauge(catalog: Catalog, owned: OwnedShip) -> String:
 	if active_fuel_id(catalog, owned).is_empty():
-		return "—"
+		return "-"
 	var fuel_id := active_fuel_id(catalog, owned)
 	var name := display_name(catalog, fuel_id)
 	var amount := active_amount(catalog, owned)

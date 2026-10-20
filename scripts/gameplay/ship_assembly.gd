@@ -71,12 +71,12 @@ static func undock_blockers(
 		)
 
 	if ShipFuel.propulsion_requires_fuel(assembled) and ShipFuel.active_amount(catalog, owned) <= 0.0:
-		blockers.append("No fuel — refuel at the Docking Bay or Shipyard.")
+		blockers.append("No fuel - refuel at the Docking Bay or Shipyard.")
 
 	var life_support_capacity := float(assembled.capacities.get("life_support_capacity", 0.0))
 	var life_support_demand := maxf(1.0, float(occupant_count))
 	if life_support_capacity < life_support_demand:
-		blockers.append("No life support — fit a life support module at the Shipyard.")
+		blockers.append("No life support - fit a life support module at the Shipyard.")
 
 	var launch_state := ShipOperations.launch_snapshot(catalog, assembled, owned, occupant_count)
 	var power_generation := float(assembled.capacities.get("power_generation", 0.0))
@@ -85,7 +85,7 @@ static func undock_blockers(
 	if life_support_capacity >= life_support_demand:
 		if not _category_power_satisfied(launch_state, "life_support"):
 			blockers.append(
-				"No power to life support — fit a reactor (or a larger one) at the Shipyard."
+				"No power to life support - fit a reactor (or a larger one) at the Shipyard."
 			)
 
 	if has_engine:
@@ -93,15 +93,15 @@ static func undock_blockers(
 			launch_state.power_requested_by_category.get("propulsion", 0.0)
 		)
 		if propulsion_requested <= 0.0 and power_generation <= 0.0:
-			blockers.append("No power to engines — fit a reactor at the Shipyard.")
+			blockers.append("No power to engines - fit a reactor at the Shipyard.")
 		elif not _category_power_satisfied(launch_state, "propulsion"):
 			blockers.append(
-				"No power to engines — fit a reactor (or a larger one) at the Shipyard."
+				"No power to engines - fit a reactor (or a larger one) at the Shipyard."
 			)
 
 	if not assembled.has_transponder():
 		blockers.append(
-			"No transponder — buy a Vessel Registration Beacon at the Shipyard."
+			"No transponder - buy a Vessel Registration Beacon at the Shipyard."
 		)
 	elif not owned.transponder_enabled:
 		blockers.append("Transponder is deactivated.")
@@ -109,13 +109,13 @@ static func undock_blockers(
 	if freight_compute_cu > 0.0:
 		if launch_state.compute_demand + freight_compute_cu > launch_state.compute_capacity + 0.001:
 			blockers.append(
-				"Not enough compute for freight load — upgrade ship systems at the Shipyard."
+				"Not enough compute for freight load - upgrade ship systems at the Shipyard."
 			)
 
 	if freight_power_mw > 0.0:
 		if launch_state.power_requested + freight_power_mw > launch_state.power_available + 0.001:
 			blockers.append(
-				"Not enough power for freight load — upgrade ship systems at the Shipyard."
+				"Not enough power for freight load - upgrade ship systems at the Shipyard."
 			)
 
 	return blockers

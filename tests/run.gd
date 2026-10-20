@@ -39,6 +39,7 @@ func _init() -> void:
 	TestDebris.run(runner)
 	TestMessageBar.run(runner, self)
 	TestMessageEmitters.run(runner)
+	TestCorporateOfficeTape.run(runner)
 	TestExchangePriceTape.run(runner)
 	TestFuel.run(runner)
 	TestFlightManifest.run(runner)

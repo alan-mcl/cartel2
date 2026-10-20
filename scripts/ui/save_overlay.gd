@@ -53,7 +53,7 @@ func _refresh_slots() -> void:
 			var location := str(slot_info.get("location", ""))
 			var saved_at := str(slot_info.get("saved_at", ""))
 			var label := Label.new()
-			label.text = 'Slot %d: "%s" — %s — %s' % [
+			label.text = 'Slot %d: "%s" - %s - %s' % [
 				slot_index,
 				callsign,
 				location,

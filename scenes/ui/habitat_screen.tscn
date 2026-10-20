@@ -55,7 +55,7 @@ theme_override_constants/separation = 4
 [node name="Pilot" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]
 layout_mode = 2
 theme_type_variation = &"Section"
-text = "—"
+text = "-"
 vertical_alignment = 1
 
 [node name="Credits" type="Label" parent="Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo"]

@@ -144,7 +144,7 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 
 
 ## Catalog sizes are content, not contract. Assert a floor so accidental bulk deletion is still
-## caught, but do not assert equality — exact counts broke this suite on every SKU addition.
+## caught, but do not assert equality - exact counts broke this suite on every SKU addition.
 ## Do not reintroduce `check_eq` on category sizes.
 static func _check_min_count(
 	runner: TestRunner,

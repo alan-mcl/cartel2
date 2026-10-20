@@ -147,7 +147,7 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 		)
 		inner.add_child(cancel)
 	else:
-		status_line = "In transit — cannot cancel."
+		status_line = "In transit - cannot cancel."
 		inner.add_child(_one_line_label(status_line, &"Muted"))
 
 	var tooltip := CharterTooltipText.format_freight(

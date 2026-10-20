@@ -88,9 +88,9 @@ func _build_signature(assembled: AssembledShip) -> String:
 
 static func _format_ammo(module_def: ModuleDef, owned: OwnedShip) -> String:
 	if module_def == null:
-		return "—"
+		return "-"
 	if module_def.ammunition_type.is_empty():
-		return "—"
+		return "-"
 	if owned == null:
 		return "0"
 	return str(owned.get_ammo_count(module_def.ammunition_type))

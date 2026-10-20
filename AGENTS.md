@@ -1,4 +1,4 @@
-# Agent guide — Cartel (Godot 4.7)
+# Agent guide - Cartel (Godot 4.7)
 
 This repository is the **production Godot build** of Cartel, not a throwaway POC. Follow these conventions before finishing any change.
 
@@ -13,10 +13,10 @@ This repository is the **production Godot build** of Cartel, not a throwaway POC
 
 | Layer | Path | Rules |
 |-------|------|--------|
-| Gameplay | `scripts/gameplay/` | `RefCounted` only — **no** scene tree, no `@onready` |
+| Gameplay | `scripts/gameplay/` | `RefCounted` only - **no** scene tree, no `@onready` |
 | Presentation | `scripts/presentation/` | Godot nodes, world loading, ship motion |
 | UI | `scripts/ui/` | Menus, HUD, habitat/shipyard screens |
-| Dev/tools | `scripts/dev/`, `scripts/tools/` | Sandboxes and one-off generators — not gameplay |
+| Dev/tools | `scripts/dev/`, `scripts/tools/` | Sandboxes and one-off generators - not gameplay |
 
 - Session state lives in **`GameSession`** (`scripts/gameplay/game_session.gd`), not `PrototypeSession`.
 - `GameSession`'s forwarding properties are a compatibility facade. New code must use
@@ -43,7 +43,7 @@ GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
 
 The script runs catalog validation, Godot import, `--check-only` across `scripts/` and `tests/`, and headless unit tests.
 
-For the inner loop, `--fast` skips the import and parse sweep (validators plus unit tests, a few seconds); `--scripts-only` and `--tests-only` run one half each. `--fast` is not sufficient to mark work complete — run the full check before you finish. The parse sweep parallelises over `nproc`; use `--jobs N` to change that.
+For the inner loop, `--fast` skips the import and parse sweep (validators plus unit tests, a few seconds); `--scripts-only` and `--tests-only` run one half each. `--fast` is not sufficient to mark work complete - run the full check before you finish. The parse sweep parallelises over `nproc`; use `--jobs N` to change that.
 
 **Important:** Godot may exit `0` even when a script has parse errors. The check script scans output for `SCRIPT ERROR`, `Parse Error`, and `Failed to load script`. Do not claim compile-clean without running it.
 
@@ -69,12 +69,12 @@ Use **British English** in setting docs, design prose, and player-facing catalog
 - Typed GDScript 2.0; use existing `class_name` types (`Catalog`, `GameSession`, `OwnedShip`, …)
 - Prefer `RefCounted` for gameplay logic; keep nodes thin
 - Match naming: snake_case ids in JSON, PascalCase `class_name` in scripts
-- No GUT/gdUnit4 in this repo — add tests under `tests/` using `TestRunner`
+- No GUT/gdUnit4 in this repo - add tests under `tests/` using `TestRunner`
 
 ## Scope guardrails (unless explicitly asked)
 
 - Only **4-space** Unspace is implemented; do not wire n>5 routes or hyperdrive translation without a plan
-- Do not invent new setting canon in JSON alone — `docs/setting/` is frozen unless the user explicitly requests a setting-doc edit
+- Do not invent new setting canon in JSON alone - `docs/setting/` is frozen unless the user explicitly requests a setting-doc edit
 - Merchants beyond Proxima Exchange remain partial; check README placeholders
 
 ## Useful commands
@@ -107,9 +107,9 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
 ## Documentation map
 
-- [README.md](README.md) — run, controls, loop
-- [docs/README.md](docs/README.md) — design vs setting index
-- [docs/design/architecture.md](docs/design/architecture.md) — code layout and data flow
-- [docs/design/data_model.md](docs/design/data_model.md) — catalog schemas and runtime types
-- [docs/design/refactor_backlog.md](docs/design/refactor_backlog.md) — phased engineering work items
-- Catalog files — `data/catalog/*.json`
+- [README.md](README.md) - run, controls, loop
+- [docs/README.md](docs/README.md) - design vs setting index
+- [docs/design/architecture.md](docs/design/architecture.md) - code layout and data flow
+- [docs/design/data_model.md](docs/design/data_model.md) - catalog schemas and runtime types
+- [docs/design/refactor_backlog.md](docs/design/refactor_backlog.md) - phased engineering work items
+- Catalog files - `data/catalog/*.json`

@@ -44,7 +44,7 @@ text = "Weapon"
 [node name="AmmoLabel" type="Label" parent="VBox/HBox/Body"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "—"
+text = "-"
 
 [node name="CooldownBar" type="ProgressBar" parent="VBox"]
 layout_mode = 2

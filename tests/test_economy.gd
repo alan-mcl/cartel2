@@ -4,7 +4,7 @@ extends RefCounted
 ## `CommodityEconomy` coverage.
 ##
 ## Quotes are derived state: recomputed on day rollover and rebuilt on load rather than saved.
-## That makes determinism for a given day the load-bearing property — two sessions on the same
+## That makes determinism for a given day the load-bearing property - two sessions on the same
 ## day must agree, or a save/load round-trip silently reprices the galaxy.
 
 
@@ -468,7 +468,7 @@ static func _test_network_friction_and_reach(runner: TestRunner) -> void:
 static func _test_route_disconnection_pending(runner: TestRunner) -> void:
 	runner.check(
 		true,
-		"economy: PENDING complete route disconnection (edge removal) — use route_friction_delta until supported"
+		"economy: PENDING complete route disconnection (edge removal) - use route_friction_delta until supported"
 	)
 
 

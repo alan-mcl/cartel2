@@ -278,5 +278,5 @@ static func _format_speed(metres_per_sec: float) -> String:
 
 static func _format_heading(velocity: Vector2) -> String:
 	if velocity.length_squared() < 0.25:
-		return "—"
+		return "-"
 	return "%.0f°" % wrapf(rad_to_deg(velocity.angle()), 0.0, 360.0)

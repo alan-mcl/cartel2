@@ -4,7 +4,7 @@
 
 ## Overview
 
-The known interplanetary economy is a graph of **publicly known Unspace routes** connecting inhabited worlds. Routes represent reliable commercial translations, not physical proximity. The graph is deliberately incomplete — undiscovered mappings may exist outside the public network.
+The known interplanetary economy is a graph of **publicly known Unspace routes** connecting inhabited worlds. Routes represent reliable commercial translations, not physical proximity. The graph is deliberately incomplete - undiscovered mappings may exist outside the public network.
 
 Three conceptual layers:
 
@@ -51,9 +51,9 @@ Each route has a friction value (0–100) representing combined translation dura
 
 In play, friction drives:
 
-- **Jump overlay** — qualitative transit band (Excellent … Hazardous)
-- **GST lumps** — `entry_seconds` and `exit_seconds` = `friction × 240` GST seconds
-- **Commodity prices** — shortest-path friction between worlds reduces how effectively surpluses reach deficits
+- **Jump overlay** - qualitative transit band (Excellent … Hazardous)
+- **GST lumps** - `entry_seconds` and `exit_seconds` = `friction × 240` GST seconds
+- **Commodity prices** - shortest-path friction between worlds reduces how effectively surpluses reach deficits
 
 ## Daily commodity markets
 
@@ -69,4 +69,4 @@ The public graph is what jump gates and the daily economy share. Unknown routes 
 
 ## Economic events (future)
 
-Events may block routes or raise effective friction via `session.route_friction_delta`. The next daily reset recalculates trade flows using the modified graph — no separate commodity logic required.
+Events may block routes or raise effective friction via `session.route_friction_delta`. The next daily reset recalculates trade flows using the modified graph - no separate commodity logic required.

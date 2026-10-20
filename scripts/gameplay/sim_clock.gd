@@ -2,7 +2,7 @@ class_name SimClock
 extends RefCounted
 
 ## Advances [GameSession.gst_seconds] in real time or via unspace pulses.
-## Does not notify subsystems — [Simulation] owns boundary dispatch.
+## Does not notify subsystems - [Simulation] owns boundary dispatch.
 
 var _pulse_timer: float = 0.0
 var _pulse_interval: float = 1.0

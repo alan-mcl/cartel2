@@ -1,6 +1,6 @@
 # Sprite size catalog
 
-Production dimensions for Cartel art assets. Use this when authoring or refreshing SVG/PNG files so **on-disk size matches in-flight size** — no compensating for camera zoom or import scale in the canvas.
+Production dimensions for Cartel art assets. Use this when authoring or refreshing SVG/PNG files so **on-disk size matches in-flight size** - no compensating for camera zoom or import scale in the canvas.
 
 Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/presentation/follow_camera.gd`).
 
@@ -18,7 +18,7 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 
 - Set `width` and `height` to match the `viewBox` extent.
 - Standard viewBox: **`-W/2 -H/2  W  H`** (rotation pivot at SVG `(0,0)` = texture center).
-- Place the desired spin point at SVG `(0,0)` by translating geometry — do not compensate with a shifted `viewBox` alone.
+- Place the desired spin point at SVG `(0,0)` by translating geometry - do not compensate with a shifted `viewBox` alone.
 - **Nose points toward −Y** (up on screen when facing default).
 - Collision hulls are derived from SVG primitives via `HullHitbox` (`scripts/presentation/hull_hitbox.gd`). Keep `width`, `height`, and `viewBox` in sync. Put paint in `style` attributes; remove conflicting presentation-attribute leftovers (`fill="#…"` on the same element as `style="fill:…"`).
 
@@ -44,7 +44,7 @@ Reference viewport: **1920×1080**. Flight camera zoom: **0.72** (`scripts/prese
 
 ## Chassis hulls (SVG)
 
-Paths: `assets/ships/chassis/<id>.svg` — referenced from `data/catalog/chassis.json`.
+Paths: `assets/ships/chassis/<id>.svg` - referenced from `data/catalog/chassis.json`.
 
 ### Scale rule
 
@@ -89,7 +89,7 @@ Same chassis SVGs appear in habitat/shipyard UI (`LocationArt` `TextureRect`, fi
 |-------|------|-----|---------------|-------|
 | Thrust alignment | `assets/ships/fx/thrust.svg` | 32×32 | **20×24** | Stern anchor only; flight exhaust is procedural per `engine_type` (`EngineExhaust`) |
 | Mass driver round | `assets/ships/fx/mass_driver_round.svg` | 16×16 | **16×16** | Keep |
-| Laser / cyber beams | — | Line2D | — | Procedural; no sprite |
+| Laser / cyber beams | - | Line2D | - | Procedural; no sprite |
 
 ### Thrust attachment
 
@@ -129,21 +129,21 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 
 ---
 
-## PNG — space and planets
+## PNG - space and planets
 
 | Asset | Path | Current | **Author at** | Usage |
 |-------|------|---------|---------------|-------|
 | Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08 |
-| Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 — do **not** bake 1.15 into the PNG |
+| Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 - do **not** bake 1.15 into the PNG |
 | Planet albedo | `assets/world/planets/<sector_id>_albedo.png` | 2048×1024 placeholders | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1; wired in `worlds.json` `planet.albedo` |
 | Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same pixel size and equirect UV as albedo; **RGB emission** (black = none). Shader adds `texture * night_emission_strength` on the night side only. Generate from albedo: `python3 scripts/tools/planet_night_from_albedo.py assets/world/planets/<sector>_albedo.png --density 0.4 -o assets/world/planets/<sector>_night.png` (requires `pip install pillow`). |
-| Planet disc (legacy) | `assets/world/planet.png` | 512×512 | — | **Unused** for globe mesh; do not replace as a flat disc |
+| Planet disc (legacy) | `assets/world/planet.png` | 512×512 | - | **Unused** for globe mesh; do not replace as a flat disc |
 
 Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **1024** px SubViewport (throttled refresh in flight) and is scaled to `diameter / 1024`. Albedo and night PNGs remain **2048×1024** equirectangular maps. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present).
 
 ---
 
-## PNG / SVG — UI art
+## PNG / SVG - UI art
 
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
@@ -167,7 +167,7 @@ Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`a
 
 ---
 
-## Quick reference — all author-at sizes
+## Quick reference - all author-at sizes
 
 | Category | Dimensions |
 |----------|------------|

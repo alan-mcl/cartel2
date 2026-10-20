@@ -65,8 +65,8 @@ static func format_terminal_line(catalog: Catalog, entry: Dictionary) -> String:
 	var fine := int(entry.get("fine", 0))
 	var stamp := format_recorded_at(entry)
 	if stamp.is_empty():
-		return "%s — d%d" % [label, fine]
-	return "%s — %s — d%d" % [stamp, label, fine]
+		return "%s - d%d" % [label, fine]
+	return "%s - %s - d%d" % [stamp, label, fine]
 
 
 static func infraction_label(catalog: Catalog, infraction_id: String) -> String:

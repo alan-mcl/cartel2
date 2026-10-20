@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Eight ship families below are **setting intent** from original `Ships.doc` plus the Mantis interceptor line. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit — see `data/catalog/backgrounds.json`.
+**Status:** Eight ship families below are **setting intent** from original `Ships.doc` plus the Mantis interceptor line. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit - see `data/catalog/backgrounds.json`.
 
 **Hull sales at Proxima Habitat:** **Concord Scouts** stocks used, manufacturer-fitted scout templates from the catalog. **Skyedge Space Ships** sells unfitted chassis frames; **Centauri Shipyard** fits modules. Used ship price is chassis list cost plus half the fitted module value.
 
@@ -70,7 +70,7 @@ Charter and VIP transport: luxury cabin, Helios deflector and Ionique energy shi
 
 ### P113
 
-Convoy escort: rocket launcher, plate, medium fuel, and a small hold. Support gunship on a civilian frame — not a Wolff-class heavy.
+Convoy escort: rocket launcher, plate, medium fuel, and a small hold. Support gunship on a civilian frame - not a Wolff-class heavy.
 
 ### P115
 
@@ -86,7 +86,7 @@ Produced by the dynamic **Holt-Winters Corporation**, the small Flare-ON is a mo
 
 The Flare-ON SS is the base model and features a Sundancer Compact direct-fusion drive that provides excellent acceleration to this light ship. It is armed with a rotating laser turret for self-defence. This configuration is by far the most common.
 
-**Game instance:** Flare-ON SS — Sundancer Compact, no armour, player starting ship.
+**Game instance:** Flare-ON SS - Sundancer Compact, no armour, player starting ship.
 
 ### SK
 
@@ -94,13 +94,13 @@ The Flare-ON SK is a cutting edge craft and is becoming an increasingly common s
 
 ### CX
 
-Courier trim: Sundancer Compact fusion, a parcel bay, and solo transit air. **Unarmed** — the SS is the sport hull with a laser; the CX only carries the package.
+Courier trim: Sundancer Compact fusion, a parcel bay, and solo transit air. **Unarmed** - the SS is the sport hull with a laser; the CX only carries the package.
 
 ---
 
 ## Krypton
 
-The Krypton is the mainstay of **Orion Aerospace** (formerly marketed under Durbin-Watson) in the mid-range space ship market. It is a bizarre looking craft — styled after the flying saucers that appear in the re-popularised cinemagraphs of the mid twentieth century. It is highly manoeuvrable and capable of mounting a range of different equipment.
+The Krypton is the mainstay of **Orion Aerospace** (formerly marketed under Durbin-Watson) in the mid-range space ship market. It is a bizarre looking craft - styled after the flying saucers that appear in the re-popularised cinemagraphs of the mid twentieth century. It is highly manoeuvrable and capable of mounting a range of different equipment.
 
 ### K2
 
@@ -134,7 +134,7 @@ The original armed freighter trim: fusion drive, rocket launcher, light plate, a
 
 ### Logistico
 
-Bulk freighter trim: large hold, habitat bunks, fusion drive, and one light laser — no rocket launcher and no scatter cannon. The Bastion is armed; the **Logistico** is the hold.
+Bulk freighter trim: large hold, habitat bunks, fusion drive, and one light laser - no rocket launcher and no scatter cannon. The Bastion is armed; the **Logistico** is the hold.
 
 ---
 
@@ -144,7 +144,7 @@ The Dragon is the most recent ship from **Seven Bells Inc** (Kolmogorov-Smirnov 
 
 ### Bronze
 
-Earlier in-system patrol trim: compact fusion, light laser, light plate — no translation gear.
+Earlier in-system patrol trim: compact fusion, light laser, light plate - no translation gear.
 
 ### Gold
 
@@ -176,7 +176,7 @@ The Silhouette is a medium weight tactical fighter from the **Oklahoma Combine**
 
 ### Mk8
 
-The **Mk8** configuration is the popular contract fighter — dual medium hardpoints and a heavy sensor fit.
+The **Mk8** configuration is the popular contract fighter - dual medium hardpoints and a heavy sensor fit.
 
 ### Mk6
 
@@ -198,7 +198,7 @@ The **XF900** is the original series, no longer in production. Survivors still a
 
 ### XF4400
 
-The **XF4400** is the current mid-tier production model — faster drives and a heavier weapons fit than the retired XF900.
+The **XF4400** is the current mid-tier production model - faster drives and a heavier weapons fit than the retired XF900.
 
 ### XF5700
 
@@ -214,7 +214,7 @@ The **XF5700** is the top-line interceptor configuration in current manufacture,
 | Chassis hits | 10–40 (design sheet) | 1000 placeholder in XML |
 | Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
 
-Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation — see [equipment.md](equipment.md) and [architecture.md](../design/architecture.md).
+Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation - see [equipment.md](equipment.md) and [architecture.md](../design/architecture.md).
 
 ### In catalog (`ships.json`)
 

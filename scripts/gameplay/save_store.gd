@@ -104,9 +104,9 @@ static func write_slot(slot_index: int, data: Dictionary) -> bool:
 	return true
 
 
-## Assembles the save sections. Each section is serialized by whoever owns it —
+## Assembles the save sections. Each section is serialized by whoever owns it -
 ## `player` and `session` by `GameSession`, `ships` by `OwnedShip`, `flight` by the presentation
-## layer — so this function never needs to know a section's field list. Pass dictionaries, not
+## layer - so this function never needs to know a section's field list. Pass dictionaries, not
 ## `GameSession`: it already references `SaveStore.SAVE_VERSION`, and a mutual type dependency
 ## risks a GDScript cyclic reference.
 static func build_save_data(

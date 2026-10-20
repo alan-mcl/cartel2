@@ -27,14 +27,15 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
-| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`) |
+| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, optional `ad_voice`, `trade`) |
+| `corporate_office_ticker.json` | object | Shared SKU/job/recruitment templates keyed by `ad_voice` |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
 | `freight_missions.json` | object | Freight charter cargos, descriptions, and pay tuning |
 | `message_emitters.json` | array | Weighted flavour pools for headline and gossip tickers |
 | `celebrity_pilots.json` | array | Celebrity pilot names for message ticker tokens |
 
-Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
+Loader: `scripts/gameplay/catalog.gd` - `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
 
 ## ID conventions
 
@@ -49,7 +50,7 @@ Loader: `scripts/gameplay/catalog.gd` — `Catalog.load_default()`. Modules merg
 Chassis (envelope + mounts)
   └── installed modules (slot → module_id)
         └── aggregated capacities + derived flight stats
-              └── operating state (power, fuel, compute — in flight)
+              └── operating state (power, fuel, compute - in flight)
 ```
 
 **Static fitting** validates mount compatibility, mass limit, and volume. **Operating overload** (e.g. weapons drawing more power than the plant generates while firing) is allowed at install time; `ShipOperations.tick` resolves power/fuel/compute during flight.
@@ -149,8 +150,8 @@ New Game reads this template once; runtime progress is stored in save slots unde
 
 Save v1 ships with `engine_id` / `armour_id` are migrated on load to `main_engine_1` / `other_1`. Legacy `internal_*` and `utility_*` slot names migrate to `other_*` / next free `system_*`.
 
-- **aboard** — ship the player flies in orbit.
-- **habitat id** — parked at that habitat; persists across sector jumps.
+- **aboard** - ship the player flies in orbit.
+- **habitat id** - parked at that habitat; persists across sector jumps.
 
 ## Runtime ship types
 
@@ -209,7 +210,7 @@ Fuel lives on the owned ship. Heat/signature simulation is deferred beyond the c
 
 | Field | Description |
 |-------|-------------|
-| `owned_ships` | `OwnedShip[]` — each carries its own `cargo` |
+| `owned_ships` | `OwnedShip[]` - each carries its own `cargo` |
 | `spare_parts` | `{ module_id: qty }` uninstalled modules in player inventory |
 | `hull` / `max_hull` | Hull stress during 4-space (from chassis + armour hits) |
 | `gst_seconds` | Elapsed GST since 1 January Q1, year 0 (float; persisted in saves) |
@@ -238,7 +239,7 @@ Cargo is **per ship**, not session-wide. Exchange buy/sell targets the selected 
 | `exit_seconds` | number | GST consumed when emerging at the destination |
 | `time_jitter` | number | ± fraction applied to each lump (e.g. `0.08` → ±8%) |
 
-**Unspace GST** (required on each `unspaces.json` entry under `gst`): `pulse_min`, `pulse_max`, `stretch_min`, `stretch_max`, `slip_chance`, `slip_min`, `slip_max` — control irregular time flow while flying in N-space. Deeper layers tune these per entry in catalog data; `SimClock` does not scale GST by route `n`.
+**Unspace GST** (required on each `unspaces.json` entry under `gst`): `pulse_min`, `pulse_max`, `stretch_min`, `stretch_max`, `slip_chance`, `slip_min`, `slip_max` - control irregular time flow while flying in N-space. Deeper layers tune these per entry in catalog data; `SimClock` does not scale GST by route `n`.
 
 ### `unspaces.json`
 
@@ -267,10 +268,10 @@ One entry per implemented N-space depth (`n` unique, `n >= 4`). `Catalog.get_uns
 
 ### Ship assembly (`ShipAssembly`)
 
-- `buy_part` / `sell_part` — yard stock ↔ credits ↔ `spare_parts`
-- `install_module` / `remove_module` — any compatible slot; validates mass/volume/mount
-- `refuel_ship` — fill fuel tank toward capacity for credits
-- `preview_stats` / `get_engineering_block` — configuration + engineering readout for shipyard UI
+- `buy_part` / `sell_part` - yard stock ↔ credits ↔ `spare_parts`
+- `install_module` / `remove_module` - any compatible slot; validates mass/volume/mount
+- `refuel_ship` - fill fuel tank toward capacity for credits
+- `preview_stats` / `get_engineering_block` - configuration + engineering readout for shipyard UI
 
 Chassis is **fixed**; undock is allowed even with incomplete fits (no thrust without engine/fuel).
 
@@ -284,8 +285,8 @@ Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VER
   "game_version": "DEV",
   "saved_at": "2026-09-01T12:00:00Z",
   "player": { "name": "Jane Doe", "callsign": "Vixen" },
-  "session": { /* GameSession.to_dict() — includes spare_parts */ },
-  "ships": [ /* OwnedShip.to_dict() — modules, cargo, fuel, ammunition */ ],
+  "session": { /* GameSession.to_dict() - includes spare_parts */ },
+  "ships": [ /* OwnedShip.to_dict() - modules, cargo, fuel, ammunition */ ],
   "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
 }
 ```
@@ -301,7 +302,7 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 - Density scales with `population_billions` on each sector (see `planets.md` lore). Proxima ≈ 100 ships at population max (`near_count_max + far_count_max`); full simulation capped by `sim_slot_max`.
 - Initial spawn places trip roles (`transit`, `shuttle`, `dock_cycle`) 15–85% along origin→destination with lateral offset; `loiter` / `runabout` scatter near the jump gate and orbitals (not habitat). Cycle replacements still spawn at origin waypoints.
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
-- Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` — tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
+- Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` - tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
 - Completing a route (habitat, gate, or orbital), running dry, or leaving bounds **retires** the sprite; the director spawns a fresh replacement so fleet density stays constant.
 - Provoked combat only: NPCs engage or flee; player hull remains invulnerable this slice.
 - Sensor HUD: smaller unlabelled NPC blips across the sector and unlabelled orbital dots on the local radar.
@@ -331,7 +332,7 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `independent_callsign_prefixes` / `independent_callsign_roots` | array | Optional combinatoric parts (`{Prefix} {Root}`) when both are non-empty |
 | `vanity_ship_names` | array | Hull given names; always assigned to independent operators, never to corporate |
 
-**NPC identity:** corporate ships broadcast `{TICKER}-{NNN}` callsigns (e.g. `HW-447`) and affiliation only — no hull name. Corporate affiliation is weighted by `corporate_presence.json` for the current sector (`CorporatePresence.pick_corporation`). Independent ships always receive a name from `vanity_ship_names` and a personal callsign from the independent lists. Player callsign at New Game is pre-filled from `independent_callsigns` but remains editable.
+**NPC identity:** corporate ships broadcast `{TICKER}-{NNN}` callsigns (e.g. `HW-447`) and affiliation only - no hull name. Corporate affiliation is weighted by `corporate_presence.json` for the current sector (`CorporatePresence.pick_corporation`). Independent ships always receive a name from `vanity_ship_names` and a personal callsign from the independent lists. Player callsign at New Game is pre-filled from `independent_callsigns` but remains editable.
 
 ### `corporations.json` and `corporate_presence.json`
 
@@ -340,6 +341,8 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `id` | corporations | Lowercase snake_case corporation id |
 | `name` | corporations | Display name (transponder affiliation) |
 | `callsign_prefix` | corporations | Stock ticker for `{TICKER}-{NNN}` callsigns |
+| `ad_voice` | corporations | Office ticker tone: `polished`, `blunt`, `cheerful`, or `severe` |
+| `trade` | corporations | One-sentence trade advertising line for corporate office ticker |
 | *(sector id)* | corporate_presence | Key matching `sectors.json` |
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
@@ -384,7 +387,7 @@ Daily commodity quotes are computed at runtime by `CommodityEconomy` from `econo
 
 **Adding a sector:** `scripts/tools/generate_sector_bundle.py` patches `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, and `routes.json` from a compact spec. See `scripts/tools/sector_spec.example.json`. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
 
-Other sector/world/interactable/habitat schemas unchanged — see setting docs.
+Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 
 ## How to extend
 

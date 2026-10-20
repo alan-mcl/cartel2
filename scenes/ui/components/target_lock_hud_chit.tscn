@@ -29,12 +29,12 @@ theme_override_constants/separation = 0
 [node name="DistanceLabel" type="Label" parent="VBox/HBox/Body"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "— m"
+text = "- m"
 
 [node name="Line1Label" type="Label" parent="VBox/HBox/Body"]
 layout_mode = 2
 theme_type_variation = &"Meta"
-text = "—"
+text = "-"
 text_overrun_behavior = 3
 
 [node name="Line2Label" type="Label" parent="VBox/HBox/Body"]

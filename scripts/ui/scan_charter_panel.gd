@@ -38,6 +38,7 @@ func _build_content() -> void:
 
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
@@ -244,7 +245,7 @@ func _bounty_accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> P
 		)
 		inner.add_child(cancel)
 	else:
-		status_line = "In progress — cannot cancel."
+		status_line = "In progress - cannot cancel."
 		inner.add_child(_one_line_label(status_line, &"Muted"))
 
 	var tooltip := CharterTooltipText.format_bounty(
@@ -285,7 +286,7 @@ func _accepted_tile(missions: MissionSubsystem, charter: Dictionary) -> PanelCon
 		)
 		inner.add_child(cancel)
 	else:
-		status_line = "In progress — cannot cancel."
+		status_line = "In progress - cannot cancel."
 		inner.add_child(_one_line_label(status_line, &"Muted"))
 
 	var tooltip := CharterTooltipText.format_scan(
@@ -430,6 +431,8 @@ func _one_line_label(text: String, variation: StringName = &"") -> Label:
 func _plain_label(text: String) -> Label:
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	label.text = text
 	return label
 

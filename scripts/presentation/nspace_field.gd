@@ -281,7 +281,7 @@ func _draw() -> void:
 	var tex_size := tex.get_size()
 	var center := to_local(camera.get_screen_center_position())
 	var scale := Vector2.ONE / camera.zoom
-	# Vertices already map 2D y → 3D -y; viewport pixels are y-down like the canvas — no second flip.
+	# Vertices already map 2D y → 3D -y; viewport pixels are y-down like the canvas - no second flip.
 	draw_set_transform_matrix(Transform2D(Vector2(scale.x, 0.0), Vector2(0.0, scale.y), center))
 	draw_texture_rect(tex, Rect2(-tex_size * 0.5, tex_size), false)
 	draw_set_transform_matrix(Transform2D.IDENTITY)

@@ -105,27 +105,27 @@ text = "SHIP"
 [node name="PowerLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Power: —"
+text = "Power: -"
 
 [node name="FuelLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Fuel: —"
+text = "Fuel: -"
 
 [node name="ComputeLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Compute: —"
+text = "Compute: -"
 
 [node name="LifeSupportLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Life support: —"
+text = "Life support: -"
 
 [node name="HullLabel" type="Label" parent="Root/StatusPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Hull: —"
+text = "Hull: -"
 
 [node name="WeaponChitStack" type="VBoxContainer" parent="Root"]
 layout_mode = 0
@@ -155,7 +155,7 @@ alignment = 1
 [node name="IdentityLabel" type="Label" parent="Root/FlightStrip/HBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "— aboard —"
+text = "- aboard -"
 
 [node name="SpeedLabel" type="Label" parent="Root/FlightStrip/HBox"]
 layout_mode = 2
@@ -193,32 +193,32 @@ text = "SIGNATURE"
 [node name="ThermalLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Thermal: —"
+text = "Thermal: -"
 
 [node name="GravLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Gravitational: —"
+text = "Gravitational: -"
 
 [node name="EmLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "EM: —"
+text = "EM: -"
 
 [node name="ComputeLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Computational: —"
+text = "Computational: -"
 
 [node name="TransponderLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Transponder: —"
+text = "Transponder: -"
 
 [node name="ActiveSensorsLabel" type="Label" parent="Root/SignaturePanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Active sensors: —"
+text = "Active sensors: -"
 
 [node name="FieldPanel" type="PanelContainer" parent="Root"]
 layout_mode = 1
@@ -245,22 +245,22 @@ text = "FIELDS"
 [node name="GravityLabel" type="Label" parent="Root/FieldPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Gravity: —"
+text = "Gravity: -"
 
 [node name="MagneticLabel" type="Label" parent="Root/FieldPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Magnetic: —"
+text = "Magnetic: -"
 
 [node name="RadiantLabel" type="Label" parent="Root/FieldPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Radiant: —"
+text = "Radiant: -"
 
 [node name="ParticlesLabel" type="Label" parent="Root/FieldPanel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Numeric"
-text = "Particles: —"
+text = "Particles: -"
 
 [node name="StabilityLabel" type="Label" parent="Root/FieldPanel/VBox"]
 layout_mode = 2

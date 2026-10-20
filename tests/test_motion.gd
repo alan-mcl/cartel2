@@ -5,7 +5,7 @@ extends RefCounted
 ##
 ## Flight is Newtonian: `step` integrates thrust along facing and never damps, so velocity
 ## persists when input stops. Phase 2 moves this call site into a shared sim core, so pin the
-## integration behaviour — especially the speed caps, which are the only clamping in the model.
+## integration behaviour - especially the speed caps, which are the only clamping in the model.
 
 const EPSILON := 0.0001
 

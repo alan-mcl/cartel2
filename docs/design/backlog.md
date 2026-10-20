@@ -1,6 +1,6 @@
 # Design backlog
 
-Deferred **design and content** features. For what is **not implemented in code today**, see also [architecture.md](architecture.md#not-yet-implemented). For maintainability and extensibility work — refactors, test and CI gaps, content tooling — see [refactor_backlog.md](refactor_backlog.md).
+Deferred **design and content** features. For what is **not implemented in code today**, see also [architecture.md](architecture.md#not-yet-implemented). For maintainability and extensibility work - refactors, test and CI gaps, content tooling - see [refactor_backlog.md](refactor_backlog.md).
 
 ## Propulsion fuel types
 
@@ -14,4 +14,4 @@ Deferred **design and content** features. For what is **not implemented in code 
 
 ## Integrated sail
 
-**Status:** Implemented. `engine_type` `integrated_sail` — thrust scales with radiant / particle / magnetic fields; zero propulsion fuel; power draw while thrusting. Six workshop SKUs; no ship template defaults to a sail yet.
+**Status:** Implemented. `engine_type` `integrated_sail` - thrust scales with radiant / particle / magnetic fields; zero propulsion fuel; power draw while thrusting. Six workshop SKUs; no ship template defaults to a sail yet.

@@ -1,6 +1,6 @@
 # Cartel UI theme
 
-Corporate information-system visual language for this game: charcoal surfaces, off-white text, amber accent. Designed at **1920×1080** with compact Bloomberg-style density — fonts do not scale up to fill the viewport.
+Corporate information-system visual language for this game: charcoal surfaces, off-white text, amber accent. Designed at **1920×1080** with compact Bloomberg-style density - fonts do not scale up to fill the viewport.
 
 ## Canonical resources
 
@@ -21,7 +21,7 @@ Rebuild after token or style changes:
 `project.godot`:
 
 - `1920×1080` design baseline (layout authored at this size)
-- `window/stretch/mode="disabled"` — one UI unit equals one framebuffer pixel so labels and 1px borders stay crisp; smaller windows show less content instead of scaling the whole frame
+- `window/stretch/mode="disabled"` - one UI unit equals one framebuffer pixel so labels and 1px borders stay crisp; smaller windows show less content instead of scaling the whole frame
 - `gui/theme/custom="res://themes/cartel_theme.tres"`
 
 ## Design tokens (`Cartel` theme type)
@@ -70,33 +70,33 @@ Set on nodes: `theme_type_variation = &"Title"`.
 
 `PanelContainer` type variations:
 
-- `Surface` — default operational panel
-- `SurfaceTranslucent` — flight HUD corner panels (25% alpha surface/border)
-- `HudTicker` — bottom HUD gameplay and WIRE ticker bars (elevated fill at ~85% opacity — slightly translucent)
-- `WeaponHudChit` — flight HUD weapon chits and right-edge lock/autopilot chits (same ~85% elevated fill as `HudTicker`)
-- `WeaponHudChitSelected` — active weapon chit (`accent` gold border)
-- `Elevated` — footer bars, selected contexts
-- `Media` — editorial / art frames
-- `Alert` — breaking strip with left status bar
+- `Surface` - default operational panel
+- `SurfaceTranslucent` - flight HUD corner panels (25% alpha surface/border)
+- `HudTicker` - bottom HUD gameplay and WIRE ticker bars (elevated fill at ~85% opacity - slightly translucent)
+- `WeaponHudChit` - flight HUD weapon chits and right-edge lock/autopilot chits (same ~85% elevated fill as `HudTicker`)
+- `WeaponHudChitSelected` - active weapon chit (`accent` gold border)
+- `Elevated` - footer bars, selected contexts
+- `Media` - editorial / art frames
+- `Alert` - breaking strip with left status bar
 
 ## Operational vs media
 
 One theme file; layout patterns distinguish modes:
 
-- **Operational** — habitat, shipyard, HUD, menus: tables, metrics, compact buttons. Use `Surface`, `Numeric`, `Section`, `Muted`.
-- **Media** — wire/headline layouts (showcase today): `Headline`, `Meta`, `Alert` banner. Same tokens, editorial hierarchy.
+- **Operational** - habitat, shipyard, HUD, menus: tables, metrics, compact buttons. Use `Surface`, `Numeric`, `Section`, `Muted`.
+- **Media** - wire/headline layouts (showcase today): `Headline`, `Meta`, `Alert` banner. Same tokens, editorial hierarchy.
 
 ## Reusable patterns
 
 Under `scenes/ui/patterns/` (native Controls only):
 
-- `metric_block.tscn` — label + numeric value
-- `status_row.tscn` — key / value row
-- `headline_item.tscn` — headline + meta line
-- `message_bar.tscn` — queued log labels (`play_line`, one pass each) or looping wire feed (`set_feed`)
-- `alert_banner.tscn` — compact alert strip
-- `compact_toolbar.tscn` — button row
-- `data_table.tscn` — header grid + ItemList
+- `metric_block.tscn` - label + numeric value
+- `status_row.tscn` - key / value row
+- `headline_item.tscn` - headline + meta line
+- `message_bar.tscn` - queued log labels (`play_line`, one pass each) or looping wire feed (`set_feed`)
+- `alert_banner.tscn` - compact alert strip
+- `compact_toolbar.tscn` - button row
+- `data_table.tscn` - header grid + ItemList
 
 ## Developer showcase
 
@@ -107,7 +107,7 @@ Static scene with System, Operational, and Media samples:
   --scene res://scenes/dev/theme_showcase.tscn
 ```
 
-Not the main scene — for visual QA and onboarding only.
+Not the main scene - for visual QA and onboarding only.
 
 ## Conventions
 

@@ -20,7 +20,7 @@ func _ready() -> void:
 func open(session: GameSession) -> void:
 	_session = session
 	visible = true
-	_title.text = "Career — %s" % str(session.callsign) if session != null else "Career"
+	_title.text = "Career - %s" % str(session.callsign) if session != null else "Career"
 	_rebuild()
 
 

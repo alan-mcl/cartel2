@@ -1,4 +1,4 @@
-SENSOR AND SIGNATURE SYSTEM — PHASE 1 SPEC
+SENSOR AND SIGNATURE SYSTEM - PHASE 1 SPEC
 
 OVERVIEW
 
@@ -308,7 +308,7 @@ A contact may therefore be detected without being lockable.
 
 For example:
 
-"Unknown contact — weak thermal signature"
+"Unknown contact - weak thermal signature"
 
 means the sensor knows something is present.
 

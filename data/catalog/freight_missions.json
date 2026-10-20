@@ -858,7 +858,7 @@
       "cargos": [
         "cognition_crate"
       ],
-      "text": "{quantity} cognition crate(s) — keep the vault powered all the way to {destination}."
+      "text": "{quantity} cognition crate(s) - keep the vault powered all the way to {destination}."
     },
     {
       "id": "cognition_archive",
