@@ -118,27 +118,33 @@ func _build_content() -> void:
 	)
 	tab_row.add_child(ships_tab)
 
-	var departures_tab := Button.new()
-	departures_tab.text = "Departures Terminal"
-	departures_tab.disabled = _view_mode == "departures"
-	departures_tab.pressed.connect(func() -> void:
-		if _view_mode != "departures":
-			_view_mode = "departures"
-			_full_rebuild()
+	var is_station := (
+		_context.catalog != null
+		and _context.session != null
+		and _context.catalog.location_is_station(_context.session.habitat_id)
 	)
-	tab_row.add_child(departures_tab)
+	if not is_station:
+		var departures_tab := Button.new()
+		departures_tab.text = "Departures Terminal"
+		departures_tab.disabled = _view_mode == "departures"
+		departures_tab.pressed.connect(func() -> void:
+			if _view_mode != "departures":
+				_view_mode = "departures"
+				_full_rebuild()
+		)
+		tab_row.add_child(departures_tab)
 
-	var freight_tab := Button.new()
-	freight_tab.text = "Freight Terminal"
-	freight_tab.disabled = _view_mode == "freight"
-	freight_tab.pressed.connect(func() -> void:
-		if _view_mode != "freight":
-			_view_mode = "freight"
-			_full_rebuild()
-	)
-	tab_row.add_child(freight_tab)
+		var freight_tab := Button.new()
+		freight_tab.text = "Freight Terminal"
+		freight_tab.disabled = _view_mode == "freight"
+		freight_tab.pressed.connect(func() -> void:
+			if _view_mode != "freight":
+				_view_mode = "freight"
+				_full_rebuild()
+		)
+		tab_row.add_child(freight_tab)
 
-	if _view_mode == "freight":
+	if not is_station and _view_mode == "freight":
 		_sync_terminal_ship_selection()
 		var freight_host := Control.new()
 		_fill_remaining_area(freight_host)
@@ -156,7 +162,7 @@ func _build_content() -> void:
 			freight_panel.refresh()
 		return
 
-	if _view_mode == "departures":
+	if not is_station and _view_mode == "departures":
 		_sync_terminal_ship_selection()
 		var charter_host := Control.new()
 		_fill_remaining_area(charter_host)

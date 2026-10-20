@@ -1,1699 +1,1836 @@
 {
-  "proxima": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/proxima_albedo.png",
-      "night_lights": "res://assets/world/planets/proxima_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "proxima_habitat_obj",
-          "kind": "habitat",
-          "label": "Proxima Habitat",
-          "interactable": "proxima_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg"
-        },
-        {
-          "id": "proxima_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "proxima_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "proxima_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        },
-        {
-          "id": "proxima_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "proxima_orbital_5",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tower.svg"
-        },
-        {
-          "id": "proxima_orbital_6",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "proxima_jump_gate_obj",
-      "label": "Proxima Jump Gate",
-      "interactable": "proxima_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "tycho": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/tycho_albedo.png",
-      "night_lights": "res://assets/world/planets/tycho_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "tycho_habitat_obj",
-          "kind": "habitat",
-          "label": "Tycho Habitat",
-          "interactable": "tycho_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#dd9966"
-        },
-        {
-          "id": "tycho_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "tycho_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "tycho_jump_gate_obj",
-      "label": "Tycho Jump Gate",
-      "interactable": "tycho_jump_gate",
-      "radius": 5400
-    },
-    "entities": [
-      {
-        "id": "tycho_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2800,
-          "y": 900
-        },
-        "rotation": 0.35
-      },
-      {
-        "id": "tycho_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 3200,
-          "y": -1200
-        },
-        "rotation": -0.8
-      },
-      {
-        "id": "tycho_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 4100,
-          "y": 400
-        },
-        "rotation": 1.1,
-        "scale": {
-          "x": 1.15,
-          "y": 0.9
-        }
-      }
-    ],
-    "star": {
-      "temperature_k": 9500,
-      "luminosity": 1.5
-    }
-  },
-  "bela": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/bela_albedo.png",
-      "night_lights": "res://assets/world/planets/bela_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "bela_habitat_obj",
-          "kind": "habitat",
-          "label": "La Bella Vista Habitat",
-          "interactable": "bela_habitat",
-          "sprite": "res://assets/world/habitat_bela.svg"
-        },
-        {
-          "id": "bela_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "bela_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "bela_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "bela_jump_gate_obj",
-      "label": "La Bella Vista Jump Gate",
-      "interactable": "bela_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5200,
-      "luminosity": 1.1
-    }
-  },
-  "irasia": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/irasia_albedo.png",
-      "night_lights": "res://assets/world/planets/irasia_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "irasia_habitat_obj",
-          "kind": "habitat",
-          "label": "Irasia Habitat",
-          "interactable": "irasia_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#c8d4b8"
-        },
-        {
-          "id": "irasia_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "irasia_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "irasia_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        },
-        {
-          "id": "irasia_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "irasia_orbital_5",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tower.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "irasia_jump_gate_obj",
-      "label": "Irasia Jump Gate",
-      "interactable": "irasia_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "tokirev": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/tokirev_albedo.png",
-      "night_lights": "res://assets/world/planets/tokirev_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "tokirev_habitat_obj",
-          "kind": "habitat",
-          "label": "Tokirev Habitat",
-          "interactable": "tokirev_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a8b8c8"
-        },
-        {
-          "id": "tokirev_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "tokirev_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        },
-        {
-          "id": "tokirev_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "tokirev_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tower.svg"
-        },
-        {
-          "id": "tokirev_orbital_5",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "tokirev_jump_gate_obj",
-      "label": "Tokirev Jump Gate",
-      "interactable": "tokirev_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "fennet": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/fennet_albedo.png",
-      "night_lights": "res://assets/world/planets/fennet_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "fennet_habitat_obj",
-          "kind": "habitat",
-          "label": "Fennet Habitat",
-          "interactable": "fennet_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#98c878"
-        },
-        {
-          "id": "fennet_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "fennet_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "fennet_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "fennet_jump_gate_obj",
-      "label": "Fennet Jump Gate",
-      "interactable": "fennet_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "fortuna": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/fortuna_albedo.png",
-      "night_lights": "res://assets/world/planets/fortuna_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "fortuna_habitat_obj",
-          "kind": "habitat",
-          "label": "Fortuna Habitat",
-          "interactable": "fortuna_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#e8d070"
-        },
-        {
-          "id": "fortuna_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "fortuna_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "fortuna_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tower.svg"
-        },
-        {
-          "id": "fortuna_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "fortuna_jump_gate_obj",
-      "label": "Fortuna Jump Gate",
-      "interactable": "fortuna_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5400,
-      "luminosity": 0.85
-    }
-  },
-  "new_carthage": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/new_carthage_albedo.png",
-      "night_lights": "res://assets/world/planets/new_carthage_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "new_carthage_habitat_obj",
-          "kind": "habitat",
-          "label": "New Carthage Habitat",
-          "interactable": "new_carthage_habitat",
-          "sprite": "res://assets/world/habitat_bela.svg",
-          "modulate": "#70d0c8"
-        },
-        {
-          "id": "new_carthage_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "new_carthage_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "new_carthage_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "new_carthage_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "new_carthage_jump_gate_obj",
-      "label": "New Carthage Jump Gate",
-      "interactable": "new_carthage_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 3800,
-      "luminosity": 0.35
-    }
-  },
-  "horizon": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/horizon_albedo.png",
-      "night_lights": "res://assets/world/planets/horizon_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "horizon_habitat_obj",
-          "kind": "habitat",
-          "label": "Horizon Habitat",
-          "interactable": "horizon_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#b8d098"
-        },
-        {
-          "id": "horizon_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "horizon_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "horizon_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        },
-        {
-          "id": "horizon_orbital_4",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "horizon_orbital_5",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "horizon_jump_gate_obj",
-      "label": "Horizon Jump Gate",
-      "interactable": "horizon_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "titania": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/titania_albedo.png",
-      "night_lights": "res://assets/world/planets/titania_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "titania_habitat_obj",
-          "kind": "habitat",
-          "label": "Titania Habitat",
-          "interactable": "titania_habitat",
-          "sprite": "res://assets/world/habitat_bela.svg",
-          "modulate": "#c0d4f0"
-        },
-        {
-          "id": "titania_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "titania_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/array.svg"
-        },
-        {
-          "id": "titania_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/platform.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "titania_jump_gate_obj",
-      "label": "Titania Jump Gate",
-      "interactable": "titania_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 2800,
-      "luminosity": 0.12
-    }
-  },
-  "pelagos": {
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2000,
-      "modulate": "#ffffff",
-      "albedo": "res://assets/world/planets/pelagos_albedo.png",
-      "night_lights": "res://assets/world/planets/pelagos_night.png"
-    },
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "concordia_habitat_obj",
-          "kind": "habitat",
-          "label": "Pelagos Habitat",
-          "interactable": "concordia_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#d4a050"
-        },
-        {
-          "id": "pelagos_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/torus.svg"
-        },
-        {
-          "id": "pelagos_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "pelagos_orbital_3",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "jump_gate": {
-      "id": "pelagos_jump_gate_obj",
-      "label": "Pelagos Jump Gate",
-      "interactable": "pelagos_jump_gate",
-      "radius": 5400
-    },
-    "star": {
-      "temperature_k": 4500,
-      "luminosity": 1.0
-    }
-  },
-  "centauri_a_beltworks": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "centauri_a_beltworks_habitat_obj",
-          "kind": "habitat",
-          "label": "Centauri A Beltworks",
-          "interactable": "centauri_a_beltworks_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "centauri_a_beltworks_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "centauri_a_beltworks_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "centauri_a_beltworks_beacon_obj",
-      "label": "Centauri A Beltworks Translation Beacon",
-      "interactable": "centauri_a_beltworks_jump_gate",
-      "destination": "proxima",
-      "radius": 5400
-    },
-    "entities": [
-      {
-        "id": "centauri_a_beltworks_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2100,
-          "y": 900
-        },
-        "rotation": 0.2
-      },
-      {
-        "id": "centauri_a_beltworks_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2400,
-          "y": -1400
-        },
-        "rotation": -0.4
-      },
-      {
-        "id": "centauri_a_beltworks_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2800,
-          "y": 1700
-        },
-        "rotation": 1.1,
-        "scale": {
-          "x": 1.2,
-          "y": 0.85
-        }
-      },
-      {
-        "id": "centauri_a_beltworks_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3100,
-          "y": -400
-        },
-        "rotation": 0.6
-      },
-      {
-        "id": "centauri_a_beltworks_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3400,
-          "y": 600
-        },
-        "rotation": -1.2
-      },
-      {
-        "id": "centauri_a_beltworks_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3600,
-          "y": -1900
-        },
-        "rotation": 0.35,
-        "scale": {
-          "x": 0.8,
-          "y": 1.15
-        }
-      },
-      {
-        "id": "centauri_a_beltworks_debris_7",
-        "kind": "debris",
-        "position": {
-          "x": 3900,
-          "y": 2100
-        },
-        "rotation": -0.8
-      },
-      {
-        "id": "centauri_a_beltworks_debris_8",
-        "kind": "debris",
-        "position": {
-          "x": 4100,
-          "y": -900
-        },
-        "rotation": 1.4
-      },
-      {
-        "id": "centauri_a_beltworks_debris_9",
-        "kind": "debris",
-        "position": {
-          "x": 4400,
-          "y": 300
-        },
-        "rotation": -0.15,
-        "scale": {
-          "x": 1.35,
-          "y": 1.0
-        }
-      },
-      {
-        "id": "centauri_a_beltworks_debris_10",
-        "kind": "debris",
-        "position": {
-          "x": 4700,
-          "y": -1600
-        },
-        "rotation": 0.9
-      },
-      {
-        "id": "centauri_a_beltworks_debris_11",
-        "kind": "debris",
-        "position": {
-          "x": 4900,
-          "y": 1400
-        },
-        "rotation": -1.0
-      },
-      {
-        "id": "centauri_a_beltworks_debris_12",
-        "kind": "debris",
-        "position": {
-          "x": 5200,
-          "y": -500
-        },
-        "rotation": 0.5,
-        "scale": {
-          "x": 0.9,
-          "y": 1.25
-        }
-      },
-      {
-        "id": "centauri_a_beltworks_debris_13",
-        "kind": "debris",
-        "position": {
-          "x": 5500,
-          "y": 1900
-        },
-        "rotation": -0.55
-      },
-      {
-        "id": "centauri_a_beltworks_debris_14",
-        "kind": "debris",
-        "position": {
-          "x": 5700,
-          "y": -2100
-        },
-        "rotation": 1.6
-      },
-      {
-        "id": "centauri_a_beltworks_debris_15",
-        "kind": "debris",
-        "position": {
-          "x": 6000,
-          "y": 700
-        },
-        "rotation": -1.3,
-        "scale": {
-          "x": 1.1,
-          "y": 0.75
-        }
-      },
-      {
-        "id": "centauri_a_beltworks_debris_16",
-        "kind": "debris",
-        "position": {
-          "x": 6300,
-          "y": -1200
-        },
-        "rotation": 0.25
-      },
-      {
-        "id": "centauri_a_beltworks_debris_17",
-        "kind": "debris",
-        "position": {
-          "x": 6600,
-          "y": 1500
-        },
-        "rotation": -0.7
-      },
-      {
-        "id": "centauri_a_beltworks_debris_18",
-        "kind": "debris",
-        "position": {
-          "x": 6900,
-          "y": -300
-        },
-        "rotation": 1.05,
-        "scale": {
-          "x": 1.4,
-          "y": 1.1
-        }
-      }
-    ],
-    "star": {
-      "temperature_k": 5800,
-      "luminosity": 1.0
-    }
-  },
-  "n4_default": {
-    "entities": []
-  },
-  "acb1": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "acb1_habitat_obj",
-          "kind": "habitat",
-          "label": "ACB1",
-          "interactable": "acb1_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "acb1_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "acb1_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "acb1_beacon_obj",
-      "label": "ACB1 Translation Beacon",
-      "interactable": "acb1_jump_gate",
-      "destination": "proxima",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 1600,
-      "modulate": "#c85830"
-    },
-    "entities": [
-      {
-        "id": "acb1_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "acb1_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "acb1_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "acb1_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "acb1_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "acb1_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      }
-    ],
-    "star": {
-      "temperature_k": 5200,
-      "luminosity": 1.15
-    }
-  },
-  "acb2": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "acb2_habitat_obj",
-          "kind": "habitat",
-          "label": "Scar",
-          "interactable": "acb2_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "acb2_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "acb2_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "acb2_beacon_obj",
-      "label": "Scar Translation Beacon",
-      "interactable": "acb2_jump_gate",
-      "destination": "proxima",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 1400,
-      "modulate": "#8a8078"
-    },
-    "entities": [
-      {
-        "id": "acb2_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "acb2_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "acb2_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "acb2_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "acb2_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "acb2_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      },
-      {
-        "id": "acb2_debris_7",
-        "kind": "debris",
-        "position": {
-          "x": 4060,
-          "y": 0
-        },
-        "rotation": 0.9
-      },
-      {
-        "id": "acb2_debris_8",
-        "kind": "debris",
-        "position": {
-          "x": 4340,
-          "y": 700
-        },
-        "rotation": 1.1
-      },
-      {
-        "id": "acb2_debris_9",
-        "kind": "debris",
-        "position": {
-          "x": 4620,
-          "y": 1400
-        },
-        "rotation": 1.3
-      },
-      {
-        "id": "acb2_debris_10",
-        "kind": "debris",
-        "position": {
-          "x": 4900,
-          "y": -1400
-        },
-        "rotation": 1.5
-      }
-    ],
-    "star": {
-      "temperature_k": 5200,
-      "luminosity": 1.15
-    }
-  },
-  "acb3": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "acb3_habitat_obj",
-          "kind": "habitat",
-          "label": "ACB3",
-          "interactable": "acb3_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "acb3_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "acb3_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "acb3_beacon_obj",
-      "label": "ACB3 Translation Beacon",
-      "interactable": "acb3_jump_gate",
-      "destination": "proxima",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 1200,
-      "modulate": "#a8c8e0"
-    },
-    "entities": [
-      {
-        "id": "acb3_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "acb3_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "acb3_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "acb3_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "acb3_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "acb3_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      }
-    ],
-    "star": {
-      "temperature_k": 5200,
-      "luminosity": 1.15
-    }
-  },
-  "terminus": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "terminus_habitat_obj",
-          "kind": "habitat",
-          "label": "Terminus",
-          "interactable": "terminus_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "terminus_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "terminus_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "terminus_beacon_obj",
-      "label": "Terminus Translation Beacon",
-      "interactable": "terminus_jump_gate",
-      "destination": "proxima",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2200,
-      "modulate": "#b0c0d8"
-    },
-    "entities": [
-      {
-        "id": "terminus_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "terminus_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "terminus_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "terminus_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "terminus_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      }
-    ],
-    "star": {
-      "temperature_k": 5200,
-      "luminosity": 0.55
-    }
-  },
-  "vulcan_research": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "vulcan_research_habitat_obj",
-          "kind": "habitat",
-          "label": "Vulcan Research Station",
-          "interactable": "vulcan_research_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "vulcan_research_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "vulcan_research_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "vulcan_research_beacon_obj",
-      "label": "Vulcan Research Station Translation Beacon",
-      "interactable": "vulcan_research_jump_gate",
-      "destination": "tycho",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 2800,
-      "modulate": "#d07040"
-    },
-    "entities": [
-      {
-        "id": "vulcan_research_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "vulcan_research_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "vulcan_research_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "vulcan_research_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      }
-    ],
-    "star": {
-      "temperature_k": 9500,
-      "luminosity": 2.4
-    }
-  },
-  "regulus_belt": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "regulus_belt_habitat_obj",
-          "kind": "habitat",
-          "label": "Regulus Belt Station",
-          "interactable": "regulus_belt_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "regulus_belt_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "regulus_belt_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "regulus_belt_beacon_obj",
-      "label": "Regulus Belt Station Translation Beacon",
-      "interactable": "regulus_belt_jump_gate",
-      "destination": "tycho",
-      "radius": 5400
-    },
-    "entities": [
-      {
-        "id": "regulus_belt_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "regulus_belt_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "regulus_belt_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "regulus_belt_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "regulus_belt_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "regulus_belt_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      },
-      {
-        "id": "regulus_belt_debris_7",
-        "kind": "debris",
-        "position": {
-          "x": 4060,
-          "y": 0
-        },
-        "rotation": 0.9
-      },
-      {
-        "id": "regulus_belt_debris_8",
-        "kind": "debris",
-        "position": {
-          "x": 4340,
-          "y": 700
-        },
-        "rotation": 1.1
-      }
-    ],
-    "star": {
-      "temperature_k": 8500,
-      "luminosity": 2.0
-    }
-  },
-  "denarius_ii": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "denarius_ii_habitat_obj",
-          "kind": "habitat",
-          "label": "Denarius II",
-          "interactable": "denarius_ii_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "denarius_ii_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "denarius_ii_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "denarius_ii_beacon_obj",
-      "label": "Denarius II Translation Beacon",
-      "interactable": "denarius_ii_jump_gate",
-      "destination": "tycho",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 1300,
-      "modulate": "#908878"
-    },
-    "entities": [
-      {
-        "id": "denarius_ii_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "denarius_ii_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "denarius_ii_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "denarius_ii_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "denarius_ii_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "denarius_ii_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      },
-      {
-        "id": "denarius_ii_debris_7",
-        "kind": "debris",
-        "position": {
-          "x": 4060,
-          "y": 0
-        },
-        "rotation": 0.9
-      },
-      {
-        "id": "denarius_ii_debris_8",
-        "kind": "debris",
-        "position": {
-          "x": 4340,
-          "y": 700
-        },
-        "rotation": 1.1
-      }
-    ],
-    "star": {
-      "temperature_k": 8500,
-      "luminosity": 2.0
-    }
-  },
-  "typhon_xvi": {
-    "orbital_ring": {
-      "radius": 1600,
-      "period_seconds": 720,
-      "orbitals": [
-        {
-          "id": "typhon_xvi_habitat_obj",
-          "kind": "habitat",
-          "label": "Typhon XVI",
-          "interactable": "typhon_xvi_habitat",
-          "sprite": "res://assets/world/habitat_proxima.svg",
-          "modulate": "#a89878"
-        },
-        {
-          "id": "typhon_xvi_orbital_1",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/yard.svg"
-        },
-        {
-          "id": "typhon_xvi_orbital_2",
-          "kind": "orbital",
-          "sprite": "res://assets/world/orbitals/tank_farm.svg"
-        }
-      ]
-    },
-    "translation_beacon": {
-      "id": "typhon_xvi_beacon_obj",
-      "label": "Typhon XVI Translation Beacon",
-      "interactable": "typhon_xvi_jump_gate",
-      "destination": "tycho",
-      "radius": 5400
-    },
-    "planet": {
-      "sprite": "res://assets/world/planet.png",
-      "diameter": 1350,
-      "modulate": "#787068"
-    },
-    "entities": [
-      {
-        "id": "typhon_xvi_debris_1",
-        "kind": "debris",
-        "position": {
-          "x": 2380,
-          "y": -700
-        },
-        "rotation": -0.3
-      },
-      {
-        "id": "typhon_xvi_debris_2",
-        "kind": "debris",
-        "position": {
-          "x": 2660,
-          "y": 0
-        },
-        "rotation": -0.1
-      },
-      {
-        "id": "typhon_xvi_debris_3",
-        "kind": "debris",
-        "position": {
-          "x": 2940,
-          "y": 700
-        },
-        "rotation": 0.1
-      },
-      {
-        "id": "typhon_xvi_debris_4",
-        "kind": "debris",
-        "position": {
-          "x": 3220,
-          "y": 1400
-        },
-        "rotation": 0.3
-      },
-      {
-        "id": "typhon_xvi_debris_5",
-        "kind": "debris",
-        "position": {
-          "x": 3500,
-          "y": -1400
-        },
-        "rotation": 0.5
-      },
-      {
-        "id": "typhon_xvi_debris_6",
-        "kind": "debris",
-        "position": {
-          "x": 3780,
-          "y": -700
-        },
-        "rotation": 0.7
-      },
-      {
-        "id": "typhon_xvi_debris_7",
-        "kind": "debris",
-        "position": {
-          "x": 4060,
-          "y": 0
-        },
-        "rotation": 0.9
-      },
-      {
-        "id": "typhon_xvi_debris_8",
-        "kind": "debris",
-        "position": {
-          "x": 4340,
-          "y": 700
-        },
-        "rotation": 1.1
-      },
-      {
-        "id": "typhon_xvi_debris_9",
-        "kind": "debris",
-        "position": {
-          "x": 4620,
-          "y": 1400
-        },
-        "rotation": 1.3
-      },
-      {
-        "id": "typhon_xvi_debris_10",
-        "kind": "debris",
-        "position": {
-          "x": 4900,
-          "y": -1400
-        },
-        "rotation": 1.5
-      }
-    ],
-    "star": {
-      "temperature_k": 8500,
-      "luminosity": 2.0
-    }
-  }
+	"proxima": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/proxima_albedo.png",
+			"night_lights": "res://assets/world/planets/proxima_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "proxima_habitat_obj",
+					"kind": "habitat",
+					"label": "Proxima Habitat",
+					"interactable": "proxima_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg"
+				},
+				{
+					"id": "proxima_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "Creus Corporation Headquarters",
+					"interactable": "sta_creus_proxima_dock"
+				},
+				{
+					"id": "proxima_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg",
+					"label": "SnedeCorp Headquarters",
+					"interactable": "sta_snedecorp_proxima_dock"
+				},
+				{
+					"id": "proxima_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg",
+					"label": "Morrow & Sons Headquarters",
+					"interactable": "sta_morrow_and_sons_proxima_dock"
+				},
+				{
+					"id": "proxima_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg",
+					"label": "Mercury Communications Headquarters",
+					"interactable": "sta_mercury_communications_proxima_dock"
+				},
+				{
+					"id": "proxima_orbital_5",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				},
+				{
+					"id": "proxima_orbital_6",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "proxima_jump_gate_obj",
+			"label": "Proxima Jump Gate",
+			"interactable": "proxima_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"tycho": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/tycho_albedo.png",
+			"night_lights": "res://assets/world/planets/tycho_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tycho_habitat_obj",
+					"kind": "habitat",
+					"label": "Tycho Habitat",
+					"interactable": "tycho_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#dd9966"
+				},
+				{
+					"id": "tycho_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg",
+					"label": "Galactic Outcomes Headquarters",
+					"interactable": "sta_galactic_outcomes_tycho_dock"
+				},
+				{
+					"id": "tycho_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg",
+					"label": "General Industrial Headquarters",
+					"interactable": "sta_general_industrial_tycho_dock"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "tycho_jump_gate_obj",
+			"label": "Tycho Jump Gate",
+			"interactable": "tycho_jump_gate",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "tycho_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2800,
+					"y": 900
+				},
+				"rotation": 0.35
+			},
+			{
+				"id": "tycho_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 3200,
+					"y": -1200
+				},
+				"rotation": -0.8
+			},
+			{
+				"id": "tycho_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 4100,
+					"y": 400
+				},
+				"rotation": 1.1,
+				"scale": {
+					"x": 1.15,
+					"y": 0.9
+				}
+			}
+		],
+		"star": {
+			"temperature_k": 9500,
+			"luminosity": 1.5
+		}
+	},
+	"bela": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/bela_albedo.png",
+			"night_lights": "res://assets/world/planets/bela_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "bela_habitat_obj",
+					"kind": "habitat",
+					"label": "La Bella Vista Habitat",
+					"interactable": "bela_habitat",
+					"sprite": "res://assets/world/habitat_bela.svg"
+				},
+				{
+					"id": "bela_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "bela_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "bela_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "bela_jump_gate_obj",
+			"label": "La Bella Vista Jump Gate",
+			"interactable": "bela_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
+	},
+	"irasia": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/irasia_albedo.png",
+			"night_lights": "res://assets/world/planets/irasia_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "irasia_habitat_obj",
+					"kind": "habitat",
+					"label": "Irasia Habitat",
+					"interactable": "irasia_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c8d4b8"
+				},
+				{
+					"id": "irasia_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "Orion Aerospace Headquarters",
+					"interactable": "sta_orion_aerospace_irasia_dock"
+				},
+				{
+					"id": "irasia_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "irasia_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "irasia_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "irasia_orbital_5",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "irasia_jump_gate_obj",
+			"label": "Irasia Jump Gate",
+			"interactable": "irasia_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"tokirev": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/tokirev_albedo.png",
+			"night_lights": "res://assets/world/planets/tokirev_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tokirev_habitat_obj",
+					"kind": "habitat",
+					"label": "Tokirev Habitat",
+					"interactable": "tokirev_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a8b8c8"
+				},
+				{
+					"id": "tokirev_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "tokirev_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "tokirev_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "tokirev_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				},
+				{
+					"id": "tokirev_orbital_5",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "tokirev_jump_gate_obj",
+			"label": "Tokirev Jump Gate",
+			"interactable": "tokirev_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"fennet": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/fennet_albedo.png",
+			"night_lights": "res://assets/world/planets/fennet_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "fennet_habitat_obj",
+					"kind": "habitat",
+					"label": "Fennet Habitat",
+					"interactable": "fennet_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#98c878"
+				},
+				{
+					"id": "fennet_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "fennet_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "fennet_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "fennet_jump_gate_obj",
+			"label": "Fennet Jump Gate",
+			"interactable": "fennet_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"fortuna": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/fortuna_albedo.png",
+			"night_lights": "res://assets/world/planets/fortuna_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "fortuna_habitat_obj",
+					"kind": "habitat",
+					"label": "Fortuna Habitat",
+					"interactable": "fortuna_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#e8d070"
+				},
+				{
+					"id": "fortuna_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "GRC Inc Headquarters",
+					"interactable": "sta_grc_fortuna_dock"
+				},
+				{
+					"id": "fortuna_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg",
+					"label": "The Octagon Headquarters",
+					"interactable": "sta_octagon_fortuna_dock"
+				},
+				{
+					"id": "fortuna_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				},
+				{
+					"id": "fortuna_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "fortuna_jump_gate_obj",
+			"label": "Fortuna Jump Gate",
+			"interactable": "fortuna_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"new_carthage": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/new_carthage_albedo.png",
+			"night_lights": "res://assets/world/planets/new_carthage_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "new_carthage_habitat_obj",
+					"kind": "habitat",
+					"label": "New Carthage Habitat",
+					"interactable": "new_carthage_habitat",
+					"sprite": "res://assets/world/habitat_bela.svg",
+					"modulate": "#70d0c8"
+				},
+				{
+					"id": "new_carthage_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "Crown & Anchor Headquarters",
+					"interactable": "sta_crown_and_anchor_new_carthage_dock"
+				},
+				{
+					"id": "new_carthage_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "new_carthage_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "new_carthage_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "new_carthage_jump_gate_obj",
+			"label": "New Carthage Jump Gate",
+			"interactable": "new_carthage_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 3800,
+			"luminosity": 0.35
+		}
+	},
+	"horizon": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/horizon_albedo.png",
+			"night_lights": "res://assets/world/planets/horizon_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "horizon_habitat_obj",
+					"kind": "habitat",
+					"label": "Horizon Habitat",
+					"interactable": "horizon_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#b8d098"
+				},
+				{
+					"id": "horizon_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "horizon_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "horizon_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "horizon_orbital_4",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "horizon_orbital_5",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "horizon_jump_gate_obj",
+			"label": "Horizon Jump Gate",
+			"interactable": "horizon_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"titania": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/titania_albedo.png",
+			"night_lights": "res://assets/world/planets/titania_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "titania_habitat_obj",
+					"kind": "habitat",
+					"label": "Titania Habitat",
+					"interactable": "titania_habitat",
+					"sprite": "res://assets/world/habitat_bela.svg",
+					"modulate": "#c0d4f0"
+				},
+				{
+					"id": "titania_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "Cult of Apex Headquarters",
+					"interactable": "sta_cult_of_apex_titania_dock"
+				},
+				{
+					"id": "titania_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg",
+					"label": "Chimera Corporation Headquarters",
+					"interactable": "sta_chimera_titania_dock"
+				},
+				{
+					"id": "titania_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "titania_jump_gate_obj",
+			"label": "Titania Jump Gate",
+			"interactable": "titania_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 2800,
+			"luminosity": 0.12
+		}
+	},
+	"pelagos": {
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2000,
+			"modulate": "#ffffff",
+			"albedo": "res://assets/world/planets/pelagos_albedo.png",
+			"night_lights": "res://assets/world/planets/pelagos_night.png"
+		},
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "concordia_habitat_obj",
+					"kind": "habitat",
+					"label": "Pelagos Habitat",
+					"interactable": "concordia_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#d4a050"
+				},
+				{
+					"id": "pelagos_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg",
+					"label": "Terra Nova Headquarters",
+					"interactable": "sta_terra_nova_pelagos_dock"
+				},
+				{
+					"id": "pelagos_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "pelagos_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"jump_gate": {
+			"id": "pelagos_jump_gate_obj",
+			"label": "Pelagos Jump Gate",
+			"interactable": "pelagos_jump_gate",
+			"radius": 5400
+		},
+		"star": {
+			"temperature_k": 4500,
+			"luminosity": 1.0
+		}
+	},
+	"centauri_a_beltworks": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "centauri_a_beltworks_habitat_obj",
+					"kind": "habitat",
+					"label": "Centauri A Beltworks",
+					"interactable": "centauri_a_beltworks_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "centauri_a_beltworks_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "centauri_a_beltworks_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "centauri_a_beltworks_beacon_obj",
+			"label": "Centauri A Beltworks Translation Beacon",
+			"interactable": "centauri_a_beltworks_jump_gate",
+			"destination": "proxima",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "centauri_a_beltworks_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2100,
+					"y": 900
+				},
+				"rotation": 0.2
+			},
+			{
+				"id": "centauri_a_beltworks_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2400,
+					"y": -1400
+				},
+				"rotation": -0.4
+			},
+			{
+				"id": "centauri_a_beltworks_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2800,
+					"y": 1700
+				},
+				"rotation": 1.1,
+				"scale": {
+					"x": 1.2,
+					"y": 0.85
+				}
+			},
+			{
+				"id": "centauri_a_beltworks_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3100,
+					"y": -400
+				},
+				"rotation": 0.6
+			},
+			{
+				"id": "centauri_a_beltworks_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3400,
+					"y": 600
+				},
+				"rotation": -1.2
+			},
+			{
+				"id": "centauri_a_beltworks_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3600,
+					"y": -1900
+				},
+				"rotation": 0.35,
+				"scale": {
+					"x": 0.8,
+					"y": 1.15
+				}
+			},
+			{
+				"id": "centauri_a_beltworks_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 3900,
+					"y": 2100
+				},
+				"rotation": -0.8
+			},
+			{
+				"id": "centauri_a_beltworks_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4100,
+					"y": -900
+				},
+				"rotation": 1.4
+			},
+			{
+				"id": "centauri_a_beltworks_debris_9",
+				"kind": "debris",
+				"position": {
+					"x": 4400,
+					"y": 300
+				},
+				"rotation": -0.15,
+				"scale": {
+					"x": 1.35,
+					"y": 1.0
+				}
+			},
+			{
+				"id": "centauri_a_beltworks_debris_10",
+				"kind": "debris",
+				"position": {
+					"x": 4700,
+					"y": -1600
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "centauri_a_beltworks_debris_11",
+				"kind": "debris",
+				"position": {
+					"x": 4900,
+					"y": 1400
+				},
+				"rotation": -1.0
+			},
+			{
+				"id": "centauri_a_beltworks_debris_12",
+				"kind": "debris",
+				"position": {
+					"x": 5200,
+					"y": -500
+				},
+				"rotation": 0.5,
+				"scale": {
+					"x": 0.9,
+					"y": 1.25
+				}
+			},
+			{
+				"id": "centauri_a_beltworks_debris_13",
+				"kind": "debris",
+				"position": {
+					"x": 5500,
+					"y": 1900
+				},
+				"rotation": -0.55
+			},
+			{
+				"id": "centauri_a_beltworks_debris_14",
+				"kind": "debris",
+				"position": {
+					"x": 5700,
+					"y": -2100
+				},
+				"rotation": 1.6
+			},
+			{
+				"id": "centauri_a_beltworks_debris_15",
+				"kind": "debris",
+				"position": {
+					"x": 6000,
+					"y": 700
+				},
+				"rotation": -1.3,
+				"scale": {
+					"x": 1.1,
+					"y": 0.75
+				}
+			},
+			{
+				"id": "centauri_a_beltworks_debris_16",
+				"kind": "debris",
+				"position": {
+					"x": 6300,
+					"y": -1200
+				},
+				"rotation": 0.25
+			},
+			{
+				"id": "centauri_a_beltworks_debris_17",
+				"kind": "debris",
+				"position": {
+					"x": 6600,
+					"y": 1500
+				},
+				"rotation": -0.7
+			},
+			{
+				"id": "centauri_a_beltworks_debris_18",
+				"kind": "debris",
+				"position": {
+					"x": 6900,
+					"y": -300
+				},
+				"rotation": 1.05,
+				"scale": {
+					"x": 1.4,
+					"y": 1.1
+				}
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"n4_default": {
+		"entities": []
+	},
+	"acb1": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "acb1_habitat_obj",
+					"kind": "habitat",
+					"label": "ACB1",
+					"interactable": "acb1_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "acb1_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "acb1_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "acb1_beacon_obj",
+			"label": "ACB1 Translation Beacon",
+			"interactable": "acb1_jump_gate",
+			"destination": "proxima",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1600,
+			"modulate": "#c85830"
+		},
+		"entities": [
+			{
+				"id": "acb1_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "acb1_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "acb1_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "acb1_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "acb1_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "acb1_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.15
+		}
+	},
+	"acb2": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "acb2_habitat_obj",
+					"kind": "habitat",
+					"label": "Scar",
+					"interactable": "acb2_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "acb2_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "acb2_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "acb2_beacon_obj",
+			"label": "Scar Translation Beacon",
+			"interactable": "acb2_jump_gate",
+			"destination": "proxima",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1400,
+			"modulate": "#8a8078"
+		},
+		"entities": [
+			{
+				"id": "acb2_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "acb2_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "acb2_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "acb2_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "acb2_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "acb2_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			},
+			{
+				"id": "acb2_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 4060,
+					"y": 0
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "acb2_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4340,
+					"y": 700
+				},
+				"rotation": 1.1
+			},
+			{
+				"id": "acb2_debris_9",
+				"kind": "debris",
+				"position": {
+					"x": 4620,
+					"y": 1400
+				},
+				"rotation": 1.3
+			},
+			{
+				"id": "acb2_debris_10",
+				"kind": "debris",
+				"position": {
+					"x": 4900,
+					"y": -1400
+				},
+				"rotation": 1.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.15
+		}
+	},
+	"acb3": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "acb3_habitat_obj",
+					"kind": "habitat",
+					"label": "ACB3",
+					"interactable": "acb3_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "acb3_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "acb3_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "acb3_beacon_obj",
+			"label": "ACB3 Translation Beacon",
+			"interactable": "acb3_jump_gate",
+			"destination": "proxima",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1200,
+			"modulate": "#a8c8e0"
+		},
+		"entities": [
+			{
+				"id": "acb3_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "acb3_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "acb3_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "acb3_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "acb3_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "acb3_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.15
+		}
+	},
+	"terminus": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "terminus_habitat_obj",
+					"kind": "habitat",
+					"label": "Terminus",
+					"interactable": "terminus_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "terminus_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "terminus_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "terminus_beacon_obj",
+			"label": "Terminus Translation Beacon",
+			"interactable": "terminus_jump_gate",
+			"destination": "proxima",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2200,
+			"modulate": "#b0c0d8"
+		},
+		"entities": [
+			{
+				"id": "terminus_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "terminus_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "terminus_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "terminus_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "terminus_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 0.55
+		}
+	},
+	"vulcan_research": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "vulcan_research_habitat_obj",
+					"kind": "habitat",
+					"label": "Vulcan Research Station",
+					"interactable": "vulcan_research_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "vulcan_research_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "vulcan_research_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "vulcan_research_beacon_obj",
+			"label": "Vulcan Research Station Translation Beacon",
+			"interactable": "vulcan_research_jump_gate",
+			"destination": "tycho",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2800,
+			"modulate": "#d07040"
+		},
+		"entities": [
+			{
+				"id": "vulcan_research_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "vulcan_research_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "vulcan_research_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "vulcan_research_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			}
+		],
+		"star": {
+			"temperature_k": 9500,
+			"luminosity": 2.4
+		}
+	},
+	"regulus_belt": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "regulus_belt_habitat_obj",
+					"kind": "habitat",
+					"label": "Regulus Belt Station",
+					"interactable": "regulus_belt_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "regulus_belt_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "regulus_belt_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "regulus_belt_beacon_obj",
+			"label": "Regulus Belt Station Translation Beacon",
+			"interactable": "regulus_belt_jump_gate",
+			"destination": "tycho",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "regulus_belt_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "regulus_belt_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "regulus_belt_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "regulus_belt_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "regulus_belt_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "regulus_belt_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			},
+			{
+				"id": "regulus_belt_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 4060,
+					"y": 0
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "regulus_belt_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4340,
+					"y": 700
+				},
+				"rotation": 1.1
+			}
+		],
+		"star": {
+			"temperature_k": 8500,
+			"luminosity": 2.0
+		}
+	},
+	"denarius_ii": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "denarius_ii_habitat_obj",
+					"kind": "habitat",
+					"label": "Denarius II",
+					"interactable": "denarius_ii_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "denarius_ii_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "denarius_ii_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "denarius_ii_beacon_obj",
+			"label": "Denarius II Translation Beacon",
+			"interactable": "denarius_ii_jump_gate",
+			"destination": "tycho",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1300,
+			"modulate": "#908878"
+		},
+		"entities": [
+			{
+				"id": "denarius_ii_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "denarius_ii_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "denarius_ii_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "denarius_ii_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "denarius_ii_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "denarius_ii_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			},
+			{
+				"id": "denarius_ii_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 4060,
+					"y": 0
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "denarius_ii_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4340,
+					"y": 700
+				},
+				"rotation": 1.1
+			}
+		],
+		"star": {
+			"temperature_k": 8500,
+			"luminosity": 2.0
+		}
+	},
+	"typhon_xvi": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "typhon_xvi_habitat_obj",
+					"kind": "habitat",
+					"label": "Typhon XVI",
+					"interactable": "typhon_xvi_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "typhon_xvi_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "typhon_xvi_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "typhon_xvi_beacon_obj",
+			"label": "Typhon XVI Translation Beacon",
+			"interactable": "typhon_xvi_jump_gate",
+			"destination": "tycho",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1350,
+			"modulate": "#787068"
+		},
+		"entities": [
+			{
+				"id": "typhon_xvi_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "typhon_xvi_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "typhon_xvi_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "typhon_xvi_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "typhon_xvi_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "typhon_xvi_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			},
+			{
+				"id": "typhon_xvi_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 4060,
+					"y": 0
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "typhon_xvi_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4340,
+					"y": 700
+				},
+				"rotation": 1.1
+			},
+			{
+				"id": "typhon_xvi_debris_9",
+				"kind": "debris",
+				"position": {
+					"x": 4620,
+					"y": 1400
+				},
+				"rotation": 1.3
+			},
+			{
+				"id": "typhon_xvi_debris_10",
+				"kind": "debris",
+				"position": {
+					"x": 4900,
+					"y": -1400
+				},
+				"rotation": 1.5
+			}
+		],
+		"star": {
+			"temperature_k": 8500,
+			"luminosity": 2.0
+		}
+	},
+	"pelagos_belt": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "pelagos_belt_habitat_obj",
+					"kind": "habitat",
+					"label": "Pelagos Belt Station",
+					"interactable": "pelagos_belt_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a89878"
+				},
+				{
+					"id": "pelagos_belt_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "pelagos_belt_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "pelagos_belt_beacon_obj",
+			"label": "Pelagos Belt Station Translation Beacon",
+			"interactable": "pelagos_belt_jump_gate",
+			"destination": "pelagos",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "pelagos_belt_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "pelagos_belt_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "pelagos_belt_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "pelagos_belt_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "pelagos_belt_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			},
+			{
+				"id": "pelagos_belt_debris_6",
+				"kind": "debris",
+				"position": {
+					"x": 3780,
+					"y": -700
+				},
+				"rotation": 0.7
+			},
+			{
+				"id": "pelagos_belt_debris_7",
+				"kind": "debris",
+				"position": {
+					"x": 4060,
+					"y": 0
+				},
+				"rotation": 0.9
+			},
+			{
+				"id": "pelagos_belt_debris_8",
+				"kind": "debris",
+				"position": {
+					"x": 4340,
+					"y": 700
+				},
+				"rotation": 1.1
+			}
+		],
+		"star": {
+			"temperature_k": 4500,
+			"luminosity": 1.0
+		}
+	}
 }

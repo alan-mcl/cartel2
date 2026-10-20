@@ -340,6 +340,8 @@ Mediran, Twin Cities, New Cambridge
 
 TBD
 
+- Pelagos Belt Station: habitat central to mining the asteroid belt in the Pelagos system
+
 ### Field conditions
 
  - Solar: Kepler-16 binary with radiant swings with orbital phase, near basline wind

@@ -52,6 +52,8 @@ static func sector_habitat_index(catalog: Catalog) -> Dictionary:
 		if typeof(habitat_variant) != TYPE_DICTIONARY:
 			continue
 		var habitat: Dictionary = habitat_variant
+		if str(habitat.get("type", "habitat")) == "station":
+			continue
 		var sector_id := str(habitat.get("sector_id", ""))
 		if sector_id.is_empty():
 			continue

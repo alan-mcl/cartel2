@@ -293,6 +293,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 	if ship_id.is_empty() or not _main.session.docked:
 		return
 
+	var dock_location_id: String = _main.session.habitat_id
 	var missions := _simulation.get_subsystem("missions") as MissionSubsystem
 	if not _main.session.undock(_catalog, ship_id, missions):
 		return
@@ -306,10 +307,9 @@ func on_ui_undock_requested(ship_id: String) -> void:
 	)
 	_hud.bind(_main.session, _player, _main.player_ship, _simulation, _catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
-
-	var launch_pos := _world_loader.get_habitat_launch_position()
-	var habitat_pos := _world_loader.get_habitat_world_position()
-	var outward := (launch_pos - habitat_pos).normalized()
+	var launch_pos := _world_loader.get_dock_launch_position(dock_location_id)
+	var dock_pos := _world_loader.get_dock_world_position(dock_location_id)
+	var outward := (launch_pos - dock_pos).normalized()
 	if outward.length_squared() < 0.001:
 		outward = Vector2.UP
 
@@ -321,7 +321,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 	_on_session_changed.call()
 
 	_player.global_position = launch_pos
-	_player.apply_launch_velocity(_world_loader.get_undock_exit_velocity(), outward.angle())
+	_player.apply_launch_velocity(_world_loader.get_undock_exit_velocity(dock_location_id), outward.angle())
 	_on_interaction_target_changed.call(_player.get_current_target())
 
 

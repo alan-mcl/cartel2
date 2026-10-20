@@ -11,7 +11,11 @@
 			"proxima_peaceforce",
 			"corp_creus_proxima_office",
 			"corp_grc_proxima_office",
-			"corp_mercury_communications_proxima_office"
+			"corp_mercury_communications_proxima_office",
+			"corp_hq_pararamcovidia_proxima",
+			"corp_hq_monday_proxima",
+			"corp_hq_continuity_foundation_proxima",
+			"corp_hq_praetorium_proxima"
 		],
 		"default_building": "proxima_habitat_terminal",
 		"description": "Orbital city hub above Proxima, and the largest orbital by population in any system.",
@@ -51,7 +55,8 @@
 			"bela_peaceforce",
 			"corp_karaquazen_bela_office",
 			"corp_liveworlds_bela_office",
-			"corp_carthage_mercantile_bela_office"
+			"corp_carthage_mercantile_bela_office",
+			"corp_hq_universal_house_bela"
 		],
 		"default_building": "bela_habitat_terminal",
 		"description": "Resort orbital city above La Bella Vista's endless oceans.",
@@ -71,7 +76,8 @@
 			"corp_guangzhou_mercantile_irasia_office",
 			"corp_meridian_irasia_office",
 			"corp_chettiar_irasia_office",
-			"corp_orion_spur_irasia_office"
+			"corp_orion_spur_irasia_office",
+			"corp_hq_biogenesis_irasia"
 		],
 		"default_building": "irasia_habitat_terminal",
 		"description": "Busy commercial orbital on a major trade spine. Manufacturing traffic never quite sleeps.",
@@ -90,7 +96,8 @@
 			"tokirev_peaceforce",
 			"corp_atlas_concern_tokirev_office",
 			"corp_general_industrial_tokirev_office",
-			"corp_four_rivers_zaibatsu_tokirev_office"
+			"corp_four_rivers_zaibatsu_tokirev_office",
+			"corp_hq_holt_winters_tokirev"
 		],
 		"default_building": "tokirev_habitat_terminal",
 		"description": "Utilitarian orbital city above a cold factory world. Automated yards fill the skyline.",
@@ -149,7 +156,8 @@
 			"new_carthage_peaceforce",
 			"corp_carthage_mercantile_new_carthage_office",
 			"corp_guangzhou_mercantile_new_carthage_office",
-			"corp_crown_and_anchor_new_carthage_office"
+			"corp_crown_and_anchor_new_carthage_office",
+			"corp_hq_meridian_new_carthage"
 		],
 		"default_building": "new_carthage_habitat_terminal",
 		"description": "Mercantile orbital above an oceanic shipping hub. Old trading houses still set the tone.",
@@ -170,7 +178,9 @@
 			"corp_mercury_communications_horizon_office",
 			"corp_monday_horizon_office",
 			"corp_evergreen_horizon_office",
-			"corp_octagon_horizon_office"
+			"corp_octagon_horizon_office",
+			"corp_hq_himalaya_triad_horizon",
+			"corp_hq_dar_al_nour_horizon"
 		],
 		"default_building": "horizon_habitat_terminal",
 		"description": "Spacious orbital above one of the galaxy's great population centres. Green belts show through the cloud.",
@@ -210,7 +220,8 @@
 			"pelagos_peaceforce",
 			"corp_deepspace_pelagos_office",
 			"corp_atlas_concern_pelagos_office",
-			"corp_biogenesis_pelagos_office"
+			"corp_biogenesis_pelagos_office",
+			"corp_hq_orion_spur_pelagos"
 		],
 		"default_building": "concordia_orbital_terminal",
 		"description": "Commerce and manufacturing orbital above Pelagos. Twin suns make the daylight cycle a local sport.",
@@ -308,7 +319,8 @@
 		"art": "res://assets/ui/locations/regulus_belt_habitat.png",
 		"buildings": [
 			"regulus_belt_terminal",
-			"regulus_belt_exchange"
+			"regulus_belt_exchange",
+			"corp_hq_atlas_concern_regulus_belt"
 		],
 		"default_building": "regulus_belt_terminal",
 		"description": "Central habitat for the asteroid belt beyond Tycho. Mining convoys and Tycho supply shuttles share the lanes.",
@@ -345,5 +357,202 @@
 		"sector_id": "typhon_xvi",
 		"short_desc": "Mining orbitals at Typhon XVI.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_belt_habitat.png",
+		"buildings": [
+			"pelagos_belt_terminal",
+			"pelagos_belt_exchange",
+			"corp_hq_deepspace_pelagos_belt"
+		],
+		"default_building": "pelagos_belt_terminal",
+		"description": "Central habitat for the asteroid belt beyond Pelagos. Cooperative haulage and mining convoys share the lanes.",
+		"id": "pelagos_belt_habitat",
+		"name": "Pelagos Belt Station",
+		"sector_id": "pelagos_belt",
+		"short_desc": "Belt mining habitat beyond Pelagos.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_galactic_outcomes_tycho.png",
+		"buildings": [
+			"sta_galactic_outcomes_tycho_terminal",
+			"sta_galactic_outcomes_tycho_hq"
+		],
+		"default_building": "sta_galactic_outcomes_tycho_terminal",
+		"description": "Dedicated corporate orbital above the sector. Galactic Outcomes maintains its own docks.",
+		"id": "sta_galactic_outcomes_tycho",
+		"name": "Galactic Outcomes",
+		"sector_id": "tycho",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_grc_fortuna.png",
+		"buildings": [
+			"sta_grc_fortuna_terminal",
+			"sta_grc_fortuna_hq"
+		],
+		"default_building": "sta_grc_fortuna_terminal",
+		"description": "Dedicated corporate orbital above the sector. GRC Inc maintains its own docks.",
+		"id": "sta_grc_fortuna",
+		"name": "GRC Inc",
+		"sector_id": "fortuna",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_creus_proxima.png",
+		"buildings": [
+			"sta_creus_proxima_terminal",
+			"sta_creus_proxima_hq"
+		],
+		"default_building": "sta_creus_proxima_terminal",
+		"description": "Dedicated corporate orbital above the sector. Creus Corporation maintains its own docks.",
+		"id": "sta_creus_proxima",
+		"name": "Creus Corporation",
+		"sector_id": "proxima",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_snedecorp_proxima.png",
+		"buildings": [
+			"sta_snedecorp_proxima_terminal",
+			"sta_snedecorp_proxima_hq"
+		],
+		"default_building": "sta_snedecorp_proxima_terminal",
+		"description": "Dedicated corporate orbital above the sector. SnedeCorp maintains its own docks.",
+		"id": "sta_snedecorp_proxima",
+		"name": "SnedeCorp",
+		"sector_id": "proxima",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_cult_of_apex_titania.png",
+		"buildings": [
+			"sta_cult_of_apex_titania_terminal",
+			"sta_cult_of_apex_titania_hq"
+		],
+		"default_building": "sta_cult_of_apex_titania_terminal",
+		"description": "Dedicated corporate orbital above the sector. Cult of Apex maintains its own docks.",
+		"id": "sta_cult_of_apex_titania",
+		"name": "Cult of Apex",
+		"sector_id": "titania",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_general_industrial_tycho.png",
+		"buildings": [
+			"sta_general_industrial_tycho_terminal",
+			"sta_general_industrial_tycho_hq"
+		],
+		"default_building": "sta_general_industrial_tycho_terminal",
+		"description": "Dedicated corporate orbital above the sector. General Industrial maintains its own docks.",
+		"id": "sta_general_industrial_tycho",
+		"name": "General Industrial",
+		"sector_id": "tycho",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_morrow_and_sons_proxima.png",
+		"buildings": [
+			"sta_morrow_and_sons_proxima_terminal",
+			"sta_morrow_and_sons_proxima_hq"
+		],
+		"default_building": "sta_morrow_and_sons_proxima_terminal",
+		"description": "Dedicated corporate orbital above the sector. Morrow & Sons maintains its own docks.",
+		"id": "sta_morrow_and_sons_proxima",
+		"name": "Morrow & Sons",
+		"sector_id": "proxima",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_octagon_fortuna.png",
+		"buildings": [
+			"sta_octagon_fortuna_terminal",
+			"sta_octagon_fortuna_hq"
+		],
+		"default_building": "sta_octagon_fortuna_terminal",
+		"description": "Dedicated corporate orbital above the sector. The Octagon maintains its own docks.",
+		"id": "sta_octagon_fortuna",
+		"name": "The Octagon",
+		"sector_id": "fortuna",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_crown_and_anchor_new_carthage.png",
+		"buildings": [
+			"sta_crown_and_anchor_new_carthage_terminal",
+			"sta_crown_and_anchor_new_carthage_hq"
+		],
+		"default_building": "sta_crown_and_anchor_new_carthage_terminal",
+		"description": "Dedicated corporate orbital above the sector. Crown & Anchor maintains its own docks.",
+		"id": "sta_crown_and_anchor_new_carthage",
+		"name": "Crown & Anchor",
+		"sector_id": "new_carthage",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_mercury_communications_proxima.png",
+		"buildings": [
+			"sta_mercury_communications_proxima_terminal",
+			"sta_mercury_communications_proxima_hq"
+		],
+		"default_building": "sta_mercury_communications_proxima_terminal",
+		"description": "Dedicated corporate orbital above the sector. Mercury Communications maintains its own docks.",
+		"id": "sta_mercury_communications_proxima",
+		"name": "Mercury Communications",
+		"sector_id": "proxima",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_orion_aerospace_irasia.png",
+		"buildings": [
+			"sta_orion_aerospace_irasia_terminal",
+			"sta_orion_aerospace_irasia_hq"
+		],
+		"default_building": "sta_orion_aerospace_irasia_terminal",
+		"description": "Dedicated corporate orbital above the sector. Orion Aerospace maintains its own docks.",
+		"id": "sta_orion_aerospace_irasia",
+		"name": "Orion Aerospace",
+		"sector_id": "irasia",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_chimera_titania.png",
+		"buildings": [
+			"sta_chimera_titania_terminal",
+			"sta_chimera_titania_hq"
+		],
+		"default_building": "sta_chimera_titania_terminal",
+		"description": "Dedicated corporate orbital above the sector. Chimera Corporation maintains its own docks.",
+		"id": "sta_chimera_titania",
+		"name": "Chimera Corporation",
+		"sector_id": "titania",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_terra_nova_pelagos.png",
+		"buildings": [
+			"sta_terra_nova_pelagos_terminal",
+			"sta_terra_nova_pelagos_hq"
+		],
+		"default_building": "sta_terra_nova_pelagos_terminal",
+		"description": "Dedicated corporate orbital above the sector. Terra Nova maintains its own docks.",
+		"id": "sta_terra_nova_pelagos",
+		"name": "Terra Nova",
+		"sector_id": "pelagos",
+		"short_desc": "Corporate headquarters orbital.",
+		"type": "station"
 	}
 ]

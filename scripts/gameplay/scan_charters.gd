@@ -125,6 +125,19 @@ static func bar_scan_section_visible(
 
 static func scan_building_ids(catalog: Catalog, habitat_id: String) -> Array:
 	var out: Array = []
+	var location := catalog.get_habitat(habitat_id)
+	if location.is_empty():
+		return out
+	if str(location.get("type", "habitat")) == "station":
+		for building_id_variant in location.get("buildings", []):
+			var building_id := str(building_id_variant)
+			var building := catalog.get_building(building_id)
+			if catalog.get_building_type(building) != BOARD_CORPORATE:
+				continue
+			if not building.get("headquarters", false):
+				continue
+			out.append(building_id)
+		return out
 	if is_major_habitat(habitat_id):
 		var sector_id := sector_for_major_habitat(habitat_id)
 		if not sector_id.is_empty():
@@ -134,6 +147,16 @@ static func scan_building_ids(catalog: Catalog, habitat_id: String) -> Array:
 				out.append(corporate_building_id(str(corp_id_variant), sector_id))
 	if PassengerCharters.habitat_has_bar(catalog, habitat_id):
 		out.append("davidsons")
+	for building_id_variant in location.get("buildings", []):
+		var hq_building_id := str(building_id_variant)
+		if hq_building_id in out:
+			continue
+		var hq_building := catalog.get_building(hq_building_id)
+		if catalog.get_building_type(hq_building) != BOARD_CORPORATE:
+			continue
+		if not hq_building.get("headquarters", false):
+			continue
+		out.append(hq_building_id)
 	return out
 
 
@@ -148,6 +171,8 @@ static func generate_offers_for_building(
 ) -> Array:
 	var cfg := config(catalog)
 	var sector_id := sector_for_major_habitat(habitat_id)
+	if sector_id.is_empty():
+		sector_id = catalog.get_habitat_sector_id(habitat_id)
 	if sector_id.is_empty():
 		return []
 

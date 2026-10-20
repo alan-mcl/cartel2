@@ -1,274 +1,378 @@
 [
-  {
-    "id": "proxima_habitat",
-    "title": "Proxima Habitat",
-    "inspect_text": "Orbital city hub. Docking lanes are open; customs wave you through on transponder.",
-    "kind": "dock",
-    "dock_location_id": "proxima_habitat"
-  },
-  {
-    "id": "proxima_jump_gate",
-    "title": "Proxima Jump Gate",
-    "inspect_text": "Unspace translation ring. Select a known route to translate.",
-    "kind": "translate"
-  },
-  {
-    "id": "tycho_habitat",
-    "title": "Tycho Habitat",
-    "inspect_text": "Industrial orbital. Docking lanes are open; ore shuttles share the approaches.",
-    "kind": "dock",
-    "dock_location_id": "tycho_habitat"
-  },
-  {
-    "id": "tycho_jump_gate",
-    "title": "Tycho Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "bela_habitat",
-    "title": "La Bella Vista Habitat",
-    "inspect_text": "Resort orbital city. Docking lanes are open; the water-world gleams below.",
-    "kind": "dock",
-    "dock_location_id": "bela_orbital_habitat"
-  },
-  {
-    "id": "bela_jump_gate",
-    "title": "La Bella Vista Jump Gate",
-    "inspect_text": "Unspace translation ring. Known routes lead back toward Proxima and beyond.",
-    "kind": "translate"
-  },
-  {
-    "id": "irasia_habitat",
-    "title": "Irasia Habitat",
-    "inspect_text": "Commercial orbital. Docking lanes are open; trade traffic fills the ring.",
-    "kind": "dock",
-    "dock_location_id": "irasia_habitat"
-  },
-  {
-    "id": "irasia_jump_gate",
-    "title": "Irasia Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "tokirev_habitat",
-    "title": "Tokirev Habitat",
-    "inspect_text": "Factory orbital. Docking lanes are open; automated yards crowd the skyline.",
-    "kind": "dock",
-    "dock_location_id": "tokirev_habitat"
-  },
-  {
-    "id": "tokirev_jump_gate",
-    "title": "Tokirev Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "fennet_habitat",
-    "title": "Fennet Habitat",
-    "inspect_text": "Rim orbital. Docking lanes are open; the frontier still shows through.",
-    "kind": "dock",
-    "dock_location_id": "fennet_habitat"
-  },
-  {
-    "id": "fennet_jump_gate",
-    "title": "Fennet Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "fortuna_habitat",
-    "title": "Fortuna Habitat",
-    "inspect_text": "Polished orbital. Docking lanes are open; private shuttles keep to their own lanes.",
-    "kind": "dock",
-    "dock_location_id": "fortuna_habitat"
-  },
-  {
-    "id": "fortuna_jump_gate",
-    "title": "Fortuna Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "new_carthage_habitat",
-    "title": "New Carthage Habitat",
-    "inspect_text": "Mercantile orbital. Docking lanes are open; shipping traffic never quite stops.",
-    "kind": "dock",
-    "dock_location_id": "new_carthage_habitat"
-  },
-  {
-    "id": "new_carthage_jump_gate",
-    "title": "New Carthage Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "horizon_habitat",
-    "title": "Horizon Habitat",
-    "inspect_text": "Civic orbital. Docking lanes are open; suburban shuttles mix with long-haul traffic.",
-    "kind": "dock",
-    "dock_location_id": "horizon_habitat"
-  },
-  {
-    "id": "horizon_jump_gate",
-    "title": "Horizon Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "titania_habitat",
-    "title": "Titania Habitat",
-    "inspect_text": "Tourist orbital. Docking lanes are open; Titania's storms fill the view.",
-    "kind": "dock",
-    "dock_location_id": "titania_habitat"
-  },
-  {
-    "id": "titania_jump_gate",
-    "title": "Titania Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "concordia_habitat",
-    "title": "Pelagos Habitat",
-    "inspect_text": "Commerce orbital above Pelagos. Docking lanes are open; twin suns glare off the hulls.",
-    "kind": "dock",
-    "dock_location_id": "concordia_habitat"
-  },
-  {
-    "id": "pelagos_jump_gate",
-    "title": "Pelagos Jump Gate",
-    "inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
-    "kind": "translate"
-  },
-  {
-    "id": "centauri_a_beltworks_habitat",
-    "title": "Centauri A Beltworks",
-    "inspect_text": "Mining habitat in the Alpha Centauri A belt. Docking lanes are open for ore convoys and supply traffic.",
-    "kind": "dock",
-    "dock_location_id": "centauri_a_beltworks_habitat"
-  },
-  {
-    "id": "centauri_a_beltworks_jump_gate",
-    "title": "Centauri A Beltworks Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "unspace_exit",
-    "title": "Exit Portal",
-    "inspect_text": "Stabilised portal leading back toward 3-space. Translate through to complete the jump.",
-    "kind": "arrive"
-  },
-  {
-    "id": "acb1_habitat",
-    "title": "ACB1",
-    "inspect_text": "Docking at ACB1. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "acb1_habitat"
-  },
-  {
-    "id": "acb1_jump_gate",
-    "title": "ACB1 Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "acb2_habitat",
-    "title": "Scar",
-    "inspect_text": "Docking at Scar. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "acb2_habitat"
-  },
-  {
-    "id": "acb2_jump_gate",
-    "title": "Scar Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "acb3_habitat",
-    "title": "ACB3",
-    "inspect_text": "Docking at ACB3. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "acb3_habitat"
-  },
-  {
-    "id": "acb3_jump_gate",
-    "title": "ACB3 Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "terminus_habitat",
-    "title": "Terminus",
-    "inspect_text": "Docking at Terminus. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "terminus_habitat"
-  },
-  {
-    "id": "terminus_jump_gate",
-    "title": "Terminus Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "vulcan_research_habitat",
-    "title": "Vulcan Research Station",
-    "inspect_text": "Docking at Vulcan Research Station. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "vulcan_research_habitat"
-  },
-  {
-    "id": "vulcan_research_jump_gate",
-    "title": "Vulcan Research Station Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "regulus_belt_habitat",
-    "title": "Regulus Belt Station",
-    "inspect_text": "Docking at Regulus Belt Station. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "regulus_belt_habitat"
-  },
-  {
-    "id": "regulus_belt_jump_gate",
-    "title": "Regulus Belt Station Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "denarius_ii_habitat",
-    "title": "Denarius II",
-    "inspect_text": "Docking at Denarius II. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "denarius_ii_habitat"
-  },
-  {
-    "id": "denarius_ii_jump_gate",
-    "title": "Denarius II Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "typhon_xvi_habitat",
-    "title": "Typhon XVI",
-    "inspect_text": "Docking at Typhon XVI. Supply and ore traffic uses the outer lanes.",
-    "kind": "dock",
-    "dock_location_id": "typhon_xvi_habitat"
-  },
-  {
-    "id": "typhon_xvi_jump_gate",
-    "title": "Typhon XVI Translation Beacon",
-    "inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
-    "kind": "translate"
-  },
-  {
-    "id": "volatile_return_gate",
-    "title": "Temporary return gate",
-    "inspect_text": "An unstable translation ring back toward the route you came from. It will not hold indefinitely.",
-    "kind": "translate"
-  }
+	{
+		"id": "proxima_habitat",
+		"title": "Proxima Habitat",
+		"inspect_text": "Orbital city hub. Docking lanes are open; customs wave you through on transponder.",
+		"kind": "dock",
+		"dock_location_id": "proxima_habitat"
+	},
+	{
+		"id": "proxima_jump_gate",
+		"title": "Proxima Jump Gate",
+		"inspect_text": "Unspace translation ring. Select a known route to translate.",
+		"kind": "translate"
+	},
+	{
+		"id": "tycho_habitat",
+		"title": "Tycho Habitat",
+		"inspect_text": "Industrial orbital. Docking lanes are open; ore shuttles share the approaches.",
+		"kind": "dock",
+		"dock_location_id": "tycho_habitat"
+	},
+	{
+		"id": "tycho_jump_gate",
+		"title": "Tycho Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "bela_habitat",
+		"title": "La Bella Vista Habitat",
+		"inspect_text": "Resort orbital city. Docking lanes are open; the water-world gleams below.",
+		"kind": "dock",
+		"dock_location_id": "bela_orbital_habitat"
+	},
+	{
+		"id": "bela_jump_gate",
+		"title": "La Bella Vista Jump Gate",
+		"inspect_text": "Unspace translation ring. Known routes lead back toward Proxima and beyond.",
+		"kind": "translate"
+	},
+	{
+		"id": "irasia_habitat",
+		"title": "Irasia Habitat",
+		"inspect_text": "Commercial orbital. Docking lanes are open; trade traffic fills the ring.",
+		"kind": "dock",
+		"dock_location_id": "irasia_habitat"
+	},
+	{
+		"id": "irasia_jump_gate",
+		"title": "Irasia Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "tokirev_habitat",
+		"title": "Tokirev Habitat",
+		"inspect_text": "Factory orbital. Docking lanes are open; automated yards crowd the skyline.",
+		"kind": "dock",
+		"dock_location_id": "tokirev_habitat"
+	},
+	{
+		"id": "tokirev_jump_gate",
+		"title": "Tokirev Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "fennet_habitat",
+		"title": "Fennet Habitat",
+		"inspect_text": "Rim orbital. Docking lanes are open; the frontier still shows through.",
+		"kind": "dock",
+		"dock_location_id": "fennet_habitat"
+	},
+	{
+		"id": "fennet_jump_gate",
+		"title": "Fennet Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "fortuna_habitat",
+		"title": "Fortuna Habitat",
+		"inspect_text": "Polished orbital. Docking lanes are open; private shuttles keep to their own lanes.",
+		"kind": "dock",
+		"dock_location_id": "fortuna_habitat"
+	},
+	{
+		"id": "fortuna_jump_gate",
+		"title": "Fortuna Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "new_carthage_habitat",
+		"title": "New Carthage Habitat",
+		"inspect_text": "Mercantile orbital. Docking lanes are open; shipping traffic never quite stops.",
+		"kind": "dock",
+		"dock_location_id": "new_carthage_habitat"
+	},
+	{
+		"id": "new_carthage_jump_gate",
+		"title": "New Carthage Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "horizon_habitat",
+		"title": "Horizon Habitat",
+		"inspect_text": "Civic orbital. Docking lanes are open; suburban shuttles mix with long-haul traffic.",
+		"kind": "dock",
+		"dock_location_id": "horizon_habitat"
+	},
+	{
+		"id": "horizon_jump_gate",
+		"title": "Horizon Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "titania_habitat",
+		"title": "Titania Habitat",
+		"inspect_text": "Tourist orbital. Docking lanes are open; Titania's storms fill the view.",
+		"kind": "dock",
+		"dock_location_id": "titania_habitat"
+	},
+	{
+		"id": "titania_jump_gate",
+		"title": "Titania Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "concordia_habitat",
+		"title": "Pelagos Habitat",
+		"inspect_text": "Commerce orbital above Pelagos. Docking lanes are open; twin suns glare off the hulls.",
+		"kind": "dock",
+		"dock_location_id": "concordia_habitat"
+	},
+	{
+		"id": "pelagos_jump_gate",
+		"title": "Pelagos Jump Gate",
+		"inspect_text": "Unspace translation ring. No known routes are logged from this gate.",
+		"kind": "translate"
+	},
+	{
+		"id": "centauri_a_beltworks_habitat",
+		"title": "Centauri A Beltworks",
+		"inspect_text": "Mining habitat in the Alpha Centauri A belt. Docking lanes are open for ore convoys and supply traffic.",
+		"kind": "dock",
+		"dock_location_id": "centauri_a_beltworks_habitat"
+	},
+	{
+		"id": "centauri_a_beltworks_jump_gate",
+		"title": "Centauri A Beltworks Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "unspace_exit",
+		"title": "Exit Portal",
+		"inspect_text": "Stabilised portal leading back toward 3-space. Translate through to complete the jump.",
+		"kind": "arrive"
+	},
+	{
+		"id": "acb1_habitat",
+		"title": "ACB1",
+		"inspect_text": "Docking at ACB1. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "acb1_habitat"
+	},
+	{
+		"id": "acb1_jump_gate",
+		"title": "ACB1 Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "acb2_habitat",
+		"title": "Scar",
+		"inspect_text": "Docking at Scar. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "acb2_habitat"
+	},
+	{
+		"id": "acb2_jump_gate",
+		"title": "Scar Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "acb3_habitat",
+		"title": "ACB3",
+		"inspect_text": "Docking at ACB3. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "acb3_habitat"
+	},
+	{
+		"id": "acb3_jump_gate",
+		"title": "ACB3 Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "terminus_habitat",
+		"title": "Terminus",
+		"inspect_text": "Docking at Terminus. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "terminus_habitat"
+	},
+	{
+		"id": "terminus_jump_gate",
+		"title": "Terminus Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Proxima near orbit. Only the public hop back to Proxima is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "vulcan_research_habitat",
+		"title": "Vulcan Research Station",
+		"inspect_text": "Docking at Vulcan Research Station. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "vulcan_research_habitat"
+	},
+	{
+		"id": "vulcan_research_jump_gate",
+		"title": "Vulcan Research Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "regulus_belt_habitat",
+		"title": "Regulus Belt Station",
+		"inspect_text": "Docking at Regulus Belt Station. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "regulus_belt_habitat"
+	},
+	{
+		"id": "regulus_belt_jump_gate",
+		"title": "Regulus Belt Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "denarius_ii_habitat",
+		"title": "Denarius II",
+		"inspect_text": "Docking at Denarius II. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "denarius_ii_habitat"
+	},
+	{
+		"id": "denarius_ii_jump_gate",
+		"title": "Denarius II Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "typhon_xvi_habitat",
+		"title": "Typhon XVI",
+		"inspect_text": "Docking at Typhon XVI. Supply and ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "typhon_xvi_habitat"
+	},
+	{
+		"id": "typhon_xvi_jump_gate",
+		"title": "Typhon XVI Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tycho near orbit. Only the public hop back to Tycho is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "volatile_return_gate",
+		"title": "Temporary return gate",
+		"inspect_text": "An unstable translation ring back toward the route you came from. It will not hold indefinitely.",
+		"kind": "translate"
+	},
+	{
+		"id": "sta_galactic_outcomes_tycho_dock",
+		"title": "Galactic Outcomes Headquarters",
+		"inspect_text": "Galactic Outcomes Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_galactic_outcomes_tycho"
+	},
+	{
+		"id": "sta_grc_fortuna_dock",
+		"title": "GRC Inc Headquarters",
+		"inspect_text": "GRC Inc Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_grc_fortuna"
+	},
+	{
+		"id": "sta_creus_proxima_dock",
+		"title": "Creus Corporation Headquarters",
+		"inspect_text": "Creus Corporation Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_creus_proxima"
+	},
+	{
+		"id": "sta_snedecorp_proxima_dock",
+		"title": "SnedeCorp Headquarters",
+		"inspect_text": "SnedeCorp Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_snedecorp_proxima"
+	},
+	{
+		"id": "sta_cult_of_apex_titania_dock",
+		"title": "Cult of Apex Headquarters",
+		"inspect_text": "Cult of Apex Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_cult_of_apex_titania"
+	},
+	{
+		"id": "sta_general_industrial_tycho_dock",
+		"title": "General Industrial Headquarters",
+		"inspect_text": "General Industrial Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_general_industrial_tycho"
+	},
+	{
+		"id": "sta_morrow_and_sons_proxima_dock",
+		"title": "Morrow & Sons Headquarters",
+		"inspect_text": "Morrow & Sons Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_morrow_and_sons_proxima"
+	},
+	{
+		"id": "sta_octagon_fortuna_dock",
+		"title": "The Octagon Headquarters",
+		"inspect_text": "The Octagon Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_octagon_fortuna"
+	},
+	{
+		"id": "sta_crown_and_anchor_new_carthage_dock",
+		"title": "Crown & Anchor Headquarters",
+		"inspect_text": "Crown & Anchor Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_crown_and_anchor_new_carthage"
+	},
+	{
+		"id": "sta_mercury_communications_proxima_dock",
+		"title": "Mercury Communications Headquarters",
+		"inspect_text": "Mercury Communications Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_mercury_communications_proxima"
+	},
+	{
+		"id": "sta_orion_aerospace_irasia_dock",
+		"title": "Orion Aerospace Headquarters",
+		"inspect_text": "Orion Aerospace Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_orion_aerospace_irasia"
+	},
+	{
+		"id": "sta_chimera_titania_dock",
+		"title": "Chimera Corporation Headquarters",
+		"inspect_text": "Chimera Corporation Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_chimera_titania"
+	},
+	{
+		"id": "sta_terra_nova_pelagos_dock",
+		"title": "Terra Nova Headquarters",
+		"inspect_text": "Terra Nova Headquarters. Docking lanes are open on transponder.",
+		"kind": "dock",
+		"dock_location_id": "sta_terra_nova_pelagos"
+	},
+	{
+		"id": "pelagos_belt_habitat",
+		"title": "Pelagos Belt Station",
+		"inspect_text": "Belt mining habitat. Docking lanes are open; cooperative traffic fills the approaches.",
+		"kind": "dock",
+		"dock_location_id": "pelagos_belt_habitat"
+	},
+	{
+		"id": "pelagos_belt_jump_gate",
+		"title": "Pelagos Belt Translation Beacon",
+		"inspect_text": "Translation beacon back toward Pelagos near orbit.",
+		"kind": "translate"
+	}
 ]

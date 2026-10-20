@@ -30,6 +30,7 @@ var _orbital_ring: Node2D = null
 var _habitat_node: Node2D = null
 var _jump_gate_node: Node2D = null
 var _orbital_entries: Array = []
+var _dock_nodes_by_location_id: Dictionary = {}
 var _ring_radius: float = 0.0
 var _ring_period_seconds: float = 720.0
 var _habitat_slot_angle: float = 0.0
@@ -58,6 +59,7 @@ func clear_world(world_root: Node2D) -> void:
 	_habitat_node = null
 	_jump_gate_node = null
 	_orbital_entries.clear()
+	_dock_nodes_by_location_id.clear()
 	_ring_radius = 0.0
 	_ring_period_seconds = 720.0
 	_habitat_slot_angle = 0.0
@@ -230,6 +232,14 @@ func get_habitat_world_position() -> Vector2:
 	return _orbital_ring.global_transform * _habitat_node.position
 
 
+func get_dock_world_position(dock_location_id: String) -> Vector2:
+	if not dock_location_id.is_empty() and _dock_nodes_by_location_id.has(dock_location_id):
+		var dock_node: Variant = _dock_nodes_by_location_id[dock_location_id]
+		if dock_node is Node2D and _orbital_ring != null:
+			return _orbital_ring.global_transform * (dock_node as Node2D).position
+	return get_habitat_world_position()
+
+
 func get_jump_gate_world_position() -> Vector2:
 	if _jump_gate_node != null:
 		return _jump_gate_node.global_position
@@ -246,31 +256,39 @@ func get_traffic_envelope_radius() -> float:
 	return 5000.0
 
 
-func get_habitat_orbital_velocity() -> Vector2:
-	var habitat_world := get_habitat_world_position()
-	if habitat_world.length_squared() < 0.001 or _ring_period_seconds <= 0.0:
+func get_dock_orbital_velocity(dock_location_id: String) -> Vector2:
+	var dock_world := get_dock_world_position(dock_location_id)
+	if dock_world.length_squared() < 0.001 or _ring_period_seconds <= 0.0:
 		return Vector2.ZERO
 	var omega := TAU / _ring_period_seconds
-	return Vector2(habitat_world.y, -habitat_world.x) * omega
+	return Vector2(dock_world.y, -dock_world.x) * omega
 
 
-func get_undock_exit_velocity() -> Vector2:
-	var habitat_world := get_habitat_world_position()
-	var outward := habitat_world.normalized()
+func get_habitat_orbital_velocity() -> Vector2:
+	return get_dock_orbital_velocity("")
+
+
+func get_undock_exit_velocity(dock_location_id: String = "") -> Vector2:
+	var dock_world := get_dock_world_position(dock_location_id)
+	var outward := dock_world.normalized()
 	if outward.length_squared() < 0.001:
 		outward = Vector2.UP
-	return get_habitat_orbital_velocity() + outward * UNDOCK_LAUNCH_SPEED
+	return get_dock_orbital_velocity(dock_location_id) + outward * UNDOCK_LAUNCH_SPEED
+
+
+func get_dock_launch_position(dock_location_id: String = "") -> Vector2:
+	if _orbital_ring == null:
+		return Vector2.ZERO
+
+	var dock_world := get_dock_world_position(dock_location_id)
+	var outward: Vector2 = dock_world.normalized()
+	if outward.length_squared() < 0.001:
+		outward = Vector2.UP
+	return dock_world + outward * LAUNCH_OFFSET
 
 
 func get_habitat_launch_position() -> Vector2:
-	if _habitat_node == null or _orbital_ring == null:
-		return Vector2.ZERO
-
-	var habitat_world: Vector2 = _orbital_ring.global_transform * _habitat_node.position
-	var outward: Vector2 = habitat_world.normalized()
-	if outward.length_squared() < 0.001:
-		outward = Vector2.UP
-	return habitat_world + outward * LAUNCH_OFFSET
+	return get_dock_launch_position("")
 
 
 func get_jump_gate_approach_position() -> Vector2:
@@ -548,6 +566,7 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 				"contact_kind": "orbital",
 				"position": Vector2.ZERO,
 				"orbital_sprite": orbital_sprite,
+				"interactable_id": str(entry.get("interactable_id", "")),
 			}
 			_merge_lock_display_fields(orbital_contact, orbital_sprite, 48.0)
 			_sector_nav_cache.append(orbital_contact)
@@ -927,18 +946,25 @@ func _spawn_orbital_ring(
 			spawned_by_id[entity_id] = instance
 
 		var kind := str(orbital_def.get("kind", ""))
+		var interactable_id := str(orbital_def.get("interactable", ""))
 		if kind == "habitat":
 			_habitat_node = instance
 			_habitat_slot_angle = angle
 			_habitat_sprite_path = str(orbital_def.get("sprite", ""))
-			_habitat_interactable_id = str(orbital_def.get("interactable", ""))
+			_habitat_interactable_id = interactable_id
 		elif kind == "orbital":
+			if not interactable_id.is_empty():
+				var dock_data := catalog.get_interactable(interactable_id)
+				var dock_location_id := str(dock_data.get("dock_location_id", ""))
+				if not dock_location_id.is_empty():
+					_dock_nodes_by_location_id[dock_location_id] = instance
 			_orbital_entries.append({
 				"id": entity_id,
 				"node": instance,
 				"kind": "orbital",
 				"label": str(orbital_def.get("label", "")),
 				"sprite": str(orbital_def.get("sprite", "")),
+				"interactable_id": interactable_id,
 			})
 
 	world_root.add_child(ring)
@@ -953,7 +979,10 @@ func _spawn_orbital_instance(
 	session: GameSession
 ) -> Node2D:
 	var kind := str(orbital_def.get("kind", ""))
-	var scene_path: String = SCENES.get(kind, "")
+	var scene_kind := kind
+	if kind == "orbital" and not str(orbital_def.get("interactable", "")).is_empty():
+		scene_kind = "habitat"
+	var scene_path: String = SCENES.get(scene_kind, "")
 	if scene_path.is_empty():
 		push_error("Unknown orbital kind: %s" % kind)
 		return null

@@ -55,6 +55,8 @@ static func generate_offers_for_building(
 	var cfg := config(catalog)
 	var sector_id := ScanCharters.sector_for_major_habitat(habitat_id)
 	if sector_id.is_empty():
+		sector_id = catalog.get_habitat_sector_id(habitat_id)
+	if sector_id.is_empty():
 		return []
 
 	var rng := RandomNumberGenerator.new()

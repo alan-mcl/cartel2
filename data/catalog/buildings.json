@@ -674,12 +674,13 @@
 	{
 		"art": "res://assets/ui/locations/corp_karaquazen_bela_office.png",
 		"corporation_id": "karaquazen",
-		"description": "Corporate liaison desk for Karaquazen Inc. Posts inspection and assessment scan work for hulls operating in-system.",
+		"description": "Corporate headquarters for Karaquazen Inc.",
 		"id": "corp_karaquazen_bela_office",
 		"kind": "office",
-		"name": "Karaquazen Inc Office",
+		"name": "Karaquazen Inc Headquarters",
 		"short_desc": "Karaquazen Inc charter desk.",
-		"type": "corporate_office"
+		"type": "corporate_office",
+		"headquarters": true
 	},
 	{
 		"art": "res://assets/ui/locations/corp_liveworlds_bela_office.png",
@@ -860,12 +861,13 @@
 	{
 		"art": "res://assets/ui/locations/corp_house_of_roth_fortuna_office.png",
 		"corporation_id": "house_of_roth",
-		"description": "Corporate liaison desk for House of Roth. Posts inspection and assessment scan work for hulls operating in-system.",
+		"description": "Corporate headquarters for House of Roth.",
 		"id": "corp_house_of_roth_fortuna_office",
 		"kind": "office",
-		"name": "House of Roth Office",
+		"name": "House of Roth Headquarters",
 		"short_desc": "House of Roth charter desk.",
-		"type": "corporate_office"
+		"type": "corporate_office",
+		"headquarters": true
 	},
 	{
 		"art": "res://assets/ui/locations/corp_karaquazen_fortuna_office.png",
@@ -889,12 +891,13 @@
 	{
 		"art": "res://assets/ui/locations/corp_carthage_mercantile_new_carthage_office.png",
 		"corporation_id": "carthage_mercantile",
-		"description": "Corporate liaison desk for Carthage Mercantile. Posts inspection and assessment scan work for hulls operating in-system.",
+		"description": "Corporate headquarters for Carthage Mercantile.",
 		"id": "corp_carthage_mercantile_new_carthage_office",
 		"kind": "office",
-		"name": "Carthage Mercantile Office",
+		"name": "Carthage Mercantile Headquarters",
 		"short_desc": "Carthage Mercantile charter desk.",
-		"type": "corporate_office"
+		"type": "corporate_office",
+		"headquarters": true
 	},
 	{
 		"art": "res://assets/ui/locations/corp_guangzhou_mercantile_new_carthage_office.png",
@@ -1091,6 +1094,427 @@
 		"kind": "office",
 		"name": "Continuity Foundation Office",
 		"short_desc": "Continuity Foundation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_galactic_outcomes_tycho_terminal.png",
+		"description": "Docking terminal at Galactic Outcomes. Ship administration and launch.",
+		"id": "sta_galactic_outcomes_tycho_terminal",
+		"kind": "terminal",
+		"name": "Galactic Outcomes Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_galactic_outcomes_tycho_hq.png",
+		"corporation_id": "galactic_outcomes",
+		"description": "Corporate headquarters for Galactic Outcomes.",
+		"headquarters": true,
+		"id": "sta_galactic_outcomes_tycho_hq",
+		"kind": "office",
+		"name": "Galactic Outcomes Headquarters",
+		"short_desc": "Galactic Outcomes charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_himalaya_triad_horizon.png",
+		"corporation_id": "himalaya_triad",
+		"description": "Corporate headquarters for Himalaya Triad.",
+		"headquarters": true,
+		"id": "corp_hq_himalaya_triad_horizon",
+		"kind": "office",
+		"name": "Himalaya Triad Headquarters",
+		"short_desc": "Himalaya Triad charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_pararamcovidia_proxima.png",
+		"corporation_id": "pararamcovidia",
+		"description": "Corporate headquarters for ParaRamcoVidia.",
+		"headquarters": true,
+		"id": "corp_hq_pararamcovidia_proxima",
+		"kind": "office",
+		"name": "ParaRamcoVidia Headquarters",
+		"short_desc": "ParaRamcoVidia charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_grc_fortuna_terminal.png",
+		"description": "Docking terminal at GRC Inc. Ship administration and launch.",
+		"id": "sta_grc_fortuna_terminal",
+		"kind": "terminal",
+		"name": "GRC Inc Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_grc_fortuna_hq.png",
+		"corporation_id": "grc",
+		"description": "Corporate headquarters for GRC Inc.",
+		"headquarters": true,
+		"id": "sta_grc_fortuna_hq",
+		"kind": "office",
+		"name": "GRC Inc Headquarters",
+		"short_desc": "GRC Inc charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_creus_proxima_terminal.png",
+		"description": "Docking terminal at Creus Corporation. Ship administration and launch.",
+		"id": "sta_creus_proxima_terminal",
+		"kind": "terminal",
+		"name": "Creus Corporation Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_creus_proxima_hq.png",
+		"corporation_id": "creus",
+		"description": "Corporate headquarters for Creus Corporation.",
+		"headquarters": true,
+		"id": "sta_creus_proxima_hq",
+		"kind": "office",
+		"name": "Creus Corporation Headquarters",
+		"short_desc": "Creus Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_holt_winters_tokirev.png",
+		"corporation_id": "holt_winters",
+		"description": "Corporate headquarters for Holt-Winters Corp.",
+		"headquarters": true,
+		"id": "corp_hq_holt_winters_tokirev",
+		"kind": "office",
+		"name": "Holt-Winters Corp Headquarters",
+		"short_desc": "Holt-Winters Corp charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_snedecorp_proxima_terminal.png",
+		"description": "Docking terminal at SnedeCorp. Ship administration and launch.",
+		"id": "sta_snedecorp_proxima_terminal",
+		"kind": "terminal",
+		"name": "SnedeCorp Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_snedecorp_proxima_hq.png",
+		"corporation_id": "snedecorp",
+		"description": "Corporate headquarters for SnedeCorp.",
+		"headquarters": true,
+		"id": "sta_snedecorp_proxima_hq",
+		"kind": "office",
+		"name": "SnedeCorp Headquarters",
+		"short_desc": "SnedeCorp charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_cult_of_apex_titania_terminal.png",
+		"description": "Docking terminal at Cult of Apex. Ship administration and launch.",
+		"id": "sta_cult_of_apex_titania_terminal",
+		"kind": "terminal",
+		"name": "Cult of Apex Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_cult_of_apex_titania_hq.png",
+		"corporation_id": "cult_of_apex",
+		"description": "Corporate headquarters for Cult of Apex.",
+		"headquarters": true,
+		"id": "sta_cult_of_apex_titania_hq",
+		"kind": "office",
+		"name": "Cult of Apex Headquarters",
+		"short_desc": "Cult of Apex charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_monday_proxima.png",
+		"corporation_id": "monday",
+		"description": "Corporate headquarters for Monday Corporation.",
+		"headquarters": true,
+		"id": "corp_hq_monday_proxima",
+		"kind": "office",
+		"name": "Monday Corporation Headquarters",
+		"short_desc": "Monday Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_general_industrial_tycho_terminal.png",
+		"description": "Docking terminal at General Industrial. Ship administration and launch.",
+		"id": "sta_general_industrial_tycho_terminal",
+		"kind": "terminal",
+		"name": "General Industrial Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_general_industrial_tycho_hq.png",
+		"corporation_id": "general_industrial",
+		"description": "Corporate headquarters for General Industrial.",
+		"headquarters": true,
+		"id": "sta_general_industrial_tycho_hq",
+		"kind": "office",
+		"name": "General Industrial Headquarters",
+		"short_desc": "General Industrial charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_morrow_and_sons_proxima_terminal.png",
+		"description": "Docking terminal at Morrow & Sons. Ship administration and launch.",
+		"id": "sta_morrow_and_sons_proxima_terminal",
+		"kind": "terminal",
+		"name": "Morrow & Sons Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_morrow_and_sons_proxima_hq.png",
+		"corporation_id": "morrow_and_sons",
+		"description": "Corporate headquarters for Morrow & Sons.",
+		"headquarters": true,
+		"id": "sta_morrow_and_sons_proxima_hq",
+		"kind": "office",
+		"name": "Morrow & Sons Headquarters",
+		"short_desc": "Morrow & Sons charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_octagon_fortuna_terminal.png",
+		"description": "Docking terminal at The Octagon. Ship administration and launch.",
+		"id": "sta_octagon_fortuna_terminal",
+		"kind": "terminal",
+		"name": "The Octagon Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_octagon_fortuna_hq.png",
+		"corporation_id": "octagon",
+		"description": "Corporate headquarters for The Octagon.",
+		"headquarters": true,
+		"id": "sta_octagon_fortuna_hq",
+		"kind": "office",
+		"name": "The Octagon Headquarters",
+		"short_desc": "The Octagon charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_meridian_new_carthage.png",
+		"corporation_id": "meridian",
+		"description": "Corporate headquarters for The Meridian Company.",
+		"headquarters": true,
+		"id": "corp_hq_meridian_new_carthage",
+		"kind": "office",
+		"name": "The Meridian Company Headquarters",
+		"short_desc": "The Meridian Company charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_crown_and_anchor_new_carthage_terminal.png",
+		"description": "Docking terminal at Crown & Anchor. Ship administration and launch.",
+		"id": "sta_crown_and_anchor_new_carthage_terminal",
+		"kind": "terminal",
+		"name": "Crown & Anchor Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_crown_and_anchor_new_carthage_hq.png",
+		"corporation_id": "crown_and_anchor",
+		"description": "Corporate headquarters for Crown & Anchor.",
+		"headquarters": true,
+		"id": "sta_crown_and_anchor_new_carthage_hq",
+		"kind": "office",
+		"name": "Crown & Anchor Headquarters",
+		"short_desc": "Crown & Anchor charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_universal_house_bela.png",
+		"corporation_id": "universal_house",
+		"description": "Corporate headquarters for Universal House.",
+		"headquarters": true,
+		"id": "corp_hq_universal_house_bela",
+		"kind": "office",
+		"name": "Universal House Headquarters",
+		"short_desc": "Universal House charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_atlas_concern_regulus_belt.png",
+		"corporation_id": "atlas_concern",
+		"description": "Corporate headquarters for Atlas Concern.",
+		"headquarters": true,
+		"id": "corp_hq_atlas_concern_regulus_belt",
+		"kind": "office",
+		"name": "Atlas Concern Headquarters",
+		"short_desc": "Atlas Concern charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_continuity_foundation_proxima.png",
+		"corporation_id": "continuity_foundation",
+		"description": "Corporate headquarters for Continuity Foundation.",
+		"headquarters": true,
+		"id": "corp_hq_continuity_foundation_proxima",
+		"kind": "office",
+		"name": "Continuity Foundation Headquarters",
+		"short_desc": "Continuity Foundation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_dar_al_nour_horizon.png",
+		"corporation_id": "dar_al_nour",
+		"description": "Corporate headquarters for Dar al-Nour Trust.",
+		"headquarters": true,
+		"id": "corp_hq_dar_al_nour_horizon",
+		"kind": "office",
+		"name": "Dar al-Nour Trust Headquarters",
+		"short_desc": "Dar al-Nour Trust charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_mercury_communications_proxima_terminal.png",
+		"description": "Docking terminal at Mercury Communications. Ship administration and launch.",
+		"id": "sta_mercury_communications_proxima_terminal",
+		"kind": "terminal",
+		"name": "Mercury Communications Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_mercury_communications_proxima_hq.png",
+		"corporation_id": "mercury_communications",
+		"description": "Corporate headquarters for Mercury Communications.",
+		"headquarters": true,
+		"id": "sta_mercury_communications_proxima_hq",
+		"kind": "office",
+		"name": "Mercury Communications Headquarters",
+		"short_desc": "Mercury Communications charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_orion_aerospace_irasia_terminal.png",
+		"description": "Docking terminal at Orion Aerospace. Ship administration and launch.",
+		"id": "sta_orion_aerospace_irasia_terminal",
+		"kind": "terminal",
+		"name": "Orion Aerospace Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_orion_aerospace_irasia_hq.png",
+		"corporation_id": "orion_aerospace",
+		"description": "Corporate headquarters for Orion Aerospace.",
+		"headquarters": true,
+		"id": "sta_orion_aerospace_irasia_hq",
+		"kind": "office",
+		"name": "Orion Aerospace Headquarters",
+		"short_desc": "Orion Aerospace charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_biogenesis_irasia.png",
+		"corporation_id": "biogenesis",
+		"description": "Corporate headquarters for BioGenesis Life Sciences.",
+		"headquarters": true,
+		"id": "corp_hq_biogenesis_irasia",
+		"kind": "office",
+		"name": "BioGenesis Life Sciences Headquarters",
+		"short_desc": "BioGenesis Life Sciences charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_chimera_titania_terminal.png",
+		"description": "Docking terminal at Chimera Corporation. Ship administration and launch.",
+		"id": "sta_chimera_titania_terminal",
+		"kind": "terminal",
+		"name": "Chimera Corporation Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_chimera_titania_hq.png",
+		"corporation_id": "chimera",
+		"description": "Corporate headquarters for Chimera Corporation.",
+		"headquarters": true,
+		"id": "sta_chimera_titania_hq",
+		"kind": "office",
+		"name": "Chimera Corporation Headquarters",
+		"short_desc": "Chimera Corporation charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_praetorium_proxima.png",
+		"corporation_id": "praetorium",
+		"description": "Corporate headquarters for The Praetorium.",
+		"headquarters": true,
+		"id": "corp_hq_praetorium_proxima",
+		"kind": "office",
+		"name": "The Praetorium Headquarters",
+		"short_desc": "The Praetorium charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_terra_nova_pelagos_terminal.png",
+		"description": "Docking terminal at Terra Nova. Ship administration and launch.",
+		"id": "sta_terra_nova_pelagos_terminal",
+		"kind": "terminal",
+		"name": "Terra Nova Terminal",
+		"short_desc": "Docking terminal.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sta_terra_nova_pelagos_hq.png",
+		"corporation_id": "terra_nova",
+		"description": "Corporate headquarters for Terra Nova.",
+		"headquarters": true,
+		"id": "sta_terra_nova_pelagos_hq",
+		"kind": "office",
+		"name": "Terra Nova Headquarters",
+		"short_desc": "Terra Nova charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_orion_spur_pelagos.png",
+		"corporation_id": "orion_spur",
+		"description": "Corporate headquarters for Orion Spur Company.",
+		"headquarters": true,
+		"id": "corp_hq_orion_spur_pelagos",
+		"kind": "office",
+		"name": "Orion Spur Company Headquarters",
+		"short_desc": "Orion Spur Company charter desk.",
+		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_belt_terminal.png",
+		"description": "Customs and convoy scheduling for Pelagos Belt Station.",
+		"id": "pelagos_belt_terminal",
+		"kind": "terminal",
+		"name": "Pelagos Belt Terminal",
+		"short_desc": "Terminal for Pelagos Belt traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_belt_exchange.png",
+		"description": "Commodity exchange for Pelagos Belt contracts and hub supply runs.",
+		"id": "pelagos_belt_exchange",
+		"kind": "merchant",
+		"name": "Pelagos Belt Exchange",
+		"short_desc": "Exchange at Pelagos Belt Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/corp_hq_deepspace_pelagos_belt.png",
+		"corporation_id": "deepspace",
+		"description": "Corporate headquarters for DeepSpace Cooperative.",
+		"headquarters": true,
+		"id": "corp_hq_deepspace_pelagos_belt",
+		"kind": "office",
+		"name": "DeepSpace Cooperative Headquarters",
+		"short_desc": "DeepSpace Cooperative charter desk.",
 		"type": "corporate_office"
 	}
 ]

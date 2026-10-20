@@ -747,13 +747,14 @@ func _ensure_habitat_boards(
 	var need_bounty := not bounty_offers_by_habitat.has(habitat_id)
 	if not need_passenger and not need_freight and not need_scan and not need_bounty:
 		return
+	var is_station := catalog.location_is_station(habitat_id)
 	var cfg := PassengerCharters.config(catalog)
 	var terminal_count := int(cfg.get("terminal_offers_per_day", 4))
 	var bar_count := int(cfg.get("bar_offers_per_day", 2))
 	var freight_cfg := FreightCharters.config(catalog)
 	var freight_count := int(freight_cfg.get("offers_per_day", 4))
 	var run_seed := session.run_seed
-	if need_passenger:
+	if need_passenger and not is_station:
 		var boards := {
 			PassengerCharters.BOARD_TERMINAL: PassengerCharters.generate_offers(
 				catalog,
@@ -774,7 +775,9 @@ func _ensure_habitat_boards(
 				run_seed
 			)
 		offers_by_habitat[habitat_id] = boards
-	if need_freight:
+	elif need_passenger and is_station:
+		offers_by_habitat[habitat_id] = {}
+	if need_freight and not is_station:
 		freight_offers_by_habitat[habitat_id] = FreightCharters.generate_offers(
 			catalog,
 			habitat_id,
@@ -782,6 +785,8 @@ func _ensure_habitat_boards(
 			freight_count,
 			run_seed
 		)
+	elif need_freight and is_station:
+		freight_offers_by_habitat[habitat_id] = {}
 	if need_scan:
 		_ensure_scan_boards_for_habitat(session, catalog, habitat_id, day, run_seed)
 	if need_bounty:

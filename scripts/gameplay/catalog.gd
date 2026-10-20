@@ -454,6 +454,13 @@ func get_habitat_art(habitat: Dictionary) -> String:
 	return str(habitat.get("art", ""))
 
 
+func location_is_station(location_id: String) -> bool:
+	var location := get_habitat(location_id)
+	if location.is_empty():
+		return false
+	return str(location.get("type", "habitat")) == "station"
+
+
 func habitat_allows_building(habitat: Dictionary, building_id: String) -> bool:
 	if habitat.is_empty() or building_id.is_empty():
 		return false

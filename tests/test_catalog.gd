@@ -89,6 +89,7 @@ static func run(runner: TestRunner) -> void:
 	_validate_propulsion(runner, catalog)
 	_validate_combat(runner, catalog)
 	_validate_habitat_buildings(runner, catalog)
+	_validate_corporate_headquarters(runner, catalog)
 
 
 static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) -> void:
@@ -108,6 +109,8 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 		)
 		art_paths[art] = habitat_id
 
+		if str(habitat.get("type", "habitat")) == "station":
+			continue
 		shipyard_count = 0
 		for building_id_variant in habitat.get("buildings", []):
 			var building_id := str(building_id_variant)
@@ -136,6 +139,7 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 			"regulus_belt_habitat",
 			"denarius_ii_habitat",
 			"typhon_xvi_habitat",
+			"pelagos_belt_habitat",
 		]
 		if habitat_id in no_shipyard_habitats:
 			runner.check_eq(shipyard_count, 0, "habitat %s has no shipyard" % habitat_id)
@@ -595,6 +599,59 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in tycho_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "tycho")
+	var pelagos_sites: Array[String] = ["pelagos_belt"]
+	for sector_id in pelagos_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "pelagos")
+
+
+static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:
+	for corp_variant in catalog.list_corporations():
+		if typeof(corp_variant) != TYPE_DICTIONARY:
+			continue
+		var corp: Dictionary = corp_variant
+		var corp_id := str(corp.get("id", ""))
+		var hq: Variant = corp.get("hq", {})
+		runner.check(typeof(hq) == TYPE_DICTIONARY, "corporation %s has hq" % corp_id)
+		if typeof(hq) != TYPE_DICTIONARY:
+			continue
+		var placement := str(hq.get("placement", ""))
+		runner.check(not placement.is_empty(), "corporation %s hq placement" % corp_id)
+		if placement == "planet":
+			runner.check(
+				not hq.has("location_id"),
+				"planet hq %s has no location_id" % corp_id
+			)
+			continue
+		var location_id := str(hq.get("location_id", ""))
+		runner.check(not location_id.is_empty(), "corporation %s hq location_id" % corp_id)
+		var location := catalog.get_habitat(location_id)
+		runner.check(not location.is_empty(), "hq location %s exists for %s" % [location_id, corp_id])
+		var hq_building_id := ""
+		for building_id_variant in location.get("buildings", []):
+			var building_id := str(building_id_variant)
+			var building := catalog.get_building(building_id)
+			if str(building.get("corporation_id", "")) != corp_id:
+				continue
+			if building.get("headquarters", false):
+				hq_building_id = building_id
+				break
+		runner.check(
+			not hq_building_id.is_empty(),
+			"corporation %s has headquarters building at %s" % [corp_id, location_id]
+		)
+		if str(location.get("type", "habitat")) == "station":
+			var terminal_count := 0
+			var hq_count := 0
+			for building_id_variant in location.get("buildings", []):
+				var building := catalog.get_building(str(building_id_variant))
+				match catalog.get_building_type(building):
+					"terminal":
+						terminal_count += 1
+					"corporate_office":
+						if building.get("headquarters", false):
+							hq_count += 1
+			runner.check_eq(terminal_count, 1, "station %s has one terminal" % location_id)
+			runner.check_eq(hq_count, 1, "station %s has one hq desk" % location_id)
 
 
 static func _test_beacon_outpost_route(

@@ -52,6 +52,10 @@ def check(catalog_dir: Path) -> list[str]:
     routes = load_array(catalog_dir / "routes.json")
     worlds = load_object(catalog_dir / "worlds.json")
 
+    habitats_by_id: dict[str, dict] = {
+        str(h.get("id", "")): h for h in habitats if isinstance(h, dict) and h.get("id")
+    }
+
     habitats_by_sector: dict[str, list[dict]] = {}
     for habitat in habitats:
         if not isinstance(habitat, dict):
@@ -61,6 +65,13 @@ def check(catalog_dir: Path) -> list[str]:
             errors.append(f"habitat {habitat.get('id', '?')}: missing sector_id")
             continue
         habitats_by_sector.setdefault(sector_id, []).append(habitat)
+
+    def civic_habitats(sector_habitats: list[dict]) -> list[dict]:
+        return [
+            h
+            for h in sector_habitats
+            if str(h.get("type", "habitat")) != "station"
+        ]
 
     route_endpoints: dict[str, int] = {}
     for route in routes:
@@ -74,7 +85,7 @@ def check(catalog_dir: Path) -> list[str]:
     for sector_id, sector in sectors.items():
         label = f"sector {sector_id}"
 
-        matched = habitats_by_sector.get(sector_id, [])
+        matched = civic_habitats(habitats_by_sector.get(sector_id, []))
         if len(matched) == 0:
             errors.append(f"{label}: no habitat with sector_id")
         elif len(matched) > 1:
@@ -160,6 +171,51 @@ def check(catalog_dir: Path) -> list[str]:
                     errors.append(
                         f"{label}: dock interactable '{habitat_interactable_id}' "
                         f"dock_location_id '{dock_location}' != habitat id '{habitat_id}'"
+                    )
+
+        for orb in orbitals:
+            if not isinstance(orb, dict) or str(orb.get("kind", "")) != "orbital":
+                continue
+            orbital_interactable_id = str(orb.get("interactable", ""))
+            if not orbital_interactable_id:
+                continue
+            orb_label = f"{label} orbital '{orb.get('id', '?')}'"
+            if orbital_interactable_id not in interactables:
+                errors.append(
+                    f"{orb_label}: unknown interactable '{orbital_interactable_id}'"
+                )
+                continue
+            dock = interactables[orbital_interactable_id]
+            if str(dock.get("kind", "")) != "dock":
+                errors.append(
+                    f"{orb_label}: interactable '{orbital_interactable_id}' must be kind dock"
+                )
+                continue
+            dock_location = str(dock.get("dock_location_id", ""))
+            station = habitats_by_id.get(dock_location)
+            if station is None:
+                errors.append(
+                    f"{orb_label}: unknown dock location '{dock_location}'"
+                )
+                continue
+            if str(station.get("type", "")) != "station":
+                errors.append(
+                    f"{orb_label}: dock location '{dock_location}' must be type station"
+                )
+                continue
+            if str(station.get("sector_id", "")) != sector_id:
+                errors.append(
+                    f"{orb_label}: station sector_id '{station.get('sector_id')}' "
+                    f"!= sector '{sector_id}'"
+                )
+            station_buildings = station.get("buildings", [])
+            if not isinstance(station_buildings, list):
+                continue
+            for building_id in station_buildings:
+                bid = str(building_id)
+                if bid and bid not in buildings:
+                    errors.append(
+                        f"{orb_label}: unknown building '{bid}' on station '{dock_location}'"
                     )
 
         jump_gate = world_data.get("jump_gate")
