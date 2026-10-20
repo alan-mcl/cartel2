@@ -346,9 +346,30 @@ static func group_offered_translations(
 	}
 
 
-static func format_cell_summary(accuracy: float, duration_seconds: float) -> String:
+static func format_cell_summary(
+	accuracy: float,
+	duration_seconds: float,
+	translation: Dictionary = {}
+) -> String:
+	if bool(translation.get("volatile", false)):
+		var entry := VolatileTranslation.lag_seconds(translation, "entry_seconds")
+		var exit := VolatileTranslation.lag_seconds(translation, "exit_seconds")
+		return "%d%%\nEntry %s\nExit %s" % [
+			int(round(accuracy)),
+			GalacticCalendar.format_duration(entry),
+			GalacticCalendar.format_duration(exit),
+		]
 	var duration_text := GalacticCalendar.format_duration(duration_seconds)
 	return "%d%%\n%s" % [int(round(accuracy)), duration_text]
+
+
+static func format_lag_pair(translation: Dictionary) -> String:
+	var entry := VolatileTranslation.lag_seconds(translation, "entry_seconds")
+	var exit := VolatileTranslation.lag_seconds(translation, "exit_seconds")
+	return "Entry lag %s, exit lag %s." % [
+		GalacticCalendar.format_duration(entry),
+		GalacticCalendar.format_duration(exit),
+	]
 
 
 static func _sorted_destination_rows(by_dest: Dictionary) -> Array:

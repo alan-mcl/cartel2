@@ -328,12 +328,22 @@ static func build_volatile_grant_params(
 				"ship_name": ship_fields.get("ship_name", ""),
 			}
 
+	var lump := VolatileTranslation.default_lump_seconds()
+	var entry_seconds := float(cfg.get("volatile_entry_seconds", lump))
+	var exit_seconds := float(cfg.get("volatile_exit_seconds", lump))
+	if entry_seconds <= 0.0:
+		entry_seconds = lump
+	if exit_seconds <= 0.0:
+		exit_seconds = lump
 	return {
 		"source_sector_id": str(offer.get("origin_sector_id", "")),
 		"label": str(offer.get("site_label", "Survey site")),
-		"duration_hours": int(config(catalog).get("volatile_duration_hours", 8)),
-		"return_duration_hours": int(config(catalog).get("volatile_return_hours", 8)),
+		"description": str(offer.get("description", "")),
+		"duration_hours": int(cfg.get("volatile_duration_hours", 8)),
+		"return_duration_hours": int(cfg.get("volatile_return_hours", 8)),
 		"n": int(offer.get("volatile_n", 4)),
+		"entry_seconds": entry_seconds,
+		"exit_seconds": exit_seconds,
 		"setup": setup,
 	}
 

@@ -7,10 +7,13 @@ static func apply(
 	delivery_type: String,
 	packets: Dictionary,
 	shooter: Variant = null,
-	shot_velocity: Vector2 = Vector2.ZERO
+	shot_velocity: Vector2 = Vector2.ZERO,
+	attribution_session: GameSession = null,
+	attribution_catalog: Catalog = null
 ) -> void:
 	if collider == null:
 		return
+	shooter = _valid_shooter(shooter)
 	if shooter != null and collider == shooter:
 		return
 	var result: Dictionary = {}
@@ -28,7 +31,7 @@ static func apply(
 	if delta.length_squared() > 0.01 and collider.has_method("apply_weapon_impulse"):
 		collider.call("apply_weapon_impulse", delta)
 
-	var session := _shooter_session(shooter)
+	var session := attribution_session if attribution_session != null else _shooter_session(shooter)
 	if (
 		session != null
 		and not session.player.sandbox
@@ -39,10 +42,28 @@ static func apply(
 	if session != null and bool(result.get("destroyed", false)):
 		_maybe_record_bounty_target_destroyed(session, collider)
 
-	var catalog := _shooter_catalog(shooter)
+	var catalog := attribution_catalog if attribution_catalog != null else _shooter_catalog(shooter)
 	if session == null or catalog == null:
 		return
 	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, result)
+
+
+static func capture_attribution(shooter: Variant) -> Dictionary:
+	shooter = _valid_shooter(shooter)
+	if shooter == null:
+		return {}
+	return {
+		"session": _shooter_session(shooter),
+		"catalog": _shooter_catalog(shooter),
+	}
+
+
+static func _valid_shooter(shooter: Variant) -> Variant:
+	if shooter == null:
+		return null
+	if shooter is Object and not is_instance_valid(shooter):
+		return null
+	return shooter
 
 
 static func _maybe_record_bounty_target_destroyed(session: GameSession, collider: Object) -> void:
@@ -93,8 +114,9 @@ static func _target_mass(collider: Object) -> float:
 	return 10.0
 
 
-static func _shooter_session(shooter: Node) -> GameSession:
-	if shooter == null:
+static func _shooter_session(shooter: Variant) -> GameSession:
+	shooter = _valid_shooter(shooter)
+	if shooter == null or not shooter is Node:
 		return null
 	var value = shooter.get("session")
 	if value is GameSession:
@@ -102,8 +124,9 @@ static func _shooter_session(shooter: Node) -> GameSession:
 	return null
 
 
-static func _shooter_catalog(shooter: Node) -> Catalog:
-	if shooter == null:
+static func _shooter_catalog(shooter: Variant) -> Catalog:
+	shooter = _valid_shooter(shooter)
+	if shooter == null or not shooter is Node:
 		return null
 	var value = shooter.get("catalog")
 	if value is Catalog:

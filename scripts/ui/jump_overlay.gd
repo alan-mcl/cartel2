@@ -257,9 +257,11 @@ func _add_n_label_cell(row: HBoxContainer, text: String, header: bool) -> void:
 
 func _add_offer_cell(row: HBoxContainer, offer: Dictionary) -> void:
 	var button := Button.new()
+	var translation: Dictionary = offer.get("translation", {})
 	button.text = TranslationNav.format_cell_summary(
 		float(offer.get("accuracy", 0.0)),
-		float(offer.get("duration_seconds", 0.0))
+		float(offer.get("duration_seconds", 0.0)),
+		translation
 	)
 	button.custom_minimum_size = Vector2(float(COL_N_MIN_WIDTH), 0.0)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -310,6 +312,8 @@ func _update_selection_ui() -> void:
 		"Selected: %d → %s via %d-space. Nav accuracy %d%% before jump."
 		% [solution, label, n, int(round(accuracy))]
 	)
+	if bool(translation.get("volatile", false)):
+		detail += " %s" % TranslationNav.format_lag_pair(translation)
 	if bool(_selected_offer.get("volatile", false)) and bool(translation.get("volatile", false)):
 		var record := VolatileTranslation.find_by_solution(_session, _session.sector_id, solution)
 		if not record.is_empty():
@@ -318,7 +322,7 @@ func _update_selection_ui() -> void:
 				detail += " Single-use; offer expires in %s." % GalacticCalendar.format_duration(remaining)
 			else:
 				detail += " Single-use."
-	elif bool(_selected_offer.get("volatile_return", false)):
+	elif bool(_selected_offer.get("volatile_return", false)) and bool(translation.get("volatile", false)):
 		var record := VolatileTranslation.find_by_sector_id(_session, _session.sector_id)
 		if not record.is_empty():
 			var remaining := float(record.get("return_expires_gst", 0.0)) - _session.gst_seconds

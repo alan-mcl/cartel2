@@ -8,6 +8,30 @@ const ALLOWED_N := [4, 5, 6]
 const ALLOWED_ENTITY_KINDS: Array[String] = ["debris", "orbital"]
 const DEFAULT_DESTINATION_DESCRIPTION := "Single-use off-network site"
 
+
+static func default_lump_seconds() -> float:
+	return float(DEFAULT_FRICTION) * Catalog.ROUTE_SECONDS_PER_FRICTION
+
+
+static func lag_seconds(record_or_mapping: Dictionary, field: String) -> float:
+	var value := float(record_or_mapping.get(field, 0.0))
+	if value > 0.0:
+		return value
+	var other_field := "exit_seconds" if field == "entry_seconds" else "entry_seconds"
+	var other := float(record_or_mapping.get(other_field, 0.0))
+	if other > 0.0:
+		return other
+	return default_lump_seconds()
+
+
+static func _lag_from_params(params: Dictionary, field: String, default: float) -> float:
+	if not params.has(field):
+		return default
+	var value := float(params.get(field, 0.0))
+	if value <= 0.0:
+		return default
+	return value
+
 static var _next_grant_index: int = 0
 
 
@@ -50,9 +74,9 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 
 	var ease := float(params.get("ease", 0.5))
 	ease = clampf(ease, 0.0, 1.0)
-	var lump := float(DEFAULT_FRICTION) * Catalog.ROUTE_SECONDS_PER_FRICTION
-	var entry_seconds := float(params.get("entry_seconds", lump))
-	var exit_seconds := float(params.get("exit_seconds", lump))
+	var lump := default_lump_seconds()
+	var entry_seconds := _lag_from_params(params, "entry_seconds", lump)
+	var exit_seconds := _lag_from_params(params, "exit_seconds", lump)
 	var time_jitter := clampf(float(params.get("time_jitter", 0.08)), 0.0, 0.5)
 
 	_next_grant_index += 1
@@ -139,8 +163,8 @@ static func mapping_from_record(record: Dictionary, source_sector_id: String, ta
 		"n": int(record.get("n", 4)),
 		"label": str(record.get("label", target_sector_id)),
 		"description": destination_description(record),
-		"entry_seconds": float(record.get("entry_seconds", 0.0)),
-		"exit_seconds": float(record.get("exit_seconds", 0.0)),
+		"entry_seconds": lag_seconds(record, "entry_seconds"),
+		"exit_seconds": lag_seconds(record, "exit_seconds"),
 		"time_jitter": float(record.get("time_jitter", 0.08)),
 		"ease": float(record.get("ease", 0.5)),
 		"volatile": true,
@@ -191,6 +215,30 @@ static func resolve_mapping(
 				str(record.get("source_sector_id", "")),
 				int(record.get("return_solution", 0))
 			)
+	return {}
+
+
+## Mapping for a jump already in progress. Unlike [method resolve_mapping], this
+## still returns the translation after outbound use is consumed and before the
+## return record is removed on arrival, so exit lag can be applied.
+static func transit_mapping(
+	session: GameSession,
+	origin_sector_id: String,
+	destination_id: String,
+	n: int,
+	solution: int
+) -> Dictionary:
+	var record := find_by_solution(session, origin_sector_id, solution)
+	if record.is_empty():
+		return {}
+	if int(record.get("n", 0)) != n:
+		return {}
+	var volatile_sector := sector_id_for(str(record.get("id", "")))
+	var source_sector_id := str(record.get("source_sector_id", ""))
+	if origin_sector_id == source_sector_id and destination_id == volatile_sector:
+		return mapping_from_record(record, origin_sector_id, volatile_sector, solution)
+	if origin_sector_id == volatile_sector and destination_id == source_sector_id:
+		return mapping_from_record(record, volatile_sector, source_sector_id, solution)
 	return {}
 
 
@@ -373,7 +421,7 @@ static func from_save_array(value: Variant) -> Array:
 		var n := int(entry.get("n", 4))
 		if n not in ALLOWED_N:
 			continue
-		out.append({
+		var loaded := {
 			"id": record_id,
 			"source_sector_id": str(entry.get("source_sector_id", "")),
 			"solution": int(entry.get("solution", 0)),
@@ -382,15 +430,16 @@ static func from_save_array(value: Variant) -> Array:
 			"description": str(entry.get("description", "")),
 			"n": n,
 			"ease": float(entry.get("ease", 0.5)),
-			"entry_seconds": float(entry.get("entry_seconds", 0.0)),
-			"exit_seconds": float(entry.get("exit_seconds", 0.0)),
+			"entry_seconds": lag_seconds(entry, "entry_seconds"),
+			"exit_seconds": lag_seconds(entry, "exit_seconds"),
 			"time_jitter": float(entry.get("time_jitter", 0.08)),
 			"expires_gst": float(entry.get("expires_gst", 0.0)),
 			"return_expires_gst": float(entry.get("return_expires_gst", 0.0)),
 			"consumed": bool(entry.get("consumed", false)),
 			"collapse_announced": bool(entry.get("collapse_announced", false)),
 			"setup": _setup_from_variant(entry.get("setup", {})),
-		})
+		}
+		out.append(loaded)
 	return out
 
 

@@ -25,6 +25,8 @@ var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
 var _shooter: Node = null
+var _attribution_session: GameSession = null
+var _attribution_catalog: Catalog = null
 var _visual_variant := "mass_driver"
 
 
@@ -92,6 +94,11 @@ func configure(
 	_collision_mask = collision_mask
 	_exclude = exclude
 	_shooter = shooter
+	var attribution := WeaponHit.capture_attribution(shooter)
+	var session_value: Variant = attribution.get("session", null)
+	var catalog_value: Variant = attribution.get("catalog", null)
+	_attribution_session = session_value if session_value is GameSession else null
+	_attribution_catalog = catalog_value if catalog_value is Catalog else null
 	_visual_variant = visual_variant
 	if _visual_variant.is_empty():
 		_visual_variant = "plasma" if delivery_type == "plasma" else "mass_driver"
@@ -150,7 +157,16 @@ func _physics_process(delta: float) -> void:
 
 
 func _apply_hit(collider: Object) -> void:
-	WeaponHit.apply(collider, _delivery_type, _packets, _shooter, _velocity)
+	var shooter: Variant = _shooter if is_instance_valid(_shooter) else null
+	WeaponHit.apply(
+		collider,
+		_delivery_type,
+		_packets,
+		shooter,
+		_velocity,
+		_attribution_session,
+		_attribution_catalog
+	)
 
 
 func _sweep(from: Vector2, to: Vector2) -> Dictionary:

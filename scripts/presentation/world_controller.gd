@@ -226,22 +226,13 @@ func arrive_from_unspace() -> void:
 	var dest_id: String = _main.session.pending_destination_id
 	var solution: int = _main.session.unspace_solution
 	var unspace_n: int = _main.session.unspace_n
+	# Snapshot before arrival. Outbound marks the grant consumed on entry, and a
+	# successful return deletes the record inside arrive_from_unspace.
+	var mapping := _exit_mapping(origin_id, dest_id, unspace_n, solution)
 
 	if not _main.session.arrive_from_unspace(_catalog):
 		return
 
-	var mapping := _catalog.get_translation(origin_id, solution)
-	if mapping.is_empty():
-		mapping = VolatileTranslation.resolve_mapping(
-			_main.session,
-			_catalog,
-			origin_id,
-			dest_id,
-			unspace_n,
-			solution
-		)
-	if mapping.is_empty() and not VolatileTranslation.is_volatile_sector_id(origin_id):
-		mapping = _catalog.get_public_translation(origin_id, dest_id, unspace_n if unspace_n > 0 else 4)
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "exit_seconds", _catalog)
 	var sector_name := dest_id
 	if VolatileTranslation.is_volatile_sector_id(dest_id):
@@ -258,6 +249,21 @@ func arrive_from_unspace() -> void:
 	load_current_sector(true, "jump_gate")
 	_on_session_changed.call()
 	_on_interaction_target_changed.call(_player.get_current_target())
+
+
+func _exit_mapping(origin_id: String, dest_id: String, unspace_n: int, solution: int) -> Dictionary:
+	var mapping := _catalog.get_translation(origin_id, solution)
+	if mapping.is_empty():
+		mapping = VolatileTranslation.transit_mapping(
+			_main.session,
+			origin_id,
+			dest_id,
+			unspace_n,
+			solution
+		)
+	if mapping.is_empty() and not VolatileTranslation.is_volatile_sector_id(origin_id):
+		mapping = _catalog.get_public_translation(origin_id, dest_id, unspace_n if unspace_n > 0 else 4)
+	return mapping
 
 
 func on_jump_cancelled() -> void:

@@ -10,6 +10,8 @@ static func run(runner: TestRunner) -> void:
 	_test_round_trip_and_sweep(runner, catalog)
 	_test_save_volatile_sector(runner, catalog)
 	_test_grouping_and_description(runner, catalog)
+	_test_volatile_lag_display(runner, catalog)
+	_test_exit_lag_on_arrival(runner, catalog)
 
 
 static func _assembled_with_nav(catalog: Catalog) -> AssembledShip:
@@ -246,6 +248,106 @@ static func _test_grouping_and_description(runner: TestRunner, catalog: Catalog)
 			not VolatileTranslation.is_volatile_sector_id(str(other_row.get("destination_id", ""))),
 			"volatile grouping: volatile target not listed under other"
 		)
+
+
+static func _test_volatile_lag_display(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session_at_proxima(catalog)
+	var record_id := VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Lag check",
+		"duration_hours": 4,
+		"n": 4,
+		"entry_seconds": 1800.0,
+		"exit_seconds": 900.0,
+	})
+	var zero_exit_id := VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Zero exit grant",
+		"duration_hours": 4,
+		"n": 4,
+		"entry_seconds": 1800.0,
+		"exit_seconds": 0.0,
+	})
+	runner.check(not zero_exit_id.is_empty(), "volatile lag: zero exit_seconds coerced on grant")
+	var zero_exit_record := VolatileTranslation.find_by_id(session, zero_exit_id)
+	runner.check(
+		float(zero_exit_record.get("exit_seconds", 0.0)) > 0.0,
+		"volatile lag: stored exit lag is positive after grant"
+	)
+	var record := VolatileTranslation.find_by_id(session, record_id)
+	var mapping := VolatileTranslation.mapping_from_record(
+		record,
+		"proxima",
+		VolatileTranslation.sector_id_for(record_id),
+		int(record.get("solution", 0))
+	)
+	var cell := TranslationNav.format_cell_summary(75.0, 2700.0, mapping)
+	runner.check(cell.contains("Entry"), "volatile lag: cell shows entry")
+	runner.check(cell.contains("Exit"), "volatile lag: cell shows exit")
+	var pair := TranslationNav.format_lag_pair(mapping)
+	runner.check(pair.contains("Entry lag"), "volatile lag: pair mentions entry lag")
+	runner.check(pair.contains("exit lag"), "volatile lag: pair mentions exit lag")
+
+
+static func _test_exit_lag_on_arrival(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session_at_proxima(catalog)
+	var assembled := _assembled_with_nav(catalog)
+	var simulation := Simulation.new()
+	var record_id := VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Exit lag site",
+		"duration_hours": 12,
+		"return_duration_hours": 12,
+		"n": 4,
+		"entry_seconds": 2400.0,
+		"exit_seconds": 2100.0,
+	})
+	var record := VolatileTranslation.find_by_id(session, record_id)
+	var volatile_sector := VolatileTranslation.sector_id_for(record_id)
+	var solution := int(record.get("solution", 0))
+	var return_solution := int(record.get("return_solution", 0))
+
+	runner.check(
+		session.enter_unspace(catalog, volatile_sector, 4, assembled, solution),
+		"volatile exit lag: outbound enter"
+	)
+	runner.check(
+		VolatileTranslation.resolve_mapping(
+			session, catalog, "proxima", volatile_sector, 4, solution
+		).is_empty(),
+		"volatile exit lag: consumed outbound is no longer an offer"
+	)
+	var outbound := VolatileTranslation.transit_mapping(
+		session, "proxima", volatile_sector, 4, solution
+	)
+	var outbound_exit := float(outbound.get("exit_seconds", 0.0))
+	var outbound_entry := float(outbound.get("entry_seconds", 0.0))
+	runner.check(outbound_exit > 0.0, "volatile exit lag: transit mapping keeps exit lump")
+	runner.check(
+		absf(outbound_exit - outbound_entry) < outbound_entry,
+		"volatile exit lag: exit lump is in the same ballpark as entry"
+	)
+	var gst_before_site := session.gst_seconds
+	runner.check(session.arrive_from_unspace(catalog), "volatile exit lag: arrive at site")
+	var applied_out := simulation.apply_mapping_lump(session, outbound, "exit_seconds", catalog)
+	runner.check(applied_out > outbound_exit * 0.5, "volatile exit lag: site arrival applies exit lump")
+	runner.check(session.gst_seconds > gst_before_site, "volatile exit lag: site arrival advances GST")
+
+	runner.check(
+		session.enter_unspace(catalog, "proxima", 4, assembled, return_solution),
+		"volatile exit lag: return enter"
+	)
+	var inbound := VolatileTranslation.transit_mapping(
+		session, volatile_sector, "proxima", 4, return_solution
+	)
+	var inbound_exit := float(inbound.get("exit_seconds", 0.0))
+	runner.check(inbound_exit > 0.0, "volatile exit lag: return transit keeps exit lump")
+	var gst_before_home := session.gst_seconds
+	runner.check(session.arrive_from_unspace(catalog), "volatile exit lag: arrive home")
+	runner.check_eq(session.player.volatile_translations.size(), 0, "volatile exit lag: record cleared on return")
+	var applied_home := simulation.apply_mapping_lump(session, inbound, "exit_seconds", catalog)
+	runner.check(applied_home > inbound_exit * 0.5, "volatile exit lag: home arrival applies exit lump")
+	runner.check(session.gst_seconds > gst_before_home, "volatile exit lag: home arrival advances GST")
 
 
 static func _test_save_volatile_sector(runner: TestRunner, catalog: Catalog) -> void:
