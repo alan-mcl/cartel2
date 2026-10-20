@@ -99,8 +99,17 @@ static func _test_offer_grouping(runner: TestRunner, catalog: Catalog) -> void:
 			break
 	runner.check(not irasia_row.is_empty(), "grouping: irasia is other hub from proxima")
 	runner.check(
-		not str(irasia_row.get("description", "")).is_empty(),
-		"grouping: catalog destination row includes blurb"
+		str(irasia_row.get("description", "")).contains("commerce"),
+		"grouping: catalog destination uses the sector description"
+	)
+	runner.check_eq(
+		TranslationNav.local_system_tab_title(catalog, "proxima"),
+		"Alpha Centauri System",
+		"grouping: local tab uses the star system name"
+	)
+	runner.check(
+		TranslationNav.sector_destination_blurb(catalog, "centauri_a_beltworks").contains("asteroid belt"),
+		"grouping: beltworks description names the belt"
 	)
 	var by_n: Dictionary = irasia_row.get("by_n", {})
 	runner.check(by_n.has(4), "grouping: irasia row has 4-space offer")

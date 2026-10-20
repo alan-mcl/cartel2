@@ -136,7 +136,10 @@ func _filter_beacon_offers(all_offers: Array, beacon_destination: String) -> Arr
 func _build_route_tables(local_rows: Array, other_rows: Array, volatile_rows: Array) -> void:
 	var sections: Array = []
 	if not local_rows.is_empty():
-		sections.append({"title": "Local Star System", "rows": local_rows})
+		sections.append({
+			"title": TranslationNav.local_system_tab_title(_catalog, _session.sector_id),
+			"rows": local_rows,
+		})
 	if not other_rows.is_empty():
 		sections.append({"title": "Other star systems", "rows": other_rows})
 	if not volatile_rows.is_empty():

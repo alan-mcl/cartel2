@@ -259,12 +259,27 @@ static func destination_display_label(catalog: Catalog, sector_id: String) -> St
 	return label
 
 
+static func local_system_tab_title(catalog: Catalog, sector_id: String) -> String:
+	if catalog == null or sector_id.is_empty():
+		return "Local star system"
+	var star_system := str(catalog.get_sector(sector_id).get("star_system", "")).strip_edges()
+	if star_system.is_empty():
+		return "Local star system"
+	if star_system.ends_with(" System"):
+		return star_system
+	return "%s System" % star_system
+
+
 static func sector_destination_blurb(catalog: Catalog, sector_id: String) -> String:
 	if catalog == null or sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
 		return ""
 	var sector := catalog.get_sector(sector_id)
 	if sector.is_empty():
 		return ""
+
+	var description := str(sector.get("description", "")).strip_edges()
+	if not description.is_empty():
+		return description
 
 	var climate := str(sector.get("climate", "")).strip_edges()
 	var classification := str(sector.get("classification", "")).strip_edges()
