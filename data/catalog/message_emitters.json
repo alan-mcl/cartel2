@@ -251,7 +251,7 @@
     { "channel": "headlines", "text": "{corporation} launches revised {commodity} packaging after supplier dispute.", "tone": "info" },
     { "channel": "headlines", "text": "Executive at {corporation} resigns amid scandal at {habitat}.", "tone": "warning" },
     { "channel": "headlines", "text": "{corporation} promises 'synergy week' at {city-mall}; staff call it unpaid overtime.", "tone": "warning" },
-    { "channel": "headlines", "text": "{corporation} opens a new corporate headquarters at {habitat}.", "tone": "info" },
+    { "channel": "headlines", "text": "{corporation} opens a new corporate headquarters at {city-mall}.", "tone": "info" },
     { "channel": "headlines", "text": "{corporation} announces expansion of its {planet} operations.", "tone": "positive" },
     { "channel": "headlines", "text": "{corporation} acquires a long-established local supplier on {planet}.", "tone": "info" },
     { "channel": "headlines", "text": "{corporation} reports record quarterly sales across {planet}.", "tone": "positive" },

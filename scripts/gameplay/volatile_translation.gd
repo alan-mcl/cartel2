@@ -7,6 +7,25 @@ const DEFAULT_FRICTION := 10
 const ALLOWED_N := [4, 5, 6]
 const ALLOWED_ENTITY_KINDS: Array[String] = ["debris", "orbital"]
 const DEFAULT_DESTINATION_DESCRIPTION := "Single-use off-network site"
+const SITE_STAR_DEEP_SPACE_WEIGHT := 0.2
+const SITE_STAR_LOCAL_WEIGHT := 0.4
+const SITE_STAR_BACKGROUND_WEIGHT := 0.4
+const VOLATILE_STAR_MIN_DISC_RADIUS := 18.0
+const UNCATALOGUED_STAR_LABEL := "Uncatalogued star"
+
+const AFFILIATED_BACKGROUND_GROUPS: Array[String] = [
+	"Eridani",
+	"Centauri",
+	"Cygni",
+	"Ceti",
+	"Virginis",
+	"Scorpii",
+	"Pavonis",
+	"Ursae Majoris",
+	"Leonis",
+	"Wolf",
+	"Kepler",
+]
 
 
 static func default_lump_seconds() -> float:
@@ -49,6 +68,40 @@ static func record_id_from_sector(sector_id: String) -> String:
 	return sector_id.substr(SECTOR_PREFIX.length())
 
 
+static func pick_site_star(catalog: Catalog, source_sector_id: String, seed_text: String) -> Dictionary:
+	if catalog == null or source_sector_id.is_empty():
+		return {}
+	var rng := RandomNumberGenerator.new()
+	rng.seed = absi(seed_text.hash())
+	var roll := rng.randf()
+	if roll < SITE_STAR_DEEP_SPACE_WEIGHT:
+		return {}
+	if roll < SITE_STAR_DEEP_SPACE_WEIGHT + SITE_STAR_LOCAL_WEIGHT:
+		return _pick_local_system_star(catalog, source_sector_id, rng)
+	return _pick_background_star(catalog, rng)
+
+
+static func star_setup_for_render(star_data: Dictionary) -> Dictionary:
+	if star_data.is_empty():
+		return {}
+	var out := star_data.duplicate(true)
+	var disc := float(out.get("disc_radius", 0.0))
+	if disc < VOLATILE_STAR_MIN_DISC_RADIUS:
+		out["disc_radius"] = VOLATILE_STAR_MIN_DISC_RADIUS
+	return out
+
+
+static func volatile_star_contact_name(star_data: Dictionary) -> String:
+	if typeof(star_data) != TYPE_DICTIONARY or star_data.is_empty():
+		return ""
+	var name := str(star_data.get("name", "")).strip_edges()
+	if not name.is_empty():
+		return name
+	if star_data.has("temperature_k") or star_data.has("luminosity"):
+		return UNCATALOGUED_STAR_LABEL
+	return ""
+
+
 static func grant(session: GameSession, catalog: Catalog, params: Dictionary) -> String:
 	if session == null or catalog == null:
 		return ""
@@ -82,6 +135,12 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 	_next_grant_index += 1
 	var record_id := "vt_%d" % _next_grant_index
 	var setup: Dictionary = _bind_setup_record_id(setup_raw as Dictionary, record_id)
+	if not _setup_has_star(setup):
+		var picked := pick_site_star(catalog, source_sector_id, record_id)
+		if picked.is_empty():
+			setup.erase("star")
+		else:
+			setup["star"] = picked
 	if not _validate_setup(setup):
 		return ""
 	var solution := _allocate_solution(session, catalog, source_sector_id)
@@ -494,6 +553,53 @@ static func _allocate_solution(session: GameSession, catalog: Catalog, source_se
 			continue
 		return candidate
 	return 0
+
+
+static func _setup_has_star(setup: Dictionary) -> bool:
+	var star: Variant = setup.get("star", null)
+	if typeof(star) != TYPE_DICTIONARY:
+		return false
+	return not (star as Dictionary).is_empty()
+
+
+static func _pick_local_system_star(
+	catalog: Catalog,
+	source_sector_id: String,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var sector := catalog.get_sector(source_sector_id)
+	var star_system := str(sector.get("star_system", "")).strip_edges()
+	if star_system.is_empty():
+		return _pick_background_star(catalog, rng)
+	var names := catalog.list_star_names_for_system(star_system)
+	if names.is_empty():
+		return _star_setup_from_facts(star_system, catalog.get_star(star_system))
+	var picked: String = names[rng.randi_range(0, names.size() - 1)]
+	return _star_setup_from_facts(picked, catalog.get_star(picked))
+
+
+static func _pick_background_star(catalog: Catalog, rng: RandomNumberGenerator) -> Dictionary:
+	var names := catalog.list_background_star_names()
+	if names.is_empty():
+		return {}
+	var picked: String = names[rng.randi_range(0, names.size() - 1)]
+	return _star_setup_from_facts(picked, catalog.get_star(picked))
+
+
+static func _star_setup_from_facts(star_name: String, facts: Dictionary) -> Dictionary:
+	if star_name.is_empty():
+		return {}
+	var temperature_k := float(facts.get("temperature_k", 0.0))
+	var luminosity := float(facts.get("luminosity", 0.0))
+	if temperature_k <= 0.0:
+		temperature_k = 5800.0
+	if luminosity <= 0.0:
+		luminosity = 1.0
+	return {
+		"name": star_name,
+		"temperature_k": temperature_k,
+		"luminosity": luminosity,
+	}
 
 
 static func _bind_setup_record_id(setup: Dictionary, record_id: String) -> Dictionary:

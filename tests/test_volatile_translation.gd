@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_grouping_and_description(runner, catalog)
 	_test_volatile_lag_display(runner, catalog)
 	_test_exit_lag_on_arrival(runner, catalog)
+	_test_volatile_site_stars(runner, catalog)
 
 
 static func _assembled_with_nav(catalog: Catalog) -> AssembledShip:
@@ -348,6 +349,101 @@ static func _test_exit_lag_on_arrival(runner: TestRunner, catalog: Catalog) -> v
 	var applied_home := simulation.apply_mapping_lump(session, inbound, "exit_seconds", catalog)
 	runner.check(applied_home > inbound_exit * 0.5, "volatile exit lag: home arrival applies exit lump")
 	runner.check(session.gst_seconds > gst_before_home, "volatile exit lag: home arrival advances GST")
+
+
+static func _test_volatile_site_stars(runner: TestRunner, catalog: Catalog) -> void:
+	runner.check(
+		catalog.background_star_count() >= 180,
+		"volatile stars: background pool size"
+	)
+	for star_name in catalog.stars_by_name.keys():
+		runner.check(
+			not catalog.background_stars_by_name.has(star_name),
+			"volatile stars: system star not duplicated in background (%s)" % star_name
+		)
+	var affiliated_frac := catalog.background_star_affiliated_fraction(
+		VolatileTranslation.AFFILIATED_BACKGROUND_GROUPS
+	)
+	runner.check(affiliated_frac >= 0.25, "volatile stars: affiliated group share lower bound")
+	runner.check(affiliated_frac <= 0.5, "volatile stars: affiliated group share upper bound")
+
+	var local_allowed := {
+		"Alpha Centauri A": true,
+		"Alpha Centauri B": true,
+		"Alpha Centauri C": true,
+	}
+	var local_count := 0
+	var background_count := 0
+	var deep_count := 0
+	const SAMPLES := 1200
+	for i in range(SAMPLES):
+		var picked := VolatileTranslation.pick_site_star(catalog, "proxima", "star_roll_%d" % i)
+		if picked.is_empty():
+			deep_count += 1
+			continue
+		var name := str(picked.get("name", ""))
+		if local_allowed.has(name):
+			local_count += 1
+		elif catalog.background_stars_by_name.has(name):
+			background_count += 1
+		else:
+			runner.check(false, "volatile stars: unexpected pick %s" % name)
+
+	var total := float(SAMPLES)
+	runner.check(absf(float(local_count) / total - 0.4) < 0.08, "volatile stars: local roll near 40%")
+	runner.check(absf(float(background_count) / total - 0.4) < 0.08, "volatile stars: background roll near 40%")
+	runner.check(absf(float(deep_count) / total - 0.2) < 0.08, "volatile stars: deep space roll near 20%")
+
+	var session := _session_at_proxima(catalog)
+	var found_deep_grant := false
+	var found_named_star_grant := false
+	for attempt in range(400):
+		var grant_id := VolatileTranslation.grant(session, catalog, {
+			"source_sector_id": "proxima",
+			"label": "Star roll %d" % attempt,
+			"duration_hours": 4,
+			"n": 4,
+		})
+		if grant_id.is_empty():
+			continue
+		var grant_record := VolatileTranslation.find_by_id(session, grant_id)
+		var grant_setup: Dictionary = grant_record.get("setup", {})
+		if not grant_setup.has("star"):
+			found_deep_grant = true
+		else:
+			var star_block: Dictionary = grant_setup.get("star", {})
+			if not star_block.is_empty():
+				found_named_star_grant = true
+				runner.check(
+					not str(star_block.get("name", "")).is_empty(),
+					"volatile stars: granted star has a catalogue name"
+				)
+		if found_deep_grant and found_named_star_grant:
+			break
+	runner.check(found_deep_grant, "volatile stars: grant can omit star for deep space")
+	runner.check(found_named_star_grant, "volatile stars: grant persists picked star")
+
+	var named_grant := VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Fixed star",
+		"duration_hours": 4,
+		"n": 4,
+		"setup": {
+			"play_bounds": 7500.0,
+			"seed": "fixed",
+			"star": {
+				"name": "Tau Ceti",
+				"temperature_k": 5344.0,
+				"luminosity": 0.52,
+			},
+		},
+	})
+	var fixed_record := VolatileTranslation.find_by_id(session, named_grant)
+	runner.check_eq(
+		str(fixed_record.get("setup", {}).get("star", {}).get("name", "")),
+		"Tau Ceti",
+		"volatile stars: caller-supplied star is preserved"
+	)
 
 
 static func _test_save_volatile_sector(runner: TestRunner, catalog: Catalog) -> void:

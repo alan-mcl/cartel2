@@ -179,10 +179,6 @@ static func _star_detail_rows(catalog: Catalog, contact: Dictionary) -> Array:
 	if lum > 0.0:
 		rows.append(_row("Luminosity", "%.1f" % lum))
 
-	if bool(contact.get("volatile_survey_star", false)):
-		rows.append(_row("Note", "Temporary survey lighting; not a catalog primary."))
-		return rows
-
 	var star_name := str(contact.get("star_name", contact.get("name", ""))).strip_edges()
 	var facts := catalog.get_star(star_name)
 	if facts.is_empty():

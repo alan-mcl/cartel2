@@ -1,20 +1,119 @@
 {
   "Alpha Centauri A": {
+    "star_system": "Alpha Centauri",
     "spectral_class": "G2V",
+    "temperature_k": 5790,
+    "luminosity": 1.52,
     "mass_solar": 1.1,
     "radius_solar": 1.22,
     "description": "Primary of the Alpha Centauri system; a Sun-like star and the anchor of human space."
   },
   "Alpha Centauri B": {
+    "star_system": "Alpha Centauri",
     "spectral_class": "K1V",
+    "temperature_k": 5260,
+    "luminosity": 0.5,
     "mass_solar": 0.907,
     "radius_solar": 0.863,
     "description": "Orange companion to Alpha Centauri A; its industrial worlds orbit under a dimmer, redder sky."
   },
+  "Alpha Centauri C": {
+    "star_system": "Alpha Centauri",
+    "spectral_class": "M5.5Ve",
+    "temperature_k": 3042,
+    "luminosity": 0.00017,
+    "mass_solar": 0.122,
+    "radius_solar": 0.154,
+    "description": "The red dwarf Proxima; it dominates Proxima's night sky though it lies far from the A–B pair."
+  },
   "Regulus A": {
+    "star_system": "Regulus",
     "spectral_class": "B8 IVn",
+    "temperature_k": 12460,
+    "luminosity": 288.0,
     "mass_solar": 3.8,
     "radius_solar": 4.35,
     "description": "Fast-rotating blue subgiant at the heart of the Regulus system; Tycho's fierce daylight comes from this star."
+  },
+  "Delta Pavonis": {
+    "star_system": "Delta Pavonis",
+    "spectral_class": "G8IV",
+    "temperature_k": 5602,
+    "luminosity": 1.55,
+    "mass_solar": 0.991,
+    "radius_solar": 1.56,
+    "description": "Quiet G-type subgiant; La Bella Vista orbits under warm, steady light."
+  },
+  "61 Virginis": {
+    "star_system": "61 Virginis",
+    "spectral_class": "G5V",
+    "temperature_k": 5531,
+    "luminosity": 0.83,
+    "mass_solar": 0.95,
+    "radius_solar": 0.98,
+    "description": "Sun-like star hosting Irasia's heavy industry and trade lanes."
+  },
+  "61 Ursae Majoris": {
+    "star_system": "61 Ursae Majoris",
+    "spectral_class": "G8V",
+    "temperature_k": 5459,
+    "luminosity": 0.76,
+    "mass_solar": 0.92,
+    "radius_solar": 0.96,
+    "description": "Stable main-sequence star anchoring Tokirev's cold industrial orbit."
+  },
+  "18 Scorpii": {
+    "star_system": "18 Scorpii",
+    "spectral_class": "G2V",
+    "temperature_k": 5823,
+    "luminosity": 1.05,
+    "mass_solar": 1.02,
+    "radius_solar": 1.01,
+    "description": "Near-Solar analogue; Fennet grew under its calm temperate light."
+  },
+  "Tau Ceti": {
+    "star_system": "Tau Ceti",
+    "spectral_class": "G8.5V",
+    "temperature_k": 5344,
+    "luminosity": 0.52,
+    "mass_solar": 0.783,
+    "radius_solar": 0.793,
+    "description": "Quiet G dwarf; Fortuna's finance districts orbit a dimmer, steadier sun."
+  },
+  "61 Cygni A": {
+    "star_system": "61 Cygni",
+    "spectral_class": "K5V",
+    "temperature_k": 4340,
+    "luminosity": 0.08,
+    "mass_solar": 0.7,
+    "radius_solar": 0.665,
+    "description": "Orange dwarf of the 61 Cygni binary; New Carthage trades under its ruddy light."
+  },
+  "Epsilon Eridani": {
+    "star_system": "Epsilon Eridani",
+    "spectral_class": "K2V",
+    "temperature_k": 5084,
+    "luminosity": 0.34,
+    "mass_solar": 0.82,
+    "radius_solar": 0.74,
+    "description": "Young K dwarf with elevated particle wind; Horizon's vast cities orbit here."
+  },
+  "Wolf 359": {
+    "star_system": "Wolf 359",
+    "spectral_class": "M6.5V",
+    "temperature_k": 2800,
+    "luminosity": 0.00002,
+    "mass_solar": 0.09,
+    "radius_solar": 0.16,
+    "description": "Dim flare star; Titania IX rides the turbulent skies of its gas-giant primary nearby."
+  },
+  "Kepler-16 A": {
+    "star_system": "Kepler-16",
+    "spectral_class": "K",
+    "temperature_k": 4450,
+    "luminosity": 0.12,
+    "mass_solar": 0.69,
+    "radius_solar": 0.65,
+    "description": "Primary of the Kepler-16 circumbinary; Pelagos sees two suns from its sky."
   }
 }

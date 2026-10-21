@@ -49,6 +49,7 @@ var _habitat_sprite_path: String = ""
 var _gate_sprite_path: String = ""
 var _volatile_scan_contact: Dictionary = {}
 var _volatile_orbital_entity_ids: Array[String] = []
+var _volatile_star_setup: Dictionary = {}
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -78,6 +79,7 @@ func clear_world(world_root: Node2D) -> void:
 	_gate_sprite_path = ""
 	_volatile_scan_contact = {}
 	_volatile_orbital_entity_ids.clear()
+	_volatile_star_setup = {}
 
 
 func load_sector(
@@ -131,10 +133,14 @@ func _load_volatile_sector(
 	_gate_radius = 5400.0
 	_gate_angle = _gate_angle_for_sector(sector_id)
 
-	var star_data: Dictionary = setup.get("star", {})
-	if typeof(star_data) != TYPE_DICTIONARY:
-		star_data = {"temperature_k": 4200.0, "luminosity": 0.35}
-	_spawn_volatile_star(world_root, star_data, setup, str(record.get("id", sector_id)))
+	_volatile_star_setup = {}
+	var star_raw: Variant = setup.get("star", null)
+	var star_data: Dictionary = star_raw if typeof(star_raw) == TYPE_DICTIONARY else {}
+	_volatile_star_setup = star_data.duplicate(true)
+	var contact_name := VolatileTranslation.volatile_star_contact_name(star_data)
+	if not contact_name.is_empty():
+		var render_data := VolatileTranslation.star_setup_for_render(star_data)
+		_spawn_volatile_star(world_root, render_data, setup, str(record.get("id", sector_id)))
 
 	if VolatileTranslation.return_gate_open(session, sector_id):
 		var gate_entity := {
@@ -700,7 +706,9 @@ func _build_volatile_site_contacts(_catalog: Catalog) -> Array:
 
 	if spawned_by_id.has("local_star"):
 		var star_display := get_local_star_display()
-		var volatile_star_name := "Survey star"
+		var volatile_star_name := VolatileTranslation.volatile_star_contact_name(_volatile_star_setup)
+		if volatile_star_name.is_empty():
+			volatile_star_name = VolatileTranslation.UNCATALOGUED_STAR_LABEL
 		var star_contact := {
 			"id": "local_star",
 			"name": volatile_star_name,
@@ -710,7 +718,6 @@ func _build_volatile_site_contacts(_catalog: Catalog) -> Array:
 			"star_name": volatile_star_name,
 			"star_temperature_k": float(star_display.get("temperature_k", 0.0)),
 			"star_luminosity": float(star_display.get("luminosity", 0.0)),
-			"volatile_survey_star": true,
 		}
 		_merge_lock_display_fields(star_contact, "", 220.0)
 		contacts.append(star_contact)

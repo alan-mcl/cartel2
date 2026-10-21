@@ -164,7 +164,6 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 	var setup := {
 		"play_bounds": 7500.0,
 		"seed": id_token,
-		"star": {"temperature_k": 4800.0, "luminosity": 0.65},
 		"bounty_target": {
 			"id": target_id,
 			"template_id": str(offer.get("target_template_id", "")),

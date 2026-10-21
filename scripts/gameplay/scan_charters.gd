@@ -313,7 +313,6 @@ static func build_volatile_grant_params(
 	var setup := {
 		"play_bounds": 7500.0,
 		"seed": id_token,
-		"star": {"temperature_k": 5200.0, "luminosity": 0.8},
 	}
 
 	match target_kind:

@@ -29,6 +29,7 @@ const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
 const CORPORATE_OFFICE_TICKER_PATH := "res://data/catalog/corporate_office_ticker.json"
 const STARS_PATH := "res://data/catalog/stars.json"
+const BACKGROUND_STARS_PATH := "res://data/catalog/background_stars.json"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
 const ROUTE_TIME_JITTER := 0.08
@@ -62,6 +63,7 @@ var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
 var corporate_office_ticker_config: Dictionary = {}
 var stars_by_name: Dictionary = {}
+var background_stars_by_name: Dictionary = {}
 ## Directed translation records keyed by "source_sector:solution".
 var translations_by_key: Dictionary = {}
 ## All directed translations from a sector (unsorted).
@@ -104,6 +106,7 @@ func load_all() -> void:
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
 	corporate_office_ticker_config = _load_json_object(CORPORATE_OFFICE_TICKER_PATH)
 	stars_by_name = _load_json_object(STARS_PATH)
+	background_stars_by_name = _load_json_object(BACKGROUND_STARS_PATH)
 
 
 func get_chassis(id: String) -> Dictionary:
@@ -379,9 +382,51 @@ func get_star(name: String) -> Dictionary:
 	if name.is_empty():
 		return {}
 	var entry: Variant = stars_by_name.get(name, {})
+	if typeof(entry) == TYPE_DICTIONARY and not (entry as Dictionary).is_empty():
+		return entry as Dictionary
+	entry = background_stars_by_name.get(name, {})
 	if typeof(entry) != TYPE_DICTIONARY:
 		return {}
 	return entry as Dictionary
+
+
+func list_star_names_for_system(star_system: String) -> Array:
+	var names: Array = []
+	if star_system.is_empty():
+		return names
+	for star_name in stars_by_name.keys():
+		var entry: Variant = stars_by_name[star_name]
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if str((entry as Dictionary).get("star_system", "")) == star_system:
+			names.append(str(star_name))
+	names.sort()
+	return names
+
+
+func list_background_star_names() -> Array:
+	var names: Array = []
+	for star_name in background_stars_by_name.keys():
+		names.append(str(star_name))
+	names.sort()
+	return names
+
+
+func background_star_count() -> int:
+	return background_stars_by_name.size()
+
+
+func background_star_affiliated_fraction(affiliated_groups: Array) -> float:
+	if background_stars_by_name.is_empty():
+		return 0.0
+	var affiliated := 0
+	for entry_variant in background_stars_by_name.values():
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var group := str((entry_variant as Dictionary).get("group", ""))
+		if group in affiliated_groups:
+			affiliated += 1
+	return float(affiliated) / float(background_stars_by_name.size())
 
 
 func get_sanction_infraction(id: String) -> Dictionary:
