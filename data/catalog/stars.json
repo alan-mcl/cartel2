@@ -6,7 +6,7 @@
     "luminosity": 1.52,
     "mass_solar": 1.1,
     "radius_solar": 1.22,
-    "description": "Primary of the Alpha Centauri system; a Sun-like star and the anchor of human space."
+    "description": "Primary of the Alpha Centauri system; a Sol-like star and the anchor of human space."
   },
   "Alpha Centauri B": {
     "star_system": "Alpha Centauri",
@@ -51,7 +51,7 @@
     "luminosity": 0.83,
     "mass_solar": 0.95,
     "radius_solar": 0.98,
-    "description": "Sun-like star hosting Irasia's heavy industry and trade lanes."
+    "description": "Sol-like star hosting Irasia's heavy industry and trade lanes."
   },
   "61 Ursae Majoris": {
     "star_system": "61 Ursae Majoris",
@@ -78,7 +78,7 @@
     "luminosity": 0.52,
     "mass_solar": 0.783,
     "radius_solar": 0.793,
-    "description": "Quiet G dwarf; Fortuna's finance districts orbit a dimmer, steadier sun."
+    "description": "Quiet G dwarf; Fortuna's finance districts orbit a dimmer, steadier sol."
   },
   "61 Cygni A": {
     "star_system": "61 Cygni",
@@ -102,7 +102,7 @@
     "star_system": "Wolf 359",
     "spectral_class": "M6.5V",
     "temperature_k": 2800,
-    "luminosity": 0.00002,
+    "luminosity": 2e-05,
     "mass_solar": 0.09,
     "radius_solar": 0.16,
     "description": "Dim flare star; Titania IX rides the turbulent skies of its gas-giant primary nearby."
@@ -114,6 +114,1014 @@
     "luminosity": 0.12,
     "mass_solar": 0.69,
     "radius_solar": 0.65,
-    "description": "Primary of the Kepler-16 circumbinary; Pelagos sees two suns from its sky."
+    "description": "Primary of the Kepler-16 circumbinary; Pelagos sees two sols from its sky."
+  },
+  "Sirius A": {
+    "star_system": "Sirius",
+    "spectral_class": "A1V",
+    "temperature_k": 9940,
+    "luminosity": 25.4,
+    "mass_solar": 2.06,
+    "radius_solar": 1.71,
+    "description": "Brightest star in Old Earth's night sky; its white light is a familiar marker in the inner systems."
+  },
+  "Sirius B": {
+    "star_system": "Sirius",
+    "spectral_class": "DA2",
+    "temperature_k": 25200,
+    "luminosity": 0.056,
+    "mass_solar": 1.02,
+    "radius_solar": 0.0084,
+    "description": "Dense white-dwarf companion to Sirius A, a remnant of a once more massive star."
+  },
+  "Procyon A": {
+    "star_system": "Procyon",
+    "spectral_class": "F5IV-V",
+    "temperature_k": 6530,
+    "luminosity": 6.93,
+    "mass_solar": 1.5,
+    "radius_solar": 2.05,
+    "description": "Yellow-white subgiant in the Procyon binary, brighter and hotter than the Sol."
+  },
+  "Procyon B": {
+    "star_system": "Procyon",
+    "spectral_class": "DQZ",
+    "temperature_k": 7740,
+    "luminosity": 0.0005,
+    "mass_solar": 0.6,
+    "radius_solar": 0.012,
+    "description": "Compact white-dwarf companion orbiting Procyon A."
+  },
+  "Barnard's Star": {
+    "star_system": "Barnard's Star",
+    "spectral_class": "M4V",
+    "temperature_k": 3134,
+    "luminosity": 0.00036,
+    "mass_solar": 0.16,
+    "radius_solar": 0.2,
+    "description": "Red dwarf famous for its large proper motion across the Old Earth sky."
+  },
+  "Lalande 21185": {
+    "star_system": "Lalande 21185",
+    "spectral_class": "M2V",
+    "temperature_k": 3520,
+    "luminosity": 0.0052,
+    "mass_solar": 0.39,
+    "radius_solar": 0.39,
+    "description": "Red dwarf in Ursa Major and one of the closest stellar neighbors to Sol."
+  },
+  "Ross 154": {
+    "star_system": "Ross 154",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340,
+    "luminosity": 0.0038,
+    "mass_solar": 0.17,
+    "radius_solar": 0.24,
+    "description": "Active Red dwarf in Sagittarius, known for energetic flares."
+  },
+  "Ross 248": {
+    "star_system": "Ross 248",
+    "spectral_class": "M6V",
+    "temperature_k": 2800,
+    "luminosity": 0.0022,
+    "mass_solar": 0.14,
+    "radius_solar": 0.17,
+    "description": "Faint red dwarf in Andromeda."
+  },
+  "Lacaille 9352": {
+    "star_system": "Lacaille 9352",
+    "spectral_class": "M0.5V",
+    "temperature_k": 3680,
+    "luminosity": 0.013,
+    "mass_solar": 0.47,
+    "radius_solar": 0.47,
+    "description": "Red dwarf with a comparatively bright apparent presence for its class."
+  },
+  "Kapteyn's Star": {
+    "star_system": "Kapteyn's Star",
+    "spectral_class": "M1V",
+    "temperature_k": 3550,
+    "luminosity": 0.004,
+    "mass_solar": 0.28,
+    "radius_solar": 0.3,
+    "description": "Old high-velocity red dwarf whose motion marks it as a member of the Galactic halo population."
+  },
+  "Groombridge 34 A": {
+    "star_system": "Groombridge 34",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3600,
+    "luminosity": 0.007,
+    "mass_solar": 0.47,
+    "radius_solar": 0.47,
+    "description": "Red dwarf in a binary system, with a companion separated by a wide orbit."
+  },
+  "Groombridge 34 B": {
+    "star_system": "Groombridge 34",
+    "spectral_class": "M4V",
+    "temperature_k": 3300,
+    "luminosity": 0.0015,
+    "mass_solar": 0.2,
+    "radius_solar": 0.25,
+    "description": "Cool companion of Groombridge 34 A."
+  },
+  "Luyten's Star": {
+    "star_system": "Luyten's Star",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3150,
+    "luminosity": 0.004,
+    "mass_solar": 0.26,
+    "radius_solar": 0.29,
+    "description": "Red dwarf in Canis Minor with a long history of astrometric study."
+  },
+  "Wolf 1061": {
+    "star_system": "Wolf 1061",
+    "spectral_class": "M3V",
+    "temperature_k": 3340,
+    "luminosity": 0.012,
+    "mass_solar": 0.31,
+    "radius_solar": 0.33,
+    "description": "Red dwarf known to host a compact planetary system."
+  },
+  "GJ 15 A": {
+    "star_system": "GJ 15",
+    "spectral_class": "M1V",
+    "temperature_k": 3600,
+    "luminosity": 0.0055,
+    "mass_solar": 0.38,
+    "radius_solar": 0.39,
+    "description": "Red dwarf in a binary system with a low-mass stellar companion."
+  },
+  "GJ 15 B": {
+    "star_system": "GJ 15",
+    "spectral_class": "M3V",
+    "temperature_k": 3300,
+    "luminosity": 0.0012,
+    "mass_solar": 0.15,
+    "radius_solar": 0.2,
+    "description": "Cool companion to GJ 15 A."
+  },
+  "YZ Ceti": {
+    "star_system": "YZ Ceti",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3050,
+    "luminosity": 0.0008,
+    "mass_solar": 0.14,
+    "radius_solar": 0.17,
+    "description": "Active red dwarf with a compact planetary system."
+  },
+  "LHS 1140": {
+    "star_system": "LHS 1140",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3131,
+    "luminosity": 0.0039,
+    "mass_solar": 0.18,
+    "radius_solar": 0.21,
+    "description": "Cool red dwarf known for hosting a temperate exoplanet."
+  },
+  "TRAPPIST-1": {
+    "star_system": "TRAPPIST-1",
+    "spectral_class": "M8V",
+    "temperature_k": 2566,
+    "luminosity": 0.00055,
+    "mass_solar": 0.089,
+    "radius_solar": 0.121,
+    "description": "Ultra-cool red dwarf famous for its compact system of seven Old Earth-sized planets."
+  },
+  "GJ 436": {
+    "star_system": "GJ 436",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3416,
+    "luminosity": 0.025,
+    "mass_solar": 0.45,
+    "radius_solar": 0.46,
+    "description": "Red dwarf hosting a well-studied warm gas giant."
+  },
+  "GJ 3470": {
+    "star_system": "GJ 3470",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3652,
+    "luminosity": 0.021,
+    "mass_solar": 0.54,
+    "radius_solar": 0.48,
+    "description": "Red dwarf with a low-density Neptune-sized planet."
+  },
+  "Epsilon Indi A": {
+    "star_system": "Epsilon Indi",
+    "spectral_class": "K5V",
+    "temperature_k": 4630,
+    "luminosity": 0.23,
+    "mass_solar": 0.76,
+    "radius_solar": 0.74,
+    "description": "Orange dwarf in a multiple system, surrounded by a faint stellar and substellar entourage."
+  },
+  "Epsilon Indi Ba": {
+    "star_system": "Epsilon Indi",
+    "spectral_class": "T1V",
+    "temperature_k": 1300,
+    "luminosity": 0.0003,
+    "mass_solar": 0.075,
+    "radius_solar": 0.1,
+    "description": "Brown-dwarf companion to Epsilon Indi A; its spectrum is dominated by molecular absorption."
+  },
+  "Epsilon Indi Bb": {
+    "star_system": "Epsilon Indi",
+    "spectral_class": "T6V",
+    "temperature_k": 900,
+    "luminosity": 0.0001,
+    "mass_solar": 0.07,
+    "radius_solar": 0.1,
+    "description": "Cooler brown-dwarf companion in the Epsilon Indi system."
+  },
+  "61 Cygni B": {
+    "star_system": "61 Cygni",
+    "spectral_class": "K7V",
+    "temperature_k": 4040,
+    "luminosity": 0.04,
+    "mass_solar": 0.63,
+    "radius_solar": 0.59,
+    "description": "Cooler companion of 61 Cygni A, with deep orange-red light."
+  },
+  "40 Eridani A": {
+    "star_system": "40 Eridani",
+    "spectral_class": "K0.5V",
+    "temperature_k": 5100,
+    "luminosity": 0.46,
+    "mass_solar": 0.84,
+    "radius_solar": 0.86,
+    "description": "Orange main-sequence primary of a hierarchical triple system."
+  },
+  "40 Eridani B": {
+    "star_system": "40 Eridani",
+    "spectral_class": "DA4",
+    "temperature_k": 17000,
+    "luminosity": 0.013,
+    "mass_solar": 0.57,
+    "radius_solar": 0.014,
+    "description": "White-dwarf companion in the 40 Eridani triple system."
+  },
+  "40 Eridani C": {
+    "star_system": "40 Eridani",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3200,
+    "luminosity": 0.002,
+    "mass_solar": 0.2,
+    "radius_solar": 0.23,
+    "description": "Red-dwarf outer companion of the 40 Eridani system."
+  },
+  "Struve 2398 A": {
+    "star_system": "Struve 2398",
+    "spectral_class": "M3V",
+    "temperature_k": 3300,
+    "luminosity": 0.008,
+    "mass_solar": 0.36,
+    "radius_solar": 0.4,
+    "description": "Nearby flare-star primary in a binary red-dwarf system."
+  },
+  "Struve 2398 B": {
+    "star_system": "Struve 2398",
+    "spectral_class": "M4V",
+    "temperature_k": 3100,
+    "luminosity": 0.003,
+    "mass_solar": 0.15,
+    "radius_solar": 0.2,
+    "description": "Cool companion to Struve 2398 A."
+  },
+  "GJ 887": {
+    "star_system": "GJ 887",
+    "spectral_class": "M1V",
+    "temperature_k": 3688,
+    "luminosity": 0.007,
+    "mass_solar": 0.49,
+    "radius_solar": 0.47,
+    "description": "Red dwarf with a relatively high surface temperature for an M star."
+  },
+  "GJ 667 C": {
+    "star_system": "GJ 667",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3700,
+    "luminosity": 0.013,
+    "mass_solar": 0.33,
+    "radius_solar": 0.42,
+    "description": "Red-dwarf component of a triple system with several reported planetary signals."
+  },
+  "GJ 486": {
+    "star_system": "GJ 486",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340,
+    "luminosity": 0.003,
+    "mass_solar": 0.32,
+    "radius_solar": 0.34,
+    "description": "Red dwarf hosting a short-period terrestrial planet."
+  },
+  "GJ 1214": {
+    "star_system": "GJ 1214",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3250,
+    "luminosity": 0.004,
+    "mass_solar": 0.18,
+    "radius_solar": 0.22,
+    "description": "Cool Red dwarf hosting a well-studied small gas giant."
+  },
+  "Ross 128": {
+    "star_system": "Ross 128",
+    "spectral_class": "M4V",
+    "temperature_k": 3192,
+    "luminosity": 0.0036,
+    "mass_solar": 0.15,
+    "radius_solar": 0.2,
+    "description": "Quiet Red dwarf with a known Old Earth-sized planetary companion."
+  },
+  "Gliese 876": {
+    "star_system": "Gliese 876",
+    "spectral_class": "M4V",
+    "temperature_k": 3350,
+    "luminosity": 0.012,
+    "mass_solar": 0.37,
+    "radius_solar": 0.38,
+    "description": "Red dwarf whose planetary system includes multiple giant planets in compact orbits."
+  },
+  "Gliese 832": {
+    "star_system": "Gliese 832",
+    "spectral_class": "M2V",
+    "temperature_k": 3472,
+    "luminosity": 0.027,
+    "mass_solar": 0.45,
+    "radius_solar": 0.5,
+    "description": "Red dwarf with a long-period planetary companion."
+  },
+  "Gliese 581": {
+    "star_system": "Gliese 581",
+    "spectral_class": "M3V",
+    "temperature_k": 3498,
+    "luminosity": 0.013,
+    "mass_solar": 0.31,
+    "radius_solar": 0.3,
+    "description": "Red dwarf made famous by early reports of multiple low-mass planets."
+  },
+  "Gliese 667 A": {
+    "star_system": "Gliese 667",
+    "spectral_class": "K3V",
+    "temperature_k": 4330,
+    "luminosity": 0.14,
+    "mass_solar": 0.73,
+    "radius_solar": 0.72,
+    "description": "K-type primary in the Gliese 667 triple system."
+  },
+  "Gliese 667 B": {
+    "star_system": "Gliese 667",
+    "spectral_class": "K5V",
+    "temperature_k": 4100,
+    "luminosity": 0.06,
+    "mass_solar": 0.69,
+    "radius_solar": 0.6,
+    "description": "Cooler stellar companion to Gliese 667 A."
+  },
+  "HD 40307": {
+    "star_system": "HD 40307",
+    "spectral_class": "K2.5V",
+    "temperature_k": 4977,
+    "luminosity": 0.23,
+    "mass_solar": 0.77,
+    "radius_solar": 0.72,
+    "description": "Orange dwarf known for a compact family of detected planets."
+  },
+  "HD 85512": {
+    "star_system": "HD 85512",
+    "spectral_class": "K6V",
+    "temperature_k": 4715,
+    "luminosity": 0.32,
+    "mass_solar": 0.69,
+    "radius_solar": 0.68,
+    "description": "Orange dwarf with a well-studied planetary candidate from early radial-velocity surveys."
+  },
+  "HD 20794": {
+    "star_system": "HD 20794",
+    "spectral_class": "G6V",
+    "temperature_k": 5401,
+    "luminosity": 0.66,
+    "mass_solar": 0.94,
+    "radius_solar": 0.92,
+    "description": "Sol-like star with a long history of precision radial-velocity observations."
+  },
+  "HD 69830": {
+    "star_system": "HD 69830",
+    "spectral_class": "K0V",
+    "temperature_k": 5385,
+    "luminosity": 0.6,
+    "mass_solar": 0.86,
+    "radius_solar": 0.89,
+    "description": "Orange dwarf with a prominent debris disk and several detected planets."
+  },
+  "HD 10180": {
+    "star_system": "HD 10180",
+    "spectral_class": "G1V",
+    "temperature_k": 5911,
+    "luminosity": 1.4,
+    "mass_solar": 1.06,
+    "radius_solar": 1.2,
+    "description": "Sol-like star with a rich planetary system originally inferred from precision radial velocities."
+  },
+  "HD 189733 A": {
+    "star_system": "HD 189733",
+    "spectral_class": "K1V",
+    "temperature_k": 5050,
+    "luminosity": 0.32,
+    "mass_solar": 0.8,
+    "radius_solar": 0.76,
+    "description": "Orange dwarf hosting the intensely studied hot gas giant HD 189733 b."
+  },
+  "HD 209458": {
+    "star_system": "HD 209458",
+    "spectral_class": "G0V",
+    "temperature_k": 6075,
+    "luminosity": 1.61,
+    "mass_solar": 1.15,
+    "radius_solar": 1.2,
+    "description": "Sol-like star hosting one of the first exoplanets observed transiting its star."
+  },
+  "51 Pegasi": {
+    "star_system": "51 Pegasi",
+    "spectral_class": "G2.5IVa",
+    "temperature_k": 5793,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "Sol-like star whose hot gas giant companion helped launch the ancient era of exoplanet discovery."
+  },
+  "55 Cancri A": {
+    "star_system": "55 Cancri",
+    "spectral_class": "G8V",
+    "temperature_k": 5196,
+    "luminosity": 0.59,
+    "mass_solar": 0.91,
+    "radius_solar": 0.94,
+    "description": "G-type primary hosting a notably diverse multi-planet system."
+  },
+  "47 Ursae Majoris": {
+    "star_system": "47 Ursae Majoris",
+    "spectral_class": "G1V",
+    "temperature_k": 5892,
+    "luminosity": 1.5,
+    "mass_solar": 1.04,
+    "radius_solar": 1.15,
+    "description": "Sol-like star with a long-studied system of giant planets."
+  },
+  "Upsilon Andromedae A": {
+    "star_system": "Upsilon Andromedae",
+    "spectral_class": "F8V",
+    "temperature_k": 6212,
+    "luminosity": 3.6,
+    "mass_solar": 1.28,
+    "radius_solar": 1.6,
+    "description": "F-type star with a historically important multi-planet system."
+  },
+  "Kepler-16 B": {
+    "star_system": "Kepler-16",
+    "spectral_class": "M",
+    "temperature_k": 3310,
+    "luminosity": 0.004,
+    "mass_solar": 0.2,
+    "radius_solar": 0.23,
+    "description": "Low-mass companion that makes the Kepler-16 system a true binary-star planetary environment."
+  },
+  "Kepler-90": {
+    "star_system": "Kepler-90",
+    "spectral_class": "G0V",
+    "temperature_k": 6080,
+    "luminosity": 1.2,
+    "mass_solar": 1.2,
+    "radius_solar": 1.2,
+    "description": "Sol-like star known for a remarkably large planetary system."
+  },
+  "Kepler-11": {
+    "star_system": "Kepler-11",
+    "spectral_class": "G8V",
+    "temperature_k": 5680,
+    "luminosity": 2.3,
+    "mass_solar": 0.95,
+    "radius_solar": 1.1,
+    "description": "Sol-like star hosting several tightly packed transiting planets."
+  },
+  "Kepler-62": {
+    "star_system": "Kepler-62",
+    "spectral_class": "K2V",
+    "temperature_k": 4925,
+    "luminosity": 0.21,
+    "mass_solar": 0.69,
+    "radius_solar": 0.64,
+    "description": "Cooler orange star with a compact system including two planets in its habitable-zone region."
+  },
+  "Kepler-186": {
+    "star_system": "Kepler-186",
+    "spectral_class": "M1V",
+    "temperature_k": 3755,
+    "luminosity": 0.041,
+    "mass_solar": 0.54,
+    "radius_solar": 0.52,
+    "description": "Red dwarf hosting five known planets, including an Old Earth-sized planet in the temperate zone."
+  },
+  "Kepler-452": {
+    "star_system": "Kepler-452",
+    "spectral_class": "G2V",
+    "temperature_k": 5757,
+    "luminosity": 1.2,
+    "mass_solar": 1.04,
+    "radius_solar": 1.11,
+    "description": "Sol-like star with a well aged planetary system and a well-known transiting rocky super planet."
+  },
+  "Kepler-1649": {
+    "star_system": "Kepler-1649",
+    "spectral_class": "M5V",
+    "temperature_k": 3240,
+    "luminosity": 0.006,
+    "mass_solar": 0.23,
+    "radius_solar": 0.23,
+    "description": "Cool red dwarf hosting an Old Earth-sized planet receiving a temperate level of stellar radiation."
+  },
+  "Kepler-22": {
+    "star_system": "Kepler-22",
+    "spectral_class": "G5V",
+    "temperature_k": 5518,
+    "luminosity": 0.79,
+    "mass_solar": 0.97,
+    "radius_solar": 0.98,
+    "description": "Sol-like star with an early-discovered transiting planet in its habitable zone."
+  },
+  "TOI-700": {
+    "star_system": "TOI-700",
+    "spectral_class": "M2V",
+    "temperature_k": 3480,
+    "luminosity": 0.024,
+    "mass_solar": 0.42,
+    "radius_solar": 0.42,
+    "description": "Cool red dwarf with a compact planetary system containing Earth-sized worlds."
+  },
+  "TOI-715": {
+    "star_system": "TOI-715",
+    "spectral_class": "M4V",
+    "temperature_k": 3075,
+    "luminosity": 0.0039,
+    "mass_solar": 0.25,
+    "radius_solar": 0.24,
+    "description": "Cool red dwarf hosting a transiting planet near the inner edge of its temperate zone."
+  },
+  "LHS 475": {
+    "star_system": "LHS 475",
+    "spectral_class": "M3V",
+    "temperature_k": 3310,
+    "luminosity": 0.005,
+    "mass_solar": 0.29,
+    "radius_solar": 0.31,
+    "description": "Red dwarf with an Old Earth-sized transiting planet."
+  },
+  "LP 791-18": {
+    "star_system": "LP 791-18",
+    "spectral_class": "M6V",
+    "temperature_k": 2960,
+    "luminosity": 0.0008,
+    "mass_solar": 0.15,
+    "radius_solar": 0.17,
+    "description": "Cool red dwarf with a compact planetary system containing a volcanically interesting terrestrial world."
+  },
+  "GJ 357": {
+    "star_system": "GJ 357",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3500,
+    "luminosity": 0.006,
+    "mass_solar": 0.34,
+    "radius_solar": 0.34,
+    "description": "Red dwarf with a compact planetary system."
+  },
+  "GJ 1132": {
+    "star_system": "GJ 1132",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3270,
+    "luminosity": 0.004,
+    "mass_solar": 0.18,
+    "radius_solar": 0.21,
+    "description": "Cool red dwarf whose rocky planet is a target for atmospheric studies."
+  },
+  "GJ 9827": {
+    "star_system": "GJ 9827",
+    "spectral_class": "K6V",
+    "temperature_k": 4270,
+    "luminosity": 0.16,
+    "mass_solar": 0.65,
+    "radius_solar": 0.6,
+    "description": "Orange dwarf hosting several small transiting planets."
+  },
+  "K2-18": {
+    "star_system": "K2-18",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3457,
+    "luminosity": 0.043,
+    "mass_solar": 0.41,
+    "radius_solar": 0.45,
+    "description": "Cool red dwarf hosting a small gas giant in a temperate orbit."
+  },
+  "WASP-12": {
+    "star_system": "WASP-12",
+    "spectral_class": "F9V",
+    "temperature_k": 6300,
+    "luminosity": 1.57,
+    "mass_solar": 1.43,
+    "radius_solar": 1.57,
+    "description": "Hot, slightly evolved F-type star hosting an extremely irradiated giant planet."
+  },
+  "WASP-17": {
+    "star_system": "WASP-17",
+    "spectral_class": "F6V",
+    "temperature_k": 6550,
+    "luminosity": 4.0,
+    "mass_solar": 1.25,
+    "radius_solar": 1.58,
+    "description": "Hot F-type star hosting a highly inflated gas giant."
+  },
+  "WASP-39": {
+    "star_system": "WASP-39",
+    "spectral_class": "G8V",
+    "temperature_k": 5480,
+    "luminosity": 1.4,
+    "mass_solar": 0.93,
+    "radius_solar": 0.94,
+    "description": "Sol-like star whose transiting gas giant has been a major target for atmospheric spectroscopy."
+  },
+  "WASP-96": {
+    "star_system": "WASP-96",
+    "spectral_class": "G8V",
+    "temperature_k": 5540,
+    "luminosity": 1.25,
+    "mass_solar": 1.05,
+    "radius_solar": 1.05,
+    "description": "Sol-like star hosting a hot gas giant with a well-observed atmosphere."
+  },
+  "WASP-121": {
+    "star_system": "WASP-121",
+    "spectral_class": "F6V",
+    "temperature_k": 6460,
+    "luminosity": 3.3,
+    "mass_solar": 1.46,
+    "radius_solar": 1.46,
+    "description": "Hot F-type star orbited by an ultra-hot gas giant."
+  },
+  "55 Cnc B": {
+    "star_system": "55 Cancri",
+    "spectral_class": "M3V",
+    "temperature_k": 3000,
+    "luminosity": 0.0005,
+    "mass_solar": 0.17,
+    "radius_solar": 0.2,
+    "description": "Faint stellar companion to the 55 Cancri planetary system."
+  },
+  "Sol": {
+    "star_system": "Sol",
+    "spectral_class": "G2V",
+    "temperature_k": 5772,
+    "luminosity": 1.0,
+    "mass_solar": 1.0,
+    "radius_solar": 1.0,
+    "description": "The Old Earth's G-type primary and the historical reference point for human stellar measurements."
+  },
+  "Vega": {
+    "star_system": "Vega",
+    "spectral_class": "A0V",
+    "temperature_k": 9602,
+    "luminosity": 40.1,
+    "mass_solar": 2.14,
+    "radius_solar": 2.36,
+    "description": "Rapidly rotating A-type star and a historic photometric standard, surrounded by a bright debris disk."
+  },
+  "Altair": {
+    "star_system": "Altair",
+    "spectral_class": "A7V",
+    "temperature_k": 7550,
+    "luminosity": 10.6,
+    "mass_solar": 1.86,
+    "radius_solar": 1.63,
+    "description": "Rapidly rotating nearby A-type star whose flattened shape reflects its high spin rate."
+  },
+  "Fomalhaut A": {
+    "star_system": "Fomalhaut",
+    "spectral_class": "A3V",
+    "temperature_k": 8590,
+    "luminosity": 16.6,
+    "mass_solar": 1.92,
+    "radius_solar": 1.84,
+    "description": "A-type star encircled by a prominent debris disk."
+  },
+  "Arcturus": {
+    "star_system": "Arcturus",
+    "spectral_class": "K1.5III",
+    "temperature_k": 4286,
+    "luminosity": 170,
+    "mass_solar": 1.08,
+    "radius_solar": 25.4,
+    "description": "Orange giant and one of the brightest stars visible from Old Earth."
+  },
+  "Aldebaran": {
+    "star_system": "Aldebaran",
+    "spectral_class": "K5III",
+    "temperature_k": 3910,
+    "luminosity": 439,
+    "mass_solar": 1.16,
+    "radius_solar": 44.2,
+    "description": "Orange giant marking the eye of Taurus, with a surface far cooler than the Sol."
+  },
+  "Betelgeuse": {
+    "star_system": "Betelgeuse",
+    "spectral_class": "M1-2 Ia-ab",
+    "temperature_k": 3600,
+    "luminosity": 126000,
+    "mass_solar": 16.5,
+    "radius_solar": 764,
+    "description": "Red supergiant in Orion, nearing the end of its stellar evolution."
+  },
+  "Rigel": {
+    "star_system": "Rigel",
+    "spectral_class": "B8 Ia",
+    "temperature_k": 12100,
+    "luminosity": 120000,
+    "mass_solar": 21,
+    "radius_solar": 74,
+    "description": "Blue supergiant in Orion radiating with enormous luminosity."
+  },
+  "Deneb": {
+    "star_system": "Deneb",
+    "spectral_class": "A2 Ia",
+    "temperature_k": 8525,
+    "luminosity": 196000,
+    "mass_solar": 19,
+    "radius_solar": 203,
+    "description": "Luminous blue-white supergiant marking the tail of Cygnus."
+  },
+  "Antares A": {
+    "star_system": "Antares",
+    "spectral_class": "M1.5 Iab-Ib",
+    "temperature_k": 3660,
+    "luminosity": 75900,
+    "mass_solar": 12,
+    "radius_solar": 680,
+    "description": "Red supergiant at the heart of Scorpius, with a hot blue companion nearby."
+  },
+  "Canopus": {
+    "star_system": "Canopus",
+    "spectral_class": "A9 II",
+    "temperature_k": 7350,
+    "luminosity": 10700,
+    "mass_solar": 8.5,
+    "radius_solar": 71.4,
+    "description": "Bright white-yellow supergiant-like giant and the second-brightest star in Old Earth's night sky."
+  },
+  "Achernar": {
+    "star_system": "Achernar",
+    "spectral_class": "B6 Vep",
+    "temperature_k": 15000,
+    "luminosity": 3150,
+    "mass_solar": 6.7,
+    "radius_solar": 9.7,
+    "description": "Rapidly rotating blue star with a strongly oblate shape."
+  },
+  "Spica A": {
+    "star_system": "Spica",
+    "spectral_class": "B1 III-IV",
+    "temperature_k": 25300,
+    "luminosity": 20500,
+    "mass_solar": 10.3,
+    "radius_solar": 7.4,
+    "description": "Hot blue primary in the close Spica binary, a major navigation beacon in Virgo."
+  },
+  "Spica B": {
+    "star_system": "Spica",
+    "spectral_class": "B2 V",
+    "temperature_k": 21000,
+    "luminosity": 1400,
+    "mass_solar": 6.8,
+    "radius_solar": 3.6,
+    "description": "Hot blue companion to Spica A in a tight stellar orbit."
+  },
+  "Pollux": {
+    "star_system": "Pollux",
+    "spectral_class": "K0 III",
+    "temperature_k": 4865,
+    "luminosity": 43,
+    "mass_solar": 1.86,
+    "radius_solar": 8.8,
+    "description": "Orange giant in Gemini and one of the closest evolved stars to Sol."
+  },
+  "Castor A": {
+    "star_system": "Castor",
+    "spectral_class": "A1V",
+    "temperature_k": 10286,
+    "luminosity": 50,
+    "mass_solar": 2.2,
+    "radius_solar": 2.4,
+    "description": "White A-type component of the Castor multiple-star system."
+  },
+  "Castor B": {
+    "star_system": "Castor",
+    "spectral_class": "A2V",
+    "temperature_k": 8840,
+    "luminosity": 15,
+    "mass_solar": 1.7,
+    "radius_solar": 1.8,
+    "description": "Second bright A-type component of the Castor multiple system."
+  },
+  "Capella Aa": {
+    "star_system": "Capella",
+    "spectral_class": "G8III",
+    "temperature_k": 4970,
+    "luminosity": 78,
+    "mass_solar": 2.6,
+    "radius_solar": 12.2,
+    "description": "Cool giant component of the close Capella binary."
+  },
+  "Capella Ab": {
+    "star_system": "Capella",
+    "spectral_class": "G0III",
+    "temperature_k": 5700,
+    "luminosity": 78,
+    "mass_solar": 2.5,
+    "radius_solar": 9.2,
+    "description": "Hotter giant companion orbiting Capella Aa."
+  },
+  "Polaris Aa": {
+    "star_system": "Polaris",
+    "spectral_class": "F7Ib",
+    "temperature_k": 6015,
+    "luminosity": 1260,
+    "mass_solar": 5.4,
+    "radius_solar": 46,
+    "description": "Cepheid variable and the primary of the Polaris multiple system."
+  },
+  "Regulus B": {
+    "star_system": "Regulus",
+    "spectral_class": "K2V",
+    "temperature_k": 4900,
+    "luminosity": 0.5,
+    "mass_solar": 0.8,
+    "radius_solar": 0.7,
+    "description": "Cool companion to the rapidly rotating Regulus A."
+  },
+  "Bellatrix": {
+    "star_system": "Bellatrix",
+    "spectral_class": "B2 III",
+    "temperature_k": 22000,
+    "luminosity": 9200,
+    "mass_solar": 8.6,
+    "radius_solar": 5.7,
+    "description": "Hot blue giant marking Orion's shoulder."
+  },
+  "Alnilam": {
+    "star_system": "Alnilam",
+    "spectral_class": "B0 Ia",
+    "temperature_k": 27500,
+    "luminosity": 375000,
+    "mass_solar": 40,
+    "radius_solar": 42,
+    "description": "Extremely luminous blue supergiant at the center of Orion's Belt."
+  },
+  "Alnitak": {
+    "star_system": "Alnitak",
+    "spectral_class": "O9.5 Iab",
+    "temperature_k": 29500,
+    "luminosity": 250000,
+    "mass_solar": 330000,
+    "radius_solar": 28,
+    "description": "Hot massive multiple system forming the eastern star of Orion's Belt."
+  },
+  "Mintaka A": {
+    "star_system": "Mintaka",
+    "spectral_class": "O9.5 II",
+    "temperature_k": 29500,
+    "luminosity": 90000,
+    "mass_solar": 20,
+    "radius_solar": 16,
+    "description": "Hot blue primary of the Mintaka multiple system in Orion's Belt."
+  },
+  "Mimosa": {
+    "star_system": "Beta Crucis",
+    "spectral_class": "B0.5 III",
+    "temperature_k": 27000,
+    "luminosity": 34000,
+    "mass_solar": 14,
+    "radius_solar": 8.9,
+    "description": "Hot blue giant marking one of the principal points of the Southern Cross."
+  },
+  "Hadar A": {
+    "star_system": "Hadar",
+    "spectral_class": "B1 III",
+    "temperature_k": 25000,
+    "luminosity": 50000,
+    "mass_solar": 15,
+    "radius_solar": 7.3,
+    "description": "Massive blue giant in a multiple system and a prominent southern-sky star."
+  },
+  "Acrux A": {
+    "star_system": "Acrux",
+    "spectral_class": "B0.5 IV",
+    "temperature_k": 28000,
+    "luminosity": 25000,
+    "mass_solar": 17,
+    "radius_solar": 8.9,
+    "description": "Hot blue component of the Acrux multiple system at the foot of the Southern Cross."
+  },
+  "Shaula": {
+    "star_system": "Shaula",
+    "spectral_class": "B1.5 IV",
+    "temperature_k": 25000,
+    "luminosity": 36000,
+    "mass_solar": 11,
+    "radius_solar": 5.0,
+    "description": "Hot blue star in Scorpius, with a close stellar companion."
+  },
+  "Alkaid": {
+    "star_system": "Alkaid",
+    "spectral_class": "B3 V",
+    "temperature_k": 15500,
+    "luminosity": 594,
+    "mass_solar": 6.1,
+    "radius_solar": 4.0,
+    "description": "Blue main-sequence star at the end of the Big Dipper's handle."
+  },
+  "Mizar A": {
+    "star_system": "Mizar",
+    "spectral_class": "A2V",
+    "temperature_k": 9000,
+    "luminosity": 33,
+    "mass_solar": 2.4,
+    "radius_solar": 2.4,
+    "description": "Bright A-type component of the famous visual multiple system in Ursa Major."
+  },
+  "Mizar B": {
+    "star_system": "Mizar",
+    "spectral_class": "A2V",
+    "temperature_k": 9000,
+    "luminosity": 30,
+    "mass_solar": 2.3,
+    "radius_solar": 2.3,
+    "description": "Companion to Mizar A, forming a celebrated double-star pair."
+  },
+  "Alcor": {
+    "star_system": "Alcor",
+    "spectral_class": "A5V",
+    "temperature_k": 7800,
+    "luminosity": 13,
+    "mass_solar": 1.8,
+    "radius_solar": 1.6,
+    "description": "A-type companion visually paired with Mizar in Ursa Major."
+  },
+  "Eta Carinae A": {
+    "star_system": "Eta Carinae",
+    "spectral_class": "LBV",
+    "temperature_k": 15000,
+    "luminosity": 5000000,
+    "mass_solar": 100,
+    "radius_solar": 60,
+    "description": "Extremely luminous unstable massive star surrounded by the Homunculus Nebula."
+  },
+  "R Doradus": {
+    "star_system": "R Doradus",
+    "spectral_class": "M8III",
+    "temperature_k": 2700,
+    "luminosity": 3700,
+    "mass_solar": 1.0,
+    "radius_solar": 298,
+    "description": "Cool red giant with one of the largest stellar disks."
+  },
+  "Mira A": {
+    "star_system": "Mira",
+    "spectral_class": "M7 IIIe",
+    "temperature_k": 3000,
+    "luminosity": 8500,
+    "mass_solar": 1.2,
+    "radius_solar": 332,
+    "description": "Pulsating red giant and prototype of the long-period Mira variable stars."
+  },
+  "Algol A": {
+    "star_system": "Algol",
+    "spectral_class": "B8V",
+    "temperature_k": 13000,
+    "luminosity": 182,
+    "mass_solar": 3.2,
+    "radius_solar": 2.9,
+    "description": "Hot primary of the eclipsing Algol system, whose brightness changes reveal its orbital geometry."
+  },
+  "Algol B": {
+    "star_system": "Algol",
+    "spectral_class": "K0IV",
+    "temperature_k": 4500,
+    "luminosity": 4,
+    "mass_solar": 0.9,
+    "radius_solar": 3.5,
+    "description": "Cooler evolved companion of Algol A in the famous eclipsing binary."
+  },
+  "Sadr": {
+    "star_system": "Sadr",
+    "spectral_class": "F8 Iab",
+    "temperature_k": 6100,
+    "luminosity": 33000,
+    "mass_solar": 12,
+    "radius_solar": 150,
+    "description": "Yellow-white supergiant near the center of the Northern Cross."
   }
 }
