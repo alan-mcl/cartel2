@@ -35,7 +35,7 @@ static func build_sector_bindings(
 	var sector_id := session.sector_id
 	var sector := catalog.get_sector(sector_id)
 	var planet := sector_display_label(catalog, sector_id)
-	var habitat_name := _pick_habitat_name(catalog, sector_id, rng)
+	var habitat_name := _pick_habitat_name(catalog, sector_id, rng, session)
 	var corps := _pick_corporation_pair(catalog, sector_id, rng)
 	var bindings := {
 		"habitat": habitat_name,
@@ -164,8 +164,23 @@ static func _pick_commodity_name(catalog: Catalog, rng: RandomNumberGenerator) -
 	return str(pick.get("name", "")).strip_edges()
 
 
-static func _pick_habitat_name(catalog: Catalog, sector_id: String, rng: RandomNumberGenerator) -> String:
-	var matches: Array[String] = []
+static func _pick_habitat_name(
+	catalog: Catalog,
+	sector_id: String,
+	rng: RandomNumberGenerator,
+	session: GameSession = null
+) -> String:
+	if session != null and session.docked:
+		var docked_habitat_id := str(session.habitat_id).strip_edges()
+		if not docked_habitat_id.is_empty():
+			var docked := catalog.get_habitat(docked_habitat_id)
+			if str(docked.get("sector_id", "")) == sector_id:
+				var docked_name := str(docked.get("name", "")).strip_edges()
+				if not docked_name.is_empty():
+					return docked_name
+
+	var civil: Array[String] = []
+	var fallback: Array[String] = []
 	for habitat_variant in catalog.habitats_by_id.values():
 		if typeof(habitat_variant) != TYPE_DICTIONARY:
 			continue
@@ -173,12 +188,17 @@ static func _pick_habitat_name(catalog: Catalog, sector_id: String, rng: RandomN
 		if str(habitat.get("sector_id", "")) != sector_id:
 			continue
 		var name := str(habitat.get("name", "")).strip_edges()
-		if not name.is_empty():
-			matches.append(name)
-	if matches.is_empty():
+		if name.is_empty():
+			continue
+		fallback.append(name)
+		if str(habitat.get("type", "habitat")) == "habitat":
+			civil.append(name)
+
+	var pool := civil if not civil.is_empty() else fallback
+	if pool.is_empty():
 		return sector_id
-	matches.sort()
-	return matches[rng.randi_range(0, matches.size() - 1)]
+	pool.sort()
+	return pool[rng.randi_range(0, pool.size() - 1)]
 
 
 static func _pick_corporation_pair(

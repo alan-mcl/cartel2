@@ -120,6 +120,14 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 
 	runner.check(bindings.has("commodity"), "message emitters: bindings include commodity name")
 
+	var habitat_label := str(bindings.get("habitat", ""))
+	runner.check_eq(habitat_label, "Proxima Habitat", "message emitters: habitat token is civil dock name")
+	var corp_label := str(bindings.get("corporation", ""))
+	runner.check(
+		habitat_label != corp_label,
+		"message emitters: habitat token must not duplicate corporation name"
+	)
+
 
 static func _test_commodities_headline_includes_price(runner: TestRunner, catalog: Catalog) -> void:
 	var simulation := Simulation.new()
