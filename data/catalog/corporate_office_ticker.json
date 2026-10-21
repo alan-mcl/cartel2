@@ -13,7 +13,15 @@
         "The right equipment begins with {product}.",
         "{product} - manufactured to specification, supplied with confidence.",
         "For crews who know the difference: {product} from {brand}.",
-        "{product}. No compromises hidden in the small print."
+        "{product}. No compromises hidden in the small print.",
+        "{product} — a considered investment in operational continuity.",
+        "Specify {product} with confidence; {brand} maintains the documentation.",
+        "For demanding schedules, {product} offers a dependable standard.",
+        "{product} — performance supported by clear service terms.",
+        "Discover how {product} can support your vessel's operating profile.",
+        "{brand} supplies {product} to operators who value consistency.",
+        "An informed choice today: {product}, available through {brand}.",
+        "{product} — designed to integrate with professional workflows."
       ],
       "job": [
         "Contract posted: {title}, destination {destination}.",
@@ -23,7 +31,13 @@
         "Professional opportunity: {title}, with operations at {destination}.",
         "Contract available for {title}. Full particulars available for passage to {destination}.",
         "{brand} is seeking capable operators for {title} at {destination}.",
-        "Put your ship to work: {title}, destination {destination}."
+        "Put your ship to work: {title}, destination {destination}.",
+        "Qualified operators may enquire about {title}, serving {destination}.",
+        "{brand} invites expressions of interest for {title} at {destination}.",
+        "A new contract opportunity is available: {title}, destination {destination}.",
+        "Operators with suitable capacity are invited to review {title} for {destination}.",
+        "{title} at {destination} — clear terms and particulars available at this desk.",
+        "Consider your next deployment: {title}, with work scheduled at {destination}."
       ],
       "recruitment": [
         "Independent operators are welcome to enquire at this desk.",
@@ -33,14 +47,26 @@
         "We work with operators who value clear terms and reliable payment.",
         "Experienced crews are invited to join our independent contractor network.",
         "Flexible contracts for pilots who prefer to remain independent.",
-        "If you have the experience, we have the work."
+        "If you have the experience, we have the work.",
+        "We value independent operators who bring sound judgement and reliable equipment.",
+        "Discuss a longer-term working relationship with the {brand} team.",
+        "Experienced pilots can enquire about our current contractor requirements.",
+        "Our network is built on clear expectations and professional delivery.",
+        "Independent operators with a strong service record are encouraged to make contact.",
+        "Let us discuss how your vessel and experience might suit our current requirements."
       ],
       "brand": [
         "Ask at this desk about {brand}.",
-        "{brand} \u2014 services for serious operators.",
+        "{brand} — services for serious operators.",
         "Enquire regarding {brand}; particulars available here.",
         "Our {brand} desk serves clients throughout the sector.",
-        "{brand}: established standards, clear terms."
+        "{brand}: established standards, clear terms.",
+        "{brand} — a considered choice for established operators.",
+        "Ask our desk about the services available through {brand}.",
+        "{brand} maintains a professional presence across the sector.",
+        "Learn more about {brand}; our team can provide the relevant particulars.",
+        "An established name, with terms available for review: {brand}.",
+        "{brand} — professional service, clearly presented."
       ]
     },
     "blunt": {
@@ -56,7 +82,15 @@
         "{product}. Tested by operators, not executives.",
         "Cheap equipment gets expensive when it fails three jumps from home. Buy {product}.",
         "We could tell you how advanced {product} is. You'd rather see it work.",
-        "{product} - because 'good enough' isn't a repair strategy."
+        "{product} - because 'good enough' isn't a repair strategy.",
+        "{product}. Less downtime. That's the pitch.",
+        "If {product} breaks, it costs you. Buy something that lasts.",
+        "{product} does the job. The rest is sales talk.",
+        "Your ship doesn't care about the brochure. It cares about {product}.",
+        "{brand} {product}. No magic, just useful hardware.",
+        "Stop nursing old equipment. Fit {product} and get moving.",
+        "{product}: buy it once, maintain it, get on with the job.",
+        "Need {product} today? We've got it. Make a decision."
       ],
       "job": [
         "{title} at {destination}. Pay on completion.",
@@ -68,7 +102,15 @@
         "We need an operator for {title} at {destination}. Qualified means qualified.",
         "{destination} needs a ship. {title} is the job.",
         "Empty ship? Take the {title} contract to {destination}.",
-        "If you can do {title}, there's money waiting at {destination}."
+        "If you can do {title}, there's money waiting at {destination}.",
+        "{title} to {destination}. Read the risks before you take the money.",
+        "We need a ship for {title} at {destination}. Can yours do it?",
+        "{title}. Destination {destination}. No speeches, just terms.",
+        "There's work at {destination}. {title}. Take it if you can handle it.",
+        "Don't like the terms? Don't sign. Need the money? Read them twice.",
+        "{title} to {destination}: available now, excuses not required.",
+        "Ship idle? The {title} contract at {destination} won't take itself.",
+        "One job, one destination: {title}, {destination}. Decide."
       ],
       "recruitment": [
         "Crew wanted. Show up qualified.",
@@ -79,14 +121,27 @@
         "Good pilots get paid. Bad pilots get replaced.",
         "Your ship is yours. The contract is ours. Keep it simple.",
         "Qualified operators wanted. No hand-holding provided.",
-        "If you can do the job, come talk to us."
+        "If you can do the job, come talk to us.",
+        "We hire operators who show up, do the work and invoice correctly.",
+        "No promises of easy money. Just contracts for capable crews.",
+        "Bring a serviceable ship and a record worth checking.",
+        "Independent means you run your ship. It doesn't mean you ignore the terms.",
+        "Can you deliver? Prove it. We have work.",
+        "We pay for completed work, not dramatic explanations.",
+        "Want steady contracts? Be reliable. It's not complicated."
       ],
       "brand": [
         "{brand}. We do the work.",
         "Need {brand}? Talk to the desk.",
-        "{brand} \u2014 no brochure required.",
+        "{brand} — no brochure required.",
         "We run {brand} out of this office. Ask.",
-        "{brand}. Straight deal or walk."
+        "{brand}. Straight deal or walk.",
+        "{brand}. Get what you came for.",
+        "{brand} does business. You decide if the terms work.",
+        "Need {brand}? The desk is open. Make it quick.",
+        "{brand}. No ceremony, no mystery.",
+        "Ask about {brand}. If we can help, we'll say so.",
+        "{brand}: straightforward business for people with places to be."
       ]
     },
     "cheerful": {
@@ -102,7 +157,15 @@
         "Fly farther, work smarter, enjoy the journey with {product}.",
         "Another successful delivery of {product} - thanks for flying with {brand}!",
         "Ask our friendly staff about {product} and see what the fuss is about.",
-        "{brand} {product}: a little upgrade that makes a big difference."
+        "{brand} {product}: a little upgrade that makes a big difference.",
+        "Give your ship a little lift with {product}!",
+        "Great news for your next run: {product} is available!",
+        "Come say hello and see what {product} can do for your ship!",
+        "Your next upgrade could be {product} from {brand}!",
+        "Fresh equipment, fresh possibilities — ask us about {product}!",
+        "Make room for better journeys with {product}!",
+        "Need a hand choosing? Our team can help you find the right {product}.",
+        "{product} is ready for a new home aboard your ship!"
       ],
       "job": [
         "Exciting work: {title} heading to {destination}!",
@@ -113,7 +176,15 @@
         "Next stop: {destination}! Contract available for {title}.",
         "Put your ship to work with a new {title} contract at {destination}!",
         "Ready for a new destination? {title} is now available for {destination}.",
-        "There's always another opportunity out there - today's is {title} at {destination}!"
+        "There's always another opportunity out there - today's is {title} at {destination}!",
+        "There's a new opportunity on the board: {title}, heading to {destination}!",
+        "Ready to earn and explore? Take a look at {title} for {destination}!",
+        "Your next great run could start with {title} at {destination}!",
+        "Make today a working day! {title} is available for {destination}.",
+        "Got a destination in mind? There's work waiting at {destination}!",
+        "One more contract, one more story to tell: {title}, {destination}!",
+        "Let's get those engines earning — ask about {title} at {destination}!",
+        "Your schedule has room for one more adventure, doesn't it?"
       ],
       "recruitment": [
         "Join our network - independents make great partners!",
@@ -124,14 +195,28 @@
         "Good crews make good business. Come join the {brand} network!",
         "Looking for flexible work? Our independent contracts could be just the ticket.",
         "Fly your way, work with us!",
-        "New opportunities are opening for independent pilots and crews."
+        "New opportunities are opening for independent pilots and crews.",
+        "We love working with independent pilots — let's find something that suits you!",
+        "There's room in our network for good people and well-run ships.",
+        "Bring your experience; we'll bring the opportunities!",
+        "Let's make your next contract a good one. Ask about joining {brand}.",
+        "Friendly desk, clear terms, and work worth looking at!",
+        "Your independence is a strength. Put it to work with us!",
+        "We're always glad to meet pilots who take pride in their ships.",
+        "Let's talk contracts, destinations and what works for your crew!"
       ],
       "brand": [
-        "Come ask about {brand} \u2014 we'd love to help!",
+        "Come ask about {brand} — we'd love to help!",
         "{brand} is available right here at the desk!",
         "Looking for {brand}? You're in the right place!",
-        "Try {brand} \u2014 customers keep coming back!",
-        "Good news: {brand} is open for business today!"
+        "Try {brand} — customers keep coming back!",
+        "Good news: {brand} is open for business today!",
+        "Good to see you! Ask us about {brand}!",
+        "Come on over — the {brand} team is ready to help!",
+        "There's always something happening at {brand}. Take a look!",
+        "Your next good decision might start with {brand}!",
+        "Pop by the desk and discover what {brand} can do for you!",
+        "{brand} is here to make business a little brighter!"
       ]
     },
     "severe": {
@@ -147,7 +232,15 @@
         "Do not substitute unapproved equipment for {product}.",
         "{product} - compliance begins before launch.",
         "Inspection deficiencies involving {product} will be recorded.",
-        "Ensure your vessel is equipped with approved {product} before commencing operations."
+        "Ensure your vessel is equipped with approved {product} before commencing operations.",
+        "Use of {product} must conform to the applicable operating specification.",
+        "Unverified {product} installations may be grounds for inspection failure.",
+        "Operators are responsible for the correct maintenance of {product}.",
+        "Procurement of {product} does not waive inspection requirements.",
+        "Only approved configurations of {product} are acceptable for regulated service.",
+        "Record the installation and service history of {product} before deployment.",
+        "{product} must be operated within its certified parameters.",
+        "Non-compliant substitutes for {product} may invalidate operational approval."
       ],
       "job": [
         "Mandatory posting: {title}, {destination}.",
@@ -158,7 +251,15 @@
         "{title} to {destination}. Eligibility requirements apply.",
         "Authorised operators are required for work at {destination}. Contract: {title}.",
         "Failure to complete assigned {title} obligations may affect future eligibility.",
-        "Operational requirement: {title}, {destination}. Review all terms before acceptance."
+        "Operational requirement: {title}, {destination}. Review all terms before acceptance.",
+        "Contract availability does not imply exemption from eligibility requirements.",
+        "Review the acceptance criteria before applying for {title} at {destination}.",
+        "{title} at {destination}. Operator qualifications will be checked.",
+        "Applications for {title} must satisfy the published terms for {destination}.",
+        "Acceptance of {title} constitutes agreement to the stated delivery conditions.",
+        "Operators are responsible for verifying vessel suitability for {title} at {destination}.",
+        "Contract notice: {title}, destination {destination}. Unqualified applications will be rejected.",
+        "Work at {destination} is subject to contract terms and applicable operating rules."
       ],
       "recruitment": [
         "Personnel must meet published standards.",
@@ -169,70 +270,137 @@
         "Do not apply unless you meet the stated requirements.",
         "All contracted crews are subject to inspection and compliance procedures.",
         "Operators are responsible for maintaining current certification.",
-        "Contract access is conditional upon satisfactory compliance records."
+        "Contract access is conditional upon satisfactory compliance records.",
+        "Submission of credentials does not constitute approval for engagement.",
+        "Contractors must maintain valid records for the duration of each assignment.",
+        "Vessel and operator eligibility will be verified before work is issued.",
+        "All applicants are subject to review under current engagement standards.",
+        "Independent status does not exempt operators from contractual obligations.",
+        "Failure to disclose relevant sanctions may result in rejection.",
+        "Only operators with current documentation should proceed to contract review.",
+        "Engagement remains conditional upon verification of qualifications and records."
       ],
       "brand": [
         "{brand}. Compliance documentation available on request.",
         "Authorised {brand} services only at this desk.",
         "Operators must meet standards before {brand} engagement.",
-        "{brand} \u2014 mandatory procedures apply.",
-        "Procure {brand} through approved channels only."
+        "{brand} — mandatory procedures apply.",
+        "Procure {brand} through approved channels only.",
+        "{brand}. Approved procedures apply without exception.",
+        "Use of {brand} services is subject to eligibility review.",
+        "{brand} transactions must be completed through authorised channels.",
+        "Consult the published requirements before requesting {brand} services.",
+        "{brand}. Documentation must be current.",
+        "Unauthorised representation of {brand} is prohibited."
       ]
     },
     "slick": {
       "sku": [
-        "{product} \u2014 ask how {brand} fits your ship.",
+        "{product} — ask how {brand} fits your ship.",
         "Limited run on {product}. {brand} clients get first look.",
         "{product} moves fast. {brand} desk can hold one.",
         "You want {product}? {brand} makes it simple.",
-        "{product} \u2014 franchise pricing for {brand} partners.",
+        "{product} — franchise pricing for {brand} partners.",
         "Smart money buys {product} through {brand}.",
         "{product} on the board today. {brand} terms apply.",
-        "Don't fly without {product}. {brand} has stock."
+        "Don't fly without {product}. {brand} has stock.",
+        "{product} is moving. The question is whether you'll get yours.",
+        "Smart operators are already asking about {product}. Ask before they do.",
+        "There's a reason {product} keeps coming up in the right conversations.",
+        "{product} — get ahead of the market while the terms are good.",
+        "Your competitors have seen {product}. Have you?",
+        "Ask now about {product}; availability can change between shifts.",
+        "{brand} knows how to put {product} in the right hands.",
+        "Make your next move look obvious in hindsight: {product}.",
+        "Good timing is a competitive advantage. Ask about {product}.",
+        "{product} — the kind of upgrade people notice after you've bought it."
       ],
       "brand": [
-        "{brand} \u2014 limited availability, ask today.",
+        "{brand} — limited availability, ask today.",
         "Smart operators know {brand} when they see it.",
         "Your next contract starts with {brand}.",
         "{brand}: the desk favourite this quarter.",
         "Don't leave without hearing about {brand}.",
-        "Everybody's talking {brand}. Find out why."
+        "Everybody's talking {brand}. Find out why.",
+        "{brand}. You didn't hear it here first — you heard it here early.",
+        "People in the know are asking about {brand}.",
+        "Get acquainted with {brand} before everyone else catches on.",
+        "{brand}: the name behind a few very interesting opportunities.",
+        "Don't just follow the market. Get closer to the desk that moves it: {brand}.",
+        "Ask about {brand}. Some details are better discussed in person.",
+        "{brand} has options. The interesting question is which ones are yours.",
+        "There's the public offer, and then there's the conversation. Ask {brand}."
       ],
       "job": [
-        "{title} to {destination} \u2014 {brand} is paying.",
+        "{title} to {destination} — {brand} is paying.",
         "Hot contract: {title}, {destination}. Ask {brand}.",
         "{brand} needs a ship for {title} at {destination}.",
         "Easy money: {title}, {destination}. {brand} desk.",
         "{title} at {destination}. {brand} bonus if you leave today.",
-        "Still open: {title} bound for {destination}."
+        "Still open: {title} bound for {destination}.",
+        "{title} to {destination} — get in before another operator does.",
+        "{brand} has a ship-sized opening: {title}, {destination}.",
+        "Good contract, useful destination. Ask about {title} at {destination}.",
+        "{title} at {destination}. The board won't hold your place for long.",
+        "Want first look at the next run? Start with {title}, {destination}.",
+        "{brand} has work at {destination}. Ask about the terms before the crowd arrives.",
+        "An opportunity like {title} doesn't need a long pitch. Destination: {destination}.",
+        "Take the contract, make the run, keep your options open: {title} to {destination}.",
+        "There's money in motion at {destination}. Ask {brand} about {title}.",
+        "{title}, {destination}. Could be your next good decision."
       ],
       "recruitment": [
         "Independent? {brand} wants your callsign on file.",
-        "Join the {brand} network \u2014 terms you'll like.",
+        "Join the {brand} network — terms you'll like.",
         "Crew wanted. {brand} pays on time.",
         "Bring your ship to {brand}. We keep you busy.",
         "Qualified pilots: {brand} has contracts waiting.",
-        "Sign with {brand}. Flexible hops, real rates."
+        "Sign with {brand}. Flexible hops, real rates.",
+        "Keep your independence. Add {brand} to your list of useful contacts.",
+        "Your callsign has value. Make sure the right desks know it.",
+        "Good operators get remembered. Sign on with {brand} and stay in circulation.",
+        "We have contracts, you have a ship. Let's make the introduction.",
+        "Keep your options open — the {brand} network is worth knowing.",
+        "Want better access to work? Put your name where the contracts start.",
+        "Qualified pilots don't need a permanent employer. They need the right contacts.",
+        "Bring your ship, keep your freedom, and let {brand} find you work.",
+        "There's a place for your callsign on our list. Ask about the terms."
       ]
     },
     "courtly": {
       "sku": [
-        "{product} \u2014 supplied under {brand} warrant.",
+        "{product} — supplied under {brand} warrant.",
         "The house recommends {product} for discerning crews.",
         "{product}, as offered through {brand}.",
         "Enquire after {product}; {brand} maintains the line.",
-        "{product} \u2014 quality befitting {brand} clients.",
+        "{product} — quality befitting {brand} clients.",
         "Permit us to mention {product} from {brand}.",
         "{product} remains available to {brand} patrons.",
-        "A considered choice: {product}, by {brand}."
+        "A considered choice: {product}, by {brand}.",
+        "{product} — selected for those who value a proper standard.",
+        "The house would commend {product} to a discerning operator.",
+        "{product}, supplied with the care and discretion our clients expect.",
+        "May we draw your attention to {product}, maintained by {brand}.",
+        "{product} — a fitting choice for a vessel of distinction.",
+        "The quality of {product} speaks quietly, as quality should.",
+        "We would be pleased to arrange the supply of {product}.",
+        "{product}, offered to established clients in good standing."
       ],
       "brand": [
         "The house is pleased to offer {brand}.",
         "Enquire discreetly regarding {brand}.",
-        "{brand} \u2014 a long-standing obligation honoured here.",
+        "{brand} — a long-standing obligation honoured here.",
         "Guests may ask after {brand} at this desk.",
         "It is our custom to provide {brand} to qualified clients.",
-        "{brand}, maintained as tradition demands."
+        "{brand}, maintained as tradition demands.",
+        "{brand} receives its clients with the customary courtesy.",
+        "Those acquainted with {brand} will know where to enquire.",
+        "The house continues its association with {brand}.",
+        "An introduction to {brand} may be arranged at this desk.",
+        "{brand} — a name carried forward with care.",
+        "We remain at your service for matters concerning {brand}.",
+        "Clients of standing may enquire privately about {brand}.",
+        "{brand} is available here, as it has been for generations."
       ],
       "job": [
         "Contract notice: {title}, destination {destination}.",
@@ -240,7 +408,15 @@
         "{brand} seeks an operator for {title} at {destination}.",
         "Field service: {title}, {destination}. Enquire within.",
         "Qualified crews may tender for {title}, {destination}.",
-        "{title} \u2014 passage to {destination} under published terms."
+        "{title} — passage to {destination} under published terms.",
+        "The house posts {title}, with destination {destination}, for suitable operators.",
+        "Those of proven standing may enquire after {title} at {destination}.",
+        "{brand} would welcome a discreet enquiry regarding {title}, {destination}.",
+        "A contract is available for {title}, with passage toward {destination}.",
+        "Qualified operators may be considered for {title} at {destination}.",
+        "We invite suitable crews to review the terms for {title}, {destination}.",
+        "{title} to {destination} is entered on the board for those interested.",
+        "May we recommend an enquiry concerning {title} at {destination}?"
       ],
       "recruitment": [
         "Independent operators of good standing may enquire.",
@@ -248,7 +424,15 @@
         "Qualified pilots are welcome to discuss terms.",
         "We honour long service among independent contractors.",
         "Discreet enquiries regarding contract work are received here.",
-        "{brand} extends courtesy terms to proven operators."
+        "{brand} extends courtesy terms to proven operators.",
+        "The house welcomes introductions from independent operators of good standing.",
+        "Reputation is remembered here. Experienced pilots are invited to enquire.",
+        "We maintain relations with proven crews who value discretion and honourable terms.",
+        "Those who have served well may find further work through {brand}.",
+        "An established record is always a welcome introduction.",
+        "We would be pleased to discuss a suitable arrangement with your crew.",
+        "Independent operators with whom we have a trusted relationship are always valued.",
+        "Let us speak privately about future engagements and mutually agreeable terms."
       ]
     }
   }
