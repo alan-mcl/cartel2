@@ -1,0 +1,3056 @@
+{
+  "sites": [
+    {
+      "id": "deep_space",
+      "label": "Deep space",
+      "star": false,
+      "article": "a"
+    },
+    {
+      "id": "empty_orbit",
+      "label": "Empty orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "high_orbit",
+      "label": "High orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "polar_orbit",
+      "label": "Polar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "eccentric_apogee",
+      "label": "Eccentric-orbit apogee",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "eccentric_perigee",
+      "label": "Eccentric-orbit perigee",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "geosynchronous_orbit",
+      "label": "Geosynchronous orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "lagrange_l1",
+      "label": "L1 Lagrange point",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "lagrange_l2",
+      "label": "L2 Lagrange point",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "lagrange_l4",
+      "label": "L4 Lagrange point",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "lagrange_l5",
+      "label": "L5 Lagrange point",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "transfer_orbit",
+      "label": "Transfer orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "terminator_orbit",
+      "label": "Terminator orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "magnetosphere",
+      "label": "Magnetospheric fringe",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "asteroid_belt",
+      "label": "Asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            8
+          ]
+        },
+        {
+          "kind": "derelict",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "cargo",
+          "count": [
+            0,
+            3
+          ]
+        },
+        {
+          "kind": "mine",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "trojan_cluster",
+      "label": "Trojan cluster",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            7
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "debris_field",
+      "label": "Debris field",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            7
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "debris_disc",
+      "label": "Debris disc",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            7
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "dark_debris",
+      "label": "Dark debris field",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            5
+          ]
+        },
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "derelict",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "mine",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "wreck_site",
+      "label": "Wreck site",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            0,
+            5
+          ]
+        },
+        {
+          "kind": "derelict",
+          "count": [
+            1,
+            1
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "shipping_lane",
+      "label": "Shipping translation point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            2,
+            5
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "approach_corridor",
+      "label": "Orbital approach corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            2,
+            5
+          ]
+        },
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "orbital_junction",
+      "label": "Orbital traffic junction",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            3,
+            7
+          ]
+        },
+        {
+          "kind": "orbital",
+          "count": [
+            1,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "industrial_orbit",
+      "label": "Industrial orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "shipyard_approach",
+      "label": "Shipyard approach",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "planetary_limb",
+      "label": "Planetary limb",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "moon_orbit",
+      "label": "Moon orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "outer_system",
+      "label": "Outer system",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "debris",
+          "count": [
+            0,
+            3
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "resource_field",
+      "label": "Resource field",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "inner_orbit",
+      "label": "Inner orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        },
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "near_polar_orbit",
+      "label": "Near-polar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "equatorial_orbit",
+      "label": "Equatorial orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "inclined_orbit",
+      "label": "Inclined orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "prograde_orbit",
+      "label": "Prograde orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "retrograde_orbit",
+      "label": "Retrograde orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "synchronous_orbit",
+      "label": "Synchronous orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "frozen_orbit",
+      "label": "Frozen orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "molniya_orbit",
+      "label": "Molniya-type orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "tundra_orbit",
+      "label": "Tundra orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "highly_elliptical_orbit",
+      "label": "Highly elliptical orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "eccentric_orbit",
+      "label": "Eccentric orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "periapsis",
+      "label": "Periapsis",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "apoapsis",
+      "label": "Apoapsis",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "orbital_plane_crossing",
+      "label": "Orbital plane crossing",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "ascending_node_crossing",
+      "label": "Ascending-node crossing",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "descending_node_crossing",
+      "label": "Descending-node crossing",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "equatorial_crossing",
+      "label": "Equatorial crossing",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "inclination_change_corridor",
+      "label": "Inclination-change corridor",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "solar_synchronous_orbit",
+      "label": "Solar-synchronous orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_stationary_orbit",
+      "label": "Solar-stationary orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "supersynchronous_orbit",
+      "label": "Supersynchronous orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "sub_synchronous_orbit",
+      "label": "Sub-synchronous orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "graveyard_orbit",
+      "label": "Graveyard orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "derelict",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "disposal_orbit",
+      "label": "Disposal orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "derelict",
+          "count": [
+            0,
+            2
+          ]
+        },
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "solar_transfer_orbit",
+      "label": "Solar transfer orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "medium_orbit",
+      "label": "Medium orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "highly_eccentric_high_orbit",
+      "label": "Highly eccentric high orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "escape_trajectory",
+      "label": "Escape trajectory",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "hyperbolic_departure_trajectory",
+      "label": "Hyperbolic departure trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "hyperbolic_arrival_trajectory",
+      "label": "Hyperbolic arrival trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "lunar_l1",
+      "label": "Lunar L1",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "lunar_l2",
+      "label": "Lunar L2",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "lunar_l3",
+      "label": "Lunar L3",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "lunar_l4",
+      "label": "Lunar L4",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "lunar_l5",
+      "label": "Lunar L5",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "solar_l1",
+      "label": "Solar L1",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "solar_l2",
+      "label": "Solar L2",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "solar_l3",
+      "label": "Solar L3",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "solar_l4",
+      "label": "Solar L4",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "solar_l5",
+      "label": "Solar L5",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "cislunar_transfer_corridor",
+      "label": "Cislunar transfer corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            3
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "weak_stability_boundary",
+      "label": "Weak-stability boundary",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "lunar_capture_corridor",
+      "label": "Lunar capture corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "lunar_departure_corridor",
+      "label": "Lunar departure corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "lunar_gateway_orbit",
+      "label": "Lunar gateway orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "distant_retrograde_orbit",
+      "label": "Distant retrograde orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "low_energy_lunar_transfer",
+      "label": "Low-energy lunar transfer",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "ballistic_lunar_transfer",
+      "label": "Ballistic lunar transfer",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "free_return_trajectory",
+      "label": "Free-return trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "lunar_cycler_trajectory",
+      "label": "Lunar cycler trajectory",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "l1_equilibrium_region",
+      "label": "L1 equilibrium region",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l1_halo_orbit",
+      "label": "L1 halo orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l1_planar_lyapunov_orbit",
+      "label": "L1 planar Lyapunov orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l1_vertical_lyapunov_orbit",
+      "label": "L1 vertical Lyapunov orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l1_quasi_periodic_orbit",
+      "label": "L1 quasi-periodic orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l1_libration_corridor",
+      "label": "L1 libration corridor",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l1_stationkeeping_zone",
+      "label": "L1 stationkeeping zone",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l2_equilibrium_region",
+      "label": "L2 equilibrium region",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l2_halo_orbit",
+      "label": "L2 halo orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l2_planar_lyapunov_orbit",
+      "label": "L2 planar Lyapunov orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l2_vertical_lyapunov_orbit",
+      "label": "L2 vertical Lyapunov orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l2_quasi_periodic_orbit",
+      "label": "L2 quasi-periodic orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l2_libration_corridor",
+      "label": "L2 libration corridor",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l2_stationkeeping_zone",
+      "label": "L2 stationkeeping zone",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l3_equilibrium_region",
+      "label": "L3 equilibrium region",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l3_halo_orbit",
+      "label": "L3 halo orbit",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l3_libration_region",
+      "label": "L3 libration region",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "l4_trojan_region",
+      "label": "L4 Trojan region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l5_trojan_region",
+      "label": "L5 Trojan region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l4_libration_orbit",
+      "label": "L4 libration orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l5_libration_orbit",
+      "label": "L5 libration orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l4_dust_cloud",
+      "label": "L4 dust cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "l5_dust_cloud",
+      "label": "L5 dust cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "trojan_asteroid_cluster",
+      "label": "Trojan asteroid cluster",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "trojan_asteroid_trailing_swarm",
+      "label": "Trojan asteroid trailing swarm",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "trojan_asteroid_leading_swarm",
+      "label": "Trojan asteroid leading swarm",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "coorbital_object_region",
+      "label": "Co-orbital object region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            5
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "horseshoe_orbit",
+      "label": "Horseshoe orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "quasi_satellite_orbit",
+      "label": "Quasi-satellite orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "tadpole_orbit",
+      "label": "Tadpole orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "hohmann_transfer_midpoint",
+      "label": "Hohmann transfer midpoint",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "hohmann_transfer_departure",
+      "label": "Hohmann transfer departure point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "hohmann_transfer_arrival",
+      "label": "Hohmann transfer arrival point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "bielliptic_transfer_apogee",
+      "label": "Bi-elliptic transfer apogee",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "bielliptic_transfer_perigee",
+      "label": "Bi-elliptic transfer perigee",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "translunar_injection_corridor",
+      "label": "Trans-lunar injection corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "transplanetary_injection_corridor",
+      "label": "Trans-planetary injection corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "planetary_escape_corridor",
+      "label": "Planetary escape corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "interplanetary_cruise_trajectory",
+      "label": "Interplanetary cruise trajectory",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "interplanetary_transfer_midpoint",
+      "label": "Interplanetary transfer midpoint",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "interplanetary_transfer_aphelion",
+      "label": "Interplanetary transfer aphelion",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "interplanetary_transfer_perihelion",
+      "label": "Interplanetary transfer perihelion",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "gravity_assist_approach_corridor",
+      "label": "Gravity-assist approach corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "gravity_assist_departure_corridor",
+      "label": "Gravity-assist departure corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "planetary_flyby_pericentre",
+      "label": "Planetary flyby pericentre",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "planetary_flyby_outbound_leg",
+      "label": "Planetary flyby outbound leg",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "planetary_flyby_inbound_leg",
+      "label": "Planetary flyby inbound leg",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "oberth_manoeuvre_point",
+      "label": "Oberth-manoeuvre point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "deep_space_manoeuvre_point",
+      "label": "Deep-space manoeuvre point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "mid_course_correction_corridor",
+      "label": "Mid-course correction corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "ballistic_capture_corridor",
+      "label": "Ballistic capture corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "low_energy_transfer_manifold",
+      "label": "Low-energy transfer manifold",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stable_manifold",
+      "label": "Stable manifold",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "unstable_manifold",
+      "label": "Unstable manifold",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "invariant_manifold_intersection",
+      "label": "Invariant-manifold intersection",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "heteroclinic_transfer",
+      "label": "Heteroclinic transfer",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "homoclinic_transfer",
+      "label": "Homoclinic transfer",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "interplanetary_transport_network_node",
+      "label": "Interplanetary transport network node",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "low_energy_gateway",
+      "label": "Low-energy gateway",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "resonant_transfer_orbit",
+      "label": "Resonant transfer orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "phasing_orbit",
+      "label": "Phasing orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "parking_orbit",
+      "label": "Parking orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            3
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "departure_asymptote",
+      "label": "Departure asymptote",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "arrival_asymptote",
+      "label": "Arrival asymptote",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "solar_polar_orbit",
+      "label": "Solar polar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_equatorial_orbit",
+      "label": "Solar equatorial orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "low_solar_orbit",
+      "label": "Low solar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "high_solar_orbit",
+      "label": "High solar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "highly_eccentric_solar_orbit",
+      "label": "Highly eccentric solar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_perihelion",
+      "label": "Solar perihelion",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_aphelion",
+      "label": "Solar aphelion",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_grazing_trajectory",
+      "label": "Solar grazing trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_escape_trajectory",
+      "label": "Solar escape trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_occultation_corridor",
+      "label": "Solar occultation corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_conjunction",
+      "label": "Solar conjunction",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "anti_solar_position",
+      "label": "Anti-solar position",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "solar_transfer_corridor",
+      "label": "Solar transfer corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_observation_station",
+      "label": "Solar observation station",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            1,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "coronal_observation_distance",
+      "label": "Coronal observation distance",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "solar_wind_monitoring_position",
+      "label": "Solar-wind monitoring position",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "heliocentric_coorbital_region",
+      "label": "Heliocentric co-orbital region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "inner_system_transfer_corridor",
+      "label": "Inner-system transfer corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "outer_system_transfer_corridor",
+      "label": "Outer-system transfer corridor",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "one_one_orbital_resonance",
+      "label": "1:1 orbital resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "one_one_coorbital_region",
+      "label": "1:1 co-orbital region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "one_two_resonance",
+      "label": "1:2 resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "two_one_resonance",
+      "label": "2:1 resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "three_two_resonance",
+      "label": "3:2 resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "three_one_resonance",
+      "label": "3:1 resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "five_two_resonance",
+      "label": "5:2 resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "mean_motion_resonance",
+      "label": "Mean-motion resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "secular_resonance",
+      "label": "Secular resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "spin_orbit_resonance",
+      "label": "Spin-orbit resonance",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "kozai_resonance_region",
+      "label": "Kozai resonance region",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "resonant_libration_zone",
+      "label": "Resonant libration zone",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "resonance_separatrix",
+      "label": "Resonance separatrix",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "resonance_crossing_point",
+      "label": "Resonance crossing point",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "resonance_gap",
+      "label": "Resonance gap",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "resonant_asteroid_population",
+      "label": "Resonant asteroid population",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "resonant_moon_orbit",
+      "label": "Resonant moon orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "resonant_transfer_trajectory",
+      "label": "Resonant transfer trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "main_asteroid_belt",
+      "label": "Main asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        },
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "inner_asteroid_belt",
+      "label": "Inner asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "central_asteroid_belt",
+      "label": "Central asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "outer_asteroid_belt",
+      "label": "Outer asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_family_cluster",
+      "label": "Asteroid-family cluster",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_family_core",
+      "label": "Asteroid-family core",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            5,
+            10
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_family_fringe",
+      "label": "Asteroid-family fringe",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "kirkwood_gap",
+      "label": "Kirkwood gap",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "asteroid_belt_crossing",
+      "label": "Asteroid belt crossing",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "high_inclination_asteroid_population",
+      "label": "High-inclination asteroid population",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "near_ecliptic_asteroid_population",
+      "label": "Near-ecliptic asteroid population",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "carbonaceous_asteroid_cluster",
+      "label": "Carbonaceous asteroid cluster",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "metallic_asteroid_population",
+      "label": "Metallic asteroid population",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "binary_asteroid_system",
+      "label": "Binary asteroid system",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            5
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "contact_binary_asteroid",
+      "label": "Contact-binary asteroid",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "tumbling_asteroid",
+      "label": "Tumbling asteroid",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "rapid_rotator_asteroid",
+      "label": "Rapid-rotator asteroid",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "rubble_pile_asteroid",
+      "label": "Rubble-pile asteroid",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "asteroid_regolith_field",
+      "label": "Asteroid regolith field",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_debris_trail",
+      "label": "Asteroid debris trail",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_ejecta_cloud",
+      "label": "Asteroid ejecta cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_satellite_orbit",
+      "label": "Asteroid satellite orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "asteroid_pole",
+      "label": "Asteroid pole",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "asteroid_terminator",
+      "label": "Asteroid terminator",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "asteroid_subsolar_point",
+      "label": "Asteroid subsolar point",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "asteroid_nightside",
+      "label": "Asteroid nightside",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "planetary_l4_trojan_cloud",
+      "label": "Planetary L4 Trojan cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "planetary_l5_trojan_cloud",
+      "label": "Planetary L5 Trojan cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "trojan_binary_system",
+      "label": "Trojan binary system",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "trojan_libration_centre",
+      "label": "Trojan libration centre",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "trojan_libration_envelope",
+      "label": "Trojan libration envelope",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "horseshoe_coorbital_region",
+      "label": "Horseshoe co-orbital region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            5
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "horseshoe_turning_point",
+      "label": "Horseshoe turning point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "quasi_satellite_region",
+      "label": "Quasi-satellite region",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "coorbital_exchange_corridor",
+      "label": "Co-orbital exchange corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "coorbital_resonance_boundary",
+      "label": "Co-orbital resonance boundary",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "hill_sphere_boundary",
+      "label": "Hill-sphere boundary",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "solar_soi_boundary",
+      "label": "Solar sphere-of-influence boundary",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "planetary_escape_region",
+      "label": "Planetary escape region",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "planetary_capture_region",
+      "label": "Planetary capture region",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "planetary_heliocentric_transition",
+      "label": "Transition between planetary and heliocentric orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "heliopause",
+      "label": "Heliopause",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "termination_shock",
+      "label": "Termination shock",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "heliosheath",
+      "label": "Heliosheath",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "interstellar_boundary",
+      "label": "Interstellar boundary",
+      "star": false,
+      "article": "the"
+    },
+    {
+      "id": "oort_cloud_inner",
+      "label": "Oort-cloud inner region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "oort_cloud_outer",
+      "label": "Oort-cloud outer region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "detached_object_region",
+      "label": "Detached-object region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "solar_wind_stream",
+      "label": "Solar-wind stream",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "high_speed_solar_wind_stream",
+      "label": "High-speed solar-wind stream",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "cme_front",
+      "label": "Coronal-mass-ejection front",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "solar_wind_discontinuity",
+      "label": "Solar-wind discontinuity",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "heliospheric_current_sheet",
+      "label": "Heliospheric current sheet",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "current_sheet_crossing",
+      "label": "Current-sheet crossing",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "interplanetary_dust_cloud",
+      "label": "Interplanetary dust cloud",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "zodiacal_light_region",
+      "label": "Zodiacal-light region",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "zodiacal_dust_concentration",
+      "label": "Zodiacal dust concentration",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "micrometeoroid_stream",
+      "label": "Micrometeoroid stream",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "deep_space_debris_stream",
+      "label": "Deep-space debris stream",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "cosmic_ray_observation_point",
+      "label": "Cosmic-ray observation point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "solar_energetic_particle_zone",
+      "label": "Solar energetic particle event zone",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "imf_sector_boundary",
+      "label": "Interplanetary magnetic-field sector boundary",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "heliocentric_drift_trajectory",
+      "label": "Heliocentric drift trajectory",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "deep_space_cruise",
+      "label": "Deep-space cruise",
+      "star": false,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "interplanetary_conjunction",
+      "label": "Interplanetary conjunction",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "communications_shadow",
+      "label": "Communications shadow",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "circumstellar_orbit",
+      "label": "Circumstellar orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "circumbinary_orbit",
+      "label": "Circumbinary orbit",
+      "star": true,
+      "objects": [
+        {
+          "kind": "ship",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "s_type_binary_orbit",
+      "label": "S-type binary orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "p_type_binary_orbit",
+      "label": "P-type binary orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "binary_system_barycentre",
+      "label": "Binary-system barycentre",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "stellar_habitable_zone_orbit",
+      "label": "Stellar habitable-zone orbit",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "inner_habitable_zone",
+      "label": "Inner habitable zone",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "outer_habitable_zone",
+      "label": "Outer habitable zone",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "frost_line",
+      "label": "Frost line",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "asteroid_belt_stellar",
+      "label": "Circumstellar asteroid belt",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "debris_disk",
+      "label": "Debris disk",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "protoplanetary_disk",
+      "label": "Protoplanetary disk",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            4,
+            9
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "circumstellar_dust_disk",
+      "label": "Circumstellar dust disk",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "inner_system_comet_reservoir",
+      "label": "Inner-system comet reservoir",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "outer_system_comet_reservoir",
+      "label": "Outer-system comet reservoir",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            5
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "stellar_magnetosphere",
+      "label": "Stellar magnetosphere",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stellar_wind_termination_region",
+      "label": "Stellar-wind termination region",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "stellar_coronal_observation_point",
+      "label": "Stellar coronal observation point",
+      "star": true,
+      "objects": [
+        {
+          "kind": "marker",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "the"
+    },
+    {
+      "id": "stellar_polar_region",
+      "label": "Stellar polar region",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stellar_equatorial_plane",
+      "label": "Stellar equatorial plane",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "binary_system_l1",
+      "label": "Binary-system L1",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "binary_system_l2",
+      "label": "Binary-system L2",
+      "star": true,
+      "objects": [
+        {
+          "kind": "orbital",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "binary_system_l3",
+      "label": "Binary-system L3",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "binary_system_l4",
+      "label": "Binary-system L4",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "binary_system_l5",
+      "label": "Binary-system L5",
+      "star": true,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            1,
+            4
+          ]
+        }
+      ],
+      "article": "an"
+    },
+    {
+      "id": "circumbinary_resonance_zone",
+      "label": "Circumbinary resonance zone",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stellar_occultation_position",
+      "label": "Stellar occultation position",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stellar_transit_corridor",
+      "label": "Stellar transit corridor",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "stellar_gravitational_lens_line",
+      "label": "Stellar gravitational-lens line",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "transit_alignment",
+      "label": "Transit alignment",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "periapsis_passage",
+      "label": "Periapsis passage",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "apoapsis_passage",
+      "label": "Apoapsis passage",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "perihelion_passage",
+      "label": "Perihelion passage",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "aphelion_passage",
+      "label": "Aphelion passage",
+      "star": true,
+      "article": "an"
+    },
+    {
+      "id": "resonance_crossing",
+      "label": "Resonance crossing",
+      "star": true,
+      "article": "a"
+    },
+    {
+      "id": "heliopause_crossing",
+      "label": "Heliopause crossing",
+      "star": true,
+      "article": "the"
+    },
+    {
+      "id": "fragmentation_event",
+      "label": "Fragmentation event",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
+      "id": "collision_aftermath",
+      "label": "Collision aftermath",
+      "star": false,
+      "objects": [
+        {
+          "kind": "debris",
+          "count": [
+            3,
+            8
+          ]
+        },
+        {
+          "kind": "derelict",
+          "count": [
+            0,
+            2
+          ]
+        }
+      ],
+      "article": "a"
+    }
+  ]
+}

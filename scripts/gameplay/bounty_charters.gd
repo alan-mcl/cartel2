@@ -113,7 +113,9 @@ static func _build_offer(
 		var building := catalog.get_building(building_id)
 		corp_id = str(building.get("corporation_id", ""))
 
-	var site_label := _volatile_site_label(rng)
+	var site := VolatileSites.pick_site(catalog, rng)
+	var site_label := VolatileSites.site_label(site)
+	var volatile_site_id := VolatileSites.site_id(site)
 	var callsign := _pick_callsign(catalog, rng, corp_id)
 	var target_name := str(ship_def.get("name", template_id))
 
@@ -130,7 +132,9 @@ static func _build_offer(
 	var corp_name := ""
 	if not corp_id.is_empty():
 		corp_name = str(catalog.get_corporation(corp_id).get("name", corp_id))
-	blurb = blurb.replace("{site}", site_label).replace("{corp}", corp_name).replace("{callsign}", callsign)
+	var site_phrase := VolatileSites.description_phrase(site)
+	blurb = blurb.replace("{site}", site_phrase).replace("{corp}", corp_name).replace("{callsign}", callsign)
+	blurb = ScanCharters._capitalise_sentence_start(blurb)
 
 	var affiliation := corp_name if not corp_id.is_empty() else "Independent Operator"
 	if building_type == BOARD_PEACEKEEPING:
@@ -142,6 +146,7 @@ static func _build_offer(
 		"building_id": building_id,
 		"origin_habitat_id": habitat_id,
 		"origin_sector_id": sector_id,
+		"volatile_site_id": volatile_site_id,
 		"site_label": site_label,
 		"destination_name": site_label,
 		"target_template_id": template_id,
@@ -173,6 +178,9 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 			"heading_rad": -0.35,
 		},
 	}
+	var site_id := str(offer.get("volatile_site_id", "")).strip_edges()
+	if not site_id.is_empty():
+		VolatileSites.apply_site_to_setup(setup, catalog.get_volatile_site(site_id), catalog)
 	var lump := VolatileTranslation.default_lump_seconds()
 	var entry_seconds := float(cfg.get("volatile_entry_seconds", lump))
 	var exit_seconds := float(cfg.get("volatile_exit_seconds", lump))
@@ -234,17 +242,6 @@ static func _pick_callsign(catalog: Catalog, rng: RandomNumberGenerator, corpora
 		prefix = str(catalog.get_corporation(corporation_id).get("callsign_prefix", "WX"))
 	var suffix := rng.randi_range(100, 999)
 	return "%s-%d" % [prefix, suffix]
-
-
-static func _volatile_site_label(rng: RandomNumberGenerator) -> String:
-	var labels := [
-		"Off-route intercept point",
-		"Unlisted drift marker",
-		"Temporary rendezvous",
-		"Volatile translation site",
-		"Deep survey locus",
-	]
-	return labels[rng.randi_range(0, labels.size() - 1)]
 
 
 static func _string_array(raw: Variant) -> Array:

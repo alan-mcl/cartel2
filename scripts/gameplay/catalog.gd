@@ -22,6 +22,7 @@ const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
 const SCAN_MISSIONS_PATH := "res://data/catalog/scan_missions.json"
 const BOUNTY_MISSIONS_PATH := "res://data/catalog/bounty_missions.json"
+const VOLATILE_SITES_PATH := "res://data/catalog/volatile_sites.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
@@ -57,6 +58,7 @@ var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
 var scan_missions_config: Dictionary = {}
 var bounty_missions_config: Dictionary = {}
+var volatile_sites_by_id: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
@@ -99,6 +101,7 @@ func load_all() -> void:
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
 	scan_missions_config = _load_json_object(SCAN_MISSIONS_PATH)
 	bounty_missions_config = _load_json_object(BOUNTY_MISSIONS_PATH)
+	volatile_sites_by_id = _load_volatile_sites()
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
@@ -373,6 +376,43 @@ func get_scan_missions_config() -> Dictionary:
 
 func get_bounty_missions_config() -> Dictionary:
 	return bounty_missions_config
+
+
+func get_volatile_site(id: String) -> Dictionary:
+	if id.is_empty():
+		return {}
+	var entry: Variant = volatile_sites_by_id.get(id, {})
+	if typeof(entry) != TYPE_DICTIONARY:
+		return {}
+	return (entry as Dictionary).duplicate(true)
+
+
+func list_volatile_sites() -> Array:
+	var out: Array = []
+	for entry_variant in volatile_sites_by_id.values():
+		if typeof(entry_variant) == TYPE_DICTIONARY:
+			out.append(entry_variant)
+	out.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return str(a.get("id", "")) < str(b.get("id", ""))
+	)
+	return out
+
+
+func _load_volatile_sites() -> Dictionary:
+	var doc := _load_json_object(VOLATILE_SITES_PATH)
+	var sites: Variant = doc.get("sites", [])
+	var out := {}
+	if typeof(sites) != TYPE_ARRAY:
+		return out
+	for entry_variant in sites:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var id := str(entry.get("id", "")).strip_edges()
+		if id.is_empty():
+			continue
+		out[id] = entry
+	return out
 
 
 func get_star(name: String) -> Dictionary:

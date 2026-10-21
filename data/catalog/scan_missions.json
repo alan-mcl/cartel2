@@ -3,81 +3,290 @@
   "corporate_offers_per_day": 2,
   "bar_scan_chance": 0.25,
   "base_pay": 320,
-  "bar_pay_multiplier": 0.65,
   "cancel_penalty_fraction": 0.25,
   "volatile_duration_hours": 8,
   "volatile_return_hours": 8,
   "planet_survey_fraction": 0.2,
-  "designations": {
+  "types": {
     "reconnaissance": {
-      "label": "Reconnaissance",
-      "desks": [
+      "objective": "active_scan",
+      "sources": [
         "peacekeeping"
       ],
-      "target_kinds": [
+      "targets": [
         "volatile_orbital",
         "volatile_ship"
-      ]
+      ],
+      "difficulty": 1.0
     },
     "intelligence": {
-      "label": "Intelligence",
-      "desks": [
+      "objective": "active_scan",
+      "sources": [
         "peacekeeping"
       ],
-      "target_kinds": [
+      "targets": [
         "volatile_ship",
         "volatile_orbital"
-      ]
+      ],
+      "difficulty": 1.05
     },
     "survey": {
-      "label": "Survey",
-      "desks": [
+      "objective": "active_scan",
+      "sources": [
         "peacekeeping",
         "corporate_office",
         "bar"
       ],
-      "target_kinds": [
+      "targets": [
         "volatile_debris",
         "planet"
-      ]
+      ],
+      "difficulty": 1.0
     },
     "inspection": {
-      "label": "Inspection",
-      "desks": [
+      "objective": "active_scan",
+      "sources": [
         "corporate_office"
       ],
-      "target_kinds": [
+      "targets": [
         "volatile_ship"
-      ]
+      ],
+      "difficulty": 1.08
     },
     "assessment": {
-      "label": "Assessment",
-      "desks": [
+      "objective": "active_scan",
+      "sources": [
         "corporate_office"
       ],
-      "target_kinds": [
+      "targets": [
         "volatile_ship"
+      ],
+      "difficulty": 1.1
+    }
+  },
+  "sources": {
+    "peacekeeping": {
+      "pay_multiplier": 1.0,
+      "frames": [
+        "Quiet orbital pass over {site}. Complete the {work} and return the file.",
+        "Peaceforce posting: {work} at {site}. Active scan required; report back to this desk.",
+        "Marked contact at {site}. Conduct the {work} and bring the readout back.",
+        "Routine field task: {work} at {site}. Confirm the contact, complete the scan, and file your return.",
+        "Peacekeeping wants eyes on {site}. Carry out the {work}, record the contact, and return the data.",
+        "New posting for independent operators: {work} at {site}. Keep the scan clean and the report complete.",
+        "Field intelligence request for {site}. Perform the {work} and transmit the resulting scan to the peace desk.",
+        "A contact at {site} has been flagged for review. Complete the {work}; the desk will handle the rest.",
+        "Independent operator required for {work} at {site}. No intervention requested. We need the information and nothing more.",
+        "Survey authority has marked {site} for a {work}. Make the pass, collect the data, and return to this desk.",
+        "Peaceforce records require an updated read on {site}. Undertake the {work} and submit the scan on return.",
+        "This is a data-gathering posting, not an enforcement action. Complete the {work} at {site} and bring us what you find."
+      ]
+    },
+    "corporate_office": {
+      "pay_multiplier": 1.0
+    },
+    "bar": {
+      "pay_multiplier": 0.65,
+      "anonymous_frames": [
+        "Someone at the bar knows a pilot who'll pay for a scan at {site}.",
+        "Informal tip: paid survey work at {site} if you can get there and back.",
+        "Bar chatter points to scan work at {site} — cash on return, no questions.",
+        "There's money attached to a scan at {site}. Ask around if you want the name behind it.",
+        "A quiet contract is circulating for {site}. Get the scan, come back with the data, collect the fee.",
+        "Someone has a reason to know what's at {site}. They'd rather pay a ship than send their own.",
+        "Unadvertised survey work at {site}. Nothing official, nothing complicated, provided you don't ask why.",
+        "A client with more money than inclination to travel wants a look at {site}. The bar can arrange the rest.",
+        "There's a buyer for information on {site}. Bring back a clean scan and someone will make it worth your time.",
+        "Private scan work at {site}. No registry, no desk, no speeches. Data in, payment out.",
+        "A contact is paying for eyes on {site}. If you're comfortable taking work that isn't on a corporate board, ask for the details.",
+        "Word is there's a fee waiting for anyone who can get a scan of {site} without making a production of it."
       ]
     }
   },
-  "blurbs": {
-    "reconnaissance": [
-      "Quiet orbital pass over {site}. Scan the marked contact and return with the file."
-    ],
-    "intelligence": [
-      "Unlisted contact at {site}. Get a full active scan and bring the readout back."
-    ],
-    "survey": [
-      "Survey work at {site}. Scan the subject and report back to the desk."
-    ],
-    "inspection": [
-      "{corp} wants an independent inspection at {site}. Scan the hull and return."
-    ],
-    "assessment": [
-      "{corp} needs an assessment scan at {site} before they commit assets."
-    ],
-    "bar": [
-      "Someone at the bar knows a pilot who'll pay for a scan at {site}."
-    ]
+  "practices": {
+    "peacekeeping": {
+      "reconnaissance": "Reconnaissance pass",
+      "intelligence": "Intelligence sweep",
+      "survey": "Field survey"
+    },
+    "aerospace": {
+      "inspection": "Hull condition check",
+      "assessment": "Flightworthiness assessment",
+      "survey": "Systems survey"
+    },
+    "finance": {
+      "inspection": "Asset verification",
+      "assessment": "Collateral assessment",
+      "survey": "Portfolio site survey"
+    },
+    "logistics": {
+      "inspection": "Cargo integrity scan",
+      "assessment": "Route risk assessment",
+      "survey": "Lane survey"
+    },
+    "extractive": {
+      "inspection": "Extraction site inspection",
+      "assessment": "Concession assessment",
+      "survey": "Prospect survey"
+    },
+    "life_sciences": {
+      "inspection": "Containment inspection",
+      "assessment": "Compliance assessment",
+      "survey": "Bio-site survey"
+    },
+    "security": {
+      "inspection": "Threat inspection",
+      "assessment": "Risk assessment",
+      "survey": "Perimeter survey"
+    },
+    "industrial": {
+      "inspection": "Plant inspection",
+      "assessment": "Capacity assessment",
+      "survey": "Industrial survey"
+    },
+    "media": {
+      "inspection": "Broadcast asset check",
+      "assessment": "Audience reach assessment",
+      "survey": "Coverage survey"
+    },
+    "retail": {
+      "inspection": "Supply chain check",
+      "assessment": "Franchise assessment",
+      "survey": "Market survey"
+    }
+  },
+  "voices": {
+    "polished": {
+      "corporate_office": [
+        "{client} requests an independent {work} at {site}. Scan the subject and return the readout.",
+        "Contract from {client}: {work} at {site}. Full active scan, then report to this desk.",
+        "{client} has commissioned an external {work} at {site}. Please complete the scan and return the resulting data.",
+        "An independent operator has been requested for {work} at {site} on behalf of {client}. The client requires a complete scan and formal return.",
+        "{client} is seeking third-party confirmation at {site}. Conduct the {work} and submit the scan for review.",
+        "A contracted {work} has been posted by {client} for {site}. Standard field procedure applies: scan, return, report.",
+        "{client} requires fresh field data from {site}. Undertake the {work} and return the completed readout to the contracting desk.",
+        "This posting represents an independent {work} commissioned by {client}. The subject is {site}; the deliverable is the scan."
+      ],
+      "bar": [
+        "{client} is quietly paying for a {work} at {site}.",
+        "Word from {client}: a {work} at {site} if you want the fee.",
+        "There is private funding available for a {work} at {site}, courtesy of {client}.",
+        "{client} has placed an informal request for a {work} at {site}. Payment follows delivery.",
+        "A discreet {work} has been arranged at {site}. {client} is covering the fee.",
+        "{client} is looking for an operator willing to undertake a {work} at {site} without the usual administrative ceremony.",
+        "An off-board contract from {client}: {work} at {site}. Quiet handling is preferred.",
+        "The name attached to the money is {client}. The work is a {work} at {site}. Decide for yourself whether the arrangement suits you."
+      ]
+    },
+    "blunt": {
+      "corporate_office": [
+        "{client} wants a {work} at {site}. Scan it and come back.",
+        "Paid job for {client}: {work} at {site}. No paperwork until you deliver the scan.",
+        "{client} needs eyes on {site}. Do the {work}. Bring back the data.",
+        "Here's the job: {work} at {site} for {client}. Get the scan and don't complicate it.",
+        "{client} is paying for a {work} at {site}. Reach the site, scan it, return.",
+        "Contract says {work}. Location is {site}. Client is {client}. Everything else is your problem.",
+        "{client} wants a fresh read on {site}. Complete the {work} and collect when the data checks out.",
+        "Go to {site}. Do the {work}. Send the scan back to {client}. That's the contract."
+      ],
+      "bar": [
+        "Someone tied to {client} wants a {work} done at {site}.",
+        "{client} money for a {work} at {site} — ask at the bar.",
+        "{client} needs a scan at {site}. They don't care who does it.",
+        "Got a ship? There's money from {client} for a {work} at {site}.",
+        "The job is {work} at {site}. {client} is paying. Keep your questions to yourself.",
+        "There's a {client} contract floating around for {site}. Do the {work}, get paid.",
+        "{client} wants information, not conversation. {work} at {site}.",
+        "Someone has posted {client} money against a {work} at {site}. If you want it, take it."
+      ]
+    },
+    "cheerful": {
+      "corporate_office": [
+        "{client} has posted a friendly {work} at {site}. Scan and swing back when you're done!",
+        "Good contract from {client}: {work} at {site}.",
+        "{client} is looking for a capable ship to handle a {work} at {site}. Nice straightforward field work.",
+        "Here's a useful one from {client}: a {work} at {site}. Get the scan, bring it home, enjoy the payout.",
+        "{client} has some field work for you at {site}. It's a {work}; nothing to it but getting there and getting the data.",
+        "A fresh posting from {client}: {work} at {site}. A good chance to turn a few jumps into a clean contract.",
+        "{client} needs an operator at {site} for a {work}. Complete the scan and you're on your way to the next job.",
+        "Easy fieldwork on offer from {client}: {work} at {site}. Get out there and have a look."
+      ],
+      "bar": [
+        "Heard {client} is paying for a {work} at {site}.",
+        "Easy money — {client} wants a {work} at {site}.",
+        "There's a nice little {client} job going around: {work} at {site}.",
+        "{client} is putting money on a {work} at {site}. Sounds like a trip with a receipt attached.",
+        "Someone's looking for a ship to handle a {work} at {site}. {client} is paying.",
+        "Good word from the bar: {client} has cash waiting for a {work} at {site}.",
+        "A bit of independent work from {client}: {work} at {site}. Nothing says you have to make it complicated.",
+        "If you're heading that way anyway, {client} is paying for a {work} at {site}."
+      ]
+    },
+    "severe": {
+      "corporate_office": [
+        "{client} requires a {work} at {site}. Failure to return the scan on time voids payment.",
+        "Mandatory field task for {client}: {work} at {site}.",
+        "{client} has issued a field requirement for {site}. Complete the {work} and return the scan within the contracted window.",
+        "Contract authority: {client}. Assignment: {work}. Location: {site}. Late or incomplete data will not be accepted.",
+        "{client} requires verified information from {site}. Perform the {work} exactly as contracted.",
+        "This posting is time-sensitive. {client} requires a {work} at {site}; the return window is part of the contract.",
+        "Do not substitute observation for the contracted deliverable. {client} requires the {work} at {site} and the resulting scan.",
+        "{client} has no use for an incomplete report. Undertake the {work} at {site} and return the required data."
+      ],
+      "bar": [
+        "Do not discuss this loudly. {client} needs a {work} at {site}.",
+        "{client} expects discretion on a {work} at {site}.",
+        "Keep this off the public boards. {client} has a {work} at {site}.",
+        "The client is {client}. The location is {site}. Complete the {work} and do not attract attention.",
+        "Someone is paying {client} rates for a {work} at {site}. They are paying for results, not explanations.",
+        "This one is meant to stay quiet. {client} requires a {work} at {site}.",
+        "No public posting, no unnecessary transmission. {client} wants the {work} at {site}.",
+        "Take the contract only if you understand the word discreet. {client} has a {work} at {site}."
+      ]
+    },
+    "slick": {
+      "corporate_office": [
+        "{client} has a discreet {work} at {site}. Scan, return, collect.",
+        "Opportunity from {client}: {work} at {site} — terms are straightforward.",
+        "{client} has placed a clean little contract on the board: {work} at {site}.",
+        "A well-funded {work} from {client}, location {site}. Minimal ceremony, reliable payment.",
+        "{client} would like an independent set of eyes on {site}. The contract calls for a {work}.",
+        "There's a tidy {client} contract waiting: {work} at {site}. Make the run, make the scan, make the return.",
+        "A straightforward proposition from {client}. {work} at {site}. No need to overthink a paying contract.",
+        "{client} has business at {site} that benefits from an operator outside the chain. The work is a {work}."
+      ],
+      "bar": [
+        "Between us: {client} is funding a {work} at {site}.",
+        "A {work} at {site} with {client} backing — interested?",
+        "Quiet money from {client} for a {work} at {site}.",
+        "There's a private {client} contract on the loose. {work} at {site}. Nice fee, light questions.",
+        "{client} wants an independent operator for a {work} at {site}. They know how to make the payment worthwhile.",
+        "The smart money says {client}. The job says {work} at {site}.",
+        "A discreet client, a simple assignment, a destination: {site}. {client} is paying for the {work}.",
+        "Someone with {client} money wants a ship at {site}. Call it a {work}; call it an opportunity."
+      ]
+    },
+    "courtly": {
+      "corporate_office": [
+        "{client} invites a qualified operator for a {work} at {site}.",
+        "You are requested to undertake a {work} at {site} on behalf of {client}.",
+        "{client} respectfully requests an independent {work} at {site}, with the completed scan to be returned upon conclusion.",
+        "The offices of {client} seek a capable operator to undertake a {work} at {site}.",
+        "{client} has occasion to require an external {work} at {site}. Your findings are requested at the conclusion of the assignment.",
+        "A commission has been placed on behalf of {client}: {work} at {site}. The usual professional courtesies will be observed.",
+        "{client} would be obliged by an independent {work} at {site}. Kindly return the resulting data to the contracting desk.",
+        "You are invited, on behalf of {client}, to conduct a {work} at {site} and furnish the resulting scan."
+      ],
+      "bar": [
+        "A patron suggests {client} may remunerate a {work} at {site}.",
+        "Whispers mention {client} and a {work} waiting at {site}.",
+        "There is said to be a private commission from {client} concerning a {work} at {site}.",
+        "A discreet patron seeks an operator for a {work} at {site}. The name attached to the purse is {client}.",
+        "{client} is rumoured to be seeking assistance with a {work} at {site}.",
+        "A quiet introduction has been made: {client} requires a {work} at {site}, should you be inclined.",
+        "One hears that {client} would reward a capable operator for undertaking a {work} at {site}.",
+        "The bar has a commission of some refinement: a {work} at {site}, with {client} behind the arrangement."
+      ]
+    }
   }
 }

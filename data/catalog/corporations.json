@@ -14,7 +14,8 @@
 			"Sierra Refining",
 			"Altiplano Bulk",
 			"Cordillera Haulage"
-		]
+		],
+		"practice": "extractive"
 	},
 	{
 		"id": "atlas_concern",
@@ -32,7 +33,8 @@
 			"Loadmaster Systems",
 			"Titan-class Yards",
 			"Keystone Extraction"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "biogenesis",
@@ -50,7 +52,8 @@
 			"VitaVault Containment",
 			"GeneSeal Labs",
 			"Clinical Compliance"
-		]
+		],
+		"practice": "life_sciences"
 	},
 	{
 		"id": "carthage_mercantile",
@@ -68,14 +71,15 @@
 			"Punic Commodities",
 			"Mediterranean Exchange",
 			"Carthage Intelligence"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "chettiar",
 		"name": "Chettiar Holdings",
 		"callsign_prefix": "CHET",
 		"ad_voice": "polished",
-		"trade": "Chettiar Holdings \u2014 structured finance across the inner systems.",
+		"trade": "Chettiar Holdings — structured finance across the inner systems.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "fortuna"
@@ -85,7 +89,8 @@
 			"Steward Capital",
 			"Chettiar Commodity House",
 			"Temple Endowment Desk"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "chimera",
@@ -103,7 +108,8 @@
 			"Glasspark Entertainment",
 			"Flex Security",
 			"Experimental Licensing"
-		]
+		],
+		"practice": "security"
 	},
 	{
 		"id": "continuity_foundation",
@@ -121,7 +127,8 @@
 			"Genetic Repository",
 			"Continuity Schools",
 			"Long Horizon Trust"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "creus",
@@ -139,14 +146,15 @@
 			"House Auctions",
 			"MicroLoan Desk",
 			"Property Exchange"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "crown_and_anchor",
 		"name": "Crown & Anchor",
 		"callsign_prefix": "CA",
 		"ad_voice": "polished",
-		"trade": "Crown & Anchor \u2014 insured freight and charter brokerage.",
+		"trade": "Crown & Anchor — insured freight and charter brokerage.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "new_carthage",
@@ -157,7 +165,8 @@
 			"Harbour Charter",
 			"Crown Freight",
 			"Admiralty Bonds"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "cult_of_apex",
@@ -175,14 +184,15 @@
 			"Apex Initiation",
 			"Capsule Rites",
 			"Deep Vault Catalogue"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "dar_al_nour",
 		"name": "Dar al-Nour Trust",
 		"callsign_prefix": "DAN",
 		"ad_voice": "courtly",
-		"trade": "Dar al-Nour Trust \u2014 sharia-compliant trade finance.",
+		"trade": "Dar al-Nour Trust — sharia-compliant trade finance.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "horizon",
@@ -193,7 +203,8 @@
 			"Trust Healthcare",
 			"Waqf Property",
 			"Scholarly Foundation"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "deepspace",
@@ -211,7 +222,8 @@
 			"Frontier Pooling",
 			"Pelagos Collective",
 			"DeepSpace Shares"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "evergreen",
@@ -228,7 +240,8 @@
 			"Rootstock Foods",
 			"Watershed Services",
 			"Greenfield Development"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "four_rivers_zaibatsu",
@@ -245,14 +258,15 @@
 			"Tensho Energy",
 			"Shirayuki Trading",
 			"Zaibatsu House Bank"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "galactic_outcomes",
 		"name": "Galactic Outcomes",
 		"callsign_prefix": "GO",
 		"ad_voice": "blunt",
-		"trade": "Galactic Outcomes \u2014 extraction and salvage, no apologies.",
+		"trade": "Galactic Outcomes — extraction and salvage, no apologies.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "tycho",
@@ -263,7 +277,8 @@
 			"Mercenary Bureau",
 			"Small Arms Division",
 			"Specialist Personnel"
-		]
+		],
+		"practice": "extractive"
 	},
 	{
 		"id": "general_industrial",
@@ -281,14 +296,15 @@
 			"Utility Industrial",
 			"Mass Production Line",
 			"GI Logistics"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "grc",
 		"name": "GRC Inc",
 		"callsign_prefix": "GRC",
 		"ad_voice": "polished",
-		"trade": "GRC Inc \u2014 corporate treasury and settlement rails.",
+		"trade": "GRC Inc — corporate treasury and settlement rails.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "fortuna",
@@ -299,7 +315,8 @@
 			"Speculation Desk",
 			"Settlement Rails",
 			"Competitive Banking"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "greenfields",
@@ -316,7 +333,8 @@
 			"AgriLive Supply",
 			"Plantation Services",
 			"Fresh Distribution"
-		]
+		],
+		"practice": "life_sciences"
 	},
 	{
 		"id": "guangzhou_mercantile",
@@ -333,14 +351,15 @@
 			"Merchant House Finance",
 			"Guangzhou Shipping",
 			"Jade Route Logistics"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "hanseatic_guild",
 		"name": "The Hanseatic Guild",
 		"callsign_prefix": "HANS",
 		"ad_voice": "courtly",
-		"trade": "The Hanseatic Guild \u2014 mutual credit among trusted houses.",
+		"trade": "The Hanseatic Guild — mutual credit among trusted houses.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "new_carthage"
@@ -350,7 +369,8 @@
 			"Hanse Warehouses",
 			"League Shipping",
 			"Merchant Obligation Desk"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "himalaya_triad",
@@ -368,7 +388,8 @@
 			"High Pass Security",
 			"Tibetan Logistics",
 			"Mountain Extraction"
-		]
+		],
+		"practice": "extractive"
 	},
 	{
 		"id": "holt_winters",
@@ -386,7 +407,8 @@
 			"HW Shield Works",
 			"Compact Power",
 			"Winters Aerospace"
-		]
+		],
+		"practice": "aerospace"
 	},
 	{
 		"id": "house_of_roth",
@@ -400,18 +422,19 @@
 			"location_id": "fortuna_habitat"
 		},
 		"brands": [
-			"Roth Priv\u00e9 Banking",
+			"Roth Privé Banking",
 			"Roth Continental Energy",
 			"Inherited Commodities",
 			"Old House Finance"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "karaquazen",
 		"name": "Karaquazen Inc",
 		"callsign_prefix": "KRQ",
 		"ad_voice": "slick",
-		"trade": "Karaquazen Inc \u2014 cheerful service and dependable shipyard work.",
+		"trade": "Karaquazen Inc — cheerful service and dependable shipyard work.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "bela",
@@ -422,7 +445,8 @@
 			"Planetary Lotteries",
 			"Medical Aid Partners",
 			"Operations Franchise"
-		]
+		],
+		"practice": "aerospace"
 	},
 	{
 		"id": "liveworlds",
@@ -439,7 +463,8 @@
 			"Virtual Worlds",
 			"Celebrity Management",
 			"Experience Networks"
-		]
+		],
+		"practice": "media"
 	},
 	{
 		"id": "mercury_communications",
@@ -457,7 +482,8 @@
 			"Relay Navigation",
 			"Broadcast Infrastructure",
 			"Data Services"
-		]
+		],
+		"practice": "media"
 	},
 	{
 		"id": "meridian",
@@ -475,14 +501,15 @@
 			"Current Navigation",
 			"Spine Shipping",
 			"Connectivity Services"
-		]
+		],
+		"practice": "aerospace"
 	},
 	{
 		"id": "microdonald",
 		"name": "MicroDonald Franchise",
 		"callsign_prefix": "MDF",
 		"ad_voice": "slick",
-		"trade": "MicroDonald Franchise \u2014 familiar food, every habitat.",
+		"trade": "MicroDonald Franchise — familiar food, every habitat.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "proxima"
@@ -492,7 +519,8 @@
 			"MDF Consumer Line",
 			"Everyday Essentials",
 			"MDF Hospitality"
-		]
+		],
+		"practice": "retail"
 	},
 	{
 		"id": "monday",
@@ -510,7 +538,8 @@
 			"Monday Core Software",
 			"Monday Cloud Desk",
 			"365 Productivity"
-		]
+		],
+		"practice": "media"
 	},
 	{
 		"id": "morrow_and_sons",
@@ -528,14 +557,15 @@
 			"Preservation Vaults",
 			"Life Assurance",
 			"Cryogenic Services"
-		]
+		],
+		"practice": "retail"
 	},
 	{
 		"id": "octagon",
 		"name": "The Octagon",
 		"callsign_prefix": "OCT",
 		"ad_voice": "polished",
-		"trade": "The Octagon \u2014 diversified holdings, single counterparty.",
+		"trade": "The Octagon — diversified holdings, single counterparty.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "fortuna",
@@ -546,7 +576,8 @@
 			"Opaque Finance",
 			"Subsidiary Network",
 			"Octagon Insurance"
-		]
+		],
+		"practice": "finance"
 	},
 	{
 		"id": "oklahoma_combine",
@@ -563,7 +594,8 @@
 			"Prairie Bulk",
 			"Red Dirt Energy",
 			"Agri Machinery"
-		]
+		],
+		"practice": "extractive"
 	},
 	{
 		"id": "orion_aerospace",
@@ -581,7 +613,8 @@
 			"YardFit Service",
 			"Orion Frames",
 			"AP Propulsion"
-		]
+		],
+		"practice": "aerospace"
 	},
 	{
 		"id": "orion_spur",
@@ -599,7 +632,8 @@
 			"Longhaul Commerce",
 			"Spur Acquisition",
 			"Spur Finance"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "pacific_triad",
@@ -616,7 +650,8 @@
 			"Pacific Entertainment",
 			"Family Network Trade",
 			"Triad Security"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "pararamcovidia",
@@ -634,7 +669,8 @@
 			"Studio Networks",
 			"Deepwell Energy",
 			"Infotainment Bundles"
-		]
+		],
+		"practice": "media"
 	},
 	{
 		"id": "praetorium",
@@ -652,7 +688,8 @@
 			"Executive Protection",
 			"Luxury Residences",
 			"Arbitration Chamber"
-		]
+		],
+		"practice": "security"
 	},
 	{
 		"id": "sakuraya_shinise",
@@ -669,7 +706,8 @@
 			"Asahi Plant",
 			"Wakaba Trading",
 			"Founding Family Office"
-		]
+		],
+		"practice": "retail"
 	},
 	{
 		"id": "seven_bells",
@@ -686,7 +724,8 @@
 			"Peal Communications",
 			"Bell Industrial",
 			"Campana Systems"
-		]
+		],
+		"practice": "extractive"
 	},
 	{
 		"id": "snedecorp",
@@ -704,7 +743,8 @@
 			"Bridge Licensing",
 			"Cyberwall Security",
 			"Commercial Software"
-		]
+		],
+		"practice": "industrial"
 	},
 	{
 		"id": "terra_nova",
@@ -722,7 +762,8 @@
 			"Strip Mining",
 			"Colonial Logistics",
 			"Nova Settlement"
-		]
+		],
+		"practice": "logistics"
 	},
 	{
 		"id": "tukey",
@@ -739,7 +780,8 @@
 			"HandyParts Retail",
 			"Yardfit Aftermarket",
 			"Opportunist Supply"
-		]
+		],
+		"practice": "aerospace"
 	},
 	{
 		"id": "universal_house",
@@ -757,6 +799,7 @@
 			"Mall Hospitality",
 			"House Chandlery",
 			"Franchise Everyday"
-		]
+		],
+		"practice": "retail"
 	}
 ]

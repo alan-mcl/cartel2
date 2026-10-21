@@ -13,6 +13,15 @@ static func run(runner: TestRunner) -> void:
 	_test_planet_scan_complete_at_origin(runner, catalog)
 	_test_cancel_drops_unused_grant(runner, catalog)
 	_test_save_migration_v3(runner, catalog)
+	_test_compose_aerospace_vs_finance_inspection(runner, catalog)
+	_test_compose_peacekeeping_clientless(runner, catalog)
+	_test_compose_bar_survey_with_client(runner, catalog)
+	_test_eligible_types_by_source(runner, catalog)
+	_test_volatile_site_deep_space_no_star(runner, catalog)
+	_test_volatile_site_asteroid_belt_ambient_debris(runner, catalog)
+	_test_volatile_site_dark_debris_orbitals(runner, catalog)
+	_test_volatile_site_object_kinds(runner, catalog)
+	_test_site_description_phrase(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -159,6 +168,166 @@ static func _test_bar_can_generate_empty(runner: TestRunner, catalog: Catalog) -
 			found_empty = true
 			break
 	runner.check(found_empty, "scan: bar chance can yield no offer")
+
+
+static func _test_volatile_site_deep_space_no_star(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "SCN-DS")
+	var offer := _debris_offer(catalog, "proxima_habitat", "scan_deep_space")
+	offer["volatile_site_id"] = "deep_space"
+	offer["site_label"] = "Deep space"
+	var params := ScanCharters.build_volatile_grant_params(catalog, offer)
+	var record_id := VolatileTranslation.grant(session, catalog, params)
+	runner.check(not record_id.is_empty(), "scan site: deep space grant succeeds")
+	var setup: Dictionary = VolatileTranslation.find_by_id(session, record_id).get("setup", {})
+	runner.check(not setup.has("star"), "scan site: deep space has no star")
+
+
+static func _test_volatile_site_asteroid_belt_ambient_debris(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "SCN-BELT")
+	var span := VolatileSites.count_range(catalog.get_volatile_site("asteroid_belt"), "debris")
+	var seen_counts := {}
+	for attempt in range(12):
+		var offer := _debris_offer(catalog, "proxima_habitat", "scan_belt_%d" % attempt)
+		offer["volatile_site_id"] = "asteroid_belt"
+		offer["site_label"] = "Asteroid belt"
+		var params := ScanCharters.build_volatile_grant_params(catalog, offer)
+		var record_id := VolatileTranslation.grant(session, catalog, params)
+		runner.check(not record_id.is_empty(), "scan site: asteroid belt grant succeeds")
+		var setup: Dictionary = VolatileTranslation.find_by_id(session, record_id).get("setup", {})
+		if attempt == 0:
+			var star: Dictionary = setup.get("star", {})
+			runner.check(not star.is_empty(), "scan site: asteroid belt keeps a star")
+		var ambient := 0
+		var has_scan_contact := false
+		var entities: Array = setup.get("entities", [])
+		for entity_variant in entities:
+			if typeof(entity_variant) != TYPE_DICTIONARY:
+				continue
+			var entity: Dictionary = entity_variant
+			var entity_id := str(entity.get("id", ""))
+			if entity_id.begins_with("scan_debris_"):
+				has_scan_contact = true
+				continue
+			if str(entity.get("kind", "")) != "debris":
+				continue
+			ambient += 1
+			runner.check(entity.has("rotation"), "scan site: belt debris has a rotation")
+		runner.check(has_scan_contact, "scan site: mission debris id present")
+		runner.check(
+			ambient >= span.x and ambient <= span.y,
+			"scan site: belt ambient debris count in catalog range"
+		)
+		seen_counts[ambient] = true
+	runner.check(seen_counts.size() > 1, "scan site: belt debris count varies")
+
+
+static func _test_volatile_site_dark_debris_orbitals(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "SCN-DARK")
+	var site := catalog.get_volatile_site("dark_debris")
+	var debris_span := VolatileSites.count_range(site, "debris")
+	var orbital_span := VolatileSites.count_range(site, "orbital")
+	var offer := _debris_offer(catalog, "proxima_habitat", "scan_dark")
+	offer["volatile_site_id"] = "dark_debris"
+	offer["site_label"] = "Dark debris field"
+	var params := ScanCharters.build_volatile_grant_params(catalog, offer)
+	var record_id := VolatileTranslation.grant(session, catalog, params)
+	runner.check(not record_id.is_empty(), "scan site: dark debris grant succeeds")
+	var setup: Dictionary = VolatileTranslation.find_by_id(session, record_id).get("setup", {})
+	runner.check(not setup.has("star"), "scan site: dark debris has no star")
+	var debris := 0
+	var orbitals := 0
+	for entity_variant in setup.get("entities", []):
+		if typeof(entity_variant) != TYPE_DICTIONARY:
+			continue
+		var entity: Dictionary = entity_variant
+		if str(entity.get("id", "")).begins_with("scan_debris_"):
+			continue
+		var kind := str(entity.get("kind", ""))
+		if kind == "debris":
+			debris += 1
+			runner.check(entity.has("rotation"), "scan site: dark debris rock has a rotation")
+		elif kind == "orbital":
+			orbitals += 1
+			runner.check(entity.has("rotation"), "scan site: ambient orbital has a rotation")
+			var sprite := str(entity.get("sprite", ""))
+			runner.check(
+				VolatileSites.ORBITAL_SPRITES.has(sprite),
+				"scan site: ambient orbital uses a catalog sprite"
+			)
+	runner.check(
+		debris >= debris_span.x and debris <= debris_span.y,
+		"scan site: dark debris count in catalog range"
+	)
+	runner.check(
+		orbitals >= orbital_span.x and orbitals <= orbital_span.y,
+		"scan site: ambient orbital count in catalog range"
+	)
+
+
+static func _test_volatile_site_object_kinds(runner: TestRunner, catalog: Catalog) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 90210
+	var site := catalog.get_volatile_site("asteroid_belt")
+	var layout := VolatileSites.generate_site_layout(site, catalog, rng, 7500.0)
+	var entities: Array = layout.get("entities", [])
+	var debris_span := VolatileSites.count_range(site, "debris")
+	var debris := 0
+	var has_derelict := false
+	var has_mine := false
+	for entity_variant in entities:
+		if typeof(entity_variant) != TYPE_DICTIONARY:
+			continue
+		var entity: Dictionary = entity_variant
+		var kind := str(entity.get("kind", ""))
+		if kind == "debris":
+			debris += 1
+		elif kind == "derelict":
+			has_derelict = true
+			runner.check(
+				not str(entity.get("sprite", "")).is_empty(),
+				"scan site: derelict has a chassis sprite"
+			)
+		elif kind == "mine":
+			has_mine = true
+			runner.check_eq(str(entity.get("delivery", "")), "ballistic", "scan site: mine delivery")
+			var packets: Dictionary = entity.get("packets", {})
+			runner.check(packets.has("kinetic"), "scan site: mine kinetic packet")
+	runner.check(debris >= debris_span.x and debris <= debris_span.y, "scan site: layout debris in range")
+	var saw_extra_kind := has_derelict or has_mine
+	if not saw_extra_kind:
+		for seed_value in range(1, 120):
+			var probe := RandomNumberGenerator.new()
+			probe.seed = seed_value
+			for entity_variant in VolatileSites.generate_site_layout(site, catalog, probe, 7500.0).get(
+				"entities",
+				[]
+			):
+				if typeof(entity_variant) != TYPE_DICTIONARY:
+					continue
+				var probe_kind := str((entity_variant as Dictionary).get("kind", ""))
+				if probe_kind == "derelict" or probe_kind == "mine":
+					saw_extra_kind = true
+					break
+			if saw_extra_kind:
+				break
+	runner.check(saw_extra_kind, "scan site: belt can roll derelicts or mines")
+
+	var deep := catalog.get_volatile_site("deep_space")
+	var saw_zero_marker := false
+	for seed_value in range(40):
+		var roller := RandomNumberGenerator.new()
+		roller.seed = seed_value
+		var deep_layout := VolatileSites.generate_site_layout(deep, catalog, roller, 7500.0)
+		if deep_layout.get("entities", []).is_empty():
+			saw_zero_marker = true
+			break
+	runner.check(saw_zero_marker, "scan site: deep space can roll zero props")
+
+	var ships: Array = layout.get("ambient_ships", [])
+	if not ships.is_empty():
+		var ship: Dictionary = ships[0]
+		runner.check(bool(ship.get("anonymous", false)), "scan site: ambient ship flagged anonymous")
+		runner.check(not str(ship.get("template_id", "")).is_empty(), "scan site: ambient ship template")
 
 
 static func _test_accept_volatile_grants_record(runner: TestRunner, catalog: Catalog) -> void:
@@ -309,3 +478,157 @@ static func _test_save_migration_v3(runner: TestRunner, catalog: Catalog) -> voi
 	missions.from_dict(migrated)
 	runner.check_eq(missions.freight_accepted.size(), 1, "scan save: keeps freight data")
 	runner.check(missions.scan_accepted.is_empty(), "scan save: empty scan accepted")
+
+
+static func _test_site_description_phrase(runner: TestRunner, catalog: Catalog) -> void:
+	var high := catalog.get_volatile_site("high_orbit")
+	runner.check_eq(
+		VolatileSites.description_phrase(high),
+		"a high orbit",
+		"scan prose: high orbit article and case"
+	)
+	var molniya := catalog.get_volatile_site("molniya_orbit")
+	runner.check(
+		VolatileSites.description_phrase(molniya).contains("Molniya"),
+		"scan prose: Molniya name preserved"
+	)
+	var l3 := catalog.get_volatile_site("l3_halo_orbit")
+	runner.check(
+		VolatileSites.description_phrase(l3).begins_with("an L3"),
+		"scan prose: L-point uses an"
+	)
+	var kirkwood := catalog.get_volatile_site("kirkwood_gap")
+	runner.check(
+		VolatileSites.description_phrase(kirkwood).begins_with("the Kirkwood"),
+		"scan prose: Kirkwood gap uses the"
+	)
+	var filled := ScanCharters._fill_scan_frame(
+		"Peaceforce posting: {work} at {site}.",
+		"Hull condition check",
+		VolatileSites.description_phrase(high),
+		""
+	)
+	runner.check(filled.contains("hull condition check"), "scan prose: work phrase lowercased in frame")
+	runner.check(filled.contains("a high orbit"), "scan prose: site phrase in frame")
+	runner.check(filled.begins_with("Peaceforce"), "scan prose: sentence capitalised")
+	var work_first := ScanCharters._fill_scan_frame(
+		"{work} at {site}.",
+		"Field survey",
+		VolatileSites.description_phrase(high),
+		""
+	)
+	runner.check(work_first.begins_with("Field survey"), "scan prose: capitalises work-led sentence")
+
+
+static func _test_compose_aerospace_vs_finance_inspection(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := ScanCharters.config(catalog)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 42
+	var site := "Drift survey point"
+	var aero := ScanCharters.compose_contract(
+		cfg,
+		catalog,
+		ScanCharters.BOARD_CORPORATE,
+		"inspection",
+		"volatile_ship",
+		site,
+		"holt_winters",
+		rng
+	)
+	var finance := ScanCharters.compose_contract(
+		cfg,
+		catalog,
+		ScanCharters.BOARD_CORPORATE,
+		"inspection",
+		"volatile_ship",
+		site,
+		"chettiar",
+		rng
+	)
+	runner.check_eq(
+		str(aero.get("designation", "")),
+		"Hull condition check",
+		"scan compose: aerospace inspection title"
+	)
+	runner.check_eq(
+		str(finance.get("designation", "")),
+		"Asset verification",
+		"scan compose: finance inspection title"
+	)
+	runner.check(
+		str(aero.get("description", "")).contains("Holt-Winters"),
+		"scan compose: aerospace description names client"
+	)
+	runner.check(
+		str(finance.get("description", "")).contains("Chettiar"),
+		"scan compose: finance description names client"
+	)
+	runner.check(
+		str(aero.get("description", "")) != str(finance.get("description", "")),
+		"scan compose: aerospace and finance descriptions differ"
+	)
+
+
+static func _test_compose_peacekeeping_clientless(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := ScanCharters.config(catalog)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var composed := ScanCharters.compose_contract(
+		cfg,
+		catalog,
+		ScanCharters.BOARD_PEACEKEEPING,
+		"reconnaissance",
+		"volatile_orbital",
+		"Prospect marker",
+		"",
+		rng
+	)
+	runner.check(composed.get("corporation_id", "x").is_empty(), "scan compose: peacekeeping has no client")
+	runner.check_eq(
+		str(composed.get("designation", "")),
+		"Reconnaissance pass",
+		"scan compose: peacekeeping work phrase"
+	)
+	runner.check(
+		str(composed.get("description", "")).contains("prospect marker"),
+		"scan compose: peacekeeping frame includes site phrase"
+	)
+	var keys := ScanCharters.eligible_type_keys(cfg, ScanCharters.BOARD_PEACEKEEPING)
+	runner.check(keys.has("reconnaissance"), "scan compose: peacekeeping allows reconnaissance")
+	runner.check(keys.has("intelligence"), "scan compose: peacekeeping allows intelligence")
+	runner.check(keys.has("survey"), "scan compose: peacekeeping allows survey")
+	runner.check(not keys.has("inspection"), "scan compose: peacekeeping excludes inspection")
+
+
+static func _test_compose_bar_survey_with_client(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := ScanCharters.config(catalog)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 99
+	var composed := ScanCharters.compose_contract(
+		cfg,
+		catalog,
+		ScanCharters.BOARD_BAR,
+		"survey",
+		"volatile_debris",
+		"Unlisted contact",
+		"creus",
+		rng
+	)
+	runner.check_eq(str(composed.get("corporation_id", "")), "creus", "scan compose: bar client id stored")
+	runner.check(
+		str(composed.get("description", "")).contains("Creus"),
+		"scan compose: bar voice names client"
+	)
+	runner.check(
+		str(composed.get("designation", "")).find("survey") >= 0
+		or str(composed.get("designation", "")).find("Survey") >= 0,
+		"scan compose: bar survey work phrase present"
+	)
+
+
+static func _test_eligible_types_by_source(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := ScanCharters.config(catalog)
+	var corp_keys := ScanCharters.eligible_type_keys(cfg, ScanCharters.BOARD_CORPORATE)
+	runner.check(corp_keys.has("inspection"), "scan compose: corporate allows inspection")
+	runner.check(corp_keys.has("assessment"), "scan compose: corporate allows assessment")
+	runner.check(not corp_keys.has("reconnaissance"), "scan compose: corporate excludes reconnaissance")

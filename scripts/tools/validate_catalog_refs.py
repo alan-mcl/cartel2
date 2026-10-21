@@ -820,6 +820,223 @@ VALID_CORPORATE_AD_VOICES = frozenset(
     {"polished", "blunt", "cheerful", "severe", "slick", "courtly"}
 )
 
+VALID_SCAN_SOURCES = frozenset({"peacekeeping", "corporate_office", "bar"})
+VALID_SCAN_TARGETS = frozenset(
+    {"planet", "volatile_debris", "volatile_orbital", "volatile_ship"}
+)
+VALID_SCAN_OBJECTIVES = frozenset({"active_scan"})
+SCAN_CLIENT_TYPES = frozenset({"inspection", "assessment", "survey"})
+SCAN_PEACEKEEPING_TYPES = frozenset({"reconnaissance", "intelligence", "survey"})
+
+
+def check_scan_missions(doc: object, corporations: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("scan_missions.json must be an object")
+        return errors
+
+    for key in (
+        "peacekeeping_offers_per_day",
+        "corporate_offers_per_day",
+        "bar_scan_chance",
+        "base_pay",
+        "cancel_penalty_fraction",
+        "volatile_duration_hours",
+        "volatile_return_hours",
+    ):
+        if key not in doc:
+            errors.append(f"scan_missions.json: missing {key}")
+
+    types = doc.get("types", {})
+    if not isinstance(types, dict) or not types:
+        errors.append("scan_missions.json: types must be a non-empty object")
+        return errors
+
+    for type_id, type_def in types.items():
+        if not isinstance(type_def, dict):
+            errors.append(f"scan_missions type {type_id}: must be object")
+            continue
+        objective = str(type_def.get("objective", ""))
+        if objective not in VALID_SCAN_OBJECTIVES:
+            errors.append(f"scan_missions type {type_id}: invalid objective '{objective}'")
+        sources = type_def.get("sources", [])
+        if not isinstance(sources, list) or not sources:
+            errors.append(f"scan_missions type {type_id}: sources required")
+        else:
+            for src in sources:
+                if str(src) not in VALID_SCAN_SOURCES:
+                    errors.append(f"scan_missions type {type_id}: invalid source '{src}'")
+        targets = type_def.get("targets", [])
+        if not isinstance(targets, list) or not targets:
+            errors.append(f"scan_missions type {type_id}: targets required")
+        else:
+            for tgt in targets:
+                if str(tgt) not in VALID_SCAN_TARGETS:
+                    errors.append(f"scan_missions type {type_id}: invalid target '{tgt}'")
+        diff = type_def.get("difficulty")
+        if diff is not None and float(diff) <= 0.0:
+            errors.append(f"scan_missions type {type_id}: difficulty must be positive")
+
+    sources_cfg = doc.get("sources", {})
+    if not isinstance(sources_cfg, dict):
+        errors.append("scan_missions.json: sources must be an object")
+    else:
+        for src in VALID_SCAN_SOURCES:
+            if src not in sources_cfg:
+                errors.append(f"scan_missions.json: missing sources.{src}")
+        pk = sources_cfg.get("peacekeeping", {})
+        if isinstance(pk, dict):
+            frames = pk.get("frames", [])
+            if not isinstance(frames, list) or not frames:
+                errors.append("scan_missions.json: peacekeeping frames required")
+        bar = sources_cfg.get("bar", {})
+        if isinstance(bar, dict):
+            anon = bar.get("anonymous_frames", [])
+            if not isinstance(anon, list) or not anon:
+                errors.append("scan_missions.json: bar anonymous_frames required")
+
+    practices = doc.get("practices", {})
+    if not isinstance(practices, dict) or not practices:
+        errors.append("scan_missions.json: practices must be a non-empty object")
+    else:
+        if "peacekeeping" not in practices:
+            errors.append("scan_missions.json: missing practices.peacekeeping")
+        else:
+            pk_practice = practices.get("peacekeeping", {})
+            if isinstance(pk_practice, dict):
+                for req in SCAN_PEACEKEEPING_TYPES:
+                    if req not in pk_practice:
+                        errors.append(
+                            f"scan_missions.json: peacekeeping practice missing '{req}'"
+                        )
+        for practice_id, practice_def in practices.items():
+            if practice_id == "peacekeeping":
+                continue
+            if not isinstance(practice_def, dict):
+                errors.append(f"scan_missions practice {practice_id}: must be object")
+                continue
+            for req in SCAN_CLIENT_TYPES:
+                if req not in practice_def:
+                    errors.append(
+                        f"scan_missions practice {practice_id}: missing client phrase '{req}'"
+                    )
+
+    voices = doc.get("voices", {})
+    if not isinstance(voices, dict):
+        errors.append("scan_missions.json: voices must be an object")
+    else:
+        for voice in sorted(VALID_CORPORATE_AD_VOICES):
+            if voice not in voices:
+                errors.append(f"scan_missions.json: missing voices.{voice}")
+                continue
+            voice_def = voices.get(voice, {})
+            if not isinstance(voice_def, dict):
+                continue
+            for channel in ("corporate_office", "bar"):
+                lines = voice_def.get(channel, [])
+                if not isinstance(lines, list) or not lines:
+                    errors.append(
+                        f"scan_missions.json: voices.{voice}.{channel} must be non-empty"
+                    )
+
+    if isinstance(practices, dict):
+        valid_practices = set(practices.keys())
+        for corp_id, corp in corporations.items():
+            if not isinstance(corp, dict):
+                continue
+            practice = str(corp.get("practice", "")).strip()
+            if not practice:
+                errors.append(f"corporations.json: {corp_id} missing practice")
+            elif practice not in valid_practices:
+                errors.append(
+                    f"corporations.json: {corp_id} practice '{practice}' unknown in scan_missions"
+                )
+
+    return errors
+
+
+def check_volatile_sites(doc: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("volatile_sites.json must be an object")
+        return errors
+    sites = doc.get("sites", [])
+    if not isinstance(sites, list) or not sites:
+        errors.append("volatile_sites.json: sites must be a non-empty array")
+        return errors
+    seen_ids: set[str] = set()
+    for index, entry in enumerate(sites):
+        if not isinstance(entry, dict):
+            errors.append(f"volatile_sites.json: sites[{index}] must be an object")
+            continue
+        site_id = str(entry.get("id", "")).strip()
+        if not site_id:
+            errors.append(f"volatile_sites.json: sites[{index}] missing id")
+            continue
+        if site_id in seen_ids:
+            errors.append(f"volatile_sites.json: duplicate site id '{site_id}'")
+        seen_ids.add(site_id)
+        label = str(entry.get("label", "")).strip()
+        if not label:
+            errors.append(f"volatile_sites.json: {site_id} missing label")
+        if "star" not in entry:
+            errors.append(f"volatile_sites.json: {site_id} missing star flag")
+        elif not isinstance(entry.get("star"), bool):
+            errors.append(f"volatile_sites.json: {site_id} star must be boolean")
+        article = str(entry.get("article", "")).strip()
+        if article not in ("a", "an", "the"):
+            errors.append(f"volatile_sites.json: {site_id} article must be a, an, or the")
+        if "objects" not in entry:
+            continue
+        objects = entry.get("objects")
+        if not isinstance(objects, list):
+            errors.append(f"volatile_sites.json: {site_id} objects must be an array")
+            continue
+        seen_kinds: set[str] = set()
+        for object_index, spec in enumerate(objects):
+            if not isinstance(spec, dict):
+                errors.append(
+                    f"volatile_sites.json: {site_id} objects[{object_index}] must be an object"
+                )
+                continue
+            kind = str(spec.get("kind", "")).strip()
+            if kind == "npc_ship":
+                kind = "ship"
+            allowed_kinds = (
+                "debris",
+                "orbital",
+                "derelict",
+                "cargo",
+                "marker",
+                "mine",
+                "ship",
+            )
+            if kind not in allowed_kinds:
+                errors.append(
+                    f"volatile_sites.json: {site_id} objects[{object_index}] "
+                    f"kind must be one of {', '.join(allowed_kinds)}"
+                )
+                continue
+            if kind in seen_kinds:
+                errors.append(f"volatile_sites.json: {site_id} duplicate object kind '{kind}'")
+            seen_kinds.add(kind)
+            count = spec.get("count")
+            if (
+                not isinstance(count, list)
+                or len(count) != 2
+                or not all(isinstance(value, int) and not isinstance(value, bool) for value in count)
+            ):
+                errors.append(
+                    f"volatile_sites.json: {site_id} {kind} count must be [min, max] integers"
+                )
+                continue
+            lo, hi = int(count[0]), int(count[1])
+            if lo < 0 or hi < lo or hi > 32:
+                errors.append(
+                    f"volatile_sites.json: {site_id} {kind} count must satisfy 0 <= min <= max <= 32"
+                )
+    return errors
+
 
 def check_corporation_office_ticker(
     corporations: dict[str, dict],
@@ -1034,6 +1251,8 @@ def main() -> int:
     passenger_missions = load_object(CATALOG / "passenger_missions.json")
     freight_missions = load_object(CATALOG / "freight_missions.json")
     bounty_missions = load_object(CATALOG / "bounty_missions.json")
+    scan_missions = load_object(CATALOG / "scan_missions.json")
+    volatile_sites = load_object(CATALOG / "volatile_sites.json")
     sanctions_doc = load_object(CATALOG / "sanctions.json")
     commodities = load_array(CATALOG / "commodities.json")
     commodities_by_id = index_by_id(commodities)
@@ -1045,6 +1264,8 @@ def main() -> int:
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))
     errors.extend(check_bounty_missions(bounty_missions, ships))
+    errors.extend(check_scan_missions(scan_missions, corporations))
+    errors.extend(check_volatile_sites(volatile_sites))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
     )

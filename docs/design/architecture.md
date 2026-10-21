@@ -151,16 +151,26 @@ Successful gameplay mutations publish typed events on `GameSession.events` (`Eve
 `MissionSubsystem` is registered on production `Simulation` and drives daily passenger
 charter offers from `passenger_missions.json` (terminal departures and civilian fares at
 bars), freight lots from `freight_missions.json`, and **scan charters** from
-`scan_missions.json`. Scan work is posted per desk (peacekeeping offices and corporate
-liaison offices on major-planet habitats, plus occasional bar tips at Davidsons): accept
-grants a volatile survey site or points at a neighbouring system’s planet, the pilot
+`scan_missions.json`. Scan work is **combinatorial**: [`ScanCharters`](scripts/gameplay/scan_charters.gd)
+assembles each offer from a mechanical **type** (reconnaissance, intelligence, survey,
+inspection, assessment), a desk **source** (peacekeeping, corporate office, bar), an optional
+**client** corporation (`practice` + `ad_voice` on [`corporations.json`](data/catalog/corporations.json)),
+a **target** kind, and a **location**. Global timing and pay knobs stay at the top of
+`scan_missions.json`; types declare objective, eligible sources, targets, and difficulty.
+Player-facing titles use practice-specific work phrases (for example finance “asset verification”
+vs aerospace “hull condition check” for the same inspection type); descriptions come from
+peacekeeping frame lists or voice-keyed corporate/bar templates with `{client}`, `{work}`, and
+`{site}`. Volatile locations pick a row from [`volatile_sites.json`](data/catalog/volatile_sites.json)
+(label, optional star, and count ranges for debris, orbitals, derelicts, cargo, nav or survey
+markers, proximity mines, and anonymous loitering ships). Grant rolls those counts into placed
+props and `setup.ambient_ships`, then merges the mission contact. Accept grants a volatile survey site or a neighbouring planet; the pilot
 **active-scans** the contracted contact (`PlayerState.scan_satisfies_contract` matches
 sector and post-accept timestamp), then docks back at the **origin** habitat for pay.
 Volatile grants carry optional `setup.scan_contact` ship contacts spawned in
 `WorldLoader._load_volatile_sector`. Daily boards invalidate at GST day rollover; the first
 charter UI open at a docked habitat generates that habitat’s passenger, freight, and scan
 offers only (not every habitat in the catalog). Accepted charters persist in subsystem
-save data (missions save version 4); completion and cancellation are handled in gameplay,
+save data (missions save version 5); completion and cancellation are handled in gameplay,
 not UI.
 
 **Bounty charters** from `bounty_missions.json` post on the same peacekeeping, corporate,

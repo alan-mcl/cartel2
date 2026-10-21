@@ -19,6 +19,10 @@ const SCENES := {
 	"jump_gate": "res://scenes/world/jump_gate.tscn",
 	"debris": "res://scenes/world/debris_rock.tscn",
 	"orbital": "res://scenes/world/orbital.tscn",
+	"derelict": "res://scenes/world/volatile_static.tscn",
+	"cargo": "res://scenes/world/volatile_static.tscn",
+	"marker": "res://scenes/world/volatile_static.tscn",
+	"mine": "res://scenes/world/proximity_mine.tscn",
 }
 
 const LAUNCH_OFFSET := 220.0
@@ -49,6 +53,7 @@ var _habitat_sprite_path: String = ""
 var _gate_sprite_path: String = ""
 var _volatile_scan_contact: Dictionary = {}
 var _volatile_orbital_entity_ids: Array[String] = []
+var _volatile_entity_contact_meta: Dictionary = {}
 var _volatile_star_setup: Dictionary = {}
 
 
@@ -72,6 +77,7 @@ func clear_world(world_root: Node2D) -> void:
 	_nspace_field = null
 	_uses_translation_beacon = false
 	_debris_entity_ids.clear()
+	_volatile_entity_contact_meta.clear()
 	_planet_diameter = 2000.0
 	_habitat_interactable_id = ""
 	_gate_interactable_id = ""
@@ -79,6 +85,7 @@ func clear_world(world_root: Node2D) -> void:
 	_gate_sprite_path = ""
 	_volatile_scan_contact = {}
 	_volatile_orbital_entity_ids.clear()
+	_volatile_entity_contact_meta.clear()
 	_volatile_star_setup = {}
 
 
@@ -159,8 +166,11 @@ func _load_volatile_sector(
 			var entity: Dictionary = entity_variant
 			_spawn_entity(world_root, entity, catalog, session)
 			var entity_id := str(entity.get("id", ""))
-			if str(entity.get("kind", "")) == "orbital" and not entity_id.is_empty():
+			var entity_kind := str(entity.get("kind", ""))
+			if entity_kind == "orbital" and not entity_id.is_empty():
 				_volatile_orbital_entity_ids.append(entity_id)
+			elif entity_kind in ["derelict", "cargo", "marker", "mine"] and not entity_id.is_empty():
+				_volatile_entity_contact_meta[entity_id] = entity.duplicate(true)
 
 	var scan_contact: Variant = setup.get("scan_contact", {})
 	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
@@ -703,6 +713,7 @@ func _build_volatile_site_contacts(_catalog: Catalog) -> Array:
 		contacts.append(orbital_contact)
 
 	contacts.append_array(_build_debris_contacts())
+	contacts.append_array(_build_volatile_prop_contacts())
 
 	if spawned_by_id.has("local_star"):
 		var star_display := get_local_star_display()
@@ -771,6 +782,49 @@ func _build_debris_contacts() -> Array:
 		_merge_lock_display_fields(debris_contact, DEBRIS_SPRITE)
 		contacts.append(debris_contact)
 	_debris_entity_ids = surviving_ids
+	return contacts
+
+
+func _build_volatile_prop_contacts() -> Array:
+	var contacts: Array = []
+	var surviving: Dictionary = {}
+	for entity_id in _volatile_entity_contact_meta.keys():
+		var meta: Dictionary = _volatile_entity_contact_meta[entity_id]
+		var node: Variant = spawned_by_id.get(entity_id)
+		if node == null or not is_instance_valid(node) or not (node is Node2D):
+			continue
+		surviving[entity_id] = meta
+		var prop_node := node as Node2D
+		var kind := str(meta.get("kind", ""))
+		var label := str(meta.get("label", kind.capitalize()))
+		var sprite_path := str(meta.get("sprite", DEBRIS_SPRITE))
+		var contact := {
+			"id": entity_id,
+			"name": label,
+			"short_label": "",
+			"position": prop_node.global_position,
+			"velocity": Vector2.ZERO,
+			"heading_rad": prop_node.global_rotation - PI * 0.5,
+		}
+		match kind:
+			"derelict", "cargo":
+				contact["contact_kind"] = "debris"
+				var health_ratio := 1.0
+				if prop_node.has_method("health_ratio"):
+					health_ratio = float(prop_node.call("health_ratio"))
+				contact["debris_health_ratio"] = health_ratio
+				_merge_lock_display_fields(contact, sprite_path)
+			"marker":
+				contact["contact_kind"] = "landmark"
+				_merge_lock_display_fields(contact, sprite_path, 40.0)
+			"mine":
+				contact["contact_kind"] = "landmark"
+				contact["name"] = "Mine"
+				_merge_lock_display_fields(contact, sprite_path, 36.0)
+			_:
+				continue
+		contacts.append(contact)
+	_volatile_entity_contact_meta = surviving
 	return contacts
 
 
@@ -1164,6 +1218,12 @@ func _spawn_entity(
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
+	elif kind in ["derelict", "cargo", "marker"]:
+		if instance.has_method("configure"):
+			instance.call("configure", entity)
+	elif kind == "mine":
+		if instance.has_method("configure"):
+			instance.call("configure", entity)
 	else:
 		if instance is Node2D and entity.has("position"):
 			var pos: Dictionary = entity.get("position", {})

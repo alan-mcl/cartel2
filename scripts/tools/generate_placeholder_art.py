@@ -349,6 +349,42 @@ def main() -> None:
 </svg>""",
     )
 
+    write_text(
+        ASSETS / "world/cargo_container.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="72" height="56" viewBox="-36 -28 72 56">
+  <rect x="-30" y="-18" width="60" height="36" rx="4" fill="#6a7580" stroke="#4a5560" stroke-width="2"/>
+  <line x1="-30" y1="-6" x2="30" y2="-6" stroke="#4a5560" stroke-width="2"/>
+  <line x1="-10" y1="-18" x2="-10" y2="18" stroke="#4a5560" stroke-width="2"/>
+  <line x1="10" y1="-18" x2="10" y2="18" stroke="#4a5560" stroke-width="2"/>
+</svg>""",
+    )
+    write_text(
+        ASSETS / "world/nav_buoy.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="48" height="96" viewBox="-24 -48 48 96">
+  <line x1="0" y1="20" x2="0" y2="44" stroke="#8898a8" stroke-width="3"/>
+  <polygon points="0,-40 -18,16 18,16" fill="#c8a030" stroke="#806820" stroke-width="2"/>
+  <circle cx="0" cy="0" r="6" fill="#506070"/>
+</svg>""",
+    )
+    write_text(
+        ASSETS / "world/survey_marker.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="-32 -32 64 64">
+  <circle cx="0" cy="0" r="28" fill="none" stroke="#70a0c0" stroke-width="3"/>
+  <line x1="-20" y1="0" x2="20" y2="0" stroke="#70a0c0" stroke-width="2"/>
+  <line x1="0" y1="-20" x2="0" y2="20" stroke="#70a0c0" stroke-width="2"/>
+  <circle cx="0" cy="0" r="4" fill="#90c0e0"/>
+</svg>""",
+    )
+    write_text(
+        ASSETS / "world/mine.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="-28 -28 56 56">
+  <circle cx="0" cy="0" r="22" fill="#505860" stroke="#303840" stroke-width="3"/>
+  <line x1="-16" y1="-16" x2="16" y2="16" stroke="#c04040" stroke-width="4"/>
+  <line x1="16" y1="-16" x2="-16" y2="16" stroke="#c04040" stroke-width="4"/>
+  <circle cx="0" cy="0" r="6" fill="#808890"/>
+</svg>""",
+    )
+
     write_text(ASSETS / "ui/.gitkeep", "")
 
     write_png(ASSETS / "space/stars_far.png", 512, 512, stars_png(512, 512, 180, 90210))

@@ -3,6 +3,7 @@ extends RefCounted
 
 const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.gd")
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+const TrafficSpawnScript := preload("res://scripts/gameplay/traffic_spawn.gd")
 
 
 static func run(runner: TestRunner) -> void:
@@ -12,6 +13,7 @@ static func run(runner: TestRunner) -> void:
 	_test_near_lod_tracks_sim_slot(runner, catalog)
 	_test_detection_stagger(runner, catalog)
 	_test_clear_drops_fleet(runner, catalog)
+	_test_ambient_ship_spawn_anonymous(runner, catalog)
 
 
 static func _test_setup_fleet_size(runner: TestRunner, catalog: Catalog) -> void:
@@ -149,3 +151,24 @@ static func _test_clear_drops_fleet(runner: TestRunner, catalog: Catalog) -> voi
 
 	director.clear()
 	runner.check_eq(director.actors.size(), 0, "director clear drops actors")
+
+
+static func _test_ambient_ship_spawn_anonymous(runner: TestRunner, catalog: Catalog) -> void:
+	var traffic_config := catalog.get_traffic_config()
+	var ship_record := {
+		"id": "ambient_ship_test",
+		"template_id": str(catalog.list_ships()[0].get("id", "")),
+		"position": {"x": 1200.0, "y": 800.0},
+		"heading_rad": 0.2,
+		"anonymous": true,
+	}
+	var actor = TrafficSpawnScript.create_from_ambient_ship(
+		catalog,
+		traffic_config,
+		ship_record,
+		"proxima"
+	)
+	runner.check(actor != null, "traffic: ambient ship spawns")
+	runner.check_eq(str(actor.callsign), "", "traffic: ambient ship has no callsign")
+	runner.check_eq(str(actor.affiliation), "", "traffic: ambient ship has no affiliation")
+	runner.check(not actor.owned_ship.transponder_enabled, "traffic: ambient ship transponder off")

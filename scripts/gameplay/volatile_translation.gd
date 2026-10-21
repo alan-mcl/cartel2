@@ -5,7 +5,14 @@ const SECTOR_PREFIX := "volatile:"
 const SOLUTION_BASE := 900_000_000
 const DEFAULT_FRICTION := 10
 const ALLOWED_N := [4, 5, 6]
-const ALLOWED_ENTITY_KINDS: Array[String] = ["debris", "orbital"]
+const ALLOWED_ENTITY_KINDS: Array[String] = [
+	"debris",
+	"orbital",
+	"derelict",
+	"cargo",
+	"marker",
+	"mine",
+]
 const DEFAULT_DESTINATION_DESCRIPTION := "Single-use off-network site"
 const SITE_STAR_DEEP_SPACE_WEIGHT := 0.2
 const SITE_STAR_LOCAL_WEIGHT := 0.4
@@ -122,7 +129,10 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 	_next_grant_index += 1
 	var record_id := "vt_%d" % _next_grant_index
 	var setup: Dictionary = _bind_setup_record_id(setup_raw as Dictionary, record_id)
-	if not _setup_has_star(setup):
+	if bool(setup.get("omit_star", false)):
+		setup.erase("omit_star")
+		setup.erase("star")
+	elif not _setup_has_star(setup):
 		var picked := pick_site_star(catalog, source_sector_id, record_id)
 		if picked.is_empty():
 			setup.erase("star")
@@ -616,6 +626,16 @@ static func _bind_setup_record_id(setup: Dictionary, record_id: String) -> Dicti
 		var target: Dictionary = bounty_target.duplicate(true)
 		target["id"] = str(target.get("id", "")).replace("{{ID}}", record_id)
 		out["bounty_target"] = target
+	var ambient_ships: Variant = out.get("ambient_ships", [])
+	if typeof(ambient_ships) == TYPE_ARRAY:
+		var bound_ships: Array = []
+		for ship_variant in ambient_ships:
+			if typeof(ship_variant) != TYPE_DICTIONARY:
+				continue
+			var ship: Dictionary = ship_variant.duplicate(true)
+			ship["id"] = str(ship.get("id", "")).replace("{{ID}}", record_id)
+			bound_ships.append(ship)
+		out["ambient_ships"] = bound_ships
 	return out
 
 
@@ -640,6 +660,13 @@ static func _validate_setup(setup: Dictionary) -> bool:
 			return false
 		if str(bounty_target.get("template_id", "")).is_empty():
 			return false
+	var ambient_ships: Variant = setup.get("ambient_ships", [])
+	if typeof(ambient_ships) == TYPE_ARRAY:
+		for ship_variant in ambient_ships:
+			if typeof(ship_variant) != TYPE_DICTIONARY:
+				return false
+			if str(ship_variant.get("template_id", "")).is_empty():
+				return false
 	return true
 
 
@@ -677,6 +704,9 @@ static func _setup_to_save(setup: Variant) -> Dictionary:
 	var bounty_target: Variant = src.get("bounty_target", {})
 	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
 		out["bounty_target"] = bounty_target.duplicate(true)
+	var ambient_ships: Variant = src.get("ambient_ships", [])
+	if typeof(ambient_ships) == TYPE_ARRAY and not ambient_ships.is_empty():
+		out["ambient_ships"] = ambient_ships.duplicate(true)
 	return out
 
 

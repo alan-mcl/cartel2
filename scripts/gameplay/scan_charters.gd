@@ -5,6 +5,16 @@ const BOARD_BAR := "bar"
 const BOARD_PEACEKEEPING := "peacekeeping"
 const BOARD_CORPORATE := "corporate_office"
 
+const _VOICE_FALLBACK := "polished"
+const _VALID_VOICES: Array[String] = [
+	"polished",
+	"blunt",
+	"cheerful",
+	"severe",
+	"slick",
+	"courtly",
+]
+
 const MAJOR_HABITATS: Array = [
 	{"habitat_id": "proxima_habitat", "sector_id": "proxima", "peaceforce": "Proxima Peaceforce"},
 	{"habitat_id": "tycho_habitat", "sector_id": "tycho", "peaceforce": "Tycho Peaceforce"},
@@ -205,6 +215,79 @@ static func generate_offers_for_building(
 	return offers
 
 
+static func compose_contract(
+	cfg: Dictionary,
+	catalog: Catalog,
+	building_type: String,
+	type_key: String,
+	target_kind: String,
+	site_label: String,
+	corp_id: String,
+	rng: RandomNumberGenerator,
+	volatile_site: Dictionary = {}
+) -> Dictionary:
+	var types: Dictionary = cfg.get("types", {})
+	var type_def: Dictionary = types.get(type_key, {})
+	var difficulty := float(type_def.get("difficulty", 1.0))
+	var practice_key := _practice_key_for_client(cfg, catalog, building_type, corp_id)
+	var work := work_phrase(cfg, type_key, practice_key)
+	var description := _compose_description(
+		cfg,
+		catalog,
+		building_type,
+		work,
+		site_label,
+		corp_id,
+		rng,
+		target_kind == "planet",
+		volatile_site
+	)
+	var source_def: Dictionary = _source_def(cfg, building_type)
+	var pay_mult := float(source_def.get("pay_multiplier", 1.0))
+	var reward := int(
+		round(float(cfg.get("base_pay", 320)) * pay_mult * difficulty * rng.randf_range(0.85, 1.25))
+	)
+	var corp_name := ""
+	if not corp_id.is_empty():
+		corp_name = str(catalog.get_corporation(corp_id).get("name", corp_id))
+	return {
+		"designation_key": type_key,
+		"designation": work,
+		"description": description,
+		"reward": reward,
+		"corporation_id": corp_id,
+		"corporation_name": corp_name,
+		"objective": str(type_def.get("objective", "active_scan")),
+		"practice": practice_key,
+	}
+
+
+static func work_phrase(cfg: Dictionary, type_key: String, practice_key: String) -> String:
+	var practices: Variant = cfg.get("practices", {})
+	if typeof(practices) != TYPE_DICTIONARY:
+		return type_key.capitalize()
+	var practice_def: Variant = practices.get(practice_key, {})
+	if typeof(practice_def) != TYPE_DICTIONARY:
+		return type_key.capitalize()
+	var phrase := str((practice_def as Dictionary).get(type_key, "")).strip_edges()
+	if phrase.is_empty():
+		return type_key.capitalize()
+	return phrase
+
+
+static func eligible_type_keys(cfg: Dictionary, building_type: String) -> Array:
+	var types: Dictionary = cfg.get("types", {})
+	var out: Array = []
+	for key_variant in types.keys():
+		var key := str(key_variant)
+		var type_def: Dictionary = types[key]
+		var sources: Array = _string_array(type_def.get("sources", []))
+		if sources.has(building_type):
+			out.append(key)
+	out.sort()
+	return out
+
+
 static func _build_offer(
 	catalog: Catalog,
 	cfg: Dictionary,
@@ -215,25 +298,14 @@ static func _build_offer(
 	rng: RandomNumberGenerator,
 	offer_index: int
 ) -> Dictionary:
-	var designations: Dictionary = cfg.get("designations", {})
-	var keys: Array = []
-	for key_variant in designations.keys():
-		var key := str(key_variant)
-		var def: Dictionary = designations[key]
-		var desks: Variant = def.get("desks", [])
-		if typeof(desks) != TYPE_ARRAY:
-			continue
-		if building_type == BOARD_BAR:
-			if desks.has("bar"):
-				keys.append(key)
-		elif desks.has(building_type):
-			keys.append(key)
+	var keys := eligible_type_keys(cfg, building_type)
 	if keys.is_empty():
 		return {}
 
-	var designation_key: String = keys[rng.randi_range(0, keys.size() - 1)]
-	var designation_def: Dictionary = designations[designation_key]
-	var target_kinds: Array = _string_array(designation_def.get("target_kinds", []))
+	var type_key: String = str(keys[rng.randi_range(0, keys.size() - 1)])
+	var types: Dictionary = cfg.get("types", {})
+	var type_def: Dictionary = types.get(type_key, {})
+	var target_kinds: Array = _string_array(type_def.get("targets", []))
 	if target_kinds.is_empty():
 		return {}
 
@@ -242,12 +314,10 @@ static func _build_offer(
 	if use_planet and rng.randf() > float(cfg.get("planet_survey_fraction", 0.2)):
 		target_kind = "volatile_debris"
 
-	var corp_id := ""
-	if building_type == BOARD_CORPORATE:
-		var building := catalog.get_building(building_id)
-		corp_id = str(building.get("corporation_id", ""))
+	var corp_id := _client_corporation_id(catalog, building_type, building_id, sector_id, rng)
 
 	var site_label := ""
+	var volatile_site_id := ""
 	var destination_sector := sector_id
 	if use_planet or target_kind == "planet":
 		var neighbor := _pick_neighbor_sector(catalog, sector_id, rng)
@@ -256,24 +326,23 @@ static func _build_offer(
 		else:
 			destination_sector = neighbor
 			site_label = _sector_display_name(catalog, neighbor)
-	else:
-		site_label = _volatile_site_label(rng)
+	var volatile_site: Dictionary = {}
+	if target_kind != "planet":
+		volatile_site = VolatileSites.pick_site(catalog, rng)
+		volatile_site_id = VolatileSites.site_id(volatile_site)
+		site_label = VolatileSites.site_label(volatile_site)
 
-	var pay_mult := 1.0
-	if building_type == BOARD_BAR:
-		pay_mult = float(cfg.get("bar_pay_multiplier", 0.65))
-	var reward := int(round(float(cfg.get("base_pay", 320)) * pay_mult * rng.randf_range(0.85, 1.25)))
-
-	var blurbs: Dictionary = cfg.get("blurbs", {})
-	var blurb_key := designation_key if building_type != BOARD_BAR else "bar"
-	var blurb_list: Variant = blurbs.get(blurb_key, [])
-	var blurb := "Scan contract at {site}."
-	if typeof(blurb_list) == TYPE_ARRAY and not blurb_list.is_empty():
-		blurb = str(blurb_list[rng.randi_range(0, blurb_list.size() - 1)])
-	var corp_name := ""
-	if not corp_id.is_empty():
-		corp_name = str(catalog.get_corporation(corp_id).get("name", corp_id))
-	blurb = blurb.replace("{site}", site_label).replace("{corp}", corp_name)
+	var composed := compose_contract(
+		cfg,
+		catalog,
+		building_type,
+		type_key,
+		target_kind,
+		site_label,
+		corp_id,
+		rng,
+		volatile_site
+	)
 
 	var duration_hours := int(cfg.get("volatile_duration_hours", 8))
 	var deadline_hours := duration_hours
@@ -284,21 +353,150 @@ static func _build_offer(
 		"id": "scan_%s_%d" % [building_id, offer_index],
 		"desk": building_type,
 		"building_id": building_id,
-		"designation_key": designation_key,
-		"designation": str(designation_def.get("label", designation_key.capitalize())),
+		"designation_key": str(composed.get("designation_key", type_key)),
+		"designation": str(composed.get("designation", type_key.capitalize())),
 		"target_kind": target_kind,
 		"origin_habitat_id": habitat_id,
 		"origin_sector_id": sector_id,
 		"destination_sector_id": destination_sector,
+		"volatile_site_id": volatile_site_id,
 		"site_label": site_label,
 		"destination_name": site_label,
-		"description": blurb,
-		"reward": reward,
+		"description": str(composed.get("description", "")),
+		"reward": int(composed.get("reward", 0)),
 		"deadline_hours": deadline_hours,
 		"min_reputation": 0,
-		"corporation_id": corp_id,
+		"corporation_id": str(composed.get("corporation_id", "")),
+		"corporation_name": str(composed.get("corporation_name", "")),
+		"objective": str(composed.get("objective", "active_scan")),
 		"volatile_n": 4 + rng.randi_range(0, 2),
 	}
+
+
+static func _client_corporation_id(
+	catalog: Catalog,
+	building_type: String,
+	building_id: String,
+	sector_id: String,
+	rng: RandomNumberGenerator
+) -> String:
+	if building_type == BOARD_CORPORATE:
+		var building := catalog.get_building(building_id)
+		return str(building.get("corporation_id", ""))
+	if building_type == BOARD_BAR:
+		var corps := top_corporation_ids(catalog, sector_id, 8)
+		if corps.is_empty():
+			return ""
+		return str(corps[rng.randi_range(0, corps.size() - 1)])
+	return ""
+
+
+static func _practice_key_for_client(
+	cfg: Dictionary,
+	catalog: Catalog,
+	building_type: String,
+	corp_id: String
+) -> String:
+	if building_type == BOARD_PEACEKEEPING or corp_id.is_empty():
+		return "peacekeeping"
+	var corp := catalog.get_corporation(corp_id)
+	var practice := str(corp.get("practice", "")).strip_edges()
+	if practice.is_empty():
+		return "industrial"
+	var practices: Variant = cfg.get("practices", {})
+	if typeof(practices) == TYPE_DICTIONARY and (practices as Dictionary).has(practice):
+		return practice
+	return "industrial"
+
+
+static func _source_def(cfg: Dictionary, building_type: String) -> Dictionary:
+	var sources: Variant = cfg.get("sources", {})
+	if typeof(sources) != TYPE_DICTIONARY:
+		return {}
+	var def: Variant = (sources as Dictionary).get(building_type, {})
+	if typeof(def) != TYPE_DICTIONARY:
+		return {}
+	return def as Dictionary
+
+
+static func _compose_description(
+	cfg: Dictionary,
+	catalog: Catalog,
+	building_type: String,
+	work: String,
+	site_label: String,
+	corp_id: String,
+	rng: RandomNumberGenerator,
+	is_planet_site: bool = false,
+	volatile_site: Dictionary = {}
+) -> String:
+	var client := ""
+	if not corp_id.is_empty():
+		client = str(catalog.get_corporation(corp_id).get("name", corp_id))
+	var site_phrase := _site_phrase_for_description(site_label, is_planet_site, volatile_site)
+
+	if building_type == BOARD_PEACEKEEPING:
+		var source_def := _source_def(cfg, BOARD_PEACEKEEPING)
+		var frames: Array = _string_array(source_def.get("frames", []))
+		if frames.is_empty():
+			return _capitalise_sentence_start("Scan work at %s." % site_phrase)
+		var frame: String = str(frames[rng.randi_range(0, frames.size() - 1)])
+		return _fill_scan_frame(frame, work, site_phrase, client)
+
+	if building_type == BOARD_BAR and corp_id.is_empty():
+		var bar_def := _source_def(cfg, BOARD_BAR)
+		var anon: Array = _string_array(bar_def.get("anonymous_frames", []))
+		if anon.is_empty():
+			return _capitalise_sentence_start("Informal scan tip at %s." % site_phrase)
+		var anon_frame: String = str(anon[rng.randi_range(0, anon.size() - 1)])
+		return _fill_scan_frame(anon_frame, work, site_phrase, client)
+
+	var voice := _VOICE_FALLBACK
+	if not corp_id.is_empty():
+		voice = str(catalog.get_corporation(corp_id).get("ad_voice", _VOICE_FALLBACK)).strip_edges()
+		if voice.is_empty() or voice not in _VALID_VOICES:
+			voice = _VOICE_FALLBACK
+
+	var voices: Variant = cfg.get("voices", {})
+	if typeof(voices) != TYPE_DICTIONARY:
+		return _capitalise_sentence_start("Scan contract at %s." % site_phrase)
+	var voice_def: Variant = (voices as Dictionary).get(voice, {})
+	if typeof(voice_def) != TYPE_DICTIONARY:
+		return _capitalise_sentence_start("Scan contract at %s." % site_phrase)
+
+	var channel := "corporate_office" if building_type == BOARD_CORPORATE else "bar"
+	var channel_frames: Array = _string_array((voice_def as Dictionary).get(channel, []))
+	if channel_frames.is_empty():
+		return _capitalise_sentence_start("Scan contract at %s." % site_phrase)
+	var picked: String = str(channel_frames[rng.randi_range(0, channel_frames.size() - 1)])
+	return _fill_scan_frame(picked, work, site_phrase, client)
+
+
+static func _site_phrase_for_description(
+	site_label: String,
+	is_planet_site: bool,
+	volatile_site: Dictionary
+) -> String:
+	if is_planet_site:
+		return site_label
+	if not volatile_site.is_empty():
+		return VolatileSites.description_phrase(volatile_site)
+	return VolatileSites.description_phrase({"label": site_label, "article": "a"})
+
+
+static func _fill_scan_frame(frame: String, work: String, site_phrase: String, client: String) -> String:
+	var work_lower := work.to_lower()
+	var filled := frame.replace("{work}", work_lower).replace("{site}", site_phrase).replace("{client}", client)
+	return _capitalise_sentence_start(filled)
+
+
+static func _capitalise_sentence_start(text: String) -> String:
+	if text.is_empty():
+		return text
+	var first := text[0]
+	if first == first.to_lower() and first != first.to_upper():
+		return first.to_upper() + text.substr(1)
+	return text
 
 
 static func build_volatile_grant_params(
@@ -314,19 +512,24 @@ static func build_volatile_grant_params(
 		"play_bounds": 7500.0,
 		"seed": id_token,
 	}
+	var site_id := str(offer.get("volatile_site_id", "")).strip_edges()
+	if not site_id.is_empty():
+		VolatileSites.apply_site_to_setup(setup, catalog.get_volatile_site(site_id), catalog)
 
 	match target_kind:
 		"volatile_debris":
-			setup["entities"] = [
+			VolatileSites.append_entity(
+				setup,
 				{
 					"id": "scan_debris_%s" % id_token,
 					"kind": "debris",
 					"position": {"x": 3200.0, "y": 900.0},
 					"rotation": 0.4,
 				}
-			]
+			)
 		"volatile_orbital":
-			setup["entities"] = [
+			VolatileSites.append_entity(
+				setup,
 				{
 					"id": "scan_orbital_%s" % id_token,
 					"kind": "orbital",
@@ -334,7 +537,7 @@ static func build_volatile_grant_params(
 					"sprite": "res://assets/world/orbitals/array.svg",
 					"position": {"x": 2800.0, "y": -600.0},
 				}
-			]
+			)
 		"volatile_ship":
 			var ship_fields := _random_ship_scan_fields(catalog, str(offer.get("corporation_id", "")))
 			setup["scan_contact"] = {
@@ -472,17 +675,6 @@ static func _sector_display_name(catalog: Catalog, sector_id: String) -> String:
 	if sector.is_empty():
 		return sector_id
 	return str(sector.get("name", sector_id))
-
-
-static func _volatile_site_label(rng: RandomNumberGenerator) -> String:
-	var labels := [
-		"Prospect marker",
-		"Drift survey point",
-		"Unlisted contact",
-		"Off-route survey site",
-		"Temporary observation point",
-	]
-	return labels[rng.randi_range(0, labels.size() - 1)]
 
 
 static func _string_array(raw: Variant) -> Array:

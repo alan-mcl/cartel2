@@ -86,6 +86,42 @@ static func create_from_bounty_target(
 	return actor
 
 
+static func create_from_ambient_ship(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	ambient_ship: Dictionary,
+	sector_id: String
+) -> RefCounted:
+	var template := str(ambient_ship.get("template_id", ""))
+	if template.is_empty() or catalog.get_ship(template).is_empty():
+		return null
+	var pos_dict: Dictionary = ambient_ship.get("position", {})
+	var spawn_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+	var spawn_facing := float(ambient_ship.get("heading_rad", 0.0))
+	var actor: RefCounted = create(
+		catalog,
+		traffic_config,
+		"loiter",
+		template,
+		spawn_pos,
+		spawn_facing,
+		sector_id
+	)
+	if actor == null:
+		return null
+	var ship_id := str(ambient_ship.get("id", ""))
+	if not ship_id.is_empty():
+		actor.id = ship_id
+	actor.loiter_center = spawn_pos
+	actor.callsign = ""
+	actor.affiliation = ""
+	if actor.owned_ship != null:
+		actor.owned_ship.transponder_enabled = false
+		actor.owned_ship.name = ""
+	actor.role = "loiter"
+	return actor
+
+
 static func _create_owned_ship(
 	catalog: Catalog,
 	template_id: String,

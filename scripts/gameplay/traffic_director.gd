@@ -56,14 +56,30 @@ func setup_lone_bounty_actor(
 	player_pos: Vector2,
 	actor
 ) -> void:
+	var roster: Array = []
+	if actor != null:
+		roster.append(actor)
+	setup_scripted_volatile_roster(catalog, sector_id, traffic_envelope, player_pos, roster)
+
+
+func setup_scripted_volatile_roster(
+	catalog: Catalog,
+	sector_id: String,
+	traffic_envelope: float,
+	_player_pos: Vector2,
+	roster: Array
+) -> void:
 	clear()
 	_lone_actor_mode = true
 	_catalog = catalog
 	_traffic_config = catalog.get_traffic_config()
 	_sector_id = sector_id
 	_traffic_envelope = traffic_envelope
-	_target_fleet_size = 1
-	if actor != null:
+	_target_fleet_size = roster.size()
+	for actor_variant in roster:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
 		actors.append(actor)
 		actor.has_sim_slot = true
 		actor.near_lod = true

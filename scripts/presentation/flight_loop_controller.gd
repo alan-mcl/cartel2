@@ -54,7 +54,7 @@ func clear_traffic() -> void:
 
 func setup_traffic(world: Node2D) -> void:
 	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
-		_setup_volatile_bounty_traffic(world)
+		_setup_volatile_site_traffic(world)
 		return
 	_ensure_traffic_director()
 	if _traffic_director == null:
@@ -86,7 +86,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
 		VolatileTranslation.announce_gate_collapsed_if_needed(_main.session)
 		_world_loader.refresh_volatile_return_gate(_main.session)
-		_tick_volatile_bounty_traffic(delta, physics_frame)
+		_tick_volatile_site_traffic(delta, physics_frame)
 
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
 	if (
@@ -290,7 +290,7 @@ func on_operating_state_changed(state: ShipOperatingState) -> void:
 		_hud.set_signature_state(signature, transponder_label, active_sensors_label)
 
 
-func _setup_volatile_bounty_traffic(world: Node2D) -> void:
+func _setup_volatile_site_traffic(world: Node2D) -> void:
 	_ensure_traffic_director()
 	if _traffic_director == null:
 		return
@@ -303,38 +303,51 @@ func _setup_volatile_bounty_traffic(world: Node2D) -> void:
 	if typeof(setup) != TYPE_DICTIONARY:
 		clear_traffic()
 		return
-	var bounty_target: Variant = setup.get("bounty_target", {})
-	if typeof(bounty_target) != TYPE_DICTIONARY or bounty_target.is_empty():
-		clear_traffic()
-		return
-	var target: Dictionary = bounty_target
-	var target_id := str(target.get("id", ""))
-	if (
-		not target_id.is_empty()
-		and _main.session.player.has_scanned(target_id)
-	):
-		clear_traffic()
-		return
 	var traffic_config := _catalog.get_traffic_config()
-	var actor = TrafficSpawnScript.create_from_bounty_target(
-		_catalog,
-		traffic_config,
-		target,
-		sector_id
-	)
-	_traffic_director.setup_lone_bounty_actor(
+	var roster: Array = []
+	var ambient_ships: Variant = setup.get("ambient_ships", [])
+	if typeof(ambient_ships) == TYPE_ARRAY:
+		for ship_variant in ambient_ships:
+			if typeof(ship_variant) != TYPE_DICTIONARY:
+				continue
+			var ship_record: Dictionary = ship_variant
+			var actor = TrafficSpawnScript.create_from_ambient_ship(
+				_catalog,
+				traffic_config,
+				ship_record,
+				sector_id
+			)
+			if actor != null:
+				roster.append(actor)
+	var bounty_target: Variant = setup.get("bounty_target", {})
+	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
+		var target: Dictionary = bounty_target
+		var target_id := str(target.get("id", ""))
+		if target_id.is_empty() or not _main.session.player.has_scanned(target_id):
+			var bounty_actor = TrafficSpawnScript.create_from_bounty_target(
+				_catalog,
+				traffic_config,
+				target,
+				sector_id
+			)
+			if bounty_actor != null:
+				roster.append(bounty_actor)
+	if roster.is_empty():
+		clear_traffic()
+		return
+	_traffic_director.setup_scripted_volatile_roster(
 		_catalog,
 		sector_id,
 		_world_loader.get_traffic_envelope_radius(),
 		_player.global_position,
-		actor
+		roster
 	)
 	if _traffic_view != null:
 		_traffic_view.setup(world)
 		_traffic_view.sync(_traffic_director.actors, _catalog)
 
 
-func _tick_volatile_bounty_traffic(delta: float, physics_frame: int) -> void:
+func _tick_volatile_site_traffic(delta: float, physics_frame: int) -> void:
 	if _traffic_director == null or _traffic_director.actors.is_empty():
 		return
 	var player_broadcasting: bool = (
