@@ -11,6 +11,7 @@ var orbit_name: String = ""
 var planet_name: String = ""
 var star: String = ""
 var star_system: String = ""
+var star_distance_au: float = 0.0
 var description: String = ""
 var classification: String = ""
 var gravity: float = 1.0
@@ -33,6 +34,7 @@ static func from_dict(data: Dictionary) -> SectorDef:
 	def.planet_name = str(data.get("planet_name", ""))
 	def.star = str(data.get("star", ""))
 	def.star_system = str(data.get("star_system", ""))
+	def.star_distance_au = float(data.get("star_distance_au", 0.0))
 	def.description = str(data.get("description", ""))
 	def.classification = str(data.get("classification", ""))
 	def.gravity = float(data.get("gravity", 1.0))
@@ -65,6 +67,8 @@ func to_dict() -> Dictionary:
 		out["star"] = star
 	if _present_keys.has("star_system") or star_system != "":
 		out["star_system"] = star_system
+	if _present_keys.has("star_distance_au") or star_distance_au != 0.0:
+		out["star_distance_au"] = star_distance_au
 	if _present_keys.has("description") or description != "":
 		out["description"] = description
 	if _present_keys.has("classification") or classification != "":
@@ -89,7 +93,7 @@ func to_dict() -> Dictionary:
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star", "star_system", "description", "classification", "gravity", "population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings", "neighborhood"])
+	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star", "star_system", "star_distance_au", "description", "classification", "gravity", "population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings", "neighborhood"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "play_bounds"])

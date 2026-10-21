@@ -1123,5 +1123,1517 @@
     "mass_solar": 12,
     "radius_solar": 150,
     "description": "Yellow-white supergiant near the center of the Northern Cross."
+  },
+  "82 Eridani": {
+    "star_system": "82 Eridani",
+    "spectral_class": "G8V",
+    "temperature_k": 5490.0,
+    "luminosity": 0.74,
+    "mass_solar": 0.97,
+    "radius_solar": 0.92,
+    "description": "A mature G-type dwarf with a little less light than Sol. Its steady output makes 82 Eridani a useful reference point for long-range navigation."
+  },
+  "Zeta Eridani": {
+    "star_system": "Zeta Eridani",
+    "spectral_class": "K2 III",
+    "temperature_k": 4500.0,
+    "luminosity": 50.0,
+    "mass_solar": 2.0,
+    "radius_solar": 10.0,
+    "description": "A hot A-type binary primary, substantially brighter than Sol. Zeta Eridani is a young, luminous system whose companion makes its stellar neighbourhood more complex than the catalogue entry suggests."
+  },
+  "Eta Eridani": {
+    "star_system": "Eta Eridani",
+    "spectral_class": "K1 III",
+    "temperature_k": 4300.0,
+    "luminosity": 80.0,
+    "mass_solar": 2.2,
+    "radius_solar": 12.0,
+    "description": "An evolved K-type giant, swollen to many times the radius of Sol. Its amber light marks a star well beyond the main sequence."
+  },
+  "Nu Eridani": {
+    "star_system": "Nu Eridani",
+    "spectral_class": "B2III",
+    "temperature_k": 22000.0,
+    "luminosity": 2000.0,
+    "mass_solar": 8.0,
+    "radius_solar": 5.0,
+    "description": "A massive B-type giant pouring out thousands of times Sol's light. Nu Eridani is a conspicuous beacon, but its intense radiation makes the inner system an unforgiving environment."
+  },
+  "Omicron2 Eridani": {
+    "star_system": "Omicron2 Eridani",
+    "spectral_class": "K1V",
+    "temperature_k": 5100.0,
+    "luminosity": 0.4,
+    "mass_solar": 0.82,
+    "radius_solar": 0.85,
+    "description": "A quiet K-type dwarf with only a fraction of Sol's output. Its low-energy amber light gives the system a markedly different character from the brighter stars of Eridanus."
+  },
+  "Gliese 163": {
+    "star_system": "Gliese 163",
+    "spectral_class": "M3V",
+    "temperature_k": 3500.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.42,
+    "description": "A dim M-type dwarf whose visible light is only a fraction of a percent of Sol's. Gliese 163 is the sort of low-power primary around which orbital infrastructure must be built close in."
+  },
+  "Gliese 180": {
+    "star_system": "Gliese 180",
+    "spectral_class": "M3V",
+    "temperature_k": 3400.0,
+    "luminosity": 0.003,
+    "mass_solar": 0.38,
+    "radius_solar": 0.4,
+    "description": "A cool M-type dwarf with an exceptionally low luminosity. Its faint red output concentrates useful stellar energy into a compact inner system."
+  },
+  "HD 147513": {
+    "star_system": "HD 147513",
+    "spectral_class": "G3V",
+    "temperature_k": 5660.0,
+    "luminosity": 1.0,
+    "mass_solar": 0.99,
+    "radius_solar": 1.0,
+    "description": "A metal-rich G-type dwarf with a luminosity close to Sol's. HD 147513 is a comparatively familiar-looking primary despite its different place in the stellar map."
+  },
+  "HD 128621": {
+    "star_system": "HD 128621",
+    "spectral_class": "G5V",
+    "temperature_k": 5520.0,
+    "luminosity": 0.9,
+    "mass_solar": 0.95,
+    "radius_solar": 0.98,
+    "description": "The catalogue designation for Alpha Centauri B, the cooler companion to Alpha Centauri A. Its orange-gold light comes from a K-type dwarf slightly less massive and luminous than Sol."
+  },
+  "HD 134439": {
+    "star_system": "HD 134439",
+    "spectral_class": "G5V",
+    "temperature_k": 5560.0,
+    "luminosity": 0.85,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "An old, metal-poor G-type dwarf moving rapidly across the sky. Its chemical composition marks it as a member of the Galaxy's older stellar population."
+  },
+  "HD 134440": {
+    "star_system": "HD 134440",
+    "spectral_class": "G5V",
+    "temperature_k": 5540.0,
+    "luminosity": 0.82,
+    "mass_solar": 0.91,
+    "radius_solar": 0.95,
+    "description": "The close companion of HD 134439, another old metal-poor G-type star. The pair's shared motion and unusual chemistry distinguish this otherwise modest system."
+  },
+  "Gliese 667 C": {
+    "star_system": "Gliese 667",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3700.0,
+    "luminosity": 0.014,
+    "mass_solar": 0.33,
+    "radius_solar": 0.42,
+    "description": "A cool M-type component of the Gliese 667 triple system. It is by far the faintest of the three stars, but its close planetary architecture has made the system a persistent target of survey work."
+  },
+  "HD 101930": {
+    "star_system": "HD 101930",
+    "spectral_class": "M0V",
+    "temperature_k": 3900.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A cool M-type dwarf with a tiny fraction of Sol's luminosity. HD 101930's weak red output makes its inner system the natural focus of local traffic and settlement."
+  },
+  "16 Cygni A": {
+    "star_system": "16 Cygni",
+    "spectral_class": "G1.5V",
+    "temperature_k": 5830.0,
+    "luminosity": 1.18,
+    "mass_solar": 1.01,
+    "radius_solar": 1.05,
+    "description": "A slightly hotter, brighter G-type member of the 16 Cygni binary. Its companion is a similarly Sun-like star, giving the system a rare double-primary character."
+  },
+  "16 Cygni B": {
+    "star_system": "16 Cygni",
+    "spectral_class": "G2.5V",
+    "temperature_k": 5760.0,
+    "luminosity": 1.0,
+    "mass_solar": 0.98,
+    "radius_solar": 1.0,
+    "description": "The slightly fainter G-type companion in the 16 Cygni binary. Its long-period giant planet gives the system a particularly interesting outer architecture."
+  },
+  "Gliese 777 A": {
+    "star_system": "Gliese 777",
+    "spectral_class": "G5IV",
+    "temperature_k": 5500.0,
+    "luminosity": 1.2,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "A slightly evolved G-type star, brighter than Sol and old enough to have left the simplest main-sequence profile. A faint M-dwarf companion shares the system."
+  },
+  "Gliese 777 B": {
+    "star_system": "Gliese 777",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3200.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.25,
+    "radius_solar": 0.3,
+    "description": "A very faint M-type companion to Gliese 777 A. The little red star contributes almost nothing to the system's total light, but is dynamically part of the same stellar neighbourhood."
+  },
+  "HD 186408": {
+    "star_system": "HD 186408",
+    "spectral_class": "G5V",
+    "temperature_k": 5530.0,
+    "luminosity": 0.88,
+    "mass_solar": 0.94,
+    "radius_solar": 0.97,
+    "description": "One half of the 16 Cygni-like HD 186408/HD 186427 pair, a solar-type binary separated by a broad stellar orbit. Its G-type spectrum is familiar to human observers."
+  },
+  "HD 186427": {
+    "star_system": "HD 186427",
+    "spectral_class": "G3V",
+    "temperature_k": 5680.0,
+    "luminosity": 1.05,
+    "mass_solar": 1.0,
+    "radius_solar": 1.02,
+    "description": "A solar-type companion to HD 186408, slightly brighter and hotter than Sol. The two stars form a wide binary with both components useful as independent stellar references."
+  },
+  "HD 190007": {
+    "star_system": "HD 190007",
+    "spectral_class": "K2V",
+    "temperature_k": 4900.0,
+    "luminosity": 0.25,
+    "mass_solar": 0.78,
+    "radius_solar": 0.75,
+    "description": "A cool K-type dwarf radiating at roughly a quarter of Sol's luminosity. Its orange light and modest size give the system a distinctly low-energy profile."
+  },
+  "Gliese 806": {
+    "star_system": "Gliese 806",
+    "spectral_class": "M0V",
+    "temperature_k": 3850.0,
+    "luminosity": 0.018,
+    "mass_solar": 0.48,
+    "radius_solar": 0.48,
+    "description": "A cool M-type dwarf with very low luminosity. Gliese 806 belongs to the large population of faint red primaries that dominate the local stellar census."
+  },
+  "Luyten 726-8 A": {
+    "star_system": "Luyten 726-8",
+    "spectral_class": "M5.5Ve",
+    "temperature_k": 2900.0,
+    "luminosity": 6e-05,
+    "mass_solar": 0.1,
+    "radius_solar": 0.14,
+    "description": "One of the two extremely faint red dwarfs of the Luyten 726-8 binary. It is an active M-type star whose output is tiny compared with Sol's."
+  },
+  "Luyten 726-8 B": {
+    "star_system": "Luyten 726-8",
+    "spectral_class": "M6Ve",
+    "temperature_k": 2800.0,
+    "luminosity": 4e-05,
+    "mass_solar": 0.09,
+    "radius_solar": 0.13,
+    "description": "The companion to Luyten 726-8 A, and one of the faintest stellar primaries in the catalogue. The pair is better known to old navigators as UV Ceti, after the violent flares of component B."
+  },
+  "Gliese 1061": {
+    "star_system": "Gliese 1061",
+    "spectral_class": "M5.5V",
+    "temperature_k": 2950.0,
+    "luminosity": 8e-05,
+    "mass_solar": 0.11,
+    "radius_solar": 0.15,
+    "description": "A very old, very faint M-type dwarf with only a few ten-thousandths of Sol's luminosity. Its compact planetary region is consequently packed close to the star."
+  },
+  "HD 2638": {
+    "star_system": "HD 2638",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A G-type dwarf with a luminosity slightly below Sol's. Its planetary system has made this otherwise inconspicuous star a familiar entry in exoplanet catalogues."
+  },
+  "HD 11506": {
+    "star_system": "HD 11506",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A slightly hotter and brighter G-type dwarf. HD 11506 hosts a system of giant planets, giving its outer system more structure than its quiet stellar appearance suggests."
+  },
+  "Gliese 687": {
+    "star_system": "Gliese 687",
+    "spectral_class": "M3V",
+    "temperature_k": 3480.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.41,
+    "description": "A nearby M-type dwarf with a small fraction of Sol's luminosity. Its cool red spectrum and high proper motion are characteristic of the local red-dwarf population."
+  },
+  "Gliese 674": {
+    "star_system": "Gliese 674",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3600.0,
+    "luminosity": 0.006,
+    "mass_solar": 0.45,
+    "radius_solar": 0.45,
+    "description": "A low-luminosity M-type dwarf with a compact planetary system. Its close-in worlds orbit in a region that receives the little energy this red star provides."
+  },
+  "HD 11964": {
+    "star_system": "HD 11964",
+    "spectral_class": "G5IV",
+    "temperature_k": 5580.0,
+    "luminosity": 1.4,
+    "mass_solar": 1.08,
+    "radius_solar": 1.2,
+    "description": "An evolved G-type star somewhat brighter than Sol. Its age and expanded radius place it on the older side of the solar-type stellar population."
+  },
+  "70 Virginis": {
+    "star_system": "70 Virginis",
+    "spectral_class": "G5IV",
+    "temperature_k": 5540.0,
+    "luminosity": 2.5,
+    "mass_solar": 1.1,
+    "radius_solar": 1.4,
+    "description": "An older, slightly evolved G-type star about twice as luminous as Sol. Its giant planet on an eccentric orbit made 70 Virginis one of the early landmarks of the exoplanet era."
+  },
+  "109 Virginis": {
+    "star_system": "109 Virginis",
+    "spectral_class": "A0V",
+    "temperature_k": 9600.0,
+    "luminosity": 50.0,
+    "mass_solar": 2.4,
+    "radius_solar": 1.8,
+    "description": "A bright F-type main-sequence star, hotter and more luminous than Sol. Its high-energy white light makes it an unmistakable stellar marker in Virgo."
+  },
+  "Porrima": {
+    "star_system": "Porrima",
+    "spectral_class": "F0V",
+    "temperature_k": 6900.0,
+    "luminosity": 5.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.3,
+    "description": "A close pair of nearly identical F-type stars orbiting one another on a roughly 169-year cycle. From the outer system they resolve into a matched pair of white-gold points."
+  },
+  "Vindemiatrix": {
+    "star_system": "Vindemiatrix",
+    "spectral_class": "G8III",
+    "temperature_k": 5100.0,
+    "luminosity": 70.0,
+    "mass_solar": 2.5,
+    "radius_solar": 10.0,
+    "description": "An evolved yellow giant, far larger and more luminous than a main-sequence solar analogue. Vindemiatrix is one of the conspicuous old stars that outline Virgo's traditional star patterns."
+  },
+  "Gliese 506": {
+    "star_system": "Gliese 506",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A faint M-type dwarf with very little visible output. Its red spectrum is typical of the small, long-lived stars that make up much of the local stellar population."
+  },
+  "HD 115617": {
+    "star_system": "HD 115617",
+    "spectral_class": "G5V",
+    "temperature_k": 5520.0,
+    "luminosity": 0.87,
+    "mass_solar": 0.94,
+    "radius_solar": 0.97,
+    "description": "A mature G-type star better known in stellar catalogues as 61 Virginis. It is slightly dimmer than Sol and has a notably low-mass planetary system by giant-planet standards."
+  },
+  "Antares": {
+    "star_system": "Antares",
+    "spectral_class": "M1.5Iab",
+    "temperature_k": 3660.0,
+    "luminosity": 75000.0,
+    "mass_solar": 12.0,
+    "radius_solar": 680.0,
+    "description": "The catalogue entry is commonly associated with the red supergiant Antares, a vastly evolved star rather than a dwarf. Its immense radius and intense orange-red light dominate the surrounding system."
+  },
+  "HD 159868": {
+    "star_system": "HD 159868",
+    "spectral_class": "G5IV",
+    "temperature_k": 5550.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "A solar-type star with a modestly higher luminosity than Sol. Its planetary system includes a long-period giant, making the outer system of greater interest than the quiet primary suggests."
+  },
+  "Gliese 682": {
+    "star_system": "Gliese 682",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3180.0,
+    "luminosity": 0.0018,
+    "mass_solar": 0.24,
+    "radius_solar": 0.29,
+    "description": "A cool M-type dwarf with a tiny fraction of Sol's luminosity. Its faint red light is characteristic of the low-mass stars that can burn for trillions of years."
+  },
+  "Beta Pavonis": {
+    "star_system": "Beta Pavonis",
+    "spectral_class": "A7III",
+    "temperature_k": 8200.0,
+    "luminosity": 40.0,
+    "mass_solar": 2.0,
+    "radius_solar": 2.5,
+    "description": "A luminous A-type star, substantially hotter and brighter than Sol. Beta Pavonis is a clean white stellar beacon against the southern sky."
+  },
+  "Gamma Pavonis": {
+    "star_system": "Gamma Pavonis",
+    "spectral_class": "F6V",
+    "temperature_k": 6300.0,
+    "luminosity": 2.2,
+    "mass_solar": 1.15,
+    "radius_solar": 1.15,
+    "description": "A relatively quiet G-type dwarf with output close to Sol's. Its modest luminosity and solar-like spectrum make it one of the more familiar southern catalogue stars."
+  },
+  "Eta Pavonis": {
+    "star_system": "Eta Pavonis",
+    "spectral_class": "G5IV",
+    "temperature_k": 5520.0,
+    "luminosity": 1.1,
+    "mass_solar": 1.02,
+    "radius_solar": 1.1,
+    "description": "A cool, low-mass K-type dwarf with less than half Sol's luminosity. Its amber light marks a substantially cooler stellar environment."
+  },
+  "Gliese 411": {
+    "star_system": "Gliese 411",
+    "spectral_class": "M2V",
+    "temperature_k": 3650.0,
+    "luminosity": 0.007,
+    "mass_solar": 0.44,
+    "radius_solar": 0.44,
+    "description": "A nearby, high-proper-motion M-type dwarf with a low luminosity. Its motion across the sky is much more noticeable than its faint red light."
+  },
+  "Gliese 412A": {
+    "star_system": "Gliese 412A",
+    "spectral_class": "M1V",
+    "temperature_k": 3800.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "The brighter member of the Gliese 412 binary, a small red dwarf system. Component A is a cool M-type star with very low luminosity."
+  },
+  "HD 89744": {
+    "star_system": "HD 89744",
+    "spectral_class": "F8IV",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A hot F-type star, brighter and more massive than Sol. HD 89744 is also an unusually active exoplanet host, with a massive planet on a tight orbit."
+  },
+  "HD 80606": {
+    "star_system": "HD 80606",
+    "spectral_class": "G5V",
+    "temperature_k": 5530.0,
+    "luminosity": 0.9,
+    "mass_solar": 0.95,
+    "radius_solar": 0.98,
+    "description": "A Sun-like star famous for hosting a giant planet on an exceptionally eccentric orbit. The planet's long, stretched trajectory produces enormous changes in irradiation over its year."
+  },
+  "Alioth": {
+    "star_system": "Alioth",
+    "spectral_class": "A0p",
+    "temperature_k": 9400.0,
+    "luminosity": 100.0,
+    "mass_solar": 2.8,
+    "radius_solar": 2.0,
+    "description": "A hot, luminous A-type star and the brightest member of the Great Bear's central chain. Its white light is considerably stronger than Sol's."
+  },
+  "Denebola": {
+    "star_system": "Denebola",
+    "spectral_class": "A3V",
+    "temperature_k": 8500.0,
+    "luminosity": 15.0,
+    "mass_solar": 1.75,
+    "radius_solar": 1.5,
+    "description": "A young, rapidly rotating A-type star with a prominent debris disk. Denebola's bright white light and dusty surroundings give its system a distinctly active appearance."
+  },
+  "Algieba": {
+    "star_system": "Algieba",
+    "spectral_class": "K0III",
+    "temperature_k": 4500.0,
+    "luminosity": 180.0,
+    "mass_solar": 2.5,
+    "radius_solar": 14.0,
+    "description": "A prominent binary of evolved giant stars in Leo, glowing orange-gold against the darker sky. The combined system is far brighter and more physically extended than a solar-type primary."
+  },
+  "Zosma": {
+    "star_system": "Zosma",
+    "spectral_class": "A4V",
+    "temperature_k": 8600.0,
+    "luminosity": 20.0,
+    "mass_solar": 1.8,
+    "radius_solar": 1.6,
+    "description": "A hot A-type star on the back of Leo's familiar figure. Its white light and relatively high temperature distinguish it from the cooler stars of the constellation."
+  },
+  "Gliese 436": {
+    "star_system": "Gliese 436",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3580.0,
+    "luminosity": 0.006,
+    "mass_solar": 0.43,
+    "radius_solar": 0.43,
+    "description": "A cool M-type dwarf hosting a close-in Neptune-mass world. Its faint red light is almost entirely overshadowed by the attention paid to the compact planetary system."
+  },
+  "Wolf 424 A": {
+    "star_system": "Wolf 424",
+    "spectral_class": "M5V",
+    "temperature_k": 3100.0,
+    "luminosity": 0.0008,
+    "mass_solar": 0.18,
+    "radius_solar": 0.22,
+    "description": "One half of the close Wolf 424 red-dwarf binary. Component A is a tiny, faint M-type star whose system is dominated by the dynamics of its companion."
+  },
+  "Wolf 424 B": {
+    "star_system": "Wolf 424",
+    "spectral_class": "M7V",
+    "temperature_k": 2700.0,
+    "luminosity": 5e-05,
+    "mass_solar": 0.08,
+    "radius_solar": 0.12,
+    "description": "The companion to Wolf 424 A, another low-mass M-type dwarf. The pair orbit close enough to form a clearly interacting stellar system at catalogue scales."
+  },
+  "Wolf 1055": {
+    "star_system": "Wolf 1055",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A cool M-type dwarf with very low luminosity. Its small stellar output is concentrated into a compact region of useful orbital space."
+  },
+  "Wolf 294": {
+    "star_system": "Wolf 294",
+    "spectral_class": "M3V",
+    "temperature_k": 3450.0,
+    "luminosity": 0.0035,
+    "mass_solar": 0.38,
+    "radius_solar": 0.4,
+    "description": "A faint red dwarf of the Wolf catalogue, with the low temperature and luminosity typical of late M-type stars."
+  },
+  "Wolf 1453": {
+    "star_system": "Wolf 1453",
+    "spectral_class": "M4V",
+    "temperature_k": 3200.0,
+    "luminosity": 0.0015,
+    "mass_solar": 0.22,
+    "radius_solar": 0.28,
+    "description": "Another low-mass red dwarf from the Wolf stellar catalogues. Its faint M-type emission marks a system where useful stellar energy is found only close to the primary."
+  },
+  "Kepler-442": {
+    "star_system": "Kepler-442",
+    "spectral_class": "K5V",
+    "temperature_k": 4050.0,
+    "luminosity": 0.04,
+    "mass_solar": 0.66,
+    "radius_solar": 0.64,
+    "description": "A cool K-type dwarf known for hosting Kepler-442b, a planet of roughly Earth size receiving moderate stellar energy. The star's orange light is less intense than Sol's."
+  },
+  "Fomalhaut": {
+    "star_system": "Fomalhaut",
+    "spectral_class": "A3V",
+    "temperature_k": 8590.0,
+    "luminosity": 16.67,
+    "mass_solar": 1.92,
+    "radius_solar": 1.842,
+    "description": "A young A-type star surrounded by a broad debris disk and a sharply defined dust ring. Fomalhaut's bright white light and conspicuous disk make the system easy to identify on long-range surveys."
+  },
+  "Spica": {
+    "star_system": "Spica",
+    "spectral_class": "B1III",
+    "temperature_k": 22400.0,
+    "luminosity": 12000.0,
+    "mass_solar": 11.0,
+    "radius_solar": 7.0,
+    "description": "A close, massive blue-white binary whose primary is a rapidly rotating B-type star. The system is extraordinarily luminous and drives a powerful stellar environment."
+  },
+  "Dubhe": {
+    "star_system": "Dubhe",
+    "spectral_class": "K0III",
+    "temperature_k": 4660.0,
+    "luminosity": 316.0,
+    "mass_solar": 4.25,
+    "radius_solar": 30.0,
+    "description": "A K-type giant and the primary of a multiple-star system forming the northern edge of the Great Bear's bowl. Its amber light comes from a star far larger than Sol."
+  },
+  "Merak": {
+    "star_system": "Merak",
+    "spectral_class": "A1IV",
+    "temperature_k": 9480.0,
+    "luminosity": 63.0,
+    "mass_solar": 2.7,
+    "radius_solar": 2.4,
+    "description": "A hot A-type star forming one of the two pointer stars of the Great Bear's bowl. Its white light is substantially more luminous than Sol's."
+  },
+  "Saiph": {
+    "star_system": "Saiph",
+    "spectral_class": "B0.5Ia",
+    "temperature_k": 26500.0,
+    "luminosity": 56000.0,
+    "mass_solar": 15.0,
+    "radius_solar": 22.0,
+    "description": "A massive blue supergiant at the foot of Orion. Saiph's enormous luminosity and strong stellar wind make the inner system a hostile place for conventional infrastructure."
+  },
+  "Mintaka": {
+    "star_system": "Mintaka",
+    "spectral_class": "O9.5II",
+    "temperature_k": 29500.0,
+    "luminosity": 90000.0,
+    "mass_solar": 20.0,
+    "radius_solar": 18.0,
+    "description": "A multiple-star system in Orion's Belt, dominated by hot blue-white stars. Its intense ultraviolet output and powerful winds are typical of massive young stars."
+  },
+  "Polaris": {
+    "star_system": "Polaris",
+    "spectral_class": "F7Ib",
+    "temperature_k": 6015.0,
+    "luminosity": 1260.0,
+    "mass_solar": 5.4,
+    "radius_solar": 37.5,
+    "description": "The famous northern pole star, a multiple system whose primary is a yellow supergiant Cepheid variable. Its brightness rises and falls on a regular pulsation cycle."
+  },
+  "Groombridge 1830": {
+    "star_system": "Groombridge 1830",
+    "spectral_class": "G8V",
+    "temperature_k": 5550.0,
+    "luminosity": 0.85,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "An old, metal-poor G-type subdwarf with unusually high proper motion. Its chemistry and motion mark it as a relic of an older Galactic population."
+  },
+  "Ross 614 A": {
+    "star_system": "Ross 614",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3180.0,
+    "luminosity": 0.0018,
+    "mass_solar": 0.24,
+    "radius_solar": 0.29,
+    "description": "A faint red-dwarf primary in a close binary. Its tiny luminosity is typical of low-mass M stars, while the nearby companion gives the system a compact gravitational architecture."
+  },
+  "EV Lacertae": {
+    "star_system": "EV Lacertae",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A small, active M-type flare star. EV Lacertae is prone to powerful stellar outbursts, making radiation forecasts an important part of operating in its inner system."
+  },
+  "Teegarden's Star": {
+    "star_system": "Teegarden's Star",
+    "spectral_class": "M7V",
+    "temperature_k": 2700.0,
+    "luminosity": 5e-05,
+    "mass_solar": 0.08,
+    "radius_solar": 0.12,
+    "description": "An exceptionally faint M-type dwarf with several confirmed small planets. Its low luminosity keeps the planetary orbits tightly packed around the star."
+  },
+  "Gliese 1214": {
+    "star_system": "Gliese 1214",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3150.0,
+    "luminosity": 0.0012,
+    "mass_solar": 0.2,
+    "radius_solar": 0.26,
+    "description": "A small M-type dwarf hosting a well-studied sub-Neptune. Its planetary system is compact, with the known planet completing an orbit in only a little over a day."
+  },
+  "Gliese 649": {
+    "star_system": "Gliese 649",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3750.0,
+    "luminosity": 0.015,
+    "mass_solar": 0.45,
+    "radius_solar": 0.48,
+    "description": "A cool M-type dwarf known to host a long-period giant planet. The contrast between its tiny stellar output and the planet's broad orbit makes the system an interesting navigation marker."
+  },
+  "Gliese 710": {
+    "star_system": "Gliese 710",
+    "spectral_class": "M0V",
+    "temperature_k": 3900.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A low-mass K-type star with a long future trajectory through the outer reaches of Sol's neighbourhood. Its high proper motion has made it a familiar object in long-baseline stellar models."
+  },
+  "Gliese 849": {
+    "star_system": "Gliese 849",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A nearby K-type dwarf hosting a Jupiter-mass planet on a long orbit. Its subdued orange light and wide planetary architecture give the system a quiet outer-system character."
+  },
+  "Gliese 370": {
+    "star_system": "Gliese 370",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A low-mass K-type dwarf with a fraction of Sol's luminosity. Its orange spectrum is characteristic of stars that remain stable for far longer than Sol."
+  },
+  "Gliese 251": {
+    "star_system": "Gliese 251",
+    "spectral_class": "K3V",
+    "temperature_k": 4400.0,
+    "luminosity": 0.12,
+    "mass_solar": 0.73,
+    "radius_solar": 0.76,
+    "description": "A cool M-type dwarf with very low luminosity. Gliese 251's known planetary system occupies the close-in orbital region expected around a red primary."
+  },
+  "Gliese 205": {
+    "star_system": "Gliese 205",
+    "spectral_class": "M1V",
+    "temperature_k": 3800.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A nearby M-type dwarf with a faint red spectrum and low luminosity. It is a representative member of the abundant local red-dwarf population."
+  },
+  "Gliese 59": {
+    "star_system": "Gliese 59",
+    "spectral_class": "K3V",
+    "temperature_k": 4400.0,
+    "luminosity": 0.12,
+    "mass_solar": 0.73,
+    "radius_solar": 0.76,
+    "description": "A faint K-type dwarf with a subdued orange spectrum. Its lower mass and luminosity give the system a compact usable orbital region."
+  },
+  "Gliese 95": {
+    "star_system": "Gliese 95",
+    "spectral_class": "K0V",
+    "temperature_k": 5200.0,
+    "luminosity": 0.55,
+    "mass_solar": 0.85,
+    "radius_solar": 0.82,
+    "description": "A low-luminosity K-type dwarf. Its cool photosphere produces the amber light typical of a star substantially smaller than Sol."
+  },
+  "Gliese 117": {
+    "star_system": "Gliese 117",
+    "spectral_class": "K3V",
+    "temperature_k": 4400.0,
+    "luminosity": 0.12,
+    "mass_solar": 0.73,
+    "radius_solar": 0.76,
+    "description": "A modest K-type dwarf with less light than Sol. The system's subdued primary makes close orbital operations more practical than in a high-mass stellar system."
+  },
+  "Gliese 229 A": {
+    "star_system": "Gliese 229",
+    "spectral_class": "M1V",
+    "temperature_k": 3800.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A nearby M-type dwarf known for its unusually famous companion, the brown dwarf Gliese 229 B. Component A provides only a small fraction of Sol's light."
+  },
+  "Gliese 229 B": {
+    "star_system": "Gliese 229",
+    "spectral_class": "T7V",
+    "temperature_k": 1200.0,
+    "luminosity": 1e-05,
+    "mass_solar": 0.05,
+    "radius_solar": 0.08,
+    "description": "A brown dwarf companion to Gliese 229 A, too cool and faint to sustain hydrogen fusion. It is a substellar object rather than a conventional star, glowing primarily from residual heat."
+  },
+  "Gliese 623 A": {
+    "star_system": "Gliese 623",
+    "spectral_class": "M2V",
+    "temperature_k": 3650.0,
+    "luminosity": 0.007,
+    "mass_solar": 0.44,
+    "radius_solar": 0.44,
+    "description": "The brighter component of a close red-dwarf binary. Its M-type spectrum and low luminosity make the system's useful orbital zone compact."
+  },
+  "Gliese 623 B": {
+    "star_system": "Gliese 623",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "The smaller companion of Gliese 623 A, a faint M-type dwarf in a close binary configuration."
+  },
+  "Gliese 725 A": {
+    "star_system": "Gliese 725",
+    "spectral_class": "M3V",
+    "temperature_k": 3500.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.42,
+    "description": "A nearby M-type dwarf and the brighter component of the Gliese 725 binary. Its red light is faint but persistent, characteristic of a long-lived low-mass star."
+  },
+  "Gliese 725 B": {
+    "star_system": "Gliese 725",
+    "spectral_class": "M5V",
+    "temperature_k": 3100.0,
+    "luminosity": 0.0008,
+    "mass_solar": 0.18,
+    "radius_solar": 0.22,
+    "description": "The close M-type companion to Gliese 725 A. Its low luminosity contributes little to the system's total output but gives the binary a distinct double-star signature."
+  },
+  "Gliese 783": {
+    "star_system": "Gliese 783",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A cool, low-luminosity M-type dwarf. Like many late-type stars, it produces little visible light but can remain on the main sequence for extraordinary lengths of time."
+  },
+  "Gliese 785": {
+    "star_system": "Gliese 785",
+    "spectral_class": "K3V",
+    "temperature_k": 4400.0,
+    "luminosity": 0.12,
+    "mass_solar": 0.73,
+    "radius_solar": 0.76,
+    "description": "A K-type dwarf with a subdued orange spectrum and roughly half Sol's luminosity. Its stellar environment is cooler and more compact than Sol's."
+  },
+  "Gliese 788": {
+    "star_system": "Gliese 788",
+    "spectral_class": "M2V",
+    "temperature_k": 3650.0,
+    "luminosity": 0.007,
+    "mass_solar": 0.44,
+    "radius_solar": 0.44,
+    "description": "A faint M-type dwarf with very low luminosity. The system's useful orbital real estate is concentrated close to the primary."
+  },
+  "Gliese 793": {
+    "star_system": "Gliese 793",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A small red dwarf with low luminosity. Its faint output and cool photosphere place it firmly among the long-lived low-mass stars."
+  },
+  "Gliese 797": {
+    "star_system": "Gliese 797",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3750.0,
+    "luminosity": 0.015,
+    "mass_solar": 0.45,
+    "radius_solar": 0.48,
+    "description": "A cool M-type dwarf with a compact stellar environment. Its red emission is weak compared with the familiar G-type primaries of Old Earth's historical records."
+  },
+  "Gliese 803": {
+    "star_system": "Gliese 803",
+    "spectral_class": "M3V",
+    "temperature_k": 3500.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.42,
+    "description": "A low-mass M-type dwarf with very low luminosity. Its close-in orbital region receives the bulk of the star's available energy."
+  },
+  "Gliese 809": {
+    "star_system": "Gliese 809",
+    "spectral_class": "M5.5V",
+    "temperature_k": 3000.0,
+    "luminosity": 0.0001,
+    "mass_solar": 0.12,
+    "radius_solar": 0.15,
+    "description": "A faint red M-type dwarf. The star's small mass and low output are typical of the numerous low-energy systems found throughout the local stellar catalogue."
+  },
+  "Gliese 820": {
+    "star_system": "Gliese 820",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3580.0,
+    "luminosity": 0.006,
+    "mass_solar": 0.43,
+    "radius_solar": 0.43,
+    "description": "A cool M-type dwarf with low luminosity. Its subdued red spectrum makes it an unremarkable visual beacon but a useful catalogue reference."
+  },
+  "Gliese 825": {
+    "star_system": "Gliese 825",
+    "spectral_class": "M0.5V",
+    "temperature_k": 3850.0,
+    "luminosity": 0.018,
+    "mass_solar": 0.48,
+    "radius_solar": 0.48,
+    "description": "A small, faint M-type star. Gliese 825 produces little light compared with Sol, with most useful irradiation confined to close orbital distances."
+  },
+  "Gliese 831": {
+    "star_system": "Gliese 831",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3150.0,
+    "luminosity": 0.0012,
+    "mass_solar": 0.2,
+    "radius_solar": 0.26,
+    "description": "A cool red dwarf of low luminosity. Its long-lived main-sequence state is typical of stars near the bottom of the stellar mass range."
+  },
+  "Gliese 833": {
+    "star_system": "Gliese 833",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A faint M-type dwarf with a compact energy envelope. The star's red spectrum is markedly cooler than the G-type light familiar from Sol."
+  },
+  "Gliese 835": {
+    "star_system": "Gliese 835",
+    "spectral_class": "M1V",
+    "temperature_k": 3800.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A small M-type primary with very low luminosity. Its system is dominated by close-in orbital space rather than a broad, brightly illuminated outer region."
+  },
+  "Gliese 841": {
+    "star_system": "Gliese 841",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A cool, faint red dwarf. Gliese 841 is representative of the numerous low-mass stars whose lifetimes vastly exceed those of massive stars."
+  },
+  "Gliese 845": {
+    "star_system": "Gliese 845",
+    "spectral_class": "M2V",
+    "temperature_k": 3650.0,
+    "luminosity": 0.007,
+    "mass_solar": 0.44,
+    "radius_solar": 0.44,
+    "description": "A low-luminosity M-type star with a compact inner system. Its faint red light gives the primary a distinctly subdued appearance."
+  },
+  "Gliese 851": {
+    "star_system": "Gliese 851",
+    "spectral_class": "M3V",
+    "temperature_k": 3500.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.42,
+    "description": "A small red dwarf with very low stellar output. Most useful stellar energy in the system is concentrated close to the primary."
+  },
+  "Gliese 853": {
+    "star_system": "Gliese 853",
+    "spectral_class": "M5V",
+    "temperature_k": 3100.0,
+    "luminosity": 0.0008,
+    "mass_solar": 0.18,
+    "radius_solar": 0.22,
+    "description": "A cool M-type dwarf of modest mass and extremely low luminosity. Its system offers little ambient light beyond the inner orbital region."
+  },
+  "Gliese 855": {
+    "star_system": "Gliese 855",
+    "spectral_class": "M6V",
+    "temperature_k": 2800.0,
+    "luminosity": 4e-05,
+    "mass_solar": 0.09,
+    "radius_solar": 0.13,
+    "description": "A faint red dwarf whose low luminosity is characteristic of late-type M stars. Its stellar output is steady on human timescales despite the star's small size."
+  },
+  "Gliese 857": {
+    "star_system": "Gliese 857",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A low-mass M-type dwarf with a dim red photosphere. It belongs to the numerous class of stars expected to outlive almost every other stellar population."
+  },
+  "Gliese 859": {
+    "star_system": "Gliese 859",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3580.0,
+    "luminosity": 0.006,
+    "mass_solar": 0.43,
+    "radius_solar": 0.43,
+    "description": "A small, cool M-type star with very low luminosity. Its compact stellar environment is typical of late red dwarfs."
+  },
+  "Gliese 861": {
+    "star_system": "Gliese 861",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A faint M-type dwarf with a subdued red spectrum. The star contributes little light to the wider system, but its close-in region remains energetically active."
+  },
+  "Gliese 863": {
+    "star_system": "Gliese 863",
+    "spectral_class": "M1.5V",
+    "temperature_k": 3750.0,
+    "luminosity": 0.015,
+    "mass_solar": 0.45,
+    "radius_solar": 0.48,
+    "description": "A low-luminosity red dwarf. Its cool photosphere and small radius place it among the most durable stellar engines in the catalogue."
+  },
+  "Gliese 865": {
+    "star_system": "Gliese 865",
+    "spectral_class": "M3V",
+    "temperature_k": 3500.0,
+    "luminosity": 0.004,
+    "mass_solar": 0.4,
+    "radius_solar": 0.42,
+    "description": "A faint M-type primary with little visible output. Like other late red dwarfs, it trades brightness for extraordinary longevity."
+  },
+  "Gliese 867": {
+    "star_system": "Gliese 867",
+    "spectral_class": "M5.5V",
+    "temperature_k": 3000.0,
+    "luminosity": 0.0001,
+    "mass_solar": 0.12,
+    "radius_solar": 0.15,
+    "description": "A compact M-type dwarf with very low luminosity. The system's stellar environment becomes appreciably darker with increasing orbital distance."
+  },
+  "Gliese 869": {
+    "star_system": "Gliese 869",
+    "spectral_class": "M2V",
+    "temperature_k": 3650.0,
+    "luminosity": 0.007,
+    "mass_solar": 0.44,
+    "radius_solar": 0.44,
+    "description": "A cool red dwarf of the low-mass class. Its weak stellar output makes close orbital placement the defining feature of the system."
+  },
+  "Gliese 871": {
+    "star_system": "Gliese 871",
+    "spectral_class": "M4.5V",
+    "temperature_k": 3150.0,
+    "luminosity": 0.0012,
+    "mass_solar": 0.2,
+    "radius_solar": 0.26,
+    "description": "A faint M-type star with a compact useful radiation zone. Its low mass places it among the longest-lived conventional stars."
+  },
+  "Gliese 873": {
+    "star_system": "Gliese 873",
+    "spectral_class": "M3.5V",
+    "temperature_k": 3340.0,
+    "luminosity": 0.0038,
+    "mass_solar": 0.3,
+    "radius_solar": 0.34,
+    "description": "A small red dwarf with very low luminosity. The star's subdued spectrum is typical of late-type stellar systems."
+  },
+  "Gliese 875": {
+    "star_system": "Gliese 875",
+    "spectral_class": "M1V",
+    "temperature_k": 3800.0,
+    "luminosity": 0.02,
+    "mass_solar": 0.5,
+    "radius_solar": 0.5,
+    "description": "A cool M-type dwarf with little stellar output. Its system is dominated by the close-in orbits where the primary's weak light remains useful."
+  },
+  "Gliese 877": {
+    "star_system": "Gliese 877",
+    "spectral_class": "M6V",
+    "temperature_k": 2800.0,
+    "luminosity": 4e-05,
+    "mass_solar": 0.09,
+    "radius_solar": 0.13,
+    "description": "A faint red dwarf with low luminosity and a cool photosphere. It is a typical low-mass stellar primary rather than a high-energy beacon."
+  },
+  "Gliese 879": {
+    "star_system": "Gliese 879",
+    "spectral_class": "M2.5V",
+    "temperature_k": 3580.0,
+    "luminosity": 0.006,
+    "mass_solar": 0.43,
+    "radius_solar": 0.43,
+    "description": "A compact M-type dwarf with very low luminosity. Its red light is weak at range but persistent over stellar timescales."
+  },
+  "HD 219134": {
+    "star_system": "HD 219134",
+    "spectral_class": "K3V",
+    "temperature_k": 4400.0,
+    "luminosity": 0.12,
+    "mass_solar": 0.73,
+    "radius_solar": 0.76,
+    "description": "An old K-type dwarf only modestly brighter than the faintest catalogue stars, but with a well-studied system of multiple small planets. Its orange light is significantly cooler than Sol's."
+  },
+  "HD 102365": {
+    "star_system": "HD 102365",
+    "spectral_class": "G5V",
+    "temperature_k": 5540.0,
+    "luminosity": 0.9,
+    "mass_solar": 0.95,
+    "radius_solar": 0.98,
+    "description": "A mature, metal-poor G-type dwarf with luminosity close to Sol's. Its old stellar population signature makes it an interesting contrast to younger solar analogues."
+  },
+  "HD 10647": {
+    "star_system": "HD 10647",
+    "spectral_class": "F8V",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A bright F-type star with a prominent debris disk. Its planet-hosting system is unusually dusty for a relatively mature star."
+  },
+  "HD 20781": {
+    "star_system": "HD 20781",
+    "spectral_class": "G9.5V",
+    "temperature_k": 5400.0,
+    "luminosity": 0.7,
+    "mass_solar": 0.9,
+    "radius_solar": 0.94,
+    "description": "A quiet K-type dwarf hosting multiple planets. Its cooler spectrum gives the system a warmer, amber cast compared with Sol."
+  },
+  "HD 20782": {
+    "star_system": "HD 20782",
+    "spectral_class": "G3V",
+    "temperature_k": 5680.0,
+    "luminosity": 1.05,
+    "mass_solar": 1.0,
+    "radius_solar": 1.02,
+    "description": "A Sun-like star known for a giant planet on an exceptionally eccentric orbit. The planet's stretched path carries it through radically different stellar environments during each revolution."
+  },
+  "HD 28185": {
+    "star_system": "HD 28185",
+    "spectral_class": "G5IV",
+    "temperature_k": 5550.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "A solar-type star hosting a Jupiter-mass planet on a relatively temperate, near-circular orbit. The outer system is unusually orderly for a giant-planet host."
+  },
+  "HD 37124": {
+    "star_system": "HD 37124",
+    "spectral_class": "G4V",
+    "temperature_k": 5620.0,
+    "luminosity": 0.88,
+    "mass_solar": 0.94,
+    "radius_solar": 0.97,
+    "description": "A mature G-type star with a system of multiple giant planets. Its planetary architecture was among the early examples showing that compact multi-planet systems are not unique to Sol."
+  },
+  "HD 45364": {
+    "star_system": "HD 45364",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A cool solar-type star with two known giant planets locked near a 3:2 orbital resonance. Their coupled orbits make this system especially distinctive in navigational models."
+  },
+  "HD 51608": {
+    "star_system": "HD 51608",
+    "spectral_class": "G8V",
+    "temperature_k": 5450.0,
+    "luminosity": 0.76,
+    "mass_solar": 0.92,
+    "radius_solar": 0.96,
+    "description": "A G-type star hosting multiple planets detected through stellar wobble. Its quiet solar-like spectrum belies a more complicated planetary system."
+  },
+  "HD 5319": {
+    "star_system": "HD 5319",
+    "spectral_class": "K3III",
+    "temperature_k": 4200.0,
+    "luminosity": 60.0,
+    "mass_solar": 2.0,
+    "radius_solar": 11.0,
+    "description": "A slightly evolved K-type star with a warm orange spectrum. Its greater radius and luminosity indicate a star beginning to move beyond the main sequence."
+  },
+  "HD 134060": {
+    "star_system": "HD 134060",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A metal-poor G-type star hosting two confirmed planets, including a massive close-in world and a more distant companion. The inner planet completes its orbit in only a few days."
+  },
+  "HD 136352": {
+    "star_system": "HD 136352",
+    "spectral_class": "G6V",
+    "temperature_k": 5480.0,
+    "luminosity": 0.8,
+    "mass_solar": 0.91,
+    "radius_solar": 0.95,
+    "description": "A nearby G-type star hosting three known planets. Its solar-like spectrum and compact multi-planet architecture make it a useful benchmark system."
+  },
+  "HD 142022 A": {
+    "star_system": "HD 142022",
+    "spectral_class": "G1V",
+    "temperature_k": 5910.0,
+    "luminosity": 1.25,
+    "mass_solar": 1.04,
+    "radius_solar": 1.06,
+    "description": "A mature G-type star hosting a long-period giant planet. Its wide planetary orbit gives the system a distinctly outer-system character."
+  },
+  "HD 142022 B": {
+    "star_system": "HD 142022",
+    "spectral_class": "M4V",
+    "temperature_k": 3250.0,
+    "luminosity": 0.002,
+    "mass_solar": 0.26,
+    "radius_solar": 0.31,
+    "description": "A faint M-type companion to HD 142022 A. Its tiny contribution to the system's light contrasts sharply with the brighter primary."
+  },
+  "HD 14618": {
+    "star_system": "HD 14618",
+    "spectral_class": "K0V",
+    "temperature_k": 5200.0,
+    "luminosity": 0.55,
+    "mass_solar": 0.85,
+    "radius_solar": 0.82,
+    "description": "A cool K-type dwarf with lower luminosity than Sol. Its orange light and modest mass make it a typical long-lived stellar primary."
+  },
+  "HD 164595": {
+    "star_system": "HD 164595",
+    "spectral_class": "G2V",
+    "temperature_k": 5790.0,
+    "luminosity": 1.05,
+    "mass_solar": 1.02,
+    "radius_solar": 1.01,
+    "description": "A mature G-type star with a solar-like spectrum. A reported planetary signal made the system briefly notable in SETI circles, although no extraterrestrial transmission was established."
+  },
+  "HD 188015": {
+    "star_system": "HD 188015",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A slightly evolved G-type star hosting a giant planet on a broad orbit. Its greater age and luminosity place it beyond the simplest Sol analogue category."
+  },
+  "HD 192310": {
+    "star_system": "HD 192310",
+    "spectral_class": "K2V",
+    "temperature_k": 4900.0,
+    "luminosity": 0.25,
+    "mass_solar": 0.78,
+    "radius_solar": 0.75,
+    "description": "A cool K-type dwarf hosting multiple planets. Its orange light and low stellar output produce a compact but well-populated planetary system."
+  },
+  "HD 204941": {
+    "star_system": "HD 204941",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A metal-poor, solar-type star with a giant planet on a long-period orbit. Its chemistry marks it as an older member of the Galactic stellar population."
+  },
+  "HD 216770": {
+    "star_system": "HD 216770",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A solar-type star hosting a giant planet on an eccentric orbit. The system's planetary dynamics give it more character than the quiet primary suggests."
+  },
+  "HD 217107": {
+    "star_system": "HD 217107",
+    "spectral_class": "G8IV",
+    "temperature_k": 5450.0,
+    "luminosity": 1.0,
+    "mass_solar": 1.0,
+    "radius_solar": 1.05,
+    "description": "A G-type star with both a close-in giant planet and a much more distant giant companion. The contrast between the two orbits makes HD 217107 a particularly useful planetary reference system."
+  },
+  "HD 23079": {
+    "star_system": "HD 23079",
+    "spectral_class": "F8V",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A mature G-type star with a Jupiter-mass planet on an orbit extending well beyond the inner system. A smaller planet has also been reported on a much shorter orbit."
+  },
+  "HD 231701": {
+    "star_system": "HD 231701",
+    "spectral_class": "F5V",
+    "temperature_k": 6600.0,
+    "luminosity": 5.0,
+    "mass_solar": 1.5,
+    "radius_solar": 1.45,
+    "description": "A slightly evolved F-type star hosting a giant planet. Its hotter, whiter light and substantial planetary companion distinguish it from the quieter G-dwarf systems nearby."
+  },
+  "HD 240237": {
+    "star_system": "HD 240237",
+    "spectral_class": "K0V",
+    "temperature_k": 5200.0,
+    "luminosity": 0.55,
+    "mass_solar": 0.85,
+    "radius_solar": 0.82,
+    "description": "An evolved K-type giant hosting a massive planet. Its swollen stellar radius and amber light indicate a system well past the youthful main-sequence stage."
+  },
+  "HD 25015": {
+    "star_system": "HD 25015",
+    "spectral_class": "F8V",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A warm F-type dwarf with a somewhat higher temperature than Sol. Its white-yellow light marks a more energetic stellar environment."
+  },
+  "HD 28305": {
+    "star_system": "HD 28305",
+    "spectral_class": "F6V",
+    "temperature_k": 6300.0,
+    "luminosity": 2.2,
+    "mass_solar": 1.15,
+    "radius_solar": 1.15,
+    "description": "An evolved giant star with a high luminosity compared with Sol. Its large radius and orange-yellow spectrum indicate a star late in its normal stellar evolution."
+  },
+  "HD 33142": {
+    "star_system": "HD 33142",
+    "spectral_class": "K0III",
+    "temperature_k": 4500.0,
+    "luminosity": 180.0,
+    "mass_solar": 2.5,
+    "radius_solar": 14.0,
+    "description": "An evolved K-type giant hosting planets in its outer system. Its orange light and enlarged radius distinguish it sharply from main-sequence K dwarfs."
+  },
+  "HD 34445": {
+    "star_system": "HD 34445",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A mature G-type star with a rich planetary system containing several known planets. Its nearly solar spectrum makes the complexity of the system particularly notable."
+  },
+  "HD 38529": {
+    "star_system": "HD 38529",
+    "spectral_class": "G4IV",
+    "temperature_k": 5620.0,
+    "luminosity": 1.1,
+    "mass_solar": 1.02,
+    "radius_solar": 1.1,
+    "description": "An evolved G-type star hosting multiple planets, including a massive outer companion. Its enlarged radius and higher luminosity show that the primary is no longer a simple solar analogue."
+  },
+  "HD 38858": {
+    "star_system": "HD 38858",
+    "spectral_class": "G4V",
+    "temperature_k": 5620.0,
+    "luminosity": 0.88,
+    "mass_solar": 0.94,
+    "radius_solar": 0.97,
+    "description": "A mature G-type star with a prominent debris disk and a cool, Solar System-like outer architecture. Its spectrum and luminosity make it one of the more familiar-looking stars in the catalogue."
+  },
+  "HD 4203": {
+    "star_system": "HD 4203",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A G-type star known for hosting multiple giant planets. Its quiet solar-like primary contrasts with the substantial masses moving through its outer system."
+  },
+  "HD 4308": {
+    "star_system": "HD 4308",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A mature, metal-poor G-type star with a confirmed low-mass planet. Its relatively low stellar activity makes the system a useful target for precision measurements."
+  },
+  "HD 43691": {
+    "star_system": "HD 43691",
+    "spectral_class": "F8V",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A slightly evolved F-type star hosting a massive planet on a short-period orbit. Its hotter white-yellow light illuminates a comparatively compact planetary system."
+  },
+  "HD 45350": {
+    "star_system": "HD 45350",
+    "spectral_class": "G5IV",
+    "temperature_k": 5550.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "A G-type star with a giant planet on a long, eccentric orbit. The planet spends much of its cycle far from the primary, giving the outer system an unusually stretched architecture."
+  },
+  "HD 47186": {
+    "star_system": "HD 47186",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A solar-type star hosting two planets: a close-in Neptune-mass world and a more distant companion. Their very different orbits make the system an efficient demonstration of planetary diversity."
+  },
+  "HD 49674": {
+    "star_system": "HD 49674",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A G-type dwarf with a hot, close-orbiting giant planet. Its primary is modest and solar-like, while the inner planet is subjected to intense stellar irradiation."
+  },
+  "HD 50554": {
+    "star_system": "HD 50554",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A slightly hotter F-type star with a giant planet on a broad orbit. Its white light and substantial planetary companion make it a conspicuous exoplanet-system marker."
+  },
+  "HD 52265": {
+    "star_system": "HD 52265",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A mature G-type star with a Jupiter-like planet. Its relatively high metallicity and stable output have made it a useful target for precision stellar and planetary studies."
+  },
+  "HD 52790": {
+    "star_system": "HD 52790",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A luminous A-type star, much hotter and brighter than Sol. Its strong white light gives the system a very different energy profile from the surrounding G- and K-type stars."
+  },
+  "HD 6434": {
+    "star_system": "HD 6434",
+    "spectral_class": "G3V",
+    "temperature_k": 5680.0,
+    "luminosity": 1.05,
+    "mass_solar": 1.0,
+    "radius_solar": 1.02,
+    "description": "An old, metal-poor G-type star hosting a giant planet. Its chemistry and age mark it as a member of an older Galactic stellar population."
+  },
+  "HD 65216": {
+    "star_system": "HD 65216",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A G-type star with a planetary system including a giant world on a broad orbit. Its solar-like spectrum makes the outer planetary architecture the dominant point of interest."
+  },
+  "HD 66428": {
+    "star_system": "HD 66428",
+    "spectral_class": "G5IV",
+    "temperature_k": 5550.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.15,
+    "description": "A mature G-type star with a long-period giant planet. Its quiet primary and distant massive companion give the system a relatively spacious architecture."
+  },
+  "HD 68988": {
+    "star_system": "HD 68988",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A G-type star hosting a massive planet on a close orbit. The planet's short year puts it deep inside the system's high-irradiation zone."
+  },
+  "HD 72659": {
+    "star_system": "HD 72659",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A mature G-type star with a long-period giant planet. The broad orbit leaves the inner system comparatively open by the standards of early exoplanet discoveries."
+  },
+  "HD 73526": {
+    "star_system": "HD 73526",
+    "spectral_class": "G6V",
+    "temperature_k": 5480.0,
+    "luminosity": 0.8,
+    "mass_solar": 0.91,
+    "radius_solar": 0.95,
+    "description": "A G-type star hosting two giant planets in a near-resonant orbital arrangement. Their mutual gravitational interaction gives the system a distinctive dynamical signature."
+  },
+  "HD 74156": {
+    "star_system": "HD 74156",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A G-type star with multiple giant planets on substantially different orbits. The system is a classic example of the varied architectures found around solar-type stars."
+  },
+  "HD 75289": {
+    "star_system": "HD 75289",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A hot F-type star with a close-in giant planet. The planet's short orbit places it deep in the primary's intense irradiation field."
+  },
+  "HD 76700": {
+    "star_system": "HD 76700",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A solar-type star hosting a close-in giant planet. Its compact planetary system contrasts with the broad outer orbits found around many other catalogue stars."
+  },
+  "HD 82943": {
+    "star_system": "HD 82943",
+    "spectral_class": "G0V",
+    "temperature_k": 5920.0,
+    "luminosity": 1.3,
+    "mass_solar": 1.05,
+    "radius_solar": 1.08,
+    "description": "A solar-type star hosting multiple giant planets in a dynamically interesting resonant architecture. Its planets have made HD 82943 a standard reference in studies of orbital migration."
+  },
+  "HD 83443": {
+    "star_system": "HD 83443",
+    "spectral_class": "K0V",
+    "temperature_k": 5200.0,
+    "luminosity": 0.55,
+    "mass_solar": 0.85,
+    "radius_solar": 0.82,
+    "description": "A cool K-type star with a close-in giant planet. Its orange light is substantially weaker than Sol's, but the inner planet remains strongly irradiated."
+  },
+  "HD 86081": {
+    "star_system": "HD 86081",
+    "spectral_class": "F8V",
+    "temperature_k": 6400.0,
+    "luminosity": 4.0,
+    "mass_solar": 1.4,
+    "radius_solar": 1.4,
+    "description": "A hot F-type star hosting a close-in giant planet. Its higher temperature and short planetary orbit combine to make the inner system intensely illuminated."
+  },
+  "HD 89345": {
+    "star_system": "HD 89345",
+    "spectral_class": "K0III",
+    "temperature_k": 4500.0,
+    "luminosity": 180.0,
+    "mass_solar": 2.5,
+    "radius_solar": 14.0,
+    "description": "A slightly evolved K-type star with a large radius and a lower-temperature photosphere. Its planet-hosting system orbits a primary already beginning to leave the main sequence."
+  },
+  "HD 92788": {
+    "star_system": "HD 92788",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A mature G-type star hosting a massive planet on a broad orbit. Its solar-like light makes the planetary system especially easy to compare with Sol's historical records."
+  },
+  "HD 93083": {
+    "star_system": "HD 93083",
+    "spectral_class": "K2V",
+    "temperature_k": 4900.0,
+    "luminosity": 0.25,
+    "mass_solar": 0.78,
+    "radius_solar": 0.75,
+    "description": "A cool K-type star hosting a giant planet. Its subdued orange light and relatively low mass give the system a compact stellar environment."
+  },
+  "HD 93722": {
+    "star_system": "HD 93722",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.86,
+    "mass_solar": 0.93,
+    "radius_solar": 0.96,
+    "description": "A hot, luminous star with a high-energy spectrum very different from the G-type primaries that dominate human settlement history. Its output makes the inner system a harsh radiation environment."
+  },
+  "HD 99109": {
+    "star_system": "HD 99109",
+    "spectral_class": "G5V",
+    "temperature_k": 5510.0,
+    "luminosity": 0.88,
+    "mass_solar": 0.94,
+    "radius_solar": 0.97,
+    "description": "A mature G-type star hosting a long-period giant planet. Its near-solar spectrum gives the system a familiar appearance despite its distinct planetary architecture."
   }
 }

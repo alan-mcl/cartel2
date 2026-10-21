@@ -13,21 +13,6 @@ const SITE_STAR_BACKGROUND_WEIGHT := 0.4
 const VOLATILE_STAR_MIN_DISC_RADIUS := 18.0
 const UNCATALOGUED_STAR_LABEL := "Uncatalogued star"
 
-const AFFILIATED_BACKGROUND_GROUPS: Array[String] = [
-	"Eridani",
-	"Centauri",
-	"Cygni",
-	"Ceti",
-	"Virginis",
-	"Scorpii",
-	"Pavonis",
-	"Ursae Majoris",
-	"Leonis",
-	"Wolf",
-	"Kepler",
-]
-
-
 static func default_lump_seconds() -> float:
 	return float(DEFAULT_FRICTION) * Catalog.ROUTE_SECONDS_PER_FRICTION
 
@@ -78,7 +63,9 @@ static func pick_site_star(catalog: Catalog, source_sector_id: String, seed_text
 		return {}
 	if roll < SITE_STAR_DEEP_SPACE_WEIGHT + SITE_STAR_LOCAL_WEIGHT:
 		return _pick_local_system_star(catalog, source_sector_id, rng)
-	return _pick_background_star(catalog, rng)
+	var sector := catalog.get_sector(source_sector_id)
+	var star_system := str(sector.get("star_system", "")).strip_edges()
+	return _pick_galactic_star(catalog, star_system, rng)
 
 
 static func star_setup_for_render(star_data: Dictionary) -> Dictionary:
@@ -570,7 +557,7 @@ static func _pick_local_system_star(
 	var sector := catalog.get_sector(source_sector_id)
 	var star_system := str(sector.get("star_system", "")).strip_edges()
 	if star_system.is_empty():
-		return _pick_background_star(catalog, rng)
+		return _pick_galactic_star(catalog, "", rng)
 	var names := catalog.list_star_names_for_system(star_system)
 	if names.is_empty():
 		return _star_setup_from_facts(star_system, catalog.get_star(star_system))
@@ -578,8 +565,12 @@ static func _pick_local_system_star(
 	return _star_setup_from_facts(picked, catalog.get_star(picked))
 
 
-static func _pick_background_star(catalog: Catalog, rng: RandomNumberGenerator) -> Dictionary:
-	var names := catalog.list_background_star_names()
+static func _pick_galactic_star(
+	catalog: Catalog,
+	source_star_system: String,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var names := catalog.list_star_names_outside_system(source_star_system)
 	if names.is_empty():
 		return {}
 	var picked: String = names[rng.randi_range(0, names.size() - 1)]

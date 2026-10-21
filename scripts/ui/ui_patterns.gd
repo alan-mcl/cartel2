@@ -7,10 +7,16 @@ const METRIC_BLOCK := preload("res://scenes/ui/patterns/metric_block.tscn")
 const MESSAGE_BAR := preload("res://scenes/ui/patterns/message_bar.tscn")
 
 
-static func status_row(label_text: String, value_text: String, key_min_width: float = 120.0) -> Control:
+static func status_row(
+	label_text: String,
+	value_text: String,
+	key_min_width: float = 120.0,
+	wrap_value: bool = false,
+	value_min_width: float = 0.0
+) -> Control:
 	var row: Control = STATUS_ROW.instantiate()
 	if row.has_method("configure"):
-		row.configure(label_text, value_text, key_min_width)
+		row.configure(label_text, value_text, key_min_width, wrap_value, value_min_width)
 	return row
 
 

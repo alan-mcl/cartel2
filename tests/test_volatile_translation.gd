@@ -353,19 +353,21 @@ static func _test_exit_lag_on_arrival(runner: TestRunner, catalog: Catalog) -> v
 
 static func _test_volatile_site_stars(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(
-		catalog.background_star_count() >= 180,
-		"volatile stars: background pool size"
+		catalog.star_catalog_count() >= 280,
+		"volatile stars: unified star catalogue size"
 	)
 	for star_name in catalog.stars_by_name.keys():
+		var entry: Variant = catalog.stars_by_name[star_name]
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
 		runner.check(
-			not catalog.background_stars_by_name.has(star_name),
-			"volatile stars: system star not duplicated in background (%s)" % star_name
+			not str((entry as Dictionary).get("description", "")).is_empty(),
+			"volatile stars: every star has a description (%s)" % star_name
 		)
-	var affiliated_frac := catalog.background_star_affiliated_fraction(
-		VolatileTranslation.AFFILIATED_BACKGROUND_GROUPS
+	runner.check(
+		catalog.list_star_names_outside_system("Alpha Centauri").size() >= 200,
+		"volatile stars: galactic pool excludes local system"
 	)
-	runner.check(affiliated_frac >= 0.25, "volatile stars: affiliated group share lower bound")
-	runner.check(affiliated_frac <= 0.5, "volatile stars: affiliated group share upper bound")
 
 	var local_allowed := {
 		"Alpha Centauri A": true,
@@ -384,7 +386,7 @@ static func _test_volatile_site_stars(runner: TestRunner, catalog: Catalog) -> v
 		var name := str(picked.get("name", ""))
 		if local_allowed.has(name):
 			local_count += 1
-		elif catalog.background_stars_by_name.has(name):
+		elif str(catalog.get_star(name).get("star_system", "")) != "Alpha Centauri":
 			background_count += 1
 		else:
 			runner.check(false, "volatile stars: unexpected pick %s" % name)

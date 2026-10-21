@@ -30,7 +30,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "tycho",
@@ -58,7 +59,8 @@
 			"radiant_fluctuation": 0.35,
 			"charged_particle": 1.8,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.05
 	},
 	{
 		"id": "bela",
@@ -86,7 +88,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.15,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 0.98
 	},
 	{
 		"id": "irasia",
@@ -114,7 +117,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.02
 	},
 	{
 		"id": "tokirev",
@@ -141,7 +145,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "fennet",
@@ -168,7 +173,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.95,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "fortuna",
@@ -197,7 +203,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.45,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "new_carthage",
@@ -227,7 +234,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "horizon",
@@ -258,7 +266,8 @@
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.6,
 			"charged_particle_fluctuation": 0.25
-		}
+		},
+		"star_distance_au": 1.01
 	},
 	{
 		"id": "titania",
@@ -286,7 +295,8 @@
 			"radiant_fluctuation": 0.55,
 			"charged_particle": 2.4,
 			"charged_particle_fluctuation": 0.7
-		}
+		},
+		"star_distance_au": 1.08
 	},
 	{
 		"id": "pelagos",
@@ -315,7 +325,8 @@
 			"radiant_fluctuation": 0.3,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 1.0
 	},
 	{
 		"id": "centauri_a_beltworks",
@@ -336,7 +347,8 @@
 			"radiant_fluctuation": 0.15,
 			"charged_particle": 0.85,
 			"charged_particle_fluctuation": 0.1
-		}
+		},
+		"star_distance_au": 2.4
 	},
 	{
 		"id": "acb1",
@@ -358,7 +370,8 @@
 			"radiant_fluctuation": 0.25,
 			"charged_particle": 1.2,
 			"charged_particle_fluctuation": 0.15
-		}
+		},
+		"star_distance_au": 0.32
 	},
 	{
 		"id": "acb2",
@@ -380,7 +393,8 @@
 			"radiant_fluctuation": 0.2,
 			"charged_particle": 1.15,
 			"charged_particle_fluctuation": 0.1
-		}
+		},
+		"star_distance_au": 0.48
 	},
 	{
 		"id": "acb3",
@@ -402,7 +416,8 @@
 			"radiant_fluctuation": 0.18,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.08
-		}
+		},
+		"star_distance_au": 0.72
 	},
 	{
 		"id": "terminus",
@@ -423,7 +438,8 @@
 			"radiant_fluctuation": 0.12,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.08
-		}
+		},
+		"star_distance_au": 115.0
 	},
 	{
 		"id": "vulcan_research",
@@ -444,7 +460,8 @@
 			"radiant_fluctuation": 0.45,
 			"charged_particle": 2.2,
 			"charged_particle_fluctuation": 0.2
-		}
+		},
+		"star_distance_au": 0.28
 	},
 	{
 		"id": "regulus_belt",
@@ -465,7 +482,8 @@
 			"radiant_fluctuation": 0.3,
 			"charged_particle": 1.4,
 			"charged_particle_fluctuation": 0.1
-		}
+		},
+		"star_distance_au": 3.2
 	},
 	{
 		"id": "denarius_ii",
@@ -487,7 +505,8 @@
 			"radiant_fluctuation": 0.32,
 			"charged_particle": 1.6,
 			"charged_particle_fluctuation": 0.12
-		}
+		},
+		"star_distance_au": 5.5
 	},
 	{
 		"id": "typhon_xvi",
@@ -509,7 +528,8 @@
 			"radiant_fluctuation": 0.28,
 			"charged_particle": 1.55,
 			"charged_particle_fluctuation": 0.15
-		}
+		},
+		"star_distance_au": 8.4
 	},
 	{
 		"id": "pelagos_belt",
@@ -529,6 +549,7 @@
 			"radiant_fluctuation": 0.3,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
-		}
+		},
+		"star_distance_au": 2.6
 	}
 ]

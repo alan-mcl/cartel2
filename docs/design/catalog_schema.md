@@ -169,6 +169,7 @@ Source: `data/catalog/schema/sectors.schema.json` → `sectors.json`
 | `planet_name` | string | no | `` |  |
 | `star` | string | no | `` |  |
 | `star_system` | string | no | `` |  |
+| `star_distance_au` | number | no | `0.0` |  |
 | `description` | string | no | `` |  |
 | `classification` | string | no | `` |  |
 | `gravity` | number | no | `1.0` |  |

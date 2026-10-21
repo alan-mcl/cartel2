@@ -12,6 +12,7 @@
     "planet_name": { "type": "string", "default": "" },
     "star": { "type": "string", "default": "" },
     "star_system": { "type": "string", "default": "" },
+    "star_distance_au": { "type": "number", "default": 0.0 },
     "description": { "type": "string", "default": "" },
     "classification": { "type": "string", "default": "" },
     "gravity": { "type": "number", "default": 1.0 },

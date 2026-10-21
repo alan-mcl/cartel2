@@ -1,8 +1,10 @@
 extends Control
 
 const REFRESH_INTERVAL_SEC := 1.0
+const ROW_VALUE_WRAP_WIDTH := 340.0
 
 @onready var _title: Label = $Center/Panel/VBox/Title
+@onready var _rows_scroll: ScrollContainer = $Center/Panel/VBox/RowsScroll
 @onready var _rows_list: VBoxContainer = $Center/Panel/VBox/RowsScroll/RowsList
 
 var _session: GameSession
@@ -19,6 +21,11 @@ func _ready() -> void:
 	var panel := get_node_or_null("Center/Panel") as Control
 	if panel != null:
 		panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _title != null:
+		_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if _rows_scroll != null:
+		_rows_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 
 
 func bind(session: GameSession, catalog: Catalog) -> void:
@@ -96,7 +103,13 @@ func _refresh_content() -> void:
 			continue
 		var row: Dictionary = row_variant
 		_rows_list.add_child(
-			UiPatterns.status_row(str(row.get("label", "")), str(row.get("value", "")))
+			UiPatterns.status_row(
+				str(row.get("label", "")),
+				str(row.get("value", "")),
+				120.0,
+				true,
+				ROW_VALUE_WRAP_WIDTH
+			)
 		)
 
 

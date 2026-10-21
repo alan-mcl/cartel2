@@ -18,9 +18,14 @@ static func build(
 	var velocity: Vector2 = contact.get("velocity", Vector2.ZERO)
 	var kind := str(contact.get("contact_kind", ""))
 	var title := _title_for_contact(contact)
+	var range_text := (
+		_format_star_range_au(session, catalog, contact)
+		if kind == "star"
+		else _format_distance(observer_pos.distance_to(target_pos))
+	)
 	var rows: Array = [
 		_row("Kind", _kind_display(kind, contact)),
-		_row("Range", _format_distance(observer_pos.distance_to(target_pos))),
+		_row("Range", range_text),
 		_row("Speed", _format_speed(velocity.length())),
 		_row("Heading", _format_heading(velocity)),
 	]
@@ -177,7 +182,7 @@ static func _star_detail_rows(catalog: Catalog, contact: Dictionary) -> Array:
 		rows.append(_row("Temperature", "%.0f K" % temp_k))
 	var lum := float(contact.get("star_luminosity", 0.0))
 	if lum > 0.0:
-		rows.append(_row("Luminosity", "%.1f" % lum))
+		rows.append(_row("Luminosity", "%.3f" % lum))
 
 	var star_name := str(contact.get("star_name", contact.get("name", ""))).strip_edges()
 	var facts := catalog.get_star(star_name)
@@ -193,7 +198,7 @@ static func _star_detail_rows(catalog: Catalog, contact: Dictionary) -> Array:
 		rows.append(_row("Radius", "%.2f R☉" % float(facts.get("radius_solar", 0.0))))
 	var description := str(facts.get("description", "")).strip_edges()
 	if not description.is_empty():
-		rows.append(_row("Catalogue", description))
+		rows.append(_row("Description", description))
 	return rows
 
 
@@ -258,6 +263,35 @@ static func _kind_display(kind: String, contact: Dictionary) -> String:
 
 static func _row(label_text: String, value_text: String) -> Dictionary:
 	return {"label": label_text, "value": value_text}
+
+
+static func _format_star_range_au(session: GameSession, catalog: Catalog, contact: Dictionary) -> String:
+	if session == null or catalog == null:
+		return "—"
+	var sector_id := str(session.world.sector_id)
+	if VolatileTranslation.is_volatile_sector_id(sector_id):
+		var record := VolatileTranslation.find_by_sector_id(session, sector_id)
+		var seed_key := str(record.get("id", VolatileTranslation.record_id_from_sector(sector_id)))
+		if seed_key.is_empty():
+			seed_key = sector_id
+		var rng := RandomNumberGenerator.new()
+		rng.seed = absi(seed_key.hash())
+		var au := 1.0 + rng.randf() * 19.0
+		return "%.3f AU" % au
+	var sector := catalog.get_sector(sector_id)
+	var base_au := float(sector.get("star_distance_au", 0.0))
+	if base_au <= 0.0:
+		base_au = 1.0
+	var jitter := _star_range_jitter_au(sector_id)
+	return "%.3f AU" % (base_au + jitter)
+
+
+static func _star_range_jitter_au(sector_id: String) -> float:
+	if sector_id.is_empty():
+		return 0.0
+	var rng := RandomNumberGenerator.new()
+	rng.seed = absi(sector_id.hash())
+	return rng.randf_range(-0.005, 0.005)
 
 
 static func _format_distance(metres: float) -> String:
