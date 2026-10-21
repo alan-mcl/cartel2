@@ -17,6 +17,7 @@ func _run() -> void:
 	await _smoke_save_loaded_world(catalog)
 	await _smoke_combat_motion()
 	await _smoke_system_render_tester()
+	await _smoke_mission_harness()
 	if _failures > 0:
 		push_error("Scene smoke suite failed with %d assertion(s)." % _failures)
 		quit(1)
@@ -96,6 +97,27 @@ func _smoke_combat_motion() -> void:
 		)
 	paused = false
 	sandbox.queue_free()
+	await process_frame
+
+
+func _smoke_mission_harness() -> void:
+	var harness := preload("res://scenes/dev/mission_harness.tscn").instantiate()
+	root.add_child(harness)
+	await process_frame
+	await process_frame
+	var ok: bool = harness.smoke_begin_site_only("deep_space")
+	_check(ok, "mission harness begins site-only run")
+	await process_frame
+	var main: Node2D = harness.get_node("Main")
+	_check(
+		VolatileTranslation.is_volatile_sector_id(main.session.sector_id),
+		"mission harness session in volatile sector"
+	)
+	_check(not main.session.docked, "mission harness player undocked")
+	var world: Node2D = main.get_node("World")
+	_check(world.get_child_count() > 0, "mission harness loads volatile world")
+	paused = false
+	harness.queue_free()
 	await process_frame
 
 

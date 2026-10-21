@@ -147,7 +147,13 @@ func _load_volatile_sector(
 	var contact_name := VolatileTranslation.volatile_star_contact_name(star_data)
 	if not contact_name.is_empty():
 		var render_data := VolatileTranslation.star_setup_for_render(star_data)
-		_spawn_volatile_star(world_root, render_data, setup, str(record.get("id", sector_id)))
+		_spawn_volatile_star(
+			world_root,
+			render_data,
+			setup,
+			str(record.get("id", sector_id)),
+			session.run_seed
+		)
 
 	if VolatileTranslation.return_gate_open(session, sector_id):
 		var gate_entity := {
@@ -183,10 +189,11 @@ func _spawn_volatile_star(
 	world_root: Node2D,
 	star_data: Dictionary,
 	setup: Dictionary,
-	seed_key: String
+	seed_key: String,
+	run_seed: int = 0
 ) -> void:
 	var rng := RandomNumberGenerator.new()
-	var seed_text := str(setup.get("seed", seed_key))
+	var seed_text := "%s:%d:%s" % [str(setup.get("seed", seed_key)), run_seed, seed_key]
 	rng.seed = absi(seed_text.hash())
 	var ref_pos := Vector2(_gate_radius * 0.35, 0.0)
 	var star_pos := _pick_star_position(rng, ref_pos)

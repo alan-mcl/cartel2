@@ -219,6 +219,23 @@ func try_interact(target: Interactable) -> void:
 	_world.try_interact(target)
 
 
+func get_simulation() -> Simulation:
+	return _simulation
+
+
+## Dev-only hooks for mission_harness.tscn.
+func dev_start_game_from_session() -> void:
+	_menu.start_game_from_session()
+
+
+func dev_set_quit_to_menu(handler: Callable) -> void:
+	if _pause.quit_to_menu_requested.is_connected(_menu.on_quit_to_menu_requested):
+		_pause.quit_to_menu_requested.disconnect(_menu.on_quit_to_menu_requested)
+	if handler.is_valid() and not _pause.quit_to_menu_requested.is_connected(handler):
+		_pause.quit_to_menu_requested.connect(handler)
+	_ui_root.on_quit_to_menu_requested = handler
+
+
 func _bind_session_events(game_session: GameSession) -> void:
 	_menu.bind_session_events(game_session)
 

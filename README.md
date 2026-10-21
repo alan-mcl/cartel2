@@ -78,13 +78,15 @@ python3 scripts/tools/generate_placeholder_art.py
 $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 ```
 
-**Dev sandboxes** - open a scene under `scenes/dev/` in the editor and press **F6**, or run one directly, for example:
+**Dev sandboxes** — open a scene under `scenes/dev/` in the editor and press **F6**, or from repo root:
 
 ```bash
-$GODOT --path . --scene res://scenes/dev/theme_showcase.tscn
+./scripts/dev/mission_harness.sh
+./scripts/dev/combat_sandbox.sh
+# … see docs/design/dev_sandboxes.md for the full list
 ```
 
-Other sandboxes: `ship_assembly_sandbox`, `combat_sandbox`, `stealth_sandbox`, `system_render_tester`.
+Override Godot with `GODOT=/path/to/Godot ./scripts/dev/combat_sandbox.sh`. Details: [docs/design/dev_sandboxes.md](docs/design/dev_sandboxes.md).
 
 Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/ui/portraits/` (matches habitat banner height); reimport.
 

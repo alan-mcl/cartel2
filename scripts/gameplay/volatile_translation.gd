@@ -133,7 +133,11 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 		setup.erase("omit_star")
 		setup.erase("star")
 	elif not _setup_has_star(setup):
-		var picked := pick_site_star(catalog, source_sector_id, record_id)
+		var picked := pick_site_star(
+			catalog,
+			source_sector_id,
+			_star_pick_seed(source_sector_id, session, record_id, setup)
+		)
 		if picked.is_empty():
 			setup.erase("star")
 		else:
@@ -557,6 +561,23 @@ static func _setup_has_star(setup: Dictionary) -> bool:
 	if typeof(star) != TYPE_DICTIONARY:
 		return false
 	return not (star as Dictionary).is_empty()
+
+
+static func _star_pick_seed(
+	source_sector_id: String,
+	session: GameSession,
+	record_id: String,
+	setup: Dictionary
+) -> String:
+	var run_seed := 0
+	if session != null:
+		run_seed = session.run_seed
+	return "%s:%d:%s:%s" % [
+		source_sector_id,
+		run_seed,
+		record_id,
+		str(setup.get("seed", "")),
+	]
 
 
 static func _pick_local_system_star(

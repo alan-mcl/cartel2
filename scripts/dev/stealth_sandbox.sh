@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$DIR/run_scene.sh" "res://scenes/dev/stealth_sandbox.tscn" "$@"

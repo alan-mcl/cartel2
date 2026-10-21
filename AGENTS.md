@@ -89,20 +89,9 @@ $GODOT --path . --headless --import --quit
 # Rebuild UI theme
 $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
-# Theme showcase (F6 in editor)
-# res://scenes/dev/theme_showcase.tscn
-
-# Ship assembly sandbox (F6)
-# res://scenes/dev/ship_assembly_sandbox.tscn
-
-# Combat sandbox (F6)
-# res://scenes/dev/combat_sandbox.tscn
-
-# Stealth sandbox (F6)
-# res://scenes/dev/stealth_sandbox.tscn
-
-# System render tester (F6)
-# res://scenes/dev/system_render_tester.tscn
+# Dev sandboxes (F6 in editor, or ./scripts/dev/<name>.sh) — see docs/design/dev_sandboxes.md
+#   theme_showcase.sh  ship_assembly_sandbox.sh  combat_sandbox.sh
+#   stealth_sandbox.sh  mission_harness.sh  system_render_tester.sh
 ```
 
 ## Documentation map

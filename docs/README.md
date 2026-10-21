@@ -13,6 +13,7 @@ Specification and setting reference for the Cartel game. Content grows as system
 | Document | Contents |
 |----------|----------|
 | [architecture.md](design/architecture.md) | Code layering, data flow, main loops, not-yet-implemented features |
+| [dev_sandboxes.md](design/dev_sandboxes.md) | Dev sandbox launcher scripts and scene index |
 | [commodity_economy.md](design/commodity_economy.md) | Daily Exchange quotes: fixed flows, graph reach, pricing equations |
 | [sensors_signatures.txt](design/sensors_signatures.txt) | Phase 1 sensor vs signature design spec |
 | [backlog.md](design/backlog.md) | Deferred design passes (fuel types, gravitic line, integrated sail) |
