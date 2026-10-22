@@ -9,12 +9,32 @@
 			"placement": "planet",
 			"sector_id": "fennet"
 		},
-		"brands": [
-			"Cumbre Mining",
-			"Sierra Refining",
-			"Altiplano Bulk",
-			"Cordillera Haulage"
-		],
+"brands": [
+    "Cumbre Mining",
+    "Sierra Refining",
+    "Altiplano Bulk",
+    "Cordillera Haulage",
+    "Condor Engineering",
+    "Páramo Foods",
+    "Andes Mutual",
+    "Sol de Plata Energy",
+    "Tierra Alta Construction",
+    "Qhapaq Logistics",
+    "Cañon Steel",
+    "Puna AgriSystems",
+    "Nevado Water",
+    "Cobrex Materials",
+    "Cumbre Home",
+    "Sierra Freight",
+    "Altiplano Estates",
+    "Cordillera Insurance",
+    "Andean Harvest",
+    "Pachamama Biotech",
+    "Roca Heavy Industries",
+    "Cóndor Motors",
+    "Horizonte Developments",
+    "Tierra Nueva Utilities"
+],
 		"practice": "extractive"
 	},
 	{
@@ -28,12 +48,33 @@
 			"sector_id": "regulus_belt",
 			"location_id": "regulus_belt_habitat"
 		},
-		"brands": [
-			"Foundation Habitat",
-			"Loadmaster Systems",
-			"Titan-class Yards",
-			"Keystone Extraction"
-		],
+"brands": [
+    "Foundation Habitat",
+    "Loadmaster Systems",
+    "Titan-class Yards",
+    "Keystone Extraction",
+    "Atlas Civil Engineering",
+    "Bedrock Materials",
+    "Pioneer Construction",
+    "DeepCore Mining",
+    "Horizon Infrastructure",
+    "Ironclad Machinery",
+    "Grandworks Fabrication",
+    "TerraForm Development",
+    "Anchor Power",
+    "Atlas Transit",
+    "Surveyor Instruments",
+    "Frontier Works",
+    "HeavyLift Logistics",
+    "Keystone Properties",
+    "Atlas Water",
+    "Foundry Systems",
+    "LongHaul Freight",
+    "New World Utilities",
+    "Pillar Engineering",
+    "Outpost Developments",
+    "Atlas Home"
+],
 		"practice": "industrial"
 	},
 	{
@@ -47,12 +88,32 @@
 			"sector_id": "irasia",
 			"location_id": "irasia_habitat"
 		},
-		"brands": [
-			"Caduceus Therapeutics",
-			"VitaVault Containment",
-			"GeneSeal Labs",
-			"Clinical Compliance"
-		],
+"brands": [
+    "Caduceus Therapeutics",
+    "VitaVault Containment",
+    "GeneSeal Labs",
+    "Clinical Compliance",
+    "EternaCell",
+    "Genesis Diagnostics",
+    "Lifeline Pharmaceuticals",
+    "HelixCare",
+    "NewLife Reproductive",
+    "VitaNova Longevity",
+    "BioGenesis Veterinary",
+    "Dermagen Cosmetics",
+    "Progenitor Foods",
+    "Synapse Clinical",
+    "Medisource Distribution",
+    "Genewell Laboratories",
+    "Vitalis Prosthetics",
+    "CuraGene",
+    "Embryon Systems",
+    "Cellular Assurance",
+    "LifeSpan Clinics",
+    "BioGenesis Wellness",
+    "Heritage Cryonics",
+    "Precision Immunology"
+],
 		"practice": "life_sciences"
 	},
 	{
@@ -66,12 +127,32 @@
 			"sector_id": "new_carthage",
 			"location_id": "new_carthage_habitat"
 		},
-		"brands": [
-			"Tyrian Shipping",
-			"Punic Commodities",
-			"Mediterranean Exchange",
-			"Carthage Intelligence"
-		],
+"brands": [
+    "Carthage Intelligence",
+    "Hannibal Financial",
+    "Mare Nostrum Hotels",
+    "Levantine Foods",
+    "Merchant House",
+    "Golden Fleece Luxury",
+    "New Carthage Properties",
+    "Pillar & Sons",
+    "Carthage Assurance",
+    "Atlas Provisioning",
+    "Saffron Consumer Goods",
+    "Harbour & Vine",
+    "Punic Telecommunications",
+    "Seven Seas Travel",
+    "Mercator Systems",
+    "Carthage Agricultural",
+    "Silk Road Logistics",
+    "Imperial Estates",
+    "Old Harbour Bank",
+    "Voyager Outfitters",
+    "Mediterranean Broadcasting",
+    "Carthage Household",
+    "Meridian Commodities",
+    "Red Sea Resorts"
+],
 		"practice": "logistics"
 	},
 	{
@@ -84,12 +165,32 @@
 			"placement": "planet",
 			"sector_id": "fortuna"
 		},
-		"brands": [
-			"Nagarathar Finance",
-			"Steward Capital",
-			"Chettiar Commodity House",
-			"Temple Endowment Desk"
-		],
+"brands": [
+    "Nagarathar Finance",
+    "Steward Capital",
+    "Chettiar Commodity House",
+    "Temple Endowment Desk",
+    "Nagarathar Properties",
+    "Chettiar & Sons",
+    "Coromandel Shipping",
+    "Deccan Mercantile",
+    "Kaveri Foods",
+    "Steward Insurance",
+    "Chettiar Industrial",
+    "Southern Cross Logistics",
+    "Nagarathar Estates",
+    "Peninsula Hospitality",
+    "Chettiar Consumer",
+    "Eastern Exchange",
+    "Madras House",
+    "Steward Infrastructure",
+    "Chettiar Transport",
+    "Golden Coast Trading",
+    "Nagarathar Developments",
+    "Heritage Provisioning",
+    "Chettiar Communications",
+    "Indus General"
+],
 		"practice": "finance"
 	},
 	{
@@ -103,12 +204,32 @@
 			"sector_id": "titania",
 			"location_id": "sta_chimera_titania"
 		},
-		"brands": [
-			"Chimera Labs",
-			"Glasspark Entertainment",
-			"Flex Security",
-			"Experimental Licensing"
-		],
+"brands": [
+    "Chimera Labs",
+    "Glasspark Entertainment",
+    "Flex Security",
+    "Experimental Licensing",
+    "Chimera Biotech",
+    "Glasspark Studios",
+    "Adaptive Systems",
+    "NewForm Genetics",
+    "Chimera Clinical",
+    "WonderWorks Parks",
+    "Cognitiva AI",
+    "Flex Robotics",
+    "BrightMatter Computing",
+    "Chimera Pharmaceuticals",
+    "Glasspark Interactive",
+    "EvoLife Technologies",
+    "Threshold Research",
+    "Chimera Contracting",
+    "Dreamstate Virtual",
+    "OpenForm Materials",
+    "Cortex Systems",
+    "Wonderland Resorts",
+    "NextLife Medical",
+    "Chimera Software"
+],
 		"practice": "security"
 	},
 	{
@@ -122,12 +243,32 @@
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
 		},
-		"brands": [
-			"Archive Continuance",
-			"Genetic Repository",
-			"Continuity Schools",
-			"Long Horizon Trust"
-		],
+"brands": [
+    "Archive Continuance",
+    "Genetic Repository",
+    "Continuity Schools",
+    "Long Horizon Trust",
+    "Continuity Health",
+    "Everlasting Records",
+    "Heritage House",
+    "Continuum Insurance",
+    "Future Foundation",
+    "Legacy Biotech",
+    "Continuity Estates",
+    "Lifeline Preservation",
+    "Horizon Learning",
+    "Human Heritage Services",
+    "Generations Healthcare",
+    "Continuity Research",
+    "Evergreen Archives",
+    "Legacy Properties",
+    "Commonwealth Education",
+    "Continuum Development",
+    "Heritage Genetics",
+    "Perpetual Care",
+    "Longview Infrastructure",
+    "Tomorrow Trust"
+],
 		"practice": "industrial"
 	},
 	{
@@ -141,12 +282,32 @@
 			"sector_id": "proxima",
 			"location_id": "sta_creus_proxima"
 		},
-		"brands": [
-			"Creus Escrow",
-			"House Auctions",
-			"MicroLoan Desk",
-			"Property Exchange"
-		],
+"brands": [
+    "Creus Escrow",
+    "House Auctions",
+    "MicroLoan Desk",
+    "Property Exchange",
+    "Creus Private Bank",
+    "First Settlement",
+    "Grand Estates",
+    "Creus Fiduciary",
+    "Heritage Capital",
+    "House & Holdings",
+    "Creus Assurance",
+    "Legacy Finance",
+    "Prime Properties",
+    "Creus Securities",
+    "Old World Investments",
+    "Civic Lending",
+    "Creus Wealth Management",
+    "Continental Trust",
+    "Household Credit",
+    "Creus Development",
+    "Merchant Capital",
+    "Premier Estates",
+    "Creus Appraisals",
+    "Long-Term Holdings"
+],
 		"practice": "finance"
 	},
 	{
@@ -160,12 +321,32 @@
 			"sector_id": "new_carthage",
 			"location_id": "sta_crown_and_anchor_new_carthage"
 		},
-		"brands": [
-			"Anchor Insurance",
-			"Harbour Charter",
-			"Crown Freight",
-			"Admiralty Bonds"
-		],
+"brands": [
+    "Anchor Insurance",
+    "Harbour Charter",
+    "Crown Freight",
+    "Admiralty Bonds",
+    "Crown & Anchor Bank",
+    "Harbour Estates",
+    "Crown Hotels",
+    "Anchor Properties",
+    "Admiralty Travel",
+    "Crown Logistics",
+    "Port & Crown",
+    "Anchor Mutual",
+    "Crown Utilities",
+    "Harbour Engineering",
+    "Royal Exchange",
+    "Anchor Household",
+    "Crown Developments",
+    "Grand Harbour Resorts",
+    "Admiralty Finance",
+    "Crown Provisioning",
+    "Anchor Communications",
+    "Mariner Services",
+    "Crown Infrastructure",
+    "Harbour House"
+],
 		"practice": "logistics"
 	},
 	{
@@ -179,12 +360,32 @@
 			"sector_id": "titania",
 			"location_id": "sta_cult_of_apex_titania"
 		},
-		"brands": [
-			"Ascension Supply",
-			"Apex Initiation",
-			"Capsule Rites",
-			"Deep Vault Catalogue"
-		],
+"brands": [
+    "Ascension Supply",
+    "Apex Initiation",
+    "Capsule Rites",
+    "Deep Vault Catalogue",
+    "Apex Pilgrimage",
+    "Higher Ground Habitats",
+    "First Light Publications",
+    "Apex Heritage",
+    "Transcendence Systems",
+    "Seven Horizons",
+    "Ascendant Insurance",
+    "Apex Hospitality",
+    "Inner Circle Finance",
+    "Threshold Education",
+    "Continuum Wellness",
+    "Apex Memorials",
+    "Beyond Earth Travel",
+    "New Dawn Foods",
+    "Apex Communications",
+    "The Higher Life",
+    "Apex Family Services",
+    "Pilgrim Outfitters",
+    "Eternal Archive",
+    "Ascendant Properties"
+],
 		"practice": "industrial"
 	},
 	{
@@ -199,11 +400,31 @@
 			"location_id": "horizon_habitat"
 		},
 		"brands": [
-			"Nour Endowment",
-			"Trust Healthcare",
-			"Waqf Property",
-			"Scholarly Foundation"
-		],
+    "Nour Endowment",
+    "Trust Healthcare",
+    "Waqf Property",
+    "Scholarly Foundation",
+    "Nour Mutual",
+    "Crescent Medical",
+    "Enduring Estates",
+    "Nour Education",
+    "Heritage Trust",
+    "Al-Nour Foods",
+    "Nour Development",
+    "Common Good Insurance",
+    "Waqf Holdings",
+    "Nour Agricultural",
+    "Crescent Hospitality",
+    "Nour Infrastructure",
+    "Trust Pharmaceuticals",
+    "Nour Waterworks",
+    "Legacy Education",
+    "Al-Nour Publishing",
+    "Nour Family Services",
+    "Endowment Finance",
+    "Crescent Properties",
+    "Nour Research"
+],
 		"practice": "finance"
 	},
 	{
@@ -217,12 +438,32 @@
 			"sector_id": "pelagos_belt",
 			"location_id": "pelagos_belt_habitat"
 		},
-		"brands": [
-			"Member Co-op Trade",
-			"Frontier Pooling",
-			"Pelagos Collective",
-			"DeepSpace Shares"
-		],
+"brands": [
+    "Member Co-op Trade",
+    "Frontier Pooling",
+    "Pelagos Collective",
+    "DeepSpace Shares",
+    "Co-op Mutual",
+    "MemberBank",
+    "Frontier Supply",
+    "Common Holdings",
+    "Cooperative Insurance",
+    "DeepSpace Freight",
+    "Pelagos Provisioning",
+    "Shared Harvest",
+    "Member Housing",
+    "Frontier Foundries",
+    "Co-op Engineering",
+    "Common Ground Agriculture",
+    "DeepSpace Medical",
+    "Member Services",
+    "Collective Power",
+    "Frontier Communications",
+    "Co-op Outfitters",
+    "Shared Horizons Travel",
+    "DeepSpace Properties",
+    "Commonwealth Development"
+],
 		"practice": "logistics"
 	},
 	{
@@ -235,12 +476,32 @@
 			"placement": "planet",
 			"sector_id": "fennet"
 		},
-		"brands": [
-			"Canopy Agriculture",
-			"Rootstock Foods",
-			"Watershed Services",
-			"Greenfield Development"
-		],
+"brands": [
+    "Canopy Agriculture",
+    "Rootstock Foods",
+    "Watershed Services",
+    "Greenfield Development",
+    "Evergreen Mutual",
+    "Harvest Green",
+    "Canopy Forestry",
+    "Greenwater Utilities",
+    "Evergreen Energy",
+    "Root & Branch Markets",
+    "New Growth Biotech",
+    "Evergreen Properties",
+    "Pioneer Foods",
+    "Watershed Engineering",
+    "Greenfield Estates",
+    "Canopy Logistics",
+    "Evergreen Wellness",
+    "Living Earth Systems",
+    "Frontier Harvest",
+    "Rootstock Consumer",
+    "Greenwater Insurance",
+    "Evergreen Hospitality",
+    "Planetary Works",
+    "Canopy Home"
+],
 		"practice": "industrial"
 	},
 	{
@@ -253,12 +514,32 @@
 			"placement": "planet",
 			"sector_id": "tokirev"
 		},
-		"brands": [
-			"Mikuni Industrial",
-			"Tensho Energy",
-			"Shirayuki Trading",
-			"Zaibatsu House Bank"
-		],
+"brands": [
+    "Mikuni Industrial",
+    "Tensho Energy",
+    "Shirayuki Trading",
+    "Zaibatsu House Bank",
+    "Kiyomizu Electronics",
+    "Takane Motors",
+    "Yamato Precision",
+    "Four Rivers Insurance",
+    "Shinmei Properties",
+    "Hoshino Foods",
+    "Mikuni Heavy Machinery",
+    "Tensho Power Systems",
+    "Shirayuki Logistics",
+    "Kobayashi Consumer",
+    "Riverine Hospitality",
+    "Kogane Securities",
+    "Mikuni Shipyards",
+    "Takumi Instruments",
+    "Shinsei Communications",
+    "Hikari Household",
+    "Four Rivers Healthcare",
+    "Kiyomizu Estates",
+    "Tensho Materials",
+    "Shirayuki Travel"
+],
 		"practice": "industrial"
 	},
 	{
@@ -272,12 +553,32 @@
 			"sector_id": "tycho",
 			"location_id": "sta_galactic_outcomes_tycho"
 		},
-		"brands": [
-			"Outcomes Security",
-			"Mercenary Bureau",
-			"Small Arms Division",
-			"Specialist Personnel"
-		],
+"brands": [
+    "Outcomes Security",
+    "Mercenary Bureau",
+    "Small Arms Division",
+    "Specialist Personnel",
+    "Outcomes Protection",
+    "Contractor Services",
+    "Frontline Training",
+    "Outcomes Insurance",
+    "Sentinel Security",
+    "Guardian Services",
+    "Fieldcraft Equipment",
+    "Outcomes Logistics",
+    "Professional Personnel",
+    "Outcomes Based Protection",
+    "Tactical Systems",
+    "Outcomes Industrial",
+    "SecureTransit",
+    "Crisis Management",
+    "Outcomes Recruitment",
+    "Frontier Security",
+    "Personnel Solutions",
+    "Outcomes Aerospace",
+    "Private Guarding",
+    "Outcomes Facilities"
+],
 		"practice": "extractive"
 	},
 	{
@@ -291,12 +592,32 @@
 			"sector_id": "tycho",
 			"location_id": "sta_general_industrial_tycho"
 		},
-		"brands": [
-			"GI Standard Issue",
-			"Utility Industrial",
-			"Mass Production Line",
-			"GI Logistics"
-		],
+"brands": [
+    "GI Standard Issue",
+    "Utility Industrial",
+    "Mass Production Line",
+    "GI Logistics",
+    "General Works",
+    "GI Machinery",
+    "Common Utility",
+    "Industrial Standard",
+    "General Supply",
+    "GI Construction",
+    "Universal Components",
+    "GI Energy",
+    "Everyday Industrial",
+    "General Materials",
+    "GI Infrastructure",
+    "Standard Housing",
+    "GI Maintenance",
+    "Commonwealth Manufacturing",
+    "General Transport",
+    "Utility Systems",
+    "GI Water Services",
+    "Industrial Provisions",
+    "General Engineering",
+    "Standard Facilities"
+],
 		"practice": "industrial"
 	},
 	{
@@ -310,12 +631,32 @@
 			"sector_id": "fortuna",
 			"location_id": "sta_grc_fortuna"
 		},
-		"brands": [
-			"GRC Treasury",
-			"Speculation Desk",
-			"Settlement Rails",
-			"Competitive Banking"
-		],
+"brands": [
+    "GRC Treasury",
+    "Speculation Desk",
+    "Settlement Rails",
+    "Competitive Banking",
+    "GRC Private Capital",
+    "OpenMarket Finance",
+    "Rapid Settlement",
+    "GRC Securities",
+    "Frontier Capital",
+    "MarketEdge",
+    "GRC Credit",
+    "Dynamic Assets",
+    "NextBank",
+    "GRC Exchange",
+    "Velocity Payments",
+    "Prime Speculation",
+    "GRC Ventures",
+    "OpenLedger",
+    "MarketLink",
+    "GRC Properties",
+    "CapitalWorks",
+    "Instant Credit",
+    "GRC Insurance",
+    "Future Markets"
+],
 		"practice": "finance"
 	},
 	{
@@ -328,12 +669,32 @@
 			"placement": "planet",
 			"sector_id": "horizon"
 		},
-		"brands": [
-			"Harvest Foods",
-			"AgriLive Supply",
-			"Plantation Services",
-			"Fresh Distribution"
-		],
+"brands": [
+    "Harvest Foods",
+    "AgriLive Supply",
+    "Plantation Services",
+    "Fresh Distribution",
+    "Greenfields Markets",
+    "Harvest Home",
+    "Pasture Prime",
+    "FieldFresh Produce",
+    "Greenfields Water",
+    "AgriTech Systems",
+    "Golden Grain Foods",
+    "Farmstead Dairy",
+    "Greenfields Livestock",
+    "Harvest Logistics",
+    "Field & Family",
+    "Greenfields Seeds",
+    "Freshway Grocers",
+    "AgriSure Insurance",
+    "Greenfields Biotech",
+    "Rural Works",
+    "Harvest Energy",
+    "Greenfields Packaging",
+    "Pasture & Grain",
+    "Fieldstone Properties"
+],
 		"practice": "life_sciences"
 	},
 	{
@@ -346,12 +707,32 @@
 			"placement": "planet",
 			"sector_id": "new_carthage"
 		},
-		"brands": [
-			"Pearl River Trade",
-			"Merchant House Finance",
-			"Guangzhou Shipping",
-			"Jade Route Logistics"
-		],
+"brands": [
+    "Pearl River Trade",
+    "Merchant House Finance",
+    "Guangzhou Shipping",
+    "Jade Route Logistics",
+    "Pearl River Foods",
+    "Jade House Hotels",
+    "Guangzhou Assurance",
+    "Southern Star Properties",
+    "Silk Road Consumer",
+    "Pearl River Manufacturing",
+    "Jade Market",
+    "Merchant House Insurance",
+    "Guangzhou Industrial",
+    "Eastern Gate Electronics",
+    "Pearl River Communications",
+    "Jade Coast Hospitality",
+    "Southern Cross Finance",
+    "Guangzhou Provisioning",
+    "Merchant House Estates",
+    "Pearl River Agriculture",
+    "Jade Route Travel",
+    "Eastern Gate Retail",
+    "Guangzhou Infrastructure",
+    "Pearl River Household"
+],
 		"practice": "logistics"
 	},
 	{
@@ -359,17 +740,37 @@
 		"name": "The Hanseatic Guild",
 		"callsign_prefix": "HANS",
 		"ad_voice": "courtly",
-		"trade": "The Hanseatic Guild — mutual credit among trusted houses.",
+		"trade": "The Hanseatic Guild - mutual credit among trusted houses.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "new_carthage"
 		},
-		"brands": [
-			"Guild Mutual Credit",
-			"Hanse Warehouses",
-			"League Shipping",
-			"Merchant Obligation Desk"
-		],
+"brands": [
+    "Guild Mutual Credit",
+    "Hanse Warehouses",
+    "League Shipping",
+    "Merchant Obligation Desk",
+    "Hanseatic Assurance",
+    "Guild Provisioners",
+    "Free Port Services",
+    "League Exchange",
+    "Merchant House Properties",
+    "Hanse Freight",
+    "Guild Commercial Bank",
+    "Northern Trade House",
+    "Hanse Insurance",
+    "League Hospitality",
+    "Guild Supply",
+    "Merchant Registry",
+    "Hanse Estates",
+    "Free Market Logistics",
+    "League Communications",
+    "Guild Industrial Supply",
+    "Hanse Consumer Goods",
+    "Merchant Marine Services",
+    "Guild Development",
+    "Hanse Provisioning"
+],
 		"practice": "finance"
 	},
 	{
@@ -383,12 +784,32 @@
 			"sector_id": "horizon",
 			"location_id": "horizon_habitat"
 		},
-		"brands": [
-			"Triad Pharmaceuticals",
-			"High Pass Security",
-			"Tibetan Logistics",
-			"Mountain Extraction"
-		],
+"brands": [
+    "Triad Pharmaceuticals",
+    "High Pass Security",
+    "Tibetan Logistics",
+    "Mountain Extraction",
+    "Himalaya Medical",
+    "Summit Finance",
+    "Highland Properties",
+    "Triad Insurance",
+    "Mountain Foods",
+    "Peak Hospitality",
+    "Himalaya Engineering",
+    "Passage Communications",
+    "Triad Personnel",
+    "Highland Manufacturing",
+    "Summit Transport",
+    "Mountain House",
+    "Himalaya Consumer",
+    "High Pass Services",
+    "Triad Development",
+    "Peak Resources",
+    "Summit Provisioning",
+    "Highland Energy",
+    "Mountain Systems",
+    "Himalaya Estates"
+],
 		"practice": "extractive"
 	},
 	{
@@ -402,12 +823,32 @@
 			"sector_id": "tokirev",
 			"location_id": "tokirev_habitat"
 		},
-		"brands": [
-			"Helios Drive",
-			"HW Shield Works",
-			"Compact Power",
-			"Winters Aerospace"
-		],
+"brands": [
+    "Helios Drive",
+    "HW Shield Works",
+    "Compact Power",
+    "Winters Aerospace",
+    "Holt-Winters Electronics",
+    "NovaCell Energy",
+    "Winterglass Materials",
+    "HW Precision",
+    "Helios Instruments",
+    "Polar Computing",
+    "Winters Mobility",
+    "Holt Consumer",
+    "NovaHome Systems",
+    "HW Industrial",
+    "Helios Robotics",
+    "Winterstar Communications",
+    "Holt-Winters Medical",
+    "Polar Dynamics",
+    "NovaForge",
+    "Winters Properties",
+    "HW Power Systems",
+    "Helios Security",
+    "Wintertech Appliances",
+    "Holt-Winters Research"
+],
 		"practice": "aerospace"
 	},
 	{
@@ -421,12 +862,32 @@
 			"sector_id": "fortuna",
 			"location_id": "fortuna_habitat"
 		},
-		"brands": [
-			"Roth Privé Banking",
-			"Roth Continental Energy",
-			"Inherited Commodities",
-			"Old House Finance"
-		],
+"brands": [
+    "Roth Privé Banking",
+    "Roth Continental Energy",
+    "Inherited Commodities",
+    "Old House Finance",
+    "Roth Estates",
+    "Continental Assurance",
+    "Roth Mineral Holdings",
+    "House of Roth Properties",
+    "Grand Continental Hotels",
+    "Roth Industrial",
+    "Old House Securities",
+    "Continental Power",
+    "Roth Agricultural",
+    "Heritage Developments",
+    "Roth Fine Goods",
+    "Continental Shipping",
+    "Roth Private Capital",
+    "Old House Insurance",
+    "Roth Infrastructure",
+    "Continental Resources",
+    "Household Provisioning",
+    "Roth Communications",
+    "Roth Hospitality",
+    "Heritage Properties"
+],
 		"practice": "finance"
 	},
 	{
@@ -434,18 +895,38 @@
 		"name": "Karaquazen Inc",
 		"callsign_prefix": "KRQ",
 		"ad_voice": "slick",
-		"trade": "Karaquazen Inc — cheerful service and dependable shipyard work.",
+		"trade": "Karaquazen Inc - cheerful service and dependable shipyard work.",
 		"hq": {
 			"placement": "habitat",
 			"sector_id": "bela",
 			"location_id": "bela_orbital_habitat"
 		},
-		"brands": [
-			"MegaCasino Network",
-			"Planetary Lotteries",
-			"Medical Aid Partners",
-			"Operations Franchise"
-		],
+"brands": [
+    "MegaCasino Network",
+    "Planetary Lotteries",
+    "Medical Aid Partners",
+    "Operations Franchise",
+    "Karaquazen Resorts",
+    "Lucky Star Hotels",
+    "House of Fortune",
+    "KQ Insurance",
+    "Golden Table Dining",
+    "Karaquazen Health",
+    "Fortune Financial",
+    "Grand Prize Travel",
+    "KQ Entertainment",
+    "Winner's Club",
+    "Prosperity Properties",
+    "Karaquazen Leisure",
+    "House of Fortune Finance",
+    "Lucky Seven Consumer",
+    "KQ Hospitality",
+    "Fortune Life Assurance",
+    "Golden Chance Retail",
+    "Karaquazen Wellness",
+    "High Roller Estates",
+    "Operations Services"
+],
 		"practice": "aerospace"
 	},
 	{
@@ -458,12 +939,32 @@
 			"placement": "planet",
 			"sector_id": "bela"
 		},
-		"brands": [
-			"Arena Live",
-			"Virtual Worlds",
-			"Celebrity Management",
-			"Experience Networks"
-		],
+"brands": [
+    "Arena Live",
+    "Virtual Worlds",
+    "Celebrity Management",
+    "Experience Networks",
+    "LiveWorlds Studios",
+    "WorldStage Events",
+    "Starline Talent",
+    "LiveWorlds Sports",
+    "Arena Resorts",
+    "Celebrity House",
+    "WorldPlay Gaming",
+    "LiveStream Network",
+    "FanWorld",
+    "Premier Athletics",
+    "LiveWorlds Travel",
+    "Starline Media",
+    "Experience Hotels",
+    "WorldStage Merchandising",
+    "LiveWorlds Interactive",
+    "Arena Hospitality",
+    "Celebrity Ventures",
+    "WorldPlay VR",
+    "LiveWorlds Broadcasting",
+    "Front Row Experiences"
+],
 		"practice": "media"
 	},
 	{
@@ -477,12 +978,32 @@
 			"sector_id": "proxima",
 			"location_id": "sta_mercury_communications_proxima"
 		},
-		"brands": [
-			"Mercury Wire",
-			"Relay Navigation",
-			"Broadcast Infrastructure",
-			"Data Services"
-		],
+"brands": [
+    "Mercury Wire",
+    "Relay Navigation",
+    "Broadcast Infrastructure",
+    "Data Services",
+    "Mercury Mobile",
+    "RelayNet",
+    "Mercury Media",
+    "Signal House",
+    "Mercury Cloud",
+    "Navigation Services",
+    "Mercury Consumer",
+    "LongRange Communications",
+    "SignalWorks",
+    "Mercury Security",
+    "Relay Travel",
+    "Mercury Broadcasting",
+    "Personal Data Systems",
+    "Mercury Home",
+    "Interworld Messaging",
+    "Mercury Electronics",
+    "Signal Assurance",
+    "Mercury Information",
+    "Relay Systems",
+    "Mercury Business Services"
+],
 		"practice": "media"
 	},
 	{
@@ -496,12 +1017,32 @@
 			"sector_id": "new_carthage",
 			"location_id": "new_carthage_habitat"
 		},
-		"brands": [
-			"Meridian Transit",
-			"Current Navigation",
-			"Spine Shipping",
-			"Connectivity Services"
-		],
+"brands": [
+    "Meridian Transit",
+    "Current Navigation",
+    "Spine Shipping",
+    "Connectivity Services",
+    "Meridian Travel",
+    "Crossworld Logistics",
+    "Meridian Freight",
+    "Current Communications",
+    "Meridian Properties",
+    "Portside Hospitality",
+    "Meridian Insurance",
+    "Transit Finance",
+    "Meridian Infrastructure",
+    "Worldline Services",
+    "Current Energy",
+    "Meridian Consumer",
+    "Crossworld Hotels",
+    "Meridian Developments",
+    "Spine Industrial",
+    "Meridian Provisioning",
+    "Worldline Retail",
+    "Meridian Utilities",
+    "Current Systems",
+    "Meridian Business Services"
+],
 		"practice": "aerospace"
 	},
 	{
@@ -514,12 +1055,32 @@
 			"placement": "planet",
 			"sector_id": "proxima"
 		},
-		"brands": [
-			"City-Mall Franchise",
-			"MDF Consumer Line",
-			"Everyday Essentials",
-			"MDF Hospitality"
-		],
+"brands": [
+    "City-Mall Franchise",
+    "MDF Consumer Line",
+    "Everyday Essentials",
+    "MDF Hospitality",
+    "MicroDonald Foods",
+    "MDF Home",
+    "MDF Family Services",
+    "Everyday Finance",
+    "MDF Health",
+    "MicroDonald Insurance",
+    "MDF Transport",
+    "City-Mall Living",
+    "MDF Entertainment",
+    "Everyday Banking",
+    "MDF Education",
+    "MicroDonald Properties",
+    "MDF Utilities",
+    "Everyday Electronics",
+    "MDF Travel",
+    "MicroDonald Automotive",
+    "MDF Household",
+    "Everyday Pharmacy",
+    "MDF Leisure",
+    "MicroDonald Memorial"
+],
 		"practice": "retail"
 	},
 	{
@@ -533,12 +1094,34 @@
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
 		},
-		"brands": [
-			"Monday Workplace",
-			"Monday Core Software",
-			"Monday Cloud Desk",
-			"365 Productivity"
-		],
+"brands": [
+    "Monday Workplace",
+    "Monday Core Software",
+    "Monday Cloud Desk",
+    "365 Productivity",
+    "MDC Welcome!",
+    "Monday & Friends",
+    "MDC HappyHome",
+    "Monday Everyday",
+    "MDC Family Fun",
+    "Monday Sunshine",
+    "MDC Smile Services",
+    "Monday Personal",
+    "MDC GoodLife",
+    "Monday Facilities",
+    "MDC Cheerfully Yours",
+    "Monday Travel Club",
+    "MDC BrightFuture",
+    "Monday Learning",
+    "MDC Health & Happiness",
+    "Monday Finance",
+    "MDC HomeCare",
+    "Monday Hospitality",
+    "MDC Playtime",
+    "Monday Support",
+    "MDC Wonderful World",
+    "Monday First Coffee"
+],
 		"practice": "media"
 	},
 	{
@@ -552,12 +1135,32 @@
 			"sector_id": "proxima",
 			"location_id": "sta_morrow_and_sons_proxima"
 		},
-		"brands": [
-			"Morrow Memorial",
-			"Preservation Vaults",
-			"Life Assurance",
-			"Cryogenic Services"
-		],
+"brands": [
+    "Morrow Memorial",
+    "Preservation Vaults",
+    "Life Assurance",
+    "Cryogenic Services",
+    "Morrow Healthcare",
+    "EverRest Memorials",
+    "Morrow Pharmaceuticals",
+    "Lasting Legacy",
+    "Morrow Family Care",
+    "Final Rest Properties",
+    "Morrow Life Services",
+    "Heritage Memorial",
+    "Morrow Clinics",
+    "Eternal Estates",
+    "Morrow Insurance",
+    "Legacy Planning",
+    "Morrow Home Care",
+    "Quietus Pharmaceuticals",
+    "Memorial Gardens",
+    "Morrow Properties",
+    "LongSleep Preservation",
+    "Morrow Family Services",
+    "Aftercare Solutions",
+    "Continuance Healthcare"
+],
 		"practice": "retail"
 	},
 	{
@@ -565,18 +1168,38 @@
 		"name": "The Octagon",
 		"callsign_prefix": "OCT",
 		"ad_voice": "polished",
-		"trade": "The Octagon — diversified holdings, single counterparty.",
+		"trade": "The Octagon - diversified holdings, single counterparty.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "fortuna",
 			"location_id": "sta_octagon_fortuna"
 		},
 		"brands": [
-			"Octagon Holdings",
-			"Opaque Finance",
-			"Subsidiary Network",
-			"Octagon Insurance"
-		],
+    "Octagon Holdings",
+    "Opaque Finance",
+    "Subsidiary Network",
+    "Octagon Insurance",
+    "Octagon Properties",
+    "Northstar Assurance",
+    "Eightfold Capital",
+    "Octagon Industrial",
+    "Civic Development",
+    "Private Asset Services",
+    "Continental Utilities",
+    "Octagon Hospitality",
+    "Consumer Eight",
+    "Eight Point Logistics",
+    "Octagon Healthcare",
+    "Heritage Infrastructure",
+    "Octet Office Services",
+    "Octagon Technologies",
+    "Commonwealth Properties",
+    "Eightfold Investments",
+    "Octagon Energy",
+    "Civic Supply",
+    "Octagon Facilities",
+    "General Holdings"
+],
 		"practice": "finance"
 	},
 	{
@@ -589,12 +1212,32 @@
 			"placement": "planet",
 			"sector_id": "fennet"
 		},
-		"brands": [
-			"Combine Fieldplant",
-			"Prairie Bulk",
-			"Red Dirt Energy",
-			"Agri Machinery"
-		],
+"brands": [
+    "Combine Fieldplant",
+    "Prairie Bulk",
+    "Red Dirt Energy",
+    "Agri Machinery",
+    "Heartland Foods",
+    "Combine Grain",
+    "Prairie Fresh",
+    "Red Dirt Power",
+    "Fieldmaster Equipment",
+    "Oklahoma Livestock",
+    "Combine Seeds",
+    "Prairie Water",
+    "Heartland Feed",
+    "Combine Fertilizer",
+    "Red Dirt Construction",
+    "Prairie Logistics",
+    "Heartland Insurance",
+    "Combine Agricultural",
+    "Field & Farm Supply",
+    "Prairie Properties",
+    "Red Dirt Engineering",
+    "Combine Foods",
+    "Heartland Transport",
+    "Great Plains Utilities"
+],
 		"practice": "extractive"
 	},
 	{
@@ -608,12 +1251,32 @@
 			"sector_id": "irasia",
 			"location_id": "sta_orion_aerospace_irasia"
 		},
-		"brands": [
-			"Orion Mainplant",
-			"YardFit Service",
-			"Orion Frames",
-			"AP Propulsion"
-		],
+"brands": [
+    "Orion Mainplant",
+    "YardFit Service",
+    "Orion Frames",
+    "AP Propulsion",
+    "Orion Avionics",
+    "AeroLine Services",
+    "Orion Flight Systems",
+    "AP Materials",
+    "Orion Aerospace Training",
+    "Skyway Travel",
+    "Orion Maintenance",
+    "AeroSure Insurance",
+    "Orion Industrial",
+    "Flightpath Logistics",
+    "Orion Instruments",
+    "Skyport Development",
+    "Orion Communications",
+    "AeroWorks Manufacturing",
+    "Orion Energy",
+    "Flightline Hospitality",
+    "Orion Properties",
+    "AP Engineering",
+    "Skyway Consumer",
+    "Orion Technical Services"
+],
 		"practice": "aerospace"
 	},
 	{
@@ -627,12 +1290,32 @@
 			"sector_id": "pelagos",
 			"location_id": "concordia_habitat"
 		},
-		"brands": [
-			"Spur Passenger",
-			"Longhaul Commerce",
-			"Spur Acquisition",
-			"Spur Finance"
-		],
+"brands": [
+    "Spur Passenger",
+    "Longhaul Commerce",
+    "Spur Acquisition",
+    "Spur Finance",
+    "Orion Spur Travel",
+    "Spur Freight",
+    "Frontier Passenger",
+    "Longhaul Logistics",
+    "Spur Insurance",
+    "Waystation Services",
+    "Spur Properties",
+    "Deep Route Hospitality",
+    "Frontier Mercantile",
+    "Spur Communications",
+    "Longhaul Engineering",
+    "Waypoint Developments",
+    "Spur Provisioning",
+    "Frontier Credit",
+    "Orion Spur Hotels",
+    "Long Route Energy",
+    "Spur Maintenance",
+    "AllSpur Settlement",
+    "Frontier Estates",
+    "Spur Consumer"
+],
 		"practice": "logistics"
 	},
 	{
@@ -645,12 +1328,32 @@
 			"placement": "planet",
 			"sector_id": "horizon"
 		},
-		"brands": [
-			"Triad House Finance",
-			"Pacific Entertainment",
-			"Family Network Trade",
-			"Triad Security"
-		],
+"brands": [
+    "Triad House Finance",
+    "Pacific Entertainment",
+    "Family Network Trade",
+    "Triad Security",
+    "Pacific Star Hotels",
+    "Triad Electronics",
+    "Family Network Retail",
+    "Pacific Assurance",
+    "Triad Properties",
+    "Golden Pacific Foods",
+    "Triad Communications",
+    "Pacific Development",
+    "Family Network Logistics",
+    "Triad Consumer",
+    "Pacific Energy",
+    "Triad Healthcare",
+    "Island Gateway Travel",
+    "Pacific Industrial",
+    "Family Network Services",
+    "Triad Maritime",
+    "Pacific Home",
+    "Golden Pacific Insurance",
+    "Triad Media",
+    "Pacific Hospitality"
+],
 		"practice": "logistics"
 	},
 	{
@@ -664,12 +1367,32 @@
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
 		},
-		"brands": [
-			"PRV Broadcast",
-			"Studio Networks",
-			"Deepwell Energy",
-			"Infotainment Bundles"
-		],
+"brands": [
+    "PRV Broadcast",
+    "Studio Networks",
+    "Deepwell Energy",
+    "Infotainment Bundles",
+    "PRV Home",
+    "Ramco Consumer",
+    "Vidia Entertainment",
+    "PRV Communications",
+    "Deepwell Utilities",
+    "Studio Leisure",
+    "PRV Streaming",
+    "Vidia Interactive",
+    "Ramco Electronics",
+    "Deepwell Resources",
+    "PRV Advertising",
+    "Studio Hospitality",
+    "Vidia Home Media",
+    "PRV Retail",
+    "Ramco Properties",
+    "Deepwell Engineering",
+    "PRV Travel",
+    "Studio Networks Gaming",
+    "Vidia Consumer Services",
+    "PRV Family Entertainment"
+],
 		"practice": "media"
 	},
 	{
@@ -683,12 +1406,32 @@
 			"sector_id": "proxima",
 			"location_id": "proxima_habitat"
 		},
-		"brands": [
-			"Praetorium Guard",
-			"Executive Protection",
-			"Luxury Residences",
-			"Arbitration Chamber"
-		],
+"brands": [
+    "Praetorium Guard",
+    "Executive Protection",
+    "Luxury Residences",
+    "Arbitration Chamber",
+    "Praetorium Assurance",
+    "Civic Security",
+    "Patrician Estates",
+    "Praetorium Private",
+    "Continental Arbitration",
+    "First Class Transit",
+    "Praetorium Risk",
+    "Heritage Residences",
+    "Private Office Services",
+    "Praetorium Hospitality",
+    "Elite Transport",
+    "Civic Mediation",
+    "Praetorium Insurance",
+    "Premier Properties",
+    "Praetorium Logistics",
+    "Household Protection",
+    "Executive Travel",
+    "Praetorium Facilities",
+    "Patron Services",
+    "Praetorium Development"
+],
 		"practice": "security"
 	},
 	{
@@ -701,12 +1444,32 @@
 			"placement": "planet",
 			"sector_id": "proxima"
 		},
-		"brands": [
-			"Shinise Tea House",
-			"Asahi Plant",
-			"Wakaba Trading",
-			"Founding Family Office"
-		],
+"brands": [
+    "Shinise Tea House",
+    "Asahi Plant",
+    "Wakaba Trading",
+    "Founding Family Office",
+    "Sakuraya Properties",
+    "Hikari Foods",
+    "Wakaba Insurance",
+    "Asahi Electronics",
+    "Sakura Hospitality",
+    "Sakuraya Finance",
+    "Shinise Department Stores",
+    "Wakaba Logistics",
+    "Asahi Precision",
+    "Sakura Health",
+    "Founding Family Trust",
+    "Sakuraya Estates",
+    "Hikari Consumer Goods",
+    "Wakaba Communications",
+    "Asahi Energy",
+    "Sakura Travel",
+    "Shinise Housewares",
+    "Sakuraya Development",
+    "Founding Family Services",
+    "Wakaba Agricultural"
+],
 		"practice": "retail"
 	},
 	{
@@ -719,12 +1482,32 @@
 			"placement": "planet",
 			"sector_id": "irasia"
 		},
-		"brands": [
-			"Seven Bells Signal",
-			"Peal Communications",
-			"Bell Industrial",
-			"Campana Systems"
-		],
+"brands": [
+    "Seven Bells Signal",
+    "Peal Communications",
+    "Bell Industrial",
+    "Campana Systems",
+    "Seven Bells Broadcasting",
+    "Peal Networks",
+    "BellWorks Engineering",
+    "Campana Electronics",
+    "Seven Bells Navigation",
+    "Peal Mobile",
+    "Bell Household",
+    "Campana Manufacturing",
+    "Seven Bells Security",
+    "Peal Media",
+    "Bell & Co. Insurance",
+    "Campana Logistics",
+    "Seven Bells Travel",
+    "Peal Hospitality",
+    "Bell Properties",
+    "Campana Energy",
+    "Seven Bells Consumer",
+    "Peal Data Services",
+    "Bell Communications",
+    "Campana Development"
+],
 		"practice": "extractive"
 	},
 	{
@@ -738,12 +1521,32 @@
 			"sector_id": "proxima",
 			"location_id": "sta_snedecorp_proxima"
 		},
-		"brands": [
-			"SnedeOS Platform",
-			"Bridge Licensing",
-			"Cyberwall Security",
-			"Commercial Software"
-		],
+"brands": [
+    "SnedeOS Platform",
+    "Bridge Licensing",
+    "Cyberwall Security",
+    "Commercial Software",
+    "SnedeCloud",
+    "Bridge Systems",
+    "Snede Office",
+    "Cyberwall Identity",
+    "Snede Devices",
+    "Bridge Enterprise",
+    "Snede Communications",
+    "Cyberwall Assurance",
+    "Snede Data Services",
+    "Commercial Computing",
+    "Snede Home",
+    "Bridge Media",
+    "Snede Payments",
+    "Cyberwall Networks",
+    "Snede Education",
+    "Bridge Professional",
+    "Snede Health",
+    "Commercial Cloud",
+    "Snede Support",
+    "Bridge Consumer"
+],
 		"practice": "industrial"
 	},
 	{
@@ -757,12 +1560,32 @@
 			"sector_id": "pelagos",
 			"location_id": "sta_terra_nova_pelagos"
 		},
-		"brands": [
-			"TerraCore Harvest",
-			"Strip Mining",
-			"Colonial Logistics",
-			"Nova Settlement"
-		],
+"brands": [
+    "TerraCore Harvest",
+    "Strip Mining",
+    "Colonial Logistics",
+    "Nova Settlement",
+    "TerraCore Foods",
+    "Frontier Nova",
+    "Nova Utilities",
+    "TerraCore Water",
+    "Colonial Construction",
+    "New Earth Supply",
+    "Nova Power",
+    "TerraCore Machinery",
+    "Settlement Services",
+    "Frontier Housing",
+    "TerraCore Materials",
+    "Colonial Freight",
+    "Nova Agricultural",
+    "TerraCore Engineering",
+    "Pioneer Insurance",
+    "New World Provisions",
+    "Frontier Energy",
+    "Nova Industrial",
+    "Colonial Properties",
+    "TerraCore Consumer"
+],
 		"practice": "logistics"
 	},
 	{
@@ -775,12 +1598,32 @@
 			"placement": "planet",
 			"sector_id": "tokirev"
 		},
-		"brands": [
-			"Tukey Lot Specials",
-			"HandyParts Retail",
-			"Yardfit Aftermarket",
-			"Opportunist Supply"
-		],
+"brands": [
+    "Tukey Lot Specials",
+    "HandyParts Retail",
+    "Yardfit Aftermarket",
+    "Opportunist Supply",
+    "Tukey Clearance",
+    "SecondLife Parts",
+    "GoodEnough Industrial",
+    "YardSale Machinery",
+    "Tukey Bargain House",
+    "OffSpec Goods",
+    "Reclaimed Systems",
+    "LastChance Logistics",
+    "Tukey Used Equipment",
+    "Salvage & Sons",
+    "Practical Power",
+    "Surplus Direct",
+    "OddLot Electronics",
+    "Yardfit Home",
+    "Tukey Trade Outlet",
+    "Reconditioned Works",
+    "Bargain Freight",
+    "Whatever Works",
+    "Tukey Provisioning",
+    "EndOfLine Supply"
+],
 		"practice": "aerospace"
 	},
 	{
@@ -794,12 +1637,32 @@
 			"sector_id": "bela",
 			"location_id": "bela_orbital_habitat"
 		},
-		"brands": [
-			"Universal Retail",
-			"Mall Hospitality",
-			"House Chandlery",
-			"Franchise Everyday"
-		],
+"brands": [
+    "Universal Retail",
+    "Mall Hospitality",
+    "House Chandlery",
+    "Franchise Everyday",
+    "Universal Home",
+    "House Market",
+    "Universal Properties",
+    "Everyday Housewares",
+    "Universal Travel",
+    "Mall Services",
+    "House Foods",
+    "Universal Finance",
+    "Franchise Supply",
+    "Universal Insurance",
+    "Household Direct",
+    "Universal Electronics",
+    "Mall Entertainment",
+    "House Logistics",
+    "Universal Health",
+    "Everyday Development",
+    "Universal Utilities",
+    "House Consumer",
+    "Franchise Services",
+    "Universal Facilities"
+],
 		"practice": "retail"
 	}
 ]
