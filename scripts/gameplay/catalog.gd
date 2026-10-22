@@ -93,7 +93,7 @@ func load_all() -> void:
 	player_data = _load_json_object(PLAYER_PATH)
 	_load_backgrounds()
 	commodities_by_id = _load_indexed_records(COMMODITIES_PATH, CommodityDef)
-	fuels_by_id = _load_indexed_array(FUELS_PATH)
+	fuels_by_id = _load_indexed_records(FUELS_PATH, FuelDef)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
 	corporations_by_id = _load_indexed_array(CORPORATIONS_PATH)
 	corporate_presence = _load_json_object(CORPORATE_PRESENCE_PATH)
@@ -477,11 +477,15 @@ func get_commodity(id: String) -> Dictionary:
 
 
 func get_fuel(id: String) -> Dictionary:
-	return _require(fuels_by_id, id, "fuel")
+	return _require_dict(fuels_by_id, id, "fuel")
+
+
+func get_fuel_def(id: String) -> FuelDef:
+	return _require_record(fuels_by_id, id, "fuel") as FuelDef
 
 
 func list_fuels() -> Array:
-	var fuels: Array = fuels_by_id.values()
+	var fuels := _records_to_dicts(fuels_by_id)
 	fuels.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
 		return str(left.get("id", "")) < str(right.get("id", ""))
 	)

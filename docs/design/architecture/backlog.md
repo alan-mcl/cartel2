@@ -33,7 +33,7 @@ Recorded so the audit is not relitigated as if the earlier refactors had not lan
 - `main.gd` is scene wiring. Flight, world, and menu work sit on `FlightLoopController`, `WorldController`, and `MenuController`.
 - New habitat buildings go through `BuildingPanelRegistry` and `GameScreen`, not a `match` in `HabitatScreen`.
 - Charter accept, pay, and cancel call `MissionSubsystem`. Market, dealer, yard, and fuel UI call `GameSession` or `ShipAssembly`.
-- Ammunition, chassis, commodities, economies, modules, sectors, ships, and unspace have JSON Schema, generated `*Def` records, and CI checks. Sector completeness covers the 21-sector set.
+- Ammunition, chassis, commodities, economies, fuels, modules, sectors, ships, and unspace have JSON Schema, generated `*Def` records, and CI checks. Sector completeness covers the 21-sector set. Stars, message emitters, and celebrity pilots are checked in `validate_catalog_refs.py` without generated record classes.
 - File-level save round-trips exist. `tests/test_save.gd` points `SaveStore.save_dir` at a project-local directory.
 
 The October 2026 audit inventoried all 82 gameplay scripts, all 100 presentation, UI, and dev scripts, and all 53 catalog JSON files. Files with no finding are not listed.
@@ -196,20 +196,9 @@ Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and 
 
 ## A-12 Several catalogs have no schema check
 
-**Status:** Discuss. **Severity:** High.
+**Status:** Done. **Severity:** High.
 
-CI schema targets are ammunition, chassis, commodities, economies, modules, sectors, ships, and unspace (`scripts/tools/validate_catalog_schema.py`). These files are loaded by `Catalog` and are not in that list:
-
-| File | Notes |
-|------|--------|
-| `fuels.json` | `data/catalog/schema/fuels.schema.json` exists and is not a schema target, and there is no `FuelDef` |
-| `stars.json` | About 290 names. No Python check |
-| `message_emitters.json` | Templates and channel ids are unchecked. A bad placeholder is only caught if a test happens to render it |
-| `celebrity_pilots.json` | Names only. No uniqueness check in the validators |
-
-Buildings, habitats, routes, corporations, mission configs, volatile sites, and sanctions are raw dictionaries, but `validate_catalog_refs.py` does cross-check them. Those are in better shape than the four above.
-
-**Direction:** Wire `fuels.schema.json` into the generator and the schema target list, or delete the orphan schema. Add a small refs check for emitter ids, template channels, star keys, and unique celebrity ids.
+`fuels.schema.json` is a generator input, so CI validates `fuels.json` and `Catalog` loads `FuelDef`. `validate_catalog_refs.py` checks fuel price ranges and module `fuel_type` ids, star records, message-emitter ids, channels, tones, and placeholders, and unique celebrity pilot ids and names.
 
 **Do not:** generate `*Def` classes for every small table in one pass. Fuels are the one that already has a schema.
 

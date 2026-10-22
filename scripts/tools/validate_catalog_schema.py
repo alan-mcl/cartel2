@@ -32,6 +32,7 @@ SCHEMA_TARGETS = [
     ("chassis.json", SCHEMA_DIR / "chassis.schema.json"),
     ("commodities.json", SCHEMA_DIR / "commodities.schema.json"),
     ("economies.json", SCHEMA_DIR / "economies.schema.json"),
+    ("fuels.json", SCHEMA_DIR / "fuels.schema.json"),
     ("modules/", SCHEMA_DIR / "modules.schema.json"),
     ("sectors.json", SCHEMA_DIR / "sectors.schema.json"),
     ("ships.json", SCHEMA_DIR / "ships.schema.json"),

@@ -97,6 +97,17 @@ Source: `data/catalog/schema/economies.schema.json` → `economies.json`
 | `produce` | object | yes | `` |  |
 | `consume` | object | yes | `` |  |
 
+## FuelDef
+
+Source: `data/catalog/schema/fuels.schema.json` → `fuels.json`
+
+| Field | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | string | yes | `` |  |
+| `name` | string | yes | `` |  |
+| `price_min` | number | yes | `` |  |
+| `price_max` | number | yes | `` |  |
+
 ## ModuleDef
 
 Source: `data/catalog/schema/modules.schema.json` → `modules/`

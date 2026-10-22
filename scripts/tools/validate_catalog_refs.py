@@ -1331,6 +1331,186 @@ def collect_interactable_refs(value: object, found: set[str]) -> None:
             collect_interactable_refs(item, found)
 
 
+MESSAGE_CHANNELS = {"headlines", "gossip"}
+
+MESSAGE_TONES = {"info", "warning", "positive", "negative"}
+
+MESSAGE_PLACEHOLDERS = {
+    "habitat",
+    "planet",
+    "corporation",
+    "rival",
+    "city-mall",
+    "celebrity-pilot",
+    "local-star-system-location",
+    "jump-destination",
+    "commodity",
+    "price",
+    "move",
+    "destination",
+    "quantity",
+    "label",
+    "desk",
+}
+
+STAR_FIELDS = {
+    "star_system",
+    "spectral_class",
+    "temperature_k",
+    "luminosity",
+    "mass_solar",
+    "radius_solar",
+    "description",
+}
+
+STAR_POSITIVE_NUMBERS = {"temperature_k", "luminosity", "mass_solar", "radius_solar"}
+
+PLACEHOLDER_RE = re.compile(r"\{([^{}]+)\}")
+
+
+def check_fuels(fuels: list, modules: list) -> list[str]:
+    errors: list[str] = []
+    seen: set[str] = set()
+    for index, fuel in enumerate(fuels):
+        label = f"fuels.json[{index}]"
+        if not isinstance(fuel, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        fuel_id = str(fuel.get("id", "")).strip()
+        if not fuel_id:
+            errors.append(f"{label}: missing id")
+            continue
+        label = f"fuels.json {fuel_id}"
+        if fuel_id in seen:
+            errors.append(f"{label}: duplicate id")
+        seen.add(fuel_id)
+        price_min = fuel.get("price_min")
+        price_max = fuel.get("price_max")
+        if isinstance(price_min, bool) or not isinstance(price_min, (int, float)):
+            errors.append(f"{label}: price_min must be a number")
+            continue
+        if isinstance(price_max, bool) or not isinstance(price_max, (int, float)):
+            errors.append(f"{label}: price_max must be a number")
+            continue
+        if price_min < 0 or price_max < price_min:
+            errors.append(f"{label}: price_max must be at least price_min, both non-negative")
+    for module in modules:
+        if not isinstance(module, dict):
+            continue
+        fuel_type = str(module.get("fuel_type", "")).strip()
+        if not fuel_type:
+            continue
+        module_id = str(module.get("id", "?"))
+        if fuel_type not in seen:
+            errors.append(f"modules {module_id}: unknown fuel_type '{fuel_type}'")
+    return errors
+
+
+def check_message_emitters(emitters: list) -> list[str]:
+    errors: list[str] = []
+    seen: set[str] = set()
+    for index, emitter in enumerate(emitters):
+        label = f"message_emitters.json[{index}]"
+        if not isinstance(emitter, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        emitter_id = str(emitter.get("id", "")).strip()
+        if not emitter_id:
+            errors.append(f"{label}: missing id")
+            continue
+        label = f"message_emitters.json {emitter_id}"
+        if emitter_id in seen:
+            errors.append(f"{label}: duplicate id")
+        seen.add(emitter_id)
+        weight = emitter.get("weight")
+        if isinstance(weight, bool) or not isinstance(weight, (int, float)) or weight <= 0:
+            errors.append(f"{label}: weight must be a number greater than 0")
+        templates = emitter.get("templates")
+        if not isinstance(templates, list) or not templates:
+            errors.append(f"{label}: templates must be a non-empty array")
+            continue
+        for template_index, template in enumerate(templates):
+            template_label = f"{label} templates[{template_index}]"
+            if not isinstance(template, dict):
+                errors.append(f"{template_label}: template must be an object")
+                continue
+            channel = str(template.get("channel", ""))
+            if channel not in MESSAGE_CHANNELS:
+                errors.append(f"{template_label}: unknown channel '{channel}'")
+            text = template.get("text")
+            if not isinstance(text, str) or not text.strip():
+                errors.append(f"{template_label}: text must be a non-empty string")
+                text = ""
+            tone = str(template.get("tone", ""))
+            if tone not in MESSAGE_TONES:
+                errors.append(f"{template_label}: unknown tone '{tone}'")
+            for token in PLACEHOLDER_RE.findall(text):
+                if token not in MESSAGE_PLACEHOLDERS:
+                    errors.append(f"{template_label}: unknown placeholder '{{{token}}}'")
+    return errors
+
+
+def check_celebrity_pilots(pilots: list) -> list[str]:
+    errors: list[str] = []
+    seen_ids: set[str] = set()
+    seen_names: set[str] = set()
+    for index, pilot in enumerate(pilots):
+        label = f"celebrity_pilots.json[{index}]"
+        if not isinstance(pilot, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        pilot_id = str(pilot.get("id", "")).strip()
+        name = str(pilot.get("name", "")).strip()
+        if not pilot_id:
+            errors.append(f"{label}: missing id")
+            continue
+        label = f"celebrity_pilots.json {pilot_id}"
+        if pilot_id in seen_ids:
+            errors.append(f"{label}: duplicate id")
+        seen_ids.add(pilot_id)
+        if not name:
+            errors.append(f"{label}: missing name")
+            continue
+        if name in seen_names:
+            errors.append(f"{label}: duplicate name '{name}'")
+        seen_names.add(name)
+    return errors
+
+
+def check_stars(stars: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(stars, dict) or not stars:
+        return ["stars.json: must be a non-empty object keyed by star name"]
+    for name, row in stars.items():
+        star_name = str(name).strip()
+        label = f"stars.json {star_name or '?'}"
+        if not star_name:
+            errors.append("stars.json: empty star name")
+            continue
+        if not isinstance(row, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        extra = sorted(set(row.keys()) - STAR_FIELDS)
+        if extra:
+            errors.append(f"{label}: unknown fields {extra}")
+        for field in sorted(STAR_FIELDS - set(row.keys())):
+            errors.append(f"{label}: missing {field}")
+        star_system = row.get("star_system")
+        spectral_class = row.get("spectral_class")
+        description = row.get("description")
+        if not isinstance(star_system, str) or not star_system.strip():
+            errors.append(f"{label}: star_system must be a non-empty string")
+        if not isinstance(spectral_class, str) or not spectral_class.strip():
+            errors.append(f"{label}: spectral_class must be a non-empty string")
+        if not isinstance(description, str) or not description.strip():
+            errors.append(f"{label}: description must be a non-empty string")
+        for field in sorted(STAR_POSITIVE_NUMBERS):
+            value = row.get(field)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0:
+                errors.append(f"{label}: {field} must be a number greater than 0")
+    return errors
+
+
 def main() -> int:
     sectors = index_by_id(load_array(CATALOG / "sectors.json"))
     habitats = index_by_id(load_array(CATALOG / "habitats.json"))
@@ -1359,6 +1539,10 @@ def main() -> int:
 
     errors.extend(check_sanctions(sanctions_doc))
     errors.extend(check_commodities(commodities))
+    errors.extend(check_fuels(load_array(CATALOG / "fuels.json"), load_modules()))
+    errors.extend(check_message_emitters(load_array(CATALOG / "message_emitters.json")))
+    errors.extend(check_celebrity_pilots(load_array(CATALOG / "celebrity_pilots.json")))
+    errors.extend(check_stars(load_object(CATALOG / "stars.json")))
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))
     errors.extend(check_bounty_missions(bounty_missions, ships))

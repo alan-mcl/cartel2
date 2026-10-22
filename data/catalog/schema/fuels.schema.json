@@ -1,5 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "x-gdscript-class": "FuelDef",
+  "x-catalog-file": "fuels.json",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "name", "price_min", "price_max"],
