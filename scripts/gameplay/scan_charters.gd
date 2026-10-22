@@ -320,6 +320,95 @@ static func _build_offer(
 		volatile_site_id = VolatileSites.site_id(volatile_site)
 		site_label = VolatileSites.site_label(volatile_site)
 
+	var duration_hours := int(cfg.get("volatile_duration_hours", 8))
+	var deadline_hours := duration_hours
+	if target_kind == "planet":
+		deadline_hours = duration_hours + 4
+	return _assemble_offer(
+		catalog,
+		cfg,
+		habitat_id,
+		sector_id,
+		building_id,
+		building_type,
+		rng,
+		offer_index,
+		type_key,
+		target_kind,
+		corp_id,
+		destination_sector,
+		site_label,
+		volatile_site_id,
+		volatile_site,
+		deadline_hours,
+		4 + rng.randi_range(0, 2)
+	)
+
+
+static func build_pinned_offer(
+	catalog: Catalog,
+	habitat_id: String,
+	building_id: String,
+	rng: RandomNumberGenerator,
+	offer_index: int,
+	type_key: String,
+	target_kind: String,
+	volatile_site: Dictionary,
+	volatile_n: int
+) -> Dictionary:
+	if type_key.is_empty() or target_kind.is_empty() or target_kind == "planet":
+		return {}
+	if volatile_site.is_empty():
+		return {}
+	var cfg := config(catalog)
+	var sector_id := catalog.get_habitat_sector_id(habitat_id)
+	if sector_id.is_empty():
+		return {}
+	var building := catalog.get_building(building_id)
+	var building_type := catalog.get_building_type(building)
+	if building_type.is_empty():
+		return {}
+	var corp_id := _client_corporation_id(catalog, building_type, building_id, sector_id, rng)
+	return _assemble_offer(
+		catalog,
+		cfg,
+		habitat_id,
+		sector_id,
+		building_id,
+		building_type,
+		rng,
+		offer_index,
+		type_key,
+		target_kind,
+		corp_id,
+		sector_id,
+		VolatileSites.site_label(volatile_site),
+		VolatileSites.site_id(volatile_site),
+		volatile_site,
+		int(cfg.get("volatile_duration_hours", 8)),
+		volatile_n
+	)
+
+
+static func _assemble_offer(
+	catalog: Catalog,
+	cfg: Dictionary,
+	habitat_id: String,
+	sector_id: String,
+	building_id: String,
+	building_type: String,
+	rng: RandomNumberGenerator,
+	offer_index: int,
+	type_key: String,
+	target_kind: String,
+	corp_id: String,
+	destination_sector: String,
+	site_label: String,
+	volatile_site_id: String,
+	volatile_site: Dictionary,
+	deadline_hours: int,
+	volatile_n: int
+) -> Dictionary:
 	var composed := compose_contract(
 		cfg,
 		catalog,
@@ -331,12 +420,6 @@ static func _build_offer(
 		rng,
 		volatile_site
 	)
-
-	var duration_hours := int(cfg.get("volatile_duration_hours", 8))
-	var deadline_hours := duration_hours
-	if target_kind == "planet":
-		deadline_hours = duration_hours + 4
-
 	return {
 		"id": "scan_%s_%d" % [building_id, offer_index],
 		"desk": building_type,
@@ -357,7 +440,7 @@ static func _build_offer(
 		"corporation_id": str(composed.get("corporation_id", "")),
 		"corporation_name": str(composed.get("corporation_name", "")),
 		"objective": str(composed.get("objective", "active_scan")),
-		"volatile_n": 4 + rng.randi_range(0, 2),
+		"volatile_n": volatile_n,
 	}
 
 

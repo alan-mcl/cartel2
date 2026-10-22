@@ -94,11 +94,9 @@ A fifth charter type, or a deadline-rule change, will be edited in the subsystem
 
 ## A-3 Mission harness writes offer maps directly
 
-**Status:** Discuss. **Severity:** High.
+**Status:** Done. **Severity:** High.
 
-`scripts/dev/mission_harness.gd` assigns `missions.scan_offers_by_habitat` and `missions.bounty_offers_by_habitat` itself, and rebuilds offers beside the production generators. The harness will keep passing after the board rules have changed.
-
-**Direction:** A harness-only seed on `MissionSubsystem` that calls the production generators with a fixture catalog, or a documented test double that cannot drift field-by-field.
+The harness calls `MissionSubsystem.seed_harness_scan_offer` and `seed_harness_bounty_offer`. Those build one peacekeeping offer through `ScanCharters.build_pinned_offer` and `BountyCharters.build_pinned_offer` (same field assembly as the daily boards, with the chosen site, scan target, and bounty hull pinned) and replace today's board. Production rolls are unchanged. N on a harness grant stays 4.
 
 **Do not:** treat the harness as production gameplay. Do not weaken production generation to match the harness.
 

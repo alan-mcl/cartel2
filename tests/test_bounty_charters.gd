@@ -20,6 +20,27 @@ static func run(runner: TestRunner) -> void:
 	_test_disable_power_records_contact(runner, catalog)
 	_test_threat_profile_on_grant(runner, catalog)
 	_test_threat_profile_on_spawn(runner, catalog)
+	_test_harness_seed_pins_contract(runner, catalog)
+
+
+static func _test_harness_seed_pins_contract(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "BNT-HARNESS")
+	var site := catalog.get_volatile_site("deep_space")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	var offer := missions.seed_harness_bounty_offer(
+		session, catalog, "proxima_habitat", "dragon_bronze", site, rng
+	)
+	runner.check(not offer.is_empty(), "bounty harness seed: offer")
+	runner.check_eq(str(offer.get("target_template_id", "")), "dragon_bronze", "bounty harness seed: hull")
+	runner.check_eq(str(offer.get("volatile_site_id", "")), "deep_space", "bounty harness seed: site")
+	runner.check_eq(int(offer.get("volatile_n", 0)), 4, "bounty harness seed: n")
+	runner.check(not str(offer.get("objective_completion", "")).is_empty(), "bounty harness seed: completion")
+	runner.check(typeof(offer.get("threat_profile", null)) == TYPE_DICTIONARY, "bounty harness seed: threat")
+	var listed := missions.list_bounty_offers("proxima_habitat", "proxima_peaceforce")
+	runner.check_eq(listed.size(), 1, "bounty harness seed: one board offer")
 
 
 static func _simulation() -> Simulation:

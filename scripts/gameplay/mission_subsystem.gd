@@ -56,6 +56,64 @@ func ensure_boards(session: GameSession, catalog: Catalog) -> void:
 	_ensure_habitat_boards(session, catalog, habitat_id, day)
 
 
+## Dev harness only. One peacekeeping scan offer, built by ScanCharters, replaces today's board.
+func seed_harness_scan_offer(
+	session: GameSession,
+	catalog: Catalog,
+	habitat_id: String,
+	type_key: String,
+	target_kind: String,
+	volatile_site: Dictionary,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	ensure_boards(session, catalog)
+	var sector_id := catalog.get_habitat_sector_id(habitat_id)
+	var building_id := ScanCharters.peacekeeping_building_id(sector_id)
+	var offer := ScanCharters.build_pinned_offer(
+		catalog,
+		habitat_id,
+		building_id,
+		rng,
+		0,
+		type_key,
+		target_kind,
+		volatile_site,
+		4
+	)
+	if offer.is_empty():
+		return {}
+	scan_offers_by_habitat[habitat_id] = {building_id: [offer]}
+	return offer
+
+
+## Dev harness only. One peacekeeping bounty offer, built by BountyCharters, replaces today's board.
+func seed_harness_bounty_offer(
+	session: GameSession,
+	catalog: Catalog,
+	habitat_id: String,
+	template_id: String,
+	volatile_site: Dictionary,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	ensure_boards(session, catalog)
+	var sector_id := catalog.get_habitat_sector_id(habitat_id)
+	var building_id := ScanCharters.peacekeeping_building_id(sector_id)
+	var offer := BountyCharters.build_pinned_offer(
+		catalog,
+		habitat_id,
+		building_id,
+		rng,
+		0,
+		template_id,
+		volatile_site,
+		4
+	)
+	if offer.is_empty():
+		return {}
+	bounty_offers_by_habitat[habitat_id] = {building_id: [offer]}
+	return offer
+
+
 func list_offers(habitat_id: String, board: String) -> Array:
 	var habitat_boards: Variant = offers_by_habitat.get(habitat_id, {})
 	if typeof(habitat_boards) != TYPE_DICTIONARY:

@@ -88,6 +88,41 @@ static func generate_offers_for_building(
 	return offers
 
 
+static func build_pinned_offer(
+	catalog: Catalog,
+	habitat_id: String,
+	building_id: String,
+	rng: RandomNumberGenerator,
+	offer_index: int,
+	template_id: String,
+	volatile_site: Dictionary,
+	volatile_n: int
+) -> Dictionary:
+	if template_id.is_empty() or volatile_site.is_empty():
+		return {}
+	var cfg := config(catalog)
+	var sector_id := catalog.get_habitat_sector_id(habitat_id)
+	if sector_id.is_empty():
+		return {}
+	var building := catalog.get_building(building_id)
+	var building_type := catalog.get_building_type(building)
+	if building_type.is_empty():
+		return {}
+	return _build_offer(
+		catalog,
+		cfg,
+		habitat_id,
+		sector_id,
+		building_id,
+		building_type,
+		rng,
+		offer_index,
+		template_id,
+		volatile_site,
+		volatile_n
+	)
+
+
 static func _build_offer(
 	catalog: Catalog,
 	cfg: Dictionary,
@@ -96,12 +131,17 @@ static func _build_offer(
 	building_id: String,
 	building_type: String,
 	rng: RandomNumberGenerator,
-	offer_index: int
+	offer_index: int,
+	pinned_template_id: String = "",
+	pinned_site: Dictionary = {},
+	pinned_n: int = -1
 ) -> Dictionary:
-	var armed := _armed_ship_template_ids(catalog)
-	if armed.is_empty():
-		return {}
-	var template_id: String = str(armed[rng.randi_range(0, armed.size() - 1)])
+	var template_id := pinned_template_id
+	if template_id.is_empty():
+		var armed := _armed_ship_template_ids(catalog)
+		if armed.is_empty():
+			return {}
+		template_id = str(armed[rng.randi_range(0, armed.size() - 1)])
 	var ship_def := catalog.get_ship(template_id)
 	if ship_def.is_empty():
 		return {}
@@ -123,7 +163,7 @@ static func _build_offer(
 	var threat_id := str(threat.get("id", ""))
 	var threat_profile := _threat_profile(threat)
 
-	var site := VolatileSites.pick_site(catalog, rng)
+	var site := pinned_site if not pinned_site.is_empty() else VolatileSites.pick_site(catalog, rng)
 	var site_label := VolatileSites.site_label(site)
 	var volatile_site_id := VolatileSites.site_id(site)
 	var callsign := _pick_callsign(catalog, rng, corp_id)
@@ -190,7 +230,7 @@ static func _build_offer(
 		"deadline_hours": int(cfg.get("volatile_return_hours", 8)),
 		"min_reputation": 0,
 		"corporation_id": corp_id,
-		"volatile_n": 4 + rng.randi_range(0, 2),
+		"volatile_n": pinned_n if pinned_n > 0 else 4 + rng.randi_range(0, 2),
 	}
 
 

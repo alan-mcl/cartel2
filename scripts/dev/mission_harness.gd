@@ -430,17 +430,17 @@ func _on_begin_pressed() -> void:
 	var volatile_site := _resolve_volatile_site(rng)
 	var record_id := ""
 
-	# accept_* calls ensure_boards first; that invalidates boards when generated_day != gst day.
-	# Prime boards for today, then overwrite with the harness offer so accept still finds it.
-	missions.ensure_boards(session, _catalog)
-
 	match _job_option.selected as JobKind:
 		JobKind.SCAN:
-			var offer := _build_scan_offer(sector_id, habitat_id, volatile_site, rng)
+			var type_key := _scan_type_keys[_scan_type_option.selected] if _scan_type_option.selected >= 0 else "survey"
+			var target_kinds: Array[String] = ["volatile_debris", "volatile_orbital", "volatile_ship"]
+			var target_kind: String = target_kinds[_scan_target_option.selected]
+			var offer := missions.seed_harness_scan_offer(
+				session, _catalog, habitat_id, type_key, target_kind, volatile_site, rng
+			)
 			if offer.is_empty():
 				_status_label.text = "Could not build scan offer."
 				return
-			_seed_scan_offer(missions, habitat_id, offer)
 			if not missions.accept_scan_offer(session, _catalog, str(offer.get("id", "")), ship.id):
 				_status_label.text = session.last_log
 				return
@@ -450,11 +450,13 @@ func _on_begin_pressed() -> void:
 			if player_assembled.modules_in_category("weapon").is_empty():
 				_status_label.text = "Contract requires an armed ship."
 				return
-			var offer := _build_bounty_offer(sector_id, habitat_id, volatile_site, rng)
+			var target_template_id := _template_id_at(_bounty_target_option, _bounty_template_ids)
+			var offer := missions.seed_harness_bounty_offer(
+				session, _catalog, habitat_id, target_template_id, volatile_site, rng
+			)
 			if offer.is_empty():
 				_status_label.text = "Could not build bounty offer."
 				return
-			_seed_bounty_offer(missions, habitat_id, offer)
 			if not missions.accept_bounty_offer(session, _catalog, str(offer.get("id", "")), ship.id):
 				_status_label.text = session.last_log
 				return
@@ -492,90 +494,6 @@ func _on_begin_pressed() -> void:
 	get_tree().paused = false
 
 
-func _build_scan_offer(
-	sector_id: String,
-	habitat_id: String,
-	volatile_site: Dictionary,
-	rng: RandomNumberGenerator
-) -> Dictionary:
-	var cfg := ScanCharters.config(_catalog)
-	var building_id := ScanCharters.peacekeeping_building_id(sector_id)
-	var type_key := _scan_type_keys[_scan_type_option.selected] if _scan_type_option.selected >= 0 else "survey"
-	var target_kinds: Array[String] = ["volatile_debris", "volatile_orbital", "volatile_ship"]
-	var target_kind: String = target_kinds[_scan_target_option.selected]
-	var site_label := VolatileSites.site_label(volatile_site)
-	var composed := ScanCharters.compose_contract(
-		cfg,
-		_catalog,
-		ScanCharters.BOARD_PEACEKEEPING,
-		type_key,
-		target_kind,
-		site_label,
-		"",
-		rng,
-		volatile_site
-	)
-	return {
-		"id": "harness_scan_0",
-		"desk": ScanCharters.BOARD_PEACEKEEPING,
-		"building_id": building_id,
-		"designation_key": str(composed.get("designation_key", type_key)),
-		"designation": str(composed.get("designation", type_key.capitalize())),
-		"target_kind": target_kind,
-		"origin_habitat_id": habitat_id,
-		"origin_sector_id": sector_id,
-		"destination_sector_id": sector_id,
-		"volatile_site_id": VolatileSites.site_id(volatile_site),
-		"site_label": site_label,
-		"destination_name": site_label,
-		"description": str(composed.get("description", "")),
-		"reward": int(composed.get("reward", 0)),
-		"deadline_hours": int(cfg.get("volatile_return_hours", 8)),
-		"min_reputation": 0,
-		"corporation_id": "",
-		"corporation_name": "",
-		"objective": str(composed.get("objective", "active_scan")),
-		"volatile_n": 4,
-	}
-
-
-func _build_bounty_offer(
-	sector_id: String,
-	habitat_id: String,
-	volatile_site: Dictionary,
-	rng: RandomNumberGenerator
-) -> Dictionary:
-	var cfg := BountyCharters.config(_catalog)
-	var building_id := ScanCharters.peacekeeping_building_id(sector_id)
-	var template_id := _template_id_at(_bounty_target_option, _bounty_template_ids)
-	if template_id.is_empty():
-		return {}
-	var ship_def := _catalog.get_ship(template_id)
-	var site_label := VolatileSites.site_label(volatile_site)
-	var callsign := "HX-%04d" % rng.randi_range(1000, 9999)
-	var reward := int(round(float(cfg.get("base_pay", 1100)) * rng.randf_range(0.9, 1.15)))
-	return {
-		"id": "harness_bounty_0",
-		"desk": BountyCharters.BOARD_PEACEKEEPING,
-		"building_id": building_id,
-		"origin_habitat_id": habitat_id,
-		"origin_sector_id": sector_id,
-		"volatile_site_id": VolatileSites.site_id(volatile_site),
-		"site_label": site_label,
-		"destination_name": site_label,
-		"target_template_id": template_id,
-		"target_name": str(ship_def.get("name", template_id)),
-		"target_callsign": callsign,
-		"target_affiliation": "Wanted fugitive",
-		"description": "Destroy %s at %s." % [callsign, VolatileSites.description_phrase(volatile_site)],
-		"reward": reward,
-		"deadline_hours": int(cfg.get("volatile_return_hours", 8)),
-		"min_reputation": 0,
-		"corporation_id": "",
-		"volatile_n": 4,
-	}
-
-
 func _build_site_only_grant_params(
 	source_sector_id: String,
 	volatile_site: Dictionary,
@@ -606,16 +524,6 @@ func _build_site_only_grant_params(
 		"exit_seconds": exit_seconds,
 		"setup": setup,
 	}
-
-
-func _seed_scan_offer(missions: MissionSubsystem, habitat_id: String, offer: Dictionary) -> void:
-	var building_id := str(offer.get("building_id", ""))
-	missions.scan_offers_by_habitat[habitat_id] = {building_id: [offer]}
-
-
-func _seed_bounty_offer(missions: MissionSubsystem, habitat_id: String, offer: Dictionary) -> void:
-	var building_id := str(offer.get("building_id", ""))
-	missions.bounty_offers_by_habitat[habitat_id] = {building_id: [offer]}
 
 
 func _volatile_record_from_scan(missions: MissionSubsystem) -> String:

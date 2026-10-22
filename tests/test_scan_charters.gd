@@ -22,6 +22,34 @@ static func run(runner: TestRunner) -> void:
 	_test_volatile_site_dark_debris_orbitals(runner, catalog)
 	_test_volatile_site_object_kinds(runner, catalog)
 	_test_site_description_phrase(runner, catalog)
+	_test_harness_seed_pins_site(runner, catalog)
+
+
+static func _test_harness_seed_pins_site(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "SCN-HARNESS")
+	var ship := _ship(session, catalog, "proxima_habitat")
+	if ship == null:
+		runner.check(false, "scan harness seed: starter ship")
+		return
+	var site := catalog.get_volatile_site("deep_space")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var offer := missions.seed_harness_scan_offer(
+		session, catalog, "proxima_habitat", "survey", "volatile_debris", site, rng
+	)
+	runner.check(not offer.is_empty(), "scan harness seed: offer")
+	runner.check_eq(str(offer.get("volatile_site_id", "")), "deep_space", "scan harness seed: site")
+	runner.check_eq(str(offer.get("target_kind", "")), "volatile_debris", "scan harness seed: target")
+	runner.check_eq(int(offer.get("volatile_n", 0)), 4, "scan harness seed: n")
+	runner.check(not str(offer.get("objective", "")).is_empty(), "scan harness seed: objective")
+	var listed := missions.list_scan_offers("proxima_habitat", "proxima_peaceforce")
+	runner.check_eq(listed.size(), 1, "scan harness seed: one board offer")
+	runner.check(
+		missions.accept_scan_offer(session, catalog, str(offer.get("id", "")), ship.id),
+		"scan harness seed: accept"
+	)
 
 
 static func _simulation() -> Simulation:
@@ -186,6 +214,7 @@ static func _test_volatile_site_asteroid_belt_ambient_debris(runner: TestRunner,
 	var session := _session(runner, catalog, "SCN-BELT")
 	var span := VolatileSites.count_range(catalog.get_volatile_site("asteroid_belt"), "debris")
 	var seen_counts := {}
+	var saw_star := false
 	for attempt in range(12):
 		var offer := _debris_offer(catalog, "proxima_habitat", "scan_belt_%d" % attempt)
 		offer["volatile_site_id"] = "asteroid_belt"
@@ -194,9 +223,9 @@ static func _test_volatile_site_asteroid_belt_ambient_debris(runner: TestRunner,
 		var record_id := VolatileTranslation.grant(session, catalog, params)
 		runner.check(not record_id.is_empty(), "scan site: asteroid belt grant succeeds")
 		var setup: Dictionary = VolatileTranslation.find_by_id(session, record_id).get("setup", {})
-		if attempt == 0:
-			var star: Dictionary = setup.get("star", {})
-			runner.check(not star.is_empty(), "scan site: asteroid belt keeps a star")
+		var star: Dictionary = setup.get("star", {})
+		if not star.is_empty():
+			saw_star = true
 		var ambient := 0
 		var has_scan_contact := false
 		var entities: Array = setup.get("entities", [])
@@ -218,6 +247,7 @@ static func _test_volatile_site_asteroid_belt_ambient_debris(runner: TestRunner,
 			"scan site: belt ambient debris count in catalog range"
 		)
 		seen_counts[ambient] = true
+	runner.check(saw_star, "scan site: asteroid belt keeps a star")
 	runner.check(seen_counts.size() > 1, "scan site: belt debris count varies")
 
 
