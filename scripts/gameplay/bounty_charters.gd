@@ -475,14 +475,15 @@ static func bounty_sector_for_contract(contract: Dictionary) -> String:
 static func bar_bounty_section_visible(
 	missions: MissionSubsystem,
 	catalog: Catalog,
-	session: GameSession
+	session: GameSession,
+	building_id: String
 ) -> bool:
-	if missions == null or session == null or catalog == null:
+	if missions == null or session == null or catalog == null or building_id.is_empty():
 		return false
-	if not PassengerCharters.habitat_has_bar(catalog, session.habitat_id):
+	if not ScanCharters.is_bar_on_habitat(catalog, session.habitat_id, building_id):
 		return false
 	missions.ensure_boards(session, catalog)
-	if not missions.list_bounty_offers(session.habitat_id, "davidsons").is_empty():
+	if not missions.list_bounty_offers(session.habitat_id, building_id).is_empty():
 		return true
 	for entry_variant in missions.list_bounty_accepted():
 		if typeof(entry_variant) != TYPE_DICTIONARY:
@@ -490,7 +491,7 @@ static func bar_bounty_section_visible(
 		var entry: Dictionary = entry_variant
 		if str(entry.get("origin_habitat_id", "")) != session.habitat_id:
 			continue
-		if str(entry.get("building_id", "")) == "davidsons":
+		if str(entry.get("building_id", "")) == building_id:
 			return true
 	return false
 

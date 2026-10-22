@@ -181,7 +181,7 @@ not UI.
 
 **Bounty charters** from `bounty_missions.json` post on the same peacekeeping, corporate,
 and bar desks as scan work (peaceforce always one per day; corporate and bar roll at lower
-chance). Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
+chance). Each habitat building of type `bar` posts its own board. `BarPanel` configures that desk from the building it was opened with. Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
 draws an **objective** (destroy, intercept, disable, eliminate), wanted **reason** and **status**
 lines, a **threat** (pay multiplier plus a profile), any catalog **armed ship** template, a volatile **site** from
 [`volatile_sites.json`](../../../data/catalog/volatile_sites.json), and a desk **frame** with substituted

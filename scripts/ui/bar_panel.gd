@@ -12,6 +12,7 @@ var _scan_panel: Control
 var _gossip_bar: MessageBar
 var _gossip_rng := RandomNumberGenerator.new()
 var _gossip_started := false
+var _building: Dictionary = {}
 
 
 func _ready() -> void:
@@ -41,6 +42,12 @@ func _ready() -> void:
 
 	_gossip_rng.randomize()
 	set_process(false)
+
+
+func configure(building: Dictionary) -> void:
+	_building = building.duplicate(true)
+	if _scan_panel != null and is_instance_valid(_scan_panel) and _scan_panel.has_method("configure"):
+		_scan_panel.configure(_building)
 
 
 func refresh() -> void:
@@ -130,8 +137,13 @@ func _sync_scan_section() -> void:
 	if _scan_host == null or _context == null or _context.session == null or _context.catalog == null:
 		return
 	var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
-	var show_scan := ScanCharters.bar_scan_section_visible(missions, _context.catalog, _context.session)
-	var show_bounty := BountyCharters.bar_bounty_section_visible(missions, _context.catalog, _context.session)
+	var building_id := str(_building.get("id", ""))
+	var show_scan := ScanCharters.bar_scan_section_visible(
+		missions, _context.catalog, _context.session, building_id
+	)
+	var show_bounty := BountyCharters.bar_bounty_section_visible(
+		missions, _context.catalog, _context.session, building_id
+	)
 	_scan_host.visible = show_scan or show_bounty
 	if not show_scan and not show_bounty:
 		_clear_children(_scan_host)
@@ -153,9 +165,8 @@ func _ensure_scan_panel() -> void:
 	_scan_host.add_child(_scan_panel)
 	if _scan_panel.has_method("bind"):
 		_scan_panel.bind(_context)
-	var building := _context.catalog.get_building("davidsons")
 	if _scan_panel.has_method("configure"):
-		_scan_panel.configure(building)
+		_scan_panel.configure(_building)
 
 
 func _clear_children(node: Node) -> void:

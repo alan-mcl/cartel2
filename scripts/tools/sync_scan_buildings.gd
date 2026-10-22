@@ -29,7 +29,8 @@ func _init() -> void:
 		var scan_ids: Array = ScanChartersScript.scan_building_ids(catalog, habitat_id)
 		for bid_variant in scan_ids:
 			var building_id := str(bid_variant)
-			if building_id == "davidsons":
+			var existing: Variant = by_id.get(building_id, {})
+			if typeof(existing) == TYPE_DICTIONARY and str(existing.get("type", "")) == "bar":
 				continue
 			if not by_id.has(building_id):
 				var record := _make_building_record(catalog, building_id, sector_id, peaceforce_name)

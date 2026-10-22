@@ -35,6 +35,13 @@ static func habitat_has_peacekeeping(catalog: Catalog, habitat_id: String) -> bo
 	return _habitat_lists_building(location, peacekeeping_building_id(sector_id))
 
 
+static func is_bar_on_habitat(catalog: Catalog, habitat_id: String, building_id: String) -> bool:
+	var location := catalog.get_habitat(habitat_id)
+	if not _habitat_lists_building(location, building_id):
+		return false
+	return catalog.get_building_type(catalog.get_building(building_id)) == "bar"
+
+
 static func _habitat_lists_building(location: Dictionary, building_id: String) -> bool:
 	for building_id_variant in location.get("buildings", []):
 		if str(building_id_variant) == building_id:
@@ -103,14 +110,15 @@ static func evaluate_offer_for_ship(
 static func bar_scan_section_visible(
 	missions: MissionSubsystem,
 	catalog: Catalog,
-	session: GameSession
+	session: GameSession,
+	building_id: String
 ) -> bool:
-	if missions == null or session == null or catalog == null:
+	if missions == null or session == null or catalog == null or building_id.is_empty():
 		return false
-	if not PassengerCharters.habitat_has_bar(catalog, session.habitat_id):
+	if not is_bar_on_habitat(catalog, session.habitat_id, building_id):
 		return false
 	missions.ensure_boards(session, catalog)
-	if not missions.list_scan_offers(session.habitat_id, "davidsons").is_empty():
+	if not missions.list_scan_offers(session.habitat_id, building_id).is_empty():
 		return true
 	for entry_variant in missions.list_scan_accepted():
 		if typeof(entry_variant) != TYPE_DICTIONARY:
@@ -118,7 +126,7 @@ static func bar_scan_section_visible(
 		var entry: Dictionary = entry_variant
 		if str(entry.get("origin_habitat_id", "")) != session.habitat_id:
 			continue
-		if str(entry.get("building_id", "")) == "davidsons":
+		if str(entry.get("building_id", "")) == building_id:
 			return true
 	return false
 
@@ -145,8 +153,13 @@ static func scan_building_ids(catalog: Catalog, habitat_id: String) -> Array:
 		var count := corporate_office_count(sector_id)
 		for corp_id_variant in top_corporation_ids(catalog, sector_id, count):
 			out.append(corporate_building_id(str(corp_id_variant), sector_id))
-	if PassengerCharters.habitat_has_bar(catalog, habitat_id):
-		out.append("davidsons")
+	for building_id_variant in location.get("buildings", []):
+		var bar_id := str(building_id_variant)
+		if bar_id.is_empty() or bar_id in out:
+			continue
+		if catalog.get_building_type(catalog.get_building(bar_id)) != "bar":
+			continue
+		out.append(bar_id)
 	for building_id_variant in location.get("buildings", []):
 		var hq_building_id := str(building_id_variant)
 		if hq_building_id in out:

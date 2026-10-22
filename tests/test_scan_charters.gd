@@ -6,6 +6,7 @@ static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_peaceforce_board_generates(runner, catalog)
 	_test_bar_can_generate_empty(runner, catalog)
+	_test_second_bar_configures_its_own_desk(runner, catalog)
 	_test_accept_volatile_grants_record(runner, catalog)
 	_test_accept_volatile_ship_grant(runner, catalog)
 	_test_accept_peacekeeping_ship_without_corp(runner, catalog)
@@ -196,6 +197,56 @@ static func _test_bar_can_generate_empty(runner: TestRunner, catalog: Catalog) -
 			found_empty = true
 			break
 	runner.check(found_empty, "scan: bar chance can yield no offer")
+
+
+static func _test_second_bar_configures_its_own_desk(runner: TestRunner, catalog: Catalog) -> void:
+	var habitat: Dictionary = catalog.habitats_by_id["proxima_habitat"]
+	var buildings: Array = habitat.get("buildings", [])
+	buildings.append("second_bar")
+	catalog.buildings_by_id["second_bar"] = {
+		"id": "second_bar",
+		"name": "Second Bar",
+		"type": "bar",
+	}
+	var desk_ids := ScanCharters.scan_building_ids(catalog, "proxima_habitat")
+	runner.check(desk_ids.has("davidsons"), "scan: proxima still lists davidsons")
+	runner.check(desk_ids.has("second_bar"), "scan: second bar gets its own desk")
+
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "SCN-BAR2")
+	missions.ensure_boards(session, catalog)
+	var boards: Dictionary = missions.scan_offers_by_habitat.get("proxima_habitat", {})
+	boards["second_bar"] = [{"id": "scan_second_bar_0", "building_id": "second_bar"}]
+	missions.scan_offers_by_habitat["proxima_habitat"] = boards
+	runner.check(
+		ScanCharters.bar_scan_section_visible(missions, catalog, session, "second_bar"),
+		"scan: second bar section follows that building"
+	)
+
+	var panel = load("res://scripts/ui/bar_panel.gd").new()
+	panel._ready()
+	var context := UiContext.new()
+	context.catalog = catalog
+	context.session = session
+	context.simulation = simulation
+	panel.bind(context)
+	panel.configure({"id": "second_bar", "type": "bar", "name": "Second Bar"})
+	panel._ensure_scan_panel()
+	var scan_panel = panel._scan_panel
+	runner.check(scan_panel != null, "bar panel: scan desk created")
+	if scan_panel != null:
+		runner.check_eq(
+			str(scan_panel._building_id),
+			"second_bar",
+			"bar panel: configures the opened bar"
+		)
+	if panel.get_parent() != null:
+		panel.get_parent().remove_child(panel)
+	panel.free()
+
+	buildings.erase("second_bar")
+	catalog.buildings_by_id.erase("second_bar")
 
 
 static func _test_volatile_site_deep_space_no_star(runner: TestRunner, catalog: Catalog) -> void:

@@ -84,13 +84,9 @@ A fifth charter type, or a deadline-rule change, will be edited in the subsystem
 
 ## A-2 Bar scan desk ignores the building it was opened from
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`BarPanel` does not implement `configure`. When it embeds `ScanCharterPanel` it always loads the building id `davidsons` (`scripts/ui/bar_panel.gd`). That id is the only `type: bar` row in `buildings.json` today, so the current habitat is correct. A second bar will show Davidson's board.
-
-`CorporateOfficePanel.configure` already stores the building it was given and passes that to the scan panel.
-
-**Direction:** Store the building passed into `BarPanel.configure` and pass that dictionary through. Add a test that a non-`davidsons` bar id is the one configured.
+`BarPanel.configure` stores the building and passes it to `ScanCharterPanel`. Scan and bounty boards list every habitat building of type `bar`, and the section visibility checks that building id. Davidson's remains the only bar in the catalog; a second bar gets its own desk.
 
 ## A-3 Mission harness writes offer maps directly
 
