@@ -262,6 +262,35 @@
       "article": "a"
     },
     {
+      "id": "abandoned_minefield",
+      "label": "Abandoned minefield",
+      "star": true,
+      "objects": [
+        {
+          "kind": "mine",
+          "count": [
+            5,
+            10
+          ]
+        },
+        {
+          "kind": "debris",
+          "count": [
+            2,
+            6
+          ]
+        },
+                {
+          "kind": "derelict",
+          "count": [
+            0,
+            1
+          ]
+        }
+      ],
+      "article": "a"
+    },
+    {
       "id": "approach_corridor",
       "label": "Orbital approach corridor",
       "star": true,
