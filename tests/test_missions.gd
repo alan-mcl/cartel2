@@ -17,6 +17,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cancel_before_departure(runner, catalog)
 	_test_cancel_after_undock_fails(runner, catalog)
 	_test_dock_completion_pays(runner, catalog)
+	_test_attach_events_completes_charter(runner, catalog)
 	_test_reputation_charter_outcomes(runner, catalog)
 	_test_full_charter_manifest_can_launch(runner, catalog)
 	_test_lazy_habitat_board_generation(runner, catalog)
@@ -376,6 +377,38 @@ static func _test_dock_completion_pays(runner: TestRunner, catalog: Catalog) -> 
 		"missions: destination dock pays reward"
 	)
 	runner.check_eq(session.player.reputation, 1, "missions: on-time delivery gains reputation")
+
+
+static func _test_attach_events_completes_charter(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "MIS-ATTACH")
+	simulation.attach_events(session, catalog)
+	var ship := _best_docked_ship(session, catalog, "proxima_habitat")
+	if ship == null:
+		return
+	var picked := _inject_test_offer(
+		missions,
+		session,
+		catalog,
+		"proxima_habitat",
+		"bela_orbital_habitat",
+		"test_attach_complete"
+	)
+	runner.check(
+		missions.accept_offer(session, catalog, str(picked.get("id", "")), ship.id),
+		"missions: attach accept bela charter"
+	)
+	var reward := int(picked.get("reward", 0))
+	var credits_before := session.credits
+	runner.check(session.undock(catalog, ship.id, missions), "missions: attach launch")
+	runner.check(session.enter_sector(catalog, "bela", false), "missions: attach travel")
+	runner.check(session.dock(catalog, "bela_orbital_habitat"), "missions: attach dock")
+	runner.check(missions.list_accepted().is_empty(), "missions: attach completes charter on dock")
+	runner.check(
+		session.credits >= credits_before + reward,
+		"missions: attach dock pays reward"
+	)
 
 
 static func _test_reputation_charter_outcomes(runner: TestRunner, catalog: Catalog) -> void:

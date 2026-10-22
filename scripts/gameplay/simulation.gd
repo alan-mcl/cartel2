@@ -5,6 +5,9 @@ extends RefCounted
 
 var _clock := SimClock.new()
 var _subsystems: Dictionary = {}
+var _event_session: GameSession
+var _event_catalog: Catalog
+var _event_listener: Callable = Callable()
 
 
 func _init() -> void:
@@ -111,6 +114,36 @@ func apply_mapping_lump(
 
 func reset_unspace_pulse() -> void:
 	_clock.reset_unspace_pulse()
+
+
+## Subscribe this simulation to a session bus. Replaces any previous attachment.
+func attach_events(session: GameSession, catalog: Catalog) -> void:
+	detach_events()
+	if session == null or catalog == null:
+		return
+	_event_session = session
+	_event_catalog = catalog
+	_event_listener = _on_session_event
+	session.events.subscribe_all(_event_listener)
+
+
+## Drop the session bus subscription. A different session is left untouched.
+func detach_events(session: GameSession = null) -> void:
+	if _event_session == null:
+		return
+	if session != null and session != _event_session:
+		return
+	if _event_listener.is_valid():
+		_event_session.events.unsubscribe_all(_event_listener)
+	_event_session = null
+	_event_catalog = null
+	_event_listener = Callable()
+
+
+func _on_session_event(evt: Dictionary) -> void:
+	if _event_session == null or _event_catalog == null:
+		return
+	dispatch_event(_event_session, _event_catalog, evt)
 
 
 func dispatch_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:

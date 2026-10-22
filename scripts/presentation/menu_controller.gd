@@ -431,18 +431,12 @@ func _refresh_session_bindings() -> void:
 
 
 func bind_session_events(game_session: GameSession) -> void:
-	if game_session == null:
+	if game_session == null or _simulation == null:
 		return
-	game_session.events.subscribe_all(_forward_session_event)
+	_simulation.attach_events(game_session, _catalog)
 
 
 func unbind_session_events(game_session: GameSession) -> void:
-	if game_session == null:
-		return
-	game_session.events.unsubscribe_all(_forward_session_event)
-
-
-func _forward_session_event(evt: Dictionary) -> void:
 	if _simulation == null:
 		return
-	_simulation.dispatch_event(_main.session, _catalog, evt)
+	_simulation.detach_events(game_session)

@@ -98,13 +98,9 @@ The harness calls `MissionSubsystem.seed_harness_scan_offer` and `seed_harness_b
 
 ## A-4 Mission reactions depend on a presentation subscription
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`GameSession.dock` publishes `SimEvent.docked` on `session.events`. `MissionSubsystem.on_event` runs only when `Simulation.dispatch_event` is called. Production does that in `MenuController._forward_session_event`. Headless tests subscribe themselves. `mission_harness.gd` does not. Any future caller that docks a session without that subscription will complete travel and silently skip charter resolution.
-
-The bridge is documented in [architecture.md](architecture.md) and is not an accident. It is a load-bearing wire with one production owner.
-
-**Direction:** Have `GameSession` notify the `Simulation` it was started with, or have `MissionSubsystem` subscribe to `session.events` when it is registered. Keep `MenuController` from being the only production forwarder.
+`Simulation.attach_events` subscribes to the session bus and dispatches to subsystems. `MenuController` only attaches and detaches when the session object is replaced. A dock on an attached session completes charters without a menu forwarder. `EventBus` and `session.changed` are unchanged.
 
 **Do not:** delete `EventBus` or the coarse `changed` signal as part of this. UI still refreshes on `changed` (A-8).
 
