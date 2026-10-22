@@ -11,6 +11,8 @@ static func run(runner: TestRunner) -> void:
 	_test_push_preempts_random_sample(runner, catalog)
 	_test_headlines_sector_change_clears_push(runner, catalog)
 	_test_charter_gossip_quotes_live_offer(runner, catalog)
+	_test_pool_emitter_samples_one_channel(runner, catalog)
+	_test_commodity_emitter_quotes_a_price(runner, catalog)
 
 
 static func _messages(simulation: Simulation) -> MessageSubsystem:
@@ -238,6 +240,113 @@ static func _test_charter_gossip_quotes_live_offer(runner: TestRunner, catalog: 
 			quoted = true
 			break
 	runner.check(quoted, "message emitters: charter gossip names a live board destination")
+
+
+static func _test_pool_emitter_samples_one_channel(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(catalog)
+	var emitter := PoolMessageEmitter.new({
+		"id": "pool_probe",
+		"weight": 3.0,
+		"templates": [
+			{"channel": "headlines", "text": "Desk note from {habitat}.", "tone": "info"},
+			{"channel": "gossip", "text": "Quiet rumour.", "tone": "warning"},
+			"not-a-template",
+		],
+	})
+	runner.check(
+		is_equal_approx(emitter.weight(MessageChannels.HEADLINES, session, catalog), 3.0),
+		"message emitters: pool weight is the definition weight"
+	)
+	var silenced := PoolMessageEmitter.new({"id": "silenced", "weight": -2.0, "templates": []})
+	runner.check(
+		is_equal_approx(silenced.weight(MessageChannels.HEADLINES, session, catalog), 0.0),
+		"message emitters: a negative pool weight is treated as zero"
+	)
+	runner.check(
+		emitter.has_templates_for_channel(MessageChannels.HEADLINES),
+		"message emitters: pool emitter has a headlines template"
+	)
+	runner.check(
+		emitter.has_templates_for_channel(MessageChannels.GOSSIP),
+		"message emitters: pool emitter has a gossip template"
+	)
+	runner.check(
+		not emitter.has_templates_for_channel("missing"),
+		"message emitters: pool emitter ignores a channel it has no template for"
+	)
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var sample := emitter.sample(MessageChannels.HEADLINES, session, catalog, rng)
+	runner.check_eq(
+		str(sample.get("emitter_id", "")),
+		"pool_probe",
+		"message emitters: pool sample is tagged with the emitter id"
+	)
+	runner.check_eq(str(sample.get("tone", "")), "info", "message emitters: pool sample keeps the template tone")
+	var text := str(sample.get("text", ""))
+	runner.check(text.begins_with("Desk note from "), "message emitters: pool sample fills the habitat token")
+	runner.check(text.find("{") < 0, "message emitters: pool sample has no unfilled tokens")
+	var empty := emitter.sample("not-a-channel", session, catalog, rng)
+	runner.check_eq(str(empty.get("text", "x")), "", "message emitters: an unmatched pool channel returns no text")
+	runner.check_eq(
+		str(empty.get("emitter_id", "")),
+		"pool_probe",
+		"message emitters: an empty pool sample still names the emitter"
+	)
+
+
+static func _test_commodity_emitter_quotes_a_price(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(catalog)
+	var def := catalog.get_message_emitter("commodities")
+	runner.check(not def.is_empty(), "message emitters: commodities definition exists")
+	var emitter := CommodityMessageEmitter.new(def)
+	runner.check(
+		is_equal_approx(emitter.weight(MessageChannels.HEADLINES, session, catalog), float(def.get("weight", 0.0))),
+		"message emitters: commodity emitter uses the catalog weight"
+	)
+	runner.check(
+		emitter.has_templates_for_channel(MessageChannels.HEADLINES),
+		"message emitters: commodity emitter has headlines templates"
+	)
+	runner.check(
+		emitter.has_templates_for_channel(MessageChannels.GOSSIP),
+		"message emitters: commodity emitter has gossip templates"
+	)
+
+	var names: PackedStringArray = PackedStringArray()
+	for commodity_variant in catalog.list_commodities():
+		if typeof(commodity_variant) != TYPE_DICTIONARY:
+			continue
+		var name := str(commodity_variant.get("name", "")).strip_edges()
+		if not name.is_empty():
+			names.append(name)
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 44001
+	var quoted_price := false
+	var named := false
+	for _i in range(12):
+		var sample := emitter.sample(MessageChannels.HEADLINES, session, catalog, rng)
+		runner.check_eq(
+			str(sample.get("emitter_id", "")),
+			"commodities",
+			"message emitters: commodity sample is tagged commodities"
+		)
+		var text := str(sample.get("text", "")).strip_edges()
+		runner.check(not text.is_empty(), "message emitters: commodity headline returns text")
+		runner.check(text.find("{") < 0, "message emitters: commodity headline has no unfilled tokens")
+		if text.find("d") >= 0:
+			quoted_price = true
+		for name in names:
+			if text.find(name) >= 0:
+				named = true
+				break
+	runner.check(quoted_price, "message emitters: a commodity headline quotes a price")
+	runner.check(named, "message emitters: a commodity headline names a catalog commodity")
+
+	var empty := emitter.sample("not-a-channel", session, catalog, rng)
+	runner.check_eq(str(empty.get("text", "x")), "", "message emitters: commodity emitter ignores an unknown channel")
 
 
 static func _charter_destination_names(missions: MissionSubsystem, habitat_id: String) -> Array[String]:

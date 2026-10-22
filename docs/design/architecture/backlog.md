@@ -218,23 +218,9 @@ Floors (`_check_min_count`, validator SKU floors) are the right shape and should
 
 ## A-15 High-risk gameplay with no direct test
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-Most gameplay modules have a suite. These do not:
-
-| Module | Why it matters |
-|--------|----------------|
-| `cargo_requirements.gd` | Charter accept depends on it |
-| `combat_persistence.gd` | Hull, integrity, and shield charges across save and dock repair |
-| `traffic_detection.gd` | Staggered detection. `traffic_director.gd` tests cover caps and setup, not this |
-| `commodity_message_emitter.gd` | Sibling emitters are tested; this one is not |
-| `pool_message_emitter.gd` | Base class for the ticker pools |
-
-`game_version.gd` is a constant. A test would not earn its keep.
-
-Save file IO is covered via `SaveStore.save_dir`. That closed the Phase 0 gap. Do not reopen it.
-
-**Direction:** Headless cases for cargo rejection, combat-state round-trip, and one detection stagger step. Emitter tests can follow `test_message_emitters.gd`.
+`TestCargoRequirements` rejects a plain hold for refrigerated cargo, accepts it once a cold bay is fitted, and blocks a bay change while that cargo is still aboard. `TestCombatPersistence` round-trips hull, integrity, and shield charges, applies hull stress only in unspace and only after the cooldown, and restores a full hull on repair. `TestTraffic` pins one far-actor detection refresh per stagger window by calling `TrafficDetection` directly. `TestMessageEmitters` samples `CommodityMessageEmitter` and `PoolMessageEmitter` for a filled line, channel filtering, and weight.
 
 **Do not:** boot the scene tree to test these. Do not add GUT.
 

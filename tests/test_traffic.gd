@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_sim_slot_cap(runner, catalog)
 	_test_near_lod_tracks_sim_slot(runner, catalog)
 	_test_detection_stagger(runner, catalog)
+	_test_detection_stagger_phase(runner)
 	_test_clear_drops_fleet(runner, catalog)
 	_test_ambient_ship_spawn_anonymous(runner, catalog)
 
@@ -134,6 +135,69 @@ static func _test_detection_stagger(runner: TestRunner, catalog: Catalog) -> voi
 		refresh_count < eligible,
 		"detection stagger skips some far actors on a single frame"
 	)
+
+
+static func _test_detection_stagger_phase(runner: TestRunner) -> void:
+	var actor = TrafficActorScript.new()
+	actor.id = "stagger-phase-probe"
+	actor.position = Vector2(20000.0, 0.0)
+	actor.has_sim_slot = false
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	var observer := Vector2.ZERO
+	var radius := 250.0
+	var window := TrafficDetection.DETECTION_STAGGER_FRAMES
+	var hits := 0
+	var hit_frame := -1
+	for frame in range(window):
+		if TrafficDetection.should_refresh_detection(actor, frame, observer, radius):
+			hits += 1
+			hit_frame = frame
+	runner.check_eq(hits, 1, "detection stagger: far traffic refreshes once per window")
+	if hits != 1:
+		return
+	runner.check(
+		TrafficDetection.should_refresh_detection(actor, hit_frame + window, observer, radius),
+		"detection stagger: the same phase repeats on the next window"
+	)
+	runner.check(
+		not TrafficDetection.should_refresh_detection(actor, hit_frame + 1, observer, radius),
+		"detection stagger: the next frame in the window is skipped"
+	)
+
+	actor.has_sim_slot = true
+	runner.check_eq(
+		_refresh_count(actor, observer, radius, window),
+		window,
+		"detection stagger: a sim slot refreshes every frame"
+	)
+	actor.has_sim_slot = false
+	actor.ai_state = TrafficActorScript.AiState.ENGAGE
+	runner.check_eq(
+		_refresh_count(actor, observer, radius, window),
+		window,
+		"detection stagger: an engaging actor refreshes every frame"
+	)
+	actor.ai_state = TrafficActorScript.AiState.FLEE
+	runner.check_eq(
+		_refresh_count(actor, observer, radius, window),
+		window,
+		"detection stagger: a fleeing actor refreshes every frame"
+	)
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	actor.position = Vector2(10.0, 0.0)
+	runner.check_eq(
+		_refresh_count(actor, observer, radius, window),
+		window,
+		"detection stagger: an actor inside visual range refreshes every frame"
+	)
+
+
+static func _refresh_count(actor, observer: Vector2, radius: float, window: int) -> int:
+	var hits := 0
+	for frame in range(window):
+		if TrafficDetection.should_refresh_detection(actor, frame, observer, radius):
+			hits += 1
+	return hits
 
 
 static func _test_clear_drops_fleet(runner: TestRunner, catalog: Catalog) -> void:
