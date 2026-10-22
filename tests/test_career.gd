@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_profit_and_accounts(runner, catalog)
 	_test_flight_time_excludes_docked(runner, catalog)
 	_test_kill_on_destroy_blow(runner, catalog)
+	_test_weapon_attribution(runner, catalog)
 	_test_save_round_trip(runner, catalog)
 	_test_legacy_save(runner, catalog)
 	_test_leaderboard_store(runner, catalog)
@@ -89,15 +90,26 @@ static func _test_kill_on_destroy_blow(runner: TestRunner, catalog: Catalog) -> 
 	var config := catalog.get_traffic_config()
 	var result: Dictionary = actor.take_combat_hit("ballistic", {"kinetic": 999.0}, config)
 	runner.check(bool(result.get("destroyed", false)), "career: destroy flag on killing blow")
-	var shooter: Node2D = load("res://tests/helpers/test_shooter_stub.gd").new()
-	shooter.session = session
-	shooter.catalog = catalog
+	var context := WeaponHitContext.new()
+	context.session = session
+	context.catalog = catalog
+	context.shooter_id = "career-shooter"
+	context.player_shot = true
 	var target := MockCombatTarget.new()
-	WeaponHit.apply(target, "ballistic", {"kinetic": 1.0}, shooter, Vector2.ZERO)
+	WeaponHit.apply(target, "ballistic", {"kinetic": 1.0}, null, Vector2.ZERO, context)
 	runner.check_eq(session.career.kills, 1, "career: player destroy counts as kill")
-	WeaponHit.apply(target, "ballistic", {"kinetic": 1.0}, shooter, Vector2.ZERO)
+	WeaponHit.apply(target, "ballistic", {"kinetic": 1.0}, null, Vector2.ZERO, context)
 	runner.check_eq(session.career.kills, 1, "career: second hit on destroyed target does not add kill")
-	shooter.free()
+
+	var ignored := _ShooterProbe.new()
+	ignored.session = session
+	ignored.catalog = catalog
+	WeaponHit.apply(target, "ballistic", {"kinetic": 1.0}, ignored, Vector2.ZERO)
+	runner.check_eq(
+		session.career.kills,
+		1,
+		"career: a shooter object is not read for the kill"
+	)
 
 
 static func _test_save_round_trip(runner: TestRunner, catalog: Catalog) -> void:
@@ -195,3 +207,50 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 	if DirAccess.dir_exists_absolute(temp_dir):
 		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
 		DirAccess.remove_absolute(temp_dir)
+
+
+static func _test_weapon_attribution(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "CR-ATTR")
+	if session == null:
+		return
+	var empty := WeaponAttribution.capture(null)
+	runner.check(not empty.player_shot, "career: a missing shooter is not a player shot")
+	runner.check(empty.session == null, "career: a missing shooter has no session")
+	runner.check_eq(empty.shooter_id, "", "career: a missing shooter has no id")
+
+	var owned := OwnedShip.new()
+	owned.id = "ship-owned"
+	var player := _ShooterProbe.new()
+	player.session = session
+	player.catalog = catalog
+	player.ship_id = "flare_on_ss"
+	player.owned_ship = owned
+	var player_context := WeaponAttribution.capture(player)
+	runner.check(player_context.player_shot, "career: a session on the shooter marks a player shot")
+	runner.check(player_context.session == session, "career: attribution keeps the shooter session")
+	runner.check(player_context.catalog == catalog, "career: attribution keeps the shooter catalog")
+	runner.check_eq(
+		player_context.shooter_id,
+		"ship-owned",
+		"career: attribution prefers the owned ship id"
+	)
+
+	var actor = TrafficActorScript.new()
+	actor.id = "npc-7"
+	var npc := _ShooterProbe.new()
+	npc.catalog = catalog
+	npc.actor = actor
+	var npc_context := WeaponAttribution.capture(npc)
+	runner.check(not npc_context.player_shot, "career: an NPC shot is not the player's")
+	runner.check(npc_context.session == null, "career: an NPC shot has no session")
+	runner.check(npc_context.catalog == catalog, "career: an NPC shot keeps the catalog")
+	runner.check_eq(npc_context.shooter_id, "npc-7", "career: an NPC shot uses the actor id")
+
+
+class _ShooterProbe:
+	extends RefCounted
+	var session: GameSession
+	var catalog: Catalog
+	var ship_id: String = ""
+	var owned_ship: OwnedShip
+	var actor = null

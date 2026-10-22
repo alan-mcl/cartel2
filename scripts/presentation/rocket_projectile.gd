@@ -1,6 +1,7 @@
 extends Area2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const WeaponAttributionScript := preload("res://scripts/presentation/weapon_attribution.gd")
 const ProjectGuidance := preload("res://scripts/gameplay/project_guidance.gd")
 const WarheadBlast := preload("res://scripts/presentation/warhead_blast.gd")
 const INTERCEPTABLE_GROUP := "interceptable_round"
@@ -22,8 +23,7 @@ var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
 var _shooter: Node = null
-var _attribution_session: GameSession = null
-var _attribution_catalog: Catalog = null
+var _hit_context: WeaponHitContext
 var _homing := false
 var _guidance_target_id := ""
 var _guidance_turn_rate := 2.8
@@ -102,11 +102,7 @@ func configure(
 	_collision_mask = collision_mask
 	_exclude = exclude
 	_shooter = shooter
-	var attribution := WeaponHit.capture_attribution(shooter)
-	var session_value: Variant = attribution.get("session", null)
-	var catalog_value: Variant = attribution.get("catalog", null)
-	_attribution_session = session_value if session_value is GameSession else null
-	_attribution_catalog = catalog_value if catalog_value is Catalog else null
+	_hit_context = WeaponAttributionScript.capture(shooter)
 	_homing = bool(guidance.get("homing", false))
 	_guidance_target_id = str(guidance.get("target_id", ""))
 	_guidance_turn_rate = float(guidance.get("turn_rate", 2.8))
@@ -240,8 +236,7 @@ func _apply_hit(collider: Object) -> void:
 		_packets,
 		shooter,
 		_velocity,
-		_attribution_session,
-		_attribution_catalog
+		_hit_context
 	)
 
 

@@ -8,8 +8,7 @@ static func apply(
 	packets: Dictionary,
 	shooter: Variant = null,
 	shot_velocity: Vector2 = Vector2.ZERO,
-	attribution_session: GameSession = null,
-	attribution_catalog: Catalog = null
+	context: WeaponHitContext = null
 ) -> void:
 	if collider == null:
 		return
@@ -31,7 +30,7 @@ static func apply(
 	if delta.length_squared() > 0.01 and collider.has_method("apply_weapon_impulse"):
 		collider.call("apply_weapon_impulse", delta)
 
-	var session := attribution_session if attribution_session != null else _shooter_session(shooter)
+	var session: GameSession = context.session if context != null else null
 	if (
 		session != null
 		and not session.player.sandbox
@@ -44,20 +43,11 @@ static func apply(
 	elif session != null:
 		_maybe_record_bounty_target_disabled(session, collider)
 
-	var catalog := attribution_catalog if attribution_catalog != null else _shooter_catalog(shooter)
+	var catalog: Catalog = context.catalog if context != null else null
 	if session == null or catalog == null:
 		return
-	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, result)
-
-
-static func capture_attribution(shooter: Variant) -> Dictionary:
-	shooter = _valid_shooter(shooter)
-	if shooter == null:
-		return {}
-	return {
-		"session": _shooter_session(shooter),
-		"catalog": _shooter_catalog(shooter),
-	}
+	var player_shot := context != null and context.player_shot
+	Sanctions.record_player_weapon_hit(session, catalog, player_shot, collider, result)
 
 
 static func _valid_shooter(shooter: Variant) -> Variant:
@@ -170,23 +160,3 @@ static func _target_mass(collider: Object) -> float:
 	if assembled is AssembledShip:
 		return maxf(float(assembled.envelope.get("dry_mass", 10.0)), 0.1)
 	return 10.0
-
-
-static func _shooter_session(shooter: Variant) -> GameSession:
-	shooter = _valid_shooter(shooter)
-	if shooter == null or not shooter is Node:
-		return null
-	var value = shooter.get("session")
-	if value is GameSession:
-		return value
-	return null
-
-
-static func _shooter_catalog(shooter: Variant) -> Catalog:
-	shooter = _valid_shooter(shooter)
-	if shooter == null or not shooter is Node:
-		return null
-	var value = shooter.get("catalog")
-	if value is Catalog:
-		return value
-	return null

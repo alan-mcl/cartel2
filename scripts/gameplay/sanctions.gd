@@ -79,7 +79,7 @@ static func infraction_label(catalog: Catalog, infraction_id: String) -> String:
 static func record_player_weapon_hit(
 	session: Variant,
 	catalog: Catalog,
-	shooter: Variant,
+	player_shot: bool,
 	collider: Variant,
 	result: Dictionary
 ) -> void:
@@ -89,7 +89,7 @@ static func record_player_weapon_hit(
 		return
 	if VolatileTranslation.is_volatile_sector_id(session.sector_id):
 		return
-	if not _is_player_shooter(shooter):
+	if not player_shot:
 		return
 	if bool(result.get("intercepted", false)):
 		return
@@ -142,12 +142,6 @@ static func record_player_weapon_hit(
 	session.changed.emit()
 
 
-static func _is_player_shooter(shooter: Variant) -> bool:
-	if shooter == null:
-		return false
-	return _shooter_session(shooter) != null
-
-
 static func _sanction_target_id(collider: Variant) -> String:
 	if collider == null:
 		return ""
@@ -174,26 +168,6 @@ static func _collider_actor(collider: Variant) -> Variant:
 		return null
 	if collider is Object:
 		return collider.get("actor")
-	return null
-
-
-static func _shooter_session(shooter: Variant) -> Variant:
-	if shooter == null:
-		return null
-	if shooter is Object:
-		var value = shooter.get("session")
-		if value != null and value.get("player") != null:
-			return value
-	return null
-
-
-static func _shooter_catalog(shooter: Variant) -> Catalog:
-	if shooter == null:
-		return null
-	if shooter is Object:
-		var value = shooter.get("catalog")
-		if value is Catalog:
-			return value
 	return null
 
 

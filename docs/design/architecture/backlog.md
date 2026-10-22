@@ -29,7 +29,7 @@ Copied here so this file can be used without re-reading the archive. The reasoni
 
 Recorded so the audit is not relitigated as if the earlier refactors had not landed.
 
-- Gameplay does not construct nodes. The only `Node` check under `scripts/gameplay/` is `WeaponHit` reading `session` and `catalog` off a shooter (A-6).
+- Gameplay does not construct nodes. Weapon hits carry a `WeaponHitContext` captured in presentation; gameplay does not read `session` or `catalog` off a shooter node.
 - `main.gd` is scene wiring. Flight, world, and menu work sit on `FlightLoopController`, `WorldController`, and `MenuController`.
 - New habitat buildings go through `BuildingPanelRegistry` and `GameScreen`, not a `match` in `HabitatScreen`.
 - Charter accept, pay, and cancel call `MissionSubsystem`. Market, dealer, yard, and fuel UI call `GameSession` or `ShipAssembly`.
@@ -118,11 +118,9 @@ Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and 
 
 ## A-6 `WeaponHit` pulls session and catalog off a Node
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`WeaponHit._shooter_session` and `_shooter_catalog` (`scripts/gameplay/weapon_hit.gd`) accept a hit only when the shooter `is Node` and then `get("session")` / `get("catalog")`. That is the one scene-tree dependency in gameplay. Projectiles, lasers, and proximity mines all arrive through it.
-
-**Direction:** Pass a small `RefCounted` hit context (session, catalog, shooter id) from presentation into `WeaponHit.apply`.
+Presentation snapshots a `WeaponHitContext` (session, catalog, shooter id, and whether the shot is the player's) when a laser, mass-driver round, or rocket is spawned. `WeaponHit.apply` uses that context for career kills and sanctions. A shooter object that still carries `session` does not count unless the context is passed. Proximity mines still detonate through `take_combat_hit` (A-10).
 
 **Do not:** move damage resolution into the projectile scripts.
 

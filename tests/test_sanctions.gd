@@ -76,10 +76,6 @@ static func _test_record_fire_and_destroy(runner: TestRunner, catalog: Catalog) 
 	runner.check(session.start_new_game(catalog, "SAN-HIT", "trader"), "sanctions: trader for hit test")
 	session.player.sanctions.clear()
 
-	var shooter := SanctionTestStub.new()
-	shooter.session = session
-	shooter.catalog = catalog
-
 	var actor := TrafficActorScript.new()
 	actor.id = "traffic_test_1"
 	actor.hull_current = 10.0
@@ -90,7 +86,12 @@ static func _test_record_fire_and_destroy(runner: TestRunner, catalog: Catalog) 
 	collider.actor = actor
 
 	var hit_result := {"intercepted": false, "hull_damage": 1.0}
-	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, hit_result)
+	Sanctions.record_player_weapon_hit(session, catalog, false, collider, hit_result)
+	runner.check(
+		session.player.sanctions.is_empty(),
+		"sanctions: a non-player shot is not recorded"
+	)
+	Sanctions.record_player_weapon_hit(session, catalog, true, collider, hit_result)
 	runner.check_eq(session.player.sanctions.size(), 1, "sanctions: first hit records fire")
 	runner.check_eq(
 		str(session.player.sanctions[0].get("infraction_id", "")),
@@ -98,12 +99,12 @@ static func _test_record_fire_and_destroy(runner: TestRunner, catalog: Catalog) 
 		"sanctions: fire infraction id"
 	)
 
-	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, hit_result)
+	Sanctions.record_player_weapon_hit(session, catalog, true, collider, hit_result)
 	runner.check_eq(session.player.sanctions.size(), 1, "sanctions: duplicate fire suppressed")
 
 	actor.hull_current = 0.0
 	actor.ai_state = TrafficActorScript.AiState.DESTROYED
-	Sanctions.record_player_weapon_hit(session, catalog, shooter, collider, hit_result)
+	Sanctions.record_player_weapon_hit(session, catalog, true, collider, hit_result)
 	runner.check_eq(session.player.sanctions.size(), 2, "sanctions: destruction adds second sanction")
 	runner.check_eq(
 		str(session.player.sanctions[1].get("infraction_id", "")),
@@ -118,9 +119,6 @@ static func _test_unspace_skips_record(runner: TestRunner, catalog: Catalog) -> 
 	session.player.sanctions.clear()
 	session.world.in_unspace = true
 
-	var shooter := SanctionTestStub.new()
-	shooter.session = session
-	shooter.catalog = catalog
 	var actor := TrafficActorScript.new()
 	actor.id = "traffic_un_1"
 	var collider := SanctionTestStub.new()
@@ -129,7 +127,7 @@ static func _test_unspace_skips_record(runner: TestRunner, catalog: Catalog) -> 
 	Sanctions.record_player_weapon_hit(
 		session,
 		catalog,
-		shooter,
+		true,
 		collider,
 		{"intercepted": false, "hull_damage": 1.0}
 	)

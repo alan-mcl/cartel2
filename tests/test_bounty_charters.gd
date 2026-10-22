@@ -473,5 +473,5 @@ static func _test_no_sanction_in_volatile(runner: TestRunner, catalog: Catalog) 
 	actor.owned_ship = OwnedShip.new()
 	actor.hull_current = 0.0
 	var result := {"destroyed": true, "intercepted": false}
-	Sanctions.record_player_weapon_hit(session, catalog, null, actor, result)
+	Sanctions.record_player_weapon_hit(session, catalog, true, actor, result)
 	runner.check_eq(session.player.sanctions.size(), before, "bounty: no sanction in volatile sector")

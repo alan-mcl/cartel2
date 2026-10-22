@@ -1,6 +1,7 @@
 extends Line2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const WeaponAttributionScript := preload("res://scripts/presentation/weapon_attribution.gd")
 const DURATION := 0.1
 const BEAM_COLOR := Color(0.37, 0.88, 1.0, 0.95)
 const CYBER_COLOR := Color(0.78, 0.35, 1.0, 0.95)
@@ -27,7 +28,14 @@ static func spawn(
 	var hit := _raycast(parent, start, direction, max_range, collision_mask, exclude)
 	if not hit.is_empty():
 		end = hit.position
-		WeaponHit.apply(hit.collider, delivery_type, packets, shooter, direction)
+		WeaponHit.apply(
+			hit.collider,
+			delivery_type,
+			packets,
+			shooter,
+			direction,
+			WeaponAttributionScript.capture(shooter)
+		)
 
 	var beam := Line2D.new()
 	beam.width = 3.0 if visual_variant == "laser" else 2.5

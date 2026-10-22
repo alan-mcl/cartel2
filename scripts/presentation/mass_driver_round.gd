@@ -1,6 +1,7 @@
 extends Area2D
 
 const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const WeaponAttributionScript := preload("res://scripts/presentation/weapon_attribution.gd")
 const ROUND_RADIUS := 5.0
 const ROUND_COLOR := Color(1.0, 0.7, 0.27, 1.0)
 const ROUND_OUTLINE := Color(1.0, 0.55, 0.2, 1.0)
@@ -25,8 +26,7 @@ var _traveled: float = 0.0
 var _collision_mask: int = DEFAULT_WEAPON_MASK
 var _exclude: Array = []
 var _shooter: Node = null
-var _attribution_session: GameSession = null
-var _attribution_catalog: Catalog = null
+var _hit_context: WeaponHitContext
 var _visual_variant := "mass_driver"
 
 
@@ -94,11 +94,7 @@ func configure(
 	_collision_mask = collision_mask
 	_exclude = exclude
 	_shooter = shooter
-	var attribution := WeaponHit.capture_attribution(shooter)
-	var session_value: Variant = attribution.get("session", null)
-	var catalog_value: Variant = attribution.get("catalog", null)
-	_attribution_session = session_value if session_value is GameSession else null
-	_attribution_catalog = catalog_value if catalog_value is Catalog else null
+	_hit_context = WeaponAttributionScript.capture(shooter)
 	_visual_variant = visual_variant
 	if _visual_variant.is_empty():
 		_visual_variant = "plasma" if delivery_type == "plasma" else "mass_driver"
@@ -164,8 +160,7 @@ func _apply_hit(collider: Object) -> void:
 		_packets,
 		shooter,
 		_velocity,
-		_attribution_session,
-		_attribution_catalog
+		_hit_context
 	)
 
 
