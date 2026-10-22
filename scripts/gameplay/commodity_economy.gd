@@ -125,7 +125,7 @@ static func sell_price(buy_price: int) -> int:
 	return maxi(1, int(round(float(buy_price) * SELL_SPREAD)))
 
 
-## Test seam - documented in docs/design/commodity_economy.md.
+## Test seam - documented in docs/design/architecture/commodity_economy.md.
 static func price_ratio_for_test(demand: float, supply: float) -> float:
 	return _price_ratio(demand, supply)
 

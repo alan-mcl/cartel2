@@ -181,4 +181,4 @@ Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`a
 | Star tiles | 512×512 |
 | Planet maps | 2048×1024 (2:1) |
 | Location art | 640×360 (16:9) |
-| Portraits | 1024×1024 |
+| Portraits | 120×160 |

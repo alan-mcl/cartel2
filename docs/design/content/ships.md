@@ -214,7 +214,7 @@ The **XF5700** is the top-line interceptor configuration in current manufacture,
 | Chassis hits | 10–40 (design sheet) | 1000 placeholder in XML |
 | Weapons on player ships | Mass driver, lasers, etc. | Light laser and mass driver wired in this game |
 
-Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation - see [equipment.md](equipment.md) and [architecture.md](../design/architecture.md).
+Flight behaviour uses derived thrust, speed, and maneuver from assembled modules and loaded mass, with in-flight fuel, power, and compute simulation - see [equipment.md](equipment.md) and [architecture.md](../architecture/architecture.md).
 
 ### In catalog (`ships.json`)
 

@@ -14,12 +14,9 @@ The first Old Earth colonists arrived in orbit around Proxima on sublight sleepe
 
 ## The Player
 
-At New Game the player chooses a callsign, a portrait, and a background. A background is a starting location and possessions, usually including a ship and some liquid funds.
-Starting backgrounds include **Trader**, **Hotshot**, **Entrepreneur**, **Outlaw**, **Soldier**, **Old Money**, and **Influencer**.
+At New Game the player chooses a callsign, a portrait, and a background. A background is a starting location and possessions, usually including a ship and some liquid funds. Starting backgrounds include **Trader**, **Hotshot**, **Entrepreneur**, **Outlaw**, **Soldier**, **Old Money**, and **Influencer**.
 
-Each pilot carries a **reputation** score: how well known they are among brokers, terminals, and charter desks. Higher is better. Most backgrounds begin at **0** (unknown). The **Outlaw** begins at **5** - a name on the rim from smuggling and merc work, not yet someone institutions book. **Old Money** begins at **8** - a family name brokers have heard, without much freight behind it. **Influencer** begins at **25** - recognised from streams and sponsorship tags, not yet trusted for sealed institutional work. Rough bands: around **15** a working name, **25–40** recognised, **50** trusted for sealed institutional freight, **75** the sort of pilot officials put on diplomatic parties. An on-time passenger or freight delivery raises reputation by **1**; a late delivery, passengers abandoning a late charter at the wrong habitat, or cancelling at the origin lowers it by **1**. The score never falls below **0**. Some charter types already require a minimum reputation to accept.
-
-That score is separate from **sanctions**: recorded infractions with a monetary fine. Any outstanding sanction blocks launch from a habitat until the pilot pays the total at the terminal. Firing on another ship in settled space adds an unlawful-fire sanction; destroying a ship adds a heavier one. Shots in Unspace are not recorded yet. The **Outlaw** begins with one unlawful-fire sanction and enough cash to pay it and keep d250. Charter desks may later refuse pilots with certain sanctions; that gate is not implemented yet.
+Reputation, sanctions, and charter rules are playable systems, documented in [missions](../design/content/missions.md).
 
 ## Worlds
 
@@ -107,3 +104,20 @@ System peacekeeping forces exist at all major planets, responsible for maintaini
 **Jerusalem Ridge.** When the first travellers returned to Old Earth to discover the uninhabitable planet that it is now, they also discovered that the solar system was not wholly devoid of human life.  One colony on the red planet had survived.  It called itself Jerusalem Ridge, and wanted nothing to do with the newcomers.
 
 **Geoffrey Tensing.** Born on Old Earth, the mathematician was amongst the first wave of colonists on Proxima. He famously published the first solution to the KPF n-space matrix problem (claiming to have dreamed the proof in letters of fire) thus enabling the development of FTL transportation technology.
+
+## Glossary
+
+| Term | Meaning |
+|------|---------|
+| **Sector** | A star system; primary unit for orbital play and Unspace routing |
+| **Planet** | Habitable E-type world within a sector; has surface cities and usually an orbital habitat |
+| **Habitat** | Orbital city; default launch/dock hub for ships |
+| **City Mall (CM)** | Enclosed consumer habitat (MicroDonald-style) |
+| **Building** | Visitable location within a city or habitat |
+| **Unspace / n-space** | Higher-order dimensions used for inter-sector travel |
+| **Solution** | Integer identifying a stored Unspace translation from a source sector (see [translations](../design/content/translations.md)) |
+| **d** | Galactic dollar |
+| **Cash** | Carried on the person |
+| **Credit (eCash)** | Bank balance |
+| **E-type** | Earth-like planetary classification E1–E5 |
+| **GST / GSC** | Galactic Standard Time / Calendar - interstellar civil time (364-day year). Clock behaviour: [GST in play](../design/content/gst.md) |

@@ -78,7 +78,7 @@ Commercial main engines are branded products: **maker** (corporation), **brand**
 | Power | `power_demand` | Operating budget |
 | Type | `engine_type` | Technology class (see below) |
 
-Manufacturer tiers for propulsion are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+Manufacturer tiers for propulsion are defined in [manufacturers.txt](manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
 #### Engine types
 
@@ -121,11 +121,11 @@ Shipboard reactors mount on the chassis `power` hardpoint. One plant is typical;
 | Weight | `mass` | Ship mass |
 | Envelope | `volume` | Fitting limit |
 | Fuel burn | `fuel_consumption` | Plant fuel use in flight |
-| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](../../setting/corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 | Type | `plant_type` | Technology class (see below) |
 
-Manufacturer tiers for power plants are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+Manufacturer tiers for power plants are defined in [manufacturers.txt](manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
 #### Plant types
 
@@ -164,11 +164,11 @@ Shipboard compute cores mount on the chassis `system` hardpoint. One core is typ
 | Weight | `mass` | Ship mass |
 | Envelope | `volume` | Fitting limit |
 | Power | `power_demand` | Operating budget (MW) |
-| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](../../setting/corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 | Type | `core_type` | Technology class (see below) |
 
-Manufacturer tiers for compute cores are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+Manufacturer tiers for compute cores are defined in [manufacturers.txt](manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
 **Role:** cores **only supply compute (CU)** in the prototype. Targeting, fire-control, extra HUD features, and similar functions will be **separate system modules** that consume CU and grant capabilities. Every core still carries `basic_hud` so undocked ships show flight instruments - a temporary gate, not a product role.
 
@@ -220,7 +220,7 @@ The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engine
 
 Sensors detect signature channels within **`sensor_range`**, using per-channel **`sensor_sensitivity`**. Stacking multiple sensors takes the **max** sensitivity per channel and **max** range among contributing units. Catalog JSON is **product-level** (maker, brand, name, stats) - bundled instruments are described in product copy, not as a `detectors[]` array.
 
-Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Sensors & Navigation column). Sensor marques are distinct from propulsion, power, and compute brands (e.g. **Hermes** for Mercury nav packages vs **Helios** for Holt-Winters plants).
+Manufacturer tiers: [manufacturers.txt](manufacturers.txt) (Sensors & Navigation column). Sensor marques are distinct from propulsion, power, and compute brands (e.g. **Hermes** for Mercury nav packages vs **Helios** for Holt-Winters plants).
 
 #### Instrument taxonomy (lore)
 
@@ -297,7 +297,7 @@ Armour is an **internal module** (`category: armour`, mount `other`) that adds `
 
 Required JSON: `maker`, `brand`, `hits`, `protection` (`kinetic`, `concussive`, `energy`).
 
-Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Armour & Shields column).
+Manufacturer tiers: [manufacturers.txt](manufacturers.txt) (Armour & Shields column).
 
 ---
 
@@ -340,10 +340,10 @@ Shipboard life support systems mount on the chassis `system` hardpoint. One unit
 | Envelope | `volume` | Cabin + plant, counted against chassis `volume` |
 | Power | `power_demand` | Operating budget (MW) |
 | Compute | `compute_demand` | Operating budget (CU) |
-| Maker | `maker` | Corporation - see [corporations.md](corporations.md) |
+| Maker | `maker` | Corporation - see [corporations.md](../../setting/corporations.md) |
 | Brand | `brand` | Product family / marque within the maker |
 
-Manufacturer tiers for life support are defined in [manufacturers.txt](../design/manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
+Manufacturer tiers for life support are defined in [manufacturers.txt](manufacturers.txt). The habitat workshop sells the full catalogue; no per-world stock filter yet.
 
 **Role:** life support **sustains crew** in the prototype. Launch requires installed life support with capacity ≥ occupant count (currently 1). Cabin mode and luxury are optional **capability flags** - not a type enum.
 
@@ -417,7 +417,7 @@ A hold may combine several flags or carry none (general dry bulk). Specialty bay
 
 **Exchange buys** require the matching flags on the selected ship; **sells** stay open. Starter templates keep plain Tukey **`cargo_bay_*`** holds for dry bulk. Future **freight charters** will use the same tags.
 
-Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Cargo & other infra column). Data: `data/catalog/modules/cargo.json`.
+Manufacturer tiers: [manufacturers.txt](manufacturers.txt) (Cargo & other infra column). Data: `data/catalog/modules/cargo.json`.
 
 ---
 
@@ -439,7 +439,7 @@ Weapons (`category: weapon`) require `maker`, `brand`, `weapon_type`, and `deliv
 
 Ammunition types in `ammunition.json` may carry `damage_packets`. Magazine modules unchanged (`category: ammunition`).
 
-Manufacturer tiers: [manufacturers.txt](../design/manufacturers.txt) (Weapons column).
+Manufacturer tiers: [manufacturers.txt](manufacturers.txt) (Weapons column).
 
 ---
 
@@ -478,7 +478,7 @@ Despite futuristic weapons, weight-conscious pilots favour **22-millimeter solid
 1. **Point defence** - ballistic / guided only
 2. **Shields** - per-packet absorption from `protection` profile; drains `shield_capacity`
 3. **Armour** - remaining kinetic / concussive / energy only
-4. **Resource conversion** - see [ship_offense_defense.txt](../design/ship_offense_defense.txt)
+4. **Resource conversion** - see [ship_offense_defense.txt](../architecture/ship_offense_defense.txt)
 
 Integrity losses to Power and Compute reduce effective generation/CU in `ShipOperations` until repaired at dock.
 
@@ -499,7 +499,7 @@ At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 - Refuel ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned - see [architecture.md](../design/architecture.md). Dock resets hull and integrity.
+Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned - see [architecture.md](../architecture/architecture.md). Dock resets hull and integrity.
 
 ---
 
@@ -511,4 +511,4 @@ When extending JSON after editing this bible:
 2. Propulsion modules require `maker`, `brand`, and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`). Integrated sail SKUs must set `fuel_consumption` to 0. Power modules require `maker`, `brand`, and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules require `maker`, `brand`, and `core_type` (`silicon` | `photon` | `quantum`); life support modules require `maker`, `brand`, `life_support_capacity`, and `compute_demand`. Weapon modules require `maker`, `brand`, `weapon_type`, `delivery_type`, and `damage_packets` (or ammo-supplied packets). Armour requires `protection`; shields require `shield_type`, `shield_capacity`, `protection`, `regen`. Optional flags: `ls_habitat` (live-aboard), `ls_comfort`, `ls_luxury`. Volume includes cabin space.
 3. Cargo modules require `maker`, `brand`, and `cargo_capacity`; optional cargo capability flags as above. Reference in `ships.json` templates and `player.json` instances
 4. Extend `ShipAssembler` / `ShipOperations` if new stat fields matter for flight or operating budgets
-5. Add corporate `maker` strings aligned with [corporations.md](corporations.md)
+5. Add corporate `maker` strings aligned with [corporations.md](../../setting/corporations.md)

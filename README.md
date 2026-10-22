@@ -6,13 +6,19 @@
 
 **Status:** early development - in-game version **DEV**. Gameplay and content are incomplete; see [Project status](#project-status) below.
 
+## Project status
+
+The playable loop is flight, docking, commodity trade, ship fitting, passenger and freight charters, and scan and bounty work. Scan and bounty charters can grant a private volatile translation. Public routes include n=5 and n=6 translations on the same 4-space presentation. There is no separate 5-space or 6-space layout, no hyperdrive translation, and no combat game-over screen.
+
+What is not built: [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md#not-yet-implemented). Open follow-ons and the maintainability audit: [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md).
+
 ## Features
 
 - Newtonian flight, boost, sensors, and orbital navigation
 - Habitat hubs: terminal, exchange, shipyard, and building interactions
 - Modular ship assembly with catalog-driven parts and engineering budgets
 - Commodity trading at habitat Exchanges
-- Passenger and freight charter missions
+- Passenger, freight, scan, and bounty charters
 - Save/load to three slots under `user://saves/`
 
 ## Requirements
@@ -53,7 +59,7 @@ On **New Game**, choose callsign, portrait, and starting background. The default
 | `tests/` | Headless unit tests (custom `TestRunner`, not GUT) |
 | `scenes/dev/` | Sandboxes for theme, combat, stealth, and rendering |
 
-Layering and conventions: [docs/design/architecture.md](docs/design/architecture.md) and [AGENTS.md](AGENTS.md).
+Layering and conventions: [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md) and [AGENTS.md](AGENTS.md).
 
 ## Development
 
@@ -83,20 +89,39 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 ```bash
 ./scripts/dev/mission_harness.sh
 ./scripts/dev/combat_sandbox.sh
-# … see docs/design/dev_sandboxes.md for the full list
+# … see docs/design/architecture/dev_sandboxes.md for the full list
 ```
 
-Override Godot with `GODOT=/path/to/Godot ./scripts/dev/combat_sandbox.sh`. Details: [docs/design/dev_sandboxes.md](docs/design/dev_sandboxes.md).
+Override Godot with `GODOT=/path/to/Godot ./scripts/dev/combat_sandbox.sh`. Details: [docs/design/architecture/dev_sandboxes.md](docs/design/architecture/dev_sandboxes.md).
 
 Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/ui/portraits/` (matches habitat banner height); reimport.
 
 ## Documentation
 
-- [docs/README.md](docs/README.md) - index
-- **Design** - [architecture](docs/design/architecture.md), [data model](docs/design/data_model.md), [UI theme](docs/design/ui_theme.md)
-- **Setting** - [overview](docs/setting/overview.md) and [setting index](docs/setting/README.md)
+`docs/setting/` is frozen lore: [overview](docs/setting/overview.md) (premise and glossary), [planets](docs/setting/planets.md), [corporations](docs/setting/corporations.md), and the [calendar](docs/setting/date_time.md). Edit those only when a change request names a setting doc.
 
-Setting docs are the lore target; catalogs implement the current playable subset.
+`docs/design/` is what this repository implements today. Update the doc that states a behaviour in the same change as the code or catalog.
+
+**Architecture** (code layout, schemas, systems, tooling):
+
+- [architecture](docs/design/architecture/architecture.md) - layering, loops, not-yet-implemented list
+- [data model](docs/design/architecture/data_model.md) - catalog schemas and runtime types
+- [catalog schema](docs/design/architecture/catalog_schema.md) - generated field tables
+- [commodity economy](docs/design/architecture/commodity_economy.md) - daily quote equations
+- [UI theme](docs/design/architecture/ui_theme.md)
+- [sprite sizes](docs/design/architecture/sprite_sizes.md)
+- [dev sandboxes](docs/design/architecture/dev_sandboxes.md)
+- [backlog](docs/design/architecture/backlog.md) - open work
+- [refactor archive](docs/design/architecture/refactor_backlog.md) - completed phases 0–6
+
+**Content** (playable rules and rosters):
+
+- [ships](docs/design/content/ships.md), [equipment](docs/design/content/equipment.md), [manufacturers](docs/design/content/manufacturers.txt)
+- [commodities](docs/design/content/commodities.md), [trade network](docs/design/content/trade_network.md)
+- [translations](docs/design/content/translations.md), [missions](docs/design/content/missions.md)
+- [field conditions](docs/design/content/field_conditions.md), [GST in play](docs/design/content/gst.md)
+
+Setting prose is the lore target. Catalog JSON is the current playable subset. Do not invent lore in JSON to fill a gap the frozen setting files do not cover.
 
 ## License
 

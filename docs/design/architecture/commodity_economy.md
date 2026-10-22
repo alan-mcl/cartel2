@@ -1,6 +1,6 @@
 # Commodity economy
 
-**Status:** Implemented in [`CommodityEconomy`](../../scripts/gameplay/commodity_economy.gd). Quotes are derived state: recomputed on GST day rollover and on load, not authored as save data. Setting context (route graph, friction bands, trade fiction): [trade_network.md](../setting/trade_network.md). Roster and categories: [commodities.md](../setting/commodities.md).
+**Status:** Implemented in [`CommodityEconomy`](../../../scripts/gameplay/commodity_economy.gd). Quotes are derived state: recomputed on GST day rollover and on load, not authored as save data. Route graph and friction bands: [trade_network.md](../content/trade_network.md). Roster and categories: [commodities.md](../content/commodities.md).
 
 ## Purpose
 
@@ -64,7 +64,7 @@ Every sector id returned by `Catalog.list_sectors()` is priced. Sectors without 
 
 For sector \(s\) and commodity \(c\), let \(P_{s,c}\) and \(K_{s,c}\) be produce and consume weights from `economies.json` (0 if absent).
 
-**Settled-world produce floor.** Eleven settled worlds (sector ids in `CommodityEconomy.SETTLED_WORLD_SECTOR_IDS`, aligned with [planets.md](../setting/planets.md)) apply:
+**Settled-world produce floor.** Eleven settled worlds (sector ids in `CommodityEconomy.SETTLED_WORLD_SECTOR_IDS`, aligned with [planets.md](../../setting/planets.md)) apply:
 
 \[
 \text{output}_{s,c} = \max(P_{s,c},\, 1)
@@ -217,7 +217,7 @@ Same `catalog`, `day`, and `route_friction_delta` ⇒ identical `compute_quotes`
 | Player or NPC trades moving quotes | Intraday quotes are fixed; volume is unlimited at listed buy/sell prices |
 | `wealth` in flow or price formulas | Field remains in JSON for future or presentation |
 | Population scaling | Baked into economy weights at authoring time |
-| Unknown / private routes | Only `routes.json` public edges; see setting [trade_network.md](../setting/trade_network.md) |
+| Unknown / private routes | Only `routes.json` public edges. Volatile grants are not economy edges; see [trade_network.md](../content/trade_network.md) |
 | Per-commodity shipping cost in pricing | Friction is route-level, not cargo-level |
 | Corporate presence (`corporate_presence.json`) | Does not adjust quotes |
 | Refrigeration / cargo tags | Affect cargo rules, not `CommodityEconomy` |
@@ -257,5 +257,4 @@ Run economy tests only: `GODOT=… godot --headless --path . --script res://test
 ## Related future work
 
 - Economic events that block edges (infinite friction) rather than only adding `route_friction_delta`
-- Optional inclusion of discovered private routes as session-local graph overlays
-- Typed `CommodityTraded` events and subsystem reactions (see [refactor_backlog.md](refactor_backlog.md))
+- Optional inclusion of discovered private routes as session-local graph overlays. Volatile mission translations are private navigation solutions; they are not economy edges

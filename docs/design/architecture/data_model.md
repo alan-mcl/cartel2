@@ -1,6 +1,6 @@
 # Data model
 
-JSON catalog schemas and runtime types for this game. For setting intent beyond what is catalogued today, see [setting docs](../setting/README.md).
+JSON catalog schemas and runtime types for this game. For setting intent beyond what is catalogued today, see [overview.md](../../setting/overview.md).
 
 Machine-readable schema files live under `data/catalog/schema/`; generated field tables are in [catalog_schema.md](catalog_schema.md). Regenerate typed records and validators with `python3 scripts/tools/generate_catalog_records.py`.
 
@@ -17,6 +17,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `ammunition.json` | array | Ammunition type definitions (mass, cost) |
 | `ships.json` | array | Manufacturer templates (recommended module loadouts) |
 | `player.json` | object | New-game template: starting sector, credits, owned ship instances |
+| `backgrounds.json` | object | New-game kits: starting habitat, ships, reputation, sanctions |
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
 | `sectors.json` | array | Sector identity, bounds, spawn (mappings synthesized from `routes.json`) |
@@ -26,16 +27,22 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
+| `fuels.json` | array | Propulsion fuel chemistries and daily price bounds |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 | `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, `ad_voice`, `trade`, `brands`) |
 | `corporate_office_ticker.json` | object | Shared SKU/brand/job/recruitment templates keyed by `ad_voice` |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
 | `freight_missions.json` | object | Freight charter cargos, descriptions, and pay tuning |
+| `scan_missions.json` | object | Scan charter types, pay, and desk tuning |
+| `bounty_missions.json` | object | Bounty charter tuning and target templates |
+| `volatile_sites.json` | object | Off-network sites granted by scan and bounty charters (`sites`) |
+| `sanctions.json` | object | Infraction definitions referenced by backgrounds |
+| `stars.json` | object | Background star names for volatile sites and ticker tokens |
 | `message_emitters.json` | array | Weighted flavour pools for headline and gossip tickers |
 | `celebrity_pilots.json` | array | Celebrity pilot names for message ticker tokens |
 
-Loader: `scripts/gameplay/catalog.gd` - `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass.
+Loader: `scripts/gameplay/catalog.gd` - `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass. `backgrounds.json`, `fuels.json`, `scan_missions.json`, `bounty_missions.json`, `volatile_sites.json`, `sanctions.json`, and `stars.json` load as indexed dictionaries. `data/catalog/schema/fuels.schema.json` exists and is not yet a CI schema target.
 
 ## ID conventions
 
@@ -68,7 +75,7 @@ Chassis (envelope + mounts)
 | `volume` | number | Internal volume envelope (m³) |
 | `maneuver` | string | `low` \| `medium` \| `high` → rotation and damp |
 | `mounts` | object | Mount category → count (e.g. `main_engine: 1`, `system: 5`) |
-| `hull_color` | string | HTML colour for sprite modulate |
+| `hull_color` | string | HTML colour kept as identity metadata (livery). Hull sprites render at `Color.WHITE`; this field does not tint the sprite |
 | `sprite` | string | `res://` path to hull art |
 
 ### `modules/*.json`
@@ -91,9 +98,9 @@ Common fields (omit zero-valued properties):
 
 Commodity records (`commodities.json`) may include optional `requires_capabilities` (same cargo flags; AND semantics on the ship). Exchange buys enforce them; sells do not.
 
-Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `engine_type` (propulsion: `chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic`), `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
+Category-specific fields include `thrust`, `max_speed`, `boost_multiplier`, `fuel_consumption`, `power_generation`, `power_demand`, `engine_type` (propulsion: `chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`), `compute_capacity`, `compute_demand`, `core_type` (computer: `silicon` | `photon` | `quantum`), `plant_type` (power), `life_support_capacity`, `cargo_capacity`, `fuel_capacity`, `hits` (armour), weapon stats, `ammunition_capacity` (object keyed by ammo type), etc.
 
-**Categories in current JSON:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`.
+**Categories in current JSON:** `propulsion`, `power`, `computer`, `life_support`, `sensor`, `navigation`, `hyperdrive`, `weapon`, `armour`, `cargo`, `fuel`, `ammunition`, `shield`, `point_defence`, `cyber_defence`, `transponder`. Each category is a file under `data/catalog/modules/`.
 
 Use `"mount": "system"` (or another single mount) for modules with one home. Use `"mounts": ["other", "light_weapon", …]` when a part can fit multiple slot types. Omit both for Other-only modules (`ShipAssembler.module_mounts()` defaults to `["other"]`).
 
@@ -304,8 +311,8 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 - Each actor uses a real `OwnedShip` assembled from manufacturer templates (`pegasus_p101`, `flare_on_ss`) and ticks `ShipOperations` + `ShipWeapons` (fuel, power, ammo).
 - Roles: `transit`, `shuttle`, `loiter`, `runabout`, `dock_cycle` - tuned in `traffic.json`. Trip roles share one lifecycle: origin → destination (habitat, gate, or unnamed orbital) → despawn → fresh origin.
 - Completing a route (habitat, gate, or orbital), running dry, or leaving bounds **retires** the sprite; the director spawns a fresh replacement so fleet density stays constant.
-- Provoked combat only: NPCs engage or flee; player hull remains invulnerable this slice.
-- Sensor HUD: smaller unlabelled NPC blips across the sector and unlabelled orbital dots on the local radar.
+- Provoked combat only: NPCs engage or flee. Player and NPC shots apply hull damage through `GameSession.apply_combat_hit`. At 0 Hits, thrust and weapons cut off. Docking repairs hull and system integrity.
+- Sensor HUD: undetected NPCs are hidden (no sprite, no radar blip). Detected ships, and landmarks, orbitals, and debris, show on the local radar. See the sensor section in [architecture.md](architecture.md).
 
 ### `traffic.json`
 
@@ -368,7 +375,7 @@ Each record: `id`, `weight`, and `templates[]` with `channel` (`headlines` | `go
 
 ### Freight charters (`freight_missions.json`, `MissionSubsystem`)
 
-Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Offers reference a cargo profile (`cargos[]`) and a formatted blurb from `descriptions[]`. Commodity-linked cargos inherit mass and `requires_capabilities` from `commodities.json` and must not set extra seat/compute/power rates. Special cargos supply `mass_per_unit`, hold flags, and optional `life_support_per_unit`, `compute_per_unit`, or `power_per_unit`. Accepting reserves tonnes (and budgets) without writing `OwnedShip.cargo`. Multi-hop destinations and GST deadlines mirror passenger terminal rules (no habitat LS gate on freight). Save version **3** adds freight fields; v2 saves migrate with empty freight state.
+Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Offers reference a cargo profile (`cargos[]`) and a formatted blurb from `descriptions[]`. Commodity-linked cargos inherit mass and `requires_capabilities` from `commodities.json` and must not set extra seat/compute/power rates. Special cargos supply `mass_per_unit`, hold flags, and optional `life_support_per_unit`, `compute_per_unit`, or `power_per_unit`. Accepting reserves tonnes (and budgets) without writing `OwnedShip.cargo`. Multi-hop destinations and GST deadlines mirror passenger terminal rules (no habitat LS gate on freight). `MissionSubsystem.save_version` is **5**. Migration from v2 adds empty freight state, v4 adds scan charters, and v5 adds bounties.
 
 ### `sectors.json` (addition)
 
@@ -394,9 +401,10 @@ Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 
 ### Add a module
 
-1. Add entry to `modules.json` with `category`, optional `mount`, mass/volume, and category stats.
-2. Reference in `ships.json` template if part of a default loadout.
+1. Add the entry to `data/catalog/modules/<category>.json` with `category`, optional `mount`, mass/volume, and category stats.
+2. Reference it in a `ships.json` template if it belongs in a default loadout.
 3. Set `cost` for shipyard purchase.
+4. New fields belong in `data/catalog/schema/modules.schema.json`, then `python3 scripts/tools/generate_catalog_records.py`. CI rejects a schema and generated records that disagree.
 
 ### Add a ship template
 
@@ -406,11 +414,11 @@ Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 
 ## Implemented subset vs setting
 
-| Area | In JSON today | Setting target |
-|------|---------------|----------------|
-| Ship model | Chassis + modules + budgets | Full Elite-style fitting + combat |
-| Modules | Fusion engines, power, LS, sensors, lasers, mass drivers, cargo, fuel | Shields, ECM, hyperdrive, passenger classes |
-| Weapons | Light laser and mass driver fire in flight; debris destructible; NPC traffic engage/flee | Full combat loop, shields, player hull damage |
-| Operating sim | Power, fuel, compute in flight; weapon power while firing; NPC ships use same tick | Combat power contention, heat/signature, full ammo logistics |
+| Area | In the game today | Still outstanding |
+|------|------------------|-------------------|
+| Ship model | Chassis, modules, and mass, volume, power, compute, and fuel budgets. Hull damage and dock repair | Fitting depth in the setting that the catalogued mounts do not cover |
+| Modules | Every file under `data/catalog/modules/`: propulsion (including gravitic and integrated sail), power, computer, life support, sensors, navigation, weapons, armour, shields, point defence, cyber defence, cargo, fuel, ammunition, transponder, hyperdrive SKUs | Hyperdrive translation. Reactor fuel for power plants |
+| Weapons | Lasers, mass drivers, rockets, mines, and guided weapons (homing while a target lock is held). Point defence, shields, and cyber defence run in `ShipCombat`. Debris is destructible. Provoked NPC combat. Player hull takes damage | Combat game-over screen |
+| Operating sim | Power, fuel, and compute in flight; weapon power draw while firing; live signature. NPCs share `ShipSimCore` at a lower cadence than the player | No separate heat budget |
 
-Canonical lore: [setting/ships.md](../setting/ships.md), [setting/equipment.md](../setting/equipment.md).
+Playable rules: [ships.md](../content/ships.md), [equipment.md](../content/equipment.md).

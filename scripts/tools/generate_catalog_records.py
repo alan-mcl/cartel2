@@ -16,7 +16,7 @@ SCHEMA_DIR = ROOT / "data" / "catalog" / "schema"
 CATALOG_DIR = ROOT / "data" / "catalog"
 RECORDS_DIR = ROOT / "scripts" / "gameplay" / "catalog_records"
 VALIDATOR_PATH = ROOT / "scripts" / "tools" / "validate_catalog_schema.py"
-DOCS_PATH = ROOT / "docs" / "design" / "catalog_schema.md"
+DOCS_PATH = ROOT / "docs" / "design" / "architecture" / "catalog_schema.md"
 
 GENERATED_HEADER = "## Generated - do not edit. Run scripts/tools/generate_catalog_records.py.\n"
 

@@ -12,7 +12,7 @@ Each record is conceptually:
 
 The same source and destination may have several translations through different N-space layers. Solution integers identify the stored solution; the player does not calculate them.
 
-Public commercial translations live in [`routes.json`](../../data/catalog/routes.json). Each route edge has a friction value for trade and charter timing; one or more **translation** entries supply `n`, directional solutions, and optional tuning.
+Public commercial translations live in [`routes.json`](../../../data/catalog/routes.json). Each route edge has a friction value for trade and charter timing; one or more **translation** entries supply `n`, directional solutions, and optional tuning.
 
 ## Navigation computer
 

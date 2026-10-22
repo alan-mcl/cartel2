@@ -9,5 +9,6 @@ alwaysApply: false
 - ids: lowercase `snake_case`, unique within each file.
 - Referential integrity: ships → chassis + modules; worlds `interactable` → `interactables.json`; routes `a`/`b` → `sectors.json`; unspace `id` → key in `worlds.json`.
 - Sector jump routes are synthesized from `routes.json` at load time - add routes there, not inline in sectors.
-- Setting lore lives in `docs/setting/`; catalogs are instance data for the running game.
+- Frozen lore lives in `docs/setting/` (`overview.md`, `corporations.md`, `planets.md`, `date_time.md`). Catalogs are instance data for the running game. Do not edit those setting files unless the request asks for a setting-doc change.
+- A new catalog file, or a change to fields the game reads, updates `docs/design/architecture/data_model.md` in the same change. Behaviour changes also update `docs/design/architecture/architecture.md` or the matching file under `docs/design/content/` when that doc states the behaviour.
 - Run `python3 scripts/tools/validate_ship_templates.py` and `./scripts/ci/check.sh` after catalog edits.

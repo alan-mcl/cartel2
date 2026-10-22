@@ -1,6 +1,6 @@
 # Public Unspace trade network
 
-**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` and `CommodityEconomy`. Economic events (blockades, friction spikes) and unknown/private routes are not yet implemented.
+**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` (38 edges) and `CommodityEconomy`. Economic events (blockades, friction spikes) are not implemented. Volatile mission translations are private navigation solutions and are not economy edges. Public unknown routes are not implemented.
 
 ## Overview
 
@@ -16,7 +16,7 @@ Three conceptual layers:
 
 ## Route graph
 
-28 undirected public connections are defined in [routes.json](../data/catalog/routes.json). Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
+[routes.json](../../../data/catalog/routes.json) is the live graph: **38** undirected public edges, including belt and station sectors beyond the eleven E-worlds sketched below. Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
 
 ### Core network
 
@@ -57,15 +57,15 @@ In play, friction drives:
 
 ## Daily commodity markets
 
-Each GST day (midnight reset), habitat Exchanges post buy and sell quotes for all thirteen commodity categories. Quotes are fixed until the next GST midnight; player trades do not move the board. Flows and specialisation come from per-sector profiles in [economies.json](../data/catalog/economies.json); par anchors from [commodities.json](../data/catalog/commodities.json). Settled worlds maintain a small baseline output of every category; belts and stations specialise without that floor (see [planets.md](planets.md) and [commodities.md](commodities.md)).
+Each GST day (midnight reset), habitat Exchanges post buy and sell quotes for all thirteen commodity categories. Quotes are fixed until the next GST midnight; player trades do not move the board. Flows and specialisation come from per-sector profiles in [economies.json](../../../data/catalog/economies.json); par anchors from [commodities.json](../../../data/catalog/commodities.json). Settled worlds maintain a small baseline output of every category; belts and stations specialise without that floor (see [planets.md](../../setting/planets.md) and [commodities.md](commodities.md)).
 
-**Implementation specification** (equations, constants, sign rule, descoped behaviour): [commodity_economy.md](../design/commodity_economy.md).
+**Implementation specification** (equations, constants, sign rule, descoped behaviour): [commodity_economy.md](../architecture/commodity_economy.md).
 
 Each habitat has an Exchange building. Sell quotes sit slightly below buy quotes so graph arbitrage remains viable in fiction and in play.
 
 ## Public vs unknown routes
 
-The public graph is what jump gates and the daily economy share. Unknown routes discovered later can function as private commercial advantages without automatically joining the public economy.
+The public graph is what jump gates and the daily economy share. Volatile mission sites are private translations stored on the player. They do not join this graph. A public unknown route, discovered and then used by the daily economy, is not implemented.
 
 ## Economic events (future)
 

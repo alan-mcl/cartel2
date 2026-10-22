@@ -13,7 +13,7 @@ High-level structure of the Godot 4.7 near-orbit game. Historical design notes f
 
 | Path | Role |
 |------|------|
-| `scripts/gameplay/` | `Catalog`, generated catalog records (`AmmunitionDef`, `ChassisDef`, `CommodityDef`, `EconomyDef`, `ModuleDef`, `ShipDef`, `SectorDef`, plus shared `CatalogSignature` / `CatalogDamagePackets` / `CatalogNeighborhood`), `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `FieldConditions`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `TrafficSpawn`, `TrafficDetection`, `TrafficRouting`, `InteractableDef` |
+| `scripts/gameplay/` | `Catalog`, generated catalog records (`AmmunitionDef`, `ChassisDef`, `CommodityDef`, `EconomyDef`, `ModuleDef`, `ShipDef`, `SectorDef`, plus shared `CatalogSignature` / `CatalogDamagePackets` / `CatalogNeighborhood`), `GameSession`, `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, `CombatPersistence`, `EventBus`, `SimEvent`, `GameVersion`, `SaveStore`, `GalacticCalendar`, `Simulation`, `SimClock`, `SimSubsystem`, `EconomySubsystem`, `MissionSubsystem`, `GameClock`, `CommodityEconomy`, `ShipAssembler`, `ShipAssembly`, `ShipSimCore`, `ShipOperations`, `ShipWeapons`, `ShipCombat`, `ShipCombatState`, `ShipMotion`, `ShipStats`, `OwnedShip`, `AssembledShip`, `ShipOperatingState`, `SensorSystem`, `FieldConditions`, `WeaponHit`, `DebrisHealth`, `TransponderBroadcast`, `CombatPilot`, `TrafficDirector`, `TrafficActor`, `TrafficSpawn`, `TrafficDetection`, `TrafficRouting`, `InteractableDef`, `CareerStats`, `MessageSubsystem`, `FuelEconomy`, `Sanctions`, `TranslationNav`, `VolatileTranslation`, `VolatileSites`, `PassengerCharters`, `FreightCharters`, `ScanCharters`, `BountyCharters`, `CargoRequirements`, `Autopilot`, `TargetLock`, `TargetScan`, `FlightManifest`, `CorporatePresence` |
 | `scripts/presentation/` | `main.gd`, `FlightLoopController`, `WorldController`, `MenuController`, `player_ship.gd`, `npc_ship.gd`, `EngineExhaust`, `ShipVisual`, `TrafficView`, `PresentationNodePool`, `world_loader.gd`, `world_object.gd`, `interactable.gd`, camera, starfield |
 | `scripts/ui/` | HUD, main menu, save overlay, pause overlay, jump overlay, `UiRoot`, `ScreenStack`, habitat/shipyard screens |
 | `scenes/ui/` | Full-screen habitat UI, shipyard assembly, reusable components |
@@ -59,12 +59,12 @@ On startup, `main.gd` wires three presentation controllers and delegates to them
 Docking opens **UiRoot** - a full-screen opaque Control UI (not a dim overlay). Navigation uses **ScreenStack** (`push_screen`, `pop_screen`, `replace_screen`):
 
 - **HabitatScreen** - location shell (future orbitals/malls reuse the same pattern): habitat header (name, description, pilot, credits, GST); two-column body with a narrow **building list** and a right column. Each building shows a **building header** (name + long description left, banner art right) and a non-scrollable **`ContentPane`** below it. Building types resolve through **BuildingPanelRegistry** (`embed` / `placeholder`). **TerminalPanel**, **MarketPanel**, **DealerPanel**, **BarPanel**, and embedded **ShipyardScreen** mount full-rect in `ContentPane` (`configure_embedded(true)` on the yard hides duplicate header/back). List+detail building UIs scroll **vertically only** inside the detail column, never at the location pane. Unknown types still show a placeholder label in `ContentPane`. Building `short_desc` is tooltips only - transactional messages use the habitat **`MessageBar`** strip (`play_line` queues independent scrolling labels).
-- **TerminalPanel** - docked ship list, **ShipDetailPanel**, admin column (rename, undock blockers, Launch), and a **Departures** tab with [`PassengerCharterPanel`](scripts/ui/passenger_charter_panel.gd) plus [`FreightCharterPanel`](scripts/ui/freight_charter_panel.gd): posted offers and accepted contracts render as a **three-column tile grid**; hover tooltips use [`CharterTooltipText`](scripts/ui/charter_tooltip_text.gd) (sectioned copy, suggested public route when multi-hop, bulleted requirements, accept blockers). Peacekeeping and corporate scan desks use the same tile + tooltip pattern via [`ScanCharterPanel`](scripts/ui/scan_charter_panel.gd) and `CharterTooltipText.format_scan`. **CorporateOfficePanel** wraps that desk with a corporation-tagged ticker (`callsign_prefix`) fed by [`CorporateOfficeTape`](scripts/gameplay/corporate_office_tape.gd): equal-weight samples among own-catalogue SKUs (`maker`), the corporation’s non-SKU `brands` list (banks, franchises, services), posted scan/bounty titles at that building, the `trade` line, and shared recruitment copy keyed by `ad_voice` (`polished`, `blunt`, `cheerful`, `severe`, `slick`, `courtly`) in [`corporate_office_ticker.json`](data/catalog/corporate_office_ticker.json). Job and recruitment templates bind `{brand}` from that list; SKU lines use the catalogue `brand` when present. **BarPanel** adds a **BAR** gossip ticker above the passenger charter panel (informal fares); lines are direct overheard speech wrapped in quotation marks at display time.
+- **TerminalPanel** - docked ship list, **ShipDetailPanel**, admin column (rename, undock blockers, Launch), and a **Departures** tab with [`PassengerCharterPanel`](../../../scripts/ui/passenger_charter_panel.gd) plus [`FreightCharterPanel`](../../../scripts/ui/freight_charter_panel.gd): posted offers and accepted contracts render as a **three-column tile grid**; hover tooltips use [`CharterTooltipText`](../../../scripts/ui/charter_tooltip_text.gd) (sectioned copy, suggested public route when multi-hop, bulleted requirements, accept blockers). Peacekeeping and corporate scan desks use the same tile + tooltip pattern via [`ScanCharterPanel`](../../../scripts/ui/scan_charter_panel.gd) and `CharterTooltipText.format_scan`. **CorporateOfficePanel** wraps that desk with a corporation-tagged ticker (`callsign_prefix`) fed by [`CorporateOfficeTape`](../../../scripts/gameplay/corporate_office_tape.gd): equal-weight samples among own-catalogue SKUs (`maker`), the corporation’s non-SKU `brands` list (banks, franchises, services), posted scan/bounty titles at that building, the `trade` line, and shared recruitment copy keyed by `ad_voice` (`polished`, `blunt`, `cheerful`, `severe`, `slick`, `courtly`) in [`corporate_office_ticker.json`](../../../data/catalog/corporate_office_ticker.json). Job and recruitment templates bind `{brand}` from that list; SKU lines use the catalogue `brand` when present. **BarPanel** adds a **BAR** gossip ticker above the passenger charter panel (informal fares); lines are direct overheard speech wrapped in quotation marks at display time.
 - **ShipDetailPanel** - shared owned-ship readout (art, optional summary, modules and/or engineering/flight blocks, signature via `ModuleSpecText`). **TerminalPanel** and **ShipyardScreen** configure section flags; the yard slot board stays shipyard-only.
-- **UI patterns** - production habitat panels use `scenes/ui/patterns/` (`status_row`, `headline_item`, `metric_block`, `message_bar`) via [`UiPatterns`](scripts/ui/ui_patterns.gd). Yard stock row subtitles use `ModuleSpecText.format_stock_list_meta`. Transactional status uses **`MessageBar.play_line`** when `session.last_log` changes (each line scrolls once; new lines queue with gap). `compact_toolbar`, `data_table`, and `alert_banner` remain showcase references for now.
+- **UI patterns** - production habitat panels use `scenes/ui/patterns/` (`status_row`, `headline_item`, `metric_block`, `message_bar`) via [`UiPatterns`](../../../scripts/ui/ui_patterns.gd). Yard stock row subtitles use `ModuleSpecText.format_stock_list_meta`. Transactional status uses **`MessageBar.play_line`** when `session.last_log` changes (each line scrolls once; new lines queue with gap). `compact_toolbar`, `data_table`, and `alert_banner` remain showcase references for now.
 - **MarketPanel** - exchange listings plus scrollable commodity detail; buy/sell via `GameSession`. A **TAPE** message bar streams noisy off-system commodity prints (not the local board price).
 - **DealerPanel** - used-ship or chassis stock from building `stock`; scrollable detail with buy.
-- **ShipyardScreen** - embedded yard body: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Propulsion stock sorts by price, type, or thrust; row meta shows `engine_type` and thrust. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Computer stock sorts by price, type, or CU; row meta shows `core_type` and capacity. Life support stock sorts by price or crew; row meta shows crew, Transport vs Habitat, and luxury flags. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Propulsion modules carry `brand` and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`); power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules carry `brand` and `core_type` (`silicon` | `photon` | `quantum`); life support modules carry `brand` and optional `ls_habitat` / `ls_comfort` / `ls_luxury` capability flags in `modules.json`. `ls_habitat` marks live-aboard cabin volume; its absence is transport seating. LSS `volume` includes that cabin.
+- **ShipyardScreen** - embedded yard body: docked ships, slot board with drag-and-drop fitting, tabbed yard stock by module category, buy/sell/refuel. Propulsion stock sorts by price, type, or thrust; row meta shows `engine_type` and thrust. Power stock sorts by price, type, or MW; row meta shows `plant_type` and output. Computer stock sorts by price, type, or CU; row meta shows `core_type` and capacity. Life support stock sorts by price or crew; row meta shows crew, Transport vs Habitat, and luxury flags. Hover any yard part or occupied slot for full module specs via `ModuleSpecText.format_tooltip()`. Propulsion modules carry `brand` and `engine_type` (`chemical` | `hydro_thermal` | `electric_plasma` | `direct_fusion` | `antimatter` | `gravitic` | `integrated_sail`); power modules carry `brand` and `plant_type` (`fission` | `fusion` | `radioisotope`); computer modules carry `brand` and `core_type` (`silicon` | `photon` | `quantum`); life support modules carry `brand` and optional `ls_habitat` / `ls_comfort` / `ls_luxury` capability flags in `data/catalog/modules/life_support.json`. `ls_habitat` marks live-aboard cabin volume; its absence is transport seating. LSS `volume` includes that cabin.
 
 Reusable DnD components live under `scenes/ui/components/` (`module_slot`, `module_stock_item`).
 
@@ -120,9 +120,9 @@ For planetary layout and globe texture inspection without player, ships, or traf
 
 - `ShipSimCore` orchestrates the shared flight rules (shields, ops, signature glow, mass/stats, weapons, motion). The player calls every step each physics frame for HUD telemetry; slotted NPC traffic uses the same steps with interval stats refresh; unslotted NPCs skip ops/weapons/stats and only run cheap motion + glow.
 - `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from assembled modules and loaded mass), modulated by operating-state `thrust_factor` and optional **environment scale** (`FieldConditions.thrust_scale_for_ship`: gravitic × local gravity, integrated sail × radiant/particle/magnetic mix, otherwise 1.0).
-- `FieldConditions.sample(catalog, world, position)` reads sector `neighborhood` and world layout radii in 3-space, or a fixed unspace profile when `WorldPresence.in_unspace`. Setting: [field_conditions.md](../setting/field_conditions.md).
+- `FieldConditions.sample(catalog, world, position)` reads sector `neighborhood` and world layout radii in 3-space, or a fixed unspace profile when `WorldPresence.in_unspace`. Rules: [field_conditions.md](../content/field_conditions.md).
 - Hold **Space** or **LMB** (`fire`) to discharge the **selected** weapon along ship facing. Keys **1–9** and HUD chits pick the active mount; NPCs rotate one weapon per new fire press with a short stagger before the first shot. `ShipWeapons` handles per-slot cooldowns and ammo; `ShipOperations` allocates power for the active weapon only while firing.
-- **Autopilot** (`autopilot_basic` on navigation computers except Section): **F1–F9** modes via [`Autopilot`](scripts/gameplay/autopilot.gd) on the player ship. Uses world-space Newtonian motion, the current target lock for align/pursuit/velocity modes, and the right-edge autopilot chit. Temporary modes (align with velocity, reverse align, full stop) return to manual when complete; stick input cancels most automated modes.
+- **Autopilot** (`autopilot_basic` on navigation computers except Section): **F1–F9** modes via [`Autopilot`](../../../scripts/gameplay/autopilot.gd) on the player ship. Uses world-space Newtonian motion, the current target lock for align/pursuit/velocity modes, and the right-edge autopilot chit. Temporary modes (align with velocity, reverse align, full stop) return to manual when complete; stick input cancels most automated modes.
 - `play_bounds` per sector defines the distant dust ring (visual landmark only; player flight is unbounded).
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.
 - Flight HUD elements require installed module capabilities (`basic_hud`, `local_sensor`, `local_system_waypoints`, `sensor_read_beacons`, `basic_target_lock`, `4_space_topology` for unspace exit labelling). In-system ships require a powered `vessel_registration_beacon` (Commercial Article 19).
@@ -150,23 +150,23 @@ Ships parked at a habitat **stay there when jumping sectors** (only the aboard s
 
 ### Galactic Standard Time (GST)
 
-Session state stores `gst_seconds` (see [setting/date_time.md](../setting/date_time.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame (GST freeze from **MenuController** when paused, in menus, or docked in habitat UI) and dispatches registered subsystems (economy reposts market quotes on day rollover). Daily commodity pricing is specified in [commodity_economy.md](commodity_economy.md). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
+Session state stores `gst_seconds` (calendar: [setting/date_time.md](../../setting/date_time.md); how the clock advances: [gst.md](../content/gst.md)). `GalacticCalendar` formats timestamps. `Simulation.step` in `main.gd` advances time each frame (GST freeze from **MenuController** when paused, in menus, or docked in habitat UI) and dispatches registered subsystems (economy reposts market quotes on day rollover). Daily commodity pricing is specified in [commodity_economy.md](commodity_economy.md). `GameClock` remains a thin facade over `Simulation` for tests and legacy callers.
 
 Successful gameplay mutations publish typed events on `GameSession.events` (`EventBus` + `SimEvent` factories - e.g. `commodity_traded`, `sector_entered`, `docked`). **MenuController** forwards those events to `Simulation.dispatch_event(session, catalog, evt)`, which calls `SimSubsystem.on_event(session, catalog, evt)`. UI still refreshes on the coarse `session.changed` signal; typed events are for simulation subsystems and future mission/faction hooks, not HUD wiring.
 
 `MissionSubsystem` is registered on production `Simulation` and drives daily passenger
 charter offers from `passenger_missions.json` (terminal departures and civilian fares at
 bars), freight lots from `freight_missions.json`, and **scan charters** from
-`scan_missions.json`. Scan work is **combinatorial**: [`ScanCharters`](scripts/gameplay/scan_charters.gd)
+`scan_missions.json`. Scan work is **combinatorial**: [`ScanCharters`](../../../scripts/gameplay/scan_charters.gd)
 assembles each offer from a mechanical **type** (reconnaissance, intelligence, survey,
 inspection, assessment), a desk **source** (peacekeeping, corporate office, bar), an optional
-**client** corporation (`practice` + `ad_voice` on [`corporations.json`](data/catalog/corporations.json)),
+**client** corporation (`practice` + `ad_voice` on [`corporations.json`](../../../data/catalog/corporations.json)),
 a **target** kind, and a **location**. Global timing and pay knobs stay at the top of
 `scan_missions.json`; types declare objective, eligible sources, targets, and difficulty.
 Player-facing titles use practice-specific work phrases (for example finance “asset verification”
 vs aerospace “hull condition check” for the same inspection type); descriptions come from
 peacekeeping frame lists or voice-keyed corporate/bar templates with `{client}`, `{work}`, and
-`{site}`. Volatile locations pick a row from [`volatile_sites.json`](data/catalog/volatile_sites.json)
+`{site}`. Volatile locations pick a row from [`volatile_sites.json`](../../../data/catalog/volatile_sites.json)
 (label, optional star, and count ranges for debris, orbitals, derelicts, cargo, nav or survey
 markers, proximity mines, and anonymous loitering ships). Grant rolls those counts into placed
 props and `setup.ambient_ships`, then merges the mission contact. Accept grants a volatile survey site or a neighbouring planet; the pilot
@@ -181,10 +181,10 @@ not UI.
 
 **Bounty charters** from `bounty_missions.json` post on the same peacekeeping, corporate,
 and bar desks as scan work (peaceforce always one per day; corporate and bar roll at lower
-chance). Each offer is **combinatorial**: [`BountyCharters`](scripts/gameplay/bounty_charters.gd)
+chance). Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
 draws an **objective** (destroy, intercept, disable, eliminate), wanted **reason** and **status**
 lines, a **threat** (pay multiplier plus a profile), any catalog **armed ship** template, a volatile **site** from
-[`volatile_sites.json`](data/catalog/volatile_sites.json), and a desk **frame** with substituted
+[`volatile_sites.json`](../../../data/catalog/volatile_sites.json), and a desk **frame** with substituted
 `{objective}`, `{callsign}`, `{ship}`, `{site}`, `{reason}`, `{status}`, `{threat}`, and `{corp}`.
 Board titles use the objective name; site headings keep the catalogue label. A threat profile sets
 pilot skill (`novice`, `experienced`, `elite`, or blank to roll), a hull scale, and an escort count.
@@ -197,7 +197,7 @@ power generation reaches zero and still pays if the target is destroyed instead.
 pilot docks back at the origin habitat before the return gate expires. Sanctions do not apply in
 volatile sectors. Missions save version 5 adds bounty offer and accepted lists.
 
-[`MessageSubsystem`](scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, `{planet}`, `{city-mall}`, `{celebrity-pilot}`, `{local-star-system-location}`, `{jump-destination}`, and a commodity name; the commodities emitter also binds live `{price}` and `{move}`. The gossip-only `charters` emitter binds `{destination}`, `{quantity}`, `{label}`, and `{desk}` from posted bar and terminal offers via `Simulation` → `MissionSubsystem`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
+[`MessageSubsystem`](../../../scripts/gameplay/message_subsystem.gd) samples weighted **emitters** from [`message_emitters.json`](../../../data/catalog/message_emitters.json) on demand for two channels: **`headlines`** (flight HUD **WIRE** tape in planetary sectors) and **`gossip`** (bar **BAR** tape). Pool emitters fill `{corporation}`, `{rival}`, `{habitat}`, `{planet}`, `{city-mall}`, `{celebrity-pilot}`, `{local-star-system-location}`, `{jump-destination}`, and a commodity name; the commodities emitter also binds live `{price}` and `{move}`. The gossip-only `charters` emitter binds `{destination}`, `{quantity}`, `{label}`, and `{desk}` from posted bar and terminal offers via `Simulation` → `MissionSubsystem`. `push(channel, text)` queues plot- or player-driven lines for a later phase; UI uses the same scrolling **`MessageBar.play_line`** tape pattern as market price data.
 
 | Context | GST behaviour |
 |---------|---------------|
@@ -221,7 +221,7 @@ Hyperdrive-equipped ships may later translate without a gate or from other 4-spa
 
 ### Volatile translations (off-network sites)
 
-Missions (future) can grant a **volatile translation**: a one-shot, expiring navigation solution stored on the player (`PlayerState.volatile_translations`), not in catalog `routes.json`. Each record names a source catalog sector, destination label, **N-space layer** (4, 5, or 6), GST deadlines for the outbound offer and the temporary return gate, and optional **site setup** (play bounds, star tuning, debris/orbital entities). The destination sector id is synthetic (`volatile:<record_id>`); the site is rebuilt from the record whenever the player is there or reloads a save.
+Scan charters (other than a planet target) and bounty charters grant a **volatile translation**: a one-shot, expiring navigation solution stored on the player (`PlayerState.volatile_translations`), not in catalog `routes.json`. Each record names a source catalog sector, destination label, **N-space layer** (4, 5, or 6), GST deadlines for the outbound offer and the temporary return gate, and optional **site setup** (play bounds, star tuning, debris/orbital entities). The destination sector id is synthetic (`volatile:<record_id>`); the site is rebuilt from the record whenever the player is there or reloads a save.
 
 At the source jump gate, `TranslationNav` unions usable volatile outbound rows into the jump overlay (they do not consume nav-computer capacity; higher N than the computer’s usual tier still rolls with the existing accuracy penalties). Confirming consumes the outbound hop and runs the normal Unspace pipeline (`n4_default` presentation; session stores the granted N). On arrival, `WorldLoader` spawns a minimal field (dust ring, optional backdrop star chosen at grant time from the local system, the background-star catalogue, or deep space with no star, plus optional entities) and a **temporary return gate** while `return_expires_gst` has not passed. The overlay on-site offers only the return hop to the origin sector at the same N. When the player docks back at the origin, the record is removed; if the return gate expires while they remain on-site, the gate vanishes and they are stranded (no hyperdrive yet). `VolatileTranslation.sweep` runs after GST advances in `Simulation` to drop expired, unanchored grants.
 
@@ -235,7 +235,7 @@ flowchart TD
 
 ## World loading
 
-3-space sectors (`proxima`, `bela`, and the nine additional worlds in `sectors.json`) use a structured layout in `worlds.json`:
+All 21 sectors in `sectors.json` use a structured layout in `worlds.json`, the eleven E-class worlds and the ten outlying sectors included:
 
 - **`planet`** - lit 3D globe rendered in an isolated `SubViewport` (1024 px, ~10 Hz `UPDATE_ONCE` while in flight; immediate refresh on sun or inspection rotation) and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Each sector references `albedo` and `night_lights` equirectangular PNGs (2048×1024 placeholders) under `assets/world/planets/<sector_id>_*.png`; drop-in replacements keep the same paths. `modulate` tints the procedural fallback only, not mapped textures. Legacy `sprite` is ignored for the globe mesh. Day/night terminator follows the sector **`star`** (visit-random position 7000–12000, procedural `LocalStar` at `z_index -40`). Farther stars drop the sun toward the play plane so the disc reads as side-lit; the globe shader uses a narrowed day cone and darker night cap than wrap lighting (luminosity scales brightness only).
 - **`star`** - presentation-only block on each 3-space world: `temperature_k`, `luminosity`, optional `disc_radius`. Drives apparent disc size, corona colour, and planet `sun_direction` / intensity (not saved between visits).
@@ -295,7 +295,7 @@ Chassis entries reference hull **sprites**; SVG paint is the source of colour (h
 
 Regenerate placeholders: `python3 scripts/tools/generate_placeholder_art.py` (runs Godot import for new SVG/PNG sidecars). Do not run on authored hull SVGs without guarding files - see sprite size catalog. If import is skipped, run `godot --path . --import --headless --quit` manually.
 
-UI styling uses the shared **Cartel corporate theme** - see [docs/design/ui_theme.md](docs/design/ui_theme.md). Reference viewport: **1920×1080**.
+UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_theme.md). Reference viewport: **1920×1080**.
 
 ## Save / load
 
@@ -313,15 +313,15 @@ UI styling uses the shared **Cartel corporate theme** - see [docs/design/ui_them
 - On-foot play: city roadmaps, trams, surface travel
 - Named NPCs, dialogue trees, Dialogue Manager integration
 - Unspace solution typing (integers shown as flavour only)
-- Deeper N-space routes (n > 4)
-- Ship hyperdrive translation
+- Distinct 5-space and 6-space layouts. Public routes already include n=5 and n=6 translations; transit still uses the single n=4 presentation (`unspaces.json` `n4_default`)
+- Ship hyperdrive translation (hyperdrive SKUs are catalogued; they are not a travel mode)
 - Combat game-over screen
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
-- Economic events (blockades, route friction overrides beyond `route_friction_delta` UI)
-- Unknown/private Unspace routes
+- Economic events (blockades and other friction overrides). `route_friction_delta` is a session field read by `CommodityEconomy`. There is no player UI for it
+- Public unknown Unspace routes. Private off-catalog translations already exist as volatile mission grants (see above)
 - Market contract depletion (depth is display-only)
 
-Deferred design passes (propulsion fuel types, gravitic hyper-travel range): [backlog.md](backlog.md).
+Open design follow-ons and the October 2026 maintainability audit: [backlog.md](backlog.md). Completed engineering phases 0–6: [refactor_backlog.md](refactor_backlog.md).
 
-See `data/catalog/` and [setting docs](../setting/README.md) for implemented subset vs intended scope.
+See `data/catalog/` and [setting overview](../../setting/overview.md) for implemented subset vs intended scope.

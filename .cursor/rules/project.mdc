@@ -8,6 +8,7 @@ alwaysApply: true
 - Run `./scripts/ci/check.sh` after GDScript or `data/catalog/` changes before marking work complete.
 - Gameplay logic: `scripts/gameplay/` as `RefCounted` only (no nodes). Session type is `GameSession`.
 - Presentation/UI adapt data; do not put game rules in `@onready` UI scripts.
-- **`docs/setting/` is frozen.** Do not create or edit files there unless the user explicitly asks for a setting-doc change in that request. Catalog and code may still change; do not invent lore in JSON to fill gaps the frozen docs do not cover.
+- **Frozen setting files:** `docs/setting/overview.md`, `corporations.md`, `planets.md`, and `date_time.md`. Do not edit them unless the request explicitly asks for a setting-doc change. Do not invent lore in JSON to fill gaps they do not cover.
+- When a change alters behaviour or catalog shape, update the design doc that states it in the same change. `docs/design/architecture/` is code layout, schemas, systems, and tooling. `docs/design/content/` is playable rules and rosters (ships, equipment, commodities, trade network, translations, missions, field conditions, GST flow).
 - British English in setting docs and player-facing catalog prose - see `british-english.mdc`.
 - Do not commit `.godot/`. See root `AGENTS.md` for run commands and scope guardrails.

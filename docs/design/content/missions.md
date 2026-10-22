@@ -1,6 +1,14 @@
 # Missions
 
-**Status:** Passenger charters are the first catalog-backed mission type. Other work (cargo, combat, plot) remains design target.
+**Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Plot and named-NPC dialogue are not. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
+
+## Pilot standing
+
+Each pilot carries a **reputation** score: how well known they are among brokers, terminals, and charter desks. Higher is better. Most backgrounds begin at **0** (unknown). The **Outlaw** begins at **5** - a name on the rim from smuggling and merc work, not yet someone institutions book. **Old Money** begins at **8** - a family name brokers have heard, without much freight behind it. **Influencer** begins at **25** - recognised from streams and sponsorship tags, not yet trusted for sealed institutional work. Rough bands: around **15** a working name, **25–40** recognised, **50** trusted for sealed institutional freight, **75** the sort of pilot officials put on diplomatic parties.
+
+An on-time passenger or freight delivery raises reputation by **1**. A late delivery, passengers abandoning a late charter at the wrong habitat, or cancelling at the origin lowers it by **1**. The score never falls below **0**. Fifteen clean deliveries is enough to reach the threshold for touring performers and bonded luxury freight.
+
+That score is separate from **sanctions**: recorded infractions with a monetary fine. Any outstanding sanction blocks launch from a habitat until the pilot pays the total at the terminal. Firing on another ship in settled space adds an unlawful-fire sanction; destroying a ship adds a heavier one. Shots in Unspace are not recorded yet. The **Outlaw** begins with one unlawful-fire sanction and enough cash to pay it and keep d250. Charter desks do not yet refuse pilots for sanctions on the record. Charter reputation minimums are a separate gate.
 
 ## Passenger charters
 
@@ -11,10 +19,6 @@ Role titles, comfort requirements, blurbs, and pay tuning live in `data/catalog/
 Some passenger **roles** require a minimum pilot **reputation** (touring performers, influencer parties, security consultants, diplomatic parties). The terminal shows the threshold on the offer tile; the pilot cannot accept until their score meets it. Corporate principals still expect affiliation with the posting corporation (standing not implemented yet).
 
 Some **freight** cargo types use the same gate (bonded luxury, prototypes, race animals, museum objects under seal).
-
-**Sanctions.** Outstanding fines on the pilot record block habitat launch until paid at the terminal. Charter reputation minimums are separate; future work may refuse certain sanctions at the desk.
-
-**Reputation from charters.** Completing a passenger or freight contract on time increases pilot reputation by 1. Arriving late at the destination (fee instead of pay), losing passengers who walk off after the deadline at an intermediate habitat, or cancelling at the origin before departure each decrease reputation by 1. The score cannot go below zero; fifteen clean deliveries is enough to reach the threshold for touring performers and bonded luxury freight.
 
 Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances.
 

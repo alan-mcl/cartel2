@@ -1,13 +1,12 @@
-# Engineering refactor backlog
+# Engineering refactor archive
 
-Phased maintainability and extensibility work, written so a single item can be picked up
-cold by someone (or some agent) with no other context. For deferred **design and content**
-features see [backlog.md](backlog.md); for what exists in code today see
-[architecture.md](architecture.md).
+Record of completed maintainability work, written so a finished item can still be understood
+cold. For what exists in code today see [architecture.md](architecture.md).
 
-**Phases 0–6 are complete** (all items below are `Done`). New engineering work should be
-tracked in [backlog.md](backlog.md) or as ad-hoc items here only if a new refactor phase is
-opened deliberately.
+**Phases 0–6 are complete** (all items below are `Done`). This file is an archive. **Do not add
+new items here.** Open design follow-ons and the October 2026 audit live in
+[backlog.md](backlog.md). Standing decisions are summarised there; the full reasoning and the
+per-item **Explicitly do NOT** notes below still apply.
 
 ## How to use this file
 
@@ -53,7 +52,7 @@ are the ones with no tests. Do Phase 0 first.
 **Status:** Done. **Phase:** 0.
 
 Roadmap captured in this file and cross-linked from [backlog.md](backlog.md) and
-[AGENTS.md](../../AGENTS.md).
+[AGENTS.md](../../../AGENTS.md).
 
 ## P0-2 Save round-trip test, `background_id` bug, validator unification
 
@@ -81,13 +80,11 @@ instead of loose strings. `GameSession._validate_save_data` deleted in favour of
 references `SaveStore.SAVE_VERSION`, and making the dependency mutual risks a GDScript cyclic
 reference error. Pass dictionaries across that boundary.
 
-**Known gap - read before adding file-level save tests.** `tests/test_save.gd` deliberately stops
-at the dictionary level and does not exercise `SaveStore.write_slot` / `read_slot`. `SAVE_DIR` is
-a hardcoded `const` pointing at `user://saves/`, and there are only three fixed slot paths, so a
-test that writes a slot **would overwrite the developer's real save files** every time the suite
-ran. Before adding file-level coverage, make the save directory injectable (constructor argument
-or an overridable static) and point tests at a temporary directory. Worth folding into
-[P1-3](#p1-3-save-registry-with-per-section-versioning).
+**Known gap - closed.** `SaveStore.save_dir` is now an overridable static, and
+`tests/test_save.gd` points it at a project-local directory for `write_slot` / `read_slot`.
+Do not point tests at the default `user://saves/` slots. The original note below is kept so the
+reason is not rediscovered: a hardcoded `user://saves/` path with three fixed slots would
+overwrite the developer's real saves on every suite run.
 
 ## P0-3 Tests for the untested systems Phase 1-2 will disturb
 
@@ -165,7 +162,7 @@ Add one when a remote exists; `check.sh` is already CI-shaped (non-zero exit on 
 
 **Problem:** `scripts/ui/location_overlay.gd` (319 lines) and `scenes/location_overlay.tscn` were
 the pre-`UiRoot` habitat overlay, superseded and not referenced by `main.tscn`.
-[AGENTS.md](../../AGENTS.md) and [docs/README.md](../README.md) both claimed `data_model.md` was
+[AGENTS.md](../../../AGENTS.md) and the docs index both claimed `data_model.md` was
 missing or unrestored; it exists at [data_model.md](data_model.md) with 336 lines.
 
 **Scope (done):** Dead overlay removed, doc index corrected.
@@ -483,7 +480,7 @@ route. Add to `validate_catalog_refs.py` or a sibling script wired into `check.s
 procedural constants, so deeper layers are code rather than content.
 
 **Explicitly do NOT:** wire n>5 routes or hyperdrive translation as part of this. The
-[AGENTS.md](../../AGENTS.md) scope guardrail stands - this item makes the data-driven field
+[AGENTS.md](../../../AGENTS.md) scope guardrail stands - this item makes the data-driven field
 possible, it is not permission to enable deeper layers.
 
 ## P4-5 Decide the fate of the unused world entity kinds
@@ -516,7 +513,7 @@ outlying-area flavour or delete the dead path.
 **Problem:** The habitat terminal and the shipyard render overlapping module list, engineering,
 and signature views through separate code, both calling `ShipAssembly`.
 
-**Scope (done):** [`ship_detail_panel.gd`](scripts/ui/ship_detail_panel.gd) with section flags;
+**Scope (done):** [`ship_detail_panel.gd`](../../../scripts/ui/ship_detail_panel.gd) with section flags;
 wired from **TerminalPanel** and **ShipyardScreen** (slot board unchanged).
 
 ## P5-3 Adopt the pattern components that already exist
@@ -575,8 +572,8 @@ production controllers and **`ship_assembly_sandbox`** unchanged.
 | near spawn cached PackedScene | 24.3 us/spawn | 15.9 us/spawn (bench) |
 | projectile spawn+free (mass/rocket/laser) | 107–207 us/shot | not pooled (below crossing cost) |
 
-**Scope (done):** Presentation bench [`scripts/dev/bench_traffic_view.gd`](scripts/dev/bench_traffic_view.gd).
-LOD churn is in [`TrafficView.sync`](scripts/presentation/traffic_view.gd) (not `TrafficDirector`).
-Cached `npc_ship.tscn` PackedScene; [`PresentationNodePool`](scripts/presentation/presentation_node_pool.gd)
+**Scope (done):** Presentation bench [`scripts/dev/bench_traffic_view.gd`](../../../scripts/dev/bench_traffic_view.gd).
+LOD churn is in [`TrafficView.sync`](../../../scripts/presentation/traffic_view.gd) (not `TrafficDirector`).
+Cached `npc_ship.tscn` PackedScene; [`PresentationNodePool`](../../../scripts/presentation/presentation_node_pool.gd)
 for near ships; far sprite root pool. Projectiles unchanged. `_sim_slot_pool` on
 `traffic_director.gd` remains a sim-slot priority queue, not an object pool.
