@@ -43,6 +43,11 @@
       "solution_ba": -4500
     }
   ],
+  "presence_anchors": {
+    "creus": 6.0,
+    "deepspace": 4.0
+  },
+  "peacekeeping": "Example Peaceforce",
   "traffic_role_weights": {
     "transit": 0.3,
     "shuttle": 0.25,

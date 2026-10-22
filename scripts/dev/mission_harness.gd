@@ -215,14 +215,16 @@ func _populate_options() -> void:
 
 	_habitat_entries.clear()
 	_source_option.clear()
-	for entry_variant in ScanCharters.MAJOR_HABITATS:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
+	for habitat_variant in _catalog.list_habitat_dicts():
+		if typeof(habitat_variant) != TYPE_DICTIONARY:
 			continue
-		var entry: Dictionary = entry_variant
-		var habitat_id := str(entry.get("habitat_id", ""))
+		var habitat: Dictionary = habitat_variant
+		var habitat_id := str(habitat.get("id", ""))
 		if habitat_id.is_empty():
 			continue
-		var sector_id := str(entry.get("sector_id", ""))
+		if not ScanCharters.habitat_has_peacekeeping(_catalog, habitat_id):
+			continue
+		var sector_id := str(habitat.get("sector_id", ""))
 		var label := _sector_source_label(sector_id)
 		_habitat_entries.append({"habitat_id": habitat_id, "sector_id": sector_id, "label": label})
 	_habitat_entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

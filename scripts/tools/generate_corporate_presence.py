@@ -156,9 +156,23 @@ def _normalize(raw: dict[str, float]) -> dict[str, float]:
     return rounded
 
 
-def build_sector_presence(corp_ids: list[str], sector_id: str) -> dict[str, float]:
-    anchors = SECTOR_ANCHORS.get(sector_id, MINING_ANCHORS)
-    rng = random.Random(RNG_SEED + (hash(sector_id) & 0xFFFFFFFF))
+def godot_string_hash(text: str) -> int:
+    """Godot 4 String.hash(): djb2 (hash * 33 + codepoint), masked to 32 bits."""
+    hashv = 5381
+    for char in text:
+        hashv = ((hashv << 5) + hashv) + ord(char)
+        hashv &= 0xFFFFFFFF
+    return hashv
+
+
+def build_sector_presence(
+    corp_ids: list[str],
+    sector_id: str,
+    anchors: dict[str, float] | None = None,
+) -> dict[str, float]:
+    if anchors is None:
+        anchors = SECTOR_ANCHORS.get(sector_id, MINING_ANCHORS)
+    rng = random.Random(RNG_SEED + godot_string_hash(sector_id))
     raw: dict[str, float] = {}
     for corp_id in corp_ids:
         w = FLOOR + rng.uniform(0.0, 0.85)

@@ -15,41 +15,31 @@ const _VALID_VOICES: Array[String] = [
 	"courtly",
 ]
 
-const MAJOR_HABITATS: Array = [
-	{"habitat_id": "proxima_habitat", "sector_id": "proxima", "peaceforce": "Proxima Peaceforce"},
-	{"habitat_id": "tycho_habitat", "sector_id": "tycho", "peaceforce": "Tycho Peaceforce"},
-	{"habitat_id": "bela_orbital_habitat", "sector_id": "bela", "peaceforce": "La Bella Vista Peaceforce"},
-	{"habitat_id": "irasia_habitat", "sector_id": "irasia", "peaceforce": "Irasia Peaceforce"},
-	{"habitat_id": "tokirev_habitat", "sector_id": "tokirev", "peaceforce": "Tokirev Peaceforce"},
-	{"habitat_id": "fennet_habitat", "sector_id": "fennet", "peaceforce": "Fennet Peaceforce"},
-	{"habitat_id": "fortuna_habitat", "sector_id": "fortuna", "peaceforce": "Fortuna Peaceforce"},
-	{"habitat_id": "new_carthage_habitat", "sector_id": "new_carthage", "peaceforce": "New Carthage Peaceforce"},
-	{"habitat_id": "horizon_habitat", "sector_id": "horizon", "peaceforce": "Horizon Peaceforce"},
-	{"habitat_id": "titania_habitat", "sector_id": "titania", "peaceforce": "Titania IX Peaceforce"},
-	{"habitat_id": "concordia_habitat", "sector_id": "pelagos", "peaceforce": "Pelagos Peaceforce"},
-]
-
-
 static func config(catalog: Catalog) -> Dictionary:
 	return catalog.get_scan_missions_config()
 
 
-static func is_major_habitat(habitat_id: String) -> bool:
-	for entry_variant in MAJOR_HABITATS:
-		if str(entry_variant.get("habitat_id", "")) == habitat_id:
-			return true
-	return false
-
-
-static func sector_for_major_habitat(habitat_id: String) -> String:
-	for entry_variant in MAJOR_HABITATS:
-		if str(entry_variant.get("habitat_id", "")) == habitat_id:
-			return str(entry_variant.get("sector_id", ""))
-	return ""
-
-
 static func peacekeeping_building_id(sector_id: String) -> String:
 	return "%s_peaceforce" % sector_id
+
+
+static func habitat_has_peacekeeping(catalog: Catalog, habitat_id: String) -> bool:
+	var location := catalog.get_habitat(habitat_id)
+	if location.is_empty():
+		return false
+	if str(location.get("type", "habitat")) == "station":
+		return false
+	var sector_id := str(location.get("sector_id", ""))
+	if sector_id.is_empty():
+		return false
+	return _habitat_lists_building(location, peacekeeping_building_id(sector_id))
+
+
+static func _habitat_lists_building(location: Dictionary, building_id: String) -> bool:
+	for building_id_variant in location.get("buildings", []):
+		if str(building_id_variant) == building_id:
+			return true
+	return false
 
 
 static func corporate_office_count(sector_id: String) -> int:
@@ -148,13 +138,13 @@ static func scan_building_ids(catalog: Catalog, habitat_id: String) -> Array:
 				continue
 			out.append(building_id)
 		return out
-	if is_major_habitat(habitat_id):
-		var sector_id := sector_for_major_habitat(habitat_id)
-		if not sector_id.is_empty():
-			out.append(peacekeeping_building_id(sector_id))
-			var count := corporate_office_count(sector_id)
-			for corp_id_variant in top_corporation_ids(catalog, sector_id, count):
-				out.append(corporate_building_id(str(corp_id_variant), sector_id))
+	var sector_id := str(location.get("sector_id", ""))
+	var peace_id := peacekeeping_building_id(sector_id)
+	if not sector_id.is_empty() and _habitat_lists_building(location, peace_id):
+		out.append(peace_id)
+		var count := corporate_office_count(sector_id)
+		for corp_id_variant in top_corporation_ids(catalog, sector_id, count):
+			out.append(corporate_building_id(str(corp_id_variant), sector_id))
 	if PassengerCharters.habitat_has_bar(catalog, habitat_id):
 		out.append("davidsons")
 	for building_id_variant in location.get("buildings", []):
@@ -180,9 +170,7 @@ static func generate_offers_for_building(
 	offer_index_start: int
 ) -> Array:
 	var cfg := config(catalog)
-	var sector_id := sector_for_major_habitat(habitat_id)
-	if sector_id.is_empty():
-		sector_id = catalog.get_habitat_sector_id(habitat_id)
+	var sector_id := catalog.get_habitat_sector_id(habitat_id)
 	if sector_id.is_empty():
 		return []
 

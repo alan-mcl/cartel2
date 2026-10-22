@@ -13,6 +13,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 from catalog_io import CATALOG, index_by_id, load_array, load_object
+from generate_corporate_presence import build_sector_presence, godot_string_hash
 
 DEFAULT_HABITAT_SPRITE = "res://assets/world/habitat_proxima.svg"
 DEFAULT_PLANET_SPRITE = "res://assets/world/planet.png"
@@ -21,6 +22,31 @@ ORBITAL_SPRITE_DIR = Path(__file__).resolve().parents[2] / "assets" / "world" / 
 
 def write_json(path: Path, data: object) -> None:
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+
+def write_json_matching(path: Path, data: object) -> None:
+    indent: str | int = 2
+    if path.exists():
+        first = path.read_text(encoding="utf-8").splitlines()
+        if len(first) > 1 and first[1].startswith("\t"):
+            indent = "\t"
+    path.write_text(json.dumps(data, indent=indent) + "\n", encoding="utf-8")
+
+
+def corporate_office_count(sector_id: str) -> int:
+    return 2 + (godot_string_hash(sector_id) % 4)
+
+
+def top_corporation_ids(presence: dict, count: int) -> list[str]:
+    ranked = sorted(
+        presence.items(),
+        key=lambda item: (-float(item[1]), str(item[0])),
+    )
+    return [str(corp_id) for corp_id, _share in ranked[:count]]
+
+
+def corporate_building_id(corp_id: str, sector_id: str) -> str:
+    return f"corp_{corp_id}_{sector_id}_office"
 
 
 def upsert_by_id(entries: list, record: dict) -> None:
@@ -97,10 +123,25 @@ def validate_spec(spec: dict, catalog_dir: Path, replace: bool) -> list[str]:
     if sector_id in worlds and not replace:
         errors.append(f"spec: worlds.json already has key '{sector_id}' (use --replace)")
 
+    corporations = index_by_id(load_array(catalog_dir / "corporations.json"))
+    anchors = spec.get("presence_anchors", {})
+    if not isinstance(anchors, dict):
+        errors.append("spec: presence_anchors must be an object")
+    else:
+        for corp_id, weight in anchors.items():
+            if str(corp_id) not in corporations:
+                errors.append(f"spec: unknown presence anchor '{corp_id}'")
+            elif isinstance(weight, bool) or not isinstance(weight, (int, float)) or weight < 0:
+                errors.append(f"spec: presence anchor '{corp_id}' must be a non-negative number")
+
+    peacekeeping = spec.get("peacekeeping", "")
+    if not isinstance(peacekeeping, str):
+        errors.append("spec: peacekeeping must be a string")
+
     return errors
 
 
-def build_bundle(spec: dict) -> dict:
+def build_bundle(spec: dict, corporations: list) -> dict:
     sector_id = str(spec["id"])
     name = str(spec["name"])
     planet_name = str(spec.get("planet_name", name))
@@ -142,7 +183,59 @@ def build_bundle(spec: dict) -> dict:
     extra_buildings = [
         str(b) for b in spec.get("extra_buildings", []) if str(b)
     ]
-    building_ids = [terminal_id, *extra_buildings, shipyard_id, exchange_id]
+    corp_ids = sorted(
+        str(corp.get("id", ""))
+        for corp in corporations
+        if isinstance(corp, dict) and str(corp.get("id", ""))
+    )
+    corp_names = {
+        str(corp.get("id", "")): str(corp.get("name", corp.get("id", "")))
+        for corp in corporations
+        if isinstance(corp, dict) and corp.get("id")
+    }
+    raw_anchors = spec.get("presence_anchors", {})
+    anchors = {
+        str(corp_id): float(weight)
+        for corp_id, weight in raw_anchors.items()
+    } if isinstance(raw_anchors, dict) else {}
+    presence = build_sector_presence(corp_ids, sector_id, anchors)
+
+    scan_buildings: list[dict] = []
+    peacekeeping_name = str(spec.get("peacekeeping", "")).strip()
+    if peacekeeping_name:
+        peace_id = f"{sector_id}_peaceforce"
+        scan_buildings.append(
+            {
+                "id": peace_id,
+                "name": peacekeeping_name,
+                "type": "peacekeeping",
+                "kind": "office",
+                "description": (
+                    f"{peacekeeping_name} liaison office posting reconnaissance "
+                    "and survey charters."
+                ),
+                "short_desc": "System peacekeeping charter desk.",
+                "art": f"res://assets/ui/locations/{peace_id}.png",
+            }
+        )
+        for corp_id in top_corporation_ids(presence, corporate_office_count(sector_id)):
+            office_id = corporate_building_id(corp_id, sector_id)
+            cname = corp_names.get(corp_id, corp_id)
+            scan_buildings.append(
+                {
+                    "id": office_id,
+                    "name": f"{cname} Office",
+                    "type": "corporate_office",
+                    "kind": "office",
+                    "corporation_id": corp_id,
+                    "description": f"Corporate liaison desk for {cname}.",
+                    "short_desc": f"{cname} charter desk.",
+                    "art": f"res://assets/ui/locations/{office_id}.png",
+                }
+            )
+
+    scan_ids = [str(building["id"]) for building in scan_buildings]
+    building_ids = [terminal_id, *extra_buildings, shipyard_id, exchange_id, *scan_ids]
 
     sector = {
         "id": sector_id,
@@ -300,7 +393,8 @@ def build_bundle(spec: dict) -> dict:
         "world": world,
         "economy": economy_record,
         "habitat": habitat,
-        "buildings": [terminal, shipyard, exchange],
+        "buildings": [terminal, shipyard, exchange, *scan_buildings],
+        "presence": presence,
         "interactables": [dock_interactable, gate_interactable],
         "routes": routes,
         "traffic_override": traffic_override,
@@ -361,6 +455,11 @@ def apply_bundle(catalog_dir: Path, bundle: dict, replace: bool) -> None:
         overrides[sector_id] = {"role_weights": dict(traffic_override)}
         write_json(traffic_path, traffic)
 
+    presence_path = catalog_dir / "corporate_presence.json"
+    presence = load_object(presence_path)
+    presence[sector_id] = bundle["presence"]
+    write_json_matching(presence_path, presence)
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -390,7 +489,8 @@ def main() -> int:
             print(f"ERROR: {err}", file=sys.stderr)
         return 1
 
-    bundle = build_bundle(spec)
+    corporations = load_array(args.catalog / "corporations.json")
+    bundle = build_bundle(spec, corporations)
     if args.dry_run:
         print(json.dumps(bundle, indent=2))
         return 0

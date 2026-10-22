@@ -14,10 +14,18 @@ func _init() -> void:
 		if typeof(entry_variant) == TYPE_DICTIONARY:
 			by_id[str(entry_variant.get("id", ""))] = entry_variant
 
-	for entry in ScanChartersScript.MAJOR_HABITATS:
-		var habitat_id := str(entry.get("habitat_id", ""))
-		var sector_id := str(entry.get("sector_id", ""))
-		var peaceforce_name := str(entry.get("peaceforce", "Peaceforce"))
+	for hab_variant in habitats:
+		if typeof(hab_variant) != TYPE_DICTIONARY:
+			continue
+		var habitat_entry: Dictionary = hab_variant
+		if str(habitat_entry.get("type", "habitat")) == "station":
+			continue
+		var habitat_id := str(habitat_entry.get("id", ""))
+		var sector_id := str(habitat_entry.get("sector_id", ""))
+		var peace_id := "%s_peaceforce" % sector_id
+		if not _list_has(habitat_entry.get("buildings", []), peace_id):
+			continue
+		var peaceforce_name := _peaceforce_name(catalog, by_id, peace_id, sector_id)
 		var scan_ids: Array = ScanChartersScript.scan_building_ids(catalog, habitat_id)
 		for bid_variant in scan_ids:
 			var building_id := str(bid_variant)
@@ -29,25 +37,46 @@ func _init() -> void:
 					buildings.append(record)
 					by_id[building_id] = record
 
-		for hab_variant in habitats:
-			if typeof(hab_variant) != TYPE_DICTIONARY:
-				continue
-			var hab: Dictionary = hab_variant
-			if str(hab.get("id", "")) != habitat_id:
-				continue
-			var list: Array = []
-			for item in hab.get("buildings", []):
-				list.append(str(item))
-			for bid_variant in scan_ids:
-				var bid := str(bid_variant)
-				if bid not in list:
-					list.append(bid)
-			hab["buildings"] = list
+		var list: Array = []
+		for item in habitat_entry.get("buildings", []):
+			list.append(str(item))
+		for bid_variant in scan_ids:
+			var bid := str(bid_variant)
+			if bid not in list:
+				list.append(bid)
+		habitat_entry["buildings"] = list
 
 	_save_json_array(BUILDINGS_PATH, buildings)
 	_save_json_array(HABITATS_PATH, habitats)
 	print("Synced scan buildings.")
 	quit()
+
+
+func _list_has(items: Variant, building_id: String) -> bool:
+	if typeof(items) != TYPE_ARRAY:
+		return false
+	for item in items:
+		if str(item) == building_id:
+			return true
+	return false
+
+
+func _peaceforce_name(
+	catalog: Catalog,
+	by_id: Dictionary,
+	peace_id: String,
+	sector_id: String
+) -> String:
+	var existing: Variant = by_id.get(peace_id, {})
+	if typeof(existing) == TYPE_DICTIONARY:
+		var current := str((existing as Dictionary).get("name", "")).strip_edges()
+		if not current.is_empty():
+			return current
+	var sector := catalog.get_sector(sector_id)
+	var planet := str(sector.get("planet_name", sector.get("name", sector_id))).strip_edges()
+	if planet.is_empty():
+		return "Peaceforce"
+	return "%s Peaceforce" % planet
 
 
 func _make_building_record(

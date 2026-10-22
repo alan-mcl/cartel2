@@ -204,13 +204,9 @@ Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and 
 
 ## A-13 A new sector still needs a hand-maintained tail
 
-**Status:** Discuss. **Severity:** High.
+**Status:** Done. **Severity:** High.
 
-`generate_sector_bundle.py` patches sectors, worlds, economies, habitats, buildings, interactables, routes, and optional traffic overrides. It does not write `corporate_presence.json` (one row per sector, shares summing to 100). Scan desks and corporate HQs are maintained by `scripts/tools/sync_scan_buildings.gd` and `scripts/tools/sync_corporate_hqs.py`, which overwrite catalog JSON from tables in the tool. `data_model.md` "Adding a sector" does not mention presence or those sync tools.
-
-The live 21-sector catalog currently satisfies sector completeness, including a presence row per sector. The next sector will not get that from the bundle alone.
-
-**Direction:** Extend the bundle spec with a presence row, and either emit the peacekeeping and office buildings from the same spec or make the sync tools read a catalog table instead of a hardcoded list. Document the tail next to the bundle in `data_model.md`.
+`generate_sector_bundle.py` writes the `corporate_presence.json` row from `presence_anchors`, and emits the peacekeeping desk plus liaison offices when `peacekeeping` is set. `ScanCharters` treats a civic habitat that lists `{sector_id}_peaceforce` as a scan habitat, so the old hardcoded habitat table is gone. Headquarters stay in `sync_corporate_hqs.py`. The tail is documented under "Adding a sector" in `data_model.md`.
 
 **Do not:** invent new world types for moons or belts.
 

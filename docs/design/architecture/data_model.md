@@ -393,7 +393,13 @@ Daily commodity quotes are computed at runtime by `CommodityEconomy` from `econo
 
 **Sector completeness:** `scripts/tools/validate_sector_completeness.py` (wired into `validate_catalog_refs.py`) checks every `sectors.json` id has a matching world, economy, exactly one habitat (`sector_id`), resolvable buildings, dock/translate interactables linked from the world layout, and at least one route edge. Legacy ids may differ from `{id}_habitat` templates (e.g. `bela_orbital_habitat`, `concordia_habitat` on sector `pelagos`); validation is structural, not string-prefix rules.
 
-**Adding a sector:** `scripts/tools/generate_sector_bundle.py` patches `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, and `routes.json` from a compact spec. See `scripts/tools/sector_spec.example.json`. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
+**Adding a sector:** `scripts/tools/generate_sector_bundle.py` patches `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, `routes.json`, and one `corporate_presence.json` row from a compact spec. See `scripts/tools/sector_spec.example.json`. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
+
+`presence_anchors` is a map of corporation id to extra weight. The bundle fills every other corporation from the same floor and jitter as `generate_corporate_presence.py`, then normalises the row so the shares sum to 100. Omit the map for an even floor.
+
+`peacekeeping` is the peaceforce display name. When it is set, the bundle adds `{id}_peaceforce` and the liaison offices `ScanCharters` will post: `2 + (String.hash(sector id) % 4)` corporations, highest share first. A civic habitat that lists `{sector_id}_peaceforce` is a scan habitat; there is no separate habitat table. Leave `peacekeeping` unset for a belt or station sector that should not have those desks.
+
+Corporate headquarters are not part of the bundle. Place those with `scripts/tools/sync_corporate_hqs.py`. `scripts/tools/sync_scan_buildings.gd` only fills missing peacekeeping and liaison records for habitats that already list a peaceforce building.
 
 Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 
