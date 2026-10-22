@@ -718,6 +718,19 @@ func _roll_skill() -> Skill:
 	return Skill.ELITE
 
 
+func set_skill_name(skill_name: String) -> void:
+	match skill_name:
+		"novice":
+			skill = Skill.NOVICE
+		"experienced":
+			skill = Skill.EXPERIENCED
+		"elite":
+			skill = Skill.ELITE
+		_:
+			return
+	apply_skill_table()
+
+
 func apply_skill_table() -> void:
 	_graze_radius = SKILL_GRAZE_RADIUS[skill]
 	_ema_alpha = SKILL_EMA_ALPHA[skill]

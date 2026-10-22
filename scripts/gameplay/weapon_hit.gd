@@ -41,6 +41,8 @@ static func apply(
 
 	if session != null and bool(result.get("destroyed", false)):
 		_maybe_record_bounty_target_destroyed(session, collider)
+	elif session != null:
+		_maybe_record_bounty_target_disabled(session, collider)
 
 	var catalog := attribution_catalog if attribution_catalog != null else _shooter_catalog(shooter)
 	if session == null or catalog == null:
@@ -83,7 +85,7 @@ static func _maybe_record_bounty_target_destroyed(session: GameSession, collider
 	var target_id := str(bounty_target.get("id", ""))
 	if target_id.is_empty():
 		return
-	var actor = Sanctions._collider_actor(collider)
+	var actor = _bounty_actor_from_collider(collider)
 	if actor == null:
 		return
 	if str(actor.get("id")) != target_id:
@@ -95,6 +97,62 @@ static func _maybe_record_bounty_target_destroyed(session: GameSession, collider
 		float(session.gst_seconds)
 	)
 	session.changed.emit()
+
+
+static func _maybe_record_bounty_target_disabled(session: GameSession, collider: Object) -> void:
+	if session == null or collider == null:
+		return
+	if not VolatileTranslation.is_volatile_sector_id(session.sector_id):
+		return
+	var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
+	if record.is_empty():
+		return
+	var setup: Variant = record.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		return
+	var bounty_target: Variant = setup.get("bounty_target", {})
+	if typeof(bounty_target) != TYPE_DICTIONARY:
+		return
+	var target_id := str(bounty_target.get("id", ""))
+	if target_id.is_empty():
+		return
+	var actor = _bounty_actor_from_collider(collider)
+	if actor == null:
+		return
+	if str(actor.get("id")) != target_id:
+		return
+	if float(actor.get("hull_current")) <= 0.0:
+		return
+	var assembled: Variant = actor.get("assembled_ship")
+	var combat_state: Variant = actor.get("combat_state")
+	if assembled == null:
+		return
+	if combat_state == null:
+		combat_state = ShipCombatState.from_assembled(assembled)
+	if ShipCombat.get_effective_power_generation(assembled, combat_state) > 0.0:
+		return
+	if session.player.has_contact_record(target_id, "bounty_disabled"):
+		return
+	if session.player.has_contact_record(target_id, "bounty_target"):
+		return
+	session.player.record_target_scan(
+		target_id,
+		"bounty_disabled",
+		session.sector_id,
+		float(session.gst_seconds)
+	)
+	session.changed.emit()
+
+
+static func _bounty_actor_from_collider(collider: Object) -> Variant:
+	var actor = Sanctions._collider_actor(collider)
+	if actor != null:
+		return actor
+	if collider == null:
+		return null
+	if collider.get("assembled_ship") != null and not str(collider.get("id")).is_empty():
+		return collider
+	return null
 
 
 static func _target_mass(collider: Object) -> float:

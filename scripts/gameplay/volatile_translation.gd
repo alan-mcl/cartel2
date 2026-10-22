@@ -647,17 +647,24 @@ static func _bind_setup_record_id(setup: Dictionary, record_id: String) -> Dicti
 		var target: Dictionary = bounty_target.duplicate(true)
 		target["id"] = str(target.get("id", "")).replace("{{ID}}", record_id)
 		out["bounty_target"] = target
-	var ambient_ships: Variant = out.get("ambient_ships", [])
-	if typeof(ambient_ships) == TYPE_ARRAY:
-		var bound_ships: Array = []
-		for ship_variant in ambient_ships:
-			if typeof(ship_variant) != TYPE_DICTIONARY:
-				continue
-			var ship: Dictionary = ship_variant.duplicate(true)
-			ship["id"] = str(ship.get("id", "")).replace("{{ID}}", record_id)
-			bound_ships.append(ship)
-		out["ambient_ships"] = bound_ships
+	if typeof(out.get("bounty_escorts")) == TYPE_ARRAY:
+		out["bounty_escorts"] = _bind_ship_records(out.get("bounty_escorts"), record_id)
+	if typeof(out.get("ambient_ships")) == TYPE_ARRAY:
+		out["ambient_ships"] = _bind_ship_records(out.get("ambient_ships"), record_id)
 	return out
+
+
+static func _bind_ship_records(raw: Variant, record_id: String) -> Array:
+	if typeof(raw) != TYPE_ARRAY:
+		return []
+	var bound: Array = []
+	for ship_variant in raw:
+		if typeof(ship_variant) != TYPE_DICTIONARY:
+			continue
+		var ship: Dictionary = ship_variant.duplicate(true)
+		ship["id"] = str(ship.get("id", "")).replace("{{ID}}", record_id)
+		bound.append(ship)
+	return bound
 
 
 static func _validate_setup(setup: Dictionary) -> bool:
@@ -681,13 +688,21 @@ static func _validate_setup(setup: Dictionary) -> bool:
 			return false
 		if str(bounty_target.get("template_id", "")).is_empty():
 			return false
-	var ambient_ships: Variant = setup.get("ambient_ships", [])
-	if typeof(ambient_ships) == TYPE_ARRAY:
-		for ship_variant in ambient_ships:
-			if typeof(ship_variant) != TYPE_DICTIONARY:
-				return false
-			if str(ship_variant.get("template_id", "")).is_empty():
-				return false
+	if not _ship_records_valid(setup.get("bounty_escorts", [])):
+		return false
+	if not _ship_records_valid(setup.get("ambient_ships", [])):
+		return false
+	return true
+
+
+static func _ship_records_valid(raw: Variant) -> bool:
+	if typeof(raw) != TYPE_ARRAY:
+		return false
+	for ship_variant in raw:
+		if typeof(ship_variant) != TYPE_DICTIONARY:
+			return false
+		if str(ship_variant.get("template_id", "")).is_empty():
+			return false
 	return true
 
 
@@ -725,6 +740,9 @@ static func _setup_to_save(setup: Variant) -> Dictionary:
 	var bounty_target: Variant = src.get("bounty_target", {})
 	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
 		out["bounty_target"] = bounty_target.duplicate(true)
+	var bounty_escorts: Variant = src.get("bounty_escorts", [])
+	if typeof(bounty_escorts) == TYPE_ARRAY and not bounty_escorts.is_empty():
+		out["bounty_escorts"] = bounty_escorts.duplicate(true)
 	var ambient_ships: Variant = src.get("ambient_ships", [])
 	if typeof(ambient_ships) == TYPE_ARRAY and not ambient_ships.is_empty():
 		out["ambient_ships"] = ambient_ships.duplicate(true)

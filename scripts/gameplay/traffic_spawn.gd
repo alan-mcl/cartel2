@@ -83,6 +83,14 @@ static func create_from_bounty_target(
 		actor.affiliation = affiliation
 	actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
 	actor.role = "bounty"
+	actor.bounty_pilot_skill = str(bounty_target.get("pilot_skill", ""))
+	var hull_scale := float(bounty_target.get("hull_scale", 1.0))
+	if hull_scale > 0.0 and not is_equal_approx(hull_scale, 1.0):
+		actor.hull_max *= hull_scale
+		actor.hull_current = actor.hull_max
+		if actor.combat_state != null:
+			actor.combat_state.hull_max = actor.hull_max
+			actor.combat_state.hull_current = actor.hull_current
 	return actor
 
 

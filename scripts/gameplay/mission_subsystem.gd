@@ -1041,10 +1041,7 @@ func _try_complete_bounty_charters(session: GameSession, catalog: Catalog, habit
 
 
 func _bounty_charter_satisfied(session: GameSession, charter: Dictionary) -> bool:
-	var target_id := str(charter.get("bounty_target_id", ""))
-	var sector_id := BountyCharters.bounty_sector_for_contract(charter)
-	var accepted_gst := float(charter.get("accepted_gst", 0.0))
-	return session.player.scan_satisfies_contract(target_id, sector_id, accepted_gst)
+	return BountyCharters.charter_satisfied(session, charter)
 
 
 func _enforce_late_bounty_charters_at_dock(session: GameSession, catalog: Catalog) -> void:

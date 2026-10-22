@@ -126,8 +126,18 @@ func scan_satisfies_contract(
 	sector_id: String,
 	accepted_gst: float
 ) -> bool:
+	return scan_satisfies_contract_kinds(contact_id, sector_id, accepted_gst, [])
+
+
+func scan_satisfies_contract_kinds(
+	contact_id: String,
+	sector_id: String,
+	accepted_gst: float,
+	contact_kinds: Array
+) -> bool:
 	if contact_id.is_empty() or sector_id.is_empty():
 		return false
+	var filter_kinds := contact_kinds.size() > 0
 	for entry_variant in scanned_contacts:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
@@ -138,7 +148,25 @@ func scan_satisfies_contract(
 			continue
 		if float(entry.get("recorded_gst", 0.0)) + 0.001 < accepted_gst:
 			continue
+		if filter_kinds:
+			var kind := str(entry.get("contact_kind", ""))
+			if kind not in contact_kinds:
+				continue
 		return true
+	return false
+
+
+func has_contact_record(contact_id: String, contact_kind: String) -> bool:
+	if contact_id.is_empty() or contact_kind.is_empty():
+		return false
+	for entry_variant in scanned_contacts:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("contact_id", "")) != contact_id:
+			continue
+		if str(entry.get("contact_kind", "")) == contact_kind:
+			return true
 	return false
 
 
@@ -148,7 +176,7 @@ func record_target_scan(
 	sector_id: String,
 	recorded_gst: float
 ) -> void:
-	if contact_id.is_empty() or has_scanned(contact_id):
+	if contact_id.is_empty() or has_contact_record(contact_id, contact_kind):
 		return
 	scanned_contacts.append({
 		"contact_id": contact_id,

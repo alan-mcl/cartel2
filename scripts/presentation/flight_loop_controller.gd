@@ -323,7 +323,10 @@ func _setup_volatile_site_traffic(world: Node2D) -> void:
 	if typeof(bounty_target) == TYPE_DICTIONARY and not bounty_target.is_empty():
 		var target: Dictionary = bounty_target
 		var target_id := str(target.get("id", ""))
-		if target_id.is_empty() or not _main.session.player.has_scanned(target_id):
+		if (
+			target_id.is_empty()
+			or not _main.session.player.has_contact_record(target_id, "bounty_target")
+		):
 			var bounty_actor = TrafficSpawnScript.create_from_bounty_target(
 				_catalog,
 				traffic_config,
@@ -332,6 +335,19 @@ func _setup_volatile_site_traffic(world: Node2D) -> void:
 			)
 			if bounty_actor != null:
 				roster.append(bounty_actor)
+			var escorts: Variant = setup.get("bounty_escorts", [])
+			if typeof(escorts) == TYPE_ARRAY:
+				for escort_variant in escorts:
+					if typeof(escort_variant) != TYPE_DICTIONARY:
+						continue
+					var escort_actor = TrafficSpawnScript.create_from_bounty_target(
+						_catalog,
+						traffic_config,
+						escort_variant,
+						sector_id
+					)
+					if escort_actor != null:
+						roster.append(escort_actor)
 	if roster.is_empty():
 		clear_traffic()
 		return

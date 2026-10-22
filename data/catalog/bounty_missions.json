@@ -7,25 +7,262 @@
   "cancel_penalty_fraction": 0.25,
   "volatile_duration_hours": 8,
   "volatile_return_hours": 8,
-  "target_templates": [
-    "dragon_bronze",
-    "dragon_gold",
-    "wolff_warrior",
-    "wolff_gladius",
-    "flare_on_sk",
-    "silhouette_mk8",
-    "mantis_xf900",
-    "pegasus_p103a"
+  "objectives": {
+    "destroy": {
+      "title": "Destroy",
+      "verb": "destroy",
+      "completion": "destroy",
+      "sources": [
+        "peacekeeping",
+        "corporate_office",
+        "bar"
+      ],
+      "difficulty": 1.0
+    },
+    "intercept": {
+      "title": "Intercept",
+      "verb": "intercept",
+      "completion": "destroy",
+      "sources": [
+        "peacekeeping",
+        "corporate_office",
+        "bar"
+      ],
+      "difficulty": 1.05
+    },
+    "disable": {
+      "title": "Disable",
+      "verb": "disable",
+      "completion": "disable",
+      "sources": [
+        "peacekeeping",
+        "corporate_office",
+        "bar"
+      ],
+      "difficulty": 1.08
+    },
+    "eliminate": {
+      "title": "Eliminate",
+      "verb": "eliminate",
+      "completion": "destroy",
+      "sources": [
+        "peacekeeping",
+        "corporate_office",
+        "bar"
+      ],
+      "difficulty": 1.12
+    }
+  },
+ "reasons": [
+  "breach of a Concord Commercial Charter obligation",
+  "piracy against chartered commercial shipping",
+  "refusal of a lawful peacekeeping order",
+  "unlawful discharge of weapons in settled space",
+  "theft of corporate cargo under seal",
+  "assault upon a registered commercial operator",
+  "repeated evasion of recorded sanctions",
+  "theft of proprietary intellectual property",
+  "unauthorised salvage",
+  "destruction of chartered or registered property",
+  "deliberate obstruction of commercial traffic",
+  "unauthorised access to corporate infrastructure",
+  "sabotage of translation equipment",
+  "attempted seizure of bonded cargo",
+  "refusal of lawful inspection",
+  "operation under a false vessel identity",
+  "interference with a contracted survey expedition",
+  "theft of restricted survey data",
+  "violation of a quarantine exclusion",
+  "attacks upon autonomous service craft",
+  "interference with a corporate recovery operation",
+  "unlawful carriage of military goods",
+  "unauthorised alteration of a registered vessel",
+  "evasion of a civil seizure order",
+  "assault upon corporate security personnel",
+  "tampering with orbital infrastructure",
+  "unauthorised operation within a controlled approach",
+  "interference with registered salvage rights",
+  "interference with a registered commercial claim",
+  "failure to honour a bonded commercial contract",
+  "deliberate disruption of a scheduled transfer",
+  "unauthorised extraction from a protected body",
+  "attempted destruction or removal of evidence",
+  "operation under a compromised vessel registry",
+  "multiple outstanding civil warrants",
+  "participation in organised piracy",
+  "unauthorised recovery of military-origin hardware",
+  "violation of a restricted translation corridor",
+  "unlawful interference with a translation beacon",
+  "interference with a registered courier vessel",
+  "theft of sealed corporate dispatches",
+  "breach of a corporate quarantine order",
+  "unauthorised boarding of a commercial vessel",
+  "attempted appropriation of a chartered vessel",
+  "deliberate falsification of cargo manifests",
+  "concealment of prohibited cargo",
+  "interference with a corporate debt recovery",
+  "unlawful possession of another operator's vessel",
+  "destruction of cargo following refusal of inspection",
+  "interference with a licensed passenger charter",
+  "endangerment of civilian traffic during an unlawful pursuit",
+  "unauthorised entry into a corporate exclusion zone",
+  "interference with a registered orbital facility",
+  "theft of proprietary translation solutions",
+  "unauthorised extraction of corporate personnel",
+  "breach of a sealed recovery contract",
+  "obstruction of a Charter Judiciary order",
+  "interference with a peacekeeping investigation",
+  "failure to surrender a vessel subject to civil seizure",
+  "theft of archival material under corporate custody",
+  "interference with a registered prospecting operation",
+  "unauthorised exploitation of a mineral claim",
+  "destruction of a registered survey beacon",
+  "attack upon a contracted recovery crew",
+  "attempted forgery of SolCoin ledger entries"
   ],
-  "blurbs": {
-    "peacekeeping": [
-      "Peaceforce warrant: destroy {callsign} at {site}. Return to this desk for payment."
-    ],
-    "corporate_office": [
-      "{corp} has posted a bounty on {callsign} at {site}. Eliminate the target and report back."
-    ],
-    "bar": [
-      "Word at the bar: someone wants {callsign} gone at {site}. Cash on return if you pull it off."
-    ]
+  "statuses": [
+    "last seen under power",
+    "running dark",
+    "holding position near the site",
+    "attempting to leave the sector",
+    "refusing transponder contact",
+    "manoeuvring aggressively",
+    "operating with escort jamming",
+    "moving on a low-energy transfer",
+    "drifting without a declared flight plan",
+    "changing vector under thrust",
+    "holding a high eccentric orbit",
+    "descending toward the inner system",
+    "climbing out on an escape trajectory",
+    "waiting at a transfer-point rendezvous",
+    "shadowing commercial traffic",
+    "using a falsified transponder",
+    "maintaining communications silence",
+    "switching between registered identities",
+    "loitering outside the normal traffic envelope",
+    "approaching from an unregistered vector",
+    "departing a stationkeeping zone",
+    "moving through a debris field",
+    "reported near the system boundary",
+    "believed to be sheltering in the outer system",
+    "making repeated course corrections",
+    "holding position under minimal thrust",
+    "using the local traffic pattern for cover",
+    "last contact lost during a conjunction",
+    "intermittently visible on passive scan",
+    "reported in company with unidentified craft",
+    "travelling without a filed destination",
+    "attempting to cross the planetary escape region",
+    "entering a communications shadow",
+    "holding at the edge of a controlled corridor",
+    "making for a known rendezvous point",
+    "diverting from its declared route",
+    "maintaining a non-standard orbital plane",
+    "operating outside normal approach procedures",
+    "reported stationary relative to the local frame",
+    "last confirmed beyond the station perimeter"
+  ],
+  "threats": [
+    {
+      "id": "routine",
+      "label": "routine",
+      "pay_multiplier": 1.0,
+      "profile": {"pilot_skill": "novice", "escort_count": 0, "hull_scale": 1.0}
+    },
+    {
+      "id": "armed",
+      "label": "armed and evasive",
+      "pay_multiplier": 1.08,
+      "profile": {"pilot_skill": "experienced", "escort_count": 0, "hull_scale": 1.0}
+    },
+    {
+      "id": "hardened",
+      "label": "hardened",
+      "pay_multiplier": 1.15,
+      "profile": {"pilot_skill": "experienced", "escort_count": 0, "hull_scale": 1.35}
+    },
+    {
+      "id": "veteran",
+      "label": "veteran crew",
+      "pay_multiplier": 1.22,
+      "profile": {"pilot_skill": "elite", "escort_count": 0, "hull_scale": 1.1}
+    },
+    {
+      "id": "heavily_armed",
+      "label": "heavily armed",
+      "pay_multiplier": 1.3,
+      "profile": {"pilot_skill": "experienced", "escort_count": 0, "hull_scale": 1.2}
+    },
+    {
+      "id": "military_origin",
+      "label": "military-origin hardware",
+      "pay_multiplier": 1.34,
+      "profile": {"pilot_skill": "elite", "escort_count": 0, "hull_scale": 1.25}
+    },
+    {
+      "id": "multiple_contacts",
+      "label": "multiple hostile contacts",
+      "pay_multiplier": 1.4,
+      "profile": {"pilot_skill": "experienced", "escort_count": 2, "hull_scale": 1.0}
+    },
+    {
+      "id": "unknown",
+      "label": "threat profile unconfirmed",
+      "pay_multiplier": 1.12,
+      "profile": {"pilot_skill": "", "escort_count": 0, "hull_scale": 1.0}
+    }
+  ],
+  "sources": {
+    "peacekeeping": {
+      "pay_multiplier": 1.0,
+      "frames": [
+        "Peaceforce warrant: {objective} {callsign} ({ship}) at {site}. Reason: {reason}; {status}. Threat: {threat}. Return to this desk for payment.",
+        "Posted warrant to {objective} {callsign} at {site}. {reason}. Target {status}.",
+        "Independent operator sought to {objective} {callsign} ({ship}) at {site}. {reason}; {status}.",
+        "Peacekeeping bulletin: {callsign} wanted at {site}. {objective} the contact. {reason}.",
+        "Active warrant: {objective} {callsign} ({ship}) at {site}. {reason}. Current status: {status}.",
+        "Peaceforce notice. Target {callsign} located or expected at {site}. Authorised action: {objective}. {reason}. Threat assessment: {threat}.",
+        "Warrant service request: {objective} {callsign}, a {ship}, operating at {site}. The subject is {status}. {reason}.",
+        "Peacekeeping contract available to {objective} {callsign} at {site}. Subject is {status}; threat assessment is {threat}.",
+        "Traffic-control alert: {callsign} ({ship}) has been flagged for {reason}. Last reported {status} at {site}. {objective} on confirmation.",
+        "Sanctioned bounty: {objective} {callsign} at {site}. Independent operators may claim the posted reward on confirmed completion.",
+        "Peaceforce dispatch: target {callsign}. Reported at {site}, {status}. {objective}. Warrant basis: {reason}.",
+        "This notice authorises independent action against {callsign} ({ship}) at {site}. Subject is {status}. {objective} and submit confirmation."
+      ]
+    },
+    "corporate_office": {
+      "pay_multiplier": 1.0,
+      "frames": [
+        "{corp} has posted a bounty to {objective} {callsign} ({ship}) at {site}. {reason}. {status}.",
+        "Contract from {corp}: {objective} {callsign} at {site}. {reason}; threat assessed as {threat}.",
+        "{corp} requests an external operator to {objective} {callsign} at {site}. {status}.",
+        "Corporate bounty on {callsign} ({ship}) at {site}. {objective} and report back to this desk.",
+        "{corp} has authorised contract action against {callsign} at {site}. {reason}. Target currently {status}.",
+        "External operator contract: {objective} {callsign} ({ship}) in the vicinity of {site}. {reason}. Threat assessment: {threat}.",
+        "{corp} requires immediate resolution of an unauthorised vessel, {callsign}, reported at {site}. {objective}. {status}.",
+        "Asset-protection notice from {corp}: {callsign} ({ship}) is wanted at {site}. {reason}. {objective} and provide telemetry on completion.",
+        "Commercial security contract: {objective} {callsign} at {site}. The vessel is {status}; current threat assessment is {threat}.",
+        "{corp} has an outstanding external action request concerning {callsign}. Last confirmed at {site}. {reason}. {objective}.",
+        "Third-party operator required. Target: {callsign}, class {ship}. Location: {site}. Status: {status}. Approved action: {objective}.",
+        "This contract concerns {callsign} ({ship}), currently {status} at {site}. {corp} will accept confirmed completion of the order to {objective}."
+      ]
+    },
+    "bar": {
+      "pay_multiplier": 1.0,
+      "frames": [
+        "Word at the bar: someone wants you to {objective} {callsign} at {site}. {reason}.",
+        "Informal fee to {objective} {callsign} ({ship}) at {site}. {status}.",
+        "Quiet contract: {objective} {callsign} at {site}. {reason}; paid on return.",
+        "A buyer is paying to {objective} {callsign} at {site}. {status}.",
+        "There is money on {callsign}. {ship}, last heard of at {site}. {objective}. Ask no questions.",
+        "Someone with more money than patience wants {callsign} dealt with at {site}. {objective}. {status}.",
+        "Private work: {objective} {callsign} ({ship}) at {site}. The story is {reason}. The rest is your problem.",
+        "A name came through the room: {callsign}. Supposedly {status} at {site}. {objective}. Cash when it is done.",
+        "Quiet bounty, no registry questions. {callsign} at {site}. {objective}. {reason}.",
+        "If you are looking for paid work, {callsign} is worth a look. {ship}; {status}; last place {site}. {objective}.",
+        "Somebody has put a price on {callsign}. They are saying {reason}. Last word puts the ship at {site}.",
+        "There is a buyer for one problem: {callsign}. {objective} at {site}. {status}. Do not expect paperwork."
+      ]
+    }
   }
 }

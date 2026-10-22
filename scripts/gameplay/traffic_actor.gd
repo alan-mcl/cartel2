@@ -73,6 +73,7 @@ var sim
 
 var ai_state: AiState = AiState.TRAFFIC
 var combat_attitude: CombatAttitude = CombatAttitude.STANDARD
+var bounty_pilot_skill: String = ""
 var hull_current: float = 0.0
 var hull_max: float = 0.0
 var combat_state: ShipCombatState
@@ -196,6 +197,8 @@ func begin_combat_pilot() -> void:
 	if combat_pilot == null:
 		combat_pilot = CombatPilotScript.new()
 	combat_pilot.reset()
+	if not bounty_pilot_skill.is_empty():
+		combat_pilot.set_skill_name(bounty_pilot_skill)
 	_weapon_profile_dirty = true
 
 

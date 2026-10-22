@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -723,23 +724,120 @@ def check_bounty_missions(doc: object, ships: dict[str, dict]) -> list[str]:
         if chance is not None and not (0.0 <= float(chance) <= 1.0):
             errors.append(f"bounty_missions.json: {chance_key} must be between 0 and 1")
 
-    templates = doc.get("target_templates", [])
-    if not isinstance(templates, list) or not templates:
-        errors.append("bounty_missions.json: target_templates must be a non-empty array")
+    objectives = doc.get("objectives", {})
+    if not isinstance(objectives, dict) or not objectives:
+        errors.append("bounty_missions.json: objectives must be a non-empty object")
     else:
-        for template_id in templates:
-            tid = str(template_id)
-            if tid not in ships:
-                errors.append(f"bounty_missions.json: unknown ship template '{tid}'")
+        for required_id in ("destroy", "intercept", "disable", "eliminate"):
+            if required_id not in objectives:
+                errors.append(f"bounty_missions.json: missing objective '{required_id}'")
+        for obj_id, obj_def in objectives.items():
+            if not isinstance(obj_def, dict):
+                errors.append(f"bounty_missions objective {obj_id}: must be object")
+                continue
+            for req in ("title", "verb", "completion", "sources", "difficulty"):
+                if req not in obj_def:
+                    errors.append(f"bounty_missions objective {obj_id}: missing {req}")
+            completion = str(obj_def.get("completion", ""))
+            if completion not in ("destroy", "disable"):
+                errors.append(
+                    f"bounty_missions objective {obj_id}: completion must be destroy or disable"
+                )
+            sources = obj_def.get("sources", [])
+            if not isinstance(sources, list) or not sources:
+                errors.append(f"bounty_missions objective {obj_id}: sources required")
+            else:
+                for src in sources:
+                    if str(src) not in VALID_SCAN_SOURCES:
+                        errors.append(
+                            f"bounty_missions objective {obj_id}: invalid source '{src}'"
+                        )
+            diff = obj_def.get("difficulty")
+            if diff is not None and float(diff) <= 0.0:
+                errors.append(f"bounty_missions objective {obj_id}: difficulty must be positive")
 
-    blurbs = doc.get("blurbs", {})
-    if not isinstance(blurbs, dict):
-        errors.append("bounty_missions.json: blurbs must be an object")
+    for list_key in ("reasons", "statuses"):
+        entries = doc.get(list_key, [])
+        if not isinstance(entries, list) or not entries:
+            errors.append(f"bounty_missions.json: {list_key} must be a non-empty array")
+
+    threats = doc.get("threats", [])
+    if not isinstance(threats, list) or not threats:
+        errors.append("bounty_missions.json: threats must be a non-empty array")
     else:
-        for desk in ("peacekeeping", "corporate_office", "bar"):
-            lines = blurbs.get(desk, [])
-            if not isinstance(lines, list) or not lines:
-                errors.append(f"bounty_missions.json: blurbs.{desk} must be a non-empty array")
+        seen_threats: set[str] = set()
+        for threat in threats:
+            if not isinstance(threat, dict):
+                errors.append("bounty_missions.json: each threat must be an object")
+                continue
+            threat_id = str(threat.get("id", ""))
+            if not threat_id:
+                errors.append("bounty_missions.json: threat missing id")
+            elif threat_id in seen_threats:
+                errors.append(f"bounty_missions.json: duplicate threat '{threat_id}'")
+            seen_threats.add(threat_id)
+            if not str(threat.get("label", "")).strip():
+                errors.append(f"bounty_missions threat {threat_id}: label required")
+            mult = threat.get("pay_multiplier")
+            if mult is not None and float(mult) <= 0.0:
+                errors.append("bounty_missions.json: threat pay_multiplier must be positive")
+            profile = threat.get("profile", {})
+            if not isinstance(profile, dict):
+                errors.append(f"bounty_missions threat {threat_id}: profile must be an object")
+            else:
+                skill = str(profile.get("pilot_skill", ""))
+                if skill not in ("", "novice", "experienced", "elite"):
+                    errors.append(
+                        f"bounty_missions threat {threat_id}: invalid pilot_skill '{skill}'"
+                    )
+                escorts = profile.get("escort_count", 0)
+                if not isinstance(escorts, int) or escorts < 0:
+                    errors.append(
+                        f"bounty_missions threat {threat_id}: escort_count must be a non-negative int"
+                    )
+                hull_scale = profile.get("hull_scale", 1.0)
+                if hull_scale is not None and float(hull_scale) <= 0.0:
+                    errors.append(
+                        f"bounty_missions threat {threat_id}: hull_scale must be positive"
+                    )
+
+    sources_cfg = doc.get("sources", {})
+    if not isinstance(sources_cfg, dict):
+        errors.append("bounty_missions.json: sources must be an object")
+    else:
+        for src in VALID_SCAN_SOURCES:
+            if src not in sources_cfg:
+                errors.append(f"bounty_missions.json: missing sources.{src}")
+            else:
+                src_def = sources_cfg.get(src, {})
+                if not isinstance(src_def, dict):
+                    continue
+                frames = src_def.get("frames", [])
+                if not isinstance(frames, list) or not frames:
+                    errors.append(f"bounty_missions.json: sources.{src}.frames required")
+                else:
+                    allowed = {
+                        "callsign",
+                        "ship",
+                        "site",
+                        "reason",
+                        "status",
+                        "threat",
+                        "objective",
+                        "corp",
+                    }
+                    for frame in frames:
+                        text = str(frame)
+                        if not text.strip():
+                            errors.append(
+                                f"bounty_missions.json: sources.{src} has empty frame"
+                            )
+                            continue
+                        for token in re.findall(r"\{([a-z_]+)\}", text):
+                            if token not in allowed:
+                                errors.append(
+                                    f"bounty_missions.json: sources.{src} unknown placeholder '{{{token}}}'"
+                                )
 
     return errors
 

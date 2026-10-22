@@ -15,6 +15,11 @@ static func run(runner: TestRunner) -> void:
 	_test_cancel_drops_grant(runner, catalog)
 	_test_save_migration_v4(runner, catalog)
 	_test_no_sanction_in_volatile(runner, catalog)
+	_test_composed_peacekeeping_copy(runner, catalog)
+	_test_disable_objective_distinct(runner, catalog)
+	_test_disable_power_records_contact(runner, catalog)
+	_test_threat_profile_on_grant(runner, catalog)
+	_test_threat_profile_on_spawn(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -61,18 +66,30 @@ static func _inject_bounty_offer(
 static func _sample_offer(catalog: Catalog, origin_habitat_id: String, offer_id: String) -> Dictionary:
 	var origin := catalog.get_habitat(origin_habitat_id)
 	var sector_id := str(origin.get("sector_id", ""))
+	var site: Dictionary = {}
+	for site_variant in catalog.list_volatile_sites():
+		if typeof(site_variant) == TYPE_DICTIONARY:
+			site = site_variant
+			break
+	if site.is_empty():
+		site = {"id": "test_site", "label": "Test site", "article": "a"}
 	return {
 		"id": offer_id,
 		"desk": BountyCharters.BOARD_PEACEKEEPING,
 		"building_id": ScanCharters.peacekeeping_building_id(sector_id),
 		"origin_habitat_id": origin_habitat_id,
 		"origin_sector_id": sector_id,
-		"site_label": "Off-route intercept point",
-		"destination_name": "Off-route intercept point",
+		"volatile_site_id": str(site.get("id", "off_route_intercept")),
+		"site_label": VolatileSites.site_label(site),
+		"destination_name": VolatileSites.site_label(site),
 		"target_template_id": "dragon_bronze",
 		"target_name": "Dragon Bronze",
 		"target_callsign": "WX-404",
 		"target_affiliation": "Wanted fugitive",
+		"objective_key": "destroy",
+		"objective_completion": "destroy",
+		"designation_key": "destroy",
+		"designation": "Destroy",
 		"description": "Destroy WX-404 at the intercept point.",
 		"reward": 1200,
 		"deadline_hours": 8,
@@ -246,6 +263,182 @@ static func _test_save_migration_v4(runner: TestRunner, catalog: Catalog) -> voi
 	missions.from_dict(migrated)
 	runner.check_eq(missions.scan_accepted.size(), 1, "bounty save: keeps scan data")
 	runner.check(missions.bounty_accepted.is_empty(), "bounty save: empty bounty accepted")
+
+
+static func _test_composed_peacekeeping_copy(runner: TestRunner, catalog: Catalog) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 424242
+	var building_id := ScanCharters.peacekeeping_building_id("proxima")
+	var offers := BountyCharters.generate_offers_for_building(
+		catalog,
+		"proxima_habitat",
+		building_id,
+		BountyCharters.BOARD_PEACEKEEPING,
+		12,
+		777,
+		0
+	)
+	runner.check(not offers.is_empty(), "bounty compose: peacekeeping generates")
+	var offer: Dictionary = offers[0]
+	var desc := str(offer.get("description", ""))
+	var site_id := str(offer.get("volatile_site_id", ""))
+	var site := catalog.get_volatile_site(site_id)
+	var site_phrase := VolatileSites.description_phrase(site)
+	runner.check(desc.find(site_phrase) >= 0, "bounty compose: description includes site phrase")
+	var callsign := str(offer.get("target_callsign", ""))
+	runner.check(not callsign.is_empty() and desc.find(callsign) >= 0, "bounty compose: callsign in copy")
+	var reason := str(offer.get("reason", ""))
+	runner.check(not reason.is_empty() and desc.to_lower().find(reason.to_lower()) >= 0, "bounty compose: reason in copy")
+	var objectives: Dictionary = BountyCharters.config(catalog).get("objectives", {})
+	var obj_key := str(offer.get("objective_key", ""))
+	var verb := str(objectives.get(obj_key, {}).get("verb", "")).to_lower()
+	runner.check(not verb.is_empty() and desc.to_lower().find(verb) >= 0, "bounty compose: objective verb in copy")
+
+
+static func _test_disable_objective_distinct(runner: TestRunner, catalog: Catalog) -> void:
+	var destroy_offer: Dictionary = {}
+	var disable_offer: Dictionary = {}
+	for day in range(0, 200):
+		var offers := BountyCharters.generate_offers_for_building(
+			catalog,
+			"proxima_habitat",
+			ScanCharters.peacekeeping_building_id("proxima"),
+			BountyCharters.BOARD_PEACEKEEPING,
+			day,
+			8888,
+			0
+		)
+		if offers.is_empty():
+			continue
+		var offer: Dictionary = offers[0]
+		var key := str(offer.get("objective_key", ""))
+		if key == "destroy" and destroy_offer.is_empty():
+			destroy_offer = offer
+		if key == "disable" and disable_offer.is_empty():
+			disable_offer = offer
+		if not destroy_offer.is_empty() and not disable_offer.is_empty():
+			break
+	runner.check(not destroy_offer.is_empty(), "bounty compose: saw destroy objective")
+	runner.check(not disable_offer.is_empty(), "bounty compose: saw disable objective")
+	runner.check_eq(
+		str(destroy_offer.get("designation", "")),
+		"Destroy",
+		"bounty compose: destroy designation"
+	)
+	runner.check_eq(
+		str(disable_offer.get("designation", "")),
+		"Disable",
+		"bounty compose: disable designation"
+	)
+	runner.check_eq(
+		str(disable_offer.get("objective_completion", "")),
+		"disable",
+		"bounty compose: disable completion mode"
+	)
+
+
+static func _test_disable_power_records_contact(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "BNT-DIS")
+	var offer := _sample_offer(catalog, "proxima_habitat", "bounty_disable_hit")
+	offer["objective_key"] = "disable"
+	offer["objective_completion"] = "disable"
+	var params := BountyCharters.build_volatile_grant_params(catalog, offer)
+	var record_id := VolatileTranslation.grant(session, catalog, params)
+	runner.check(not record_id.is_empty(), "bounty disable: volatile grant")
+	var target_id := BountyCharters.bounty_target_id_for_record(record_id)
+	session.sector_id = VolatileTranslation.sector_id_for(record_id)
+	var actor = TrafficActorScript.new()
+	actor.id = target_id
+	actor.assembled_ship = ShipAssembly.preview_from_template(catalog, "dragon_bronze")
+	actor.owned_ship = OwnedShip.new()
+	actor.combat_state = ShipCombatState.from_assembled(actor.assembled_ship)
+	actor.hull_current = 100.0
+	actor.hull_max = 100.0
+	var power_base := float(actor.assembled_ship.capacities.get("power_generation", 0.0))
+	actor.combat_state.power_integrity_lost = power_base
+	runner.check(
+		ShipCombat.get_effective_power_generation(actor.assembled_ship, actor.combat_state) <= 0.0,
+		"bounty disable: fixture has no power"
+	)
+	WeaponHit._maybe_record_bounty_target_disabled(session, actor)
+	runner.check(
+		session.player.has_contact_record(target_id, "bounty_disabled"),
+		"bounty disable: records bounty_disabled without hull kill"
+	)
+
+
+static func _test_threat_profile_on_grant(runner: TestRunner, catalog: Catalog) -> void:
+	runner.check_eq(
+		BountyCharters._capitalise_sentences("peaceforce notice. destroy the contact."),
+		"Peaceforce notice. Destroy the contact.",
+		"bounty copy: capitalises each sentence"
+	)
+	var offer := _sample_offer(catalog, "proxima_habitat", "bounty_profile_grant")
+	offer["threat_id"] = "multiple_contacts"
+	offer["threat_profile"] = {
+		"pilot_skill": "elite",
+		"escort_count": 2,
+		"hull_scale": 1.25,
+	}
+	var params := BountyCharters.build_volatile_grant_params(catalog, offer)
+	var setup: Dictionary = params.get("setup", {})
+	var target: Dictionary = setup.get("bounty_target", {})
+	runner.check_eq(str(target.get("pilot_skill", "")), "elite", "bounty profile: skill on target")
+	runner.check(
+		is_equal_approx(float(target.get("hull_scale", 0.0)), 1.25),
+		"bounty profile: hull scale on target"
+	)
+	var escorts: Array = setup.get("bounty_escorts", [])
+	runner.check_eq(escorts.size(), 2, "bounty profile: multiple contacts grant two escorts")
+	var bound := VolatileTranslation._bind_setup_record_id(setup, "vt_profile")
+	var stored_escorts: Array = bound.get("bounty_escorts", [])
+	runner.check_eq(stored_escorts.size(), 2, "bounty profile: escorts survive id bind")
+	if stored_escorts.size() == 2:
+		var escort: Dictionary = stored_escorts[0]
+		runner.check(
+			str(escort.get("id", "")).contains("vt_profile"),
+			"bounty profile: escort id bound to record"
+		)
+		runner.check(
+			str(escort.get("template_id", "")) == str(offer.get("target_template_id", "")),
+			"bounty profile: escorts use the target hull"
+		)
+
+
+static func _test_threat_profile_on_spawn(runner: TestRunner, catalog: Catalog) -> void:
+	var traffic := catalog.get_traffic_config()
+	var plain = TrafficSpawn.create_from_bounty_target(
+		catalog,
+		traffic,
+		{
+			"id": "bounty_plain",
+			"template_id": "dragon_bronze",
+			"position": {"x": 0.0, "y": 0.0},
+			"hull_scale": 1.0,
+		},
+		"proxima"
+	)
+	var scaled = TrafficSpawn.create_from_bounty_target(
+		catalog,
+		traffic,
+		{
+			"id": "bounty_scaled",
+			"template_id": "dragon_bronze",
+			"position": {"x": 100.0, "y": 0.0},
+			"pilot_skill": "elite",
+			"hull_scale": 1.5,
+		},
+		"proxima"
+	)
+	runner.check(plain != null and scaled != null, "bounty profile: spawn both actors")
+	if plain == null or scaled == null:
+		return
+	runner.check(
+		is_equal_approx(scaled.hull_max, plain.hull_max * 1.5),
+		"bounty profile: hull scale applied"
+	)
+	scaled.begin_combat_pilot()
+	runner.check_eq(int(scaled.combat_pilot.skill), int(CombatPilot.Skill.ELITE), "bounty profile: elite skill")
 
 
 static func _test_no_sanction_in_volatile(runner: TestRunner, catalog: Catalog) -> void:
