@@ -142,8 +142,8 @@ static func _build_offer(
 		if armed.is_empty():
 			return {}
 		template_id = str(armed[rng.randi_range(0, armed.size() - 1)])
-	var ship_def := catalog.get_ship(template_id)
-	if ship_def.is_empty():
+	var template := catalog.get_ship_def(template_id)
+	if template == null:
 		return {}
 
 	var corp_id := ""
@@ -167,7 +167,7 @@ static func _build_offer(
 	var site_label := VolatileSites.site_label(site)
 	var volatile_site_id := VolatileSites.site_id(site)
 	var callsign := _pick_callsign(catalog, rng, corp_id)
-	var target_name := str(ship_def.get("name", template_id))
+	var target_name := template.name if template.has_source_key("name") else template_id
 	var site_phrase := VolatileSites.description_phrase(site)
 
 	var corp_name := ""

@@ -706,10 +706,10 @@ static func _random_ship_scan_fields(catalog: Catalog, corporation_id: String) -
 		chassis_id = str(pick.get("chassis", ""))
 	if template_id.is_empty() or chassis_id.is_empty():
 		return _default_ship_fields()
-	var chassis := catalog.get_chassis(chassis_id)
-	if chassis.is_empty():
+	var chassis := catalog.get_chassis_def(chassis_id)
+	if chassis == null:
 		return _default_ship_fields()
-	var sprite_path := str(chassis.get("sprite", ""))
+	var sprite_path := chassis.sprite
 	var owned := OwnedShip.from_template(
 		catalog,
 		{"id": "scan_npc_%s" % template_id, "template_id": template_id, "chassis_id": chassis_id}
@@ -721,8 +721,8 @@ static func _random_ship_scan_fields(catalog: Catalog, corporation_id: String) -
 		corp = catalog.get_corporation(corporation_id)
 	var affiliation := str(corp.get("name", "")) if broadcasting else ""
 	return {
-		"chassis_name": str(chassis.get("name", chassis_id)),
-		"ship_mass": float(chassis.get("mass", 8.0)),
+		"chassis_name": chassis.name if chassis.has_source_key("name") else chassis_id,
+		"ship_mass": chassis.mass if chassis.has_source_key("mass") else 8.0,
 		"sprite_path": sprite_path,
 		"live_signature": SensorSystem.ship_signature(assembled),
 		"broadcasting": broadcasting,
@@ -764,10 +764,10 @@ static func _pick_neighbor_sector(catalog: Catalog, sector_id: String, rng: Rand
 
 
 static func _sector_display_name(catalog: Catalog, sector_id: String) -> String:
-	var sector := catalog.get_sector(sector_id)
-	if sector.is_empty():
+	var sector := catalog.get_sector_def(sector_id)
+	if sector == null or not sector.has_source_key("name"):
 		return sector_id
-	return str(sector.get("name", sector_id))
+	return sector.name
 
 
 static func _string_array(raw: Variant) -> Array:

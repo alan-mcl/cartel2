@@ -33,7 +33,7 @@ func setup(
 	_traffic_envelope = traffic_envelope
 	_rng.randomize()
 
-	var counts := _population_counts(catalog.get_sector(sector_id))
+	var counts := _population_counts(catalog.get_sector_def(sector_id))
 	_target_fleet_size = counts.near + counts.far
 	_spawn_initial_fleet(_target_fleet_size, player_pos, world_loader)
 	_assign_sim_slots(player_pos)
@@ -199,8 +199,10 @@ func _touch_stale_detection(actor) -> void:
 		actor.get_cached_player_contact()
 
 
-func _population_counts(sector: Dictionary) -> Dictionary:
-	var pop := float(sector.get("population_billions", 15.0))
+func _population_counts(sector: SectorDef) -> Dictionary:
+	var pop := 15.0
+	if sector != null and sector.has_source_key("population_billions"):
+		pop = sector.population_billions
 	var pop_min := float(_traffic_config.get("population_min_billions", 0.25))
 	var pop_busy := float(_traffic_config.get("population_busy_billions", 3.0))
 	var pop_max := float(_traffic_config.get("population_max_billions", 60.0))

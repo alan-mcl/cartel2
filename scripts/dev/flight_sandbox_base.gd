@@ -192,9 +192,9 @@ func _rebuild_spec_panel(host: VBoxContainer, template_id: String) -> void:
 	host.add_child(_detail_label(
 		"CHASSIS",
 		"%s (%d Hits, %s maneuver)" % [
-			str(assembled.chassis.get("name", owned.chassis_id)),
+			assembled.chassis_name() if not assembled.chassis_name().is_empty() else owned.chassis_id,
 			int(capacities.get("hull_hits", 0.0)),
-			str(assembled.chassis.get("maneuver", "medium")),
+			assembled.chassis_maneuver(),
 		]
 	))
 
@@ -265,12 +265,18 @@ func _add_module_groups(host: VBoxContainer, assembled: AssembledShip) -> void:
 
 
 func _owned_ship_from_template(template_id: String, ship_id: String) -> OwnedShip:
-	var template := catalog.get_ship(template_id)
+	var template := catalog.get_ship_def(template_id)
+	var ship_name := template_id
+	var chassis_id := ""
+	if template != null:
+		chassis_id = template.chassis
+		if template.has_source_key("name"):
+			ship_name = template.name
 	var ship_data := {
 		"id": ship_id,
 		"template_id": template_id,
-		"chassis_id": str(template.get("chassis", "")),
-		"name": str(template.get("name", template_id)),
+		"chassis_id": chassis_id,
+		"name": ship_name,
 	}
 	return OwnedShip.from_template(catalog, ship_data)
 

@@ -56,7 +56,7 @@ static func create_from_bounty_target(
 	sector_id: String
 ) -> RefCounted:
 	var template := str(bounty_target.get("template_id", ""))
-	if template.is_empty() or catalog.get_ship(template).is_empty():
+	if template.is_empty() or catalog.get_ship_def(template) == null:
 		return null
 	var pos_dict: Dictionary = bounty_target.get("position", {})
 	var spawn_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
@@ -101,7 +101,7 @@ static func create_from_ambient_ship(
 	sector_id: String
 ) -> RefCounted:
 	var template := str(ambient_ship.get("template_id", ""))
-	if template.is_empty() or catalog.get_ship(template).is_empty():
+	if template.is_empty() or catalog.get_ship_def(template) == null:
 		return null
 	var pos_dict: Dictionary = ambient_ship.get("position", {})
 	var spawn_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
@@ -136,19 +136,17 @@ static func _create_owned_ship(
 	traffic_config: Dictionary,
 	is_independent: bool
 ) -> OwnedShip:
-	var template := catalog.get_ship(template_id)
+	var template := catalog.get_ship_def(template_id)
 	var owned := OwnedShip.new()
 	owned.id = "npc_%d" % randi()
 	owned.name = _pick_vanity_name(traffic_config) if is_independent else ""
 	owned.registration = TransponderBroadcastScript.generate_registration(catalog, template_id)
 	owned.template_id = template_id
-	owned.chassis_id = str(template.get("chassis", ""))
-	var chassis := catalog.get_chassis(owned.chassis_id)
+	owned.chassis_id = "" if template == null else template.chassis
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
 	var module_ids: Array = []
-	var raw_modules: Variant = template.get("modules", [])
-	if typeof(raw_modules) == TYPE_ARRAY:
-		for module_id in raw_modules:
-			module_ids.append(str(module_id))
+	if template != null:
+		module_ids = template.modules.duplicate()
 	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	ShipFuel.fill_active_to_capacity(catalog, owned)

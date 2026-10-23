@@ -25,9 +25,10 @@ static func resolve_cargo(catalog: Catalog, cargo: Dictionary) -> Dictionary:
 	var mass_per_unit := float(cargo.get("mass_per_unit", 0.0))
 	var caps: Array = []
 	if not commodity_id.is_empty():
-		var commodity := catalog.get_commodity(commodity_id)
-		mass_per_unit = float(commodity.get("mass", mass_per_unit))
-		caps = CargoRequirements.required_capabilities(commodity)
+		var commodity := catalog.get_commodity_def(commodity_id)
+		if commodity != null and commodity.has_source_key("mass"):
+			mass_per_unit = commodity.mass
+		caps = _capability_array([] if commodity == null else commodity.requires_capabilities)
 	else:
 		caps = _capability_array(cargo.get("requires_capabilities", []))
 	return {
@@ -205,8 +206,11 @@ static func generate_offers(
 		var commodity_name := ""
 		var commodity_id := str(resolved.get("commodity_id", ""))
 		if not commodity_id.is_empty():
-			var commodity := catalog.get_commodity(commodity_id)
-			commodity_name = str(commodity.get("name", commodity_id))
+			var commodity := catalog.get_commodity_def(commodity_id)
+			if commodity != null and commodity.has_source_key("name"):
+				commodity_name = commodity.name
+			else:
+				commodity_name = commodity_id
 
 		var desc_template := pick_description_from_index(desc_by_cargo, cargo_id, rng)
 		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))

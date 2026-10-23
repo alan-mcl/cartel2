@@ -265,11 +265,14 @@ func _populate_options() -> void:
 		var template_id := str(template_variant)
 		if template_id.is_empty():
 			continue
-		var ship_def := _catalog.get_ship(template_id)
-		if ship_def.is_empty():
+		var ship_def := _catalog.get_ship_def(template_id)
+		if ship_def == null:
 			continue
 		_bounty_template_ids.append(template_id)
-		_bounty_target_option.add_item(str(ship_def.get("name", template_id)))
+		var ship_label := template_id
+		if ship_def.has_source_key("name"):
+			ship_label = ship_def.name
+		_bounty_target_option.add_item(ship_label)
 	if _bounty_template_ids.is_empty():
 		for template_id in _ship_template_ids:
 			var assembled := ShipAssembler.assemble_owned(
@@ -278,8 +281,11 @@ func _populate_options() -> void:
 			)
 			if not assembled.modules_in_category("weapon").is_empty():
 				_bounty_template_ids.append(template_id)
-				var ship_def := _catalog.get_ship(template_id)
-				_bounty_target_option.add_item(str(ship_def.get("name", template_id)))
+				var ship_def := _catalog.get_ship_def(template_id)
+				var ship_label := template_id
+				if ship_def != null and ship_def.has_source_key("name"):
+					ship_label = ship_def.name
+				_bounty_target_option.add_item(ship_label)
 	if _bounty_target_option.item_count > 0:
 		_bounty_target_option.select(0)
 
@@ -333,9 +339,9 @@ func _refresh_spec_panel() -> void:
 		_detail_label(
 			"CHASSIS",
 			"%s (%d Hits, %s maneuver)" % [
-				str(assembled.chassis.get("name", owned.chassis_id)),
+				assembled.chassis_name() if not assembled.chassis_name().is_empty() else owned.chassis_id,
 				int(capacities.get("hull_hits", 0.0)),
-				str(assembled.chassis.get("maneuver", "medium")),
+				assembled.chassis_maneuver(),
 			]
 		)
 	)
@@ -345,12 +351,18 @@ func _refresh_spec_panel() -> void:
 
 
 func _owned_ship_from_template(template_id: String, ship_id: String) -> OwnedShip:
-	var template := _catalog.get_ship(template_id)
+	var template := _catalog.get_ship_def(template_id)
+	var ship_name := template_id
+	var chassis_id := ""
+	if template != null:
+		chassis_id = template.chassis
+		if template.has_source_key("name"):
+			ship_name = template.name
 	var ship_data := {
 		"id": ship_id,
 		"template_id": template_id,
-		"chassis_id": str(template.get("chassis", "")),
-		"name": str(template.get("name", template_id)),
+		"chassis_id": chassis_id,
+		"name": ship_name,
 	}
 	return OwnedShip.from_template(_catalog, ship_data)
 
@@ -358,15 +370,15 @@ func _owned_ship_from_template(template_id: String, ship_id: String) -> OwnedShi
 func _sector_source_label(sector_id: String) -> String:
 	if sector_id.is_empty():
 		return ""
-	var sector := _catalog.get_sector(sector_id)
-	if sector.is_empty():
+	var sector := _catalog.get_sector_def(sector_id)
+	if sector == null:
 		return sector_id
-	var display_name := str(sector.get("planet_name", ""))
-	if display_name.is_empty():
-		display_name = str(sector.get("name", sector_id))
-	var star_label := str(sector.get("star", ""))
+	var display_name := sector.planet_name.strip_edges()
+	if display_name.is_empty() and sector.has_source_key("name"):
+		display_name = sector.name
+	var star_label := sector.star.strip_edges()
 	if star_label.is_empty():
-		star_label = str(sector.get("star_system", ""))
+		star_label = sector.star_system.strip_edges()
 	if star_label.is_empty():
 		return display_name
 	return "%s - %s" % [display_name, star_label]

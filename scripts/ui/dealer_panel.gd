@@ -61,13 +61,16 @@ func _build_ship_dealer_content(building: Dictionary) -> void:
 
 	for template_id in stock:
 		var id := str(template_id)
-		var template := _context.catalog.get_ship(id)
-		if template.is_empty():
+		var template := _context.catalog.get_ship_def(id)
+		if template == null:
 			continue
 		_dealer_stock_ids.append(id)
 		var price := ShipAssembly.used_ship_price(_context.catalog, id)
+		var template_label := id
+		if template.has_source_key("name"):
+			template_label = template.name
 		_dealer_item_list.add_item(
-			"%s · d%d" % [str(template.get("name", id)), price]
+			"%s · d%d" % [template_label, price]
 		)
 
 	_sync_dealer_selection(detail)
@@ -109,13 +112,16 @@ func _build_chassis_dealer_content(building: Dictionary) -> void:
 
 	for chassis_id in stock:
 		var id := str(chassis_id)
-		var chassis := _context.catalog.get_chassis(id)
-		if chassis.is_empty():
+		var chassis := _context.catalog.get_chassis_def(id)
+		if chassis == null:
 			continue
 		_dealer_stock_ids.append(id)
 		var price := ShipAssembly.chassis_price(_context.catalog, id)
+		var chassis_label := id
+		if chassis.has_source_key("name"):
+			chassis_label = chassis.name
 		_dealer_item_list.add_item(
-			"%s · d%d" % [str(chassis.get("name", id)), price]
+			"%s · d%d" % [chassis_label, price]
 		)
 
 	_sync_dealer_selection(detail)
@@ -157,28 +163,39 @@ func _rebuild_ship_dealer_detail(detail: VBoxContainer) -> void:
 	if _selected_dealer_stock_id.is_empty():
 		return
 
-	var template := _context.catalog.get_ship(_selected_dealer_stock_id)
-	if template.is_empty():
+	var template := _context.catalog.get_ship_def(_selected_dealer_stock_id)
+	if template == null:
 		return
 
-	var chassis := _context.catalog.get_chassis(str(template.get("chassis", "")))
+	var chassis := _context.catalog.get_chassis_def(template.chassis)
 	var assembled := ShipAssembly.preview_from_template(_context.catalog, _selected_dealer_stock_id)
 	var price := ShipAssembly.used_ship_price(_context.catalog, _selected_dealer_stock_id)
+	var template_label := _selected_dealer_stock_id
+	if template.has_source_key("name"):
+		template_label = template.name
+	var chassis_header := ""
+	var chassis_name := ""
+	var chassis_desc := ""
+	if chassis != null:
+		chassis_header = chassis.header
+		if chassis.has_source_key("name"):
+			chassis_name = chassis.name
+		chassis_desc = chassis.description
 
 	detail.add_child(
 		LocationArtFactory.create_banner(
-			str(chassis.get("header", "")),
-			str(template.get("name", _selected_dealer_stock_id))
+			chassis_header,
+			template_label
 		)
 	)
 
-	detail.add_child(UiPatterns.headline_item(str(template.get("name", _selected_dealer_stock_id))))
-	detail.add_child(UiPatterns.status_row("Maker", str(template.get("maker", ""))))
+	detail.add_child(UiPatterns.headline_item(template_label))
+	detail.add_child(UiPatterns.status_row("Maker", template.maker))
 	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
-	detail.add_child(UiPatterns.status_row("Chassis", str(chassis.get("name", ""))))
+	detail.add_child(UiPatterns.status_row("Chassis", chassis_name))
 
-	_add_description_label(detail, str(chassis.get("description", "")))
-	_add_description_label(detail, str(template.get("description", "")))
+	_add_description_label(detail, chassis_desc)
+	_add_description_label(detail, template.description)
 
 	if assembled != null:
 		var summary := Label.new()
@@ -197,26 +214,29 @@ func _rebuild_chassis_dealer_detail(detail: VBoxContainer) -> void:
 	if _selected_dealer_stock_id.is_empty():
 		return
 
-	var chassis := _context.catalog.get_chassis(_selected_dealer_stock_id)
-	if chassis.is_empty():
+	var chassis := _context.catalog.get_chassis_def(_selected_dealer_stock_id)
+	if chassis == null:
 		return
 
 	var price := ShipAssembly.chassis_price(_context.catalog, _selected_dealer_stock_id)
+	var chassis_label := _selected_dealer_stock_id
+	if chassis.has_source_key("name"):
+		chassis_label = chassis.name
 
 	detail.add_child(
 		LocationArtFactory.create_banner(
-			str(chassis.get("header", "")),
-			str(chassis.get("name", _selected_dealer_stock_id))
+			chassis.header,
+			chassis_label
 		)
 	)
 
-	detail.add_child(UiPatterns.headline_item(str(chassis.get("name", _selected_dealer_stock_id))))
-	detail.add_child(UiPatterns.status_row("Maker", str(chassis.get("maker", ""))))
+	detail.add_child(UiPatterns.headline_item(chassis_label))
+	detail.add_child(UiPatterns.status_row("Maker", chassis.maker))
 	detail.add_child(UiPatterns.status_row("Price", "d%d" % price))
-	detail.add_child(UiPatterns.status_row("Maneuver", str(chassis.get("maneuver", ""))))
-	detail.add_child(UiPatterns.status_row("Mass limit", str(chassis.get("mass_limit", ""))))
+	detail.add_child(UiPatterns.status_row("Maneuver", chassis.maneuver))
+	detail.add_child(UiPatterns.status_row("Mass limit", str(chassis.mass_limit)))
 
-	_add_description_label(detail, str(chassis.get("description", "")))
+	_add_description_label(detail, chassis.description)
 
 	var note := Label.new()
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

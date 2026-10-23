@@ -46,7 +46,7 @@ flowchart LR
 
 On startup, `main.gd` wires three presentation controllers and delegates to them:
 
-1. Loads `Catalog.load_default()` - ammunition, chassis, modules (from `data/catalog/modules/*.json`), ships, and sectors materialise as generated `*Def` records at load. The assembly pipeline stores `ModuleDef` on `AssembledShip`; yard/catalog listing still exposes `Dictionary` via `get_module()` / `list_modules()`. Chassis/ships/sectors dictionary getters remain for a later pass.
+1. Loads `Catalog.load_default()` - ammunition, chassis, modules (from `data/catalog/modules/*.json`), ships, sectors, and economies materialise as generated `*Def` records at load. Gameplay, presentation, and docked UI read those records or the `AssembledShip` chassis accessors. `AssembledShip` stores `ModuleDef` for installed modules and both a `ChassisDef` and a chassis dictionary; assigning the dictionary clears `chassis_def`, so a test stub still wins. Yard part listing and module tooltips still use `Dictionary` (`list_yard_parts`, `get_part_def`, `ModuleDef.to_dict()` for `ModuleSpecText`). The dictionary getters stay for compatibility.
 2. **MenuController** shows the **main menu** (New Game / Load / Exit).
 3. **New Game** - player enters callsign, portrait, and background; `GameSession.start_new_game` seeds fleet from `backgrounds.json`, docks at the kit's habitat, and opens **HabitatScreen** at the Terminal.
 4. **Load** - reads a JSON slot from `user://saves/` and restores session, fleet, cargo, spare parts, and flight state.

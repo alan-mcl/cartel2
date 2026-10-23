@@ -38,24 +38,18 @@ const MOUNT_CATEGORIES := [
 
 
 static func assemble(catalog: Catalog, ship_id: String) -> AssembledShip:
-	var template := catalog.get_ship(ship_id)
-	if template.is_empty():
+	var template := catalog.get_ship_def(ship_id)
+	if template == null:
 		push_error("Cannot assemble unknown ship: %s" % ship_id)
 		return AssembledShip.new()
 
-	var chassis := catalog.get_chassis(str(template.get("chassis", "")))
-	var module_ids: Array = []
-	var raw_modules: Variant = template.get("modules", [])
-	if typeof(raw_modules) == TYPE_ARRAY:
-		for module_id in raw_modules:
-			module_ids.append(str(module_id))
-
+	var chassis := catalog.get_chassis_def(template.chassis)
 	var owned := OwnedShip.new()
 	owned.id = ship_id
-	owned.name = str(template.get("name", ship_id))
+	owned.name = template.name if not template.name.is_empty() else ship_id
 	owned.template_id = ship_id
-	owned.chassis_id = str(template.get("chassis", ""))
-	owned.modules = assign_modules_to_slots(catalog, chassis, module_ids)
+	owned.chassis_id = template.chassis
+	owned.modules = assign_modules_to_slots(catalog, chassis, template.modules)
 	return assemble_owned(catalog, owned)
 
 
@@ -64,18 +58,21 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 		push_error("Cannot assemble invalid owned ship.")
 		return AssembledShip.new()
 
-	var template: Dictionary = {}
+	var template: ShipDef = null
 	if not owned.template_id.is_empty():
-		template = catalog.get_ship(owned.template_id)
+		template = catalog.get_ship_def(owned.template_id)
 
-	var chassis_data := catalog.get_chassis(owned.chassis_id)
+	var chassis_def := catalog.get_chassis_def(owned.chassis_id)
 	var assembled := AssembledShip.new()
 	assembled.id = owned.id
 	assembled.name = owned.name
-	assembled.maker = str(template.get("maker", chassis_data.get("maker", "")))
-	assembled.chassis = chassis_data
+	if template != null:
+		assembled.maker = template.maker
+	elif chassis_def != null:
+		assembled.maker = chassis_def.maker
+	assembled.set_chassis(chassis_def)
 	assembled.installed_modules = _resolve_installed_modules(catalog, owned)
-	assembled.mounts = _calculate_mount_usage(assembled.chassis, assembled.installed_modules)
+	assembled.mounts = _calculate_mount_usage(assembled.chassis_mounts(), assembled.installed_modules)
 	assembled.capacities = _calculate_capacities(catalog, assembled)
 	assembled.capabilities = _aggregate_capabilities(assembled)
 	assembled.envelope = _calculate_envelope(assembled)
@@ -121,7 +118,7 @@ static func seed_ammunition(catalog: Catalog, owned: OwnedShip, fill_ratio: floa
 			owned.ammunition[str(ammo_type)] = float(fill_amount)
 
 
-static func assign_modules_to_slots(catalog: Catalog, chassis: Dictionary, module_ids: Array) -> Array:
+static func assign_modules_to_slots(catalog: Catalog, chassis: ChassisDef, module_ids: Array) -> Array:
 	var result: Array = []
 	var mount_usage: Dictionary = {}
 	var other_index := 1
@@ -168,8 +165,8 @@ static func validate_install(
 		result["reason"] = "Unknown module."
 		return result
 
-	var chassis := catalog.get_chassis(owned.chassis_id)
-	if chassis.is_empty():
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
+	if chassis == null:
 		result["reason"] = "Unknown chassis."
 		return result
 
@@ -210,7 +207,7 @@ static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipSt
 	var engine_thrust := engine.thrust
 	var max_speed := engine.max_speed
 	var boost_multiplier := engine.boost_multiplier
-	var maneuver := str(assembled.chassis.get("maneuver", "medium"))
+	var maneuver := assembled.chassis_maneuver()
 
 	stats.forward_thrust = engine_thrust / mass * THRUST_SCALE
 	stats.reverse_thrust = stats.forward_thrust * REVERSE_RATIO
@@ -228,13 +225,17 @@ static func calculate_loaded_mass(catalog: Catalog, owned: OwnedShip, assembled:
 
 	for commodity_id in owned.cargo.keys():
 		var qty := owned.get_cargo_count(str(commodity_id))
-		var commodity := catalog.get_commodity(str(commodity_id))
-		mass += float(commodity.get("mass", 0.0)) * qty
+		var commodity := catalog.get_commodity_def(str(commodity_id))
+		if commodity != null:
+			mass += commodity.mass * qty
 
 	for ammo_id in owned.ammunition.keys():
 		var qty := owned.get_ammo_count(str(ammo_id))
-		var ammo := catalog.get_ammunition(str(ammo_id))
-		mass += float(ammo.get("mass", 0.5)) * qty
+		var ammo := catalog.get_ammunition_def(str(ammo_id))
+		var ammo_mass := 0.5
+		if ammo != null and ammo.has_source_key("mass"):
+			ammo_mass = ammo.mass
+		mass += ammo_mass * qty
 
 	return mass
 
@@ -245,7 +246,7 @@ static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
 		return {}
 
 	var loaded_mass := calculate_loaded_mass(catalog, owned, assembled)
-	var maneuver := str(assembled.chassis.get("maneuver", "medium"))
+	var maneuver := assembled.chassis_maneuver()
 	var armour := assembled.get_armour_module_def()
 	return {
 		"dry_mass": float(assembled.envelope.get("dry_mass", 0.0)),
@@ -258,17 +259,15 @@ static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
 		"boost_max_speed": assembled.stats.boost_max_speed,
 		"maneuver": maneuver,
 		"armour_hits": int(armour.hits) if armour != null else 0,
-		"chassis_hits": int(assembled.chassis.get("hits", 0)),
+		"chassis_hits": assembled.chassis_hits(),
 		"capacities": assembled.capacities.duplicate(true),
 		"mounts": assembled.mounts.duplicate(true),
 	}
 
 
-static func list_slots_for_chassis(chassis: Dictionary) -> Array:
+static func list_slots_for_chassis(chassis: ChassisDef) -> Array:
 	var slots: Array = []
-	var mounts: Variant = chassis.get("mounts", {})
-	if typeof(mounts) != TYPE_DICTIONARY:
-		return slots
+	var mounts := {} if chassis == null else chassis.mounts
 
 	for mount_category in MOUNT_CATEGORIES:
 		var count := int(mounts.get(mount_category, 0))
@@ -285,13 +284,12 @@ static func list_visible_slots(catalog: Catalog, owned: OwnedShip) -> Array:
 	if owned == null:
 		return slots
 
-	var chassis := catalog.get_chassis(owned.chassis_id)
-	var mounts: Variant = chassis.get("mounts", {})
-	if typeof(mounts) == TYPE_DICTIONARY:
-		for mount_category in MOUNT_CATEGORIES:
-			var count := int(mounts.get(mount_category, 0))
-			for i in range(count):
-				slots.append("%s_%d" % [mount_category, i + 1])
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
+	var mounts := {} if chassis == null else chassis.mounts
+	for mount_category in MOUNT_CATEGORIES:
+		var count := int(mounts.get(mount_category, 0))
+		for i in range(count):
+			slots.append("%s_%d" % [mount_category, i + 1])
 
 	var max_other_index := 0
 	for entry in owned.modules:
@@ -343,14 +341,12 @@ static func _resolve_installed_modules(catalog: Catalog, owned: OwnedShip) -> Ar
 	return result
 
 
-static func _calculate_mount_usage(chassis: Dictionary, installed_modules: Array) -> Dictionary:
-	var mounts_def: Variant = chassis.get("mounts", {})
+static func _calculate_mount_usage(mounts_def: Dictionary, installed_modules: Array) -> Dictionary:
 	var usage: Dictionary = {}
-	if typeof(mounts_def) == TYPE_DICTIONARY:
-		for mount_category in MOUNT_CATEGORIES:
-			var total := int(mounts_def.get(mount_category, 0))
-			if total > 0:
-				usage[mount_category] = {"used": 0, "total": total}
+	for mount_category in MOUNT_CATEGORIES:
+		var total := int(mounts_def.get(mount_category, 0))
+		if total > 0:
+			usage[mount_category] = {"used": 0, "total": total}
 
 	for entry in installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
@@ -376,7 +372,7 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 		"fuel_capacity": 0.0,
 		"passenger_capacity": 0.0,
 		"ammunition_capacity": {},
-		"hull_hits": int(assembled.chassis.get("hits", 0)),
+		"hull_hits": assembled.chassis_hits(),
 	}
 
 	for entry in assembled.installed_modules:
@@ -434,7 +430,7 @@ static func _aggregate_capabilities(assembled: AssembledShip) -> Dictionary:
 
 
 static func _calculate_envelope(assembled: AssembledShip) -> Dictionary:
-	var dry_mass := float(assembled.chassis.get("mass", 0.0))
+	var dry_mass := assembled.chassis_mass()
 	var volume_used := 0.0
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
@@ -448,17 +444,15 @@ static func _calculate_envelope(assembled: AssembledShip) -> Dictionary:
 	return {
 		"dry_mass": dry_mass,
 		"volume_used": volume_used,
-		"mass_limit": float(assembled.chassis.get("mass_limit", dry_mass)),
-		"volume": float(assembled.chassis.get("volume", volume_used)),
+		"mass_limit": assembled.chassis_mass_limit(dry_mass),
+		"volume": assembled.chassis_volume(volume_used),
 	}
 
 
-static func _next_free_mount_slot(chassis: Dictionary, mount: String, mount_usage: Dictionary) -> String:
-	var mounts: Variant = chassis.get("mounts", {})
-	if typeof(mounts) != TYPE_DICTIONARY:
+static func _next_free_mount_slot(chassis: ChassisDef, mount: String, mount_usage: Dictionary) -> String:
+	if chassis == null:
 		return ""
-
-	var total := int(mounts.get(mount, 0))
+	var total := int(chassis.mounts.get(mount, 0))
 	if total <= 0:
 		return ""
 
@@ -495,8 +489,8 @@ static func _module_provides_value(module_def: ModuleDef, key: String) -> float:
 			return 0.0
 
 
-static func _slot_compatible(_catalog: Catalog, chassis: Dictionary, slot: String, module_def: ModuleDef) -> bool:
-	if module_def == null:
+static func _slot_compatible(_catalog: Catalog, chassis: ChassisDef, slot: String, module_def: ModuleDef) -> bool:
+	if module_def == null or chassis == null:
 		return false
 	var slot_type := slot_mount_type(slot)
 	if slot_type.is_empty():
@@ -513,7 +507,4 @@ static func _slot_compatible(_catalog: Catalog, chassis: Dictionary, slot: Strin
 	if not slot.begins_with(expected_prefix):
 		return false
 
-	var mounts: Variant = chassis.get("mounts", {})
-	if typeof(mounts) != TYPE_DICTIONARY:
-		return false
-	return int(mounts.get(slot_type, 0)) > 0
+	return int(chassis.mounts.get(slot_type, 0)) > 0

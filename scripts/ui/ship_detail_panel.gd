@@ -45,11 +45,13 @@ func refresh() -> void:
 		return
 
 	var assembled := ShipAssembly.preview_stats(_catalog, _ship)
-	var chassis_data := _catalog.get_chassis(_ship.chassis_id)
+	var chassis_label := assembled.chassis_name()
+	if chassis_label.is_empty():
+		chassis_label = _ship.chassis_id
 
 	if _show_chassis_art:
 		add_child(
-			LocationArtFactory.create_banner(str(chassis_data.get("header", "")), _ship.name)
+			LocationArtFactory.create_banner(assembled.chassis_header(), _ship.name)
 		)
 
 	if _show_summary:
@@ -62,10 +64,10 @@ func refresh() -> void:
 		add_child(UiPatterns.headline_item(_ship.name))
 
 	if _chassis_style == "row":
-		add_child(UiPatterns.status_row("Chassis", str(assembled.chassis.get("name", _ship.chassis_id))))
+		add_child(UiPatterns.status_row("Chassis", chassis_label))
 	elif _chassis_style == "fixed":
 		var chassis := Label.new()
-		chassis.text = "Chassis (fixed): %s" % str(assembled.chassis.get("name", _ship.chassis_id))
+		chassis.text = "Chassis (fixed): %s" % chassis_label
 		chassis.theme_type_variation = &"Numeric"
 		add_child(chassis)
 

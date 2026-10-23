@@ -62,14 +62,12 @@ static func apply_damage_tint(hull: Sprite2D, health_ratio: float, base: Color =
 static func muzzle_global(
 	origin: Vector2,
 	facing: float,
-	chassis: Dictionary,
+	sprite_path: String,
 	projectile_radius: float = 5.0
 ) -> Vector2:
 	var offset := ShipWeapons.MUZZLE_OFFSET
-	if not chassis.is_empty():
-		var sprite_path := str(chassis.get("sprite", ""))
-		if not sprite_path.is_empty():
-			offset = HullHitbox.muzzle_offset(sprite_path, projectile_radius)
+	if not sprite_path.is_empty():
+		offset = HullHitbox.muzzle_offset(sprite_path, projectile_radius)
 	return origin + Vector2.from_angle(facing) * offset
 
 
@@ -82,7 +80,7 @@ static func spawn_weapon_orders(
 	collision_mask: int,
 	exclude: Array,
 	shooter: Node,
-	chassis: Dictionary
+	sprite_path: String
 ) -> void:
 	if world == null:
 		return
@@ -104,7 +102,7 @@ static func spawn_weapon_orders(
 		if delivery in ["beam", "cyber"]:
 			_LaserBeam.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, chassis),
+				muzzle_global(origin, facing + facing_offset, sprite_path),
 				direction,
 				max_range,
 				delivery,
@@ -117,7 +115,7 @@ static func spawn_weapon_orders(
 		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
 			_RocketProjectile.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, chassis, _RocketProjectile.ROCKET_RADIUS),
+				muzzle_global(origin, facing + facing_offset, sprite_path, _RocketProjectile.ROCKET_RADIUS),
 				direction,
 				speed,
 				max_range,
@@ -134,7 +132,7 @@ static func spawn_weapon_orders(
 		elif delivery in ["ballistic", "plasma"]:
 			_MassDriverRound.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, chassis, _MassDriverRound.ROUND_RADIUS),
+				muzzle_global(origin, facing + facing_offset, sprite_path, _MassDriverRound.ROUND_RADIUS),
 				direction,
 				speed,
 				max_range,

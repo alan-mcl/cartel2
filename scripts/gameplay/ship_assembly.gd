@@ -6,16 +6,16 @@ static func preview_stats(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 
 
 static func preview_from_template(catalog: Catalog, template_id: String) -> AssembledShip:
-	var template := catalog.get_ship(template_id)
-	if template.is_empty():
+	var template := catalog.get_ship_def(template_id)
+	if template == null:
 		return null
 	var preview_ship := OwnedShip.from_template(
 		catalog,
 		{
 			"id": "preview",
-			"name": str(template.get("name", template_id)),
+			"name": template.name if not template.name.is_empty() else template_id,
 			"template_id": template_id,
-			"chassis_id": str(template.get("chassis", "")),
+			"chassis_id": template.chassis,
 		}
 	)
 	return preview_stats(catalog, preview_ship)
@@ -130,39 +130,37 @@ static func _category_power_satisfied(state: ShipOperatingState, category: Strin
 
 
 static func chassis_price(catalog: Catalog, chassis_id: String) -> int:
-	var chassis := catalog.get_chassis(chassis_id)
-	if chassis.is_empty():
+	var chassis := catalog.get_chassis_def(chassis_id)
+	if chassis == null:
 		return 0
-	return int(chassis.get("cost", 0))
+	return int(chassis.cost)
 
 
 static func used_ship_price(catalog: Catalog, template_id: String) -> int:
-	var template := catalog.get_ship(template_id)
-	if template.is_empty():
+	var template := catalog.get_ship_def(template_id)
+	if template == null:
 		return 0
 
-	var base := chassis_price(catalog, str(template.get("chassis", "")))
+	var base := chassis_price(catalog, template.chassis)
 	var module_total := 0
-	var modules: Variant = template.get("modules", [])
-	if typeof(modules) == TYPE_ARRAY:
-		for module_id in modules:
-			var module_def := catalog.get_module(str(module_id))
-			if typeof(module_def) == TYPE_DICTIONARY:
-				module_total += int(module_def.get("cost", 0))
+	for module_id in template.modules:
+		var module_def := catalog.get_module_def(str(module_id))
+		if module_def != null:
+			module_total += int(module_def.cost)
 	return base + int(module_total * 0.5)
 
 
 static func buy_part(session: GameSession, catalog: Catalog, part_id: String) -> bool:
-	var part := catalog.get_module(part_id)
-	if part.is_empty():
+	var part := catalog.get_module_def(part_id)
+	if part == null:
 		return false
 
-	var cost := int(part.get("cost", 0))
+	var cost := int(part.cost)
 	if not session.try_spend_credits(cost):
 		return false
 
 	session.add_spare_part(part_id, 1)
-	session.last_log = "Purchased %s for d%d." % [str(part.get("name", part_id)), cost]
+	session.last_log = "Purchased %s for d%d." % [_part_name(part, part_id), cost]
 	if not session.player.sandbox:
 		session.career.record_part_purchase(cost)
 	session.changed.emit()
@@ -170,20 +168,20 @@ static func buy_part(session: GameSession, catalog: Catalog, part_id: String) ->
 
 
 static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -> bool:
-	var part := catalog.get_module(part_id)
-	if part.is_empty():
+	var part := catalog.get_module_def(part_id)
+	if part == null:
 		return false
 
 	if session.get_spare_part_count(part_id) <= 0:
-		session.last_log = "No spare %s in inventory." % str(part.get("name", part_id))
+		session.last_log = "No spare %s in inventory." % _part_name(part, part_id)
 		session.changed.emit()
 		return false
 
-	var cost := int(part.get("cost", 0))
+	var cost := int(part.cost)
 	var sell_price := maxi(1, int(cost * 0.6))
 	session.remove_spare_part(part_id, 1)
 	session.apply_credits_delta(sell_price)
-	session.last_log = "Sold %s for d%d." % [str(part.get("name", part_id)), sell_price]
+	session.last_log = "Sold %s for d%d." % [_part_name(part, part_id), sell_price]
 	if not session.player.sandbox:
 		session.career.record_part_sale(sell_price)
 	session.changed.emit()
@@ -217,8 +215,8 @@ static func install_module(
 		session.changed.emit()
 		return false
 
-	var part := catalog.get_module(part_id)
-	if part.is_empty():
+	var part := catalog.get_module_def(part_id)
+	if part == null:
 		return false
 
 	if not session.sandbox:
@@ -240,7 +238,7 @@ static func install_module(
 
 	ship.set_module(slot, part_id)
 	var vented := ShipFuel.reconcile_after_fit(catalog, ship)
-	session.last_log = "Installed %s on %s." % [str(part.get("name", part_id)), ship.name]
+	session.last_log = "Installed %s on %s." % [_part_name(part, part_id), ship.name]
 	if vented:
 		session.last_log += " Previous propulsion fuel vented."
 	session.events.publish(SimEvent.module_installed(ship_id, slot, part_id))
@@ -311,14 +309,14 @@ static func relocate_module(
 
 	ShipFuel.reconcile_after_fit(catalog, ship)
 
-	var part := catalog.get_module(moving)
+	var part := catalog.get_module_def(moving)
 	if target.is_empty():
-		session.last_log = "Moved %s to %s." % [str(part.get("name", moving)), to_slot]
+		session.last_log = "Moved %s to %s." % [_part_name(part, moving), to_slot]
 	else:
-		var other := catalog.get_module(target)
+		var other := catalog.get_module_def(target)
 		session.last_log = "Swapped %s and %s." % [
-			str(part.get("name", moving)),
-			str(other.get("name", target)),
+			_part_name(part, moving),
+			_part_name(other, target),
 		]
 	session.changed.emit()
 	return true
@@ -352,8 +350,8 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 	ShipFuel.reconcile_after_fit(catalog, ship)
 	if not session.sandbox:
 		session.add_spare_part(previous, 1)
-	var part := catalog.get_module(previous)
-	session.last_log = "Removed %s from %s." % [str(part.get("name", previous)), ship.name]
+	var part := catalog.get_module_def(previous)
+	session.last_log = "Removed %s from %s." % [_part_name(part, previous), ship.name]
 	session.changed.emit()
 	return true
 
@@ -450,14 +448,24 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	return true
 
 
+static func _part_name(part: ModuleDef, part_id: String) -> String:
+	if part == null or part.name.is_empty():
+		return part_id
+	return part.name
+
+
 static func get_part_cost(catalog: Catalog, part_id: String) -> int:
-	var part := catalog.get_module(part_id)
-	return int(part.get("cost", 0))
+	var part := catalog.get_module_def(part_id)
+	if part == null:
+		return 0
+	return int(part.cost)
 
 
 static func get_part_category(catalog: Catalog, part_id: String) -> String:
-	var part := catalog.get_module(part_id)
-	return str(part.get("category", ""))
+	var part := catalog.get_module_def(part_id)
+	if part == null:
+		return ""
+	return part.category
 
 
 static func list_yard_parts(catalog: Catalog) -> Array[Dictionary]:
@@ -475,7 +483,7 @@ static func get_part_def(catalog: Catalog, part_id: String) -> Dictionary:
 
 
 static func list_install_slots(catalog: Catalog, owned: OwnedShip) -> Array:
-	var chassis := catalog.get_chassis(owned.chassis_id)
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
 	return ShipAssembler.list_slots_for_chassis(chassis)
 
 
@@ -528,15 +536,13 @@ static func find_compatible_slots(catalog: Catalog, owned: OwnedShip, part_id: S
 
 	var slots: Array = []
 	var allowed_mounts := ShipAssembler.module_mounts(module_def)
-	var chassis := catalog.get_chassis(owned.chassis_id)
-	var mounts: Variant = chassis.get("mounts", {})
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
+	var mounts := {} if chassis == null else chassis.mounts
 
 	for mount in allowed_mounts:
 		if str(mount) == "other":
 			for i in range(1, 13):
 				slots.append("other_%d" % i)
-			continue
-		if typeof(mounts) != TYPE_DICTIONARY:
 			continue
 		var count := int(mounts.get(str(mount), 0))
 		for i in range(count):

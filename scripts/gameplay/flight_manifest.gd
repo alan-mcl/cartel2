@@ -77,9 +77,14 @@ static func _build_cargo(catalog: Catalog, ship: OwnedShip) -> Array:
 		var qty := ship.get_cargo_count(commodity_id)
 		if qty <= 0:
 			continue
-		var commodity := catalog.get_commodity(commodity_id)
-		var name := str(commodity.get("name", commodity_id))
-		var mass_each := float(commodity.get("mass", 0.0))
+		var commodity := catalog.get_commodity_def(commodity_id)
+		var name := commodity_id
+		var mass_each := 0.0
+		if commodity != null:
+			if commodity.has_source_key("name"):
+				name = commodity.name
+			if commodity.has_source_key("mass"):
+				mass_each = commodity.mass
 		rows.append({
 			"commodity_id": commodity_id,
 			"name": name,

@@ -122,9 +122,9 @@ static func toggle(
 
 
 static func hull_radius_world(assembled: AssembledShip, far_lod: bool) -> float:
-	if assembled == null or assembled.chassis.is_empty():
+	if assembled == null or not assembled.has_chassis():
 		return 18.0
-	var mass := float(assembled.chassis.get("mass", PEGASUS_MASS))
+	var mass := assembled.chassis_mass_or(PEGASUS_MASS)
 	var longest := _round_to_even(PEGASUS_LONGEST_AXIS * mass / PEGASUS_MASS)
 	var half := longest * 0.5
 	var scale := FAR_LOD_HULL_SCALE if far_lod else 1.0
@@ -143,7 +143,7 @@ static func lock_contact_fields(actor) -> Dictionary:
 	return {
 		"lock_hull_radius": hull_radius_world(actor.assembled_ship, far_lod),
 		"heading_rad": float(actor.motion.facing),
-		"sprite_path": str(actor.assembled_ship.chassis.get("sprite", "")),
+		"sprite_path": actor.assembled_ship.chassis_sprite(),
 		"lock_hull_display_scale": FAR_LOD_HULL_SCALE if far_lod else 1.0,
 	}
 

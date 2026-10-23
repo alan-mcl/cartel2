@@ -68,13 +68,11 @@ static func from_template(catalog: Catalog, ship_data: Dictionary) -> OwnedShip:
 	if typeof(modules_data) == TYPE_ARRAY and not modules_data.is_empty():
 		ship.modules = _parse_modules_array(modules_data)
 	else:
-		var template := catalog.get_ship(ship.template_id)
-		var chassis := catalog.get_chassis(ship.chassis_id)
+		var template := catalog.get_ship_def(ship.template_id)
+		var chassis := catalog.get_chassis_def(ship.chassis_id)
 		var module_ids: Array = []
-		var raw_modules: Variant = template.get("modules", [])
-		if typeof(raw_modules) == TYPE_ARRAY:
-			for module_id in raw_modules:
-				module_ids.append(str(module_id))
+		if template != null:
+			module_ids = template.modules.duplicate()
 		ship.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
 
 	if ship.fuels.is_empty():

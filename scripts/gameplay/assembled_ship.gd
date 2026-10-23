@@ -4,7 +4,12 @@ extends RefCounted
 var id: String = ""
 var name: String = ""
 var maker: String = ""
-var chassis: Dictionary = {}
+## Typed chassis from assembly. Cleared when `chassis` is assigned directly, so a test stub wins.
+var chassis_def: ChassisDef = null
+var chassis: Dictionary = {}:
+	set(value):
+		chassis = value
+		chassis_def = null
 var installed_modules: Array = []
 var mounts: Dictionary = {}
 var capacities: Dictionary = {}
@@ -20,6 +25,95 @@ var has_transponder_installed: bool = false
 var has_active_sensor_package_installed: bool = false
 var propulsion_module: ModuleDef = null
 var armour_module: ModuleDef = null
+
+
+func set_chassis(def: ChassisDef) -> void:
+	if def == null:
+		chassis = {}
+		return
+	chassis = def.to_dict()
+	chassis_def = def
+
+
+func has_chassis() -> bool:
+	return chassis_def != null or not chassis.is_empty()
+
+
+func chassis_id() -> String:
+	if chassis_def != null and (chassis_def.has_source_key("id") or not chassis_def.id.is_empty()):
+		return chassis_def.id
+	return str(chassis.get("id", ""))
+
+
+func chassis_sprite() -> String:
+	if chassis_def != null and (chassis_def.has_source_key("sprite") or not chassis_def.sprite.is_empty()):
+		return chassis_def.sprite
+	return str(chassis.get("sprite", ""))
+
+
+func chassis_header() -> String:
+	if chassis_def != null and (chassis_def.has_source_key("header") or not chassis_def.header.is_empty()):
+		return chassis_def.header
+	return str(chassis.get("header", ""))
+
+
+func chassis_name() -> String:
+	if chassis_def != null and not chassis_def.name.is_empty():
+		return chassis_def.name
+	return str(chassis.get("name", ""))
+
+
+func chassis_maneuver() -> String:
+	if chassis_def != null and not chassis_def.maneuver.is_empty():
+		return chassis_def.maneuver
+	var labeled := str(chassis.get("maneuver", "")).strip_edges()
+	if labeled.is_empty():
+		return "medium"
+	return labeled
+
+
+func chassis_hits() -> int:
+	if chassis_def != null:
+		return int(chassis_def.hits)
+	return int(chassis.get("hits", 0))
+
+
+func chassis_mass() -> float:
+	if chassis_def != null and chassis_def.has_source_key("mass"):
+		return chassis_def.mass
+	if chassis.has("mass"):
+		return float(chassis["mass"])
+	return 0.0
+
+
+## Mass for lock radius; defaults like the old dictionary `.get("mass", fallback)`.
+func chassis_mass_or(fallback: float) -> float:
+	if chassis_def != null and chassis_def.has_source_key("mass"):
+		return chassis_def.mass
+	if chassis.has("mass"):
+		return float(chassis["mass"])
+	return fallback
+
+
+func chassis_mass_limit(fallback: float) -> float:
+	if chassis_def != null and chassis_def.has_source_key("mass_limit"):
+		return chassis_def.mass_limit
+	return float(chassis.get("mass_limit", fallback))
+
+
+func chassis_volume(fallback: float) -> float:
+	if chassis_def != null and chassis_def.has_source_key("volume"):
+		return chassis_def.volume
+	return float(chassis.get("volume", fallback))
+
+
+func chassis_mounts() -> Dictionary:
+	if chassis_def != null:
+		return chassis_def.mounts
+	var mounts: Variant = chassis.get("mounts", {})
+	if typeof(mounts) != TYPE_DICTIONARY:
+		return {}
+	return mounts
 
 
 func has_capability(id: String) -> bool:
@@ -40,8 +134,9 @@ func has_active_sensor_package() -> bool:
 
 func get_summary() -> String:
 	var parts: PackedStringArray = PackedStringArray([name])
-	if not chassis.is_empty():
-		parts.append(str(chassis.get("name", "")))
+	var chassis_label := chassis_name()
+	if not chassis_label.is_empty():
+		parts.append(chassis_label)
 
 	var engine := get_propulsion_module_def()
 	if engine != null:

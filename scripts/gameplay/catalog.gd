@@ -240,11 +240,11 @@ func get_public_translation(from_sector_id: String, to_sector_id: String, n: int
 		return {}
 	if VolatileTranslation.is_volatile_sector_id(to_sector_id):
 		return {}
-	var sector := get_sector(from_sector_id)
-	if sector.is_empty():
+	var sector := get_sector_def(from_sector_id)
+	if sector == null:
 		return {}
 
-	var mappings: Variant = sector.get("mappings", [])
+	var mappings: Variant = sector.mappings
 	if typeof(mappings) != TYPE_ARRAY:
 		return {}
 

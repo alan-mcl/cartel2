@@ -546,7 +546,7 @@ func should_engage(traffic_config: Dictionary) -> bool:
 	if not is_armed() or not has_ammo():
 		return false
 	var hull_ratio := hull_current / maxf(hull_max, 1.0)
-	var maneuver := str(assembled_ship.chassis.get("maneuver", "medium"))
+	var maneuver := assembled_ship.chassis_maneuver()
 	if maneuver == "high":
 		return hull_ratio > float(traffic_config.get("engage_hull_threshold_flare", 0.4))
 	return hull_ratio > float(traffic_config.get("engage_hull_threshold_pegasus", 0.5))
@@ -577,8 +577,8 @@ func _build_ai_inputs(
 			if assembled_ship != null and assembled_ship.stats != null:
 				max_speed = assembled_ship.stats.max_speed
 			var maneuver := "medium"
-			if assembled_ship != null and not assembled_ship.chassis.is_empty():
-				maneuver = str(assembled_ship.chassis.get("maneuver", "medium"))
+			if assembled_ship != null:
+				maneuver = assembled_ship.chassis_maneuver()
 			_copy_ai_inputs_from(combat_pilot.tick({
 				"ship_pos": position,
 				"facing": motion.facing,

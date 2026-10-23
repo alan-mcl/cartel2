@@ -73,8 +73,13 @@ func _peaceforce_name(
 		var current := str((existing as Dictionary).get("name", "")).strip_edges()
 		if not current.is_empty():
 			return current
-	var sector := catalog.get_sector(sector_id)
-	var planet := str(sector.get("planet_name", sector.get("name", sector_id))).strip_edges()
+	var sector := catalog.get_sector_def(sector_id)
+	var planet := sector_id
+	if sector != null:
+		planet = sector.planet_name.strip_edges()
+		if planet.is_empty() and sector.has_source_key("name"):
+			planet = sector.name
+	planet = planet.strip_edges()
 	if planet.is_empty():
 		return "Peaceforce"
 	return "%s Peaceforce" % planet

@@ -53,7 +53,7 @@ static func tick_into(
 ) -> void:
 	if state == null:
 		return
-	if assembled == null or owned == null or assembled.chassis.is_empty():
+	if assembled == null or owned == null or not assembled.has_chassis():
 		_reset_operating_state(state)
 		return
 
@@ -155,8 +155,11 @@ static func get_cargo_mass(catalog: Catalog, owned: OwnedShip) -> float:
 	var mass := 0.0
 	for commodity_id in owned.cargo.keys():
 		var qty := owned.get_cargo_count(str(commodity_id))
-		var commodity := catalog.get_commodity(str(commodity_id))
-		mass += float(commodity.get("mass", 0.0)) * qty
+		var commodity := catalog.get_commodity_def(str(commodity_id))
+		var unit_mass := 0.0
+		if commodity != null and commodity.has_source_key("mass"):
+			unit_mass = commodity.mass
+		mass += unit_mass * qty
 	return mass
 
 

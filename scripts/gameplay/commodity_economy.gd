@@ -41,10 +41,8 @@ static func ensure_quotes(session: GameSession, catalog: Catalog) -> bool:
 
 static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionary = {}) -> Dictionary:
 	var sector_ids: Array[String] = []
-	for sector in catalog.list_sectors():
-		if typeof(sector) != TYPE_DICTIONARY:
-			continue
-		var sector_id := str(sector.get("id", ""))
+	for sector_id_variant in catalog.sectors_by_id.keys():
+		var sector_id := str(sector_id_variant)
 		if not sector_id.is_empty():
 			sector_ids.append(sector_id)
 
@@ -52,20 +50,21 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 	var nets_by_sector: Dictionary = {}
 
 	for sector_id in sector_ids:
-		var economy := catalog.get_economy(sector_id)
+		var economy := catalog.get_economy_def(sector_id)
 		nets_by_sector[sector_id] = _sector_nets(catalog, sector_id, economy)
 
 	var quotes_by_sector: Dictionary = {}
 	for sector_id in sector_ids:
 		quotes_by_sector[sector_id] = {}
 
-	for commodity in catalog.list_commodities():
-		if typeof(commodity) != TYPE_DICTIONARY:
-			continue
-		var commodity_id := str(commodity.get("id", ""))
+	for commodity_id_variant in catalog.commodities_by_id.keys():
+		var commodity_id := str(commodity_id_variant)
 		if commodity_id.is_empty():
 			continue
-		var base_price := int(commodity.get("base_price", 0))
+		var commodity: CommodityDef = catalog.commodities_by_id[commodity_id]
+		if commodity == null:
+			continue
+		var base_price := int(commodity.base_price)
 
 		var surpluses: Dictionary = {}
 		var deficits: Dictionary = {}
@@ -77,7 +76,7 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 		for sector_id in sector_ids:
 			var supply_eff: float = float(surpluses[sector_id])
 			var demand_eff: float = float(deficits[sector_id])
-			var economy := catalog.get_economy(sector_id)
+			var economy := catalog.get_economy_def(sector_id)
 			for other_id in sector_ids:
 				if other_id == sector_id:
 					continue
@@ -99,7 +98,8 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 			elif local_net < 0.0:
 				ratio = maxf(graph_ratio, local_ratio)
 			var noise: float = 1.0 + _deterministic_noise(day, sector_id, commodity_id) * NOISE_SPAN
-			var tier_multiplier: float = _tier_price_multiplier(economy.get("tier", ""))
+			var tier := "" if economy == null else economy.tier
+			var tier_multiplier: float = _tier_price_multiplier(tier)
 			var price: int = maxi(1, int(round(float(base_price) * ratio * noise * tier_multiplier)))
 			var quantity: int = maxi(1, int(round(absf(local_net) * 10.0)))
 			quotes_by_sector[sector_id][commodity_id] = {
@@ -151,17 +151,15 @@ static func quote_analysis(
 	friction_delta: Dictionary = {}
 ) -> Dictionary:
 	var sector_ids: Array[String] = []
-	for sector in catalog.list_sectors():
-		if typeof(sector) != TYPE_DICTIONARY:
-			continue
-		var sid := str(sector.get("id", ""))
+	for sector_id_variant in catalog.sectors_by_id.keys():
+		var sid := str(sector_id_variant)
 		if not sid.is_empty():
 			sector_ids.append(sid)
 
 	var distances := _all_pair_distances(catalog, sector_ids, friction_delta)
 	var nets_by_sector: Dictionary = {}
 	for sid in sector_ids:
-		nets_by_sector[sid] = _sector_nets(catalog, sid, catalog.get_economy(sid))
+		nets_by_sector[sid] = _sector_nets(catalog, sid, catalog.get_economy_def(sid))
 
 	var surpluses: Dictionary = {}
 	var deficits: Dictionary = {}
@@ -203,16 +201,14 @@ static func quote_analysis(
 	}
 
 
-static func _sector_nets(catalog: Catalog, sector_id: String, economy: Dictionary) -> Dictionary:
-	var produce: Dictionary = economy.get("produce", {})
-	var consume: Dictionary = economy.get("consume", {})
+static func _sector_nets(catalog: Catalog, sector_id: String, economy: EconomyDef) -> Dictionary:
+	var produce: Dictionary = {} if economy == null else economy.produce
+	var consume: Dictionary = {} if economy == null else economy.consume
 	var nets: Dictionary = {}
 	var settled_floor := SETTLED_WORLD_SECTOR_IDS.has(sector_id)
 
-	for commodity in catalog.list_commodities():
-		if typeof(commodity) != TYPE_DICTIONARY:
-			continue
-		var commodity_id := str(commodity.get("id", ""))
+	for commodity_id_variant in catalog.commodities_by_id.keys():
+		var commodity_id := str(commodity_id_variant)
 		if commodity_id.is_empty():
 			continue
 		var output: float = float(produce.get(commodity_id, 0.0))

@@ -100,8 +100,10 @@ func load_sector(
 	if VolatileTranslation.is_volatile_sector_id(sector_id):
 		return _load_volatile_sector(world_root, catalog, session, sector_id)
 
-	var sector := catalog.get_sector(sector_id)
-	var play_bounds := float(sector.get("play_bounds", 3500.0))
+	var sector := catalog.get_sector_def(sector_id)
+	var play_bounds := 3500.0
+	if sector != null:
+		play_bounds = sector.play_bounds
 	var world_data := catalog.get_world(sector_id)
 
 	_spawn_dust_ring(world_root, play_bounds)
@@ -519,7 +521,9 @@ func _ensure_sector_nav_cache(catalog: Catalog) -> void:
 		return
 
 	_sector_nav_cache.clear()
-	var sector := catalog.get_sector(_sector_id) if not _sector_id.is_empty() else {}
+	var sector: SectorDef = null
+	if not _sector_id.is_empty():
+		sector = catalog.get_sector_def(_sector_id)
 	var world_data := catalog.get_world(_sector_id) if not _sector_id.is_empty() else {}
 	var star_data: Dictionary = world_data.get("star", {})
 	if spawned_by_id.has("planet"):
@@ -1176,21 +1180,25 @@ func _spawn_dust_ring(
 	world_root.add_child(ring)
 
 
-static func _planet_contact_name(sector: Dictionary) -> String:
-	var planet_name := str(sector.get("planet_name", "")).strip_edges()
+static func _planet_contact_name(sector: SectorDef) -> String:
+	if sector == null:
+		return "Planet"
+	var planet_name := sector.planet_name.strip_edges()
 	if not planet_name.is_empty():
 		return planet_name
-	var sector_name := str(sector.get("name", "Planet")).strip_edges()
+	var sector_name := sector.name.strip_edges() if sector.has_source_key("name") else "Planet"
 	if sector_name.ends_with(" Sector"):
 		return sector_name.substr(0, sector_name.length() - " Sector".length())
 	return sector_name
 
 
-static func _star_contact_name(sector: Dictionary) -> String:
-	var star := str(sector.get("star", "")).strip_edges()
+static func _star_contact_name(sector: SectorDef) -> String:
+	if sector == null:
+		return "Local star"
+	var star := sector.star.strip_edges()
 	if not star.is_empty():
 		return star
-	var system := str(sector.get("star_system", "")).strip_edges()
+	var system := sector.star_system.strip_edges()
 	if not system.is_empty():
 		return system
 	return "Local star"

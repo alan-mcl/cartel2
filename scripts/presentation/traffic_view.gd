@@ -252,7 +252,7 @@ func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 	var exhaust: EngineExhaust = root.get_node_or_null("EngineExhaust") as EngineExhaust
 	if hull == null or thrust_flame == null:
 		return
-	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
+	var sprite_path: String = actor.assembled_ship.chassis_sprite()
 	if not sprite_path.is_empty():
 		hull.texture = ChassisSpriteScript.get_texture(sprite_path)
 	hull.scale = Vector2(0.65, 0.65)

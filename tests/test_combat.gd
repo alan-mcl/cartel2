@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_packet_conversion(runner)
 	_test_point_defence_intercept(runner)
 	_test_fight_to_death_attitude(runner)
+	_test_typed_chassis_beats_stub(runner)
 	_test_standard_npc_attitude(runner)
 	_test_traffic_idles_without_anchors(runner)
 	_test_traffic_runabout_and_flee(runner)
@@ -223,6 +224,32 @@ static func _make_armed_actor(hull_ratio: float):
 	actor.hull_current = hull_ratio * actor.hull_max
 	actor.combat_state.hull_current = actor.hull_current
 	return actor
+
+
+static func _test_typed_chassis_beats_stub(runner: TestRunner) -> void:
+	var assembled := AssembledShip.new()
+	assembled.chassis = {"maneuver": "low", "hits": 4}
+	assembled.chassis_def = ChassisDef.from_dict({
+		"id": "stub",
+		"name": "Stub",
+		"maker": "Test",
+		"description": "Stub chassis",
+		"mass": 1.0,
+		"hits": 9.0,
+		"mass_limit": 2.0,
+		"volume": 1.0,
+		"maneuver": "high",
+		"mounts": {},
+	})
+	var state := ShipCombatState.from_assembled(assembled)
+	runner.check(is_equal_approx(state.hull_max, 9.0), "combat state prefers chassis def hits")
+
+	var actor = _make_armed_actor(0.45)
+	actor.assembled_ship.chassis = {"maneuver": "low", "hits": 4}
+	actor.assembled_ship.chassis_def = assembled.chassis_def
+	runner.check(actor.should_engage(_traffic_config()), "traffic engage uses chassis def maneuver")
+	actor.assembled_ship.chassis_def = null
+	runner.check(not actor.should_engage(_traffic_config()), "traffic engage falls back to the chassis stub")
 
 
 static func _test_fight_to_death_attitude(runner: TestRunner) -> void:

@@ -70,8 +70,8 @@ static func pick_site_star(catalog: Catalog, source_sector_id: String, seed_text
 		return {}
 	if roll < SITE_STAR_DEEP_SPACE_WEIGHT + SITE_STAR_LOCAL_WEIGHT:
 		return _pick_local_system_star(catalog, source_sector_id, rng)
-	var sector := catalog.get_sector(source_sector_id)
-	var star_system := str(sector.get("star_system", "")).strip_edges()
+	var sector := catalog.get_sector_def(source_sector_id)
+	var star_system := "" if sector == null else sector.star_system.strip_edges()
 	return _pick_galactic_star(catalog, star_system, rng)
 
 
@@ -100,7 +100,7 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 	if session == null or catalog == null:
 		return ""
 	var source_sector_id := str(params.get("source_sector_id", ""))
-	if source_sector_id.is_empty() or catalog.get_sector(source_sector_id).is_empty():
+	if source_sector_id.is_empty() or catalog.get_sector_def(source_sector_id) == null:
 		return ""
 	var label := str(params.get("label", "")).strip_edges()
 	if label.is_empty():
@@ -353,8 +353,11 @@ static func return_offer(
 	)
 	var origin_id := str(record.get("source_sector_id", ""))
 	if catalog != null and not origin_id.is_empty():
-		var origin := catalog.get_sector(origin_id)
-		mapping["label"] = str(origin.get("name", origin_id))
+		var origin := catalog.get_sector_def(origin_id)
+		if origin != null and origin.has_source_key("name"):
+			mapping["label"] = origin.name
+		else:
+			mapping["label"] = origin_id
 	return mapping
 
 
@@ -585,8 +588,8 @@ static func _pick_local_system_star(
 	source_sector_id: String,
 	rng: RandomNumberGenerator
 ) -> Dictionary:
-	var sector := catalog.get_sector(source_sector_id)
-	var star_system := str(sector.get("star_system", "")).strip_edges()
+	var sector := catalog.get_sector_def(source_sector_id)
+	var star_system := "" if sector == null else sector.star_system.strip_edges()
 	if star_system.is_empty():
 		return _pick_galactic_star(catalog, "", rng)
 	var names := catalog.list_star_names_for_system(star_system)

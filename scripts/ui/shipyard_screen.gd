@@ -283,8 +283,8 @@ func _clear_ship_chassis_banner() -> void:
 
 func _refresh_ship_chassis_banner(ship: OwnedShip) -> void:
 	_clear_ship_chassis_banner()
-	var chassis := _context.catalog.get_chassis(ship.chassis_id)
-	var header := str(chassis.get("header", ""))
+	var assembled := ShipAssembly.preview_stats(_context.catalog, ship)
+	var header := assembled.chassis_header()
 	if header.is_empty():
 		return
 	_ship_art_host.add_child(LocationArtFactory.create_banner(header, ship.name))
@@ -323,10 +323,13 @@ func _add_slot_board(ship: OwnedShip) -> void:
 			var slot_tooltip := ""
 			var module_category := ""
 			if not module_id.is_empty():
-				var module_def := _context.catalog.get_module(module_id)
-				module_name = str(module_def.get("name", module_id))
-				slot_tooltip = ModuleSpecText.format_tooltip(module_def)
-				module_category = str(module_def.get("category", ""))
+				var module_def := _context.catalog.get_module_def(module_id)
+				if module_def != null:
+					module_name = module_def.name if module_def.has_source_key("name") else module_id
+					slot_tooltip = ModuleSpecText.format_tooltip(module_def.to_dict())
+					module_category = module_def.category
+				else:
+					module_name = module_id
 
 			var slot_panel := MODULE_SLOT.instantiate()
 			var compatible := _selected_part_id if not _selected_part_id.is_empty() else ""

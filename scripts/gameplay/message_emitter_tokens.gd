@@ -33,7 +33,7 @@ static func build_sector_bindings(
 	rng: RandomNumberGenerator
 ) -> Dictionary:
 	var sector_id := session.sector_id
-	var sector := catalog.get_sector(sector_id)
+	var sector := catalog.get_sector_def(sector_id)
 	var planet := sector_display_label(catalog, sector_id)
 	var habitat_name := _pick_habitat_name(catalog, sector_id, rng, session)
 	var corps := _pick_corporation_pair(catalog, sector_id, rng)
@@ -70,17 +70,19 @@ static func build_sector_bindings(
 static func sector_display_label(catalog: Catalog, sector_id: String) -> String:
 	if catalog == null or sector_id.is_empty():
 		return ""
-	var sector := catalog.get_sector(sector_id)
-	if sector.is_empty():
+	var sector := catalog.get_sector_def(sector_id)
+	if sector == null:
 		return sector_id
-	var planet := str(sector.get("planet_name", "")).strip_edges()
+	var planet := sector.planet_name.strip_edges()
 	if not planet.is_empty():
 		return planet
-	return str(sector.get("name", sector_id))
+	return sector.name if sector.has_source_key("name") else sector_id
 
 
-static func _pick_city_mall(sector: Dictionary, rng: RandomNumberGenerator) -> String:
-	var malls: Variant = sector.get("city_malls", [])
+static func _pick_city_mall(sector: SectorDef, rng: RandomNumberGenerator) -> String:
+	if sector == null:
+		return ""
+	var malls: Variant = sector.city_malls
 	if typeof(malls) != TYPE_ARRAY or malls.is_empty():
 		return ""
 	var names: Array[String] = []
@@ -107,22 +109,20 @@ static func _pick_local_star_system_location(
 	sector_id: String,
 	rng: RandomNumberGenerator
 ) -> String:
-	var current := catalog.get_sector(sector_id)
-	if current.is_empty():
+	var current := catalog.get_sector_def(sector_id)
+	if current == null:
 		return ""
-	var star_system := str(current.get("star_system", "")).strip_edges()
+	var star_system := current.star_system.strip_edges()
 	if star_system.is_empty():
 		return ""
 
 	var matches: Array[String] = []
-	for sector_variant in catalog.list_sectors():
-		if typeof(sector_variant) != TYPE_DICTIONARY:
-			continue
-		var other: Dictionary = sector_variant
-		var other_id := str(other.get("id", ""))
+	for other_id_variant in catalog.sectors_by_id.keys():
+		var other_id := str(other_id_variant)
 		if other_id.is_empty() or other_id == sector_id:
 			continue
-		if str(other.get("star_system", "")) != star_system:
+		var other: SectorDef = catalog.sectors_by_id[other_id]
+		if other == null or other.star_system != star_system:
 			continue
 		var label := sector_display_label(catalog, other_id)
 		if not label.is_empty():

@@ -266,7 +266,11 @@ static func _scan_site_kind_line(entry: Dictionary, catalog: Catalog) -> String:
 		var sector_id := str(entry.get("destination_sector_id", ""))
 		var sector_name := sector_id
 		if catalog != null and not sector_id.is_empty():
-			sector_name = str(catalog.get_sector(sector_id).get("name", sector_id))
+			var sector := catalog.get_sector_def(sector_id)
+			if sector != null and sector.has_source_key("name"):
+				sector_name = sector.name
+			else:
+				sector_name = sector_id
 		return "In-system survey: %s." % sector_name
 	if target_kind.is_empty():
 		return ""

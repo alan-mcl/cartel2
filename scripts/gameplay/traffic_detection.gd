@@ -212,8 +212,8 @@ static func build_player_contact(actor, broadcasting: bool, observer_reads_beaco
 static func _apply_scan_fields(contact: Dictionary, actor) -> void:
 	if actor.assembled_ship == null:
 		return
-	contact["chassis_name"] = str(actor.assembled_ship.chassis.get("name", ""))
-	contact["ship_mass"] = float(actor.assembled_ship.chassis.get("mass", 0.0))
+	contact["chassis_name"] = actor.assembled_ship.chassis_name()
+	contact["ship_mass"] = actor.assembled_ship.chassis_mass()
 	contact["live_signature"] = SensorSystem.live_signature(
 		actor.assembled_ship,
 		actor.operating_state

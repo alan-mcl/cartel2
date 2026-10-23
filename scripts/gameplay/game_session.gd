@@ -393,14 +393,14 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 					% world.pending_destination_id
 				)
 				return false
-		elif catalog.get_sector(world.pending_destination_id).is_empty():
+		elif catalog.get_sector_def(world.pending_destination_id) == null:
 			push_error("Save file has invalid pending destination '%s'." % world.pending_destination_id)
 			return false
 	elif VolatileTranslation.is_volatile_sector_id(world.sector_id):
 		if VolatileTranslation.find_by_sector_id(self, world.sector_id).is_empty():
 			push_error("Save file references unknown volatile sector '%s'." % world.sector_id)
 			return false
-	elif catalog.get_sector(world.sector_id).is_empty():
+	elif catalog.get_sector_def(world.sector_id) == null:
 		push_error("Save file references unknown sector '%s'." % world.sector_id)
 		return false
 
@@ -439,8 +439,8 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 		changed.emit()
 		return true
 
-	var sector := catalog.get_sector(new_sector_id)
-	if sector.is_empty():
+	var sector := catalog.get_sector_def(new_sector_id)
+	if sector == null:
 		return false
 
 	world.sector_id = new_sector_id
@@ -450,11 +450,12 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	world.unspace_solution = 0
 	world.translation_stability = -1.0
 	world.pending_destination_id = ""
-	world.location_name = str(sector.get("orbit_name", new_sector_id))
-	player.objective = str(sector.get("objective", ""))
+	world.location_name = sector.orbit_name if sector.has_source_key("orbit_name") else new_sector_id
+	player.objective = sector.objective
 
 	if emit_log:
-		player.last_log = "Arrived in %s." % str(sector.get("name", new_sector_id))
+		var sector_name := sector.name if sector.has_source_key("name") else new_sector_id
+		player.last_log = "Arrived in %s." % sector_name
 
 	VolatileTranslation.on_catalog_sector_entered(self, new_sector_id)
 	events.publish(SimEvent.sector_entered(world.sector_id))
@@ -499,7 +500,7 @@ func enter_unspace(
 		return false
 
 	if not VolatileTranslation.is_volatile_sector_id(destination_id):
-		if catalog.get_sector(destination_id).is_empty():
+		if catalog.get_sector_def(destination_id) == null:
 			return false
 
 	world.pending_destination_id = destination_id
@@ -555,25 +556,26 @@ func get_sector_quote_listings(catalog: Catalog, market_sector_id: String = "") 
 		return []
 
 	var listings: Array = []
-	for commodity in catalog.list_commodities():
-		if typeof(commodity) != TYPE_DICTIONARY:
-			continue
-		var commodity_id := str(commodity.get("id", ""))
+	for commodity_id_variant in catalog.commodities_by_id.keys():
+		var commodity_id := str(commodity_id_variant)
 		if commodity_id.is_empty():
+			continue
+		var commodity: CommodityDef = catalog.commodities_by_id[commodity_id]
+		if commodity == null:
 			continue
 		var quote: Variant = sector_quotes.get(commodity_id, {})
 		if typeof(quote) != TYPE_DICTIONARY:
 			continue
 		listings.append({
 			"commodity_id": commodity_id,
-			"price": int(quote.get("price", commodity.get("base_price", 0))),
+			"price": int(quote.get("price", commodity.base_price)),
 			"quantity": int(quote.get("quantity", 0)),
 		})
 	listings.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var id_a := str(a.get("commodity_id", ""))
 		var id_b := str(b.get("commodity_id", ""))
-		var name_a := str(catalog.get_commodity(id_a).get("name", id_a))
-		var name_b := str(catalog.get_commodity(id_b).get("name", id_b))
+		var name_a := _commodity_sort_name(catalog, id_a)
+		var name_b := _commodity_sort_name(catalog, id_b)
 		return name_a.naturalnocasecmp_to(name_b) < 0
 	)
 	return listings
@@ -833,8 +835,11 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 	world.habitat_id = ""
 	world.building_id = ""
 
-	var sector := catalog.get_sector(world.sector_id)
-	world.location_name = str(sector.get("orbit_name", "High orbit"))
+	var sector := catalog.get_sector_def(world.sector_id)
+	var orbit := "High orbit"
+	if sector != null and sector.has_source_key("orbit_name") and not sector.orbit_name.is_empty():
+		orbit = sector.orbit_name
+	world.location_name = orbit
 	player.last_log = "Launched %s. Propulsion online." % ship.name
 	events.publish(SimEvent.undocked(ship_id, world.sector_id))
 	changed.emit()
@@ -879,15 +884,16 @@ func get_ship_cargo_capacity(catalog: Catalog, ship: OwnedShip) -> float:
 func can_add_cargo(catalog: Catalog, ship: OwnedShip, commodity_id: String, amount: int) -> bool:
 	if ship == null or amount <= 0:
 		return false
-	var commodity := catalog.get_commodity(commodity_id)
-	if commodity.is_empty():
+	var commodity := catalog.get_commodity_def(commodity_id)
+	if commodity == null:
 		return false
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	if not CargoRequirements.assembled_meets_commodity(assembled, commodity):
 		return false
 	var capacity := get_ship_cargo_capacity(catalog, ship)
 	var current_mass := get_ship_cargo_mass(catalog, ship)
-	var added_mass := float(commodity.get("mass", 0.0)) * amount
+	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
+	var added_mass := unit_mass * amount
 	return current_mass + added_mass <= capacity + 0.001
 
 
@@ -901,8 +907,8 @@ func cargo_carry_block_reason(
 		return "No ship selected for cargo."
 	if amount <= 0:
 		return "Invalid amount."
-	var commodity := catalog.get_commodity(commodity_id)
-	if commodity.is_empty():
+	var commodity := catalog.get_commodity_def(commodity_id)
+	if commodity == null:
 		return "Unknown commodity."
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	var cap_reason := CargoRequirements.cannot_carry_reason(catalog, assembled, commodity)
@@ -910,7 +916,8 @@ func cargo_carry_block_reason(
 		return cap_reason
 	var capacity := get_ship_cargo_capacity(catalog, ship)
 	var current_mass := get_ship_cargo_mass(catalog, ship)
-	var added_mass := float(commodity.get("mass", 0.0)) * amount
+	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
+	var added_mass := unit_mass * amount
 	if current_mass + added_mass > capacity + 0.001:
 		return "Not enough cargo capacity on %s." % ship.name
 	return ""
@@ -938,8 +945,8 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 	if not _building_stock_has(building, chassis_id):
 		return fail_action("Chassis not available here.")
 
-	var chassis := catalog.get_chassis(chassis_id)
-	if chassis.is_empty():
+	var chassis := catalog.get_chassis_def(chassis_id)
+	if chassis == null:
 		return false
 
 	var cost := ShipAssembly.chassis_price(catalog, chassis_id)
@@ -948,7 +955,10 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 
 	var ship := OwnedShip.new()
 	ship.id = fleet.next_purchased_ship_id("frame_%s" % chassis_id)
-	ship.name = "%s (empty)" % str(chassis.get("name", chassis_id))
+	var chassis_label := chassis_id
+	if chassis.has_source_key("name"):
+		chassis_label = chassis.name
+	ship.name = "%s (empty)" % chassis_label
 	ship.chassis_id = chassis_id
 	ship.template_id = ""
 	ship.modules = []
@@ -981,19 +991,22 @@ func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
 	if not _building_stock_has(building, template_id):
 		return fail_action("Ship not available here.")
 
-	var template := catalog.get_ship(template_id)
-	if template.is_empty():
+	var template := catalog.get_ship_def(template_id)
+	if template == null:
 		return false
 
 	var cost := ShipAssembly.used_ship_price(catalog, template_id)
 	if not try_spend_credits(cost):
 		return false
 
+	var ship_name := template_id
+	if template.has_source_key("name"):
+		ship_name = template.name
 	var ship_data := {
 		"id": fleet.next_purchased_ship_id("used_%s" % template_id),
-		"name": str(template.get("name", template_id)),
+		"name": ship_name,
 		"template_id": template_id,
-		"chassis_id": str(template.get("chassis", "")),
+		"chassis_id": template.chassis,
 		"location": world.habitat_id,
 	}
 	var ship := OwnedShip.from_template(catalog, ship_data)
@@ -1035,27 +1048,31 @@ func buy_commodity(
 	if listing.is_empty():
 		return false
 
-	var commodity := catalog.get_commodity(commodity_id)
-	if commodity.is_empty():
+	var commodity := catalog.get_commodity_def(commodity_id)
+	if commodity == null:
 		return false
 
 	var block_reason := cargo_carry_block_reason(catalog, ship, commodity_id, amount)
 	if not block_reason.is_empty():
 		return fail_action(block_reason)
 
-	var price := int(listing.get("price", commodity.get("base_price", 0)))
+	var price := int(listing.get("price", commodity.base_price))
 	var total_cost := price * amount
 	if not try_spend_credits(total_cost):
 		return false
 
 	ship.add_cargo(commodity_id, amount)
-	player.last_log = "Bought %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total_cost]
+	var commodity_name := commodity_id
+	if commodity.has_source_key("name"):
+		commodity_name = commodity.name
+	player.last_log = "Bought %d x %s for d%d." % [amount, commodity_name, total_cost]
 	var market_sector_id := get_market_sector_id(catalog)
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, price, "buy")
 	)
 	if _track_career_enabled():
-		var tonnes := float(commodity.get("mass", 0.0)) * float(amount)
+		var buy_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
+		var tonnes := buy_mass * float(amount)
 		career.record_commodity_buy(amount, tonnes, total_cost)
 	changed.emit()
 	return true
@@ -1091,8 +1108,11 @@ func sell_commodity(
 	if get_cargo_count(ship, commodity_id) < amount:
 		return fail_action("Not enough cargo to sell.")
 
-	var commodity := catalog.get_commodity(commodity_id)
-	var price := int(listing.get("price", commodity.get("base_price", 0)))
+	var commodity := catalog.get_commodity_def(commodity_id)
+	var base_price := 0
+	if commodity != null:
+		base_price = int(commodity.base_price)
+	var price := int(listing.get("price", base_price))
 	var sell_price := CommodityEconomy.sell_price(price)
 	var total := sell_price * amount
 
@@ -1100,14 +1120,20 @@ func sell_commodity(
 		return false
 
 	wallet.apply(total)
-	player.last_log = "Sold %d x %s for d%d." % [amount, str(commodity.get("name", commodity_id)), total]
+	var commodity_name := commodity_id
+	if commodity != null and commodity.has_source_key("name"):
+		commodity_name = commodity.name
+	player.last_log = "Sold %d x %s for d%d." % [amount, commodity_name, total]
 	var market_sector_id := get_market_sector_id(catalog)
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, sell_price, "sell")
 	)
 	_publish_credits_changed(total)
 	if _track_career_enabled():
-		var tonnes := float(commodity.get("mass", 0.0)) * float(amount)
+		var sell_mass := 0.0
+		if commodity != null and commodity.has_source_key("mass"):
+			sell_mass = commodity.mass
+		var tonnes := sell_mass * float(amount)
 		career.record_commodity_sell(amount, tonnes, total)
 	changed.emit()
 	return true
@@ -1124,6 +1150,13 @@ func _find_market_listing(market: Dictionary, commodity_id: String) -> Dictionar
 		if str(listing.get("commodity_id", "")) == commodity_id:
 			return listing
 	return {}
+
+
+static func _commodity_sort_name(catalog: Catalog, commodity_id: String) -> String:
+	var commodity := catalog.get_commodity_def(commodity_id)
+	if commodity != null and commodity.has_source_key("name"):
+		return commodity.name
+	return commodity_id
 
 
 func _building_stock_has(building: Dictionary, stock_id: String) -> bool:

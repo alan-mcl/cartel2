@@ -55,11 +55,12 @@ func _build_session() -> GameSession:
 			session.owned_ships.append(ship)
 			_ship_id_counter += 1
 
-	for chassis_def in _catalog.list_chassis():
-		if typeof(chassis_def) != TYPE_DICTIONARY:
-			continue
-		var chassis_id := str(chassis_def.get("id", ""))
+	for chassis_id_variant in _catalog.chassis_by_id.keys():
+		var chassis_id := str(chassis_id_variant)
 		if chassis_id.is_empty():
+			continue
+		var chassis_def: ChassisDef = _catalog.chassis_by_id[chassis_id]
+		if chassis_def == null:
 			continue
 		session.owned_ships.append(_make_empty_hull(chassis_def))
 
@@ -97,11 +98,16 @@ func _mount_shipyard() -> void:
 	_yard.bind(_context)
 
 
-func _make_empty_hull(chassis_def: Dictionary) -> OwnedShip:
-	var chassis_id := str(chassis_def.get("id", ""))
+func _make_empty_hull(chassis_def: ChassisDef) -> OwnedShip:
+	if chassis_def == null:
+		return OwnedShip.new()
+	var chassis_id := chassis_def.id
 	var ship := OwnedShip.new()
 	ship.id = _next_ship_id(chassis_id)
-	ship.name = "%s (empty)" % str(chassis_def.get("name", chassis_id))
+	var label := chassis_id
+	if chassis_def.has_source_key("name"):
+		label = chassis_def.name
+	ship.name = "%s (empty)" % label
 	ship.chassis_id = chassis_id
 	ship.location = SANDBOX_HABITAT_ID
 	return ship
@@ -147,18 +153,14 @@ func _on_restore_pressed() -> void:
 		_session.changed.emit()
 		return
 
-	var template := _catalog.get_ship(ship.template_id)
-	if template.is_empty():
+	var template := _catalog.get_ship_def(ship.template_id)
+	if template == null:
 		_session.last_log = "Template %s not found." % ship.template_id
 		_session.changed.emit()
 		return
 
-	var chassis := _catalog.get_chassis(ship.chassis_id)
-	var module_ids: Array = []
-	var raw_modules: Variant = template.get("modules", [])
-	if typeof(raw_modules) == TYPE_ARRAY:
-		for module_id in raw_modules:
-			module_ids.append(str(module_id))
+	var chassis := _catalog.get_chassis_def(ship.chassis_id)
+	var module_ids: Array = template.modules.duplicate()
 
 	ship.modules = ShipAssembler.assign_modules_to_slots(_catalog, chassis, module_ids)
 	var assembled := ShipAssembler.assemble_owned(_catalog, ship)
@@ -176,8 +178,8 @@ func _on_add_hull_pressed() -> void:
 
 	var index := _chassis_option.selected
 	var chassis_id := str(_chassis_option.get_item_metadata(index))
-	var chassis_def := _catalog.get_chassis(chassis_id)
-	if chassis_def.is_empty():
+	var chassis_def := _catalog.get_chassis_def(chassis_id)
+	if chassis_def == null:
 		return
 
 	var ship := _make_empty_hull(chassis_def)

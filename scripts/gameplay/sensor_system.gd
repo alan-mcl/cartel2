@@ -106,7 +106,7 @@ static func compute_signature_basis(assembled: AssembledShip) -> Dictionary:
 
 	var hull_mass := float(assembled.envelope.get("dry_mass", 0.0))
 	if hull_mass <= 0.0:
-		hull_mass = float(assembled.chassis.get("mass", 0.0))
+		hull_mass = assembled.chassis_mass()
 	basis["hull_grav_mass"] = hull_mass
 	return basis
 
@@ -136,7 +136,7 @@ static func compute_ship_signature(assembled: AssembledShip, loaded_mass: float 
 	if hull_mass < 0.0:
 		hull_mass = float(assembled.envelope.get("dry_mass", 0.0))
 		if hull_mass <= 0.0:
-			hull_mass = float(assembled.chassis.get("mass", 0.0))
+			hull_mass = assembled.chassis_mass()
 
 	result["gravitational"] = float(result["gravitational"]) + hull_mass * HULL_GRAV_PER_TONNE
 	return result
@@ -231,7 +231,7 @@ static func _live_signature_from_basis(
 		if hull_mass <= 0.0:
 			hull_mass = float(assembled.envelope.get("dry_mass", 0.0))
 			if hull_mass <= 0.0:
-				hull_mass = float(assembled.chassis.get("mass", 0.0))
+				hull_mass = assembled.chassis_mass()
 	gravitational += hull_mass * HULL_GRAV_PER_TONNE
 
 	var compute_ratio := 0.0
@@ -293,7 +293,7 @@ static func _live_signature_from_modules(
 	if hull_mass < 0.0:
 		hull_mass = float(assembled.envelope.get("dry_mass", 0.0))
 		if hull_mass <= 0.0:
-			hull_mass = float(assembled.chassis.get("mass", 0.0))
+			hull_mass = assembled.chassis_mass()
 	result["gravitational"] = float(result["gravitational"]) + hull_mass * HULL_GRAV_PER_TONNE
 
 	var compute_ratio := 0.0

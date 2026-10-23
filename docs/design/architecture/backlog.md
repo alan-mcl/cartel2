@@ -138,13 +138,11 @@ Presentation snapshots a `WeaponHitContext` (session, catalog, shooter id, and w
 
 ## A-7 Typed catalog records are only half-adopted
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`ModuleDef`, `ChassisDef`, `ShipDef`, `SectorDef`, `CommodityDef`, `EconomyDef`, and `AmmunitionDef` exist, with both `get_*` dictionary getters and `get_*_def` typed getters on `Catalog`. Assembly, traffic spawn, translation nav, and several charter paths still use the dictionaries. `AssembledShip.chassis` is a `Dictionary` while installed modules are `ModuleDef`. `data_model.md` already calls the dictionary getters a remaining pass. A mistyped key still returns a default and stays green.
+Production code reads generated `*Def` records or the `AssembledShip` chassis accessors. `GameSession`, `CommodityEconomy`, cargo and flight helpers, sensors, detection, volatile translation, world loading, and the dealer, market, and yard panels use `get_*_def`. `list_yard_parts`, `get_part_def`, and module tooltips still expose `Dictionary` via `to_dict()` / `get_module()` so optional JSON keys stay absent from tooltips. The dictionary getters remain for compatibility and `test_catalog.gd`.
 
-**Direction:** Move gameplay readers that already have a `*Def` onto `get_*_def`, starting with `ShipAssembler` / `ShipAssembly` and `AssembledShip.chassis`. Leave presentation on dictionaries until that pass is done, which is what `data_model.md` already describes.
-
-**Do not:** delete the dictionary getters in the same change as the first caller migration. UI still uses them.
+**Do not:** delete the dictionary getters without a separate plan. Do not rewrite `module_spec_text.gd` to take `ModuleDef` until tooltips can omit absent keys another way.
 
 ## A-8 Docked UI rebuilds on every `session.changed`
 

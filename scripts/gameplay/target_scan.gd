@@ -150,26 +150,24 @@ static func _planet_setting_rows(session: GameSession, catalog: Catalog) -> Arra
 	var sector_id := str(session.world.sector_id)
 	if sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
 		return rows
-	var sector := catalog.get_sector(sector_id)
-	if sector.is_empty():
+	var sector := catalog.get_sector_def(sector_id)
+	if sector == null:
 		return rows
 
-	var classification := str(sector.get("classification", "")).strip_edges()
+	var classification := sector.classification.strip_edges()
 	if not classification.is_empty():
 		rows.append(_row("Classification", classification))
-	var gravity := float(sector.get("gravity", 0.0))
+	var gravity := sector.gravity
 	if gravity > 0.0:
 		rows.append(_row("Gravity", "%.2f G" % gravity))
-	if sector.has("population_billions"):
-		var pop_b := float(sector.get("population_billions", 0.0))
-		rows.append(_row("Population", _format_population_billions(pop_b)))
-	if sector.has("ocean_coverage"):
-		var ocean := float(sector.get("ocean_coverage", 0.0))
-		rows.append(_row("Ocean coverage", "%.0f%%" % (ocean * 100.0)))
-	var climate := str(sector.get("climate", "")).strip_edges()
+	if sector.has_source_key("population_billions"):
+		rows.append(_row("Population", _format_population_billions(sector.population_billions)))
+	if sector.has_source_key("ocean_coverage"):
+		rows.append(_row("Ocean coverage", "%.0f%%" % (sector.ocean_coverage * 100.0)))
+	var climate := sector.climate.strip_edges()
 	if not climate.is_empty():
 		rows.append(_row("Climate", climate))
-	var system := str(sector.get("star_system", "")).strip_edges()
+	var system := sector.star_system.strip_edges()
 	if not system.is_empty():
 		rows.append(_row("System", system))
 	return rows
@@ -278,8 +276,8 @@ static func _format_star_range_au(session: GameSession, catalog: Catalog, contac
 		rng.seed = absi(seed_key.hash())
 		var au := 1.0 + rng.randf() * 19.0
 		return "%.3f AU" % au
-	var sector := catalog.get_sector(sector_id)
-	var base_au := float(sector.get("star_distance_au", 0.0))
+	var sector := catalog.get_sector_def(sector_id)
+	var base_au := 0.0 if sector == null else sector.star_distance_au
 	if base_au <= 0.0:
 		base_au = 1.0
 	var jitter := _star_range_jitter_au(sector_id)

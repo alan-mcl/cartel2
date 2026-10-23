@@ -61,12 +61,12 @@ func configure(
 
 
 func _apply_hull_visual() -> void:
-	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
+	if _hull == null or assembled_ship == null or not assembled_ship.has_chassis():
 		return
 
-	var sprite_path := str(assembled_ship.chassis.get("sprite", ""))
+	var sprite_path := assembled_ship.chassis_sprite()
 	if sprite_path.is_empty():
-		push_error("Chassis '%s' is missing sprite path." % str(assembled_ship.chassis.get("id", "")))
+		push_error("Chassis '%s' is missing sprite path." % assembled_ship.chassis_id())
 	else:
 		ShipVisual.apply_hull(_hull, _thrust_flame, _collision_shape, sprite_path)
 		ShipVisual.sync_engine_exhaust(_engine_exhaust, _thrust_flame, assembled_ship, sprite_path)
@@ -373,7 +373,7 @@ func apply_weapon_impulse(delta_v: Vector2) -> void:
 
 
 func _apply_hull_damage_visual(health_ratio: float) -> void:
-	if _hull == null or assembled_ship == null or assembled_ship.chassis.is_empty():
+	if _hull == null or assembled_ship == null or not assembled_ship.has_chassis():
 		return
 	ShipVisual.apply_damage_tint(_hull, health_ratio)
 
@@ -419,7 +419,7 @@ func _spawn_weapon_orders(orders: Array) -> void:
 		_WEAPON_MASK,
 		[self],
 		self,
-		assembled_ship.chassis
+		assembled_ship.chassis_sprite()
 	)
 
 

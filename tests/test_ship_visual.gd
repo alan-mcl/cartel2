@@ -25,8 +25,7 @@ static func run(runner: TestRunner) -> void:
 
 	var origin := Vector2(100.0, 200.0)
 	var facing := 0.0
-	var empty_chassis: Dictionary = {}
-	var muzzle := ShipVisual.muzzle_global(origin, facing, empty_chassis)
+	var muzzle := ShipVisual.muzzle_global(origin, facing, "")
 	var expected := origin + Vector2.from_angle(facing) * ShipWeapons.MUZZLE_OFFSET
 	runner.check(muzzle.is_equal_approx(expected), "ship visual: empty chassis uses default muzzle offset")
 

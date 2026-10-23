@@ -252,17 +252,20 @@ static func destination_display_label(catalog: Catalog, sector_id: String) -> St
 		return sector_id
 	if VolatileTranslation.is_volatile_sector_id(sector_id):
 		return "Survey site"
-	var sector := catalog.get_sector(sector_id)
-	var label := str(sector.get("planet_name", ""))
+	var sector := catalog.get_sector_def(sector_id)
+	if sector == null:
+		return sector_id
+	var label := sector.planet_name
 	if label.is_empty():
-		label = str(sector.get("name", sector_id))
+		label = sector.name if sector.has_source_key("name") else sector_id
 	return label
 
 
 static func local_system_tab_title(catalog: Catalog, sector_id: String) -> String:
 	if catalog == null or sector_id.is_empty():
 		return "Local star system"
-	var star_system := str(catalog.get_sector(sector_id).get("star_system", "")).strip_edges()
+	var sector := catalog.get_sector_def(sector_id)
+	var star_system := "" if sector == null else sector.star_system.strip_edges()
 	if star_system.is_empty():
 		return "Local star system"
 	if star_system.ends_with(" System"):
@@ -273,17 +276,17 @@ static func local_system_tab_title(catalog: Catalog, sector_id: String) -> Strin
 static func sector_destination_blurb(catalog: Catalog, sector_id: String) -> String:
 	if catalog == null or sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
 		return ""
-	var sector := catalog.get_sector(sector_id)
-	if sector.is_empty():
+	var sector := catalog.get_sector_def(sector_id)
+	if sector == null:
 		return ""
 
-	var description := str(sector.get("description", "")).strip_edges()
+	var description := sector.description.strip_edges()
 	if not description.is_empty():
 		return description
 
-	var climate := str(sector.get("climate", "")).strip_edges()
-	var classification := str(sector.get("classification", "")).strip_edges()
-	var star_system := str(sector.get("star_system", "")).strip_edges()
+	var climate := sector.climate.strip_edges()
+	var classification := sector.classification.strip_edges()
+	var star_system := sector.star_system.strip_edges()
 
 	var summary := ""
 	if not climate.is_empty() and not classification.is_empty():
@@ -303,8 +306,10 @@ static func sector_destination_blurb(catalog: Catalog, sector_id: String) -> Str
 static func same_star_system(catalog: Catalog, sector_a: String, sector_b: String) -> bool:
 	if catalog == null or sector_a.is_empty() or sector_b.is_empty():
 		return false
-	var sys_a := str(catalog.get_sector(sector_a).get("star_system", ""))
-	var sys_b := str(catalog.get_sector(sector_b).get("star_system", ""))
+	var def_a := catalog.get_sector_def(sector_a)
+	var def_b := catalog.get_sector_def(sector_b)
+	var sys_a := "" if def_a == null else def_a.star_system
+	var sys_b := "" if def_b == null else def_b.star_system
 	return not sys_a.is_empty() and sys_a == sys_b
 
 

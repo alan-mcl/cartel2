@@ -104,7 +104,7 @@ func spawn_weapon_orders(orders: Array) -> void:
 		WEAPON_MASK,
 		[self],
 		self,
-		actor.assembled_ship.chassis
+		actor.assembled_ship.chassis_sprite()
 	)
 
 
@@ -124,10 +124,10 @@ func _ready() -> void:
 
 
 func _apply_hull_visual() -> void:
-	if _hull == null or actor == null or actor.assembled_ship.chassis.is_empty():
+	if _hull == null or actor == null or not actor.assembled_ship.has_chassis():
 		return
 
-	var sprite_path := str(actor.assembled_ship.chassis.get("sprite", ""))
+	var sprite_path: String = actor.assembled_ship.chassis_sprite()
 	if not sprite_path.is_empty():
 		ShipVisual.apply_hull(_hull, _thrust_flame, _collision_shape, sprite_path)
 		ShipVisual.sync_engine_exhaust(

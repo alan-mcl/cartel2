@@ -22,13 +22,15 @@ static func remote_quote_entry(
 	CommodityEconomy.ensure_quotes(session, catalog)
 
 	var sector_id := remote_ids[rng.randi_range(0, remote_ids.size() - 1)]
-	var commodities := catalog.list_commodities()
-	if commodities.is_empty():
+	var commodity_ids: Array = catalog.commodities_by_id.keys()
+	if commodity_ids.is_empty():
 		return {}
 
-	var commodity_pick: Dictionary = commodities[rng.randi_range(0, commodities.size() - 1)]
-	var commodity_id := str(commodity_pick.get("id", ""))
+	var commodity_id := str(commodity_ids[rng.randi_range(0, commodity_ids.size() - 1)])
 	if commodity_id.is_empty():
+		return {}
+	var commodity_pick: CommodityDef = catalog.commodities_by_id[commodity_id]
+	if commodity_pick == null:
 		return {}
 
 	var quote := CommodityEconomy.quote_for_sector(session, catalog, sector_id, commodity_id)
@@ -44,11 +46,15 @@ static func remote_quote_entry(
 	var high := maxi(low, int(floor(float(true_price) * ratio_max + 0.0001)))
 	var shown_price := clampi(maxi(1, int(round(float(true_price) * noise))), low, high)
 
-	var sector := catalog.get_sector(sector_id)
-	var location := str(sector.get("planet_name", ""))
-	if location.is_empty():
-		location = str(sector.get("name", sector_id))
-	var commodity_name := str(commodity_pick.get("name", commodity_id))
+	var sector := catalog.get_sector_def(sector_id)
+	var location := sector_id
+	if sector != null:
+		location = sector.planet_name.strip_edges()
+		if location.is_empty() and sector.has_source_key("name"):
+			location = sector.name
+	var commodity_name := commodity_id
+	if commodity_pick.has_source_key("name"):
+		commodity_name = commodity_pick.name
 	var line := "%s - %s - d%d" % [location, commodity_name, shown_price]
 
 	return {

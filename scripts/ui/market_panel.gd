@@ -120,16 +120,19 @@ func _build_content() -> void:
 			continue
 		var listing: Dictionary = listing_variant
 		var commodity_id := str(listing.get("commodity_id", ""))
-		var commodity := _context.catalog.get_commodity(commodity_id)
-		if commodity.is_empty():
+		var commodity := _context.catalog.get_commodity_def(commodity_id)
+		if commodity == null:
 			continue
 
 		_market_commodity_ids.append(commodity_id)
 		_market_listings.append(listing)
 
-		var price := int(listing.get("price", commodity.get("base_price", 0)))
+		var price := int(listing.get("price", commodity.base_price))
+		var commodity_label := commodity_id
+		if commodity.has_source_key("name"):
+			commodity_label = commodity.name
 		_commodity_item_list.add_item(
-			"%s · d%d" % [str(commodity.get("name", commodity_id)), price]
+			"%s · d%d" % [commodity_label, price]
 		)
 
 	if _selected_commodity_id.is_empty() and not _market_commodity_ids.is_empty():
@@ -164,11 +167,11 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		return
 
 	var listing := _find_market_listing(_selected_commodity_id)
-	var commodity := _context.catalog.get_commodity(_selected_commodity_id)
-	if commodity.is_empty():
+	var commodity := _context.catalog.get_commodity_def(_selected_commodity_id)
+	if commodity == null:
 		return
 
-	var price := int(listing.get("price", commodity.get("base_price", 0)))
+	var price := int(listing.get("price", commodity.base_price))
 	var store_qty := int(listing.get("quantity", 0))
 	var cargo_ship := _context.session.get_cargo_ship(_cargo_ship_id)
 	var cargo_qty := 0
@@ -179,9 +182,12 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		cargo_cap = _context.session.get_ship_cargo_capacity(_context.catalog, cargo_ship)
 		cargo_mass = _context.session.get_ship_cargo_mass(_context.catalog, cargo_ship)
 
-	detail.add_child(UiPatterns.headline_item(str(commodity.get("name", _selected_commodity_id))))
+	var commodity_label := _selected_commodity_id
+	if commodity.has_source_key("name"):
+		commodity_label = commodity.name
+	detail.add_child(UiPatterns.headline_item(commodity_label))
 
-	var desc_text := str(commodity.get("description", ""))
+	var desc_text := commodity.description
 	if not desc_text.is_empty():
 		var desc := Label.new()
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -195,7 +201,7 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		detail.add_child(UiPatterns.status_row("Ship cargo", str(cargo_qty)))
 		detail.add_child(UiPatterns.status_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
 
-	var hold_req := CargoRequirements.commodity_requirement_phrase(commodity)
+	var hold_req := CargoRequirements.commodity_requirement_phrase(commodity.to_dict())
 	if not hold_req.is_empty():
 		detail.add_child(UiPatterns.status_row("Hold requires", hold_req))
 

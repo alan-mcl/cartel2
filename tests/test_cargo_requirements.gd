@@ -26,7 +26,7 @@ static func _test_plain_hold_rejects_refrigerated_cargo(runner: TestRunner, cata
 	var owned := _owned(catalog)
 	owned.set_module("other_1", "cargo_bay_10")
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	var food := catalog.get_commodity("food_products")
+	var food := catalog.get_commodity_def("food_products")
 	runner.check(
 		not CargoRequirements.assembled_meets_commodity(assembled, food),
 		"cargo requirements: plain hold cannot carry food"
@@ -37,7 +37,7 @@ static func _test_plain_hold_rejects_refrigerated_cargo(runner: TestRunner, cata
 		"cargo requirements: food rejection names the hold and the cargo"
 	)
 	runner.check_eq(
-		CargoRequirements.commodity_requirement_phrase(food),
+		CargoRequirements.commodity_requirement_phrase(food.to_dict()),
 		"refrigerated",
 		"cargo requirements: food phrase is the refrigerated label"
 	)
@@ -47,7 +47,7 @@ static func _test_cold_hold_accepts_food(runner: TestRunner, catalog: Catalog) -
 	var owned := _owned(catalog)
 	owned.set_module("other_1", "ok_coolstore_10")
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	var food := catalog.get_commodity("food_products")
+	var food := catalog.get_commodity_def("food_products")
 	runner.check(
 		CargoRequirements.assembled_meets_commodity(assembled, food),
 		"cargo requirements: refrigerated hold can carry food"
@@ -63,13 +63,13 @@ static func _test_unrestricted_commodity_needs_no_hold(runner: TestRunner, catal
 	var owned := _owned(catalog)
 	owned.set_module("other_1", "cargo_bay_10")
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
-	var goods := catalog.get_commodity("consumer_goods")
+	var goods := catalog.get_commodity_def("consumer_goods")
 	runner.check(
 		CargoRequirements.assembled_meets_commodity(assembled, goods),
 		"cargo requirements: unrestricted goods need no special hold"
 	)
 	runner.check_eq(
-		CargoRequirements.commodity_requirement_phrase(goods),
+		CargoRequirements.commodity_requirement_phrase(goods.to_dict()),
 		"",
 		"cargo requirements: unrestricted goods have an empty phrase"
 	)
@@ -121,16 +121,17 @@ static func _test_requirement_labels(runner: TestRunner, catalog: Catalog) -> vo
 		"biohazard, secure / bonded",
 		"cargo requirements: empty capability ids are dropped and known labels are joined"
 	)
+	var specimen_def := CommodityDef.from_dict(specimen)
 	runner.check_eq(
-		CargoRequirements.cannot_carry_reason(catalog, assembled, specimen),
+		CargoRequirements.cannot_carry_reason(catalog, assembled, specimen_def),
 		"Need a biohazard hold to carry Specimen.",
 		"cargo requirements: the first missing capability is the rejection reason"
 	)
-	var unknown := {
+	var unknown := CommodityDef.from_dict({
 		"id": "odd_cargo",
 		"name": "Odd Cargo",
 		"requires_capabilities": ["not_a_real_cap"],
-	}
+	})
 	runner.check_eq(
 		CargoRequirements.requirement_label("not_a_real_cap"),
 		"not_a_real_cap",

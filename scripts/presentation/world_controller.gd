@@ -239,8 +239,11 @@ func arrive_from_unspace() -> void:
 		var volatile_record := VolatileTranslation.find_by_sector_id(_main.session, dest_id)
 		sector_name = str(volatile_record.get("label", dest_id))
 	else:
-		var sector := _catalog.get_sector(dest_id)
-		sector_name = str(sector.get("name", dest_id))
+		var sector := _catalog.get_sector_def(dest_id)
+		if sector != null and sector.has_source_key("name"):
+			sector_name = sector.name
+		else:
+			sector_name = dest_id
 	_main.session.last_log = (
 		"Translation complete. Exit lag %s. Welcome to %s."
 		% [GalacticCalendar.format_duration(applied), sector_name]

@@ -23,9 +23,14 @@ static func required_capabilities(commodity: Dictionary) -> Array:
 	return out
 
 
-static func assembled_meets_commodity(assembled: AssembledShip, commodity: Dictionary) -> bool:
-	for cap_id in required_capabilities(commodity):
-		if not assembled.has_capability(str(cap_id)):
+static func assembled_meets_commodity(assembled: AssembledShip, commodity: CommodityDef) -> bool:
+	if commodity == null:
+		return false
+	for cap_id in commodity.requires_capabilities:
+		var cap := str(cap_id).strip_edges()
+		if cap.is_empty():
+			continue
+		if not assembled.has_capability(cap):
 			return false
 	return true
 
@@ -47,19 +52,23 @@ static func commodity_requirement_phrase(commodity: Dictionary) -> String:
 static func cannot_carry_reason(
 	catalog: Catalog,
 	assembled: AssembledShip,
-	commodity: Dictionary
+	commodity: CommodityDef
 ) -> String:
-	var caps := required_capabilities(commodity)
-	if caps.is_empty():
+	if commodity == null:
 		return ""
-	for cap_id in caps:
-		if not assembled.has_capability(str(cap_id)):
+	if commodity.requires_capabilities.is_empty():
+		return ""
+	for cap_id in commodity.requires_capabilities:
+		var cap := str(cap_id).strip_edges()
+		if cap.is_empty():
+			continue
+		if not assembled.has_capability(cap):
+			var label := commodity.id
+			if commodity.has_source_key("name"):
+				label = commodity.name
 			return (
 				"Need a %s hold to carry %s."
-				% [
-					requirement_label(str(cap_id)),
-					str(commodity.get("name", commodity.get("id", "cargo"))),
-				]
+				% [requirement_label(cap), label]
 			)
 	return ""
 
@@ -72,13 +81,16 @@ static func cargo_aboard_violation_reason(catalog: Catalog, ship: OwnedShip) -> 
 		var commodity_id := str(commodity_id_variant)
 		if ship.get_cargo_count(commodity_id) <= 0:
 			continue
-		var commodity := catalog.get_commodity(commodity_id)
-		if commodity.is_empty():
+		var commodity := catalog.get_commodity_def(commodity_id)
+		if commodity == null:
 			continue
 		var reason := cannot_carry_reason(catalog, assembled, commodity)
 		if not reason.is_empty():
+			var aboard_name := commodity_id
+			if commodity.has_source_key("name"):
+				aboard_name = commodity.name
 			return (
 				"Cannot change cargo bays: %s is still aboard."
-				% str(commodity.get("name", commodity_id))
+				% aboard_name
 			)
 	return ""

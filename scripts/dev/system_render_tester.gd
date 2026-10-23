@@ -164,8 +164,11 @@ func _load_selected_sector() -> void:
 	var index := clampi(_sector_option.selected, 0, _sector_ids.size() - 1)
 	var sector_id := _sector_ids[index]
 	session.sector_id = sector_id
-	var sector := catalog.get_sector(sector_id)
-	session.location_name = str(sector.get("orbit_name", sector_id))
+	var sector := catalog.get_sector_def(sector_id)
+	if sector != null and sector.has_source_key("orbit_name") and not sector.orbit_name.is_empty():
+		session.location_name = sector.orbit_name
+	else:
+		session.location_name = sector_id
 
 	_loader.load_sector(_world, catalog, session, sector_id)
 	_apply_planet_auto_spin()
