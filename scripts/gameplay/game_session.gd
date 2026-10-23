@@ -132,9 +132,11 @@ var current_ship_id: String:
 	get: return fleet.current_ship_id
 	set(value): fleet.current_ship_id = value
 
+## Read-only. Pay and penalties go through add_credits, try_spend_credits,
+## assess_penalty_credits, or apply_credits_delta so credits_changed is published.
+## New game and save load write wallet.credits and do not publish.
 var credits: int:
 	get: return wallet.credits
-	set(value): wallet.credits = value
 
 var hull: float:
 	get: return combat.hull

@@ -120,15 +120,13 @@ The harness calls `MissionSubsystem.seed_harness_scan_offer` and `seed_harness_b
 
 ## A-5 `GameSession` is again the behaviour hub
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence`. The facade grew back. `game_session.gd` is about 1,140 lines, with 36 forwarding properties, and it still implements travel, dock and undock, market buy and sell, ship purchase, salvage, combat repair, and career side effects.
+Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence`. The facade still implements travel, dock and undock, market buy and sell, ship purchase, salvage, combat repair, and career side effects. Those methods stay. New mutations belong on the slice that owns the state, with `GameSession` coordinating save and events.
 
-`credits`'s setter writes `wallet.credits` and does not publish the credits event. `add_credits` and `try_spend_credits` do. Direct assignment is a footgun.
+`session.credits` is read-only. `add_credits`, `try_spend_credits`, `assess_penalty_credits`, and `apply_credits_delta` publish `credits_changed`. An absolute write, including new game and save load, goes to `wallet.credits` and does not publish.
 
-**Direction:** Stop adding feature methods here. New mutations belong on the slice that owns the state, with `GameSession` coordinating save and events. Decide explicitly whether the `credits` setter should publish or whether assignment should be removed from gameplay call sites.
-
-**Do not:** add more forwarding properties. Do not change save JSON keys. Do not do another pure move of the same fields.
+**Do not:** add more forwarding properties. Do not change save JSON keys. Do not do another pure move of the same fields. Do not put the credits setter back.
 
 ## A-6 `WeaponHit` pulls session and catalog off a Node
 

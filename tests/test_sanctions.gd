@@ -41,7 +41,7 @@ static func _test_outlaw_start_pay_launch(runner: TestRunner, catalog: Catalog) 
 static func _test_pay_requires_funds(runner: TestRunner, catalog: Catalog) -> void:
 	var session := GameSession.new()
 	runner.check(session.start_new_game(catalog, "SAN-POOR", "outlaw"), "sanctions: poor outlaw starts")
-	session.credits = 100
+	session.wallet.credits = 100
 	runner.check(not session.pay_sanctions(catalog), "sanctions: pay fails when short")
 	runner.check_eq(session.player.sanctions.size(), 1, "sanctions: fine remains when unpaid")
 

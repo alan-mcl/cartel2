@@ -43,7 +43,7 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(true, "save: trader session starts")
 
 	# Dirty every section so defaults cannot mask a dropped field.
-	session.credits = 4242
+	session.wallet.credits = 4242
 	session.player.reputation = 42
 	session.objective = "Round-trip objective"
 	session.last_log = "Round-trip log"

@@ -42,7 +42,7 @@ flowchart LR
   Assembler --> PlayerShip[PlayerShip configure]
 ```
 
-`GameSession` is an aggregate root: `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence` own the fields; public properties on `GameSession` forward to those slices so UI and tests keep using `session.credits` and `session.owned_ships`. Save JSON keys are unchanged - `to_dict` / `from_save` compose the slice serializers.
+`GameSession` is an aggregate root: `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and `CombatPersistence` own the fields. `session.credits` is read-only. Pay and penalties go through `add_credits`, `try_spend_credits`, `assess_penalty_credits`, and `apply_credits_delta`, which publish `credits_changed`. New game and save load write `wallet.credits` and do not publish. Other public properties still forward, including `session.owned_ships`. Save JSON keys are unchanged - `to_dict` / `from_save` compose the slice serializers.
 
 On startup, `main.gd` wires three presentation controllers and delegates to them:
 

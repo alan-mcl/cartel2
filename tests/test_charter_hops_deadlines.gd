@@ -215,7 +215,7 @@ static func _test_late_destination_charges_cancel_fee(runner: TestRunner, catalo
 	runner.check(missions.accept_offer(session, catalog, offer.id, ship.id), "charter hops: accept late dest test")
 	var reward := int(offer.get("reward", 0))
 	var penalty := PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward)
-	session.credits = penalty + 5
+	session.wallet.credits = penalty + 5
 	var credits_before := session.credits
 	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 2))
 	runner.check(session.undock(catalog, ship.id, missions), "charter hops: undock late")
@@ -230,14 +230,14 @@ static func _test_late_destination_charges_cancel_fee(runner: TestRunner, catalo
 
 static func _test_penalty_can_overdraw(runner: TestRunner, catalog: Catalog) -> void:
 	var session := _session(runner, catalog, "CH-OVER")
-	session.credits = 10
+	session.wallet.credits = 10
 	session.assess_penalty_credits(50)
 	runner.check(session.credits < 0, "charter hops: penalty overdraws credits")
 
 
 static func _test_spend_blocked_when_overdrawn(runner: TestRunner, catalog: Catalog) -> void:
 	var session := _session(runner, catalog, "CH-NOSPEND")
-	session.credits = -5
+	session.wallet.credits = -5
 	runner.check(not session.try_spend_credits(1), "charter hops: spend blocked when overdrawn")
 
 

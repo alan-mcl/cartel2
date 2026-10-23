@@ -103,7 +103,7 @@ static func run(runner: TestRunner) -> void:
 
 	var broke := GameSession.new()
 	runner.check(broke.start_new_game(catalog, "POOR-1", "entrepreneur"), "poor buyer session starts")
-	broke.credits = 750
+	broke.wallet.credits = 750
 	runner.check(broke.visit(catalog, "concord_scouts"), "poor buyer visits Concord Scouts")
 	runner.check(
 		not broke.buy_used_ship(catalog, "dragon_gold"),

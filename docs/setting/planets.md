@@ -24,6 +24,10 @@ The Proxima Peaceforce is responsible for maintaining order in the shared commer
 Proxima high orbit is bustling with civilian and commercial traffic.
  
  - Proxima Habitat
+ - Creus Corp HQ
+ - SnedeCorp HQ
+ - Morrow & Sons HQ
+ - Mercury Communications HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -63,6 +67,8 @@ Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-
 ### Planetary Orbit
 
  - Tycho Habitat
+ - Galactic Outcomes HQ
+ - General Industrial HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -130,6 +136,7 @@ La Palma, Fairhaven
 ### Planetary Orbit
 
  - Irasia Habitat
+ - Orion Aerospace HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -217,6 +224,8 @@ Jubilee, New Venice, Bellagio
 ### Planetary Orbit
 
  - Fortuna Habitat
+ - GRC Inc HQ
+ - The Octagon HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -246,6 +255,7 @@ Carthage, New Tyre, Leptis, Utica
 ### Planetary orbit
 
  - New Carthage Habitat
+ - Crown & Anchor HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -304,6 +314,8 @@ Titania Central, Skygarden
 ### Planetary orbit
 
  - Titania Habitat
+ - Cult of Apex HQ
+ - Chimera Corp HQ
  - others TBD
 
 ### Solar neighbourhood
@@ -334,6 +346,7 @@ Mediran, Twin Cities, New Cambridge
 ### Orbitals
 
  - Pelagos Habitat
+ - Terra Nova HQ
  - others TBD
 
 ### Solar neighbourhood

@@ -460,7 +460,7 @@ static func _test_reputation_charter_outcomes(runner: TestRunner, catalog: Catal
 		"missions: accept for late reputation"
 	)
 	var reward := int(late_offer.get("reward", 0))
-	session.credits = PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward) + 5
+	session.wallet.credits = PassengerCharters.cancel_penalty(PassengerCharters.config(catalog), reward) + 5
 	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 2))
 	runner.check(session.undock(catalog, ship.id, missions), "missions: undock for late reputation")
 	runner.check(session.enter_sector(catalog, "bela", false), "missions: travel for late reputation")

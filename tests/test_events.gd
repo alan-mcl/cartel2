@@ -7,6 +7,7 @@ extends RefCounted
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_subscribe_by_type(runner)
+	_test_wallet_write_skips_credits_event(runner)
 	_test_commodity_traded(runner, catalog)
 	_test_failed_buy_no_trade_event(runner, catalog)
 	_test_dock_undock_sector(runner, catalog)
@@ -40,6 +41,23 @@ static func _test_subscribe_by_type(runner: TestRunner) -> void:
 		"proxima",
 		"events: sector subscriber ignores trade events"
 	)
+
+
+static func _test_wallet_write_skips_credits_event(runner: TestRunner) -> void:
+	var session := GameSession.new()
+	var events: Array = []
+	session.events.subscribe(SimEvent.CREDITS_CHANGED, func(evt: Dictionary) -> void:
+		events.append(evt)
+	)
+	session.wallet.credits = 100
+	runner.check(events.is_empty(), "events: writing the wallet does not publish credits_changed")
+	runner.check_eq(session.credits, 100, "events: session.credits reads the wallet")
+	session.add_credits(40)
+	runner.check_eq(events.size(), 1, "events: add_credits publishes credits_changed")
+	if events.is_empty():
+		return
+	runner.check_eq(int(events[0].get("delta", 0)), 40, "events: credits delta")
+	runner.check_eq(int(events[0].get("credits", 0)), 140, "events: credits balance after add")
 
 
 static func _test_commodity_traded(runner: TestRunner, catalog: Catalog) -> void:
@@ -93,7 +111,7 @@ static func _test_failed_buy_no_trade_event(runner: TestRunner, catalog: Catalog
 	)
 
 	runner.check(session.visit(catalog, "proxima_exchange"), "events: failed-buy visit market")
-	session.credits = 0
+	session.wallet.credits = 0
 
 	runner.check(
 		not session.buy_commodity(catalog, "proxima_exchange", "consumer_goods", 1),
