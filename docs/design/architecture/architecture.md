@@ -238,7 +238,7 @@ flowchart TD
 
 ## World loading
 
-All 21 sectors in `sectors.json` use a structured layout in `worlds.json`, the eleven E-class worlds and the ten outlying sectors included:
+All 26 sectors in `sectors.json` use a structured layout in `worlds.json`, the eleven E-class worlds and the fifteen outlying sectors included:
 
 - **`planet`** - lit 3D globe rendered in an isolated `SubViewport` (1024 px, ~10 Hz `UPDATE_ONCE` while in flight; immediate refresh on sun or inspection rotation) and composited as a 2D disc at the origin (`PlanetBackdrop`, diameter 2000, `z_index -50`). Each sector references `albedo` and `night_lights` equirectangular PNGs (2048×1024 placeholders) under `assets/world/planets/<sector_id>_*.png`; drop-in replacements keep the same paths. `modulate` tints the procedural fallback only, not mapped textures. Legacy `sprite` is ignored for the globe mesh. Day/night terminator follows the sector **`star`** (visit-random position 7000–12000, procedural `LocalStar` at `z_index -40`). Farther stars drop the sun toward the play plane so the disc reads as side-lit; the globe shader uses a narrowed day cone and darker night cap than wrap lighting (luminosity scales brightness only).
 - **`star`** - presentation-only block on each 3-space world: `temperature_k`, `luminosity`, optional `disc_radius`. Drives apparent disc size, corona colour, and planet `sun_direction` / intensity (not saved between visits).

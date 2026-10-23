@@ -374,5 +374,70 @@
 		"title": "Pelagos Belt Translation Beacon",
 		"inspect_text": "Translation beacon back toward Pelagos near orbit.",
 		"kind": "translate"
+	},
+	{
+		"id": "aurelia_habitat",
+		"title": "Aurelia",
+		"inspect_text": "Docking at Aurelia. Assay convoys and hab-suit excursion traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "aurelia_habitat"
+	},
+	{
+		"id": "aurelia_jump_gate",
+		"title": "Aurelia Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "boreas_habitat",
+		"title": "Boreas",
+		"inspect_text": "Docking at Boreas. High-gravity ore traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "boreas_habitat"
+	},
+	{
+		"id": "boreas_jump_gate",
+		"title": "Boreas Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "calypso_vi_habitat",
+		"title": "Calypso VI",
+		"inspect_text": "Docking at Calypso VI. Resort shuttles use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "calypso_vi_habitat"
+	},
+	{
+		"id": "calypso_vi_jump_gate",
+		"title": "Calypso VI Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "hesper_habitat",
+		"title": "Hesper",
+		"inspect_text": "Docking at Hesper. Station supply traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "hesper_habitat"
+	},
+	{
+		"id": "hesper_jump_gate",
+		"title": "Hesper Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "kestrel_habitat",
+		"title": "Kestrel Resort",
+		"inspect_text": "Docking at Kestrel Resort. Charter and ice traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "kestrel_habitat"
+	},
+	{
+		"id": "kestrel_jump_gate",
+		"title": "Kestrel Resort Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
+		"kind": "translate"
 	}
 ]

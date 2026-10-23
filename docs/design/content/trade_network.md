@@ -1,6 +1,6 @@
 # Public Unspace trade network
 
-**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` (38 edges) and `CommodityEconomy`. Economic events (blockades, friction spikes) are not implemented. Volatile mission translations are private navigation solutions and are not economy edges. Public unknown routes are not implemented.
+**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` (43 edges) and `CommodityEconomy`. Economic events (blockades, friction spikes) are not implemented. Volatile mission translations are private navigation solutions and are not economy edges. Public unknown routes are not implemented.
 
 ## Overview
 
@@ -16,7 +16,7 @@ Three conceptual layers:
 
 ## Route graph
 
-[routes.json](../../../data/catalog/routes.json) is the live graph: **38** undirected public edges, including belt and station sectors beyond the eleven E-worlds sketched below. Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
+[routes.json](../../../data/catalog/routes.json) is the live graph: **43** undirected public edges, including belt and station sectors beyond the eleven E-worlds sketched below. Translation beacons tie Aurelia, Boreas, Calypso VI, Hesper, and Kestrel to La Bella Vista. Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
 
 ### Core network
 

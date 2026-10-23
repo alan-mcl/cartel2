@@ -111,17 +111,16 @@ La Bella Vista, often called Bela, is a water world with only one continental la
 
 ### Solar neighbourhood
 
-Delta Pavonis has a busy orbit of ten planets (Bela being the fourth of them), some of which are easily reachable via translation beacons. The tourism industry on the main E type world spills out into these other accessible places in the system.
+Delta Pavonis has a busy orbit of ten planets (Bela being the fourth of them), some of which are easily reachable via translation beacons. The tourism industry on the main E-class world spills out into these other accessible places in the system.
 
 Planets and moons:
- - Aurelia: the 3rd planet (0.55 AU); a dry rocky world with a marginal atmosphere. Mining and research infrastructure, as well as tourist locations for low-G hab-suit mountaineering, rock climbing and base jumping.
- - Boreas: the fifth planet (1.6 AU); a icy super-E-type with a maginal atmosphere. Mineral rich but it's high gravity makes it unpopular with tourists.
- - Calypso VI: sixth moon of Calypso, the sixth planet (3.2 AU) and the first gas giant in the system. The moon-orbitting resort has famous views of the parents spectacular ring system.
- - Hesper: the 8th planet (11 AU); an ice giant on an eccentric orbit. It has an unusually strong magnetic field.
- - 
+ - Aurelia: the third planet (0.55 AU); a dry rocky world with a marginal atmosphere. Mining and research infrastructure, as well as tourist locations for low-G hab-suit mountaineering, rock climbing and base jumping.
+ - Boreas: the fifth planet (1.6 AU); an icy super-E-type with a marginal atmosphere. Mineral-rich, but its high gravity makes it unpopular with tourists.
+ - Calypso VI: sixth moon of Calypso, the sixth planet (3.2 AU) and the first gas giant in the system. The moon-orbiting resort has famous views of the parent's spectacular ring system.
+ - Hesper: the eighth planet (11 AU); an ice giant on an eccentric orbit. It has an unusually strong magnetic field.
 
 Others:
- - Kestrel: not a planet, but a long period comet with a very large icy nucleus. It's orbited by a resort habitat. The comet's eccentric orbit leads to seasonal activities built around the comet's changing activity as it approaches Delta Pavonis.
+ - Kestrel: not a planet, but a long-period comet with a very large icy nucleus. It's orbited by a resort habitat. The comet's eccentric orbit leads to seasonal activities built around the comet's changing activity as it approaches Delta Pavonis.
 
 
 

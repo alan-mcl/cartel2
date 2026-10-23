@@ -135,6 +135,35 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "deepspace": 6.0,
         "oklahoma_combine": 4.0,
     },
+    "aurelia": {
+        "atlas_concern": 6.0,
+        "karaquazen": 4.0,
+        "liveworlds": 3.0,
+        "praetorium": 3.0,
+    },
+    "boreas": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "calypso_vi": {
+        "karaquazen": 7.0,
+        "liveworlds": 6.0,
+        "universal_house": 5.0,
+        "praetorium": 4.0,
+    },
+    "hesper": {
+        "deepspace": 5.0,
+        "atlas_concern": 4.0,
+        "mercury_communications": 3.0,
+    },
+    "kestrel": {
+        "karaquazen": 6.0,
+        "liveworlds": 6.0,
+        "universal_house": 5.0,
+        "praetorium": 4.0,
+    },
 }
 
 FLOOR = 0.15

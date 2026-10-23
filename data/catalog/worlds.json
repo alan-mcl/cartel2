@@ -1832,5 +1832,450 @@
 			"temperature_k": 4500,
 			"luminosity": 1.0
 		}
+	},
+	"aurelia": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "aurelia_habitat_obj",
+					"kind": "habitat",
+					"label": "Aurelia",
+					"interactable": "aurelia_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c4a574"
+				},
+				{
+					"id": "aurelia_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "aurelia_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "aurelia_beacon_obj",
+			"label": "Aurelia Translation Beacon",
+			"interactable": "aurelia_jump_gate",
+			"destination": "bela",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1500,
+			"modulate": "#c4a574"
+		},
+		"entities": [
+			{
+				"id": "aurelia_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "aurelia_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "aurelia_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "aurelia_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "aurelia_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
+	},
+	"boreas": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "boreas_habitat_obj",
+					"kind": "habitat",
+					"label": "Boreas",
+					"interactable": "boreas_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#8aa0b0"
+				},
+				{
+					"id": "boreas_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "boreas_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "boreas_beacon_obj",
+			"label": "Boreas Translation Beacon",
+			"interactable": "boreas_jump_gate",
+			"destination": "bela",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2200,
+			"modulate": "#9aafc0"
+		},
+		"entities": [
+			{
+				"id": "boreas_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "boreas_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "boreas_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "boreas_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "boreas_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
+	},
+	"calypso_vi": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "calypso_vi_habitat_obj",
+					"kind": "habitat",
+					"label": "Calypso VI",
+					"interactable": "calypso_vi_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c8b4d4"
+				},
+				{
+					"id": "calypso_vi_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "calypso_vi_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "calypso_vi_beacon_obj",
+			"label": "Calypso VI Translation Beacon",
+			"interactable": "calypso_vi_jump_gate",
+			"destination": "bela",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1200,
+			"modulate": "#8a9aaa"
+		},
+		"entities": [
+			{
+				"id": "calypso_vi_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "calypso_vi_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "calypso_vi_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "calypso_vi_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "calypso_vi_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
+	},
+	"hesper": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "hesper_habitat_obj",
+					"kind": "habitat",
+					"label": "Hesper",
+					"interactable": "hesper_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#7eb6d6"
+				},
+				{
+					"id": "hesper_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				},
+				{
+					"id": "hesper_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "hesper_beacon_obj",
+			"label": "Hesper Translation Beacon",
+			"interactable": "hesper_jump_gate",
+			"destination": "bela",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 2800,
+			"modulate": "#7eb6d6"
+		},
+		"entities": [
+			{
+				"id": "hesper_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "hesper_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "hesper_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "hesper_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "hesper_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
+	},
+	"kestrel": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "kestrel_habitat_obj",
+					"kind": "habitat",
+					"label": "Kestrel Resort",
+					"interactable": "kestrel_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#d7eef8"
+				},
+				{
+					"id": "kestrel_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "kestrel_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "kestrel_beacon_obj",
+			"label": "Kestrel Resort Translation Beacon",
+			"interactable": "kestrel_jump_gate",
+			"destination": "bela",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 700,
+			"modulate": "#d7eef8"
+		},
+		"entities": [
+			{
+				"id": "kestrel_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "kestrel_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "kestrel_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "kestrel_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "kestrel_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5200,
+			"luminosity": 1.1
+		}
 	}
 }

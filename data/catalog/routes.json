@@ -555,5 +555,70 @@
 				"solution_ba": -48118
 			}
 		]
+	},
+	{
+		"id": "bela_aurelia",
+		"a": "bela",
+		"b": "aurelia",
+		"friction": 4,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48119,
+				"solution_ba": -48120
+			}
+		]
+	},
+	{
+		"id": "bela_boreas",
+		"a": "bela",
+		"b": "boreas",
+		"friction": 6,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48121,
+				"solution_ba": -48122
+			}
+		]
+	},
+	{
+		"id": "bela_calypso_vi",
+		"a": "bela",
+		"b": "calypso_vi",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48123,
+				"solution_ba": -48124
+			}
+		]
+	},
+	{
+		"id": "bela_hesper",
+		"a": "bela",
+		"b": "hesper",
+		"friction": 12,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48125,
+				"solution_ba": -48126
+			}
+		]
+	},
+	{
+		"id": "bela_kestrel",
+		"a": "bela",
+		"b": "kestrel",
+		"friction": 10,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48127,
+				"solution_ba": -48128
+			}
+		]
 	}
 ]

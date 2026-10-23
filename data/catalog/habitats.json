@@ -554,5 +554,75 @@
 		"sector_id": "pelagos",
 		"short_desc": "Corporate headquarters orbital.",
 		"type": "station"
+	},
+	{
+		"art": "res://assets/ui/locations/aurelia_habitat.png",
+		"buildings": [
+			"aurelia_terminal",
+			"aurelia_exchange"
+		],
+		"default_building": "aurelia_terminal",
+		"description": "Orbital docks above a dry inner world. Assay crews share the ring with hab-suit climbers heading for the low-G ranges.",
+		"id": "aurelia_habitat",
+		"name": "Aurelia",
+		"sector_id": "aurelia",
+		"short_desc": "Mining and hab-suit tourism at Aurelia.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/boreas_habitat.png",
+		"buildings": [
+			"boreas_terminal",
+			"boreas_exchange"
+		],
+		"default_building": "boreas_terminal",
+		"description": "High-gravity mining orbitals above an icy super-Earth. Tourist traffic is scarce; ore convoys are not.",
+		"id": "boreas_habitat",
+		"name": "Boreas",
+		"sector_id": "boreas",
+		"short_desc": "High-gravity mining orbitals at Boreas.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/calypso_vi_habitat.png",
+		"buildings": [
+			"calypso_vi_terminal",
+			"calypso_vi_exchange"
+		],
+		"default_building": "calypso_vi_terminal",
+		"description": "Moon-orbiting resort beneath Calypso's rings. The parent giant fills the viewports.",
+		"id": "calypso_vi_habitat",
+		"name": "Calypso VI",
+		"sector_id": "calypso_vi",
+		"short_desc": "Ring-view resort on Calypso VI.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/hesper_habitat.png",
+		"buildings": [
+			"hesper_terminal",
+			"hesper_exchange"
+		],
+		"default_building": "hesper_terminal",
+		"description": "Small orbital station at the ice giant Hesper. The giant's magnetic field dominates local navigation briefs.",
+		"id": "hesper_habitat",
+		"name": "Hesper",
+		"sector_id": "hesper",
+		"short_desc": "Orbital station at the ice giant Hesper.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/kestrel_habitat.png",
+		"buildings": [
+			"kestrel_terminal",
+			"kestrel_exchange"
+		],
+		"default_building": "kestrel_terminal",
+		"description": "Resort habitat orbiting the icy nucleus of the long-period comet Kestrel. Charter traffic follows the comet's approach toward Delta Pavonis.",
+		"id": "kestrel_habitat",
+		"name": "Kestrel Resort",
+		"sector_id": "kestrel",
+		"short_desc": "Resort habitat at the comet Kestrel.",
+		"type": "habitat"
 	}
 ]

@@ -94,7 +94,7 @@ Decompose for ratio math:
 | 10 | `proxima`, `irasia`, `tokirev` |
 | 6 | `new_carthage`, `fortuna`, `horizon` |
 | 4 | `bela`, `pelagos`, `fennet`, `titania`, `tycho` |
-| 2 | `vulcan_research`, `centauri_a_beltworks`, `acb1`, `acb2`, `acb3`, `terminus`, `regulus_belt`, `denarius_ii`, `typhon_xvi`, `pelagos_belt` |
+| 2 | `vulcan_research`, `centauri_a_beltworks`, `acb1`, `acb2`, `acb3`, `terminus`, `regulus_belt`, `denarius_ii`, `typhon_xvi`, `pelagos_belt`, `aurelia`, `boreas`, `calypso_vi`, `hesper`, `kestrel` |
 
 Population from `sectors.json` is **not** read by `CommodityEconomy`.
 

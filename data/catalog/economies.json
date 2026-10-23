@@ -470,5 +470,80 @@
 			"pharmaceuticals": 2.1,
 			"water_ice": 3.0
 		}
+	},
+	{
+		"id": "aurelia",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 6.0,
+			"data": 2.0,
+			"minerals": 8.0
+		},
+		"consume": {
+			"consumer_goods": 3.0,
+			"food_products": 8.0,
+			"luxury_goods": 4.0,
+			"water_ice": 6.0
+		}
+	},
+	{
+		"id": "boreas",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 8.0,
+			"energy": 2.5,
+			"minerals": 11.0,
+			"water_ice": 9.0
+		},
+		"consume": {
+			"food_products": 10.0,
+			"industrial_components": 3.0,
+			"pharmaceuticals": 2.5
+		}
+	},
+	{
+		"id": "calypso_vi",
+		"tier": "outer",
+		"wealth": 0.9,
+		"produce": {
+			"consumer_goods": 2.0,
+			"luxury_goods": 4.0
+		},
+		"consume": {
+			"energy": 3.0,
+			"food_products": 8.0,
+			"luxury_goods": 5.0,
+			"pharmaceuticals": 2.0
+		}
+	},
+	{
+		"id": "hesper",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"energy": 1.0,
+			"water_ice": 3.0
+		},
+		"consume": {
+			"energy": 4.0,
+			"food_products": 5.0,
+			"industrial_components": 2.0
+		}
+	},
+	{
+		"id": "kestrel",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"luxury_goods": 3.0,
+			"water_ice": 4.0
+		},
+		"consume": {
+			"consumer_goods": 3.0,
+			"food_products": 7.0,
+			"luxury_goods": 4.0
+		}
 	}
 ]

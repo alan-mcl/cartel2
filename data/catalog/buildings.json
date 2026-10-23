@@ -1516,5 +1516,95 @@
 		"name": "DeepSpace Cooperative Headquarters",
 		"short_desc": "DeepSpace Cooperative charter desk.",
 		"type": "corporate_office"
+	},
+	{
+		"art": "res://assets/ui/locations/aurelia_terminal.png",
+		"description": "Customs for assay convoys and hab-suit excursion traffic at Aurelia.",
+		"id": "aurelia_terminal",
+		"kind": "terminal",
+		"name": "Aurelia Terminal",
+		"short_desc": "Terminal for Aurelia traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/aurelia_exchange.png",
+		"description": "Commodity exchange for Aurelia ore contracts and resort supply runs.",
+		"id": "aurelia_exchange",
+		"kind": "merchant",
+		"name": "Aurelia Exchange",
+		"short_desc": "Exchange at Aurelia.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/boreas_terminal.png",
+		"description": "Customs and convoy scheduling for high-gravity mining at Boreas.",
+		"id": "boreas_terminal",
+		"kind": "terminal",
+		"name": "Boreas Terminal",
+		"short_desc": "Terminal for Boreas traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/boreas_exchange.png",
+		"description": "Commodity exchange for Boreas ore and ice contracts.",
+		"id": "boreas_exchange",
+		"kind": "merchant",
+		"name": "Boreas Exchange",
+		"short_desc": "Exchange at Boreas.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/calypso_vi_terminal.png",
+		"description": "Arrival terminal for the Calypso VI resort. Charter yachts mix with supply shuttles from La Bella Vista.",
+		"id": "calypso_vi_terminal",
+		"kind": "terminal",
+		"name": "Calypso VI Terminal",
+		"short_desc": "Terminal for Calypso VI traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/calypso_vi_exchange.png",
+		"description": "Commodity exchange for resort supply and luxury contracts at Calypso VI.",
+		"id": "calypso_vi_exchange",
+		"kind": "merchant",
+		"name": "Calypso VI Exchange",
+		"short_desc": "Exchange at Calypso VI.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/hesper_terminal.png",
+		"description": "Small customs desk for the orbital station at Hesper.",
+		"id": "hesper_terminal",
+		"kind": "terminal",
+		"name": "Hesper Terminal",
+		"short_desc": "Terminal for Hesper traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/hesper_exchange.png",
+		"description": "Commodity exchange for station supply and ice contracts at Hesper.",
+		"id": "hesper_exchange",
+		"kind": "merchant",
+		"name": "Hesper Exchange",
+		"short_desc": "Exchange at Hesper.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/kestrel_terminal.png",
+		"description": "Arrival terminal for Kestrel Resort. Seasonal charter traffic shares the docks with ice haulers.",
+		"id": "kestrel_terminal",
+		"kind": "terminal",
+		"name": "Kestrel Resort Terminal",
+		"short_desc": "Terminal for Kestrel Resort traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/kestrel_exchange.png",
+		"description": "Commodity exchange for resort supply and comet-ice contracts at Kestrel.",
+		"id": "kestrel_exchange",
+		"kind": "merchant",
+		"name": "Kestrel Exchange",
+		"short_desc": "Exchange at Kestrel Resort.",
+		"type": "market"
 	}
 ]

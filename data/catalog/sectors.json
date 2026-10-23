@@ -551,5 +551,115 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 2.6
+	},
+	{
+		"id": "aurelia",
+		"name": "Aurelia Sector",
+		"orbit_name": "Aurelia near orbit",
+		"planet_name": "Aurelia",
+		"star_system": "Delta Pavonis",
+		"description": "Dry inner world of Delta Pavonis, with mining, research, and low-G hab-suit tourism.",
+		"gravity": 0.42,
+		"population_billions": 0.25,
+		"play_bounds": 8000,
+		"objective": "Explore Aurelia near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.5,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 5.08,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 3.65,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 0.55
+	},
+	{
+		"id": "boreas",
+		"name": "Boreas Sector",
+		"orbit_name": "Boreas near orbit",
+		"planet_name": "Boreas",
+		"star_system": "Delta Pavonis",
+		"description": "Icy super-Earth beyond La Bella Vista. Mineral-rich, and unpopular with tourists because of its high gravity.",
+		"gravity": 1.8,
+		"population_billions": 0.12,
+		"play_bounds": 8000,
+		"objective": "Explore Boreas near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.6,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.43,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 1.6
+	},
+	{
+		"id": "calypso_vi",
+		"name": "Calypso VI Sector",
+		"orbit_name": "Calypso VI near orbit",
+		"planet_name": "Calypso VI",
+		"star_system": "Delta Pavonis",
+		"description": "Resort on the sixth moon of Calypso, with views of the parent giant's rings.",
+		"gravity": 0.28,
+		"population_billions": 0.2,
+		"play_bounds": 8000,
+		"objective": "Explore Calypso VI near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.4,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.15,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.11,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 3.2
+	},
+	{
+		"id": "hesper",
+		"name": "Hesper Sector",
+		"orbit_name": "Hesper near orbit",
+		"planet_name": "Hesper",
+		"star_system": "Delta Pavonis",
+		"description": "Remote ice giant of Delta Pavonis, with an unusually strong magnetic field.",
+		"gravity": 0.2,
+		"population_billions": 0.04,
+		"play_bounds": 8000,
+		"objective": "Explore Hesper near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 4.0,
+			"magnetic_fluctuation": 0.25,
+			"radiant": 0.013,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.009,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 11.0
+	},
+	{
+		"id": "kestrel",
+		"name": "Kestrel Sector",
+		"orbit_name": "Kestrel near orbit",
+		"planet_name": "Kestrel",
+		"star_system": "Delta Pavonis",
+		"description": "Resort habitat orbiting the long-period comet Kestrel.",
+		"gravity": 0.08,
+		"population_billions": 0.08,
+		"play_bounds": 8000,
+		"objective": "Explore Kestrel near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.04,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.03,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 6.0
 	}
 ]

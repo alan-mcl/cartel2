@@ -610,6 +610,15 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	var pelagos_sites: Array[String] = ["pelagos_belt"]
 	for sector_id in pelagos_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "pelagos")
+	var bela_sites: Array[String] = [
+		"aurelia",
+		"boreas",
+		"calypso_vi",
+		"hesper",
+		"kestrel",
+	]
+	for sector_id in bela_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "bela")
 
 
 static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:
