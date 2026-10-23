@@ -2769,8 +2769,8 @@
       "article": "an"
     },
     {
-      "id": "frost_line",
-      "label": "Frost line",
+      "id": "273k_line",
+      "label": "273K transition line",
       "star": true,
       "objects": [
         {

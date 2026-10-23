@@ -6,8 +6,9 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 const TrafficSpawnScript := preload("res://scripts/gameplay/traffic_spawn.gd")
 
 
-static func run(runner: TestRunner) -> void:
+static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	var catalog := Catalog.load_default()
+	_test_sector_nav_adapter(runner, catalog, tree)
 	_test_setup_fleet_size(runner, catalog)
 	_test_sim_slot_cap(runner, catalog)
 	_test_near_lod_tracks_sim_slot(runner, catalog)
@@ -15,6 +16,34 @@ static func run(runner: TestRunner) -> void:
 	_test_detection_stagger_phase(runner)
 	_test_clear_drops_fleet(runner, catalog)
 	_test_ambient_ship_spawn_anonymous(runner, catalog)
+
+
+static func _test_sector_nav_adapter(runner: TestRunner, catalog: Catalog, tree: SceneTree) -> void:
+	if tree == null:
+		tree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		runner.check(false, "world nav: SceneTree available")
+		return
+	var host := Node2D.new()
+	tree.root.add_child(host)
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "NAV-1", "tester"), "world nav: session starts")
+	var loader := WorldLoader.new()
+	loader.load_sector(host, catalog, session, "proxima")
+	var ids: Array[String] = []
+	for entry in loader.get_nav_contacts(catalog, false):
+		if typeof(entry) == TYPE_DICTIONARY:
+			ids.append(str(entry.get("id", "")))
+	runner.check("habitat" in ids, "world nav: proxima habitat contact")
+	runner.check("planet" in ids, "world nav: proxima planet contact")
+	runner.check(not loader.get_traffic_anchors().is_empty(), "world nav: traffic anchors")
+	runner.check(
+		not loader.is_traffic_route_arrived(
+			Vector2(80000, 80000), Vector2(80000, 80000), "habitat", {}
+		),
+		"world nav: far from habitat is not arrived"
+	)
+	host.free()
 
 
 static func _test_setup_fleet_size(runner: TestRunner, catalog: Catalog) -> void:

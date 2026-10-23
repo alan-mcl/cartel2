@@ -170,13 +170,11 @@ Production code reads generated `*Def` records or the `AssembledShip` chassis ac
 
 ## A-11 `WorldLoader` owns layout, nav, traffic geometry, and volatile sites
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`scripts/presentation/world_loader.gd` is about 1,260 lines. It spawns sector and unspace scenes, caches nav contacts, and builds the arrival geometry `traffic_routing.gd` consumes. `nspace_field.gd` is about 790 lines of the same shape for unspace presentation.
+`WorldLoader` still spawns sector scenes, volatile sites, and unspace (`NspaceField` is unchanged). `WorldNav` owns the sector nav cache, unspace and volatile contact lists, traffic anchors, and route-arrival tests. `WorldController`, `FlightLoopController`, and `TrafficDirector` keep calling the same `WorldLoader` methods.
 
-**Direction:** Split spawn from the nav and traffic adapter, keeping the public methods `WorldController` and gameplay already call. Touch unspace only when that code is already being edited.
-
-**Do not:** add world kinds. Moons and belts stay ordinary sectors (Phase 4).
+**Do not:** add world kinds. Moons and belts stay ordinary sectors (Phase 4). Do not split `nspace_field.gd` unless that file is already being edited.
 
 ---
 

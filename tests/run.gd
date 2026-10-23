@@ -35,7 +35,7 @@ func _init() -> void:
 	TestBountyCharters.run(runner)
 	TestFreight.run(runner)
 	TestCharterHopsDeadlines.run(runner)
-	TestTraffic.run(runner)
+	TestTraffic.run(runner, self)
 	TestCorporatePresence.run(runner)
 	TestShipSim.run(runner)
 	TestShipVisual.run(runner)
