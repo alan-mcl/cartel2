@@ -25,8 +25,8 @@ This repository is the **production Godot build** of Cartel, not a throwaway POC
 - Content is JSON under `data/catalog/`. Frozen lore: `docs/setting/overview.md`, `corporations.md`, `planets.md`, `date_time.md`. Implementation docs are indexed from the root [README.md](README.md).
 - **Those setting files are frozen** unless the user explicitly asks for a setting-doc change in that request. Do not edit them on your own, and do not invent lore in JSON to fill gaps they do not cover.
 - Design docs describe what this repository implements today. When a change alters behaviour or catalog shape, update the doc that states it in the same change. `docs/design/architecture/` covers code layout, schemas, systems, and tooling (`architecture.md`, `data_model.md`, `commodity_economy.md`, `sprite_sizes.md`, `ui_theme.md`, `dev_sandboxes.md`). `docs/design/content/` covers playable rules and rosters (ships, equipment, commodities, trade network, translations, missions, field conditions, GST flow).
-- Open work is tracked in [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md). Items stay **Discuss** until picked up. Read **Do not** before starting, and update **Status** in the same commit. Completed phases 0–6 and their constraints are archived in [docs/design/architecture/refactor_backlog.md](docs/design/architecture/refactor_backlog.md). Do not add new items there.
-- **The project stays on GDScript.** A port to Godot .NET/C# was assessed and rejected; see the standing decision in the refactor backlog before proposing one.
+- Open work is tracked in [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md). Items stay **Discuss** until picked up. Read **Do not** before starting. Remove the item in the same change as the work.
+- **The project stays on GDScript.** A port to Godot .NET/C# was assessed and rejected. A language-bound hot loop, if one remains after algorithmic fixes, would be a GDExtension for that kernel.
 
 ## Required check before done
 
@@ -77,6 +77,10 @@ Use **British English** in setting docs, design prose, and player-facing catalog
 - Only **4-space** Unspace is implemented; do not wire n>5 routes or hyperdrive translation without a plan
 - Do not invent new setting canon in JSON alone. `docs/setting/overview.md`, `corporations.md`, `planets.md`, and `date_time.md` are frozen unless the user explicitly requests a setting-doc edit
 - Merchants beyond Proxima Exchange remain partial; check README placeholders
+- Do not unify the player and NPC simulation tick rate. Share the sim path; keep the cadences separate
+- Do not pool projectiles
+- Do not make `gdlint` mandatory
+- `SaveStore.save_dir` is injectable. Tests must keep using a project-local directory. Do not write the default `user://saves/` slots from the suite
 
 ## Useful commands
 
@@ -100,6 +104,5 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 - [README.md](README.md) - run, controls, and the documentation index
 - [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md) - code layout and data flow
 - [docs/design/architecture/data_model.md](docs/design/architecture/data_model.md) - catalog schemas and runtime types
-- [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md) - open design follow-ons and audit items
-- [docs/design/architecture/refactor_backlog.md](docs/design/architecture/refactor_backlog.md) - archive of completed engineering phases 0–6
+- [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md) - open design follow-ons
 - Catalog files - `data/catalog/*.json`

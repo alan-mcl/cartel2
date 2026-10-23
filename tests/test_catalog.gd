@@ -110,6 +110,20 @@ static func run(runner: TestRunner) -> void:
 	_validate_combat(runner, catalog)
 	_validate_habitat_buildings(runner, catalog)
 	_validate_corporate_headquarters(runner, catalog)
+	_validate_corporation_logos(runner, catalog)
+
+
+static func _validate_corporation_logos(runner: TestRunner, catalog: Catalog) -> void:
+	for corp_variant in catalog.list_corporations():
+		if typeof(corp_variant) != TYPE_DICTIONARY:
+			continue
+		var corp_id := str(corp_variant.get("id", ""))
+		var logo_path := catalog.corporation_logo_path(corp_id)
+		runner.check(not logo_path.is_empty(), "corporation %s has logo texture" % corp_id)
+		runner.check(
+			ResourceLoader.exists(logo_path),
+			"corporation %s logo path loads" % corp_id
+		)
 
 
 static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) -> void:

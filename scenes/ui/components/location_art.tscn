@@ -23,3 +23,17 @@ theme_type_variation = &"Muted"
 text = "Location art"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LogoHost" type="Control" parent="."]
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Logo" type="TextureRect" parent="LogoHost"]
+layout_mode = 0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 2

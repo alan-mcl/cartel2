@@ -30,6 +30,7 @@ const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
 const CORPORATE_OFFICE_TICKER_PATH := "res://data/catalog/corporate_office_ticker.json"
 const STARS_PATH := "res://data/catalog/stars.json"
+const CORP_LOGO_DIR := "res://assets/ui/corps/logos"
 
 const ROUTE_SECONDS_PER_FRICTION := 240.0
 const ROUTE_TIME_JITTER := 0.08
@@ -328,6 +329,22 @@ func get_traffic_config() -> Dictionary:
 
 func get_corporation(id: String) -> Dictionary:
 	return _require(corporations_by_id, id, "corporation")
+
+
+func corporation_logo_path(corporation_id: String) -> String:
+	var corp_id := corporation_id.strip_edges()
+	if corp_id.is_empty():
+		return ""
+	var corp := get_corporation(corp_id)
+	if corp.is_empty():
+		return ""
+	var ticker := str(corp.get("callsign_prefix", "")).strip_edges()
+	if ticker.is_empty():
+		return ""
+	var path := "%s/%s.png" % [CORP_LOGO_DIR, ticker]
+	if not ResourceLoader.exists(path):
+		return ""
+	return path
 
 
 func list_corporations() -> Array:

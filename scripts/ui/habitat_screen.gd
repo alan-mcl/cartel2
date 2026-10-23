@@ -238,6 +238,11 @@ func _update_building_header(habitat: Dictionary, building: Dictionary) -> void:
 		art_path = _context.catalog.get_habitat_art(habitat)
 		label = str(habitat.get("name", ""))
 	_art_frame.set_art_path(art_path, label)
+	var logo_path := ""
+	if _context.catalog.get_building_type(building) == "corporate_office":
+		logo_path = _context.catalog.corporation_logo_path(str(building.get("corporation_id", "")))
+	if _art_frame.has_method("set_logo_path"):
+		_art_frame.set_logo_path(logo_path)
 
 
 func _show_building_content(habitat: Dictionary, building: Dictionary) -> void:

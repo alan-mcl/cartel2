@@ -10,7 +10,7 @@
 
 The playable loop is flight, docking, commodity trade, ship fitting, passenger and freight charters, and scan and bounty work. Scan and bounty charters can grant a private volatile translation. Public routes include n=5 and n=6 translations on the same 4-space presentation. There is no separate 5-space or 6-space layout, no hyperdrive translation, and no combat game-over screen.
 
-What is not built: [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md#not-yet-implemented). Open follow-ons and the maintainability audit: [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md).
+What is not built: [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md#not-yet-implemented). Open follow-ons: [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md).
 
 ## Features
 
@@ -112,7 +112,6 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 - [sprite sizes](docs/design/architecture/sprite_sizes.md)
 - [dev sandboxes](docs/design/architecture/dev_sandboxes.md)
 - [backlog](docs/design/architecture/backlog.md) - open work
-- [refactor archive](docs/design/architecture/refactor_backlog.md) - completed phases 0–6
 
 **Content** (playable rules and rosters):
 

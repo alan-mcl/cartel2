@@ -148,6 +148,7 @@ Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000*
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
 | Location / building art | `assets/ui/locations/*.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
+| Corporation logos | `assets/ui/corps/logos/<callsign_prefix>.png` | varies | **Author at display size** | 1:1 on corporate building banners; right edge flush, vertically centred, cropped to the 160 px header |
 | Chassis UI header | `assets/ui/ships/<chassis_id>.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9 banner via `LocationArtFactory.create_banner()` (cover + left fade); Shipyard hosts above stats scroll |
 | Module category icon | `assets/ui/modules/<category>.png` | 64×64 | **64×64** | One PNG per module `category`; list rows at 24 px |
 | Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 | **120×160** | Same height as habitat header banner (`LocationArt` header min-height **160 px**); width **120** (3:4). `PortraitTextureRect` uses that box in New Game and habitat. Mipmaps + linear filter if exporting larger. |
