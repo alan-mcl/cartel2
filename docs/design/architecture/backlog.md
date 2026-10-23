@@ -218,11 +218,9 @@ Maker allow-lists, retired module ids, and banned makers live in `data/validatio
 
 ## A-16 Dev flight sandboxes copy the production tick
 
-**Status:** Discuss. **Severity:** Low.
+**Status:** Done. **Severity:** Low.
 
-`FlightSandboxBase` rebuilds HUD nav that `FlightLoopController` already updates. `combat_sandbox.gd` ticks `TrafficActor` and detection itself instead of going through `TrafficDirector`. `ship_assembly_sandbox.gd` hosts the real yard and is fine. `system_render_tester.gd` and `smoke_scenes.gd` use `WorldLoader`.
-
-**Direction:** When those sandboxes are next edited, call the production flight tick with the sandbox session. Not worth a dedicated change on its own.
+`FlightSandboxBase` binds `FlightLoopController` to the sandbox session. HUD nav and signature go through `present_flight_frame`. The combat bout installs its opponent with `install_scripted_roster` and calls `physics_tick`, so detection and the actor step run on `TrafficDirector`. The stealth drill still owns acquire and visibility, and uses the same HUD frame. The yard, system render tester, and scene smoke stay as they were.
 
 **Do not:** make sandboxes depend on the full habitat UI.
 

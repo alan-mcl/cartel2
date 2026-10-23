@@ -23,6 +23,14 @@ const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103a"
 
 var session: GameSession
 var catalog: Catalog
+var player_ship: AssembledShip
+var play_bounds: float = 3000.0
+var game_active: bool = false
+
+var _flight := FlightLoopController.new()
+var _world_loader := WorldLoader.new()
+var _jump: CanvasLayer
+var _ui_root: CanvasLayer
 
 var _ship_template_ids: Array[String] = []
 var _traffic_root: Node2D = null
@@ -53,6 +61,23 @@ func _ready() -> void:
 
 	_hud.visible = false
 	_setup_layer.visible = true
+	_jump = CanvasLayer.new()
+	_jump.visible = false
+	add_child(_jump)
+	_ui_root = CanvasLayer.new()
+	_ui_root.visible = false
+	add_child(_ui_root)
+	_flight.bind(
+		self,
+		_world_loader,
+		catalog,
+		_player,
+		_hud,
+		_camera,
+		_jump,
+		_ui_root,
+		get_tree()
+	)
 	get_tree().paused = true
 
 
@@ -288,6 +313,7 @@ func _configure_player_for_run(player_owned: OwnedShip) -> AssembledShip:
 	session.current_ship_id = player_owned.id
 
 	var player_assembled := ShipAssembler.assemble_owned(catalog, player_owned)
+	player_ship = player_assembled
 	session.apply_combat_state(ShipCombatState.from_assembled(player_assembled))
 
 	_player.configure(player_assembled, player_owned, catalog, session)
@@ -301,6 +327,9 @@ func _configure_player_for_run(player_owned: OwnedShip) -> AssembledShip:
 
 
 func _enter_run_ui(player_assembled: AssembledShip) -> void:
+	player_ship = player_assembled
+	play_bounds = _nav_radius_for_hud()
+	game_active = true
 	_camera.make_current()
 	_hud.bind(session, _player, player_assembled, null, catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
@@ -315,6 +344,8 @@ func _enter_run_ui(player_assembled: AssembledShip) -> void:
 
 
 func _return_to_setup_ui() -> void:
+	game_active = false
+	_flight.clear_traffic()
 	_player.freeze_motion()
 	_hud.visible = false
 	_setup_layer.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -372,33 +403,7 @@ func _play_destroyed_or_free(node: Node2D) -> void:
 
 
 func _update_hud_nav() -> void:
-	var contacts: Array = _collect_nav_contacts()
-	if _player.has_method("retain_target_lock"):
-		_player.retain_target_lock(contacts)
-	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
-	if _player.has_method("set_guidance_lock_contact"):
-		_player.set_guidance_lock_contact(locked_contact)
-	if _player.has_method("set_autopilot_target"):
-		_player.set_autopilot_target(locked_contact)
-	_hud.set_nav_state(
-		_nav_radius_for_hud(),
-		_player.global_position,
-		rad_to_deg(_player.motion.facing),
-		contacts,
-		_camera,
-		{},
-		locked_contact
-	)
-	var player_signature := SensorSystem.live_signature(
-		_player.assembled_ship,
-		_player.operating_state
-	)
-	var transponder_label := "on" if _player.operating_state.transponder_broadcasting else "off"
-	var active_sensors_label := FlightLoopController.active_sensors_hud_label(
-		_player.assembled_ship,
-		_player.operating_state
-	)
-	_hud.set_signature_state(player_signature, transponder_label, active_sensors_label)
+	_flight.present_flight_frame(_collect_nav_contacts(), _nav_radius_for_hud())
 
 
 func _clear_traffic_root() -> void:

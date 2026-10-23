@@ -117,6 +117,31 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				_traffic_view.sync(_traffic_director.actors, _catalog)
 
 	var contacts := _collect_nav_contacts()
+	var nav_radius: float = _main.play_bounds
+	if not _main.session.in_unspace:
+		nav_radius = _world_loader.get_content_radius()
+		if nav_radius <= 0.0:
+			nav_radius = _main.play_bounds
+	var star_display: Dictionary = {}
+	if not _main.session.in_unspace:
+		star_display = _world_loader.get_local_star_display()
+	present_flight_frame(contacts, nav_radius, star_display)
+
+
+func install_scripted_roster(roster: Array, sector_id: String, envelope: float) -> void:
+	_ensure_traffic_director()
+	if _traffic_director == null:
+		return
+	_traffic_director.setup_scripted_volatile_roster(
+		_catalog,
+		sector_id,
+		envelope,
+		_player.global_position,
+		roster
+	)
+
+
+func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dictionary = {}) -> void:
 	if _player.has_method("retain_target_lock"):
 		_player.retain_target_lock(contacts)
 	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
@@ -124,10 +149,6 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_player.set_guidance_lock_contact(locked_contact)
 	if _player.has_method("set_autopilot_target"):
 		_player.set_autopilot_target(locked_contact)
-
-	var nav_radius: float = _main.play_bounds
-	if not _main.session.in_unspace:
-		nav_radius = _world_loader.get_content_radius()
 
 	var owned: OwnedShip = _main.session.get_current_owned_ship()
 	var player_broadcast: Dictionary = TransponderBroadcastScript.player_broadcast(
@@ -144,15 +165,12 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		player_broadcast,
 		locked_contact
 	)
-	if _main.session.in_unspace:
-		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
-	else:
-		_hud.set_star_lens_flare(
-			_world_loader.get_local_star_display(),
-			_player.global_position,
-			_player.motion.facing,
-			_camera
-		)
+	_hud.set_star_lens_flare(
+		star_display,
+		_player.global_position,
+		_player.motion.facing,
+		_camera
+	)
 	var player_signature := SensorSystem.live_signature(
 		_player.assembled_ship,
 		_player.operating_state

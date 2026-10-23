@@ -133,6 +133,7 @@ func _spawn_opponent(
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
 
+	_flight.install_scripted_roster([_opponent_actor], "proxima", NAV_RADIUS)
 	_opponent_node = _spawn_bound_npc(_opponent_actor, spawn_pos)
 
 
@@ -140,52 +141,20 @@ func _physics_process(delta: float) -> void:
 	if _bout_state != BoutState.FIGHTING:
 		return
 
-	if _opponent_actor == null:
-		_update_hud_nav()
-		return
+	_flight.physics_tick(delta, Engine.get_physics_frames())
+	_sync_opponent_presentation()
 
+
+func _sync_opponent_presentation() -> void:
+	if _opponent_actor == null:
+		return
 	if _opponent_actor.ai_state == TrafficActorScript.STATE_DESTROYED:
 		if not _destroyed_pending:
 			_destroyed_pending = true
 			_play_destroyed_or_free(_opponent_node)
 			_opponent_node = null
-		_update_hud_nav()
 		return
-
-	var traffic_config := catalog.get_traffic_config()
-	var anchors: Array = []
-	var observer_profile := SensorSystem.sensor_profile(
-		_player.assembled_ship,
-		_player.operating_state
-	)
-	var player_signature := SensorSystem.live_signature(
-		_player.assembled_ship,
-		_player.operating_state
-	)
-	var player_broadcasting: bool = _player.operating_state.transponder_broadcasting
-	_opponent_actor.refresh_player_detection(
-		_player.global_position,
-		observer_profile,
-		player_signature,
-		player_broadcasting,
-		traffic_config,
-		_player.assembled_ship.has_capability("sensor_read_beacons")
-	)
-	_opponent_actor.tick(
-		catalog,
-		traffic_config,
-		delta,
-		_player.global_position,
-		anchors,
-		0.0,
-		null,
-		_player.motion.velocity,
-		_player.motion.facing,
-		_player.motion.is_thrusting()
-	)
-
 	_sync_npc_node(_opponent_node, _opponent_actor)
-	_update_hud_nav()
 
 
 func _end_bout() -> void:

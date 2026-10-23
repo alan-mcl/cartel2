@@ -16,6 +16,7 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_detection_stagger_phase(runner)
 	_test_clear_drops_fleet(runner, catalog)
 	_test_ambient_ship_spawn_anonymous(runner, catalog)
+	_test_scripted_roster_stays_lone(runner, catalog)
 
 
 static func _test_sector_nav_adapter(runner: TestRunner, catalog: Catalog, tree: SceneTree) -> void:
@@ -244,6 +245,32 @@ static func _test_clear_drops_fleet(runner: TestRunner, catalog: Catalog) -> voi
 
 	director.clear()
 	runner.check_eq(director.actors.size(), 0, "director clear drops actors")
+
+
+static func _test_scripted_roster_stays_lone(runner: TestRunner, catalog: Catalog) -> void:
+	var director := TrafficDirectorScript.new()
+	var world_loader := WorldLoader.new()
+	var traffic_config := catalog.get_traffic_config()
+	var actor = TrafficActorScript.create(
+		catalog,
+		traffic_config,
+		"scripted_roster_test",
+		"flare_on_ss",
+		Vector2(400.0, 0.0),
+		PI,
+		"proxima"
+	)
+	runner.check(actor != null, "scripted roster actor spawns")
+	if actor == null:
+		return
+	director.setup_scripted_volatile_roster(catalog, "proxima", 3000.0, Vector2.ZERO, [actor])
+	for frame in range(12):
+		director.tick(0.1, Vector2.ZERO, world_loader, frame)
+	runner.check_eq(director.actors.size(), 1, "scripted roster does not fill a sector fleet")
+	actor.ai_state = TrafficActorScript.STATE_DESTROYED
+	director.tick(0.1, Vector2.ZERO, world_loader, 13)
+	director.tick(30.0, Vector2.ZERO, world_loader, 14)
+	runner.check_eq(director.actors.size(), 0, "scripted roster does not replace a destroyed ship")
 
 
 static func _test_ambient_ship_spawn_anonymous(runner: TestRunner, catalog: Catalog) -> void:
