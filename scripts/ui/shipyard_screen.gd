@@ -1,3 +1,4 @@
+class_name ShipyardScreen
 extends GameScreen
 
 const LOCATION_ART := preload("res://scenes/ui/components/location_art.tscn")
@@ -104,6 +105,10 @@ func _ready() -> void:
 
 func configure_embedded(enabled: bool) -> void:
 	_embedded = enabled
+	if enabled:
+		_disconnect_session_changed()
+	elif _context != null:
+		_connect_session_changed()
 	if is_node_ready():
 		_apply_embedded_chrome()
 	else:
@@ -138,7 +143,7 @@ func bind(context: UiContext) -> void:
 	super.bind(context)
 
 
-func _on_session_changed() -> void:
+func session_changed() -> void:
 	_request_refresh()
 
 
@@ -157,7 +162,35 @@ func _run_deferred_refresh() -> void:
 func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
+	if _can_soft_refresh():
+		_soft_refresh()
+		return
+	_full_refresh()
 
+
+func _can_soft_refresh() -> bool:
+	return _ship_item_list != null and _stock_tabs.get_tab_count() > 0
+
+
+func _soft_refresh() -> void:
+	if not _embedded:
+		_credits.text = "Credits: d%d" % _context.session.credits
+	_sync_log()
+	_sync_ship_list_labels()
+	_rebuild_ship_detail()
+	_update_actions()
+
+
+func _sync_ship_list_labels() -> void:
+	if _ship_item_list == null:
+		return
+	for i in range(_ship_ids.size()):
+		var ship := _context.session.get_owned_ship(_ship_ids[i])
+		if ship != null:
+			_ship_item_list.set_item_text(i, ship.name)
+
+
+func _full_refresh() -> void:
 	if _stock_tabs.get_tab_count() > 0:
 		_selected_stock_tab = _stock_tabs.current_tab
 

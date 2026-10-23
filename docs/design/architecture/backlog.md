@@ -146,17 +146,11 @@ Production code reads generated `*Def` records or the `AssembledShip` chassis ac
 
 ## A-8 Docked UI rebuilds on every `session.changed`
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`GameScreen.bind` connects `session.changed` to `refresh` and never disconnects it (`scripts/ui/game_screen.gd`). Habitat, market, dealer, yard, and charter panels clear and rebuild on that signal. `changed` also fires for logs, ammo selection, and sensor toggles. `TerminalPanel` already has a softer docking-bay refresh. The yard and the charter boards do not.
+`GameScreen` disconnects `session.changed` on rebind and in `_exit_tree`, routes the signal to overridable `session_changed()`, and keeps full `refresh()` for building or layout changes. Habitat syncs chrome only and forwards to embedded panels; embedded **ShipyardScreen** unsubscribes and relies on habitat. Market, dealer, terminal, yard, bar, corporate office, and charter panels soft-update in place where the widget tree already exists (charter panels reuse **CharterBoard**). **ShipyardScreen** uses `class_name` and `is ShipyardScreen` when popping stacked yard UI.
 
-`HabitatScreen` detects the shipyard by `script` path ending in `shipyard_screen.gd` rather than by type.
-
-`hud.gd` (about 640 lines) rebuilds weapon chits from `_process`. Worth measuring before treating it as a defect. `shipyard_screen.gd` (about 780 lines) is the largest docked panel and refreshes in full.
-
-**Direction:** Disconnect `changed` in `_exit_tree`. Split "log line" from "board data changed", or follow the terminal's soft refresh where the board is unchanged. Identify the shipyard with `is ShipyardScreen` or a registry flag.
-
-**Do not:** delete `changed` until subscribers have a narrower signal (see the Phase 1 event-bus note in the archive).
+**Do not:** delete `changed` until subscribers have a narrower signal (see the Phase 1 event-bus note in the archive). HUD weapon chits from `_process` remain out of scope.
 
 ## A-9 Player ship node records career shots and warning logs
 

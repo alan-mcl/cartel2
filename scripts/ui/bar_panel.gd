@@ -50,6 +50,21 @@ func configure(building: Dictionary) -> void:
 		_scan_panel.configure(_building)
 
 
+func session_changed() -> void:
+	if not is_node_ready() or _context == null:
+		return
+	if _can_soft_refresh():
+		_top_up_gossip_tape()
+		_ensure_charter_panel()
+		if _charter_panel != null and _charter_panel.has_method("session_changed"):
+			_charter_panel.session_changed()
+		elif _charter_panel != null and _charter_panel.has_method("refresh"):
+			_charter_panel.refresh()
+		_sync_scan_section()
+		return
+	refresh()
+
+
 func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
@@ -58,6 +73,10 @@ func refresh() -> void:
 	if _charter_panel != null and _charter_panel.has_method("refresh"):
 		_charter_panel.refresh()
 	_sync_scan_section()
+
+
+func _can_soft_refresh() -> bool:
+	return _gossip_started and _charter_panel != null and is_instance_valid(_charter_panel)
 
 
 func _process(_delta: float) -> void:

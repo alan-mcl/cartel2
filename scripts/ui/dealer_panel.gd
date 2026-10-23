@@ -12,6 +12,15 @@ func configure(building: Dictionary) -> void:
 	_building = building
 
 
+func session_changed() -> void:
+	if not is_node_ready() or _context == null or _context.session == null:
+		return
+	if _can_soft_refresh():
+		_soft_refresh()
+		return
+	refresh()
+
+
 func refresh() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
@@ -24,6 +33,21 @@ func refresh() -> void:
 		_build_ship_dealer_content(_building)
 	elif building_type == "chassis_dealer":
 		_build_chassis_dealer_content(_building)
+
+
+func _can_soft_refresh() -> bool:
+	return _dealer_item_list != null and is_instance_valid(_dealer_item_list)
+
+
+func _soft_refresh() -> void:
+	var detail := _find_meta_host("dealer_detail_host")
+	if detail == null:
+		return
+	var building_type := _context.catalog.get_building_type(_building)
+	if building_type == "ship_dealer":
+		_rebuild_ship_dealer_detail(detail)
+	elif building_type == "chassis_dealer":
+		_rebuild_chassis_dealer_detail(detail)
 
 
 func _build_ship_dealer_content(building: Dictionary) -> void:

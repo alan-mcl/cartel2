@@ -47,6 +47,19 @@ func _apply_tape_tag() -> void:
 	_tape_bar.set_tag(tag)
 
 
+func session_changed() -> void:
+	if not is_node_ready() or _context == null:
+		return
+	if _can_soft_refresh():
+		_top_up_tape()
+		if _scan_panel != null and _scan_panel.has_method("session_changed"):
+			_scan_panel.session_changed()
+		elif _scan_panel != null and _scan_panel.has_method("refresh"):
+			_scan_panel.refresh()
+		return
+	refresh()
+
+
 func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
@@ -57,6 +70,10 @@ func refresh() -> void:
 			_scan_panel.configure(_building)
 		if _scan_panel.has_method("refresh"):
 			_scan_panel.refresh()
+
+
+func _can_soft_refresh() -> bool:
+	return _tape_started and _scan_panel != null and is_instance_valid(_scan_panel)
 
 
 func _process(_delta: float) -> void:

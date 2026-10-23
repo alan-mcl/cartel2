@@ -2,12 +2,14 @@ class_name GameScreen
 extends Control
 
 var _context: UiContext
+var _bound_session: GameSession
 
 
 func bind(context: UiContext) -> void:
+	_disconnect_session_changed()
 	_context = context
-	if _context.session != null and not _context.session.changed.is_connected(_on_session_changed):
-		_context.session.changed.connect(_on_session_changed, CONNECT_DEFERRED)
+	_bound_session = _context.session if _context != null else null
+	_connect_session_changed()
 	_refresh_when_ready()
 
 
@@ -26,8 +28,31 @@ func handle_back() -> bool:
 	return false
 
 
-func _on_session_changed() -> void:
+func session_changed() -> void:
 	refresh()
+
+
+func _on_session_changed() -> void:
+	session_changed()
+
+
+func _connect_session_changed() -> void:
+	if _bound_session == null:
+		return
+	if not _bound_session.changed.is_connected(_on_session_changed):
+		_bound_session.changed.connect(_on_session_changed, CONNECT_DEFERRED)
+
+
+func _disconnect_session_changed() -> void:
+	if _bound_session == null:
+		return
+	if _bound_session.changed.is_connected(_on_session_changed):
+		_bound_session.changed.disconnect(_on_session_changed)
+
+
+func _exit_tree() -> void:
+	_disconnect_session_changed()
+	_bound_session = null
 
 
 func _refresh_when_ready() -> void:

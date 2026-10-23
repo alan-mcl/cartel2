@@ -2,6 +2,7 @@ extends GameScreen
 
 var board_mode: String = PassengerCharters.BOARD_TERMINAL
 var _resolve_ship_id: Callable = Callable()
+var _board: CharterBoard
 
 
 func set_ship_resolver(resolver: Callable) -> void:
@@ -11,21 +12,22 @@ func set_ship_resolver(resolver: Callable) -> void:
 func refresh() -> void:
 	if not is_node_ready() or _context == null or _context.session == null or _context.catalog == null:
 		return
-	_clear_children(self)
-	var board := CharterBoard.new()
-	board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	board.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	board.resolve_ship_id = _resolve_ship_id
-	board.ship_score = Callable(self, "_ship_score")
-	board.rerender = Callable(self, "refresh")
-	add_child(board)
+	if _board == null or not is_instance_valid(_board):
+		_clear_children(self)
+		_board = CharterBoard.new()
+		_board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_board.resolve_ship_id = _resolve_ship_id
+		_board.ship_score = Callable(self, "_ship_score")
+		_board.rerender = Callable(self, "refresh")
+		add_child(_board)
 	var blocked := _blocked_text()
 	if blocked.is_empty():
 		var missions := _missions()
 		if missions != null:
 			missions.ensure_boards(_context.session, _context.catalog)
-	board.present(_context, Callable(self, "_sections"), blocked)
+	_board.present(_context, Callable(self, "_sections"), blocked)
 
 
 func _blocked_text() -> String:

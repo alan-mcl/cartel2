@@ -67,9 +67,36 @@ func refresh() -> void:
 	if habitat.is_empty():
 		return
 
-	_title.text = str(habitat.get("name", "Habitat"))
-	var habitat_desc := str(habitat.get("description", habitat.get("short_desc", "")))
-	_description.text = habitat_desc
+	_sync_session_chrome(habitat)
+	_rebuild_building_list(habitat)
+	_update_building_header(habitat, building)
+	_show_building_content(habitat, building)
+
+
+func session_changed() -> void:
+	if not is_node_ready() or _context == null or _context.session == null or _context.catalog == null:
+		return
+	var habitat := _context.session.get_current_habitat(_context.catalog)
+	if habitat.is_empty():
+		return
+	_sync_session_chrome(habitat)
+	if _embedded_panel != null and is_instance_valid(_embedded_panel):
+		if _embedded_panel.has_method("session_changed"):
+			_embedded_panel.session_changed()
+		elif _embedded_panel.has_method("refresh"):
+			_embedded_panel.refresh()
+
+
+func _sync_session_chrome(habitat: Dictionary = {}) -> void:
+	if _context == null or _context.session == null:
+		return
+	if habitat.is_empty() and _context.catalog != null:
+		habitat = _context.session.get_current_habitat(_context.catalog)
+	if not habitat.is_empty():
+		_title.text = str(habitat.get("name", "Habitat"))
+		var habitat_desc := str(habitat.get("description", habitat.get("short_desc", "")))
+		_description.text = habitat_desc
+		_update_habitat_header(habitat)
 	_pilot.text = '"%s"' % _context.session.callsign
 	_update_portrait(_context.session.portrait_path)
 	_credits.text = "Coin d%d" % _context.session.credits
@@ -81,12 +108,7 @@ func refresh() -> void:
 	else:
 		_sanctions.text = ""
 		_sanctions.visible = false
-	_update_habitat_header(habitat)
 	_sync_log()
-
-	_rebuild_building_list(habitat)
-	_update_building_header(habitat, building)
-	_show_building_content(habitat, building)
 
 
 func _rebuild_building_list(habitat: Dictionary) -> void:
@@ -287,8 +309,7 @@ func _pop_stacked_shipyard_if_needed() -> void:
 	var top := _context.stack.get_top_screen()
 	if top == null or top == self:
 		return
-	var script: Variant = top.get_script()
-	if script != null and str(script.resource_path).ends_with("shipyard_screen.gd"):
+	if top is ShipyardScreen:
 		_context.stack.pop_screen()
 
 

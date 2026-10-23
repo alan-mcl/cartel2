@@ -59,6 +59,15 @@ func _top_up_tape() -> void:
 		tries += 1
 
 
+func session_changed() -> void:
+	if not is_node_ready() or _context == null or _context.session == null:
+		return
+	if _can_soft_refresh():
+		_soft_refresh()
+		return
+	refresh()
+
+
 func refresh() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
@@ -67,6 +76,38 @@ func refresh() -> void:
 	_clear_children(_listings_host)
 	_commodity_item_list = null
 	_build_content()
+
+
+func _can_soft_refresh() -> bool:
+	return (
+		_tape_started
+		and _commodity_item_list != null
+		and is_instance_valid(_commodity_item_list)
+	)
+
+
+func _soft_refresh() -> void:
+	_top_up_tape()
+	_context.session.refresh_market_quotes(_context.catalog)
+	var listings := _context.session.get_sector_quote_listings(_context.catalog)
+	_market_listings.clear()
+	for listing_variant in listings:
+		if typeof(listing_variant) == TYPE_DICTIONARY:
+			_market_listings.append(listing_variant)
+	for i in range(_market_commodity_ids.size()):
+		var commodity_id := _market_commodity_ids[i]
+		var listing := _find_market_listing(commodity_id)
+		var commodity := _context.catalog.get_commodity_def(commodity_id)
+		if commodity == null:
+			continue
+		var price := int(listing.get("price", commodity.base_price))
+		var commodity_label := commodity_id
+		if commodity.has_source_key("name"):
+			commodity_label = commodity.name
+		_commodity_item_list.set_item_text(i, "%s · d%d" % [commodity_label, price])
+	var detail := _find_meta_host("detail_host")
+	if detail != null:
+		_rebuild_commodity_detail(detail)
 
 
 func _start_tape() -> void:

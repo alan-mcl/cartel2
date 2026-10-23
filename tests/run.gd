@@ -5,6 +5,7 @@ func _init() -> void:
 	var runner := TestRunner.new()
 	TestCatalog.run(runner)
 	TestUiRegistry.run(runner)
+	TestGameScreen.run(runner, self)
 	TestSession.run(runner)
 	TestTranslation.run(runner)
 	TestVolatileTranslation.run(runner)

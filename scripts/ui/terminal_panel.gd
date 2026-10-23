@@ -54,13 +54,17 @@ func _process(_delta: float) -> void:
 		tries += 1
 
 
-func refresh() -> void:
+func session_changed() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
 	if _can_soft_refresh_docking_bay():
 		_soft_refresh_docking_bay()
 		return
 	_full_rebuild()
+
+
+func refresh() -> void:
+	session_changed()
 
 
 func _can_soft_refresh_docking_bay() -> bool:
