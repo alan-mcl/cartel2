@@ -1,0 +1,191 @@
+{
+  "makers": {
+    "power": [
+      "Andean Consolidated",
+      "Atlas Concern",
+      "Chettiar Holdings",
+      "Crown & Anchor",
+      "Evergreen Group",
+      "Four Rivers Zaibatsu",
+      "General Industrial",
+      "Guangzhou Mercantile",
+      "Holt-Winters Corp",
+      "House of Roth",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "Pacific Triad",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "Seven Bells Inc",
+      "Terra Nova",
+      "The Meridian Company",
+      "Tukey Enterprises"
+    ],
+    "computer": [
+      "Chimera Corporation",
+      "Cult of Apex",
+      "Four Rivers Zaibatsu",
+      "Holt-Winters Corp",
+      "LiveWorlds",
+      "Mercury Communications",
+      "Monday Corporation",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "Orion Spur Company",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "Seven Bells Inc",
+      "SnedeCorp",
+      "The Meridian Company",
+      "Tukey Enterprises"
+    ],
+    "life_support": [
+      "Atlas Concern",
+      "BioGenesis Life Sciences",
+      "Evergreen Group",
+      "Four Rivers Zaibatsu",
+      "General Industrial",
+      "Greenfields Corporation",
+      "Holt-Winters Corp",
+      "Morrow & Sons",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "The Meridian Company",
+      "The Praetorium",
+      "Tukey Enterprises",
+      "Universal House"
+    ],
+    "cargo": [
+      "Andean Consolidated",
+      "Atlas Concern",
+      "Carthage Mercantile",
+      "Chettiar Holdings",
+      "Crown & Anchor",
+      "Evergreen Group",
+      "Four Rivers Zaibatsu",
+      "General Industrial",
+      "Guangzhou Mercantile",
+      "Oklahoma Combine",
+      "Orion Spur Company",
+      "Pacific Triad",
+      "Sakuraya Shinise",
+      "Terra Nova",
+      "The Hanseatic Guild",
+      "The Meridian Company",
+      "Tukey Enterprises",
+      "Universal House"
+    ],
+    "propulsion": [
+      "Andean Consolidated",
+      "Atlas Concern",
+      "Chimera Corporation",
+      "Crown & Anchor",
+      "Four Rivers Zaibatsu",
+      "General Industrial",
+      "Guangzhou Mercantile",
+      "Holt-Winters Corp",
+      "House of Roth",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "Orion Spur Company",
+      "Pacific Triad",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "Seven Bells Inc",
+      "Terra Nova",
+      "The Meridian Company",
+      "Tukey Enterprises"
+    ],
+    "weapon": [
+      "Andean Consolidated",
+      "Atlas Concern",
+      "Carthage Mercantile",
+      "Chimera Corporation",
+      "Cult of Apex",
+      "Four Rivers Zaibatsu",
+      "Galactic Outcomes",
+      "General Industrial",
+      "Guangzhou Mercantile",
+      "Holt-Winters Corp",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "Pacific Triad",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "Seven Bells Inc",
+      "SnedeCorp",
+      "Terra Nova",
+      "The Meridian Company",
+      "Tukey Enterprises"
+    ],
+    "armour_shield": [
+      "Andean Consolidated",
+      "Atlas Concern",
+      "Chimera Corporation",
+      "Cult of Apex",
+      "Evergreen Group",
+      "Four Rivers Zaibatsu",
+      "Galactic Outcomes",
+      "General Industrial",
+      "Holt-Winters Corp",
+      "Oklahoma Combine",
+      "Orion Aerospace",
+      "Pacific Triad",
+      "ParaRamcoVidia",
+      "Sakuraya Shinise",
+      "Seven Bells Inc",
+      "SnedeCorp",
+      "Terra Nova",
+      "The Meridian Company",
+      "Tukey Enterprises"
+    ]
+  },
+  "retired_ids": {
+    "power": [
+      "fusion_plant_mk1",
+      "fusion_plant_mk2"
+    ],
+    "computer": [
+      "nav_combat_core_mk1",
+      "nav_combat_core_mk2",
+      "targeting_core_mk2"
+    ],
+    "life_support": [
+      "life_support_a3",
+      "life_support_mk1"
+    ],
+    "sensor": [
+      "sensor_advanced",
+      "sensor_basic",
+      "sensor_computational",
+      "sensor_em",
+      "sensor_gravimetric",
+      "sensor_thermal"
+    ],
+    "propulsion": [
+      "gravitic_mk1",
+      "mark_1_fusion",
+      "mark_2_antimatter",
+      "mark_3_fusion"
+    ],
+    "weapon": [
+      "hw_deflector_mk1",
+      "light_laser",
+      "mass_driver_round",
+      "scatter_cannon"
+    ]
+  },
+  "banned_makers": {
+    "propulsion": [
+      "Bayes Inc"
+    ],
+    "weapon": [
+      "Bayes Inc"
+    ],
+    "armour": [
+      "Bayes Inc"
+    ]
+  }
+}

@@ -18,98 +18,47 @@ from validate_sector_completeness import check as check_sector_completeness
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "data" / "catalog"
 
-POWER_PLANT_MAKERS = {
-    "Holt-Winters Corp",
-    "ParaRamcoVidia",
-    "General Industrial",
-    "Orion Aerospace",
-    "Oklahoma Combine",
-    "Four Rivers Zaibatsu",
-    "Atlas Concern",
-    "House of Roth",
-    "The Meridian Company",
-    "Seven Bells Inc",
-    "Sakuraya Shinise",
-    "Andean Consolidated",
-    "Terra Nova",
-    "Evergreen Group",
-    "Tukey Enterprises",
-    "Chettiar Holdings",
-    "Guangzhou Mercantile",
-    "Crown & Anchor",
-    "Pacific Triad",
-}
+
+def _load_module_rules() -> dict:
+    path = ROOT / "data" / "validation" / "module_rules.json"
+    with path.open(encoding="utf-8") as handle:
+        loaded = json.load(handle)
+    if not isinstance(loaded, dict):
+        raise SystemExit("module_rules.json must be an object")
+    return loaded
+
+
+MODULE_RULES = _load_module_rules()
+
+
+def _rule_names(group: str, key: str) -> set[str]:
+    rows = MODULE_RULES.get(group, {}).get(key, [])
+    if not isinstance(rows, list):
+        raise SystemExit(f"module_rules.json {group}.{key} must be an array")
+    return {str(row) for row in rows}
+
+
+POWER_PLANT_MAKERS = _rule_names("makers", "power")
+COMPUTE_CORE_MAKERS = _rule_names("makers", "computer")
+LIFE_SUPPORT_MAKERS = _rule_names("makers", "life_support")
+CARGO_MAKERS = _rule_names("makers", "cargo")
+PROPULSION_MAKERS = _rule_names("makers", "propulsion")
+WEAPON_MAKERS = _rule_names("makers", "weapon")
+ARMOUR_SHIELD_MAKERS = _rule_names("makers", "armour_shield")
+RETIRED_POWER_IDS = _rule_names("retired_ids", "power")
+RETIRED_COMPUTER_IDS = _rule_names("retired_ids", "computer")
+RETIRED_LIFE_SUPPORT_IDS = _rule_names("retired_ids", "life_support")
+RETIRED_SENSOR_IDS = _rule_names("retired_ids", "sensor")
+RETIRED_PROPULSION_IDS = _rule_names("retired_ids", "propulsion")
+RETIRED_WEAPON_IDS = _rule_names("retired_ids", "weapon")
+BANNED_PROPULSION_MAKERS = _rule_names("banned_makers", "propulsion")
+BANNED_WEAPON_MAKERS = _rule_names("banned_makers", "weapon")
+BANNED_ARMOUR_MAKERS = _rule_names("banned_makers", "armour")
+
 
 POWER_PLANT_TYPES = {"fission", "fusion", "radioisotope"}
-RETIRED_POWER_IDS = {"fusion_plant_mk1", "fusion_plant_mk2"}
-
-COMPUTE_CORE_MAKERS = {
-    "SnedeCorp",
-    "ParaRamcoVidia",
-    "Monday Corporation",
-    "Mercury Communications",
-    "Chimera Corporation",
-    "Seven Bells Inc",
-    "Orion Aerospace",
-    "Holt-Winters Corp",
-    "Sakuraya Shinise",
-    "Four Rivers Zaibatsu",
-    "Oklahoma Combine",
-    "Tukey Enterprises",
-    "The Meridian Company",
-    "Cult of Apex",
-    "LiveWorlds",
-    "Orion Spur Company",
-}
-
 COMPUTE_CORE_TYPES = {"silicon", "photon", "quantum"}
-RETIRED_COMPUTER_IDS = {
-    "nav_combat_core_mk1",
-    "nav_combat_core_mk2",
-    "targeting_core_mk2",
-}
-
-LIFE_SUPPORT_MAKERS = {
-    "Holt-Winters Corp",
-    "Orion Aerospace",
-    "ParaRamcoVidia",
-    "General Industrial",
-    "Oklahoma Combine",
-    "BioGenesis Life Sciences",
-    "Greenfields Corporation",
-    "Four Rivers Zaibatsu",
-    "Sakuraya Shinise",
-    "Morrow & Sons",
-    "Universal House",
-    "Evergreen Group",
-    "Atlas Concern",
-    "Tukey Enterprises",
-    "The Meridian Company",
-    "The Praetorium",
-}
-
 LIFE_SUPPORT_FLAGS = {"ls_comfort", "ls_luxury", "ls_habitat"}
-
-CARGO_MAKERS = {
-    "Oklahoma Combine",
-    "Atlas Concern",
-    "The Meridian Company",
-    "Crown & Anchor",
-    "The Hanseatic Guild",
-    "General Industrial",
-    "Four Rivers Zaibatsu",
-    "Guangzhou Mercantile",
-    "Carthage Mercantile",
-    "Chettiar Holdings",
-    "Pacific Triad",
-    "Orion Spur Company",
-    "Tukey Enterprises",
-    "Universal House",
-    "Evergreen Group",
-    "Terra Nova",
-    "Andean Consolidated",
-    "Sakuraya Shinise",
-}
 
 CARGO_CAPABILITY_FLAGS = {
     "life_support_integrated",
@@ -120,15 +69,6 @@ CARGO_CAPABILITY_FLAGS = {
     "military_grade",
 }
 CARGO_SKU_FLOOR = 18
-RETIRED_LIFE_SUPPORT_IDS = {"life_support_mk1", "life_support_a3"}
-RETIRED_SENSOR_IDS = {
-    "sensor_basic",
-    "sensor_advanced",
-    "sensor_thermal",
-    "sensor_gravimetric",
-    "sensor_em",
-    "sensor_computational",
-}
 # SKU counts are floors, not exact expectations. Adding content must never fail validation;
 # these only catch accidental bulk deletion. Do not convert them back to equality checks.
 SENSOR_SKU_FLOOR = 8
@@ -288,28 +228,6 @@ def check_world_entity_kinds(worlds: dict) -> list[str]:
     return errors
 
 
-PROPULSION_MAKERS = {
-    "Holt-Winters Corp",
-    "Orion Aerospace",
-    "Oklahoma Combine",
-    "Atlas Concern",
-    "ParaRamcoVidia",
-    "Four Rivers Zaibatsu",
-    "The Meridian Company",
-    "General Industrial",
-    "Crown & Anchor",
-    "House of Roth",
-    "Chimera Corporation",
-    "Sakuraya Shinise",
-    "Seven Bells Inc",
-    "Pacific Triad",
-    "Tukey Enterprises",
-    "Terra Nova",
-    "Andean Consolidated",
-    "Guangzhou Mercantile",
-    "Orion Spur Company",
-}
-
 ENGINE_TYPES = {
     "chemical",
     "hydro_thermal",
@@ -318,13 +236,6 @@ ENGINE_TYPES = {
     "antimatter",
     "gravitic",
     "integrated_sail",
-}
-
-RETIRED_PROPULSION_IDS = {
-    "mark_1_fusion",
-    "mark_3_fusion",
-    "mark_2_antimatter",
-    "gravitic_mk1",
 }
 
 PROPULSION_SKU_FLOOR = 40
@@ -347,51 +258,6 @@ ENGINE_TYPE_LABELS = {
     "antimatter": "Antimatter",
     "gravitic": "Gravitic",
     "integrated_sail": "Integrated sail",
-}
-
-WEAPON_MAKERS = {
-    "Holt-Winters Corp",
-    "Orion Aerospace",
-    "Oklahoma Combine",
-    "Galactic Outcomes",
-    "ParaRamcoVidia",
-    "Four Rivers Zaibatsu",
-    "Chimera Corporation",
-    "Atlas Concern",
-    "General Industrial",
-    "Seven Bells Inc",
-    "SnedeCorp",
-    "Pacific Triad",
-    "Tukey Enterprises",
-    "Andean Consolidated",
-    "Terra Nova",
-    "Sakuraya Shinise",
-    "Cult of Apex",
-    "Guangzhou Mercantile",
-    "Carthage Mercantile",
-    "The Meridian Company",
-}
-
-ARMOUR_SHIELD_MAKERS = {
-    "Holt-Winters Corp",
-    "Oklahoma Combine",
-    "Orion Aerospace",
-    "ParaRamcoVidia",
-    "General Industrial",
-    "Chimera Corporation",
-    "Atlas Concern",
-    "Four Rivers Zaibatsu",
-    "Galactic Outcomes",
-    "Seven Bells Inc",
-    "SnedeCorp",
-    "The Meridian Company",
-    "Sakuraya Shinise",
-    "Pacific Triad",
-    "Tukey Enterprises",
-    "Terra Nova",
-    "Andean Consolidated",
-    "Evergreen Group",
-    "Cult of Apex",
 }
 
 WEAPON_TYPES = {
@@ -1511,6 +1377,22 @@ def check_stars(stars: object) -> list[str]:
     return errors
 
 
+
+def check_module_rule_makers(corporations: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    names = {str(row.get("name", "")) for row in corporations.values() if isinstance(row, dict)}
+    for category, makers in sorted(MODULE_RULES.get("makers", {}).items()):
+        if not isinstance(makers, list):
+            errors.append(f"module_rules.json makers.{category} must be an array")
+            continue
+        for maker in makers:
+            if str(maker) not in names:
+                errors.append(
+                    f"module_rules.json makers.{category}: '{maker}' is not a corporation name"
+                )
+    return errors
+
+
 def main() -> int:
     sectors = index_by_id(load_array(CATALOG / "sectors.json"))
     habitats = index_by_id(load_array(CATALOG / "habitats.json"))
@@ -1536,6 +1418,7 @@ def main() -> int:
     commodities_by_id = index_by_id(commodities)
 
     errors: list[str] = []
+    errors.extend(check_module_rule_makers(corporations))
 
     errors.extend(check_sanctions(sanctions_doc))
     errors.extend(check_commodities(commodities))
@@ -1776,8 +1659,8 @@ def main() -> int:
         maker = str(module.get("maker", ""))
         if maker and maker not in PROPULSION_MAKERS:
             errors.append(f"propulsion module {module_id}: unknown maker '{maker}'")
-        if maker == "Bayes Inc":
-            errors.append(f"propulsion module {module_id}: Bayes Inc must not make engines")
+        if maker in BANNED_PROPULSION_MAKERS:
+            errors.append(f"propulsion module {module_id}: {maker} must not make engines")
         engine_type = str(module.get("engine_type", ""))
         if engine_type and engine_type not in ENGINE_TYPES:
             errors.append(f"propulsion module {module_id}: invalid engine_type '{engine_type}'")
@@ -1847,10 +1730,12 @@ def main() -> int:
                 if field not in module:
                     errors.append(f"weapon module {module_id}: missing {field}")
             maker = str(module.get("maker", ""))
-            if maker == "Bayes Inc":
-                errors.append(f"weapon module {module_id}: Bayes Inc must not make weapons")
+            if maker in BANNED_WEAPON_MAKERS:
+                errors.append(f"weapon module {module_id}: {maker} must not make weapons")
             if maker and maker not in WEAPON_MAKERS:
                 errors.append(f"weapon module {module_id}: unknown maker '{maker}'")
+            if module_id in RETIRED_WEAPON_IDS:
+                errors.append(f"modules.json: retired weapon id '{module_id}' still present")
             weapon_type = str(module.get("weapon_type", ""))
             if weapon_type and weapon_type not in WEAPON_TYPES:
                 errors.append(f"weapon module {module_id}: invalid weapon_type '{weapon_type}'")
@@ -1878,8 +1763,8 @@ def main() -> int:
                 if field not in module:
                     errors.append(f"armour module {module_id}: missing {field}")
             maker = str(module.get("maker", ""))
-            if maker == "Bayes Inc":
-                errors.append(f"armour module {module_id}: Bayes Inc must not make armour")
+            if maker in BANNED_ARMOUR_MAKERS:
+                errors.append(f"armour module {module_id}: {maker} must not make armour")
             if maker and maker not in ARMOUR_SHIELD_MAKERS:
                 errors.append(f"armour module {module_id}: unknown maker '{maker}'")
         elif category == "shield":

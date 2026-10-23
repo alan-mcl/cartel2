@@ -198,15 +198,11 @@ Production code reads generated `*Def` records or the `AssembledShip` chassis ac
 
 ## A-14 Module and habitat rules are duplicated and brittle
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-Maker allow-lists, life-support flags, cargo floors, and retired module ids are enforced both in `scripts/tools/validate_catalog_refs.py` and in `tests/test_catalog.gd`. A new manufacturer fails CI until both are edited. `test_catalog.gd` also requires exactly one shipyard per civic habitat (with an exception list), exactly one public route for named belt and hub sectors, and one terminal plus one HQ on stations. `test_catalog.gd` and `test_translation.gd` pin the Proxima–Bela n=4 solution at 42.
+Maker allow-lists, retired module ids, and banned makers live in `data/validation/module_rules.json`. `validate_catalog_refs.py` and `test_catalog.gd` both read that file. Every listed maker must be a `corporations.json` name. Category lists stay, because the catalog does not say which corporations may build which module kinds. Habitat checks are at most one shipyard, at least one public route to the named hub, and at least one terminal and headquarters desk on a station. Proxima–Bela n=4 solution 42 stays in `test_catalog.gd` and `test_translation.gd` as the designed public solution for that edge. SKU floors are unchanged.
 
-Floors (`_check_min_count`, validator SKU floors) are the right shape and should stay.
-
-**Direction:** One rule module or data file for maker and retired-id checks. Prefer "maker exists on `corporations.json`" over a handwritten allow-list where the setting allows it. Keep the solution-42 check only if that edge is a designed constant. Soften layout checks that are really "the current map looks like this".
-
-**Do not:** go back to exact SKU counts.
+**Do not:** go back to exact SKU counts. Do not open every corporation name as a valid maker for every category.
 
 ---
 

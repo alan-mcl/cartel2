@@ -2,9 +2,29 @@ class_name TestCatalog
 extends RefCounted
 
 
+const MODULE_RULES_PATH := "res://data/validation/module_rules.json"
+
+
+static func _rule_ids(group: String, key: String) -> Array:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MODULE_RULES_PATH))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return []
+	var section: Variant = (parsed as Dictionary).get(group, {})
+	if typeof(section) != TYPE_DICTIONARY:
+		return []
+	var rows: Variant = (section as Dictionary).get(key, [])
+	if typeof(rows) != TYPE_ARRAY:
+		return []
+	return rows
+
+
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 
+	runner.check(
+		not _rule_ids("retired_ids", "power").is_empty(),
+		"module rules list retired power ids"
+	)
 	runner.check(not catalog.get_sector("proxima").is_empty(), "proxima sector exists")
 	runner.check(not catalog.get_sector("bela").is_empty(), "bela sector exists")
 
@@ -129,22 +149,10 @@ static func _validate_habitat_buildings(runner: TestRunner, catalog: Catalog) ->
 			art_paths[building_art] = building_id
 			if catalog.get_building_type(building) == "shipyard":
 				shipyard_count += 1
-		var no_shipyard_habitats: Array[String] = [
-			"centauri_a_beltworks_habitat",
-			"acb1_habitat",
-			"acb2_habitat",
-			"acb3_habitat",
-			"terminus_habitat",
-			"vulcan_research_habitat",
-			"regulus_belt_habitat",
-			"denarius_ii_habitat",
-			"typhon_xvi_habitat",
-			"pelagos_belt_habitat",
-		]
-		if habitat_id in no_shipyard_habitats:
-			runner.check_eq(shipyard_count, 0, "habitat %s has no shipyard" % habitat_id)
-		else:
-			runner.check_eq(shipyard_count, 1, "habitat %s has one shipyard" % habitat_id)
+		runner.check(
+			shipyard_count <= 1,
+			"habitat %s has at most one shipyard" % habitat_id
+		)
 
 
 ## Catalog sizes are content, not contract. Assert a floor so accidental bulk deletion is still
@@ -183,7 +191,7 @@ static func _validate_power_plants(runner: TestRunner, catalog: Catalog) -> void
 			continue
 		var module_id := str(module_def.get("id", ""))
 		runner.check(
-			module_id != "fusion_plant_mk1" and module_id != "fusion_plant_mk2",
+			not _rule_ids("retired_ids", "power").has(module_id),
 			"retired POC plant %s absent" % module_id
 		)
 		var plant_type := str(module_def.get("plant_type", ""))
@@ -226,11 +234,7 @@ static func _validate_compute_cores(runner: TestRunner, catalog: Catalog) -> voi
 	var computer_modules: Array = catalog.list_modules("computer")
 	_check_min_count(runner, computer_modules.size(), 35, "compute core SKUs")
 
-	var retired := [
-		"nav_combat_core_mk1",
-		"nav_combat_core_mk2",
-		"targeting_core_mk2",
-	]
+	var retired := _rule_ids("retired_ids", "computer")
 	var type_counts := {"silicon": 0, "photon": 0, "quantum": 0}
 	for module_def in computer_modules:
 		if typeof(module_def) != TYPE_DICTIONARY:
@@ -284,12 +288,7 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 	var propulsion_modules: Array = catalog.list_modules("propulsion")
 	_check_min_count(runner, propulsion_modules.size(), 40, "propulsion SKUs")
 
-	var retired := [
-		"mark_1_fusion",
-		"mark_3_fusion",
-		"mark_2_antimatter",
-		"gravitic_mk1",
-	]
+	var retired := _rule_ids("retired_ids", "propulsion")
 	var type_counts := {
 		"chemical": 0,
 		"hydro_thermal": 0,
@@ -311,8 +310,8 @@ static func _validate_propulsion(runner: TestRunner, catalog: Catalog) -> void:
 		runner.check(not engine_type.is_empty(), "%s has engine_type" % module_id)
 		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
 		runner.check(
-			str(module_def.get("maker", "")) != "Bayes Inc",
-			"%s is not Bayes Inc propulsion" % module_id
+			not _rule_ids("banned_makers", "propulsion").has(str(module_def.get("maker", ""))),
+			"%s propulsion maker is allowed" % module_id
 		)
 		if type_counts.has(engine_type):
 			type_counts[engine_type] += 1
@@ -348,7 +347,7 @@ static func _validate_life_support(runner: TestRunner, catalog: Catalog) -> void
 	var life_support_modules: Array = catalog.list_modules("life_support")
 	_check_min_count(runner, life_support_modules.size(), 35, "life support SKUs")
 
-	var retired := ["life_support_mk1", "life_support_a3"]
+	var retired := _rule_ids("retired_ids", "life_support")
 	for module_def in life_support_modules:
 		if typeof(module_def) != TYPE_DICTIONARY:
 			continue
@@ -436,8 +435,8 @@ static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
 		runner.check(not str(module_def.get("delivery_type", "")).is_empty(), "%s has delivery_type" % module_id)
 		runner.check(not str(module_def.get("brand", "")).is_empty(), "%s has brand" % module_id)
 		runner.check(
-			str(module_def.get("maker", "")) != "Bayes Inc",
-			"%s is not Bayes Inc weapon" % module_id
+			not _rule_ids("banned_makers", "weapon").has(str(module_def.get("maker", ""))),
+			"%s weapon maker is allowed" % module_id
 		)
 
 	for module_def in armour:
@@ -446,8 +445,8 @@ static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
 		var module_id := str(module_def.get("id", ""))
 		runner.check(module_def.has("protection"), "%s has protection profile" % module_id)
 		runner.check(
-			str(module_def.get("maker", "")) != "Bayes Inc",
-			"%s is not Bayes Inc armour" % module_id
+			not _rule_ids("banned_makers", "armour").has(str(module_def.get("maker", ""))),
+			"%s armour maker is allowed" % module_id
 		)
 
 	var assembled := ShipAssembler.assemble(catalog, "pegasus_p101")
@@ -467,12 +466,7 @@ static func _validate_combat(runner: TestRunner, catalog: Catalog) -> void:
 	)
 	runner.check(result.has("defence_layers"), "combat hit reports defence_layers")
 
-	var retired := [
-		"light_laser",
-		"scatter_cannon",
-		"hw_deflector_mk1",
-		"mass_driver_round",
-	]
+	var retired := _rule_ids("retired_ids", "weapon")
 	var weapon_ids: Dictionary = {}
 	for module_def in catalog.list_modules("weapon"):
 		if typeof(module_def) == TYPE_DICTIONARY:
@@ -518,7 +512,7 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 	runner.check(belt_world.has("orbital_ring"), "beltworks world has orbital ring")
 
 	var route_count := 0
-	var partner := ""
+	var partners: Array[String] = []
 	for route_variant in catalog.list_routes():
 		if typeof(route_variant) != TYPE_DICTIONARY:
 			continue
@@ -527,10 +521,10 @@ static func _test_centauri_a_beltworks_public_route(runner: TestRunner, catalog:
 		var b := str(route.get("b", ""))
 		if a == "centauri_a_beltworks" or b == "centauri_a_beltworks":
 			route_count += 1
-			partner = b if a == "centauri_a_beltworks" else a
+			partners.append(b if a == "centauri_a_beltworks" else a)
 
-	runner.check_eq(route_count, 1, "beltworks has exactly one public route")
-	runner.check_eq(partner, "proxima", "beltworks public route partner is proxima")
+	runner.check(route_count >= 1, "beltworks has a public route")
+	runner.check("proxima" in partners, "beltworks public route reaches proxima")
 
 	var mapping := catalog.get_mapping("proxima", "centauri_a_beltworks", 4)
 	runner.check(not mapping.is_empty(), "proxima→beltworks n=4 mapping exists")
@@ -650,8 +644,8 @@ static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalo
 					"corporate_office":
 						if building.get("headquarters", false):
 							hq_count += 1
-			runner.check_eq(terminal_count, 1, "station %s has one terminal" % location_id)
-			runner.check_eq(hq_count, 1, "station %s has one hq desk" % location_id)
+			runner.check(terminal_count >= 1, "station %s has a terminal" % location_id)
+			runner.check(hq_count >= 1, "station %s has an hq desk" % location_id)
 
 
 static func _test_beacon_outpost_route(
@@ -662,7 +656,7 @@ static func _test_beacon_outpost_route(
 	runner.check(world.has("orbital_ring"), "%s world has orbital ring" % sector_id)
 
 	var route_count := 0
-	var partner := ""
+	var partners: Array[String] = []
 	for route_variant in catalog.list_routes():
 		if typeof(route_variant) != TYPE_DICTIONARY:
 			continue
@@ -671,10 +665,10 @@ static func _test_beacon_outpost_route(
 		var b := str(route.get("b", ""))
 		if a == sector_id or b == sector_id:
 			route_count += 1
-			partner = b if a == sector_id else a
+			partners.append(b if a == sector_id else a)
 
-	runner.check_eq(route_count, 1, "%s has exactly one public route" % sector_id)
-	runner.check_eq(partner, hub_id, "%s public route partner is %s" % [sector_id, hub_id])
+	runner.check(route_count >= 1, "%s has a public route" % sector_id)
+	runner.check(hub_id in partners, "%s public route reaches %s" % [sector_id, hub_id])
 	runner.check(
 		not catalog.get_mapping(hub_id, sector_id, 4).is_empty(),
 		"%s→%s n=4 mapping exists" % [hub_id, sector_id]
