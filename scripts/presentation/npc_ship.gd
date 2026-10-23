@@ -17,11 +17,13 @@ var catalog: Catalog
 @onready var _visual_root: Node2D = $Visual
 
 var _defence_visual: CombatDefenceVisual
+var _weapon_spawn_root: Node2D
 
 
-func bind_actor(traffic_actor, game_catalog: Catalog) -> void:
+func bind_actor(traffic_actor, game_catalog: Catalog, weapon_spawn_root: Node2D = null) -> void:
 	actor = traffic_actor
 	catalog = game_catalog
+	_weapon_spawn_root = weapon_spawn_root
 	_apply_hull_visual()
 	apply_hull_damage_visual(1.0)
 
@@ -149,11 +151,8 @@ func _hull_base_modulate() -> Color:
 
 
 func _get_world_root() -> Node2D:
-	var main := get_parent()
-	while main != null:
-		if main.name == "Traffic":
-			return main.get_parent() as Node2D
-		main = main.get_parent()
+	if _weapon_spawn_root != null and is_instance_valid(_weapon_spawn_root):
+		return _weapon_spawn_root
 	return null
 
 

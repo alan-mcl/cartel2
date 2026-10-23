@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_npc_weapon_stagger(runner, catalog)
 	_test_arm_next_preserves_fire_cooldown(runner, catalog)
 	_test_preview_from_template(runner, catalog)
+	_test_operating_warning_log(runner)
 
 
 static func _test_zero_fuel_integrated_sail(runner: TestRunner, catalog: Catalog) -> void:
@@ -246,6 +247,26 @@ static func _test_arm_next_preserves_fire_cooldown(runner: TestRunner, catalog: 
 	runner.check(
 		weapons.cooldown_remaining(slot) >= cycle * 0.9,
 		"arm_next does not clear active fire cooldown on single-weapon ship"
+	)
+
+
+static func _test_operating_warning_log(runner: TestRunner) -> void:
+	var operating := ShipOperatingState.new()
+	operating.fuel_empty = true
+	runner.check_eq(
+		ShipSimCore.operating_warning_log(operating, {"thrust": true}, false),
+		"Out of fuel.",
+		"operating warning: out of fuel when thrusting"
+	)
+	runner.check(
+		ShipSimCore.operating_warning_log(operating, {"thrust": false}, false).is_empty(),
+		"operating warning: no fuel message without thrust"
+	)
+	operating.fuel_empty = false
+	operating.power_deficit = 12.0
+	runner.check(
+		ShipSimCore.operating_warning_log(operating, {}, false).contains("12"),
+		"operating warning: power deficit when unallocated"
 	)
 
 

@@ -154,11 +154,9 @@ Production code reads generated `*Def` records or the `AssembledShip` chassis ac
 
 ## A-9 Player ship node records career shots and warning logs
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`player_ship.gd` writes `session.last_log` for fuel and power warnings and calls `session.career.record_shots` when weapons fire. It also reaches the parent for `try_interact` and the world. `npc_ship.gd` walks its parent chain for the world root. Rules and career counters then depend on the scene tree.
-
-**Direction:** Return warning and shot results from the sim step `ShipSimCore` already runs, and let the session record them. Inject the interact callable from `main.gd` when the ship is configured.
+`ShipSimCore.operating_warning_log` derives fuel and power warnings from operating state and stick input. `GameSession.apply_player_flight_step` writes `last_log`, records career shots, and emits `changed` for ammo updates. `player_ship.gd` calls that after `step_weapons`; presentation hooks (`set_presentation_hooks`) inject interact and weapon spawn root from `main.gd` and flight sandboxes. **TrafficView** passes the world root into **NpcShip** `bind_actor` instead of walking the parent chain.
 
 **Do not:** fold the player back onto the NPC tick rate.
 

@@ -616,6 +616,24 @@ func apply_combat_state(state: ShipCombatState) -> void:
 	combat.apply_combat_state(state)
 
 
+func apply_player_flight_step(
+	operating: ShipOperatingState,
+	stick: Dictionary,
+	firing: bool,
+	weapon_result: Dictionary
+) -> void:
+	var warning := ShipSimCore.operating_warning_log(operating, stick, firing)
+	if not warning.is_empty():
+		player.last_log = warning
+	var orders: Array = weapon_result.get("orders", [])
+	if orders.size() > 0 and _track_career_enabled():
+		career.record_shots(orders.size())
+	if bool(weapon_result.get("ammo_changed", false)):
+		changed.emit()
+	if firing and bool(weapon_result.get("out_of_ammo", false)):
+		player.last_log = "Out of ammunition."
+
+
 func repair_combat_at_dock(catalog: Catalog) -> void:
 	var ship := fleet.get_current_owned_ship()
 	if ship == null or catalog == null:

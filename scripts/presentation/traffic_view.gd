@@ -14,6 +14,7 @@ const NEAR_POOL_MAX := 25
 const FAR_POOL_MAX := 80
 
 var _traffic_root: Node2D
+var _world_root: Node2D
 var _nodes_by_id: Dictionary = {}
 var _far_thrust_by_id: Dictionary = {}
 var _far_exhaust_by_id: Dictionary = {}
@@ -29,6 +30,7 @@ var _thrust_texture: Texture2D
 func setup(world_root: Node2D) -> void:
 	clear()
 	_ensure_resources()
+	_world_root = world_root
 	_traffic_root = Node2D.new()
 	_traffic_root.name = "Traffic"
 	world_root.add_child(_traffic_root)
@@ -199,7 +201,7 @@ func _spawn_near_ship(actor, catalog: Catalog) -> void:
 		return
 	ship.global_position = actor.position
 	if ship.has_method("bind_actor"):
-		ship.call("bind_actor", actor, catalog)
+		ship.call("bind_actor", actor, catalog, _world_root)
 	_nodes_by_id[actor.id] = ship
 
 

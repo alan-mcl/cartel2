@@ -101,6 +101,26 @@ func step_weapons(delta: float, firing: bool, guidance_context: Dictionary = {})
 	)
 
 
+static func operating_warning_log(
+	operating: ShipOperatingState,
+	stick: Dictionary,
+	firing: bool
+) -> String:
+	if operating == null:
+		return ""
+	if operating.fuel_empty and bool(stick.get("thrust", false)):
+		return "Out of fuel."
+	if (
+		firing
+		and not operating.weapons_allowed
+		and operating.weapon_power_requested > 0.0
+	):
+		return "Power deficit %.0f MW." % operating.power_deficit
+	if operating.power_deficit > 0.0:
+		return "Power deficit %.0f MW." % operating.power_deficit
+	return ""
+
+
 func step_physics(
 	delta: float,
 	inputs: Dictionary,

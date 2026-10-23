@@ -39,6 +39,13 @@ var _guidance_lock_active: bool = false
 var _autopilot := Autopilot.new()
 var _autopilot_target: Dictionary = {}
 var _hull_destroyed_fx_played := false
+var _try_interact: Callable = Callable()
+var _weapon_spawn_root: Node2D
+
+
+func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -> void:
+	_try_interact = try_interact
+	_weapon_spawn_root = weapon_spawn_root
 
 
 func configure(
@@ -175,18 +182,12 @@ func _physics_process(delta: float) -> void:
 		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
 		_maybe_play_hull_destroyed()
 		operating_state_changed.emit(operating_state)
-		_update_operating_warnings(session, firing)
 
 		var weapon_result: Dictionary = _sim.step_weapons(delta, firing, _weapon_guidance_context())
+		session.apply_player_flight_step(operating_state, physics_inputs, firing, weapon_result)
 		var orders: Array = weapon_result.get("orders", [])
 		if not orders.is_empty():
-			if session != null and not session.player.sandbox:
-				session.career.record_shots(orders.size())
 			_spawn_weapon_orders(orders)
-		if bool(weapon_result.get("ammo_changed", false)):
-			session.changed.emit()
-		if firing and bool(weapon_result.get("out_of_ammo", false)):
-			session.last_log = "Out of ammunition."
 
 	var environment_scale := 1.0
 	if session != null and catalog != null:
@@ -342,15 +343,6 @@ func _pointer_over_weapon_chit() -> bool:
 	return false
 
 
-func _update_operating_warnings(session: GameSession, firing: bool = false) -> void:
-	if operating_state.fuel_empty and Input.is_action_pressed("thrust"):
-		session.last_log = "Out of fuel."
-	elif firing and not operating_state.weapons_allowed and operating_state.weapon_power_requested > 0.0:
-		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
-	elif operating_state.power_deficit > 0.0:
-		session.last_log = "Power deficit %.0f MW." % operating_state.power_deficit
-
-
 func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	if session == null or catalog == null or assembled_ship == null:
 		return {}
@@ -397,9 +389,8 @@ func _maybe_play_hull_destroyed() -> void:
 		return
 	_hull_destroyed_fx_played = true
 	var tint := _hull.modulate if _hull != null else Color.WHITE
-	var world := _get_world_root()
-	if world != null:
-		ShipBreakup.spawn(world, global_position, motion.velocity, tint)
+	if _weapon_spawn_root != null and is_instance_valid(_weapon_spawn_root):
+		ShipBreakup.spawn(_weapon_spawn_root, global_position, motion.velocity, tint)
 	if _visual_root != null:
 		_visual_root.visible = false
 	if _collision_shape != null:
@@ -407,11 +398,10 @@ func _maybe_play_hull_destroyed() -> void:
 
 
 func _spawn_weapon_orders(orders: Array) -> void:
-	var world := _get_world_root()
-	if world == null or assembled_ship == null:
+	if _weapon_spawn_root == null or not is_instance_valid(_weapon_spawn_root) or assembled_ship == null:
 		return
 	ShipVisual.spawn_weapon_orders(
-		world,
+		_weapon_spawn_root,
 		orders,
 		global_position,
 		motion.facing,
@@ -423,17 +413,10 @@ func _spawn_weapon_orders(orders: Array) -> void:
 	)
 
 
-func _get_world_root() -> Node2D:
-	var main := get_parent()
-	if main == null:
-		return null
-	return main.get_node_or_null("World") as Node2D
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
-		if _current_target and _current_target.can_interact():
-			get_parent().try_interact(_current_target)
+		if _current_target and _current_target.can_interact() and _try_interact.is_valid():
+			_try_interact.call(_current_target)
 
 
 func get_current_target() -> Interactable:

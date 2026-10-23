@@ -291,6 +291,8 @@ func _configure_player_for_run(player_owned: OwnedShip) -> AssembledShip:
 	session.apply_combat_state(ShipCombatState.from_assembled(player_assembled))
 
 	_player.configure(player_assembled, player_owned, catalog, session)
+	if _player.has_method("set_presentation_hooks"):
+		_player.set_presentation_hooks(Callable(self, "try_interact"), _world)
 	_player.global_position = Vector2.ZERO
 	_player.motion.facing = 0.0
 	_player.freeze_motion()

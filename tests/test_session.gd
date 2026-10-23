@@ -3,6 +3,7 @@ extends RefCounted
 
 
 static func run(runner: TestRunner) -> void:
+	_test_apply_player_flight_step(runner)
 	var catalog := Catalog.load_default()
 	var session := GameSession.new()
 
@@ -256,6 +257,40 @@ static func _test_habitat_tram_hop(runner: TestRunner, catalog: Catalog) -> void
 		tram_session.gst_seconds,
 		gst_after_hop,
 		"tram: same building does not advance GST"
+	)
+
+
+static func _test_apply_player_flight_step(runner: TestRunner) -> void:
+	var session := GameSession.new()
+	session.start_new_game(Catalog.load_default(), "FLT-1", "tester")
+	var operating := ShipOperatingState.new()
+	operating.fuel_empty = true
+	session.apply_player_flight_step(operating, {"thrust": true}, false, {})
+	runner.check_eq(session.last_log, "Out of fuel.", "flight step: fuel warning to session log")
+	var before := session.career.shots_fired
+	session.apply_player_flight_step(
+		operating,
+		{},
+		true,
+		{"orders": [{"slot": "light_weapon_1"}], "out_of_ammo": false, "ammo_changed": false}
+	)
+	runner.check_eq(
+		session.career.shots_fired,
+		before + 1,
+		"flight step: career records weapon orders"
+	)
+	session.sandbox = true
+	var sandbox_before := session.career.shots_fired
+	session.apply_player_flight_step(
+		operating,
+		{},
+		true,
+		{"orders": [{"slot": "light_weapon_1"}], "out_of_ammo": false, "ammo_changed": false}
+	)
+	runner.check_eq(
+		session.career.shots_fired,
+		sandbox_before,
+		"flight step: sandbox skips career shots"
 	)
 
 

@@ -41,6 +41,8 @@ func _ready() -> void:
 
 	_hud.bind(session, _player, AssembledShip.new(), _simulation, catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
+	if _player.has_method("set_presentation_hooks"):
+		_player.set_presentation_hooks(Callable(self, "try_interact"), _world_node)
 	if not _hud.target_scan_requested.is_connected(_on_target_scan_requested):
 		_hud.target_scan_requested.connect(_on_target_scan_requested)
 	_bind_controllers()
