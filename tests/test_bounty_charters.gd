@@ -76,11 +76,11 @@ static func _inject_bounty_offer(
 ) -> void:
 	var habitat_id := str(offer.get("origin_habitat_id", ""))
 	var building_id := str(offer.get("building_id", ""))
-	if not missions.bounty_offers_by_habitat.has(habitat_id):
-		missions.bounty_offers_by_habitat[habitat_id] = {}
-	var boards: Dictionary = missions.bounty_offers_by_habitat[habitat_id]
+	if not missions.bounties.offers.has(habitat_id):
+		missions.bounties.offers[habitat_id] = {}
+	var boards: Dictionary = missions.bounties.offers[habitat_id]
 	boards[building_id] = [offer]
-	missions.bounty_offers_by_habitat[habitat_id] = boards
+	missions.bounties.offers[habitat_id] = boards
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -282,8 +282,8 @@ static func _test_save_migration_v4(runner: TestRunner, catalog: Catalog) -> voi
 	runner.check(migrated.has("bounty_accepted"), "bounty save: adds bounty accepted")
 	runner.check(migrated.has("next_bounty_charter_id"), "bounty save: adds bounty id counter")
 	missions.from_dict(migrated)
-	runner.check_eq(missions.scan_accepted.size(), 1, "bounty save: keeps scan data")
-	runner.check(missions.bounty_accepted.is_empty(), "bounty save: empty bounty accepted")
+	runner.check_eq(missions.scans.accepted.size(), 1, "bounty save: keeps scan data")
+	runner.check(missions.bounties.accepted.is_empty(), "bounty save: empty bounty accepted")
 
 
 static func _test_composed_peacekeeping_copy(runner: TestRunner, catalog: Catalog) -> void:

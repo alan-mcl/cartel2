@@ -83,7 +83,7 @@ static func _test_passengers_filtered_by_ship(runner: TestRunner, catalog: Catal
 	var other := session.fleet.owned_ships[0] if session.fleet.owned_ships.size() > 0 else null
 	if other != null and other.id == ship.id and session.fleet.owned_ships.size() > 1:
 		other = session.fleet.owned_ships[1]
-	missions.accepted.append({
+	missions.passengers.accepted.append({
 		"charter_id": "pax_other",
 		"ship_id": other.id if other != null else "other_ship",
 		"role_title": "Other ship charter",
@@ -94,7 +94,7 @@ static func _test_passengers_filtered_by_ship(runner: TestRunner, catalog: Catal
 		"reward": 50,
 		"deadline_hours": 12,
 	})
-	missions.accepted.append({
+	missions.passengers.accepted.append({
 		"charter_id": "pax_mine",
 		"ship_id": ship.id,
 		"role_title": "My charter",
@@ -121,7 +121,7 @@ static func _test_freight_filtered_by_ship(runner: TestRunner, catalog: Catalog)
 	var ship := session.get_current_owned_ship()
 	if ship == null:
 		return
-	missions.freight_accepted.append({
+	missions.freight.accepted.append({
 		"charter_id": "frt_mine",
 		"ship_id": ship.id,
 		"cargo_title": "Test lot",
@@ -149,7 +149,7 @@ static func _test_hold_totals_include_freight_reserves(runner: TestRunner, catal
 	if ship == null:
 		return
 	ship.add_cargo("food_products", 1)
-	missions.freight_accepted.append({
+	missions.freight.accepted.append({
 		"charter_id": "frt_reserve",
 		"ship_id": ship.id,
 		"tonnes": 2.0,
@@ -181,7 +181,7 @@ static func _test_scans_separate_from_freight(runner: TestRunner, catalog: Catal
 	var ship := session.get_current_owned_ship()
 	if ship == null:
 		return
-	missions.scan_accepted.append({
+	missions.scans.accepted.append({
 		"charter_id": "scn_mine",
 		"ship_id": ship.id,
 		"designation": "Field survey",
@@ -207,7 +207,7 @@ static func _test_charter_row_tooltip_and_deadline_seconds(runner: TestRunner, c
 	if ship == null:
 		return
 	session.gst_seconds = 1000.0
-	missions.freight_accepted.append({
+	missions.freight.accepted.append({
 		"charter_id": "frt_deadline",
 		"ship_id": ship.id,
 		"cargo_title": "Timed lot",

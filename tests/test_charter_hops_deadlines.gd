@@ -112,7 +112,7 @@ static func _inject_passenger_offer(
 	offer: Dictionary
 ) -> void:
 	var habitat_id := str(offer.get("origin_habitat_id", ""))
-	missions.offers_by_habitat[habitat_id] = {
+	missions.passengers.offers[habitat_id] = {
 		PassengerCharters.BOARD_TERMINAL: [offer],
 	}
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
@@ -301,7 +301,7 @@ static func _test_late_freight_elsewhere_keeps_contract(runner: TestRunner, cata
 		"hold_label": "refrigerated",
 		"reward": 100,
 	}
-	missions.freight_offers_by_habitat["proxima_habitat"] = [offer]
+	missions.freight.offers["proxima_habitat"] = [offer]
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 	runner.check(missions.accept_freight_offer(session, catalog, offer.id, ship.id), "charter hops: accept freight keep test")
 	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 2))
@@ -331,7 +331,7 @@ static func _test_legacy_charter_without_deadline_pays(runner: TestRunner, catal
 	var ship := _best_docked_ship(session, catalog, "proxima_habitat")
 	if ship == null:
 		return
-	missions.accepted.append({
+	missions.passengers.accepted.append({
 		"charter_id": "legacy_1",
 		"ship_id": ship.id,
 		"origin_habitat_id": "proxima_habitat",

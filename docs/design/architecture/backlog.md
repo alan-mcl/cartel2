@@ -70,17 +70,31 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 ## A-1 Charter lifecycle is copied four times
 
-**Status:** Discuss. **Severity:** High.
+**Status:** Done. **Severity:** High.
 
-`MissionSubsystem` (`scripts/gameplay/mission_subsystem.gd`, about 1,400 lines, save version 5) owns passenger, freight, scan, and bounty charters as parallel offer maps, id counters, accept/cancel paths, dock resolution, and deadline failure. Offer generation itself is properly delegated to `PassengerCharters`, `FreightCharters`, `ScanCharters`, and `BountyCharters`. The lifecycle around those generators is not. `cancel_penalty` is the same formula in all four charter modules. Scan satisfaction is inlined on the subsystem; bounty satisfaction lives on `BountyCharters`.
+`MissionSubsystem` owns passenger, freight, scan, and bounty charters as parallel offer maps, id counters, accept and cancel paths, dock resolution, and deadline failure. Offer generation stays in `PassengerCharters`, `FreightCharters`, `ScanCharters`, and `BountyCharters`. Save version 5 keeps four offer maps, four accepted lists, and four id counters. The id prefixes are `charter_`, `freight_`, `scan_`, and `bounty_`.
 
-The UI repeats the split. `passenger_charter_panel.gd`, `freight_charter_panel.gd`, and `scan_charter_panel.gd` each rebuild a tile grid, ship selector, and refresh cycle. Scan is embedded three ways: the peacekeeping registry entry, `CorporateOfficePanel` (current building), and `BarPanel` (A-2).
+Passenger and freight accept is one sequence. Scan and bounty do that and then grant a volatile site, and the grant can fail. Dock pay, late fees, and missed-deadline failure are one skeleton. The three charter panels each rebuild a tile grid, ship selector, and refresh cycle.
 
-A fifth charter type, or a deadline-rule change, will be edited in the subsystem, four rule modules, and three panels.
+**Do not:** merge the four generators into one combinatorial module. Scan and bounty assembly rules are different on purpose. Do not rewrite charter balance while extracting the lifecycle. Do not bump the mission save version or change its keys or id prefixes in these phases.
 
-**Direction:** One charter lifecycle helper (accept, cancel, late, resolve on dock, reputation and career logging) parameterised by kind. One charter board widget with kind-specific offer and accept hooks. Move scan satisfaction next to `ScanCharters`.
+### Phase 1 — Shared resolution
 
-**Do not:** merge the four generators into one combinatorial module. Scan and bounty assembly rules are different on purpose. Do not rewrite charter balance while extracting the lifecycle.
+**Status:** Done.
+
+`CharterResolution` settles on-time pay, a late fee, and a missed deadline. `MissionSubsystem` still finds and removes the charter, and still formats the log line. `ScanCharters.charter_satisfied` decides a scan contract, beside `BountyCharters.charter_satisfied`. Accept methods, save keys, and the panels are unchanged.
+
+### Phase 2 — One book per kind
+
+**Status:** Done.
+
+`CharterBook` holds one kind's offer map, accepted list, and id counter (`passengers`, `freight`, `scans`, `bounties`). Freight offers stay a flat list per habitat. The other three stay habitat, then board, then rows. `accept_offer` and `accept_freight_offer` share `_take_offer` and `_commit_accepted`. `accept_scan_offer` and `accept_bounty_offer` use the same open step, then grant the volatile site before commit. A failed grant still drops the offer and consumes the id. `to_dict` and `from_dict` keep the version 5 keys and the `charter_`, `freight_`, `scan_`, and `bounty_` prefixes.
+
+### Phase 3 — One board widget
+
+**Status:** Done.
+
+`CharterBoard` draws the ship line, the three-column tile grid, and the refresh. `PassengerCharterPanel`, `FreightCharterPanel`, and `ScanCharterPanel` supply the headings, tile copy, and accept or cancel hooks. Scan and bounty stay two blocks on the one scan desk, with one ship line. Peacekeeping, the corporate office, and the bar still embed those panels.
 
 ## A-2 Bar scan desk ignores the building it was opened from
 

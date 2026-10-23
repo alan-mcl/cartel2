@@ -92,7 +92,7 @@ static func _inject_test_offer(
 		"description": "Test charter to %s." % str(dest.get("name", "")),
 		"reward": reward,
 	}
-	missions.offers_by_habitat[origin_habitat_id] = {
+	missions.passengers.offers[origin_habitat_id] = {
 		PassengerCharters.BOARD_TERMINAL: [offer],
 	}
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
@@ -533,7 +533,7 @@ static func _test_lazy_habitat_board_generation(runner: TestRunner, catalog: Cat
 		"missions: proxima board generated on ensure"
 	)
 	runner.check(
-		not missions.offers_by_habitat.has("bela_orbital_habitat"),
+		not missions.passengers.offers.has("bela_orbital_habitat"),
 		"missions: bela board not built while docked elsewhere"
 	)
 	runner.check(

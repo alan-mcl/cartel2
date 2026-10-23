@@ -86,11 +86,11 @@ static func _inject_scan_offer(
 ) -> void:
 	var habitat_id := str(offer.get("origin_habitat_id", ""))
 	var building_id := str(offer.get("building_id", ""))
-	if not missions.scan_offers_by_habitat.has(habitat_id):
-		missions.scan_offers_by_habitat[habitat_id] = {}
-	var boards: Dictionary = missions.scan_offers_by_habitat[habitat_id]
+	if not missions.scans.offers.has(habitat_id):
+		missions.scans.offers[habitat_id] = {}
+	var boards: Dictionary = missions.scans.offers[habitat_id]
 	boards[building_id] = [offer]
-	missions.scan_offers_by_habitat[habitat_id] = boards
+	missions.scans.offers[habitat_id] = boards
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -216,9 +216,9 @@ static func _test_second_bar_configures_its_own_desk(runner: TestRunner, catalog
 	var missions := _missions(simulation)
 	var session := _session(runner, catalog, "SCN-BAR2")
 	missions.ensure_boards(session, catalog)
-	var boards: Dictionary = missions.scan_offers_by_habitat.get("proxima_habitat", {})
+	var boards: Dictionary = missions.scans.offers.get("proxima_habitat", {})
 	boards["second_bar"] = [{"id": "scan_second_bar_0", "building_id": "second_bar"}]
-	missions.scan_offers_by_habitat["proxima_habitat"] = boards
+	missions.scans.offers["proxima_habitat"] = boards
 	runner.check(
 		ScanCharters.bar_scan_section_visible(missions, catalog, session, "second_bar"),
 		"scan: second bar section follows that building"
@@ -557,8 +557,8 @@ static func _test_save_migration_v3(runner: TestRunner, catalog: Catalog) -> voi
 	runner.check(migrated.has("scan_accepted"), "scan save: adds scan accepted")
 	runner.check(migrated.has("next_scan_charter_id"), "scan save: adds scan id counter")
 	missions.from_dict(migrated)
-	runner.check_eq(missions.freight_accepted.size(), 1, "scan save: keeps freight data")
-	runner.check(missions.scan_accepted.is_empty(), "scan save: empty scan accepted")
+	runner.check_eq(missions.freight.accepted.size(), 1, "scan save: keeps freight data")
+	runner.check(missions.scans.accepted.is_empty(), "scan save: empty scan accepted")
 
 
 static func _test_site_description_phrase(runner: TestRunner, catalog: Catalog) -> void:

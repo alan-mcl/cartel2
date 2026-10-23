@@ -92,7 +92,7 @@ static func _inject_freight_offer(
 	offer: Dictionary
 ) -> void:
 	var habitat_id := str(offer.get("origin_habitat_id", ""))
-	missions.freight_offers_by_habitat[habitat_id] = [offer]
+	missions.freight.offers[habitat_id] = [offer]
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -228,7 +228,7 @@ static func _test_livestock_lss_with_passengers(runner: TestRunner, catalog: Cat
 	var passenger_charter := passenger.duplicate(true)
 	passenger_charter["charter_id"] = "charter_test"
 	passenger_charter["ship_id"] = ship.id
-	missions.accepted.append(passenger_charter)
+	missions.passengers.accepted.append(passenger_charter)
 	var offer := _livestock_offer(catalog, "proxima_habitat", "irasia_habitat", "freight_lss_mix")
 	offer["quantity"] = 2
 	offer["life_support_seats"] = 2

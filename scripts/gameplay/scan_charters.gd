@@ -674,6 +674,15 @@ static func scan_contact_id_for_offer(offer: Dictionary, volatile_record_id: Str
 			return ""
 
 
+static func charter_satisfied(session: GameSession, charter: Dictionary) -> bool:
+	if session == null:
+		return false
+	var contact_id := str(charter.get("scan_contact_id", ""))
+	var sector_id := scan_sector_for_contract(charter)
+	var accepted_gst := float(charter.get("accepted_gst", 0.0))
+	return session.player.scan_satisfies_contract(contact_id, sector_id, accepted_gst)
+
+
 static func scan_sector_for_contract(contract: Dictionary) -> String:
 	var target_kind := str(contract.get("target_kind", ""))
 	if target_kind == "planet":
