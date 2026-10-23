@@ -134,7 +134,7 @@ Phase 2 split state into `PlayerState`, `WorldPresence`, `Fleet`, `Wallet`, and 
 
 **Status:** Done. **Severity:** Medium.
 
-Presentation snapshots a `WeaponHitContext` (session, catalog, shooter id, and whether the shot is the player's) when a laser, mass-driver round, or rocket is spawned. `WeaponHit.apply` uses that context for career kills and sanctions. A shooter object that still carries `session` does not count unless the context is passed. Proximity mines still detonate through `take_combat_hit` (A-10).
+Presentation snapshots a `WeaponHitContext` (session, catalog, shooter id, and whether the shot is the player's) when a laser, mass-driver round, or rocket is spawned. `WeaponHit.apply` uses that context for career kills and sanctions. A shooter object that still carries `session` does not count unless the context is passed. Proximity mines detonate through `BallisticHit.apply` (A-10), which calls `take_combat_hit` with no shooter and no shot velocity.
 
 **Do not:** move damage resolution into the projectile scripts.
 
@@ -174,11 +174,9 @@ Presentation snapshots a `WeaponHitContext` (session, catalog, shooter id, and w
 
 ## A-10 Ballistic projectiles duplicate sweep and hit application
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Done. **Severity:** Medium.
 
-`mass_driver_round.gd` and `rocket_projectile.gd` each implement sweep, shooter attribution, and `WeaponHit.apply`. `laser_beam.gd` is a different weapon and should stay separate. `proximity_mine.gd` applies packets on overlap, which matches the other weapons. `point_defence_pellet.gd` is cosmetic.
-
-**Direction:** One shared sweep-and-apply helper used by the mass driver and the rocket. Mines can call the same apply path when A-6 lands.
+`BallisticHit` sweeps a ray and calls `WeaponHit.apply`, including the freed-shooter check. The sweep assigns its exclude list onto the ray query, so the shooter is left out of the cast. `mass_driver_round.gd` and `rocket_projectile.gd` use it. `laser_beam.gd` stays a separate weapon. `proximity_mine.gd` calls the same apply path with no shooter and no shot velocity, so a detonation still deals its packets and does not impart impulse. `point_defence_pellet.gd` stays cosmetic.
 
 **Do not:** pool projectiles. Phase 6 measured that cost below LOD crossing.
 

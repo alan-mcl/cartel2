@@ -1,6 +1,6 @@
 extends Area2D
 
-const WeaponHit := preload("res://scripts/gameplay/weapon_hit.gd")
+const BallisticHitScript := preload("res://scripts/presentation/ballistic_hit.gd")
 const WeaponAttributionScript := preload("res://scripts/presentation/weapon_attribution.gd")
 const ProjectGuidance := preload("res://scripts/gameplay/project_guidance.gd")
 const WarheadBlast := preload("res://scripts/presentation/warhead_blast.gd")
@@ -229,30 +229,24 @@ func _apply_guidance(delta: float) -> void:
 
 
 func _apply_hit(collider: Object) -> void:
-	var shooter: Variant = _shooter if is_instance_valid(_shooter) else null
-	WeaponHit.apply(
+	BallisticHitScript.apply(
 		collider,
 		_delivery_type,
 		_packets,
-		shooter,
+		_shooter,
 		_velocity,
 		_hit_context
 	)
 
 
 func _sweep(from: Vector2, to: Vector2) -> Dictionary:
-	var space_state := get_world_2d().direct_space_state
-	if space_state == null:
-		return {}
-
-	var query := PhysicsRayQueryParameters2D.create(from, to)
-	query.collision_mask = _collision_mask
-	for body in _exclude:
-		if not is_instance_valid(body):
-			continue
-		if body is CollisionObject2D:
-			query.exclude.append(body.get_rid())
-	return space_state.intersect_ray(query)
+	return BallisticHitScript.sweep(
+		get_world_2d().direct_space_state,
+		from,
+		to,
+		_collision_mask,
+		_exclude
+	)
 
 
 func _on_body_entered(body: Node) -> void:

@@ -1,5 +1,7 @@
 extends Area2D
 
+const BallisticHitScript := preload("res://scripts/presentation/ballistic_hit.gd")
+
 var _spent: bool = false
 var _entity_id: String = ""
 var _delivery: String = "ballistic"
@@ -47,16 +49,17 @@ func _physics_process(_delta: float) -> void:
 			return
 
 
-func _detonate(target: Node) -> void:
+func _detonate(target: Variant) -> void:
 	if _spent:
 		return
 	_spent = true
 	if target != null:
-		if target.has_method("take_combat_hit"):
-			target.call("take_combat_hit", _delivery, _packets.duplicate(true))
-		elif target.has_method("take_weapon_hit"):
-			var total := 0.0
-			for key in _packets.keys():
-				total += float(_packets[key])
-			target.call("take_weapon_hit", total)
+		BallisticHitScript.apply(
+			target,
+			_delivery,
+			_packets.duplicate(true),
+			null,
+			Vector2.ZERO,
+			null
+		)
 	queue_free()
