@@ -61,7 +61,7 @@
       ]
     },
     {
-      "name": "CM-5",
+      "name": "Magnetite CM",
       "u": 0.277057,
       "v": 0.488726,
       "radius_px": 30.92,
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "CM-6",
+      "name": "Mercury CM",
       "u": 0.151353,
       "v": 0.604848,
       "radius_px": 30.8,
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "name": "CM-7",
+      "name": "Kandara CM",
       "u": 0.648534,
       "v": 0.540586,
       "radius_px": 27.64,

@@ -62,7 +62,7 @@ Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-
 
 ### Planet Surface
 
- - City Malls: Ozero CM, Redoubt, Zarya CM, Vostok CM, Hammerfest Stack.
+ - City Malls: Ozero CM, Redoubt, Zarya CM, Vostok CM, Hammerfest Stack, Magnetite CM, Mercury CM, Kandara CM.
 
 ### Planetary Orbit
 
@@ -101,7 +101,7 @@ La Bella Vista, often called Bela, is a water world with only one continental la
 
 ### Planet Surface
 
- - City Malls: Oberon CM, Santa Margarita, Coral Bay CM, Paradise CM, Marina CM, Bellevue CM, Laguna Arc, Côte d'Azur, Marbella CM, Capri CM, Valencia Arc
+ - City Malls: Oberon CM, Santa Margarita, Coral Bay CM, Paradise CM, Marina CM, Bellevue CM, Laguna Arc, Côte d'Azur, Marbella CM, Capri CM, Valencia Arc, Zaytun CM, Sapphire CM, Nimitz Stack
  - Other: Watershed Stadium near Oberon is a famous outdoor cricket stadium
 
 ### Planetary Orbit
@@ -142,7 +142,7 @@ Irasia is a prosperous and heavily industrialised world, with enormous coastal c
 
 ### Planet Surface
 
- - City Malls: La Palma, Fairhaven CM, Albion CM, New Singapore, Grand Exchange CM, Commerce CM, Samarkand Stack, Isfahan CM, Amber CM, Ring of Fire CM, Ormuz Arc, Zaytun Arc, Pearl City Stack, New Malacca, Jade CM, New Zanzibar Arc, Kamachatka Stack
+ - City Malls: La Palma, Fairhaven CM, Albion CM, New Singapore, Grand Exchange CM, Commerce CM, Samarkand Stack, Isfahan CM, Amber CM, Ring of Fire CM, Ormuz Arc, Zaytun Arc, Pearl City Stack, New Malacca, Jade CM, New Zanzibar Arc, Kamchatka Stack
 
 ### Planetary Orbit
 
@@ -291,7 +291,7 @@ Horizon is one of the galaxy's great population centres, with many urban develop
 
 ### Planet Surface
 
- - City Malls: Horizon CM, Meridian CM, Providence CM, New Geneva, Ascension CM, New Geneva CM, Grand Canyon CM, Kingston CM, Prairie CM, Grandview CM, Civic CM, Equator CM, New World CM, Midlands CM, New Lagos, Cambridge CM, Chanderpaul Stack, Reunion CM
+ - City Malls: Horizon CM, Meridian CM, Providence CM, New Geneva, Ascension CM, Grand Canyon CM, Kingston CM, Prairie CM, Grandview CM, Civic CM, Equator CM, New World CM, Midlands CM, New Lagos, Cambridge CM, Chanderpaul Stack, Reunion CM
 
 ### Planetary Orbit
 

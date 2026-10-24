@@ -70,9 +70,9 @@
 			"Zarya CM",
 			"Vostok CM",
 			"Hammerfest Stack",
-			"CM-5",
-			"CM-6",
-			"CM-7"
+			"Magnetite CM",
+			"Mercury CM",
+			"Kandara CM"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Tycho near orbit",
@@ -111,9 +111,9 @@
 			"Marbella CM",
 			"Capri CM",
 			"Valencia Arc",
-			"CM-10",
-			"CM-11",
-			"CM-12"
+			"Zaytun CM",
+			"Sapphire CM",
+			"Nimitz Stack"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore La Bella Vista near orbit",
