@@ -16,8 +16,10 @@ and slightly cool light sources.
 
 The same run writes a habitations sidecar: one anchor per distinct large metro,
 in Godot SphereMesh space, so a HUD can pin a City-Mall label to that cluster
-while the globe spins. When the albedo stem matches a sector, extra metros past
-the named city_malls list are appended to the catalog as CM-N placeholders.
+while the globe spins. A full density labels 24 metros; lower densities take
+that many times the density, largest first. When the albedo stem matches a
+sector, extra metros past the named city_malls list are appended to the catalog
+as CM-N placeholders.
 """
 
 from __future__ import annotations
@@ -42,6 +44,15 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 _SECTORS_PATH = _REPO_ROOT / "data" / "catalog" / "sectors.json"
 _CM_NAME = re.compile(r"^CM-(\d+)$")
 _METRO_RADIUS_FRACTION = 0.010
+# Poleward of this, settlement weight is zero. 60° is the edge of the polar regions.
+_POLAR_LATITUDE_DEGREES = 60.0
+# Density 1 labels this many City-Malls. The count scales linearly with density.
+_FULL_DENSITY_METROS = 24
+# Anchor points for smoothing a raw population ratio into that density knob.
+# Proxima (60 billion) stays at 1. Tycho (3.5 billion) maps to 8/24.
+_REFERENCE_POPULATION_BILLIONS = 60.0
+_LOW_POPULATION_BILLIONS = 3.5
+_LOW_DENSITY_METROS = 8
 
 
 def _default_seed(path: Path) -> int:
@@ -76,9 +87,30 @@ def _is_land(r: int, g: int, b: int) -> bool:
     return True
 
 
+def _abs_latitude(v: float) -> float:
+    """Degrees from the equator. v = 0 and v = 1 are the poles."""
+    return abs(v - 0.5) * 180.0
+
+
+def _is_polar_v(v: float) -> bool:
+    """True for the polar caps: the outer sixth of the map, 60° and poleward."""
+    return v <= 1.0 / 6.0 or v >= 5.0 / 6.0
+
+
+def _in_polar_cap(y: int, height: int) -> bool:
+    return _is_polar_v((y + 0.5) / max(height, 1))
+
+
 def _latitude_weight(v: float) -> float:
-    """Prefer temperate latitudes, but do not eliminate equatorial settlements."""
-    return max(0.0, math.sin(v * math.pi)) ** 0.42
+    """Temperate bias that drops to zero at the polar caps.
+
+    The equator keeps full weight. Approaching 60° the weight thins out, and
+    poleward of that no city, village, or highway lamp is placed.
+    """
+    if _is_polar_v(v):
+        return 0.0
+    temper = min(_abs_latitude(v) / _POLAR_LATITUDE_DEGREES, 1.0)
+    return math.cos(temper * math.pi / 2.0) ** 0.65
 
 
 def _wrap_x(x: int, width: int) -> int:
@@ -227,7 +259,7 @@ def _draw_city(
         y = int(round(cy + rng.gauss(0, radius * rng.uniform(0.22, 0.45))))
 
         x = _wrap_x(x, width)
-        if y < 0 or y >= height:
+        if y < 0 or y >= height or _in_polar_cap(y, height):
             continue
 
         # Urban brightness follows a loose radial gradient, but with substantial
@@ -345,7 +377,7 @@ def _draw_settlement_network(
             y = int(round(ay + (by - ay) * t + rng.gauss(0, height * 0.0015)))
             x = _wrap_x(x, width)
 
-            if y < 0 or y >= height:
+            if y < 0 or y >= height or _in_polar_cap(y, height):
                 continue
             if not _candidate_is_land(mask_px, width, height, x, y):
                 continue
@@ -396,7 +428,7 @@ def _scatter_villages(
             for _ in range(cluster):
                 xx = _wrap_x(x + rng.randint(-4, 4), width)
                 yy = y + rng.randint(-3, 3)
-                if yy < 0 or yy >= height:
+                if yy < 0 or yy >= height or _in_polar_cap(yy, height):
                     continue
                 if not _candidate_is_land(px, width, height, xx, yy):
                     continue
@@ -454,15 +486,39 @@ def _angular_radius_degrees(radius_px: float, width: int) -> float:
     return 360.0 * radius_px / float(width)
 
 
+def smoothed_population_density(population_billions: float) -> float:
+    """Map population onto the density knob with a gentler ratio than raw proportion.
+
+    ``(population / 60) ** k`` with ``k`` chosen so 3.5 billion lands on 8/24.
+    Proxima stays at 1. Worlds between the two sit on that power curve.
+    """
+    if population_billions <= 0.0:
+        return 0.0
+    ratio = min(population_billions / _REFERENCE_POPULATION_BILLIONS, 1.0)
+    low_ratio = _LOW_POPULATION_BILLIONS / _REFERENCE_POPULATION_BILLIONS
+    exponent = math.log(_LOW_DENSITY_METROS / _FULL_DENSITY_METROS) / math.log(low_ratio)
+    return ratio ** exponent
+
+
+def metro_quota(density: float) -> int:
+    """How many distinct large metros a density should label."""
+    if density <= 0.0:
+        return 0
+    return max(1, int(math.floor(_FULL_DENSITY_METROS * density + 0.5)))
+
+
 def select_metros(
     cities: list[tuple[int, int, float]],
     width: int,
     height: int,
+    limit: int | None = None,
 ) -> list[dict]:
-    """Keep every distinct large metro, largest first.
+    """Keep distinct large metros, largest first, up to limit.
 
     A smaller centre that falls inside an already kept centre's angular radius
-    is the same agglomeration, including across the equirect seam.
+    is the same agglomeration, including across the equirect seam. ``limit``
+    stops the list once that many are kept. None keeps every metro above the
+    size threshold.
     """
     threshold = _METRO_RADIUS_FRACTION * width
     candidates = [
@@ -489,6 +545,8 @@ def select_metros(
                 "local": local,
             }
         )
+        if limit is not None and len(kept) >= limit:
+            break
     return kept
 
 
@@ -751,7 +809,7 @@ def build_night_lights(
                 b = min(255, b + lift // 5)
             px[x, y] = (r, g, b)
 
-    return rgb, select_metros(cities, width, height)
+    return rgb, select_metros(cities, width, height, metro_quota(density))
 
 
 def main() -> int:

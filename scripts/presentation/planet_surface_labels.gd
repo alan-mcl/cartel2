@@ -51,9 +51,13 @@ static func anchors_from_data(data: Variant) -> Array:
 
 
 static func project_offset(local: Vector3, pitch: float, yaw: float, diameter: float) -> Variant:
-	var basis := Basis.from_euler(Vector3(pitch, yaw, 0.0), EULER_ORDER_YXZ)
-	var facing := basis * local
+	var facing := facing_direction(local, pitch, yaw)
 	if facing.z <= LIMB_Z:
 		return null
 	var scale := diameter / CAMERA_VIEW_HEIGHT
 	return Vector2(facing.x, -facing.y) * scale
+
+
+static func facing_direction(local: Vector3, pitch: float, yaw: float) -> Vector3:
+	var basis := Basis.from_euler(Vector3(pitch, yaw, 0.0), EULER_ORDER_YXZ)
+	return basis * local

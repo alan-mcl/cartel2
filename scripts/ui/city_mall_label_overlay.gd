@@ -1,6 +1,5 @@
 extends Control
 
-const LABEL_OFFSET := Vector2(14.0, -12.0)
 const SCREEN_MARGIN := 24.0
 
 var _labels: Array = []
@@ -26,6 +25,7 @@ func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	var font_size := ThemeDB.fallback_font_size - 2
 	var muted := get_theme_color("text_muted", "Cartel")
+	var xform := get_viewport().get_canvas_transform()
 
 	for label_variant in _labels:
 		if typeof(label_variant) != TYPE_DICTIONARY:
@@ -35,12 +35,18 @@ func _draw() -> void:
 		if anchor_name.is_empty():
 			continue
 		var world_pos: Vector2 = label.get("position", Vector2.ZERO)
-		var screen_pos := get_viewport().get_canvas_transform() * world_pos
+		var screen_pos := xform * world_pos
 		if not _is_on_screen(screen_pos, viewport_size):
 			continue
+		# Centre on the cluster. A fixed screen-pixel nudge misses the lights
+		# whenever the globe is small, which is the usual system-harness zoom.
+		var text_size := font.get_string_size(anchor_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+		var ascent := font.get_ascent(font_size)
+		var descent := font.get_descent(font_size)
+		var baseline := screen_pos + Vector2(-text_size.x * 0.5, (ascent - descent) * 0.5)
 		draw_string(
 			font,
-			screen_pos + LABEL_OFFSET,
+			baseline,
 			anchor_name,
 			HORIZONTAL_ALIGNMENT_LEFT,
 			-1,
