@@ -23,3 +23,160 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 **Still open:** independent gravitic hyper-travel range, any gravitic-specific fuel rules, and ship hyperdrive translation. The last of those is also listed under [Not yet implemented](architecture.md#not-yet-implemented).
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
+
+## D-3 Leaderboard ranks net worth, not cash flow
+
+**Status:** Discuss. **Severity:** Critical.
+
+The hall of fame ranks by `CareerStats.nett_profit()`, which is revenue minus expenses. Part sales are revenue, so stripping a free starting kit scores as profit: the Outlaw's Wolff Warrior is worth d18,378 on the leaderboard with no play. Every purchase is a permanent loss, so the Entrepreneur sits at -d18,635 after buying its first hull. Evidence: finding 1 of the [October 2026 balance pass](../../reports/balance_pass_2026-10.md#1-the-leaderboard-counts-asset-sales-as-profit-critical).
+
+**Proposal:** rank by the change in net worth since the career started, as defined in [balance.md](../content/balance.md#leaderboard-metric). Use one module resale rate for both `ShipAssembly.used_ship_price` (50% today) and `sell_part` (60% today), so that buying a ship, stripping one, and installing a spare are all neutral to the score.
+
+**Do not:** rank on any figure that stripping a ship or buying a template can raise. Do not remove the revenue and expense ledgers that the career screen reads.
+
+## D-4 Market depth and trade margins
+
+**Status:** Discuss. **Severity:** Critical.
+
+Quotes are fixed for the GST day, trades never move prices, and listing quantities are display-only. The `CommodityEconomy` ratio clamps (0.55 to 2.2) set almost every margin, so the best 1-hop route returns 290% to 390% on every good except data.
+
+Compute cores need no special hold and make d2,528 per tonne. A 20 t hold earns d50,061 per hop, against d934 for the best charter on the same hull, and every hull with a hold pays for itself in 2.5 trade hops or fewer. Evidence: finding 2 of the [balance pass](../../reports/balance_pass_2026-10.md#2-trade-dominates-and-compute-cores-dominate-trade-critical).
+
+**Proposal:**
+
+- Add market depth: listing quantity is the volume at the quote, trades move the local quote, and quotes recover over a few days.
+- Then narrow the ratio band to about 0.75 to 1.6.
+- Require `compute_integrated` on `compute_cores`.
+
+The target is in [balance.md](../content/balance.md#economy).
+
+**Do not:** add a second pricing model beside `CommodityEconomy`. Depth and price impact belong in its quote path.
+
+## D-5 Loaded-mass payload rule
+
+**Status:** Discuss. **Severity:** High.
+
+`ShipAssembler.validate_install` compares dry mass with `mass_limit`, and `ShipAssembly.undock_blockers` ignores mass. Nine templates launch over their limit, and the Wolff Warrior launches at 118 t against 42 t. A greedy cargo refit turns a d12,730 Juno 1045 into a 44 t freighter and a Pegasus P107 into an 84 t one. Evidence: finding 3 of the [balance pass](../../reports/balance_pass_2026-10.md#3-payload-is-not-constrained-high).
+
+**Proposal:** count dry mass plus fuel, ammunition, and cargo against `mass_limit`, both at undock and when fitting with full tanks, full magazines, and a full hold. Then refit the overweight templates.
+
+**Do not:** fix overweight templates by raising `mass_limit` across the board. That keeps every refit loophole.
+
+## D-6 Ammunition rearming and seeding
+
+**Status:** Discuss. **Severity:** High.
+
+Ammunition cannot be restocked. Nothing writes to `OwnedShip.ammunition` after a ship is created, and the ammunition `cost` field is never charged.
+
+`ShipAssembler.seed_ammunition` fills every type a magazine lists at full capacity, so 6.4 to 8 t of unfired rounds ride on seven templates. Rounds are heavy: a rocket weighs 1.0 t and a missile 1.2 t. Evidence: finding 4 of the [balance pass](../../reports/balance_pass_2026-10.md#4-ammunition-is-overfilled-heavy-and-never-restocked-high).
+
+**Proposal:**
+
+- Add a rearm service at the shipyard beside refuelling, priced at the ammunition `cost` times the local repair index. Make it free in sandbox and record it as a `CareerStats` expense.
+- Seed only the types fitted weapons fire.
+- After D-5, trim the heavy magazines.
+
+**Do not:** make ammunition free or unlimited to avoid building the restock flow. The `cost` field is the rearm price.
+
+## D-7 Antimatter running cost
+
+**Status:** Discuss. **Severity:** High.
+
+Antimatter is priced at d200 to d800 a unit, so antimatter hulls burn d30 to d45 per thrust-second, against d0.65 to d4.20 for every other fuel. A mid-price refill costs 61% to 208% of the hull's used price: d61,500 for the Wolff Gladius and Warrior. The Outlaw starts in the Warrior with d250. Evidence: finding 5 of the [balance pass](../../reports/balance_pass_2026-10.md#5-antimatter-running-cost-high).
+
+**Proposal:** cut the band in `data/catalog/fuels.json` to about d40 to d120, or keep the price and give antimatter drives an edge that justifies it. The target is in [balance.md](../content/balance.md#running-costs).
+
+**Do not:** special-case antimatter in `FuelEconomy` code. Tune the catalog band or the drives.
+
+## D-8 Background start-value band
+
+**Status:** Discuss. **Severity:** High.
+
+Start value (liquid credits plus the kit at its used price) runs from d16,355 (Hotshot) to d33,565 (Outlaw). Liquid credits run from d250 to d32,000.
+
+- Old Money and the Outlaw have no hold.
+- Old Money and the Hotshot have no seats.
+- Reputation 5 and 8 unlock nothing, because the lowest gate is 15.
+- The Entrepreneur's first trade hop earns d45,198, against the Trader's d17,496.
+
+Evidence: finding 6 of the [balance pass](../../reports/balance_pass_2026-10.md#6-backgrounds-are-unequal-high).
+
+**Proposal:** after D-3 and D-4, bring every start into the d20,000 to d26,000 band. Give each background one real edge and one real constraint that show in the balance tool. The target is in [balance.md](../content/balance.md#backgrounds).
+
+**Do not:** rebalance backgrounds before D-3 and D-4 land, because most of today's spread comes from them. Test-only kits such as Tester stay outside the band.
+
+## D-9 Charter and bounty pay
+
+**Status:** Discuss. **Severity:** Medium.
+
+Freight pays about the same per tonne as passengers per seat, but its lots are small, so it earns 3.3 times less per GST hour (d72.9 against d240). Bounty reward ignores the target. Median pay is d1,341 to d1,542 for targets worth d12,730 to d35,660, and three hostile ships pay only 1.4 times. Evidence: finding 7 of the [balance pass](../../reports/balance_pass_2026-10.md#7-charter-and-bounty-pay-medium).
+
+**Proposal:**
+
+- Raise freight lot sizes or pay until freight earns at least half of passenger pay per GST hour.
+- Scale bounty pay in `BountyCharters` by the target's scaled hull, best weapon, and escorts.
+- With D-12, retune `base_pay` so the median lands near d2,200.
+
+**Do not:** ship bounty pay changes and paid repairs (D-12) separately. Tune them together with the balance tool.
+
+## D-10 Weapon mount tiers
+
+**Status:** Discuss. **Severity:** Medium.
+
+Median hull damage per second is 10.1 for light mounts, 9.24 for medium, and 10.8 for heavy. The best heavy (Sunspike, d5,200, 16.3) loses to the best medium (Turbo Laser, d2,800, 19.8). The Ionique Lance and the Chimera Plasma Burst are strictly dominated by the Seven Bells laser, and the Burst spends two plasma cells per shot for one cell's damage. A d2,600 Bellatrix rocket lands 44 hull points, more than any unarmoured hull has. Evidence: finding 8 of the [balance pass](../../reports/balance_pass_2026-10.md#8-weapon-tiers-and-dominated-weapons-medium).
+
+**Proposal:**
+
+- Bring weapons into the mount bands in [balance.md](../content/balance.md#gear-pricing): light 10 to 14, medium 15 to 20, heavy 22 to 30.
+- Reprice or rework the two dominated weapons.
+- Cap per-round damage on rockets.
+
+**Do not:** retune weapon damage without re-running the weapon, repair, and bounty tables. Repair bills and bounty costs depend on it.
+
+## D-11 Dominated modules and chassis outliers
+
+**Status:** Discuss. **Severity:** Medium.
+
+46 of 296 modules are strictly dominated, even with signature counted. Most are in life support (24 of 42), driven by underpriced dominators such as `te_lot_6_special` and `te_handy_air`.
+
+- `hyperdrive_alpha` costs d12,000, does nothing yet (D-2), and adds d6,000 to the used prices of the Dragon Post and Dragon Gold.
+- The Mantis chassis costs d1,188 per hull point against a median of d573.
+- The Pegasus P111 runs a power deficit of 7.4 with the engine on.
+- `ShipStats.linear_damp` is derived but never applied.
+
+Evidence: findings 9 and 10 of the [balance pass](../../reports/balance_pass_2026-10.md#9-dominated-modules-and-the-placeholder-hyperdrive-medium).
+
+**Proposal:**
+
+- Raise the underpriced dominators, re-run the tool, then reprice or differentiate the dominated SKUs that remain.
+- Take `hyperdrive_alpha` off the Dragon templates, or price it at a token amount.
+- Reprice the Mantis chassis.
+- Fit the P111 with a larger plant.
+- Apply `linear_damp`, or drop it.
+
+**Do not:** delete dominated SKUs to clear the list. Saves store module ids verbatim, so reprice or differentiate them instead.
+
+## D-12 Paid repairs
+
+**Status:** Discuss. **Severity:** Medium.
+
+Docking repairs hull, power, and compute damage for free (`GameSession.dock` calls `repair_combat_at_dock`). Arriving from unspace restores the hull. Damage lives once per session in `CombatPersistence`, so launching a second ship keeps the previous ship's hull figures: a 36-hull Dragon Bronze launched after an 18-hull Flare-ON SS flies at 18 of 18. That carry-over is a bug in its own right.
+
+A breach stops thrust and weapons, and there is no recovery flow. `GameSession.apply_hull_stress` has no caller.
+
+**Proposal:** charge d30 per hull point times the local Industrial Components index (the local buy quote over the base price of 110).
+
+- At today's quotes that is d16 per point at Irasia and Tokirev, d64 at Proxima (the median yard), and d74 at Fennet.
+- Power and compute damage cost the same share of module value: d3.53 and d3.93 per unit at index 1.0.
+
+Before charging:
+
+1. Turn the automatic dock repair into a shipyard action modelled on `ShipAssembly.refuel_quote` and `refuel_ship`, free in sandbox, with a `repairs` expense key in `CareerStats`.
+2. Remove the free heal in `arrive_from_unspace`.
+3. Store and save damage on each `OwnedShip`.
+4. Define a breach outcome, such as a tow to the nearest shipyard plus the full bill.
+5. Bill unspace hull stress at the same rate once it has a caller.
+
+Prices, bills, and targets are in the [Repair prices](../../reports/balance_pass_2026-10.md#repair-prices) section of the report and in [balance.md](../content/balance.md#running-costs).
+
+**Do not:** charge for repairs while docking or unspace arrival still heal for free, or while damage is shared across ships. Do not add a separate repair price list beside the local market index.

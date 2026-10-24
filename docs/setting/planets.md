@@ -122,8 +122,6 @@ Planets and moons:
 Others:
  - Kestrel: not a planet, but a long-period comet with a very large icy nucleus. It's orbited by a resort habitat. The comet's eccentric orbit leads to seasonal activities built around the comet's changing activity as it approaches Delta Pavonis.
 
-
-
 ### Field conditions
 
  - Solar influence: Delta Pavonis is warm with elevated radiance and moderate wind

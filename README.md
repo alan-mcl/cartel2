@@ -55,7 +55,7 @@ On **New Game**, choose callsign, portrait, and starting background. The default
 | `scripts/ui/` | Menus, HUD, habitat and shipyard screens |
 | `data/catalog/` | JSON content (ships, commodities, economies, worlds) |
 | `assets/` | Art, fonts, logos |
-| `docs/` | Architecture, data model, and setting bible |
+| `docs/` | Architecture, data model, setting bible, and dated reports |
 | `tests/` | Headless unit tests (custom `TestRunner`, not GUT) |
 | `scenes/dev/` | Sandboxes for theme, combat, stealth, and rendering |
 
@@ -82,6 +82,9 @@ python3 scripts/tools/generate_placeholder_art.py
 
 # Rebuild UI theme after token changes
 $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
+
+# Balance tables from the real game code (about 40 s); see docs/design/content/balance.md
+$GODOT --headless --path . --script res://scripts/tools/balance_report.gd -- --out /tmp/balance_tables.md
 ```
 
 **Dev sandboxes** — open a scene under `scenes/dev/` in the editor and press **F6**, or from repo root:
@@ -119,6 +122,11 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 - [commodities](docs/design/content/commodities.md), [trade network](docs/design/content/trade_network.md)
 - [translations](docs/design/content/translations.md), [missions](docs/design/content/missions.md)
 - [field conditions](docs/design/content/field_conditions.md), [GST in play](docs/design/content/gst.md)
+- [balance](docs/design/content/balance.md) - pricing approach, targets, and how to measure them
+
+**Reports** (point-in-time reviews, not kept current):
+
+- [balance pass, October 2026](docs/reports/balance_pass_2026-10.md), with its [generated tables](docs/reports/balance_pass_2026-10_tables.md)
 
 Setting prose is the lore target. Catalog JSON is the current playable subset. Do not invent lore in JSON to fill a gap the frozen setting files do not cover.
 
