@@ -80,6 +80,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				_player.clear_target_lock()
 			if _player.has_method("reset_autopilot"):
 				_player.reset_autopilot()
+		if _main.session.docked or _jump.visible:
+			_hud.set_surface_labels([], _camera)
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
@@ -165,6 +167,7 @@ func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dict
 		player_broadcast,
 		locked_contact
 	)
+	_hud.set_surface_labels(_surface_labels(), _camera)
 	_hud.set_star_lens_flare(
 		star_display,
 		_player.global_position,
@@ -192,6 +195,12 @@ func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dict
 		_main.session.translation_stability,
 		_main.session.in_unspace
 	)
+
+
+func _surface_labels() -> Array:
+	if _main.session.in_unspace:
+		return []
+	return _world_loader.get_surface_labels()
 
 
 func can_toggle_active_sensors() -> bool:

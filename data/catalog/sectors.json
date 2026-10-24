@@ -18,7 +18,16 @@
 			"Loch Grumman",
 			"Greenfields",
 			"Century",
-			"Safeharbour"
+			"Safeharbour",
+			"CM-1",
+			"CM-2",
+			"CM-3",
+			"CM-4",
+			"CM-5",
+			"CM-6",
+			"CM-7",
+			"CM-8",
+			"CM-9"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Proxima near orbit",

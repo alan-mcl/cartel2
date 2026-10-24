@@ -132,6 +132,8 @@ func _smoke_system_render_tester() -> void:
 	)
 	_check(has_layout, "system render tester loads sector layout")
 	_check(tester.get_node_or_null("PlayerShip") == null, "system render tester has no player ship")
+	var label_overlay: Node = tester.get_node_or_null("Overlay/Root/CityMallLabelOverlay")
+	_check(label_overlay != null, "system render tester has city-mall labels")
 	tester.queue_free()
 	await process_frame
 

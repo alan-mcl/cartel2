@@ -36,6 +36,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _local_sensor_map: Control = $Root/LocalSensorMap
 @onready var _waypoint_arrows: Control = $Root/WaypointArrows
 @onready var _beacon_labels: Control = $Root/BeaconLabelOverlay
+@onready var _city_mall_labels: Control = $Root/CityMallLabelOverlay
 @onready var _target_lock_overlay: Control = $Root/TargetLockOverlay
 @onready var _interact_prompt: Control = $Root/InteractPromptOverlay
 @onready var _star_lens_flare: Control = $Root/StarLensFlare
@@ -380,6 +381,11 @@ func set_nav_state(
 		_interact_prompt.set_camera(camera)
 
 	_update_player_hover_probe(ship_pos, camera)
+
+
+func set_surface_labels(labels: Array, camera: Camera2D) -> void:
+	if _city_mall_labels != null and _city_mall_labels.has_method("set_overlay_state"):
+		_city_mall_labels.set_overlay_state(labels, camera)
 
 
 func set_star_lens_flare(

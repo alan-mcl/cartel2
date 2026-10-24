@@ -1,6 +1,7 @@
 extends Node2D
 
 const PLANET_SHADER := preload("res://shaders/planet_backdrop.gdshader")
+const SurfaceLabels := preload("res://scripts/presentation/planet_surface_labels.gd")
 
 const VIEWPORT_SIZE := 1024
 const SPHERE_RADIAL_SEGMENTS := 48
@@ -23,13 +24,17 @@ var _auto_spin_yaw: float = 0.0
 var _inspection_yaw: float = 0.0
 var _inspection_pitch: float = 0.0
 var _viewport_render_accum: float = 0.0
+var _diameter: float = 2000.0
+var _anchors: Array = []
 
 const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
 
 
 func configure(planet_data: Dictionary, sector_id: String = "") -> void:
-	var diameter := float(planet_data.get("diameter", 2000.0))
+	_diameter = float(planet_data.get("diameter", 2000.0))
 	var tint := Color(str(planet_data.get("modulate", "#ffffff")))
+	var night_path := str(planet_data.get("night_lights", ""))
+	_anchors = SurfaceLabels.load_anchors(SurfaceLabels.habitations_path_for_night(night_path))
 
 	if planet_data.has("rotation_period_seconds"):
 		_spin_period = maxf(float(planet_data.get("rotation_period_seconds")), 1.0)
@@ -38,12 +43,17 @@ func configure(planet_data: Dictionary, sector_id: String = "") -> void:
 		var hash_value := absi(seed_id.hash())
 		_spin_period = lerpf(480.0, 1200.0, float(hash_value % 10000) / 10000.0)
 
+	_auto_spin_yaw = randf() * TAU
+	_inspection_yaw = 0.0
+	_inspection_pitch = 0.0
+
 	position = Vector2.ZERO
 	z_index = -50
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 	_build_viewport_scene(planet_data, tint)
-	_sprite.scale = Vector2.ONE * (diameter / float(VIEWPORT_SIZE))
+	_apply_planet_rotation()
+	_sprite.scale = Vector2.ONE * (_diameter / float(VIEWPORT_SIZE))
 	_sprite.modulate = Color.WHITE
 	_request_viewport_render()
 
@@ -85,7 +95,7 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.position = Vector3(0.0, 0.0, CAMERA_DISTANCE)
 	camera.rotation_degrees = Vector3.ZERO
-	camera.size = SPHERE_RADIUS * 2.05
+	camera.size = SurfaceLabels.CAMERA_VIEW_HEIGHT
 	camera.near = 0.05
 	camera.far = 100.0
 	camera.current = true
@@ -174,6 +184,31 @@ func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> v
 	)
 	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.05))
 	_request_viewport_render()
+
+
+func visible_surface_labels() -> Array:
+	if _anchors.is_empty():
+		return []
+	var yaw := _inspection_yaw + _auto_spin_yaw
+	var origin := global_position
+	var labels: Array = []
+	for anchor_variant in _anchors:
+		if typeof(anchor_variant) != TYPE_DICTIONARY:
+			continue
+		var anchor: Dictionary = anchor_variant
+		var offset: Variant = SurfaceLabels.project_offset(
+			anchor["local"],
+			_inspection_pitch,
+			yaw,
+			_diameter
+		)
+		if typeof(offset) != TYPE_VECTOR2:
+			continue
+		labels.append({
+			"name": str(anchor.get("name", "")),
+			"position": origin + (offset as Vector2),
+		})
+	return labels
 
 
 func set_auto_spin_enabled(enabled: bool) -> void:

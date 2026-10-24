@@ -413,6 +413,15 @@ func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2
 		planet.call("set_sun", star_pos, star.get_light_color(), star.get_luminosity())
 
 
+func get_surface_labels() -> Array:
+	var planet: Variant = spawned_by_id.get("planet")
+	if planet == null or not is_instance_valid(planet):
+		return []
+	if not planet.has_method("visible_surface_labels"):
+		return []
+	return planet.visible_surface_labels()
+
+
 func get_local_star_display() -> Dictionary:
 	var star: Variant = spawned_by_id.get("local_star")
 	if star == null or not is_instance_valid(star):

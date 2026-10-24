@@ -40,6 +40,7 @@ func _init() -> void:
 	TestShipSim.run(runner)
 	TestShipVisual.run(runner)
 	TestPresentation.run(runner)
+	TestPlanetSurfaceLabels.run(runner)
 	TestFlightSandbox.run(runner)
 	TestMotion.run(runner)
 	TestDebris.run(runner)

@@ -136,10 +136,24 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 | Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08 |
 | Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 - do **not** bake 1.15 into the PNG |
 | Planet albedo | `assets/world/planets/<sector_id>_albedo.png` | 2048×1024 placeholders | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1; wired in `worlds.json` `planet.albedo` |
-| Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same pixel size and equirect UV as albedo; **RGB emission** (black = none). Shader adds `texture * night_emission_strength` on the night side only. Generate from albedo: `python3 scripts/tools/planet_night_from_albedo.py assets/world/planets/<sector>_albedo.png --density 0.4 -o assets/world/planets/<sector>_night.png` (requires `pip install pillow`). |
+| Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same pixel size and equirect UV as albedo; **RGB emission** (black = none). Shader adds `texture * night_emission_strength` on the night side only. Generate from albedo: `python3 scripts/tools/planet_night_from_albedo_photorealistic.py assets/world/planets/<sector>_albedo.png --density 0.4 -o assets/world/planets/<sector>_night.png` (requires `pip install pillow`). The same run writes `<sector>_night_habitations.json` beside the night PNG. |
 | Planet disc (legacy) | `assets/world/planet.png` | 512×512 | - | **Unused** for globe mesh; do not replace as a flat disc |
 
-Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **1024** px SubViewport (throttled refresh in flight) and is scaled to `diameter / 1024`. Albedo and night PNGs remain **2048×1024** equirectangular maps. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present).
+Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000** world units for all sectors). The 3D mesh renders in a **1024** px SubViewport (throttled refresh in flight) and is scaled to `diameter / 1024`. Albedo and night PNGs remain **2048×1024** equirectangular maps. Replace PNGs in place (same filename); **`planet.modulate` does not tint mapped albedo** (procedural fallback only). Regenerate planet placeholders: `python3 scripts/tools/generate_placeholder_art.py` (overwrites `assets/world/planets/*_{albedo,night}.png`; other assets still skip if present). Placeholder regeneration does not write habitations sidecars.
+
+`planet_night_from_albedo_photorealistic.py` writes one anchor per distinct large metro (`radius >= 0.010` of the map width). A smaller centre that lies inside a larger centre's angular radius (`360 * radius_px / width` degrees, measured on the sphere) is the same agglomeration and is omitted, including across the equirect seam. Sidecar fields are `sector_id`, `seed`, `density`, `width`, `height`, and `anchors`. Each anchor has `name`, `u`, `v`, `radius_px`, and `local`. `u` and `v` are equirectangular texture coordinates with the origin at the top-left of the PNG (`u = (x + 0.5) / width`, `v = (y + 0.5) / height`). `local` is the matching unit direction in Godot `SphereMesh` space: `v = 0` is the north pole (`+Y`), `v = 1` is the south pole (`-Y`), `u = 0` faces `+Z`, and `u` increases toward `+X` (`x = sin(2π u) sin(π v)`, `y = cos(π v)`, `z = cos(2π u) sin(π v)`). The planet shader samples `UV` with no V flip, and the globe camera sits on `+Z` looking toward the origin.
+
+A label rotates `local` with the planet root (`Basis.from_euler(Vector3(pitch, yaw, 0))`, Godot's default YXZ order) and projects the orthographic disc:
+
+```text
+p = basis * local
+visible when p.z > ~0.08
+world_pos = Vector2(p.x, -p.y) * (diameter / 2.05)
+```
+
+`2.05` is the backdrop camera size. The sphere is slightly inset in the viewport, so that scale keeps the label on the disc. The flight HUD and the system render tester draw one label per anchor while that point faces the camera, adding the planet's position on the flight plane.
+
+When the albedo stem matches a sector id, anchor names are that sector's `city_malls` in list order, largest metro first. Metros beyond the list are appended to `city_malls` as `CM-N`. `N` continues from the highest `CM-N` already in that sector, so a later run keeps existing placeholders. Existing entries stay in place, including placeholders later given real names. An albedo stem that is not a sector id still writes anchors named `CM-1` onward and leaves `sectors.json` unchanged. Real names for `CM-N` are filled in by hand.
 
 ---
 
@@ -148,7 +162,7 @@ Globe on-screen size comes from catalog **`planet.diameter`** (currently **2000*
 | Asset | Path pattern | Current | **Author at** | Display |
 |-------|--------------|---------|---------------|---------|
 | Location / building art | `assets/ui/locations/*.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9; `LocationArt` frame min-height 160 px |
-| Corporation logos | `assets/ui/corps/logos/<callsign_prefix>.png` | varies | **Author at display size** | 1:1 on corporate building banners; right edge flush, vertically centred, cropped to the 160 px header |
+| Corporation logos | `assets/ui/corps/logos/<callsign_prefix>.png` | 160 px tall | **160 px tall** (width proportional) | 1:1 on corporate building banners; right edge flush, vertically centred, cropped to the 160 px header |
 | Chassis UI header | `assets/ui/ships/<chassis_id>.png` | 640×360 | **640×360** (or **1280×720** optional) | 16:9 banner via `LocationArtFactory.create_banner()` (cover + left fade); Shipyard hosts above stats scroll |
 | Module category icon | `assets/ui/modules/<category>.png` | 64×64 | **64×64** | One PNG per module `category`; list rows at 24 px |
 | Pilot portraits | `assets/ui/portraits/pN.png` | 3:4 | **120×160** | Same height as habitat header banner (`LocationArt` header min-height **160 px**); width **120** (3:4). `PortraitTextureRect` uses that box in New Game and habitat. Mipmaps + linear filter if exporting larger. |

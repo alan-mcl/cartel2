@@ -1,5 +1,7 @@
 extends Node2D
 
+const CityMallLabelOverlay := preload("res://scripts/ui/city_mall_label_overlay.gd")
+
 const ZOOM_MIN := 0.02
 const ZOOM_MAX := 4.0
 const ZOOM_WHEEL_FACTOR := 1.12
@@ -16,6 +18,7 @@ var _loader := WorldLoader.new()
 var _sector_ids: Array[String] = []
 
 var _overlay_root: Control
+var _surface_labels: Control
 var _sector_option: OptionButton
 var _auto_spin_check: CheckButton
 var _frame_button: Button
@@ -65,6 +68,12 @@ func _build_overlay() -> void:
 	_overlay_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_overlay_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_overlay_layer.add_child(_overlay_root)
+
+	_surface_labels = CityMallLabelOverlay.new()
+	_surface_labels.name = "CityMallLabelOverlay"
+	_surface_labels.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_surface_labels.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_overlay_root.add_child(_surface_labels)
 
 	var panel := PanelContainer.new()
 	panel.name = "Panel"
@@ -172,6 +181,7 @@ func _load_selected_sector() -> void:
 
 	_loader.load_sector(_world, catalog, session, sector_id)
 	_apply_planet_auto_spin()
+	_refresh_surface_labels()
 	_frame_view()
 
 
@@ -198,6 +208,13 @@ func _on_auto_spin_toggled(enabled: bool) -> void:
 func _process(delta: float) -> void:
 	if session != null and catalog != null:
 		session.advance_orbital_phase(catalog, delta)
+	_refresh_surface_labels()
+
+
+func _refresh_surface_labels() -> void:
+	if _surface_labels == null or not _surface_labels.has_method("set_overlay_state"):
+		return
+	_surface_labels.set_overlay_state(_loader.get_surface_labels(), _camera)
 
 
 func _unhandled_input(event: InputEvent) -> void:
