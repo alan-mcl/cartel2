@@ -215,8 +215,9 @@ static func template_earnings_section(ctx: Dictionary) -> Dictionary:
 		],
 		rows,
 		[
-			"Trade per hop is the median, over the trade window, of the best 1-hop run with a full"
-			+ " hold of the best commodity the hull may carry, with unlimited credits. Charter columns"
+			"Trade per hop is the median, over the trade window, of the best 1-hop run the hull can"
+			+ " fill. The lot is the hold, capped by the fresh-day book: the origin's buy quantity and"
+			+ " the destination's sell quantity. Credits are unlimited. Charter columns"
 			+ " are medians over sampled boards of the best single offer the hull passes"
 			+ " `evaluate_offer_for_ship` for, at reputation 0. Typical run is the best 1-hop charter,"
 			+ " or the median bounty pay for an armed hull when that is higher.",
@@ -351,7 +352,7 @@ static func trade_routes_section(ctx: Dictionary) -> Dictionary:
 			"10th percentile", "Days positive %",
 		],
 		candidates.slice(0, limit),
-		["Ranked by median margin per tonne per hop. Trades do not move prices and volume is unlimited."]
+		["Ranked by median margin per tonne per hop on the fresh-day board, before any book pressure."]
 	)
 
 
@@ -1777,23 +1778,28 @@ static func _template_trade(ctx: Dictionary, probe: Dictionary) -> Dictionary:
 	var incomes: Array = []
 	var capitals: Array = []
 	var picks := {}
-	for best_variant in trade["daily_best"]:
-		var best_today: Dictionary = best_variant
+	var by_id := {}
+	for commodity_variant in trade["commodities"]:
+		var listed: CommodityDef = commodity_variant
+		by_id[listed.id] = listed
+	for books_variant in trade["day_books"]:
+		var books: Array = books_variant
 		var top_income := 0
 		var top_capital := 0
 		var top_id := ""
-		for commodity_variant in trade["commodities"]:
-			var commodity: CommodityDef = commodity_variant
-			if not CargoRequirements.assembled_meets_commodity(assembled, commodity):
+		for book_variant in books:
+			var book: Dictionary = book_variant
+			var commodity: CommodityDef = by_id.get(str(book.get("commodity", "")), null)
+			if commodity == null or not CargoRequirements.assembled_meets_commodity(assembled, commodity):
 				continue
-			var one_hop: Dictionary = (best_today.get(commodity.id, {}) as Dictionary).get("one_hop", {})
-			if one_hop.is_empty():
+			var hold_units := int(floor(hold / commodity.mass + EPSILON))
+			var units := mini(hold_units, int(book.get("depth", 0)))
+			if units <= 0:
 				continue
-			var units := int(floor(hold / commodity.mass + EPSILON))
-			var income := units * int(one_hop["margin"])
+			var income := units * int(book.get("margin", 0))
 			if income > top_income:
 				top_income = income
-				top_capital = units * int(one_hop["buy"])
+				top_capital = units * int(book.get("buy", 0))
 				top_id = commodity.id
 		incomes.append(top_income)
 		capitals.append(top_capital)
@@ -1921,6 +1927,7 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 
 	var days: Array = []
 	var daily_best: Array = []
+	var day_books: Array = []
 	var route_margins := {}
 	var index_prices := {}
 	var start_day := int(ctx["start_day"])
@@ -1933,6 +1940,7 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 			prices.append(_quote_price(quotes, str(sector_id), REPAIR_INDEX_COMMODITY))
 			index_prices[sector_id] = prices
 		var best_today := {}
+		var books: Array = []
 		for commodity_variant in commodities:
 			var commodity: CommodityDef = commodity_variant
 			var best_one := {}
@@ -1944,6 +1952,17 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 					continue
 				var margin := CommodityEconomy.sell_price(_quote_price(quotes, str(route["to"]), commodity.id)) - buy
 				var hops := int(route["hops"])
+				var depth := mini(
+					_quote_quantity(quotes, str(route["from"]), commodity.id),
+					_quote_quantity(quotes, str(route["to"]), commodity.id)
+				)
+				if hops == 1 and depth > 0 and margin > 0:
+					books.append({
+						"commodity": commodity.id,
+						"margin": margin,
+						"buy": buy,
+						"depth": depth,
+					})
 				var candidate := {
 					"margin": margin,
 					"buy": buy,
@@ -1969,6 +1988,7 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 					((route_margins[key] as Dictionary)["margins"] as Array).append(margin)
 			best_today[commodity.id] = {"one_hop": best_one, "per_hop": best_rate}
 		daily_best.append(best_today)
+		day_books.append(books)
 	return {
 		"adjacency": adjacency,
 		"sector_habitats": sector_habitats,
@@ -1977,6 +1997,7 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 		"commodities": commodities,
 		"days": days,
 		"daily_best": daily_best,
+		"day_books": day_books,
 		"route_margins": route_margins,
 		"index_prices": index_prices,
 	}
@@ -2006,6 +2027,16 @@ static func _quote_price(quotes: Dictionary, sector_id: String, commodity_id: St
 	if typeof(listing) != TYPE_DICTIONARY:
 		return 0
 	return int((listing as Dictionary).get("price", 0))
+
+
+static func _quote_quantity(quotes: Dictionary, sector_id: String, commodity_id: String) -> int:
+	var sector_quotes: Variant = quotes.get(sector_id, {})
+	if typeof(sector_quotes) != TYPE_DICTIONARY:
+		return 0
+	var listing: Variant = (sector_quotes as Dictionary).get(commodity_id, {})
+	if typeof(listing) != TYPE_DICTIONARY:
+		return 0
+	return int((listing as Dictionary).get("quantity", 0))
 
 
 static func _fuel_mid_price(catalog: Catalog, fuel_id: String) -> float:
@@ -2459,6 +2490,7 @@ static func _first_run(ctx: Dictionary, session: GameSession, ship: OwnedShip, c
 		if buy <= 0:
 			continue
 		var units := mini(int(floor(float(credits) / float(buy))), int(floor(hold / commodity.mass + EPSILON)))
+		units = mini(units, _quote_quantity(quotes, origin, commodity.id))
 		if units > 0 and not session.cargo_carry_block_reason(catalog, ship, commodity.id, units).is_empty():
 			units -= 1
 		if units <= 0 or not session.cargo_carry_block_reason(catalog, ship, commodity.id, units).is_empty():
@@ -2472,8 +2504,9 @@ static func _first_run(ctx: Dictionary, session: GameSession, ship: OwnedShip, c
 			var commodity_id := str(commodity_variant)
 			var lot: Dictionary = lots[commodity_variant]
 			var margin := CommodityEconomy.sell_price(_quote_price(quotes, str(route["to"]), commodity_id)) - int(lot["buy"])
+			var tradable := mini(int(lot["units"]), _quote_quantity(quotes, str(route["to"]), commodity_id))
 			var pick := {
-				"profit": int(lot["units"]) * margin,
+				"profit": tradable * margin,
 				"commodity": commodity_id,
 				"to": route["to"],
 				"hops": int(route["hops"]),

@@ -24,24 +24,6 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-4 Market depth and trade margins
-
-**Status:** Discuss. **Severity:** Critical.
-
-Quotes are fixed for the GST day, trades never move prices, and listing quantities are display-only. The `CommodityEconomy` ratio clamps (0.55 to 2.2) set almost every margin, so the best 1-hop route returns 290% to 390% on every good except data.
-
-Compute cores need no special hold and make d2,528 per tonne. A 20 t hold earns d50,061 per hop, against d934 for the best charter on the same hull, and every hull with a hold pays for itself in 2.5 trade hops or fewer. Evidence: finding 2 of the [balance pass](../../reports/balance_pass_2026-10.md#2-trade-dominates-and-compute-cores-dominate-trade-critical).
-
-**Proposal:**
-
-- Add market depth: listing quantity is the volume at the quote, trades move the local quote, and quotes recover over a few days.
-- Then narrow the ratio band to about 0.75 to 1.6.
-- Require `compute_integrated` on `compute_cores`.
-
-The target is in [balance.md](../content/balance.md#economy).
-
-**Do not:** add a second pricing model beside `CommodityEconomy`. Depth and price impact belong in its quote path.
-
 ## D-5 Loaded-mass payload rule
 
 **Status:** Discuss. **Severity:** High.

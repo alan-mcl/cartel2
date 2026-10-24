@@ -263,6 +263,8 @@ func start_new_game(
 	world.run_seed = randi()
 	world.market_quotes.clear()
 	world.market_quotes_day = -1
+	world.market_pressure.clear()
+	world.market_pressure_day = -1
 	world.fuel_quotes.clear()
 	world.fuel_quotes_day = -1
 	world.route_friction_delta.clear()
@@ -1076,17 +1078,22 @@ func buy_commodity(
 	if not block_reason.is_empty():
 		return fail_action(block_reason)
 
+	var available := int(listing.get("quantity", 0))
+	if amount > available:
+		return fail_action("The exchange has only %d on the board." % available)
+
 	var price := int(listing.get("price", commodity.base_price))
 	var total_cost := price * amount
 	if not try_spend_credits(total_cost):
 		return false
 
 	ship.add_cargo(commodity_id, amount)
+	var market_sector_id := get_market_sector_id(catalog)
+	CommodityEconomy.commit_book(self, market_sector_id, commodity_id, amount, true)
 	var commodity_name := commodity_id
 	if commodity.has_source_key("name"):
 		commodity_name = commodity.name
 	player.last_log = "Bought %d x %s for d%d." % [amount, commodity_name, total_cost]
-	var market_sector_id := get_market_sector_id(catalog)
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, price, "buy")
 	)
@@ -1128,6 +1135,10 @@ func sell_commodity(
 	if get_cargo_count(ship, commodity_id) < amount:
 		return fail_action("Not enough cargo to sell.")
 
+	var available := int(listing.get("quantity", 0))
+	if amount > available:
+		return fail_action("The exchange has only %d on the board." % available)
+
 	var commodity := catalog.get_commodity_def(commodity_id)
 	var base_price := 0
 	if commodity != null:
@@ -1139,12 +1150,13 @@ func sell_commodity(
 	if not ship.remove_cargo(commodity_id, amount):
 		return false
 
+	var market_sector_id := get_market_sector_id(catalog)
+	CommodityEconomy.commit_book(self, market_sector_id, commodity_id, amount, false)
 	wallet.apply(total)
 	var commodity_name := commodity_id
 	if commodity != null and commodity.has_source_key("name"):
 		commodity_name = commodity.name
 	player.last_log = "Sold %d x %s for d%d." % [amount, commodity_name, total]
-	var market_sector_id := get_market_sector_id(catalog)
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, sell_price, "sell")
 	)

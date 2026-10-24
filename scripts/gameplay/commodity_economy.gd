@@ -3,10 +3,14 @@ extends RefCounted
 
 const DISTANCE_SCALE := 40.0
 const EPSILON := 0.5
-const MIN_PRICE_RATIO := 0.55
-const MAX_PRICE_RATIO := 2.2
+const MIN_PRICE_RATIO := 0.8
+const MAX_PRICE_RATIO := 1.55
 const NOISE_SPAN := 0.08
 const SELL_SPREAD := 0.97
+## A full book moves the posted buy price by this fraction. Buying raises it, selling lowers it.
+const BOOK_PRICE_STEP := 0.25
+## Outstanding traded units halve once per GST day.
+const BOOK_RECOVERY := 0.5
 
 ## Eleven settled worlds from docs/setting/planets.md - each produces at least 1 of every commodity.
 const SETTLED_WORLD_SECTOR_IDS: Array[String] = [
@@ -30,10 +34,13 @@ static func gst_day(gst_seconds: float) -> int:
 
 static func ensure_quotes(session: GameSession, catalog: Catalog) -> bool:
 	var day: int = gst_day(session.gst_seconds)
+	_decay_pressure(session, day)
 	if session.market_quotes_day == day and not session.market_quotes.is_empty():
 		FuelEconomy.ensure_quotes(session, catalog)
 		return false
-	session.market_quotes = compute_quotes(catalog, day, session.route_friction_delta)
+	var quotes := compute_quotes(catalog, day, session.route_friction_delta)
+	_overlay_pressure(session, quotes)
+	session.market_quotes = quotes
 	session.market_quotes_day = day
 	FuelEconomy.ensure_quotes(session, catalog)
 	return true
@@ -102,10 +109,7 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 			var tier_multiplier: float = _tier_price_multiplier(tier)
 			var price: int = maxi(1, int(round(float(base_price) * ratio * noise * tier_multiplier)))
 			var quantity: int = maxi(1, int(round(absf(local_net) * 10.0)))
-			quotes_by_sector[sector_id][commodity_id] = {
-				"price": price,
-				"quantity": quantity,
-			}
+			quotes_by_sector[sector_id][commodity_id] = _posted_listing(price, quantity, 0.0)
 
 	return quotes_by_sector
 
@@ -123,6 +127,22 @@ static func quote_for_sector(session: GameSession, catalog: Catalog, sector_id: 
 
 static func sell_price(buy_price: int) -> int:
 	return maxi(1, int(round(float(buy_price) * SELL_SPREAD)))
+
+
+## Moves the book after a trade that fit the posted quantity. Buying adds units, selling subtracts them.
+static func commit_book(
+	session: GameSession,
+	sector_id: String,
+	commodity_id: String,
+	amount: int,
+	buying: bool
+) -> void:
+	if session == null or amount <= 0 or sector_id.is_empty() or commodity_id.is_empty():
+		return
+	var delta := float(amount) if buying else -float(amount)
+	var units := _pressure_units(session, sector_id, commodity_id) + delta
+	_set_pressure(session, sector_id, commodity_id, units)
+	_repost_listing(session, sector_id, commodity_id)
 
 
 ## Test seam - documented in docs/design/architecture/commodity_economy.md.
@@ -222,6 +242,104 @@ static func _sector_nets(catalog: Catalog, sector_id: String, economy: EconomyDe
 
 static func _price_ratio(demand: float, supply: float) -> float:
 	return clampf((demand + EPSILON) / (supply + EPSILON), MIN_PRICE_RATIO, MAX_PRICE_RATIO)
+
+
+static func _posted_listing(base_price: int, base_quantity: int, units: float) -> Dictionary:
+	var fraction := 0.0
+	if base_quantity > 0:
+		fraction = clampf(units / float(base_quantity), -1.0, 1.0)
+	var price := maxi(1, int(round(float(base_price) * (1.0 + fraction * BOOK_PRICE_STEP))))
+	var quantity := maxi(0, base_quantity - int(round(absf(units))))
+	return {
+		"price": price,
+		"quantity": quantity,
+		"base_price": base_price,
+		"base_quantity": base_quantity,
+	}
+
+
+static func _decay_pressure(session: GameSession, day: int) -> void:
+	var world := session.world
+	if world.market_pressure_day < 0:
+		world.market_pressure_day = day
+		return
+	var elapsed := day - world.market_pressure_day
+	if elapsed <= 0:
+		return
+	var factor := pow(BOOK_RECOVERY, float(elapsed))
+	var next_pressure := {}
+	for sector_variant in world.market_pressure.keys():
+		var book: Variant = world.market_pressure.get(sector_variant, {})
+		if typeof(book) != TYPE_DICTIONARY:
+			continue
+		var next_book := {}
+		for commodity_variant in (book as Dictionary).keys():
+			var units := float((book as Dictionary).get(commodity_variant, 0.0)) * factor
+			if absf(units) >= 0.05:
+				next_book[str(commodity_variant)] = units
+		if not next_book.is_empty():
+			next_pressure[str(sector_variant)] = next_book
+	world.market_pressure = next_pressure
+	world.market_pressure_day = day
+
+
+static func _overlay_pressure(session: GameSession, quotes: Dictionary) -> void:
+	for sector_variant in quotes.keys():
+		var sector_id := str(sector_variant)
+		var sector_quotes: Variant = quotes.get(sector_id, {})
+		if typeof(sector_quotes) != TYPE_DICTIONARY:
+			continue
+		for commodity_variant in (sector_quotes as Dictionary).keys():
+			var commodity_id := str(commodity_variant)
+			var listing: Variant = (sector_quotes as Dictionary).get(commodity_id, {})
+			if typeof(listing) != TYPE_DICTIONARY:
+				continue
+			var base_price := int((listing as Dictionary).get("base_price", (listing as Dictionary).get("price", 1)))
+			var base_quantity := int((listing as Dictionary).get("base_quantity", (listing as Dictionary).get("quantity", 1)))
+			(sector_quotes as Dictionary)[commodity_id] = _posted_listing(
+				base_price,
+				base_quantity,
+				_pressure_units(session, sector_id, commodity_id)
+			)
+
+
+static func _repost_listing(session: GameSession, sector_id: String, commodity_id: String) -> void:
+	var sector_quotes: Variant = session.market_quotes.get(sector_id, {})
+	if typeof(sector_quotes) != TYPE_DICTIONARY:
+		return
+	var listing: Variant = (sector_quotes as Dictionary).get(commodity_id, {})
+	if typeof(listing) != TYPE_DICTIONARY or (listing as Dictionary).is_empty():
+		return
+	var base_price := int((listing as Dictionary).get("base_price", (listing as Dictionary).get("price", 1)))
+	var base_quantity := int((listing as Dictionary).get("base_quantity", (listing as Dictionary).get("quantity", 1)))
+	(sector_quotes as Dictionary)[commodity_id] = _posted_listing(
+		base_price,
+		base_quantity,
+		_pressure_units(session, sector_id, commodity_id)
+	)
+
+
+static func _pressure_units(session: GameSession, sector_id: String, commodity_id: String) -> float:
+	var book: Variant = session.world.market_pressure.get(sector_id, {})
+	if typeof(book) != TYPE_DICTIONARY:
+		return 0.0
+	return float((book as Dictionary).get(commodity_id, 0.0))
+
+
+static func _set_pressure(session: GameSession, sector_id: String, commodity_id: String, units: float) -> void:
+	var world := session.world
+	if world.market_pressure_day < 0:
+		world.market_pressure_day = gst_day(session.gst_seconds)
+	var book: Variant = world.market_pressure.get(sector_id, {})
+	var next: Dictionary = {} if typeof(book) != TYPE_DICTIONARY else (book as Dictionary).duplicate()
+	if absf(units) < 0.05:
+		next.erase(commodity_id)
+	else:
+		next[commodity_id] = units
+	if next.is_empty():
+		world.market_pressure.erase(sector_id)
+	else:
+		world.market_pressure[sector_id] = next
 
 
 static func _all_pair_distances(

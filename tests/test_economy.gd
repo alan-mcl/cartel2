@@ -3,9 +3,9 @@ extends RefCounted
 
 ## `CommodityEconomy` coverage.
 ##
-## Quotes are derived state: recomputed on day rollover and rebuilt on load rather than saved.
-## That makes determinism for a given day the load-bearing property - two sessions on the same
-## day must agree, or a save/load round-trip silently reprices the galaxy.
+## Base quotes are derived state: recomputed on day rollover and rebuilt on load.
+## Traded units are saved as market pressure and overlaid on that board.
+## Two sessions on the same day with no pressure must agree.
 
 
 static func run(runner: TestRunner) -> void:
@@ -22,6 +22,7 @@ static func run(runner: TestRunner) -> void:
 	_test_network_friction_and_reach(runner)
 	_test_route_disconnection_pending(runner)
 	_test_market_usability_and_routes(runner, catalog)
+	_test_book_depth(runner, catalog)
 
 
 static func _test_quote_shape(runner: TestRunner, catalog: Catalog) -> void:
@@ -254,11 +255,11 @@ static func _set_synth_flow(
 
 
 static func _test_local_ratio_saturation(runner: TestRunner) -> void:
-	const MIN_RATIO := 0.55
-	const MAX_RATIO := 2.2
+	const MIN_RATIO := 0.8
+	const MAX_RATIO := 1.55
 	var surplus_cases: Array = [
 		[0.1, 0.8333333333],
-		[0.25, 0.6666666667],
+		[0.25, MIN_RATIO],
 		[0.5, MIN_RATIO],
 		[1.0, MIN_RATIO],
 		[15.0, MIN_RATIO],
@@ -268,13 +269,14 @@ static func _test_local_ratio_saturation(runner: TestRunner) -> void:
 		var expected: float = float(row[1])
 		var ratio: float = CommodityEconomy.price_ratio_for_test(0.0, surplus)
 		_check_approx(runner, ratio, expected, "economy: local surplus ratio at %.2f" % surplus)
-		if surplus >= 0.5:
+		if surplus >= 0.25:
 			runner.check(is_equal_approx(ratio, MIN_RATIO), "economy: surplus %.2f at minimum clamp" % surplus)
 
 	var deficit_cases: Array = [
 		[0.1, 1.2],
 		[0.25, 1.5],
-		[0.5, 2.0],
+		[0.3, MAX_RATIO],
+		[0.5, MAX_RATIO],
 		[0.6, MAX_RATIO],
 		[1.0, MAX_RATIO],
 		[15.0, MAX_RATIO],
@@ -284,7 +286,7 @@ static func _test_local_ratio_saturation(runner: TestRunner) -> void:
 		var expected: float = float(row[1])
 		var ratio: float = CommodityEconomy.price_ratio_for_test(deficit, 0.0)
 		_check_approx(runner, ratio, expected, "economy: local deficit ratio at %.2f" % deficit)
-		if deficit >= 0.6:
+		if deficit >= 0.3:
 			runner.check(is_equal_approx(ratio, MAX_RATIO), "economy: deficit %.2f at maximum clamp" % deficit)
 
 	var saturated_surplus: float = CommodityEconomy.price_ratio_for_test(0.0, 15.0)
@@ -599,3 +601,96 @@ static func _test_market_usability_and_routes(runner: TestRunner, catalog: Catal
 		)
 	else:
 		runner.check(false, "economy: market usability session start")
+
+
+static func _test_book_depth(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	if not session.start_new_game(catalog, "ECON-BOOK", "trader"):
+		runner.check(false, "economy: book session starts")
+		return
+	var sector := session.get_market_sector_id(catalog)
+	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	var base: Dictionary = CommodityEconomy.compute_quotes(catalog, day)
+	var live: Dictionary = session.market_quotes.get(sector, {}).get("consumer_goods", {})
+	var raw: Dictionary = base.get(sector, {}).get("consumer_goods", {})
+	runner.check_eq(int(live.get("price", 0)), int(raw.get("price", 0)), "economy: no pressure leaves the base price")
+	runner.check_eq(
+		int(live.get("quantity", 0)),
+		int(raw.get("quantity", 0)),
+		"economy: no pressure leaves the base quantity"
+	)
+
+	var energy: Dictionary = session.market_quotes.get(sector, {}).get("energy", {})
+	var energy_base := int(energy.get("base_price", 0))
+	var energy_qty := int(energy.get("base_quantity", 0))
+	CommodityEconomy.commit_book(session, sector, "energy", energy_qty, false)
+	var sold: Dictionary = session.market_quotes.get(sector, {}).get("energy", {})
+	var lowered := maxi(1, int(round(float(energy_base) * (1.0 - CommodityEconomy.BOOK_PRICE_STEP))))
+	runner.check_eq(int(sold.get("price", 0)), lowered, "economy: selling the book lowers the buy price by a quarter")
+	runner.check_eq(int(sold.get("quantity", 0)), 0, "economy: selling the book empties it")
+	runner.check_eq(
+		CommodityEconomy.sell_price(int(sold.get("price", 0))),
+		CommodityEconomy.sell_price(lowered),
+		"economy: the sell price follows the lowered buy"
+	)
+
+	var goods: Dictionary = session.market_quotes.get(sector, {}).get("consumer_goods", {})
+	var goods_base := int(goods.get("base_price", 0))
+	var goods_qty := int(goods.get("base_quantity", 0))
+	CommodityEconomy.commit_book(session, sector, "consumer_goods", goods_qty, true)
+	var filled: Dictionary = session.market_quotes.get(sector, {}).get("consumer_goods", {})
+	var raised := maxi(1, int(round(float(goods_base) * (1.0 + CommodityEconomy.BOOK_PRICE_STEP))))
+	runner.check_eq(int(filled.get("quantity", 0)), 0, "economy: buying the book empties it")
+	runner.check_eq(int(filled.get("price", 0)), raised, "economy: buying the book raises the buy price by a quarter")
+
+	runner.check(session.visit(catalog, "proxima_exchange"), "economy: book visits the exchange")
+	var ship := session.get_current_owned_ship()
+	var credits := session.credits
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "consumer_goods", 1),
+		"economy: a buy larger than the book is refused"
+	)
+	runner.check_eq(session.credits, credits, "economy: a refused buy spends nothing")
+	runner.check_eq(ship.get_cargo_count("consumer_goods"), 0, "economy: a refused buy loads nothing")
+	runner.check(
+		session.last_log.contains("board"),
+		"economy: a refused buy says the board is short"
+	)
+	ship.add_cargo("consumer_goods", 1)
+	runner.check(
+		not session.sell_commodity(catalog, "proxima_exchange", "consumer_goods", 1),
+		"economy: a sell into an empty book is refused"
+	)
+	runner.check_eq(ship.get_cargo_count("consumer_goods"), 1, "economy: a refused sell keeps the cargo")
+
+	var data := SaveStore.build_save_data(
+		session.player_to_dict(),
+		session.to_dict(),
+		session.ships_to_array(),
+		{},
+		{}
+	)
+	var loaded := GameSession.new()
+	runner.check(loaded.from_save(catalog, data), "economy: book pressure save loads")
+	var loaded_goods: Dictionary = loaded.market_quotes.get(sector, {}).get("consumer_goods", {})
+	runner.check_eq(int(loaded_goods.get("quantity", -1)), 0, "economy: saved pressure keeps the book empty")
+	runner.check_eq(int(loaded_goods.get("price", 0)), raised, "economy: saved pressure keeps the raised price")
+
+	session.advance_gst(float(GalacticCalendar.SECONDS_PER_DAY))
+	runner.check(CommodityEconomy.ensure_quotes(session, catalog), "economy: a day rolls the book")
+	var restored: Dictionary = session.market_quotes.get(sector, {}).get("consumer_goods", {})
+	var units := float(session.world.market_pressure.get(sector, {}).get("consumer_goods", 0.0))
+	runner.check(
+		is_equal_approx(units, float(goods_qty) * CommodityEconomy.BOOK_RECOVERY),
+		"economy: one day halves the outstanding units"
+	)
+	var new_base_qty := int(restored.get("base_quantity", 0))
+	var new_base_price := int(restored.get("base_price", 0))
+	var fraction := clampf(units / float(maxi(1, new_base_qty)), -1.0, 1.0)
+	var expected_qty := maxi(0, new_base_qty - int(round(absf(units))))
+	var expected_price := maxi(
+		1,
+		int(round(float(new_base_price) * (1.0 + fraction * CommodityEconomy.BOOK_PRICE_STEP)))
+	)
+	runner.check_eq(int(restored.get("quantity", -1)), expected_qty, "economy: one day restores half the book")
+	runner.check_eq(int(restored.get("price", 0)), expected_price, "economy: one day halves the price shift")

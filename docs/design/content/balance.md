@@ -32,7 +32,7 @@ Every income source and cost is compared in the same units, for the same referen
 
 | Flow | Today | Target |
 | --- | --- | --- |
-| Commodity trade | Unlimited volume at fixed daily quotes. It out-earns every other source per hop. | Bounded by market depth. A full-hold hop earns 1.5 to 3 times the best charter hop for the same hull. |
+| Commodity trade | Listing quantity is the book at the posted price. Trades move that price and recover over GST days. | A book-limited hold earns 1.5 to 3 times the best charter hop for the same hull. |
 | Passenger charters | Terminal and bar boards. Pay scales by role, comfort tier, and route. | The benchmark for a 1-hop run. |
 | Freight charters | Terminal board. Lots reserve tonnes on the hull. | At least half of passenger pay per GST hour. |
 | Scan contracts | Low, narrow pay band for an active scan at a volatile site or planet. | Below charters per hop, unless the site carries combat risk. |
@@ -64,18 +64,18 @@ A typical career should draw income from at least two sources, and no single sou
 **Today:**
 
 - Commodity quotes come from `CommodityEconomy` ([commodity_economy.md](../architecture/commodity_economy.md)). Price is the base price times a demand-over-supply ratio, a noise term, and a tier modifier:
-  - The ratio is clamped to `MIN_PRICE_RATIO` 0.55 and `MAX_PRICE_RATIO` 2.2.
+  - The ratio is clamped to `MIN_PRICE_RATIO` 0.8 and `MAX_PRICE_RATIO` 1.55.
   - The noise term is ±`NOISE_SPAN` 8%.
   - The tier modifier is 0.97 for core sectors, 1.0 for mid, and 1.12 for outer.
 - The sell price is 97% of the buy price.
-- Quotes are fixed for the GST day, trades never move prices, and listing quantities are display-only.
-- Most goods sit on both clamps, so the clamps set the margins: the best 1-hop route returns about 290% to 390% on every commodity except data.
-- Hold flags (`refrigerated`, `biohazard`, `secure_cargo`, `military_grade`, `compute_integrated`) gate goods to suitable holds.
+- The listing quantity is the volume available at the posted price. Buying raises the buy price and selling lowers it, by up to 25% when the book is emptied. Outstanding units halve each GST day. The pressure is saved. The base board is still derived from the day.
+- A trade larger than the posted quantity is refused.
+- Hold flags (`refrigerated`, `biohazard`, `secure_cargo`, `military_grade`, `compute_integrated`) gate goods to suitable holds. Compute cores require `compute_integrated`.
+- On a fresh-day board, with the lot capped by the book, the best unflagged hop against the best charter hop is about 1.6× for the Flare-ON SS and the Juno 1088, 2.1× for the Pegasus P101, and 2.7× for the Krypton K2. The Pegasus P105 is about 4.3× (d4,038 against d934): its charter hop matches the P101, and the book fills the 20 t hold. A narrower band that brought the P105 down to 3× would put the 4 t hulls under 1.5×, so the clamps stay at 0.8 and 1.55. The Silhouette Mk8 and the Wolff Warrior have no cargo hold.
 
 **Target:**
 
-- **Market depth.** The listing quantity is the volume available at the quote. Buying raises the local buy price, selling lowers the sell price, and both recover over a few GST days. Depth is what turns margins into a bounded income, so set it before tuning margins.
-- **Margin bands.** The best 1-hop margin per tonne may rise with value density. With depth in place, a full hold of the best unflagged good earns 1.5 to 3 times the best charter hop for that hull. Goods that need a special hold may earn up to about 1.5 times the unflagged best per tonne, so the special hold pays back.
+- **Margin bands.** The Pegasus P105's book-limited hold still earns about 4.3× its best charter hop. Bring that hull into the 1.5 to 3× band without pushing the 4 t hulls under 1.5×. Goods that need a special hold may earn up to about 1.5 times the unflagged best per tonne, so the special hold pays back. Compute cores still earn about five times the best unflagged good per tonne.
 - **No dominant good.** No single commodity should be the best route on most days for most hulls. Value-dense goods carry a hold flag or enough mass per unit to keep them in their band.
 - **Charter benchmarks.** Measure passenger and freight pay per hop and per GST hour for the reference hulls at reputation 0. Freight earns at least half of passenger pay per GST hour. Reputation-gated work (from reputation 15) pays its multipliers on top.
 - **Bounty and scan pay.** Bounty pay scales with the target's scaled hull, its best weapon, and its escorts. Scan pay stays below charter pay per hop unless the site carries combat risk.

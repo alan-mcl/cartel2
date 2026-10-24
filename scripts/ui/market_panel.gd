@@ -250,9 +250,11 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 	actions.add_theme_constant_override("separation", 8)
 	detail.add_child(actions)
 
+	var book_open := store_qty >= 1
 	var buy := Button.new()
 	buy.text = "Buy 1"
-	if cargo_ship != null:
+	buy.disabled = not book_open
+	if cargo_ship != null and book_open:
 		buy.disabled = not _context.session.cargo_carry_block_reason(
 			_context.catalog,
 			cargo_ship,
@@ -264,6 +266,7 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 
 	var sell := Button.new()
 	sell.text = "Sell 1"
+	sell.disabled = not book_open or cargo_qty < 1
 	sell.pressed.connect(_on_sell_commodity.bind(_selected_commodity_id))
 	actions.add_child(sell)
 

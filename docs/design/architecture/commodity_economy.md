@@ -106,7 +106,9 @@ Constants (code):
 |--------|-----------|------:|
 | Distance scale | `DISTANCE_SCALE` | 40 |
 | Ratio stabiliser | `EPSILON` | 0.5 |
-| Min / max ratio | `MIN_PRICE_RATIO` / `MAX_PRICE_RATIO` | 0.55 / 2.2 |
+| Min / max ratio | `MIN_PRICE_RATIO` / `MAX_PRICE_RATIO` | 0.8 / 1.55 |
+| Book price step | `BOOK_PRICE_STEP` | 0.25 |
+| Book recovery | `BOOK_RECOVERY` | 0.5 per GST day |
 | Noise half-span | `NOISE_SPAN` | 0.08 (±8%) |
 | Sell spread | `SELL_SPREAD` | 0.97 |
 
@@ -135,7 +137,7 @@ Interpretation: remote surpluses cheaply add to effective supply; remote deficit
 Generic ratio from supply and demand buckets:
 
 \[
-\text{ratio}(D, S) = \mathrm{clamp}\left( \frac{D + 0.5}{S + 0.5},\; 0.55,\; 2.2 \right)
+\text{ratio}(D, S) = \mathrm{clamp}\left( \frac{D + 0.5}{S + 0.5},\; 0.8,\; 1.55 \right)
 \]
 
 For sector \(s\):
@@ -178,11 +180,13 @@ where \(\eta \in [-1, 1]\) is derived from `hash("%d:%s:%s" % [day, sector_id, c
 \text{buy}_{s,c} = \max\left(1,\; \mathrm{round}\bigl( \text{base\_price}_c \cdot \text{ratio}_s \cdot \text{noise} \cdot \tau_s \bigr)\right)
 \]
 
-**Listing quantity** (display-only, not enforced on trade volume):
+**Listing quantity** is the volume available at the posted price. A buy or a sell larger than that quantity is refused.
 
 \[
 q_{s,c} = \max(1,\; \mathrm{round}(|\text{net}_{s,c}| \times 10))
 \]
+
+That is the base book. Outstanding traded units thin it. See [Market pressure](#market-pressure).
 
 ## Sell quote
 
@@ -190,15 +194,28 @@ q_{s,c} = \max(1,\; \mathrm{round}(|\text{net}_{s,c}| \times 10))
 \text{sell}_{s,c} = \max(1,\; \mathrm{round}(0.97 \times \text{buy}_{s,c}))
 \]
 
-Implemented as `CommodityEconomy.sell_price(buy)` and `GameSession.commodity_sell_price`. Fixed until the next GST day boundary; player trades do not move buy or sell quotes intraday.
+Implemented as `CommodityEconomy.sell_price(buy)` and `GameSession.commodity_sell_price`. The sell price is always 97% of the posted buy, so a trade that moves the buy price moves the sell price with it.
+
+## Market pressure
+
+The base board above is deterministic for a catalog, a GST day, and `route_friction_delta`. Player trades do not change that base. They add a saved overlay.
+
+`WorldPresence.market_pressure` stores net units per sector and commodity. A buy adds units. A sell subtracts them. `market_pressure_day` is the GST day those units were last decayed. Both are saved with the session. A save that has no pressure fields starts with an empty book. Quotes themselves are still rebuilt on load.
+
+Units halve once per GST day (`BOOK_RECOVERY` 0.5), so three days leave about an eighth. On the day roll, `ensure_quotes` decays the units, recomputes the base board, then posts:
+
+- Buy price = base price × (1 + fraction × 0.25), where fraction is the outstanding units divided by the base quantity, clamped to −1..1.
+- Quantity = base quantity minus the absolute outstanding units, floored at 0.
+
+Buying raises the buy price. Selling lowers it. Either trade thins the book. Units that fit pay the price on the board, then the overlay updates, so the next trade the same day sees the new price and the smaller quantity. A full book moves the buy price by 25% and leaves nothing to trade until the units decay.
 
 ## Lifecycle and determinism
 
 1. **GST day:** \(day = \lfloor gst\_seconds / \text{SECONDS\_PER\_DAY} \rfloor\) (`GalacticCalendar`).
-2. **`ensure_quotes`:** If `session.market_quotes_day == day` and quotes non-empty, skip commodity recompute (still may refresh fuel). Otherwise `market_quotes = compute_quotes(catalog, day, route_friction_delta)`.
-3. **New game / load:** Quotes rebuilt for the current day when first needed or on rollover.
+2. **`ensure_quotes`:** Decay pressure to the current day. If `session.market_quotes_day == day` and quotes are non-empty, skip the commodity recompute (fuel may still refresh). Otherwise recompute the base board and overlay pressure.
+3. **New game / load:** The base board is rebuilt for the current day. Saved pressure is overlaid after decay for any days elapsed since `market_pressure_day`.
 
-Same `catalog`, `day`, and `route_friction_delta` ⇒ identical `compute_quotes` output (see `tests/test_economy.gd` determinism test).
+Same `catalog`, `day`, and `route_friction_delta` ⇒ identical `compute_quotes` output (see `tests/test_economy.gd` determinism test). The posted board also depends on pressure.
 
 ## Assumptions
 
@@ -207,25 +224,25 @@ Same `catalog`, `day`, and `route_friction_delta` ⇒ identical `compute_quotes`
 - Route graph is symmetric and undirected; multi-route redundancy is collapsed to shortest path.
 - Friction is the only edge cost; cargo mass, refrigeration, or commodity type do not change reach.
 - `base_price` is a global par anchor, not sector-specific.
-- Economic coupling is linear in surplus/deficit magnitudes with no diminishing returns or stock depletion.
+- Economic coupling of the base board is linear in surplus and deficit magnitudes. Player trades thin the posted book and shift its price. They do not change the underlying flows.
 - Tier affects posted price only, not flows.
 
 ## Explicitly out of scope (current implementation)
 
 | Topic | Notes |
 |-------|--------|
-| Player or NPC trades moving quotes | Intraday quotes are fixed; volume is unlimited at listed buy/sell prices |
+| NPC trades moving quotes | Only the player's buys and sells write `market_pressure` |
 | `wealth` in flow or price formulas | Field remains in JSON for future or presentation |
 | Population scaling | Baked into economy weights at authoring time |
 | Unknown / private routes | Only `routes.json` public edges. Volatile grants are not economy edges; see [trade_network.md](../content/trade_network.md) |
 | Per-commodity shipping cost in pricing | Friction is route-level, not cargo-level |
 | Corporate presence (`corporate_presence.json`) | Does not adjust quotes |
 | Refrigeration / cargo tags | Affect cargo rules, not `CommodityEconomy` |
-| Order book, bid/ask depth, contract enforcement | `quantity` on listings is flavour |
+| A second order book beside the posted quantity | Depth is the listing quantity and the pressure overlay |
 | Commodity-specific tax, tariff, or Exchange fees | Beyond the 97% sell spread |
 | Dynamic events without `route_friction_delta` | Blockades must mutate friction (or graph) before the next daily recompute |
 | n>4 Unspace routing | Project scope: 4-space public graph only |
-| Saving quotes as authoritative | Saves carry GST time; quotes re-derived on load for consistency |
+| Saving the posted board as authoritative | Saves carry GST time and `market_pressure`. The base board is re-derived on load |
 
 ## Test seams
 

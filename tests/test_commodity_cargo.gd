@@ -8,6 +8,7 @@ static func run(runner: TestRunner) -> void:
 	_test_refrigerated_hold_allows_food_buy(runner, catalog)
 	_test_cannot_remove_hold_with_food_aboard(runner, catalog)
 	_test_sell_allowed_without_hold_capability(runner, catalog)
+	_test_compute_cores_need_a_vault(runner, catalog)
 
 
 static func _session(runner: TestRunner, catalog: Catalog, callsign: String) -> GameSession:
@@ -80,4 +81,34 @@ static func _test_sell_allowed_without_hold_capability(runner: TestRunner, catal
 	runner.check(
 		session.sell_commodity(catalog, "proxima_exchange", "food_products", 1),
 		"commodity cargo: sell food without refrigerated hold"
+	)
+
+
+static func _test_compute_cores_need_a_vault(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "CARGO-CORE")
+	runner.check(session.visit(catalog, "proxima_exchange"), "commodity cargo: compute visit market")
+	var ship := session.get_cargo_ship()
+	if ship == null:
+		runner.check(false, "commodity cargo: compute ship present")
+		return
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "compute_cores", 1),
+		"commodity cargo: a plain hold cannot buy compute cores"
+	)
+	ship.set_module(_cargo_slot(ship), "chettiar_compute_vault_10")
+	var listing := CommodityEconomy.quote_for_sector(
+		session,
+		catalog,
+		session.get_market_sector_id(catalog),
+		"compute_cores"
+	)
+	var available := int(listing.get("quantity", 0))
+	runner.check(available >= 1, "commodity cargo: compute cores are on the board")
+	runner.check(
+		session.buy_commodity(catalog, "proxima_exchange", "compute_cores", 1),
+		"commodity cargo: a compute vault can buy one core"
+	)
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "compute_cores", available),
+		"commodity cargo: a buy larger than the remaining book is refused"
 	)

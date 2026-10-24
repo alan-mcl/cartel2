@@ -84,7 +84,8 @@
     "name": "Compute",
     "mass": 0.3,
     "base_price": 400,
-    "description": "Computational hardware cores shipped between worlds for industrial, commercial, and civilian use. Compute capacity is always in demand across all sectors and requires highly developed manufacturing facilities to produce. High performance and compact size make compute particularly suitable for interstellar trade between locations with different levels of demand and production capacity."
+    "description": "Computational hardware cores shipped between worlds for industrial, commercial, and civilian use. Compute capacity is always in demand across all sectors and requires highly developed manufacturing facilities to produce. High performance and compact size make compute particularly suitable for interstellar trade between locations with different levels of demand and production capacity.",
+    "requires_capabilities": ["compute_integrated"]
   },
   {
     "id": "minerals",

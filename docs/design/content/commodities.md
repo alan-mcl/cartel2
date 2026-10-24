@@ -133,6 +133,7 @@ Eight categories require installed cargo-bay **capabilities** on the carrying sh
 | Pharmaceuticals, Chemicals | `biohazard` |
 | Luxury Goods, Data | `secure_cargo` |
 | Military Goods | `military_grade` |
+| Compute Cores | `compute_integrated` |
 
 Consumer Goods, Energy, Industrial Components, Advanced Raw Materials, and Minerals use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
 
@@ -146,6 +147,6 @@ Consumer Goods, Energy, Industrial Components, Advanced Raw Materials, and Miner
 | Exchange buy gated by hold capabilities | Implemented |
 | Habitat Exchange buy/sell | Implemented (daily quotes, all eleven habitats) |
 | Multi-market arbitrage | Implemented (graph-driven price differences) |
-| Market stock depletion | Not implemented (contract depth is display-only) |
+| Market stock depletion | Implemented. The listing quantity is the book at the posted price. Trades move that price and the book refills as the pressure halves each GST day. |
 | Planet production/consumption | Implemented (`economies.json` + daily reset) |
 | Economic events / blockades | Not implemented (`route_friction_delta` reserved) |

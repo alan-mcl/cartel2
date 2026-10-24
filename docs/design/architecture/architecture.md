@@ -303,9 +303,9 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 ## Save / load
 
 - Three fixed slots: `user://saves/slot_1.json` … `slot_3.json` (directory configurable via `SaveStore.save_dir` for tests).
-- Saves store pilot identity, full `GameSession` state (including `spare_parts`), owned ship instances (modules, per-ship cargo, fuel, ammunition), player flight position/velocity/facing, and `game_version` (from `GameVersion.VERSION`).
+- Saves store pilot identity, full `GameSession` state (including `spare_parts` and `market_pressure`), owned ship instances (modules, per-ship cargo, fuel, ammunition), player flight position/velocity/facing, and `game_version` (from `GameVersion.VERSION`).
 - **Alpha catalog ids:** fitted module and ammunition ids are stored verbatim. Renaming or removing a catalog SKU invalidates existing save slots; there is no save migrator yet.
-- Optional top-level `subsystems` envelope: `Simulation.collect_save()` writes one versioned section per registered `SimSubsystem` (`{version, data}` keyed by subsystem `id`). `Simulation.apply_save()` restores each section (running `migrate` when the stored version is older). Missing envelope on v1/v2 saves is valid - subsystems reset to defaults. Session/UI fields are unchanged; market quotes remain derived on load.
+- Optional top-level `subsystems` envelope: `Simulation.collect_save()` writes one versioned section per registered `SimSubsystem` (`{version, data}` keyed by subsystem `id`). `Simulation.apply_save()` restores each section (running `migrate` when the stored version is older). Missing envelope on v1/v2 saves is valid - subsystems reset to defaults. Session/UI fields are unchanged. The commodity board is derived on load from the GST day, then overlaid with saved `market_pressure` (net units traded per sector and commodity, decayed by half for each GST day since `market_pressure_day`). A save with no pressure fields has an empty overlay.
 - Catalog JSON under `data/catalog/` remains read-only; saves never write there.
 - Save/load available from the pause menu (in flight) and from the habitat pilot menu (☰ under the pilot summary, while docked).
 - **Career statistics:** lifetime counters and revenue/expense ledgers live in the save `session` object (`CareerStats` on `GameSession`, keyed fields such as `career_id`, `revenue_by_source`, `expenses_by_source`). Missing keys on older saves default to zero and receive a new `career_id` on load.
@@ -323,7 +323,6 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades and other friction overrides). `route_friction_delta` is a session field read by `CommodityEconomy`. There is no player UI for it
 - Public unknown Unspace routes. Private off-catalog translations already exist as volatile mission grants (see above)
-- Market contract depletion (depth is display-only)
 
 Open design follow-ons: [backlog.md](backlog.md).
 

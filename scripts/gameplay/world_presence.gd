@@ -18,6 +18,10 @@ var run_seed: int = 0
 var orbital_phase_by_sector: Dictionary = {}
 var market_quotes: Dictionary = {}
 var market_quotes_day: int = -1
+## Net units traded per sector and commodity. Positive is buying, which raises the buy price.
+## The GST day the units were last decayed. -1 means unset.
+var market_pressure: Dictionary = {}
+var market_pressure_day: int = -1
 var fuel_quotes: Dictionary = {}
 var fuel_quotes_day: int = -1
 var route_friction_delta: Dictionary = {}
@@ -97,6 +101,8 @@ func to_session_dict() -> Dictionary:
 		"gst_seconds": gst_seconds,
 		"run_seed": run_seed,
 		"route_friction_delta": route_friction_delta.duplicate(),
+		"market_pressure_day": market_pressure_day,
+		"market_pressure": _pressure_to_save(market_pressure),
 	}
 
 
@@ -123,6 +129,39 @@ func load_session_dict(data: Dictionary, default_gst_seconds: float) -> void:
 	market_quotes_day = -1
 	fuel_quotes.clear()
 	fuel_quotes_day = -1
+	if data.has("market_pressure_day"):
+		market_pressure_day = int(data.get("market_pressure_day", -1))
+	else:
+		market_pressure_day = -1
+	market_pressure = _pressure_from_save(data.get("market_pressure", {}))
+
+
+static func _pressure_to_save(pressure: Dictionary) -> Dictionary:
+	var out := {}
+	for sector_variant in pressure.keys():
+		var book: Variant = pressure.get(sector_variant, {})
+		if typeof(book) != TYPE_DICTIONARY:
+			continue
+		var saved := {}
+		for commodity_variant in (book as Dictionary).keys():
+			saved[str(commodity_variant)] = float((book as Dictionary).get(commodity_variant, 0.0))
+		out[str(sector_variant)] = saved
+	return out
+
+
+static func _pressure_from_save(value: Variant) -> Dictionary:
+	var out := {}
+	if typeof(value) != TYPE_DICTIONARY:
+		return out
+	for sector_variant in value.keys():
+		var book: Variant = value.get(sector_variant, {})
+		if typeof(book) != TYPE_DICTIONARY:
+			continue
+		var loaded := {}
+		for commodity_variant in (book as Dictionary).keys():
+			loaded[str(commodity_variant)] = float((book as Dictionary).get(commodity_variant, 0.0))
+		out[str(sector_variant)] = loaded
+	return out
 
 
 static func _float_dict_from_variant(value: Variant) -> Dictionary:
