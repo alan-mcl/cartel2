@@ -24,16 +24,6 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-3 Leaderboard ranks net worth, not cash flow
-
-**Status:** Discuss. **Severity:** Critical.
-
-The hall of fame ranks by `CareerStats.nett_profit()`, which is revenue minus expenses. Part sales are revenue, so stripping a free starting kit scores as profit: the Outlaw's Wolff Warrior is worth d18,378 on the leaderboard with no play. Every purchase is a permanent loss, so the Entrepreneur sits at -d18,635 after buying its first hull. Evidence: finding 1 of the [October 2026 balance pass](../../reports/balance_pass_2026-10.md#1-the-leaderboard-counts-asset-sales-as-profit-critical).
-
-**Proposal:** rank by the change in net worth since the career started, as defined in [balance.md](../content/balance.md#leaderboard-metric). Use one module resale rate for both `ShipAssembly.used_ship_price` (50% today) and `sell_part` (60% today), so that buying a ship, stripping one, and installing a spare are all neutral to the score.
-
-**Do not:** rank on any figure that stripping a ship or buying a template can raise. Do not remove the revenue and expense ledgers that the career screen reads.
-
 ## D-4 Market depth and trade margins
 
 **Status:** Discuss. **Severity:** Critical.
@@ -88,22 +78,22 @@ Antimatter is priced at d200 to d800 a unit, so antimatter hulls burn d30 to d45
 
 **Do not:** special-case antimatter in `FuelEconomy` code. Tune the catalog band or the drives.
 
-## D-8 Background start-value band
+## D-8 Background edges and day-one earning
 
 **Status:** Discuss. **Severity:** High.
 
-Start value (liquid credits plus the kit at its used price) runs from d16,355 (Hotshot) to d33,565 (Outlaw). Liquid credits run from d250 to d32,000.
+Starting nett worth for every background except the Entrepreneur and the Tester sits in d20,000 to d26,000. The Entrepreneur starts at d32,000, about a fifth above the top of that band, with no ship. Profit remains the hall-of-fame default. Nett worth is a secondary column.
 
-- Old Money and the Outlaw have no hold.
+Still open:
+
+- Old Money and the Outlaw have no hold, so they cannot trade or haul on day one.
 - Old Money and the Hotshot have no seats.
-- Reputation 5 and 8 unlock nothing, because the lowest gate is 15.
-- The Entrepreneur's first trade hop earns d45,198, against the Trader's d17,496.
+- The Outlaw's reputation 5 and Old Money's reputation 8 unlock nothing, because the lowest gate is 15. A starting reputation should reach a gate, or not be given.
+- Each background should have one real edge and one real constraint that show in the balance tool.
 
-Evidence: finding 6 of the [balance pass](../../reports/balance_pass_2026-10.md#6-backgrounds-are-unequal-high).
+Evidence: finding 6 of the [balance pass](../../reports/balance_pass_2026-10.md#6-backgrounds-are-unequal-high). The wealth band in that finding has since been set; the edges and the day-one gaps are what remain. The target is in [balance.md](../content/balance.md#backgrounds).
 
-**Proposal:** after D-3 and D-4, bring every start into the d20,000 to d26,000 band. Give each background one real edge and one real constraint that show in the balance tool. The target is in [balance.md](../content/balance.md#backgrounds).
-
-**Do not:** rebalance backgrounds before D-3 and D-4 land, because most of today's spread comes from them. Test-only kits such as Tester stay outside the band.
+**Do not:** pull the Entrepreneur down into the band. Their cash is the compensation for buying a hull, and it stays about a fifth above the top. Test-only kits such as Tester stay outside the band. Retune that premium after market depth if the cash then dominates a career.
 
 ## D-9 Charter and bounty pay
 

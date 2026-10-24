@@ -282,7 +282,7 @@ func save_to_slot(slot_index: int) -> bool:
 	if not SaveStore.write_slot(slot_index, save_data):
 		return false
 
-	LeaderboardStore.upsert_from_session(_main.session, str(save_data.get("saved_at", "")))
+	LeaderboardStore.upsert_from_session(_main.session, str(save_data.get("saved_at", "")), _catalog)
 
 	_current_slot = slot_index
 	_main.session.last_log = "Game saved to slot %d." % slot_index
@@ -387,7 +387,7 @@ func on_pause_leaderboard_requested() -> void:
 func open_career_overlay() -> void:
 	if not _main.game_active or _career == null:
 		return
-	_career.open(_main.session)
+	_career.open(_main.session, _catalog)
 	if not _main.session.docked and not _pause.visible:
 		_tree.paused = true
 

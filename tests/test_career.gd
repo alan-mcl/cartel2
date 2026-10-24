@@ -16,6 +16,8 @@ static func run(runner: TestRunner) -> void:
 	_test_save_round_trip(runner, catalog)
 	_test_legacy_save(runner, catalog)
 	_test_leaderboard_store(runner, catalog)
+	_test_nett_worth(runner, catalog)
+	_test_starting_nett_worth_bands(runner, catalog)
 	CareerStats.reset_factory()
 
 
@@ -169,8 +171,8 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 	session_a.player.reputation = 12
 	session_b.player.reputation = 3
 	session_a.career.played_seconds = 7200.0
-	LeaderboardStore.upsert_from_session(session_a, "2026-01-01T00:00:00")
-	LeaderboardStore.upsert_from_session(session_b, "2026-01-02T00:00:00")
+	LeaderboardStore.upsert_from_session(session_a, "2026-01-01T00:00:00", catalog)
+	LeaderboardStore.upsert_from_session(session_b, "2026-01-02T00:00:00", catalog)
 	var row_a: Dictionary = {}
 	for entry_variant in LeaderboardStore.read_all():
 		if str(entry_variant.get("career_id", "")) == "career_a":
@@ -194,7 +196,7 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 	var by_revenue := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.REVENUE, true)
 	runner.check_eq(int(by_revenue[0].get("revenue", 0)), 1000, "career: leaderboard revenue sort")
 	session_a.career.record_charter_reward(2000)
-	LeaderboardStore.upsert_from_session(session_a, "2026-01-03T00:00:00")
+	LeaderboardStore.upsert_from_session(session_a, "2026-01-03T00:00:00", catalog)
 	var updated := LeaderboardStore.read_all()
 	var found := false
 	for entry_variant in updated:
@@ -203,10 +205,137 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 			runner.check_eq(int(entry_variant.get("profit", 0)), 3000, "career: leaderboard upsert updates career")
 			break
 	runner.check(found, "career: leaderboard upsert finds career")
+	session_a.wallet.credits += 5000
+	LeaderboardStore.upsert_from_session(session_a, "2026-01-04T00:00:00", catalog)
+	var by_worth := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.NET_WORTH, true)
+	runner.check(
+		by_worth.size() >= 2 and str(by_worth[0].get("career_id", "")) == "career_a",
+		"career: leaderboard nett worth sort"
+	)
+	var session_c := _session(runner, catalog, "CHARLIE-3")
+	if session_c != null:
+		session_c.career.career_id = "career_c"
+		LeaderboardStore.upsert_from_session(session_c, "2026-01-05T00:00:00")
+		var with_gap := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.NET_WORTH, false)
+		runner.check(
+			with_gap.size() >= 1 and str(with_gap[with_gap.size() - 1].get("career_id", "")) == "career_c",
+			"career: a row without nett worth sorts last"
+		)
+		var by_profit_again := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.PROFIT, true)
+		runner.check(
+			by_profit_again.size() >= 1 and int(by_profit_again[0].get("profit", 0)) == 3000,
+			"career: profit stays the ranking column"
+		)
 	LeaderboardStore.store_dir = "user://"
 	if DirAccess.dir_exists_absolute(temp_dir):
 		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
 		DirAccess.remove_absolute(temp_dir)
+
+
+static func _test_nett_worth(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "CR-WORTH")
+	if session == null:
+		return
+	var start := CareerWorth.nett_worth(session, catalog)
+	runner.check(start > 0, "career: a new kit has nett worth")
+	var ship := session.get_current_owned_ship()
+	if ship == null or ship.modules.is_empty():
+		runner.check(false, "career: trader has a fitted module")
+		return
+	var entry: Dictionary = ship.modules[0]
+	var module_id := str(entry.get("module_id", ""))
+	var slot := str(entry.get("slot", ""))
+	ship.remove_module(slot)
+	session.add_spare_part(module_id, 1)
+	runner.check_eq(
+		CareerWorth.nett_worth(session, catalog),
+		start,
+		"career: unplugging a module does not change nett worth"
+	)
+	var module_def := catalog.get_module_def(module_id)
+	var cost := int(module_def.cost)
+	var book := CareerWorth.module_book_value(cost)
+	var sale := maxi(1, int(float(cost) * 0.6))
+	var profit_before := session.career.nett_profit()
+	runner.check(ShipAssembly.sell_part(session, catalog, module_id), "career: spare sells")
+	runner.check_eq(
+		session.career.nett_profit() - profit_before,
+		sale,
+		"career: profit books the whole part sale"
+	)
+	runner.check_eq(
+		CareerWorth.nett_worth(session, catalog) - start,
+		sale - book,
+		"career: nett worth moves only by the sale spread"
+	)
+	var before_cargo := CareerWorth.nett_worth(session, catalog)
+	ship.add_cargo("compute_cores", 2)
+	var quote := CommodityEconomy.quote_for_sector(
+		session,
+		catalog,
+		catalog.get_habitat_sector_id(ship.location),
+		"compute_cores"
+	)
+	var cargo_value := CommodityEconomy.sell_price(int(quote.get("price", 0))) * 2
+	runner.check(cargo_value > 0, "career: cargo has a sell quote")
+	runner.check_eq(
+		CareerWorth.nett_worth(session, catalog) - before_cargo,
+		cargo_value,
+		"career: cargo is marked at the local sell quote"
+	)
+	var aboard := _session(runner, catalog, "CR-ABOARD")
+	if aboard == null:
+		return
+	var flying := aboard.get_current_owned_ship()
+	if flying == null:
+		runner.check(false, "career: aboard session has a ship")
+		return
+	runner.check(aboard.undock(catalog, flying.id), "career: undock for aboard cargo valuation")
+	runner.check_eq(flying.location, "aboard", "career: active ship location is aboard")
+	var worth_before := CareerWorth.nett_worth(aboard, catalog)
+	flying.add_cargo("compute_cores", 1)
+	LeaderboardStore.upsert_from_session(aboard, "2026-01-06T00:00:00", catalog)
+	runner.check(
+		CareerWorth.nett_worth(aboard, catalog) > worth_before,
+		"career: cargo aboard is valued without habitat lookup"
+	)
+
+
+static func _test_starting_nett_worth_bands(runner: TestRunner, catalog: Catalog) -> void:
+	var ids: Array = catalog.backgrounds_by_id.keys()
+	ids.sort()
+	var checked := 0
+	for id_variant in ids:
+		var background_id := str(id_variant)
+		if background_id == "tester":
+			continue
+		var session := GameSession.new()
+		if not session.start_new_game(catalog, "NW-%s" % background_id, background_id):
+			runner.check(false, "career: %s starts" % background_id)
+			continue
+		checked += 1
+		var worth := CareerWorth.nett_worth(session, catalog)
+		if background_id == "entrepreneur":
+			runner.check(
+				worth > 26000 and worth <= 32000,
+				"career: entrepreneur nett worth %d sits just above the band" % worth
+			)
+		else:
+			runner.check(
+				worth >= 20000 and worth <= 26000,
+				"career: %s nett worth %d is inside d20,000 to d26,000" % [background_id, worth]
+			)
+		var owned := session.get_current_owned_ship()
+		if owned == null:
+			continue
+		if background_id == "outlaw":
+			runner.check_eq(owned.template_id, "wolff_warrior", "career: outlaw still flies a Warrior")
+		var blockers := ShipAssembly.undock_blockers(catalog, owned)
+		runner.check(
+			blockers.is_empty(),
+			"career: %s kit can undock (%s)" % [background_id, ", ".join(blockers)]
+		)
+	runner.check(checked >= 6, "career: starting bands cover the playable backgrounds")
 
 
 static func _test_weapon_attribution(runner: TestRunner, catalog: Catalog) -> void:

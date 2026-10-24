@@ -37,9 +37,9 @@ Every income source and cost is compared in the same units, for the same referen
 | Freight charters | Terminal board. Lots reserve tonnes on the hull. | At least half of passenger pay per GST hour. |
 | Scan contracts | Low, narrow pay band for an active scan at a volatile site or planet. | Below charters per hop, unless the site carries combat risk. |
 | Bounties | Flat pay regardless of target. Free repairs make it pure profit. | Scales with target strength. Keeps at least 60% of pay after costs. |
-| Part sales | 60% of list price. Counted as revenue. | One shared resale rate with the used-ship price (see [Ships](#ships)). |
+| Part sales | 60% of list price. Counted as revenue. | Stay revenue. Nett worth books the module at 50% until it is sold. |
 | Salvage | Wired into the session and career stats. No catalog content. | Small extra income from exploration. |
-| Ship and part purchases | Expenses. | Count only depreciation against the score. |
+| Ship and part purchases | Expenses. | Stay expenses. Profit counts the full spend. |
 | Fuel | Refuelling at local `FuelEconomy` quotes. | See [Running costs](#running-costs). |
 | Fines and penalties | d500 for unlawful fire, d2,500 for a destroyed ship, and charter cancellation fees. | Unchanged. Piracy is not an income source. |
 | Repairs | Free and automatic on docking. | Priced per hull point (see [Running costs](#running-costs)). |
@@ -47,13 +47,11 @@ Every income source and cost is compared in the same units, for the same referen
 
 ### Leaderboard metric
 
-**Today:** the hall of fame ranks by `CareerStats.nett_profit()`, which is revenue minus expenses. Selling parts from the free starting kit therefore scores as profit, and every purchase counts as a loss even though the asset keeps its value.
+**Today:** the hall of fame ranks by `CareerStats.nett_profit()`, which is revenue minus expenses. Part sales count as revenue and purchases as expenses, so selling modules from a free kit scores, and buying a hull scores as spending. Buying a hull and stripping it still loses money, because the chassis is not sold and the parts come back for less than the used price.
 
-**Target:** rank by the change in net worth since the career started.
+Nett worth is a second column. It is credits, plus each owned ship at the used-price rule on its current fit (chassis at list, each fitted module at 50%), plus spare parts at that same 50%, plus cargo at the local sell quote, minus unpaid fines. Unplugging a module does not move it. Selling the module lifts it only by the gap between the 60% cash and the 50% book value. The column is absolute wealth, so a richer start can lead it while trailing on profit. Rows saved before the column existed have no figure and sort below measured rows until that career is saved again.
 
-- Net worth is credits, plus owned ships at the used-price rule applied to their current fit, plus spare parts at the part sale rate, plus cargo at the local sell quote, minus unpaid fines.
-- The module share in the used-ship price must equal the part sale rate. Then buying a ship, stripping one, and installing a spare are all neutral to the score, and only new parts cost their depreciation.
-- If hull sales are added, price them at the same valuation.
+**Target:** keep this split. Profit stays the default rank. Nett worth stays the secondary column, on the definition above.
 
 ### Risk premium
 
@@ -163,26 +161,27 @@ A typical career should draw income from at least two sources, and no single sou
 **Target:**
 
 - **Chassis price model.** Chassis cost tracks hull points, mass limit, volume, and mounts. A chassis priced well above that, such as the Mantis at about twice the median cost per hull point, needs an edge that justifies the premium.
-- **Resale.** One module resale rate serves both the used-ship price and part sales (see [Leaderboard metric](#leaderboard-metric)). The no-strip-profit invariant must keep holding.
+- **Resale.** The yard's used price counts modules at 50% of list, and part sales pay 60%. Profit books the purchase and the sale in full. Nett worth books a fitted module and a spare at the same 50%, so moving a part between the ship and the pile does not change it, and selling the part lifts nett worth only by the gap over that book value. The no-strip-profit invariant must keep holding.
 - **Payload sets the role.** Loaded mass (dry, fuel, full magazines, and a full hold) must fit the mass limit, so hold, armour, ammunition, and fuel compete for it. A cargo refit of a combat hull should not exceed the purpose-built haulers' hold by more than about 50%.
 - **Power.** No template has a negative power margin with the engine on. Firing the best weapon does not starve shields.
 - **Payback.** A new hull or a major upgrade pays for itself in about 10 to 30 hops of the activity it serves.
 
 ## Backgrounds
 
-**Today:** start value is liquid credits after any starting fine, plus the kit hull at its used price.
+**Today:** starting nett worth is credits, plus the kit at the used-price rule on its current fit, plus spare parts at 50%, minus unpaid fines. The Tester kit is outside this.
 
-- Start values run from d16,355 to d33,565.
-- Liquid credits run from d250 to d32,000.
+- Every other background except the Entrepreneur starts between d20,000 and d26,000.
+- The Entrepreneur starts at d32,000 with no ship, about a fifth above the top of that band.
+- Liquid credits still run from d250, after the Outlaw's fine, to the Entrepreneur's d32,000.
 - Reputation gates start at 15. The others are 25, 30, 40, 50, and 75, depending on role and cargo.
 - Each on-time delivery adds 1 reputation, and each late or cancelled charter removes 1 ([missions.md](missions.md)).
 
 **Target:**
 
-- **Start value band.** Every background starts at d20,000 to d26,000 of start value, a spread of no more than 1.3 times.
+- **Start value band.** Keep the d20,000 to d26,000 band for every background except the Entrepreneur and the Tester. Keep the Entrepreneur about a fifth above the top of the band (d30,000 to d32,000). That premium is for having to buy a hull, and it is smaller than the hull's price, because choosing the ship is already their edge.
 - **Day-one income.** Every background can earn on day one with its kit through at least one activity: trade, a charter, or a bounty.
 - **One edge and one constraint each,** both visible in the balance tool's backgrounds table. A starting reputation either reaches a gate or is not given.
-- **Earning power.** Compare backgrounds by start value and by first-run income from the start habitat, measured after the leaderboard and market-depth changes.
+- **Earning power.** Compare backgrounds by start value and by first-run income from the start habitat. Revisit the Entrepreneur's premium after market depth, if that cash then dominates a career.
 
 ## Process and guard rails
 
@@ -212,14 +211,14 @@ The run takes about 40 seconds. Without `--out` it prints the tables, and `--tit
 | No negative power margin with the engine on | Template mass and power |
 | Breach costs one to two typical runs | Hull repair bills by template |
 | Armed hulls keep at least 60% of a bounty after costs | Bounty pay after rearming and repairs |
-| Start value within d20,000 to d26,000 | Backgrounds |
+| Start value within d20,000 to d26,000, Entrepreneur about a fifth above | Backgrounds |
 
 **Guard rails as tests.**
 
 - `tests/test_balance_metrics.gd` asserts the no-strip-profit invariant and the tool's structure.
+- `tests/test_career.gd` asserts the starting nett-worth bands, and that profit stays the ranking column.
 - When the catalog meets another target, add it as an invariant test in the same change, so it cannot regress. Candidates:
   - No strictly dominated modules
   - No template over its mass limit when loaded
   - No negative power margin
-  - Backgrounds within the band
 - Assert floors and invariants, never exact catalog counts.

@@ -1000,7 +1000,8 @@ static func bounty_targets_section(ctx: Dictionary) -> Dictionary:
 static func backgrounds_section(ctx: Dictionary) -> Dictionary:
 	var rows: Array = []
 	var notes: Array = [
-		"Start value is liquid credits plus the used value of the kit. Liquidation strips every"
+		"Start value is nett worth at the start: liquid credits plus the book value of the fitted"
+		+ " kit (chassis at list, modules and spares at 50%). Liquidation strips every"
 		+ " module and sells it, with spare parts, through `ShipAssembly`; the leaderboard column is"
 		+ " `CareerStats.nett_profit()` afterwards. First-run figures use the start-day quotes, the"
 		+ " kit ship's hold and flags, and liquid credits. Test-only kits are skipped.",
@@ -2335,17 +2336,14 @@ static func _probe_background(ctx: Dictionary, background_id: String) -> Diction
 	var credits := session.wallet.credits
 	var fine := session.player.outstanding_sanction_fine()
 	var liquid := credits - fine
-	var kit_used := 0
-	for ship in session.fleet.owned_ships:
-		if not ship.template_id.is_empty():
-			kit_used += ShipAssembly.used_ship_price(catalog, ship.template_id)
+	var worth := CareerWorth.nett_worth(session, catalog)
 	var probe := {
 		"id": background_id,
 		"habitat_id": session.world.habitat_id,
 		"credits": credits,
 		"fine": fine,
 		"liquid": liquid,
-		"kit_used_value": kit_used,
+		"kit_used_value": worth - liquid,
 		"reputation": session.player.reputation,
 		"unlocks": _reputation_unlocks(catalog, session.player.reputation),
 		"hold": 0.0,

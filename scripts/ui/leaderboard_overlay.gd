@@ -4,6 +4,7 @@ signal closed
 
 const COLUMNS := [
 	{"id": LeaderboardStore.SortColumn.PROFIT, "label": "Nett profit", "width": 96},
+	{"id": LeaderboardStore.SortColumn.NET_WORTH, "label": "Nett worth", "width": 96},
 	{"id": LeaderboardStore.SortColumn.REVENUE, "label": "Revenue", "width": 88},
 	{"id": LeaderboardStore.SortColumn.EXPENSES, "label": "Expenses", "width": 88},
 	{"id": LeaderboardStore.SortColumn.TONNES, "label": "Tonnes", "width": 68},
@@ -129,6 +130,10 @@ func _format_cell(entry: Dictionary, column: LeaderboardStore.SortColumn) -> Str
 	match column:
 		LeaderboardStore.SortColumn.PROFIT:
 			return CareerStatsFormat.format_credits(int(entry.get("profit", 0)))
+		LeaderboardStore.SortColumn.NET_WORTH:
+			if not entry.has("net_worth"):
+				return "—"
+			return CareerStatsFormat.format_credits(int(entry.get("net_worth", 0)))
 		LeaderboardStore.SortColumn.REVENUE:
 			return CareerStatsFormat.format_credits(int(entry.get("revenue", 0)))
 		LeaderboardStore.SortColumn.EXPENSES:

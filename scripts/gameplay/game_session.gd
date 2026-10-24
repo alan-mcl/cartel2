@@ -282,6 +282,8 @@ func start_new_game(
 		else:
 			ship = OwnedShip.from_template(catalog, ship_data)
 		OwnedShip.finalize_loaded_ship(ship, catalog)
+		if ship.ammunition.is_empty():
+			ShipAssembler.seed_ammunition(catalog, ship)
 		ship.location = start_habitat_id
 		fleet.owned_ships.append(ship)
 

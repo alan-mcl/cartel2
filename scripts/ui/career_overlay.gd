@@ -8,6 +8,7 @@ signal leaderboard_requested
 @onready var _content: VBoxContainer = $Center/Panel/VBox/Scroll/Content
 
 var _session: GameSession = null
+var _catalog: Catalog = null
 
 
 func _ready() -> void:
@@ -17,8 +18,9 @@ func _ready() -> void:
 	$Center/Panel/VBox/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
 
 
-func open(session: GameSession) -> void:
+func open(session: GameSession, catalog: Catalog = null) -> void:
 	_session = session
+	_catalog = catalog
 	visible = true
 	_title.text = "Career - %s" % str(session.callsign) if session != null else "Career"
 	_rebuild()
@@ -27,6 +29,7 @@ func open(session: GameSession) -> void:
 func close() -> void:
 	visible = false
 	_session = null
+	_catalog = null
 
 
 func _rebuild() -> void:
@@ -40,6 +43,8 @@ func _rebuild() -> void:
 	_add_row("Reputation", str(_session.player.reputation))
 	_add_row("Ships owned", str(_session.fleet.owned_ships.size()))
 	_add_row("Nett profit", CareerStatsFormat.format_credits(career.nett_profit()))
+	if _catalog != null:
+		_add_row("Nett worth", CareerStatsFormat.format_credits(CareerWorth.nett_worth(_session, _catalog)))
 	_add_row("Total revenue", CareerStatsFormat.format_credits(career.total_revenue()))
 	_add_money_map("Revenue", career.revenue_by_source, true)
 	_add_row("Total expenses", CareerStatsFormat.format_credits(career.total_expenses()))

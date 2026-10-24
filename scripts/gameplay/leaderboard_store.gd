@@ -15,6 +15,7 @@ enum SortColumn {
 	KILLS,
 	REPUTATION,
 	CAREER_TIME,
+	NET_WORTH,
 }
 
 
@@ -54,7 +55,7 @@ static func write_all(entries: Array) -> bool:
 	return true
 
 
-static func upsert_from_session(session: GameSession, saved_at: String) -> bool:
+static func upsert_from_session(session: GameSession, saved_at: String, catalog: Catalog = null) -> bool:
 	if session == null or session.player.sandbox:
 		return false
 	session.career.ensure_career_id()
@@ -74,6 +75,8 @@ static func upsert_from_session(session: GameSession, saved_at: String) -> bool:
 		"career_time": session.career.played_seconds,
 		"saved_at": saved_at,
 	}
+	if catalog != null:
+		entry["net_worth"] = CareerWorth.nett_worth(session, catalog)
 	var replaced := false
 	for i in entries.size():
 		var existing: Dictionary = entries[i]
@@ -89,6 +92,11 @@ static func upsert_from_session(session: GameSession, saved_at: String) -> bool:
 static func sorted_entries(column: SortColumn, descending: bool) -> Array:
 	var entries := read_all()
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if column == SortColumn.NET_WORTH:
+			var a_measured := a.has("net_worth")
+			var b_measured := b.has("net_worth")
+			if a_measured != b_measured:
+				return a_measured
 		var av: Variant = _sort_value(a, column)
 		var bv: Variant = _sort_value(b, column)
 		if av != bv:
@@ -122,4 +130,6 @@ static func _sort_value(entry: Dictionary, column: SortColumn) -> Variant:
 			return int(entry.get("reputation", 0))
 		SortColumn.CAREER_TIME:
 			return float(entry.get("career_time", 0.0))
+		SortColumn.NET_WORTH:
+			return int(entry.get("net_worth", 0))
 	return 0
