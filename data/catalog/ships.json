@@ -66,7 +66,7 @@
       "gi_ls_4",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "oc_river_md_magazine_200",
+      "oc_river_md_light_magazine_200",
       "fuel_tank_medium",
       "cargo_bay_10",
       "oc_chitanium_5mm",
@@ -200,7 +200,7 @@
       "gi_ls_4",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "ora_bellatrix_rocket_magazine_16",
+      "ora_bellatrix_he_rocket_magazine_16",
       "fuel_tank_medium",
       "cargo_bay_4",
       "oc_chitanium_5mm",
@@ -284,7 +284,7 @@
     "id": "wolff_warrior",
     "name": "Wolff Warrior",
     "maker": "Bayes Inc",
-    "description": "Gunship conversion of the Wolff freighter: antimatter drive, missile and scatter mounts, no cargo bay. Built take the punch and then win the fight.",
+    "description": "Gunship conversion of the Wolff freighter: antimatter drive and a Brutus scatter cannon, no cargo bay. The rocket and missile racks do not fit a full tank.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -293,15 +293,10 @@
       "oc_field_air_2",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "ora_bellatrix_rocket_magazine_16",
-      "go_brutus_scatter_magazine_80",
+      "go_brutus_scatter_magazine_24",
       "fuel_tank_large",
       "oc_chitanium_5mm",
-      "ora_bellatrix_rocket_launcher",
       "go_brutus_scatter_cannon",
-      "go_disruptor_emp_rocket",
-      "ora_bellatrix_guided_missile",
-      "ora_bellatrix_missile_magazine_24",
       "mdc_almanac"
     ]
   },
@@ -309,7 +304,7 @@
     "id": "wolff_gladius",
     "name": "Wolff Gladius",
     "maker": "Bayes Inc",
-    "description": "A modernised Wolff gunship: Privy Seal Null antimatter, deflector shield, and heavier plate than the Warrior.",
+    "description": "A modernised Wolff gunship: Privy Seal Null antimatter, deflector shield, heavier plate than the Warrior, and a Brutus scatter cannon. The rocket rack does not fit a full tank.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -318,12 +313,10 @@
       "oc_workhorse_lungs",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "ora_bellatrix_rocket_magazine_16",
-      "go_brutus_scatter_magazine_80",
+      "go_brutus_scatter_magazine_24",
       "fuel_tank_large",
       "hw_helios_chitanium_10mm",
       "hw_helios_deflector",
-      "ora_bellatrix_rocket_launcher",
       "go_brutus_scatter_cannon",
       "mdc_almanac"
     ]
@@ -332,7 +325,7 @@
     "id": "wolff_bastion",
     "name": "Wolff Bastion",
     "maker": "Bayes Inc",
-    "description": "The original Wolff armed freighter: Bellatrix fusion, an unguided rocket launcher, 5mm chitanium, and a twenty-tonne hold. If there's money in the route, somebody has done it in a Wolff Bastion.",
+    "description": "The original Wolff armed freighter: Bellatrix fusion, a short unguided rocket rack, 5mm chitanium, and a ten-tonne hold. A full tank leaves no room for the twenty-tonne bay.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -341,9 +334,9 @@
       "oc_workhorse_lungs",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "ora_bellatrix_rocket_magazine_16",
+      "ora_bellatrix_he_rocket_magazine_3",
       "fuel_tank_large",
-      "cargo_bay_20",
+      "cargo_bay_10",
       "oc_chitanium_5mm",
       "ora_bellatrix_rocket_launcher",
       "mdc_almanac"
@@ -353,7 +346,7 @@
     "id": "wolff_logistico",
     "name": "Wolff Logistico",
     "maker": "Bayes Inc",
-    "description": "Bulk Wolff freighter: twenty-tonne hold, habitat bunks, fusion drive, and one light laser. The Bastion is armed; the Logistico is the hold.",
+    "description": "Bulk Wolff freighter: ten-tonne hold, habitat bunks, fusion drive, and one light laser. A full tank will not lift the twenty-tonne bay. The Bastion is armed; the Logistico is the hold.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
@@ -363,7 +356,7 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "fuel_tank_large",
-      "cargo_bay_20",
+      "cargo_bay_10",
       "hw_helios_light_laser"
     ]
   },
@@ -418,7 +411,7 @@
       "hg_hermes_circinus",
       "vessel_registration_beacon",
       "hyperdrive_alpha",
-      "prv_ionique_plasma_magazine_100",
+      "prv_ionique_plasma_magazine_50",
       "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
@@ -477,7 +470,7 @@
       "tmc_channel_cabin",
       "hg_hermes_circinus",
       "vessel_registration_beacon",
-      "oc_river_md_magazine_200",
+      "oc_river_md_light_magazine_100",
       "fuel_tank_medium",
       "cargo_bay_4",
       "hw_helios_light_laser",
@@ -489,7 +482,7 @@
     "id": "juno_1030",
     "name": "Juno 1030",
     "maker": "General Industrial",
-    "description": "Unarmed Juno freighter: hydro-thermal drive, HandyAir life support, and fourteen tonnes of hold. No weapons \u2014 pure cargo.",
+    "description": "Unarmed Juno freighter: hydro-thermal drive, HandyAir life support, and ten tonnes of hold. No weapons. A full tank will not lift the fourteen-tonne fit.",
     "chassis": "juno_chassis",
     "modules": [
       "gi_pp_18",
@@ -499,8 +492,7 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "fuel_tank_medium",
-      "cargo_bay_10",
-      "cargo_bay_4"
+      "cargo_bay_10"
     ]
   },
   {
@@ -533,7 +525,7 @@
       "oc_red_dirt_recycle",
       "hg_hermes_circinus",
       "vessel_registration_beacon",
-      "oc_river_md_magazine_200",
+      "oc_river_md_light_magazine_200",
       "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_turbo_laser",
@@ -554,7 +546,7 @@
       "oc_red_dirt_recycle",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "oc_river_md_magazine_200",
+      "oc_river_md_light_magazine_200",
       "fuel_tank_small",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
@@ -619,7 +611,7 @@
     "id": "mantis_xf5700",
     "name": "Mantis XF5700",
     "maker": "The Praetorium",
-    "description": "Top-line Mantis interceptor: Privy Seal Null antimatter, turbo laser and plasma burst for offense. It's a glass cannon for pilots who trust speed over chitanium.",
+    "description": "Top-line Mantis interceptor: Privy Seal Null antimatter and a turbo laser. The plasma burst and its cells do not fit the hull. A glass cannon for pilots who trust speed over chitanium.",
     "chassis": "mantis_chassis",
     "modules": [
       "prv_voltcore_x7",
@@ -628,10 +620,8 @@
       "prae_aegis_seat",
       "prv_lumina_sight",
       "vessel_registration_beacon",
-      "prv_ionique_plasma_magazine_100",
       "fuel_tank_small",
       "hw_helios_turbo_laser",
-      "chi_chimera_plasma_burst",
       "sne_snedeos_electronic_shield",
       "sne_snedeos_cyberwall"
     ]

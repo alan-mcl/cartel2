@@ -14,6 +14,8 @@ static func run(runner: TestRunner) -> void:
 	_test_cargo_capabilities(runner, catalog)
 	_test_chassis_def_keeps_dictionary(runner, catalog)
 	_test_stock_list_meta(runner, catalog)
+	_test_full_load_limits_fitting_and_launch(runner, catalog)
+	_test_templates_fit_a_full_load(runner, catalog)
 
 
 static func _test_cargo_capabilities(runner: TestRunner, catalog: Catalog) -> void:
@@ -141,3 +143,82 @@ static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:
 			packet_tooltip.contains("Damage packets"),
 			"weapon tooltip lists damage packets"
 		)
+
+
+static func _test_full_load_limits_fitting_and_launch(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "mass_fit",
+			"template_id": "flare_on_ss",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	var slot := ""
+	for slot_variant in ShipAssembler.list_slots_for_chassis(catalog.get_chassis_def("flare_on_chassis")):
+		var candidate := str(slot_variant)
+		if candidate.begins_with("other_") and owned.get_module_id(candidate).is_empty():
+			slot = candidate
+			break
+	runner.check(not slot.is_empty(), "assembler: flare has a free slot for the mass check")
+	var before := owned.get_module_id(slot)
+	var refused := ShipAssembler.validate_install(catalog, owned, slot, "cargo_bay_20")
+	runner.check(not bool(refused.get("ok", false)), "assembler: a 20 t bay that fits dry is refused when full")
+	runner.check(
+		str(refused.get("reason", "")).contains("fully loaded"),
+		"assembler: the refusal names the full load"
+	)
+	runner.check_eq(owned.get_module_id(slot), before, "assembler: a refused install changes nothing")
+
+	var launched := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "mass_launch",
+			"template_id": "flare_on_ss",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	runner.check(
+		ShipAssembly.undock_blockers(catalog, launched).is_empty(),
+		"assembler: an empty flare can undock"
+	)
+	launched.add_cargo("minerals", 20)
+	var blocked := ShipAssembly.undock_blockers(catalog, launched)
+	var saw_mass := false
+	for reason in blocked:
+		if str(reason).contains("mass limit"):
+			saw_mass = true
+	runner.check(saw_mass, "assembler: cargo over the limit blocks undock")
+	launched.remove_cargo("minerals", 20)
+	runner.check(
+		ShipAssembly.undock_blockers(catalog, launched).is_empty(),
+		"assembler: offloading the cargo clears the mass block"
+	)
+
+
+static func _test_templates_fit_a_full_load(runner: TestRunner, catalog: Catalog) -> void:
+	var checked := 0
+	for ship_variant in catalog.list_ships():
+		if typeof(ship_variant) != TYPE_DICTIONARY:
+			continue
+		var ship_id := str(ship_variant.get("id", ""))
+		var template := catalog.get_ship_def(ship_id)
+		if template == null:
+			continue
+		var owned := OwnedShip.from_template(
+			catalog,
+			{
+				"id": "full_%s" % ship_id,
+				"template_id": ship_id,
+				"chassis_id": template.chassis,
+			}
+		)
+		var assembled := ShipAssembler.assemble_owned(catalog, owned)
+		var full := ShipAssembler.projected_full_mass(catalog, owned, assembled)
+		var limit := float(assembled.envelope.get("mass_limit", 0.0))
+		runner.check(
+			full <= limit,
+			"assembler: %s full load %.2f t is within %.1f t" % [ship_id, full, limit]
+		)
+		checked += 1
+	runner.check(checked >= 8, "assembler: full-load check covers the roster")

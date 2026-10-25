@@ -178,10 +178,10 @@ static func validate_install(
 	trial.set_module(slot, module_id)
 	var assembled := assemble_owned(catalog, trial, false)
 
-	var dry_mass := float(assembled.envelope.get("dry_mass", 0.0))
+	var full_mass := projected_full_mass(catalog, trial, assembled)
 	var mass_limit := float(assembled.envelope.get("mass_limit", 0.0))
-	if dry_mass > mass_limit:
-		result["reason"] = "Exceeds mass limit (%.1f / %.1f t)." % [dry_mass, mass_limit]
+	if full_mass > mass_limit:
+		result["reason"] = "Exceeds mass limit when fully loaded (%.1f / %.1f t)." % [full_mass, mass_limit]
 		return result
 
 	var volume_used := float(assembled.envelope.get("volume_used", 0.0))
@@ -231,13 +231,30 @@ static func calculate_loaded_mass(catalog: Catalog, owned: OwnedShip, assembled:
 
 	for ammo_id in owned.ammunition.keys():
 		var qty := owned.get_ammo_count(str(ammo_id))
-		var ammo := catalog.get_ammunition_def(str(ammo_id))
-		var ammo_mass := 0.5
-		if ammo != null and ammo.has_source_key("mass"):
-			ammo_mass = ammo.mass
-		mass += ammo_mass * qty
+		mass += ammunition_unit_mass(catalog, str(ammo_id)) * qty
 
 	return mass
+
+
+## Dry mass, a full tank of the engine's fuel, every magazine at its listed capacity, and a full hold.
+## A gravitic drive has no fuel, so its tank modules add only their own dry mass.
+static func projected_full_mass(catalog: Catalog, owned: OwnedShip, assembled: AssembledShip) -> float:
+	var mass := float(assembled.envelope.get("dry_mass", 0.0))
+	if not ShipFuel.active_fuel_id(catalog, owned).is_empty():
+		mass += ShipFuel.active_capacity(catalog, owned) * FUEL_MASS_PER_UNIT
+	var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
+	if typeof(caps) == TYPE_DICTIONARY:
+		for ammo_id in caps.keys():
+			mass += ammunition_unit_mass(catalog, str(ammo_id)) * float(caps[ammo_id])
+	mass += float(assembled.capacities.get("cargo_capacity", 0.0))
+	return mass
+
+
+static func ammunition_unit_mass(catalog: Catalog, ammo_id: String) -> float:
+	var ammo := catalog.get_ammunition_def(ammo_id)
+	if ammo != null and ammo.has_source_key("mass"):
+		return ammo.mass
+	return 0.5
 
 
 static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:

@@ -103,7 +103,7 @@
             },
             {
               "slot": "other_1",
-              "module_id": "oc_river_md_magazine_200"
+              "module_id": "oc_river_md_light_magazine_200"
             },
             {
               "slot": "other_2",
@@ -365,7 +365,7 @@
             },
             {
               "slot": "other_1",
-              "module_id": "oc_river_md_magazine_200"
+              "module_id": "oc_river_md_light_magazine_200"
             },
             {
               "slot": "other_2",
@@ -520,7 +520,7 @@
             },
             {
               "slot": "other_1",
-              "module_id": "go_brutus_scatter_magazine_80"
+              "module_id": "go_brutus_scatter_magazine_24"
             }
           ]
         }

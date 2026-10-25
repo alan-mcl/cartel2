@@ -118,6 +118,14 @@ static func undock_blockers(
 				"Not enough power for freight load - upgrade ship systems at the Shipyard."
 			)
 
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned, assembled)
+	var mass_limit := float(assembled.envelope.get("mass_limit", 0.0))
+	if loaded_mass > mass_limit:
+		blockers.append(
+			"Over the mass limit (%.1f / %.1f t). Offload cargo or ammunition before launch."
+			% [loaded_mass, mass_limit]
+		)
+
 	return blockers
 
 

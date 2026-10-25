@@ -156,13 +156,13 @@ A typical career should draw income from at least two sources, and no single sou
 - **Prices.** A template's build cost is its chassis plus every module at list price. The used price, which the shipyard charges, is the chassis plus 50% of module list prices. Stripped modules sell for 60% of list price.
 - **No hull sales.** Hulls cannot be sold.
 - **No-strip-profit invariant.** For every template, the parts sell for less than the used price, so buying a ship to strip it never pays. `tests/test_balance_metrics.gd` checks this.
-- **Mass.** The mass limit is checked against dry mass only, when fitting. Fuel, ammunition, and cargo only reduce acceleration.
+- **Mass.** Fitting compares a full load with `mass_limit`: dry mass, a full tank of the engine's fuel, every magazine at its listed capacity, and a full hold. Undock compares the fuel, ammunition, and cargo actually aboard. A partial hold can leave. A fit that cannot fly full cannot be installed. Fuel, ammunition, and cargo still reduce acceleration.
+- **Payload sets the role.** Every template's full load is within its limit, so hold, armour, ammunition, and fuel compete for it. The largest purpose-built hold that fits is the Pegasus P105 at 20 t. The largest cargo refit is 28 t, on the Pegasus P107, about 1.4 times that hold.
 
 **Target:**
 
 - **Chassis price model.** Chassis cost tracks hull points, mass limit, volume, and mounts. A chassis priced well above that, such as the Mantis at about twice the median cost per hull point, needs an edge that justifies the premium.
 - **Resale.** The yard's used price counts modules at 50% of list, and part sales pay 60%. Profit books the purchase and the sale in full. Nett worth books a fitted module and a spare at the same 50%, so moving a part between the ship and the pile does not change it, and selling the part lifts nett worth only by the gap over that book value. The no-strip-profit invariant must keep holding.
-- **Payload sets the role.** Loaded mass (dry, fuel, full magazines, and a full hold) must fit the mass limit, so hold, armour, ammunition, and fuel compete for it. A cargo refit of a combat hull should not exceed the purpose-built haulers' hold by more than about 50%.
 - **Power.** No template has a negative power margin with the engine on. Firing the best weapon does not starve shields.
 - **Payback.** A new hull or a major upgrade pays for itself in about 10 to 30 hops of the activity it serves.
 
@@ -217,8 +217,8 @@ The run takes about 40 seconds. Without `--out` it prints the tables, and `--tit
 
 - `tests/test_balance_metrics.gd` asserts the no-strip-profit invariant and the tool's structure.
 - `tests/test_career.gd` asserts the starting nett-worth bands, and that profit stays the ranking column.
+- `tests/test_assembler.gd` asserts that every template's full load is within its mass limit.
 - When the catalog meets another target, add it as an invariant test in the same change, so it cannot regress. Candidates:
   - No strictly dominated modules
-  - No template over its mass limit when loaded
   - No negative power margin
 - Assert floors and invariants, never exact catalog counts.

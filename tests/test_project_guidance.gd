@@ -62,7 +62,7 @@ static func _test_scatter_order_count(runner: TestRunner, catalog: Catalog) -> v
 
 
 static func _test_weapon_order_splash_flag(runner: TestRunner, catalog: Catalog) -> void:
-	_check_splash_on_fire(runner, catalog, "wolff_warrior", "wolff_chassis", ["rocket", "missile"], true)
+	_check_splash_on_fire(runner, catalog, "pegasus_p113", "pegasus_chassis", ["rocket"], true)
 	_check_splash_on_fire(runner, catalog, "juno_1090", "juno_chassis", ["mass_driver"], false)
 
 

@@ -93,7 +93,7 @@ func refresh() -> void:
 		add_child(_section_label("ENGINEERING"))
 		add_child(_detail_label(
 			"MASS",
-			"%.1f / %.1f t" % [float(envelope.get("dry_mass", 0.0)), float(envelope.get("mass_limit", 0.0))]
+			"%.1f / %.1f t" % [float(stats.get("loaded_mass", 0.0)), float(stats.get("mass_limit", 0.0))]
 		))
 		add_child(_detail_label(
 			"VOLUME",

@@ -127,5 +127,158 @@
       "electromagnetic": 0.0,
       "computational": 0.0
     }
+  },
+  {
+    "id": "oc_river_md_light_magazine_200",
+    "name": "River MD Light Magazine 200",
+    "maker": "Oklahoma Combine",
+    "brand": "River",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "light_weapon",
+      "medium_weapon",
+      "heavy_weapon"
+    ],
+    "mass": 0.35,
+    "volume": 0.8,
+    "ammunition_capacity": {
+      "oc_river_md_round": 200
+    },
+    "cost": 280,
+    "description": "River-line storage for the light mass-driver round.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.08,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "oc_river_md_light_magazine_100",
+    "name": "River MD Light Magazine 100",
+    "maker": "Oklahoma Combine",
+    "brand": "River",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "light_weapon",
+      "medium_weapon",
+      "heavy_weapon"
+    ],
+    "mass": 0.25,
+    "volume": 0.6,
+    "ammunition_capacity": {
+      "oc_river_md_round": 100
+    },
+    "cost": 180,
+    "description": "Short River-line magazine for the light mass-driver round.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.06,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "go_brutus_scatter_magazine_24",
+    "name": "Brutus Scatter Magazine 24",
+    "maker": "Galactic Outcomes",
+    "brand": "Brutus",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "heavy_weapon",
+      "medium_weapon"
+    ],
+    "mass": 0.4,
+    "volume": 0.6,
+    "ammunition_capacity": {
+      "go_scatter_shell": 24
+    },
+    "cost": 180,
+    "description": "Brutus scatter shell magazine sized for a full antimatter tank.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.1,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_bellatrix_he_rocket_magazine_16",
+    "name": "Bellatrix HE Rocket Rack 16",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 0.7,
+    "volume": 1.4,
+    "ammunition_capacity": {
+      "ora_rocket_he": 16
+    },
+    "cost": 520,
+    "description": "Bellatrix storage for high-explosive rockets.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.16,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_bellatrix_he_rocket_magazine_3",
+    "name": "Bellatrix HE Rocket Rack 3",
+    "maker": "Orion Aerospace",
+    "brand": "Bellatrix",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "medium_weapon",
+      "light_weapon"
+    ],
+    "mass": 0.35,
+    "volume": 0.6,
+    "ammunition_capacity": {
+      "ora_rocket_he": 3
+    },
+    "cost": 180,
+    "description": "Short Bellatrix rack for a fuelled freighter.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.08,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "prv_ionique_plasma_magazine_50",
+    "name": "Ionique Plasma Magazine 50",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "category": "ammunition",
+    "mounts": [
+      "other",
+      "light_weapon",
+      "medium_weapon",
+      "heavy_weapon"
+    ],
+    "mass": 0.4,
+    "volume": 0.8,
+    "ammunition_capacity": {
+      "prv_plasma_cell": 50
+    },
+    "cost": 280,
+    "description": "Smaller Ionique plasma cell magazine.",
+    "signature": {
+      "thermal": 0.1,
+      "gravitational": 0.08,
+      "electromagnetic": 0.0,
+      "computational": 0.0
+    }
   }
 ]

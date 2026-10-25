@@ -122,19 +122,19 @@ The Wolff chassis was originally produced by **Bayes Inc**, and is still in regu
 
 ### Warrior
 
-The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a Brutus scatter cannon alongside Bellatrix rocket and guided missile racks, plus a Disruptor EMP rocket for electronic strikes. It also replaces the original fusion engine with a more powerful antimatter drive, making this a formidable craft in a fight.
+The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a Brutus scatter cannon and replacing the fusion engine with antimatter. A full tank does not leave room for the Bellatrix rocket and missile racks or the Disruptor. The yard still sells those weapons.
 
 ### Gladius
 
-The Gladius is a more modern upgrade of the Warrior.
+The Gladius is a more modern upgrade of the Warrior: Privy Seal Null antimatter, a deflector, heavier plate, and the same scatter cannon. The rocket rack does not fit a full tank.
 
 ### Bastion
 
-The original armed freighter trim: fusion drive, rocket launcher, light plate, and a twenty-tonne hold. If there is money in the route, somebody has done it in a Bastion.
+The original armed freighter trim: fusion drive, a short unguided rocket rack, light plate, and a ten-tonne hold. A full tank will not lift the twenty-tonne bay. If there is money in the route, somebody has done it in a Bastion.
 
 ### Logistico
 
-Bulk freighter trim: large hold, habitat bunks, fusion drive, and one light laser - no rocket launcher and no scatter cannon. The Bastion is armed; the **Logistico** is the hold.
+Bulk freighter trim: ten-tonne hold, habitat bunks, fusion drive, and one light laser - no rocket launcher and no scatter cannon. A full tank will not lift the twenty-tonne bay. The Bastion is armed; the **Logistico** is the hold.
 
 ---
 
@@ -202,7 +202,7 @@ The **XF4400** is the current mid-tier production model - faster drives and a he
 
 ### XF5700
 
-The **XF5700** is the top-line interceptor configuration in current manufacture, pairing Privy Seal Null antimatter with turbo laser and Chimera plasma burst, plus SnedOS electronic shielding and cyberwall for contested lanes.
+The **XF5700** is the top-line interceptor configuration in current manufacture, pairing Privy Seal Null antimatter with a turbo laser, plus SnedOS electronic shielding and cyberwall for contested lanes. The Chimera plasma burst and its cells do not fit the hull.
 
 ---
 

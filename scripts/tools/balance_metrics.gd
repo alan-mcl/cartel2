@@ -158,6 +158,7 @@ static func template_loads_section(ctx: Dictionary) -> Dictionary:
 			float(probe["ammo_mass"]),
 			float(probe["unfired_ammo_mass"]),
 			float(probe["loaded_mass"]),
+			float(probe["full_mass"]),
 			float(probe["mass_limit"]),
 			float(probe["accel_loaded"]),
 			float(probe["accel_dry"]),
@@ -170,15 +171,17 @@ static func template_loads_section(ctx: Dictionary) -> Dictionary:
 		"template_loads",
 		"Template mass and power",
 		[
-			"Template", "Dry t", "Fuel t", "Ammo t", "Unfired ammo t", "Loaded t", "Limit t",
+			"Template", "Dry t", "Fuel t", "Ammo t", "Unfired ammo t", "Loaded t", "Full t", "Limit t",
 			"Accel loaded", "Accel dry", "Power margin", "Power margin firing",
 			"Starved when firing", "Compute margin",
 		],
 		rows,
 		[
-			"Loaded mass is `ShipAssembler.calculate_loaded_mass` with full fuel and the magazines"
-			+ " `ShipAssembler.seed_ammunition` fills. Unfired ammo is the part of that load no fitted"
-			+ " weapon fires. The fitting check compares dry mass only with the limit. Acceleration is"
+			"Loaded mass is `ShipAssembler.calculate_loaded_mass` with the fuel and ammunition actually"
+			+ " aboard. Full mass is `ShipAssembler.projected_full_mass`: dry mass, a full tank, every"
+			+ " magazine at its listed capacity, and a full hold. Fitting refuses a module that would"
+			+ " put that projection over the limit. Undock refuses the mass actually aboard. Unfired"
+			+ " ammo is the part of the loaded ammunition no fitted weapon fires. Acceleration is"
 			+ " `forward_thrust` from `ShipAssembler.derive_stats`. Power margins come from"
 			+ " `ShipOperations` with the engine on, then with the best weapon firing; starved"
 			+ " categories get less power than they ask for while firing.",
@@ -253,8 +256,9 @@ static func refit_holds_section(ctx: Dictionary) -> Dictionary:
 		[
 			"The refit strips weapons, magazines, shields, armour, point defence, cyber defence, the"
 			+ " hyperdrive, and the holds, then fills every free slot with the largest cargo module"
-			+ " `ShipAssembler.validate_install` accepts. It is greedy, so the hold is a floor, not"
-			+ " a maximum. Loaded mass adds full fuel and a full hold. Outlay is the new holds at"
+			+ " `ShipAssembler.validate_install` accepts, so a full tank and a full hold have to fit the"
+			+ " mass limit. It is greedy, so the hold is a floor, not a maximum. Loaded mass adds full"
+			+ " fuel and a full hold. Outlay is the new holds at"
 			+ " full price less what `ShipAssembly.sell_part` pays for the stripped parts. Trade per"
 			+ " hop uses the same rule as the earning-power table. Launch blockers counts"
 			+ " `ShipAssembly.undock_blockers` for a solo pilot.",
@@ -1628,6 +1632,7 @@ static func _probe_template(ctx: Dictionary, template_id: String) -> Dictionary:
 		"ammo_mass": loaded_mass - dry_mass - fuel_mass,
 		"unfired_ammo_mass": unfired_mass,
 		"loaded_mass": loaded_mass,
+		"full_mass": ShipAssembler.projected_full_mass(catalog, owned, assembled),
 		"mass_limit": float(assembled.envelope.get("mass_limit", 0.0)),
 		"accel_loaded": assembled.stats.forward_thrust,
 		"accel_dry": ShipAssembler.derive_stats(assembled, dry_mass).forward_thrust,

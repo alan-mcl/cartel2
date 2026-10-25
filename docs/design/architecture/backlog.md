@@ -24,31 +24,20 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-5 Loaded-mass payload rule
-
-**Status:** Discuss. **Severity:** High.
-
-`ShipAssembler.validate_install` compares dry mass with `mass_limit`, and `ShipAssembly.undock_blockers` ignores mass. Nine templates launch over their limit, and the Wolff Warrior launches at 118 t against 42 t. A greedy cargo refit turns a d12,730 Juno 1045 into a 44 t freighter and a Pegasus P107 into an 84 t one. Evidence: finding 3 of the [balance pass](../../reports/balance_pass_2026-10.md#3-payload-is-not-constrained-high).
-
-**Proposal:** count dry mass plus fuel, ammunition, and cargo against `mass_limit`, both at undock and when fitting with full tanks, full magazines, and a full hold. Then refit the overweight templates.
-
-**Do not:** fix overweight templates by raising `mass_limit` across the board. That keeps every refit loophole.
-
 ## D-6 Ammunition rearming and seeding
 
 **Status:** Discuss. **Severity:** High.
 
 Ammunition cannot be restocked. Nothing writes to `OwnedShip.ammunition` after a ship is created, and the ammunition `cost` field is never charged.
 
-`ShipAssembler.seed_ammunition` fills every type a magazine lists at full capacity, so 6.4 to 8 t of unfired rounds ride on seven templates. Rounds are heavy: a rocket weighs 1.0 t and a missile 1.2 t. Evidence: finding 4 of the [balance pass](../../reports/balance_pass_2026-10.md#4-ammunition-is-overfilled-heavy-and-never-restocked-high).
+`ShipAssembler.seed_ammunition` fills every type a magazine lists at full capacity. The template fits no longer carry a second unfired type, but the yard magazines still do: the River magazine lists heavy rounds beside the light ones, and the Bellatrix rocket rack lists EMP rockets beside high explosive. Rounds are heavy: a rocket weighs 1.0 t and a missile 1.2 t. Evidence: finding 4 of the [balance pass](../../reports/balance_pass_2026-10.md#4-ammunition-is-overfilled-heavy-and-never-restocked-high).
 
 **Proposal:**
 
 - Add a rearm service at the shipyard beside refuelling, priced at the ammunition `cost` times the local repair index. Make it free in sandbox and record it as a `CareerStats` expense.
-- Seed only the types fitted weapons fire.
-- After D-5, trim the heavy magazines.
+- Seed only the types fitted weapons fire. The yard still sells magazines that list a second round, and those still fill both types.
 
-**Do not:** make ammunition free or unlimited to avoid building the restock flow. The `cost` field is the rearm price.
+**Do not:** make ammunition free or unlimited to avoid building the restock flow. The `cost` field is the rearm price. Do not change round masses to make a magazine fit. The loaded-mass rule already sizes the template fits.
 
 ## D-7 Antimatter running cost
 
