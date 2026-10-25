@@ -330,6 +330,16 @@ static func _test_starting_nett_worth_bands(runner: TestRunner, catalog: Catalog
 			continue
 		if background_id == "outlaw":
 			runner.check_eq(owned.template_id, "wolff_warrior", "career: outlaw still flies a Warrior")
+		var spec: Dictionary = catalog.get_background(background_id)
+		for ship_variant in spec.get("ships", []):
+			if typeof(ship_variant) != TYPE_DICTIONARY:
+				continue
+			var ship_spec: Dictionary = ship_variant
+			runner.check(
+				not ship_spec.has("modules"),
+				"career: %s ship %s has no module override"
+				% [background_id, str(ship_spec.get("id", ""))]
+			)
 		var blockers := ShipAssembly.undock_blockers(catalog, owned)
 		runner.check(
 			blockers.is_empty(),

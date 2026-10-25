@@ -24,23 +24,6 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-8 Background edges and day-one earning
-
-**Status:** Discuss. **Severity:** High.
-
-Starting nett worth for every background except the Entrepreneur and the Tester sits in d20,000 to d26,000. The Entrepreneur starts at d32,000, about a fifth above the top of that band, with no ship. Profit remains the hall-of-fame default. Nett worth is a secondary column.
-
-Still open:
-
-- Old Money and the Outlaw have no hold, so they cannot trade or haul on day one.
-- Old Money and the Hotshot have no seats.
-- The Outlaw's reputation 5 and Old Money's reputation 8 unlock nothing, because the lowest gate is 15. A starting reputation should reach a gate, or not be given.
-- Each background should have one real edge and one real constraint that show in the balance tool.
-
-Evidence: finding 6 of the [balance pass](../../reports/balance_pass_2026-10.md#6-backgrounds-are-unequal-high). The wealth band in that finding has since been set; the edges and the day-one gaps are what remain. The target is in [balance.md](../content/balance.md#backgrounds).
-
-**Do not:** pull the Entrepreneur down into the band. Their cash is the compensation for buying a hull, and it stays about a fifth above the top. Test-only kits such as Tester stay outside the band. Retune that premium after market depth if the cash then dominates a career.
-
 ## D-9 Charter and bounty pay
 
 **Status:** Discuss. **Severity:** Medium.

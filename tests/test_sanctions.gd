@@ -16,7 +16,7 @@ static func run(runner: TestRunner) -> void:
 static func _test_outlaw_start_pay_launch(runner: TestRunner, catalog: Catalog) -> void:
 	var session := GameSession.new()
 	runner.check(session.start_new_game(catalog, "SAN-O", "outlaw"), "sanctions: outlaw starts")
-	runner.check_eq(session.credits, 750, "sanctions: outlaw starting credits")
+	runner.check_eq(session.credits, 540, "sanctions: outlaw starting credits")
 	runner.check_eq(session.player.sanctions.size(), 1, "sanctions: outlaw starts with one sanction")
 	runner.check_eq(
 		str(session.player.sanctions[0].get("infraction_id", "")),
@@ -33,7 +33,7 @@ static func _test_outlaw_start_pay_launch(runner: TestRunner, catalog: Catalog) 
 		return
 	runner.check(not session.undock(catalog, ship.id), "sanctions: undock blocked with outstanding fine")
 	runner.check(session.pay_sanctions(catalog), "sanctions: outlaw pays fine")
-	runner.check_eq(session.credits, 250, "sanctions: outlaw left with d250")
+	runner.check_eq(session.credits, 40, "sanctions: outlaw left with d40")
 	runner.check(session.player.sanctions.is_empty(), "sanctions: cleared after payment")
 	runner.check(session.undock(catalog, ship.id), "sanctions: undock after payment")
 

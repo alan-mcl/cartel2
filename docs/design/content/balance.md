@@ -145,7 +145,7 @@ A typical career should draw income from at least two sources, and no single sou
   - The rate is the same for every hull. A tougher hull already paid for its toughness in its purchase price, and armour and shields pay back through smaller bills.
   - Power and compute damage cost the same share of module value per unit: about d3.53 per unit of generation and d3.93 per compute unit at index 1.0.
 - **Breach.** A breach costs one to two typical runs of income for the median hull. That is a band of d48 to d96 per hull point at the median yard.
-- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the median bounty after rearming and repairing a quarter of its hull. With rearm charged at the median index (1.51, Proxima), the Wolff Bastion keeps 55.4% and the Gladius 55.9%. The Warrior keeps 63.8%. The line stays open for the weapon and bounty passes.
+- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the median bounty after rearming and repairing a quarter of its hull. With rearm charged at the median index (1.51, Proxima), the Wolff Bastion keeps 55.5% and the Gladius 56.0%. The Warrior, without plate, keeps 73.2%. The line stays open for the weapon and bounty passes.
 - **Ammunition weapons** must justify their running cost through range, alpha damage, or point-defence-proof delivery. Measure that as cost per kill against a laser of similar price.
 - **Retune with the band.** Retune the repair rate with the balance tool whenever the commodity price band changes, because the index moves with it.
 
@@ -168,19 +168,32 @@ A typical career should draw income from at least two sources, and no single sou
 
 ## Backgrounds
 
-**Today:** starting nett worth is credits, plus the kit at the used-price rule on its current fit, plus spare parts at 50%, minus unpaid fines. The Tester kit is outside this.
+**Today:** starting nett worth is credits, plus the kit at the used-price rule on its current fit, plus spare parts at 50%, minus unpaid fines. Every player start, including the Tester fleet, loads the catalog template. None of them carries a private module list. The Tester kit is outside the wealth band.
 
-- Every other background except the Entrepreneur starts between d20,000 and d26,000.
+- Every other background except the Entrepreneur starts between d20,000 and d26,000. The Outlaw is on the cap, at d26,000.
 - The Entrepreneur starts at d32,000 with no ship, about a fifth above the top of that band.
-- Liquid credits still run from d250, after the Outlaw's fine, to the Entrepreneur's d32,000.
-- Reputation gates start at 15. The others are 25, 30, 40, 50, and 75, depending on role and cargo.
+- Liquid credits run from d40, after the Outlaw pays the d500 fine, to the Entrepreneur's d32,000. The Outlaw starts with d540.
+- The Wolff Warrior template is the Outlaw's ship. The published fit drops the light plate, steps the tank from large to small, and fits a Glimmer Ember instead of a Hermes N6. The Almanac stays. Those three cuts leave a used price of d25,960. The remaining d210, which would have put d250 of cash over the cap, comes out of the Outlaw's credits. A full load is 30.4 t of the 42 t limit.
+- Reputation stays Outlaw 5, Old Money 8, Influencer 25, and 0 for everyone else. Gates start at 15, then 25, 30, 40, 50, and 75. Five and eight still unlock nothing on day one.
 - Each on-time delivery adds 1 reputation, and each late or cancelled charter removes 1 ([missions.md](missions.md)).
+
+A start at reputation R is R successful charters ahead of a start at 0. For each gate G that lead is `min(R, G)` deliveries on which the higher start can take work that opens at G. Let P(g) be the median, over sampled boards, of the best charter a reference hull can complete at reputation g, and let D(G) be `max(0, P(G) - P(previous))`, with P(0) the ungated board. Then
+
+`Value(R) = sum over gates G of min(R, G) * D(G)`
+
+Measured with the balance tool's charter sample (6 days, three run seeds, 468 boards) on the Pegasus P111, the luxury charter hull that can fly the passenger roles those gates open. D(15) is 0: the performers' work does not beat the best ungated offer. The later steps are small. P goes 281, 281, 296, 296, 313, 313, 325 at reputations 0, 15, 25, 30, 40, 50, and 75.
+
+- Value(5) is d220.
+- Value(8) is d352.
+- Value(25) is d1,100.
+
+The band compares liquid credits, plus the kit at the used-price rule, plus Value(R). Value(8) leaves Old Money inside the band (about d22,500). Value(25) leaves the Influencer inside (about d21,200). Value(5) would put the Outlaw d220 over the cap. That is a small sum, and taking it out of credits would drop them below the d500 fine, so the cash stays.
 
 **Target:**
 
-- **Start value band.** Keep the d20,000 to d26,000 band for every background except the Entrepreneur and the Tester. Keep the Entrepreneur about a fifth above the top of the band (d30,000 to d32,000). That premium is for having to buy a hull, and it is smaller than the hull's price, because choosing the ship is already their edge.
+- **Start value band.** Keep the d20,000 to d26,000 band for every background except the Entrepreneur and the Tester. The comparison is liquid credits, plus the kit at the used-price rule, plus Value(R) above. Keep the Entrepreneur about a fifth above the top of the band (d30,000 to d32,000). That premium is for having to buy a hull, and it is smaller than the hull's price, because choosing the ship is already their edge.
+- **Reputation time-value.** Price a starting reputation with Value(R), not by whether it reaches a gate. The current starts are 5, 8, and 25. Do not change those figures to chase the band. If a measured Value(R) is large enough to push a start out of the band, take it out of that background's credits.
 - **Day-one income.** Every background can earn on day one with its kit through at least one activity: trade, a charter, or a bounty.
-- **One edge and one constraint each,** both visible in the balance tool's backgrounds table. A starting reputation either reaches a gate or is not given.
 - **Earning power.** Compare backgrounds by start value and by first-run income from the start habitat. Revisit the Entrepreneur's premium after market depth, if that cash then dominates a career.
 
 ## Process and guard rails

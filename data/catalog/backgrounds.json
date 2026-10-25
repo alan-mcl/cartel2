@@ -4,10 +4,10 @@
     {
       "id": "tester",
       "name": "Tester",
-      "description": "Development kit with the full template fleet for shipyard testing.",
-      "background": "You are a sandbox pilot with every hull in the yard.",
+      "description": "Test kit with the full template fleet for shipyard testing.",
+      "background": "You are a test pilot with every hull in the yard.",
       "starting_location": "Proxima Habitat.",
-      "ship": "Every catalog template is parked here for fitting tests.",
+      "ship": "Every catalog template is parked here for fitting and flight tests.",
       "money": "d3000 and a spare GI-HT-18 in the parts locker.",
       "credits": 3000,
       "reputation": 0,
@@ -20,113 +20,13 @@
           "id": "flare_on_ss_1",
           "name": "Flare-ON SS",
           "template_id": "flare_on_ss",
-          "chassis_id": "flare_on_chassis",
-          "modules": [
-            {
-              "slot": "power_1",
-              "module_id": "hw_helios_compact_40"
-            },
-            {
-              "slot": "main_engine_1",
-              "module_id": "hw_sundancer_compact"
-            },
-            {
-              "slot": "system_1",
-              "module_id": "hw_helios_spark"
-            },
-            {
-              "slot": "system_2",
-              "module_id": "hw_helios_breath"
-            },
-            {
-              "slot": "system_3",
-              "module_id": "hg_hermes_n6"
-            },
-            {
-              "slot": "system_4",
-              "module_id": "vessel_registration_beacon"
-            },
-            {
-              "slot": "system_5",
-              "module_id": "mdc_almanac"
-            },
-            {
-              "slot": "other_1",
-              "module_id": "fuel_tank_small"
-            },
-            {
-              "slot": "other_2",
-              "module_id": "cargo_bay_4"
-            },
-            {
-              "slot": "light_weapon_1",
-              "module_id": "hw_helios_light_laser"
-            }
-          ],
-          "fuel_current": 40.0,
-          "ammunition": {},
-          "cargo": {}
+          "chassis_id": "flare_on_chassis"
         },
         {
           "id": "pegasus_p101_1",
           "name": "Pegasus P101",
           "template_id": "pegasus_p101",
-          "chassis_id": "pegasus_chassis",
-          "modules": [
-            {
-              "slot": "power_1",
-              "module_id": "gi_pp_18"
-            },
-            {
-              "slot": "main_engine_1",
-              "module_id": "gi_ht_18"
-            },
-            {
-              "slot": "system_1",
-              "module_id": "mdc_monday_core"
-            },
-            {
-              "slot": "system_2",
-              "module_id": "gi_ls_4"
-            },
-            {
-              "slot": "system_3",
-              "module_id": "hg_hermes_n6"
-            },
-            {
-              "slot": "system_4",
-              "module_id": "vessel_registration_beacon"
-            },
-            {
-              "slot": "system_5",
-              "module_id": "mdc_almanac"
-            },
-            {
-              "slot": "other_1",
-              "module_id": "oc_river_md_light_magazine_200"
-            },
-            {
-              "slot": "other_2",
-              "module_id": "fuel_tank_medium"
-            },
-            {
-              "slot": "other_3",
-              "module_id": "cargo_bay_10"
-            },
-            {
-              "slot": "other_4",
-              "module_id": "oc_chitanium_5mm"
-            },
-            {
-              "slot": "light_weapon_1",
-              "module_id": "oc_river_light_mass_driver"
-            }
-          ],
-          "fuel_current": 80.0,
-          "ammunition": {
-            "oc_river_md_round": 120
-          },
-          "cargo": {}
+          "chassis_id": "pegasus_chassis"
         },
         {
           "id": "flare_on_sk_1",
@@ -333,62 +233,7 @@
           "id": "pegasus_p101_1",
           "name": "Pegasus P101",
           "template_id": "pegasus_p101",
-          "chassis_id": "pegasus_chassis",
-          "modules": [
-            {
-              "slot": "power_1",
-              "module_id": "gi_pp_18"
-            },
-            {
-              "slot": "main_engine_1",
-              "module_id": "gi_ht_18"
-            },
-            {
-              "slot": "system_1",
-              "module_id": "mdc_monday_core"
-            },
-            {
-              "slot": "system_2",
-              "module_id": "gi_ls_4"
-            },
-            {
-              "slot": "system_3",
-              "module_id": "hg_hermes_n6"
-            },
-            {
-              "slot": "system_4",
-              "module_id": "vessel_registration_beacon"
-            },
-            {
-              "slot": "system_5",
-              "module_id": "mdc_almanac"
-            },
-            {
-              "slot": "other_1",
-              "module_id": "oc_river_md_light_magazine_200"
-            },
-            {
-              "slot": "other_2",
-              "module_id": "fuel_tank_medium"
-            },
-            {
-              "slot": "other_3",
-              "module_id": "cargo_bay_10"
-            },
-            {
-              "slot": "other_4",
-              "module_id": "oc_chitanium_5mm"
-            },
-            {
-              "slot": "light_weapon_1",
-              "module_id": "oc_river_light_mass_driver"
-            }
-          ],
-          "fuel_current": 80.0,
-          "ammunition": {
-            "oc_river_md_round": 120
-          },
-          "cargo": {}
+          "chassis_id": "pegasus_chassis"
         }
       ]
     },
@@ -409,52 +254,7 @@
           "id": "flare_on_ss_1",
           "name": "Flare-ON SS",
           "template_id": "flare_on_ss",
-          "chassis_id": "flare_on_chassis",
-          "modules": [
-            {
-              "slot": "power_1",
-              "module_id": "hw_helios_compact_40"
-            },
-            {
-              "slot": "main_engine_1",
-              "module_id": "hw_sundancer_compact"
-            },
-            {
-              "slot": "system_1",
-              "module_id": "hw_helios_spark"
-            },
-            {
-              "slot": "system_2",
-              "module_id": "hw_helios_breath"
-            },
-            {
-              "slot": "system_3",
-              "module_id": "hg_hermes_n6"
-            },
-            {
-              "slot": "system_4",
-              "module_id": "vessel_registration_beacon"
-            },
-            {
-              "slot": "system_5",
-              "module_id": "mdc_almanac"
-            },
-            {
-              "slot": "other_1",
-              "module_id": "fuel_tank_small"
-            },
-            {
-              "slot": "other_2",
-              "module_id": "cargo_bay_4"
-            },
-            {
-              "slot": "light_weapon_1",
-              "module_id": "hw_helios_light_laser"
-            }
-          ],
-          "fuel_current": 40.0,
-          "ammunition": {},
-          "cargo": {}
+          "chassis_id": "flare_on_chassis"
         }
       ]
     },
@@ -478,9 +278,9 @@
       "description": "A known trouble maker with an outstanding sanction.",
       "background": "Several years experience of smuggling, merc work and bounty hunting on the rim paid your bills. The last job wasn't a success, and you need a sure thing next up to stay afloat.",
       "starting_location": "Tycho Habitat.",
-      "ship": "You pilot a battle-scarred Wolff Warrior. The missile racks were sold off after the last job; the Brutus and its magazine are what is still mounted.",
-      "money": "d750, which should just about cover the sanction you picked up on the way in.",
-      "credits": 750,
+      "ship": "You pilot a battle-scarred Wolff Warrior.",
+      "money": "d540, barely more than the sanction you picked up shooting your way out of trouble on the way in.",
+      "credits": 540,
       "reputation": 5,
       "sanctions": [
         "unlawful_fire"
@@ -492,37 +292,7 @@
           "id": "wolff_warrior_1",
           "name": "Wolff Warrior",
           "template_id": "wolff_warrior",
-          "chassis_id": "wolff_chassis",
-          "modules": [
-            {
-              "slot": "main_engine_1",
-              "module_id": "chi_fable_kiss"
-            },
-            {
-              "slot": "power_1",
-              "module_id": "gi_utility_fusion_55"
-            },
-            {
-              "slot": "system_1",
-              "module_id": "oc_field_air_2"
-            },
-            {
-              "slot": "system_2",
-              "module_id": "oc_field_core_16"
-            },
-            {
-              "slot": "system_3",
-              "module_id": "vessel_registration_beacon"
-            },
-            {
-              "slot": "heavy_weapon_1",
-              "module_id": "go_brutus_scatter_cannon"
-            },
-            {
-              "slot": "other_1",
-              "module_id": "go_brutus_scatter_magazine_24"
-            }
-          ]
+          "chassis_id": "wolff_chassis"
         }
       ]
     },
@@ -532,7 +302,7 @@
       "description": "An ex-military pilot tired of taking orders.",
       "background": "You have just resigned your dead-end commission in one of the corporate armies to strike out on your own. You know you can fly and fight, but you're not sure how far those skills will take you in civilian life.",
       "starting_location": "Proxima Habitat.",
-      "ship": "Your savings have bought you a battered but sound Juno 1088, rather a step down from the Mantis you used to pilot.",
+      "ship": "Your savings have bought you a battered but sound Juno 1088, rather a step down from the Dragon you used to pilot.",
       "money": "After the ship you have d8000 left.",
       "credits": 8000,
       "reputation": 0,

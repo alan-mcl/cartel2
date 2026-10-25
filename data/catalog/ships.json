@@ -284,18 +284,17 @@
     "id": "wolff_warrior",
     "name": "Wolff Warrior",
     "maker": "Bayes Inc",
-    "description": "Gunship conversion of the Wolff freighter: antimatter drive and a Brutus scatter cannon, no cargo bay. The rocket and missile racks do not fit a full tank.",
+    "description": "Gunship conversion of the Wolff freighter: antimatter drive, a Brutus scatter cannon, and a Glimmer Ember. No cargo bay and no plate. A small tank is all the frame carries.",
     "chassis": "wolff_chassis",
     "modules": [
       "gi_utility_fusion_55",
       "chi_fable_kiss",
       "oc_field_core_16",
       "oc_field_air_2",
-      "hg_hermes_n6",
+      "hw_glimmer_ember",
       "vessel_registration_beacon",
       "go_brutus_scatter_magazine_24",
-      "fuel_tank_large",
-      "oc_chitanium_5mm",
+      "fuel_tank_small",
       "go_brutus_scatter_cannon",
       "mdc_almanac"
     ]

@@ -122,7 +122,7 @@ The Wolff chassis was originally produced by **Bayes Inc**, and is still in regu
 
 ### Warrior
 
-The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a Brutus scatter cannon and replacing the fusion engine with antimatter. A full tank does not leave room for the Bellatrix rocket and missile racks or the Disruptor. The yard still sells those weapons.
+The Wolff Warrior is a modification of the original freighter configuration, removing the cargo capability in favour of a Brutus scatter cannon and replacing the fusion engine with antimatter. The published fit is unarmoured: a small antimatter tank, a Glimmer Ember, and an Almanac. The trimmed full load is about 30 t of the 42 t limit. A full tank does not leave room for the Bellatrix rocket and missile racks or the Disruptor. The yard still sells those weapons.
 
 ### Gladius
 
