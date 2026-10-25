@@ -172,7 +172,7 @@
     "name": "Mantis Chassis",
     "maker": "The Praetorium",
     "description": "The Praetorium's dedicated interceptor frame: optimised for manoeuvre, speed, and weapons rather than cargo or crew comfort. Expect a single-seat cockpit and bring your carry on because there's usually no hold.",
-    "cost": 19000,
+    "cost": 12000,
     "mass": 3.0,
     "hits": 16,
     "mass_limit": 18.0,

@@ -62,7 +62,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 1300,
+    "cost": 899,
     "description": "Research-division silicon in a commercial chassis. The marketing team insists it is normal.",
     "signature": {
       "thermal": 1.2,
@@ -134,7 +134,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 700,
+    "cost": 549,
     "description": "Type-number silicon from the Shirakawa house. Conservative and durable.",
     "signature": {
       "thermal": 1.08,
@@ -158,7 +158,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 1000,
+    "cost": 819,
     "description": "Relay-grade silicon from the Caduceus family. Built for nav and comms stacks.",
     "signature": {
       "thermal": 1.24,
@@ -230,7 +230,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 620,
+    "cost": 479,
     "description": "Compact relay silicon for light hulls and messenger routes.",
     "signature": {
       "thermal": 1.0,
@@ -422,7 +422,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 820,
+    "cost": 819,
     "description": "Sixteen compute units of practical Combine engineering.",
     "signature": {
       "thermal": 1.24,
@@ -542,7 +542,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 800,
+    "cost": 754,
     "description": "Yard-standard nav silicon. Installed on more hulls than anyone admits.",
     "signature": {
       "thermal": 1.16,
@@ -662,10 +662,10 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 750,
+    "cost": 753,
     "description": "Consumer silicon from the Tensor line. Glossy packaging, dependable silicon.",
     "signature": {
-      "thermal": 1.16,
+      "thermal": 1.20,
       "gravitational": 0.08,
       "electromagnetic": 2.04,
       "computational": 4.58
@@ -686,7 +686,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 1600,
+    "cost": 1549,
     "description": "The T9 tier \u2014 more CU, same Tensor badge on the bezel.",
     "signature": {
       "thermal": 1.48,
@@ -710,7 +710,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 950,
+    "cost": 639,
     "description": "Conservative silicon from a house that still signs off on every wafer.",
     "signature": {
       "thermal": 1.12,
@@ -782,7 +782,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 880,
+    "cost": 738,
     "description": "Fifth peal in the Logic series. Rings reliably under load.",
     "signature": {
       "thermal": 1.16,
@@ -806,7 +806,7 @@
     "capabilities": [
       "basic_hud"
     ],
-    "cost": 900,
+    "cost": 814,
     "description": "Attested silicon core. License terms apply to the enclosure, not the silicon.",
     "signature": {
       "thermal": 1.24,

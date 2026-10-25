@@ -175,7 +175,7 @@
     "description": "Charter Pegasus: VitaCore luxury cabin, deflector shield, and no cargo bay. The P103 still hauls freight; the P111 carries guests.",
     "chassis": "pegasus_chassis",
     "modules": [
-      "gi_pp_18",
+      "gi_type_40_industrial",
       "gi_ht_18",
       "mdc_workplace_12",
       "prv_vitacore_l",

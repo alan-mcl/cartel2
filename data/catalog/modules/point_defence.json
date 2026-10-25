@@ -30,7 +30,7 @@
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "intercept_chance": 0.26,
-    "cost": 1800,
+    "cost": 1699,
     "description": "Efficient Helios PD grid for escorts on a power budget.",
     "signature": {
       "thermal": 0.8,

@@ -12,12 +12,6 @@ const MANEUVER_ROTATION := {
 	"high": 3.2,
 }
 
-const MANEUVER_DAMP := {
-	"low": 0.45,
-	"medium": 0.40,
-	"high": 0.35,
-}
-
 const PROVIDES_KEYS := [
 	"power_generation",
 	"power_distribution",
@@ -233,7 +227,6 @@ static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipSt
 	stats.max_speed = max_speed
 	stats.boost_max_speed = min(max_speed * boost_multiplier, BOOST_SPEED_CAP)
 	stats.rotation_speed = float(MANEUVER_ROTATION.get(maneuver, MANEUVER_ROTATION["medium"]))
-	stats.linear_damp = float(MANEUVER_DAMP.get(maneuver, MANEUVER_DAMP["medium"]))
 	return stats
 
 

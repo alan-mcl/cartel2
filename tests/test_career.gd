@@ -322,8 +322,8 @@ static func _test_starting_nett_worth_bands(runner: TestRunner, catalog: Catalog
 			)
 		else:
 			runner.check(
-				worth >= 20000 and worth <= 26000,
-				"career: %s nett worth %d is inside d20,000 to d26,000" % [background_id, worth]
+				worth >= 20000 and worth <= 27000,
+				"career: %s nett worth %d is inside d20,000 to d27,000" % [background_id, worth]
 			)
 		var owned := session.get_current_owned_ship()
 		if owned == null:

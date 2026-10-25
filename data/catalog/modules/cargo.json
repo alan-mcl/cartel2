@@ -65,7 +65,7 @@
     "mass": 0.55,
     "volume": 3.0,
     "cargo_capacity": 4.0,
-    "cost": 420,
+    "cost": 390,
     "description": "GI's entry dry bulk cell for light couriers.",
     "capabilities": [],
     "signature": {
@@ -84,7 +84,7 @@
     "mass": 1.25,
     "volume": 10.0,
     "cargo_capacity": 20.0,
-    "cost": 1250,
+    "cost": 1075,
     "description": "Atlas industrial dry hold sized for heavy haulers.",
     "capabilities": [],
     "signature": {
@@ -475,7 +475,7 @@
     "mass": 1.2,
     "volume": 10.0,
     "cargo_capacity": 20.0,
-    "cost": 1180,
+    "cost": 1095,
     "description": "Unmarked dry bulk for industrial feedstock and components.",
     "capabilities": [],
     "signature": {
@@ -513,7 +513,7 @@
     "mass": 0.9,
     "volume": 6.2,
     "cargo_capacity": 10.0,
-    "cost": 820,
+    "cost": 740,
     "description": "House-standard dry hold for mixed merchant fleets.",
     "capabilities": [],
     "signature": {

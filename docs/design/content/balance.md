@@ -86,8 +86,9 @@ A typical career should draw income from at least two sources, and no single sou
 
 - Every module has a list price in `data/catalog/modules/`.
 - No manufacturer-tier modifier exists in code. Brand differences are data.
-- The balance tool measures each category against its main metric and flags strictly dominated modules.
-- A module is strictly dominated when another module for the same mounts is at least as good on every metric, including cost and signature, has every capability flag it has, and is strictly better on at least one metric.
+- The balance tool measures each category against its main metric and flags strictly dominated modules. The headless suite (`TestModuleDominance`) fails when any signature-counted dominated pair remains.
+- A module is strictly dominated when another module for the same mounts is at least as good on every metric, including cost and signature, has every capability flag it has, and is strictly better on at least one metric. After D-11, no module is strictly dominated with signature counted.
+- **Life support list prices (D-11).** Representative four- and six-berth habitats after the pass: `gi_ls_1` d320; `te_handy_air` d500; `eg_leaf_recycle` d2,295; `gi_ls_4` d2,300; `gc_canopy_recycle` d2,285; `mns_continuance_4` d2,220; `frz_shirakawa_type_3_air` d2,260; `gi_type_6_industrial` d2,850; `gi_utility_recycle_6` d3,050; `te_lot_6_special` d3,120; `prv_habitat_series_4` d2,920; `atl_loadmaster_habitat` d2,800. Premium two-berth luxury cabins that beat the Mizuki cabin on signature include the Helios cabin, Longbreath, VitaCore L, Tokonoma, and Mall Cabin at their catalog list prices.
 
 **Target:**
 
@@ -118,7 +119,7 @@ A typical career should draw income from at least two sources, and no single sou
   | Heavy | 22 to 30 |
 
   Price rises with tier. Within a mount, cost per hull damage per second rises with damage. Range, guidance, point-defence immunity, and alpha damage are paid for, but one full trigger pull must stay below the smallest unarmoured template hull (16 hits on the Juno 1030 today). Shared ammunition is retuned once, then each launcher's rate of fire lands in its mount band. Cyber weapons stay at zero hull damage and are excluded from mount-tier medians.
-- **Modules with no gameplay yet**, such as the alpha hyperdrive, stay off ship templates or carry a token price until their feature exists.
+- **Modules with no gameplay yet** stay off ship templates or carry a token price until their feature exists. The fitted `hyperdrive_alpha` on the Dragon Post and Dragon Gold is the exception until hyperdrive translation ([D-2](../architecture/backlog.md#d-2-hyperdrive-translation)) ships; it keeps its list price on those templates.
 
 ## Running costs
 
@@ -164,16 +165,16 @@ A typical career should draw income from at least two sources, and no single sou
 
 **Target:**
 
-- **Chassis price model.** Chassis cost tracks hull points, mass limit, volume, and mounts. A chassis priced well above that, such as the Mantis at about twice the median cost per hull point, needs an edge that justifies the premium.
+- **Chassis price model.** Chassis cost tracks hull points, mass limit, volume, and mounts. The Mantis chassis is d750 per hull point (d12,000 for 16 hits), near the median near d573.
 - **Resale.** The yard's used price counts modules at 50% of list, and part sales pay 60%. Profit books the purchase and the sale in full. Nett worth books a fitted module and a spare at the same 50%, so moving a part between the ship and the pile does not change it, and selling the part lifts nett worth only by the gap over that book value. The no-strip-profit invariant must keep holding.
-- **Power.** No template has a negative power margin with the engine on. Firing the best weapon does not starve shields.
+- **Power.** Every catalog template has a non-negative power margin with the engine on and while its best weapon fires, and no category is starved while firing. `TestTemplatePower` walks `BalanceMetrics` template probes and fails on a negative margin or a non-empty starved list.
 - **Payback.** A new hull or a major upgrade pays for itself in about 10 to 30 hops of the activity it serves.
 
 ## Backgrounds
 
 **Today:** starting nett worth is credits, plus the kit at the used-price rule on its current fit, plus spare parts at 50%, minus unpaid fines. Every player start, including the Tester fleet, loads the catalog template. None of them carries a private module list. The Tester kit is outside the wealth band.
 
-- Every other background except the Entrepreneur starts between d20,000 and d26,000. The Outlaw is on the cap, at d26,000.
+- Every other background except the Entrepreneur starts between d20,000 and d27,000 after the D-11 module repricing. The Outlaw sits near the top of that band.
 - The Entrepreneur starts at d32,000 with no ship, about a fifth above the top of that band.
 - Liquid credits run from d40, after the Outlaw pays the d500 fine, to the Entrepreneur's d32,000. The Outlaw starts with d540.
 - The Wolff Warrior template is the Outlaw's ship. The published fit drops the light plate, steps the tank from large to small, and fits a Glimmer Ember instead of a Hermes N6. The Almanac stays. Those three cuts leave a used price of d25,960. The remaining d210, which would have put d250 of cash over the cap, comes out of the Outlaw's credits. A full load is 30.4 t of the 42 t limit.

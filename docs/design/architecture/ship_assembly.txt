@@ -1374,7 +1374,6 @@ acceleration
 max_speed
 boost_max_speed
 rotation_speed
-linear_damp
 hull
 
 The existing prototype already derives several of these from chassis and engine. The new model should preserve that behaviour while allowing more modules to influence the results.
