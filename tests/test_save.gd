@@ -53,14 +53,16 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	session.route_friction_delta = {"proxima_tycho": 1.5}
 	session.orbital_phase_by_sector = {"proxima": 2.25}
 	session.gst_seconds += 3.0 * float(GalacticCalendar.SECONDS_PER_DAY)
-	session.hull = 11.5
-	session.max_hull = 18.0
-	session.power_integrity_lost = 0.25
-	session.compute_integrity_lost = 0.5
-	session.shield_charges = {"forward": 2.0}
 	session.career.record_charter_reward(321)
 
 	var first_ship: OwnedShip = session.owned_ships[0]
+	var assembled := ShipAssembler.assemble_owned(catalog, first_ship)
+	session.max_hull = float(assembled.capacities.get("hull_hits", 0.0))
+	session.hull = session.max_hull - 6.5
+	session.power_integrity_lost = 0.25
+	session.compute_integrity_lost = 0.5
+	session.shield_charges = {"forward": 2.0}
+	session.persist_combat_to_ship(first_ship.id)
 	first_ship.add_cargo("food_products", 4)
 	var fuel_id := ShipFuel.active_fuel_id(catalog, first_ship)
 	if fuel_id.is_empty():
@@ -105,8 +107,8 @@ static func _test_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 		"save: orbital phase survives"
 	)
 	runner.check_eq(loaded.gst_seconds, session.gst_seconds, "save: gst survives")
-	runner.check_eq(loaded.hull, 11.5, "save: hull survives")
-	runner.check_eq(loaded.max_hull, 18.0, "save: max hull survives")
+	runner.check_eq(loaded.hull, session.max_hull - 6.5, "save: hull survives")
+	runner.check_eq(loaded.max_hull, session.max_hull, "save: max hull survives")
 	runner.check_eq(loaded.power_integrity_lost, 0.25, "save: power integrity loss survives")
 	runner.check_eq(loaded.compute_integrity_lost, 0.5, "save: compute integrity loss survives")
 	runner.check_eq(

@@ -194,8 +194,10 @@ static func _build_offer(
 	var source_def: Dictionary = _source_def(cfg, building_type)
 	pay_mult *= float(source_def.get("pay_multiplier", 1.0))
 	pay_mult *= float(objective_def.get("difficulty", 1.0))
-	pay_mult *= float(threat.get("pay_multiplier", 1.0))
-	var reward := int(round(float(cfg.get("base_pay", 1100)) * pay_mult * rng.randf_range(0.9, 1.15)))
+	var strength := target_pay_strength(catalog, template_id, threat_profile)
+	var reward := int(
+		round(float(cfg.get("base_pay", 1100)) * pay_mult * rng.randf_range(0.9, 1.15) * strength)
+	)
 
 	var affiliation := corp_name if not corp_id.is_empty() else "Independent Operator"
 	if building_type == BOARD_PEACEKEEPING:
@@ -494,6 +496,93 @@ static func bar_bounty_section_visible(
 		if str(entry.get("building_id", "")) == building_id:
 			return true
 	return false
+
+
+const TARGET_PAY_REF_HULL := 28.0
+const TARGET_PAY_REF_DPS := 14.0
+
+static var _strength_cache: Dictionary = {}
+
+
+static func target_pay_strength(catalog: Catalog, template_id: String, threat_profile: Dictionary) -> float:
+	if template_id.is_empty():
+		return 1.0
+	var cache_key := "%s|%0.3f|%d" % [
+		template_id,
+		float(threat_profile.get("hull_scale", 1.0)),
+		int(threat_profile.get("escort_count", 0)),
+	]
+	if _strength_cache.has(cache_key):
+		return float(_strength_cache[cache_key])
+	var template := catalog.get_ship_def(template_id)
+	if template == null:
+		return 1.0
+	var owned := OwnedShip.from_template(
+		catalog,
+		{"id": "bounty_strength_%s" % template_id, "template_id": template_id, "chassis_id": template.chassis}
+	)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var hull_scale := float(threat_profile.get("hull_scale", 1.0))
+	if hull_scale <= 0.0:
+		hull_scale = 1.0
+	var hull := float(assembled.capacities.get("hull_hits", 0.0)) * hull_scale
+	var escorts := 1 + maxi(0, int(threat_profile.get("escort_count", 0)))
+	var weapon_dps := _template_best_hull_dps(catalog, assembled)
+	var hull_factor := hull / TARGET_PAY_REF_HULL if TARGET_PAY_REF_HULL > 0.0 else 1.0
+	var weapon_factor := weapon_dps / TARGET_PAY_REF_DPS if TARGET_PAY_REF_DPS > 0.0 else 1.0
+	if weapon_dps <= 0.0:
+		weapon_factor = 0.5
+	var strength := maxf(0.25, hull_factor * weapon_factor * float(escorts))
+	_strength_cache[cache_key] = strength
+	return strength
+
+
+static func _template_best_hull_dps(catalog: Catalog, assembled: AssembledShip) -> float:
+	var best := 0.0
+	for entry_variant in assembled.modules_in_category("weapon"):
+		var entry: Dictionary = entry_variant
+		var module_id := str(entry.get("module_id", ""))
+		var weapon := catalog.get_module_def(module_id)
+		if weapon == null:
+			continue
+		best = maxf(best, _weapon_hull_dps(catalog, weapon))
+	return best
+
+
+static func _weapon_hull_dps(catalog: Catalog, weapon: ModuleDef) -> float:
+	var mount := str(ShipAssembler.module_mounts(weapon)[0])
+	var slot := "%s_1" % mount
+	var host := OwnedShip.new()
+	host.id = "bounty_weapon_%s" % weapon.id
+	host.chassis_id = _probe_chassis_id(catalog)
+	host.modules = [{"slot": slot, "module_id": weapon.id}]
+	var ammo_id := weapon.ammunition_type
+	if not ammo_id.is_empty():
+		host.ammunition = {ammo_id: 1000.0}
+	var assembled := ShipAssembler.assemble_owned(catalog, host)
+	var trigger := ShipWeapons.new()
+	trigger.select_slot(slot)
+	var fired := trigger.tick(catalog, assembled, host, 0.0, true, true)
+	var volley: Array = []
+	for order_variant in fired.get("orders", []):
+		volley.append((order_variant as Dictionary).get("packets", {}))
+	var bare := ShipAssembler.assemble_owned(catalog, host)
+	var state := ShipCombatState.from_assembled(bare)
+	var delivery := ShipCombat.delivery_type_from_module(weapon)
+	var hull_damage := 0.0
+	for packets in volley:
+		var hit := ShipCombat.resolve_hit(bare, state, delivery, packets)
+		hull_damage += float(hit.get("hull_damage", 0.0))
+	var cycle := ShipWeapons.fire_cycle_seconds(weapon)
+	if cycle <= 0.0:
+		return 0.0
+	return hull_damage / cycle
+
+
+static func _probe_chassis_id(catalog: Catalog) -> String:
+	for chassis_id in catalog.chassis_by_id.keys():
+		return str(chassis_id)
+	return ""
 
 
 static func _pick_callsign(catalog: Catalog, rng: RandomNumberGenerator, corporation_id: String) -> String:

@@ -13,6 +13,7 @@ const EXP_SHIPS := "ships"
 const EXP_PARTS := "parts"
 const EXP_FUEL := "fuel"
 const EXP_AMMUNITION := "ammunition"
+const EXP_REPAIRS := "repairs"
 const EXP_SANCTIONS := "sanctions"
 const EXP_MISSION_PENALTIES := "mission_penalties"
 
@@ -234,6 +235,11 @@ func record_fuel_spend(cost: int) -> void:
 func record_ammunition_spend(cost: int) -> void:
 	if cost > 0:
 		_add_expense(EXP_AMMUNITION, cost)
+
+
+func record_repair_spend(cost: int) -> void:
+	if cost > 0:
+		_add_expense(EXP_REPAIRS, cost)
 
 
 func record_ship_purchase(cost: int) -> void:

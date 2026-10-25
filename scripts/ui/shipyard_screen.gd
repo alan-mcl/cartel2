@@ -97,6 +97,7 @@ func _ready() -> void:
 	$Layout/Body/Split/InventoryColumn/Actions/SellButton.pressed.connect(_on_sell_pressed)
 	$Layout/Body/Split/InventoryColumn/Actions/RefuelButton.pressed.connect(_on_refuel_pressed)
 	$Layout/Body/Split/InventoryColumn/Actions/RearmButton.pressed.connect(_on_rearm_pressed)
+	$Layout/Body/Split/InventoryColumn/Actions/RepairButton.pressed.connect(_on_repair_pressed)
 	_ship_item_list.item_selected.connect(_on_ship_item_selected)
 	_ship_item_list.item_clicked.connect(_on_ship_item_clicked)
 	_bind_inventory_drop_target(_inventory_column)
@@ -571,6 +572,7 @@ func _update_actions() -> void:
 	var sell := $Layout/Body/Split/InventoryColumn/Actions/SellButton
 	var refuel := $Layout/Body/Split/InventoryColumn/Actions/RefuelButton
 	var rearm := $Layout/Body/Split/InventoryColumn/Actions/RearmButton
+	var repair := $Layout/Body/Split/InventoryColumn/Actions/RepairButton
 
 	if not _sandbox:
 		buy.disabled = _selected_part_id.is_empty()
@@ -581,6 +583,9 @@ func _update_actions() -> void:
 	var rearm_quote := ShipAssembly.rearm_quote(_context.session, _context.catalog, _selected_ship_id)
 	rearm.text = str(rearm_quote.get("button_text", "Rearm"))
 	rearm.disabled = not bool(rearm_quote.get("enabled", false))
+	var repair_quote := ShipAssembly.repair_quote(_context.session, _context.catalog, _selected_ship_id)
+	repair.text = str(repair_quote.get("button_text", "Repair"))
+	repair.disabled = not bool(repair_quote.get("enabled", false))
 
 
 func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
@@ -622,6 +627,12 @@ func _on_refuel_pressed() -> void:
 
 func _on_rearm_pressed() -> void:
 	if ShipAssembly.rearm_ship(_context.session, _context.catalog, _selected_ship_id):
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_ship_id)
+
+
+func _on_repair_pressed() -> void:
+	if ShipAssembly.repair_ship(_context.session, _context.catalog, _selected_ship_id):
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)
 

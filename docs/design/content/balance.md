@@ -34,16 +34,16 @@ Every income source and cost is compared in the same units, for the same referen
 | --- | --- | --- |
 | Commodity trade | Listing quantity is the book at the posted price. Trades move that price and recover over GST days. | A book-limited hold earns 1.5 to 3 times the best charter hop for the same hull. |
 | Passenger charters | Terminal and bar boards. Pay scales by role, comfort tier, and route. | The benchmark for a 1-hop run. |
-| Freight charters | Terminal board. Lots reserve tonnes on the hull. | At least half of passenger pay per GST hour. |
+| Freight charters | Terminal board. Lots reserve tonnes; several can stack to one destination when the hold fits. | At least half of passenger pay per GST hour on a stacked 1-hop run (P101/P105). |
 | Scan contracts | Low, narrow pay band for an active scan at a volatile site or planet. | Below charters per hop, unless the site carries combat risk. |
-| Bounties | Flat pay regardless of target. Free repairs make it pure profit. | Scales with target strength. Keeps at least 60% of pay after costs. |
+| Bounties | Pay scales with the target's hull, best weapon, and escorts (`BountyCharters.target_pay_strength`). | Median near d2,200. Keeps at least 60% of the paid bounty after rearm and a 25% hull repair. |
 | Part sales | 60% of list price. Counted as revenue. | Stay revenue. Nett worth books the module at 50% until it is sold. |
 | Salvage | Wired into the session and career stats. No catalog content. | Small extra income from exploration. |
 | Ship and part purchases | Expenses. | Stay expenses. Profit counts the full spend. |
 | Fuel | Refuelling at local `FuelEconomy` quotes. | See [Running costs](#running-costs). |
 | Fines and penalties | d500 for unlawful fire, d2,500 for a destroyed ship, and charter cancellation fees. | Unchanged. Piracy is not an income source. |
-| Repairs | Free and automatic on docking. | Priced per hull point (see [Running costs](#running-costs)). |
-| Rearming | Not possible. Magazines are filled only when a ship is created. | Priced per round at the shipyard. |
+| Repairs | Paid at the shipyard and the docking-bay terminal beside refuel and rearm. Damage is stored on each ship. | d30 per hull point at index 1.0 (see [Running costs](#running-costs)). |
+| Rearming | Shipyard and terminal rearm to listed capacity for fired types. | Priced per round at the local Industrial Components index. |
 
 ### Leaderboard metric
 
@@ -136,16 +136,18 @@ A typical career should draw income from at least two sources, and no single sou
 
 - **Antimatter.** The price band stays d200 to d800. A tank stores 5% of its rated capacity (`tank_scale` on the fuel). The engine bunker of 3 is not scaled, so a small tank holds 2, a medium tank 4, and a large tank 6, plus that bunker. The four drives burn 0.009 to 0.013 a second. At the midpoint that is d4.50 to d6.50 a thrust-second, against d3.50 to d4.20 on the fusion templates. A mid-price refill is 7.7% of used price on the Mantis XF5700 and 17.6% on the Krypton K3. Every template's mid-price refill is within 20% of its used price.
 - **Reactor fuel.** Power-plant `fuel_consumption` is not burned ([D-1](../architecture/backlog.md#d-1-reactor-fuel-traded-fuel-and-per-chemistry-tanks)).
-- **Repairs** are free and automatic on docking, and arriving from unspace also restores the hull.
-- **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
+- **Repairs.** The shipyard and the docking-bay terminal repair hull, power, and compute damage through `ShipAssembly.repair_quote` and `repair_ship`. The bill is d30 per missing hull point, d3.53 per unit of lost generation, and d3.93 per lost compute unit, each times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox repair is free. A paid repair is a `repairs` career expense. Damage lives on each `OwnedShip` and persists in saves. Docking and unspace arrival do not heal. Shields are not billed; they regenerate in flight.
+- **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index, ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
+- **Freight pay.** `freight_missions.json` uses `base_pay` 200 and `friction_pay` 13. The balance tool's freight row measures stacked 1-hop lots on the Pegasus P101 and P105 (same destination, greedy fill). Leftover hold trade to that destination is noted beside the stack and is not part of the target.
+- **Bounty pay.** `bounty_missions.json` uses `base_pay` 2100, multiplied by desk, objective, jitter, and `target_pay_strength` (scaled hull, best hull-damage weapon, and `1 + escort_count`). Threat cards no longer apply a separate pay multiplier for escorts. Sampled median pay lands near d2,200 after retuning.
 
 **Target:**
 
-- **Hull repairs.** Each hull point costs a base rate times the local Industrial Components index (the local buy quote over the base price). The proposed base rate is d30 per point at index 1.0.
+- **Hull repairs.** Each hull point costs a base rate times the local Industrial Components index (the local buy quote over the base price). The rate is d30 per point at index 1.0.
   - The rate is the same for every hull. A tougher hull already paid for its toughness in its purchase price, and armour and shields pay back through smaller bills.
   - Power and compute damage cost the same share of module value per unit: about d3.53 per unit of generation and d3.93 per compute unit at index 1.0.
 - **Breach.** A breach costs one to two typical runs of income for the median hull. That is a band of d48 to d96 per hull point at the median yard.
-- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the median bounty after rearming and repairing a quarter of its hull. With rearm charged at the median index (1.51, Proxima), the Wolff Bastion keeps 55.5% and the Gladius 56.0%. The Warrior, without plate, keeps 73.2%. The line stays open for the weapon and bounty passes.
+- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the bounty it was paid after rearming and repairing a quarter of its hull. With `base_pay` 2100 and strength scaling, sampled median pay is about d2,769. The Wolff Bastion and Gladius both keep about 80% at 25% hull repair after rearm at the median index.
 - **Ammunition weapons** must justify their running cost through range, alpha damage, or point-defence-proof delivery. Measure that as cost per kill against a laser of similar price.
 - **Retune with the band.** Retune the repair rate with the balance tool whenever the commodity price band changes, because the index moves with it.
 

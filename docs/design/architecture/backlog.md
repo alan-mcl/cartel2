@@ -24,19 +24,13 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-9 Charter and bounty pay
+## D-9 Hull breach recovery
 
-**Status:** Discuss. **Severity:** Medium.
+**Status:** Discuss. **Severity:** Low.
 
-Freight pays about the same per tonne as passengers per seat, but its lots are small, so it earns 3.3 times less per GST hour (d72.9 against d240). Bounty reward ignores the target. Median pay is d1,341 to d1,542 for targets worth d12,730 to d35,660, and three hostile ships pay only 1.4 times. Evidence: finding 7 of the [balance pass](../../reports/balance_pass_2026-10.md#7-charter-and-bounty-pay-medium).
+A hull breach still stops thrust and weapons. There is no tow, no distress contract, and no way to get a breached ship home except reloading. Paid repair at the yard assumes the ship is already docked.
 
-**Proposal:**
-
-- Raise freight lot sizes or pay until freight earns at least half of passenger pay per GST hour.
-- Scale bounty pay in `BountyCharters` by the target's scaled hull, best weapon, and escorts.
-- With D-12, retune `base_pay` so the median lands near d2,200.
-
-**Do not:** ship bounty pay changes and paid repairs (D-12) separately. Tune them together with the balance tool.
+**Do not:** add recovery in the same pass as weapon retuning unless the player can reach a yard without flying a breached hull.
 
 ## D-10 Weapon mount tiers
 
@@ -74,28 +68,3 @@ Evidence: findings 9 and 10 of the [balance pass](../../reports/balance_pass_202
 - Apply `linear_damp`, or drop it.
 
 **Do not:** delete dominated SKUs to clear the list. Saves store module ids verbatim, so reprice or differentiate them instead.
-
-## D-12 Paid repairs
-
-**Status:** Discuss. **Severity:** Medium.
-
-Docking repairs hull, power, and compute damage for free (`GameSession.dock` calls `repair_combat_at_dock`). Arriving from unspace restores the hull. Damage lives once per session in `CombatPersistence`, so launching a second ship keeps the previous ship's hull figures: a 36-hull Dragon Bronze launched after an 18-hull Flare-ON SS flies at 18 of 18. That carry-over is a bug in its own right.
-
-A breach stops thrust and weapons, and there is no recovery flow. `GameSession.apply_hull_stress` has no caller.
-
-**Proposal:** charge d30 per hull point times the local Industrial Components index (the local buy quote over the base price of 110).
-
-- At today's quotes that is d16 per point at Irasia and Tokirev, d64 at Proxima (the median yard), and d74 at Fennet.
-- Power and compute damage cost the same share of module value: d3.53 and d3.93 per unit at index 1.0.
-
-Before charging:
-
-1. Turn the automatic dock repair into a shipyard action modelled on `ShipAssembly.refuel_quote` and `refuel_ship`, priced through `ShipAssembly.repair_price_index`, free in sandbox, with a `repairs` expense key in `CareerStats`.
-2. Remove the free heal in `arrive_from_unspace`.
-3. Store and save damage on each `OwnedShip`.
-4. Define a breach outcome, such as a tow to the nearest shipyard plus the full bill.
-5. Bill unspace hull stress at the same rate once it has a caller.
-
-Prices, bills, and targets are in the [Repair prices](../../reports/balance_pass_2026-10.md#repair-prices) section of the report and in [balance.md](../content/balance.md#running-costs).
-
-**Do not:** charge for repairs while docking or unspace arrival still heal for free, or while damage is shared across ships. Do not add a separate repair price list beside the local market index.

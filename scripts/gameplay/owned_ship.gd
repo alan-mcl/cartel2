@@ -16,6 +16,11 @@ var ammunition: Dictionary = {}
 var transponder_enabled: bool = true
 var active_sensors_enabled: bool = true
 var pending_legacy_fuel: float = -1.0
+## Current hull when damaged; -1 means full on load.
+var combat_hull: float = -1.0
+var combat_power_lost: float = 0.0
+var combat_compute_lost: float = 0.0
+var combat_shield_charges: Dictionary = {}
 
 
 static func from_dict(data: Dictionary) -> OwnedShip:
@@ -40,6 +45,10 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 
 	ship.cargo = _dict_from_variant(data.get("cargo", {}))
 	ship.ammunition = _float_dict_from_variant(data.get("ammunition", {}))
+	ship.combat_hull = float(data.get("combat_hull", -1.0))
+	ship.combat_power_lost = float(data.get("combat_power_lost", 0.0))
+	ship.combat_compute_lost = float(data.get("combat_compute_lost", 0.0))
+	ship.combat_shield_charges = _float_dict_from_variant(data.get("combat_shield_charges", {}))
 	return ship
 
 
@@ -101,7 +110,7 @@ func ensure_registration(catalog: Catalog) -> void:
 
 
 func to_dict() -> Dictionary:
-	return {
+	var out := {
 		"id": id,
 		"name": name,
 		"registration": registration,
@@ -115,6 +124,63 @@ func to_dict() -> Dictionary:
 		"transponder_enabled": transponder_enabled,
 		"active_sensors_enabled": active_sensors_enabled,
 	}
+	if combat_hull >= 0.0 or combat_power_lost > 0.001 or combat_compute_lost > 0.001:
+		out["combat_hull"] = combat_hull
+		out["combat_power_lost"] = combat_power_lost
+		out["combat_compute_lost"] = combat_compute_lost
+		if not combat_shield_charges.is_empty():
+			out["combat_shield_charges"] = combat_shield_charges.duplicate()
+	return out
+
+
+func has_stored_combat_damage() -> bool:
+	return (
+		combat_hull >= 0.0
+		or combat_power_lost > 0.001
+		or combat_compute_lost > 0.001
+		or not combat_shield_charges.is_empty()
+	)
+
+
+func write_combat_from(persistence: CombatPersistence) -> void:
+	if persistence.max_hull <= 0.0:
+		return
+	var pristine := (
+		is_equal_approx(persistence.hull, persistence.max_hull)
+		and persistence.power_integrity_lost <= 0.001
+		and persistence.compute_integrity_lost <= 0.001
+		and persistence.shield_charges.is_empty()
+	)
+	if pristine:
+		combat_hull = -1.0
+		combat_power_lost = 0.0
+		combat_compute_lost = 0.0
+		combat_shield_charges.clear()
+		return
+	combat_hull = persistence.hull
+	combat_power_lost = persistence.power_integrity_lost
+	combat_compute_lost = persistence.compute_integrity_lost
+	combat_shield_charges = persistence.shield_charges.duplicate(true)
+
+
+func build_combat_state(assembled: AssembledShip) -> ShipCombatState:
+	var state := ShipCombatState.from_assembled(assembled)
+	if combat_hull >= 0.0:
+		state.hull_current = clampf(combat_hull, 0.0, state.hull_max)
+	if combat_power_lost > 0.001:
+		state.power_integrity_lost = combat_power_lost
+	if combat_compute_lost > 0.001:
+		state.compute_integrity_lost = combat_compute_lost
+	if not combat_shield_charges.is_empty():
+		state.shield_charges = combat_shield_charges.duplicate(true)
+	return state
+
+
+func apply_repair_from_assembled(assembled: AssembledShip) -> void:
+	combat_hull = -1.0
+	combat_power_lost = 0.0
+	combat_compute_lost = 0.0
+	combat_shield_charges.clear()
 
 
 func get_module_id(slot: String) -> String:

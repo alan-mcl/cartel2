@@ -310,6 +310,8 @@ func start_new_game(
 		player.last_log = "Welcome, %s. Docked at %s with no ships." % [player.callsign, habitat_name]
 	else:
 		player.last_log = "Welcome, %s. All ships docked at %s." % [player.callsign, habitat_name]
+	if not fleet.current_ship_id.is_empty():
+		load_combat_from_owned_ship(catalog, fleet.current_ship_id)
 	changed.emit()
 	return true
 
@@ -333,6 +335,8 @@ func to_dict() -> Dictionary:
 
 
 func ships_to_array() -> Array:
+	if not fleet.current_ship_id.is_empty():
+		persist_combat_to_ship(fleet.current_ship_id)
 	return fleet.ships_to_array()
 
 
@@ -418,6 +422,12 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 			return false
 
 	CommodityEconomy.ensure_quotes(self, catalog)
+
+	var current := fleet.get_current_owned_ship()
+	if current != null:
+		if not current.has_stored_combat_damage() and combat.max_hull > 0.0:
+			current.write_combat_from(combat)
+		load_combat_from_owned_ship(catalog, current.id)
 
 	changed.emit()
 	return true
@@ -535,7 +545,6 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	if not enter_sector(catalog, dest_id, false):
 		return false
 
-	combat.hull = combat.max_hull
 	return true
 
 
@@ -638,12 +647,20 @@ func apply_player_flight_step(
 		player.last_log = "Out of ammunition."
 
 
-func repair_combat_at_dock(catalog: Catalog) -> void:
-	var ship := fleet.get_current_owned_ship()
+func persist_combat_to_ship(ship_id: String) -> void:
+	var ship := fleet.get_owned_ship(ship_id)
+	if ship == null:
+		return
+	ship.write_combat_from(combat)
+
+
+func load_combat_from_owned_ship(catalog: Catalog, ship_id: String) -> void:
+	var ship := fleet.get_owned_ship(ship_id)
 	if ship == null or catalog == null:
 		return
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	combat.repair_from_assembled(assembled)
+	var state := ship.build_combat_state(assembled)
+	combat.apply_combat_state(state)
 
 
 func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_type: String, packets: Dictionary) -> Dictionary:
@@ -657,6 +674,8 @@ func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_
 			career.record_hull_breach()
 	if state.is_hull_disabled():
 		player.last_log = "Hull breached. Systems offline."
+	if not fleet.current_ship_id.is_empty():
+		persist_combat_to_ship(fleet.current_ship_id)
 	changed.emit()
 	return result
 
@@ -750,7 +769,9 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	world.habitat_id = location_id
 	world.building_id = default_building_id
 	world.location_name = "%s / %s" % [str(habitat.get("name", location_id)), str(default_building.get("name", default_building_id))]
-	repair_combat_at_dock(catalog)
+	var docked_ship := fleet.get_current_owned_ship()
+	if docked_ship != null:
+		persist_combat_to_ship(docked_ship.id)
 	player.last_log = "Docked at %s." % str(default_building.get("name", default_building_id))
 	events.publish(SimEvent.docked(world.habitat_id))
 	if _track_career_enabled():
@@ -850,6 +871,11 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 	)
 	if not blockers.is_empty():
 		return fail_action(blockers[0])
+
+	var previous_id := fleet.current_ship_id
+	if not previous_id.is_empty() and previous_id != ship_id:
+		persist_combat_to_ship(previous_id)
+	load_combat_from_owned_ship(catalog, ship_id)
 
 	ship.location = "aboard"
 	fleet.current_ship_id = ship_id

@@ -2,7 +2,7 @@
   "peacekeeping_offers_per_day": 1,
   "corporate_bounty_chance": 0.35,
   "bar_bounty_chance": 0.08,
-  "base_pay": 1100,
+  "base_pay": 2100,
   "bar_pay_multiplier": 0.65,
   "cancel_penalty_fraction": 0.25,
   "volatile_duration_hours": 8,

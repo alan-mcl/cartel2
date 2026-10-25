@@ -1,7 +1,7 @@
 {
   "offers_per_day": 12,
-  "base_pay": 90,
-  "friction_pay": 6,
+  "base_pay": 200,
+  "friction_pay": 13,
   "cancel_penalty_fraction": 0.25,
   "max_hops": 3,
   "deadline_slack_hours": 8,

@@ -89,6 +89,7 @@ static func build_context(catalog: Catalog, options: Dictionary = {}) -> Diction
 	ctx["templates"] = _build_template_probes(ctx)
 	ctx["refits"] = _build_refits(ctx)
 	ctx["charters"] = _sample_charters(ctx)
+	ctx["freight_stack"] = _measure_freight_stack(ctx)
 	ctx["bounty"] = _build_bounty_costs(ctx)
 	_attach_template_earnings(ctx)
 	ctx["repair"] = _build_repair_model(ctx)
@@ -385,6 +386,12 @@ static func charters_section(ctx: Dictionary) -> Dictionary:
 		var per_unit: Array = []
 		var per_hour: Array = []
 		var gated := 0
+		var use_stack := str(kind[0]) == "freight"
+		if use_stack:
+			var stack: Dictionary = ctx.get("freight_stack", {})
+			var stack_rate := float(stack.get("median_stack_per_hour", 0.0))
+			if stack_rate > 0.0:
+				per_hour.append(stack_rate)
 		for offer_variant in offers:
 			var offer: Dictionary = offer_variant
 			var reward := int(offer.get("reward", 0))
@@ -400,9 +407,10 @@ static func charters_section(ctx: Dictionary) -> Dictionary:
 			var units := float(offer.get("tonnes", offer.get("quantity", 0)))
 			if units > 0.0:
 				per_unit.append(float(reward) / units)
-			var hours := _transit_hours(catalog, cfg, offer.get("path_sectors", []), adjacency)
-			if hours > 0.0:
-				per_hour.append(float(reward) / hours)
+			if not use_stack:
+				var hours := _transit_hours(catalog, cfg, offer.get("path_sectors", []), adjacency)
+				if hours > 0.0:
+					per_hour.append(float(reward) / hours)
 		var has_route := not cfg.is_empty()
 		rows.append([
 			str(kind[1]),
@@ -416,6 +424,14 @@ static func charters_section(ctx: Dictionary) -> Dictionary:
 			_median(per_unit) if has_route else NONE,
 			_median(per_hour) if has_route else NONE,
 		])
+	var freight_notes: Array = (ctx.get("freight_stack", {}) as Dictionary).get("notes", [])
+	var charter_notes: Array = [
+		"Offers come from the real generators across every habitat that posts them, over the"
+		+ " sample days and run seeds. Gated offers need reputation above 0. GST hours are the"
+		+ " translation time plus the deadline model's in-system allowance per hop.",
+	]
+	for note in freight_notes:
+		charter_notes.append(str(note))
 	return _section(
 		"charters",
 		"Charter pay",
@@ -424,11 +440,7 @@ static func charters_section(ctx: Dictionary) -> Dictionary:
 			"Median 1-hop", "Per hop", "Per passenger or tonne", "Per GST hour",
 		],
 		rows,
-		[
-			"Offers come from the real generators across every habitat that posts them, over the"
-			+ " sample days and run seeds. Gated offers need reputation above 0. GST hours are the"
-			+ " translation time plus the deadline model's in-system allowance per hop.",
-		]
+		charter_notes
 	)
 
 
@@ -892,7 +904,7 @@ static func repair_hits_section(ctx: Dictionary) -> Dictionary:
 static func bounty_costs_section(ctx: Dictionary) -> Dictionary:
 	var bounty: Dictionary = ctx["bounty"]
 	var model: Dictionary = ctx["repair"]
-	var pay := float(bounty["pay"])
+	var median_pay := float(bounty["pay"])
 	var hunters: Dictionary = bounty["hunters"]
 	var rows: Array = []
 	for probe_variant in ctx["templates"]:
@@ -900,6 +912,9 @@ static func bounty_costs_section(ctx: Dictionary) -> Dictionary:
 		if not hunters.has(probe["id"]):
 			continue
 		var hunter: Dictionary = hunters[probe["id"]]
+		var pay := float(hunter.get("expected_pay", median_pay))
+		if pay <= 0.0:
+			pay = median_pay
 		var hull := float(probe["hull"])
 		var rearm := float(hunter["rearm"])
 		var scenario := repair_bill(model, hull * BOUNTY_DAMAGE_LEVEL, 0.0, 0.0, "median")
@@ -939,7 +954,7 @@ static func bounty_costs_section(ctx: Dictionary) -> Dictionary:
 		"Bounty pay after rearming and repairs",
 		[
 			"Hunter", "Weapon", "Completes %", "Shots", "Seconds", "Rearm", "Duels lost %",
-			"Hull lost, won duels", "Repair, won duels", "Repair at 25%", "Median pay",
+			"Hull lost, won duels", "Repair, won duels", "Repair at 25%", "Expected pay",
 			"Kept, won duels %", "Kept at 25% %",
 		],
 		rows,
@@ -952,8 +967,10 @@ static func bounty_costs_section(ctx: Dictionary) -> Dictionary:
 			+ " escort fire the target template's best weapon back for the same time with every round"
 			+ " landing; a duel is lost when that breaches the hunter first. Both sides hit every"
 			+ " shot, so read the duel columns as relative lethality, not odds. The 25% columns"
-			+ " repair a quarter of the hull instead. Rearm is the ammunition `cost` per spent"
-			+ " round times the median shipyard's Industrial Components index.",
+			+ " repair a quarter of the hull instead. Expected pay is the mean bounty this hunter"
+			+ " completes, weighted by sampled offers. Kept columns use that pay, not the board"
+			+ " median. Rearm is the ammunition `cost` per spent round times the median shipyard's"
+			+ " Industrial Components index.",
 		]
 	)
 
@@ -1058,7 +1075,7 @@ static func code_checks_section(ctx: Dictionary) -> Dictionary:
 		"Repair preconditions (current behaviour)",
 		["Check", "Observed", "Detail"],
 		rows,
-		["Headless runs of the real session flow. These describe today's code, not targets."]
+		["Headless runs of the real session flow. Paid repair is a shipyard action; damage is stored per ship."]
 	)
 
 
@@ -1937,10 +1954,13 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 	var route_margins := {}
 	var index_prices := {}
 	var start_day := int(ctx["start_day"])
+	var start_quotes: Dictionary = {}
 	for offset in range(maxi(1, int(opts.get("trade_days", 30)))):
 		var day := start_day + offset
 		days.append(day)
 		var quotes := CommodityEconomy.compute_quotes(catalog, day)
+		if offset == 0:
+			start_quotes = quotes
 		for sector_id in market_sectors.keys():
 			var prices: Array = index_prices.get(sector_id, [])
 			prices.append(_quote_price(quotes, str(sector_id), REPAIR_INDEX_COMMODITY))
@@ -2006,6 +2026,7 @@ static func _build_trade(ctx: Dictionary) -> Dictionary:
 		"day_books": day_books,
 		"route_margins": route_margins,
 		"index_prices": index_prices,
+		"start_quotes": start_quotes,
 	}
 
 
@@ -2058,6 +2079,158 @@ static func _transit_hours(catalog: Catalog, cfg: Dictionary, path_sectors: Arra
 	var orbit_hours := float(cfg.get("deadline_orbit_hours_per_hop", 2.0)) * float(hops)
 	var translation := PassengerCharters.path_translation_seconds(catalog, path_sectors, adjacency)
 	return translation / float(GalacticCalendar.SECONDS_PER_HOUR) + orbit_hours
+
+
+const FREIGHT_STACK_TEMPLATES: Array[String] = ["pegasus_p101", "pegasus_p105"]
+
+
+static func _measure_freight_stack(ctx: Dictionary) -> Dictionary:
+	var catalog: Catalog = ctx["catalog"]
+	var boards: Array = (ctx["charters"] as Dictionary)["boards"]
+	var freight_cfg := FreightCharters.config(catalog)
+	var adjacency: Dictionary = (ctx["trade"] as Dictionary)["adjacency"]
+	var stack_rates: Array = []
+	var mixed_rates: Array = []
+	var verdicts := {}
+	var board_limit := mini(boards.size(), 24)
+	for template_id in FREIGHT_STACK_TEMPLATES:
+		var template := catalog.get_ship_def(template_id)
+		if template == null:
+			continue
+		var assembled_probe := ShipAssembler.assemble_owned(
+			catalog,
+			OwnedShip.from_template(
+				catalog,
+				{"id": "stack_%s" % template_id, "template_id": template_id, "chassis_id": template.chassis}
+			)
+		)
+		var hold := float(assembled_probe.capacities.get("cargo_capacity", 0.0))
+		if hold <= 0.0:
+			continue
+		for board_index in range(board_limit):
+			var board_variant = boards[board_index]
+			var board: Dictionary = board_variant
+			var by_origin: Dictionary = {}
+			for offer_variant in board["freight"]:
+				var offer: Dictionary = offer_variant
+				if int(offer.get("hops", 1)) != 1:
+					continue
+				var origin := str(offer.get("origin_habitat_id", ""))
+				var dest := str(offer.get("destination_habitat_id", ""))
+				if origin.is_empty() or dest.is_empty():
+					continue
+				if not by_origin.has(origin):
+					by_origin[origin] = {}
+				var bucket: Dictionary = by_origin[origin]
+				if not bucket.has(dest):
+					bucket[dest] = []
+				(bucket[dest] as Array).append(offer)
+			for origin in by_origin.keys():
+				var owned := OwnedShip.from_template(
+					catalog,
+					{
+						"id": "stack_%s_%s" % [template_id, origin],
+						"template_id": template_id,
+						"chassis_id": template.chassis,
+						"location": str(origin),
+					}
+				)
+				var session := GameSession.new()
+				session.world.docked = true
+				session.world.habitat_id = str(origin)
+				session.fleet.owned_ships.append(owned)
+				var dest_map: Dictionary = by_origin[origin]
+				var origin_sector := catalog.get_habitat_sector_id(str(origin))
+				for dest in dest_map.keys():
+					var candidates: Array = dest_map[dest]
+					candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+						return int(a.get("reward", 0)) > int(b.get("reward", 0))
+					)
+					var committed := {
+						"tonnes": 0.0,
+						"passengers": 0,
+						"life_support_seats": 0,
+						"compute": 0.0,
+						"power": 0.0,
+					}
+					var stack_reward := 0
+					var path: Array = []
+					for offer_variant in candidates:
+						var offer: Dictionary = offer_variant
+						if not _offer_feasible(session, catalog, owned.id, "freight", offer, verdicts):
+							continue
+						var tonnes := float(offer.get("tonnes", 0.0))
+						if committed["tonnes"] + tonnes > hold + 0.001:
+							continue
+						stack_reward += int(offer.get("reward", 0))
+						committed["tonnes"] = float(committed["tonnes"]) + tonnes
+						committed["life_support_seats"] = int(committed["life_support_seats"]) + int(
+							offer.get("life_support_seats", 0)
+						)
+						committed["compute"] = float(committed["compute"]) + float(offer.get("compute_demand", 0.0))
+						committed["power"] = float(committed["power"]) + float(offer.get("power_demand", 0.0))
+						if path.is_empty():
+							path = offer.get("path_sectors", [])
+					if stack_reward <= 0 or path.is_empty():
+						continue
+					var hours := _transit_hours(catalog, freight_cfg, path, adjacency)
+					if hours <= 0.0:
+						continue
+					stack_rates.append(float(stack_reward) / hours)
+					var leftover := hold - float(committed["tonnes"])
+					var trade := _leftover_trade_to_destination(
+						ctx,
+						origin_sector,
+						str(dest),
+						assembled_probe,
+						leftover
+					)
+					mixed_rates.append((float(stack_reward) + float(trade)) / hours)
+	return {
+		"median_stack_per_hour": _median(stack_rates),
+		"median_mixed_per_hour": _median(mixed_rates),
+		"notes": [
+			"Freight per GST hour uses stacked 1-hop lots on the Pegasus P101 and P105: same destination,"
+			+ " greedy highest pay until the hold is full. Mixed hop adds leftover-tonne trade profit at"
+			+ " that destination (book-capped); it is reported in the tool notes only, not in the target.",
+		],
+	}
+
+
+static func _leftover_trade_to_destination(
+	ctx: Dictionary,
+	origin_sector: String,
+	destination_habitat_id: String,
+	assembled: AssembledShip,
+	leftover_tonnes: float
+) -> int:
+	if leftover_tonnes <= 0.001:
+		return 0
+	var catalog: Catalog = ctx["catalog"]
+	var dest_sector := catalog.get_habitat_sector_id(destination_habitat_id)
+	var trade: Dictionary = ctx["trade"]
+	var quotes: Dictionary = trade.get("start_quotes", {})
+	var best := 0
+	for commodity_variant in trade["commodities"]:
+		var commodity: CommodityDef = commodity_variant
+		if not CargoRequirements.assembled_meets_commodity(assembled, commodity):
+			continue
+		var buy := _quote_price(quotes, origin_sector, commodity.id)
+		var sell := CommodityEconomy.sell_price(_quote_price(quotes, dest_sector, commodity.id))
+		var margin := sell - buy
+		if margin <= 0:
+			continue
+		var units := mini(
+			int(floor(leftover_tonnes / commodity.mass + EPSILON)),
+			mini(
+				_quote_quantity(quotes, origin_sector, commodity.id),
+				_quote_quantity(quotes, dest_sector, commodity.id)
+			)
+		)
+		if units <= 0:
+			continue
+		best = maxi(best, units * margin)
+	return best
 
 
 # --- Charters and bounties --------------------------------------------------------------------
@@ -2134,8 +2307,13 @@ static func _build_bounty_costs(ctx: Dictionary) -> Dictionary:
 				"disable": completion == "disable",
 				"escorts": escorts,
 				"count": 0,
+				"reward_sum": 0,
+				"reward_count": 0,
 			}
-		(groups[key] as Dictionary)["count"] = int((groups[key] as Dictionary)["count"]) + 1
+		var group: Dictionary = groups[key]
+		group["count"] = int(group["count"]) + 1
+		group["reward_sum"] = int(group["reward_sum"]) + int(offer.get("reward", 0))
+		group["reward_count"] = int(group["reward_count"]) + 1
 	var targets := {}
 	var target_weapons := {}
 	for probe_variant in ctx["templates"]:
@@ -2154,6 +2332,8 @@ static func _build_bounty_costs(ctx: Dictionary) -> Dictionary:
 		var completed := 0
 		var shots_sum := 0.0
 		var taken := {"hull": 0.0, "power": 0.0, "compute": 0.0, "lost": 0.0, "won": 0.0}
+		var pay_weighted := 0.0
+		var pay_weight := 0.0
 		for key in groups.keys():
 			var group: Dictionary = groups[key]
 			var target: AssembledShip = targets.get(group["target"], null)
@@ -2169,6 +2349,10 @@ static func _build_bounty_costs(ctx: Dictionary) -> Dictionary:
 				continue
 			completed += count
 			shots_sum += shots * float(count)
+			var reward_count := maxi(1, int(group["reward_count"]))
+			var mean_reward := float(int(group["reward_sum"])) / float(reward_count)
+			pay_weighted += mean_reward * float(count)
+			pay_weight += float(count)
 			var attackers := 1 + int(group["escorts"])
 			var exposure := maxf(0.0, shots - 1.0) * float(stats["cycle"])
 			var hit := return_fire(hunter_ship, target_weapons.get(group["target"], {}), attackers, exposure)
@@ -2181,6 +2365,7 @@ static func _build_bounty_costs(ctx: Dictionary) -> Dictionary:
 		var mean_shots := shots_sum / float(completed) if completed > 0 else 0.0
 		var won := float(taken["won"])
 		var per_win := 1.0 / won if won > 0.0 else 0.0
+		var expected_pay := pay_weighted / pay_weight if pay_weight > 0.0 else 0.0
 		hunters[probe["id"]] = {
 			"completion_share": float(completed) / float(maxi(1, total)),
 			"mean_shots": mean_shots,
@@ -2191,6 +2376,7 @@ static func _build_bounty_costs(ctx: Dictionary) -> Dictionary:
 			"won_hull": float(taken["hull"]) * per_win,
 			"won_power": float(taken["power"]) * per_win,
 			"won_compute": float(taken["compute"]) * per_win,
+			"expected_pay": expected_pay,
 		}
 	return {"pay": _median(rewards), "offers": offers.size(), "hunters": hunters}
 
@@ -2560,11 +2746,11 @@ static func _check_dock_repair(ctx: Dictionary) -> Array:
 	session.combat.hull = 1.0
 	var credits := session.wallet.credits
 	session.dock(catalog, session.world.habitat_id)
-	var repaired := is_equal_approx(session.combat.hull, session.combat.max_hull)
+	var unchanged := is_equal_approx(session.combat.hull, 1.0) and session.wallet.credits == credits
 	return [
 		"Docking repairs the hull",
-		"free, full repair" if repaired and session.wallet.credits == credits else "not free",
-		"hull 1 -> %.0f of %.0f; credits changed by %d" % [session.combat.hull, session.combat.max_hull, session.wallet.credits - credits],
+		"no automatic repair" if unchanged else "still heals",
+		"hull stays %.0f of %.0f; credits changed by %d" % [session.combat.hull, session.combat.max_hull, session.wallet.credits - credits],
 	]
 
 
@@ -2582,10 +2768,10 @@ static func _check_unspace_arrival(ctx: Dictionary) -> Array:
 	session.world.in_unspace = true
 	session.world.pending_destination_id = str((edges[0] as Dictionary).get("sector", ""))
 	session.arrive_from_unspace(catalog)
-	var restored := is_equal_approx(session.combat.hull, session.combat.max_hull)
+	var unchanged := is_equal_approx(session.combat.hull, 1.0)
 	return [
 		"Arriving from unspace restores the hull",
-		"yes" if restored else "no",
+		"no" if unchanged else "yes",
 		"hull 1 -> %.0f of %.0f after %s -> %s" % [session.combat.hull, session.combat.max_hull, origin, session.world.sector_id],
 	]
 
@@ -2594,7 +2780,7 @@ static func _check_undock_hull_carry_over(ctx: Dictionary) -> Array:
 	var catalog: Catalog = ctx["catalog"]
 	var session := _probe_session(ctx)
 	if session == null:
-		return ["Launching a second ship resets hull figures", "not run", "no background with a ship"]
+		return ["Launching a second ship loads its own hull figures", "not run", "no background with a ship"]
 	var first := session.get_current_owned_ship()
 	var first_hull := float(ShipAssembler.assemble_owned(catalog, first).capacities.get("hull_hits", 0))
 	var other := {}
@@ -2604,7 +2790,7 @@ static func _check_undock_hull_carry_over(ctx: Dictionary) -> Array:
 			other = probe
 			break
 	if other.is_empty():
-		return ["Launching a second ship resets hull figures", "not run", "every template has the same hull"]
+		return ["Launching a second ship loads its own hull figures", "not run", "every template has the same hull"]
 	var second := OwnedShip.from_template(
 		catalog,
 		{
@@ -2617,11 +2803,11 @@ static func _check_undock_hull_carry_over(ctx: Dictionary) -> Array:
 	session.fleet.owned_ships.append(second)
 	session.dock(catalog, session.world.habitat_id)
 	if not session.undock(catalog, second.id):
-		return ["Launching a second ship resets hull figures", "not run", session.player.last_log]
+		return ["Launching a second ship loads its own hull figures", "not run", session.player.last_log]
 	var state := session.build_combat_state(ShipAssembler.assemble_owned(catalog, second))
 	var reset := is_equal_approx(state.hull_max, float(other["hull"]))
 	return [
-		"Launching a second ship resets hull figures",
+		"Launching a second ship loads its own hull figures",
 		"yes" if reset else "no, the previous ship's figures carry over",
 		"docked %s (hull %.0f), launched %s (hull %.0f): flight state hull %.0f of %.0f" % [
 			first.template_id, first_hull, other["id"], float(other["hull"]), state.hull_current, state.hull_max,

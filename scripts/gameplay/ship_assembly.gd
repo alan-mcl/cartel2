@@ -1,6 +1,10 @@
 class_name ShipAssembly
 extends RefCounted
 
+const REPAIR_HULL_PER_POINT := 30.0
+const REPAIR_POWER_PER_UNIT := 3.53
+const REPAIR_COMPUTE_PER_UNIT := 3.93
+
 static func preview_stats(catalog: Catalog, owned: OwnedShip) -> AssembledShip:
 	return ShipAssembler.assemble_owned(catalog, owned)
 
@@ -562,6 +566,102 @@ static func rearm_ship(session: GameSession, catalog: Catalog, ship_id: String) 
 			session.career.record_ammunition_spend(cost)
 	else:
 		session.last_log = "Rearmed %s." % ship.name
+	session.changed.emit()
+	return true
+
+
+static func repair_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+	var result := {
+		"enabled": false,
+		"cost": 0,
+		"button_text": "Repair",
+		"log_reason": "",
+	}
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		result["log_reason"] = "No ship selected."
+		return result
+	if ship.location != session.habitat_id:
+		result["log_reason"] = "Ship must be docked at this habitat."
+		return result
+
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var state := ship.build_combat_state(assembled)
+	var hull_points := maxf(0.0, state.hull_max - state.hull_current)
+	var power_units := minf(
+		state.power_integrity_lost,
+		float(assembled.capacities.get("power_generation", 0.0))
+	)
+	var compute_units := minf(
+		state.compute_integrity_lost,
+		float(assembled.capacities.get("compute_capacity", 0.0))
+	)
+	if hull_points <= 0.001 and power_units <= 0.001 and compute_units <= 0.001:
+		result["button_text"] = "Repair (none)"
+		result["log_reason"] = "Ship has no hull, power, or compute damage."
+		return result
+
+	if session.sandbox:
+		result["enabled"] = true
+		result["cost"] = 0
+		result["button_text"] = "Repair"
+		return result
+
+	var index := repair_price_index(session, catalog)
+	if index < 0.0:
+		result["button_text"] = "Repair (N/A)"
+		result["log_reason"] = "Repair parts price unavailable at this habitat."
+		return result
+
+	var cost := int(
+		ceil(
+			(
+				hull_points * REPAIR_HULL_PER_POINT
+				+ power_units * REPAIR_POWER_PER_UNIT
+				+ compute_units * REPAIR_COMPUTE_PER_UNIT
+			)
+			* index
+		)
+	)
+	result["cost"] = cost
+	result["button_text"] = "Repair (d%d)" % cost
+	result["enabled"] = session.can_afford_credits(cost)
+	if not result["enabled"]:
+		result["log_reason"] = "Insufficient credits to repair. Need d%d." % cost
+	return result
+
+
+static func repair_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
+	var quote := repair_quote(session, catalog, ship_id)
+	if not bool(quote.get("enabled", false)):
+		var reason := str(quote.get("log_reason", ""))
+		if reason.is_empty():
+			return false
+		if reason.begins_with("Insufficient credits"):
+			return session.fail_action(reason)
+		session.last_log = reason
+		session.changed.emit()
+		return false
+
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		return false
+
+	var cost := int(quote.get("cost", 0))
+	if cost > 0:
+		session.apply_credits_delta(-cost)
+
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	ship.apply_repair_from_assembled(assembled)
+	if ship.id == session.fleet.current_ship_id:
+		session.load_combat_from_owned_ship(catalog, ship.id)
+
+	if cost > 0:
+		session.last_log = "Repaired %s for d%d." % [ship.name, cost]
+		if not session.sandbox:
+			session.career.record_repair_spend(cost)
+	else:
+		session.last_log = "Repaired %s." % ship.name
 	session.changed.emit()
 	return true
 
