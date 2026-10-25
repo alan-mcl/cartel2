@@ -5,7 +5,7 @@
     "mass": 0.05,
     "cost": 2,
     "damage_packets": {
-      "kinetic": 18
+      "kinetic": 15
     }
   },
   {
@@ -14,8 +14,8 @@
     "mass": 0.08,
     "cost": 4,
     "damage_packets": {
-      "kinetic": 32,
-      "concussive": 8
+      "kinetic": 12,
+      "concussive": 5
     }
   },
   {
@@ -24,8 +24,8 @@
     "mass": 0.15,
     "cost": 12,
     "damage_packets": {
-      "energy": 20,
-      "concussive": 8
+      "energy": 16,
+      "concussive": 6
     }
   },
   {
@@ -34,8 +34,8 @@
     "mass": 0.4,
     "cost": 18,
     "damage_packets": {
-      "kinetic": 18,
-      "concussive": 22
+      "kinetic": 9,
+      "concussive": 7
     }
   },
   {
@@ -44,8 +44,8 @@
     "mass": 1.0,
     "cost": 65,
     "damage_packets": {
-      "kinetic": 20,
-      "concussive": 30
+      "kinetic": 7,
+      "concussive": 10
     }
   },
   {
@@ -63,8 +63,8 @@
     "mass": 1.2,
     "cost": 85,
     "damage_packets": {
-      "kinetic": 25,
-      "concussive": 35
+      "kinetic": 9,
+      "concussive": 7
     }
   }
 ]

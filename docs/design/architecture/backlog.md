@@ -32,20 +32,6 @@ A hull breach still stops thrust and weapons. There is no tow, no distress contr
 
 **Do not:** add recovery in the same pass as weapon retuning unless the player can reach a yard without flying a breached hull.
 
-## D-10 Weapon mount tiers
-
-**Status:** Discuss. **Severity:** Medium.
-
-Median hull damage per second is 10.1 for light mounts, 9.24 for medium, and 10.8 for heavy. The best heavy (Sunspike, d5,200, 16.3) loses to the best medium (Turbo Laser, d2,800, 19.8). The Ionique Lance and the Chimera Plasma Burst are strictly dominated by the Seven Bells laser, and the Burst spends two plasma cells per shot for one cell's damage. A d2,600 Bellatrix rocket lands 44 hull points, more than any unarmoured hull has. Evidence: finding 8 of the [balance pass](../../reports/balance_pass_2026-10.md#8-weapon-tiers-and-dominated-weapons-medium).
-
-**Proposal:**
-
-- Bring weapons into the mount bands in [balance.md](../content/balance.md#gear-pricing): light 10 to 14, medium 15 to 20, heavy 22 to 30.
-- Reprice or rework the two dominated weapons.
-- Cap per-round damage on rockets.
-
-**Do not:** retune weapon damage without re-running the weapon, repair, and bounty tables. Repair bills and bounty costs depend on it.
-
 ## D-11 Dominated modules and chassis outliers
 
 **Status:** Discuss. **Severity:** Medium.

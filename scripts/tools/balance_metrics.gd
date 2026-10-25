@@ -622,11 +622,14 @@ static func mount_tiers_section(ctx: Dictionary) -> Dictionary:
 		var best_dps := {}
 		for stats_variant in group:
 			var stats: Dictionary = stats_variant
+			var hull_dps := float(stats["hull_dps"])
+			if hull_dps <= 0.0:
+				continue
 			costs.append(int(stats["cost"]))
-			dps.append(float(stats["hull_dps"]))
-			if best_dps.is_empty() or float(stats["hull_dps"]) > float(best_dps["hull_dps"]):
+			dps.append(hull_dps)
+			if best_dps.is_empty() or hull_dps > float(best_dps["hull_dps"]):
 				best_dps = stats
-			var value := float(stats["hull_dps"]) / maxf(1.0, float(stats["cost"])) * 1000.0
+			var value := hull_dps / maxf(1.0, float(stats["cost"])) * 1000.0
 			if best_value.is_empty() or value > float(best_value["value"]):
 				best_value = {"id": stats["id"], "value": value}
 		rows.append([

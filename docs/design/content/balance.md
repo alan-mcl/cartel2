@@ -104,12 +104,12 @@ A typical career should draw income from at least two sources, and no single sou
 | Sensor | Range | One group |
 | Navigation | Nav rating | One group |
 | Fuel tank | Capacity | One group |
-| Weapon | Hull damage per second against the reference armour | Mount |
+| Weapon | Hull damage per second on an unprotected hull (balance tool Hull DPS column) | Mount |
 
 - **Price curve.** Within a curve group, cost follows a power law in the main metric. An exponent of 1 or more rewards progression; below 0.8 makes the top end a bargain. Every SKU sits within 0.7 to 1.4 of its fitted cost, unless a capability flag explains the gap. Price each flag as a stated premium on the curve.
 - **Manufacturer lines.** Budget lines may sit at 0.7 to 0.9 of the curve, and premium lines at 1.1 to 1.4. A budget SKU must pay for its price in another metric, such as mass, volume, signature, or power demand, so that it never dominates.
 - **No strictly dominated SKUs**, with signature counted, unless the catalog records why. Fix a dominated pair by moving the dominated SKU's price under its rival's, or by giving it a metric the rival lacks.
-- **Mount tiers.** Target hull damage per second against the reference armour:
+- **Mount tiers.** Target bare hull damage per second (one trigger pull through combat resolution, scatter counted with every pellet hitting; armour column is informational only):
 
   | Mount | Target |
   | --- | --- |
@@ -117,7 +117,7 @@ A typical career should draw income from at least two sources, and no single sou
   | Medium | 15 to 20 |
   | Heavy | 22 to 30 |
 
-  Price rises with tier. Within a mount, cost per hull damage per second rises with damage. Range, guidance, point-defence immunity, and alpha damage are paid for, but no single round should remove a typical unarmoured hull.
+  Price rises with tier. Within a mount, cost per hull damage per second rises with damage. Range, guidance, point-defence immunity, and alpha damage are paid for, but one full trigger pull must stay below the smallest unarmoured template hull (16 hits on the Juno 1030 today). Shared ammunition is retuned once, then each launcher's rate of fire lands in its mount band. Cyber weapons stay at zero hull damage and are excluded from mount-tier medians.
 - **Modules with no gameplay yet**, such as the alpha hyperdrive, stay off ship templates or carry a token price until their feature exists.
 
 ## Running costs
@@ -139,7 +139,8 @@ A typical career should draw income from at least two sources, and no single sou
 - **Repairs.** The shipyard and the docking-bay terminal repair hull, power, and compute damage through `ShipAssembly.repair_quote` and `repair_ship`. The bill is d30 per missing hull point, d3.53 per unit of lost generation, and d3.93 per lost compute unit, each times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox repair is free. A paid repair is a `repairs` career expense. Damage lives on each `OwnedShip` and persists in saves. Docking and unspace arrival do not heal. Shields are not billed; they regenerate in flight.
 - **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index, ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
 - **Freight pay.** `freight_missions.json` uses `base_pay` 200 and `friction_pay` 13. The balance tool's freight row measures stacked 1-hop lots on the Pegasus P101 and P105 (same destination, greedy fill). Leftover hold trade to that destination is noted beside the stack and is not part of the target.
-- **Bounty pay.** `bounty_missions.json` uses `base_pay` 2100, multiplied by desk, objective, jitter, and `target_pay_strength` (scaled hull, best hull-damage weapon, and `1 + escort_count`). Threat cards no longer apply a separate pay multiplier for escorts. Sampled median pay lands near d2,200 after retuning.
+- **Bounty pay.** `bounty_missions.json` uses `base_pay` 2100, multiplied by desk, objective, jitter, and `target_pay_strength` (scaled hull, best hull-damage weapon over reference 17.5 hull DPS, and `1 + escort_count`). Threat cards no longer apply a separate pay multiplier for escorts. Re-check median pay and the 60% kept-after-costs rule after weapon retuning.
+- **Weapon tiers.** Ammunition alpha is capped under the smallest unarmoured hull (16 hits on the Juno 1030). Mount medians land near 13 / 15.3 / 22.2 bare hull DPS for light, medium, and heavy mounts. Bounty strength uses reference hull DPS 17.5; sampled expected pay stays near d2,788 and armed hunters keep at least 60% after rearm and a 25% hull repair.
 
 **Target:**
 

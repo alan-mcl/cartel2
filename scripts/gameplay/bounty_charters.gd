@@ -499,7 +499,7 @@ static func bar_bounty_section_visible(
 
 
 const TARGET_PAY_REF_HULL := 28.0
-const TARGET_PAY_REF_DPS := 14.0
+const TARGET_PAY_REF_DPS := 17.5
 
 static var _strength_cache: Dictionary = {}
 

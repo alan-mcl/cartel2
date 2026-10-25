@@ -52,6 +52,7 @@ func _init() -> void:
 	TestFuel.run(runner)
 	TestFlightManifest.run(runner)
 	TestBalanceMetrics.run(runner)
+	TestWeaponMountBands.run(runner)
 
 	if runner.failures > 0:
 		print("=== %d test failure(s) ===" % runner.failures)
