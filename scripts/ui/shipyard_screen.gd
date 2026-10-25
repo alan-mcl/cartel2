@@ -96,6 +96,7 @@ func _ready() -> void:
 	$Layout/Body/Split/InventoryColumn/Actions/BuyButton.pressed.connect(_on_buy_pressed)
 	$Layout/Body/Split/InventoryColumn/Actions/SellButton.pressed.connect(_on_sell_pressed)
 	$Layout/Body/Split/InventoryColumn/Actions/RefuelButton.pressed.connect(_on_refuel_pressed)
+	$Layout/Body/Split/InventoryColumn/Actions/RearmButton.pressed.connect(_on_rearm_pressed)
 	_ship_item_list.item_selected.connect(_on_ship_item_selected)
 	_ship_item_list.item_clicked.connect(_on_ship_item_clicked)
 	_bind_inventory_drop_target(_inventory_column)
@@ -569,6 +570,7 @@ func _update_actions() -> void:
 	var buy := $Layout/Body/Split/InventoryColumn/Actions/BuyButton
 	var sell := $Layout/Body/Split/InventoryColumn/Actions/SellButton
 	var refuel := $Layout/Body/Split/InventoryColumn/Actions/RefuelButton
+	var rearm := $Layout/Body/Split/InventoryColumn/Actions/RearmButton
 
 	if not _sandbox:
 		buy.disabled = _selected_part_id.is_empty()
@@ -576,6 +578,9 @@ func _update_actions() -> void:
 
 	var ship := _context.session.get_owned_ship(_selected_ship_id)
 	refuel.disabled = ship == null
+	var rearm_quote := ShipAssembly.rearm_quote(_context.session, _context.catalog, _selected_ship_id)
+	rearm.text = str(rearm_quote.get("button_text", "Rearm"))
+	rearm.disabled = not bool(rearm_quote.get("enabled", false))
 
 
 func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
@@ -611,6 +616,12 @@ func _on_sell_pressed() -> void:
 
 func _on_refuel_pressed() -> void:
 	if ShipAssembly.refuel_ship(_context.session, _context.catalog, _selected_ship_id):
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_ship_id)
+
+
+func _on_rearm_pressed() -> void:
+	if ShipAssembly.rearm_ship(_context.session, _context.catalog, _selected_ship_id):
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)
 

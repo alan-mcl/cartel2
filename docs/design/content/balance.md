@@ -136,7 +136,7 @@ A typical career should draw income from at least two sources, and no single sou
 
 - **Reactor fuel.** Power-plant `fuel_consumption` is not burned ([D-1](../architecture/backlog.md#d-1-reactor-fuel-traded-fuel-and-per-chemistry-tanks)).
 - **Repairs** are free and automatic on docking, and arriving from unspace also restores the hull.
-- **Ammunition** cannot be restocked, and its `cost` field is never charged.
+- **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
 
 **Target:**
 
@@ -145,8 +145,8 @@ A typical career should draw income from at least two sources, and no single sou
   - The rate is the same for every hull. A tougher hull already paid for its toughness in its purchase price, and armour and shields pay back through smaller bills.
   - Power and compute damage cost the same share of module value per unit: about d3.53 per unit of generation and d3.93 per compute unit at index 1.0.
 - **Breach.** A breach costs one to two typical runs of income for the median hull. That is a band of d48 to d96 per hull point at the median yard.
-- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the median bounty after rearming and repairing a quarter of its hull.
-- **Rearming.** Charge the ammunition `cost` per round times the same local index. Ammunition weapons must justify their running cost through range, alpha damage, or point-defence-proof delivery. Measure that as cost per kill against a laser of similar price.
+- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the median bounty after rearming and repairing a quarter of its hull. With rearm charged at the median index (1.51, Proxima), the Wolff Bastion keeps 55.4% and the Gladius 55.9%. The Warrior keeps 63.8%. The line stays open for the weapon and bounty passes.
+- **Ammunition weapons** must justify their running cost through range, alpha damage, or point-defence-proof delivery. Measure that as cost per kill against a laser of similar price.
 - **Retune with the band.** Retune the repair rate with the balance tool whenever the commodity price band changes, because the index moves with it.
 
 ## Ships
@@ -217,7 +217,7 @@ The run takes about 40 seconds. Without `--out` it prints the tables, and `--tit
 
 - `tests/test_balance_metrics.gd` asserts the no-strip-profit invariant and the tool's structure.
 - `tests/test_career.gd` asserts the starting nett-worth bands, and that profit stays the ranking column.
-- `tests/test_assembler.gd` asserts that every template's full load is within its mass limit.
+- `tests/test_assembler.gd` asserts that every template's full load is within its mass limit, that seeding skips rounds no fitted weapon fires, and that rearm bills the ammunition cost times the local index.
 - When the catalog meets another target, add it as an invariant test in the same change, so it cannot regress. Candidates:
   - No strictly dominated modules
   - No negative power margin

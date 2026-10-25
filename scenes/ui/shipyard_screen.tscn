@@ -145,6 +145,10 @@ text = "Sell"
 layout_mode = 2
 text = "Refuel"
 
+[node name="RearmButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions" unique_id=1582411308]
+layout_mode = 2
+text = "Rearm"
+
 [node name="Footer" type="PanelContainer" parent="Layout" unique_id=1134504380]
 layout_mode = 2
 theme_type_variation = &"Elevated"

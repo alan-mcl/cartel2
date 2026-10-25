@@ -456,6 +456,146 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	return true
 
 
+## Local Industrial Components index: the sector buy quote over the catalog base price.
+## Paid repairs and rearming share this rate. Negative means the quote is missing.
+static func repair_price_index(session: GameSession, catalog: Catalog) -> float:
+	var commodity := catalog.get_commodity_def("industrial_components")
+	if commodity == null or commodity.base_price <= 0.0:
+		return -1.0
+	var sector_id := session.world.get_market_sector_id(catalog)
+	var listing := CommodityEconomy.quote_for_sector(session, catalog, sector_id, "industrial_components")
+	var buy := int(listing.get("price", 0))
+	if buy <= 0:
+		return -1.0
+	return float(buy) / commodity.base_price
+
+
+static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+	var result := {
+		"enabled": false,
+		"cost": 0,
+		"button_text": "Rearm",
+		"log_reason": "",
+		"shortfall": {},
+	}
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		result["log_reason"] = "No ship selected."
+		return result
+	if ship.location != session.habitat_id:
+		result["log_reason"] = "Ship must be docked at this habitat."
+		return result
+
+	var assembled := assemble_owned(catalog, ship)
+	var shortfall := _ammunition_shortfall(catalog, ship, assembled)
+	if shortfall.is_empty():
+		var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
+		var fired := ShipAssembler.fired_ammunition_types(assembled)
+		var has_magazine := false
+		if typeof(caps) == TYPE_DICTIONARY:
+			for ammo_id in caps.keys():
+				if fired.has(str(ammo_id)) and int(caps[ammo_id]) > 0:
+					has_magazine = true
+					break
+		if has_magazine:
+			result["button_text"] = "Rearm (full)"
+			result["log_reason"] = "Magazines already full."
+		else:
+			result["button_text"] = "Rearm (N/A)"
+			result["log_reason"] = "Ship has no ammunition to restock."
+		return result
+
+	result["shortfall"] = shortfall
+	if session.sandbox:
+		result["enabled"] = true
+		result["cost"] = 0
+		result["button_text"] = "Rearm"
+		return result
+
+	var index := repair_price_index(session, catalog)
+	if index < 0.0:
+		result["button_text"] = "Rearm (N/A)"
+		result["log_reason"] = "Repair index unavailable at this habitat."
+		return result
+
+	var raw := 0.0
+	for entry_variant in shortfall.values():
+		var entry: Dictionary = entry_variant
+		raw += float(entry["missing"]) * float(entry["unit_cost"]) * index
+	var cost := 0
+	if raw > 0.0:
+		cost = int(ceil(raw - 0.000001))
+	result["cost"] = cost
+	result["button_text"] = "Rearm (d%d)" % cost if cost > 0 else "Rearm"
+	result["enabled"] = cost <= 0 or session.can_afford_credits(cost)
+	if not result["enabled"]:
+		result["log_reason"] = "Insufficient credits to rearm. Need d%d." % cost
+	return result
+
+
+static func rearm_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
+	var quote := rearm_quote(session, catalog, ship_id)
+	if not bool(quote.get("enabled", false)):
+		var reason := str(quote.get("log_reason", ""))
+		if reason.is_empty():
+			return false
+		if reason.begins_with("Insufficient credits"):
+			return session.fail_action(reason)
+		session.last_log = reason
+		session.changed.emit()
+		return false
+
+	var ship := session.get_owned_ship(ship_id)
+	if ship == null:
+		return false
+
+	var cost := int(quote.get("cost", 0))
+	if cost > 0:
+		session.apply_credits_delta(-cost)
+	var shortfall: Dictionary = quote.get("shortfall", {})
+	for ammo_id in shortfall.keys():
+		var entry: Dictionary = shortfall[ammo_id]
+		ship.ammunition[str(ammo_id)] = float(entry["capacity"])
+	if cost > 0:
+		session.last_log = "Rearmed %s for d%d." % [ship.name, cost]
+		if not session.sandbox:
+			session.career.record_ammunition_spend(cost)
+	else:
+		session.last_log = "Rearmed %s." % ship.name
+	session.changed.emit()
+	return true
+
+
+static func _ammunition_shortfall(
+	catalog: Catalog,
+	owned: OwnedShip,
+	assembled: AssembledShip
+) -> Dictionary:
+	var shortfall := {}
+	var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
+	if typeof(caps) != TYPE_DICTIONARY:
+		return shortfall
+	var fired := ShipAssembler.fired_ammunition_types(assembled)
+	for ammo_variant in caps.keys():
+		var ammo_id := str(ammo_variant)
+		if not fired.has(ammo_id):
+			continue
+		var capacity := int(caps[ammo_variant])
+		var missing := capacity - owned.get_ammo_count(ammo_id)
+		if missing <= 0:
+			continue
+		var unit_cost := 0.0
+		var ammo := catalog.get_ammunition_def(ammo_id)
+		if ammo != null:
+			unit_cost = ammo.cost
+		shortfall[ammo_id] = {
+			"missing": missing,
+			"capacity": capacity,
+			"unit_cost": unit_cost,
+		}
+	return shortfall
+
+
 static func _part_name(part: ModuleDef, part_id: String) -> String:
 	if part == null or part.name.is_empty():
 		return part_id

@@ -16,6 +16,8 @@ static func run(runner: TestRunner) -> void:
 	_test_stock_list_meta(runner, catalog)
 	_test_full_load_limits_fitting_and_launch(runner, catalog)
 	_test_templates_fit_a_full_load(runner, catalog)
+	_test_seed_skips_unfired_rounds(runner, catalog)
+	_test_rearm_charges_the_repair_index(runner, catalog)
 
 
 static func _test_cargo_capabilities(runner: TestRunner, catalog: Catalog) -> void:
@@ -222,3 +224,89 @@ static func _test_templates_fit_a_full_load(runner: TestRunner, catalog: Catalog
 		)
 		checked += 1
 	runner.check(checked >= 8, "assembler: full-load check covers the roster")
+
+
+static func _test_seed_skips_unfired_rounds(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "seed_unfired",
+			"template_id": "pegasus_p101",
+			"chassis_id": "pegasus_chassis",
+		}
+	)
+	var magazine_slot := ""
+	for entry_variant in owned.modules:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		if str((entry_variant as Dictionary).get("module_id", "")) == "oc_river_md_light_magazine_200":
+			magazine_slot = str((entry_variant as Dictionary).get("slot", ""))
+			break
+	runner.check(not magazine_slot.is_empty(), "assembler: the P101 fit has a light magazine to swap")
+	owned.set_module(magazine_slot, "oc_river_md_magazine_200")
+	owned.ammunition.clear()
+	ShipAssembler.seed_ammunition(catalog, owned)
+	runner.check_eq(
+		owned.get_ammo_count("oc_river_md_round"),
+		200,
+		"assembler: seeding fills the light round a mass driver fires"
+	)
+	runner.check_eq(
+		owned.get_ammo_count("oc_river_md_heavy_round"),
+		0,
+		"assembler: seeding skips heavy rounds no fitted weapon fires"
+	)
+
+
+static func _test_rearm_charges_the_repair_index(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "REARM-1", "trader"), "assembler: rearm session starts")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		runner.check(false, "assembler: trader has a ship to rearm")
+		return
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var caps: Dictionary = assembled.capacities.get("ammunition_capacity", {})
+	var capacity := int(caps.get("oc_river_md_round", 0))
+	runner.check(capacity > 10, "assembler: trader magazine holds light rounds")
+	ship.ammunition = {"oc_river_md_round": 10.0}
+	var index := ShipAssembly.repair_price_index(session, catalog)
+	runner.check(index > 0.0, "assembler: rearm has a repair index")
+	var missing := capacity - 10
+	var unit := catalog.get_ammunition_def("oc_river_md_round").cost
+	var expected := int(ceil(float(missing) * unit * index - 0.000001))
+	var quote := ShipAssembly.rearm_quote(session, catalog, ship.id)
+	runner.check(bool(quote.get("enabled", false)), "assembler: a short magazine can be rearmed")
+	runner.check_eq(int(quote.get("cost", 0)), expected, "assembler: rearm bill is cost times the index")
+	var credits_before := session.wallet.credits
+	runner.check(ShipAssembly.rearm_ship(session, catalog, ship.id), "assembler: rearm fills the magazine")
+	runner.check_eq(owned_ammo(ship), capacity, "assembler: rearm restores the listed capacity")
+	runner.check_eq(session.wallet.credits, credits_before - expected, "assembler: rearm spends the bill")
+	runner.check_eq(
+		int(session.career.expenses_by_source.get("ammunition", 0)),
+		expected,
+		"assembler: rearm is an ammunition expense"
+	)
+	var full := ShipAssembly.rearm_quote(session, catalog, ship.id)
+	runner.check(not bool(full.get("enabled", false)), "assembler: a full magazine is not rearmed again")
+
+	ship.ammunition = {"oc_river_md_round": 10.0}
+	session.wallet.credits = 0
+	runner.check(not ShipAssembly.rearm_ship(session, catalog, ship.id), "assembler: rearm refuses an empty wallet")
+	runner.check_eq(owned_ammo(ship), 10, "assembler: a refused rearm leaves the magazine")
+
+	session.sandbox = true
+	var sandbox_credits := session.wallet.credits
+	var spent := int(session.career.expenses_by_source.get("ammunition", 0))
+	runner.check(ShipAssembly.rearm_ship(session, catalog, ship.id), "assembler: sandbox rearm is free")
+	runner.check_eq(session.wallet.credits, sandbox_credits, "assembler: sandbox rearm spends nothing")
+	runner.check_eq(
+		int(session.career.expenses_by_source.get("ammunition", 0)),
+		spent,
+		"assembler: sandbox rearm is not an expense"
+	)
+	runner.check_eq(owned_ammo(ship), capacity, "assembler: sandbox rearm still fills the magazine")
+
+
+static func owned_ammo(ship: OwnedShip) -> int:
+	return ship.get_ammo_count("oc_river_md_round")

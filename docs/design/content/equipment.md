@@ -496,7 +496,7 @@ At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 
 - Lists ships with `location` matching current habitat
 - Buy/sell/install/remove modules from unified catalogue
-- Refuel ships; inspect configuration and engineering budgets
+- Refuel and rearm ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
 Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned - see [architecture.md](../architecture/architecture.md). Dock resets hull and integrity.

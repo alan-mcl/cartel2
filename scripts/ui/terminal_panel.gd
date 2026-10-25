@@ -401,6 +401,13 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 	refuel.pressed.connect(_on_refuel_ship_pressed)
 	admin.add_child(refuel)
 
+	var rearm_quote := ShipAssembly.rearm_quote(_context.session, _context.catalog, ship.id)
+	var rearm := Button.new()
+	rearm.text = str(rearm_quote.get("button_text", "Rearm"))
+	rearm.disabled = not bool(rearm_quote.get("enabled", false))
+	rearm.pressed.connect(_on_rearm_ship_pressed)
+	admin.add_child(rearm)
+
 	var rename := Button.new()
 	rename.text = "Rename Ship"
 	rename.pressed.connect(_on_rename_ship_pressed)
@@ -464,6 +471,15 @@ func _on_refuel_ship_pressed() -> void:
 	if _selected_terminal_ship_id.is_empty():
 		return
 	if ShipAssembly.refuel_ship(_context.session, _context.catalog, _selected_terminal_ship_id):
+		_rebuild_terminal_ship_panels()
+		if _context.on_ship_changed.is_valid():
+			_context.on_ship_changed.call(_selected_terminal_ship_id)
+
+
+func _on_rearm_ship_pressed() -> void:
+	if _selected_terminal_ship_id.is_empty():
+		return
+	if ShipAssembly.rearm_ship(_context.session, _context.catalog, _selected_terminal_ship_id):
 		_rebuild_terminal_ship_panels()
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_terminal_ship_id)

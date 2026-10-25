@@ -102,6 +102,20 @@ static func module_mounts(module_def: ModuleDef) -> Array:
 	return ["other"]
 
 
+static func fired_ammunition_types(assembled: AssembledShip) -> Dictionary:
+	var fired := {}
+	if assembled == null:
+		return fired
+	for entry_variant in assembled.modules_in_category("weapon"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var module_def: ModuleDef = (entry_variant as Dictionary).get("data", null)
+		if module_def == null or module_def.ammunition_type.is_empty():
+			continue
+		fired[module_def.ammunition_type] = true
+	return fired
+
+
 static func seed_ammunition(catalog: Catalog, owned: OwnedShip, fill_ratio: float = 1.0) -> void:
 	if owned == null:
 		return
@@ -109,13 +123,17 @@ static func seed_ammunition(catalog: Catalog, owned: OwnedShip, fill_ratio: floa
 	var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
 	if typeof(caps) != TYPE_DICTIONARY:
 		return
+	var fired := fired_ammunition_types(assembled)
 	for ammo_type in caps.keys():
+		var ammo_id := str(ammo_type)
+		if not fired.has(ammo_id):
+			continue
 		var capacity := int(caps[ammo_type])
 		if capacity <= 0:
 			continue
 		var fill_amount := int(float(capacity) * clampf(fill_ratio, 0.0, 1.0))
 		if fill_amount > 0:
-			owned.ammunition[str(ammo_type)] = float(fill_amount)
+			owned.ammunition[ammo_id] = float(fill_amount)
 
 
 static func assign_modules_to_slots(catalog: Catalog, chassis: ChassisDef, module_ids: Array) -> Array:

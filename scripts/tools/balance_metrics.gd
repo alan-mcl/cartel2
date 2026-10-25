@@ -92,6 +92,7 @@ static func build_context(catalog: Catalog, options: Dictionary = {}) -> Diction
 	ctx["bounty"] = _build_bounty_costs(ctx)
 	_attach_template_earnings(ctx)
 	ctx["repair"] = _build_repair_model(ctx)
+	_apply_rearm_index(ctx)
 	return ctx
 
 
@@ -951,8 +952,8 @@ static func bounty_costs_section(ctx: Dictionary) -> Dictionary:
 			+ " escort fire the target template's best weapon back for the same time with every round"
 			+ " landing; a duel is lost when that breaches the hunter first. Both sides hit every"
 			+ " shot, so read the duel columns as relative lethality, not odds. The 25% columns"
-			+ " repair a quarter of the hull instead. Rearm prices spent rounds at the ammunition"
-			+ " `cost` field.",
+			+ " repair a quarter of the hull instead. Rearm is the ammunition `cost` per spent"
+			+ " round times the median shipyard's Industrial Components index.",
 		]
 	)
 
@@ -2223,6 +2224,19 @@ static func return_fire(hunter: AssembledShip, weapon: Dictionary, attackers: in
 	out["power"] = minf(state.power_integrity_lost, float(hunter.capacities.get("power_generation", 0.0)))
 	out["compute"] = minf(state.compute_integrity_lost, float(hunter.capacities.get("compute_capacity", 0.0)))
 	return out
+
+
+## The bounty rearm column is catalog cost until the yard index exists. Scale it, then
+## rebuild the repair calibration that spends that column.
+static func _apply_rearm_index(ctx: Dictionary) -> void:
+	var model: Dictionary = ctx["repair"]
+	var median := float((model["index"] as Dictionary).get("median", 1.0))
+	var hunters: Dictionary = (ctx["bounty"] as Dictionary)["hunters"]
+	for hunter_id in hunters.keys():
+		var hunter: Dictionary = hunters[hunter_id]
+		hunter["rearm"] = float(hunter["rearm"]) * median
+		hunters[hunter_id] = hunter
+	model["calibration"] = _repair_calibration(ctx, median)
 
 
 # --- Repairs ----------------------------------------------------------------------------------

@@ -24,21 +24,6 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-6 Ammunition rearming and seeding
-
-**Status:** Discuss. **Severity:** High.
-
-Ammunition cannot be restocked. Nothing writes to `OwnedShip.ammunition` after a ship is created, and the ammunition `cost` field is never charged.
-
-`ShipAssembler.seed_ammunition` fills every type a magazine lists at full capacity. The template fits no longer carry a second unfired type, but the yard magazines still do: the River magazine lists heavy rounds beside the light ones, and the Bellatrix rocket rack lists EMP rockets beside high explosive. Rounds are heavy: a rocket weighs 1.0 t and a missile 1.2 t. Evidence: finding 4 of the [balance pass](../../reports/balance_pass_2026-10.md#4-ammunition-is-overfilled-heavy-and-never-restocked-high).
-
-**Proposal:**
-
-- Add a rearm service at the shipyard beside refuelling, priced at the ammunition `cost` times the local repair index. Make it free in sandbox and record it as a `CareerStats` expense.
-- Seed only the types fitted weapons fire. The yard still sells magazines that list a second round, and those still fill both types.
-
-**Do not:** make ammunition free or unlimited to avoid building the restock flow. The `cost` field is the rearm price. Do not change round masses to make a magazine fit. The loaded-mass rule already sizes the template fits.
-
 ## D-7 Antimatter running cost
 
 **Status:** Discuss. **Severity:** High.
@@ -132,7 +117,7 @@ A breach stops thrust and weapons, and there is no recovery flow. `GameSession.a
 
 Before charging:
 
-1. Turn the automatic dock repair into a shipyard action modelled on `ShipAssembly.refuel_quote` and `refuel_ship`, free in sandbox, with a `repairs` expense key in `CareerStats`.
+1. Turn the automatic dock repair into a shipyard action modelled on `ShipAssembly.refuel_quote` and `refuel_ship`, priced through `ShipAssembly.repair_price_index`, free in sandbox, with a `repairs` expense key in `CareerStats`.
 2. Remove the free heal in `arrive_from_unspace`.
 3. Store and save damage on each `OwnedShip`.
 4. Define a breach outcome, such as a tow to the nearest shipyard plus the full bill.
