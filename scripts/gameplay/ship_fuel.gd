@@ -54,15 +54,31 @@ static func active_amount(catalog: Catalog, owned: OwnedShip) -> float:
 	return get_amount(owned, fuel_id)
 
 
+static func tank_scale(catalog: Catalog, fuel_id: String) -> float:
+	if catalog == null or fuel_id.is_empty():
+		return 1.0
+	var fuel := catalog.get_fuel_def(fuel_id)
+	if fuel == null or fuel.tank_scale <= 0.0:
+		return 1.0
+	return fuel.tank_scale
+
+
+## Bunker plus tank modules. Tank capacity is scaled by the fuel; the bunker is not.
+static func stored_capacity(catalog: Catalog, engine: ModuleDef, tank_units: float) -> float:
+	var bunker := 0.0
+	if engine != null:
+		bunker = engine.fuel_capacity
+	return bunker + tank_units * tank_scale(catalog, fuel_id_for_engine(engine))
+
+
 static func active_capacity(catalog: Catalog, owned: OwnedShip) -> float:
 	if owned == null or catalog == null:
 		return 0.0
-	var total := 0.0
+	var engine: ModuleDef = null
 	var engine_id := _propulsion_module_id(owned)
 	if not engine_id.is_empty():
-		var engine := catalog.get_module_def(engine_id)
-		if engine != null:
-			total += engine.fuel_capacity
+		engine = catalog.get_module_def(engine_id)
+	var tank_units := 0.0
 	for entry in owned.modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
@@ -71,8 +87,8 @@ static func active_capacity(catalog: Catalog, owned: OwnedShip) -> float:
 			continue
 		var module_def := catalog.get_module_def(module_id)
 		if module_def != null and module_def.category == "fuel":
-			total += module_def.fuel_capacity
-	return total
+			tank_units += module_def.fuel_capacity
+	return stored_capacity(catalog, engine, tank_units)
 
 
 static func propulsion_fuel_mass(catalog: Catalog, owned: OwnedShip) -> float:

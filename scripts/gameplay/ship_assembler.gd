@@ -431,15 +431,12 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 				current + int(module_def.ammunition_capacity[ammo_id])
 			)
 
-	capacities["fuel_capacity"] = _propulsion_fuel_capacity(assembled)
+	capacities["fuel_capacity"] = _propulsion_fuel_capacity(catalog, assembled)
 	return capacities
 
 
-static func _propulsion_fuel_capacity(assembled: AssembledShip) -> float:
-	var total := 0.0
-	var engine := assembled.get_propulsion_module_def()
-	if engine != null:
-		total += engine.fuel_capacity
+static func _propulsion_fuel_capacity(catalog: Catalog, assembled: AssembledShip) -> float:
+	var tank_units := 0.0
 	for entry in assembled.installed_modules:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
@@ -447,8 +444,8 @@ static func _propulsion_fuel_capacity(assembled: AssembledShip) -> float:
 		if module_def == null or not module_def is ModuleDef:
 			continue
 		if module_def.category == "fuel":
-			total += module_def.fuel_capacity
-	return total
+			tank_units += module_def.fuel_capacity
+	return ShipFuel.stored_capacity(catalog, assembled.get_propulsion_module_def(), tank_units)
 
 
 static func _aggregate_capabilities(assembled: AssembledShip) -> Dictionary:

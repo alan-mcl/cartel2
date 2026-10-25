@@ -9,6 +9,11 @@
     "id": { "type": "string" },
     "name": { "type": "string" },
     "price_min": { "type": "number" },
-    "price_max": { "type": "number" }
+    "price_max": { "type": "number" },
+    "tank_scale": {
+      "type": "number",
+      "default": 1,
+      "x-note": "Fraction of a tank module's rated capacity stored for this fuel. The engine bunker is not scaled. Omitted means 1."
+    }
   }
 }

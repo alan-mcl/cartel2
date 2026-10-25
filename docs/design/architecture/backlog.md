@@ -24,16 +24,6 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 
 **Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
 
-## D-7 Antimatter running cost
-
-**Status:** Discuss. **Severity:** High.
-
-Antimatter is priced at d200 to d800 a unit, so antimatter hulls burn d30 to d45 per thrust-second, against d0.65 to d4.20 for every other fuel. A mid-price refill costs 61% to 208% of the hull's used price: d61,500 for the Wolff Gladius and Warrior. The Outlaw starts in the Warrior with d250. Evidence: finding 5 of the [balance pass](../../reports/balance_pass_2026-10.md#5-antimatter-running-cost-high).
-
-**Proposal:** cut the band in `data/catalog/fuels.json` to about d40 to d120, or keep the price and give antimatter drives an edge that justifies it. The target is in [balance.md](../content/balance.md#running-costs).
-
-**Do not:** special-case antimatter in `FuelEconomy` code. Tune the catalog band or the drives.
-
 ## D-8 Background edges and day-one earning
 
 **Status:** Discuss. **Severity:** High.

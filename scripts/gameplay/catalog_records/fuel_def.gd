@@ -9,6 +9,7 @@ var id: String = ""
 var name: String = ""
 var price_min: float = 0
 var price_max: float = 0
+var tank_scale: float = 1
 
 static func from_dict(data: Dictionary) -> FuelDef:
 	var def := FuelDef.new()
@@ -18,6 +19,7 @@ static func from_dict(data: Dictionary) -> FuelDef:
 	def.name = str(data.get("name", ""))
 	def.price_min = float(data.get("price_min", 0))
 	def.price_max = float(data.get("price_max", 0))
+	def.tank_scale = float(data.get("tank_scale", 1))
 	return def
 
 func to_dict() -> Dictionary:
@@ -26,10 +28,12 @@ func to_dict() -> Dictionary:
 	out["name"] = name
 	out["price_min"] = price_min
 	out["price_max"] = price_max
+	if _present_keys.has("tank_scale") or tank_scale != 1:
+		out["tank_scale"] = tank_scale
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "price_min", "price_max"])
+	return PackedStringArray(["id", "name", "price_min", "price_max", "tank_scale"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "price_min", "price_max"])

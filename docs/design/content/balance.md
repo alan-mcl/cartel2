@@ -134,13 +134,13 @@ A typical career should draw income from at least two sources, and no single sou
   | Fusion | d20 to d50 |
   | Antimatter | d200 to d800 |
 
+- **Antimatter.** The price band stays d200 to d800. A tank stores 5% of its rated capacity (`tank_scale` on the fuel). The engine bunker of 3 is not scaled, so a small tank holds 2, a medium tank 4, and a large tank 6, plus that bunker. The four drives burn 0.009 to 0.013 a second. At the midpoint that is d4.50 to d6.50 a thrust-second, against d3.50 to d4.20 on the fusion templates. A mid-price refill is 7.7% of used price on the Mantis XF5700 and 17.6% on the Krypton K3. Every template's mid-price refill is within 20% of its used price.
 - **Reactor fuel.** Power-plant `fuel_consumption` is not burned ([D-1](../architecture/backlog.md#d-1-reactor-fuel-traded-fuel-and-per-chemistry-tanks)).
 - **Repairs** are free and automatic on docking, and arriving from unspace also restores the hull.
 - **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
 
 **Target:**
 
-- **Fuel.** A mid-price refill costs no more than 20% of the hull's used price. A declared luxury fuel may cost up to 40%, and no engine type costs more than about twice fusion per thrust-second without a matching performance edge.
 - **Hull repairs.** Each hull point costs a base rate times the local Industrial Components index (the local buy quote over the base price). The proposed base rate is d30 per point at index 1.0.
   - The rate is the same for every hull. A tougher hull already paid for its toughness in its purchase price, and armour and shields pay back through smaller bills.
   - Power and compute damage cost the same share of module value per unit: about d3.53 per unit of generation and d3.93 per compute unit at index 1.0.
@@ -218,6 +218,7 @@ The run takes about 40 seconds. Without `--out` it prints the tables, and `--tit
 - `tests/test_balance_metrics.gd` asserts the no-strip-profit invariant and the tool's structure.
 - `tests/test_career.gd` asserts the starting nett-worth bands, and that profit stays the ranking column.
 - `tests/test_assembler.gd` asserts that every template's full load is within its mass limit, that seeding skips rounds no fitted weapon fires, and that rearm bills the ammunition cost times the local index.
+- `tests/test_fuel.gd` asserts that an antimatter tank stores the bunker plus 5% of its rated capacity, and that every template's mid-price refill stays within 20% of its used price.
 - When the catalog meets another target, add it as an invariant test in the same change, so it cannot regress. Candidates:
   - No strictly dominated modules
   - No negative power margin

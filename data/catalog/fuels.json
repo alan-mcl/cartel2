@@ -27,6 +27,7 @@
     "id": "antimatter",
     "name": "Antimatter",
     "price_min": 200,
-    "price_max": 800
+    "price_max": 800,
+    "tank_scale": 0.05
   }
 ]

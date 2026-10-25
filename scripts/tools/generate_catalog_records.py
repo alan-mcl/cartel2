@@ -661,6 +661,8 @@ def emit_docs(class_specs: list[ClassSpec], shared_specs: dict[str, ClassSpec]) 
                 notes.append("enum: " + ", ".join(f"`{v}`" for v in prop["enum"]))
             if prop.get("x-ref-catalog"):
                 notes.append(f"ref → `{prop['x-ref-catalog']}.json`")
+            if prop.get("x-note"):
+                notes.append(str(prop["x-note"]))
             req = "yes" if key in required else "no"
             lines.append(
                 f"| `{key}` | {prop_type} | {req} | `{default}` | {'; '.join(notes)} |"

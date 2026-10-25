@@ -73,7 +73,7 @@ Commercial main engines are branded products: **maker** (corporation), **brand**
 | Max speed | `max_speed` | Speed cap km/s |
 | Fuel use | `fuel_consumption` | Consumed in flight from the fitted engine’s fuel type (`fuels` on the ship) |
 | Fuel type | `fuel_type` | `chemical`, `hydrogen`, `reaction_mass`, `fusion`, or `antimatter` (reaction engines only) |
-| Bunker | `fuel_capacity` (engine) | Built-in storage on the propulsion module; fuel tanks add untyped capacity |
+| Bunker | `fuel_capacity` (engine) | Built-in storage on the propulsion module. Fuel tanks add untyped capacity, multiplied by the fuel's `tank_scale` (1, except antimatter at 0.05). The bunker is not scaled. |
 | Boost | `boost_multiplier` | Boost speed factor |
 | Power | `power_demand` | Operating budget |
 | Type | `engine_type` | Technology class (see below) |
@@ -90,7 +90,7 @@ Seven `engine_type` values are in the catalog. All share the same fitting rules;
 | **Hydro-thermal** | Heats hydrogen and expels exhaust. Better fuel than chemical while retaining substantial thrust; **hungry for ship power**. Mature everyday engine. | Balanced thrust/speed, moderate fuel, high `power_demand` |
 | **Electric plasma** | Ship power drives plasma exhaust. Extremely fuel-efficient, suited to sustained cruise; **capped by plant MW**. | Lower thrust, high `max_speed`, weak boost, very low fuel |
 | **Direct fusion** | Dedicated fusion reactor in the engine; charged products through a magnetic nozzle. High performance, little reaction mass; heavier and costlier. | High thrust/speed, low ship power draw, low fuel burn |
-| **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme; **antimatter** fuel is expensive at the yard and scarce in the small engine bunker. | Top thrust/speed/boost, tiny fuel burn |
+| **Antimatter** | Matter–antimatter annihilation. Elite thrust and speed; engine list price is extreme. The fuel stays d200 to d800 a unit, the bunker holds 3, and a tank stores 5% of its rated capacity. | Top thrust/speed/boost. At the midpoint the drives cost d4.50 to d6.50 a thrust-second, against d3.50 to d4.20 for fusion. |
 | **Gravitic** | Couples to local **gravity** - strongest near the planet and habitat ring, weak in deep orbit and unspace. Five SKUs (Sundancer, Bellatrix, Ionique, Fable). High gravitational signature. | High catalog thrust, field-scaled effective thrust |
 | **Integrated sail** | Couples to **radiant**, **particle**, and **magnetic** fields. **Zero fuel**; power from the plant only. Low catalog thrust, modest cruise speed. Six SKUs (Daybreak, Lumen, Rhumb, Washi, Ionique, Sideline). | Very low thrust, quiet thermal signature |
 

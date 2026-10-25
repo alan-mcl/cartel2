@@ -107,6 +107,7 @@ Source: `data/catalog/schema/fuels.schema.json` → `fuels.json`
 | `name` | string | yes | `` |  |
 | `price_min` | number | yes | `` |  |
 | `price_max` | number | yes | `` |  |
+| `tank_scale` | number | no | `1` | Fraction of a tank module's rated capacity stored for this fuel. The engine bunker is not scaled. Omitted means 1. |
 
 ## ModuleDef
 
