@@ -151,6 +151,38 @@ func try_interact(target: Interactable) -> void:
 			_world_loader.apply_salvage_visuals(_main.session)
 
 
+func try_hyperdrive_spool() -> void:
+	if _main.session.docked or _main.session.in_unspace or _jump.visible:
+		return
+	var thrusting := false
+	var boosting := false
+	var motion = _player.get("motion")
+	if motion != null:
+		if motion.has_method("is_thrusting"):
+			thrusting = motion.is_thrusting()
+		if motion.has_method("is_boosting"):
+			boosting = motion.is_boosting()
+	var owned: OwnedShip = _main.session.get_current_owned_ship()
+	if owned == null:
+		return
+	var result := Hyperdrive.spool_block(
+		_catalog,
+		_main.session,
+		_main.player_ship,
+		owned,
+		_player.global_position,
+		thrusting,
+		boosting
+	)
+	if not bool(result.get("ok", false)):
+		var message := str(result.get("message", ""))
+		if not message.is_empty():
+			_main.session.last_log = message
+			_on_session_changed.call()
+		return
+	open_jump_overlay(str(result.get("title", "Hyperdrive")))
+
+
 func open_jump_overlay(gate_title: String) -> void:
 	if _main.session.docked or _main.session.in_unspace:
 		return

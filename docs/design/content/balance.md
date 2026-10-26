@@ -119,7 +119,7 @@ A typical career should draw income from at least two sources, and no single sou
   | Heavy | 22 to 30 |
 
   Price rises with tier. Within a mount, cost per hull damage per second rises with damage. Range, guidance, point-defence immunity, and alpha damage are paid for, but one full trigger pull must stay below the smallest unarmoured template hull (16 hits on the Juno 1030 today). Shared ammunition is retuned once, then each launcher's rate of fire lands in its mount band. Cyber weapons stay at zero hull damage and are excluded from mount-tier medians.
-- **Modules with no gameplay yet** stay off ship templates or carry a token price until their feature exists. The fitted `hyperdrive_alpha` on the Dragon Post and Dragon Gold is the exception until hyperdrive translation ([D-2](../architecture/backlog.md#d-2-hyperdrive-translation)) ships; it keeps its list price on those templates.
+- **Hyperdrives** price the spool spike (`power_demand`, `compute_demand`) and mass. Cheaper coils draw more plant and core; premium coils cost more list credits for lower draw. Dragon Post can spool on the YardFit 24 while coasting; Dragon Gold can spool under main-engine thrust on the AP-56.
 
 ## Running costs
 

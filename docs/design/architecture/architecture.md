@@ -112,7 +112,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 - **SaveOverlay** - three-slot save/load browser.
 - **PauseOverlay** - Resume, Save, Load, Quit to Menu (Escape during flight).
 - **UiRoot** - opaque full-screen habitat UI with ScreenStack.
-- **JumpOverlay** - Unspace route list at jump gates.
+- **JumpOverlay** - Unspace route list at jump gates and from fitted hyperdrive spool (**H** outside the gravity well).
 
 ## Player loops
 
@@ -226,7 +226,7 @@ Hyperdrive-equipped ships may later translate without a gate or from other 4-spa
 
 Scan charters (other than a planet target) and bounty charters grant a **volatile translation**: a one-shot, expiring navigation solution stored on the player (`PlayerState.volatile_translations`), not in catalog `routes.json`. Each record names a source catalog sector, destination label, **N-space layer** (4, 5, or 6), GST deadlines for the outbound offer and the temporary return gate, and optional **site setup** (play bounds, star tuning, debris/orbital entities). The destination sector id is synthetic (`volatile:<record_id>`); the site is rebuilt from the record whenever the player is there or reloads a save.
 
-At the source jump gate, `TranslationNav` unions usable volatile outbound rows into the jump overlay (they do not consume nav-computer capacity; higher N than the computer’s usual tier still rolls with the existing accuracy penalties). Confirming consumes the outbound hop and runs the normal Unspace pipeline (`n4_default` presentation; session stores the granted N). On arrival, `WorldLoader` spawns a minimal field (dust ring, optional backdrop star chosen at grant time from the local system, the background-star catalogue, or deep space with no star, plus optional entities) and a **temporary return gate** while `return_expires_gst` has not passed. The overlay on-site offers only the return hop to the origin sector at the same N. When the player docks back at the origin, the record is removed; if the return gate expires while they remain on-site, the gate vanishes and they are stranded (no hyperdrive yet). `VolatileTranslation.sweep` runs after GST advances in `Simulation` to drop expired, unanchored grants.
+At the source jump gate, `TranslationNav` unions usable volatile outbound rows into the jump overlay (they do not consume nav-computer capacity; higher N than the computer’s usual tier still rolls with the existing accuracy penalties). Confirming consumes the outbound hop and runs the normal Unspace pipeline (`n4_default` presentation; session stores the granted N). On arrival, `WorldLoader` spawns a minimal field (dust ring, optional backdrop star chosen at grant time from the local system, the background-star catalogue, or deep space with no star, plus optional entities) and a **temporary return gate** while `return_expires_gst` has not passed. The overlay on-site offers only the return hop to the origin sector at the same N. When the player docks back at the origin, the record is removed; if the return gate expires while they remain on-site, the gate vanishes and they are stranded unless they carry a hyperdrive that can still spool. `VolatileTranslation.sweep` runs after GST advances in `Simulation` to drop expired, unanchored grants.
 
 ```mermaid
 flowchart TD
@@ -317,7 +317,6 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - Named NPCs, dialogue trees, Dialogue Manager integration
 - Unspace solution typing (integers shown as flavour only)
 - Distinct 5-space and 6-space layouts. Public routes already include n=5 and n=6 translations; transit still uses the single n=4 presentation (`unspaces.json` `n4_default`)
-- Ship hyperdrive translation (hyperdrive SKUs are catalogued; they are not a travel mode)
 - Combat game-over screen
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)

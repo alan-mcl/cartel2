@@ -14,15 +14,15 @@ Propulsion fuel is implemented. Reaction engines store typed fuel on `OwnedShip.
 
 **Do not:** invent a second propulsion-fuel model beside `FuelEconomy`.
 
-## D-2 Gravitic range and hyperdrive translation
+## D-2 Gravitic range
 
 **Status:** Discuss. **Severity:** Low.
 
-Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON SK. Local field coupling is implemented: thrust scales with ambient gravity, and unspace gives only a weak fluctuating acceleration. Six `integrated_sail` workshop SKUs exist. No ship template defaults to a sail. Hyperdrive SKUs exist in `data/catalog/modules/hyperdrive.json` and are not a travel mode.
+Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON SK. Local field coupling is implemented: thrust scales with ambient gravity, and unspace gives only a weak fluctuating acceleration. Six `integrated_sail` workshop SKUs exist. No ship template defaults to a sail.
 
-**Still open:** independent gravitic hyper-travel range, any gravitic-specific fuel rules, and ship hyperdrive translation. The last of those is also listed under [Not yet implemented](architecture.md#not-yet-implemented).
+**Still open:** independent gravitic hyper-travel range and any gravitic-specific fuel rules.
 
-**Do not:** enable deeper unspace layouts or hyperdrive translation as a side effect of touching sails or gravitic thrust.
+**Do not:** enable deeper unspace layouts as a side effect of touching sails or gravitic thrust.
 
 ## D-9 Hull breach recovery
 

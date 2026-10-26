@@ -14,6 +14,7 @@ const POWER_PRIORITY_BY_CATEGORY := {
 	"weapon": PowerPriority.NORMAL,
 	"ecm": PowerPriority.NORMAL,
 	"cyber_defence": PowerPriority.NORMAL,
+	"hyperdrive": PowerPriority.NORMAL,
 	"power": PowerPriority.CRITICAL,
 }
 
@@ -24,6 +25,7 @@ const COMPUTE_PRIORITY_BY_CATEGORY := {
 	"cyber_defence": PowerPriority.NORMAL,
 	"point_defence": PowerPriority.NORMAL,
 	"weapon": PowerPriority.NORMAL,
+	"hyperdrive": PowerPriority.NORMAL,
 }
 
 
@@ -84,6 +86,7 @@ static func tick_into(
 		"active_sensors": active_sensors,
 		"weapons": firing,
 		"transponder": in_flight and assembled.has_transponder() and owned.transponder_enabled,
+		"hyperdrive": bool(inputs.get("hyperdrive_spool", false)),
 	}
 
 	var active_weapon_slot := str(inputs.get("active_weapon_slot", ""))
@@ -216,6 +219,8 @@ static func _collect_power_demands(
 			continue
 		if category == "transponder" and not bool(active_systems.get("transponder", false)):
 			continue
+		if category == "hyperdrive" and not bool(active_systems.get("hyperdrive", false)):
+			continue
 		if category == "weapon" and not bool(active_systems.get("weapons", false)):
 			continue
 		if (
@@ -259,6 +264,8 @@ static func _collect_compute_demand(
 		if demand <= 0.0:
 			continue
 		if category == "sensor" and not bool(active_systems.get("sensors", false)):
+			continue
+		if category == "hyperdrive" and not bool(active_systems.get("hyperdrive", false)):
 			continue
 		if category == "point_defence" and not in_flight:
 			continue

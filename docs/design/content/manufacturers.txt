@@ -62,6 +62,12 @@ Tier 3: General Industrial; Seven Bells Inc; SnedeCorp; Pacific Triad
 Tier 4: Tukey Enterprises; Andean Consolidated; Terra Nova; Sakuraya Shinise; Fellowship of Apex
 Tier 5: Guangzhou Mercantile; Carthage Mercantile; The Meridian Company
 
+Hyperdrives
+
+Tier 1: Orion Aerospace; Holt-Winters Corp; ParaRamcoVidia
+Tier 2: Seven Bells Inc
+Tier 3: Tukey Enterprises
+
 Propulsion
 
 Tier 1: Orion Aerospace; Holt-Winters Corp; Oklahoma Combine

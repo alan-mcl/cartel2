@@ -45,6 +45,7 @@ CARGO_MAKERS = _rule_names("makers", "cargo")
 PROPULSION_MAKERS = _rule_names("makers", "propulsion")
 WEAPON_MAKERS = _rule_names("makers", "weapon")
 ARMOUR_SHIELD_MAKERS = _rule_names("makers", "armour_shield")
+HYPERDRIVE_MAKERS = _rule_names("makers", "hyperdrive")
 RETIRED_POWER_IDS = _rule_names("retired_ids", "power")
 RETIRED_COMPUTER_IDS = _rule_names("retired_ids", "computer")
 RETIRED_LIFE_SUPPORT_IDS = _rule_names("retired_ids", "life_support")
@@ -1794,6 +1795,15 @@ def main() -> int:
             maker = str(module.get("maker", ""))
             if maker and maker not in ARMOUR_SHIELD_MAKERS:
                 errors.append(f"cyber_defence module {module_id}: unknown maker '{maker}'")
+        elif category == "hyperdrive":
+            for field in ("maker", "brand", "power_demand", "compute_demand"):
+                if field not in module:
+                    errors.append(f"hyperdrive module {module_id}: missing {field}")
+            maker = str(module.get("maker", ""))
+            if maker and maker not in HYPERDRIVE_MAKERS:
+                errors.append(f"hyperdrive module {module_id}: unknown maker '{maker}'")
+            if str(module.get("mount", "")) != "system":
+                errors.append(f"hyperdrive module {module_id}: mount must be 'system'")
 
     if weapon_count < WEAPON_SKU_FLOOR:
         errors.append(

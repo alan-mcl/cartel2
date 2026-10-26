@@ -23,6 +23,7 @@ func _init() -> void:
 	TestTargetScan.run(runner)
 	TestAutopilot.run(runner)
 	TestFieldConditions.run(runner)
+	TestHyperdrive.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)
 	TestCargoRequirements.run(runner)

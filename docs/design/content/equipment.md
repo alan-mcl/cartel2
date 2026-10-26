@@ -317,13 +317,21 @@ Multiple shields process incoming packets sequentially. Holt-Winters holds major
 
 ---
 
-## Hyperdrives (catalog placeholder)
+## Hyperdrives
 
-| Class | Module id | Notes |
-|-------|-----------|-------|
-| Alpha | `hyperdrive_alpha` | Dragon Gold template; no translation gameplay yet |
+Fitted hyperdrives (`category: hyperdrive`, mount `system`) spool from deep orbit. Press **H** in flight when undocked: if the ship is beyond the jump-gate (or translation-beacon) radius and the plant and core can cover the spool spike, the same translation overlay used at gates opens. Volatile survey sites still require the return gate.
 
-**Future Unspace role:** hyperdrive-equipped ships will be able to initiate translation from 4-space without reaching a fixed exit portal, and eventually from regions away from jump-gate entry points. Jump gates remain the standard shallow-route injection method for ships without hyperdrives.
+Spool draws the module's `power_demand` and `compute_demand` for a single budget check only; there is no standing hyperdrive load in cruise.
+
+| Tier | Module id | Maker | Brand |
+|------|-----------|-------|-------|
+| Budget | `te_span_hyperdrive` | Tukey Enterprises | Span |
+| Courier | `hyperdrive_alpha` | Seven Bells Inc | Alpha |
+| Mid | `hw_aperture_hyperdrive` | Holt-Winters Corp | Aperture |
+| High | `prv_vertex_hyperdrive` | ParaRamcoVidia | Vertex |
+| Premium | `ora_needle_hyperdrive` | Orion Aerospace | Needle |
+
+Jump gates remain the standard route for ships without a hyperdrive.
 
 ---
 

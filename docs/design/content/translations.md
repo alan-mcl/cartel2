@@ -1,6 +1,6 @@
 # Translation and navigation stability
 
-**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Learning, copying, and hyperdrive-initiated translation are not implemented. Higher-order (5-space and 6-space) translations use the same transit field presentation as 4-space until layer-specific environments exist.
+**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives can open the same translation overlay from deep orbit (**H** in flight) when power and compute cover the spool spike. Learning and copying solutions are not implemented. Higher-order (5-space and 6-space) translations use the same transit field presentation as 4-space until layer-specific environments exist.
 
 ## Stored translations
 
@@ -40,7 +40,7 @@ At a jump gate or translation beacon, the player initiates through the same orbi
 
 `solution: destination via N-space, Accuracy X%, expected duration Y`
 
-The player picks one translation. Initiation is through the gate in the current build; hyperdrive initiation is separate future work.
+The player picks one translation. Initiation is through a jump gate or translation beacon interactable, or through a fitted hyperdrive spool outside the gravity well.
 
 ## Accuracy vs stability
 
