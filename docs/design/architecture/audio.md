@@ -54,7 +54,7 @@ Process modes: music, ambience, and UI players use `PROCESS_MODE_ALWAYS` so they
 
 ## Assets
 
-Shipped audio is **OGG Vorbis** under `assets/audio/` (`music/`, `ambience/`, `sfx/`). Most current files are **silent placeholders** from [`scripts/tools/generate_placeholder_audio.py`](../../../scripts/tools/generate_placeholder_audio.py) (the script skips `music/menu/menu_01.ogg` when regenerating). Replace files with production assets without changing logical ids.
+Shipped audio is **OGG Vorbis** under `assets/audio/` (`music/`, `ambience/`, `sfx/`). **Music and ambience** placeholders from [`scripts/tools/generate_placeholder_audio.py`](../../../scripts/tools/generate_placeholder_audio.py) are silent loops (the script skips `music/menu/menu_01.ogg` when regenerating). **UI and SFX** placeholders are short dry tones from the same script. Replace files with production assets without changing logical ids.
 
 ## Dev sandbox
 
