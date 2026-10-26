@@ -190,10 +190,18 @@ lines, a **threat** (pay multiplier plus a profile), any catalog **armed ship** 
 [`volatile_sites.json`](../../../data/catalog/volatile_sites.json), and a desk **frame** with substituted
 `{objective}`, `{callsign}`, `{ship}`, `{site}`, `{reason}`, `{status}`, `{threat}`, and `{corp}`.
 Board titles use the objective name; site headings keep the catalogue label. A threat profile sets
-pilot skill (`novice`, `experienced`, `elite`, or blank to roll), a hull scale, and an escort count.
-Accepting grants a volatile site with `setup.bounty_target` and, when the profile asks for company,
-`setup.bounty_escorts`. `FlightLoopController` spawns those ships fight-to-death; only the named
-target completes the contract. Destroy, intercept, and eliminate contracts record
+pay scaling via hull scale and escort count; its optional `pilot_skill` only biases hidden behaviour rolls.
+Accepting grants a volatile site with randomised `setup.entry_position` (temporary return gate) and
+`setup.bounty_target` position (at least 2000 m from the gate), plus optional `setup.bounty_escorts`.
+[`BountyBehavior`](../../../scripts/gameplay/bounty_behavior.gd) rolls hidden per-ship posture
+(`stealthy`, `aggressive`, `oblivious`), resolve (`fight` / `flee`), transponder on/off, station
+(`hold` / `wander`), pilot skill, and flee route (`beacon`, `hyperdrive`, `deep_space`) into the ship
+records; board copy does not reveal them. Escort groups use matched, bodyguard, ambush, or decoy mixes.
+`FlightLoopController` spawns bounty ships with [`TrafficSpawn.create_from_bounty_target`](../../../scripts/gameplay/traffic_spawn.gd);
+fight resolves to fight-to-death, flee breaks toward deep space, the entry beacon, or a hyperdrive
+rim run. Named targets that escape may enter [`bounty_pursuit`](../../../scripts/gameplay/bounty_behavior.gd)
+(Unspace then origin dock timers); kills during pursuit credit against the contract volatile sector.
+Only the named target completes the contract. Destroy, intercept, and eliminate contracts record
 `bounty_target` when the hull is destroyed; **disable** records `bounty_disabled` when effective
 power generation reaches zero and still pays if the target is destroyed instead. Completion is
 `BountyCharters.charter_satisfied`, which uses `PlayerState.scan_satisfies_contract_kinds`

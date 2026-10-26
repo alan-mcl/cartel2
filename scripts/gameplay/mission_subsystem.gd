@@ -8,6 +8,7 @@ var passengers := CharterBook.new("charter_")
 var freight := CharterBook.new("freight_", true)
 var scans := CharterBook.new("scan_")
 var bounties := CharterBook.new("bounty_")
+var _pursuit_spawned_charter_id: String = ""
 
 
 func _init() -> void:
@@ -21,6 +22,12 @@ func on_day(_session: GameSession, _catalog: Catalog, day: int) -> void:
 
 func on_hour(session: GameSession, catalog: Catalog, _hour: int) -> void:
 	_enforce_late_passengers_at_dock(session, catalog)
+
+
+func on_tick(session: GameSession, catalog: Catalog, delta: float) -> void:
+	if session == null or session.docked or delta <= 0.0:
+		return
+	_tick_bounty_pursuits(session, catalog, delta)
 
 
 func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
@@ -454,6 +461,10 @@ func accept_bounty_offer(
 	var record := VolatileTranslation.find_by_id(session, record_id)
 	if not record.is_empty():
 		charter["deadline_gst"] = float(record.get("return_expires_gst", 0.0))
+	session.player.set_bounty_contract(
+		str(charter.get("bounty_target_id", "")),
+		BountyCharters.bounty_sector_for_contract(charter)
+	)
 
 	_commit_accepted(
 		session,
@@ -588,6 +599,7 @@ func cancel_bounty_charter(session: GameSession, catalog: Catalog, charter_id: S
 	if not volatile_id.is_empty():
 		VolatileTranslation.discard_record(session, volatile_id)
 
+	session.player.clear_bounty_contract(str(charter.get("bounty_target_id", "")))
 	bounties.remove_accepted(charter_id)
 	var log := "Bounty cancelled. Fee d%d." % penalty if penalty > 0 else "Bounty cancelled."
 	_log_with_reputation_delta(session, -1, log)
@@ -1006,6 +1018,7 @@ func _fail_bounty_charter_missed_deadline(
 	var charter := bounties.find_accepted(charter_id)
 	if charter.is_empty():
 		return
+	session.player.clear_bounty_contract(str(charter.get("bounty_target_id", "")))
 	var reward := int(charter.get("reward", 0))
 	var penalty := BountyCharters.cancel_penalty(BountyCharters.config(catalog), reward)
 	bounties.remove_accepted(charter_id)
@@ -1024,6 +1037,7 @@ func _resolve_bounty_charter_on_dock(
 	var charter := bounties.find_accepted(charter_id)
 	if charter.is_empty():
 		return
+	session.player.clear_bounty_contract(str(charter.get("bounty_target_id", "")))
 	var reward := int(charter.get("reward", 0))
 	var callsign := str(charter.get("target_callsign", ""))
 	var penalty := BountyCharters.cancel_penalty(BountyCharters.config(catalog), reward)
@@ -1149,6 +1163,145 @@ func _charter_at_origin(session: GameSession, charter: Dictionary) -> bool:
 
 func _freight_charter_at_origin(session: GameSession, charter: Dictionary) -> bool:
 	return _charter_at_origin(session, charter)
+
+
+func notify_bounty_ship_escaped(
+	session: GameSession,
+	catalog: Catalog,
+	target_id: String,
+	is_named_target: bool,
+	flee_route: String
+) -> void:
+	if not is_named_target or target_id.is_empty():
+		return
+	var charter := _find_bounty_charter_by_target(target_id)
+	if charter.is_empty():
+		return
+	var charter_id := str(charter.get("charter_id", ""))
+	if flee_route == "deep_space":
+		_fail_bounty_escape(
+			session,
+			catalog,
+			charter_id,
+			"Target escaped into deep space. Bounty closed."
+		)
+		return
+	charter["bounty_pursuit"] = BountyBehavior.start_pursuit(charter, flee_route)
+	_upsert_bounty_accepted(charter)
+	session.last_log = "Target is fleeing. Intercept before they reach dock."
+	session.changed.emit()
+
+
+func notify_bounty_pursuit_docked(session: GameSession, catalog: Catalog, target_id: String) -> void:
+	var charter := _find_bounty_charter_by_target(target_id)
+	if charter.is_empty():
+		return
+	_fail_bounty_escape(
+		session,
+		catalog,
+		str(charter.get("charter_id", "")),
+		"Target reached dock under pursuit. Bounty closed."
+	)
+
+
+func pursuit_charter_for_spawn(session: GameSession) -> Dictionary:
+	for entry_variant in bounties.accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var charter: Dictionary = entry_variant
+		var pursuit: Variant = charter.get("bounty_pursuit", {})
+		if typeof(pursuit) != TYPE_DICTIONARY or pursuit.is_empty():
+			continue
+		if str(pursuit.get("phase", "")) != "origin_dock":
+			continue
+		if str(charter.get("origin_sector_id", "")) != session.sector_id:
+			continue
+		if str(charter.get("charter_id", "")) == _pursuit_spawned_charter_id:
+			return {}
+		return charter
+	return {}
+
+
+func mark_pursuit_spawned(charter_id: String) -> void:
+	_pursuit_spawned_charter_id = charter_id
+
+
+func build_pursuit_target_record(session: GameSession, charter: Dictionary) -> Dictionary:
+	var record_id := str(charter.get("volatile_record_id", ""))
+	var record := VolatileTranslation.find_by_id(session, record_id)
+	if record.is_empty():
+		return {}
+	var setup: Variant = record.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		return {}
+	var target: Variant = setup.get("bounty_target", {})
+	if typeof(target) != TYPE_DICTIONARY:
+		return {}
+	return (target as Dictionary).duplicate(true)
+
+
+func _find_bounty_charter_by_target(target_id: String) -> Dictionary:
+	for entry_variant in bounties.accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("bounty_target_id", "")) == target_id:
+			return entry
+	return {}
+
+
+func _upsert_bounty_accepted(charter: Dictionary) -> void:
+	var charter_id := str(charter.get("charter_id", ""))
+	if charter_id.is_empty():
+		return
+	for index in range(bounties.accepted.size()):
+		var entry: Dictionary = bounties.accepted[index]
+		if str(entry.get("charter_id", "")) == charter_id:
+			bounties.accepted[index] = charter.duplicate(true)
+			return
+
+
+func _tick_bounty_pursuits(session: GameSession, catalog: Catalog, delta: float) -> void:
+	var failed: Array = []
+	for entry_variant in bounties.accepted:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var charter: Dictionary = entry_variant
+		var pursuit: Variant = charter.get("bounty_pursuit", {})
+		if typeof(pursuit) != TYPE_DICTIONARY or pursuit.is_empty():
+			continue
+		pursuit = BountyBehavior.advance_pursuit_phase(pursuit, charter, session)
+		pursuit = BountyBehavior.tick_pursuit(pursuit, delta, true)
+		charter["bounty_pursuit"] = pursuit
+		_upsert_bounty_accepted(charter)
+		if BountyBehavior.pursuit_failed(pursuit):
+			failed.append(str(charter.get("charter_id", "")))
+	for charter_id in failed:
+		_fail_bounty_escape(
+			session,
+			catalog,
+			charter_id,
+			"Target escaped. Bounty closed."
+		)
+
+
+func _fail_bounty_escape(
+	session: GameSession,
+	catalog: Catalog,
+	charter_id: String,
+	message: String
+) -> void:
+	var charter := bounties.find_accepted(charter_id)
+	if charter.is_empty():
+		return
+	session.player.clear_bounty_contract(str(charter.get("bounty_target_id", "")))
+	bounties.remove_accepted(charter_id)
+	if str(charter_id) == _pursuit_spawned_charter_id:
+		_pursuit_spawned_charter_id = ""
+	session.last_log = message
+	if not session.player.sandbox:
+		session.career.missions_cancelled += 1
+	session.changed.emit()
 
 
 static func _log_with_reputation_delta(session: GameSession, delta: int, message: String) -> void:

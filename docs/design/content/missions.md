@@ -2,6 +2,10 @@
 
 **Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Plot and named-NPC dialogue are not. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
 
+## Bounty charters
+
+Board copy lists the wanted callsign, site, and threat label only. At the volatile site the return gate and primary target are placed at random within the site annulus (seeded from the offer id). Each bounty ship has hidden posture, resolve, transponder, patrol style, pilot skill, and (when they flee) an escape route. Oblivious contacts ignore you until you are very close or you fire first; stealthy ones stay dark until you are in range; aggressive ones hunt with active sensors. Fleeing targets may run for deep space (contract lost), the entry beacon, or a hyperdrive translation; beacon and hyperdrive escapes can be chased through Unspace and back to the origin system before they reach dock.
+
 ## Pilot standing
 
 Each pilot carries a **reputation** score: how well known they are among brokers, terminals, and charter desks. Higher is better. Most backgrounds begin at **0** (unknown). The **Outlaw** begins at **5** - a name on the rim from smuggling and merc work, not yet someone institutions book. **Old Money** begins at **8** - a family name brokers have heard, without much freight behind it. **Influencer** begins at **25** - recognised from streams and sponsorship tags, not yet trusted for sealed institutional work. Rough bands: around **15** a working name, **25–40** recognised, **50** trusted for sealed institutional freight, **75** the sort of pilot officials put on diplomatic parties.

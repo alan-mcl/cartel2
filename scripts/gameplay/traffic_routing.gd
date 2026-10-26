@@ -370,6 +370,8 @@ static func check_route_arrival(
 		return
 
 	if actor.ai_state == TrafficActorScript.AiState.FLEE:
+		if actor.role == "bounty":
+			return
 		if actor.flee_anchor_id.is_empty():
 			return
 		if not world_loader.is_traffic_route_arrived(
@@ -490,3 +492,72 @@ static func apply_mid_route_pose(
 		actor.motion.facing = to_target.angle()
 	var travel_speed: float = actor.cruise_speed_cap if speed < 0.0 else speed
 	actor.motion.velocity = Vector2.from_angle(actor.motion.facing) * travel_speed
+
+
+static func bounty_peaceful_inputs(actor, delta: float, _traffic_config: Dictionary) -> Dictionary:
+	if actor.bounty_station == "wander":
+		if (
+			actor.bounty_wander_goal.length_squared() < 1.0
+			or actor.position.distance_to(actor.bounty_wander_goal) <= ARRIVAL_DISTANCE
+		):
+			actor.bounty_wander_goal = _pick_bounty_wander_goal(actor)
+		var use_thrust: bool = actor.bounty_posture != "stealthy"
+		var use_boost: bool = false
+		return steer_toward(actor, actor.bounty_wander_goal, use_thrust, use_boost)
+	var anchor: Vector2 = actor.bounty_spawn_anchor
+	if anchor.length_squared() < 1.0:
+		anchor = actor.position
+	if actor.position.distance_to(anchor) <= 80.0:
+		return _idle_facing_inputs(actor)
+	return steer_toward(actor, anchor, actor.bounty_posture != "stealthy", false)
+
+
+static func bounty_flee_inputs(actor, player_pos: Vector2, _catalog: Catalog) -> Dictionary:
+	if actor.bounty_habitat_flee.length_squared() > 1.0:
+		return steer_toward(actor, actor.bounty_habitat_flee, true, true)
+	var route: String = actor.bounty_flee_route
+	match route:
+		"beacon":
+			if actor.bounty_entry_beacon.length_squared() > 1.0:
+				return steer_toward(actor, actor.bounty_entry_beacon, true, true)
+		"hyperdrive":
+			var outward: Vector2 = actor.position.normalized()
+			if outward.length_squared() < 0.001:
+				outward = Vector2.RIGHT
+			var rim: Vector2 = outward * maxf(4200.0, actor.bounty_play_bounds * 0.78)
+			return steer_toward(actor, rim, true, true)
+		_:
+			var away: Vector2 = (actor.position - player_pos).normalized()
+			if away.length_squared() < 0.001:
+				away = Vector2.from_angle(actor.motion.facing)
+			return steer_toward(actor, actor.position + away * 1200.0, true, true)
+	return steer_toward(actor, actor.position + Vector2.RIGHT * 400.0, true, false)
+
+
+static func _pick_bounty_wander_goal(actor) -> Vector2:
+	var anchor: Vector2 = actor.bounty_spawn_anchor
+	if anchor.length_squared() < 1.0:
+		anchor = actor.position
+	var rng := RandomNumberGenerator.new()
+	rng.seed = absi(str(actor.id).hash())
+	var angle := rng.randf() * TAU
+	var dist := rng.randf_range(240.0, BountyBehavior.WANDER_RADIUS)
+	var candidate: Vector2 = anchor + Vector2.from_angle(angle) * dist
+	if (
+		actor.bounty_entry_beacon.length_squared() > 1.0
+		and candidate.distance_to(actor.bounty_entry_beacon) < 900.0
+	):
+		candidate = anchor + Vector2.from_angle(angle + PI * 0.5) * dist
+	return candidate
+
+
+static func _idle_facing_inputs(actor) -> Dictionary:
+	return {
+		"thrust": false,
+		"reverse": false,
+		"rotate_left": false,
+		"rotate_right": false,
+		"boost": false,
+		"in_flight": true,
+		"fire": false,
+	}

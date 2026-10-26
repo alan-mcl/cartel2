@@ -147,6 +147,15 @@ func tick(
 		else:
 			_touch_stale_detection(actor)
 
+		if actor.role == "bounty":
+			actor.try_bounty_acquire(
+				player_pos,
+				player_signature,
+				player_broadcasting,
+				_traffic_config,
+				player_profile
+			)
+
 		actor.near_lod = actor.has_sim_slot
 
 		actor.tick(

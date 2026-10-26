@@ -21,6 +21,9 @@ static func run(runner: TestRunner) -> void:
 	_test_threat_profile_on_grant(runner, catalog)
 	_test_threat_profile_on_spawn(runner, catalog)
 	_test_harness_seed_pins_contract(runner, catalog)
+	_test_randomised_site_layout(runner, catalog)
+	_test_hidden_behaviour_not_in_description(runner, catalog)
+	_test_off_site_kill_credit(runner, catalog)
 
 
 static func _test_harness_seed_pins_contract(runner: TestRunner, catalog: Catalog) -> void:
@@ -460,6 +463,62 @@ static func _test_threat_profile_on_spawn(runner: TestRunner, catalog: Catalog) 
 	)
 	scaled.begin_combat_pilot()
 	runner.check_eq(int(scaled.combat_pilot.skill), int(CombatPilot.Skill.ELITE), "bounty profile: elite skill")
+
+
+static func _test_randomised_site_layout(runner: TestRunner, catalog: Catalog) -> void:
+	var offer := _sample_offer(catalog, "proxima_habitat", "bounty_layout_a")
+	var params_a := BountyCharters.build_volatile_grant_params(catalog, offer)
+	var setup_a: Dictionary = params_a.get("setup", {})
+	var entry_a: Dictionary = setup_a.get("entry_position", {})
+	var target_a: Dictionary = (setup_a.get("bounty_target", {}) as Dictionary).get("position", {})
+	runner.check(not entry_a.is_empty(), "bounty layout: entry position stored")
+	runner.check(not target_a.is_empty(), "bounty layout: target position stored")
+	var entry_pos := Vector2(float(entry_a.get("x", 0.0)), float(entry_a.get("y", 0.0)))
+	var target_pos := Vector2(float(target_a.get("x", 0.0)), float(target_a.get("y", 0.0)))
+	runner.check(
+		entry_pos.distance_to(target_pos) >= 2000.0,
+		"bounty layout: target separated from entry gate"
+	)
+	var params_b := BountyCharters.build_volatile_grant_params(catalog, offer)
+	var setup_b: Dictionary = params_b.get("setup", {})
+	runner.check_eq(setup_a, setup_b, "bounty layout: same offer id yields same layout")
+
+
+static func _test_hidden_behaviour_not_in_description(runner: TestRunner, catalog: Catalog) -> void:
+	var offer := _sample_offer(catalog, "proxima_habitat", "bounty_hidden")
+	var params := BountyCharters.build_volatile_grant_params(catalog, offer)
+	var setup: Dictionary = params.get("setup", {})
+	var target: Dictionary = setup.get("bounty_target", {})
+	runner.check(not str(target.get("posture", "")).is_empty(), "bounty hidden: posture on target record")
+	runner.check(not str(target.get("resolve", "")).is_empty(), "bounty hidden: resolve on target record")
+	var description := str(offer.get("description", ""))
+	runner.check(
+		description.find("stealthy") < 0 and description.find("oblivious") < 0,
+		"bounty hidden: posture not in board description"
+	)
+
+
+static func _test_off_site_kill_credit(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "BNT-OFFSITE")
+	var target_id := "bounty_vt_offsite"
+	var volatile_sector := VolatileTranslation.sector_id_for("vt_offsite")
+	session.player.set_bounty_contract(target_id, volatile_sector)
+	session.sector_id = "proxima"
+	session.player.record_target_scan(
+		target_id,
+		"bounty_target",
+		volatile_sector,
+		float(session.gst_seconds) + 1.0
+	)
+	runner.check(
+		session.player.scan_satisfies_contract_kinds(
+			target_id,
+			volatile_sector,
+			float(session.gst_seconds),
+			["bounty_target"]
+		),
+		"bounty: kill credits against contract volatile sector while elsewhere"
+	)
 
 
 static func _test_no_sanction_in_volatile(runner: TestRunner, catalog: Catalog) -> void:

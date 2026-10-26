@@ -387,35 +387,69 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 	var template_id := str(offer.get("target_template_id", ""))
 	var affiliation := str(offer.get("target_affiliation", ""))
 	var profile := _threat_profile({"profile": offer.get("threat_profile", {})})
-	var pilot_skill := str(profile.get("pilot_skill", ""))
 	var hull_scale := float(profile.get("hull_scale", 1.0))
+	var play_bounds := 7500.0
+	var rng := BountyBehavior.grant_rng(offer)
+	var layout := BountyBehavior.roll_layout(play_bounds, rng)
+	var entry_pos: Vector2 = layout.get("entry_position", Vector2.ZERO)
+	var target_pos: Vector2 = layout.get("target_position", Vector2.ZERO)
 	var setup := {
-		"play_bounds": 7500.0,
+		"play_bounds": play_bounds,
 		"seed": id_token,
+		"entry_position": {"x": entry_pos.x, "y": entry_pos.y},
 		"bounty_target": {
 			"id": target_id,
 			"template_id": template_id,
 			"callsign": str(offer.get("target_callsign", "")),
 			"affiliation": affiliation,
-			"position": {"x": 3600.0, "y": 800.0},
-			"heading_rad": -0.35,
-			"pilot_skill": pilot_skill,
+			"position": {"x": target_pos.x, "y": target_pos.y},
+			"heading_rad": rng.randf_range(-PI, PI),
 			"hull_scale": hull_scale,
+			"is_named_target": true,
 		},
 	}
+	var escort_positions := BountyBehavior.escort_positions(
+		target_pos,
+		entry_pos,
+		int(profile.get("escort_count", 0)),
+		rng
+	)
 	var escorts := _bounty_escorts(
 		template_id,
 		affiliation,
-		pilot_skill,
 		hull_scale,
-		int(profile.get("escort_count", 0)),
-		id_token
+		id_token,
+		escort_positions,
+		rng
 	)
 	if not escorts.is_empty():
 		setup["bounty_escorts"] = escorts
+	var reserved: Array = [entry_pos, target_pos]
+	for escort_pos in escort_positions:
+		reserved.append(escort_pos)
 	var site_id := str(offer.get("volatile_site_id", "")).strip_edges()
 	if not site_id.is_empty():
-		VolatileSites.apply_site_to_setup(setup, catalog.get_volatile_site(site_id), catalog)
+		VolatileSites.apply_site_to_setup(
+			setup,
+			catalog.get_volatile_site(site_id),
+			catalog,
+			rng,
+			reserved
+		)
+	BountyBehavior.apply_hidden_behaviors(catalog, offer, setup, rng)
+	var target_after: Dictionary = setup.get("bounty_target", {})
+	target_after["play_bounds"] = play_bounds
+	setup["bounty_target"] = target_after
+	var escorts_after: Variant = setup.get("bounty_escorts", [])
+	if typeof(escorts_after) == TYPE_ARRAY:
+		for i in range(escorts_after.size()):
+			var escort_variant = escorts_after[i]
+			if typeof(escort_variant) != TYPE_DICTIONARY:
+				continue
+			var escort: Dictionary = escort_variant
+			escort["play_bounds"] = play_bounds
+			escorts_after[i] = escort
+		setup["bounty_escorts"] = escorts_after
 	var lump := VolatileTranslation.default_lump_seconds()
 	var entry_seconds := float(cfg.get("volatile_entry_seconds", lump))
 	var exit_seconds := float(cfg.get("volatile_exit_seconds", lump))
@@ -439,26 +473,27 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 static func _bounty_escorts(
 	template_id: String,
 	affiliation: String,
-	pilot_skill: String,
 	hull_scale: float,
-	escort_count: int,
-	id_token: String
+	id_token: String,
+	positions: Array,
+	rng: RandomNumberGenerator
 ) -> Array:
 	var escorts: Array = []
-	if template_id.is_empty() or escort_count <= 0:
+	if template_id.is_empty() or positions.is_empty():
 		return escorts
-	var origin := Vector2(3600.0, 800.0)
-	for index in escort_count:
-		var angle := TAU * float(index) / float(escort_count)
-		var pos := origin + Vector2.from_angle(angle) * 480.0
+	for index in range(positions.size()):
+		var pos_variant = positions[index]
+		if typeof(pos_variant) != TYPE_VECTOR2:
+			continue
+		var pos: Vector2 = pos_variant
 		escorts.append({
 			"id": "bounty_escort_%d_%s" % [index, id_token],
 			"template_id": template_id,
 			"affiliation": affiliation,
 			"position": {"x": pos.x, "y": pos.y},
-			"heading_rad": angle,
-			"pilot_skill": pilot_skill,
+			"heading_rad": rng.randf_range(-PI, PI),
 			"hull_scale": hull_scale,
+			"is_named_target": false,
 		})
 	return escorts
 

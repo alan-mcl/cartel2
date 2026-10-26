@@ -61,29 +61,19 @@ static func _valid_shooter(shooter: Variant) -> Variant:
 static func _maybe_record_bounty_target_destroyed(session: GameSession, collider: Object) -> void:
 	if session == null or collider == null:
 		return
-	if not VolatileTranslation.is_volatile_sector_id(session.sector_id):
-		return
-	var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
-	if record.is_empty():
-		return
-	var setup: Variant = record.get("setup", {})
-	if typeof(setup) != TYPE_DICTIONARY:
-		return
-	var bounty_target: Variant = setup.get("bounty_target", {})
-	if typeof(bounty_target) != TYPE_DICTIONARY:
-		return
-	var target_id := str(bounty_target.get("id", ""))
-	if target_id.is_empty():
-		return
 	var actor = _bounty_actor_from_collider(collider)
 	if actor == null:
 		return
-	if str(actor.get("id")) != target_id:
+	var target_id := str(actor.get("id"))
+	if target_id.is_empty():
+		return
+	var sector_id := _bounty_record_sector(session, target_id)
+	if sector_id.is_empty():
 		return
 	session.player.record_target_scan(
 		target_id,
 		"bounty_target",
-		session.sector_id,
+		sector_id,
 		float(session.gst_seconds)
 	)
 	session.changed.emit()
@@ -92,24 +82,11 @@ static func _maybe_record_bounty_target_destroyed(session: GameSession, collider
 static func _maybe_record_bounty_target_disabled(session: GameSession, collider: Object) -> void:
 	if session == null or collider == null:
 		return
-	if not VolatileTranslation.is_volatile_sector_id(session.sector_id):
-		return
-	var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
-	if record.is_empty():
-		return
-	var setup: Variant = record.get("setup", {})
-	if typeof(setup) != TYPE_DICTIONARY:
-		return
-	var bounty_target: Variant = setup.get("bounty_target", {})
-	if typeof(bounty_target) != TYPE_DICTIONARY:
-		return
-	var target_id := str(bounty_target.get("id", ""))
-	if target_id.is_empty():
-		return
 	var actor = _bounty_actor_from_collider(collider)
 	if actor == null:
 		return
-	if str(actor.get("id")) != target_id:
+	var target_id := str(actor.get("id"))
+	if target_id.is_empty():
 		return
 	if float(actor.get("hull_current")) <= 0.0:
 		return
@@ -125,13 +102,36 @@ static func _maybe_record_bounty_target_disabled(session: GameSession, collider:
 		return
 	if session.player.has_contact_record(target_id, "bounty_target"):
 		return
+	var sector_id := _bounty_record_sector(session, target_id)
+	if sector_id.is_empty():
+		return
 	session.player.record_target_scan(
 		target_id,
 		"bounty_disabled",
-		session.sector_id,
+		sector_id,
 		float(session.gst_seconds)
 	)
 	session.changed.emit()
+
+
+static func _bounty_record_sector(session: GameSession, target_id: String) -> String:
+	var contracted := session.player.bounty_contract_sector(target_id)
+	if not contracted.is_empty():
+		return contracted
+	if not VolatileTranslation.is_volatile_sector_id(session.sector_id):
+		return ""
+	var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
+	if record.is_empty():
+		return ""
+	var setup: Variant = record.get("setup", {})
+	if typeof(setup) != TYPE_DICTIONARY:
+		return ""
+	var bounty_target: Variant = setup.get("bounty_target", {})
+	if typeof(bounty_target) != TYPE_DICTIONARY:
+		return ""
+	if str(bounty_target.get("id", "")) != target_id:
+		return ""
+	return session.sector_id
 
 
 static func _bounty_actor_from_collider(collider: Object) -> Variant:

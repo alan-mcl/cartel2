@@ -20,6 +20,8 @@ var spare_parts: Dictionary = {}
 var translation_library: Array = []
 ## One-shot expiring translations to generated off-network sites (`VolatileTranslation` records).
 var volatile_translations: Array = []
+## Active bounty contracts: target contact id -> volatile sector id for kill/disable credit.
+var bounty_contract_sectors: Dictionary = {}
 
 
 func player_to_dict() -> Dictionary:
@@ -92,6 +94,7 @@ func to_session_dict() -> Dictionary:
 		"spare_parts": spare_parts.duplicate(),
 		"translation_library": _translation_library_to_save(translation_library),
 		"volatile_translations": VolatileTranslation.to_save_array(volatile_translations),
+		"bounty_contract_sectors": bounty_contract_sectors.duplicate(),
 	}
 
 
@@ -104,6 +107,7 @@ func load_session_dict(data: Dictionary) -> void:
 	spare_parts = _int_dict_from_variant(data.get("spare_parts", {}))
 	translation_library = _translation_library_from_variant(data.get("translation_library", []))
 	volatile_translations = VolatileTranslation.from_save_array(data.get("volatile_translations", []))
+	bounty_contract_sectors = _string_dict_from_variant(data.get("bounty_contract_sectors", {}))
 
 
 func is_salvaged(interactable_id: String) -> bool:
@@ -154,6 +158,22 @@ func scan_satisfies_contract_kinds(
 				continue
 		return true
 	return false
+
+
+func set_bounty_contract(target_id: String, volatile_sector_id: String) -> void:
+	if target_id.is_empty() or volatile_sector_id.is_empty():
+		return
+	bounty_contract_sectors[target_id] = volatile_sector_id
+
+
+func clear_bounty_contract(target_id: String) -> void:
+	if target_id.is_empty():
+		return
+	bounty_contract_sectors.erase(target_id)
+
+
+func bounty_contract_sector(target_id: String) -> String:
+	return str(bounty_contract_sectors.get(target_id, ""))
 
 
 func has_contact_record(contact_id: String, contact_kind: String) -> bool:
@@ -251,6 +271,15 @@ static func _int_dict_from_variant(value: Variant) -> Dictionary:
 		return result
 	for key in value.keys():
 		result[str(key)] = int(value[key])
+	return result
+
+
+static func _string_dict_from_variant(value: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if typeof(value) != TYPE_DICTIONARY:
+		return result
+	for key in value.keys():
+		result[str(key)] = str(value[key])
 	return result
 
 

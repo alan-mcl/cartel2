@@ -134,8 +134,13 @@ func _load_volatile_sector(
 	var play_bounds := VolatileTranslation.play_bounds_for(record)
 	_spawn_dust_ring(world_root, play_bounds)
 
-	_gate_radius = 5400.0
-	_gate_angle = _gate_angle_for_sector(sector_id)
+	var entry_pos := _entry_position_from_setup(setup)
+	if entry_pos.length_squared() > 1.0:
+		_gate_radius = entry_pos.length()
+		_gate_angle = entry_pos.angle()
+	else:
+		_gate_radius = 5400.0
+		_gate_angle = _gate_angle_for_sector(sector_id)
 
 	_volatile_star_setup = {}
 	var star_raw: Variant = setup.get("star", null)
@@ -159,6 +164,8 @@ func _load_volatile_sector(
 			"label": "Temporary return gate",
 			"interactable": "volatile_return_gate",
 		}
+		if entry_pos.length_squared() > 1.0:
+			gate_entity["position"] = {"x": entry_pos.x, "y": entry_pos.y}
 		_spawn_sector_jump_gate(world_root, gate_entity, catalog, session, sector_id)
 
 	var entities: Variant = setup.get("entities", [])
@@ -192,7 +199,8 @@ func _spawn_volatile_star(
 	var rng := RandomNumberGenerator.new()
 	var seed_text := "%s:%d:%s" % [str(setup.get("seed", seed_key)), run_seed, seed_key]
 	rng.seed = absi(seed_text.hash())
-	var ref_pos := Vector2(_gate_radius * 0.35, 0.0)
+	var entry_pos := _entry_position_from_setup(setup)
+	var ref_pos := entry_pos if entry_pos.length_squared() > 1.0 else Vector2(_gate_radius * 0.35, 0.0)
 	var star_pos := _pick_star_position(rng, ref_pos)
 
 	var star := LocalStarScript.new()
@@ -702,10 +710,17 @@ func _spawn_translate_structure(
 
 	var entity := structure_data.duplicate()
 	entity["kind"] = "jump_gate"
-	entity["position"] = {
-		"x": cos(_gate_angle) * gate_radius,
-		"y": sin(_gate_angle) * gate_radius,
-	}
+	var preset_pos: Variant = entity.get("position", {})
+	if typeof(preset_pos) != TYPE_DICTIONARY or preset_pos.is_empty():
+		entity["position"] = {
+			"x": cos(_gate_angle) * gate_radius,
+			"y": sin(_gate_angle) * gate_radius,
+		}
+	else:
+		var pos_dict: Dictionary = preset_pos
+		var gate_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+		_gate_radius = gate_pos.length()
+		_gate_angle = gate_pos.angle()
 
 	var instance := _spawn_entity(world_root, entity, catalog, session)
 	if is_beacon and instance is Node2D:
@@ -793,6 +808,14 @@ func _spawn_entity(
 				instance.call("configure", entity, catalog, session)
 
 	return instance
+
+
+func _entry_position_from_setup(setup: Dictionary) -> Vector2:
+	var raw: Variant = setup.get("entry_position", {})
+	if typeof(raw) != TYPE_DICTIONARY:
+		return Vector2.ZERO
+	var dict: Dictionary = raw
+	return Vector2(float(dict.get("x", 0.0)), float(dict.get("y", 0.0)))
 
 
 func _configure_debris(instance: Node2D, entity: Dictionary) -> void:

@@ -4,22 +4,11 @@ Open work only. Nothing here is approved until it is picked up. Status stays **D
 
 What the code does today: [architecture.md](architecture.md). What is explicitly not built: [architecture.md](architecture.md#not-yet-implemented).
 
-## D-1 Reactor fuel, traded fuel, and per-chemistry tanks
+| ID | Area | Sev | Desc |
+|----|------|-----|------|
+|B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
+|B2| UI | med | Leaderboard: "Tonnes" should say Freight, Career Time should be in in-game GST rather than player-time.
+|B3| gameplay | high | Freight + commodities can over-fill the hold
+|B4| UI | high | Shipyard UI: buying a module doesn't reflect at once (shows x0 still) and it can't be installed until you tram away then back
 
-**Status:** Discuss. **Severity:** Medium.
 
-Propulsion fuel is implemented. Reaction engines store typed fuel on `OwnedShip.fuels`. Each propulsion SKU has a built-in bunker (`fuel_capacity`) plus untyped `category: fuel` tank addons. Habitat prices live in `data/catalog/fuels.json` and roll per sector and GST day (`FuelEconomy`). Gravitic drives and integrated sails consume no propulsion fuel.
-
-**Still open:** exchange-traded fuel commodities, per-chemistry tank SKUs, and reactor fuel for fission and fusion plants.
-
-**Do not:** invent a second propulsion-fuel model beside `FuelEconomy`.
-
-## D-2 Gravitic range
-
-**Status:** Discuss. **Severity:** Low.
-
-Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON SK. Local field coupling is implemented: thrust scales with ambient gravity, and unspace gives only a weak fluctuating acceleration. Six `integrated_sail` workshop SKUs exist. No ship template defaults to a sail.
-
-**Still open:** independent gravitic hyper-travel range and any gravitic-specific fuel rules.
-
-**Do not:** enable deeper unspace layouts as a side effect of touching sails or gravitic thrust.

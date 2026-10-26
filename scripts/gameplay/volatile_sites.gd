@@ -116,7 +116,8 @@ static func apply_site_to_setup(
 	setup: Dictionary,
 	site: Dictionary,
 	catalog: Catalog,
-	rng: RandomNumberGenerator = null
+	rng: RandomNumberGenerator = null,
+	reserved_positions: Array = []
 ) -> void:
 	if site.is_empty():
 		return
@@ -127,7 +128,7 @@ static func apply_site_to_setup(
 		roller = RandomNumberGenerator.new()
 		roller.randomize()
 	var play_bounds := float(setup.get("play_bounds", 7500.0))
-	var layout := generate_site_layout(site, catalog, roller, play_bounds)
+	var layout := generate_site_layout(site, catalog, roller, play_bounds, reserved_positions)
 	_merge_entities(setup, layout.get("entities", []))
 	_merge_ambient_ships(setup, layout.get("ambient_ships", []))
 
@@ -136,7 +137,8 @@ static func generate_site_layout(
 	site: Dictionary,
 	catalog: Catalog,
 	rng: RandomNumberGenerator,
-	play_bounds: float = 7500.0
+	play_bounds: float = 7500.0,
+	reserved_positions: Array = []
 ) -> Dictionary:
 	var entities: Array = []
 	var ambient_ships: Array = []
@@ -144,6 +146,12 @@ static func generate_site_layout(
 	if typeof(objects) != TYPE_ARRAY or rng == null or catalog == null:
 		return {"entities": entities, "ambient_ships": ambient_ships}
 	var placed: Array[Vector2] = []
+	for reserved_variant in reserved_positions:
+		if typeof(reserved_variant) == TYPE_VECTOR2:
+			placed.append(reserved_variant)
+		elif typeof(reserved_variant) == TYPE_DICTIONARY:
+			var dict: Dictionary = reserved_variant
+			placed.append(Vector2(float(dict.get("x", 0.0)), float(dict.get("y", 0.0))))
 	var max_radius := minf(PLACE_MAX_RADIUS, maxf(play_bounds * 0.82, PLACE_MIN_RADIUS))
 	for entry_variant in objects:
 		if typeof(entry_variant) != TYPE_DICTIONARY:

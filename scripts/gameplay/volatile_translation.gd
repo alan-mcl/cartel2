@@ -731,6 +731,9 @@ static func _setup_to_save(setup: Variant) -> Dictionary:
 		out["play_bounds"] = float(src.get("play_bounds", 8000.0))
 	if src.has("seed"):
 		out["seed"] = str(src.get("seed", ""))
+	var entry_position: Variant = src.get("entry_position", {})
+	if typeof(entry_position) == TYPE_DICTIONARY and not entry_position.is_empty():
+		out["entry_position"] = entry_position.duplicate(true)
 	var star: Variant = src.get("star", {})
 	if typeof(star) == TYPE_DICTIONARY and not star.is_empty():
 		out["star"] = star.duplicate(true)

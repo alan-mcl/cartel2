@@ -117,6 +117,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			)
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog)
+			_tick_bounty_pursuit_traffic(delta, physics_frame)
 
 	var contacts := _collect_nav_contacts()
 	var nav_radius: float = _main.play_bounds
@@ -413,6 +414,7 @@ func _tick_volatile_site_traffic(delta: float, physics_frame: int) -> void:
 	)
 	if _traffic_view != null:
 		_traffic_view.sync(_traffic_director.actors, _catalog)
+	_process_bounty_escapes()
 
 
 func _ensure_traffic_director() -> void:
@@ -432,6 +434,118 @@ static func _filter_topology_contacts(contacts: Array) -> Array:
 			continue
 		filtered.append(contact)
 	return filtered
+
+
+func _missions() -> MissionSubsystem:
+	if _main == null or not _main.has_method("get_simulation"):
+		return null
+	var sim: Simulation = _main.get_simulation()
+	if sim == null:
+		return null
+	return sim.get_subsystem("missions") as MissionSubsystem
+
+
+func _process_bounty_escapes() -> void:
+	if _traffic_director == null:
+		return
+	var missions := _missions()
+	if missions == null:
+		return
+	var kept: Array = []
+	for actor_variant in _traffic_director.actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if not actor.bounty_pending_escape.is_empty():
+			missions.notify_bounty_ship_escaped(
+				_main.session,
+				_catalog,
+				str(actor.id),
+				bool(actor.bounty_is_named_target),
+				str(actor.bounty_pending_escape)
+			)
+			actor.bounty_pending_escape = ""
+			actor.bounty_remove_after_tick = true
+		if actor.bounty_remove_after_tick:
+			continue
+		kept.append(actor)
+	_traffic_director.actors = kept
+
+
+func _tick_bounty_pursuit_traffic(delta: float, physics_frame: int) -> void:
+	if (
+		_main.session.in_unspace
+		or VolatileTranslation.is_volatile_sector_id(_main.session.sector_id)
+	):
+		return
+	_ensure_traffic_director()
+	if _traffic_director == null:
+		return
+	var missions := _missions()
+	if missions == null:
+		return
+	var charter := missions.pursuit_charter_for_spawn(_main.session)
+	if not charter.is_empty():
+		_spawn_bounty_pursuit_actor(charter, missions)
+	_check_pursuit_habitat_arrival(missions)
+	_purge_removed_bounty_actors()
+
+
+func _spawn_bounty_pursuit_actor(charter: Dictionary, missions: MissionSubsystem) -> void:
+	var record := missions.build_pursuit_target_record(_main.session, charter)
+	if record.is_empty():
+		return
+	var traffic_config := _catalog.get_traffic_config()
+	var spawn_pos := _world_loader.get_jump_gate_approach_position()
+	record["position"] = {"x": spawn_pos.x, "y": spawn_pos.y}
+	record["heading_rad"] = 0.0
+	var actor = TrafficSpawnScript.create_from_bounty_target(
+		_catalog,
+		traffic_config,
+		record,
+		_main.session.sector_id
+	)
+	if actor == null:
+		return
+	actor.begin_bounty_flee(traffic_config)
+	actor.bounty_habitat_flee = _world_loader.get_habitat_world_position()
+	actor.bounty_is_named_target = true
+	actor.has_sim_slot = true
+	actor.near_lod = true
+	missions.mark_pursuit_spawned(str(charter.get("charter_id", "")))
+	_traffic_director.actors.append(actor)
+
+
+func _check_pursuit_habitat_arrival(missions: MissionSubsystem) -> void:
+	if missions == null or _traffic_director == null:
+		return
+	var habitat_pos := _world_loader.get_habitat_world_position()
+	if habitat_pos.length_squared() < 1.0:
+		return
+	for actor_variant in _traffic_director.actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if actor.bounty_habitat_flee.length_squared() < 1.0:
+			continue
+		if actor.position.distance_to(habitat_pos) > 220.0:
+			continue
+		missions.notify_bounty_pursuit_docked(_main.session, _catalog, str(actor.id))
+		actor.bounty_remove_after_tick = true
+
+
+func _purge_removed_bounty_actors() -> void:
+	if _traffic_director == null:
+		return
+	var kept: Array = []
+	for actor_variant in _traffic_director.actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if actor.bounty_remove_after_tick:
+			continue
+		kept.append(actor)
+	_traffic_director.actors = kept
 
 
 static func active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:

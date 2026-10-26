@@ -81,9 +81,29 @@ static func create_from_bounty_target(
 	var affiliation := str(bounty_target.get("affiliation", ""))
 	if not affiliation.is_empty():
 		actor.affiliation = affiliation
-	actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
 	actor.role = "bounty"
+	actor.bounty_spawn_anchor = spawn_pos
+	actor.loiter_center = spawn_pos
 	actor.bounty_pilot_skill = str(bounty_target.get("pilot_skill", ""))
+	actor.bounty_posture = str(bounty_target.get("posture", "aggressive"))
+	actor.bounty_resolve = str(bounty_target.get("resolve", "fight"))
+	actor.bounty_station = str(bounty_target.get("station", "hold"))
+	actor.bounty_flee_route = str(bounty_target.get("flee_route", "beacon"))
+	actor.bounty_is_named_target = bool(bounty_target.get("is_named_target", false))
+	var beacon_raw: Variant = bounty_target.get("entry_beacon", {})
+	if typeof(beacon_raw) == TYPE_DICTIONARY:
+		var beacon: Dictionary = beacon_raw
+		actor.bounty_entry_beacon = Vector2(
+			float(beacon.get("x", 0.0)),
+			float(beacon.get("y", 0.0))
+		)
+	actor.bounty_play_bounds = float(bounty_target.get("play_bounds", 7500.0))
+	if actor.owned_ship != null:
+		actor.owned_ship.transponder_enabled = bool(bounty_target.get("transponder", true))
+	if actor.bounty_resolve == "fight":
+		actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
+	else:
+		actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 	var hull_scale := float(bounty_target.get("hull_scale", 1.0))
 	if hull_scale > 0.0 and not is_equal_approx(hull_scale, 1.0):
 		actor.hull_max *= hull_scale

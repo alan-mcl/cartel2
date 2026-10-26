@@ -74,6 +74,19 @@ var sim
 var ai_state: AiState = AiState.TRAFFIC
 var combat_attitude: CombatAttitude = CombatAttitude.STANDARD
 var bounty_pilot_skill: String = ""
+var bounty_posture: String = ""
+var bounty_resolve: String = ""
+var bounty_station: String = ""
+var bounty_flee_route: String = ""
+var bounty_is_named_target: bool = false
+var bounty_entry_beacon: Vector2 = Vector2.ZERO
+var bounty_play_bounds: float = 7500.0
+var bounty_spawn_anchor: Vector2 = Vector2.ZERO
+var bounty_wander_goal: Vector2 = Vector2.ZERO
+var bounty_provoked: bool = false
+var bounty_pending_escape: String = ""
+var bounty_remove_after_tick: bool = false
+var bounty_habitat_flee: Vector2 = Vector2.ZERO
 var hull_current: float = 0.0
 var hull_max: float = 0.0
 var combat_state: ShipCombatState
@@ -108,6 +121,7 @@ var _cached_broadcasting: bool = false
 var _cached_player_contact: Dictionary = {}
 var _combat_weapon_profile: Dictionary = {}
 var _weapon_profile_dirty: bool = true
+var _bound_catalog: Catalog = null
 var _ai_inputs: Dictionary = {
 	"thrust": false,
 	"reverse": false,
@@ -177,7 +191,10 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 		result["destroyed"] = true
 		return result
 
-	if ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
+	if role == "bounty" and (ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING):
+		bounty_provoked = true
+		_bounty_commit_after_notice(traffic_config)
+	elif ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
 		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or should_engage(traffic_config):
 			ai_state = AiState.ENGAGE
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
@@ -188,8 +205,17 @@ func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config:
 
 
 func begin_flee(traffic_config: Dictionary) -> void:
+	if role == "bounty":
+		begin_bounty_flee(traffic_config)
+		return
 	ai_state = AiState.FLEE
 	flee_timer = float(traffic_config.get("flee_timeout_seconds", 20.0))
+	flee_anchor_id = ""
+
+
+func begin_bounty_flee(_traffic_config: Dictionary) -> void:
+	ai_state = AiState.FLEE
+	flee_timer = 9999.0
 	flee_anchor_id = ""
 
 
@@ -264,6 +290,10 @@ func tick(
 	if ai_state == AiState.DESTROYED:
 		return
 
+	if bounty_remove_after_tick:
+		return
+
+	_bound_catalog = catalog
 	var prev_position := position
 
 	init_route_from_anchors(anchors, traffic_config)
@@ -283,6 +313,7 @@ func tick(
 			prev_position,
 			world
 		)
+		_tick_bounty_escape(catalog, traffic_config)
 		return
 
 	_tick_full_sim(
@@ -299,6 +330,7 @@ func tick(
 		prev_position,
 		world
 	)
+	_tick_bounty_escape(catalog, traffic_config)
 
 
 func _ensure_sim(catalog: Catalog) -> void:
@@ -355,6 +387,14 @@ func _tick_full_sim(
 
 	sim.tick_shields(combat_state, delta)
 	sim.step_operating(delta, inputs, 1, combat_state)
+	if role == "bounty":
+		if operating_state.active_systems.is_empty():
+			operating_state.active_systems = {}
+		operating_state.active_systems["active_sensors"] = (
+			bounty_posture == "aggressive"
+			or ai_state == AiState.ENGAGE
+			or ai_state == AiState.FLEE
+		)
 	sim.refresh_signature(delta)
 	sim.refresh_stats(ShipSimCore.StatsCadence.INTERVAL)
 
@@ -385,6 +425,10 @@ func _tick_full_sim(
 	_position += motion.velocity * delta
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
+	if role == "bounty" and ai_state == AiState.ENGAGE and bounty_resolve == "flee" and bounty_posture == "aggressive":
+		var hull_ratio := hull_current / maxf(hull_max, 1.0)
+		if hull_ratio <= 0.45:
+			begin_bounty_flee(traffic_config)
 	TrafficRouting.check_route_arrival(
 		self, traffic_config, world_loader, prev_position, anchors, traffic_envelope
 	)
@@ -434,7 +478,14 @@ func _tick_kinematic(
 	operating_state.active_systems["engine"] = motion.is_thrusting()
 	operating_state.active_systems["weapons"] = bool(inputs.get("fire", false))
 	operating_state.active_systems["sensors"] = true
-	operating_state.active_systems["active_sensors"] = true
+	var bounty_sensors := true
+	if role == "bounty":
+		bounty_sensors = (
+			bounty_posture == "aggressive"
+			or ai_state == AiState.ENGAGE
+			or ai_state == AiState.FLEE
+		)
+	operating_state.active_systems["active_sensors"] = bounty_sensors
 	operating_state.active_systems["transponder"] = operating_state.transponder_broadcasting
 
 	if sim != null:
@@ -592,20 +643,25 @@ func _build_ai_inputs(
 				"profile": _combat_weapon_profile,
 			}))
 		AiState.FLEE:
-			flee_anchor_id = "habitat"
-			var flee_target := TrafficRouting.find_anchor_position(anchors, flee_anchor_id)
-			if flee_target.length_squared() < 1.0:
-				flee_anchor_id = "jump_gate"
-				flee_target = TrafficRouting.find_anchor_position(anchors, flee_anchor_id)
-			var away := (position - _combat_target_pos(player_pos)).normalized()
-			if away.length_squared() < 0.001:
-				away = Vector2.from_angle(motion.facing)
-			var flee_point := position + away * 800.0
-			if flee_target.length_squared() > 1.0:
-				flee_point = flee_target
+			if role == "bounty":
+				_copy_ai_inputs_from(
+					TrafficRouting.bounty_flee_inputs(self, player_pos, _bound_catalog)
+				)
 			else:
-				flee_anchor_id = ""
-			_copy_ai_inputs_from(TrafficRouting.steer_toward(self, flee_point, true, true))
+				flee_anchor_id = "habitat"
+				var flee_target := TrafficRouting.find_anchor_position(anchors, flee_anchor_id)
+				if flee_target.length_squared() < 1.0:
+					flee_anchor_id = "jump_gate"
+					flee_target = TrafficRouting.find_anchor_position(anchors, flee_anchor_id)
+				var away := (position - _combat_target_pos(player_pos)).normalized()
+				if away.length_squared() < 0.001:
+					away = Vector2.from_angle(motion.facing)
+				var flee_point := position + away * 800.0
+				if flee_target.length_squared() > 1.0:
+					flee_point = flee_target
+				else:
+					flee_anchor_id = ""
+				_copy_ai_inputs_from(TrafficRouting.steer_toward(self, flee_point, true, true))
 		AiState.DOCKING:
 			_copy_ai_inputs_from(
 				TrafficRouting.steer_toward(
@@ -613,7 +669,11 @@ func _build_ai_inputs(
 				)
 			)
 		_:
-			if not anchors.is_empty():
+			if role == "bounty":
+				_copy_ai_inputs_from(
+					TrafficRouting.bounty_peaceful_inputs(self, delta, traffic_config)
+				)
+			elif not anchors.is_empty():
 				_copy_ai_inputs_from(
 					TrafficRouting.traffic_inputs(
 						self, delta, anchors, traffic_config, traffic_envelope
@@ -644,7 +704,104 @@ func _can_fire_at(player_pos: Vector2) -> bool:
 	return angle_diff < 0.35
 
 
+func try_bounty_acquire(
+	player_pos: Vector2,
+	player_signature: Dictionary,
+	player_broadcasting: bool,
+	traffic_config: Dictionary,
+	observer_profile: Dictionary
+) -> void:
+	if role != "bounty" or ai_state != AiState.TRAFFIC:
+		return
+	if not _bounty_player_noticeable(
+		player_pos,
+		player_signature,
+		player_broadcasting,
+		traffic_config,
+		observer_profile
+	):
+		return
+	_bounty_commit_after_notice(traffic_config)
+
+
+func take_pending_escape() -> Dictionary:
+	if bounty_pending_escape.is_empty():
+		return {}
+	var out := {
+		"route": bounty_pending_escape,
+		"named_target": bounty_is_named_target,
+		"actor_id": id,
+	}
+	bounty_pending_escape = ""
+	bounty_remove_after_tick = true
+	return out
+
+
+func _bounty_commit_after_notice(traffic_config: Dictionary) -> void:
+	if bounty_resolve == "fight" or (
+		bounty_resolve == "flee" and bounty_posture == "aggressive" and should_engage(traffic_config)
+	):
+		ai_state = AiState.ENGAGE
+		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH:
+			engage_timer = 9999.0
+		else:
+			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
+		begin_combat_pilot()
+	elif bounty_resolve == "flee":
+		begin_bounty_flee(traffic_config)
+
+
+func _bounty_player_noticeable(
+	player_pos: Vector2,
+	player_signature: Dictionary,
+	player_broadcasting: bool,
+	traffic_config: Dictionary,
+	observer_profile: Dictionary
+) -> bool:
+	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
+	var distance := position.distance_to(player_pos)
+	if bounty_provoked or distance <= visual_radius:
+		return true
+	if bounty_posture == "oblivious":
+		return false
+	if bounty_posture == "stealthy" and distance > BountyBehavior.STEALTHY_COMMIT_RANGE:
+		return false
+	if assembled_ship == null:
+		return false
+	var npc_effectiveness := SensorSystem.sensor_effectiveness(assembled_ship, operating_state)
+	var npc_profile := SensorSystem.tick_observer_profile(assembled_ship, npc_effectiveness)
+	return SensorSystem.is_detected(
+		distance,
+		player_signature,
+		player_broadcasting,
+		npc_profile,
+		visual_radius
+	)
+
+
+func _tick_bounty_escape(catalog: Catalog, traffic_config: Dictionary) -> void:
+	if role != "bounty" or ai_state != AiState.FLEE or not bounty_pending_escape.is_empty():
+		return
+	var route := bounty_flee_route
+	if route.is_empty():
+		return
+	match route:
+		"deep_space":
+			var limit := bounty_play_bounds + BountyBehavior.DEEP_SPACE_MARGIN
+			if position.length() >= limit:
+				bounty_pending_escape = route
+		"beacon":
+			if bounty_entry_beacon.length_squared() > 1.0 and position.distance_to(bounty_entry_beacon) <= 320.0:
+				bounty_pending_escape = route
+		"hyperdrive":
+			var min_dist := maxf(3200.0, bounty_play_bounds * 0.72)
+			if position.length() >= min_dist:
+				bounty_pending_escape = route
+
+
 func _handle_combat_timeout(delta: float, player_pos: Vector2, _traffic_config: Dictionary) -> void:
+	if role == "bounty" and combat_attitude == CombatAttitude.FIGHT_TO_DEATH:
+		return
 	if combat_attitude == CombatAttitude.FIGHT_TO_DEATH:
 		return
 	if ai_state == AiState.ENGAGE:
