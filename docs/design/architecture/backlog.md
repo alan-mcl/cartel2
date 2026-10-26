@@ -9,6 +9,5 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
 |B2| UI | med | Leaderboard: "Tonnes" should say Freight, Career Time should be in in-game GST rather than player-time.
 |B3| gameplay | high | Freight + commodities can over-fill the hold
-|B4| UI | high | Shipyard UI: buying a module doesn't reflect at once (shows x0 still) and it can't be installed until you tram away then back
 
 

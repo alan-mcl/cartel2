@@ -58,6 +58,11 @@ func set_selected_state(is_selected: bool) -> void:
 	_apply_labels_if_ready()
 
 
+func set_spare_count(count: int) -> void:
+	spare_count = maxi(0, count)
+	_apply_labels_if_ready()
+
+
 func _apply_labels(name_text: String, cost: int, spare: int, is_selected: bool) -> void:
 	if _module_icon:
 		ModuleIcons.configure_texture_rect(_module_icon, category_text)

@@ -179,8 +179,23 @@ func _soft_refresh() -> void:
 		_credits.text = "Credits: d%d" % _context.session.credits
 	_sync_log()
 	_sync_ship_list_labels()
+	_sync_stock_spare_counts()
 	_rebuild_ship_detail()
 	_update_actions()
+
+
+func _sync_stock_spare_counts() -> void:
+	if _sandbox or _stock_tabs == null or _context == null:
+		return
+	for tab_index in range(_stock_tabs.get_tab_count()):
+		var tab_root := _stock_tabs.get_tab_control(tab_index)
+		if tab_root == null:
+			continue
+		_for_each_stock_row(tab_root, func(row: ModuleStockItem) -> void:
+			if row.sandbox_mode:
+				return
+			row.set_spare_count(_context.session.get_spare_part_count(row.module_id))
+		)
 
 
 func _sync_ship_list_labels() -> void:
