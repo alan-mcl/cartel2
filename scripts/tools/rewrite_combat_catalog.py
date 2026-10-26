@@ -1101,17 +1101,12 @@ def write_json(path: Path, data) -> None:
 
 
 def main() -> int:
-    write_json(MODULES / "weapon.json", weapons())
-    write_json(MODULES / "shield.json", shields())
-    write_json(MODULES / "armour.json", armour())
-    write_json(MODULES / "point_defence.json", point_defence())
-    write_json(MODULES / "cyber_defence.json", cyber_defence())
-    write_json(MODULES / "ammunition.json", magazines())
-    write_json(AMMO_PATH, ammunition_types())
-    replace_in_json(SHIPS_PATH)
-    replace_in_json(PLAYER_PATH)
-    print("Combat catalog rewrite complete.")
-    return 0
+    print(
+        "rewrite_combat_catalog.py is retired - combat modules and ammunition "
+        "are hand-authored in data/catalog/. Edit JSON directly.",
+        file=sys.stderr,
+    )
+    return 1
 
 
 if __name__ == "__main__":

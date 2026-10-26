@@ -354,7 +354,7 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | *(sector id)* | corporate_presence | Key matching `sectors.json` |
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
-Regenerate the presence matrix after adding a corporation: `python3 scripts/tools/generate_corporate_presence.py` (then hand-tune if needed).
+After adding a corporation, run `python3 scripts/tools/generate_corporate_presence.py` to insert a presence row for any **new** sector id only; hand-tune weights in `corporate_presence.json`. The script does not rewrite existing sector rows.
 
 ### Passenger charters (`passenger_missions.json`, `MissionSubsystem`)
 
@@ -393,13 +393,13 @@ Daily commodity quotes are computed at runtime by `CommodityEconomy` from `econo
 
 **Sector completeness:** `scripts/tools/validate_sector_completeness.py` (wired into `validate_catalog_refs.py`) checks every `sectors.json` id has a matching world, economy, exactly one habitat (`sector_id`), resolvable buildings, dock/translate interactables linked from the world layout, and at least one route edge. Legacy ids may differ from `{id}_habitat` templates (e.g. `bela_orbital_habitat`, `concordia_habitat` on sector `pelagos`); validation is structural, not string-prefix rules.
 
-**Adding a sector:** `scripts/tools/generate_sector_bundle.py` patches `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, `routes.json`, and one `corporate_presence.json` row from a compact spec. See `scripts/tools/sector_spec.example.json`. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
+**Adding a sector:** Hand-edit `data/catalog/` for day-to-day changes. For a **new** sector id only, `scripts/tools/generate_sector_bundle.py` can insert matching rows across `sectors.json`, `worlds.json`, `economies.json`, `habitats.json`, `buildings.json`, `interactables.json`, `routes.json`, and `corporate_presence.json` from a compact spec (`scripts/tools/sector_spec.example.json`). If the sector id already exists, edit the JSON directly; the bundle tool refuses to replace existing records. New sectors use canonical ids `{id}_habitat`, `{id}_jump_gate`, `{id}_habitat_terminal`, `{id}_exchange`.
 
 `presence_anchors` is a map of corporation id to extra weight. The bundle fills every other corporation from the same floor and jitter as `generate_corporate_presence.py`, then normalises the row so the shares sum to 100. Omit the map for an even floor.
 
 `peacekeeping` is the peaceforce display name. When it is set, the bundle adds `{id}_peaceforce` and the liaison offices `ScanCharters` will post: `2 + (String.hash(sector id) % 4)` corporations, highest share first. A civic habitat that lists `{sector_id}_peaceforce` is a scan habitat; there is no separate habitat table. Leave `peacekeeping` unset for a belt or station sector that should not have those desks.
 
-Corporate headquarters are not part of the bundle. Place those with `scripts/tools/sync_corporate_hqs.py`. `scripts/tools/sync_scan_buildings.gd` only fills missing peacekeeping and liaison records for habitats that already list a peaceforce building.
+Corporate headquarters are not part of the bundle. `scripts/tools/sync_corporate_hqs.py` inserts missing HQ buildings, stations, and interactables from its spec; it does not retitle or relabel records that already exist. `scripts/tools/sync_scan_buildings.gd` only adds missing peacekeeping and liaison building records (and habitat building lists) where a peaceforce is already listed; it saves only when something was added.
 
 Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 

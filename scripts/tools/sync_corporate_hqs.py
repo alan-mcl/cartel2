@@ -97,7 +97,7 @@ ORBITAL_LABELS = {
     ("proxima", "proxima_orbital_4"): "Mercury Communications Headquarters",
     ("fortuna", "fortuna_orbital_1"): "GRC Inc Headquarters",
     ("fortuna", "fortuna_orbital_2"): "The Octagon Headquarters",
-    ("titania", "titania_orbital_1"): "Cult of Apex Headquarters",
+    ("titania", "titania_orbital_1"): "Fellowship of Apex Headquarters",
     ("titania", "titania_orbital_2"): "Chimera Corporation Headquarters",
     ("new_carthage", "new_carthage_orbital_1"): "Crown & Anchor Headquarters",
     ("irasia", "irasia_orbital_1"): "Orion Aerospace Headquarters",
@@ -197,11 +197,14 @@ def make_station_habitat(
     }
 
 
-def add_hq_to_corporations(corporations: list) -> None:
+def add_hq_to_corporations(corporations: list) -> bool:
     by_id = {c["id"]: c for c in corporations}
+    changed = False
     for corp_id, spec in HQ_SPEC.items():
         if corp_id not in by_id:
             raise SystemExit(f"unknown corp {corp_id}")
+        if "hq" in by_id[corp_id]:
+            continue
         placement = spec[0]
         sector_id = spec[1]
         location_id = spec[2] if len(spec) > 2 else None
@@ -209,6 +212,8 @@ def add_hq_to_corporations(corporations: list) -> None:
         if placement != "planet" and location_id:
             hq["location_id"] = location_id
         by_id[corp_id]["hq"] = hq
+        changed = True
+    return changed
 
 
 def main() -> int:
@@ -224,8 +229,17 @@ def main() -> int:
 
     building_by_id = {b["id"]: b for b in buildings}
     habitat_by_id = {h["id"]: h for h in habitats}
+    interactable_ids = {str(i.get("id", "")) for i in interactables if isinstance(i, dict)}
 
-    add_hq_to_corporations(corporations)
+    corps_dirty = add_hq_to_corporations(corporations)
+    buildings_dirty = False
+    habitats_dirty = False
+    interactables_dirty = False
+    worlds_dirty = False
+    sectors_dirty = False
+    routes_dirty = False
+    economies_dirty = False
+    presence_dirty = False
 
     new_buildings: list[dict] = []
     new_habitats: list[dict] = []
@@ -247,20 +261,24 @@ def main() -> int:
             hq_id = sta_hq_id(sta_id)
             dock_id = sta_dock_id(sta_id)
             label = ORBITAL_LABELS.get((sector_id, retitle_id), f"{cname} Headquarters")
-            new_buildings.append(make_terminal(term_id, label.replace(" Headquarters", "")))
-            new_buildings.append(make_corp_office(hq_id, corp_id, cname, headquarters=True))
-            new_habitats.append(
-                make_station_habitat(sta_id, sector_id, label.replace(" Headquarters", ""), term_id, hq_id)
-            )
-            new_interactables.append(
-                {
-                    "id": dock_id,
-                    "title": label,
-                    "inspect_text": f"{label}. Docking lanes are open on transponder.",
-                    "kind": "dock",
-                    "dock_location_id": sta_id,
-                }
-            )
+            station_name = label.replace(" Headquarters", "")
+            if term_id not in building_by_id:
+                new_buildings.append(make_terminal(term_id, station_name))
+            if hq_id not in building_by_id:
+                new_buildings.append(make_corp_office(hq_id, corp_id, cname, headquarters=True))
+            if sta_id not in habitat_by_id:
+                new_habitats.append(make_station_habitat(sta_id, sector_id, station_name, term_id, hq_id))
+            if dock_id not in interactable_ids:
+                new_interactables.append(
+                    {
+                        "id": dock_id,
+                        "title": label,
+                        "inspect_text": f"{label}. Docking lanes are open on transponder.",
+                        "kind": "dock",
+                        "dock_location_id": sta_id,
+                    }
+                )
+                interactable_ids.add(dock_id)
             continue
 
         if placement in ("habitat", "outlying"):
@@ -269,21 +287,19 @@ def main() -> int:
             if hab is None and location_id == "pelagos_belt_habitat":
                 continue
             if retitle_id:
-                b = building_by_id.get(retitle_id)
-                if b is None:
+                if retitle_id not in building_by_id:
                     raise SystemExit(f"missing retitle building {retitle_id}")
-                b["name"] = f"{cname} Headquarters"
-                b["headquarters"] = True
-                b["description"] = f"Corporate headquarters for {cname}."
                 continue
             bid = hq_building_id(corp_id, sector_id)
             if bid not in building_by_id:
                 new_buildings.append(make_corp_office(bid, corp_id, cname, headquarters=True))
             if hab is not None and bid not in hab.get("buildings", []):
                 hab.setdefault("buildings", []).append(bid)
+                habitats_dirty = True
 
     # Pelagos belt sector bundle
     if "pelagos_belt" not in {s["id"] for s in sectors}:
+        sectors_dirty = True
         sectors.append(
             {
                 "id": "pelagos_belt",
@@ -308,6 +324,7 @@ def main() -> int:
         )
 
     if "pelagos_belt" not in worlds:
+        worlds_dirty = True
         worlds["pelagos_belt"] = copy.deepcopy(worlds["regulus_belt"])
         worlds["pelagos_belt"]["translation_beacon"] = {
             "id": "pelagos_belt_beacon_obj",
@@ -330,6 +347,7 @@ def main() -> int:
 
     route_ids = {r["id"] for r in routes}
     if "pelagos_pelagos_belt" not in route_ids:
+        routes_dirty = True
         routes.append(
             {
                 "id": "pelagos_pelagos_belt",
@@ -341,11 +359,13 @@ def main() -> int:
         )
 
     if "pelagos_belt" not in {e["id"] for e in economies}:
+        economies_dirty = True
         belt_econ = copy.deepcopy(next(e for e in economies if e["id"] == "regulus_belt"))
         belt_econ["id"] = "pelagos_belt"
         economies.append(belt_econ)
 
     if "pelagos_belt" not in presence:
+        presence_dirty = True
         belt_pres = copy.deepcopy(presence["regulus_belt"])
         belt_pres["deepspace"] = 18.0
         total = sum(belt_pres.values())
@@ -355,6 +375,7 @@ def main() -> int:
         presence["pelagos_belt"] = belt_pres
 
     if "pelagos_belt_habitat" not in habitat_by_id:
+        habitats_dirty = True
         pel_term = "pelagos_belt_terminal"
         pel_ex = "pelagos_belt_exchange"
         dsc_hq = hq_building_id("deepspace", "pelagos_belt")
@@ -404,8 +425,8 @@ def main() -> int:
                 "type": "habitat",
             }
         )
-        interactable_ids = {i["id"] for i in interactables}
         if "pelagos_belt_habitat" not in interactable_ids:
+            interactables_dirty = True
             new_interactables.extend(
                 [
                     {
@@ -433,6 +454,7 @@ def main() -> int:
     rb = habitat_by_id["regulus_belt_habitat"]
     if atlas_hq not in rb.get("buildings", []):
         rb.setdefault("buildings", []).append(atlas_hq)
+        habitats_dirty = True
 
     # Wire orbital interactables in worlds
     sta_by_orbital: dict[tuple[str, str], str] = {}
@@ -455,28 +477,48 @@ def main() -> int:
             oid = str(orb.get("id", ""))
             key = (sector_id, oid)
             if key in sta_by_orbital:
+                if str(orb.get("interactable", "")).strip():
+                    continue
                 dock_id = sta_by_orbital[key]
-                sta_id = dock_id.removesuffix("_dock")
                 label = ORBITAL_LABELS.get(key, "Corporate Headquarters")
                 orb["label"] = label
                 orb["interactable"] = dock_id
                 orb["kind"] = "orbital"
+                worlds_dirty = True
 
-    buildings.extend(new_buildings)
-    habitats.extend(new_habitats)
-    interactables.extend(new_interactables)
+    if new_buildings:
+        buildings.extend(new_buildings)
+        buildings_dirty = True
+    if new_habitats:
+        habitats.extend(new_habitats)
+        habitats_dirty = True
+    if new_interactables:
+        interactables.extend(new_interactables)
+        interactables_dirty = True
 
-    save_json(CATALOG / "corporations.json", corporations)
-    save_json(CATALOG / "buildings.json", buildings)
-    save_json(CATALOG / "habitats.json", habitats)
-    save_json(CATALOG / "interactables.json", interactables)
-    save_json(CATALOG / "worlds.json", worlds)
-    save_json(CATALOG / "sectors.json", sectors)
-    save_json(CATALOG / "routes.json", routes)
-    save_json(CATALOG / "economies.json", economies)
-    save_json(CATALOG / "corporate_presence.json", presence)
+    if corps_dirty:
+        save_json(CATALOG / "corporations.json", corporations)
+    if buildings_dirty:
+        save_json(CATALOG / "buildings.json", buildings)
+    if habitats_dirty:
+        save_json(CATALOG / "habitats.json", habitats)
+    if interactables_dirty:
+        save_json(CATALOG / "interactables.json", interactables)
+    if worlds_dirty:
+        save_json(CATALOG / "worlds.json", worlds)
+    if sectors_dirty:
+        save_json(CATALOG / "sectors.json", sectors)
+    if routes_dirty:
+        save_json(CATALOG / "routes.json", routes)
+    if economies_dirty:
+        save_json(CATALOG / "economies.json", economies)
+    if presence_dirty:
+        save_json(CATALOG / "corporate_presence.json", presence)
 
-    print(f"Added {len(new_buildings)} buildings, {len(new_habitats)} stations, {len(new_interactables)} interactables.")
+    print(
+        f"Added {len(new_buildings)} buildings, {len(new_habitats)} stations, "
+        f"{len(new_interactables)} interactables."
+    )
     return 0
 
 

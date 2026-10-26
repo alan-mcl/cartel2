@@ -34,7 +34,7 @@ WEAPON_MAKERS = {
     "Andean Consolidated",
     "Terra Nova",
     "Sakuraya Shinise",
-    "Cult of Apex",
+    "Fellowship of Apex",
     "Guangzhou Mercantile",
     "Carthage Mercantile",
     "The Meridian Company",
@@ -59,7 +59,7 @@ ARMOUR_SHIELD_MAKERS = {
     "Terra Nova",
     "Andean Consolidated",
     "Evergreen Group",
-    "Cult of Apex",
+    "Fellowship of Apex",
 }
 
 LEGACY_WEAPON_IDS = {
@@ -477,7 +477,7 @@ def build_extra_weapons() -> list[dict]:
         ("adc", "Andean Consolidated", "Andean", "plasma", "plasma", "light_weapon", None, 0.5, 800, 2200),
         ("tn", "Terra Nova", "Terra Nova", "laser", "beam", "heavy_weapon", {"energy": 28}, 0.9, 1000, 3400),
         ("ss", "Sakuraya Shinise", "Shinise", "laser", "beam", "light_weapon", {"energy": 13}, 2.0, 820, 1400),
-        ("apex", "Cult of Apex", "Apex", "cyber", "cyber", "medium_weapon", {"cyber": 34}, 0.2, 950, 5200),
+        ("apex", "Fellowship of Apex", "Apex", "cyber", "cyber", "medium_weapon", {"cyber": 34}, 0.2, 950, 5200),
         ("gz", "Guangzhou Mercantile", "GZ", "scatter", "ballistic", "medium_weapon", None, 0.4, 650, 2500),
         ("cm", "Carthage Mercantile", "Carthage", "rocket", "ballistic", "light_weapon", None, 0.25, 1300, 2300),
         ("mdc", "The Meridian Company", "Meridian", "missile", "guided", "medium_weapon", None, 0.16, 1700, 3900),
@@ -563,7 +563,7 @@ def build_armour() -> list[dict]:
         ("te", "Tukey Enterprises", "TE", 9, 0.07, 0.05, 0.04, 0.65, 0.9, 480),
         ("adc", "Andean Consolidated", "Andean", 16, 0.11, 0.09, 0.10, 1.0, 1.4, 760),
         ("eg", "Evergreen Group", "Evergreen", 12, 0.08, 0.07, 0.06, 0.8, 1.1, 620),
-        ("apex", "Cult of Apex", "Apex", 8, 0.05, 0.04, 0.18, 0.6, 0.9, 900),
+        ("apex", "Fellowship of Apex", "Apex", 8, 0.05, 0.04, 0.18, 0.6, 0.9, 900),
     ]
     for prefix, maker, brand, hits, kin, con, en, mass, vol, cost in specs:
         if prefix in ("hw", "oc"):
@@ -832,8 +832,8 @@ def patch_ammunition() -> None:
 
 if __name__ == "__main__":
     print(
-        "generate_combat_catalog.py is retired - combat modules are hand-authored. "
-        "Use scripts/tools/rewrite_combat_catalog.py for bulk updates.",
+        "generate_combat_catalog.py is retired - combat modules and ammunition "
+        "are hand-authored in data/catalog/. Edit JSON directly.",
         file=sys.stderr,
     )
     sys.exit(1)

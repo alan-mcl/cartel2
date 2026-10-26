@@ -52,9 +52,9 @@ Mysterious **Ascidians** are luminous natives of Unspace. A few drift through mo
 
 Dozens of megacorporations operate on every settled world, with local strength that varies by planet. 
 
-Many of their origins are Old Earth institutions that outlived the planet. Some are family houses and merchant leagues that never stopped: Sakuraya Shinise from a Japanese tea shop, Four Rivers Zaibatsu, Chettiar's Indo merchant banks, Guangzhou Mercantile, Carthage Mercantile, the Hanseatic Guild, House of Roth, and endowments such as Dar al-Nour. Others are twentieth- and twenty-first-century mergers that swallowed a market and kept going - MicroDonald's consumer monopoly, the Oklahoma Combine, Monday Corporation, SnedeCorp's amalgamation of software houses, ParaRamcoVidia.
+Many of their origins are Old Earth institutions that outlived the planet. Some are family houses and merchant leagues that never stopped: Sakuraya Shinise from a Japanese tea shop, Four Rivers Zaibatsu, Chettiar's Indo merchant banks, Guangzhou Mercantile, Carthage Mercantile, Hanseatic Ltd, House of Roth, and endowments such as Dar al-Nour. Others are twentieth- and twenty-first-century mergers that swallowed a market and kept going - MicroDonald's consumer monopoly, the Oklahoma Combine, Monday Corporation, SnedeCorp's amalgamation of software houses, ParaRamcoVidia.
 
-A smaller set incorporated a criminal or mercenary past and now trades on the same exchanges as the banks. The Himalaya Triad grew out of Tibetan triads; the Pacific Triad out of a Sino-Americano-Hanguk fraternity. Both still run on family obligation, with particular weight on the rim. Galactic Outcomes began by selling mercenaries. The Cult of Apex is a faith that became a corporation after a recovered time capsule. 
+A smaller set incorporated a criminal or mercenary past and now trades on the same exchanges as the banks. The Himalaya Triad grew out of Tibetan triads; the Pacific Triad out of a Sino-Americano-Hanguk fraternity. Both still run on family obligation, with particular weight on the rim. Galactic Outcomes began by selling mercenaries. The Fellowship of Apex is a faith that became a corporation after a recovered time capsule. 
 
 Younger concerns exist too. Some like DeepSpace Co-op and the Orion Spur Company originated in the beginnings of human space travel. Others, Holt-Winters and GRC among them, are still within living memory of their founding and compete with firms centuries older.
 
@@ -91,7 +91,7 @@ System peacekeeping forces exist at all major planets, responsible for maintaini
 
 **Sleepers.** Some people defer death in cryogenic storage. Morrow & Sons, which began in funerary services, also keeps many preservation facilities, memorial habitats, and cemeteries, and manages the business of death and remembrance across human space.
 
-**Time capsules.** Old Earth's last centuries launched capsules of writings, artefacts, and personal effects. Recovery still happens, centuries late, and the finds still move between museums, family offices, and archives under seal. The Cult of Apex grew from one such capsule into a mass faith with corporate institutions.
+**Time capsules.** Old Earth's last centuries launched capsules of writings, artefacts, and personal effects. Recovery still happens, centuries late, and the finds still move between museums, family offices, and archives under seal. The Fellowship of Apex grew from one such capsule into a mass faith with corporate institutions.
 
 **Gambling and resorts.** Karaquazen runs the mega-casinos, the gambling houses, and nearly all planetary lotteries, and quietly much of medical insurance. La Bella Vista is the water-world holiday, with atolls and orbital hotels. Gamblers who have run out of luck are a regular bar fare.
 

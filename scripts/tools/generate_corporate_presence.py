@@ -233,6 +233,10 @@ def main() -> int:
         presence[sector_id] = build_sector_presence(corp_ids, sector_id)
         added += 1
 
+    if added == 0:
+        print(f"OK: corporate_presence.json unchanged ({len(presence)} sectors).")
+        return 0
+
     out_path.write_text(
         json.dumps(presence, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

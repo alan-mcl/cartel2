@@ -351,7 +351,7 @@
 	},
 	{
 		"id": "cult_of_apex",
-		"name": "Cult of Apex",
+		"name": "Fellowship of Apex",
 		"callsign_prefix": "APEX",
 		"ad_voice": "severe",
 		"trade": "The Fellowship of Apex. Join us to thread the needle of infinity.",
@@ -737,10 +737,10 @@
 	},
 	{
 		"id": "hanseatic_guild",
-		"name": "The Hanseatic Guild",
+		"name": "Hanseatic Ltd",
 		"callsign_prefix": "HANS",
 		"ad_voice": "courtly",
-		"trade": "The Hanseatic Guild - mutual credit among trusted houses.",
+		"trade": "Hanseatic Ltd - mutual credit among trusted houses.",
 		"hq": {
 			"placement": "planet",
 			"sector_id": "new_carthage"

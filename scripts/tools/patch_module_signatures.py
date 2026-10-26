@@ -174,29 +174,33 @@ def compute_signature(module: dict) -> dict[str, float]:
     return {key: _clamp(sig[key]) for key in SIGNATURE_KEYS}
 
 
-def patch_modules(modules: list) -> None:
+def patch_modules(modules: list) -> bool:
+    changed = False
     for module in modules:
-        if module.get("category") == "sensor":
-            if "signature" not in module:
-                module["signature"] = compute_signature(module)
-        elif "signature" not in module:
-            module["signature"] = compute_signature(module)
+        if "signature" in module:
+            continue
+        module["signature"] = compute_signature(module)
+        changed = True
+    return changed
 
 
-def patch_traffic(traffic: dict) -> None:
+def patch_traffic(traffic: dict) -> bool:
+    if "visual_contact_radius" in traffic:
+        return False
     traffic["visual_contact_radius"] = 250.0
+    return True
 
 
 def main() -> int:
     for path in sorted(MODULES_DIR.glob("*.json")):
         modules = load_array(path)
-        patch_modules(modules)
-        write_module_category(path.stem, modules)
+        if patch_modules(modules):
+            write_module_category(path.stem, modules)
 
     all_modules = load_modules()
     traffic = json.loads(TRAFFIC_PATH.read_text(encoding="utf-8"))
-    patch_traffic(traffic)
-    TRAFFIC_PATH.write_text(json.dumps(traffic, indent=2) + "\n", encoding="utf-8")
+    if patch_traffic(traffic):
+        TRAFFIC_PATH.write_text(json.dumps(traffic, indent=2) + "\n", encoding="utf-8")
 
     sensor_count = sum(1 for m in all_modules if m.get("category") == "sensor")
     sig_count = sum(1 for m in all_modules if "signature" in m)

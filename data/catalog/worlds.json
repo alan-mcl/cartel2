@@ -556,7 +556,7 @@
 					"id": "titania_orbital_1",
 					"kind": "orbital",
 					"sprite": "res://assets/world/orbitals/torus.svg",
-					"label": "Cult of Apex Headquarters",
+					"label": "Fellowship of Apex Headquarters",
 					"interactable": "sta_cult_of_apex_titania_dock"
 				},
 				{

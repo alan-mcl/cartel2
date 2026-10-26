@@ -436,9 +436,9 @@
 			"sta_cult_of_apex_titania_hq"
 		],
 		"default_building": "sta_cult_of_apex_titania_terminal",
-		"description": "Dedicated corporate orbital above the sector. Cult of Apex maintains its own docks.",
+		"description": "Dedicated corporate orbital above the sector. Fellowship of Apex maintains its own docks.",
 		"id": "sta_cult_of_apex_titania",
-		"name": "Cult of Apex",
+		"name": "Fellowship of Apex",
 		"sector_id": "titania",
 		"short_desc": "Corporate headquarters orbital.",
 		"type": "station"

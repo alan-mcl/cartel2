@@ -49,25 +49,25 @@ def corporate_building_id(corp_id: str, sector_id: str) -> str:
     return f"corp_{corp_id}_{sector_id}_office"
 
 
-def upsert_by_id(entries: list, record: dict) -> None:
+def insert_by_id(entries: list, record: dict) -> bool:
     record_id = str(record.get("id", ""))
-    for index, entry in enumerate(entries):
+    for entry in entries:
         if isinstance(entry, dict) and str(entry.get("id", "")) == record_id:
-            entries[index] = record
-            return
+            return False
     entries.append(record)
+    return True
 
 
-def upsert_route(routes: list, record: dict) -> None:
+def insert_route(routes: list, record: dict) -> bool:
     route_id = str(record.get("id", ""))
-    for index, entry in enumerate(routes):
+    for entry in routes:
         if isinstance(entry, dict) and str(entry.get("id", "")) == route_id:
-            routes[index] = record
-            return
+            return False
     routes.append(record)
+    return True
 
 
-def validate_spec(spec: dict, catalog_dir: Path, replace: bool) -> list[str]:
+def validate_spec(spec: dict, catalog_dir: Path) -> list[str]:
     errors: list[str] = []
     sector_id = str(spec.get("id", ""))
     if not sector_id:
@@ -78,8 +78,10 @@ def validate_spec(spec: dict, catalog_dir: Path, replace: bool) -> list[str]:
     sectors = index_by_id(load_array(catalog_dir / "sectors.json"))
     worlds = load_object(catalog_dir / "worlds.json")
 
-    if sector_id in sectors and not replace:
-        errors.append(f"spec: sector id '{sector_id}' already exists (use --replace)")
+    if sector_id in sectors:
+        errors.append(
+            f"spec: sector id '{sector_id}' already exists; edit data/catalog/ directly"
+        )
 
     economy = spec.get("economy", spec)
     for key in ("produce", "consume"):
@@ -120,8 +122,10 @@ def validate_spec(spec: dict, catalog_dir: Path, replace: bool) -> list[str]:
             if str(building_id) not in buildings:
                 errors.append(f"spec: unknown extra_building '{building_id}'")
 
-    if sector_id in worlds and not replace:
-        errors.append(f"spec: worlds.json already has key '{sector_id}' (use --replace)")
+    if sector_id in worlds:
+        errors.append(
+            f"spec: worlds.json already has key '{sector_id}'; edit data/catalog/ directly"
+        )
 
     corporations = index_by_id(load_array(catalog_dir / "corporations.json"))
     anchors = spec.get("presence_anchors", {})
@@ -401,48 +405,56 @@ def build_bundle(spec: dict, corporations: list) -> dict:
     }
 
 
-def apply_bundle(catalog_dir: Path, bundle: dict, replace: bool) -> None:
+def apply_bundle(catalog_dir: Path, bundle: dict) -> None:
     sector_id = str(bundle["sector"]["id"])
 
     sectors_path = catalog_dir / "sectors.json"
     sectors = load_array(sectors_path)
-    upsert_by_id(sectors, bundle["sector"])
-    write_json(sectors_path, sectors)
+    if insert_by_id(sectors, bundle["sector"]):
+        write_json(sectors_path, sectors)
 
     worlds_path = catalog_dir / "worlds.json"
     worlds = load_object(worlds_path)
-    if sector_id in worlds and not replace:
-        raise ValueError(f"worlds.json already contains '{sector_id}'")
-    worlds[sector_id] = bundle["world"]
-    write_json(worlds_path, worlds)
+    if sector_id not in worlds:
+        worlds[sector_id] = bundle["world"]
+        write_json(worlds_path, worlds)
 
     economies_path = catalog_dir / "economies.json"
     economies = load_array(economies_path)
-    upsert_by_id(economies, bundle["economy"])
-    write_json(economies_path, economies)
+    if insert_by_id(economies, bundle["economy"]):
+        write_json(economies_path, economies)
 
     habitats_path = catalog_dir / "habitats.json"
     habitats = load_array(habitats_path)
-    upsert_by_id(habitats, bundle["habitat"])
-    write_json(habitats_path, habitats)
+    if insert_by_id(habitats, bundle["habitat"]):
+        write_json(habitats_path, habitats)
 
     buildings_path = catalog_dir / "buildings.json"
     buildings = load_array(buildings_path)
+    buildings_changed = False
     for building in bundle["buildings"]:
-        upsert_by_id(buildings, building)
-    write_json(buildings_path, buildings)
+        if insert_by_id(buildings, building):
+            buildings_changed = True
+    if buildings_changed:
+        write_json(buildings_path, buildings)
 
     interactables_path = catalog_dir / "interactables.json"
     interactables = load_array(interactables_path)
+    interactables_changed = False
     for interactable in bundle["interactables"]:
-        upsert_by_id(interactables, interactable)
-    write_json(interactables_path, interactables)
+        if insert_by_id(interactables, interactable):
+            interactables_changed = True
+    if interactables_changed:
+        write_json(interactables_path, interactables)
 
     routes_path = catalog_dir / "routes.json"
     routes = load_array(routes_path)
+    routes_changed = False
     for route in bundle["routes"]:
-        upsert_route(routes, route)
-    write_json(routes_path, routes)
+        if insert_route(routes, route):
+            routes_changed = True
+    if routes_changed:
+        write_json(routes_path, routes)
 
     traffic_override = bundle.get("traffic_override")
     if isinstance(traffic_override, dict) and traffic_override:
@@ -452,13 +464,15 @@ def apply_bundle(catalog_dir: Path, bundle: dict, replace: bool) -> None:
         if not isinstance(overrides, dict):
             overrides = {}
             traffic["sector_overrides"] = overrides
-        overrides[sector_id] = {"role_weights": dict(traffic_override)}
-        write_json(traffic_path, traffic)
+        if sector_id not in overrides:
+            overrides[sector_id] = {"role_weights": dict(traffic_override)}
+            write_json(traffic_path, traffic)
 
     presence_path = catalog_dir / "corporate_presence.json"
     presence = load_object(presence_path)
-    presence[sector_id] = bundle["presence"]
-    write_json_matching(presence_path, presence)
+    if sector_id not in presence:
+        presence[sector_id] = bundle["presence"]
+        write_json_matching(presence_path, presence)
 
 
 def main() -> int:
@@ -471,11 +485,6 @@ def main() -> int:
         help="Catalog directory (default: data/catalog)",
     )
     parser.add_argument(
-        "--replace",
-        action="store_true",
-        help="Replace existing records for this sector id",
-    )
-    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate and print bundle without writing files",
@@ -483,7 +492,7 @@ def main() -> int:
     args = parser.parse_args()
 
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
-    errors = validate_spec(spec, args.catalog, args.replace)
+    errors = validate_spec(spec, args.catalog)
     if errors:
         for err in errors:
             print(f"ERROR: {err}", file=sys.stderr)
@@ -495,7 +504,7 @@ def main() -> int:
         print(json.dumps(bundle, indent=2))
         return 0
 
-    apply_bundle(args.catalog, bundle, args.replace)
+    apply_bundle(args.catalog, bundle)
     print(f"OK: sector bundle applied for '{bundle['sector']['id']}'.")
     return 0
 

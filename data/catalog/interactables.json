@@ -301,8 +301,8 @@
 	},
 	{
 		"id": "sta_cult_of_apex_titania_dock",
-		"title": "Cult of Apex Headquarters",
-		"inspect_text": "Cult of Apex Headquarters. Docking lanes are open on transponder.",
+		"title": "Fellowship of Apex Headquarters",
+		"inspect_text": "Fellowship of Apex Headquarters. Docking lanes are open on transponder.",
 		"kind": "dock",
 		"dock_location_id": "sta_cult_of_apex_titania"
 	},

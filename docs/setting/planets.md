@@ -323,7 +323,7 @@ The ninth moon of the gas giant Titania in the Wolf 359 system is an E class wor
 ### Planetary orbit
 
  - Titania Habitat
- - Cult of Apex HQ
+ - Fellowship of Apex HQ
  - Chimera Corp HQ
  - others TBD
 

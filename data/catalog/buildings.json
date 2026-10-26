@@ -1211,22 +1211,22 @@
 	},
 	{
 		"art": "res://assets/ui/locations/sta_cult_of_apex_titania_terminal.png",
-		"description": "Docking terminal at Cult of Apex. Ship administration and launch.",
+		"description": "Docking terminal at Fellowship of Apex. Ship administration and launch.",
 		"id": "sta_cult_of_apex_titania_terminal",
 		"kind": "terminal",
-		"name": "Cult of Apex Terminal",
+		"name": "Fellowship of Apex Terminal",
 		"short_desc": "Docking terminal.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/sta_cult_of_apex_titania_hq.png",
 		"corporation_id": "cult_of_apex",
-		"description": "Corporate headquarters for Cult of Apex.",
+		"description": "Corporate headquarters for Fellowship of Apex.",
 		"headquarters": true,
 		"id": "sta_cult_of_apex_titania_hq",
 		"kind": "office",
-		"name": "Cult of Apex Headquarters",
-		"short_desc": "Cult of Apex charter desk.",
+		"name": "Fellowship of Apex Headquarters",
+		"short_desc": "Fellowship of Apex charter desk.",
 		"type": "corporate_office"
 	},
 	{

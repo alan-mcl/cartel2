@@ -72,9 +72,9 @@ Sakuraya Shinise claims to be humanity’s oldest continuously operating busines
 
 HQ: Proxima, planet-based (city-mall)
 
-## Cult of Apex (APEX)
+## Fellowship of Apex (APEX)
 
-The Cult traces its origins to a late twenty-first-century hacker and religious radical who died after hijacking a NASA launch and sending his writings and personal effects into deep space as a time capsule. Recovered centuries later, the capsule inspired a powerful new faith whose institutions grew into a vast corporate empire.
+The Fellowship traces its origins to a late twenty-first-century hacker and religious radical who died after hijacking a NASA launch and sending his writings and personal effects into deep space as a time capsule. Recovered centuries later, the capsule inspired a powerful new faith whose institutions grew into a vast corporate empire.
 
 HQ: Titania IX, orbital
 
@@ -156,9 +156,9 @@ Atlas Concern is a vast industrial and infrastructure conglomerate with interest
 
 HQ: Tycho, outlying
 
-## The Hanseatic Guild (HANS)
+## Hanseatic Ltd (HANS)
 
-The Hanseatic Guild is an ancient commercial institution descended from the Euro merchant leagues. It operates across shipping, finance, trade, warehousing and insurance, maintaining an extensive network of ports, markets and trading houses throughout human space. Its members value long-term relationships and mutual obligation, and the Guild remains a formidable force in interplanetary commerce.
+Hanseatic Ltd is an ancient commercial institution descended from the Euro merchant leagues. It operates across shipping, finance, trade, warehousing and insurance, maintaining an extensive network of ports, markets and trading houses throughout human space. Its members value long-term relationships and mutual obligation, and it remains a formidable force in interplanetary commerce.
 
 HQ: New Carthage, planet-based (city-mall)
 

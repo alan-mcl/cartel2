@@ -9,6 +9,8 @@ func _init() -> void:
 	var catalog := Catalog.load_default()
 	var buildings: Array = _load_json_array(BUILDINGS_PATH)
 	var habitats: Array = _load_json_array(HABITATS_PATH)
+	var buildings_changed := false
+	var habitats_changed := false
 	var by_id := {}
 	for entry_variant in buildings:
 		if typeof(entry_variant) == TYPE_DICTIONARY:
@@ -37,18 +39,25 @@ func _init() -> void:
 				if not record.is_empty():
 					buildings.append(record)
 					by_id[building_id] = record
+					buildings_changed = true
 
 		var list: Array = []
 		for item in habitat_entry.get("buildings", []):
 			list.append(str(item))
+		var habitat_list_changed := false
 		for bid_variant in scan_ids:
 			var bid := str(bid_variant)
 			if bid not in list:
 				list.append(bid)
-		habitat_entry["buildings"] = list
+				habitat_list_changed = true
+		if habitat_list_changed:
+			habitat_entry["buildings"] = list
+			habitats_changed = true
 
-	_save_json_array(BUILDINGS_PATH, buildings)
-	_save_json_array(HABITATS_PATH, habitats)
+	if buildings_changed:
+		_save_json_array(BUILDINGS_PATH, buildings)
+	if habitats_changed:
+		_save_json_array(HABITATS_PATH, habitats)
 	print("Synced scan buildings.")
 	quit()
 

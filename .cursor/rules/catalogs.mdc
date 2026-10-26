@@ -6,6 +6,7 @@ alwaysApply: false
 
 # Catalog JSON
 
+- **`data/catalog/` is hand-edited.** The game loads these JSON files directly. Catalog tools (`generate_sector_bundle.py`, `sync_corporate_hqs.py`, `generate_corporate_presence.py`, `sync_scan_buildings.gd`, and similar) may **insert missing ids only**; they must not overwrite existing records or fields. Re-running a tool on an up-to-date catalog should leave files unchanged. Combat modules and ammunition are hand-authored JSON (`generate_combat_catalog.py` / `rewrite_combat_catalog.py` are retired).
 - ids: lowercase `snake_case`, unique within each file.
 - Referential integrity: ships → chassis + modules; worlds `interactable` → `interactables.json`; routes `a`/`b` → `sectors.json`; unspace `id` → key in `worlds.json`.
 - Sector jump routes are synthesized from `routes.json` at load time - add routes there, not inline in sectors.
