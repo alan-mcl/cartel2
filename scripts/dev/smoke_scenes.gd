@@ -18,6 +18,7 @@ func _run() -> void:
 	await _smoke_combat_motion()
 	await _smoke_system_render_tester()
 	await _smoke_mission_harness()
+	await _smoke_audio_sandbox()
 	if _failures > 0:
 		push_error("Scene smoke suite failed with %d assertion(s)." % _failures)
 		quit(1)
@@ -118,6 +119,14 @@ func _smoke_mission_harness() -> void:
 	_check(world.get_child_count() > 0, "mission harness loads volatile world")
 	paused = false
 	harness.queue_free()
+	await process_frame
+
+
+func _smoke_audio_sandbox() -> void:
+	var sandbox := preload("res://scenes/dev/audio_sandbox.tscn").instantiate()
+	root.add_child(sandbox)
+	await process_frame
+	sandbox.queue_free()
 	await process_frame
 
 

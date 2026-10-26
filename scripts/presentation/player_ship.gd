@@ -207,6 +207,7 @@ func _physics_process(delta: float) -> void:
 	velocity = motion.velocity
 	move_and_slide()
 	motion.velocity = velocity
+	_report_slide_collisions()
 
 	_update_thrust_visual(
 		bool(physics_inputs.get("thrust", false)) or bool(physics_inputs.get("reverse", false))
@@ -425,11 +426,21 @@ func get_current_target() -> Interactable:
 
 func _update_thrust_visual(active: bool) -> void:
 	var thrusting := active and motion.is_thrusting()
+	var strength := operating_state.thrust_factor if thrusting else 0.0
 	if _thrust_flame:
 		_thrust_flame.visible = false
 	if _engine_exhaust:
-		var strength := operating_state.thrust_factor if thrusting else 0.0
 		_engine_exhaust.set_thrusting(thrusting, strength)
+	AudioService.set_ship_thrust(strength, motion.is_boosting(), global_position)
+
+
+func _report_slide_collisions() -> void:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		if collision == null:
+			continue
+		AudioService.play_sfx_at("ship.collision", collision.get_position())
+		return
 
 
 func _on_interact_area_entered(area: Area2D) -> void:

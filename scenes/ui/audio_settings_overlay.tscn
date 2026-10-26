@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://cartel_audio_settings"]
+
+[ext_resource type="Script" path="res://scripts/ui/audio_settings_overlay.gd" id="1"]
+
+[node name="AudioSettingsOverlay" type="CanvasLayer"]
+visible = false
+process_mode = 3
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.054902, 0.070588, 0.086275, 0.92)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

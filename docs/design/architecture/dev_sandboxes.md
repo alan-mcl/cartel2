@@ -16,6 +16,7 @@ Shared runner:
 | [`scripts/dev/mission_harness.sh`](../../../scripts/dev/mission_harness.sh) | `mission_harness.tscn` | Volatile sites and scan/bounty objectives; **Begin** starts in-flight at the site; **F8** or pause quit reloads setup |
 | [`scripts/dev/system_render_tester.sh`](../../../scripts/dev/system_render_tester.sh) | `system_render_tester.tscn` | Planetary layout and globe inspection (pan, zoom, frame) |
 | [`scripts/dev/theme_showcase.sh`](../../../scripts/dev/theme_showcase.sh) | `theme_showcase.tscn` | UI theme tokens and control variations |
+| [`scripts/dev/audio_sandbox.sh`](../../../scripts/dev/audio_sandbox.sh) | `audio_sandbox.tscn` | Music, ambience, SFX, thrust, bus volumes, and positional collision |
 
 Behaviour and architecture notes for each sandbox (except theme showcase) live in [architecture.md](architecture.md) under **Dev sandboxes** / **Mission harness** / **System render tester**. Theme tokens: [ui_theme.md](ui_theme.md).
 

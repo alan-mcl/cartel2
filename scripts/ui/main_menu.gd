@@ -4,6 +4,7 @@ signal new_game_requested
 signal load_requested
 signal leaderboard_requested
 signal exit_requested
+signal audio_settings_requested
 
 @onready var _load_button: Button = $Center/Panel/VBox/LoadButton
 @onready var _version_label: Label = $Center/Panel/VBox/VersionLabel
@@ -17,6 +18,7 @@ func _ready() -> void:
 	$Center/Panel/VBox/NewGameButton.pressed.connect(_on_new_game_pressed)
 	_load_button.pressed.connect(_on_load_pressed)
 	$Center/Panel/VBox/LeaderboardButton.pressed.connect(_on_leaderboard_pressed)
+	$Center/Panel/VBox/AudioButton.pressed.connect(_on_audio_pressed)
 	$Center/Panel/VBox/ExitButton.pressed.connect(_on_exit_pressed)
 
 
@@ -39,16 +41,29 @@ func _refresh_load_button() -> void:
 
 
 func _on_new_game_pressed() -> void:
+	_ui_click()
 	new_game_requested.emit()
 
 
 func _on_load_pressed() -> void:
+	_ui_click()
 	load_requested.emit()
 
 
 func _on_leaderboard_pressed() -> void:
+	_ui_click()
 	leaderboard_requested.emit()
 
 
+func _on_audio_pressed() -> void:
+	_ui_click()
+	audio_settings_requested.emit()
+
+
 func _on_exit_pressed() -> void:
+	_ui_click()
 	exit_requested.emit()
+
+
+func _ui_click() -> void:
+	AudioService.play_ui("click")

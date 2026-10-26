@@ -1,0 +1,50 @@
+{
+  "music": {
+    "menu": ["res://assets/audio/music/menu/menu_01.ogg"],
+    "exploration": ["res://assets/audio/music/exploration/exploration_01.ogg"],
+    "habitat": ["res://assets/audio/music/habitat/habitat_01.ogg"],
+    "shipyard": ["res://assets/audio/music/shipyard/shipyard_01.ogg"],
+    "market": ["res://assets/audio/music/market/market_01.ogg"],
+    "danger": ["res://assets/audio/music/exploration/danger_01.ogg"]
+  },
+  "ambience": {
+    "space": ["res://assets/audio/ambience/space/space_ambience_01.ogg"],
+    "habitat": ["res://assets/audio/ambience/habitat/habitat_ambience_01.ogg"]
+  },
+  "sfx": {
+    "ui.click": {
+      "bus": "UI",
+      "paths": ["res://assets/audio/sfx/ui/ui_button_click_01.ogg"]
+    },
+    "ui.hover": {
+      "bus": "UI",
+      "paths": ["res://assets/audio/sfx/ui/ui_button_hover_01.ogg"]
+    },
+    "ui.confirm": {
+      "bus": "UI",
+      "paths": ["res://assets/audio/sfx/ui/ui_confirm_01.ogg"]
+    },
+    "ship.collision": {
+      "bus": "SFX",
+      "paths": [
+        "res://assets/audio/sfx/ship/ship_collision_metal_01.ogg",
+        "res://assets/audio/sfx/ship/ship_collision_metal_02.ogg",
+        "res://assets/audio/sfx/ship/ship_collision_metal_03.ogg"
+      ],
+      "min_interval_sec": 0.12
+    },
+    "interaction.salvage": {
+      "bus": "SFX",
+      "paths": ["res://assets/audio/sfx/interaction/salvage_complete_01.ogg"]
+    },
+    "notification.alert": {
+      "bus": "SFX",
+      "paths": ["res://assets/audio/sfx/notification/notification_alert_01.ogg"]
+    },
+    "ship.thruster": {
+      "bus": "SFX",
+      "paths": ["res://assets/audio/sfx/ship/ship_thruster_loop.ogg"],
+      "loop": true
+    }
+  }
+}

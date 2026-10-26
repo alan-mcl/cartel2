@@ -320,6 +320,9 @@ func dock_at(location_id: String) -> void:
 	_ui_root.session = _main.session
 	_ui_root.sync_context_callbacks()
 	_ui_root.open_habitat()
+	AudioService.play_music("habitat")
+	AudioService.play_ambience("habitat")
+	AudioService.set_ship_thrust(0.0, false, _player.global_position)
 	_on_session_changed.call()
 	_on_interaction_target_changed.call(_player.get_current_target())
 
@@ -357,6 +360,8 @@ func on_ui_undock_requested(ship_id: String) -> void:
 
 	_player.global_position = launch_pos
 	_player.apply_launch_velocity(_world_loader.get_undock_exit_velocity(dock_location_id), outward.angle())
+	AudioService.play_music("exploration")
+	AudioService.play_ambience("space")
 	_on_interaction_target_changed.call(_player.get_current_target())
 
 

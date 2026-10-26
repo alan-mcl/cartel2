@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/ui_root.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/career_overlay.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/leaderboard_overlay.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/ui/audio_settings_overlay.tscn" id="14"]
 
 [node name="Main" type="Node2D" unique_id=1964327977]
 script = ExtResource("1")
@@ -41,3 +42,5 @@ position = Vector2(-400, -150)
 [node name="CareerOverlay" parent="." instance=ExtResource("12")]
 
 [node name="LeaderboardOverlay" parent="." instance=ExtResource("13")]
+
+[node name="AudioSettingsOverlay" parent="." instance=ExtResource("14")]

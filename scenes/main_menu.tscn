@@ -29,9 +29,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 1575.0
-offset_top = 35.0
+offset_top = 75.0
 offset_right = -41.0
-offset_bottom = -808.0
+offset_bottom = -719.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -57,6 +57,11 @@ text = "Load"
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Leaderboard"
+
+[node name="AudioButton" type="Button" parent="Center/Panel/VBox" unique_id=538957028]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+text = "Audio"
 
 [node name="ExitButton" type="Button" parent="Center/Panel/VBox" unique_id=1231376204]
 custom_minimum_size = Vector2(280, 0)

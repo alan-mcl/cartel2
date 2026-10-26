@@ -146,6 +146,9 @@ func show_main_menu() -> void:
 	_refresh_session_bindings()
 	_simulation.reset_save()
 	_main_menu.open()
+	AudioService.play_music("menu")
+	AudioService.stop_ambience(true)
+	AudioService.set_ship_thrust(0.0, false, Vector2.ZERO)
 
 
 func start_game_from_session() -> void:
@@ -181,6 +184,8 @@ func start_game_from_session() -> void:
 
 	if _main.session.in_unspace:
 		_simulation.reset_unspace_pulse()
+
+	_sync_audio_context()
 
 
 func begin_new_game(callsign: String, background_id: String, portrait_path: String) -> void:
@@ -440,3 +445,13 @@ func unbind_session_events(game_session: GameSession) -> void:
 	if _simulation == null:
 		return
 	_simulation.detach_events(game_session)
+
+
+func _sync_audio_context() -> void:
+	if _main.session.docked:
+		AudioService.play_music("habitat")
+		AudioService.play_ambience("habitat")
+		AudioService.set_ship_thrust(0.0, false, _player.global_position)
+	else:
+		AudioService.play_music("exploration")
+		AudioService.play_ambience("space")

@@ -20,6 +20,9 @@ func _ready() -> void:
 	position_smoothing_speed = 6.0
 	zoom = Vector2.ONE * zoom_level
 	_ship = get_parent() as CharacterBody2D
+	var listener := AudioListener2D.new()
+	add_child(listener)
+	listener.make_current()
 
 
 func _physics_process(_delta: float) -> void:

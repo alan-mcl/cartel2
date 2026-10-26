@@ -46,6 +46,7 @@ func interact(session: GameSession) -> String:
 			_set_focused(false)
 			_update_prompt()
 			queue_redraw()
+			AudioService.play_sfx_at("interaction.salvage", global_position)
 			return session.last_log
 
 	return session.inspect(definition)

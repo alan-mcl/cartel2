@@ -22,6 +22,7 @@ var _menu := MenuController.new()
 @onready var _save_overlay: CanvasLayer = $SaveOverlay
 @onready var _career: CanvasLayer = $CareerOverlay
 @onready var _leaderboard: CanvasLayer = $LeaderboardOverlay
+@onready var _audio_settings: CanvasLayer = $AudioSettingsOverlay
 @onready var _starfield: Node2D = $Starfield
 @onready var _camera: Camera2D = $PlayerShip/FollowCamera
 
@@ -62,6 +63,8 @@ func _ready() -> void:
 	_main_menu.load_requested.connect(_menu.on_main_menu_load)
 	_main_menu.leaderboard_requested.connect(_menu.on_main_menu_leaderboard_requested)
 	_main_menu.exit_requested.connect(_menu.on_main_menu_exit)
+	_main_menu.audio_settings_requested.connect(_on_audio_settings_requested)
+	_pause.audio_settings_requested.connect(_on_audio_settings_requested)
 
 	_career.closed.connect(_menu.on_career_overlay_closed)
 	_career.leaderboard_requested.connect(_menu.on_career_leaderboard_requested)
@@ -261,3 +264,8 @@ func _on_motion_changed(speed: float, heading_deg: float, boosting: bool) -> voi
 
 func _on_operating_state_changed(state: ShipOperatingState) -> void:
 	_flight.on_operating_state_changed(state)
+
+
+func _on_audio_settings_requested() -> void:
+	if _audio_settings.has_method("open"):
+		_audio_settings.open()
