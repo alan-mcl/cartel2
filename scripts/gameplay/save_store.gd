@@ -128,6 +128,34 @@ static func build_save_data(
 	}
 
 
+static func career_id_from_save(data: Dictionary) -> String:
+	var session: Dictionary = data.get("session", {})
+	return str(session.get("career_id", ""))
+
+
+static func delete_slot(slot_index: int) -> bool:
+	if slot_index < 1 or slot_index > SLOT_COUNT:
+		return false
+	var path := slot_path(slot_index)
+	if not FileAccess.file_exists(path):
+		return true
+	var err := DirAccess.remove_absolute(path)
+	return err == OK
+
+
+static func delete_slots_for_career(career_id: String) -> void:
+	if career_id.is_empty():
+		return
+	for slot_index in range(1, SLOT_COUNT + 1):
+		if not slot_exists(slot_index):
+			continue
+		var data := read_slot(slot_index)
+		if data.is_empty():
+			continue
+		if career_id_from_save(data) == career_id:
+			delete_slot(slot_index)
+
+
 static func validate_save_data(data: Dictionary) -> bool:
 	if data.is_empty():
 		return false

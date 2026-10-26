@@ -21,6 +21,7 @@ var _menu := MenuController.new()
 @onready var _new_game: CanvasLayer = $NewGameOverlay
 @onready var _save_overlay: CanvasLayer = $SaveOverlay
 @onready var _career: CanvasLayer = $CareerOverlay
+@onready var _career_end: CanvasLayer = $CareerEndOverlay
 @onready var _leaderboard: CanvasLayer = $LeaderboardOverlay
 @onready var _audio_settings: CanvasLayer = $AudioSettingsOverlay
 @onready var _starfield: Node2D = $Starfield
@@ -70,6 +71,9 @@ func _ready() -> void:
 	_career.leaderboard_requested.connect(_menu.on_career_leaderboard_requested)
 	_leaderboard.closed.connect(_menu.on_leaderboard_overlay_closed)
 
+	_career_end.main_menu_requested.connect(_menu.on_career_end_main_menu_requested)
+	_career_end.leaderboard_requested.connect(_menu.on_career_end_leaderboard_requested)
+
 	_new_game.confirmed.connect(_menu.on_new_game_confirmed)
 	_new_game.cancelled.connect(_menu.on_new_game_cancelled)
 
@@ -83,6 +87,7 @@ func _ready() -> void:
 	_new_game.close()
 	_save_overlay.close()
 	_career.close()
+	_career_end.close()
 	_leaderboard.close()
 
 	_menu.show_main_menu()
@@ -124,6 +129,7 @@ func _bind_controllers() -> void:
 		_save_overlay,
 		_pause,
 		_career,
+		_career_end,
 		_leaderboard,
 		_jump,
 		_hud,

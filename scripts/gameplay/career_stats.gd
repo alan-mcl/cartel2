@@ -20,6 +20,7 @@ const EXP_MISSION_PENALTIES := "mission_penalties"
 static var _career_id_factory: Callable = Callable()
 
 var career_id: String = ""
+var ended: bool = false
 var flight_gst_seconds_real: float = 0.0
 var flight_gst_seconds_unspace: float = 0.0
 var played_seconds: float = 0.0
@@ -64,6 +65,7 @@ static func reset_factory() -> void:
 
 func reset_for_new_career() -> void:
 	career_id = generate_career_id()
+	ended = false
 	flight_gst_seconds_real = 0.0
 	flight_gst_seconds_unspace = 0.0
 	played_seconds = 0.0
@@ -309,6 +311,7 @@ static func _int_dict_from_save(data: Variant) -> Dictionary:
 func to_session_dict() -> Dictionary:
 	return {
 		"career_id": career_id,
+		"career_ended": ended,
 		"flight_gst_seconds_real": flight_gst_seconds_real,
 		"flight_gst_seconds_unspace": flight_gst_seconds_unspace,
 		"played_seconds": played_seconds,
@@ -343,6 +346,7 @@ func to_session_dict() -> Dictionary:
 
 func load_session_dict(data: Dictionary) -> void:
 	career_id = str(data.get("career_id", ""))
+	ended = bool(data.get("career_ended", false))
 	flight_gst_seconds_real = float(data.get("flight_gst_seconds_real", 0.0))
 	flight_gst_seconds_unspace = float(data.get("flight_gst_seconds_unspace", 0.0))
 	played_seconds = float(data.get("played_seconds", 0.0))

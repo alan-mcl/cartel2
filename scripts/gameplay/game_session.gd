@@ -2,6 +2,7 @@ class_name GameSession
 extends RefCounted
 
 signal changed
+signal career_ended
 
 var player := PlayerState.new()
 var world := WorldPresence.new()
@@ -605,6 +606,12 @@ func get_gst_timestamp() -> String:
 func apply_hull_stress(amount: float, delta: float) -> void:
 	if not combat.apply_hull_stress(amount, delta, world.in_unspace):
 		return
+	if combat.hull <= 0.0:
+		_maybe_end_career_from_ship_destroyed()
+		if not fleet.current_ship_id.is_empty():
+			persist_combat_to_ship(fleet.current_ship_id)
+		changed.emit()
+		return
 	player.last_log = "N-space turbulence stressing hull. (%d/%d)" % [int(combat.hull), int(combat.max_hull)]
 	changed.emit()
 
@@ -673,11 +680,23 @@ func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_
 		if not hull_was_disabled and state.is_hull_disabled():
 			career.record_hull_breach()
 	if state.is_hull_disabled():
-		player.last_log = "Hull breached. Systems offline."
+		_maybe_end_career_from_ship_destroyed()
+		if not career.ended and player.sandbox:
+			player.last_log = "Hull breached. Systems offline."
 	if not fleet.current_ship_id.is_empty():
 		persist_combat_to_ship(fleet.current_ship_id)
 	changed.emit()
 	return result
+
+
+func _maybe_end_career_from_ship_destroyed() -> void:
+	if player.sandbox or career.ended:
+		return
+	if combat.max_hull <= 0.0 or combat.hull > 0.0:
+		return
+	career.ended = true
+	player.last_log = "Ship destroyed."
+	career_ended.emit()
 
 
 func get_sector_spawn(catalog: Catalog) -> Vector2:

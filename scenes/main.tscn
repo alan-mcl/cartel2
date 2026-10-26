@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/save_overlay.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ui_root.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/career_overlay.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/career_end_overlay.tscn" id="15"]
 [ext_resource type="PackedScene" path="res://scenes/leaderboard_overlay.tscn" id="13"]
 [ext_resource type="PackedScene" path="res://scenes/ui/audio_settings_overlay.tscn" id="14"]
 
@@ -40,6 +41,8 @@ position = Vector2(-400, -150)
 [node name="SaveOverlay" parent="." unique_id=366419642 instance=ExtResource("10")]
 
 [node name="CareerOverlay" parent="." instance=ExtResource("12")]
+
+[node name="CareerEndOverlay" parent="." instance=ExtResource("15")]
 
 [node name="LeaderboardOverlay" parent="." instance=ExtResource("13")]
 

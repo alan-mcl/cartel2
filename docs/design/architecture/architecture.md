@@ -311,6 +311,7 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - Save/load available from the pause menu (in flight) and from the habitat pilot menu (☰ under the pilot summary, while docked).
 - **Career statistics:** lifetime counters and revenue/expense ledgers live in the save `session` object (`CareerStats` on `GameSession`, keyed fields such as `career_id`, `revenue_by_source`, `expenses_by_source`). Missing keys on older saves default to zero and receive a new `career_id` on load.
 - **Hall of fame:** `user://leaderboard.json` (override `LeaderboardStore.store_dir` in tests) stores one row per career id, updated when a slot is saved. Each row snapshots profit, nett worth, trade and combat figures, live reputation, fleet size (`ships_owned`), and total career time (`career_time` from `played_seconds`). Nett worth is `net_worth`: credits, plus ships and spare parts at the 50% module book value, plus cargo at the local sell quote, minus unpaid fines. Default ranking is nett profit. Nett worth, reputation, and career time are sortable columns. A row saved before nett worth was recorded has no `net_worth` field and sorts below measured rows until that career is saved again. Rows persist after a save slot is overwritten.
+- **Career death:** when the ship the player is flying reaches zero hull in a non-sandbox career, that career ends. `GameSession` emits `career_ended`; presentation writes a final hall-of-fame row with `ended: true`, deletes every save slot whose `session.career_id` matches, and shows the career-end overlay (nett profit, nett worth, career time; hall of fame or main menu only). Load refuses slots whose career id is marked ended on the hall of fame. Dev sandboxes keep a destroyed hull locally and do not touch saves or the hall of fame.
 
 ## Not yet implemented
 
@@ -318,7 +319,6 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - Named NPCs, dialogue trees, Dialogue Manager integration
 - Unspace solution typing (integers shown as flavour only)
 - Distinct 5-space and 6-space layouts. Public routes already include n=5 and n=6 translations; transit still uses the single n=4 presentation (`unspaces.json` `n4_default`)
-- Combat game-over screen
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades and other friction overrides). `route_friction_delta` is a session field read by `CommodityEconomy`. There is no player UI for it

@@ -155,9 +155,19 @@ static func _test_legacy_save(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check_eq(loaded.career.nett_profit(), 0, "career: legacy save zero profit")
 
 
+static func _leaderboard_test_dir() -> String:
+	var project_root := ProjectSettings.globalize_path("res://")
+	var dir := project_root.path_join(".test_leaderboard_runtime")
+	if not dir.ends_with("/"):
+		dir += "/"
+	return dir
+
+
 static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> void:
-	var temp_dir := "user://test_leaderboard_%d" % randi()
+	var temp_dir := _leaderboard_test_dir()
 	LeaderboardStore.store_dir = temp_dir
+	if DirAccess.dir_exists_absolute(temp_dir):
+		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
 	var session_a := _session(runner, catalog, "ALPHA-1")
 	var session_b := _session(runner, catalog, "BRAVO-2")
 	if session_a == null or session_b == null:

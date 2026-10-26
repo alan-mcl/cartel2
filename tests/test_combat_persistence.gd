@@ -24,6 +24,12 @@ static func _test_round_trip(runner: TestRunner, assembled: AssembledShip) -> vo
 		"combat persistence: a fresh hull starts full"
 	)
 
+	combat.hull = 0.0
+	combat.max_hull = 18.0
+	var zero_state := combat.build_combat_state(assembled)
+	runner.check(_near(zero_state.hull_current, 0.0), "combat persistence: zero hull stays zero when max is set")
+	runner.check(_near(zero_state.hull_max, 18.0), "combat persistence: zero hull keeps max hull")
+
 	combat.hull = 4.0
 	combat.power_integrity_lost = 0.25
 	combat.compute_integrity_lost = 0.5

@@ -8,6 +8,7 @@ var _new_game: CanvasLayer
 var _save_overlay: CanvasLayer
 var _pause: CanvasLayer
 var _career: CanvasLayer
+var _career_end: CanvasLayer
 var _leaderboard: CanvasLayer
 var _jump: CanvasLayer
 var _hud: CanvasLayer
@@ -32,6 +33,7 @@ func bind(
 	save_overlay: CanvasLayer,
 	pause: CanvasLayer,
 	career: CanvasLayer,
+	career_end: CanvasLayer,
 	leaderboard: CanvasLayer,
 	jump: CanvasLayer,
 	hud: CanvasLayer,
@@ -51,6 +53,7 @@ func bind(
 	_save_overlay = save_overlay
 	_pause = pause
 	_career = career
+	_career_end = career_end
 	_leaderboard = leaderboard
 	_jump = jump
 	_hud = hud
@@ -76,6 +79,8 @@ func is_gst_frozen() -> bool:
 		return true
 	if _leaderboard != null and _leaderboard.visible:
 		return true
+	if _career_end != null and _career_end.visible:
+		return true
 	if _pause.visible and _tree.paused:
 		return true
 	return false
@@ -83,6 +88,10 @@ func is_gst_frozen() -> bool:
 
 func can_toggle_pause() -> bool:
 	if not _main.game_active:
+		return false
+	if _career_end != null and _career_end.visible:
+		return false
+	if _main.session != null and _main.session.career.ended:
 		return false
 	if _main_menu.visible or _new_game.visible or _save_overlay.visible:
 		return false
@@ -117,6 +126,8 @@ func show_main_menu() -> void:
 		_career.close()
 	if _leaderboard != null:
 		_leaderboard.close()
+	if _career_end != null:
+		_career_end.close()
 	_hud.visible = false
 	_player.freeze_motion()
 	_world.clear_world()
@@ -230,6 +241,15 @@ func load_slot(slot_index: int) -> void:
 		push_error("Failed to read save slot %d." % slot_index)
 		return
 
+	var career_id := SaveStore.career_id_from_save(data)
+	if LeaderboardStore.is_career_ended(career_id):
+		push_error("Save slot %d belongs to an ended career." % slot_index)
+		return
+	var session_blob: Dictionary = data.get("session", {})
+	if bool(session_blob.get("career_ended", false)):
+		push_error("Save slot %d is marked as ended." % slot_index)
+		return
+
 	var new_session := GameSession.new()
 	if not new_session.from_save(_catalog, data):
 		push_error("Failed to load save slot %d." % slot_index)
@@ -274,6 +294,8 @@ func load_slot(slot_index: int) -> void:
 
 func save_to_slot(slot_index: int) -> bool:
 	if not _main.game_active:
+		return false
+	if _main.session.career.ended:
 		return false
 
 	var flight := _world.capture_flight_state()
@@ -420,6 +442,8 @@ func on_career_leaderboard_requested() -> void:
 
 
 func _restore_pause_after_overlay() -> void:
+	if _career_end != null and _career_end.visible:
+		return
 	if _career != null and _career.visible:
 		return
 	if _leaderboard != null and _leaderboard.visible:
@@ -439,12 +463,44 @@ func bind_session_events(game_session: GameSession) -> void:
 	if game_session == null or _simulation == null:
 		return
 	_simulation.attach_events(game_session, _catalog)
+	if not game_session.career_ended.is_connected(_on_career_ended):
+		game_session.career_ended.connect(_on_career_ended)
 
 
 func unbind_session_events(game_session: GameSession) -> void:
 	if _simulation == null:
 		return
 	_simulation.detach_events(game_session)
+	if game_session != null and game_session.career_ended.is_connected(_on_career_ended):
+		game_session.career_ended.disconnect(_on_career_ended)
+
+
+func _on_career_ended() -> void:
+	if _main.session == null or _career_end == null:
+		return
+	_pause.close()
+	_save_overlay.close()
+	_jump.close()
+	if _hud.has_method("close_flight_manifest"):
+		_hud.close_flight_manifest()
+	if _hud.has_method("close_target_scan"):
+		_hud.close_target_scan()
+	_player.freeze_motion()
+	_main.session.career.ensure_career_id()
+	var saved_at := Time.get_datetime_string_from_system(true)
+	LeaderboardStore.upsert_from_session(_main.session, saved_at, _catalog, true)
+	SaveStore.delete_slots_for_career(_main.session.career.career_id)
+	_current_slot = -1
+	_tree.paused = true
+	_career_end.open(_main.session, _catalog)
+
+
+func on_career_end_main_menu_requested() -> void:
+	show_main_menu()
+
+
+func on_career_end_leaderboard_requested() -> void:
+	open_leaderboard_overlay()
 
 
 func _sync_audio_context() -> void:

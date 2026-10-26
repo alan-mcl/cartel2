@@ -55,7 +55,12 @@ static func write_all(entries: Array) -> bool:
 	return true
 
 
-static func upsert_from_session(session: GameSession, saved_at: String, catalog: Catalog = null) -> bool:
+static func upsert_from_session(
+	session: GameSession,
+	saved_at: String,
+	catalog: Catalog = null,
+	mark_ended: bool = false
+) -> bool:
 	if session == null or session.player.sandbox:
 		return false
 	session.career.ensure_career_id()
@@ -75,6 +80,8 @@ static func upsert_from_session(session: GameSession, saved_at: String, catalog:
 		"career_time": session.career.played_seconds,
 		"saved_at": saved_at,
 	}
+	if mark_ended:
+		entry["ended"] = true
 	if catalog != null:
 		entry["net_worth"] = CareerWorth.nett_worth(session, catalog)
 	var replaced := false
@@ -87,6 +94,18 @@ static func upsert_from_session(session: GameSession, saved_at: String, catalog:
 	if not replaced:
 		entries.append(entry)
 	return write_all(entries)
+
+
+static func is_career_ended(career_id: String) -> bool:
+	if career_id.is_empty():
+		return false
+	for entry in read_all():
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if str(entry.get("career_id", "")) != career_id:
+			continue
+		return bool(entry.get("ended", false))
+	return false
 
 
 static func sorted_entries(column: SortColumn, descending: bool) -> Array:

@@ -23,11 +23,3 @@ Five gravitic SKUs are catalogued, including `hw_sundancer_loft` on the Flare-ON
 **Still open:** independent gravitic hyper-travel range and any gravitic-specific fuel rules.
 
 **Do not:** enable deeper unspace layouts as a side effect of touching sails or gravitic thrust.
-
-## D-9 Hull breach recovery
-
-**Status:** Discuss. **Severity:** Low.
-
-A hull breach still stops thrust and weapons. There is no tow, no distress contract, and no way to get a breached ship home except reloading. Paid repair at the yard assumes the ship is already docked.
-
-**Do not:** add recovery in the same pass as weapon retuning unless the player can reach a yard without flying a breached hull.

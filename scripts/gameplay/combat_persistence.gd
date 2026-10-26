@@ -18,10 +18,7 @@ func build_combat_state(assembled_ship: AssembledShip) -> ShipCombatState:
 	var state := ShipCombatState.from_assembled(assembled_ship)
 	if max_hull > 0.0:
 		state.hull_max = max_hull
-	if hull > 0.0:
-		state.hull_current = hull
-	else:
-		state.hull_current = state.hull_max
+		state.hull_current = clampf(hull, 0.0, max_hull)
 	state.power_integrity_lost = power_integrity_lost
 	state.compute_integrity_lost = compute_integrity_lost
 	if not shield_charges.is_empty():
