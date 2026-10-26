@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://pmp40e7pt37w" path="res://scripts/ui/main_menu.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://xs1jgiyxk6xv" path="res://assets/logo/logo_large.png" id="2_ekxnf"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="3"]
 
 [node name="MainMenu" type="CanvasLayer" unique_id=626500365]
 process_mode = 3
@@ -73,3 +74,24 @@ layout_mode = 2
 theme_type_variation = &"Meta"
 text = "DEV"
 horizontal_alignment = 1
+
+[node name="BottomTape" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -44.0
+offset_right = -40.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="HeadlineTape" parent="BottomTape" instance=ExtResource("3")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HudTicker"

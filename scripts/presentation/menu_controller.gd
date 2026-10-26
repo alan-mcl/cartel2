@@ -2,6 +2,7 @@ class_name MenuController
 extends RefCounted
 
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
+const CAREER_END_EPITAPH_DELAY_SEC := 3.0
 
 var _main_menu: CanvasLayer
 var _new_game: CanvasLayer
@@ -24,6 +25,7 @@ var _current_slot: int = -1
 var _save_overlay_source: String = ""
 var _on_session_changed: Callable
 var _ui_callbacks: Dictionary = {}
+var _career_end_epitaph_gen: int = 0
 
 
 func bind(
@@ -114,6 +116,7 @@ func toggle_pause() -> void:
 
 
 func show_main_menu() -> void:
+	_cancel_career_end_epitaph_delay()
 	_main.game_active = false
 	_current_slot = -1
 	_tree.paused = false
@@ -491,7 +494,35 @@ func _on_career_ended() -> void:
 	LeaderboardStore.upsert_from_session(_main.session, saved_at, _catalog, true)
 	SaveStore.delete_slots_for_career(_main.session.career.career_id)
 	_current_slot = -1
+	_hud.visible = false
 	_tree.paused = true
+	_schedule_career_end_epitaph()
+
+
+func _cancel_career_end_epitaph_delay() -> void:
+	_career_end_epitaph_gen += 1
+
+
+func _schedule_career_end_epitaph() -> void:
+	if _career_end != null and _career_end.visible:
+		return
+	_cancel_career_end_epitaph_delay()
+	var generation := _career_end_epitaph_gen
+	var timer := _tree.create_timer(CAREER_END_EPITAPH_DELAY_SEC, true)
+	timer.timeout.connect(
+		func() -> void:
+			if generation != _career_end_epitaph_gen:
+				return
+			_open_career_end_epitaph(),
+		CONNECT_ONE_SHOT
+	)
+
+
+func _open_career_end_epitaph() -> void:
+	if _main.session == null or _career_end == null:
+		return
+	if not _main.session.career.ended:
+		return
 	_career_end.open(_main.session, _catalog)
 
 

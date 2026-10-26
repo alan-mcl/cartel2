@@ -79,6 +79,41 @@ static func sector_display_label(catalog: Catalog, sector_id: String) -> String:
 	return sector.name if sector.has_source_key("name") else sector_id
 
 
+static func is_planetary_hub(catalog: Catalog, sector_id: String) -> bool:
+	if catalog == null or sector_id.is_empty():
+		return false
+	var world := catalog.get_world(sector_id)
+	if world.is_empty():
+		return false
+	var jump_gate: Variant = world.get("jump_gate", {})
+	return typeof(jump_gate) == TYPE_DICTIONARY and not jump_gate.is_empty()
+
+
+static func list_planetary_hub_sector_ids(catalog: Catalog) -> Array[String]:
+	var ids: Array[String] = []
+	if catalog == null:
+		return ids
+	for sector_id_variant in catalog.sectors_by_id.keys():
+		var sector_id := str(sector_id_variant).strip_edges()
+		if sector_id.is_empty():
+			continue
+		if is_planetary_hub(catalog, sector_id):
+			ids.append(sector_id)
+	ids.sort()
+	return ids
+
+
+static func assign_random_planetary_hub(session: GameSession, catalog: Catalog, rng: RandomNumberGenerator) -> void:
+	if session == null or catalog == null or rng == null:
+		return
+	var hubs := list_planetary_hub_sector_ids(catalog)
+	if hubs.is_empty():
+		session.sector_id = "proxima"
+	else:
+		session.sector_id = hubs[rng.randi_range(0, hubs.size() - 1)]
+	session.docked = false
+
+
 static func _pick_city_mall(sector: SectorDef, rng: RandomNumberGenerator) -> String:
 	if sector == null:
 		return ""

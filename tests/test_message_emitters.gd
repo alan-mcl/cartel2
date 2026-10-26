@@ -11,6 +11,7 @@ static func run(runner: TestRunner) -> void:
 	_test_push_preempts_random_sample(runner, catalog)
 	_test_headlines_sector_change_clears_push(runner, catalog)
 	_test_charter_gossip_quotes_live_offer(runner, catalog)
+	_test_menu_headline_tape_bindings(runner, catalog)
 	_test_pool_emitter_samples_one_channel(runner, catalog)
 	_test_commodity_emitter_quotes_a_price(runner, catalog)
 
@@ -129,6 +130,38 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 		habitat_label != corp_label,
 		"message emitters: habitat token must not duplicate corporation name"
 	)
+
+
+static func _test_menu_headline_tape_bindings(runner: TestRunner, catalog: Catalog) -> void:
+	var scratch := GameSession.new()
+	scratch.run_seed = 99
+	scratch.sector_id = "tycho"
+	scratch.docked = false
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 777
+	var bindings := MessageEmitterTokens.build_sector_bindings(scratch, catalog, rng)
+	runner.check_eq(
+		str(bindings.get("habitat", "")),
+		"Tycho Habitat",
+		"message emitters: undocked tycho habitat token is civil name"
+	)
+
+	var hubs := MessageEmitterTokens.list_planetary_hub_sector_ids(catalog)
+	runner.check(hubs.size() > 0, "message emitters: planetary hub list non-empty")
+	runner.check(hubs.has("proxima"), "message emitters: proxima is a planetary hub")
+
+	var messages := MessageSubsystem.new()
+	var tape_rng := RandomNumberGenerator.new()
+	tape_rng.seed = 13579
+	var got_line := false
+	for _attempt in range(48):
+		var line := MenuHeadlineTape.next_headline(messages, scratch, catalog, tape_rng)
+		if line.is_empty():
+			continue
+		got_line = true
+		runner.check(line.find("{") < 0, "message emitters: menu headline has no unfilled tokens")
+		break
+	runner.check(got_line, "message emitters: menu headline tape yields a line")
 
 
 static func _test_commodities_headline_includes_price(runner: TestRunner, catalog: Catalog) -> void:

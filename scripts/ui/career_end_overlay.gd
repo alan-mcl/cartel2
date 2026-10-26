@@ -9,6 +9,9 @@ signal leaderboard_requested
 @onready var _profit: Label = $Center/Panel/VBox/ProfitLabel
 @onready var _worth: Label = $Center/Panel/VBox/WorthLabel
 @onready var _time: Label = $Center/Panel/VBox/TimeLabel
+@onready var _background: ColorRect = $Background
+
+const FADE_IN_SEC := 0.6
 
 
 func _ready() -> void:
@@ -33,11 +36,19 @@ func open(session: GameSession, catalog: Catalog) -> void:
 	else:
 		_worth.visible = false
 	_time.text = "Career time: %s" % CareerStatsFormat.format_flight_time(session.career.played_seconds)
+	var backdrop := _background.color
+	_background.color = Color(backdrop.r, backdrop.g, backdrop.b, 0.0)
 	visible = true
+	var tween := create_tween()
+	tween.tween_property(_background, "color", backdrop, FADE_IN_SEC).set_trans(Tween.TRANS_SINE).set_ease(
+		Tween.EASE_OUT
+	)
 
 
 func close() -> void:
 	visible = false
+	if _background != null:
+		_background.color = Color(_background.color.r, _background.color.g, _background.color.b, 0.92)
 
 
 func _on_leaderboard_pressed() -> void:
