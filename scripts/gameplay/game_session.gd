@@ -948,7 +948,13 @@ func get_ship_cargo_capacity(catalog: Catalog, ship: OwnedShip) -> float:
 	return float(assembled.capacities.get("cargo_capacity", 0.0))
 
 
-func can_add_cargo(catalog: Catalog, ship: OwnedShip, commodity_id: String, amount: int) -> bool:
+func can_add_cargo(
+	catalog: Catalog,
+	ship: OwnedShip,
+	commodity_id: String,
+	amount: int,
+	missions: MissionSubsystem = null
+) -> bool:
 	if ship == null or amount <= 0:
 		return false
 	var commodity := catalog.get_commodity_def(commodity_id)
@@ -959,6 +965,7 @@ func can_add_cargo(catalog: Catalog, ship: OwnedShip, commodity_id: String, amou
 		return false
 	var capacity := get_ship_cargo_capacity(catalog, ship)
 	var current_mass := get_ship_cargo_mass(catalog, ship)
+	current_mass += _freight_reserved_tonnes(missions, ship)
 	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
 	var added_mass := unit_mass * amount
 	return current_mass + added_mass <= capacity + 0.001
@@ -968,7 +975,8 @@ func cargo_carry_block_reason(
 	catalog: Catalog,
 	ship: OwnedShip,
 	commodity_id: String,
-	amount: int = 1
+	amount: int = 1,
+	missions: MissionSubsystem = null
 ) -> String:
 	if ship == null:
 		return "No ship selected for cargo."
@@ -983,11 +991,18 @@ func cargo_carry_block_reason(
 		return cap_reason
 	var capacity := get_ship_cargo_capacity(catalog, ship)
 	var current_mass := get_ship_cargo_mass(catalog, ship)
+	current_mass += _freight_reserved_tonnes(missions, ship)
 	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
 	var added_mass := unit_mass * amount
 	if current_mass + added_mass > capacity + 0.001:
 		return "Not enough cargo capacity on %s." % ship.name
 	return ""
+
+
+func _freight_reserved_tonnes(missions: MissionSubsystem, ship: OwnedShip) -> float:
+	if missions == null or ship == null:
+		return 0.0
+	return float(missions.committed_freight_reserves_for_ship(ship.id).get("tonnes", 0.0))
 
 
 func get_spare_part_count(part_id: String) -> int:
@@ -1093,7 +1108,8 @@ func buy_commodity(
 	building_id: String,
 	commodity_id: String,
 	amount: int = 1,
-	ship_id: String = ""
+	ship_id: String = "",
+	missions: MissionSubsystem = null
 ) -> bool:
 	if amount <= 0:
 		return false
@@ -1119,7 +1135,7 @@ func buy_commodity(
 	if commodity == null:
 		return false
 
-	var block_reason := cargo_carry_block_reason(catalog, ship, commodity_id, amount)
+	var block_reason := cargo_carry_block_reason(catalog, ship, commodity_id, amount, missions)
 	if not block_reason.is_empty():
 		return fail_action(block_reason)
 

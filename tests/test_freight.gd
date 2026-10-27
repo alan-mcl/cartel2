@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cancel_at_origin(runner, catalog)
 	_test_dock_pays_and_clears(runner, catalog)
 	_test_reputation_gate(runner, catalog)
+	_test_exchange_buy_respects_freight_reserve(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -340,6 +341,92 @@ static func _test_dock_pays_and_clears(runner: TestRunner, catalog: Catalog) -> 
 	runner.check(missions.list_freight_accepted().is_empty(), "freight: dock clears contract")
 	runner.check(session.credits >= credits_before + reward, "freight: dock pays reward")
 	runner.check_eq(session.player.reputation, 1, "freight: on-time delivery gains reputation")
+
+
+static func _dry_bulk_offer(
+	catalog: Catalog,
+	origin_habitat_id: String,
+	destination_habitat_id: String,
+	offer_id: String,
+	tonnes: float
+) -> Dictionary:
+	var dest := catalog.get_habitat(destination_habitat_id)
+	var friction := PassengerCharters.friction_between(
+		catalog,
+		str(catalog.get_habitat(origin_habitat_id).get("sector_id", "")),
+		str(dest.get("sector_id", ""))
+	)
+	var cfg := FreightCharters.config(catalog)
+	var mass_per_unit := 1.2
+	var quantity := int(ceil(tonnes / mass_per_unit))
+	var reward := FreightCharters.compute_reward(cfg, quantity, mass_per_unit, 1.0, friction)
+	return {
+		"id": offer_id,
+		"origin_habitat_id": origin_habitat_id,
+		"destination_habitat_id": destination_habitat_id,
+		"destination_name": str(dest.get("name", destination_habitat_id)),
+		"destination_sector_id": str(dest.get("sector_id", "")),
+		"friction": friction,
+		"cargo_id": "freight_minerals",
+		"commodity_id": "minerals",
+		"quantity": quantity,
+		"mass_per_unit": mass_per_unit,
+		"tonnes": tonnes,
+		"requires_capabilities": [],
+		"life_support_seats": 0,
+		"compute_demand": 0.0,
+		"power_demand": 0.0,
+		"description": "Bulk ore for %s." % dest.get("name", ""),
+		"hold_label": "",
+		"reward": reward,
+	}
+
+
+static func _test_exchange_buy_respects_freight_reserve(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "FRT-HOLD")
+	var ship := session.get_cargo_ship()
+	if ship == null:
+		runner.check(false, "freight: hold overlap test needs cargo ship")
+		return
+	var hold_cap := session.get_ship_cargo_capacity(catalog, ship)
+	runner.check(hold_cap >= 4.0 - 0.001, "freight: hold overlap test expects at least 4 t hold")
+	var tight := _dry_bulk_offer(
+		catalog, "proxima_habitat", "irasia_habitat", "freight_hold_tight", 3.5
+	)
+	_inject_freight_offer(missions, session, catalog, tight)
+	runner.check(
+		missions.accept_freight_offer(session, catalog, tight.id, ship.id),
+		"freight: accept lot that nearly fills hold"
+	)
+	runner.check(session.visit(catalog, "proxima_exchange"), "freight: visit exchange for hold test")
+	runner.check(
+		not session.buy_commodity(
+			catalog, "proxima_exchange", "minerals", 1, "", missions
+		),
+		"freight: exchange buy blocked when freight plus cargo exceeds hold"
+	)
+	runner.check(
+		missions.cancel_freight_charter(
+			session,
+			catalog,
+			str(missions.list_freight_accepted()[0].get("charter_id", ""))
+		),
+		"freight: cancel to free hold for second buy"
+	)
+	var roomy := _dry_bulk_offer(
+		catalog, "proxima_habitat", "irasia_habitat", "freight_hold_roomy", 2.5
+	)
+	_inject_freight_offer(missions, session, catalog, roomy)
+	runner.check(
+		missions.accept_freight_offer(session, catalog, roomy.id, ship.id),
+		"freight: accept lot with spare hold"
+	)
+	runner.check(
+		session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, "", missions),
+		"freight: exchange buy allowed when freight plus cargo fits"
+	)
 
 
 static func _test_reputation_gate(runner: TestRunner, catalog: Catalog) -> void:

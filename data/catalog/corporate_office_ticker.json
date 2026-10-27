@@ -24,7 +24,7 @@
         "{product} — designed to integrate with professional workflows."
       ],
       "job": [
-        "Contract posted: {title}, destination {destination}.",
+        "Contract posted: {title}, destination {destination}; {2-6} berths still open.",
         "Field work available - {title} toward {destination}.",
         "Experienced operators invited to tender for {title} at {destination}.",
         "{title} - a straightforward contract for qualified operators bound for {destination}.",
@@ -40,7 +40,7 @@
         "Consider your next deployment: {title}, with work scheduled at {destination}."
       ],
       "recruitment": [
-        "Independent operators are welcome to enquire at this desk.",
+        "Independent operators are welcome to enquire at this desk during {day shift|night shift|swing shift}.",
         "We retain experienced crews on flexible terms.",
         "Qualified independents are invited to discuss contract opportunities.",
         "Your ship. Your schedule. A professional relationship with {brand}.",
@@ -71,7 +71,7 @@
     },
     "blunt": {
       "sku": [
-        "{product}. Built to take a beating.",
+        "{product}. Built to take a beating — ask about our {2-12}-month service plans.",
         "Need {product}? We sell what works, not brochures.",
         "{brand} {product} - fit it and fly.",
         "{product}. It works. That's the point.",

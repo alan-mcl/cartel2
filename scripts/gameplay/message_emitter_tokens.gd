@@ -3,13 +3,74 @@ extends RefCounted
 
 const MOVE_BAND := 0.05
 
+const SPORTS: Array[String] = ["cricket", "boxing", "buzkashi", "pylon racing"]
+const SHIFTS: Array[String] = ["day shift", "night shift", "swing shift"]
 
-static func apply_template(text: String, bindings: Dictionary) -> String:
-	var out := text
-	for key_variant in bindings.keys():
-		var key := str(key_variant)
-		out = out.replace("{%s}" % key, str(bindings[key]))
+
+static func apply_template(text: String, bindings: Dictionary, rng: RandomNumberGenerator) -> String:
+	var out := ""
+	var i := 0
+	while i < text.length():
+		var start := text.find("{", i)
+		if start < 0:
+			out += text.substr(i)
+			break
+		out += text.substr(i, start - i)
+		var end := text.find("}", start + 1)
+		if end < 0:
+			out += text.substr(start)
+			break
+		var inner := text.substr(start + 1, end - start - 1)
+		var resolved: Variant = _resolve_token(inner, bindings, rng)
+		if resolved == null:
+			out += text.substr(start, end - start + 1)
+		else:
+			out += str(resolved)
+		i = end + 1
 	return out
+
+
+static func _resolve_token(inner: String, bindings: Dictionary, rng: RandomNumberGenerator) -> Variant:
+	if inner.is_empty():
+		return null
+	if rng != null and _is_integer_range(inner):
+		return str(_pick_integer_range(inner, rng))
+	if rng != null and inner.find("|") >= 0:
+		return _pick_choice(inner, rng)
+	if bindings.has(inner):
+		return str(bindings[inner])
+	return null
+
+
+static func _is_integer_range(inner: String) -> bool:
+	var dash := inner.find("-")
+	if dash <= 0 or dash >= inner.length() - 1:
+		return false
+	var low_part := inner.substr(0, dash)
+	var high_part := inner.substr(dash + 1)
+	return low_part.is_valid_int() and high_part.is_valid_int()
+
+
+static func _pick_integer_range(inner: String, rng: RandomNumberGenerator) -> int:
+	var dash := inner.find("-")
+	var low := int(inner.substr(0, dash))
+	var high := int(inner.substr(dash + 1))
+	if low > high:
+		var swap := low
+		low = high
+		high = swap
+	return rng.randi_range(low, high)
+
+
+static func _pick_choice(inner: String, rng: RandomNumberGenerator) -> String:
+	var options: Array[String] = []
+	for part in inner.split("|"):
+		var option := str(part).strip_edges()
+		if not option.is_empty():
+			options.append(option)
+	if options.is_empty():
+		return inner
+	return options[rng.randi_range(0, options.size() - 1)]
 
 
 static func has_placeholders(text: String) -> bool:
@@ -42,11 +103,27 @@ static func build_sector_bindings(
 		"planet": planet,
 		"corporation": str(corps.get("corporation", "")),
 		"rival": str(corps.get("rival", "")),
+		"sport": SPORTS[rng.randi_range(0, SPORTS.size() - 1)],
+		"shift": SHIFTS[rng.randi_range(0, SHIFTS.size() - 1)],
 	}
 
-	var city_mall := _pick_city_mall(sector, rng)
+	bindings["corporation-ticker"] = str(corps.get("corporation_ticker", "")).strip_edges()
+	bindings["rival-ticker"] = str(corps.get("rival_ticker", "")).strip_edges()
+
+	var brand := str(corps.get("brand", "")).strip_edges()
+	if not brand.is_empty():
+		bindings["brand"] = brand
+	var rival_brand := str(corps.get("rival_brand", "")).strip_edges()
+	if not rival_brand.is_empty():
+		bindings["rival-brand"] = rival_brand
+
+	var malls := _pick_city_mall_pair(sector, rng)
+	var city_mall := str(malls.get("city-mall", "")).strip_edges()
 	if not city_mall.is_empty():
 		bindings["city-mall"] = city_mall
+	var city_mall2 := str(malls.get("city-mall2", "")).strip_edges()
+	if not city_mall2.is_empty():
+		bindings["city-mall2"] = city_mall2
 
 	var celebrity := _pick_celebrity_pilot(catalog, rng)
 	if not celebrity.is_empty():
@@ -60,11 +137,18 @@ static func build_sector_bindings(
 	if not jump_dest.is_empty():
 		bindings["jump-destination"] = jump_dest
 
-	var commodity_name := _pick_commodity_name(catalog, rng)
-	if not commodity_name.is_empty():
-		bindings["commodity"] = commodity_name
+	_merge_quoted_commodity_bindings(session, catalog, rng, bindings)
 
 	return bindings
+
+
+static func merge_quoted_commodity_bindings(
+	session: GameSession,
+	catalog: Catalog,
+	rng: RandomNumberGenerator,
+	bindings: Dictionary
+) -> bool:
+	return _merge_quoted_commodity_bindings(session, catalog, rng, bindings)
 
 
 static func sector_display_label(catalog: Catalog, sector_id: String) -> String:
@@ -114,21 +198,81 @@ static func assign_random_planetary_hub(session: GameSession, catalog: Catalog, 
 	session.docked = false
 
 
-static func _pick_city_mall(sector: SectorDef, rng: RandomNumberGenerator) -> String:
+static func pick_corp_brand(corp: Dictionary, rng: RandomNumberGenerator) -> String:
+	var raw: Variant = corp.get("brands", [])
+	if typeof(raw) != TYPE_ARRAY:
+		return str(corp.get("name", "")).strip_edges()
+	var brands: Array[String] = []
+	for item in raw:
+		var label := str(item).strip_edges()
+		if not label.is_empty():
+			brands.append(label)
+	if brands.is_empty():
+		return str(corp.get("name", "")).strip_edges()
+	return brands[rng.randi_range(0, brands.size() - 1)]
+
+
+static func corp_ticker(corp: Dictionary) -> String:
+	return str(corp.get("callsign_prefix", "")).strip_edges()
+
+
+static func _merge_quoted_commodity_bindings(
+	session: GameSession,
+	catalog: Catalog,
+	rng: RandomNumberGenerator,
+	bindings: Dictionary
+) -> bool:
+	CommodityEconomy.ensure_quotes(session, catalog)
+	var commodities := catalog.list_commodities()
+	if commodities.is_empty():
+		return false
+
+	for _attempt in range(16):
+		var pick: Dictionary = commodities[rng.randi_range(0, commodities.size() - 1)]
+		var commodity_id := str(pick.get("id", ""))
+		if commodity_id.is_empty():
+			continue
+		var quote := CommodityEconomy.quote_for_sector(session, catalog, session.sector_id, commodity_id)
+		var price := int(quote.get("price", 0))
+		if price < 1:
+			continue
+		var base_price := int(pick.get("base_price", 0))
+		var name := str(pick.get("name", commodity_id))
+		bindings["commodity"] = name
+		bindings["price"] = str(price)
+		bindings["move"] = price_move_label(base_price, price)
+		return true
+	return false
+
+
+static func _city_mall_names(sector: SectorDef) -> Array[String]:
+	var names: Array[String] = []
 	if sector == null:
-		return ""
+		return names
 	var malls: Variant = sector.city_malls
 	if typeof(malls) != TYPE_ARRAY or malls.is_empty():
-		return ""
-	var names: Array[String] = []
+		return names
 	for entry_variant in malls:
 		var name := str(entry_variant).strip_edges()
 		if not name.is_empty():
 			names.append(name)
-	if names.is_empty():
-		return ""
 	names.sort()
-	return names[rng.randi_range(0, names.size() - 1)]
+	return names
+
+
+static func _pick_city_mall_pair(sector: SectorDef, rng: RandomNumberGenerator) -> Dictionary:
+	var names := _city_mall_names(sector)
+	if names.is_empty():
+		return {}
+	var first := names[rng.randi_range(0, names.size() - 1)]
+	if names.size() == 1:
+		return {"city-mall": first, "city-mall2": first}
+	var second := first
+	var guard := 0
+	while second == first and guard < 8:
+		second = names[rng.randi_range(0, names.size() - 1)]
+		guard += 1
+	return {"city-mall": first, "city-mall2": second}
 
 
 static func _pick_celebrity_pilot(catalog: Catalog, rng: RandomNumberGenerator) -> String:
@@ -191,14 +335,6 @@ static func _pick_jump_destination(
 	return sector_display_label(catalog, pick_id)
 
 
-static func _pick_commodity_name(catalog: Catalog, rng: RandomNumberGenerator) -> String:
-	var commodities := catalog.list_commodities()
-	if commodities.is_empty():
-		return ""
-	var pick: Dictionary = commodities[rng.randi_range(0, commodities.size() - 1)]
-	return str(pick.get("name", "")).strip_edges()
-
-
 static func _pick_habitat_name(
 	catalog: Catalog,
 	sector_id: String,
@@ -253,15 +389,16 @@ static func _pick_corporation_pair(
 	ids.sort()
 	if ids.is_empty():
 		var fallback := CorporatePresence.pick_corporation(catalog, sector_id, rng.randf())
+		var fallback_id := str(fallback.get("id", "")).strip_edges()
 		var name := str(fallback.get("name", "Corporate Operator"))
-		return {"corporation": name, "rival": name}
+		return _corp_pair_dict(fallback, fallback, name, name, rng)
 
 	var first_id := ids[rng.randi_range(0, ids.size() - 1)]
 	var first := catalog.get_corporation(first_id)
 	var first_name := str(first.get("name", first_id))
 
 	if ids.size() == 1:
-		return {"corporation": first_name, "rival": first_name}
+		return _corp_pair_dict(first, first, first_name, first_name, rng)
 
 	var second_id := first_id
 	var guard := 0
@@ -270,4 +407,28 @@ static func _pick_corporation_pair(
 		guard += 1
 	var second := catalog.get_corporation(second_id)
 	var second_name := str(second.get("name", second_id))
-	return {"corporation": first_name, "rival": second_name}
+	return _corp_pair_dict(first, second, first_name, second_name, rng)
+
+
+static func _corp_pair_dict(
+	first: Dictionary,
+	second: Dictionary,
+	first_name: String,
+	second_name: String,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var first_ticker := corp_ticker(first)
+	if first_ticker.is_empty():
+		first_ticker = first_name
+	var second_ticker := corp_ticker(second)
+	if second_ticker.is_empty():
+		second_ticker = second_name
+	return {
+		"corporation": first_name,
+		"rival": second_name,
+		"corporation_ticker": first_ticker,
+		"rival_ticker": second_ticker,
+		"brand": pick_corp_brand(first, rng),
+		"rival_brand": pick_corp_brand(second, rng),
+	}
+

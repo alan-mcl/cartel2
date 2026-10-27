@@ -135,7 +135,7 @@ Eight categories require installed cargo-bay **capabilities** on the carrying sh
 | Military Goods | `military_grade` |
 | Compute Cores | `compute_integrated` |
 
-Consumer Goods, Energy, Industrial Components, Advanced Raw Materials, and Minerals use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting.
+Consumer Goods, Energy, Industrial Components, Advanced Raw Materials, and Minerals use ordinary dry holds. The Exchange **blocks buys** when the selected ship lacks the required hold; **sells** remain allowed so you can offload cargo after refitting. Buys also count **accepted freight tonnes** reserved on that ship, so trade cargo and charter lots share one hold.
 
 ## Current implementation
 

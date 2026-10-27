@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_headlines_sector_change_clears_push(runner, catalog)
 	_test_charter_gossip_quotes_live_offer(runner, catalog)
 	_test_menu_headline_tape_bindings(runner, catalog)
+	_test_flavour_token_resolver(runner, catalog)
 	_test_pool_emitter_samples_one_channel(runner, catalog)
 	_test_commodity_emitter_quotes_a_price(runner, catalog)
 
@@ -90,6 +91,17 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 			malls.has(bindings["city-mall"]),
 			"message emitters: city-mall comes from sector list"
 		)
+	runner.check(bindings.has("city-mall2"), "message emitters: proxima bindings include city-mall2")
+	if bindings.has("city-mall2"):
+		runner.check(
+			malls.has(bindings["city-mall2"]),
+			"message emitters: city-mall2 comes from sector list"
+		)
+		if malls.size() > 1:
+			runner.check(
+				str(bindings["city-mall2"]) != str(bindings.get("city-mall", "")),
+				"message emitters: city-mall2 differs from city-mall when sector has multiple malls"
+			)
 
 	var pilot_names: Array[String] = []
 	for pilot_variant in catalog.list_celebrity_pilots():
@@ -121,7 +133,10 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 			"message emitters: jump-destination is not current sector"
 		)
 
-	runner.check(bindings.has("commodity"), "message emitters: bindings include commodity name")
+	runner.check(
+		bindings.has("commodity") or bindings.has("sport"),
+		"message emitters: bindings include quoted commodity or sport token"
+	)
 
 	var habitat_label := str(bindings.get("habitat", ""))
 	runner.check_eq(habitat_label, "Proxima Habitat", "message emitters: habitat token is civil dock name")
@@ -162,6 +177,56 @@ static func _test_menu_headline_tape_bindings(runner: TestRunner, catalog: Catal
 		runner.check(line.find("{") < 0, "message emitters: menu headline has no unfilled tokens")
 		break
 	runner.check(got_line, "message emitters: menu headline tape yields a line")
+
+
+static func _test_flavour_token_resolver(runner: TestRunner, catalog: Catalog) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 88001
+	for _i in range(24):
+		var n := int(MessageEmitterTokens.apply_template("{4-9}", {}, rng))
+		runner.check(n >= 4 and n <= 9, "message emitters: integer range stays within bounds")
+	var choice_rng := RandomNumberGenerator.new()
+	choice_rng.seed = 88002
+	var picked := MessageEmitterTokens.apply_template("{alpha|beta|gamma}", {}, choice_rng)
+	runner.check(
+		picked == "alpha" or picked == "beta" or picked == "gamma",
+		"message emitters: choice token picks a listed option"
+	)
+	runner.check(
+		MessageEmitterTokens.apply_template("{not-a-binding}", {}, rng).find("{") >= 0,
+		"message emitters: unknown token left for retry logic"
+	)
+
+	var session := _session(catalog)
+	var bind_rng := RandomNumberGenerator.new()
+	bind_rng.seed = 88003
+	var bindings := MessageEmitterTokens.build_sector_bindings(session, catalog, bind_rng)
+	var sport := str(bindings.get("sport", ""))
+	runner.check(
+		sport in MessageEmitterTokens.SPORTS,
+		"message emitters: sport token is a catalogued sport"
+	)
+	var corp_name := str(bindings.get("corporation", ""))
+	var ticker := str(bindings.get("corporation-ticker", ""))
+	var expected_ticker := ""
+	for corp_variant in catalog.list_corporations():
+		if typeof(corp_variant) != TYPE_DICTIONARY:
+			continue
+		var corp: Dictionary = corp_variant
+		if str(corp.get("name", "")) == corp_name:
+			expected_ticker = MessageEmitterTokens.corp_ticker(corp)
+			break
+	runner.check_eq(ticker, expected_ticker, "message emitters: corporation-ticker matches callsign_prefix")
+
+	var office_rng := RandomNumberGenerator.new()
+	office_rng.seed = 88004
+	var office_line := MessageEmitterTokens.apply_template(
+		"Need {2-5} crews for {left|right} hand work.",
+		{},
+		office_rng
+	)
+	runner.check(office_line.find("{") < 0, "message emitters: office-style inline tokens fill")
+	runner.check(office_line.find("left") >= 0 or office_line.find("right") >= 0, "message emitters: choice resolved in office line")
 
 
 static func _test_commodities_headline_includes_price(runner: TestRunner, catalog: Catalog) -> void:

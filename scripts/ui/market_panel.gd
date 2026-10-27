@@ -222,6 +222,11 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 		cargo_qty = _context.session.get_cargo_count(cargo_ship, _selected_commodity_id)
 		cargo_cap = _context.session.get_ship_cargo_capacity(_context.catalog, cargo_ship)
 		cargo_mass = _context.session.get_ship_cargo_mass(_context.catalog, cargo_ship)
+		var missions := _missions()
+		if missions != null:
+			cargo_mass += float(
+				missions.committed_freight_reserves_for_ship(cargo_ship.id).get("tonnes", 0.0)
+			)
 
 	var commodity_label := _selected_commodity_id
 	if commodity.has_source_key("name"):
@@ -259,7 +264,8 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 			_context.catalog,
 			cargo_ship,
 			_selected_commodity_id,
-			1
+			1,
+			_missions()
 		).is_empty()
 	buy.pressed.connect(_on_buy_commodity.bind(_selected_commodity_id))
 	actions.add_child(buy)
@@ -285,8 +291,15 @@ func _on_buy_commodity(commodity_id: String) -> void:
 		_context.session.building_id,
 		commodity_id,
 		1,
-		_cargo_ship_id
+		_cargo_ship_id,
+		_missions()
 	)
+
+
+func _missions() -> MissionSubsystem:
+	if _context == null or _context.simulation == null:
+		return null
+	return _context.simulation.get_subsystem("missions") as MissionSubsystem
 
 
 func _on_sell_commodity(commodity_id: String) -> void:

@@ -54,7 +54,7 @@ func _sample_from_templates(
 		var template := str(pick.get("text", "")).strip_edges()
 		if template.is_empty():
 			continue
-		var text := MessageEmitterTokens.apply_template(template, bindings)
+		var text := MessageEmitterTokens.apply_template(template, bindings, rng)
 		if MessageEmitterTokens.has_placeholders(text):
 			continue
 		return {

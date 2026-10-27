@@ -1207,7 +1207,14 @@ MESSAGE_PLACEHOLDERS = {
     "planet",
     "corporation",
     "rival",
+    "corporation-ticker",
+    "rival-ticker",
+    "brand",
+    "rival-brand",
+    "sport",
+    "shift",
     "city-mall",
+    "city-mall2",
     "celebrity-pilot",
     "local-star-system-location",
     "jump-destination",
@@ -1218,7 +1225,11 @@ MESSAGE_PLACEHOLDERS = {
     "quantity",
     "label",
     "desk",
+    "product",
+    "title",
 }
+
+MESSAGE_INTEGER_RANGE_RE = re.compile(r"^\d+-\d+$")
 
 STAR_FIELDS = {
     "star_system",
@@ -1233,6 +1244,17 @@ STAR_FIELDS = {
 STAR_POSITIVE_NUMBERS = {"temperature_k", "luminosity", "mass_solar", "radius_solar"}
 
 PLACEHOLDER_RE = re.compile(r"\{([^{}]+)\}")
+
+
+def message_template_token_allowed(token: str) -> bool:
+    if token in MESSAGE_PLACEHOLDERS:
+        return True
+    if MESSAGE_INTEGER_RANGE_RE.match(token):
+        return True
+    if "|" in token:
+        parts = [part.strip() for part in token.split("|")]
+        return bool(parts) and all(parts)
+    return False
 
 
 def check_fuels(fuels: list, modules: list) -> list[str]:
@@ -1312,7 +1334,7 @@ def check_message_emitters(emitters: list) -> list[str]:
             if tone not in MESSAGE_TONES:
                 errors.append(f"{template_label}: unknown tone '{tone}'")
             for token in PLACEHOLDER_RE.findall(text):
-                if token not in MESSAGE_PLACEHOLDERS:
+                if not message_template_token_allowed(token):
                     errors.append(f"{template_label}: unknown placeholder '{{{token}}}'")
     return errors
 

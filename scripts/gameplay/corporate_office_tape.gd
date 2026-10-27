@@ -72,15 +72,21 @@ static func next_line(
 	var pick := forced_source if not forced_source.is_empty() else sources[rng.randi_range(0, sources.size() - 1)]
 	match pick:
 		SOURCE_SKU:
-			return _sample_sku(catalog, corp, maker_name, voice_def, rng)
+			return _sample_sku(catalog, session, corp, maker_name, voice_def, rng)
 		SOURCE_BRAND:
-			return _sample_brand(corp, voice_def, rng)
+			return _sample_brand(session, catalog, corp, voice_def, rng)
 		SOURCE_JOB:
 			return _sample_job(simulation, session, catalog, building_id, corp, voice_def, rng)
 		SOURCE_TRADE:
-			return str(corp.get("trade", "")).strip_edges()
+			return _normalize_line(
+				MessageEmitterTokens.apply_template(
+					str(corp.get("trade", "")).strip_edges(),
+					_desk_bindings(session, catalog, corp, rng, {}),
+					rng
+				)
+			)
 		SOURCE_RECRUITMENT:
-			return _sample_recruitment(corp, voice_def, rng)
+			return _sample_recruitment(session, catalog, corp, voice_def, rng)
 		_:
 			return ""
 
@@ -98,22 +104,53 @@ static func _corp_brands(corp: Dictionary) -> Array:
 
 
 static func _pick_corp_brand(corp: Dictionary, rng: RandomNumberGenerator) -> String:
-	var brands := _corp_brands(corp)
-	if brands.is_empty():
-		return str(corp.get("name", "")).strip_edges()
-	return str(brands[rng.randi_range(0, brands.size() - 1)])
+	return MessageEmitterTokens.pick_corp_brand(corp, rng)
 
 
 static func _corp_display_name(corp: Dictionary) -> String:
 	return str(corp.get("name", "")).strip_edges()
 
 
-static func _finalize_line(line: String, corp: Dictionary) -> String:
-	var out := line.replace("  ", " ").strip_edges()
-	var fallback := _corp_display_name(corp)
-	if fallback.is_empty():
-		return out.replace("{brand}", "")
-	return out.replace("{brand}", fallback)
+static func _normalize_line(line: String) -> String:
+	return line.replace("  ", " ").strip_edges()
+
+
+static func _desk_bindings(
+	session: GameSession,
+	catalog: Catalog,
+	corp: Dictionary,
+	rng: RandomNumberGenerator,
+	extra: Dictionary
+) -> Dictionary:
+	var bindings := MessageEmitterTokens.build_sector_bindings(session, catalog, rng)
+	var desk_name := _corp_display_name(corp)
+	if not desk_name.is_empty():
+		bindings["corporation"] = desk_name
+		bindings["corporation-ticker"] = MessageEmitterTokens.corp_ticker(corp)
+	var desk_brand := _pick_corp_brand(corp, rng)
+	if not desk_brand.is_empty():
+		bindings["brand"] = desk_brand
+	for key_variant in extra.keys():
+		bindings[key_variant] = extra[key_variant]
+	return bindings
+
+
+static func _apply_desk_template(
+	session: GameSession,
+	catalog: Catalog,
+	corp: Dictionary,
+	rng: RandomNumberGenerator,
+	template: String,
+	extra: Dictionary = {}
+) -> String:
+	var line := MessageEmitterTokens.apply_template(
+		template,
+		_desk_bindings(session, catalog, corp, rng, extra),
+		rng
+	)
+	if MessageEmitterTokens.has_placeholders(line):
+		return ""
+	return _normalize_line(line)
 
 
 static func _sku_pool(catalog: Catalog, maker_name: String) -> Array:
@@ -135,6 +172,7 @@ static func _sku_pool(catalog: Catalog, maker_name: String) -> Array:
 
 static func _sample_sku(
 	catalog: Catalog,
+	session: GameSession,
 	corp: Dictionary,
 	maker_name: String,
 	voice_def: Dictionary,
@@ -148,19 +186,14 @@ static func _sample_sku(
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	return _apply_product_tokens(template, product_def, corp)
-
-
-static func _apply_product_tokens(template: String, product_def: Dictionary, corp: Dictionary) -> String:
 	var product := str(product_def.get("name", product_def.get("id", ""))).strip_edges()
 	var brand := str(product_def.get("brand", "")).strip_edges()
 	if brand.is_empty():
 		brand = _corp_display_name(corp)
-	var line := template.replace("{product}", product).replace("{brand}", brand)
-	return _finalize_line(line, corp)
+	return _apply_desk_template(session, catalog, corp, rng, template, {"product": product, "brand": brand})
 
 
-static func _sample_brand(corp: Dictionary, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
+static func _sample_brand(session: GameSession, catalog: Catalog, corp: Dictionary, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
 	var brands := _corp_brands(corp)
 	if brands.is_empty():
 		return ""
@@ -168,8 +201,7 @@ static func _sample_brand(corp: Dictionary, voice_def: Dictionary, rng: RandomNu
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	var brand := _pick_corp_brand(corp, rng)
-	return _finalize_line(template.replace("{brand}", brand), corp)
+	return _apply_desk_template(session, catalog, corp, rng, template)
 
 
 static func _job_pool(
@@ -229,23 +261,31 @@ static func _sample_job(
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	var brand := _pick_corp_brand(corp, rng)
-	var line := (
-		template
-		.replace("{title}", str(entry.get("title", "")))
-		.replace("{destination}", str(entry.get("destination", "")))
-		.replace("{brand}", brand)
+	return _apply_desk_template(
+		session,
+		catalog,
+		corp,
+		rng,
+		template,
+		{
+			"title": str(entry.get("title", "")),
+			"destination": str(entry.get("destination", "")),
+		}
 	)
-	return _finalize_line(line, corp)
 
 
-static func _sample_recruitment(corp: Dictionary, voice_def: Dictionary, rng: RandomNumberGenerator) -> String:
+static func _sample_recruitment(
+	session: GameSession,
+	catalog: Catalog,
+	corp: Dictionary,
+	voice_def: Dictionary,
+	rng: RandomNumberGenerator
+) -> String:
 	var templates: Array = _string_array(voice_def.get("recruitment", []))
 	if templates.is_empty():
 		return ""
 	var template: String = str(templates[rng.randi_range(0, templates.size() - 1)])
-	var brand := _pick_corp_brand(corp, rng)
-	return _finalize_line(template.replace("{brand}", brand), corp)
+	return _apply_desk_template(session, catalog, corp, rng, template)
 
 
 static func _string_array(value: Variant) -> Array:
