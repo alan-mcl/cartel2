@@ -140,7 +140,7 @@ Irasia is a prosperous and heavily industrialised world, with enormous coastal c
 
 ### Planet Surface
 
- - City Malls: La Palma, Fairhaven CM, Albion CM, New Singapore, Grand Exchange CM, Commerce CM, Samarkand Stack, Isfahan CM, Amber CM, Ring of Fire CM, Ormuz Arc, Zaytun Arc, Pearl City Stack, New Malacca, Jade CM, New Zanzibar Arc, Kamchatka Stack
+ - City Malls: La Palma, Fairhaven CM, Albion CM, New Singapore, Grand Exchange CM, Commerce CM, Samarkand Stack, Isfahan CM, Amber CM, Ring of Fire CM, Ormuz Arc, Zaytun Arc, Pearl City Stack, New Malacca, Jade CM, New Zanzibar Arc, Kamchatka Stack, Imperial Arc, New Westminster, La Salle CM, St Moritz CM, Syracuse CM
 
 ### Planetary Orbit
 
@@ -170,7 +170,7 @@ Tokirev is a large, cold industrial world dominated by manufacturing and heavy i
 
 ### Planet Surface
 
- - City Malls: Kaliningrad CM, Severin CM, Yamal CM, Taiga Stack, Winterhold CM, Steelworks CM, Aurora CM, Permafrost Stack, Varyag Stack, New Haven CM, New Brighton CM, New Ulaanbaatar, Tashkent Arc, New Pune, Dragon Gate CM, Eastgate CM, Blackpool CM, Kanazawa CM, New Lhasa Stack, Vanilla CM, Syrah CM, Dalian Stack
+ - City Malls: Kaliningrad CM, Severin CM, Yamal CM, Taiga Stack, Winterhold CM, Steelworks CM, Aurora CM, Permafrost Stack, Varyag Stack, New Haven CM, New Brighton CM, New Ulaanbaatar, Tashkent Arc, New Pune, Dragon Gate CM, Eastgate CM, Blackpool CM, Kanazawa CM, New Lhasa Stack, Vanilla CM, Syrah CM, Dalian Stack, Yukon CM
 
 ### Planetary Orbit
 
@@ -199,7 +199,7 @@ Fennet is a populous, temperate world that has grown from a once-isolated fronti
 
 ### Planet Surface
 
-City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New Dunedin, Larkspur CM, Settlers CM, Stirling CM, Penang CM, New Eden Arc, Fairmead Arc, Bitters Stack, Kirkland CM, New Benoni, Table CM, Busan CM
+City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New Dunedin, Larkspur CM, Settlers CM, Stirling CM, Penang CM, New Eden Arc, Fairmead Arc, Bitters Stack, Kirkland CM, New Benoni, Table CM, Busan CM, Valhalla CM
 
 ### Planetary orbit
 
@@ -228,7 +228,7 @@ Fortuna is a wealthy and densely populated world whose prosperity was built on f
 
 ### Planet Surface
 
- - City Malls: Jubilee CM, New Venice, Bellagio CM, Monte Carlo Arc, Canary CM, Lombard Arc, New Charter, Goldcrest CM, Silvergate CM, Clarendon CM, Sovereign CM, Bullion CM, Patrician CM, Tiger Arc, St James Arc, Regent Stack, Arcadia CM, Compound Arc, Founders Arc, Imperial Arc, New Westminster, La Salle CM.
+ - City Malls: Jubilee CM, New Venice, Bellagio CM, Monte Carlo Arc, Canary CM, Lombard Arc, New Charter, Goldcrest CM, Silvergate CM, Clarendon CM, Sovereign CM, Bullion CM, Patrician CM, Tiger Arc, St James Arc, Regent Stack, Arcadia CM, Compound Arc, Founders Arc.
 
 ### Planetary Orbit
 
@@ -259,7 +259,7 @@ New Carthage is a largely oceanic world whose major population centres developed
 
 ### Planet Surface
 
- - City Malls: Carthage CM, New Tyre, Leptis CM, Utica Arc, Alexandria Arc, New Malta, New Tangier Stack, Hormuz CM, Admiralty CM, Ocean Gate CM, Saffron City CM, Mercantile CM, Port Said, Cadiz CM, Mariners Arc, New Berbera, Mombasa Arc
+ - City Malls: Carthage CM, New Tyre, Leptis CM, Utica Arc, Alexandria Arc, New Malta, New Tangier Stack, Hormuz CM, Admiralty CM, Ocean Gate CM, Saffron City CM, Mercantile CM, Port Said, Cadiz CM, Mariners Arc, New Berbera, Mombasa Arc, Arc Banff
 
 ### Planetary orbit
 
@@ -289,7 +289,7 @@ Horizon is one of the galaxy's great population centres, with many urban develop
 
 ### Planet Surface
 
- - City Malls: Horizon CM, Meridian CM, Providence CM, New Geneva, Ascension CM, Grand Canyon CM, Kingston CM, Prairie CM, Grandview CM, Civic CM, Equator CM, New World CM, Midlands CM, New Lagos, Cambridge CM, Chanderpaul Stack, Reunion CM
+ - City Malls: Horizon CM, Meridian CM, Providence CM, New Geneva, Ascension CM, Grand Canyon CM, Kingston CM, Prairie CM, Grandview CM, Civic CM, Equator CM, New World CM, Midlands CM, New Lagos, Cambridge CM, Chanderpaul Stack, Reunion CM, Tromsø CM, Hokkaido Stack, Valhalla Stack, Heartland Arc
 
 ### Planetary Orbit
 
@@ -318,7 +318,7 @@ The ninth moon of the gas giant Titania in the Wolf 359 system is an E class wor
 
 ### Planet Surface
 
- - City Malls: Titania Central, Skygarden CM, Summit CM, Icebridge Arc, Winter Palace CM, Borealis CM, Lumen CM, Edelweiss CM, New Queenstown, New Reykjavik Stack, Yukon CM, Valhalla CM, Arc Banff, Tromsø CM, Hokkaido Stack, St Moritz CM, Syracuse CM
+ - City Malls: Titania Central, Skygarden CM, Summit CM, Icebridge Arc, Winter Palace CM, Borealis CM, Lumen CM, Edelweiss CM, New Queenstown, New Reykjavik Stack
 
 ### Planetary orbit
 
@@ -350,7 +350,7 @@ Pelagos is a prosperous world orbiting two suns, with enormous coastal cities an
 
 ### Planet Surface
 
- - City Malls: Mediran CM, Twin Cities CM, New Cambridge, Sundial CM, Solstice CM, Gold Coast CM, Cince CM, Enterprise CM, Brightwater CM, Crownpoint Stack, Sunrise CM, Helios CM, Dawnstar CM, Republic CM, New Nagasaki, Highland CM, Valhalla Stack, Heartland Arc, Lincoln CM
+ - City Malls: Mediran CM, Twin Cities CM, New Cambridge, Sundial CM, Solstice CM, Gold Coast CM, Cince CM, Enterprise CM, Brightwater CM, Crownpoint Stack, Sunrise CM, Helios CM, Dawnstar CM, Republic CM, New Nagasaki, Highland CM, Lincoln CM
 
 ### Orbitals
 

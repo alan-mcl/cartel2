@@ -158,11 +158,11 @@
 			"Jade CM",
 			"New Zanzibar Arc",
 			"Kamchatka Stack",
-			"CM-1",
-			"CM-2",
-			"CM-3",
-			"CM-4",
-			"CM-5"
+			"Imperial Arc",
+			"New Westminster",
+			"La Salle CM",
+			"St Moritz CM",
+			"Syracuse CM"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Irasia near orbit",
@@ -212,7 +212,7 @@
 			"Vanilla CM",
 			"Syrah CM",
 			"Dalian Stack",
-			"CM-1"
+			"Yukon CM"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Tokirev near orbit",
@@ -257,7 +257,7 @@
 			"New Benoni",
 			"Table CM",
 			"Busan CM",
-			"CM-1"
+			"Valhalla CM"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Fennet near orbit",
@@ -303,10 +303,7 @@
 			"Regent Stack",
 			"Arcadia CM",
 			"Compound Arc",
-			"Founders Arc",
-			"Imperial Arc",
-			"New Westminster",
-			"La Salle CM"
+			"Founders Arc"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Fortuna near orbit",
@@ -351,7 +348,7 @@
 			"Mariners Arc",
 			"New Berbera",
 			"Mombasa Arc",
-			"CM-1"
+			"Arc Banff"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore New Carthage near orbit",
@@ -396,10 +393,10 @@
 			"Cambridge CM",
 			"Chanderpaul Stack",
 			"Reunion CM",
-			"CM-1",
-			"CM-2",
-			"CM-3",
-			"CM-4"
+			"Tromsø CM",
+			"Hokkaido Stack",
+			"Valhalla Stack",
+			"Heartland Arc"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Horizon near orbit",
@@ -436,14 +433,7 @@
 			"Lumen CM",
 			"Edelweiss CM",
 			"New Queenstown",
-			"New Reykjavik Stack",
-			"Yukon CM",
-			"Valhalla CM",
-			"Arc Banff",
-			"Tromsø CM",
-			"Hokkaido Stack",
-			"St Moritz CM",
-			"Syracuse CM"
+			"New Reykjavik Stack"
 		],
 		"play_bounds": 8000,
 		"objective": "Explore Titania IX near orbit",
@@ -487,8 +477,6 @@
 			"Republic CM",
 			"New Nagasaki",
 			"Highland CM",
-			"Valhalla Stack",
-			"Heartland Arc",
 			"Lincoln CM"
 		],
 		"play_bounds": 8000,

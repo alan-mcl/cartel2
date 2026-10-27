@@ -193,7 +193,7 @@
       ]
     },
     {
-      "name": "CM-1",
+      "name": "Tromsø CM",
       "u": 0.640643,
       "v": 0.537204,
       "radius_px": 31.13,
@@ -204,7 +204,7 @@
       ]
     },
     {
-      "name": "CM-2",
+      "name": "Hokkaido Stack",
       "u": 0.92982,
       "v": 0.449267,
       "radius_px": 30.72,
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "name": "CM-3",
+      "name": "Valhalla Stack",
       "u": 0.09611,
       "v": 0.630778,
       "radius_px": 30.23,
@@ -226,7 +226,7 @@
       ]
     },
     {
-      "name": "CM-4",
+      "name": "Heartland Arc",
       "u": 0.408963,
       "v": 0.33991,
       "radius_px": 28.43,

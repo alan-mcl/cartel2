@@ -193,7 +193,7 @@
       ]
     },
     {
-      "name": "CM-1",
+      "name": "Imperial Arc",
       "u": 0.447294,
       "v": 0.454904,
       "radius_px": 28.41,
@@ -204,7 +204,7 @@
       ]
     },
     {
-      "name": "CM-2",
+      "name": "New Westminster",
       "u": 0.593292,
       "v": 0.617249,
       "radius_px": 28.27,
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "name": "CM-3",
+      "name": "La Salle CM",
       "u": 0.942221,
       "v": 0.457159,
       "radius_px": 27.94,
@@ -226,7 +226,7 @@
       ]
     },
     {
-      "name": "CM-4",
+      "name": "St Moritz CM",
       "u": 0.846956,
       "v": 0.784104,
       "radius_px": 27.7,
@@ -237,7 +237,7 @@
       ]
     },
     {
-      "name": "CM-5",
+      "name": "Syracuse CM",
       "u": 0.883596,
       "v": 0.342165,
       "radius_px": 27.67,
