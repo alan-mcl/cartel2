@@ -2,6 +2,7 @@ extends Node2D
 class_name Ascidian
 
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
+const AscidianTerrainSteer := preload("res://scripts/gameplay/ascidian_terrain_steer.gd")
 
 var _field: NspaceField = null
 var _visit_rng := RandomNumberGenerator.new()
@@ -32,6 +33,12 @@ var _waypoint: Vector2 = Vector2.ZERO
 var _velocity: Vector2 = Vector2.ZERO
 var _time: float = 0.0
 var _fixed_swim_depth: float = -1.0
+var _attention_drift: Vector2 = Vector2.ZERO
+var _sting_charging: bool = false
+var _charge_player_pos: Vector2 = Vector2.ZERO
+var _terrain_flow_until: float = 0.0
+var _terrain_quiet_until: float = 0.0
+var _terrain_flow_duration: float = 0.0
 
 
 func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rng: RandomNumberGenerator) -> void:
@@ -52,6 +59,10 @@ func configure(field: NspaceField, cfg: Dictionary, start_pos: Vector2, visit_rn
 		_altitude_max = _fixed_swim_depth
 		_altitude = _fixed_swim_depth
 		_altitude_target = _fixed_swim_depth
+	elif cfg.has("initial_swim_depth"):
+		var mid := float(cfg["initial_swim_depth"])
+		_altitude = mid
+		_altitude_target = mid
 	else:
 		_altitude_min = float(cfg.get("altitude_min", cfg.get("swim_depth_min", 0.12)))
 		_altitude_max = float(cfg.get("altitude_max", cfg.get("swim_depth_max", 0.88)))
@@ -107,6 +118,17 @@ func get_radius() -> float:
 	return _radius
 
 
+func set_hazard_context(
+	_instability: float,
+	attention_drift: Vector2,
+	sting_charging: bool = false,
+	player_pos: Vector2 = Vector2.ZERO
+) -> void:
+	_attention_drift = attention_drift
+	_sting_charging = sting_charging
+	_charge_player_pos = player_pos
+
+
 func get_render_time() -> float:
 	return _time
 
@@ -138,6 +160,7 @@ func _physics_process(delta: float) -> void:
 
 	_time += delta
 	_color_lerp = fmod(_color_lerp + _color_drift_speed * delta, 1.0)
+	_update_terrain_flow_schedule()
 	_update_altitude(delta)
 	_wander(delta)
 
@@ -153,15 +176,29 @@ func _wander(delta: float) -> void:
 		dist = to_waypoint.length()
 
 	var desired := Vector2.ZERO
-	if dist > 0.001:
-		var urgency := clampf(dist / maxf(_radius * 5.0, 300.0), 0.15, 1.0)
-		desired = to_waypoint / dist * _speed * urgency
+	if _sting_charging and _charge_player_pos.is_finite():
+		var to_player := _charge_player_pos - position
+		var player_dist := to_player.length()
+		if player_dist > maxf(_radius * 1.8, 90.0):
+			desired = to_player.normalized() * _speed * UnspaceAscidianHazards.STING_CHARGE_SPEED_SCALE
+	else:
+		if dist > 0.001:
+			var urgency := clampf(dist / maxf(_radius * 5.0, 300.0), 0.15, 1.0)
+			desired = to_waypoint / dist * _speed * urgency
 
 	var drift := Vector2(
 		sin(_time * 0.27 + _phase_offset),
 		cos(_time * 0.23 + _phase_offset * 1.4)
 	) * _speed * 0.18
 	desired += drift
+
+	if _attention_drift.length_squared() > 0.0001:
+		desired += _attention_drift * _speed
+
+	if _terrain_flow_active() and _field != null:
+		var sample := Callable(_field, "sample_height_grid")
+		var terrain_steer := AscidianTerrainSteer.compute_steer(position, _velocity, sample)
+		desired += terrain_steer * _speed
 
 	var blend := 1.0 - exp(-delta * 0.65)
 	_velocity = _velocity.lerp(desired, blend)
@@ -195,8 +232,24 @@ func _current_altitude() -> float:
 	return clampf(_altitude + wobble, _altitude_min, _altitude_max)
 
 
+func _terrain_flow_active() -> bool:
+	return _time < _terrain_flow_until
+
+
+func _update_terrain_flow_schedule() -> void:
+	if _time < _terrain_quiet_until:
+		return
+	if _time < _terrain_flow_until:
+		return
+	_terrain_flow_duration = _visit_rng.randf_range(5.0, 9.0)
+	_terrain_flow_until = _time + _terrain_flow_duration
+	_terrain_quiet_until = _terrain_flow_until + _visit_rng.randf_range(14.0, 26.0)
+
+
 func _update_altitude(delta: float) -> void:
-	if _fixed_swim_depth >= 0.0:
+	if _terrain_flow_active() and _field != null:
+		_altitude_target = _field.sample_height_grid(global_position)
+	elif _fixed_swim_depth >= 0.0:
 		return
 	if absf(_altitude - _altitude_target) < 0.025:
 		_altitude_target = _pick_altitude_target()

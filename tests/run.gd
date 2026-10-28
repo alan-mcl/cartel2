@@ -29,6 +29,7 @@ func _init() -> void:
 	TestUnspaceFlux.run(runner)
 	TestUnspaceFold.run(runner)
 	TestUnspaceShards.run(runner)
+	TestUnspaceAscidianHazards.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)
 	TestCargoRequirements.run(runner)

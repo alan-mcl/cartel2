@@ -50,6 +50,11 @@ func set_unspace_flux_stress(active: bool, delta: float) -> void:
 		_flux_electrify.tick(active, delta)
 
 
+func pulse_unspace_sting_hull() -> void:
+	if _flux_electrify != null:
+		_flux_electrify.pulse(0.48)
+
+
 func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -> void:
 	_try_interact = try_interact
 	_weapon_spawn_root = weapon_spawn_root

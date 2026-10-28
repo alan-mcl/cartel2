@@ -103,6 +103,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_tick_unspace_flux(delta)
 		_tick_unspace_fold(delta)
 		_tick_unspace_shards(delta)
+		_tick_unspace_ascidian_hazards(delta)
 	elif _player.has_method("set_unspace_flux_stress"):
 		_player.set_unspace_flux_stress(false, delta)
 
@@ -286,6 +287,8 @@ func request_target_scan() -> void:
 		_main.session.sector_id,
 		_main.session.gst_seconds
 	)
+	if _main.session.in_unspace and str(locked_contact.get("contact_kind", "")) == "ascidian":
+		_apply_ascidian_scan_reaction(locked_contact)
 	_hud.open_target_scan(locked_contact, _player.global_position, beacon_destination)
 
 
@@ -574,6 +577,64 @@ func _unspace_shards_on_radar() -> bool:
 	if not _player.assembled_ship.has_active_sensor_package():
 		return false
 	return bool(_player.operating_state.active_systems.get("active_sensors", false))
+
+
+func _parse_ascidian_index(contact_id: String) -> int:
+	if not contact_id.begins_with("ascidian_"):
+		return -1
+	return int(contact_id.substr("ascidian_".length()))
+
+
+func _apply_ascidian_scan_reaction(locked_contact: Dictionary) -> void:
+	var index := _parse_ascidian_index(str(locked_contact.get("id", "")))
+	if index < 0:
+		return
+	var field := _world_loader.get_nspace_field()
+	var ascidian_pos: Vector2 = locked_contact.get("position", Vector2.ZERO)
+	if field != null:
+		ascidian_pos = field.get_ascidian_world_position(index)
+	UnspaceAscidianHazards.react_to_scan(
+		_main.session,
+		index,
+		ascidian_pos,
+		_player.global_position
+	)
+
+
+func _deliver_ascidian_sting(reaction: Dictionary, field: NspaceField) -> void:
+	var kick: Vector2 = reaction.get("kick", Vector2.ZERO)
+	if kick.length_squared() > 1.0:
+		_player.apply_weapon_impulse(kick)
+	var stress := float(reaction.get("hull_stress", 0.0))
+	if stress > 0.0:
+		_main.session.apply_hull_stress(
+			stress,
+			0.5,
+			_player.assembled_ship if _player != null else null
+		)
+		if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
+			_player.refresh_hull_destroyed_presentation()
+	if _player.has_method("pulse_unspace_sting_hull"):
+		_player.pulse_unspace_sting_hull()
+	if field != null:
+		field.spawn_ascidian_scan_bolt(
+			reaction.get("bolt_from", Vector2.ZERO),
+			reaction.get("bolt_to", _player.global_position)
+		)
+
+
+func _tick_unspace_ascidian_hazards(delta: float) -> void:
+	var field := _world_loader.get_nspace_field()
+	if field == null:
+		return
+	var hazard_result: Dictionary = field.tick_ascidian_hazards(
+		_main.session,
+		delta,
+		_player.global_position
+	)
+	var fired: Variant = hazard_result.get("sting_fired", {})
+	if typeof(fired) == TYPE_DICTIONARY and not (fired as Dictionary).is_empty():
+		_deliver_ascidian_sting(fired, field)
 
 
 func _tick_unspace_shards(delta: float) -> void:

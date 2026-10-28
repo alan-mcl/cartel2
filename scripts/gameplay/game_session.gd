@@ -541,6 +541,7 @@ func enter_unspace(
 	UnspaceFlux.reset(self)
 	UnspaceFold.reset(self)
 	UnspaceShards.reset(self)
+	UnspaceAscidianHazards.reset(self)
 	_hull_stress_next_log_below = -1.0
 	world.pending_destination_id = destination_id
 	world.in_unspace = true
@@ -584,6 +585,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	UnspaceFlux.reset(self)
 	UnspaceFold.reset(self)
 	UnspaceShards.reset(self)
+	UnspaceAscidianHazards.reset(self)
 	_hull_stress_next_log_below = -1.0
 
 	if not enter_sector(catalog, dest_id, false):

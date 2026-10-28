@@ -64,6 +64,18 @@ static func force_start_for_tests(session: GameSession, instability: float = 0.7
 	_begin_storm(state, clampf(instability, 0.0, 1.0))
 
 
+static func start_storm_from_external(session: GameSession, instability: float = -1.0) -> bool:
+	if session == null or not session.in_unspace:
+		return false
+	if is_active(session):
+		return false
+	var inst := instability
+	if inst < 0.0:
+		inst = UnspaceInstability.index(session)
+	_begin_storm(_state(session), clampf(inst, 0.0, 1.0))
+	return true
+
+
 static func _tick_active(
 	session: GameSession,
 	state: Dictionary,

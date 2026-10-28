@@ -16,31 +16,19 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|F1|in flight|high| Unspace remainder after F5–F8: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
+|F1|in flight|high| Unspace remainder after F5–F7: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
 |F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
-|F8|in flight|high| Unspace phase 5. Ascidians sting on scan, fold nearby geometry, drift in when unstable, and shed shards. See below.|
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
 ## Unspace N 4–9
 
-Status: **Discuss**. Do **F8** next. F1 is what remains after F8 (infinite navigation, randomised spawn and portal placement).
+Status: **Discuss**. F1 is the main unspace follow-on (infinite navigation, randomised spawn and portal placement).
 
 Public routes already carry 4-space on every edge and a few 5- and 6-space alternates. Transit loads the catalog row matching translation N (`n4_default` … `n9_default`). Hull stress exists and ends the career at zero hull, but nothing calls it. Stability is `translation_stability` (higher is safer). Nav computers can use or display deeper layers up to N 9 at `nav_rating` 95; the public book still only lists N 4–6.
 
 Instability for hazards is `1 - stability/100`, further scaled by depth `(N - 4)`. A calm 4-space crossing stays quiet; a poor solution in 9-space does not.
 
 The public book stays N 4–6. N 7–9 exist only as private solutions: already in the translation library (buy or learn, later), or computed in flight with a fitted hyperdrive. Leave infinite unspace navigation and n>4 trade edges out. Update `docs/design/content/n-space.md` and `translations.md` in each phase that changes behaviour. Do not edit frozen setting files. Remove the matching F-row in the same change as the work.
-
-### F8 — Ascidians
-
-Drive behaviour from instability and from being scanned.
-
-- **Scan sting.** A scan zaps the hull once and shoves the ship. Higher instability, harder sting.
-- **Local fold.** Sometimes an Ascidian warps nearby backdrop faces around itself, which can swing the exit if it lies in that patch.
-- **Attention.** Low stability makes the nearest Ascidian drift toward the ship. It does not ram.
-- **Shed.** On a pulse, one may drop a shard on its heading.
-
-Inhabitant counts on the per-N catalog row make 9-space busier than 4-space.
 
 ### Checks
 

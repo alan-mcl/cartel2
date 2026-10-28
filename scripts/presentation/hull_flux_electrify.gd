@@ -13,6 +13,7 @@ var _arcs: Array = []
 var _rng := RandomNumberGenerator.new()
 var _lightning := FluxLightningPulse.new()
 var _flash_level: float = 0.0
+var _pulse_remaining: float = 0.0
 
 
 func setup(hull: Sprite2D) -> void:
@@ -40,12 +41,20 @@ func sync_hull_texture() -> void:
 		_glow.texture = _hull.texture
 
 
+func pulse(duration: float = 0.48) -> void:
+	_pulse_remaining = maxf(_pulse_remaining, duration)
+	visible = true
+
+
 func tick(active: bool, delta: float) -> void:
 	if _hull == null or _glow == null:
 		visible = false
 		return
-	visible = active
-	if not active:
+	if _pulse_remaining > 0.0:
+		_pulse_remaining = maxf(0.0, _pulse_remaining - delta)
+	var show := active or _pulse_remaining > 0.0
+	visible = show
+	if not show:
 		_lightning.reset(44107)
 		return
 	_flash_level = _lightning.advance(delta)

@@ -47,6 +47,12 @@ var _fold_anim_start_portal: Vector2 = Vector2.INF
 var _shard_visuals: Dictionary = {}
 var _shard_sync_delta: float = 0.0
 
+var _height_grid: PackedFloat32Array = PackedFloat32Array()
+var _height_grid_size: int = 64
+var _height_grid_extent: float = 6000.0
+
+var _scan_bolts: Array = []
+
 
 func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play_bounds: float) -> void:
 	_play_bounds = play_bounds
@@ -86,6 +92,8 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	)
 
 	_build_scatter_mesh()
+	_height_grid_extent = _play_bounds * float(_inhabitants_cfg.get("wander_radius_fraction", 0.72))
+	_build_height_grid()
 	_build_edge_catalog()
 	_pick_portal_face(spawn_hint)
 
@@ -262,6 +270,214 @@ func get_ascidians() -> Array:
 	return _ascidians
 
 
+func spawn_ascidian_scan_bolt(from_world: Vector2, to_world: Vector2) -> void:
+	if not from_world.is_finite() or not to_world.is_finite():
+		return
+	var local_from := to_local(from_world)
+	var local_to := to_local(to_world)
+	_scan_bolts.append({
+		"polylines": AscidianLightningBolt.build_polylines(local_from, local_to),
+		"elapsed": 0.0,
+	})
+	queue_redraw()
+
+
+func get_ascidian_world_position(index: int) -> Vector2:
+	if index < 0 or index >= _ascidians.size():
+		return Vector2.ZERO
+	var node_variant = _ascidians[index]
+	if node_variant is Node2D:
+		return (node_variant as Node2D).global_position
+	return Vector2.ZERO
+
+
+func sample_height_grid(world_pos: Vector2) -> float:
+	if _height_grid.is_empty() or _height_grid_size < 2:
+		return sample_height(world_pos)
+	var local_pos := to_local(world_pos)
+	var extent := _height_grid_extent
+	if extent <= 1.0:
+		return 0.5
+	var u := (local_pos.x + extent) / (2.0 * extent)
+	var v := (local_pos.y + extent) / (2.0 * extent)
+	u = clampf(u, 0.0, 1.0)
+	v = clampf(v, 0.0, 1.0)
+	var gx := u * float(_height_grid_size - 1)
+	var gy := v * float(_height_grid_size - 1)
+	var x0 := int(floor(gx))
+	var y0 := int(floor(gy))
+	var x1 := mini(x0 + 1, _height_grid_size - 1)
+	var y1 := mini(y0 + 1, _height_grid_size - 1)
+	var tx := gx - float(x0)
+	var ty := gy - float(y0)
+	var h00 := _height_grid[y0 * _height_grid_size + x0]
+	var h10 := _height_grid[y0 * _height_grid_size + x1]
+	var h01 := _height_grid[y1 * _height_grid_size + x0]
+	var h11 := _height_grid[y1 * _height_grid_size + x1]
+	var h0 := lerpf(h00, h10, tx)
+	var h1 := lerpf(h01, h11, tx)
+	return lerpf(h0, h1, ty)
+
+
+func apply_local_fold(center_world: Vector2, radius: float, angle_rad: float) -> void:
+	if _fold_anim_active or _animated.is_empty() or absf(angle_rad) < 0.0001:
+		return
+	var pivot := to_local(center_world)
+	for i in range(_animated.size()):
+		var p := _animated[i]
+		var dist := p.distance_to(pivot)
+		if dist > radius:
+			continue
+		var falloff := 1.0 - dist / radius
+		var rot := angle_rad * falloff
+		_animated[i] = _rotate_about_pivot(p, pivot, rot)
+	if _portal_world_pos != Vector2.INF and _portal_world_pos.distance_to(pivot) <= radius:
+		var portal_dist := _portal_world_pos.distance_to(pivot)
+		var portal_falloff := 1.0 - portal_dist / radius
+		_portal_world_pos = _rotate_about_pivot(
+			_portal_world_pos,
+			pivot,
+			angle_rad * portal_falloff
+		)
+		if _portal_node != null:
+			_portal_node.global_position = get_portal_position()
+	_build_height_grid()
+	if _backdrop_3d != null:
+		_backdrop_3d.clear_fold_transform()
+		_backdrop_3d.rebuild_static()
+		_static_backdrop_built = true
+
+
+func tick_ascidian_hazards(session: GameSession, delta: float, player_pos: Vector2) -> Dictionary:
+	var out := {"log": ""}
+	if session == null or delta <= 0.0 or not session.in_unspace:
+		return out
+
+	var positions: Array = []
+	for ascidian_variant in _ascidians:
+		if ascidian_variant is Node2D:
+			positions.append((ascidian_variant as Node2D).global_position)
+
+	var instability := UnspaceInstability.index(session)
+	var nearest := UnspaceAscidianHazards.nearest_index(positions, player_pos)
+	var pending_sting_index := UnspaceAscidianHazards.pending_sting_ascidian_index(session)
+	var closing_to_range := UnspaceAscidianHazards.sting_closing_to_range(session)
+	for index in range(_ascidians.size()):
+		var ascidian_variant = _ascidians[index]
+		if not ascidian_variant is Ascidian:
+			continue
+		var ascidian: Ascidian = ascidian_variant
+		var pos: Vector2 = positions[index] if index < positions.size() else ascidian.global_position
+		var charging := index == pending_sting_index and closing_to_range
+		var drift := Vector2.ZERO
+		if charging:
+			drift = UnspaceAscidianHazards.sting_charge_drift(pos, player_pos, ascidian.get_radius())
+		else:
+			drift = UnspaceAscidianHazards.attention_drift(
+				instability,
+				pos,
+				player_pos,
+				ascidian.get_radius(),
+				index == nearest
+			)
+		ascidian.set_hazard_context(instability, drift, charging, player_pos)
+
+	var armed_sting := UnspaceAscidianHazards.advance_armed_sting(
+		session,
+		positions,
+		player_pos,
+		delta
+	)
+	if not armed_sting.is_empty():
+		out["sting_fired"] = armed_sting
+
+	var ambient := UnspaceAscidianHazards.advance_ambient(
+		session,
+		delta,
+		positions,
+		_fold_anim_active
+	)
+	if bool(ambient.get("local_fold", false)):
+		apply_local_fold(
+			ambient.get("fold_center", Vector2.ZERO),
+			UnspaceAscidianHazards.LOCAL_FOLD_RADIUS,
+			float(ambient.get("fold_angle_rad", 0.0))
+		)
+	return out
+
+
+func _build_height_grid(size: int = 64) -> void:
+	_height_grid_size = maxi(size, 2)
+	var cell_count := _height_grid_size * _height_grid_size
+	_height_grid.resize(cell_count)
+	if _animated.is_empty() or _heights.is_empty():
+		_height_grid.fill(0.5)
+		return
+
+	var extent := _height_grid_extent
+	if extent <= 1.0:
+		_height_grid.fill(0.5)
+		return
+
+	var buckets: Array = []
+	buckets.resize(cell_count)
+	for bucket_index in range(cell_count):
+		buckets[bucket_index] = []
+
+	var inv_span := 1.0 / (2.0 * extent)
+	for vertex_index in range(_animated.size()):
+		var p := _animated[vertex_index]
+		var bx := clampi(int((p.x + extent) * inv_span * float(_height_grid_size)), 0, _height_grid_size - 1)
+		var by := clampi(int((p.y + extent) * inv_span * float(_height_grid_size)), 0, _height_grid_size - 1)
+		(buckets[by * _height_grid_size + bx] as Array).append({
+			"pos": p,
+			"height": _heights[vertex_index],
+		})
+
+	var denom := float(_height_grid_size - 1)
+	for y in range(_height_grid_size):
+		for x in range(_height_grid_size):
+			var wx := lerpf(-extent, extent, float(x) / denom)
+			var wy := lerpf(-extent, extent, float(y) / denom)
+			_height_grid[y * _height_grid_size + x] = _height_grid_cell_height(
+				Vector2(wx, wy),
+				x,
+				y,
+				buckets
+			)
+
+
+func _height_grid_cell_height(center: Vector2, cell_x: int, cell_y: int, buckets: Array) -> float:
+	var best_dist_sq := INF
+	var best_height := 0.5
+	var found := false
+	for dy in range(-2, 3):
+		for dx in range(-2, 3):
+			var bx := cell_x + dx
+			var by := cell_y + dy
+			if bx < 0 or by < 0 or bx >= _height_grid_size or by >= _height_grid_size:
+				continue
+			var bucket: Array = buckets[by * _height_grid_size + bx]
+			for entry_variant in bucket:
+				if typeof(entry_variant) != TYPE_DICTIONARY:
+					continue
+				var entry: Dictionary = entry_variant
+				var pos: Vector2 = entry.get("pos", Vector2.ZERO)
+				var dist_sq := pos.distance_squared_to(center)
+				if dist_sq < best_dist_sq:
+					best_dist_sq = dist_sq
+					best_height = float(entry.get("height", 0.5))
+					found = true
+	if found:
+		return best_height
+	for vertex_index in range(_animated.size()):
+		var dist_sq := _animated[vertex_index].distance_squared_to(center)
+		if dist_sq < best_dist_sq:
+			best_dist_sq = dist_sq
+			best_height = _heights[vertex_index]
+	return best_height
+
+
 func set_flux_storm_active(active: bool) -> void:
 	_flux_storm_active = active
 
@@ -297,7 +513,26 @@ func get_face_fill_color(face_index: int) -> Color:
 
 
 func _physics_process(delta: float) -> void:
+	_advance_scan_bolts(delta)
 	_update_backdrop(delta)
+
+
+func _advance_scan_bolts(delta: float) -> void:
+	if delta <= 0.0 or _scan_bolts.is_empty():
+		return
+	var kept: Array = []
+	for bolt_variant in _scan_bolts:
+		if typeof(bolt_variant) != TYPE_DICTIONARY:
+			continue
+		var bolt: Dictionary = bolt_variant
+		var elapsed := float(bolt.get("elapsed", 0.0)) + delta
+		if elapsed >= AscidianLightningBolt.LIFETIME:
+			continue
+		bolt["elapsed"] = elapsed
+		kept.append(bolt)
+	_scan_bolts = kept
+	if not _scan_bolts.is_empty():
+		queue_redraw()
 
 
 func _setup_backdrop_3d() -> void:
@@ -367,6 +602,19 @@ func _draw() -> void:
 	draw_set_transform_matrix(Transform2D(Vector2(scale.x, 0.0), Vector2(0.0, scale.y), center))
 	draw_texture_rect(tex, Rect2(-tex_size * 0.5, tex_size), false)
 	draw_set_transform_matrix(Transform2D.IDENTITY)
+	_draw_scan_bolts()
+
+
+func _draw_scan_bolts() -> void:
+	for bolt_variant in _scan_bolts:
+		if typeof(bolt_variant) != TYPE_DICTIONARY:
+			continue
+		var bolt: Dictionary = bolt_variant
+		AscidianLightningBolt.draw_polylines(
+			self,
+			bolt.get("polylines", []),
+			float(bolt.get("elapsed", 0.0))
+		)
 
 
 func _update_backdrop(delta: float) -> void:
@@ -775,7 +1023,7 @@ func _spawn_ascidians(unspace: Dictionary) -> void:
 	var spawn_cfg := _inhabitants_cfg.duplicate()
 	spawn_cfg["play_bounds"] = _play_bounds
 	spawn_cfg["wander_radius_fraction"] = wander_fraction
-	spawn_cfg["fixed_swim_depth"] = mid_height
+	spawn_cfg["initial_swim_depth"] = mid_height
 
 	for _i in range(count):
 		var start_pos := _pick_ascidian_spawn(spawn_hint, portal_pos, wander_radius, min_spawn_dist)

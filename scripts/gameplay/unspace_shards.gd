@@ -86,6 +86,37 @@ static func advance(
 	return out
 
 
+static func spawn_burst(session: GameSession, origin: Vector2, count: int, speed: float) -> void:
+	if session == null or not session.in_unspace or count <= 0:
+		return
+	var state := _state(session)
+	var entries: Array = _entries(session)
+	var instability := UnspaceInstability.index(session)
+	var depth := maxf(0.0, float(session.unspace_n - 4))
+	var max_count := clampi(
+		int(round(lerpf(1.0, 10.0, instability) * (1.0 + 0.18 * depth))),
+		1,
+		18
+	)
+	count = clampi(count, 1, 8)
+	count = mini(count, maxi(0, max_count - entries.size()))
+	if count <= 0:
+		return
+	for _i in range(count):
+		var angle := randf() * TAU
+		var dir := Vector2.from_angle(angle)
+		var vel := dir * speed * randf_range(0.75, 1.15)
+		var next_id := int(state.get("next_id", 0)) + 1
+		state["next_id"] = next_id
+		entries.append({
+			"id": next_id,
+			"pos_x": origin.x + dir.x * 12.0,
+			"pos_y": origin.y + dir.y * 12.0,
+			"vel_x": vel.x,
+			"vel_y": vel.y,
+		})
+
+
 static func force_hit_for_tests(session: GameSession, instability: float = 0.7) -> Dictionary:
 	if session == null:
 		return {}

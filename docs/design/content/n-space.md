@@ -84,10 +84,11 @@ Implemented in `scripts/presentation/nspace_field.gd`, configured from the catal
 ### Ascidians
 
 - Count scales with N on each catalog row (`inhabitants` block); spawn uses visit RNG (not route seed), wander within `wander_radius_fraction × play_bounds`.
-- Radar contacts as `ascidian_*`; behaviour in `scripts/presentation/ascidian.gd`.
+- Radar contacts as `ascidian_*`; behaviour in `scripts/presentation/ascidian.gd` and `scripts/gameplay/unspace_ascidian_hazards.gd`.
+- **Ascidian hazards (F8):** scanning a locked ascidian triggers one reaction — either a **sting** (hull-stress lump, kick, jagged forked bolt from ascidian to ship, brief hull lightning like N-space flux) or, with a chance that rises with `UnspaceInstability`, an **N-space flux** storm attributed to the ascidian (no sting on that scan). Sting discharge has a **maximum range** (~2400 m); if the ascidian is farther away it **closes on the ship** first. Once in range, the zap lands after a **3–5 s** wind-up. No ticker log lines for these events. On a slow pulse, a random ascidian **sheds** a burst of shards on random headings (count scales with instability; shard cap still applies). When instability is above a modest floor, the **nearest** ascidian drifts toward the player but stops inside a standoff of about twice its radius. Occasionally an ascidian performs a **local fold**: topo vertices within a few hundred metres rotate by a fraction of `TAU / N` with rim falloff; the exit portal rotates if it lies in that disc; one static mesh bake at the end (skipped while a global fold animation plays). **Terrain flow:** a coarse height grid on the field drives timed contour-and-valley steering and swim-depth lerping so ascidians skirt peaks instead of cutting through them.
 - **Flux (F5):** short turbulence storms from `UnspaceFlux` — hull stress, velocity kick, irregular lightning flashes on the N-space palette (topo backdrop), and an electrified hull overlay on the player ship; rate scales with `UnspaceInstability` (stability and N).
 - **Folds (F6):** discrete events from `UnspaceFold` — over ~1 s, rotate topo vertices and the exit portal by `k × (360 / N)` around the player position at fold start (smoothstep easing). During the sweep, `NspaceBackdrop3D` applies a rigid transform on a fold root (topo, edges, portal mesh); vertex positions and meshes bake once when the animation completes. Ascidians and the ship keep world pose; radar exit blip follows `get_portal_position()`. Same mean event spacing as flux, independent rolls; no new fold while a rotation is playing.
-- **Shards (F7):** moving hazards from `UnspaceShards` in the play disc — spawn rate, count cap, and speed scale with `UnspaceInstability` and N; constant velocity (no homing). A hit applies a lump of hull stress and a smaller kick than flux; the shard shatters or occasionally glances off. Radar blips (`contact_kind` `shard`) appear on the local sensor map when active sensors are on. Presentation: `UnspaceShardVisual` on the field ([F8](../architecture/backlog.md) ascidian hazards remain).
+- **Shards (F7):** moving hazards from `UnspaceShards` in the play disc — spawn rate, count cap, and speed scale with `UnspaceInstability` and N; constant velocity (no homing). A hit applies a lump of hull stress and a smaller kick than flux; the shard shatters or occasionally glances off. Radar blips (`contact_kind` `shard`) appear on the local sensor map when active sensors are on. Presentation: `UnspaceShardVisual` on the field. Ascidian **shed** bursts use the same shard motion and hits (`spawn_burst`).
 
 ### Presentation
 
@@ -159,16 +160,14 @@ The **`field`** object is validated loosely (`additionalProperties: true` on nes
 | Load field | `scripts/presentation/world_loader.gd` |
 | Field mesh, portal, ascidians | `scripts/presentation/nspace_field.gd`, `nspace_backdrop_3d.gd`, `ascidian.gd` |
 | Volatile mission sites | `scripts/gameplay/volatile_translation.gd`, separate world load |
-| Instability / flux / fold / shard hazards | `scripts/gameplay/unspace_instability.gd`, `unspace_flux.gd`, `unspace_fold.gd`, `unspace_shards.gd` |
+| Instability / flux / fold / shard / ascidian hazards | `scripts/gameplay/unspace_instability.gd`, `unspace_flux.gd`, `unspace_fold.gd`, `unspace_shards.gd`, `unspace_ascidian_hazards.gd`, `ascidian_terrain_steer.gd` |
 
 ## Placeholders and follow-ons
 
 Documented gaps to close when expanding this spec:
 
-1. **Ascidian hazards** ([F8](../architecture/backlog.md)).
-2. **Hull stress** from ascidian scans (flux and shards wired in F5/F7).
-3. **Infinite or tiled** unspace navigation ([F1](../architecture/backlog.md), [F2](../architecture/backlog.md)).
-4. **Randomised** entry spawn and exit portal placement policy (partially seeded today; backlog asks for broader randomisation).
-5. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).
+1. **Infinite or tiled** unspace navigation ([F1](../architecture/backlog.md), [F2](../architecture/backlog.md)).
+2. **Randomised** entry spawn and exit portal placement policy (partially seeded today; backlog asks for broader randomisation).
+3. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).
 
 When behaviour or catalog shape changes, update this file in the same change as the code or JSON.
