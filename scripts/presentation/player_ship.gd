@@ -10,6 +10,7 @@ const THRUST_SPRITE := "res://assets/ships/fx/thrust.svg"
 const ShipWeapons := preload("res://scripts/gameplay/ship_weapons.gd")
 const ShipSimCoreScript := preload("res://scripts/gameplay/ship_sim_core.gd")
 const ShipBreakup := preload("res://scripts/presentation/ship_breakup.gd")
+const HullFluxElectrify := preload("res://scripts/presentation/hull_flux_electrify.gd")
 const _WEAPON_MASK := 2 | 16 | 1
 
 @export var ship_id: String = "flare_on_ss"
@@ -41,6 +42,12 @@ var _autopilot_target: Dictionary = {}
 var _hull_destroyed_fx_played := false
 var _try_interact: Callable = Callable()
 var _weapon_spawn_root: Node2D
+var _flux_electrify: HullFluxElectrify
+
+
+func set_unspace_flux_stress(active: bool, delta: float) -> void:
+	if _flux_electrify != null:
+		_flux_electrify.tick(active, delta)
 
 
 func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -> void:
@@ -79,6 +86,8 @@ func _apply_hull_visual() -> void:
 		ShipVisual.sync_engine_exhaust(_engine_exhaust, _thrust_flame, assembled_ship, sprite_path)
 
 	_hull.modulate = Color.WHITE
+	if _flux_electrify != null:
+		_flux_electrify.sync_hull_texture()
 
 
 func freeze_motion() -> void:
@@ -117,6 +126,10 @@ func _ready() -> void:
 	_defence_visual.bind_owner(self)
 	if _visual_root != null:
 		_visual_root.add_child(_defence_visual)
+		_flux_electrify = HullFluxElectrify.new()
+		_flux_electrify.name = "HullFluxElectrify"
+		_visual_root.add_child(_flux_electrify)
+		_flux_electrify.setup(_hull)
 
 
 func register_world_interactables() -> void:

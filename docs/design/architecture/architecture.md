@@ -327,7 +327,7 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - On-foot play: city roadmaps, trams, surface travel
 - Named NPCs, dialogue trees, Dialogue Manager integration
 - Unspace solution typing (integers shown as flavour only)
-- Unspace hazard phases (flux, folds, shards, ascidian behaviour) per [backlog.md](backlog.md) F5–F8. Per-N catalog backdrops (`n4_default` … `n9_default`) and the duration curve through N 9 are in place (F3).
+- Unspace hazard phases (folds, shards, ascidian behaviour) per [backlog.md](backlog.md) F6–F8. **N-space flux** (F5) and per-N catalog backdrops (`n4_default` … `n9_default`) are in place.
 - Paid workshop beyond parts inventory model
 - Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades and other friction overrides). `route_friction_delta` is a session field read by `CommodityEconomy`. There is no player UI for it

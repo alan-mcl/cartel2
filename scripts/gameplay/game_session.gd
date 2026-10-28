@@ -535,6 +535,7 @@ func enter_unspace(
 		if catalog.get_sector_def(destination_id) == null:
 			return false
 
+	UnspaceFlux.reset(self)
 	world.pending_destination_id = destination_id
 	world.in_unspace = true
 	world.unspace_n = n
@@ -574,6 +575,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	world.unspace_world_id = ""
 	world.translation_stability = -1.0
 	world.pending_destination_id = ""
+	UnspaceFlux.reset(self)
 
 	if not enter_sector(catalog, dest_id, false):
 		return false

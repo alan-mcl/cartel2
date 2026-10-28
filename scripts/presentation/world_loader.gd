@@ -247,6 +247,15 @@ func load_unspace(
 	return play_bounds
 
 
+func get_nspace_field() -> NspaceField:
+	return _nspace_field
+
+
+func set_unspace_flux_storm(active: bool) -> void:
+	if _nspace_field != null and is_instance_valid(_nspace_field):
+		_nspace_field.set_flux_storm_active(active)
+
+
 func apply_salvage_visuals(session: GameSession) -> void:
 	for entity_id in spawned_by_id:
 		var node: Node = spawned_by_id[entity_id]

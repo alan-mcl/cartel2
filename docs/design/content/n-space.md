@@ -85,7 +85,7 @@ Implemented in `scripts/presentation/nspace_field.gd`, configured from the catal
 
 - Count scales with N on each catalog row (`inhabitants` block); spawn uses visit RNG (not route seed), wander within `wander_radius_fraction × play_bounds`.
 - Radar contacts as `ascidian_*`; behaviour in `scripts/presentation/ascidian.gd`.
-- **Not** yet driven by translation stability or N-specific hazard tables.
+- **Flux (F5):** short turbulence storms from `UnspaceFlux` — hull stress, velocity kick, strobing N-space palette on the topo backdrop, and an electrified hull overlay on the player ship; rate scales with `UnspaceInstability` (stability and N). Folds, shards, and ascidian hazard behaviour remain backlog ([F6–F8](../architecture/backlog.md)).
 
 ### Presentation
 
@@ -120,7 +120,7 @@ Gravitic and sail drives respond to those samples; other engines ignore local fi
 ## Combat and hull
 
 - Shots in Unspace do not record lawful-fire sanctions yet ([missions.md](missions.md)).
-- `CombatPersistence.apply_hull_stress` can decrement hull only while `in_unspace` (cooldown **0.45** s); **`GameSession.apply_hull_stress` has no gameplay caller yet**—hazard wiring is backlog ([F5](../architecture/backlog.md)).
+- `CombatPersistence.apply_hull_stress` decrements hull only while `in_unspace` (cooldown **0.45** s). **N-space flux** calls it during active storms ([`unspace_flux.gd`](../../../scripts/gameplay/unspace_flux.gd)).
 - `enter_unspace` snapshots hull from the assembled ship; arrival does not heal.
 
 ## Public route timing (4 / 5 / 6)
@@ -157,13 +157,14 @@ The **`field`** object is validated loosely (`additionalProperties: true` on nes
 | Load field | `scripts/presentation/world_loader.gd` |
 | Field mesh, portal, ascidians | `scripts/presentation/nspace_field.gd`, `nspace_backdrop_3d.gd`, `ascidian.gd` |
 | Volatile mission sites | `scripts/gameplay/volatile_translation.gd`, separate world load |
+| Instability / flux hazards | `scripts/gameplay/unspace_instability.gd`, `unspace_flux.gd` |
 
 ## Placeholders and follow-ons
 
 Documented gaps to close when expanding this spec:
 
-1. **Stability and hazards** affecting ascidians, hull stress, portal rules, and geometry beyond seed inputs ([F5–F8](../architecture/backlog.md)).
-2. **Hull stress** hooked to environmental or combat sources in transit.
+1. **Folds, shards, and ascidian hazards** ([F6–F8](../architecture/backlog.md)).
+2. **Hull stress** from shards and ascidian scans (flux wired in F5).
 3. **Infinite or tiled** unspace navigation ([F1](../architecture/backlog.md), [F2](../architecture/backlog.md)).
 4. **Randomised** entry spawn and exit portal placement policy (partially seeded today; backlog asks for broader randomisation).
 5. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).

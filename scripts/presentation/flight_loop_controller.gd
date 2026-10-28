@@ -99,6 +99,11 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 		_world_loader.refresh_volatile_return_gate(_main.session)
 		_tick_volatile_site_traffic(delta, physics_frame)
 
+	if _main.session.in_unspace:
+		_tick_unspace_flux(delta)
+	elif _player.has_method("set_unspace_flux_stress"):
+		_player.set_unspace_flux_stress(false, delta)
+
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
 	if (
 		not _main.session.in_unspace
@@ -555,6 +560,24 @@ func _purge_removed_bounty_actors() -> void:
 			continue
 		kept.append(actor)
 	_traffic_director.actors = kept
+
+
+func _tick_unspace_flux(delta: float) -> void:
+	var flux_result: Dictionary = UnspaceFlux.advance(_main.session, delta)
+	var kick: Vector2 = flux_result.get("kick", Vector2.ZERO)
+	if kick.length_squared() > 1.0:
+		_player.apply_weapon_impulse(kick)
+	var stress := float(flux_result.get("hull_stress", 0.0))
+	if stress > 0.0:
+		_main.session.apply_hull_stress(stress, delta)
+	var storm_active := UnspaceFlux.is_active(_main.session)
+	_world_loader.set_unspace_flux_storm(storm_active)
+	if _player.has_method("set_unspace_flux_stress"):
+		_player.set_unspace_flux_stress(storm_active, delta)
+	var log_msg := str(flux_result.get("log", ""))
+	if not log_msg.is_empty():
+		_main.session.last_log = log_msg
+		_main.session.changed.emit()
 
 
 static func active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:

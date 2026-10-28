@@ -20,6 +20,10 @@ var _edge_material: StandardMaterial3D
 var _portal_material: StandardMaterial3D
 var _ascidian_material: StandardMaterial3D
 var _ascidian_mesh_timer: float = 0.0
+var _flux_strobe_phase: float = 0.0
+var _flux_strobe_active: bool = false
+var _base_topo_albedo: Color = Color.WHITE
+var _base_edge_albedo: Color = Color.WHITE
 
 
 func configure(field: NspaceField, height_scale: float) -> void:
@@ -112,6 +116,52 @@ func rebuild_static() -> void:
 	_topo_mesh_instance.mesh = _build_topo_mesh()
 	_edge_mesh_instance.mesh = _build_edge_mesh()
 	_portal_mesh_instance.mesh = _build_portal_mesh()
+
+
+func update_flux_strobe(delta: float, active: bool, palette: Dictionary) -> void:
+	_flux_strobe_active = active
+	if not active:
+		if _topo_material != null:
+			_topo_material.albedo_color = _base_topo_albedo
+		if _edge_material != null:
+			_edge_material.albedo_color = _base_edge_albedo
+		if _portal_material != null:
+			_portal_material.albedo_color = Color.WHITE
+		return
+
+	_flux_strobe_phase += delta * 20.0
+	var strobe_a := (sin(_flux_strobe_phase) + 1.0) * 0.5
+	var strobe_b := (sin(_flux_strobe_phase * 2.45 + 1.1) + 1.0) * 0.5
+	var strobe_c := (sin(_flux_strobe_phase * 3.7) + 1.0) * 0.5
+
+	var peak := _palette_color(palette, "peak", Color(0.49, 0.91, 1.0, 1.0))
+	var trough := _palette_color(palette, "trough", Color(0.10, 0.05, 0.23, 1.0))
+	var bright := _palette_color(palette, "bright", Color(0.62, 0.98, 1.0, 1.0))
+	var ridge := _palette_color(palette, "ridge", Color(0.50, 0.94, 1.0, 1.0))
+
+	var flash_hi := bright.lerp(Color(1.0, 0.98, 1.0, 1.0), 0.55)
+	var flash_lo := trough.lerp(peak, 0.35).darkened(0.15 + 0.25 * strobe_c)
+
+	if _topo_material != null:
+		_topo_material.albedo_color = flash_hi.lerp(flash_lo, strobe_a)
+	if _edge_material != null:
+		_edge_material.albedo_color = ridge.lerp(peak, strobe_b)
+	if _portal_material != null:
+		var portal_host := _palette_color(
+			palette, "portal_host", Color(0.95, 0.55, 0.25, 1.0)
+		)
+		_portal_material.albedo_color = Color.WHITE.lerp(portal_host, 0.25 + 0.45 * strobe_b)
+
+
+func _palette_color(palette: Dictionary, key: String, fallback: Color) -> Color:
+	if palette.is_empty() or not palette.has(key):
+		return fallback
+	var raw: Variant = palette.get(key)
+	if raw is Color:
+		return raw
+	if typeof(raw) == TYPE_STRING:
+		return Color.from_string(str(raw), fallback)
+	return fallback
 
 
 func update_ascidians(delta: float) -> void:

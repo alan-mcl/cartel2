@@ -18,7 +18,6 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 |----|------|-----|------|
 |F1|in flight|high| Unspace remainder after F5–F8: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
 |F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
-|F5|in flight|high| Unspace phase 2. N-space flux: a few seconds of hull stress and a velocity kick, rate from instability. See below.|
 |F6|in flight|high| Unspace phase 3. Unspace folds rotate the backdrop and exit by a multiple of 360/N around the player. See below.|
 |F7|in flight|high| Unspace phase 4. Unspace shards: moving impacts, speed and rate from instability. See below.|
 |F8|in flight|high| Unspace phase 5. Ascidians sting on scan, fold nearby geometry, drift in when unstable, and shed shards. See below.|
@@ -26,19 +25,13 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 
 ## Unspace N 4–9
 
-Status: **Discuss**. Do these in order: F5, F6, F7, F8. F1 is what remains after them (infinite navigation, randomised spawn and portal placement).
+Status: **Discuss**. Do these in order: F6, F7, F8. F1 is what remains after them (infinite navigation, randomised spawn and portal placement).
 
 Public routes already carry 4-space on every edge and a few 5- and 6-space alternates. Transit loads the catalog row matching translation N (`n4_default` … `n9_default`). Hull stress exists and ends the career at zero hull, but nothing calls it. Stability is `translation_stability` (higher is safer). Nav computers can use or display deeper layers up to N 9 at `nav_rating` 95; the public book still only lists N 4–6.
 
 Instability for hazards is `1 - stability/100`, further scaled by depth `(N - 4)`. A calm 4-space crossing stays quiet; a poor solution in 9-space does not.
 
 The public book stays N 4–6. N 7–9 exist only as private solutions: already in the translation library (buy or learn, later), or computed in flight with a fitted hyperdrive. Leave infinite unspace navigation and n>4 trade edges out. Update `docs/design/content/n-space.md` and `translations.md` in each phase that changes behaviour. Do not edit frozen setting files. Remove the matching F-row in the same change as the work.
-
-### F5 — N-space flux
-
-A short storm (a few seconds) while in Unspace. Mean time between storms shrinks as instability and N rise; 4-space at high stability almost never rolls one.
-
-A gameplay `RefCounted` decides start and end. While active it calls `apply_hull_stress` and emits a random velocity kick for the flight controller to apply. Log a line on the HUD tape. A palette flash on the backdrop is enough visually.
 
 ### F6 — Unspace folds
 

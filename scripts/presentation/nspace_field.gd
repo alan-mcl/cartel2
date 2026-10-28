@@ -33,6 +33,7 @@ var _backdrop_viewport: SubViewport = null
 var _backdrop_3d: NspaceBackdrop3D = null
 var _height_scale: float = 600.0
 var _static_backdrop_built: bool = false
+var _flux_storm_active: bool = false
 
 
 func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play_bounds: float) -> void:
@@ -193,6 +194,10 @@ func get_ascidians() -> Array:
 	return _ascidians
 
 
+func set_flux_storm_active(active: bool) -> void:
+	_flux_storm_active = active
+
+
 func get_seed_phase() -> float:
 	return _seed_phase
 
@@ -304,6 +309,7 @@ func _update_backdrop(delta: float) -> void:
 		_backdrop_3d.rebuild_static()
 		_static_backdrop_built = true
 	_backdrop_3d.update_ascidians(delta)
+	_backdrop_3d.update_flux_strobe(delta, _flux_storm_active, _palette)
 	queue_redraw()
 
 
