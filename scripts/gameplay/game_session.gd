@@ -13,6 +13,8 @@ var career := CareerStats.new()
 var events := EventBus.new()
 ## Set while a Simulation is attached; used for hold checks when UI does not pass missions.
 var bound_missions: MissionSubsystem = null
+## Set while a Simulation is attached; used for plot gig queries when UI does not pass plotlines.
+var bound_plotlines: PlotlineSubsystem = null
 
 const HULL_STRESS_LOG_STEP := 10.0
 var _hull_stress_next_log_below: float = -1.0

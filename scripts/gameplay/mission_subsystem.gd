@@ -145,6 +145,19 @@ func list_bounty_accepted() -> Array:
 	return bounties.list_accepted()
 
 
+func list_plot_gigs(habitat_id: String, desk: String, session: GameSession, catalog: Catalog) -> Array:
+	var plotlines := _plotline_subsystem(session)
+	if plotlines == null:
+		return []
+	return plotlines.contribute_gigs(desk, habitat_id, session, catalog)
+
+
+func _plotline_subsystem(session: GameSession) -> PlotlineSubsystem:
+	if session == null:
+		return null
+	return session.bound_plotlines
+
+
 func find_offer(offer_id: String) -> Dictionary:
 	return passengers.find_offer(offer_id)
 

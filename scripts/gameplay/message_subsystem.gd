@@ -60,10 +60,17 @@ func next_line(
 		return pushed
 
 	for _attempt in range(MAX_SAMPLE_ATTEMPTS):
-		var emitter := _pick_emitter(channel, session, catalog, rng)
-		if emitter == null:
+		var picked := _pick_weighted(channel, session, catalog, rng, simulation)
+		if picked.is_empty():
 			break
-		var sample := emitter.sample(channel, session, catalog, rng, simulation)
+		var sample: Dictionary
+		if str(picked.get("source", "")) == "plotline":
+			sample = _sample_plotline(picked, session, catalog, rng)
+		else:
+			var emitter := picked.get("emitter") as MessageEmitter
+			if emitter == null:
+				continue
+			sample = emitter.sample(channel, session, catalog, rng, simulation)
 		var text := str(sample.get("text", "")).strip_edges()
 		if text.is_empty():
 			continue
@@ -88,12 +95,13 @@ func _remember_line(channel: String, text: String) -> void:
 	_last_line_by_channel[channel] = text
 
 
-func _pick_emitter(
+func _pick_weighted(
 	channel: String,
 	session: GameSession,
 	catalog: Catalog,
-	rng: RandomNumberGenerator
-) -> MessageEmitter:
+	rng: RandomNumberGenerator,
+	simulation: Simulation = null
+) -> Dictionary:
 	var emitters := _build_emitters(catalog)
 	var total := 0.0
 	var weighted: Array[Dictionary] = []
@@ -104,17 +112,63 @@ func _pick_emitter(
 		if w <= 0.0:
 			continue
 		total += w
-		weighted.append({"emitter": emitter, "weight": w})
+		weighted.append({"source": "emitter", "emitter": emitter, "weight": w})
+
+	var plotlines := _plotline_subsystem(simulation, session)
+	if plotlines != null:
+		for entry in plotlines.contribute_messages(channel, session, catalog):
+			var plot_weight := float(entry.get("weight", 1.0))
+			if plot_weight <= 0.0:
+				continue
+			total += plot_weight
+			weighted.append({"source": "plotline", "entry": entry, "weight": plot_weight})
+
 	if weighted.is_empty() or total <= 0.0:
-		return null
+		return {}
 
 	var roll := rng.randf() * total
 	var cumulative := 0.0
 	for entry in weighted:
 		cumulative += float(entry.get("weight", 0.0))
 		if roll <= cumulative:
-			return entry.get("emitter") as MessageEmitter
-	return weighted[weighted.size() - 1].get("emitter") as MessageEmitter
+			return entry
+	return weighted[weighted.size() - 1]
+
+
+func _plotline_subsystem(simulation: Simulation, session: GameSession) -> PlotlineSubsystem:
+	if simulation != null and simulation.has_subsystem("plotlines"):
+		return simulation.get_subsystem("plotlines") as PlotlineSubsystem
+	if session != null and session.bound_plotlines != null:
+		return session.bound_plotlines
+	return null
+
+
+func _sample_plotline(
+	picked: Dictionary,
+	session: GameSession,
+	catalog: Catalog,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	var entry: Dictionary = picked.get("entry", {})
+	var template := str(entry.get("text", "")).strip_edges()
+	if template.is_empty():
+		return {}
+	var bindings := MessageEmitterTokens.build_sector_bindings(session, catalog, rng)
+	var extra: Variant = entry.get("extra_bindings", {})
+	if typeof(extra) == TYPE_DICTIONARY:
+		for key_variant in extra.keys():
+			bindings[key_variant] = extra[key_variant]
+	for _attempt in range(12):
+		var text := MessageEmitterTokens.apply_template(template, bindings, rng)
+		if MessageEmitterTokens.has_placeholders(text):
+			continue
+		var plotline_id := str(entry.get("plotline_id", ""))
+		return {
+			"text": text,
+			"tone": str(entry.get("tone", "")),
+			"emitter_id": "plotline:%s" % plotline_id if not plotline_id.is_empty() else "plotline",
+		}
+	return {}
 
 
 static func _build_emitters(catalog: Catalog) -> Array[MessageEmitter]:

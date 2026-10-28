@@ -14,6 +14,7 @@ func _init() -> void:
 	register(EconomySubsystem.new())
 	register(MissionSubsystem.new())
 	register(MessageSubsystem.new())
+	register(PlotlineSubsystem.new())
 
 
 func register(subsystem: SimSubsystem) -> bool:
@@ -127,6 +128,7 @@ func attach_events(session: GameSession, catalog: Catalog) -> void:
 	_event_catalog = catalog
 	_event_listener = _on_session_event
 	session.bound_missions = get_subsystem("missions") as MissionSubsystem
+	session.bound_plotlines = get_subsystem("plotlines") as PlotlineSubsystem
 	session.events.subscribe_all(_event_listener)
 
 
@@ -139,6 +141,7 @@ func detach_events(session: GameSession = null) -> void:
 	if _event_listener.is_valid():
 		_event_session.events.unsubscribe_all(_event_listener)
 	_event_session.bound_missions = null
+	_event_session.bound_plotlines = null
 	_event_session = null
 	_event_catalog = null
 	_event_listener = Callable()

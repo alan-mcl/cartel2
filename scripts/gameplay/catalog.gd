@@ -27,6 +27,7 @@ const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
+const PLOTLINES_PATH := "res://data/catalog/plotlines.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
 const CORPORATE_OFFICE_TICKER_PATH := "res://data/catalog/corporate_office_ticker.json"
 const STARS_PATH := "res://data/catalog/stars.json"
@@ -62,6 +63,7 @@ var bounty_missions_config: Dictionary = {}
 var volatile_sites_by_id: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
+var plotlines_by_id: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
 var corporate_office_ticker_config: Dictionary = {}
 var stars_by_name: Dictionary = {}
@@ -105,6 +107,7 @@ func load_all() -> void:
 	volatile_sites_by_id = _load_volatile_sites()
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
+	plotlines_by_id = _load_indexed_array(PLOTLINES_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
 	corporate_office_ticker_config = _load_json_object(CORPORATE_OFFICE_TICKER_PATH)
 	stars_by_name = _load_json_object(STARS_PATH)
@@ -365,6 +368,14 @@ func get_message_emitter(id: String) -> Dictionary:
 
 func list_message_emitters() -> Array:
 	return message_emitters_by_id.values()
+
+
+func get_plotline(id: String) -> Dictionary:
+	return _require(plotlines_by_id, id, "plotline")
+
+
+func list_plotlines() -> Array:
+	return plotlines_by_id.values()
 
 
 func get_celebrity_pilot(id: String) -> Dictionary:

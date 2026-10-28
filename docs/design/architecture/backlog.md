@@ -4,6 +4,8 @@ Open work only. Nothing here is approved until it is picked up. Status stays **D
 
 What the code does today: [architecture.md](architecture.md). What is explicitly not built: [architecture.md](architecture.md#not-yet-implemented).
 
+Implemented N-space transit, hazards, and per-N backdrops are documented in [n-space.md](../content/n-space.md) (flux, folds, shards, ascidian scan/sting/shed/fold/terrain flow). Do not edit frozen setting files for backlog items unless the request explicitly asks for setting-doc changes.
+
 ## Bugs
 
 | ID | Area | Sev | Desc |
@@ -16,22 +18,11 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|F1|in flight|high| Unspace remainder after F5–F7: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
+|F1|in flight|high| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
+|F3|gameplay|high|Plotlines: longer duration sidequest-type content that the player can encounter, optional
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
-## Unspace N 4–9
+## Unspace N 4–9 (policy, not open rows)
 
-Status: **Discuss**. F1 is the main unspace follow-on (infinite navigation, randomised spawn and portal placement).
-
-Public routes already carry 4-space on every edge and a few 5- and 6-space alternates. Transit loads the catalog row matching translation N (`n4_default` … `n9_default`). Hull stress exists and ends the career at zero hull, but nothing calls it. Stability is `translation_stability` (higher is safer). Nav computers can use or display deeper layers up to N 9 at `nav_rating` 95; the public book still only lists N 4–6.
-
-Instability for hazards is `1 - stability/100`, further scaled by depth `(N - 4)`. A calm 4-space crossing stays quiet; a poor solution in 9-space does not.
-
-The public book stays N 4–6. N 7–9 exist only as private solutions: already in the translation library (buy or learn, later), or computed in flight with a fitted hyperdrive. Leave infinite unspace navigation and n>4 trade edges out. Update `docs/design/content/n-space.md` and `translations.md` in each phase that changes behaviour. Do not edit frozen setting files. Remove the matching F-row in the same change as the work.
-
-### Checks
-
-Headless tests for the duration curve (an N 9 lump is about one tenth of N 4 on the same friction), no public route row above N 6, `max_n_for_nav_rating(95) == 9`, a completed hyperdrive calculation appends a library solution and a failed one does not, and a forced flux or shard calls hull stress only while in Unspace. A fold angle is a multiple of `TAU / N` and does not move the player. Backdrop parameters differ by N. Run `./scripts/ci/check.sh` at the end of each phase.
-
-
+Public routes stay N 4–6 on the book; N 7–9 are private solutions (library or hyperdrive). Commodity economy uses 4-space edges only until designed otherwise. Volatile mission grants and hyperdrive library entries follow [translations.md](../content/translations.md). When picking up **F1**, update [n-space.md](../content/n-space.md) in the same change if behaviour shifts.

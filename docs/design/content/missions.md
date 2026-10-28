@@ -1,6 +1,6 @@
 # Missions
 
-**Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Plot and named-NPC dialogue are not. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
+**Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (no desk UI yet); see [plotlines.md](plotlines.md). Named-NPC dialogue is not implemented. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
 
 ## Bounty charters
 

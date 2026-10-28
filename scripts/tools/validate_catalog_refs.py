@@ -1202,6 +1202,22 @@ MESSAGE_CHANNELS = {"headlines", "gossip"}
 
 MESSAGE_TONES = {"info", "warning", "positive", "negative"}
 
+PLOT_TRIGGER_KINDS = {"event", "days_in_state", "gig_accepted", "gig_completed"}
+
+PLOT_GIG_DESKS = {"terminal", "bar", "peacekeeping", "corporate", "any"}
+
+SIM_EVENT_TYPES = {
+    "sector_entered",
+    "docked",
+    "undocked",
+    "commodity_traded",
+    "ship_purchased",
+    "module_installed",
+    "credits_changed",
+    "ship_destroyed",
+    "salvage_taken",
+}
+
 MESSAGE_PLACEHOLDERS = {
     "habitat",
     "planet",
@@ -1341,6 +1357,141 @@ def check_message_emitters(emitters: list) -> list[str]:
     return errors
 
 
+def check_plotlines(plotlines: list) -> list[str]:
+    errors: list[str] = []
+    seen: set[str] = set()
+    for index, plotline in enumerate(plotlines):
+        label = f"plotlines.json[{index}]"
+        if not isinstance(plotline, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        plotline_id = str(plotline.get("id", "")).strip()
+        if not plotline_id:
+            errors.append(f"{label}: missing id")
+            continue
+        label = f"plotlines.json {plotline_id}"
+        if plotline_id in seen:
+            errors.append(f"{label}: duplicate id")
+        seen.add(plotline_id)
+        initial = str(plotline.get("initial", "")).strip()
+        states = plotline.get("states")
+        if not isinstance(states, dict) or not states:
+            errors.append(f"{label}: states must be a non-empty object")
+            continue
+        if not initial:
+            errors.append(f"{label}: missing initial")
+        elif initial not in states:
+            errors.append(f"{label}: initial '{initial}' is not a state id")
+        for state_id, state in states.items():
+            state_label = f"{label} states.{state_id}"
+            if not isinstance(state, dict):
+                errors.append(f"{state_label}: state must be an object")
+                continue
+            messages = state.get("messages", [])
+            if messages is not None and not isinstance(messages, list):
+                errors.append(f"{state_label}: messages must be an array")
+            elif isinstance(messages, list):
+                for msg_index, msg in enumerate(messages):
+                    msg_label = f"{state_label} messages[{msg_index}]"
+                    if not isinstance(msg, dict):
+                        errors.append(f"{msg_label}: message must be an object")
+                        continue
+                    channel = str(msg.get("channel", ""))
+                    if channel not in MESSAGE_CHANNELS:
+                        errors.append(f"{msg_label}: unknown channel '{channel}'")
+                    text = msg.get("text")
+                    if not isinstance(text, str) or not text.strip():
+                        errors.append(f"{msg_label}: text must be a non-empty string")
+                        text = ""
+                    for token in PLACEHOLDER_RE.findall(text):
+                        if not message_template_token_allowed(token):
+                            errors.append(f"{msg_label}: unknown placeholder '{{{token}}}'")
+                    weight = msg.get("weight", 1.0)
+                    if isinstance(weight, bool) or not isinstance(weight, (int, float)) or weight <= 0:
+                        errors.append(f"{msg_label}: weight must be a number greater than 0")
+            gigs = state.get("gigs", [])
+            if gigs is not None and not isinstance(gigs, list):
+                errors.append(f"{state_label}: gigs must be an array")
+            elif isinstance(gigs, list):
+                gig_ids: set[str] = set()
+                for gig_index, gig in enumerate(gigs):
+                    gig_label = f"{state_label} gigs[{gig_index}]"
+                    if not isinstance(gig, dict):
+                        errors.append(f"{gig_label}: gig must be an object")
+                        continue
+                    gig_id = str(gig.get("id", "")).strip()
+                    if not gig_id:
+                        errors.append(f"{gig_label}: missing id")
+                    elif gig_id in gig_ids:
+                        errors.append(f"{gig_label}: duplicate gig id '{gig_id}'")
+                    else:
+                        gig_ids.add(gig_id)
+                    desk = str(gig.get("desk", ""))
+                    if desk not in PLOT_GIG_DESKS:
+                        errors.append(f"{gig_label}: unknown desk '{desk}'")
+                    title = gig.get("title")
+                    if not isinstance(title, str) or not title.strip():
+                        errors.append(f"{gig_label}: title must be a non-empty string")
+                    text = gig.get("text")
+                    if not isinstance(text, str) or not text.strip():
+                        errors.append(f"{gig_label}: text must be a non-empty string")
+                    habitats = gig.get("habitats")
+                    if habitats is not None and not isinstance(habitats, list):
+                        errors.append(f"{gig_label}: habitats must be an array when present")
+            transitions = state.get("transitions", [])
+            if transitions is not None and not isinstance(transitions, list):
+                errors.append(f"{state_label}: transitions must be an array")
+            elif isinstance(transitions, list):
+                for tr_index, transition in enumerate(transitions):
+                    tr_label = f"{state_label} transitions[{tr_index}]"
+                    if not isinstance(transition, dict):
+                        errors.append(f"{tr_label}: transition must be an object")
+                        continue
+                    to_state = str(transition.get("to", "")).strip()
+                    if not to_state:
+                        errors.append(f"{tr_label}: missing to")
+                    elif to_state not in states:
+                        errors.append(f"{tr_label}: to '{to_state}' is not a state id")
+                    when = transition.get("when")
+                    if not isinstance(when, dict):
+                        errors.append(f"{tr_label}: when must be an object")
+                        continue
+                    kind = str(when.get("kind", ""))
+                    if kind not in PLOT_TRIGGER_KINDS:
+                        errors.append(f"{tr_label}: unknown when.kind '{kind}'")
+                        continue
+                    if kind == "event":
+                        event_type = str(when.get("type", ""))
+                        if event_type not in SIM_EVENT_TYPES:
+                            errors.append(f"{tr_label}: unknown event type '{event_type}'")
+                    elif kind == "days_in_state":
+                        days = when.get("days")
+                        if isinstance(days, bool) or not isinstance(days, (int, float)) or days < 0:
+                            errors.append(f"{tr_label}: days must be a non-negative number")
+                    elif kind in ("gig_accepted", "gig_completed"):
+                        gig_id = str(when.get("gig_id", "")).strip()
+                        if not gig_id:
+                            errors.append(f"{tr_label}: gig_id required for {kind}")
+                    require_flags = transition.get("require_flags")
+                    if require_flags is not None and not isinstance(require_flags, dict):
+                        errors.append(f"{tr_label}: require_flags must be an object")
+                    set_flags = transition.get("set_flags")
+                    if set_flags is not None and not isinstance(set_flags, dict):
+                        errors.append(f"{tr_label}: set_flags must be an object")
+                    require_plotline = transition.get("require_plotline")
+                    if require_plotline is not None:
+                        if not isinstance(require_plotline, dict):
+                            errors.append(f"{tr_label}: require_plotline must be an object")
+                        else:
+                            other_id = str(require_plotline.get("id", "")).strip()
+                            other_state = str(require_plotline.get("state", "")).strip()
+                            if not other_id:
+                                errors.append(f"{tr_label}: require_plotline.id required")
+                            if not other_state:
+                                errors.append(f"{tr_label}: require_plotline.state required")
+    return errors
+
+
 def check_celebrity_pilots(pilots: list) -> list[str]:
     errors: list[str] = []
     seen_ids: set[str] = set()
@@ -1449,6 +1600,7 @@ def main() -> int:
     errors.extend(check_commodities(commodities))
     errors.extend(check_fuels(load_array(CATALOG / "fuels.json"), load_modules()))
     errors.extend(check_message_emitters(load_array(CATALOG / "message_emitters.json")))
+    errors.extend(check_plotlines(load_array(CATALOG / "plotlines.json")))
     errors.extend(check_celebrity_pilots(load_array(CATALOG / "celebrity_pilots.json")))
     errors.extend(check_stars(load_object(CATALOG / "stars.json")))
     errors.extend(check_passenger_missions(passenger_missions))
