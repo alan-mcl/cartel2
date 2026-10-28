@@ -11,6 +11,8 @@ var wallet := Wallet.new()
 var combat := CombatPersistence.new()
 var career := CareerStats.new()
 var events := EventBus.new()
+## Set while a Simulation is attached; used for hold checks when UI does not pass missions.
+var bound_missions: MissionSubsystem = null
 
 
 var callsign: String:
@@ -872,21 +874,25 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 	if sanction_total > 0:
 		return fail_action("Outstanding sanctions (d%d). Pay them before launch." % sanction_total)
 
+	var mission_book := missions if missions != null else bound_missions
 	var occupant_count := 1
 	var freight_power := 0.0
 	var freight_compute := 0.0
-	if missions != null:
-		occupant_count = missions.launch_occupant_count(ship_id)
-		var reserves := missions.committed_freight_reserves_for_ship(ship_id)
+	var freight_tonnes := 0.0
+	if mission_book != null:
+		occupant_count = mission_book.launch_occupant_count(ship_id)
+		var reserves := mission_book.committed_freight_reserves_for_ship(ship_id)
 		freight_power = float(reserves.get("power", 0.0))
 		freight_compute = float(reserves.get("compute", 0.0))
+		freight_tonnes = float(reserves.get("tonnes", 0.0))
 
 	var blockers := ShipAssembly.undock_blockers(
 		catalog,
 		ship,
 		occupant_count,
 		freight_power,
-		freight_compute
+		freight_compute,
+		freight_tonnes
 	)
 	if not blockers.is_empty():
 		return fail_action(blockers[0])
@@ -927,6 +933,25 @@ func get_current_habitat(catalog: Catalog) -> Dictionary:
 
 func get_cargo_ship(ship_id: String = "") -> OwnedShip:
 	return fleet.get_cargo_ship(world.docked, world.habitat_id, ship_id)
+
+
+## Exchange fills the terminal charter selection when that ship is docked here, else the current ship here.
+func exchange_cargo_ship(charter_ship_id: String = "") -> OwnedShip:
+	if not world.docked or world.habitat_id.is_empty():
+		return get_cargo_ship()
+	var habitat_id := world.habitat_id
+	var preferred := charter_ship_id.strip_edges()
+	if not preferred.is_empty():
+		var charter_ship := fleet.get_owned_ship(preferred)
+		if charter_ship != null and charter_ship.location == habitat_id:
+			return charter_ship
+	var current := fleet.get_owned_ship(fleet.current_ship_id)
+	if current != null and current.location == habitat_id:
+		return current
+	for ship in fleet.owned_ships:
+		if ship.location == habitat_id:
+			return ship
+	return get_cargo_ship()
 
 
 func get_cargo_count(ship: OwnedShip, commodity_id: String) -> int:
@@ -1000,9 +1025,12 @@ func cargo_carry_block_reason(
 
 
 func _freight_reserved_tonnes(missions: MissionSubsystem, ship: OwnedShip) -> float:
-	if missions == null or ship == null:
+	if ship == null:
 		return 0.0
-	return float(missions.committed_freight_reserves_for_ship(ship.id).get("tonnes", 0.0))
+	var book := missions if missions != null else bound_missions
+	if book == null:
+		return 0.0
+	return float(book.committed_freight_reserves_for_ship(ship.id).get("tonnes", 0.0))
 
 
 func get_spare_part_count(part_id: String) -> int:

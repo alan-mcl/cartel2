@@ -348,6 +348,7 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 	var occupant_count := 1
 	var freight_power := 0.0
 	var freight_compute := 0.0
+	var freight_tonnes := 0.0
 	if _context.simulation != null:
 		var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
 		if missions != null:
@@ -355,6 +356,7 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			var reserves := missions.committed_freight_reserves_for_ship(ship.id)
 			freight_power = float(reserves.get("power", 0.0))
 			freight_compute = float(reserves.get("compute", 0.0))
+			freight_tonnes = float(reserves.get("tonnes", 0.0))
 	var sanction_total := Sanctions.total_fine(_context.session.player.sanctions)
 	if sanction_total > 0:
 		for entry_variant in _context.session.player.sanctions:
@@ -375,7 +377,8 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			ship,
 			occupant_count,
 			freight_power,
-			freight_compute
+			freight_compute,
+			freight_tonnes
 		)
 		if blockers.is_empty():
 			var cleared := Label.new()

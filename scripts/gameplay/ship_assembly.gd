@@ -59,7 +59,8 @@ static func undock_blockers(
 	owned: OwnedShip,
 	occupant_count: int = 1,
 	freight_power_mw: float = 0.0,
-	freight_compute_cu: float = 0.0
+	freight_compute_cu: float = 0.0,
+	freight_reserved_tonnes: float = 0.0
 ) -> PackedStringArray:
 	var blockers: PackedStringArray = PackedStringArray()
 	if owned == null:
@@ -121,6 +122,14 @@ static func undock_blockers(
 			blockers.append(
 				"Not enough power for freight load - upgrade ship systems at the Shipyard."
 			)
+
+	var cargo_capacity := float(assembled.capacities.get("cargo_capacity", 0.0))
+	var cargo_mass := ShipOperations.get_cargo_mass(catalog, owned)
+	if cargo_mass + freight_reserved_tonnes > cargo_capacity + 0.001:
+		blockers.append(
+			"Hold over capacity (%.1f / %.1f t). Offload cargo or cancel freight before launch."
+			% [cargo_mass + freight_reserved_tonnes, cargo_capacity]
+		)
 
 	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, owned, assembled)
 	var mass_limit := float(assembled.envelope.get("mass_limit", 0.0))

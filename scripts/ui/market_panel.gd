@@ -7,8 +7,6 @@ var _market_commodity_ids: PackedStringArray = PackedStringArray()
 var _market_listings: Array[Dictionary] = []
 var _commodity_item_list: ItemList
 var _suppress_commodity_select: bool = false
-var _cargo_ship_id: String = ""
-
 var _listings_host: VBoxContainer
 var _tape_bar: MessageBar
 var _tape_rng := RandomNumberGenerator.new()
@@ -214,7 +212,7 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 
 	var price := int(listing.get("price", commodity.base_price))
 	var store_qty := int(listing.get("quantity", 0))
-	var cargo_ship := _context.session.get_cargo_ship(_cargo_ship_id)
+	var cargo_ship := _context.session.exchange_cargo_ship(_context.charter_ship_id)
 	var cargo_qty := 0
 	var cargo_cap := 0.0
 	var cargo_mass := 0.0
@@ -244,6 +242,7 @@ func _rebuild_commodity_detail(detail: VBoxContainer) -> void:
 	detail.add_child(UiPatterns.metric_block("Sell price", "d%d" % _context.session.commodity_sell_price(price)))
 	detail.add_child(UiPatterns.status_row("Contract depth", str(store_qty)))
 	if cargo_ship != null:
+		detail.add_child(UiPatterns.status_row("Cargo ship", cargo_ship.name))
 		detail.add_child(UiPatterns.status_row("Ship cargo", str(cargo_qty)))
 		detail.add_child(UiPatterns.status_row("Hold used", "%.1f / %.1f t" % [cargo_mass, cargo_cap]))
 
@@ -286,12 +285,14 @@ func _find_market_listing(commodity_id: String) -> Dictionary:
 
 func _on_buy_commodity(commodity_id: String) -> void:
 	_selected_commodity_id = commodity_id
+	var cargo_ship := _context.session.exchange_cargo_ship(_context.charter_ship_id)
+	var ship_id := cargo_ship.id if cargo_ship != null else ""
 	_context.session.buy_commodity(
 		_context.catalog,
 		_context.session.building_id,
 		commodity_id,
 		1,
-		_cargo_ship_id,
+		ship_id,
 		_missions()
 	)
 
@@ -304,12 +305,14 @@ func _missions() -> MissionSubsystem:
 
 func _on_sell_commodity(commodity_id: String) -> void:
 	_selected_commodity_id = commodity_id
+	var cargo_ship := _context.session.exchange_cargo_ship(_context.charter_ship_id)
+	var ship_id := cargo_ship.id if cargo_ship != null else ""
 	_context.session.sell_commodity(
 		_context.catalog,
 		_context.session.building_id,
 		commodity_id,
 		1,
-		_cargo_ship_id
+		ship_id
 	)
 
 

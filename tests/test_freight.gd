@@ -15,6 +15,8 @@ static func run(runner: TestRunner) -> void:
 	_test_dock_pays_and_clears(runner, catalog)
 	_test_reputation_gate(runner, catalog)
 	_test_exchange_buy_respects_freight_reserve(runner, catalog)
+	_test_bound_missions_blocks_full_hold(runner, catalog)
+	_test_exchange_targets_charter_ship(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -382,10 +384,15 @@ static func _dry_bulk_offer(
 	}
 
 
+static func _attach_simulation(session: GameSession, catalog: Catalog, simulation: Simulation) -> void:
+	simulation.attach_events(session, catalog)
+
+
 static func _test_exchange_buy_respects_freight_reserve(runner: TestRunner, catalog: Catalog) -> void:
 	var simulation := _simulation()
 	var missions := _missions(simulation)
 	var session := _session(runner, catalog, "FRT-HOLD")
+	_attach_simulation(session, catalog, simulation)
 	var ship := session.get_cargo_ship()
 	if ship == null:
 		runner.check(false, "freight: hold overlap test needs cargo ship")
@@ -402,10 +409,12 @@ static func _test_exchange_buy_respects_freight_reserve(runner: TestRunner, cata
 	)
 	runner.check(session.visit(catalog, "proxima_exchange"), "freight: visit exchange for hold test")
 	runner.check(
-		not session.buy_commodity(
-			catalog, "proxima_exchange", "minerals", 1, "", missions
-		),
+		not session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, ship.id, missions),
 		"freight: exchange buy blocked when freight plus cargo exceeds hold"
+	)
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, ship.id),
+		"freight: exchange buy blocked without explicit missions when simulation bound"
 	)
 	runner.check(
 		missions.cancel_freight_charter(
@@ -426,6 +435,81 @@ static func _test_exchange_buy_respects_freight_reserve(runner: TestRunner, cata
 	runner.check(
 		session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, "", missions),
 		"freight: exchange buy allowed when freight plus cargo fits"
+	)
+
+
+static func _test_bound_missions_blocks_full_hold(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "FRT-FULL", "tester"), "freight: tester kit for full hold")
+	_attach_simulation(session, catalog, simulation)
+	var ship := session.get_owned_ship("flare_on_ss_1")
+	if ship == null:
+		runner.check(false, "freight: flare template for full hold test")
+		return
+	session.fleet.current_ship_id = ship.id
+	var full := _dry_bulk_offer(
+		catalog, "proxima_habitat", "irasia_habitat", "freight_hold_full", 4.0
+	)
+	_inject_freight_offer(missions, session, catalog, full)
+	runner.check(
+		missions.accept_freight_offer(session, catalog, full.id, ship.id),
+		"freight: accept 4 t lot on 4 t hold"
+	)
+	runner.check(session.visit(catalog, "proxima_exchange"), "freight: exchange for full hold test")
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, ship.id),
+		"freight: full hold with 4 t freight blocks any commodity buy"
+	)
+	runner.check(
+		session.undock(catalog, ship.id, missions),
+		"freight: can launch with freight only filling the hold"
+	)
+	session.dock(catalog, "proxima_habitat")
+	ship.add_cargo("minerals", 1)
+	runner.check(
+		not session.undock(catalog, ship.id, missions),
+		"freight: cannot launch when cargo plus freight exceeds hold"
+	)
+
+
+static func _test_exchange_targets_charter_ship(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "FRT-TWO", "tester"), "freight: two-ship exchange test")
+	_attach_simulation(session, catalog, simulation)
+	var freight_ship := session.get_owned_ship("flare_on_ss_1")
+	var trade_ship := session.get_owned_ship("flare_on_cx_1")
+	if freight_ship == null or trade_ship == null:
+		runner.check(false, "freight: need two 4 t hulls at proxima")
+		return
+	session.fleet.current_ship_id = trade_ship.id
+	var cap_freight := session.get_ship_cargo_capacity(catalog, freight_ship)
+	var cap_trade := session.get_ship_cargo_capacity(catalog, trade_ship)
+	runner.check(cap_freight >= 4.0 - 0.001 and cap_trade >= 4.0 - 0.001, "freight: both hulls have 4 t holds")
+	var full := _dry_bulk_offer(
+		catalog, "proxima_habitat", "irasia_habitat", "freight_hold_two", 4.0
+	)
+	_inject_freight_offer(missions, session, catalog, full)
+	runner.check(
+		missions.accept_freight_offer(session, catalog, full.id, freight_ship.id),
+		"freight: charter on non-current hull"
+	)
+	runner.check(session.visit(catalog, "proxima_exchange"), "freight: exchange two-ship test")
+	runner.check_eq(
+		session.exchange_cargo_ship(freight_ship.id).id,
+		freight_ship.id,
+		"freight: exchange resolves charter ship id"
+	)
+	runner.check(
+		not session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, freight_ship.id),
+		"freight: buy on chartered hull blocked"
+	)
+	runner.check(
+		session.buy_commodity(catalog, "proxima_exchange", "minerals", 1, trade_ship.id),
+		"freight: buy on current hull without freight allowed"
 	)
 
 
