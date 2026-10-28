@@ -27,6 +27,7 @@ func _init() -> void:
 	TestFieldConditions.run(runner)
 	TestHyperdrive.run(runner)
 	TestUnspaceFlux.run(runner)
+	TestUnspaceFold.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)
 	TestCargoRequirements.run(runner)

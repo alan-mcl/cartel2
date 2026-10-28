@@ -256,6 +256,21 @@ func set_unspace_flux_storm(active: bool) -> void:
 		_nspace_field.set_flux_storm_active(active)
 
 
+func start_unspace_fold_animation(
+	pivot: Vector2,
+	delta_rad: float,
+	duration: float = UnspaceFold.FOLD_ANIM_SECONDS
+) -> void:
+	if _nspace_field != null and is_instance_valid(_nspace_field):
+		_nspace_field.start_fold_animation(pivot, delta_rad, duration)
+
+
+func is_unspace_fold_animating() -> bool:
+	if _nspace_field == null or not is_instance_valid(_nspace_field):
+		return false
+	return _nspace_field.is_fold_animating()
+
+
 func apply_salvage_visuals(session: GameSession) -> void:
 	for entity_id in spawned_by_id:
 		var node: Node = spawned_by_id[entity_id]

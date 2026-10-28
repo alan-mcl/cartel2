@@ -101,6 +101,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 
 	if _main.session.in_unspace:
 		_tick_unspace_flux(delta)
+		_tick_unspace_fold(delta)
 	elif _player.has_method("set_unspace_flux_stress"):
 		_player.set_unspace_flux_stress(false, delta)
 
@@ -562,6 +563,18 @@ func _purge_removed_bounty_actors() -> void:
 	_traffic_director.actors = kept
 
 
+func _tick_unspace_fold(delta: float) -> void:
+	var fold_result: Dictionary = UnspaceFold.advance(_main.session, delta)
+	if bool(fold_result.get("fold_applied", false)):
+		var delta_rad := float(fold_result.get("delta_rad", 0.0))
+		UnspaceFold.begin_animation(_main.session)
+		_world_loader.start_unspace_fold_animation(_player.global_position, delta_rad)
+	var fold_log := str(fold_result.get("log", ""))
+	if not fold_log.is_empty():
+		_main.session.last_log = fold_log
+		_main.session.changed.emit()
+
+
 func _tick_unspace_flux(delta: float) -> void:
 	var flux_result: Dictionary = UnspaceFlux.advance(_main.session, delta)
 	var kick: Vector2 = flux_result.get("kick", Vector2.ZERO)
@@ -569,7 +582,13 @@ func _tick_unspace_flux(delta: float) -> void:
 		_player.apply_weapon_impulse(kick)
 	var stress := float(flux_result.get("hull_stress", 0.0))
 	if stress > 0.0:
-		_main.session.apply_hull_stress(stress, delta)
+		_main.session.apply_hull_stress(
+			stress,
+			delta,
+			_player.assembled_ship if _player != null else null
+		)
+		if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
+			_player.refresh_hull_destroyed_presentation()
 	var storm_active := UnspaceFlux.is_active(_main.session)
 	_world_loader.set_unspace_flux_storm(storm_active)
 	if _player.has_method("set_unspace_flux_stress"):

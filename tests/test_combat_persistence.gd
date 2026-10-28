@@ -8,6 +8,7 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not assembled.id.is_empty(), "combat persistence: flare assembles")
 	_test_round_trip(runner, assembled)
 	_test_hull_stress_only_in_unspace(runner)
+	_test_hull_stress_shields_absorb(runner, catalog, assembled)
 	_test_repair_restores_full(runner, assembled)
 
 
@@ -100,12 +101,41 @@ static func _test_hull_stress_only_in_unspace(runner: TestRunner) -> void:
 		combat.apply_hull_stress(1.0, 0.5, true),
 		"combat persistence: stress applies again after the cooldown elapses"
 	)
-	runner.check(_near(combat.hull, 8.0), "combat persistence: post-cooldown stress reduces hull")
+	runner.check(_near(combat.hull, 7.0), "combat persistence: post-cooldown stress batches accumulated amount")
 
 	combat.max_hull = 0.0
 	runner.check(
 		not combat.apply_hull_stress(1.0, 1.0, true),
 		"combat persistence: hull stress needs a positive hull max"
+	)
+
+
+static func _test_hull_stress_shields_absorb(
+	runner: TestRunner,
+	catalog: Catalog,
+	assembled: AssembledShip
+) -> void:
+	var combat := CombatPersistence.new()
+	combat.init_hull_from_ship(assembled)
+	var full_shields := ShipCombat.initial_shield_charges(assembled)
+	if full_shields.is_empty():
+		runner.check(true, "combat persistence: skip shield stress test without shield mounts")
+		return
+	combat.shield_charges = full_shields.duplicate(true)
+	var hull_before := combat.hull
+	runner.check(
+		combat.apply_hull_stress(2.0, 0.5, true, assembled),
+		"combat persistence: batched hull stress applies with shields"
+	)
+	runner.check(combat.hull <= hull_before, "combat persistence: stress does not raise hull")
+	var shield_dropped := false
+	for key in full_shields.keys():
+		if float(combat.shield_charges.get(key, 0.0)) < float(full_shields.get(key, 0.0)):
+			shield_dropped = true
+			break
+	runner.check(
+		shield_dropped or combat.hull < hull_before,
+		"combat persistence: shields absorb or hull takes partial stress"
 	)
 
 

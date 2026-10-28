@@ -26,6 +26,22 @@ static func initial_shield_charges(assembled: AssembledShip) -> Dictionary:
 	return charges
 
 
+## N-space hull stress is treated as energy-like flux; shields absorb per their energy protection.
+static func hull_stress_to_hull_damage(
+	assembled: AssembledShip,
+	state: ShipCombatState,
+	stress: float
+) -> float:
+	if assembled == null or state == null or stress <= 0.0:
+		return stress
+	var packets := {"energy": stress}
+	var shield_out := _apply_shields(assembled, state, packets)
+	var remaining: Variant = shield_out.get("remaining", {})
+	if typeof(remaining) != TYPE_DICTIONARY:
+		return stress
+	return float((remaining as Dictionary).get("energy", stress))
+
+
 static func tick_shields(state: ShipCombatState, assembled: AssembledShip, delta: float) -> void:
 	if state == null or assembled == null or delta <= 0.0:
 		return

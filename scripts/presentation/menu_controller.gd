@@ -499,6 +499,8 @@ func _on_career_ended() -> void:
 	if _hud.has_method("close_target_scan"):
 		_hud.close_target_scan()
 	_player.freeze_motion()
+	if _player.has_method("refresh_hull_destroyed_presentation"):
+		_player.refresh_hull_destroyed_presentation()
 	_main.session.career.ensure_career_id()
 	var saved_at := Time.get_datetime_string_from_system(true)
 	LeaderboardStore.upsert_from_session(_main.session, saved_at, _catalog, true)

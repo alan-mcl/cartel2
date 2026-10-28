@@ -35,6 +35,14 @@ var _height_scale: float = 600.0
 var _static_backdrop_built: bool = false
 var _flux_storm_active: bool = false
 
+var _fold_anim_active: bool = false
+var _fold_anim_elapsed: float = 0.0
+var _fold_anim_duration: float = 1.0
+var _fold_anim_pivot: Vector2 = Vector2.ZERO
+var _fold_anim_delta_rad: float = 0.0
+var _fold_anim_start_verts: PackedVector2Array = PackedVector2Array()
+var _fold_anim_start_portal: Vector2 = Vector2.INF
+
 
 func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play_bounds: float) -> void:
 	_play_bounds = play_bounds
@@ -145,6 +153,54 @@ func get_portal_position() -> Vector2:
 	return Vector2.ZERO
 
 
+func is_fold_animating() -> bool:
+	return _fold_anim_active
+
+
+func start_fold_animation(pivot: Vector2, delta_rad: float, duration: float = 1.0) -> void:
+	if absf(delta_rad) < 0.0001 or _animated.is_empty():
+		return
+	_fold_anim_start_verts = _animated.duplicate()
+	_fold_anim_start_portal = _portal_world_pos
+	_fold_anim_pivot = pivot
+	_fold_anim_delta_rad = delta_rad
+	_fold_anim_duration = maxf(duration, 0.001)
+	_fold_anim_elapsed = 0.0
+	_fold_anim_active = true
+	_apply_fold_animation_angle(0.0)
+
+
+func tick_fold_animation(delta: float) -> void:
+	if not _fold_anim_active:
+		return
+	_fold_anim_elapsed += delta
+	var t := clampf(_fold_anim_elapsed / _fold_anim_duration, 0.0, 1.0)
+	var eased := _ease_fold_progress(t)
+	_apply_fold_animation_angle(_fold_anim_delta_rad * eased)
+	if t >= 1.0:
+		_fold_anim_active = false
+		_apply_fold_animation_angle(_fold_anim_delta_rad)
+
+
+func _apply_fold_animation_angle(angle_rad: float) -> void:
+	if _fold_anim_start_verts.is_empty():
+		return
+	for i in range(_fold_anim_start_verts.size()):
+		if i >= _animated.size():
+			break
+		_animated[i] = _rotate_about_pivot(_fold_anim_start_verts[i], _fold_anim_pivot, angle_rad)
+	if _fold_anim_start_portal != Vector2.INF:
+		_portal_world_pos = _rotate_about_pivot(_fold_anim_start_portal, _fold_anim_pivot, angle_rad)
+	if _portal_node != null:
+		_portal_node.global_position = get_portal_position()
+	if _backdrop_3d != null:
+		_backdrop_3d.rebuild_static()
+
+
+static func _ease_fold_progress(t: float) -> float:
+	return t * t * (3.0 - 2.0 * t)
+
+
 func get_portal_node() -> Node2D:
 	return _portal_node
 
@@ -196,6 +252,15 @@ func get_ascidians() -> Array:
 
 func set_flux_storm_active(active: bool) -> void:
 	_flux_storm_active = active
+
+
+static func _rotate_about_pivot(point: Vector2, pivot: Vector2, angle_rad: float) -> Vector2:
+	if absf(angle_rad) < 0.0001:
+		return point
+	var offset := point - pivot
+	var c := cos(angle_rad)
+	var s := sin(angle_rad)
+	return pivot + Vector2(offset.x * c - offset.y * s, offset.x * s + offset.y * c)
 
 
 func get_seed_phase() -> float:
@@ -293,6 +358,7 @@ func _draw() -> void:
 
 
 func _update_backdrop(delta: float) -> void:
+	tick_fold_animation(delta)
 	if _backdrop_3d == null or _backdrop_viewport == null:
 		return
 
@@ -649,7 +715,7 @@ func _setup_portal(catalog: Catalog, _session: GameSession) -> void:
 	_portal_node = Node2D.new()
 	_portal_node.name = "ExitPortal"
 	_portal_node.z_index = 10
-	_portal_node.position = _portal_world_pos
+	_portal_node.global_position = get_portal_position()
 	_portal_node.visible = false
 	add_child(_portal_node)
 

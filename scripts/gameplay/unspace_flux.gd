@@ -5,8 +5,8 @@ const FLUX_DURATION_MIN := 2.0
 const FLUX_DURATION_MAX := 5.0
 const KICK_SPEED_MIN := 70.0
 const KICK_SPEED_MAX := 240.0
-const STRESS_PER_SECOND_MIN := 0.6
-const STRESS_PER_SECOND_MAX := 2.8
+const STRESS_PER_SECOND_MIN := 0.12
+const STRESS_PER_SECOND_MAX := 0.48
 
 
 static func reset(session: GameSession) -> void:

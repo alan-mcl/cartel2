@@ -18,24 +18,19 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 |----|------|-----|------|
 |F1|in flight|high| Unspace remainder after F5–F8: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
 |F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
-|F6|in flight|high| Unspace phase 3. Unspace folds rotate the backdrop and exit by a multiple of 360/N around the player. See below.|
 |F7|in flight|high| Unspace phase 4. Unspace shards: moving impacts, speed and rate from instability. See below.|
 |F8|in flight|high| Unspace phase 5. Ascidians sting on scan, fold nearby geometry, drift in when unstable, and shed shards. See below.|
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
 ## Unspace N 4–9
 
-Status: **Discuss**. Do these in order: F6, F7, F8. F1 is what remains after them (infinite navigation, randomised spawn and portal placement).
+Status: **Discuss**. Do these in order: F7, F8. F1 is what remains after them (infinite navigation, randomised spawn and portal placement).
 
 Public routes already carry 4-space on every edge and a few 5- and 6-space alternates. Transit loads the catalog row matching translation N (`n4_default` … `n9_default`). Hull stress exists and ends the career at zero hull, but nothing calls it. Stability is `translation_stability` (higher is safer). Nav computers can use or display deeper layers up to N 9 at `nav_rating` 95; the public book still only lists N 4–6.
 
 Instability for hazards is `1 - stability/100`, further scaled by depth `(N - 4)`. A calm 4-space crossing stays quiet; a poor solution in 9-space does not.
 
 The public book stays N 4–6. N 7–9 exist only as private solutions: already in the translation library (buy or learn, later), or computed in flight with a fitted hyperdrive. Leave infinite unspace navigation and n>4 trade edges out. Update `docs/design/content/n-space.md` and `translations.md` in each phase that changes behaviour. Do not edit frozen setting files. Remove the matching F-row in the same change as the work.
-
-### F6 — Unspace folds
-
-Occasionally rotate the backdrop mesh and the exit portal by `k × (360 / N)` degrees, `k` in `1 .. N-1`. The player ship and Ascidians keep their world positions and headings; only the field and the portal swing around the player. Same instability schedule as flux, independent rolls so they can overlap. Radar blips for the portal follow the new position.
 
 ### F7 — Unspace shards
 

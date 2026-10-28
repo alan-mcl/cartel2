@@ -95,6 +95,14 @@ func freeze_motion() -> void:
 	motion.velocity = Vector2.ZERO
 
 
+func refresh_hull_destroyed_presentation() -> void:
+	if session == null or session.max_hull <= 0.0:
+		return
+	var health_ratio := session.hull / maxf(session.max_hull, 1.0)
+	_apply_hull_damage_visual(health_ratio)
+	_maybe_play_hull_destroyed()
+
+
 func apply_launch_velocity(launch_velocity: Vector2, facing: float) -> void:
 	motion.velocity = launch_velocity
 	velocity = launch_velocity
@@ -347,8 +355,7 @@ func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
 	if session == null or catalog == null or assembled_ship == null:
 		return {}
 	var result := session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
-	_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
-	_maybe_play_hull_destroyed()
+	refresh_hull_destroyed_presentation()
 	if _defence_visual != null:
 		var layers: Dictionary = result.get("defence_layers", {})
 		_defence_visual.play_hit_layers(layers)

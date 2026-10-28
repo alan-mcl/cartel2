@@ -7,6 +7,7 @@ var power_integrity_lost: float = 0.0
 var compute_integrity_lost: float = 0.0
 var shield_charges: Dictionary = {}
 var _hull_stress_cooldown: float = 0.0
+var _hull_stress_accumulator: float = 0.0
 
 
 func init_hull_from_ship(assembled_ship: AssembledShip) -> void:
@@ -35,6 +36,7 @@ func apply_combat_state(state: ShipCombatState) -> void:
 	compute_integrity_lost = state.compute_integrity_lost
 	shield_charges = state.shield_charges.duplicate(true)
 	_hull_stress_cooldown = 0.0
+	_hull_stress_accumulator = 0.0
 
 
 func repair_from_assembled(assembled: AssembledShip) -> void:
@@ -44,16 +46,36 @@ func repair_from_assembled(assembled: AssembledShip) -> void:
 	apply_combat_state(state)
 
 
-func apply_hull_stress(amount: float, delta: float, in_unspace: bool) -> bool:
-	if not in_unspace or max_hull <= 0.0:
+func apply_hull_stress(
+	amount: float,
+	delta: float,
+	in_unspace: bool,
+	assembled: AssembledShip = null
+) -> bool:
+	if not in_unspace or max_hull <= 0.0 or amount <= 0.0:
 		return false
 
+	_hull_stress_accumulator += amount
 	_hull_stress_cooldown -= delta
 	if _hull_stress_cooldown > 0.0:
 		return false
 
+	var batch := _hull_stress_accumulator
+	_hull_stress_accumulator = 0.0
 	_hull_stress_cooldown = 0.45
-	hull = max(0.0, hull - amount)
+	if batch <= 0.0:
+		return false
+
+	var hull_damage := batch
+	if assembled != null:
+		var state := build_combat_state(assembled)
+		hull_damage = ShipCombat.hull_stress_to_hull_damage(assembled, state, batch)
+		shield_charges = state.shield_charges.duplicate(true)
+
+	if hull_damage <= 0.0:
+		return true
+
+	hull = max(0.0, hull - hull_damage)
 	return true
 
 
@@ -74,3 +96,4 @@ func load_session_dict(data: Dictionary) -> void:
 	compute_integrity_lost = float(data.get("compute_integrity_lost", 0.0))
 	shield_charges = WorldPresence._float_dict_from_variant(data.get("shield_charges", {}))
 	_hull_stress_cooldown = 0.0
+	_hull_stress_accumulator = 0.0

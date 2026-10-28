@@ -536,6 +536,7 @@ func enter_unspace(
 			return false
 
 	UnspaceFlux.reset(self)
+	UnspaceFold.reset(self)
 	world.pending_destination_id = destination_id
 	world.in_unspace = true
 	world.unspace_n = n
@@ -576,6 +577,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	world.translation_stability = -1.0
 	world.pending_destination_id = ""
 	UnspaceFlux.reset(self)
+	UnspaceFold.reset(self)
 
 	if not enter_sector(catalog, dest_id, false):
 		return false
@@ -637,8 +639,8 @@ func get_gst_timestamp() -> String:
 	return world.get_gst_timestamp()
 
 
-func apply_hull_stress(amount: float, delta: float) -> void:
-	if not combat.apply_hull_stress(amount, delta, world.in_unspace):
+func apply_hull_stress(amount: float, delta: float, assembled_ship: AssembledShip = null) -> void:
+	if not combat.apply_hull_stress(amount, delta, world.in_unspace, assembled_ship):
 		return
 	if combat.hull <= 0.0:
 		_maybe_end_career_from_ship_destroyed()

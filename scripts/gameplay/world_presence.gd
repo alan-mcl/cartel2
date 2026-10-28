@@ -14,6 +14,8 @@ var translation_stability: float = -1.0
 var pending_destination_id: String = ""
 ## Ephemeral N-space flux scheduler (F5); not persisted across saves.
 var unspace_flux: Dictionary = {}
+## Ephemeral fold angle (F6); not persisted across saves.
+var unspace_fold: Dictionary = {}
 var gst_seconds: float = 0.0
 ## Per-save RNG salt for daily procedural content (e.g. passenger charter boards).
 var run_seed: int = 0
