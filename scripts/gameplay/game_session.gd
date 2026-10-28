@@ -482,6 +482,24 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	return true
 
 
+func resolve_translation_mapping(
+	catalog: Catalog,
+	destination_id: String,
+	n: int,
+	solution: int
+) -> Dictionary:
+	var mapping := catalog.get_translation(world.sector_id, solution)
+	if mapping.is_empty():
+		mapping = _library_mapping_for_solution(catalog, solution)
+	if mapping.is_empty():
+		mapping = VolatileTranslation.resolve_mapping(
+			self, catalog, world.sector_id, destination_id, n, solution
+		)
+	if mapping.is_empty():
+		mapping = catalog.get_public_translation(world.sector_id, destination_id, n)
+	return mapping
+
+
 func enter_unspace(
 	catalog: Catalog,
 	destination_id: String,
@@ -489,13 +507,7 @@ func enter_unspace(
 	assembled_ship: AssembledShip,
 	solution: int = 0
 ) -> bool:
-	var mapping := catalog.get_translation(world.sector_id, solution)
-	if mapping.is_empty():
-		mapping = VolatileTranslation.resolve_mapping(
-			self, catalog, world.sector_id, destination_id, n, solution
-		)
-	if mapping.is_empty():
-		mapping = catalog.get_public_translation(world.sector_id, destination_id, n)
+	var mapping := resolve_translation_mapping(catalog, destination_id, n, solution)
 	if mapping.is_empty():
 		return false
 	if str(mapping.get("target", "")) != destination_id:
@@ -535,6 +547,21 @@ func enter_unspace(
 		career.record_translation(n)
 	changed.emit()
 	return true
+
+
+func _library_mapping_for_solution(catalog: Catalog, solution: int) -> Dictionary:
+	if player == null or solution == 0:
+		return {}
+	for entry_variant in player.translation_library:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("source", "")) != world.sector_id:
+			continue
+		if int(entry.get("solution", 0)) != solution:
+			continue
+		return TranslationNav.resolve_library_translation(catalog, world.sector_id, entry)
+	return {}
 
 
 func arrive_from_unspace(catalog: Catalog) -> bool:

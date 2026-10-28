@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_hyperdrive_overlay"]
+[gd_scene load_steps=3 format=3 uid="uid://cartel_hyperdrive_overlay"]
 
 [ext_resource type="Script" path="res://scripts/ui/hyperdrive_overlay.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/route_database_panel.gd" id="2"]
 
 [node name="HyperdriveOverlay" type="CanvasLayer"]
 visible = false
@@ -13,7 +14,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.054902, 0.070588, 0.086275, 0.92)
+mouse_filter = 2
+color = Color(0.054902, 0.070588, 0.086275, 0.55)
 
 [node name="Center" type="CenterContainer" parent="Background"]
 anchors_preset = 15
@@ -21,11 +23,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="Background/Center"]
-custom_minimum_size = Vector2(920, 520)
+custom_minimum_size = Vector2(1120, 560)
 layout_mode = 2
-theme_type_variation = &"Surface"
+mouse_filter = 0
 
 [node name="VBox" type="VBoxContainer" parent="Background/Center/Panel"]
 layout_mode = 2
@@ -40,73 +43,96 @@ horizontal_alignment = 1
 [node name="DescriptionLabel" type="Label" parent="Background/Center/Panel/VBox"]
 layout_mode = 2
 autowrap_mode = 3
-text = "Compute a private translation or jump using the library."
+text = "Flight continues while this panel is open. Loiter in-system to compute private solutions."
 horizontal_alignment = 1
 
-[node name="FormRow" type="HBoxContainer" parent="Background/Center/Panel/VBox"]
+[node name="MainTabs" type="TabContainer" parent="Background/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 460)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Routes" type="VBoxContainer" parent="Background/Center/Panel/VBox/MainTabs"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RoutePanel" type="VBoxContainer" parent="Background/Center/Panel/VBox/MainTabs/Routes"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2")
+
+[node name="SolutionLabel" type="Label" parent="Background/Center/Panel/VBox/MainTabs/Routes"]
+layout_mode = 2
+theme_type_variation = &"Info"
+autowrap_mode = 3
+text = "No translation selected."
+horizontal_alignment = 1
+
+[node name="JumpButton" type="Button" parent="Background/Center/Panel/VBox/MainTabs/Routes"]
+layout_mode = 2
+disabled = true
+text = "Translate"
+
+[node name="Compute" type="VBoxContainer" parent="Background/Center/Panel/VBox/MainTabs"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ComputeHint" type="Label" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Pick any destination and N-space depth. Off-network hops require 6-space or deeper."
+
+[node name="DestTree" type="Tree" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+size_flags_vertical = 3
+hide_root = true
+
+[node name="DepthRow" type="HBoxContainer" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="DestLabel" type="Label" parent="Background/Center/Panel/VBox/FormRow"]
-layout_mode = 2
-text = "Destination"
-
-[node name="DestOption" type="OptionButton" parent="Background/Center/Panel/VBox/FormRow"]
-custom_minimum_size = Vector2(320, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DepthLabel" type="Label" parent="Background/Center/Panel/VBox/FormRow"]
+[node name="DepthLabel" type="Label" parent="Background/Center/Panel/VBox/MainTabs/Compute/DepthRow"]
 layout_mode = 2
 text = "N-space"
 
-[node name="DepthOption" type="OptionButton" parent="Background/Center/Panel/VBox/FormRow"]
-custom_minimum_size = Vector2(120, 0)
+[node name="DepthOption" type="OptionButton" parent="Background/Center/Panel/VBox/MainTabs/Compute/DepthRow"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 
-[node name="EstimateLabel" type="Label" parent="Background/Center/Panel/VBox"]
+[node name="EstimateLabel" type="Label" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
 theme_type_variation = &"Info"
 autowrap_mode = 3
 text = "Select a destination."
-horizontal_alignment = 1
 
-[node name="LibraryHeader" type="Label" parent="Background/Center/Panel/VBox"]
+[node name="ComputeProgress" type="ProgressBar" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
-text = "Library translations"
+visible = false
+max_value = 1.0
+show_percentage = false
 
-[node name="LibraryScroll" type="ScrollContainer" parent="Background/Center/Panel/VBox"]
-custom_minimum_size = Vector2(0, 180)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LibraryList" type="VBoxContainer" parent="Background/Center/Panel/VBox/LibraryScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="StatusLabel" type="Label" parent="Background/Center/Panel/VBox"]
+[node name="ComputeStatus" type="Label" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
 theme_type_variation = &"Muted"
 autowrap_mode = 3
 horizontal_alignment = 1
 
-[node name="ComputeButton" type="Button" parent="Background/Center/Panel/VBox"]
+[node name="ComputeButton" type="Button" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
 disabled = true
 text = "Begin calculation"
 
-[node name="JumpButton" type="Button" parent="Background/Center/Panel/VBox"]
+[node name="CancelCalcButton" type="Button" parent="Background/Center/Panel/VBox/MainTabs/Compute"]
 layout_mode = 2
-disabled = true
-text = "Translate via library solution"
+visible = false
+text = "Cancel calculation"
 
-[node name="CancelButton" type="Button" parent="Background/Center/Panel/VBox"]
+[node name="CloseButton" type="Button" parent="Background/Center/Panel/VBox"]
 layout_mode = 2
-text = "Cancel"
+text = "Close"
 
 [node name="HintLabel" type="Label" parent="Background/Center/Panel/VBox"]
 layout_mode = 2
 theme_type_variation = &"Muted"
-text = "Esc or Cancel to stay in orbit"
+text = "Esc or Close — flight and GST continue"
 horizontal_alignment = 1

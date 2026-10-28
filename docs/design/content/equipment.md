@@ -319,7 +319,7 @@ Multiple shields process incoming packets sequentially. Holt-Winters holds major
 
 ## Hyperdrives
 
-Fitted hyperdrives (`category: hyperdrive`, mount `system`) spool from deep orbit. Press **H** in flight when undocked: if the ship is beyond the jump-gate (or translation-beacon) radius and the plant and core can cover the spool spike, the hyperdrive overlay opens. From there the pilot can **compute** a private translation (destination on the public network, N up to the nav computer tier) or **translate** using a stored library record. Volatile survey sites still require the return gate.
+Fitted hyperdrives (`category: hyperdrive`, mount `system`) spool from deep orbit. Press **H** in flight when undocked: if the ship is beyond the jump-gate (or translation-beacon) radius and the plant and core can cover the one-shot spool spike, the hyperdrive overlay opens **without pausing** flight or GST. The **Routes** tab reuses the jump-gate route database (nav computer plus library). **Compute solution** lists any catalog destination in a hub-spoke tree (with an **Uncharted** branch for sectors with no public path), **Best N** or a fixed depth, and stores a private row after **15 seconds to 3 minutes** GST loiter in the origin system. Off-network pairs require **6-space** or deeper. A right-edge HUD tile shows progress and allows cancellation. Volatile survey sites still require the return gate.
 
 Spool draws the module's `power_demand` and `compute_demand` for a single budget check only; there is no standing hyperdrive load in cruise.
 
@@ -331,7 +331,7 @@ Spool draws the module's `power_demand` and `compute_demand` for a single budget
 | High | `prv_vertex_hyperdrive` | ParaRamcoVidia | Vertex |
 | Premium | `ora_needle_hyperdrive` | Orion Aerospace | Needle |
 
-Each hyperdrive SKU carries **`solution_skill`** (0–100). Higher skill shortens GST spent computing a private solution and improves convergence chance. Calculation GST cost also scales with route friction and N-space depth, and improves with **`nav_rating`**.
+Each hyperdrive SKU carries **`solution_skill`** (0–100). Higher skill shortens GST spent computing a private solution and improves convergence chance. Calculation GST cost scales with path friction (direct edge or shortest public path), N-space depth, **`nav_rating`**, and **`solution_skill`**, clamped to **15 seconds–3 minutes** GST per attempt.
 
 Jump gates remain the standard route for ships without a hyperdrive.
 

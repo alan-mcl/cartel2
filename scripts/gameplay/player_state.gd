@@ -295,6 +295,7 @@ static func _hyperdrive_calc_to_save(calc: Dictionary) -> Dictionary:
 		"source": str(calc.get("source", "")),
 		"target": str(calc.get("target", "")),
 		"n": int(calc.get("n", 0)),
+		"total_seconds": float(calc.get("total_seconds", calc.get("remaining_seconds", 0.0))),
 		"remaining_seconds": float(calc.get("remaining_seconds", 0.0)),
 		"salt": int(calc.get("salt", 0)),
 		"solution": int(calc.get("solution", 0)),
@@ -315,12 +316,17 @@ static func _hyperdrive_calc_from_variant(value: Variant) -> Dictionary:
 	var target := str(data.get("target", ""))
 	if source.is_empty() or target.is_empty():
 		return {}
+	var remaining := maxf(0.0, float(data.get("remaining_seconds", 0.0)))
+	var total := float(data.get("total_seconds", remaining))
+	if total <= 0.0:
+		total = remaining
 	return {
 		"active": true,
 		"source": source,
 		"target": target,
 		"n": int(data.get("n", 4)),
-		"remaining_seconds": maxf(0.0, float(data.get("remaining_seconds", 0.0))),
+		"total_seconds": total,
+		"remaining_seconds": remaining,
 		"salt": int(data.get("salt", 0)),
 		"solution": int(data.get("solution", 0)),
 		"hyperdrive_module_id": str(data.get("hyperdrive_module_id", "")),

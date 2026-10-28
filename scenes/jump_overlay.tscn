@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cartel_jump_overlay"]
+[gd_scene load_steps=3 format=3 uid="uid://cartel_jump_overlay"]
 
 [ext_resource type="Script" path="res://scripts/ui/jump_overlay.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/route_database_panel.gd" id="2"]
 
 [node name="JumpOverlay" type="CanvasLayer"]
 visible = false
@@ -48,6 +49,7 @@ custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
+script = ExtResource("2")
 
 [node name="SolutionLabel" type="Label" parent="Background/Center/Panel/VBox"]
 layout_mode = 2

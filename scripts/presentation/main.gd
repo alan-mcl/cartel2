@@ -54,8 +54,10 @@ func _ready() -> void:
 	_jump.jump_requested.connect(_world.on_jump_requested)
 	_jump.cancelled.connect(_world.on_jump_cancelled)
 	_hyperdrive.calculation_requested.connect(_world.on_hyperdrive_calculation_requested)
+	_hyperdrive.calculation_cancel_requested.connect(_world.on_hyperdrive_calculation_cancel_requested)
 	_hyperdrive.jump_requested.connect(_world.on_hyperdrive_jump_requested)
 	_hyperdrive.cancelled.connect(_world.on_hyperdrive_cancelled)
+	_hud.hyperdrive_calc_cancel_requested.connect(_world.on_hyperdrive_calculation_cancel_requested)
 
 	_pause.resume_requested.connect(_menu.on_pause_resume_requested)
 	_pause.save_requested.connect(_menu.on_pause_save_requested)
@@ -287,6 +289,8 @@ func _bind_session_events(game_session: GameSession) -> void:
 
 func _on_session_changed() -> void:
 	_hud.refresh()
+	if _hyperdrive != null and _hyperdrive.has_method("refresh_if_visible"):
+		_hyperdrive.refresh_if_visible()
 
 
 func _on_interaction_target_changed(target: Interactable) -> void:

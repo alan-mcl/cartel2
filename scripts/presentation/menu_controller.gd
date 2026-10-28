@@ -78,7 +78,7 @@ func is_gst_frozen() -> bool:
 		return true
 	if _main_menu.visible or _new_game.visible:
 		return true
-	if _save_overlay.visible or _jump.visible or (_hyperdrive != null and _hyperdrive.visible):
+	if _save_overlay.visible or _jump.visible:
 		return true
 	if _career != null and _career.visible:
 		return true

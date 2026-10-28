@@ -209,7 +209,7 @@
   "weight": 0.9,
   "templates": [
     { "channel": "headlines", "text": "{celebrity-pilot} spotted at {habitat}; no comment on next leg.", "tone": "info" },
-    { "channel": "headlines", "text": "Fans gather at {city-mall} after rumours {celebrity-pilot} will attend the pylon circuit.", "tone": "positive" },
+    { "channel": "headlines", "text": "Fans gather at {city-mall} after rumours {celebrity-pilot} will attend the {sport}.", "tone": "positive" },
     { "channel": "headlines", "text": "{celebrity-pilot} is seen refitting at {planet}.", "tone": "info" },
     { "channel": "headlines", "text": "{celebrity-pilot} denies reports of a private charter dispute at {habitat}.", "tone": "warning" },
     { "channel": "headlines", "text": "{celebrity-pilot} denies new sponsorship deal.", "tone": "positive" },

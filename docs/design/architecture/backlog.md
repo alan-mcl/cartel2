@@ -22,6 +22,7 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 |F6|in flight|high| Unspace phase 3. Unspace folds rotate the backdrop and exit by a multiple of 360/N around the player. See below.|
 |F7|in flight|high| Unspace phase 4. Unspace shards: moving impacts, speed and rate from instability. See below.|
 |F8|in flight|high| Unspace phase 5. Ascidians sting on scan, fold nearby geometry, drift in when unstable, and shed shards. See below.|
+|F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
 ## Unspace N 4–9
 

@@ -388,6 +388,15 @@ static func group_offered_translations(
 	}
 
 
+static func is_library_offer(offer: Dictionary) -> bool:
+	if offer.is_empty():
+		return false
+	if bool(offer.get("library", false)) or bool(offer.get("private_library", false)):
+		return true
+	var translation: Dictionary = offer.get("translation", {})
+	return bool(translation.get("library_private", false))
+
+
 static func format_cell_summary(
 	accuracy: float,
 	duration_seconds: float,
@@ -403,6 +412,23 @@ static func format_cell_summary(
 		]
 	var duration_text := GalacticCalendar.format_duration(duration_seconds)
 	return "%d%%\n%s" % [int(round(accuracy)), duration_text]
+
+
+static func format_offer_cell_summary(offer: Dictionary) -> String:
+	if offer.is_empty():
+		return ""
+	var translation: Dictionary = offer.get("translation", {})
+	var body := format_cell_summary(
+		float(offer.get("accuracy", 0.0)),
+		float(offer.get("duration_seconds", 0.0)),
+		translation
+	)
+	if not is_library_offer(offer):
+		return body
+	var solution := int(translation.get("solution", 0))
+	if solution != 0:
+		return "Library · sol. %d\n%s" % [solution, body]
+	return "Library\n%s" % body
 
 
 static func format_lag_pair(translation: Dictionary) -> String:
@@ -472,11 +498,16 @@ static func synthesize_private_translation(
 		return {}
 	var public4 := catalog.get_public_translation(source_sector_id, target_sector_id, 4)
 	var friction := int(public4.get("friction", 0))
-	if friction < 1:
-		return {}
+	var off_network := friction < 1
+	if off_network:
+		friction = HyperdriveSolution.friction_for_compute(
+			catalog, source_sector_id, target_sector_id
+		)
+		if friction < 1:
+			return {}
 	var duration_scale := duration_scale_for_n(n)
 	var lump_seconds := float(friction) * Catalog.ROUTE_SECONDS_PER_FRICTION * duration_scale
-	var ease := float(public4.get("ease", 0.25))
+	var ease := float(public4.get("ease", 0.25)) if not off_network else 0.18
 	if n > 4:
 		ease = minf(ease, 0.35)
 	var sector := catalog.get_sector_def(target_sector_id)
@@ -505,7 +536,7 @@ static func partition_jump_offers(offers: Array) -> Dictionary:
 		if typeof(offer_variant) != TYPE_DICTIONARY:
 			continue
 		var offer: Dictionary = offer_variant
-		if bool(offer.get("private_library", false)):
+		if is_library_offer(offer):
 			private_offers.append(offer)
 		else:
 			public_offers.append(offer)

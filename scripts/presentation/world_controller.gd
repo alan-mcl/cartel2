@@ -196,7 +196,6 @@ func open_hyperdrive_overlay(module_title: String) -> void:
 	var module_def := Hyperdrive.fitted_module(_main.player_ship)
 	if module_def == null:
 		return
-	_tree.paused = true
 	_pause.close()
 	if _hyperdrive.has_method("set_assembled_ship"):
 		_hyperdrive.set_assembled_ship(_main.player_ship)
@@ -218,7 +217,6 @@ func on_hyperdrive_calculation_requested(target_sector_id: String, n: int) -> vo
 		n,
 		module_def
 	)
-	_tree.paused = false
 	if bool(result.get("ok", false)):
 		_main.session.last_log = str(result.get("message", ""))
 	else:
@@ -226,13 +224,16 @@ func on_hyperdrive_calculation_requested(target_sector_id: String, n: int) -> vo
 	_on_session_changed.call()
 
 
+func on_hyperdrive_calculation_cancel_requested() -> void:
+	HyperdriveSolution.cancel(_main.session, "Solution calculation cancelled.")
+	_on_session_changed.call()
+
+
 func on_hyperdrive_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
-	_tree.paused = false
 	on_jump_requested(target_sector_id, n, solution)
 
 
 func on_hyperdrive_cancelled() -> void:
-	_tree.paused = false
 	_on_interaction_target_changed.call(_player.get_current_target())
 
 
@@ -252,17 +253,9 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 	if target_sector_id.is_empty():
 		return
 
-	var origin_id: String = _main.session.sector_id
-	var mapping := _catalog.get_translation(origin_id, solution)
-	if mapping.is_empty():
-		mapping = VolatileTranslation.resolve_mapping(
-			_main.session,
-			_catalog,
-			origin_id,
-			target_sector_id,
-			n,
-			solution
-		)
+	var mapping: Dictionary = _main.session.resolve_translation_mapping(
+		_catalog, target_sector_id, n, solution
+	)
 	if mapping.is_empty():
 		return
 
@@ -298,6 +291,8 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 
 	load_unspace(true)
 	_jump.close()
+	if _hyperdrive != null and _hyperdrive.has_method("close"):
+		_hyperdrive.close()
 	_tree.paused = false
 	_on_session_changed.call()
 	_on_interaction_target_changed.call(_player.get_current_target())

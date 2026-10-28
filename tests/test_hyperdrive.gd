@@ -11,6 +11,10 @@ static func run(runner: TestRunner) -> void:
 	_test_dragon_post_thrust_budget(runner, catalog)
 	_test_dragon_gold_thrust_budget(runner, catalog)
 	_test_solution_calculation(runner, catalog)
+	_test_off_network_compute_rules(runner, catalog)
+	_test_calc_duration_minutes(runner, catalog)
+	_test_library_enter_unspace_off_network(runner, catalog)
+	_test_calc_aborts_on_sector_change(runner, catalog)
 
 
 static func _owned_for_template(catalog: Catalog, ship_id: String) -> OwnedShip:
@@ -157,22 +161,113 @@ static func _test_solution_calculation(runner: TestRunner, catalog: Catalog) -> 
 	var shallow := HyperdriveSolution.calculation_seconds(12, 4, 55.0, 42.0)
 	runner.check(deep > shallow, "deeper N costs more GST to calculate")
 	var start := HyperdriveSolution.start_calculation(
-		session, catalog, assembled, "bela", 5, module
+		session, catalog, assembled, "tokirev", 5, module
 	)
-	runner.check(bool(start.get("ok", false)), "start calculation proxima→bela 5-space")
+	runner.check(bool(start.get("ok", false)), "start calculation proxima→tokirev 5-space")
 	runner.check(HyperdriveSolution.is_active(session), "calc active after start")
 	HyperdriveSolution.force_complete_for_tests(session, catalog, true)
 	runner.check(not HyperdriveSolution.is_active(session), "calc completes")
 	runner.check_eq(session.player.translation_library.size(), 1, "success appends library row")
 	var entry: Dictionary = session.player.translation_library[0]
-	runner.check_eq(str(entry.get("target", "")), "bela", "stored target")
+	runner.check_eq(str(entry.get("target", "")), "tokirev", "stored target")
 	runner.check_eq(int(entry.get("n", 0)), 5, "stored depth")
-	start = HyperdriveSolution.start_calculation(session, catalog, assembled, "horizon", 5, module)
+	start = HyperdriveSolution.start_calculation(session, catalog, assembled, "fennet", 5, module)
 	runner.check(bool(start.get("ok", false)), "start second calc")
 	HyperdriveSolution.force_complete_for_tests(session, catalog, false)
 	runner.check_eq(session.player.translation_library.size(), 1, "failed calc stores nothing")
 	HyperdriveSolution.cancel(session, "test cancel")
 	runner.check(not HyperdriveSolution.is_active(session), "cancel clears calc")
+
+
+static func _test_calc_duration_minutes(runner: TestRunner, catalog: Catalog) -> void:
+	var seconds := HyperdriveSolution.calculation_seconds(40, 6, 70.0, 50.0)
+	runner.check(
+		seconds >= HyperdriveSolution.MIN_CALC_SECONDS,
+		"hyperdrive calc: at least min duration"
+	)
+	runner.check(
+		seconds <= HyperdriveSolution.MAX_CALC_SECONDS,
+		"hyperdrive calc: at most max duration (3 min)"
+	)
+	runner.check_eq(HyperdriveSolution.MIN_CALC_SECONDS, 15.0, "hyperdrive calc: min is 15s")
+	runner.check_eq(HyperdriveSolution.MAX_CALC_SECONDS, 180.0, "hyperdrive calc: max is 3 min")
+
+
+static func _test_off_network_compute_rules(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "HD-2", "tester"), "off-network calc new game")
+	session.docked = false
+	session.sector_id = "tycho"
+	var assembled := _assembled_with_nav(catalog, "sne_astrolabe")
+	var module := catalog.get_module_def("hyperdrive_alpha")
+	var tree := HyperdriveSolution.build_compute_spanning_tree(catalog, "tycho")
+	var has_acb1 := false
+	for row_variant in tree:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		if str((row_variant as Dictionary).get("target", "")) == "acb1":
+			has_acb1 = true
+	runner.check(has_acb1, "hyperdrive tree: tycho includes acb1")
+	runner.check(
+		not HyperdriveSolution.is_direct_public_edge(catalog, "tycho", "acb1"),
+		"hyperdrive: tycho→acb1 is off-network"
+	)
+	var n5 := HyperdriveSolution.start_calculation(
+		session, catalog, assembled, "acb1", 5, module
+	)
+	runner.check(not bool(n5.get("ok", false)), "hyperdrive: tycho→acb1 5-space refused")
+	var n6 := HyperdriveSolution.start_calculation(
+		session, catalog, assembled, "acb1", 6, module
+	)
+	runner.check(bool(n6.get("ok", false)), "hyperdrive: tycho→acb1 6-space allowed")
+	HyperdriveSolution.cancel(session, "test cleanup")
+
+
+static func _test_library_enter_unspace_off_network(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "HD-3", "tester"), "library jump new game")
+	session.docked = false
+	session.sector_id = "tycho"
+	var assembled := _assembled_with_nav(catalog, "sne_astrolabe")
+	var module := catalog.get_module_def("hyperdrive_alpha")
+	var start := HyperdriveSolution.start_calculation(
+		session, catalog, assembled, "acb1", 6, module
+	)
+	runner.check(bool(start.get("ok", false)), "library jump: start tycho→acb1")
+	HyperdriveSolution.force_complete_for_tests(session, catalog, true)
+	runner.check_eq(session.player.translation_library.size(), 1, "library jump: stored row")
+	var entry: Dictionary = session.player.translation_library[0]
+	var solution := int(entry.get("solution", 0))
+	runner.check(
+		session.enter_unspace(catalog, "acb1", 6, assembled, solution),
+		"library jump: enter_unspace off-network"
+	)
+	runner.check_eq(session.pending_destination_id, "acb1", "library jump: pending acb1")
+	session.in_unspace = false
+	session.pending_destination_id = ""
+	var resolved := session.resolve_translation_mapping(catalog, "acb1", 6, solution)
+	runner.check(not resolved.is_empty(), "library jump: resolve_translation_mapping for UI jump")
+	runner.check_eq(str(resolved.get("target", "")), "acb1", "library jump: resolved target")
+
+
+static func _test_calc_aborts_on_sector_change(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "HD-4", "tester"), "sector change abort new game")
+	session.docked = false
+	session.sector_id = "tycho"
+	var assembled := _assembled_with_nav(catalog, "sne_astrolabe")
+	var module := catalog.get_module_def("hyperdrive_alpha")
+	runner.check(
+		bool(
+			HyperdriveSolution.start_calculation(
+				session, catalog, assembled, "acb1", 6, module
+			).get("ok", false)
+		),
+		"sector change: calc started"
+	)
+	session.sector_id = "proxima"
+	HyperdriveSolution.advance(session, catalog, 1.0)
+	runner.check(not HyperdriveSolution.is_active(session), "sector change: calc aborted")
 
 
 static func _test_dragon_gold_thrust_budget(runner: TestRunner, catalog: Catalog) -> void:

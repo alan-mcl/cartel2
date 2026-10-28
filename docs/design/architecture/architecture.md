@@ -114,7 +114,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 - **PauseOverlay** - Resume, Save, Load, Quit to Menu (Escape during flight).
 - **UiRoot** - opaque full-screen habitat UI with ScreenStack.
 - **JumpOverlay** - Unspace route list at jump gates and translation beacons.
-- **HyperdriveOverlay** - Private solution calculation and library jumps from fitted hyperdrive spool (**H** outside the gravity well).
+- **HyperdriveOverlay** - Same route database as **JumpOverlay** (non-pausing) plus **Compute solution** tab for any catalog destination; 15s–3min GST in-sector calculation with HUD progress tile (**H** outside the gravity well).
 
 ## Player loops
 
@@ -123,7 +123,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 - `ShipSimCore` orchestrates the shared flight rules (shields, ops, signature glow, mass/stats, weapons, motion). The player calls every step each physics frame for HUD telemetry; slotted NPC traffic uses the same steps with interval stats refresh; unslotted NPCs skip ops/weapons/stats and only run cheap motion + glow. After weapons tick, `GameSession.apply_player_flight_step` records operating warnings, career shots, and ammo-driven `changed` emits; `player_ship.gd` only spawns projectiles and reads input via injected interact and world hooks from `main.gd`.
 - `ShipMotion` integrates thrust, rotation, boost, and damping from `ShipStats` (derived from assembled modules and loaded mass), modulated by operating-state `thrust_factor` and optional **environment scale** (`FieldConditions.thrust_scale_for_ship`: gravitic × local gravity, integrated sail × radiant/particle/magnetic mix, otherwise 1.0).
 - `FieldConditions.sample(catalog, world, position)` reads sector `neighborhood` and world layout radii in 3-space, or a fixed unspace profile when `WorldPresence.in_unspace`. Rules: [field_conditions.md](../content/field_conditions.md).
-- Hold **Space** or **LMB** (`fire`) to discharge the **selected** weapon along ship facing. Keys **1–9** and HUD chits pick the active mount; NPCs rotate one weapon per new fire press with a short stagger before the first shot. `ShipWeapons` handles per-slot cooldowns and ammo; `ShipOperations` allocates power for the active weapon only while firing.
+- Hold **Space** (`fire`) to discharge the **selected** weapon along ship facing. Keys **1–9** and HUD chits pick the active mount; NPCs rotate one weapon per new fire press with a short stagger before the first shot. `ShipWeapons` handles per-slot cooldowns and ammo; `ShipOperations` allocates power for the active weapon only while firing.
 - **Autopilot** (`autopilot_basic` on navigation computers except Section): **F1–F9** modes via [`Autopilot`](../../../scripts/gameplay/autopilot.gd) on the player ship. Uses world-space Newtonian motion, the current target lock for align/pursuit/velocity modes, and the right-edge autopilot chit. Temporary modes (align with velocity, reverse align, full stop) return to manual when complete; stick input cancels most automated modes.
 - `play_bounds` per sector defines the distant dust ring (visual landmark only; player flight is unbounded).
 - `Interactable` areas on world objects; player `InteractSensor` picks nearest valid target.

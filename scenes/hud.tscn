@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/ui/components/weapon_hud_stack.gd" id="9"]
 [ext_resource type="PackedScene" uid="uid://cartel_target_lock_hud_chit" path="res://scenes/ui/components/target_lock_hud_chit.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://cartel_autopilot_hud_chit" path="res://scenes/ui/components/autopilot_hud_chit.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://cartel_hyperdrive_calc_hud_chit" path="res://scenes/ui/components/hyperdrive_calc_hud_chit.tscn" id="16"]
 [ext_resource type="PackedScene" uid="uid://cartel_gst_clock_label" path="res://scenes/ui/components/gst_clock_label.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="8"]
 [ext_resource type="Script" path="res://scripts/ui/local_sensor_map.gd" id="3"]
@@ -294,6 +295,9 @@ theme_override_constants/separation = 4
 layout_mode = 2
 
 [node name="AutopilotHudChit" parent="Root/RightChitStack" instance=ExtResource("12")]
+layout_mode = 2
+
+[node name="HyperdriveCalcHudChit" parent="Root/RightChitStack" instance=ExtResource("16")]
 layout_mode = 2
 
 [node name="MessageBar" parent="Root" instance=ExtResource("8")]

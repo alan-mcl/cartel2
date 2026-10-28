@@ -51,8 +51,6 @@ func refresh_session_refs() -> void:
 func _overlay_blocks_flight() -> bool:
 	if _jump != null and _jump.visible:
 		return true
-	if _hyperdrive != null and _hyperdrive.visible:
-		return true
 	return false
 
 

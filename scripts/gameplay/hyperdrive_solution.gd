@@ -1,37 +1,212 @@
 class_name HyperdriveSolution
 extends RefCounted
 
-const BASE_SECONDS_PER_FRICTION := 520.0
+const BEST_N := -1
+const OFF_NETWORK_MIN_N := 6
+const DISCONNECTED_FRICTION := 70
+
+const MIN_CALC_SECONDS := 15.0
+const MAX_CALC_SECONDS := 180.0
+const BASE_SECONDS_PER_FRICTION := 1.05
 
 
 static func is_active(session: GameSession) -> bool:
 	return _calc(session).get("active", false) == true
 
 
-static func list_compute_destinations(catalog: Catalog, source_sector_id: String) -> Array:
-	var out: Array = []
-	var seen: Dictionary = {}
+static func calc_progress(session: GameSession) -> float:
+	if not is_active(session):
+		return 0.0
+	var total := float(_calc(session).get("total_seconds", 0.0))
+	var remaining := float(_calc(session).get("remaining_seconds", 0.0))
+	if total <= 0.0:
+		return 0.0
+	return clampf(1.0 - remaining / total, 0.0, 1.0)
+
+
+static func direct_route_friction(catalog: Catalog, source_sector_id: String, target_sector_id: String) -> int:
+	if catalog == null or source_sector_id.is_empty() or target_sector_id.is_empty():
+		return -1
+	for route_variant in catalog.list_routes():
+		if typeof(route_variant) != TYPE_DICTIONARY:
+			continue
+		var route: Dictionary = route_variant
+		var a := str(route.get("a", ""))
+		var b := str(route.get("b", ""))
+		if (a == source_sector_id and b == target_sector_id) or (
+			a == target_sector_id and b == source_sector_id
+		):
+			return int(route.get("friction", 0))
+	return -1
+
+
+static func is_direct_public_edge(catalog: Catalog, source_sector_id: String, target_sector_id: String) -> bool:
+	return direct_route_friction(catalog, source_sector_id, target_sector_id) >= 0
+
+
+static func shortest_path_friction_sum(
+	catalog: Catalog,
+	source_sector_id: String,
+	target_sector_id: String
+) -> int:
+	if catalog == null or source_sector_id.is_empty() or target_sector_id.is_empty():
+		return -1
+	if source_sector_id == target_sector_id:
+		return 0
+	var adj := _route_adjacency(catalog)
+	if not adj.has(source_sector_id):
+		return -1
+	var queue: Array = [source_sector_id]
+	var cost_by_id: Dictionary = {source_sector_id: 0}
+	var head := 0
+	while head < queue.size():
+		var current := str(queue[head])
+		head += 1
+		var current_cost := int(cost_by_id.get(current, 0))
+		for edge_variant in adj.get(current, []):
+			if typeof(edge_variant) != TYPE_DICTIONARY:
+				continue
+			var edge: Dictionary = edge_variant
+			var neighbor := str(edge.get("id", ""))
+			if neighbor.is_empty():
+				continue
+			var next_cost := current_cost + int(edge.get("friction", 0))
+			if not cost_by_id.has(neighbor) or next_cost < int(cost_by_id[neighbor]):
+				cost_by_id[neighbor] = next_cost
+				queue.append(neighbor)
+	if not cost_by_id.has(target_sector_id):
+		return -1
+	return int(cost_by_id[target_sector_id])
+
+
+static func friction_for_compute(catalog: Catalog, source_sector_id: String, target_sector_id: String) -> int:
+	var direct := direct_route_friction(catalog, source_sector_id, target_sector_id)
+	if direct >= 0:
+		return direct
+	var path_sum := shortest_path_friction_sum(catalog, source_sector_id, target_sector_id)
+	if path_sum >= 0:
+		return path_sum
+	return DISCONNECTED_FRICTION
+
+
+static func build_compute_spanning_tree(catalog: Catalog, source_sector_id: String) -> Array:
+	var rows: Array = []
 	if catalog == null or source_sector_id.is_empty():
-		return out
-	for record_variant in catalog.list_translations_from(source_sector_id):
-		if typeof(record_variant) != TYPE_DICTIONARY:
+		return rows
+	var adj := _route_adjacency(catalog)
+	var visited: Dictionary = {source_sector_id: true}
+	var queue: Array = [source_sector_id]
+	var head := 0
+	while head < queue.size():
+		var parent := str(queue[head])
+		head += 1
+		var edges: Array = adj.get(parent, [])
+		edges.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return str(a.get("label", "")) < str(b.get("label", ""))
+		)
+		for edge_variant in edges:
+			if typeof(edge_variant) != TYPE_DICTIONARY:
+				continue
+			var edge: Dictionary = edge_variant
+			var child_id := str(edge.get("id", ""))
+			if child_id.is_empty() or visited.has(child_id):
+				continue
+			visited[child_id] = true
+			queue.append(child_id)
+			rows.append({
+				"target": child_id,
+				"label": str(edge.get("label", child_id)),
+				"parent": parent,
+				"depth": _tree_depth(rows, parent, source_sector_id) + 1,
+			})
+
+	var uncharted: Array = []
+	for sector_variant in catalog.list_sectors():
+		if typeof(sector_variant) != TYPE_DICTIONARY:
 			continue
-		var record: Dictionary = record_variant
-		if int(record.get("n", 0)) != 4:
+		var sector: Dictionary = sector_variant
+		var sector_id := str(sector.get("id", ""))
+		if sector_id.is_empty() or sector_id == source_sector_id or visited.has(sector_id):
 			continue
-		var target := str(record.get("target", "")).strip_edges()
-		if target.is_empty() or seen.has(target):
+		if VolatileTranslation.is_volatile_sector_id(sector_id):
 			continue
-		seen[target] = true
-		out.append({
-			"target": target,
-			"label": TranslationNav.destination_display_label(catalog, target),
-			"friction": int(record.get("friction", 0)),
+		uncharted.append({
+			"target": sector_id,
+			"label": TranslationNav.destination_display_label(catalog, sector_id),
+			"parent": "__uncharted__",
+			"depth": 1,
 		})
-	out.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+	uncharted.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return str(a.get("label", "")) < str(b.get("label", ""))
 	)
+	for row in uncharted:
+		rows.append(row)
+	return rows
+
+
+static func translation_already_available(
+	session: GameSession,
+	catalog: Catalog,
+	source_sector_id: String,
+	target_sector_id: String,
+	n: int
+) -> bool:
+	if not catalog.get_public_translation(source_sector_id, target_sector_id, n).is_empty():
+		return true
+	if session == null or session.player == null:
+		return false
+	for entry_variant in session.player.translation_library:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("source", "")) != source_sector_id:
+			continue
+		if str(entry.get("target", "")) != target_sector_id:
+			continue
+		if int(entry.get("n", 0)) == n:
+			return true
+	return false
+
+
+static func list_available_compute_n(
+	session: GameSession,
+	catalog: Catalog,
+	assembled: AssembledShip,
+	source_sector_id: String,
+	target_sector_id: String
+) -> Array[int]:
+	var out: Array[int] = []
+	if catalog == null or source_sector_id.is_empty() or target_sector_id.is_empty():
+		return out
+	if source_sector_id == target_sector_id:
+		return out
+	var nav_rating := float(
+		TranslationNav.nav_stats_from_ship(assembled, catalog).get("nav_rating", 0.0)
+	)
+	var max_n := TranslationNav.max_n_for_nav_rating(nav_rating)
+	var min_n := 4 if is_direct_public_edge(catalog, source_sector_id, target_sector_id) else OFF_NETWORK_MIN_N
+	for n in range(min_n, max_n + 1):
+		if not translation_already_available(session, catalog, source_sector_id, target_sector_id, n):
+			out.append(n)
 	return out
+
+
+static func resolve_compute_n(
+	session: GameSession,
+	catalog: Catalog,
+	assembled: AssembledShip,
+	source_sector_id: String,
+	target_sector_id: String,
+	requested_n: int
+) -> int:
+	if requested_n != BEST_N:
+		return requested_n
+	var available := list_available_compute_n(
+		session, catalog, assembled, source_sector_id, target_sector_id
+	)
+	if available.is_empty():
+		return 0
+	return available[0]
 
 
 static func list_library_jump_offers(
@@ -88,9 +263,10 @@ static func calculation_seconds(
 	var depth_burden := pow(1.38, maxf(0.0, float(n) - 4.0))
 	var skill_factor := clampf(0.3 + solution_skill / 85.0, 0.3, 1.45)
 	var nav_factor := clampf(0.3 + nav_rating / 85.0, 0.3, 1.45)
-	return (
+	var raw := (
 		float(friction) * BASE_SECONDS_PER_FRICTION * depth_burden / (skill_factor * nav_factor)
 	)
+	return clampf(raw, MIN_CALC_SECONDS, MAX_CALC_SECONDS)
 
 
 static func success_chance(nav_rating: float, solution_skill: float, n: int) -> float:
@@ -129,32 +305,40 @@ static func start_calculation(
 	if session.in_unspace or session.docked:
 		return {"ok": false, "message": "Cannot calculate a solution here."}
 	var source := session.sector_id
-	var public4 := catalog.get_public_translation(source, target_sector_id, 4)
-	if public4.is_empty():
-		return {"ok": false, "message": "No public route to that destination."}
-	var max_n := TranslationNav.max_n_for_nav_rating(
-		float(TranslationNav.nav_stats_from_ship(assembled, catalog).get("nav_rating", 0.0))
+	if target_sector_id.is_empty() or target_sector_id == source:
+		return {"ok": false, "message": "Pick a different destination."}
+	if catalog.get_sector_def(target_sector_id) == null:
+		return {"ok": false, "message": "Unknown destination."}
+
+	var resolved_n := resolve_compute_n(session, catalog, assembled, source, target_sector_id, n)
+	if resolved_n < 4:
+		return {"ok": false, "message": "No remaining N-space depth to compute for that pair."}
+
+	var available := list_available_compute_n(
+		session, catalog, assembled, source, target_sector_id
 	)
-	if n < 4 or n > max_n:
-		return {"ok": false, "message": "Navigation computer cannot target that depth."}
-	var friction := int(public4.get("friction", 0))
+	if not available.has(resolved_n):
+		return {"ok": false, "message": "That depth is already available or beyond nav tier."}
+
+	var friction := friction_for_compute(catalog, source, target_sector_id)
 	var skill := solution_skill_for_module(hyperdrive_module)
 	var nav_rating := float(
 		TranslationNav.nav_stats_from_ship(assembled, catalog).get("nav_rating", 0.0)
 	)
-	var seconds := calculation_seconds(friction, n, nav_rating, skill)
+	var seconds := calculation_seconds(friction, resolved_n, nav_rating, skill)
 	if seconds <= 0.0:
 		return {"ok": false, "message": "Cannot calculate a solution for that route."}
 	var salt := randi()
-	var solution := derive_solution_id(source, target_sector_id, n, salt)
+	var solution := derive_solution_id(source, target_sector_id, resolved_n, salt)
 	while _library_has_solution(session, source, solution):
 		salt = randi()
-		solution = derive_solution_id(source, target_sector_id, n, salt)
+		solution = derive_solution_id(source, target_sector_id, resolved_n, salt)
 	_calc(session).clear()
 	_calc(session)["active"] = true
 	_calc(session)["source"] = source
 	_calc(session)["target"] = target_sector_id
-	_calc(session)["n"] = n
+	_calc(session)["n"] = resolved_n
+	_calc(session)["total_seconds"] = seconds
 	_calc(session)["remaining_seconds"] = seconds
 	_calc(session)["salt"] = salt
 	_calc(session)["solution"] = solution
@@ -166,7 +350,7 @@ static func start_calculation(
 		"message": (
 			"Computing %d-space solution to %s (%s GST)."
 			% [
-				n,
+				resolved_n,
 				TranslationNav.destination_display_label(catalog, target_sector_id),
 				GalacticCalendar.format_duration(seconds),
 			]
@@ -197,26 +381,6 @@ static func advance(session: GameSession, catalog: Catalog, gst_delta: float) ->
 	if remaining > 0.0:
 		return
 	_finish(session, catalog)
-
-
-static func sustain_spool(
-	catalog: Catalog,
-	session: GameSession,
-	assembled: AssembledShip,
-	owned: OwnedShip,
-	position: Vector2,
-	thrusting: bool,
-	boosting: bool
-) -> bool:
-	if not is_active(session):
-		return true
-	var block := Hyperdrive.spool_block(
-		catalog, session, assembled, owned, position, thrusting, boosting
-	)
-	if bool(block.get("ok", false)):
-		return true
-	cancel(session, str(block.get("message", "Solution calculation cancelled.")))
-	return false
 
 
 static func force_complete_for_tests(
@@ -292,3 +456,52 @@ static func _calc(session: GameSession) -> Dictionary:
 	if session.player.hyperdrive_calc.is_empty():
 		session.player.hyperdrive_calc = {}
 	return session.player.hyperdrive_calc
+
+
+static func _route_adjacency(catalog: Catalog) -> Dictionary:
+	var adj: Dictionary = {}
+	for route_variant in catalog.list_routes():
+		if typeof(route_variant) != TYPE_DICTIONARY:
+			continue
+		var route: Dictionary = route_variant
+		var a := str(route.get("a", ""))
+		var b := str(route.get("b", ""))
+		if a.is_empty() or b.is_empty():
+			continue
+		var friction := int(route.get("friction", 0))
+		_append_edge(adj, a, b, friction, catalog)
+		_append_edge(adj, b, a, friction, catalog)
+	return adj
+
+
+static func _append_edge(
+	adj: Dictionary,
+	from_id: String,
+	to_id: String,
+	friction: int,
+	catalog: Catalog
+) -> void:
+	if not adj.has(from_id):
+		adj[from_id] = []
+	var list: Array = adj[from_id]
+	list.append({
+		"id": to_id,
+		"friction": friction,
+		"label": TranslationNav.destination_display_label(catalog, to_id),
+	})
+	adj[from_id] = list
+
+
+static func _tree_depth(rows: Array, sector_id: String, root_id: String) -> int:
+	if sector_id == root_id:
+		return 0
+	for row_variant in rows:
+		if typeof(row_variant) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("target", "")) == sector_id:
+			var parent := str(row.get("parent", ""))
+			if parent == root_id:
+				return 1
+			return _tree_depth(rows, parent, root_id) + 1
+	return 0

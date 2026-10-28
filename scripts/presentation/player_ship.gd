@@ -175,18 +175,8 @@ func _physics_process(delta: float) -> void:
 			"in_flight": not session.docked,
 			"fire": firing,
 			"active_weapon_slot": weapons.selected_slot if firing else "",
-			"hyperdrive_spool": HyperdriveSolution.is_active(session),
+			"hyperdrive_spool": false,
 		}
-		if HyperdriveSolution.is_active(session):
-			HyperdriveSolution.sustain_spool(
-				catalog,
-				session,
-				assembled_ship,
-				owned_ship,
-				global_position,
-				bool(physics_inputs.get("thrust", false)),
-				bool(physics_inputs.get("boost", false))
-			)
 		_sim.step_operating(delta, inputs, 1, combat_state)
 		_sim.refresh_signature(delta)
 		_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
@@ -337,22 +327,7 @@ func _wants_to_fire() -> bool:
 		return false
 	if session == null or session.docked or get_tree().paused:
 		return false
-	# LMB is bound to fire; over a weapon chit it selects - block mouse-only fire, not Space.
-	if _pointer_over_weapon_chit():
-		var lmb := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-		var space := Input.is_physical_key_pressed(KEY_SPACE)
-		if lmb and not space:
-			return false
 	return true
-
-
-func _pointer_over_weapon_chit() -> bool:
-	var node: Node = get_viewport().gui_get_hovered_control()
-	while node != null:
-		if node is WeaponHudChit:
-			return true
-		node = node.get_parent()
-	return false
 
 
 func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:

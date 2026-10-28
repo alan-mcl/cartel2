@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal target_scan_requested
+signal hyperdrive_calc_cancel_requested
 
 const PLAYER_HOVER_RADIUS := 24.0
 const WIRE_TAPE_TOP_UP_MAX_TRIES := 12
@@ -47,6 +48,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _right_chit_stack: VBoxContainer = $Root/RightChitStack
 @onready var _target_lock_chit: TargetLockHudChit = $Root/RightChitStack/TargetLockHudChit
 @onready var _autopilot_chit: AutopilotHudChit = $Root/RightChitStack/AutopilotHudChit
+@onready var _hyperdrive_calc_chit: HyperdriveCalcHudChit = $Root/RightChitStack/HyperdriveCalcHudChit
 @onready var _flight_manifest: Control = $Root/FlightManifestOverlay
 @onready var _target_scan: Control = $Root/TargetScanOverlay
 
@@ -81,6 +83,7 @@ func bind(
 	_refresh_identity()
 	_sync_wire_tape_state()
 	_bind_weapon_chits()
+	_bind_hyperdrive_calc_chit()
 	_bind_weapon_selection_listener()
 	if _flight_manifest != null and _flight_manifest.has_method("bind"):
 		_flight_manifest.bind(session, catalog, simulation)
@@ -155,6 +158,8 @@ func _on_weapon_chit_selected(slot_id: String) -> void:
 
 func _process(_delta: float) -> void:
 	_refresh_weapon_chits(false)
+	if _session != null and HyperdriveSolution.is_active(_session):
+		_refresh_hyperdrive_calc_chit()
 	if not _wire_tape_active or not visible:
 		return
 	_top_up_wire_tape()
@@ -186,8 +191,27 @@ func refresh() -> void:
 	_refresh_identity()
 	_sync_log()
 	_sync_wire_tape_state()
+	_refresh_hyperdrive_calc_chit()
 	if _flight_manifest != null and _flight_manifest.has_method("refresh_if_open"):
 		_flight_manifest.refresh_if_open()
+
+
+func _bind_hyperdrive_calc_chit() -> void:
+	if _hyperdrive_calc_chit == null:
+		return
+	if not _hyperdrive_calc_chit.cancel_requested.is_connected(_on_hyperdrive_calc_cancel_requested):
+		_hyperdrive_calc_chit.cancel_requested.connect(_on_hyperdrive_calc_cancel_requested)
+
+
+func _on_hyperdrive_calc_cancel_requested() -> void:
+	hyperdrive_calc_cancel_requested.emit()
+
+
+func _refresh_hyperdrive_calc_chit() -> void:
+	if _hyperdrive_calc_chit == null:
+		return
+	_hyperdrive_calc_chit.update_from_session(_session, _catalog)
+	call_deferred("_sync_right_chit_stack_layout")
 
 
 func toggle_flight_manifest() -> void:

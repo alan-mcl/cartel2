@@ -1,6 +1,6 @@
 # Translation and navigation stability
 
-**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives open a dedicated overlay from deep orbit (**H** in flight) when power and compute cover the spool spike: compute private solutions into the library, or translate using library records. Buying or copying solutions from vendors is not implemented. Each translation N loads its matching catalog unspace row (4–9). Library-only layers (N > 6) appear in a private strip on the jump overlay. In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
+**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Jump gates pause the sim and list offered translations. Fitted hyperdrives open the same **route database** from deep orbit (**H**) without pausing: **Routes** for jumps, **Compute solution** for any catalog destination (off-network from 6-space up). Calculation runs for **15 seconds to 3 minutes** GST while the ship stays in the origin sector. Buying or copying solutions from vendors is not implemented. Each translation N loads its matching catalog unspace row (4–9). Library-only solutions appear in a separate **Library solutions** block on the jump and hyperdrive route UI (labelled and tinted; not mixed into the public N-space grid). In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
 
 ## Stored translations
 
