@@ -40,37 +40,60 @@ func _blocked_text() -> String:
 	return ""
 
 
-func _sections() -> Array:
+func posted_scan_chits() -> Array:
 	var missions := _missions()
-	var habitat_id := _context.session.habitat_id
-	var scans := CharterBoardSection.new()
-	scans.heading = "POSTED SCANS"
-	scans.empty_text = "No scan work posted today."
-	scans.rows = missions.list_scan_offers(habitat_id, _building_id)
-	scans.describe = Callable(self, "_describe_scan_offer")
-	scans.act = Callable(self, "_accept_scan")
+	if missions == null or _context == null or _context.session == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_scan_offers(_context.session.habitat_id, _building_id),
+		Callable(self, "_describe_scan_offer"),
+		Callable(self, "_accept_scan")
+	)
 
-	var your_scans := CharterBoardSection.new()
-	your_scans.heading = "YOUR SCANS"
-	your_scans.empty_text = "No accepted scan charters."
-	your_scans.rows = _accepted_for_building(missions.list_scan_accepted())
-	your_scans.describe = Callable(self, "_describe_scan_accepted")
-	your_scans.act = Callable(self, "_cancel_scan")
 
-	var bounties := CharterBoardSection.new()
-	bounties.heading = "POSTED BOUNTIES"
-	bounties.empty_text = "No bounties posted today."
-	bounties.rows = missions.list_bounty_offers(habitat_id, _building_id)
-	bounties.describe = Callable(self, "_describe_bounty_offer")
-	bounties.act = Callable(self, "_accept_bounty")
+func posted_bounty_chits() -> Array:
+	var missions := _missions()
+	if missions == null or _context == null or _context.session == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_bounty_offers(_context.session.habitat_id, _building_id),
+		Callable(self, "_describe_bounty_offer"),
+		Callable(self, "_accept_bounty")
+	)
 
-	var your_bounties := CharterBoardSection.new()
-	your_bounties.heading = "YOUR BOUNTIES"
-	your_bounties.empty_text = "No accepted bounties."
-	your_bounties.rows = _accepted_for_building(missions.list_bounty_accepted())
-	your_bounties.describe = Callable(self, "_describe_bounty_accepted")
-	your_bounties.act = Callable(self, "_cancel_bounty")
-	return [scans, your_scans, bounties, your_bounties]
+
+func accepted_scan_chits() -> Array:
+	var missions := _missions()
+	if missions == null:
+		return []
+	return CharterChit.from_rows(
+		_accepted_for_building(missions.list_scan_accepted()),
+		Callable(self, "_describe_scan_accepted"),
+		Callable(self, "_cancel_scan")
+	)
+
+
+func accepted_bounty_chits() -> Array:
+	var missions := _missions()
+	if missions == null:
+		return []
+	return CharterChit.from_rows(
+		_accepted_for_building(missions.list_bounty_accepted()),
+		Callable(self, "_describe_bounty_accepted"),
+		Callable(self, "_cancel_bounty")
+	)
+
+
+func _sections() -> Array:
+	var posted := CharterBoardSection.new()
+	posted.empty_text = "Nothing posted today."
+	posted.chits = CharterBoard.interleave([posted_scan_chits(), posted_bounty_chits()])
+
+	var accepted := CharterBoardSection.new()
+	accepted.heading = "ACCEPTED"
+	accepted.empty_text = "Nothing accepted."
+	accepted.chits = CharterBoard.interleave([accepted_scan_chits(), accepted_bounty_chits()])
+	return [posted, accepted]
 
 
 func _accepted_for_building(entries: Array) -> Array:

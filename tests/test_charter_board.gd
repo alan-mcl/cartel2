@@ -78,11 +78,7 @@ static func _test_offer_button(runner: TestRunner) -> void:
 	context.charter_ship_id = "ship-a"
 	var acted := {"n": 0}
 	var redraws := {"n": 0}
-	var posted := CharterBoardSection.new()
-	posted.heading = "POSTED CHARTERS"
-	posted.empty_text = "No departures posted today."
-	posted.rows = [{"id": "o1", "role_title": "Night courier"}]
-	posted.describe = func(entry: Dictionary, ship_id: String) -> Dictionary:
+	var describe_offer := func(entry: Dictionary, ship_id: String) -> Dictionary:
 		return {
 			"title": str(entry.get("role_title", "")),
 			"lines": ["Bela · 2 pax · d100"],
@@ -92,14 +88,10 @@ static func _test_offer_button(runner: TestRunner) -> void:
 			"tooltip": "Need a hold.",
 			"status": "",
 		}
-	posted.act = func(_entry: Dictionary, _ship_id: String) -> bool:
+	var act_offer := func(_entry: Dictionary, _ship_id: String) -> bool:
 		acted["n"] = int(acted["n"]) + 1
 		return int(acted["n"]) > 1
-	var accepted := CharterBoardSection.new()
-	accepted.heading = "YOUR CHARTERS"
-	accepted.empty_text = "No accepted charters."
-	accepted.rows = [{"charter_id": "charter_1", "role_title": "Held fare"}]
-	accepted.describe = func(entry: Dictionary, _ship_id: String) -> Dictionary:
+	var describe_held := func(entry: Dictionary, _ship_id: String) -> Dictionary:
 		return {
 			"title": str(entry.get("role_title", "")),
 			"lines": [],
@@ -109,6 +101,26 @@ static func _test_offer_button(runner: TestRunner) -> void:
 			"tooltip": "In transit.",
 			"status": "In transit - cannot cancel.",
 		}
+	var posted := CharterBoardSection.new()
+	posted.heading = "POSTED CHARTERS"
+	posted.empty_text = "No departures posted today."
+	posted.chits = [
+		CharterChit.from_entry(
+			{"id": "o1", "role_title": "Night courier"},
+			describe_offer,
+			act_offer
+		),
+	]
+	var accepted := CharterBoardSection.new()
+	accepted.heading = "YOUR CHARTERS"
+	accepted.empty_text = "No accepted charters."
+	accepted.chits = [
+		CharterChit.from_entry(
+			{"charter_id": "charter_1", "role_title": "Held fare"},
+			describe_held,
+			Callable()
+		),
+	]
 	var board := CharterBoard.new()
 	board.rerender = func() -> void:
 		redraws["n"] = int(redraws["n"]) + 1
@@ -153,13 +165,6 @@ static func _test_panels_keep_their_copy(runner: TestRunner, catalog: Catalog) -
 	runner.check(_texts(board).has("POSTED CHARTERS"), "charter board: terminal keeps posted charters")
 	runner.check(_texts(board).has("No departures posted today."), "charter board: terminal keeps the empty departures line")
 	runner.check(_texts(board).has("YOUR CHARTERS"), "charter board: terminal keeps your charters")
-	passengers.board_mode = PassengerCharters.BOARD_BAR
-	board.present(context, Callable(passengers, "_sections"), passengers._blocked_text())
-	runner.check(_texts(board).has("INFORMAL FARES"), "charter board: the bar keeps informal fares")
-	runner.check(
-		_texts(board).has("No word-of-mouth fares tonight."),
-		"charter board: the bar keeps the empty fare line"
-	)
 	missions.passengers.offers[session.habitat_id] = {
 		PassengerCharters.BOARD_TERMINAL: [{
 			"id": "offer_night",
@@ -203,10 +208,9 @@ static func _test_panels_keep_their_copy(runner: TestRunner, catalog: Catalog) -
 	]
 	board.present(context, Callable(scan, "_sections"), scan._blocked_text())
 	var shown := _texts(board)
-	runner.check(shown.has("POSTED SCANS"), "charter board: the scan desk keeps posted scans")
-	runner.check(shown.has("YOUR SCANS"), "charter board: the scan desk keeps your scans")
-	runner.check(shown.has("POSTED BOUNTIES"), "charter board: the scan desk keeps posted bounties")
-	runner.check(shown.has("YOUR BOUNTIES"), "charter board: the scan desk keeps your bounties")
+	runner.check(not shown.has("POSTED SCANS"), "charter board: mixed desk drops scan type headings")
+	runner.check(not shown.has("POSTED BOUNTIES"), "charter board: mixed desk drops bounty type headings")
+	runner.check(shown.has("ACCEPTED"), "charter board: mixed desk keeps accepted heading")
 	runner.check(shown.has("Mine survey"), "charter board: an accepted scan for this building stays")
 	runner.check(not shown.has("Other survey"), "charter board: another building's scan stays off this desk")
 	runner.check(shown.has("Kept"), "charter board: an accepted bounty for this building stays")

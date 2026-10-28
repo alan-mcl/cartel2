@@ -1,14 +1,14 @@
 extends GameScreen
 
-const CHARTER_PANEL := preload("res://scenes/ui/passenger_charter_panel.tscn")
-const SCAN_PANEL := preload("res://scenes/ui/scan_charter_panel.tscn")
+const PASSENGER_CHARTER := preload("res://scripts/ui/passenger_charter_panel.gd")
+const SCAN_CHARTER := preload("res://scripts/ui/scan_charter_panel.gd")
 const GOSSIP_TAPE_TOP_UP_MAX_TRIES := 12
 
 var _layout: VBoxContainer
 var _charter_host: Control
-var _charter_panel: Control
-var _scan_host: Control
-var _scan_panel: Control
+var _board: CharterBoard
+var _passenger_factory: Control
+var _scan_factory: Control
 var _gossip_bar: MessageBar
 var _gossip_rng := RandomNumberGenerator.new()
 var _gossip_started := false
@@ -34,20 +34,14 @@ func _ready() -> void:
 	_charter_host.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_layout.add_child(_charter_host)
 
-	_scan_host = Control.new()
-	_scan_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_scan_host.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_scan_host.visible = false
-	_layout.add_child(_scan_host)
-
 	_gossip_rng.randomize()
 	set_process(false)
 
 
 func configure(building: Dictionary) -> void:
 	_building = building.duplicate(true)
-	if _scan_panel != null and is_instance_valid(_scan_panel) and _scan_panel.has_method("configure"):
-		_scan_panel.configure(_building)
+	if _scan_factory != null and is_instance_valid(_scan_factory) and _scan_factory.has_method("configure"):
+		_scan_factory.configure(_building)
 
 
 func session_changed() -> void:
@@ -55,12 +49,7 @@ func session_changed() -> void:
 		return
 	if _can_soft_refresh():
 		_top_up_gossip_tape()
-		_ensure_charter_panel()
-		if _charter_panel != null and _charter_panel.has_method("session_changed"):
-			_charter_panel.session_changed()
-		elif _charter_panel != null and _charter_panel.has_method("refresh"):
-			_charter_panel.refresh()
-		_sync_scan_section()
+		_refresh_board()
 		return
 	refresh()
 
@@ -69,14 +58,11 @@ func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
 	_reset_gossip_tape()
-	_ensure_charter_panel()
-	if _charter_panel != null and _charter_panel.has_method("refresh"):
-		_charter_panel.refresh()
-	_sync_scan_section()
+	_refresh_board()
 
 
 func _can_soft_refresh() -> bool:
-	return _gossip_started and _charter_panel != null and is_instance_valid(_charter_panel)
+	return _gossip_started and _board != null and is_instance_valid(_board)
 
 
 func _process(_delta: float) -> void:
@@ -138,54 +124,81 @@ func _top_up_gossip_tape() -> void:
 		tries += 1
 
 
-func _ensure_charter_panel() -> void:
+func _ensure_board() -> void:
 	if _charter_host == null or not is_instance_valid(_charter_host):
 		return
-	if _charter_panel != null and is_instance_valid(_charter_panel):
+	if _board != null and is_instance_valid(_board):
 		return
 	_clear_children(_charter_host)
-	_charter_panel = CHARTER_PANEL.instantiate()
-	_charter_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_charter_panel.board_mode = PassengerCharters.BOARD_BAR
-	_charter_host.add_child(_charter_panel)
-	if _charter_panel.has_method("bind"):
-		_charter_panel.bind(_context)
+	_board = CharterBoard.new()
+	_board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_board.rerender = Callable(self, "refresh")
+	_charter_host.add_child(_board)
+	if _passenger_factory == null or not is_instance_valid(_passenger_factory):
+		_passenger_factory = PASSENGER_CHARTER.new()
+		_passenger_factory.board_mode = PassengerCharters.BOARD_BAR
+	if _scan_factory == null or not is_instance_valid(_scan_factory):
+		_scan_factory = SCAN_CHARTER.new()
 
 
-func _sync_scan_section() -> void:
-	if _scan_host == null or _context == null or _context.session == null or _context.catalog == null:
-		return
-	var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
-	var building_id := str(_building.get("id", ""))
-	var show_scan := ScanCharters.bar_scan_section_visible(
-		missions, _context.catalog, _context.session, building_id
-	)
-	var show_bounty := BountyCharters.bar_bounty_section_visible(
-		missions, _context.catalog, _context.session, building_id
-	)
-	_scan_host.visible = show_scan or show_bounty
-	if not show_scan and not show_bounty:
-		_clear_children(_scan_host)
-		_scan_panel = null
-		return
-	_ensure_scan_panel()
-	if _scan_panel != null and _scan_panel.has_method("refresh"):
-		_scan_panel.refresh()
+func _sync_factories() -> void:
+	if _passenger_factory != null and _passenger_factory.has_method("bind"):
+		_passenger_factory.bind(_context)
+	if _scan_factory != null:
+		if _scan_factory.has_method("bind"):
+			_scan_factory.bind(_context)
+		if _scan_factory.has_method("configure"):
+			_scan_factory.configure(_building)
 
 
-func _ensure_scan_panel() -> void:
-	if _scan_host == null or not is_instance_valid(_scan_host):
+func _refresh_board() -> void:
+	if not is_node_ready() or _context == null:
 		return
-	if _scan_panel != null and is_instance_valid(_scan_panel):
+	_ensure_board()
+	_sync_factories()
+	if _board == null:
 		return
-	_clear_children(_scan_host)
-	_scan_panel = SCAN_PANEL.instantiate()
-	_scan_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_scan_host.add_child(_scan_panel)
-	if _scan_panel.has_method("bind"):
-		_scan_panel.bind(_context)
-	if _scan_panel.has_method("configure"):
-		_scan_panel.configure(_building)
+	_board.ship_score = Callable(_passenger_factory, "_ship_score")
+	var blocked := _blocked_text()
+	if blocked.is_empty():
+		var missions := _missions()
+		if missions != null:
+			missions.ensure_boards(_context.session, _context.catalog)
+	_board.present(_context, Callable(self, "_sections"), blocked)
+
+
+func _blocked_text() -> String:
+	if _missions() == null:
+		return "Charter services unavailable."
+	return ""
+
+
+func _sections() -> Array:
+	var posted := CharterBoardSection.new()
+	posted.empty_text = "Nothing posted tonight."
+	posted.chits = CharterBoard.interleave([
+		_passenger_factory.posted_chits(),
+		_scan_factory.posted_scan_chits(),
+		_scan_factory.posted_bounty_chits(),
+	])
+
+	var accepted := CharterBoardSection.new()
+	accepted.heading = "ACCEPTED"
+	accepted.empty_text = "Nothing accepted."
+	accepted.chits = CharterBoard.interleave([
+		_passenger_factory.accepted_chits(),
+		_scan_factory.accepted_scan_chits(),
+		_scan_factory.accepted_bounty_chits(),
+	])
+	return [posted, accepted]
+
+
+func _missions() -> MissionSubsystem:
+	if _context == null or _context.simulation == null:
+		return null
+	return _context.simulation.get_subsystem("missions") as MissionSubsystem
 
 
 func _clear_children(node: Node) -> void:

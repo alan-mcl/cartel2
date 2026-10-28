@@ -232,12 +232,13 @@ static func _test_second_bar_configures_its_own_desk(runner: TestRunner, catalog
 	context.simulation = simulation
 	panel.bind(context)
 	panel.configure({"id": "second_bar", "type": "bar", "name": "Second Bar"})
-	panel._ensure_scan_panel()
-	var scan_panel = panel._scan_panel
-	runner.check(scan_panel != null, "bar panel: scan desk created")
-	if scan_panel != null:
+	panel._ensure_board()
+	panel._sync_factories()
+	var scan_factory = panel._scan_factory
+	runner.check(scan_factory != null, "bar panel: scan chit factory created")
+	if scan_factory != null:
 		runner.check_eq(
-			str(scan_panel._building_id),
+			str(scan_factory._building_id),
 			"second_bar",
 			"bar panel: configures the opened bar"
 		)

@@ -40,6 +40,33 @@ static func ship_name(session: GameSession, ship_id: String) -> String:
 	return ship.name
 
 
+## Round-robin merge of chit groups; empty groups are skipped. Order is stable for the day.
+static func interleave(groups: Array) -> Array:
+	var lists: Array = []
+	for group_variant in groups:
+		if typeof(group_variant) != TYPE_ARRAY:
+			continue
+		var group: Array = group_variant
+		if group.is_empty():
+			continue
+		lists.append(group.duplicate())
+	if lists.is_empty():
+		return []
+	var out: Array = []
+	var index := 0
+	while true:
+		var any := false
+		for list_variant in lists:
+			var list: Array = list_variant
+			if index < list.size():
+				out.append(list[index])
+				any = true
+		if not any:
+			break
+		index += 1
+	return out
+
+
 func present(context: UiContext, build_sections: Callable, blocked_text: String = "") -> void:
 	_context = context
 	_clear_children(self)
@@ -160,26 +187,26 @@ func _ship_selector(docked: Array[OwnedShip]) -> HBoxContainer:
 
 
 func _add_section(body: VBoxContainer, section: CharterBoardSection) -> void:
-	body.add_child(_section_label(section.heading))
-	var rows: Array = []
-	for entry_variant in section.rows:
-		if typeof(entry_variant) == TYPE_DICTIONARY:
-			rows.append(entry_variant)
-	if rows.is_empty():
+	if not section.heading.is_empty():
+		body.add_child(_section_label(section.heading))
+	var chits: Array = []
+	for chit_variant in section.chits:
+		if chit_variant is CharterChit:
+			chits.append(chit_variant)
+	if chits.is_empty():
 		body.add_child(_plain_label(section.empty_text))
 		return
 	var grid := _new_tile_grid()
 	var ship_id := _active_ship_id()
-	for entry_variant in rows:
-		var entry: Dictionary = entry_variant
-		grid.add_child(_tile(section, entry, ship_id))
+	for chit_variant in chits:
+		grid.add_child(_tile(chit_variant as CharterChit, ship_id))
 	body.add_child(grid)
 
 
-func _tile(section: CharterBoardSection, entry: Dictionary, ship_id: String) -> Control:
+func _tile(chit: CharterChit, ship_id: String) -> Control:
 	var spec: Dictionary = {}
-	if section.describe.is_valid():
-		var described: Variant = section.describe.call(entry, ship_id)
+	if chit.describe.is_valid():
+		var described: Variant = chit.describe.call(chit.entry, ship_id)
 		if typeof(described) == TYPE_DICTIONARY:
 			spec = described
 	var inner := VBoxContainer.new()
@@ -199,9 +226,9 @@ func _tile(section: CharterBoardSection, entry: Dictionary, ship_id: String) -> 
 		var button := Button.new()
 		button.text = button_text
 		button.disabled = not bool(spec.get("button_enabled", true))
-		if section.act.is_valid():
+		if chit.act.is_valid():
 			button.pressed.connect(func() -> void:
-				if bool(section.act.call(entry, ship_id)):
+				if bool(chit.act.call(chit.entry, ship_id)):
 					if rerender.is_valid():
 						rerender.call()
 			)

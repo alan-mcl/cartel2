@@ -35,22 +35,38 @@ func _blocked_text() -> String:
 	return ""
 
 
-func _sections() -> Array:
+func posted_chits() -> Array:
 	var missions := _missions()
-	var habitat_id := _context.session.habitat_id
+	if missions == null or _context == null or _context.session == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_freight_offers(_context.session.habitat_id),
+		Callable(self, "_describe_offer"),
+		Callable(self, "_accept_offer")
+	)
+
+
+func accepted_chits() -> Array:
+	var missions := _missions()
+	if missions == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_freight_accepted(),
+		Callable(self, "_describe_accepted"),
+		Callable(self, "_cancel_charter")
+	)
+
+
+func _sections() -> Array:
 	var posted := CharterBoardSection.new()
 	posted.heading = "POSTED FREIGHT"
 	posted.empty_text = "No freight posted today."
-	posted.rows = missions.list_freight_offers(habitat_id)
-	posted.describe = Callable(self, "_describe_offer")
-	posted.act = Callable(self, "_accept_offer")
+	posted.chits = posted_chits()
 
 	var yours := CharterBoardSection.new()
 	yours.heading = "YOUR FREIGHT"
 	yours.empty_text = "No accepted freight."
-	yours.rows = missions.list_freight_accepted()
-	yours.describe = Callable(self, "_describe_accepted")
-	yours.act = Callable(self, "_cancel_charter")
+	yours.chits = accepted_chits()
 	return [posted, yours]
 
 

@@ -36,26 +36,38 @@ func _blocked_text() -> String:
 	return ""
 
 
-func _sections() -> Array:
+func posted_chits() -> Array:
 	var missions := _missions()
-	var habitat_id := _context.session.habitat_id
+	if missions == null or _context == null or _context.session == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_offers(_context.session.habitat_id, board_mode),
+		Callable(self, "_describe_offer"),
+		Callable(self, "_accept_offer")
+	)
+
+
+func accepted_chits() -> Array:
+	var missions := _missions()
+	if missions == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_accepted(),
+		Callable(self, "_describe_accepted"),
+		Callable(self, "_cancel_charter")
+	)
+
+
+func _sections() -> Array:
 	var posted := CharterBoardSection.new()
-	if board_mode == PassengerCharters.BOARD_BAR:
-		posted.heading = "INFORMAL FARES"
-		posted.empty_text = "No word-of-mouth fares tonight."
-	else:
-		posted.heading = "POSTED CHARTERS"
-		posted.empty_text = "No departures posted today."
-	posted.rows = missions.list_offers(habitat_id, board_mode)
-	posted.describe = Callable(self, "_describe_offer")
-	posted.act = Callable(self, "_accept_offer")
+	posted.heading = "POSTED CHARTERS"
+	posted.empty_text = "No departures posted today."
+	posted.chits = posted_chits()
 
 	var yours := CharterBoardSection.new()
 	yours.heading = "YOUR CHARTERS"
 	yours.empty_text = "No accepted charters."
-	yours.rows = missions.list_accepted()
-	yours.describe = Callable(self, "_describe_accepted")
-	yours.act = Callable(self, "_cancel_charter")
+	yours.chits = accepted_chits()
 	return [posted, yours]
 
 

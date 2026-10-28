@@ -26,6 +26,8 @@ Some **freight** cargo types use the same gate (bonded luxury, prototypes, race 
 
 Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances.
 
+At the habitat UI, each building’s desk shows **open work in one tile grid** and **accepted contracts in a second** (types the building does not post simply add no tiles). The terminal keeps **Departures** (passenger only) and **Freight** on separate tabs; bars, peacekeeping, and corporate offices mix the kinds they post in the open grid.
+
 ## Freight charters
 
 **Freight charters** are virtual consignments posted at orbital **terminals** on a dedicated **Freight Charters** tab beside passenger departures. They do not put Exchange stock into the ship’s cargo manifest; accepting a lot **reserves tonnes** (and any special seat, compute, or power draw) against the selected docked hull the same way passenger headcount reserves life support. Pay lands when the pilot **docks at the destination habitat** on the contracted ship. **Launch** is refused when commodity mass plus reserved freight tonnes exceed that hull’s cargo capacity.
