@@ -85,8 +85,8 @@ Implemented in `scripts/presentation/nspace_field.gd`, configured from the catal
 
 - Count scales with N on each catalog row (`inhabitants` block); spawn uses visit RNG (not route seed), wander within `wander_radius_fraction × play_bounds`.
 - Radar contacts as `ascidian_*`; behaviour in `scripts/presentation/ascidian.gd`.
-- **Flux (F5):** short turbulence storms from `UnspaceFlux` — hull stress, velocity kick, strobing N-space palette on the topo backdrop, and an electrified hull overlay on the player ship; rate scales with `UnspaceInstability` (stability and N).
-- **Folds (F6):** discrete events from `UnspaceFold` — over ~1 s, rotate topo vertices and the exit portal by `k × (360 / N)` around the player position at fold start (smoothstep easing); Ascidians and the ship keep world pose; radar exit blip follows `get_portal_position()`. Same mean event spacing as flux, independent rolls; no new fold while a rotation is playing ([F7–F8](../architecture/backlog.md) remain).
+- **Flux (F5):** short turbulence storms from `UnspaceFlux` — hull stress, velocity kick, irregular lightning flashes on the N-space palette (topo backdrop), and an electrified hull overlay on the player ship; rate scales with `UnspaceInstability` (stability and N).
+- **Folds (F6):** discrete events from `UnspaceFold` — over ~1 s, rotate topo vertices and the exit portal by `k × (360 / N)` around the player position at fold start (smoothstep easing). During the sweep, `NspaceBackdrop3D` applies a rigid transform on a fold root (topo, edges, portal mesh); vertex positions and meshes bake once when the animation completes. Ascidians and the ship keep world pose; radar exit blip follows `get_portal_position()`. Same mean event spacing as flux, independent rolls; no new fold while a rotation is playing ([F7–F8](../architecture/backlog.md) remain).
 
 ### Presentation
 
@@ -121,7 +121,7 @@ Gravitic and sail drives respond to those samples; other engines ignore local fi
 ## Combat and hull
 
 - Shots in Unspace do not record lawful-fire sanctions yet ([missions.md](missions.md)).
-- `CombatPersistence.apply_hull_stress` batches flux stress over **0.45** s ticks while `in_unspace`, then applies it to hull. Fitted shields absorb part of each batch as **energy** (same protection table as weapon hits) before hull takes the remainder. **N-space flux** stress rates are tuned low in [`unspace_flux.gd`](../../../scripts/gameplay/unspace_flux.gd).
+- `CombatPersistence.apply_hull_stress` batches flux stress over **0.45** s ticks while `in_unspace`, then applies it to hull. Fitted shields absorb part of each batch as **energy** (same protection table as weapon hits) before hull takes the remainder. **N-space flux** stress rates are tuned low in [`unspace_flux.gd`](../../../scripts/gameplay/unspace_flux.gd). The stressing-hull log line appears on the first hull loss in a crossing, then at most once per **10** further hull points lost.
 - `enter_unspace` snapshots hull from the assembled ship; arrival does not heal.
 
 ## Public route timing (4 / 5 / 6)

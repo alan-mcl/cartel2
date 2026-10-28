@@ -2,6 +2,7 @@ extends Node3D
 class_name NspaceBackdrop3D
 
 const Ascidian := preload("res://scripts/presentation/ascidian.gd")
+const FluxLightningPulse := preload("res://scripts/presentation/flux_lightning_pulse.gd")
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 
 var _field: NspaceField = null
@@ -9,6 +10,7 @@ var _height_scale: float = 600.0
 var _camera_z: float = 2500.0
 
 var _camera: Camera3D
+var _fold_root: Node3D
 var _topo_mesh_instance: MeshInstance3D
 var _edge_mesh_instance: MeshInstance3D
 var _portal_mesh_instance: MeshInstance3D
@@ -20,8 +22,9 @@ var _edge_material: StandardMaterial3D
 var _portal_material: StandardMaterial3D
 var _ascidian_material: StandardMaterial3D
 var _ascidian_mesh_timer: float = 0.0
-var _flux_strobe_phase: float = 0.0
 var _flux_strobe_active: bool = false
+var _flux_lightning_topo: FluxLightningPulse = FluxLightningPulse.new()
+var _flux_lightning_edge: FluxLightningPulse = FluxLightningPulse.new()
 var _base_topo_albedo: Color = Color.WHITE
 var _base_edge_albedo: Color = Color.WHITE
 
@@ -29,6 +32,8 @@ var _base_edge_albedo: Color = Color.WHITE
 func configure(field: NspaceField, height_scale: float) -> void:
 	_field = field
 	_height_scale = height_scale
+	_flux_lightning_topo.reset(90210)
+	_flux_lightning_edge.reset(90211)
 	_setup_camera()
 	_setup_materials()
 	_setup_mesh_instances()
@@ -73,27 +78,48 @@ func _setup_materials() -> void:
 
 
 func _setup_mesh_instances() -> void:
+	_fold_root = Node3D.new()
+	_fold_root.name = "FoldRoot"
+	add_child(_fold_root)
+
 	_topo_mesh_instance = MeshInstance3D.new()
 	_topo_mesh_instance.name = "TopoMesh"
 	_topo_mesh_instance.material_override = _topo_material
 	_topo_mesh_instance.sorting_offset = 0.0
-	add_child(_topo_mesh_instance)
+	_fold_root.add_child(_topo_mesh_instance)
 
 	_edge_mesh_instance = MeshInstance3D.new()
 	_edge_mesh_instance.name = "EdgeMesh"
 	_edge_mesh_instance.material_override = _edge_material
 	_edge_mesh_instance.sorting_offset = 0.5
-	add_child(_edge_mesh_instance)
+	_fold_root.add_child(_edge_mesh_instance)
 
 	_portal_mesh_instance = MeshInstance3D.new()
 	_portal_mesh_instance.name = "PortalMesh"
 	_portal_mesh_instance.material_override = _portal_material
 	_portal_mesh_instance.sorting_offset = 1.0
-	add_child(_portal_mesh_instance)
+	_fold_root.add_child(_portal_mesh_instance)
 
 	_ascidian_root = Node3D.new()
 	_ascidian_root.name = "Ascidians"
 	add_child(_ascidian_root)
+
+
+func set_fold_transform(pivot: Vector2, angle_rad: float) -> void:
+	if _fold_root == null:
+		return
+	if absf(angle_rad) < 0.0001:
+		_fold_root.transform = Transform3D.IDENTITY
+		return
+	var pivot3 := Vector3(pivot.x, -pivot.y, 0.0)
+	var basis := Basis(Vector3(0.0, 0.0, 1.0), -angle_rad)
+	var origin := pivot3 - basis * pivot3
+	_fold_root.transform = Transform3D(basis, origin)
+
+
+func clear_fold_transform() -> void:
+	if _fold_root != null:
+		_fold_root.transform = Transform3D.IDENTITY
 
 
 func sync_camera_from_2d(camera: Camera2D, viewport_size: Vector2, view_center: Vector2) -> void:
@@ -121,6 +147,8 @@ func rebuild_static() -> void:
 func update_flux_strobe(delta: float, active: bool, palette: Dictionary) -> void:
 	_flux_strobe_active = active
 	if not active:
+		_flux_lightning_topo.reset(90210)
+		_flux_lightning_edge.reset(90211)
 		if _topo_material != null:
 			_topo_material.albedo_color = _base_topo_albedo
 		if _edge_material != null:
@@ -129,10 +157,9 @@ func update_flux_strobe(delta: float, active: bool, palette: Dictionary) -> void
 			_portal_material.albedo_color = Color.WHITE
 		return
 
-	_flux_strobe_phase += delta * 20.0
-	var strobe_a := (sin(_flux_strobe_phase) + 1.0) * 0.5
-	var strobe_b := (sin(_flux_strobe_phase * 2.45 + 1.1) + 1.0) * 0.5
-	var strobe_c := (sin(_flux_strobe_phase * 3.7) + 1.0) * 0.5
+	var flash_topo := _flux_lightning_topo.advance(delta)
+	var flash_edge := _flux_lightning_edge.advance(delta)
+	var flash_portal := maxf(flash_topo, flash_edge * 0.85)
 
 	var peak := _palette_color(palette, "peak", Color(0.49, 0.91, 1.0, 1.0))
 	var trough := _palette_color(palette, "trough", Color(0.10, 0.05, 0.23, 1.0))
@@ -140,17 +167,17 @@ func update_flux_strobe(delta: float, active: bool, palette: Dictionary) -> void
 	var ridge := _palette_color(palette, "ridge", Color(0.50, 0.94, 1.0, 1.0))
 
 	var flash_hi := bright.lerp(Color(1.0, 0.98, 1.0, 1.0), 0.55)
-	var flash_lo := trough.lerp(peak, 0.35).darkened(0.15 + 0.25 * strobe_c)
+	var flash_lo := trough.lerp(peak, 0.35).darkened(0.22)
 
 	if _topo_material != null:
-		_topo_material.albedo_color = flash_hi.lerp(flash_lo, strobe_a)
+		_topo_material.albedo_color = flash_lo.lerp(flash_hi, flash_topo)
 	if _edge_material != null:
-		_edge_material.albedo_color = ridge.lerp(peak, strobe_b)
+		_edge_material.albedo_color = ridge.lerp(peak, flash_edge)
 	if _portal_material != null:
 		var portal_host := _palette_color(
 			palette, "portal_host", Color(0.95, 0.55, 0.25, 1.0)
 		)
-		_portal_material.albedo_color = Color.WHITE.lerp(portal_host, 0.25 + 0.45 * strobe_b)
+		_portal_material.albedo_color = Color.WHITE.lerp(portal_host, 0.12 + 0.55 * flash_portal)
 
 
 func _palette_color(palette: Dictionary, key: String, fallback: Color) -> Color:

@@ -14,6 +14,9 @@ var events := EventBus.new()
 ## Set while a Simulation is attached; used for hold checks when UI does not pass missions.
 var bound_missions: MissionSubsystem = null
 
+const HULL_STRESS_LOG_STEP := 10.0
+var _hull_stress_next_log_below: float = -1.0
+
 
 var callsign: String:
 	get: return player.callsign
@@ -537,6 +540,7 @@ func enter_unspace(
 
 	UnspaceFlux.reset(self)
 	UnspaceFold.reset(self)
+	_hull_stress_next_log_below = -1.0
 	world.pending_destination_id = destination_id
 	world.in_unspace = true
 	world.unspace_n = n
@@ -578,6 +582,7 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 	world.pending_destination_id = ""
 	UnspaceFlux.reset(self)
 	UnspaceFold.reset(self)
+	_hull_stress_next_log_below = -1.0
 
 	if not enter_sector(catalog, dest_id, false):
 		return false
@@ -640,16 +645,33 @@ func get_gst_timestamp() -> String:
 
 
 func apply_hull_stress(amount: float, delta: float, assembled_ship: AssembledShip = null) -> void:
+	var hull_before := combat.hull
 	if not combat.apply_hull_stress(amount, delta, world.in_unspace, assembled_ship):
 		return
 	if combat.hull <= 0.0:
+		_hull_stress_next_log_below = -1.0
 		_maybe_end_career_from_ship_destroyed()
 		if not fleet.current_ship_id.is_empty():
 			persist_combat_to_ship(fleet.current_ship_id)
 		changed.emit()
 		return
+	if combat.hull >= hull_before - 0.001:
+		return
+	if not _consume_hull_stress_log_threshold():
+		return
 	player.last_log = "N-space turbulence stressing hull. (%d/%d)" % [int(combat.hull), int(combat.max_hull)]
 	changed.emit()
+
+
+func _consume_hull_stress_log_threshold() -> bool:
+	if _hull_stress_next_log_below < 0.0:
+		_hull_stress_next_log_below = combat.hull - HULL_STRESS_LOG_STEP
+		return true
+	if combat.hull > _hull_stress_next_log_below:
+		return false
+	while combat.hull <= _hull_stress_next_log_below:
+		_hull_stress_next_log_below -= HULL_STRESS_LOG_STEP
+	return true
 
 
 func get_unspace_spawn(catalog: Catalog) -> Vector2:

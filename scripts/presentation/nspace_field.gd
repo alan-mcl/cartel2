@@ -167,7 +167,7 @@ func start_fold_animation(pivot: Vector2, delta_rad: float, duration: float = 1.
 	_fold_anim_duration = maxf(duration, 0.001)
 	_fold_anim_elapsed = 0.0
 	_fold_anim_active = true
-	_apply_fold_animation_angle(0.0)
+	_apply_fold_animation_angle(0.0, false)
 
 
 func tick_fold_animation(delta: float) -> void:
@@ -176,25 +176,33 @@ func tick_fold_animation(delta: float) -> void:
 	_fold_anim_elapsed += delta
 	var t := clampf(_fold_anim_elapsed / _fold_anim_duration, 0.0, 1.0)
 	var eased := _ease_fold_progress(t)
-	_apply_fold_animation_angle(_fold_anim_delta_rad * eased)
+	var angle := _fold_anim_delta_rad * eased
 	if t >= 1.0:
 		_fold_anim_active = false
-		_apply_fold_animation_angle(_fold_anim_delta_rad)
+		_apply_fold_animation_angle(_fold_anim_delta_rad, true)
+	else:
+		_apply_fold_animation_angle(angle, false)
 
 
-func _apply_fold_animation_angle(angle_rad: float) -> void:
+func _apply_fold_animation_angle(angle_rad: float, bake_mesh: bool) -> void:
 	if _fold_anim_start_verts.is_empty():
 		return
-	for i in range(_fold_anim_start_verts.size()):
-		if i >= _animated.size():
-			break
-		_animated[i] = _rotate_about_pivot(_fold_anim_start_verts[i], _fold_anim_pivot, angle_rad)
 	if _fold_anim_start_portal != Vector2.INF:
 		_portal_world_pos = _rotate_about_pivot(_fold_anim_start_portal, _fold_anim_pivot, angle_rad)
 	if _portal_node != null:
 		_portal_node.global_position = get_portal_position()
 	if _backdrop_3d != null:
-		_backdrop_3d.rebuild_static()
+		if bake_mesh:
+			for i in range(_fold_anim_start_verts.size()):
+				if i >= _animated.size():
+					break
+				_animated[i] = _rotate_about_pivot(
+					_fold_anim_start_verts[i], _fold_anim_pivot, angle_rad
+				)
+			_backdrop_3d.clear_fold_transform()
+			_backdrop_3d.rebuild_static()
+		else:
+			_backdrop_3d.set_fold_transform(_fold_anim_pivot, angle_rad)
 
 
 static func _ease_fold_progress(t: float) -> float:
