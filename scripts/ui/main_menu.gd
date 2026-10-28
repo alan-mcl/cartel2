@@ -63,6 +63,11 @@ func _start_headline_tape() -> void:
 	_tape_rng.randomize()
 	_tape_active = true
 	set_process(true)
+	_headline_tape.play_line(
+		"Cartel 2, version '%s'" % GameVersion.VERSION,
+		true,
+		true
+	)
 	_top_up_headline_tape()
 
 

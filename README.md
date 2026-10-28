@@ -121,7 +121,7 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 
 - [ships](docs/design/content/ships.md), [equipment](docs/design/content/equipment.md), [manufacturers](docs/design/content/manufacturers.txt)
 - [commodities](docs/design/content/commodities.md), [trade network](docs/design/content/trade_network.md)
-- [translations](docs/design/content/translations.md), [missions](docs/design/content/missions.md)
+- [translations](docs/design/content/translations.md), [n-space / Unspace transit](docs/design/content/n-space.md), [missions](docs/design/content/missions.md)
 - [field conditions](docs/design/content/field_conditions.md), [GST in play](docs/design/content/gst.md)
 - [balance](docs/design/content/balance.md) - pricing approach, targets, and how to measure them
 

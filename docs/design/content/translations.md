@@ -1,6 +1,6 @@
 # Translation and navigation stability
 
-**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives can open the same translation overlay from deep orbit (**H** in flight) when power and compute cover the spool spike. Learning and copying solutions are not implemented. Higher-order (5-space and 6-space) translations use the same transit field presentation as 4-space until layer-specific environments exist.
+**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives can open the same translation overlay from deep orbit (**H** in flight) when power and compute cover the spool spike. Learning and copying solutions are not implemented. Higher-order (5-space and 6-space) translations use the same transit field presentation as 4-space until layer-specific environments exist. In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
 
 ## Stored translations
 
