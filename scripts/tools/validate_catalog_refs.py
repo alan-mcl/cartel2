@@ -1205,6 +1205,8 @@ MESSAGE_TONES = {"info", "warning", "positive", "negative"}
 MESSAGE_PLACEHOLDERS = {
     "habitat",
     "planet",
+    "planet2",
+    "celebrity",
     "corporation",
     "rival",
     "corporation-ticker",

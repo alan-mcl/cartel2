@@ -98,6 +98,7 @@ static func build_sector_bindings(
 	var planet := sector_display_label(catalog, sector_id)
 	var habitat_name := _pick_habitat_name(catalog, sector_id, rng, session)
 	var corps := _pick_corporation_pair(catalog, sector_id, rng)
+	var planets := _pick_planet_pair(catalog, sector_id, rng)
 	var bindings := {
 		"habitat": habitat_name,
 		"planet": planet,
@@ -106,6 +107,9 @@ static func build_sector_bindings(
 		"sport": SPORTS[rng.randi_range(0, SPORTS.size() - 1)],
 		"shift": SHIFTS[rng.randi_range(0, SHIFTS.size() - 1)],
 	}
+	var planet2 := str(planets.get("planet2", "")).strip_edges()
+	if not planet2.is_empty():
+		bindings["planet2"] = planet2
 
 	bindings["corporation-ticker"] = str(corps.get("corporation_ticker", "")).strip_edges()
 	bindings["rival-ticker"] = str(corps.get("rival_ticker", "")).strip_edges()
@@ -128,6 +132,7 @@ static func build_sector_bindings(
 	var celebrity := _pick_celebrity_pilot(catalog, rng)
 	if not celebrity.is_empty():
 		bindings["celebrity-pilot"] = celebrity
+		bindings["celebrity"] = celebrity
 
 	var local_place := _pick_local_star_system_location(catalog, sector_id, rng)
 	if not local_place.is_empty():
@@ -283,32 +288,119 @@ static func _pick_celebrity_pilot(catalog: Catalog, rng: RandomNumberGenerator) 
 	return str(pick.get("name", "")).strip_edges()
 
 
-static func _pick_local_star_system_location(
-	catalog: Catalog,
-	sector_id: String,
-	rng: RandomNumberGenerator
-) -> String:
+static func _star_system_planet_labels(catalog: Catalog, sector_id: String) -> Array[String]:
 	var current := catalog.get_sector_def(sector_id)
 	if current == null:
-		return ""
+		return []
 	var star_system := current.star_system.strip_edges()
 	if star_system.is_empty():
-		return ""
+		return []
 
-	var matches: Array[String] = []
+	var seen: Dictionary = {}
+	var labels: Array[String] = []
 	for other_id_variant in catalog.sectors_by_id.keys():
 		var other_id := str(other_id_variant)
-		if other_id.is_empty() or other_id == sector_id:
+		if other_id.is_empty():
 			continue
 		var other: SectorDef = catalog.sectors_by_id[other_id]
 		if other == null or other.star_system != star_system:
 			continue
 		var label := sector_display_label(catalog, other_id)
-		if not label.is_empty():
+		if label.is_empty() or seen.has(label):
+			continue
+		seen[label] = true
+		labels.append(label)
+	labels.sort()
+	return labels
+
+
+static func main_planet_label_for_star_system(catalog: Catalog, star_system: String) -> String:
+	var system := star_system.strip_edges()
+	if catalog == null or system.is_empty():
+		return ""
+	var best_sector_id := ""
+	var best_pop := -1.0
+	var best_label := ""
+	for sector_id_variant in catalog.sectors_by_id.keys():
+		var sid := str(sector_id_variant).strip_edges()
+		if sid.is_empty():
+			continue
+		var def: SectorDef = catalog.sectors_by_id[sid]
+		if def == null or def.star_system.strip_edges() != system:
+			continue
+		var planet := def.planet_name.strip_edges()
+		if planet.is_empty():
+			continue
+		var pop := def.population_billions
+		if (
+			pop > best_pop
+			or (
+				is_equal_approx(pop, best_pop)
+				and (best_sector_id.is_empty() or sid < best_sector_id)
+			)
+		):
+			best_pop = pop
+			best_sector_id = sid
+			best_label = planet
+	return best_label
+
+
+static func _other_star_system_main_planet_labels(catalog: Catalog, sector_id: String) -> Array[String]:
+	var current := catalog.get_sector_def(sector_id)
+	if current == null:
+		return []
+	var home := current.star_system.strip_edges()
+	if home.is_empty():
+		return []
+
+	var systems_seen: Dictionary = {}
+	var labels_seen: Dictionary = {}
+	var labels: Array[String] = []
+	for other_id_variant in catalog.sectors_by_id.keys():
+		var other: SectorDef = catalog.sectors_by_id[str(other_id_variant)]
+		if other == null:
+			continue
+		var other_system := other.star_system.strip_edges()
+		if other_system.is_empty() or other_system == home or systems_seen.has(other_system):
+			continue
+		systems_seen[other_system] = true
+		var label := main_planet_label_for_star_system(catalog, other_system)
+		if label.is_empty() or labels_seen.has(label):
+			continue
+		labels_seen[label] = true
+		labels.append(label)
+	labels.sort()
+	return labels
+
+
+static func _pick_planet_pair(catalog: Catalog, sector_id: String, rng: RandomNumberGenerator) -> Dictionary:
+	var primary := sector_display_label(catalog, sector_id)
+	if primary.is_empty():
+		return {}
+	var labels := _other_star_system_main_planet_labels(catalog, sector_id)
+	if labels.is_empty():
+		return {"planet2": primary}
+	var second := labels[rng.randi_range(0, labels.size() - 1)]
+	if labels.size() > 1 and second == primary:
+		var guard := 0
+		while second == primary and guard < 8:
+			second = labels[rng.randi_range(0, labels.size() - 1)]
+			guard += 1
+	return {"planet2": second}
+
+
+static func _pick_local_star_system_location(
+	catalog: Catalog,
+	sector_id: String,
+	rng: RandomNumberGenerator
+) -> String:
+	var primary := sector_display_label(catalog, sector_id)
+	var matches: Array[String] = []
+	for label in _star_system_planet_labels(catalog, sector_id):
+		if label != primary:
 			matches.append(label)
 	if matches.is_empty():
 		return ""
-	matches.sort()
 	return matches[rng.randi_range(0, matches.size() - 1)]
 
 

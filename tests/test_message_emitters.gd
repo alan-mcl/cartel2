@@ -114,6 +114,37 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 			pilot_names.has(str(bindings["celebrity-pilot"])),
 			"message emitters: celebrity-pilot from catalog list"
 		)
+		runner.check_eq(
+			str(bindings.get("celebrity", "")),
+			str(bindings["celebrity-pilot"]),
+			"message emitters: celebrity alias matches celebrity-pilot"
+		)
+
+	var proxima_def := catalog.get_sector_def("proxima")
+	var star_system := proxima_def.star_system.strip_edges() if proxima_def != null else ""
+	var other_main_planets: Array[String] = []
+	var systems_seen: Dictionary = {}
+	for sector_id_variant in catalog.sectors_by_id.keys():
+		var def: SectorDef = catalog.sectors_by_id[str(sector_id_variant)]
+		if def == null:
+			continue
+		var system := def.star_system.strip_edges()
+		if system.is_empty() or system == star_system or systems_seen.has(system):
+			continue
+		systems_seen[system] = true
+		var main_label := MessageEmitterTokens.main_planet_label_for_star_system(catalog, system)
+		if not main_label.is_empty() and not other_main_planets.has(main_label):
+			other_main_planets.append(main_label)
+	runner.check(bindings.has("planet2"), "message emitters: proxima bindings include planet2")
+	if bindings.has("planet2") and not other_main_planets.is_empty():
+		runner.check(
+			other_main_planets.has(str(bindings["planet2"])),
+			"message emitters: planet2 is a main world in another star system"
+		)
+		runner.check(
+			str(bindings["planet2"]) != "ACB1",
+			"message emitters: planet2 is not a secondary world label"
+		)
 
 	runner.check(
 		bindings.has("local-star-system-location"),
