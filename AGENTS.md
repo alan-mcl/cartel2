@@ -42,9 +42,9 @@ Or with an explicit Godot path:
 GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
 ```
 
-The script runs catalog validation, Godot import, `--check-only` across `scripts/` and `tests/`, and headless unit tests.
+The script runs catalog validation, Godot import, a single-process parse sweep across `scripts/` and `tests/` ([`scripts/ci/check_scripts.gd`](scripts/ci/check_scripts.gd)), headless unit tests, and the scene smoke suite.
 
-For the inner loop, `--fast` skips the import and parse sweep (validators plus unit tests, a few seconds); `--scripts-only` and `--tests-only` run one half each. `--fast` is not sufficient to mark work complete - run the full check before you finish. The parse sweep parallelises over `nproc`; use `--jobs N` to change that.
+For the inner loop, `--fast` skips import, the parse sweep, and smokes (validators plus unit tests only). The unit suite includes balance metrics and can take a few minutes; `--scripts-only` and `--tests-only` run one half each. `--fast` is not sufficient to mark work complete - run the full check before you finish.
 
 **Important:** Godot may exit `0` even when a script has parse errors. The check script scans output for `SCRIPT ERROR`, `Parse Error`, and `Failed to load script`. Do not claim compile-clean without running it.
 

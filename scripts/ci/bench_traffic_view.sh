@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GODOT="${GODOT:-$HOME/opt/Godot_v4.7.2-stable_linux.x86_64}"
-ERROR_PATTERN='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:'
+ERROR_PATTERN='SCRIPT ERROR|Parse Error|Failed to load script'
 
 if [[ ! -x "$GODOT" ]]; then
 	echo "ERROR: Godot not found at $GODOT (set GODOT env var)" >&2

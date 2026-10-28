@@ -19,12 +19,40 @@ func _run() -> void:
 	await _smoke_system_render_tester()
 	await _smoke_mission_harness()
 	await _smoke_audio_sandbox()
+	await _finish()
+
+
+func _finish() -> void:
+	await _drain_root_children()
+	ChassisSprite.clear_cache()
+	var audio_mgr := root.get_node_or_null("AudioManager")
+	if audio_mgr != null:
+		AudioService.unbind_manager(audio_mgr)
 	if _failures > 0:
 		push_error("Scene smoke suite failed with %d assertion(s)." % _failures)
 		quit(1)
 		return
 	print("=== scene smoke suite passed ===")
 	quit(0)
+
+
+func _free_and_drain(node: Node) -> void:
+	if node == null:
+		return
+	if is_instance_valid(node):
+		node.queue_free()
+	for _i in 2:
+		await process_frame
+
+
+func _drain_root_children() -> void:
+	for child in root.get_children():
+		if child.name == "AudioManager":
+			continue
+		if is_instance_valid(child):
+			child.queue_free()
+	for _i in 2:
+		await process_frame
 
 
 func _smoke_embedded_shipyard(catalog: Catalog) -> void:
@@ -47,8 +75,7 @@ func _smoke_embedded_shipyard(catalog: Catalog) -> void:
 		screen._embedded_panel != null and screen._embedded_panel is Control,
 		"embedded shipyard is a control"
 	)
-	stack.queue_free()
-	await process_frame
+	await _free_and_drain(stack)
 
 
 func _smoke_save_loaded_world(catalog: Catalog) -> void:
@@ -69,8 +96,7 @@ func _smoke_save_loaded_world(catalog: Catalog) -> void:
 	await process_frame
 	_check(world_root.get_node_or_null("NspaceField") != null, "unspace load creates field")
 	_check(not loader.get_nav_contacts(catalog, true).is_empty(), "unspace exposes exit nav contact")
-	world_root.queue_free()
-	await process_frame
+	await _free_and_drain(world_root)
 
 
 func _smoke_combat_motion() -> void:
@@ -97,8 +123,7 @@ func _smoke_combat_motion() -> void:
 			"combat sandbox opponent visual follows simulation"
 		)
 	paused = false
-	sandbox.queue_free()
-	await process_frame
+	await _free_and_drain(sandbox)
 
 
 func _smoke_mission_harness() -> void:
@@ -118,16 +143,14 @@ func _smoke_mission_harness() -> void:
 	var world: Node2D = main.get_node("World")
 	_check(world.get_child_count() > 0, "mission harness loads volatile world")
 	paused = false
-	harness.queue_free()
-	await process_frame
+	await _free_and_drain(harness)
 
 
 func _smoke_audio_sandbox() -> void:
 	var sandbox := preload("res://scenes/dev/audio_sandbox.tscn").instantiate()
 	root.add_child(sandbox)
 	await process_frame
-	sandbox.queue_free()
-	await process_frame
+	await _free_and_drain(sandbox)
 
 
 func _smoke_system_render_tester() -> void:
@@ -143,8 +166,7 @@ func _smoke_system_render_tester() -> void:
 	_check(tester.get_node_or_null("PlayerShip") == null, "system render tester has no player ship")
 	var label_overlay: Node = tester.get_node_or_null("Overlay/Root/CityMallLabelOverlay")
 	_check(label_overlay != null, "system render tester has city-mall labels")
-	tester.queue_free()
-	await process_frame
+	await _free_and_drain(tester)
 
 
 func _check(condition: bool, label: String) -> void:

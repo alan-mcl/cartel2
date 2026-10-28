@@ -5,8 +5,7 @@
 #   ./scripts/ci/check.sh                 full check (default) - run before marking work done
 #   ./scripts/ci/check.sh --fast          validators + unit tests, no import or script sweep
 #   ./scripts/ci/check.sh --scripts-only  import + GDScript parse sweep
-#   ./scripts/ci/check.sh --tests-only    unit tests only
-#   ./scripts/ci/check.sh --jobs N        parallelism for the script sweep (default: nproc)
+#   ./scripts/ci/check.sh --tests-only    unit tests only (no smokes)
 #
 # Godot exits 0 even when a script has parse errors, so every Godot step greps its output for
 # error markers instead of trusting the exit code. Do not "simplify" that away, and never pair
@@ -25,7 +24,6 @@ RUN_IMPORT=1
 RUN_SWEEP=1
 RUN_TESTS=1
 RUN_SMOKES=1
-JOBS="${CHECK_JOBS:-$(nproc 2>/dev/null || echo 4)}"
 
 usage() {
   sed -n '3,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
@@ -46,10 +44,15 @@ while [[ $# -gt 0 ]]; do
       RUN_VALIDATORS=0
       RUN_IMPORT=0
       RUN_SWEEP=0
+      RUN_SMOKES=0
       ;;
     --jobs)
+      echo "NOTE: --jobs is retired; the parse sweep runs in one Godot process." >&2
       shift
-      JOBS="${1:-1}"
+      if [[ $# -gt 0 ]]; then
+        shift
+      fi
+      continue
       ;;
     -h|--help)
       usage
@@ -95,42 +98,21 @@ if [[ $RUN_IMPORT -eq 1 ]]; then
 fi
 
 if [[ $RUN_SWEEP -eq 1 ]]; then
-  echo "== GDScript check-only (${JOBS} job(s)) =="
-
-  FAIL_DIR="$(mktemp -d)"
-  trap 'rm -rf "$FAIL_DIR"' EXIT
-  export GODOT ROOT FAIL_DIR ERROR_PATTERN
-
-  # Each script is checked in its own Godot process, so the sweep parallelises cleanly. A worker
-  # records a file under FAIL_DIR only on failure; the parent counts those afterwards.
-  check_one() {
-    local rel="$1"
-    local output
-    output=$("$GODOT" --headless --path "$ROOT" --check-only --script "res://$rel" 2>&1) || true
-    if printf '%s' "$output" | grep -qE "$ERROR_PATTERN"; then
-      {
-        echo "ERROR: $rel"
-        printf '%s\n' "$output"
-      } >"$FAIL_DIR/${rel//\//_}.log"
-    fi
-    return 0
-  }
-  export -f check_one
-
-  find "${SCRIPT_DIRS[@]}" -name '*.gd' -print0 \
-    | sort -z \
-    | xargs -0 -r -P "$JOBS" -I{} bash -c 'check_one "$@"' _ {}
-
-  SCRIPT_ERRORS=$(find "$FAIL_DIR" -type f -name '*.log' | wc -l)
-  if [[ $SCRIPT_ERRORS -gt 0 ]]; then
-    cat "$FAIL_DIR"/*.log >&2
-    echo "== $SCRIPT_ERRORS script(s) failed check-only ==" >&2
+  echo "== GDScript parse sweep =="
+  set +e
+  SWEEP_OUTPUT=$("$GODOT" --headless --path "$ROOT" --script res://scripts/ci/check_scripts.gd 2>&1)
+  SWEEP_EXIT=$?
+  set -e
+  echo "$SWEEP_OUTPUT"
+  if echo "$SWEEP_OUTPUT" | grep -qE "$ERROR_PATTERN"; then
+    echo "GDScript parse sweep failed." >&2
+    exit 1
+  fi
+  if [[ $SWEEP_EXIT -ne 0 ]]; then
+    echo "GDScript parse sweep exited $SWEEP_EXIT." >&2
     exit 1
   fi
 
-  # Optional: gdlint is advisory only and is skipped when gdtoolkit is not installed, so the
-  # check never hard-depends on it. Do not make this fatal without first cleaning up the
-  # existing warnings.
   if command -v gdlint >/dev/null 2>&1; then
     echo "== gdlint (advisory) =="
     gdlint "${SCRIPT_DIRS[@]}" || echo "gdlint reported issues (not failing the check)." >&2

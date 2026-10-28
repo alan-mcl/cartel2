@@ -5,6 +5,11 @@ static var _cache: Dictionary = {}
 static var _fallback: Texture2D
 
 
+static func clear_cache() -> void:
+	_cache.clear()
+	_fallback = null
+
+
 static func get_texture(sprite_path: String) -> Texture2D:
 	if sprite_path.is_empty():
 		return _fallback_texture()
