@@ -191,6 +191,26 @@ func stop_ambience(immediate: bool = false) -> void:
 	_amb_fade_duration = CROSSFADE_SEC
 
 
+## Drop stream refs on bus players (headless smoke / process exit).
+func release_playback_streams() -> void:
+	stop_music(true)
+	stop_ambience(true)
+	_music_fade_from = null
+	_music_fade_to = null
+	_music_fade_duration = 0.0
+	_amb_fade_from = null
+	_amb_fade_to = null
+	_amb_fade_duration = 0.0
+	for player in [_music_a, _music_b, _amb_a, _amb_b]:
+		if player != null:
+			player.stop()
+			player.stream = null
+	if _engine_player != null:
+		_engine_player.stop()
+		_engine_player.stream = null
+	_engine_playing = false
+
+
 func play_ui(suffix: String) -> void:
 	play_sfx("ui.%s" % suffix)
 

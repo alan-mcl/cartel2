@@ -2277,5 +2277,20 @@
 			"temperature_k": 5200,
 			"luminosity": 1.1
 		}
+	},
+	"n5_default": {
+		"entities": []
+	},
+	"n6_default": {
+		"entities": []
+	},
+	"n7_default": {
+		"entities": []
+	},
+	"n8_default": {
+		"entities": []
+	},
+	"n9_default": {
+		"entities": []
 	}
 }

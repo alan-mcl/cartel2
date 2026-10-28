@@ -95,15 +95,24 @@ func _refresh() -> void:
 			_session
 		)
 	var offers := all_offers if on_volatile_site else _filter_beacon_offers(all_offers, beacon_destination)
-	var grouped := TranslationNav.group_offered_translations(_catalog, _session.sector_id, offers)
+	var partitioned := TranslationNav.partition_jump_offers(offers)
+	var public_offers: Array = partitioned.get("public", [])
+	var private_offers: Array = partitioned.get("private", [])
+	var grouped := TranslationNav.group_offered_translations(_catalog, _session.sector_id, public_offers)
 	var local_rows: Array = grouped.get("local", [])
 	var other_rows: Array = grouped.get("other", [])
 	var volatile_rows: Array = grouped.get("volatile", [])
 
 	_build_route_tables(local_rows, other_rows, volatile_rows)
+	_build_private_library_strip(private_offers)
 
 	_hint.text = "Esc or Cancel to stay in orbit"
-	if local_rows.is_empty() and other_rows.is_empty() and volatile_rows.is_empty():
+	if (
+		local_rows.is_empty()
+		and other_rows.is_empty()
+		and volatile_rows.is_empty()
+		and private_offers.is_empty()
+	):
 		if on_volatile_site:
 			_solution_label.text = "The temporary return gate is no longer available."
 		elif beacon_destination.is_empty():
@@ -131,6 +140,44 @@ func _filter_beacon_offers(all_offers: Array, beacon_destination: String) -> Arr
 			continue
 		filtered.append(offer)
 	return filtered
+
+
+func _build_private_library_strip(private_offers: Array) -> void:
+	if private_offers.is_empty():
+		return
+	var header := Label.new()
+	header.text = "Private library translations"
+	header.add_theme_font_size_override("font_size", 14)
+	_route_list.add_child(header)
+	var list := VBoxContainer.new()
+	list.add_theme_constant_override("separation", 4)
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_route_list.add_child(list)
+	for offer_variant in private_offers:
+		if typeof(offer_variant) != TYPE_DICTIONARY:
+			continue
+		var offer: Dictionary = offer_variant
+		var button := Button.new()
+		var translation: Dictionary = offer.get("translation", {})
+		var dest := TranslationNav.destination_display_label(
+			_catalog,
+			str(translation.get("target", ""))
+		)
+		var n := int(translation.get("n", 4))
+		button.text = "%s · %d-space\n%s" % [
+			dest,
+			n,
+			TranslationNav.format_cell_summary(
+				float(offer.get("accuracy", 0.0)),
+				float(offer.get("duration_seconds", 0.0)),
+				translation
+			),
+		]
+		button.toggle_mode = true
+		button.set_meta("translation_offer", offer)
+		button.button_pressed = _offers_equal(offer, _selected_offer)
+		button.pressed.connect(_on_offer_cell_pressed.bind(offer, button))
+		list.add_child(button)
 
 
 func _build_route_tables(local_rows: Array, other_rows: Array, volatile_rows: Array) -> void:

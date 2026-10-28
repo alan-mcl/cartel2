@@ -12,6 +12,7 @@ var _career: CanvasLayer
 var _career_end: CanvasLayer
 var _leaderboard: CanvasLayer
 var _jump: CanvasLayer
+var _hyperdrive: CanvasLayer
 var _hud: CanvasLayer
 var _ui_root: CanvasLayer
 var _player: CharacterBody2D
@@ -38,6 +39,7 @@ func bind(
 	career_end: CanvasLayer,
 	leaderboard: CanvasLayer,
 	jump: CanvasLayer,
+	hyperdrive: CanvasLayer,
 	hud: CanvasLayer,
 	ui_root: CanvasLayer,
 	player: CharacterBody2D,
@@ -58,6 +60,7 @@ func bind(
 	_career_end = career_end
 	_leaderboard = leaderboard
 	_jump = jump
+	_hyperdrive = hyperdrive
 	_hud = hud
 	_ui_root = ui_root
 	_player = player
@@ -75,7 +78,7 @@ func is_gst_frozen() -> bool:
 		return true
 	if _main_menu.visible or _new_game.visible:
 		return true
-	if _save_overlay.visible or _jump.visible:
+	if _save_overlay.visible or _jump.visible or (_hyperdrive != null and _hyperdrive.visible):
 		return true
 	if _career != null and _career.visible:
 		return true
@@ -97,7 +100,12 @@ func can_toggle_pause() -> bool:
 		return false
 	if _main_menu.visible or _new_game.visible or _save_overlay.visible:
 		return false
-	if _main.session.docked or _jump.visible or _ui_root.visible:
+	if (
+		_main.session.docked
+		or _jump.visible
+		or (_hyperdrive != null and _hyperdrive.visible)
+		or _ui_root.visible
+	):
 		return false
 	return true
 
@@ -123,6 +131,8 @@ func show_main_menu() -> void:
 	_pause.close()
 	_ui_root.close_ui()
 	_jump.close()
+	if _hyperdrive != null and _hyperdrive.has_method("close"):
+		_hyperdrive.close()
 	_new_game.close()
 	_save_overlay.close()
 	if _career != null:

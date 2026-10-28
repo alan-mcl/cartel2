@@ -15,6 +15,7 @@ var _player: CharacterBody2D
 var _hud: CanvasLayer
 var _camera: Camera2D
 var _jump: CanvasLayer
+var _hyperdrive: CanvasLayer
 var _ui_root: CanvasLayer
 var _tree: SceneTree
 
@@ -27,6 +28,7 @@ func bind(
 	hud: CanvasLayer,
 	camera: Camera2D,
 	jump: CanvasLayer,
+	hyperdrive: CanvasLayer,
 	ui_root: CanvasLayer,
 	tree: SceneTree
 ) -> void:
@@ -37,12 +39,21 @@ func bind(
 	_hud = hud
 	_camera = camera
 	_jump = jump
+	_hyperdrive = hyperdrive
 	_ui_root = ui_root
 	_tree = tree
 
 
 func refresh_session_refs() -> void:
 	pass
+
+
+func _overlay_blocks_flight() -> bool:
+	if _jump != null and _jump.visible:
+		return true
+	if _hyperdrive != null and _hyperdrive.visible:
+		return true
+	return false
 
 
 func clear_traffic() -> void:
@@ -74,13 +85,13 @@ func setup_traffic(world: Node2D) -> void:
 func physics_tick(delta: float, physics_frame: int) -> void:
 	if not _main.game_active:
 		return
-	if _main.session.docked or _jump.visible or _tree.paused:
+	if _main.session.docked or _overlay_blocks_flight() or _tree.paused:
 		if _main.session.docked:
 			if _player.has_method("clear_target_lock"):
 				_player.clear_target_lock()
 			if _player.has_method("reset_autopilot"):
 				_player.reset_autopilot()
-		if _main.session.docked or _jump.visible:
+		if _main.session.docked or _overlay_blocks_flight():
 			_hud.set_surface_labels([], _camera)
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
@@ -205,7 +216,7 @@ func _surface_labels() -> Array:
 
 
 func can_toggle_active_sensors() -> bool:
-	if not _main.game_active or _main.session.docked or _jump.visible or _ui_root.visible:
+	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false
@@ -223,7 +234,7 @@ func toggle_active_sensors() -> void:
 
 
 func can_use_target_lock() -> bool:
-	if not _main.game_active or _main.session.docked or _jump.visible or _ui_root.visible:
+	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false
@@ -274,7 +285,7 @@ func request_target_scan() -> void:
 
 
 func can_use_autopilot_hotkey(index: int) -> bool:
-	if not _main.game_active or _main.session.docked or _jump.visible or _ui_root.visible:
+	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false

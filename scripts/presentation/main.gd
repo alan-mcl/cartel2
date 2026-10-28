@@ -16,6 +16,7 @@ var _menu := MenuController.new()
 @onready var _hud: CanvasLayer = $HUD
 @onready var _pause: CanvasLayer = $PauseOverlay
 @onready var _jump: CanvasLayer = $JumpOverlay
+@onready var _hyperdrive: CanvasLayer = $HyperdriveOverlay
 @onready var _ui_root: CanvasLayer = $UiRoot
 @onready var _main_menu: CanvasLayer = $MainMenu
 @onready var _new_game: CanvasLayer = $NewGameOverlay
@@ -52,6 +53,9 @@ func _ready() -> void:
 
 	_jump.jump_requested.connect(_world.on_jump_requested)
 	_jump.cancelled.connect(_world.on_jump_cancelled)
+	_hyperdrive.calculation_requested.connect(_world.on_hyperdrive_calculation_requested)
+	_hyperdrive.jump_requested.connect(_world.on_hyperdrive_jump_requested)
+	_hyperdrive.cancelled.connect(_world.on_hyperdrive_cancelled)
 
 	_pause.resume_requested.connect(_menu.on_pause_resume_requested)
 	_pause.save_requested.connect(_menu.on_pause_save_requested)
@@ -83,6 +87,7 @@ func _ready() -> void:
 	_player.freeze_motion()
 	_pause.visible = false
 	_jump.visible = false
+	_hyperdrive.visible = false
 	_hud.visible = false
 	_new_game.close()
 	_save_overlay.close()
@@ -102,6 +107,7 @@ func _bind_controllers() -> void:
 		_hud,
 		_camera,
 		_jump,
+		_hyperdrive,
 		_ui_root,
 		get_tree()
 	)
@@ -112,6 +118,7 @@ func _bind_controllers() -> void:
 		_player,
 		_pause,
 		_jump,
+		_hyperdrive,
 		_hud,
 		_ui_root,
 		catalog,
@@ -132,6 +139,7 @@ func _bind_controllers() -> void:
 		_career_end,
 		_leaderboard,
 		_jump,
+		_hyperdrive,
 		_hud,
 		_ui_root,
 		_player,
@@ -162,6 +170,9 @@ func _bind_controllers() -> void:
 		_menu.on_quit_to_menu_requested
 	)
 	_jump.bind(catalog, session, _player.assembled_ship)
+	if _hyperdrive.has_method("bind"):
+		var hd_module := Hyperdrive.fitted_module(_player.assembled_ship)
+		_hyperdrive.bind(catalog, session, _player.assembled_ship, hd_module)
 
 
 func _process(delta: float) -> void:
@@ -207,7 +218,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if event.is_action_pressed("hyperdrive"):
-		if _menu.can_toggle_pause() and not _jump.visible:
+		if _menu.can_toggle_pause() and not _jump.visible and not _hyperdrive.visible:
 			_world.try_hyperdrive_spool()
 			get_viewport().set_input_as_handled()
 			return
@@ -250,6 +261,24 @@ func dev_set_quit_to_menu(handler: Callable) -> void:
 	if handler.is_valid() and not _pause.quit_to_menu_requested.is_connected(handler):
 		_pause.quit_to_menu_requested.connect(handler)
 	_ui_root.on_quit_to_menu_requested = handler
+
+
+## Headless smoke teardown: drop an active run without opening the main menu.
+func dev_teardown_active_run() -> void:
+	game_active = false
+	get_tree().paused = false
+	_ui_root.close_ui()
+	_jump.close()
+	if _hyperdrive != null and _hyperdrive.has_method("close"):
+		_hyperdrive.close()
+	_pause.close()
+	_hud.visible = false
+	_player.freeze_motion()
+	_world.clear_world()
+	_simulation.reset_save()
+	AudioService.stop_music(true)
+	AudioService.stop_ambience(true)
+	AudioService.set_ship_thrust(0.0, false, Vector2.ZERO)
 
 
 func _bind_session_events(game_session: GameSession) -> void:

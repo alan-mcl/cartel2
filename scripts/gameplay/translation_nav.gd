@@ -12,11 +12,30 @@ const STABILITY_COMPUTE_FLOOR := 0.55
 
 
 static func max_n_for_nav_rating(nav_rating: float) -> int:
+	if nav_rating >= 95.0:
+		return 9
+	if nav_rating >= 85.0:
+		return 8
 	if nav_rating >= 75.0:
+		return 7
+	if nav_rating >= 65.0:
 		return 6
 	if nav_rating >= 55.0:
 		return 5
 	return 4
+
+
+static func max_public_catalog_n() -> int:
+	return 6
+
+
+static func duration_scale_for_n(n: int) -> float:
+	var depth := maxf(0.0, float(n) - 4.0)
+	return pow(0.1, depth / 5.0)
+
+
+static func lump_seconds_for_route(friction: int, n: int) -> float:
+	return float(friction) * Catalog.ROUTE_SECONDS_PER_FRICTION * duration_scale_for_n(n)
 
 
 static func nav_stats_from_ship(assembled: AssembledShip, catalog: Catalog) -> Dictionary:
@@ -87,20 +106,20 @@ static func list_offered_translations(
 		if typeof(record_variant) != TYPE_DICTIONARY:
 			continue
 		var record: Dictionary = record_variant
-		if int(record.get("n", 0)) <= max_n:
+		var record_n := int(record.get("n", 0))
+		if record_n <= max_n and record_n <= max_public_catalog_n():
 			eligible_higher.append(record)
 
 	var slots_left := maxi(0, capacity - public_4.size())
 	for index in mini(slots_left, eligible_higher.size()):
 		selected.append(eligible_higher[index])
 
-	var library_keys := _library_key_set(player_library)
-	for record_variant in all_from:
-		if typeof(record_variant) != TYPE_DICTIONARY:
+	var public_keys := _translation_key_set(selected)
+	for entry_variant in player_library:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
-		var record: Dictionary = record_variant
-		var key := _library_key(record)
-		if not library_keys.has(key):
+		var record := resolve_library_translation(catalog, source_sector_id, entry_variant)
+		if record.is_empty():
 			continue
 		if _contains_translation(selected, record):
 			continue
@@ -121,10 +140,13 @@ static func list_offered_translations(
 		var record: Dictionary = record_variant
 		var accuracy := compute_accuracy(nav_rating, int(record.get("n", 4)), float(record.get("ease", 0.5)))
 		var duration_seconds := translation_duration_seconds(record)
+		var from_library := not public_keys.has(_library_key(record))
 		offered.append({
 			"translation": record,
 			"accuracy": accuracy,
 			"duration_seconds": duration_seconds,
+			"library": from_library,
+			"private_library": from_library and int(record.get("n", 4)) > max_public_catalog_n(),
 		})
 
 	if session != null:
@@ -414,6 +436,89 @@ static func format_offer_line(translation: Dictionary, accuracy: float, duration
 		int(round(accuracy)),
 		duration_text,
 	]
+
+
+static func resolve_library_translation(
+	catalog: Catalog,
+	source_sector_id: String,
+	entry: Dictionary
+) -> Dictionary:
+	if catalog == null or source_sector_id.is_empty() or entry.is_empty():
+		return {}
+	var source := str(entry.get("source", source_sector_id)).strip_edges()
+	if source != source_sector_id:
+		return {}
+	var solution := int(entry.get("solution", 0))
+	var from_catalog := catalog.get_translation(source_sector_id, solution)
+	if not from_catalog.is_empty():
+		return from_catalog
+	var target := str(entry.get("target", "")).strip_edges()
+	var n := int(entry.get("n", 0))
+	if target.is_empty() or n < 4:
+		return {}
+	return synthesize_private_translation(catalog, source_sector_id, target, n, solution)
+
+
+static func synthesize_private_translation(
+	catalog: Catalog,
+	source_sector_id: String,
+	target_sector_id: String,
+	n: int,
+	solution: int
+) -> Dictionary:
+	if catalog == null or source_sector_id.is_empty() or target_sector_id.is_empty():
+		return {}
+	if catalog.get_sector_def(target_sector_id) == null:
+		return {}
+	var public4 := catalog.get_public_translation(source_sector_id, target_sector_id, 4)
+	var friction := int(public4.get("friction", 0))
+	if friction < 1:
+		return {}
+	var duration_scale := duration_scale_for_n(n)
+	var lump_seconds := float(friction) * Catalog.ROUTE_SECONDS_PER_FRICTION * duration_scale
+	var ease := float(public4.get("ease", 0.25))
+	if n > 4:
+		ease = minf(ease, 0.35)
+	var sector := catalog.get_sector_def(target_sector_id)
+	var label := sector.name if sector != null and not sector.name.is_empty() else target_sector_id
+	return {
+		"source": source_sector_id,
+		"target": target_sector_id,
+		"solution": solution,
+		"n": n,
+		"label": label,
+		"friction": friction,
+		"entry_seconds": lump_seconds,
+		"exit_seconds": lump_seconds,
+		"time_jitter": public4.get("time_jitter", Catalog.ROUTE_TIME_JITTER),
+		"ease": ease,
+		"duration_scale": duration_scale,
+		"route_id": str(public4.get("route_id", "")),
+		"library_private": true,
+	}
+
+
+static func partition_jump_offers(offers: Array) -> Dictionary:
+	var public_offers: Array = []
+	var private_offers: Array = []
+	for offer_variant in offers:
+		if typeof(offer_variant) != TYPE_DICTIONARY:
+			continue
+		var offer: Dictionary = offer_variant
+		if bool(offer.get("private_library", false)):
+			private_offers.append(offer)
+		else:
+			public_offers.append(offer)
+	return {"public": public_offers, "private": private_offers}
+
+
+static func _translation_key_set(records: Array) -> Dictionary:
+	var keys := {}
+	for record_variant in records:
+		if typeof(record_variant) != TYPE_DICTIONARY:
+			continue
+		keys[_library_key(record_variant)] = true
+	return keys
 
 
 static func _library_key(record: Dictionary) -> String:

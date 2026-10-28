@@ -9,6 +9,7 @@ static func run(runner: TestRunner) -> void:
 	_test_stability(runner, catalog)
 	_test_inventory(runner, catalog)
 	_test_enter_unspace_higher_n(runner, catalog)
+	_test_f3_duration_and_nav_tiers(runner, catalog)
 	_test_save_library_and_stability(runner, catalog)
 	_test_tester_flare_offers_translations(runner, catalog)
 	_test_offer_grouping(runner, catalog)
@@ -247,7 +248,7 @@ static func _test_enter_unspace_higher_n(runner: TestRunner, catalog: Catalog) -
 		"enter_unspace 5-space proxima→bela"
 	)
 	runner.check_eq(session.unspace_n, 5, "session stores real N")
-	runner.check_eq(session.unspace_world_id, "n4_default", "5-space uses n4 presentation world")
+	runner.check_eq(session.unspace_world_id, "n5_default", "5-space uses n5 presentation world")
 	runner.check_eq(session.translation_stability, 87.0, "stability preserved on entry")
 	session.last_log = "Still in transit."
 	runner.check(session.arrive_from_unspace(catalog), "arrive clears unspace")
@@ -257,6 +258,40 @@ static func _test_enter_unspace_higher_n(runner: TestRunner, catalog: Catalog) -
 		"Still in transit.",
 		"arrive_from_unspace leaves the log for the emergence line"
 	)
+
+
+static func _test_f3_duration_and_nav_tiers(runner: TestRunner, catalog: Catalog) -> void:
+	runner.check_eq(TranslationNav.max_n_for_nav_rating(95.0), 9, "nav rating 95 unlocks N 9")
+	runner.check_eq(TranslationNav.max_public_catalog_n(), 6, "public book caps at N 6")
+	var scale4 := TranslationNav.duration_scale_for_n(4)
+	var scale9 := TranslationNav.duration_scale_for_n(9)
+	runner.check(scale9 < scale4 * 0.12, "N 9 duration scale about one tenth of N 4")
+	var lump4 := TranslationNav.lump_seconds_for_route(10, 4)
+	var lump9 := TranslationNav.lump_seconds_for_route(10, 9)
+	runner.check(lump9 < lump4 * 0.12, "N 9 lump about one tenth of N 4 on same friction")
+	for sector_id in catalog.sectors_by_id.keys():
+		for mapping_variant in catalog.list_translations_from(str(sector_id)):
+			if typeof(mapping_variant) != TYPE_DICTIONARY:
+				continue
+			var n := int(mapping_variant.get("n", 0))
+			runner.check(
+				n <= TranslationNav.max_public_catalog_n(),
+				"public translation N <= 6 from %s" % sector_id
+			)
+	var private_lib := [
+		{"source": "proxima", "solution": 900001, "target": "bela", "n": 8},
+	]
+	var partitioned := TranslationNav.partition_jump_offers([
+		{"translation": {"n": 4}, "private_library": false},
+		{"translation": {"n": 8}, "private_library": true},
+	])
+	runner.check_eq(partitioned.get("public", []).size(), 1, "partition keeps public offers")
+	runner.check_eq(partitioned.get("private", []).size(), 1, "partition keeps private library offers")
+	var saved := PlayerState._translation_library_to_save(private_lib)
+	runner.check_eq(str(saved[0].get("target", "")), "bela", "library save keeps target")
+	runner.check_eq(int(saved[0].get("n", 0)), 8, "library save keeps n")
+	var restored := PlayerState._translation_library_from_variant(saved)
+	runner.check_eq(int(restored[0].get("n", 0)), 8, "library load keeps n")
 
 
 static func _test_save_library_and_stability(runner: TestRunner, catalog: Catalog) -> void:

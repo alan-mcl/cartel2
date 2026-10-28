@@ -67,6 +67,10 @@ static func run(runner: TestRunner) -> void:
 	runner.check_eq(unspace_def.n, 4, "n4_default depth n")
 	var unspace := catalog.get_unspace_for_n(4)
 	runner.check_eq(str(unspace.get("id", "")), "n4_default", "get_unspace_for_n(4)")
+	for depth in range(5, 10):
+		var row := catalog.get_unspace_for_n(depth)
+		runner.check_eq(str(row.get("id", "")), "n%d_default" % depth, "get_unspace_for_n(%d)" % depth)
+		runner.check_eq(int(row.get("n", 0)), depth, "unspace row n matches depth")
 	var unspace_dict := catalog.get_unspace("n4_default")
 	runner.check(typeof(unspace_dict) == TYPE_DICTIONARY, "get_unspace still returns Dictionary")
 	runner.check(not unspace_dict.get("field", {}).is_empty(), "unspace dict includes field")

@@ -81,7 +81,8 @@
     "guidance_turn_rate": { "type": "number", "minimum": 0, "default": 0.0 },
     "intercept_chance": { "type": "number", "default": 0.0 },
     "nav_rating": { "type": "number", "default": 0.0 },
-    "translation_capacity": { "type": "number", "default": 0.0 }
+    "translation_capacity": { "type": "number", "default": 0.0 },
+    "solution_skill": { "type": "number", "minimum": 0, "maximum": 100, "default": 0.0 }
   },
   "$defs": {
     "signature": {

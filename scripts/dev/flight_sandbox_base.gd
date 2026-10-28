@@ -67,6 +67,9 @@ func _ready() -> void:
 	_ui_root = CanvasLayer.new()
 	_ui_root.visible = false
 	add_child(_ui_root)
+	var hyperdrive_layer := CanvasLayer.new()
+	hyperdrive_layer.visible = false
+	add_child(hyperdrive_layer)
 	_flight.bind(
 		self,
 		_world_loader,
@@ -75,6 +78,7 @@ func _ready() -> void:
 		_hud,
 		_camera,
 		_jump,
+		hyperdrive_layer,
 		_ui_root,
 		get_tree()
 	)
@@ -410,6 +414,18 @@ func _clear_traffic_root() -> void:
 	if _traffic_root != null and is_instance_valid(_traffic_root):
 		_traffic_root.queue_free()
 	_traffic_root = null
+
+
+## Headless smoke teardown before the sandbox node is freed.
+func smoke_teardown() -> void:
+	get_tree().paused = false
+	if _is_run_active():
+		_end_run()
+	_flight.clear_traffic()
+	_clear_traffic_root()
+	_world_loader.clear_world(_world)
+	if is_instance_valid(_player):
+		_player.freeze_motion()
 
 
 func _clear_projectiles(preserve: Array = []) -> void:

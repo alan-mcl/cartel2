@@ -17,7 +17,8 @@
       "gravitational": 7.0,
       "electromagnetic": 7.4,
       "computational": 2.4
-    }
+    },
+    "solution_skill": 28
   },
   {
     "id": "hyperdrive_alpha",
@@ -37,7 +38,8 @@
       "gravitational": 6.0,
       "electromagnetic": 6.2,
       "computational": 2.0
-    }
+    },
+    "solution_skill": 42
   },
   {
     "id": "hw_aperture_hyperdrive",
@@ -57,7 +59,8 @@
       "gravitational": 5.4,
       "electromagnetic": 5.8,
       "computational": 1.8
-    }
+    },
+    "solution_skill": 58
   },
   {
     "id": "prv_vertex_hyperdrive",
@@ -77,7 +80,8 @@
       "gravitational": 4.8,
       "electromagnetic": 5.2,
       "computational": 1.6
-    }
+    },
+    "solution_skill": 72
   },
   {
     "id": "ora_needle_hyperdrive",
@@ -97,6 +101,7 @@
       "gravitational": 4.2,
       "electromagnetic": 4.6,
       "computational": 1.4
-    }
+    },
+    "solution_skill": 88
   }
 ]

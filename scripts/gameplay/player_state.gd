@@ -18,6 +18,8 @@ var scanned_contacts: Array = []
 var spare_parts: Dictionary = {}
 ## Learned translations: `{ "source", "solution" }` records (unioned at jump gates).
 var translation_library: Array = []
+## In-flight hyperdrive solution calculation (empty when idle).
+var hyperdrive_calc: Dictionary = {}
 ## One-shot expiring translations to generated off-network sites (`VolatileTranslation` records).
 var volatile_translations: Array = []
 ## Active bounty contracts: target contact id -> volatile sector id for kill/disable credit.
@@ -93,6 +95,7 @@ func to_session_dict() -> Dictionary:
 		"scanned_contacts": _scanned_contacts_to_save(scanned_contacts),
 		"spare_parts": spare_parts.duplicate(),
 		"translation_library": _translation_library_to_save(translation_library),
+		"hyperdrive_calc": _hyperdrive_calc_to_save(hyperdrive_calc),
 		"volatile_translations": VolatileTranslation.to_save_array(volatile_translations),
 		"bounty_contract_sectors": bounty_contract_sectors.duplicate(),
 	}
@@ -106,6 +109,7 @@ func load_session_dict(data: Dictionary) -> void:
 	scanned_contacts = _scanned_contacts_from_variant(data.get("scanned_contacts", []))
 	spare_parts = _int_dict_from_variant(data.get("spare_parts", {}))
 	translation_library = _translation_library_from_variant(data.get("translation_library", []))
+	hyperdrive_calc = _hyperdrive_calc_from_variant(data.get("hyperdrive_calc", {}))
 	volatile_translations = VolatileTranslation.from_save_array(data.get("volatile_translations", []))
 	bounty_contract_sectors = _string_dict_from_variant(data.get("bounty_contract_sectors", {}))
 
@@ -283,6 +287,48 @@ static func _string_dict_from_variant(value: Variant) -> Dictionary:
 	return result
 
 
+static func _hyperdrive_calc_to_save(calc: Dictionary) -> Dictionary:
+	if calc.is_empty() or not bool(calc.get("active", false)):
+		return {}
+	var out := {
+		"active": true,
+		"source": str(calc.get("source", "")),
+		"target": str(calc.get("target", "")),
+		"n": int(calc.get("n", 0)),
+		"remaining_seconds": float(calc.get("remaining_seconds", 0.0)),
+		"salt": int(calc.get("salt", 0)),
+		"solution": int(calc.get("solution", 0)),
+		"hyperdrive_module_id": str(calc.get("hyperdrive_module_id", "")),
+		"nav_rating": float(calc.get("nav_rating", 0.0)),
+		"solution_skill": float(calc.get("solution_skill", 0.0)),
+	}
+	return out
+
+
+static func _hyperdrive_calc_from_variant(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY:
+		return {}
+	var data: Dictionary = value
+	if not bool(data.get("active", false)):
+		return {}
+	var source := str(data.get("source", ""))
+	var target := str(data.get("target", ""))
+	if source.is_empty() or target.is_empty():
+		return {}
+	return {
+		"active": true,
+		"source": source,
+		"target": target,
+		"n": int(data.get("n", 4)),
+		"remaining_seconds": maxf(0.0, float(data.get("remaining_seconds", 0.0))),
+		"salt": int(data.get("salt", 0)),
+		"solution": int(data.get("solution", 0)),
+		"hyperdrive_module_id": str(data.get("hyperdrive_module_id", "")),
+		"nav_rating": float(data.get("nav_rating", 0.0)),
+		"solution_skill": float(data.get("solution_skill", 0.0)),
+	}
+
+
 static func _translation_library_to_save(library: Array) -> Array:
 	var out: Array = []
 	for entry_variant in library:
@@ -292,10 +338,17 @@ static func _translation_library_to_save(library: Array) -> Array:
 		var source := str(entry.get("source", ""))
 		if source.is_empty():
 			continue
-		out.append({
+		var restored := {
 			"source": source,
 			"solution": int(entry.get("solution", 0)),
-		})
+		}
+		var target := str(entry.get("target", "")).strip_edges()
+		if not target.is_empty():
+			restored["target"] = target
+		var n := int(entry.get("n", 0))
+		if n >= 4:
+			restored["n"] = n
+		out.append(restored)
 	return out
 
 
@@ -310,10 +363,17 @@ static func _translation_library_from_variant(value: Variant) -> Array:
 		var source := str(entry.get("source", ""))
 		if source.is_empty():
 			continue
-		out.append({
+		var restored := {
 			"source": source,
 			"solution": int(entry.get("solution", 0)),
-		})
+		}
+		var target := str(entry.get("target", "")).strip_edges()
+		if not target.is_empty():
+			restored["target"] = target
+		var n := int(entry.get("n", 0))
+		if n >= 4:
+			restored["n"] = n
+		out.append(restored)
 	return out
 
 

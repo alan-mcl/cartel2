@@ -55,6 +55,8 @@ func step(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 
 	session.advance_orbital_phase(catalog, delta)
 	VolatileTranslation.sweep(session)
+	if not session.docked and not session.in_unspace:
+		HyperdriveSolution.advance(session, catalog, float(advance_result.get("gst_delta", 0.0)))
 
 	for subsystem_variant in _subsystems.values():
 		var subsystem: SimSubsystem = subsystem_variant

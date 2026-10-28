@@ -175,7 +175,18 @@ func _physics_process(delta: float) -> void:
 			"in_flight": not session.docked,
 			"fire": firing,
 			"active_weapon_slot": weapons.selected_slot if firing else "",
+			"hyperdrive_spool": HyperdriveSolution.is_active(session),
 		}
+		if HyperdriveSolution.is_active(session):
+			HyperdriveSolution.sustain_spool(
+				catalog,
+				session,
+				assembled_ship,
+				owned_ship,
+				global_position,
+				bool(physics_inputs.get("thrust", false)),
+				bool(physics_inputs.get("boost", false))
+			)
 		_sim.step_operating(delta, inputs, 1, combat_state)
 		_sim.refresh_signature(delta)
 		_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)

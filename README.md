@@ -8,7 +8,7 @@
 
 ## Project status
 
-The playable loop is flight, docking, commodity trade, ship fitting, passenger and freight charters, and scan and bounty work. Scan and bounty charters can grant a private volatile translation. Public routes include n=5 and n=6 translations on the same 4-space presentation. Fitted hyperdrives open the same translation UI from deep orbit (H in flight). There is no separate 5-space or 6-space layout and no combat game-over screen.
+The playable loop is flight, docking, commodity trade, ship fitting, passenger and freight charters, and scan and bounty work. Scan and bounty charters can grant a private volatile translation. Public routes include n=5 and n=6 translations on the same 4-space presentation. Fitted hyperdrives open a dedicated overlay from deep orbit (H in flight) to compute library solutions or jump using stored translations. There is no separate 5-space or 6-space layout and no combat game-over screen.
 
 What is not built: [docs/design/architecture/architecture.md](docs/design/architecture/architecture.md#not-yet-implemented). Open follow-ons: [docs/design/architecture/backlog.md](docs/design/architecture/backlog.md).
 

@@ -49,6 +49,12 @@ static func stop_ambience(immediate: bool = false) -> void:
 		mgr.call("stop_ambience", immediate)
 
 
+static func release_playback_streams() -> void:
+	var mgr := _mgr()
+	if mgr != null and mgr.has_method("release_playback_streams"):
+		mgr.call("release_playback_streams")
+
+
 static func play_ui(suffix: String) -> void:
 	var mgr := _mgr()
 	if mgr != null:

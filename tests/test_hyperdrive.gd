@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_proxima_distance(runner, catalog)
 	_test_dragon_post_thrust_budget(runner, catalog)
 	_test_dragon_gold_thrust_budget(runner, catalog)
+	_test_solution_calculation(runner, catalog)
 
 
 static func _owned_for_template(catalog: Catalog, ship_id: String) -> OwnedShip:
@@ -120,6 +121,58 @@ static func _test_dragon_post_thrust_budget(runner: TestRunner, catalog: Catalog
 		not _spool_ok(catalog, session, assembled, owned, pos, true),
 		"hyperdrive: Dragon Post under thrust refused"
 	)
+
+
+static func _assembled_with_nav(catalog: Catalog, nav_module_id: String) -> AssembledShip:
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "test_hd_nav",
+			"template_id": "flare_on_ss",
+			"chassis_id": "flare_on_chassis",
+		}
+	)
+	for entry_variant in owned.modules:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var slot := str(entry.get("slot", ""))
+		var existing_id := str(entry.get("module_id", ""))
+		var module_def := catalog.get_module_def(existing_id)
+		if module_def != null and str(module_def.category) == "navigation":
+			owned.set_module(slot, nav_module_id)
+			return ShipAssembler.assemble_owned(catalog, owned)
+	owned.set_module("system_5", nav_module_id)
+	return ShipAssembler.assemble_owned(catalog, owned)
+
+
+static func _test_solution_calculation(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "HD-1", "tester"), "hyperdrive calc new game")
+	session.docked = false
+	var assembled := _assembled_with_nav(catalog, "sne_astrolabe")
+	var module := catalog.get_module_def("hyperdrive_alpha")
+	runner.check(module != null, "hyperdrive_alpha for calc test")
+	var deep := HyperdriveSolution.calculation_seconds(12, 9, 55.0, 42.0)
+	var shallow := HyperdriveSolution.calculation_seconds(12, 4, 55.0, 42.0)
+	runner.check(deep > shallow, "deeper N costs more GST to calculate")
+	var start := HyperdriveSolution.start_calculation(
+		session, catalog, assembled, "bela", 5, module
+	)
+	runner.check(bool(start.get("ok", false)), "start calculation proxima→bela 5-space")
+	runner.check(HyperdriveSolution.is_active(session), "calc active after start")
+	HyperdriveSolution.force_complete_for_tests(session, catalog, true)
+	runner.check(not HyperdriveSolution.is_active(session), "calc completes")
+	runner.check_eq(session.player.translation_library.size(), 1, "success appends library row")
+	var entry: Dictionary = session.player.translation_library[0]
+	runner.check_eq(str(entry.get("target", "")), "bela", "stored target")
+	runner.check_eq(int(entry.get("n", 0)), 5, "stored depth")
+	start = HyperdriveSolution.start_calculation(session, catalog, assembled, "horizon", 5, module)
+	runner.check(bool(start.get("ok", false)), "start second calc")
+	HyperdriveSolution.force_complete_for_tests(session, catalog, false)
+	runner.check_eq(session.player.translation_library.size(), 1, "failed calc stores nothing")
+	HyperdriveSolution.cancel(session, "test cancel")
+	runner.check(not HyperdriveSolution.is_active(session), "cancel clears calc")
 
 
 static func _test_dragon_gold_thrust_budget(runner: TestRunner, catalog: Catalog) -> void:

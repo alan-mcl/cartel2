@@ -5,7 +5,10 @@
     "name": "4-space transit",
     "orbit_name": "4-space",
     "play_bounds": 8000,
-    "spawn": { "x": -3600, "y": 0 },
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
     "objective": "Reach the exit portal",
     "gst": {
       "pulse_min": 0.35,
@@ -53,6 +56,341 @@
         "count_max": 3,
         "speed_min": 22,
         "speed_max": 48,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
+      }
+    }
+  },
+  {
+    "id": "n5_default",
+    "n": 5,
+    "name": "5-space transit",
+    "orbit_name": "5-space",
+    "play_bounds": 8000,
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
+    "objective": "Reach the exit portal",
+    "gst": {
+      "pulse_min": 0.316,
+      "pulse_max": 2.76,
+      "stretch_min": 0.324,
+      "stretch_max": 3.14,
+      "slip_chance": 0.152,
+      "slip_min": 1.9,
+      "slip_max": 20.8
+    },
+    "field": {
+      "palette": {
+        "peak": "#2ed0ff",
+        "trough": "0.06,0.03,0.37,0.96",
+        "shallow": "0.12,0.09,0.63,0.96",
+        "bright": "0.33,0.93,1.00,0.98",
+        "ridge": "#96f1ff",
+        "edge": "#48c1ec",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 1,
+        "fov_vertex_count": 54,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.148,
+        "height_scale": 720,
+        "vertex_count_min": 192,
+        "vertex_count_max": 6600,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
+      },
+      "inhabitants": {
+        "count_min": 1,
+        "count_max": 4,
+        "speed_min": 25,
+        "speed_max": 56,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
+      }
+    }
+  },
+  {
+    "id": "n6_default",
+    "n": 6,
+    "name": "6-space transit",
+    "orbit_name": "6-space",
+    "play_bounds": 8000,
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
+    "objective": "Reach the exit portal",
+    "gst": {
+      "pulse_min": 0.282,
+      "pulse_max": 3.12,
+      "stretch_min": 0.298,
+      "stretch_max": 3.48,
+      "slip_chance": 0.184,
+      "slip_min": 1.8,
+      "slip_max": 23.6
+    },
+    "field": {
+      "palette": {
+        "peak": "#5cd8ff",
+        "trough": "0.08,0.04,0.41,0.96",
+        "shallow": "0.15,0.10,0.68,0.96",
+        "bright": "0.39,0.93,1.00,0.98",
+        "ridge": "#acf3ff",
+        "edge": "#68cbf1",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 2,
+        "fov_vertex_count": 58,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.116,
+        "height_scale": 840,
+        "vertex_count_min": 264,
+        "vertex_count_max": 7200,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
+      },
+      "inhabitants": {
+        "count_min": 1,
+        "count_max": 5,
+        "speed_min": 28,
+        "speed_max": 64,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
+      }
+    }
+  },
+  {
+    "id": "n7_default",
+    "n": 7,
+    "name": "7-space transit",
+    "orbit_name": "7-space",
+    "play_bounds": 8000,
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
+    "objective": "Reach the exit portal",
+    "gst": {
+      "pulse_min": 0.248,
+      "pulse_max": 3.48,
+      "stretch_min": 0.272,
+      "stretch_max": 3.82,
+      "slip_chance": 0.216,
+      "slip_min": 1.7,
+      "slip_max": 26.4
+    },
+    "field": {
+      "palette": {
+        "peak": "#8be0ff",
+        "trough": "0.09,0.06,0.46,0.96",
+        "shallow": "0.17,0.10,0.72,0.96",
+        "bright": "0.44,0.94,1.00,0.98",
+        "ridge": "#c3f4ff",
+        "edge": "#88d4f5",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 3,
+        "fov_vertex_count": 63,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.084,
+        "height_scale": 960,
+        "vertex_count_min": 336,
+        "vertex_count_max": 7800,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
+      },
+      "inhabitants": {
+        "count_min": 2,
+        "count_max": 6,
+        "speed_min": 31,
+        "speed_max": 72,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
+      }
+    }
+  },
+  {
+    "id": "n8_default",
+    "n": 8,
+    "name": "8-space transit",
+    "orbit_name": "8-space",
+    "play_bounds": 8000,
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
+    "objective": "Reach the exit portal",
+    "gst": {
+      "pulse_min": 0.214,
+      "pulse_max": 3.84,
+      "stretch_min": 0.246,
+      "stretch_max": 4.16,
+      "slip_chance": 0.248,
+      "slip_min": 1.6,
+      "slip_max": 29.2
+    },
+    "field": {
+      "palette": {
+        "peak": "#b9e8ff",
+        "trough": "0.11,0.07,0.50,0.96",
+        "shallow": "0.20,0.11,0.77,0.96",
+        "bright": "0.50,0.94,1.00,0.98",
+        "ridge": "#d9f6ff",
+        "edge": "#a8defa",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 4,
+        "fov_vertex_count": 67,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.052,
+        "height_scale": 1080,
+        "vertex_count_min": 408,
+        "vertex_count_max": 8400,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
+      },
+      "inhabitants": {
+        "count_min": 2,
+        "count_max": 7,
+        "speed_min": 34,
+        "speed_max": 80,
+        "radius_min": 90,
+        "radius_max": 180,
+        "wander_radius_fraction": 0.72,
+        "min_spawn_dist": 900,
+        "fade_band": 0.12,
+        "lobe_count_min": 8,
+        "lobe_count_max": 12
+      }
+    }
+  },
+  {
+    "id": "n9_default",
+    "n": 9,
+    "name": "9-space transit",
+    "orbit_name": "9-space",
+    "play_bounds": 8000,
+    "spawn": {
+      "x": -3600,
+      "y": 0
+    },
+    "objective": "Reach the exit portal",
+    "gst": {
+      "pulse_min": 0.18,
+      "pulse_max": 4.2,
+      "stretch_min": 0.22,
+      "stretch_max": 4.5,
+      "slip_chance": 0.28,
+      "slip_min": 1.5,
+      "slip_max": 32.0
+    },
+    "field": {
+      "palette": {
+        "peak": "#e8f0ff",
+        "trough": "0.12,0.08,0.55,0.96",
+        "shallow": "0.22,0.12,0.82,0.96",
+        "bright": "0.55,0.95,1.00,0.98",
+        "ridge": "#f0f8ff",
+        "edge": "#c8e8ff",
+        "portal_host": "0.95,0.55,0.25,0.45",
+        "portal_rim": "#fff0a8",
+        "portal_glow": "0.95,0.55,0.25,0.65",
+        "portal_core": "0.04,0.02,0.08,0.88"
+      },
+      "topo": {
+        "seed_salt": 5,
+        "fov_vertex_count": 72,
+        "scatter_margin": 1.6,
+        "quad_merge_chance": 0.02,
+        "height_scale": 1200,
+        "vertex_count_min": 480,
+        "vertex_count_max": 9000,
+        "min_dist_factor": 0.92,
+        "default_zoom": 0.72
+      },
+      "portal": {
+        "interact_radius": 220,
+        "interactable": "unspace_exit",
+        "origin_min_fraction": 0.25,
+        "origin_max_fraction": 0.78,
+        "spawn_separation_fraction": 0.35,
+        "score_spawn_weight": 0.35
+      },
+      "inhabitants": {
+        "count_min": 3,
+        "count_max": 8,
+        "speed_min": 38,
+        "speed_max": 88,
         "radius_min": 90,
         "radius_max": 180,
         "wander_radius_fraction": 0.72,

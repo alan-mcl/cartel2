@@ -1,6 +1,6 @@
 # Translation and navigation stability
 
-**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives can open the same translation overlay from deep orbit (**H** in flight) when power and compute cover the spool spike. Learning and copying solutions are not implemented. Higher-order (5-space and 6-space) translations use the same transit field presentation as 4-space until layer-specific environments exist. In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
+**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Fitted hyperdrives open a dedicated overlay from deep orbit (**H** in flight) when power and compute cover the spool spike: compute private solutions into the library, or translate using library records. Buying or copying solutions from vendors is not implemented. Each translation N loads its matching catalog unspace row (4–9). Library-only layers (N > 6) appear in a private strip on the jump overlay. In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
 
 ## Stored translations
 
@@ -21,8 +21,8 @@ The ship’s **navigation computer** (`category: navigation`, separate from sens
 Fill policy in play:
 
 - Every **public 4-space** translation from the current sector is always loaded (routine commercial travel).
-- Remaining slots take higher-order translations the computer tier supports (`nav_rating` ≥ 55 → 5-space, ≥ 75 → 6-space), preferring lower N and easier routes.
-- Player **library** entries can surface translations above the computer tier, still at that computer’s accuracy.
+- Remaining slots take higher-order translations the computer tier supports (`nav_rating` ≥ 55 → 5-space through ≥ 95 → 9-space), preferring lower N and easier routes. The public book still only contains N 4–6.
+- Player **library** entries can surface translations above the computer tier or above N 6 (private strip), still at that computer’s accuracy.
 
 The player also has a **translation library** (saved, empty on a new game). Library entries are unioned into the jump list when the ship is at the matching source. Access does not copy solutions onto the ship; a basic computer still shows a learned 6-space solution but computes low accuracy for it.
 
@@ -54,7 +54,7 @@ Future Unspace hazard and environment systems will consume stability and N-space
 
 **Friction** on a route edge still drives commodity markets and charter deadlines for the **public 4-space** path.
 
-When the player flies a specific translation, GST **entry** and **exit** lumps use that translation’s expected duration (friction-based seconds scaled by `duration_scale` for higher-order solutions). Public 4-space scales remain unchanged from the pre-inventory model.
+When the player flies a specific translation, GST **entry** and **exit** lumps use that translation’s expected duration: `friction × 240 × duration_scale(n)` with `duration_scale(n) = 0.1 ^ ((n - 4) / 5)` (4-space scale **1**). Authored `duration_scale` on route rows is ignored at synthesis time in favour of this curve.
 
 ## Prototype limits
 

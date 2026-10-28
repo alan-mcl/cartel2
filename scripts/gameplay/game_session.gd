@@ -511,8 +511,11 @@ func enter_unspace(
 		):
 			VolatileTranslation.mark_outbound_consumed(self, record)
 
-	var presentation_n := 4
+	var presentation_n := n
 	var unspace := catalog.get_unspace_for_n(presentation_n)
+	if unspace.is_empty():
+		presentation_n = 4
+		unspace = catalog.get_unspace_for_n(presentation_n)
 	if unspace.is_empty():
 		return false
 

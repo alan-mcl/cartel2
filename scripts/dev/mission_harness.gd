@@ -565,6 +565,14 @@ func smoke_begin_site_only(deep_space_site_id: String = "deep_space") -> bool:
 	return _run_active
 
 
+## Headless smoke teardown before the harness node is freed.
+func smoke_shutdown() -> void:
+	get_tree().paused = false
+	if _run_active and _main != null and is_instance_valid(_main):
+		_main.dev_teardown_active_run()
+	_run_active = false
+
+
 func _reload_harness() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()

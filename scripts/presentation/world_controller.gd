@@ -9,6 +9,7 @@ var _starfield: Node2D
 var _player: CharacterBody2D
 var _pause: CanvasLayer
 var _jump: CanvasLayer
+var _hyperdrive: CanvasLayer
 var _hud: CanvasLayer
 var _ui_root: CanvasLayer
 var _main: Node2D
@@ -27,6 +28,7 @@ func bind(
 	player: CharacterBody2D,
 	pause: CanvasLayer,
 	jump: CanvasLayer,
+	hyperdrive: CanvasLayer,
 	hud: CanvasLayer,
 	ui_root: CanvasLayer,
 	catalog: Catalog,
@@ -42,6 +44,7 @@ func bind(
 	_player = player
 	_pause = pause
 	_jump = jump
+	_hyperdrive = hyperdrive
 	_hud = hud
 	_ui_root = ui_root
 	_catalog = catalog
@@ -58,8 +61,7 @@ func get_loader() -> WorldLoader:
 
 func clear_world() -> void:
 	_flight.clear_traffic()
-	for child in _world.get_children():
-		child.queue_free()
+	_world_loader.clear_world(_world)
 
 
 func load_current_space(place_player: bool = true) -> void:
@@ -152,7 +154,12 @@ func try_interact(target: Interactable) -> void:
 
 
 func try_hyperdrive_spool() -> void:
-	if _main.session.docked or _main.session.in_unspace or _jump.visible:
+	if (
+		_main.session.docked
+		or _main.session.in_unspace
+		or _jump.visible
+		or (_hyperdrive != null and _hyperdrive.visible)
+	):
 		return
 	var thrusting := false
 	var boosting := false
@@ -180,7 +187,53 @@ func try_hyperdrive_spool() -> void:
 			_main.session.last_log = message
 			_on_session_changed.call()
 		return
-	open_jump_overlay(str(result.get("title", "Hyperdrive")))
+	open_hyperdrive_overlay(str(result.get("title", "Hyperdrive")))
+
+
+func open_hyperdrive_overlay(module_title: String) -> void:
+	if _main.session.docked or _main.session.in_unspace:
+		return
+	var module_def := Hyperdrive.fitted_module(_main.player_ship)
+	if module_def == null:
+		return
+	_tree.paused = true
+	_pause.close()
+	if _hyperdrive.has_method("set_assembled_ship"):
+		_hyperdrive.set_assembled_ship(_main.player_ship)
+	if _hyperdrive.has_method("bind"):
+		_hyperdrive.bind(_catalog, _main.session, _main.player_ship, module_def)
+	_hyperdrive.open(module_title)
+	_on_interaction_target_changed.call(_player.get_current_target())
+
+
+func on_hyperdrive_calculation_requested(target_sector_id: String, n: int) -> void:
+	if target_sector_id.is_empty():
+		return
+	var module_def := Hyperdrive.fitted_module(_main.player_ship)
+	var result := HyperdriveSolution.start_calculation(
+		_main.session,
+		_catalog,
+		_main.player_ship,
+		target_sector_id,
+		n,
+		module_def
+	)
+	_tree.paused = false
+	if bool(result.get("ok", false)):
+		_main.session.last_log = str(result.get("message", ""))
+	else:
+		_main.session.last_log = str(result.get("message", "Calculation refused."))
+	_on_session_changed.call()
+
+
+func on_hyperdrive_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
+	_tree.paused = false
+	on_jump_requested(target_sector_id, n, solution)
+
+
+func on_hyperdrive_cancelled() -> void:
+	_tree.paused = false
+	_on_interaction_target_changed.call(_player.get_current_target())
 
 
 func open_jump_overlay(gate_title: String) -> void:

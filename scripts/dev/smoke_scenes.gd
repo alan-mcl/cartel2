@@ -3,6 +3,8 @@ extends SceneTree
 ## Lightweight rendered-boundary smoke suite. Run through scripts/ci/smoke_scenes.sh;
 ## the wrapper turns Godot engine/script errors into a failing command.
 
+const DRAIN_MAX_FRAMES := 120
+
 var _failures: int = 0
 
 
@@ -25,6 +27,7 @@ func _run() -> void:
 func _finish() -> void:
 	await _drain_root_children()
 	ChassisSprite.clear_cache()
+	AudioService.release_playback_streams()
 	var audio_mgr := root.get_node_or_null("AudioManager")
 	if audio_mgr != null:
 		AudioService.unbind_manager(audio_mgr)
@@ -36,13 +39,34 @@ func _finish() -> void:
 	quit(0)
 
 
+func _pump_frames(count: int) -> void:
+	for _i in count:
+		await process_frame
+		await physics_frame
+
+
+func _wait_node_freed(node: Node) -> void:
+	if node == null:
+		return
+	var frames := 0
+	while is_instance_valid(node) and frames < DRAIN_MAX_FRAMES:
+		await process_frame
+		await physics_frame
+		frames += 1
+
+
 func _free_and_drain(node: Node) -> void:
 	if node == null:
 		return
 	if is_instance_valid(node):
+		if node.has_method("smoke_teardown"):
+			node.smoke_teardown()
+		elif node.has_method("smoke_shutdown"):
+			node.smoke_shutdown()
+		elif node.has_method("smoke_unload"):
+			node.smoke_unload()
 		node.queue_free()
-	for _i in 2:
-		await process_frame
+	await _wait_node_freed(node)
 
 
 func _drain_root_children() -> void:
@@ -51,8 +75,7 @@ func _drain_root_children() -> void:
 			continue
 		if is_instance_valid(child):
 			child.queue_free()
-	for _i in 2:
-		await process_frame
+	await _pump_frames(DRAIN_MAX_FRAMES)
 
 
 func _smoke_embedded_shipyard(catalog: Catalog) -> void:
@@ -96,6 +119,8 @@ func _smoke_save_loaded_world(catalog: Catalog) -> void:
 	await process_frame
 	_check(world_root.get_node_or_null("NspaceField") != null, "unspace load creates field")
 	_check(not loader.get_nav_contacts(catalog, true).is_empty(), "unspace exposes exit nav contact")
+	loader.clear_world(world_root)
+	await _pump_frames(30)
 	await _free_and_drain(world_root)
 
 

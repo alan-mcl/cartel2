@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/pause_overlay.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/jump_overlay.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/hyperdrive_overlay.tscn" id="16"]
 [ext_resource type="PackedScene" path="res://scenes/main_menu.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://scenes/new_game_overlay.tscn" id="9"]
 [ext_resource type="PackedScene" path="res://scenes/save_overlay.tscn" id="10"]
@@ -31,6 +32,8 @@ position = Vector2(-400, -150)
 [node name="PauseOverlay" parent="." unique_id=1101351505 instance=ExtResource("5")]
 
 [node name="JumpOverlay" parent="." unique_id=1716557497 instance=ExtResource("7")]
+
+[node name="HyperdriveOverlay" parent="." instance=ExtResource("16")]
 
 [node name="MainMenu" parent="." unique_id=1112122443 instance=ExtResource("8")]
 

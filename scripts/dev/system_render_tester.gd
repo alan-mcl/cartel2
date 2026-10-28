@@ -167,6 +167,11 @@ func _populate_sector_options() -> void:
 		_sector_option.add_item(str(entry.get("label", sector_id)))
 
 
+## Headless smoke teardown before the tester node is freed.
+func smoke_unload() -> void:
+	_loader.clear_world(_world)
+
+
 func _load_selected_sector() -> void:
 	if _sector_ids.is_empty():
 		return

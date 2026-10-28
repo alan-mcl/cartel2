@@ -652,9 +652,7 @@ func _synthesize_sector_mappings() -> void:
 				continue
 			var entry: Dictionary = entry_variant
 			var n := int(entry.get("n", 4))
-			var duration_scale := float(entry.get("duration_scale", 1.0))
-			if duration_scale <= 0.0:
-				duration_scale = 1.0
+			var duration_scale := TranslationNav.duration_scale_for_n(n)
 			var lump_seconds := float(friction) * ROUTE_SECONDS_PER_FRICTION * duration_scale
 			var ease := float(entry.get("ease", -1.0))
 			if ease < 0.0:
