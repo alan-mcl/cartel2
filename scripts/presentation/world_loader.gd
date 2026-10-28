@@ -271,6 +271,11 @@ func is_unspace_fold_animating() -> bool:
 	return _nspace_field.is_fold_animating()
 
 
+func sync_unspace_shards(session: GameSession, delta: float) -> void:
+	if _nspace_field != null and is_instance_valid(_nspace_field):
+		_nspace_field.sync_shard_visuals(session, delta)
+
+
 func apply_salvage_visuals(session: GameSession) -> void:
 	for entity_id in spawned_by_id:
 		var node: Node = spawned_by_id[entity_id]

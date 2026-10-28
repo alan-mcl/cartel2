@@ -16,6 +16,8 @@ var pending_destination_id: String = ""
 var unspace_flux: Dictionary = {}
 ## Ephemeral fold angle (F6); not persisted across saves.
 var unspace_fold: Dictionary = {}
+## Ephemeral N-space shard hazards (F7); not persisted across saves.
+var unspace_shards: Dictionary = {}
 var gst_seconds: float = 0.0
 ## Per-save RNG salt for daily procedural content (e.g. passenger charter boards).
 var run_seed: int = 0

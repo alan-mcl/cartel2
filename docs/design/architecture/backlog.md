@@ -18,23 +18,18 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 |----|------|-----|------|
 |F1|in flight|high| Unspace remainder after F5–F8: infinite unspace navigation, and randomised player spawn plus exit-portal placement|
 |F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
-|F7|in flight|high| Unspace phase 4. Unspace shards: moving impacts, speed and rate from instability. See below.|
 |F8|in flight|high| Unspace phase 5. Ascidians sting on scan, fold nearby geometry, drift in when unstable, and shed shards. See below.|
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
 ## Unspace N 4–9
 
-Status: **Discuss**. Do these in order: F7, F8. F1 is what remains after them (infinite navigation, randomised spawn and portal placement).
+Status: **Discuss**. Do **F8** next. F1 is what remains after F8 (infinite navigation, randomised spawn and portal placement).
 
 Public routes already carry 4-space on every edge and a few 5- and 6-space alternates. Transit loads the catalog row matching translation N (`n4_default` … `n9_default`). Hull stress exists and ends the career at zero hull, but nothing calls it. Stability is `translation_stability` (higher is safer). Nav computers can use or display deeper layers up to N 9 at `nav_rating` 95; the public book still only lists N 4–6.
 
 Instability for hazards is `1 - stability/100`, further scaled by depth `(N - 4)`. A calm 4-space crossing stays quiet; a poor solution in 9-space does not.
 
 The public book stays N 4–6. N 7–9 exist only as private solutions: already in the translation library (buy or learn, later), or computed in flight with a fitted hyperdrive. Leave infinite unspace navigation and n>4 trade edges out. Update `docs/design/content/n-space.md` and `translations.md` in each phase that changes behaviour. Do not edit frozen setting files. Remove the matching F-row in the same change as the work.
-
-### F7 — Unspace shards
-
-Moving hazards in the play disc. Count, speed, and spawn rate rise with instability and N. They are contacts, not pooled projectiles. A hit applies hull stress and a smaller velocity kick than flux, then the shard shatters or glances off. They show on the local radar when the ship has sensors. They do not home.
 
 ### F8 — Ascidians
 

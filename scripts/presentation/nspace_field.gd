@@ -4,6 +4,7 @@ class_name NspaceField
 const InteractableScene := preload("res://scenes/world/interactable_marker.tscn")
 const Ascidian := preload("res://scripts/presentation/ascidian.gd")
 const NspaceBackdrop3D := preload("res://scripts/presentation/nspace_backdrop_3d.gd")
+const UnspaceShardVisual := preload("res://scripts/presentation/unspace_shard_visual.gd")
 
 var _play_bounds: float = 8000.0
 var _rng := RandomNumberGenerator.new()
@@ -42,6 +43,9 @@ var _fold_anim_pivot: Vector2 = Vector2.ZERO
 var _fold_anim_delta_rad: float = 0.0
 var _fold_anim_start_verts: PackedVector2Array = PackedVector2Array()
 var _fold_anim_start_portal: Vector2 = Vector2.INF
+
+var _shard_visuals: Dictionary = {}
+var _shard_sync_delta: float = 0.0
 
 
 func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play_bounds: float) -> void:
@@ -809,6 +813,55 @@ func _clear_ascidians() -> void:
 		if ascidian_variant is Node:
 			(ascidian_variant as Node).queue_free()
 	_ascidians.clear()
+
+
+func sync_shard_visuals(session: GameSession, delta: float) -> void:
+	_shard_sync_delta = delta
+	if session == null or not session.in_unspace:
+		_clear_shard_visuals()
+		return
+
+	var entries: Variant = session.world.unspace_shards.get("entries", [])
+	if typeof(entries) != TYPE_ARRAY:
+		_clear_shard_visuals()
+		return
+
+	var seen: Dictionary = {}
+	for entry_variant in entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var shard_id := int(entry.get("id", -1))
+		if shard_id < 0:
+			continue
+		seen[shard_id] = true
+		var pos := Vector2(float(entry.get("pos_x", 0.0)), float(entry.get("pos_y", 0.0)))
+		var vel := Vector2(float(entry.get("vel_x", 0.0)), float(entry.get("vel_y", 0.0)))
+		var visual: UnspaceShardVisual = _shard_visuals.get(shard_id, null)
+		if visual == null or not is_instance_valid(visual):
+			visual = UnspaceShardVisual.new()
+			visual.name = "Shard_%d" % shard_id
+			add_child(visual)
+			visual.configure(pos, vel)
+			_shard_visuals[shard_id] = visual
+		else:
+			visual.sync_kinematic(pos, vel, _shard_sync_delta)
+
+	for shard_id in _shard_visuals.keys():
+		if seen.has(shard_id):
+			continue
+		var stale: Variant = _shard_visuals[shard_id]
+		if stale is Node and is_instance_valid(stale):
+			(stale as Node).queue_free()
+		_shard_visuals.erase(shard_id)
+
+
+func _clear_shard_visuals() -> void:
+	for shard_id in _shard_visuals.keys():
+		var node: Variant = _shard_visuals[shard_id]
+		if node is Node and is_instance_valid(node):
+			(node as Node).queue_free()
+	_shard_visuals.clear()
 
 
 func _barycentric(point: Vector2, a: Vector2, b: Vector2, c: Vector2) -> Vector3:

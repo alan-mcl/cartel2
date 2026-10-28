@@ -28,6 +28,7 @@ func _init() -> void:
 	TestHyperdrive.run(runner)
 	TestUnspaceFlux.run(runner)
 	TestUnspaceFold.run(runner)
+	TestUnspaceShards.run(runner)
 	TestEconomy.run(runner)
 	TestCommodityCargo.run(runner)
 	TestCargoRequirements.run(runner)

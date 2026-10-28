@@ -102,6 +102,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if _main.session.in_unspace:
 		_tick_unspace_flux(delta)
 		_tick_unspace_fold(delta)
+		_tick_unspace_shards(delta)
 	elif _player.has_method("set_unspace_flux_stress"):
 		_player.set_unspace_flux_stress(false, delta)
 
@@ -311,6 +312,10 @@ func _collect_nav_contacts() -> Array:
 	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
 	var contacts: Array = []
 	contacts.append_array(landmark_contacts)
+	if _main.session.in_unspace and _unspace_shards_on_radar():
+		for shard_variant in UnspaceShards.get_contacts(_main.session):
+			if typeof(shard_variant) == TYPE_DICTIONARY:
+				contacts.append(shard_variant)
 	if _main.session.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
 		contacts = _filter_topology_contacts(contacts)
 	if not _main.session.in_unspace:
@@ -561,6 +566,43 @@ func _purge_removed_bounty_actors() -> void:
 			continue
 		kept.append(actor)
 	_traffic_director.actors = kept
+
+
+func _unspace_shards_on_radar() -> bool:
+	if _player.assembled_ship == null or _player.operating_state == null:
+		return false
+	if not _player.assembled_ship.has_active_sensor_package():
+		return false
+	return bool(_player.operating_state.active_systems.get("active_sensors", false))
+
+
+func _tick_unspace_shards(delta: float) -> void:
+	var shard_result: Dictionary = UnspaceShards.advance(
+		_main.session,
+		delta,
+		_player.global_position,
+		_main.play_bounds
+	)
+	for hit_variant in shard_result.get("hits", []):
+		if typeof(hit_variant) != TYPE_DICTIONARY:
+			continue
+		var hit: Dictionary = hit_variant
+		var kick: Vector2 = hit.get("kick", Vector2.ZERO)
+		if kick.length_squared() > 1.0:
+			_player.apply_weapon_impulse(kick)
+		var stress := float(hit.get("hull_stress", 0.0))
+		if stress > 0.0:
+			_main.session.apply_hull_stress(
+				stress,
+				0.5,
+				_player.assembled_ship if _player != null else null
+			)
+			if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
+				_player.refresh_hull_destroyed_presentation()
+			elif stress > 0.0:
+				_main.session.last_log = "N-space shard impact."
+				_main.session.changed.emit()
+	_world_loader.sync_unspace_shards(_main.session, delta)
 
 
 func _tick_unspace_fold(delta: float) -> void:
