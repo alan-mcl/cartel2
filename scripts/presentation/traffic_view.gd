@@ -43,9 +43,8 @@ func clear() -> void:
 	for node_variant in _nodes_by_id.values():
 		if typeof(node_variant) != TYPE_OBJECT:
 			continue
-		var node: Node = node_variant
-		if is_instance_valid(node):
-			node.queue_free()
+		if is_instance_valid(node_variant):
+			(node_variant as Node).queue_free()
 	_nodes_by_id.clear()
 	_far_thrust_by_id.clear()
 	_far_exhaust_by_id.clear()

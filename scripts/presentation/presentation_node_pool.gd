@@ -40,7 +40,8 @@ func release(node: Node) -> void:
 
 
 func clear() -> void:
-	for node in _available:
-		if is_instance_valid(node):
-			node.queue_free()
+	for i in range(_available.size() - 1, -1, -1):
+		var node_ref: Variant = _available[i]
+		if is_instance_valid(node_ref):
+			(node_ref as Node).queue_free()
 	_available.clear()

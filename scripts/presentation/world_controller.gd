@@ -72,6 +72,7 @@ func load_current_space(place_player: bool = true) -> void:
 
 
 func load_current_sector(place_player: bool = true, spawn_near: String = "") -> void:
+	_flight.clear_traffic()
 	_set_play_bounds(
 		_world_loader.load_sector(_world, _catalog, _main.session, _main.session.sector_id)
 	)
@@ -83,6 +84,7 @@ func load_current_sector(place_player: bool = true, spawn_near: String = "") -> 
 
 
 func load_unspace(place_player: bool = true) -> void:
+	_flight.clear_traffic()
 	_set_play_bounds(
 		_world_loader.load_unspace(_world, _catalog, _main.session, _main.session.unspace_world_id)
 	)
