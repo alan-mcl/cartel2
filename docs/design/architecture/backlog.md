@@ -23,6 +23,3 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F3|gameplay|high|Plotlines: longer duration sidequest-type content that the player can encounter, optional
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 
-## Unspace N 4–9 (policy, not open rows)
-
-Public routes stay N 4–6 on the book; N 7–9 are private solutions (library or hyperdrive). Commodity economy uses 4-space edges only until designed otherwise. Volatile mission grants and hyperdrive library entries follow [translations.md](../content/translations.md). When picking up **F1**, update [n-space.md](../content/n-space.md) in the same change if behaviour shifts.
