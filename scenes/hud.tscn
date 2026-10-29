@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cartel_hud"]
+[gd_scene load_steps=17 format=3 uid="uid://cartel_hud"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ui/components/weapon_hud_stack.gd" id="9"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://scripts/ui/target_lock_overlay.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/ui/flight_manifest_overlay.gd" id="13"]
 [ext_resource type="Script" path="res://scripts/ui/target_scan_overlay.gd" id="14"]
+[ext_resource type="Script" path="res://scripts/ui/area_sensor_map.gd" id="17"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -99,6 +100,7 @@ offset_bottom = 48.0
 mouse_filter = 0
 
 [node name="StatusPanel" type="PanelContainer" parent="Root"]
+z_index = 10
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
@@ -140,6 +142,7 @@ theme_type_variation = &"Numeric"
 text = "Hull: -"
 
 [node name="WeaponChitStack" type="VBoxContainer" parent="Root"]
+z_index = 10
 layout_mode = 0
 offset_left = 12.0
 offset_top = 190.0
@@ -148,6 +151,7 @@ theme_override_constants/separation = 4
 script = ExtResource("9")
 
 [node name="FlightStrip" type="PanelContainer" parent="Root"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -182,6 +186,7 @@ text = "Heading: 0°"
 [node name="GstClockLabel" parent="Root/FlightStrip/HBox" instance=ExtResource("2")]
 
 [node name="SignaturePanel" type="PanelContainer" parent="Root"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -233,6 +238,7 @@ theme_type_variation = &"Numeric"
 text = "Active sensors: -"
 
 [node name="FieldPanel" type="PanelContainer" parent="Root"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -280,6 +286,7 @@ theme_type_variation = &"Numeric"
 text = ""
 
 [node name="RightChitStack" type="VBoxContainer" parent="Root"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -331,6 +338,7 @@ grow_vertical = 0
 theme_type_variation = &"HudTicker"
 
 [node name="LocalSensorMap" type="Control" parent="Root"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -345,6 +353,39 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("3")
+
+[node name="AreaSensorMap" type="Control" parent="Root"]
+z_index = 8
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("17")
+
+[node name="LegendPanel" type="PanelContainer" parent="Root/AreaSensorMap"]
+layout_mode = 0
+theme_type_variation = &"SurfaceTranslucent"
+
+[node name="VBox" type="VBoxContainer" parent="Root/AreaSensorMap/LegendPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LegendTitle" type="Label" parent="Root/AreaSensorMap/LegendPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "Sensor ranges"
+
+[node name="LegendScale" type="Label" parent="Root/AreaSensorMap/LegendPanel/VBox"]
+layout_mode = 2
+theme_type_variation = &"Muted"
+text = "Grid squares: 500 m"
+
+[node name="LegendList" type="VBoxContainer" parent="Root/AreaSensorMap/LegendPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="FlightManifestOverlay" type="Control" parent="Root"]
 z_index = 12

@@ -51,6 +51,7 @@ const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_
 @onready var _hyperdrive_calc_chit: HyperdriveCalcHudChit = $Root/RightChitStack/HyperdriveCalcHudChit
 @onready var _flight_manifest: Control = $Root/FlightManifestOverlay
 @onready var _target_scan: Control = $Root/TargetScanOverlay
+@onready var _area_sensor_map: Control = $Root/AreaSensorMap
 
 var _session: GameSession
 var _catalog: Catalog
@@ -64,6 +65,7 @@ var _wire_started := false
 var _player_ship: CharacterBody2D
 var _weapon_select_handler: Callable = Callable()
 var _weapon_selection_player: CharacterBody2D = null
+var _last_nav_contacts: Array = []
 
 
 func bind(
@@ -220,7 +222,48 @@ func toggle_flight_manifest() -> void:
 	if not _has_capability("basic_hud"):
 		return
 	close_target_scan()
+	close_area_sensor_map()
 	_flight_manifest.toggle()
+
+
+func toggle_area_sensor_map() -> void:
+	if _area_sensor_map == null or not _area_sensor_map.has_method("open"):
+		return
+	if not _has_capability("local_sensor"):
+		return
+	if _area_sensor_map.has_method("is_open") and _area_sensor_map.is_open():
+		_area_sensor_map.close()
+		_sync_minimap_for_area_map(false)
+	else:
+		close_flight_manifest()
+		close_target_scan()
+		if _area_sensor_map.has_method("open"):
+			_area_sensor_map.open()
+			_sync_minimap_for_area_map(true)
+
+
+func close_area_sensor_map() -> bool:
+	if _area_sensor_map == null or not _area_sensor_map.has_method("close"):
+		return false
+	var did_close: bool = _area_sensor_map.close()
+	if did_close:
+		_sync_minimap_for_area_map(false)
+	return did_close
+
+
+func _sync_minimap_for_area_map(area_open: bool) -> void:
+	if _local_sensor_map == null:
+		return
+	if area_open:
+		_local_sensor_map.visible = false
+	else:
+		_local_sensor_map.set_feature_visible(_has_capability("local_sensor"))
+
+
+func is_area_sensor_map_open() -> bool:
+	if _area_sensor_map == null or not _area_sensor_map.has_method("is_open"):
+		return false
+	return _area_sensor_map.is_open()
 
 
 func open_target_scan(
@@ -233,6 +276,7 @@ func open_target_scan(
 	if not _has_capability("basic_target_lock"):
 		return
 	close_flight_manifest()
+	close_area_sensor_map()
 	_target_scan.open(locked_contact, observer_pos, beacon_destination)
 
 
@@ -379,14 +423,31 @@ func set_nav_state(
 	contacts: Array,
 	camera: Camera2D,
 	player_broadcast: Dictionary = {},
-	locked_contact: Dictionary = {}
+	locked_contact: Dictionary = {},
+	ship_velocity: Vector2 = Vector2.ZERO
 ) -> void:
 	_player_broadcast_text = TransponderBroadcastScript.format_tooltip(player_broadcast)
+	_last_nav_contacts = contacts
 
 	if _has_capability("local_sensor") and _local_sensor_map != null:
 		if _local_sensor_map.has_method("set_player_broadcast"):
 			_local_sensor_map.set_player_broadcast(_player_broadcast_text)
 		_local_sensor_map.set_nav_state(nav_radius, ship_pos, ship_heading_deg, contacts)
+	if _has_capability("local_sensor") and _area_sensor_map != null and _area_sensor_map.has_method("set_frame"):
+		var snapshot := AreaRadar.build_snapshot(_assembled_ship, _operating_state, _catalog)
+		_area_sensor_map.set_frame(
+			snapshot,
+			ship_pos,
+			ship_heading_deg,
+			ship_velocity,
+			contacts,
+			locked_contact,
+			camera,
+			_has_capability("basic_target_lock"),
+			_has_capability("sensor_read_beacons")
+		)
+		if _area_sensor_map.has_method("set_player_broadcast"):
+			_area_sensor_map.set_player_broadcast(_player_broadcast_text)
 	if _has_capability("local_system_waypoints") and _waypoint_arrows != null:
 		_waypoint_arrows.set_nav_state(ship_pos, contacts, camera)
 	if _has_capability("sensor_read_beacons") and _beacon_labels != null:
@@ -495,6 +556,8 @@ func _refresh_capabilities() -> void:
 		_field_panel.visible = has_sensor
 	if _local_sensor_map != null:
 		_local_sensor_map.set_feature_visible(has_sensor)
+	if _area_sensor_map != null and _area_sensor_map.has_method("close") and not has_sensor:
+		_area_sensor_map.close()
 	if _waypoint_arrows != null:
 		_waypoint_arrows.set_feature_visible(has_waypoints)
 	if _beacon_labels != null:
@@ -635,6 +698,12 @@ func _ready() -> void:
 	if _flight_strip != null:
 		_flight_strip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		_flight_strip.gui_input.connect(_on_flight_strip_gui_input)
+	if _local_sensor_map != null and not _local_sensor_map.area_map_requested.is_connected(_on_area_map_requested):
+		_local_sensor_map.area_map_requested.connect(_on_area_map_requested)
+	if _area_sensor_map != null and not _area_sensor_map.lock_contact_requested.is_connected(_on_area_map_lock_requested):
+		_area_sensor_map.lock_contact_requested.connect(_on_area_map_lock_requested)
+	if _area_sensor_map != null and not _area_sensor_map.closed.is_connected(_on_area_sensor_map_closed):
+		_area_sensor_map.closed.connect(_on_area_sensor_map_closed)
 	if _target_lock_chit != null and not _target_lock_chit.scan_requested.is_connected(_on_target_lock_scan_requested):
 		_target_lock_chit.scan_requested.connect(_on_target_lock_scan_requested)
 	if not visibility_changed.is_connected(_on_hud_visibility_changed):
@@ -645,6 +714,21 @@ func _on_hud_visibility_changed() -> void:
 	if not visible:
 		close_flight_manifest()
 		close_target_scan()
+		close_area_sensor_map()
+
+
+func _on_area_map_requested() -> void:
+	toggle_area_sensor_map()
+
+
+func _on_area_sensor_map_closed() -> void:
+	_sync_minimap_for_area_map(false)
+
+
+func _on_area_map_lock_requested(contact_id: String) -> void:
+	if _player_ship == null or not _player_ship.has_method("apply_target_lock_on_contact"):
+		return
+	_player_ship.apply_target_lock_on_contact(contact_id, _last_nav_contacts)
 
 
 func _on_target_lock_scan_requested() -> void:

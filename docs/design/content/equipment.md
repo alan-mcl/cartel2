@@ -279,6 +279,8 @@ The POC `sensor_basic`, `sensor_advanced`, and four generic specialist ids are r
 
 **Active sensors toggle:** **`R`** in flight toggles active sensor pings (saved per ship as `active_sensors_enabled`, default on). Flight HUD shows **Active sensors: on/off** beside transponder status. NPC traffic always behaves as active on.
 
+**Area map:** with **`local_sensor`**, clicking the bottom-right minimap opens a larger square map (no pause). It shows a 500 m world grid, the **visual** contact radius, and one circle per fitted sensor module range on the **piloted ship** (scaled by current sensor effectiveness). A legend in the minimap corner lists each range; **Escape** or a click outside the map closes it.
+
 ### Transponder (`category: transponder`, mount: `system`)
 
 | id | Notes |

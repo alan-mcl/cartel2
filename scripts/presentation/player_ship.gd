@@ -248,6 +248,20 @@ func toggle_target_lock(contacts: Array) -> void:
 	)
 
 
+func apply_target_lock_on_contact(contact_id: String, contacts: Array) -> void:
+	if not TargetLock.has_capability(assembled_ship):
+		return
+	if contact_id.is_empty():
+		return
+	if locked_target_id == contact_id:
+		locked_target_id = TargetLock.clear()
+		return
+	var ids := TargetLock.candidate_ids(contacts, global_position)
+	if not ids.has(contact_id):
+		return
+	locked_target_id = contact_id
+
+
 func cycle_target_lock(contacts: Array) -> void:
 	locked_target_id = TargetLock.cycle_next(
 		locked_target_id, assembled_ship, contacts, global_position

@@ -11,6 +11,8 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
+|B2| art | med | Sail drive animation should be a semi-circle in front the of the ship ('n' shape), not a 'C' shape
+|B3| art | med | Lancer has no active sensors can't active-scan a target
 
 ## Features
 
@@ -19,5 +21,3 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F1|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
 |F2|in flight|high| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|high|Plotlines: implementations now that the framework is there
-|F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
-

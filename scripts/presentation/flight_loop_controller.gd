@@ -183,7 +183,8 @@ func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dict
 		contacts,
 		_camera,
 		player_broadcast,
-		locked_contact
+		locked_contact,
+		_player.motion.velocity
 	)
 	_hud.set_surface_labels(_surface_labels(), _camera)
 	_hud.set_star_lens_flare(

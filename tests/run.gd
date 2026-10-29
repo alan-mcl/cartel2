@@ -21,6 +21,7 @@ func _init() -> void:
 	TestBallisticHit.run(runner)
 	TestProjectGuidance.run(runner)
 	TestSensors.run(runner)
+	TestAreaRadar.run(runner)
 	TestTargetLock.run(runner)
 	TestTargetScan.run(runner)
 	TestAutopilot.run(runner)
