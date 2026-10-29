@@ -51,6 +51,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 | `juno_chassis` | Bayes Inc | medium | Light scout |
 | `silhouette_chassis` | Oklahoma Combine | high | Tactical fighter |
 | `mantis_chassis` | The Praetorium | high | Dedicated interceptor |
+| `ave_chassis` | Tukey Enterprises | medium | Budget solo courier |
 
 Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at **Centauri Shipyard** (or the local habitat shipyard elsewhere) before they can undock.
 

@@ -42,7 +42,7 @@
   "id": "sports",
   "weight": 0.8,
   "templates": [
-    { "channel": "headlines", "text": "{planet} T20 league: {city-mall} beats rivals in super over.", "tone": "positive" },
+    { "channel": "headlines", "text": "{planet} T20 league: {city-mall} beats {city-mall2} by {1-10} {runs|wickets}.", "tone": "positive" },
     { "channel": "headlines", "text": "Corporate cup at {habitat} ends in overtime; {corporation} sponsors the trophy again.", "tone": "info" },
     { "channel": "headlines", "text": "Pylon circuit - rematch scheduled at {city-mall} after a disputed finish.", "tone": "info" },
     { "channel": "headlines", "text": "{planet} {sport} qualifiers open; {city-mall} hosts the first heat.", "tone": "info" },

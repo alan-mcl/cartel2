@@ -65,6 +65,7 @@ At zoom 0.72 on 1080p: Pegasus ≈ **50 screen px**; Flare-ON ≈ **19 px**; Wol
 | `krypton_chassis` | Krypton | 6.0 | 50 | 3:2 saucer | **50×34** | 40×24 |
 | `silhouette_chassis` | Silhouette | 6.8 | 56 | ~7:3 flat | **56×24** | 46×14 |
 | `mantis_chassis` | Mantis | 3.0 | 24 | ~1:2 dart | **12×24** | 8×20 |
+| `ave_chassis` | Ave | 3.0 | 24 | ~7:6 compact dart | **28×24** | 22×20 |
 | `dragon_chassis` | Dragon | 7.5 | 62 | ~3:7 interceptor | **26×62** | 16×52 |
 | `pegasus_chassis` | Pegasus | 8.5 | 70 | square | **70×70** | 60×60 |
 | `wolff_chassis` | Wolff | 10.0 | 82 | 8:5 gunship | **82×52** | 72×42 |

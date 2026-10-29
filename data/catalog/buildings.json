@@ -18,6 +18,15 @@
 		"type": "bar"
 	},
 	{
+		"art": "res://assets/ui/locations/tokirev_habitat_terminal.png",
+		"description": "Tycho Habitat's most well known pilot bar. The Blue Star is famous for its mixed crowd, brandy cocktails, and native planet menu. Try Tycho's signature ore prawns.",
+		"id": "blue_star_bar",
+		"kind": "landmark",
+		"name": "The Blue Star Bar",
+		"short_desc": "Tycho's larges pilot bar serves hot prawns and brandy to a mixed crowd at all hours.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/skyedge.png",
 		"description": "Skyedge is where you start when you want to build a ship. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
 		"id": "skyedge_space_ships",
@@ -34,7 +43,8 @@
 			"silhouette_chassis",
 			"mantis_chassis",
 			"blackbird_chassis",
-			"lancer_chassis"
+			"lancer_chassis",
+			"ave_chassis"
 		],
 		"type": "chassis_dealer"
 	},
@@ -85,7 +95,9 @@
 			"lancer_2sv",
 			"lancer_2st",
 			"lancer_25s",
-			"lancer_2sx"
+			"lancer_2sx",
+			"ave_one",
+			"ave_x"
 		],
 		"type": "ship_dealer"
 	},
@@ -122,7 +134,7 @@
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_shipyard.png",
-		"description": "Large cradles and gantries dominate the Tycho yards. Crews fit armour and industrial systems while beneath large radiation-shielded observation decks.",
+		"description": "Large cradles and gantries dominate the Tycho Habitat yard. Crews fit armour and industrial systems beneath large radiation-shielded observation decks.",
 		"id": "tycho_shipyard",
 		"kind": "workshop",
 		"name": "Tycho Heavy Shipyard",

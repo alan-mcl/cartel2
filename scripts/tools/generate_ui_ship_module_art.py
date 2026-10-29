@@ -42,6 +42,7 @@ CHASSIS_IDS = [
     "mantis_chassis",
     "blackbird_chassis",
     "lancer_chassis",
+    "ave_chassis",
 ]
 
 # Muted palette per category (RGBA) for placeholder icons.
@@ -75,6 +76,7 @@ CHASSIS_TINTS: dict[str, tuple[int, int, int]] = {
     "mantis_chassis": (192, 192, 192),
     "blackbird_chassis": (58, 58, 72),
     "lancer_chassis": (106, 138, 184),
+    "ave_chassis": (232, 168, 64),
 }
 
 

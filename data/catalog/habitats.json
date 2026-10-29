@@ -32,6 +32,7 @@
 			"tycho_shipyard",
 			"tycho_exchange",
 			"tycho_peaceforce",
+			"blue_star_bar",
 			"corp_atlas_concern_tycho_office",
 			"corp_general_industrial_tycho_office",
 			"corp_deepspace_tycho_office",
@@ -80,7 +81,7 @@
 			"corp_hq_biogenesis_irasia"
 		],
 		"default_building": "irasia_habitat_terminal",
-		"description": "Busy commercial orbital on a major trade spine. Manufacturing traffic never quite sleeps.",
+		"description": "The largest settled orbital in the system, Irasia Habitat is a bustling trade port that never sleeps. Manufacturing and cilivian traffic comes and goes ceaselessly and the concourses are swift and crowded.",
 		"id": "irasia_habitat",
 		"name": "Irasia Habitat",
 		"sector_id": "irasia",

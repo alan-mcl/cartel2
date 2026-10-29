@@ -216,6 +216,30 @@
     }
   },
   {
+    "id": "ave_chassis",
+    "name": "Ave Chassis",
+    "maker": "Tukey Enterprises",
+    "description": "Tukey's budget courier frame: tight volume, modest mounts, and enough system bays for a solo pilot who intends to haul parcels rather than fight. The yards sell it bare; what you bolt on is your problem.",
+    "cost": 7000,
+    "mass": 3.0,
+    "hits": 16,
+    "mass_limit": 18.0,
+    "volume": 16.0,
+    "maneuver": "medium",
+    "hull_color": "#e8a840",
+    "sprite": "res://assets/ships/chassis/ave_chassis.svg",
+    "header": "res://assets/ui/ships/ave_chassis.png",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 4,
+      "light_weapon": 1,
+      "medium_weapon": 0,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
+  },
+  {
     "id": "lancer_chassis",
     "name": "Lancer Chassis",
     "maker": "Mercury Communications",

@@ -255,6 +255,18 @@
           "name": "Lancer 2SX",
           "template_id": "lancer_2sx",
           "chassis_id": "lancer_chassis"
+        },
+        {
+          "id": "ave_one_1",
+          "name": "Ave One",
+          "template_id": "ave_one",
+          "chassis_id": "ave_chassis"
+        },
+        {
+          "id": "ave_x_1",
+          "name": "Ave X",
+          "template_id": "ave_x",
+          "chassis_id": "ave_chassis"
         }
       ]
     },

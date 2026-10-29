@@ -772,5 +772,37 @@
       "hw_helios_light_laser",
       "hw_helios_turbo_laser"
     ]
+  },
+  {
+    "id": "ave_one",
+    "name": "Ave One",
+    "maker": "Tukey Enterprises",
+    "description": "The official Tukey courier trim: Knock-Off chemical drive, Handy plant and cockpit pack, BulkLine four-tonne hold, and a registration beacon. Unarmed; built to earn on trade and small freight.",
+    "chassis": "ave_chassis",
+    "modules": [
+      "te_knock_off_burner",
+      "fuel_tank_small",
+      "te_handyplant",
+      "te_handy_air",
+      "te_handy_core",
+      "vessel_registration_beacon",
+      "cargo_bay_4"
+    ]
+  },
+  {
+    "id": "ave_x",
+    "name": "Ave X",
+    "maker": "Tukey Enterprises",
+    "description": "The yard swap that stuck: same Ave frame and Knock-Off burner, but Guangzhou plant, Combine air, Orion Spur core, and a GI dry hold instead of Tukey Handy line. Tukey does not sell it new; used lots still call it an Ave X.",
+    "chassis": "ave_chassis",
+    "modules": [
+      "te_knock_off_burner",
+      "fuel_tank_small",
+      "gz_trade_plant",
+      "oc_red_dirt_recycle",
+      "osc_spur_compact",
+      "vessel_registration_beacon",
+      "gi_dry_hold_4"
+    ]
   }
 ]

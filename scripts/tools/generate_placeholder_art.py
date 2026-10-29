@@ -305,6 +305,14 @@ def main() -> None:
     )
 
     write_text(
+        ASSETS / "ships/chassis/ave_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="56" height="48" viewBox="-28 -24 56 48">
+  <polygon points="0,-20 22,14 0,10 -22,14" fill="#e8a840" stroke="#ffd878" stroke-width="2"/>
+  <rect x="-8" y="2" width="16" height="8" rx="1" fill="#c88828" stroke="#ffd878" stroke-width="1"/>
+</svg>""",
+    )
+
+    write_text(
         ASSETS / "ships/fx/thrust.svg",
         """<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-16 -16 32 32">
   <polygon points="-8,8 0,20 8,8" fill="#ff8c33" opacity="0.85"/>
