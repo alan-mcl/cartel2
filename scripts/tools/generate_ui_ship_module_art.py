@@ -40,6 +40,8 @@ CHASSIS_IDS = [
     "juno_chassis",
     "silhouette_chassis",
     "mantis_chassis",
+    "blackbird_chassis",
+    "lancer_chassis",
 ]
 
 # Muted palette per category (RGBA) for placeholder icons.
@@ -71,11 +73,16 @@ CHASSIS_TINTS: dict[str, tuple[int, int, int]] = {
     "juno_chassis": (168, 184, 208),
     "silhouette_chassis": (216, 120, 136),
     "mantis_chassis": (192, 192, 192),
+    "blackbird_chassis": (58, 58, 72),
+    "lancer_chassis": (106, 138, 184),
 }
 
 
 def write_png(path: Path, width: int, height: int, rgba_fn) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        print(f"skip existing {path.relative_to(ROOT)}")
+        return
     raw = bytearray()
     for y in range(height):
         raw.append(0)

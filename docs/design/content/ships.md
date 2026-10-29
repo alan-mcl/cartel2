@@ -33,6 +33,8 @@ SpaceShip
 | Juno | General Industrial | Light scout / freighter | 1030, 1045, 1060, 1088, 1090 |
 | Silhouette | Oklahoma Combine | Tactical fighter | Mk8, Mk6, Warden |
 | Mantis | The Praetorium | Dedicated interceptor | XF900, XF4400, XF5700 |
+| Blackbird | SnedeCorp | Stealth scout | BB-10S, BB-10R, BB-10X |
+| Lancer | Mercury Communications | Survey / listen | 2SV, 2ST, 25S, 2SX |
 
 ---
 
@@ -206,6 +208,46 @@ The **XF5700** is the top-line interceptor configuration in current manufacture,
 
 ---
 
+## Blackbird
+
+SnedeCorp's **Blackbird** is a low-profile scout hull built around integrated sails and passive listen arrays. Trims share a Voltcore X3 fusion plant, Aegis single-seat life support, Almanac autopilot nav, and a defensive light laser. None carry armour; plate signature would defeat the role.
+
+### BB-10S
+
+Basic stealth scout: Washi Quiet sail and Caduceus Quiet quantum core with passive Wellhead and Ember listen only.
+
+### BB-10R
+
+Long-range scout: Lumen Yard sail, Vault 7 quantum core, and the full passive stack (Wellhead, Ember, Sideband, Nexus Listen). Still no active sensor ping.
+
+### BB-10X
+
+Premium scout: same passive listen as the BB-10R, Oracle Well core, and an Orion Needle hyperdrive. The coil adds in-flight signature; only this trim carries translation gear.
+
+---
+
+## Lancer
+
+Mercury Communications' **Lancer** is a survey hull with stacked listen packages, modest cargo, and optional weapons. Not a player starting ship; Concord Scouts and Skyedge stock the fitted templates and bare frames respectively.
+
+### 2SV
+
+Basic unarmed survey: hydro-thermal drive, passive Wellhead, Ember, and Sideband (nine-kilometre envelope), four-tonne hold.
+
+### 2ST
+
+Armed survey: the 2SV fit plus a light laser and Octant Plumb for active gravimetric listen.
+
+### 25S
+
+Premium long range: Rhumb Longhaul, large tank, Bridge 440 core, Astrolabe nav, full survey stack including Nexus Locus, and a light laser.
+
+### 2SX
+
+Premium armed survey: full listen stack and Astrolabe, AP-56 plant with Sundancer Compact fusion, light and turbo lasers, and light plate. No hyperdrive.
+
+---
+
 ## Current implementation vs design gaps
 
 | Item | Design | Original POC / notes |
@@ -218,7 +260,7 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 
 ### In catalog (`ships.json`)
 
-**Thirty-three** manufacturer templates with launch-legal loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations remain **invented placeholders** where the design doc is sparse; role trims (P105–P115, CX, K4, Logistico, Post, Warden, Juno 1030/1060) extend the roster on existing chassis.
+**Forty** manufacturer templates with launch-legal loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations remain **invented placeholders** where the design doc is sparse; role trims (P105–P115, CX, K4, Logistico, Post, Warden, Juno 1030/1060, Blackbird, Lancer) extend the roster on existing chassis.
 
 | Template id | Chassis | Notes |
 |-------------|---------|-------|
@@ -230,3 +272,5 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 | `juno_1030`, `1045`, `1060`, `1088`, `1090` | `juno_chassis` | 1030 unarmed cargo; scouts 1045–1090 |
 | `silhouette_mk8`, `silhouette_mk6`, `silhouette_warden` | `silhouette_chassis` | Mk8 contract fighter; Warden picket |
 | `mantis_xf900`, `mantis_xf4400`, `mantis_xf5700` | `mantis_chassis` | Praetorium interceptors; XF900 legacy |
+| `blackbird_bb_10s`, `bb_10r`, `bb_10x` | `blackbird_chassis` | Stealth scout; BB-10X = Needle hyperdrive |
+| `lancer_2sv`, `2st`, `25s`, `2sx` | `lancer_chassis` | Survey listen; 2SV unarmed, 2SX armed premium |

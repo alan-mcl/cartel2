@@ -624,5 +624,153 @@
       "sne_snedeos_electronic_shield",
       "sne_snedeos_cyberwall"
     ]
+  },
+  {
+    "id": "blackbird_bb_10s",
+    "name": "Blackbird BB-10S",
+    "maker": "SnedeCorp",
+    "description": "Basic Blackbird scout: Washi Quiet sail, Caduceus Quiet core, and passive Wellhead plus Ember listen. Armed with a light laser for Article 19 compliance without active sensor ping.",
+    "chassis": "blackbird_chassis",
+    "modules": [
+      "prv_voltcore_x3",
+      "ss_washi_quiet",
+      "hg_caduceus_quiet",
+      "prae_aegis_seat",
+      "mdc_almanac",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hw_helios_light_laser"
+    ]
+  },
+  {
+    "id": "blackbird_bb_10r",
+    "name": "Blackbird BB-10R",
+    "maker": "SnedeCorp",
+    "description": "Long-range Blackbird: Lumen Yard sail, Vault 7 core, and the full passive listen stack. Still no active sensor ping; the extra legs come from sail thrust and compute headroom.",
+    "chassis": "blackbird_chassis",
+    "modules": [
+      "prv_voltcore_x3",
+      "ora_lumen_yard",
+      "sne_vault_7",
+      "prae_aegis_seat",
+      "mdc_almanac",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "prv_nexus_listen",
+      "hw_helios_light_laser"
+    ]
+  },
+  {
+    "id": "blackbird_bb_10x",
+    "name": "Blackbird BB-10X",
+    "maker": "SnedeCorp",
+    "description": "Premium Blackbird: same passive listen as the BB-10R, Oracle Well core, and an Orion Needle hyperdrive. The coil adds in-flight signature; spool from deep orbit on the Voltcore plant.",
+    "chassis": "blackbird_chassis",
+    "modules": [
+      "prv_voltcore_x3",
+      "ora_lumen_yard",
+      "chi_oracle_well",
+      "prae_aegis_seat",
+      "mdc_almanac",
+      "vessel_registration_beacon",
+      "ora_needle_hyperdrive",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "prv_nexus_listen",
+      "hw_helios_light_laser"
+    ]
+  },
+  {
+    "id": "lancer_2sv",
+    "name": "Lancer 2SV",
+    "maker": "Mercury Communications",
+    "description": "Basic survey Lancer: Helios Compact plant, hydro-thermal drive, and passive Wellhead, Ember, and Sideband out to nine kilometres. Unarmed, with a four-tonne hold for field kit.",
+    "chassis": "lancer_chassis",
+    "modules": [
+      "hw_helios_compact_40",
+      "gi_ht_18",
+      "mdc_workplace_12",
+      "tmc_transit_air",
+      "sbi_sextant",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "fuel_tank_medium",
+      "cargo_bay_4"
+    ]
+  },
+  {
+    "id": "lancer_2st",
+    "name": "Lancer 2ST",
+    "maker": "Mercury Communications",
+    "description": "Armed survey Lancer: the 2SV fit plus a light laser and Octant Plumb gravimetric array for active listen when the pilot accepts the ping.",
+    "chassis": "lancer_chassis",
+    "modules": [
+      "hw_helios_compact_40",
+      "gi_ht_18",
+      "mdc_workplace_12",
+      "tmc_transit_air",
+      "sbi_sextant",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "ora_octant_plumb",
+      "fuel_tank_medium",
+      "cargo_bay_4",
+      "hw_helios_light_laser"
+    ]
+  },
+  {
+    "id": "lancer_25s",
+    "name": "Lancer 25S",
+    "maker": "Mercury Communications",
+    "description": "Premium long-range Lancer: Rhumb Longhaul sail, large tank, Bridge 440 core, Astrolabe nav, and the full survey stack including Nexus Locus. Light laser so the hop is not helpless.",
+    "chassis": "lancer_chassis",
+    "modules": [
+      "gi_utility_fusion_55",
+      "tmc_rhumb_longhaul",
+      "sne_bridge_440",
+      "tmc_transit_air",
+      "sne_astrolabe",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "ora_octant_plumb",
+      "prv_nexus_locus",
+      "fuel_tank_large",
+      "cargo_bay_4",
+      "hw_helios_light_laser"
+    ]
+  },
+  {
+    "id": "lancer_2sx",
+    "name": "Lancer 2SX",
+    "maker": "Mercury Communications",
+    "description": "Premium armed Lancer: full listen stack and Astrolabe, AP-56 plant with Sundancer Compact fusion, turbo laser, light plate, and medium tank. No hyperdrive.",
+    "chassis": "lancer_chassis",
+    "modules": [
+      "ora_ap_56",
+      "hw_sundancer_compact",
+      "sne_bridge_440",
+      "tmc_transit_air",
+      "sne_astrolabe",
+      "vessel_registration_beacon",
+      "prv_lumina_wellhead",
+      "hw_glimmer_ember",
+      "hg_hermes_sideband",
+      "ora_octant_plumb",
+      "prv_nexus_locus",
+      "fuel_tank_medium",
+      "oc_chitanium_5mm",
+      "hw_helios_light_laser",
+      "hw_helios_turbo_laser"
+    ]
   }
 ]

@@ -133,7 +133,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				_main.session.world
 			)
 			if _traffic_view != null:
-				_traffic_view.sync(_traffic_director.actors, _catalog)
+				_traffic_view.sync(_traffic_director.actors, _catalog, delta)
 			_tick_bounty_pursuit_traffic(delta, physics_frame)
 
 	var contacts := _collect_nav_contacts()
@@ -436,7 +436,7 @@ func _tick_volatile_site_traffic(delta: float, physics_frame: int) -> void:
 		_main.session.world
 	)
 	if _traffic_view != null:
-		_traffic_view.sync(_traffic_director.actors, _catalog)
+		_traffic_view.sync(_traffic_director.actors, _catalog, delta)
 	_process_bounty_escapes()
 
 

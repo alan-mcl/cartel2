@@ -12,6 +12,8 @@ const FAR_TRAIL_CAP := 20
 
 const NEAR_POOL_MAX := 25
 const FAR_POOL_MAX := 80
+const DETECTION_FADE_SECONDS := 0.4
+const OPACITY_EPSILON := 0.01
 
 var _traffic_root: Node2D
 var _world_root: Node2D
@@ -20,6 +22,7 @@ var _far_thrust_by_id: Dictionary = {}
 var _far_exhaust_by_id: Dictionary = {}
 var _near_lod_by_id: Dictionary = {}
 var _destroy_fx_started: Dictionary = {}
+var _opacity_by_id: Dictionary = {}
 
 var _npc_ship_packed: PackedScene
 var _near_pool := PresentationNodePool.new()
@@ -48,6 +51,7 @@ func clear() -> void:
 	_far_exhaust_by_id.clear()
 	_near_lod_by_id.clear()
 	_destroy_fx_started.clear()
+	_opacity_by_id.clear()
 	_near_pool.clear()
 	for far_node in _far_sprite_pool:
 		if is_instance_valid(far_node):
@@ -58,7 +62,7 @@ func clear() -> void:
 	_traffic_root = null
 
 
-func sync(actors: Array, catalog: Catalog) -> void:
+func sync(actors: Array, catalog: Catalog, delta: float = 0.0) -> void:
 	if _traffic_root == null or not is_instance_valid(_traffic_root):
 		return
 
@@ -96,7 +100,7 @@ func sync(actors: Array, catalog: Catalog) -> void:
 		if node == null or not is_instance_valid(node):
 			continue
 
-		_apply_detection_visibility(actor, node)
+		_apply_detection_visibility(actor, node, delta)
 
 		if is_near:
 			if node.has_method("sync_from_actor"):
@@ -125,6 +129,7 @@ func _release_lod_node(node: Node2D, was_near: bool) -> void:
 	if not is_instance_valid(node):
 		return
 	if was_near and node.has_method("bind_actor"):
+		reset_pooled_node_modulate(node)
 		_near_pool.release(node)
 	elif _is_far_sprite_root(node):
 		_release_far_sprite(node)
@@ -144,6 +149,7 @@ func _release_far_sprite(node: Node2D) -> void:
 		return
 	if node.get_parent() != null:
 		node.get_parent().remove_child(node)
+	reset_pooled_node_modulate(node)
 	node.visible = false
 	_far_sprite_pool.append(node)
 
@@ -168,6 +174,7 @@ func _start_destroy_fx(actor) -> void:
 	_far_thrust_by_id.erase(actor.id)
 	_far_exhaust_by_id.erase(actor.id)
 	_near_lod_by_id.erase(actor.id)
+	_opacity_by_id.erase(actor.id)
 	_destroy_fx_started[actor.id] = true
 
 
@@ -187,12 +194,58 @@ func _prune_stale_nodes(active_ids: Dictionary) -> void:
 		_far_exhaust_by_id.erase(actor_id)
 		_near_lod_by_id.erase(actor_id)
 		_destroy_fx_started.erase(actor_id)
+		_opacity_by_id.erase(actor_id)
 
 
-func _apply_detection_visibility(actor, node: Node2D) -> void:
-	var visible := bool(actor.player_detected)
-	if node.visible != visible:
-		node.visible = visible
+static func advance_detection_opacity(
+	opacity_by_id: Dictionary,
+	actor_id: String,
+	player_detected: bool,
+	delta: float
+) -> float:
+	var target := 1.0 if player_detected else 0.0
+	var opacity: float
+	if not opacity_by_id.has(actor_id):
+		opacity = target if delta <= 0.0 else (0.0 if target >= 1.0 else target)
+	else:
+		opacity = float(opacity_by_id[actor_id])
+	if delta <= 0.0:
+		opacity = target
+	else:
+		var step := delta / DETECTION_FADE_SECONDS
+		if opacity < target:
+			opacity = minf(target, opacity + step)
+		elif opacity > target:
+			opacity = maxf(target, opacity - step)
+	opacity_by_id[actor_id] = opacity
+	return opacity
+
+
+static func apply_detection_opacity(node: Node2D, opacity: float) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var tint := node.modulate
+	tint.a = opacity
+	node.modulate = tint
+	node.visible = opacity > OPACITY_EPSILON
+
+
+static func reset_pooled_node_modulate(node: Node2D) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var tint := node.modulate
+	tint.a = 1.0
+	node.modulate = tint
+
+
+func _apply_detection_visibility(actor, node: Node2D, delta: float) -> void:
+	var opacity := advance_detection_opacity(
+		_opacity_by_id,
+		actor.id,
+		bool(actor.player_detected),
+		delta
+	)
+	apply_detection_opacity(node, opacity)
 
 
 func _spawn_near_ship(actor, catalog: Catalog) -> void:

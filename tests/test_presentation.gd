@@ -11,6 +11,7 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 static func run(runner: TestRunner) -> void:
 	_test_node_pool_reparents_and_clears(runner)
 	_test_traffic_view_lifecycle(runner)
+	_test_traffic_detection_fade(runner)
 
 
 static func _test_node_pool_reparents_and_clears(runner: TestRunner) -> void:
@@ -96,6 +97,50 @@ static func _test_traffic_view_lifecycle(runner: TestRunner) -> void:
 	runner.check(view._far_sprite_pool.is_empty(), "traffic view: clear drops far pool")
 	runner.check(view._near_pool._available.is_empty(), "traffic view: clear drops near pool")
 	runner.check_eq(view._traffic_root, null, "traffic view: clear releases traffic root")
+
+
+static func _test_traffic_detection_fade(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	var world_root := Node2D.new()
+	var view := TrafficView.new()
+	view.setup(world_root)
+	var actor: Variant = _actor(catalog, "presentation_fade")
+	actor.player_detected = false
+	actor.near_lod = false
+	view.sync([actor], catalog, 0.0)
+	var node: Node2D = view._nodes_by_id.get(actor.id)
+	runner.check(node != null, "traffic fade: spawns node")
+	if node == null:
+		view.clear()
+		return
+	runner.check(not node.visible, "traffic fade: undetected starts hidden")
+
+	actor.player_detected = true
+	view.sync([actor], catalog, 0.2)
+	runner.check(node.visible, "traffic fade: fade-in becomes visible")
+	runner.check(
+		node.modulate.a > TrafficView.OPACITY_EPSILON and node.modulate.a < 1.0,
+		"traffic fade: partial opacity while fading in"
+	)
+	view.sync([actor], catalog, 0.2)
+	runner.check(
+		absf(node.modulate.a - 1.0) < 0.01,
+		"traffic fade: opacity reaches detected"
+	)
+
+	actor.player_detected = false
+	view.sync([actor], catalog, 0.2)
+	runner.check(
+		absf(node.modulate.a - 0.5) < 0.01 and node.visible,
+		"traffic fade: partial opacity while fading out"
+	)
+	view.sync([actor], catalog, 0.2)
+	runner.check(not node.visible, "traffic fade: hidden after fade-out")
+	runner.check(
+		node.modulate.a <= TrafficView.OPACITY_EPSILON,
+		"traffic fade: opacity reaches zero"
+	)
+	view.clear()
 
 
 static func _actor(catalog: Catalog, actor_id: String):

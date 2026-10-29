@@ -213,6 +213,48 @@
           "name": "Mantis XF5700",
           "template_id": "mantis_xf5700",
           "chassis_id": "mantis_chassis"
+        },
+        {
+          "id": "blackbird_bb_10s_1",
+          "name": "Blackbird BB-10S",
+          "template_id": "blackbird_bb_10s",
+          "chassis_id": "blackbird_chassis"
+        },
+        {
+          "id": "blackbird_bb_10r_1",
+          "name": "Blackbird BB-10R",
+          "template_id": "blackbird_bb_10r",
+          "chassis_id": "blackbird_chassis"
+        },
+        {
+          "id": "blackbird_bb_10x_1",
+          "name": "Blackbird BB-10X",
+          "template_id": "blackbird_bb_10x",
+          "chassis_id": "blackbird_chassis"
+        },
+        {
+          "id": "lancer_2sv_1",
+          "name": "Lancer 2SV",
+          "template_id": "lancer_2sv",
+          "chassis_id": "lancer_chassis"
+        },
+        {
+          "id": "lancer_2st_1",
+          "name": "Lancer 2ST",
+          "template_id": "lancer_2st",
+          "chassis_id": "lancer_chassis"
+        },
+        {
+          "id": "lancer_25s_1",
+          "name": "Lancer 25S",
+          "template_id": "lancer_25s",
+          "chassis_id": "lancer_chassis"
+        },
+        {
+          "id": "lancer_2sx_1",
+          "name": "Lancer 2SX",
+          "template_id": "lancer_2sx",
+          "chassis_id": "lancer_chassis"
         }
       ]
     },
@@ -342,7 +384,7 @@
       "id": "influencer",
       "name": "Influencer",
       "description": "A streamer who cashed out.",
-      "background": "You built a moderately successful channel streaming trading and financial advice, but you fell out of love with it. You sold the brand, bought a ship and decided to try out the hustle for real away.",
+      "background": "You built a moderately successful channel streaming trading and financial advice, but you fell out of love with it. You sold the brand, bought a ship and decided to try out the hustle for real.",
       "starting_location": "Fortuna Habitat.",
       "ship": "The Krypton always caught your eye, now your K2 is fitted and ready to go.",
       "money": "d4000 remains after the purchase and a few celebratory nights.",

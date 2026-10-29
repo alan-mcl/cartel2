@@ -11,7 +11,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
-|B4| gameplay | low | ship sprites that appear/disappear from the HUD due to sensor range / stealth should fade in and out instead of winking
 
 ## Features
 

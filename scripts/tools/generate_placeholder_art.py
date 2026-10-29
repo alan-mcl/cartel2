@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Generate placeholder SVG and PNG assets for Cartel prototype."""
+"""Create missing placeholder SVG and PNG assets.
+
+Never replaces a file that already exists. Authored hulls, starfields, planet
+maps, and any other checked-in art stay as they are. Run this only to add a
+path that is not in the tree yet.
+"""
 
 from __future__ import annotations
 
@@ -19,12 +24,18 @@ ASSETS = ROOT / "assets"
 
 def write_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        print(f"skip existing {path.relative_to(ROOT)}")
+        return
     path.write_text(content, encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
 
 
 def write_png(path: Path, width: int, height: int, rgba_fn) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        print(f"skip existing {path.relative_to(ROOT)}")
+        return
     raw = bytearray()
     for y in range(height):
         raw.append(0)
@@ -274,6 +285,22 @@ def main() -> None:
         """<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="-6 -12 12 24">
   <polygon points="0,-10.8 3.6,-2.4 2.4,9.6 -2.4,9.6 -3.6,-2.4" fill="#c0c0c0" stroke="#e8e8e8" stroke-width="0.72"/>
   <polygon points="0,-9.6 1.8,-3.6 1.2,7.2 -1.2,7.2 -1.8,-3.6" fill="#a8a8a8" stroke="#d0d0d0" stroke-width="0.48"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/blackbird_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="72" height="64" viewBox="-36 -32 72 64">
+  <polygon points="0,-26 30,14 0,8 -30,14" fill="#3a3a48" stroke="#6a6a78" stroke-width="2"/>
+  <polygon points="0,-20 12,6 0,2 -12,6" fill="#2a2a34" stroke="#5a5a68" stroke-width="1"/>
+</svg>""",
+    )
+
+    write_text(
+        ASSETS / "ships/chassis/lancer_chassis.svg",
+        """<svg xmlns="http://www.w3.org/2000/svg" width="80" height="56" viewBox="-40 -28 80 56">
+  <polygon points="0,-22 36,12 8,18 -8,18 -36,12" fill="#6a8ab8" stroke="#9ab8d8" stroke-width="2"/>
+  <rect x="-6" y="-8" width="12" height="16" rx="2" fill="#4a6a98" stroke="#9ab8d8" stroke-width="1"/>
 </svg>""",
     )
 

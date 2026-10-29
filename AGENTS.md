@@ -85,7 +85,7 @@ Use **British English** in setting docs, design prose, and player-facing catalog
 ## Useful commands
 
 ```bash
-# Regenerate placeholder art
+# Create missing placeholder art (never replaces an existing file)
 python3 scripts/tools/generate_placeholder_art.py
 
 # Reimport assets

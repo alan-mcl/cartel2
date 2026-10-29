@@ -2087,7 +2087,10 @@ def main() -> int:
                 )
             if category == "computer":
                 has_computer = True
-                if str(module.get("core_type", "")) == "quantum":
+                if (
+                    str(module.get("core_type", "")) == "quantum"
+                    and str(chassis_id) != "blackbird_chassis"
+                ):
                     errors.append(
                         f"ship {template_id}: template must not default to quantum core '{module_id}'"
                     )

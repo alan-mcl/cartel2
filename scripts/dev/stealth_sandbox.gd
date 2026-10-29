@@ -1,6 +1,7 @@
 extends FlightSandboxBase
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+const TrafficViewScript := preload("res://scripts/presentation/traffic_view.gd")
 
 const SPAWN_RING_FRACTION := 0.9
 const DEFAULT_OPPONENT_COUNT := 4
@@ -11,6 +12,7 @@ enum DrillState { SETUP, ACTIVE }
 
 var _drill_state: DrillState = DrillState.SETUP
 var _opponents: Array = []
+var _detection_opacity_by_id: Dictionary = {}
 var _nav_radius: float = 15000.0
 var _current_pilot_skill: int = -1
 var _count_spin: SpinBox
@@ -156,7 +158,8 @@ func _spawn_opponents(
 			actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 
 		var node: Node2D = _spawn_bound_npc(actor, spawn_pos)
-		node.visible = false
+		_detection_opacity_by_id[actor.id] = 0.0
+		TrafficViewScript.apply_detection_opacity(node, 0.0)
 
 		_opponents.append({
 			"actor": actor,
@@ -208,7 +211,7 @@ func _physics_process(delta: float) -> void:
 			player_reads_beacons
 		)
 		_try_npc_acquire(actor, traffic_config, player_signature, player_broadcasting)
-		_apply_detection_visibility(actor, node)
+		_apply_detection_visibility(actor, node, delta)
 
 		actor.tick(
 			catalog,
@@ -268,12 +271,16 @@ func _try_npc_acquire(
 		actor.begin_flee(traffic_config)
 
 
-func _apply_detection_visibility(actor, node: Node2D) -> void:
+func _apply_detection_visibility(actor, node: Node2D, delta: float) -> void:
 	if node == null or not is_instance_valid(node):
 		return
-	var visible := bool(actor.player_detected)
-	if node.visible != visible:
-		node.visible = visible
+	var opacity := TrafficViewScript.advance_detection_opacity(
+		_detection_opacity_by_id,
+		actor.id,
+		bool(actor.player_detected),
+		delta
+	)
+	TrafficViewScript.apply_detection_opacity(node, opacity)
 
 
 func _end_drill() -> void:
@@ -288,6 +295,7 @@ func _clear_drill() -> void:
 
 
 func _clear_opponents() -> void:
+	_detection_opacity_by_id.clear()
 	for entry_variant in _opponents:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue

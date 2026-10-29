@@ -180,7 +180,7 @@ Three types are in the catalog today. All share the same fitting and operating r
 |------|------|------------|-------|
 | **Silicon** | Conventional semiconductor computing. Cheap, mature, robust, ubiquitous. | 8–28 | Default for older, cheaper, and frontier ships. Best CU per credit. |
 | **Photon** | Photonic computing - light for computation and data movement. Excellent bandwidth for parallel workloads. | 22–48 | Attractive for sensor-heavy, communications, and sporty hulls. Best CU per tonne and watt. |
-| **Quantum** | Quantum computing - specialised, not simply faster. Useful for particular mathematical, optimisation, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **No template defaults to quantum.** Future: may grant specialist capabilities (crypto, optimisation, simulation) in addition to CU. |
+| **Quantum** | Quantum computing - specialised, not simply faster. Useful for particular mathematical, optimisation, cryptographic, and simulation workloads; poor as a general-purpose ship computer. | 10–20 | Expensive, delicate, poor CU per credit. **Blackbird** stealth scouts default to quantum cores (Caduceus Quiet on BB-10S, Vault 7 on BB-10R, Oracle Well on BB-10X). Future: may grant specialist capabilities (crypto, optimisation, simulation) in addition to CU. |
 
 #### In prototype JSON
 
@@ -193,7 +193,7 @@ Forty-one branded SKUs across sixteen manufacturers (~27 silicon, ~9 photon, 5 q
 | `prv_qbit_foundry` | ParaRamcoVidia | PRV | quantum | 12 |
 | `sne_lattice` | SnedeCorp | SnedOS | photon | 36 |
 
-Ship templates: workhorses and budget hulls carry silicon; sporty and late refits carry photon. No template defaults to a quantum core.
+Ship templates: workhorses and budget hulls carry silicon; sporty and late refits carry photon. Blackbird stealth scouts carry quantum cores; no other template line defaults to quantum.
 
 SnedeCorp is the galactic software monopoly in lore, but still sells **sealed, attested hardware** - the box SnedOS runs on. ParaRamcoVidia is the glossy semiconductor house.
 

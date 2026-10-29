@@ -77,7 +77,7 @@ The script validates catalogs, imports assets, parses scripts, and runs unit tes
 # Reimport assets after adding art
 $GODOT --path . --headless --import --quit
 
-# Regenerate placeholder location art
+# Create missing placeholder art (never replaces an existing file)
 python3 scripts/tools/generate_placeholder_art.py
 
 # Rebuild UI theme after token changes

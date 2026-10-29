@@ -190,5 +190,53 @@
       "heavy_weapon": 0,
       "maneuver": 1
     }
+  },
+  {
+    "id": "blackbird_chassis",
+    "name": "Blackbird Chassis",
+    "maker": "SnedeCorp",
+    "description": "SnedeCorp's low-profile scout frame: tight volume, high manoeuvre, and enough system bays for quiet field packages. Built for pilots who would rather not be seen.",
+    "cost": 19000,
+    "mass": 3.2,
+    "hits": 16,
+    "mass_limit": 18.0,
+    "volume": 28.0,
+    "maneuver": "high",
+    "hull_color": "#3a3a48",
+    "sprite": "res://assets/ships/chassis/blackbird_chassis.svg",
+    "header": "res://assets/ui/ships/blackbird_chassis.png",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 9,
+      "light_weapon": 1,
+      "medium_weapon": 0,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
+  },
+  {
+    "id": "lancer_chassis",
+    "name": "Lancer Chassis",
+    "maker": "Mercury Communications",
+    "description": "Mercury's survey hull: room for stacked listen arrays, modest cargo, and a pair of weapon hardpoints when the contract turns hostile.",
+    "cost": 23000,
+    "mass": 5.5,
+    "hits": 22,
+    "mass_limit": 36.0,
+    "volume": 48.0,
+    "maneuver": "medium",
+    "hull_color": "#6a8ab8",
+    "sprite": "res://assets/ships/chassis/lancer_chassis.svg",
+    "header": "res://assets/ui/ships/lancer_chassis.png",
+    "mounts": {
+      "main_engine": 1,
+      "power": 1,
+      "system": 9,
+      "light_weapon": 1,
+      "medium_weapon": 1,
+      "heavy_weapon": 0,
+      "maneuver": 1
+    }
   }
 ]

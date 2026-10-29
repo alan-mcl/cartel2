@@ -32,7 +32,9 @@
 			"dragon_chassis",
 			"juno_chassis",
 			"silhouette_chassis",
-			"mantis_chassis"
+			"mantis_chassis",
+			"blackbird_chassis",
+			"lancer_chassis"
 		],
 		"type": "chassis_dealer"
 	},
@@ -76,7 +78,14 @@
 			"silhouette_warden",
 			"mantis_xf900",
 			"mantis_xf4400",
-			"mantis_xf5700"
+			"mantis_xf5700",
+			"blackbird_bb_10s",
+			"blackbird_bb_10r",
+			"blackbird_bb_10x",
+			"lancer_2sv",
+			"lancer_2st",
+			"lancer_25s",
+			"lancer_2sx"
 		],
 		"type": "ship_dealer"
 	},
