@@ -166,7 +166,7 @@ The **`field`** object is validated loosely (`additionalProperties: true` on nes
 
 Documented gaps to close when expanding this spec:
 
-1. **Infinite or tiled** unspace navigation ([F1](../architecture/backlog.md), [F2](../architecture/backlog.md)).
+1. **Infinite or tiled** unspace navigation ([F2](../architecture/backlog.md)).
 2. **Randomised** entry spawn and exit portal placement policy (partially seeded today; backlog asks for broader randomisation).
 3. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).
 

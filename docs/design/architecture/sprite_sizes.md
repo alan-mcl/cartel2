@@ -133,8 +133,8 @@ World entity `modulate` in JSON still tints some sprites today. For a clean SVG 
 
 | Asset | Path | Current | **Author at** | Usage |
 |-------|------|---------|---------------|-------|
-| Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08 |
-| Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 - do **not** bake 1.15 into the PNG |
+| Starfield far | `assets/space/stars_far.png` | 512×512 | **512×512** | Seamless tile; parallax 0.08; repeated around the camera in flight |
+| Starfield near | `assets/space/stars_near.png` | 512×512 | **512×512** | Seamless tile; runtime scale 1.15 - do **not** bake 1.15 into the PNG; repeated around the camera in flight |
 | Planet albedo | `assets/world/planets/<sector_id>_albedo.png` | 2048×1024 placeholders | **2048×1024** (preferred) or **1024×512** min | Equirectangular 2:1; wired in `worlds.json` `planet.albedo` |
 | Planet night lights | `assets/world/planets/<sector_id>_night.png` | 2048×1024 placeholders | Same as albedo | Same pixel size and equirect UV as albedo; **RGB emission** (black = none). Shader adds `texture * night_emission_strength` on the night side only. Generate from albedo: `python3 scripts/tools/planet_night_from_albedo_photorealistic.py assets/world/planets/<sector>_albedo.png --density 0.4 -o assets/world/planets/<sector>_night.png` (requires `pip install pillow`). The same run writes `<sector>_night_habitations.json` beside the night PNG. |
 | Planet disc (legacy) | `assets/world/planet.png` | 512×512 | - | **Unused** for globe mesh; do not replace as a flat disc |
