@@ -1,0 +1,122 @@
+[gd_scene load_steps=4 format=3 uid="uid://cartel_shipyard_refit"]
+
+[ext_resource type="Script" path="res://scripts/ui/shipyard_refit_screen.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/components/inventory_drop_target.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://cartel_pattern_message_bar" path="res://scenes/ui/patterns/message_bar.tscn" id="3"]
+
+[node name="ShipyardRefitScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+theme_type_variation = &"Surface"
+
+[node name="HeaderBox" type="VBoxContainer" parent="Layout/Header"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Layout/Header/HeaderBox"]
+layout_mode = 2
+theme_type_variation = &"Title"
+text = "Refit"
+
+[node name="ShipName" type="Label" parent="Layout/Header/HeaderBox"]
+layout_mode = 2
+theme_type_variation = &"Headline"
+text = "Ship"
+
+[node name="Credits" type="Label" parent="Layout/Header/HeaderBox"]
+layout_mode = 2
+theme_type_variation = &"Numeric"
+text = "Credits: d0"
+
+[node name="Body" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"Surface"
+
+[node name="Split" type="HBoxContainer" parent="Layout/Body"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ConfigColumn" type="VBoxContainer" parent="Layout/Body/Split"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.0
+theme_override_constants/separation = 8
+
+[node name="ConfigHeading" type="Label" parent="Layout/Body/Split/ConfigColumn"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "CONFIGURATION"
+
+[node name="ConfigScroll" type="ScrollContainer" parent="Layout/Body/Split/ConfigColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ConfigBody" type="VBoxContainer" parent="Layout/Body/Split/ConfigColumn/ConfigScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="InventoryColumn" type="VBoxContainer" parent="Layout/Body/Split"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/separation = 8
+script = ExtResource("2")
+
+[node name="StockHeading" type="Label" parent="Layout/Body/Split/InventoryColumn"]
+layout_mode = 2
+theme_type_variation = &"Section"
+text = "YARD STOCK / INVENTORY"
+
+[node name="StockTabs" type="TabContainer" parent="Layout/Body/Split/InventoryColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2")
+
+[node name="Actions" type="HBoxContainer" parent="Layout/Body/Split/InventoryColumn"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BuyButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions"]
+layout_mode = 2
+text = "Buy"
+
+[node name="SellButton" type="Button" parent="Layout/Body/Split/InventoryColumn/Actions"]
+layout_mode = 2
+text = "Sell"
+
+[node name="Footer" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+theme_type_variation = &"Elevated"
+
+[node name="FooterBox" type="HBoxContainer" parent="Layout/Footer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CloseButton" type="Button" parent="Layout/Footer/FooterBox"]
+layout_mode = 2
+text = "Close"
+
+[node name="Log" parent="Layout/Footer/FooterBox" instance=ExtResource("3")]
+layout_mode = 2
+size_flags_horizontal = 3

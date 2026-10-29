@@ -10,6 +10,10 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 		load("res://scripts/ui/shipyard_screen.gd").get_global_name() == &"ShipyardScreen",
 		"ShipyardScreen global class name"
 	)
+	runner.check(
+		load("res://scripts/ui/shipyard_refit_screen.gd").get_global_name() == &"ShipyardRefitScreen",
+		"ShipyardRefitScreen global class name"
+	)
 
 
 static func _test_session_changed_lifecycle(runner: TestRunner, tree: SceneTree) -> void:

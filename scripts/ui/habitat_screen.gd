@@ -314,8 +314,10 @@ func _pop_stacked_shipyard_if_needed() -> void:
 	var top := _context.stack.get_top_screen()
 	if top == null or top == self:
 		return
-	if top is ShipyardScreen:
-		_context.stack.pop_screen()
+	if top is ShipyardRefitScreen:
+		var popped := _context.stack.pop_screen()
+		if popped != null:
+			popped.queue_free()
 
 
 func _show_placeholder_content(building: Dictionary) -> void:

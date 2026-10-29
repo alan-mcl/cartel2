@@ -1,6 +1,6 @@
 extends Control
 
-const SHIPYARD_SCREEN := preload("res://scenes/ui/shipyard_screen.tscn")
+const SHIPYARD_REFIT_SCREEN := preload("res://scenes/ui/shipyard_refit_screen.tscn")
 
 const SANDBOX_HABITAT_ID := "proxima_habitat"
 
@@ -14,7 +14,11 @@ const SANDBOX_HABITAT_ID := "proxima_habitat"
 var _catalog: Catalog
 var _session: GameSession
 var _context: UiContext
-var _yard: Control
+var _refit: ShipyardRefitScreen
+var _ship_item_list: ItemList
+var _ship_ids: PackedStringArray = PackedStringArray()
+var _selected_ship_id: String = ""
+var _suppress_ship_select: bool = false
 var _ship_id_counter: int = 0
 
 
@@ -28,6 +32,8 @@ func _ready() -> void:
 	_strip_button.pressed.connect(_on_strip_pressed)
 	_restore_button.pressed.connect(_on_restore_pressed)
 	_add_hull_button.pressed.connect(_on_add_hull_pressed)
+	if not _session.changed.is_connected(_on_sandbox_session_changed):
+		_session.changed.connect(_on_sandbox_session_changed)
 
 
 func _build_session() -> GameSession:
@@ -90,12 +96,89 @@ func _populate_chassis_options() -> void:
 
 
 func _mount_shipyard() -> void:
-	_yard = SHIPYARD_SCREEN.instantiate()
-	_yard_host.add_child(_yard)
-	_yard.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_yard.configure_embedded(true)
-	_yard.configure_sandbox(true)
-	_yard.bind(_context)
+	for child in _yard_host.get_children():
+		child.queue_free()
+
+	var split := HBoxContainer.new()
+	split.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	split.add_theme_constant_override("separation", 12)
+	_yard_host.add_child(split)
+
+	var left := VBoxContainer.new()
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left.size_flags_stretch_ratio = 0.35
+	left.add_theme_constant_override("separation", 4)
+	split.add_child(left)
+
+	var heading := Label.new()
+	heading.text = "SHIPS"
+	heading.theme_type_variation = &"Section"
+	left.add_child(heading)
+
+	_ship_item_list = ItemList.new()
+	_ship_item_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_ship_item_list.select_mode = ItemList.SELECT_SINGLE
+	_ship_item_list.allow_reselect = true
+	_ship_item_list.item_selected.connect(_on_sandbox_ship_selected)
+	left.add_child(_ship_item_list)
+
+	_refit = SHIPYARD_REFIT_SCREEN.instantiate()
+	_refit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_refit.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_refit.size_flags_stretch_ratio = 1.65
+	split.add_child(_refit)
+
+	_refit.configure_sandbox(true)
+	_refit.configure_embedded_in_host(true)
+	_refit.bind(_context)
+
+	_rebuild_sandbox_ship_list()
+
+
+func _on_sandbox_session_changed() -> void:
+	_rebuild_sandbox_ship_list()
+
+
+func _rebuild_sandbox_ship_list() -> void:
+	if _ship_item_list == null:
+		return
+
+	var preserve_id := _selected_ship_id
+	_ship_ids.clear()
+	_ship_item_list.clear()
+
+	var ships := _session.ships_at(SANDBOX_HABITAT_ID)
+	for ship in ships:
+		_ship_ids.append(ship.id)
+		_ship_item_list.add_item(ship.name)
+
+	if preserve_id.is_empty() and not _ship_ids.is_empty():
+		preserve_id = _ship_ids[0]
+	if not _ship_ids.has(preserve_id):
+		preserve_id = _ship_ids[0] if not _ship_ids.is_empty() else ""
+
+	_selected_ship_id = preserve_id
+	_suppress_ship_select = true
+	var index := _ship_ids.find(_selected_ship_id)
+	if index >= 0:
+		_ship_item_list.select(index)
+	else:
+		_ship_item_list.deselect_all()
+	_suppress_ship_select = false
+
+	if _refit != null:
+		_refit.set_ship_id(_selected_ship_id)
+
+
+func _on_sandbox_ship_selected(index: int) -> void:
+	if _suppress_ship_select:
+		return
+	if index < 0 or index >= _ship_ids.size():
+		return
+	_selected_ship_id = _ship_ids[index]
+	if _refit != null:
+		_refit.set_ship_id(_selected_ship_id)
 
 
 func _make_empty_hull(chassis_def: ChassisDef) -> OwnedShip:
@@ -119,12 +202,9 @@ func _next_ship_id(chassis_id: String) -> String:
 
 
 func _get_selected_ship() -> OwnedShip:
-	if _yard == null:
+	if _selected_ship_id.is_empty():
 		return null
-	var ship_id: String = _yard.get_selected_ship_id()
-	if ship_id.is_empty():
-		return null
-	return _session.get_owned_ship(ship_id)
+	return _session.get_owned_ship(_selected_ship_id)
 
 
 func _on_strip_pressed() -> void:
@@ -184,5 +264,6 @@ func _on_add_hull_pressed() -> void:
 
 	var ship := _make_empty_hull(chassis_def)
 	_session.owned_ships.append(ship)
+	_selected_ship_id = ship.id
 	_session.last_log = "Added empty %s." % ship.name
 	_session.changed.emit()
