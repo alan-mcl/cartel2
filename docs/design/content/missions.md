@@ -2,9 +2,13 @@
 
 **Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (no desk UI yet); see [plotlines.md](plotlines.md). Named-NPC dialogue is not implemented. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
 
+## Scan and bounty volatile hops
+
+Peacekeeping, corporate, and bar desks that post scan or bounty work show the site, the translation layer (`4-space`, `5-space`, or `6-space`), and the fee on each tile; the hover popup repeats the layer. In-system **planet** scan targets omit the layer. Pay for volatile-site scans and all bounties scales with that layer: **×1** at 4-space, **×1.5** at 5-space, **×2** at 6-space (`VolatileTranslation.charter_pay_multiplier`), applied when the offer is rolled.
+
 ## Bounty charters
 
-Board copy lists the wanted callsign, site, and threat label only. At the volatile site the return gate and primary target are placed at random within the site annulus (seeded from the offer id). Each bounty ship has hidden posture, resolve, transponder, patrol style, pilot skill, and (when they flee) an escape route. Oblivious contacts ignore you until you are very close or you fire first; stealthy ones stay dark until you are in range; aggressive ones hunt with active sensors. Fleeing targets may run for deep space (contract lost), the entry beacon, or a hyperdrive translation; beacon and hyperdrive escapes can be chased through Unspace and back to the origin system before they reach dock.
+Board copy lists the wanted callsign, site, threat label, and translation layer on the tile; the hover text states that outbound and return hops use the temporary translation. At the volatile site the return gate and primary target are placed at random within the site annulus (seeded from the offer id). Each bounty ship has hidden posture, resolve, transponder, patrol style, pilot skill, and (when they flee) an escape route. Oblivious contacts ignore you until you are very close or you fire first; stealthy ones stay dark until you are in range; aggressive ones hunt with active sensors. Fleeing targets may run for deep space (contract lost), the entry beacon, or a hyperdrive translation; beacon and hyperdrive escapes can be chased through Unspace and back to the origin system before they reach dock.
 
 ## Pilot standing
 

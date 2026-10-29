@@ -433,6 +433,10 @@ static func _assemble_offer(
 		rng,
 		volatile_site
 	)
+	var base_reward := int(composed.get("reward", 0))
+	var reward := base_reward
+	if target_kind != "planet":
+		reward = VolatileTranslation.scale_charter_reward(base_reward, volatile_n)
 	return {
 		"id": "scan_%s_%d" % [building_id, offer_index],
 		"desk": building_type,
@@ -447,7 +451,7 @@ static func _assemble_offer(
 		"site_label": site_label,
 		"destination_name": site_label,
 		"description": str(composed.get("description", "")),
-		"reward": int(composed.get("reward", 0)),
+		"reward": reward,
 		"deadline_hours": deadline_hours,
 		"min_reputation": 0,
 		"corporation_id": str(composed.get("corporation_id", "")),

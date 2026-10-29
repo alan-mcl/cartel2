@@ -125,7 +125,7 @@
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_habitat_terminal.png",
-		"description": "Tycho's primary terminal is large and utilitarian. Ore shuttles and industrial traffic share the lanes with private craft. There is plenty of foot traffic moving fast on the concourse - most are here to work.",
+		"description": "Tycho's primary terminal is large and utilitarian. Ore shuttles and industrial traffic share the lanes with private craft. There is plenty of foot traffic moving fast on the concourse - most folks are here to work.",
 		"id": "tycho_habitat_terminal",
 		"kind": "terminal",
 		"name": "Tycho Terminus",
@@ -156,7 +156,7 @@
 	},
 	{
 		"art": "res://assets/ui/locations/bela_shipyard.png",
-		"description": "La Bella Vista's orbital shipyard is somewhat behind the sleek tourist facade. Yacht crews mix casually with charter pilots while modules are installed in large warehouses and cradles.",
+		"description": "La Bella Vista's busy orbital shipyard is somewhat different to the sleek tourist facade. Yacht crews mix casually with charter pilots while modules are installed in large warehouses and cradles. No tourists in sight.",
 		"id": "bela_shipyard",
 		"kind": "workshop",
 		"name": "Vista Fitting Docks",
@@ -169,16 +169,16 @@
 	},
 	{
 		"art": "res://assets/ui/locations/irasia_habitat_terminal.png",
-		"description": "Commercial terminal on a major trade route. Customs never quite catch up with the volume.",
+		"description": "Terminal A at Irasia habitat is a hive of commercial activity. Endless volumes of commodities stream in and out of the automated handling lanes and the concourses are thronged with people who have places to be and things to do.",
 		"id": "irasia_habitat_terminal",
 		"kind": "terminal",
-		"name": "Irasia Terminal",
-		"short_desc": "Commercial terminal on a major trade route.",
+		"name": "Irasia Terminal A",
+		"short_desc": "Commercial terminal at a major trade hub.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/irasia_shipyard.png",
-		"description": "High-throughput commercial yards on the Irasia trade spine. Manifest queues and parallel bays keep manufacturing traffic moving.",
+		"description": "The commercial fitting yards at Irasia Habitat are highly automated. Manifest queues and parallel bays keep the manufacturing lanes moving. Smaller sheds on the perimeter hold private ships in large cradles.",
 		"id": "irasia_shipyard",
 		"kind": "workshop",
 		"name": "Irasia Commercial Yards",
@@ -247,7 +247,7 @@
 		"description": "Discrete private yards above Fortuna. Wealthy owners expect quiet bays, vetted crews, and finishes that match the finance districts below.",
 		"id": "fortuna_shipyard",
 		"kind": "workshop",
-		"name": "Fortuna Private Yards",
+		"name": "Fortuna Coachworks",
 		"services": [
 			"assembly",
 			"parts"

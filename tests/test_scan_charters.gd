@@ -24,6 +24,30 @@ static func run(runner: TestRunner) -> void:
 	_test_volatile_site_object_kinds(runner, catalog)
 	_test_site_description_phrase(runner, catalog)
 	_test_harness_seed_pins_site(runner, catalog)
+	_test_volatile_reward_scales_with_n(runner, catalog)
+
+
+static func _test_volatile_reward_scales_with_n(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := ScanCharters.config(catalog)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 99
+	var composed := ScanCharters.compose_contract(
+		cfg,
+		catalog,
+		ScanCharters.BOARD_PEACEKEEPING,
+		"reconnaissance",
+		"volatile_orbital",
+		"Prospect marker",
+		"",
+		rng
+	)
+	var base := int(composed.get("reward", 0))
+	runner.check(base > 0, "scan scale: base reward from compose")
+	runner.check_eq(
+		VolatileTranslation.scale_charter_reward(base, 6),
+		base * 2,
+		"scan scale: n6 doubles composed base"
+	)
 
 
 static func _test_harness_seed_pins_site(runner: TestRunner, catalog: Catalog) -> void:

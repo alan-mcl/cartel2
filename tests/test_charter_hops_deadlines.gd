@@ -447,7 +447,8 @@ static func _test_scan_charter_tooltip_layout(runner: TestRunner, catalog: Catal
 		"origin_habitat_id": "proxima_habitat",
 		"destination_sector_id": "tycho",
 		"target_kind": "volatile_orbital",
-		"reward": 320,
+		"volatile_n": 6,
+		"reward": 640,
 		"deadline_hours": 8,
 		"min_reputation": 0,
 	}
@@ -458,8 +459,8 @@ static func _test_scan_charter_tooltip_layout(runner: TestRunner, catalog: Catal
 		"scan tooltip: round-trip contract"
 	)
 	runner.check(
-		tooltip.contains("Volatile survey site"),
-		"scan tooltip: volatile site kind"
+		tooltip.contains("temporary 6-space translation"),
+		"scan tooltip: volatile site kind shows N"
 	)
 	runner.check(
 		tooltip.contains("active-scan"),
@@ -476,4 +477,8 @@ static func _test_scan_charter_tooltip_layout(runner: TestRunner, catalog: Catal
 	runner.check(
 		planet_tooltip.contains("In-system survey: Tycho"),
 		"scan tooltip: planet survey line"
+	)
+	runner.check(
+		not planet_tooltip.contains("6-space"),
+		"scan tooltip: planet survey omits translation layer"
 	)

@@ -195,9 +195,11 @@ static func _build_offer(
 	pay_mult *= float(source_def.get("pay_multiplier", 1.0))
 	pay_mult *= float(objective_def.get("difficulty", 1.0))
 	var strength := target_pay_strength(catalog, template_id, threat_profile)
-	var reward := int(
+	var volatile_n := pinned_n if pinned_n > 0 else 4 + rng.randi_range(0, 2)
+	var base_reward := int(
 		round(float(cfg.get("base_pay", 1100)) * pay_mult * rng.randf_range(0.9, 1.15) * strength)
 	)
+	var reward := VolatileTranslation.scale_charter_reward(base_reward, volatile_n)
 
 	var affiliation := corp_name if not corp_id.is_empty() else "Independent Operator"
 	if building_type == BOARD_PEACEKEEPING:
@@ -232,7 +234,7 @@ static func _build_offer(
 		"deadline_hours": int(cfg.get("volatile_return_hours", 8)),
 		"min_reputation": 0,
 		"corporation_id": corp_id,
-		"volatile_n": pinned_n if pinned_n > 0 else 4 + rng.randi_range(0, 2),
+		"volatile_n": volatile_n,
 	}
 
 

@@ -159,6 +159,12 @@ static func format_bounty(
 	if not hull.is_empty():
 		_append_section(lines, "Target hull: %s" % hull)
 
+	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
+	_append_section(
+		lines,
+		"Outbound and return hops use a temporary %s translation." % n_label
+	)
+
 	_append_section(lines, "Fly to the volatile site, destroy the target, then dock back at origin.")
 
 	var deadline := _deadline_line(entry, reference_gst)
@@ -274,7 +280,8 @@ static func _scan_site_kind_line(entry: Dictionary, catalog: Catalog) -> String:
 		return "In-system survey: %s." % sector_name
 	if target_kind.is_empty():
 		return ""
-	return "Volatile survey site (temporary translation)."
+	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
+	return "Volatile survey site (temporary %s translation)." % n_label
 
 
 static func _scan_requirement_lines(entry: Dictionary) -> PackedStringArray:

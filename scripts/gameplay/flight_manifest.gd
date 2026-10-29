@@ -199,7 +199,7 @@ static func _scan_row(session: GameSession, catalog: Catalog, entry: Dictionary)
 	return {
 		"title": str(entry.get("designation", "Scan")),
 		"route": "%s → %s → %s" % [origin, site, origin],
-		"meta": "d%d" % int(entry.get("reward", 0)),
+		"meta": VolatileTranslation.charter_manifest_meta(entry, true),
 		"deadline": deadline_text(session, entry),
 		"tooltip": _mission_tooltip(session, catalog, entry, "scan"),
 	}
@@ -211,7 +211,7 @@ static func _bounty_row(session: GameSession, catalog: Catalog, entry: Dictionar
 	return {
 		"title": "Bounty: %s" % str(entry.get("target_callsign", "Target")),
 		"route": "%s → %s → %s" % [origin, site, origin],
-		"meta": "d%d" % int(entry.get("reward", 0)),
+		"meta": VolatileTranslation.charter_manifest_meta(entry, false),
 		"deadline": deadline_text(session, entry),
 		"tooltip": _mission_tooltip(session, catalog, entry, "bounty"),
 	}

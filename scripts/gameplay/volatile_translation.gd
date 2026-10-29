@@ -24,6 +24,53 @@ static func default_lump_seconds() -> float:
 	return float(DEFAULT_FRICTION) * Catalog.ROUTE_SECONDS_PER_FRICTION
 
 
+static func n_space_label(n: int) -> String:
+	return "%d-space" % n
+
+
+static func charter_pay_multiplier(n: int) -> float:
+	match n:
+		5:
+			return 1.5
+		6:
+			return 2.0
+		_:
+			return 1.0
+
+
+static func scale_charter_reward(base_reward: int, n: int) -> int:
+	return int(round(float(base_reward) * charter_pay_multiplier(n)))
+
+
+static func scan_uses_volatile_translation(entry: Dictionary) -> bool:
+	return str(entry.get("target_kind", "")) != "planet"
+
+
+static func charter_site_fee_line(entry: Dictionary, for_scan: bool) -> String:
+	var site := str(entry.get("site_label", ""))
+	var reward := int(entry.get("reward", 0))
+	var show_n := not for_scan or scan_uses_volatile_translation(entry)
+	if show_n:
+		return "%s · %s · d%d" % [site, n_space_label(int(entry.get("volatile_n", 4))), reward]
+	return "%s · d%d" % [site, reward]
+
+
+static func charter_manifest_meta(entry: Dictionary, for_scan: bool) -> String:
+	var reward := int(entry.get("reward", 0))
+	var show_n := not for_scan or scan_uses_volatile_translation(entry)
+	if show_n:
+		return "%s · d%d" % [n_space_label(int(entry.get("volatile_n", 4))), reward]
+	return "d%d" % reward
+
+
+static func accepted_charter_meta_suffix(entry: Dictionary, for_scan: bool) -> String:
+	var reward := int(entry.get("reward", 0))
+	var show_n := not for_scan or scan_uses_volatile_translation(entry)
+	if show_n:
+		return "%s · d%d" % [n_space_label(int(entry.get("volatile_n", 4))), reward]
+	return "d%d" % reward
+
+
 static func lag_seconds(record_or_mapping: Dictionary, field: String) -> float:
 	var value := float(record_or_mapping.get(field, 0.0))
 	if value > 0.0:

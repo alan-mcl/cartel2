@@ -13,6 +13,7 @@ static func run(runner: TestRunner) -> void:
 	_test_volatile_lag_display(runner, catalog)
 	_test_exit_lag_on_arrival(runner, catalog)
 	_test_volatile_site_stars(runner, catalog)
+	_test_charter_pay_multiplier(runner)
 
 
 static func _assembled_with_nav(catalog: Catalog) -> AssembledShip:
@@ -476,3 +477,28 @@ static func _test_save_volatile_sector(runner: TestRunner, catalog: Catalog) -> 
 	runner.check(loaded.from_save(catalog, save_data), "volatile: save reload accepts volatile sector")
 	runner.check_eq(loaded.sector_id, volatile_sector, "volatile: sector round-trip")
 	runner.check_eq(loaded.player.volatile_translations.size(), 1, "volatile: record round-trip")
+
+
+static func _test_charter_pay_multiplier(runner: TestRunner) -> void:
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(4), 1.0, "volatile pay: n4 multiplier")
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(5), 1.5, "volatile pay: n5 multiplier")
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(6), 2.0, "volatile pay: n6 multiplier")
+	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 4), 320, "volatile pay: n4 reward")
+	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 5), 480, "volatile pay: n5 reward")
+	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 6), 640, "volatile pay: n6 reward")
+	runner.check_eq(
+		VolatileTranslation.charter_site_fee_line(
+			{"site_label": "Marker", "volatile_n": 6, "reward": 640, "target_kind": "volatile_orbital"},
+			true
+		),
+		"Marker · 6-space · d640",
+		"volatile pay: site fee line"
+	)
+	runner.check_eq(
+		VolatileTranslation.charter_site_fee_line(
+			{"site_label": "Tycho", "volatile_n": 6, "reward": 320, "target_kind": "planet"},
+			true
+		),
+		"Tycho · d320",
+		"volatile pay: planet site fee line omits N"
+	)

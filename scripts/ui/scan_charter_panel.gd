@@ -136,7 +136,7 @@ func _describe_scan_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 
 func _describe_bounty_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 	var lines: Array = []
-	lines.append("%s · d%d" % [str(offer.get("site_label", "")), int(offer.get("reward", 0))])
+	lines.append(VolatileTranslation.charter_site_fee_line(offer, false))
 	var timing := _charter_timing_line(offer)
 	if not timing.is_empty():
 		lines.append(timing)
@@ -276,7 +276,7 @@ func _cancel_bounty(charter: Dictionary, _ship_id: String) -> bool:
 
 func _scan_offer_lines(offer: Dictionary) -> Array:
 	var lines: Array = []
-	lines.append("%s · d%d" % [str(offer.get("site_label", "")), int(offer.get("reward", 0))])
+	lines.append(VolatileTranslation.charter_site_fee_line(offer, true))
 	var reputation_line := CharterBoard.reputation_line(offer)
 	if not reputation_line.is_empty():
 		lines.append(reputation_line)
@@ -287,12 +287,14 @@ func _scan_offer_lines(offer: Dictionary) -> Array:
 
 
 func _accepted_meta_line(charter: Dictionary, origin: String, ship_name: String) -> String:
-	return "%s → %s → %s · %s · d%d" % [
+	var for_scan := charter.has("target_kind")
+	var suffix := VolatileTranslation.accepted_charter_meta_suffix(charter, for_scan)
+	return "%s → %s → %s · %s · %s" % [
 		origin,
 		str(charter.get("site_label", "")),
 		origin,
 		ship_name,
-		int(charter.get("reward", 0)),
+		suffix,
 	]
 
 
