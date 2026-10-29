@@ -412,7 +412,7 @@ func _update_hud_nav() -> void:
 
 func _clear_traffic_root() -> void:
 	if _traffic_root != null and is_instance_valid(_traffic_root):
-		_traffic_root.queue_free()
+		_traffic_root.free()
 	_traffic_root = null
 
 

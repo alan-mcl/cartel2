@@ -171,7 +171,7 @@ func _clear_bout() -> void:
 
 func _clear_opponent() -> void:
 	if _opponent_node != null and is_instance_valid(_opponent_node):
-		_opponent_node.queue_free()
+		_opponent_node.free()
 	_opponent_node = null
 	_opponent_actor = null
 	_clear_traffic_root()

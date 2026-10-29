@@ -251,15 +251,15 @@ Premium armed survey: full listen stack and Astrolabe, AP-56 plant with Sundance
 
 ## Ave
 
-**Tukey Enterprises** sells the **Ave** as a bare chassis at Skyedge and lists two fitted trims on used lots at Concord Scouts. It is the cheapest launch-legal courier in the catalogue: four tonnes of hold, one pilot seat, no weapons.
+**Tukey Enterprises** sells the **Ave** as a bare chassis at Skyedge and lists two fitted trims on used lots at Concord Scouts. It is the cheapest launch-legal courier in the catalogue: four tonnes of hold, one pilot seat, passive Glimmer Ember sensing (gate on the minimap), Section nav for public 4-space translations, no weapons, and no viewport waypoint arrows.
 
 ### One
 
-The **Ave One** is the official trim: Knock-Off chemical drive, Handy plant, air, and core, BulkLine hold, small fuel tank, and a registration beacon.
+The **Ave One** is the official trim: Knock-Off chemical drive, Handy plant, air, and core, BulkLine hold, small fuel tank, Ember, Section, and a registration beacon.
 
 ### X
 
-The **Ave X** is the yard swap that became common enough to name: same frame and burner, but Guangzhou plant, Combine cockpit air, Orion Spur core, and a GI dry hold. Tukey does not warrant it or sell it new.
+The **Ave X** is the yard swap that became common enough to name: same frame, burner, Ember, and Section, but Guangzhou plant, Combine cockpit air, Orion Spur core, and a GI dry hold. Tukey does not warrant it or sell it new.
 
 ---
 
@@ -289,4 +289,4 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 | `mantis_xf900`, `mantis_xf4400`, `mantis_xf5700` | `mantis_chassis` | Praetorium interceptors; XF900 legacy |
 | `blackbird_bb_10s`, `bb_10r`, `bb_10x` | `blackbird_chassis` | Stealth scout; BB-10X = Needle hyperdrive |
 | `lancer_2sv`, `2st`, `25s`, `2sx` | `lancer_chassis` | Survey listen; 2SV unarmed, 2SX armed premium |
-| `ave_one`, `ave_x` | `ave_chassis` | One = official Handy trim; X = ubiquitous OEM swap |
+| `ave_one`, `ave_x` | `ave_chassis` | Ember + Section nav; One = Handy trim, X = OEM swap |

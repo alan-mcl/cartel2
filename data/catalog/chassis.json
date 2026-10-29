@@ -232,7 +232,7 @@
     "mounts": {
       "main_engine": 1,
       "power": 1,
-      "system": 4,
+      "system": 5,
       "light_weapon": 1,
       "medium_weapon": 0,
       "heavy_weapon": 0,

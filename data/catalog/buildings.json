@@ -18,7 +18,7 @@
 		"type": "bar"
 	},
 	{
-		"art": "res://assets/ui/locations/tokirev_habitat_terminal.png",
+		"art": "res://assets/ui/locations/blue_star_bar.png",
 		"description": "Tycho Habitat's most well known pilot bar. The Blue Star is famous for its mixed crowd, brandy cocktails, and native planet menu. Try Tycho's signature ore prawns.",
 		"id": "blue_star_bar",
 		"kind": "landmark",

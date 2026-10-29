@@ -3,8 +3,6 @@ extends SceneTree
 ## Lightweight rendered-boundary smoke suite. Run through scripts/ci/smoke_scenes.sh;
 ## the wrapper turns Godot engine/script errors into a failing command.
 
-const DRAIN_MAX_FRAMES := 120
-
 var _failures: int = 0
 
 
@@ -27,7 +25,11 @@ func _run() -> void:
 func _finish() -> void:
 	await _drain_root_children()
 	ChassisSprite.clear_cache()
+	AudioService.stop_music(true)
+	AudioService.stop_ambience(true)
+	AudioService.set_ship_thrust(0.0, false, Vector2.ZERO)
 	AudioService.release_playback_streams()
+	await _pump_frames(2)
 	var audio_mgr := root.get_node_or_null("AudioManager")
 	if audio_mgr != null:
 		AudioService.unbind_manager(audio_mgr)
@@ -45,28 +47,27 @@ func _pump_frames(count: int) -> void:
 		await physics_frame
 
 
-func _wait_node_freed(node: Node) -> void:
-	if node == null:
+func _invoke_smoke_teardown(node: Node) -> void:
+	if not is_instance_valid(node):
 		return
-	var frames := 0
-	while is_instance_valid(node) and frames < DRAIN_MAX_FRAMES:
-		await process_frame
-		await physics_frame
-		frames += 1
+	if node.has_method("smoke_teardown"):
+		node.smoke_teardown()
+	elif node.has_method("smoke_shutdown"):
+		node.smoke_shutdown()
+	elif node.has_method("smoke_unload"):
+		node.smoke_unload()
+
+
+func _destroy_node(node: Node) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	_invoke_smoke_teardown(node)
+	node.free()
 
 
 func _free_and_drain(node: Node) -> void:
-	if node == null:
-		return
-	if is_instance_valid(node):
-		if node.has_method("smoke_teardown"):
-			node.smoke_teardown()
-		elif node.has_method("smoke_shutdown"):
-			node.smoke_shutdown()
-		elif node.has_method("smoke_unload"):
-			node.smoke_unload()
-		node.queue_free()
-	await _wait_node_freed(node)
+	_destroy_node(node)
+	await _pump_frames(2)
 
 
 func _drain_root_children() -> void:
@@ -74,8 +75,8 @@ func _drain_root_children() -> void:
 		if child.name == "AudioManager":
 			continue
 		if is_instance_valid(child):
-			child.queue_free()
-	await _pump_frames(DRAIN_MAX_FRAMES)
+			child.free()
+	await _pump_frames(2)
 
 
 func _smoke_embedded_shipyard(catalog: Catalog) -> void:
@@ -120,7 +121,6 @@ func _smoke_save_loaded_world(catalog: Catalog) -> void:
 	_check(world_root.get_node_or_null("NspaceField") != null, "unspace load creates field")
 	_check(not loader.get_nav_contacts(catalog, true).is_empty(), "unspace exposes exit nav contact")
 	loader.clear_world(world_root)
-	await _pump_frames(30)
 	await _free_and_drain(world_root)
 
 

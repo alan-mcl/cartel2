@@ -121,7 +121,7 @@
   "weight": 1.2,
   "templates": [
     { "channel": "headlines", "text": "Control tower at {habitat} warns of docking queue delays.", "tone": "warning" },
-    { "channel": "headlines", "text": "{habitat} reports air-scrubber outage, no impact in transit.", "tone": "info" },
+    { "channel": "headlines", "text": "{habitat} reports air-scrubber outage, no impact on transit.", "tone": "info" },
     { "channel": "headlines", "text": "Trams running on {reduced|normal} headway per {shift} at {planet} orbit.", "tone": "info" },
     { "channel": "headlines", "text": "{habitat} maintenance crawl under way on the outer ring walkway.", "tone": "info" },
     { "channel": "headlines", "text": "Officials at {habitat} annouce new translation queue algorithm.", "tone": "info" },

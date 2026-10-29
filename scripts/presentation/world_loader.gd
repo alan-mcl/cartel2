@@ -55,7 +55,7 @@ var _volatile_star_setup: Dictionary = {}
 
 func clear_world(world_root: Node2D) -> void:
 	for child in world_root.get_children():
-		child.queue_free()
+		child.free()
 	spawned_by_id.clear()
 	_orbital_ring = null
 	_habitat_node = null

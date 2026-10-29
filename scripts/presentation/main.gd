@@ -10,6 +10,7 @@ var _simulation := Simulation.new()
 var _flight := FlightLoopController.new()
 var _world := WorldController.new()
 var _menu := MenuController.new()
+var _exit_shutdown_done: bool = false
 
 @onready var _world_node: Node2D = $World
 @onready var _player: CharacterBody2D = $PlayerShip
@@ -79,6 +80,11 @@ func _ready() -> void:
 
 	_career_end.main_menu_requested.connect(_menu.on_career_end_main_menu_requested)
 	_career_end.leaderboard_requested.connect(_menu.on_career_end_leaderboard_requested)
+
+	var tree := get_tree()
+	if tree != null and tree.has_signal("about_to_quit"):
+		if not tree.about_to_quit.is_connected(_on_about_to_quit):
+			tree.about_to_quit.connect(_on_about_to_quit)
 
 	_new_game.confirmed.connect(_menu.on_new_game_confirmed)
 	_new_game.cancelled.connect(_menu.on_new_game_cancelled)
@@ -285,6 +291,28 @@ func dev_teardown_active_run() -> void:
 	AudioService.stop_music(true)
 	AudioService.stop_ambience(true)
 	AudioService.set_ship_thrust(0.0, false, Vector2.ZERO)
+	AudioService.release_playback_streams()
+
+
+func _on_about_to_quit() -> void:
+	shutdown_for_exit()
+
+
+## Release presentation caches and audio streams before the process exits.
+func shutdown_for_exit() -> void:
+	if _exit_shutdown_done:
+		return
+	_exit_shutdown_done = true
+	if game_active:
+		dev_teardown_active_run()
+	else:
+		_player.freeze_motion()
+		_world.clear_world()
+		AudioService.stop_music(true)
+		AudioService.stop_ambience(true)
+		AudioService.set_ship_thrust(0.0, false, Vector2.ZERO)
+	ChassisSprite.clear_cache()
+	AudioService.release_playback_streams()
 
 
 func _bind_session_events(game_session: GameSession) -> void:
