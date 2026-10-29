@@ -91,7 +91,7 @@
 	},
 	{
 		"art": "res://assets/ui/locations/proxima_shipyard.png",
-		"description": "Centauri is the habitat's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
+		"description": "Centauri is the system's largest shipyard. Outfitting bays for all manner of ship systems cram the giant warehouses, glittering with arc welders and angle grinders. Ships sit in heavy maintenance cradles while crews work around them, installing modules of all kinds. You must supply at least a registered chassis.",
 		"id": "proxima_shipyard",
 		"kind": "workshop",
 		"name": "Centauri Shipyard",
@@ -113,19 +113,19 @@
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_habitat_terminal.png",
-		"description": "Hard-worn terminal above Tycho. Ore shuttles and industrial traffic share the lanes.",
+		"description": "Tycho's primary terminal is large and utilitarian. Ore shuttles and industrial traffic share the lanes with private craft. There is plenty of foot traffic moving fast on the concourse - most are here to work.",
 		"id": "tycho_habitat_terminal",
 		"kind": "terminal",
-		"name": "Tycho Terminal",
+		"name": "Tycho Terminus",
 		"short_desc": "Hard-worn terminal above Tycho.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_shipyard.png",
-		"description": "Ore-hauler cradles and quake-braced gantries dominate the Tycho yards. Crews fit armour and industrial systems while eclipse shutters roll across the observation decks.",
+		"description": "Large cradles and gantries dominate the Tycho yards. Crews fit armour and industrial systems while beneath large radiation-shielded observation decks.",
 		"id": "tycho_shipyard",
 		"kind": "workshop",
-		"name": "Tycho Heavy Yards",
+		"name": "Tycho Heavy Shipyard",
 		"services": [
 			"assembly",
 			"parts"
@@ -135,16 +135,16 @@
 	},
 	{
 		"art": "res://assets/ui/locations/bela_habitat_terminal.png",
-		"description": "Resort terminal with customs and docking lanes overlooking the ocean.",
+		"description": "The main terminal of La Bella Vista system is spacious and modern. The stunning blue seas of the planet below are framed in panoramic observation windows. Tourists drift along the concourses, worked by swarms of vendors, concierges, and hustlers.",
 		"id": "bela_habitat_terminal",
 		"kind": "terminal",
-		"name": "La Bella Vista Orbital Terminal",
-		"short_desc": "Resort terminal with customs and docking lanes overlooking the ocean.",
+		"name": "Bela Spaceport",
+		"short_desc": "Resort terminal overlooking the Bela's oceans.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/bela_shipyard.png",
-		"description": "Polished fitting docks above La Bella Vista's oceans. Yacht crews mix with charter pilots while modules are installed behind tinted viewports.",
+		"description": "La Bella Vista's orbital shipyard is somewhat behind the sleek tourist facade. Yacht crews mix casually with charter pilots while modules are installed in large warehouses and cradles.",
 		"id": "bela_shipyard",
 		"kind": "workshop",
 		"name": "Vista Fitting Docks",

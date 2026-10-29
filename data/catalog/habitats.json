@@ -18,7 +18,7 @@
 			"corp_hq_praetorium_proxima"
 		],
 		"default_building": "proxima_habitat_terminal",
-		"description": "Orbital city hub above Proxima, and the largest orbital by population in any system.",
+		"description": "Orbital hub above Proxima and the largest orbital by population in any system. Proxima Habitat is a bustling and cosmopolitan settlement the size of a small city-mall. In many ways this is the beating heart of human space.",
 		"id": "proxima_habitat",
 		"name": "Proxima Habitat",
 		"sector_id": "proxima",
@@ -39,7 +39,7 @@
 			"corp_oklahoma_combine_tycho_office"
 		],
 		"default_building": "tycho_habitat_terminal",
-		"description": "Industrial orbital above a restless world. Eclipses and quakes keep the docks busy with ore and parts.",
+		"description": "This is Tycho's principal orbital settlement and gateway to the system. Spectacular views of Tycho's chaotic skies are tempered by the heavy radiation shielding.",
 		"id": "tycho_habitat",
 		"name": "Tycho Habitat",
 		"sector_id": "tycho",
@@ -59,11 +59,11 @@
 			"corp_hq_universal_house_bela"
 		],
 		"default_building": "bela_habitat_terminal",
-		"description": "Resort orbital city above La Bella Vista's endless oceans.",
+		"description": "Bela's main orbital settlement is crammed with hotels, casinos, and cocktail bars. It's busy, but most tourists carry on down the gravity well where warm oceans and bright sunsets await.",
 		"id": "bela_orbital_habitat",
 		"name": "La Bella Vista Habitat",
 		"sector_id": "bela",
-		"short_desc": "Resort orbital city above La Bella Vista's endless oceans.",
+		"short_desc": "Resort orbital city above La Bella Vista's warm oceans.",
 		"type": "habitat"
 	},
 	{
