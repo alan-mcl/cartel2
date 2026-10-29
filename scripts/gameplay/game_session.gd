@@ -320,6 +320,7 @@ func start_new_game(
 		player.last_log = "Welcome, %s. All ships docked at %s." % [player.callsign, habitat_name]
 	if not fleet.current_ship_id.is_empty():
 		load_combat_from_owned_ship(catalog, fleet.current_ship_id)
+	career.bind_gst_origin_at_career_start(world.gst_seconds)
 	changed.emit()
 	return true
 
@@ -361,6 +362,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	combat.load_session_dict(session_data)
 	player.load_session_dict(session_data)
 	career.load_session_dict(session_data)
+	career.ensure_gst_origin_after_load(world.gst_seconds)
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := PlayerState._int_dict_from_variant(session_data.get("cargo", {}))

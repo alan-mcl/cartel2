@@ -132,6 +132,15 @@ static func _test_save_round_trip(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check_eq(loaded.career.nett_profit(), 100, "career: profit survives save")
 	runner.check_eq(loaded.career.kills, 3, "career: kills survive save")
 	runner.check_eq(loaded.career.career_id, "career_test_fixed_id", "career: id survives save")
+	runner.check(
+		loaded.career.gst_origin_is_set(),
+		"career: gst origin survives save"
+	)
+	runner.check(
+		absf(loaded.career.elapsed_gst_seconds(loaded.gst_seconds) - session.career.elapsed_gst_seconds(session.gst_seconds))
+			< EPSILON,
+		"career: gst elapsed survives save"
+	)
 
 
 static func _test_legacy_save(runner: TestRunner, catalog: Catalog) -> void:
@@ -153,6 +162,10 @@ static func _test_legacy_save(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check(loaded.from_save(catalog, data), "career: legacy save loads")
 	runner.check(not loaded.career.career_id.is_empty(), "career: legacy save assigns career id")
 	runner.check_eq(loaded.career.nett_profit(), 0, "career: legacy save zero profit")
+	runner.check(
+		loaded.career.gst_origin_is_set(),
+		"career: legacy save backfills gst origin"
+	)
 
 
 static func _leaderboard_test_dir() -> String:
@@ -180,7 +193,7 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 	session_b.career.record_mission_penalty(100)
 	session_a.player.reputation = 12
 	session_b.player.reputation = 3
-	session_a.career.played_seconds = 7200.0
+	session_a.advance_gst(7200.0)
 	LeaderboardStore.upsert_from_session(session_a, "2026-01-01T00:00:00", catalog)
 	LeaderboardStore.upsert_from_session(session_b, "2026-01-02T00:00:00", catalog)
 	var row_a: Dictionary = {}
@@ -194,8 +207,12 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 		"career: leaderboard stores ships owned"
 	)
 	runner.check(
+		bool(row_a.get("career_time_gst", false)),
+		"career: leaderboard marks gst career time"
+	)
+	runner.check(
 		absf(float(row_a.get("career_time", 0.0)) - 7200.0) < EPSILON,
-		"career: leaderboard stores career time"
+		"career: leaderboard stores gst career time"
 	)
 	var by_reputation := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.REPUTATION, true)
 	runner.check_eq(int(by_reputation[0].get("reputation", 0)), 12, "career: leaderboard reputation sort")
@@ -235,6 +252,52 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 		runner.check(
 			by_profit_again.size() >= 1 and int(by_profit_again[0].get("profit", 0)) == 3000,
 			"career: profit stays the ranking column"
+		)
+	var legacy_row := {
+		"career_id": "career_legacy_time",
+		"callsign": "LEGACY-T",
+		"profit": 0,
+		"revenue": 0,
+		"expenses": 0,
+		"tonnes_traded": 0.0,
+		"missions_completed": 0,
+		"kills": 0,
+		"reputation": 0,
+		"ships_owned": 1,
+		"career_time": 99999.0,
+		"saved_at": "2020-01-01T00:00:00",
+	}
+	var all_rows := LeaderboardStore.read_all()
+	all_rows.append(legacy_row)
+	LeaderboardStore.write_all(all_rows)
+	var by_career_time := LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.CAREER_TIME, true)
+	runner.check(
+		by_career_time.size() >= 1
+		and str(by_career_time[by_career_time.size() - 1].get("career_id", "")) == "career_legacy_time",
+		"career: leaderboard row without gst career time sorts last"
+	)
+	var flight_session := _session(runner, catalog, "CR-GST-ORIG")
+	if flight_session != null:
+		var sim := Simulation.new()
+		flight_session.docked = false
+		flight_session.in_unspace = false
+		sim.step(flight_session, catalog, 100.0, false)
+		var expected_elapsed := flight_session.career.elapsed_gst_seconds(flight_session.gst_seconds)
+		var data := SaveStore.build_save_data(
+			flight_session.player_to_dict(),
+			flight_session.to_dict(),
+			flight_session.ships_to_array(),
+			{},
+			{}
+		)
+		var session_data: Dictionary = data.get("session", {})
+		session_data.erase("gst_origin_seconds")
+		data["session"] = session_data
+		var reloaded := GameSession.new()
+		runner.check(reloaded.from_save(catalog, data), "career: save without gst origin loads")
+		runner.check(
+			absf(reloaded.career.elapsed_gst_seconds(reloaded.gst_seconds) - expected_elapsed) < EPSILON,
+			"career: legacy gst origin backfill preserves elapsed gst"
 		)
 	LeaderboardStore.store_dir = "user://"
 	if DirAccess.dir_exists_absolute(temp_dir):

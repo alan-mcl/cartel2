@@ -8,7 +8,7 @@
 		"reputation": 0,
 		"sanctions": []
 	},
-	"saved_at": "2026-10-28T19:32:33",
+	"saved_at": "2026-10-29T05:31:22",
 	"session": {
 		"bounty_contract_sectors": {},
 		"building_id": "proxima_habitat_terminal",
@@ -23,6 +23,7 @@
 		"expenses_by_source": {},
 		"flight_gst_seconds_real": 0.0,
 		"flight_gst_seconds_unspace": 0.0,
+		"gst_origin_seconds": null,
 		"gst_seconds": 83215670400.0,
 		"habitat_id": "proxima_habitat",
 		"habitats_visited": {},
@@ -53,7 +54,7 @@
 		"power_integrity_lost": 0.0,
 		"revenue_by_source": {},
 		"route_friction_delta": {},
-		"run_seed": 2567437660,
+		"run_seed": 2568769731,
 		"salvage_count": 0,
 		"salvaged_ids": [],
 		"sanctions_paid_total": 0,
@@ -140,7 +141,7 @@
 				}
 			],
 			"name": "Pegasus P101",
-			"registration": "VR-PGS-9681",
+			"registration": "VR-PGS-4802",
 			"template_id": "pegasus_p101",
 			"transponder_enabled": true
 		}

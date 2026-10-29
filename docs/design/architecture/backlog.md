@@ -11,15 +11,14 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
-|B2| UI | med | Leaderboard: "Tonnes" should say Freight, Career Time should be in in-game GST rather than player-time.
 |B4| gameplay | low | ship sprites that appear/disappear from the HUD due to sensor range / stealth should fade in and out instead of winking
 
 ## Features
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|F1|in flight|high| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
-|F2|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
-|F3|gameplay|high|Plotlines: longer duration sidequest-type content that the player can encounter, optional
+|F1|in flight|high| Sectors should support infinite lateral movement, just tiling background into infinity|
+|F2|in flight|high| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
+|F3|gameplay|high|Plotlines: implementations now that the framework is there
 |F9|HUD|med|provide a large-radar popup when clicking the minimap, full screen (no pause), extended range, more detail
 

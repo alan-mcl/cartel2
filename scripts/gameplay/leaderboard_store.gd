@@ -77,7 +77,8 @@ static func upsert_from_session(
 		"kills": session.career.kills,
 		"reputation": session.player.reputation,
 		"ships_owned": session.fleet.owned_ships.size(),
-		"career_time": session.career.played_seconds,
+		"career_time": session.career.elapsed_gst_seconds(session.gst_seconds),
+		"career_time_gst": true,
 		"saved_at": saved_at,
 	}
 	if mark_ended:
@@ -116,6 +117,11 @@ static func sorted_entries(column: SortColumn, descending: bool) -> Array:
 			var b_measured := b.has("net_worth")
 			if a_measured != b_measured:
 				return a_measured
+		if column == SortColumn.CAREER_TIME:
+			var a_gst := bool(a.get("career_time_gst", false))
+			var b_gst := bool(b.get("career_time_gst", false))
+			if a_gst != b_gst:
+				return a_gst
 		var av: Variant = _sort_value(a, column)
 		var bv: Variant = _sort_value(b, column)
 		if av != bv:

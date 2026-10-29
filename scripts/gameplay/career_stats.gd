@@ -23,6 +23,8 @@ var career_id: String = ""
 var ended: bool = false
 var flight_gst_seconds_real: float = 0.0
 var flight_gst_seconds_unspace: float = 0.0
+## GST clock at career start; unset until [bind_gst_origin_at_career_start] or legacy backfill.
+var gst_origin_seconds: float = NAN
 var played_seconds: float = 0.0
 var translations_count: int = 0
 var translations_by_n: Dictionary = {}
@@ -68,6 +70,7 @@ func reset_for_new_career() -> void:
 	ended = false
 	flight_gst_seconds_real = 0.0
 	flight_gst_seconds_unspace = 0.0
+	gst_origin_seconds = NAN
 	played_seconds = 0.0
 	translations_count = 0
 	translations_by_n.clear()
@@ -120,6 +123,27 @@ func tonnes_traded() -> float:
 
 func missions_completed() -> int:
 	return missions_completed_on_time
+
+
+func gst_origin_is_set() -> bool:
+	return not is_nan(gst_origin_seconds)
+
+
+func bind_gst_origin_at_career_start(current_gst_seconds: float) -> void:
+	gst_origin_seconds = current_gst_seconds
+
+
+func ensure_gst_origin_after_load(current_gst_seconds: float) -> void:
+	if gst_origin_is_set():
+		return
+	var flight_total := flight_gst_seconds_real + flight_gst_seconds_unspace
+	gst_origin_seconds = current_gst_seconds - flight_total
+
+
+func elapsed_gst_seconds(current_gst_seconds: float) -> float:
+	if not gst_origin_is_set():
+		return maxf(0.0, flight_gst_seconds_real + flight_gst_seconds_unspace)
+	return maxf(0.0, current_gst_seconds - gst_origin_seconds)
 
 
 func record_played_seconds(delta: float) -> void:
@@ -314,6 +338,7 @@ func to_session_dict() -> Dictionary:
 		"career_ended": ended,
 		"flight_gst_seconds_real": flight_gst_seconds_real,
 		"flight_gst_seconds_unspace": flight_gst_seconds_unspace,
+		"gst_origin_seconds": gst_origin_seconds if gst_origin_is_set() else null,
 		"played_seconds": played_seconds,
 		"translations_count": translations_count,
 		"translations_by_n": translations_by_n.duplicate(true),
@@ -349,6 +374,10 @@ func load_session_dict(data: Dictionary) -> void:
 	ended = bool(data.get("career_ended", false))
 	flight_gst_seconds_real = float(data.get("flight_gst_seconds_real", 0.0))
 	flight_gst_seconds_unspace = float(data.get("flight_gst_seconds_unspace", 0.0))
+	if data.has("gst_origin_seconds") and data.get("gst_origin_seconds") != null:
+		gst_origin_seconds = float(data.get("gst_origin_seconds", 0.0))
+	else:
+		gst_origin_seconds = NAN
 	played_seconds = float(data.get("played_seconds", 0.0))
 	translations_count = int(data.get("translations_count", 0))
 	translations_by_n = _int_dict_from_save(data.get("translations_by_n", {}))

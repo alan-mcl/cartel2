@@ -9,6 +9,10 @@ static func format_flight_time(seconds: float) -> String:
 	return "%d h %d m" % [hours, minutes]
 
 
+static func format_gst_career_time(seconds: float) -> String:
+	return "%s GST" % format_flight_time(seconds)
+
+
 static func format_credits(amount: int) -> String:
 	return "d%d" % amount
 
