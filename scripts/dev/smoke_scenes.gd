@@ -191,6 +191,27 @@ func _smoke_system_render_tester() -> void:
 	_check(tester.get_node_or_null("PlayerShip") == null, "system render tester has no player ship")
 	var label_overlay: Node = tester.get_node_or_null("Overlay/Root/CityMallLabelOverlay")
 	_check(label_overlay != null, "system render tester has city-mall labels")
+	var sector_tree: Tree = tester.find_child("SectorTree", true, false) as Tree
+	_check(sector_tree != null, "system render tester has sector tree")
+	if sector_tree != null:
+		var tree_root := sector_tree.get_root()
+		var fennet_item: TreeItem = null
+		if tree_root != null:
+			var row := tree_root.get_first_child()
+			while row != null:
+				if str(row.get_metadata(0)) == "fennet":
+					fennet_item = row
+					break
+				row = row.get_next()
+		_check(fennet_item != null, "system render tester lists fennet hub")
+		if fennet_item != null and tree_root != null:
+			_check(fennet_item.get_parent() == tree_root, "fennet hub is under tree root")
+			var beacon_count := 0
+			var beacon_row := fennet_item.get_first_child()
+			while beacon_row != null:
+				beacon_count += 1
+				beacon_row = beacon_row.get_next()
+			_check(beacon_count == 5, "fennet hub has five beacon rows")
 	await _free_and_drain(tester)
 
 

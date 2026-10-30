@@ -45,10 +45,12 @@ func _ready() -> void:
 		push_error("System render tester: no renderable sectors in catalog.")
 		return
 
-	if not _select_sector_in_tree("proxima"):
-		_select_first_sector_in_tree()
-
-	_load_selected_sector()
+	# Load default sector without selecting it in the tree — TreeItem.select scrolls the
+	# list and hides hubs near the top (e.g. Fennet under Bela).
+	if _find_tree_item_by_sector_id("proxima") != null:
+		_load_sector("proxima")
+	elif not _sector_ids.is_empty():
+		_load_sector(_sector_ids[0])
 	call_deferred("_scroll_sector_tree_to_top")
 
 
@@ -104,13 +106,20 @@ func _build_overlay() -> void:
 	title.add_theme_font_size_override("font_size", 18)
 	vbox.add_child(title)
 
+	var tree_margin := MarginContainer.new()
+	tree_margin.add_theme_constant_override("margin_top", 4)
+	tree_margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tree_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(tree_margin)
+
 	_sector_tree = Tree.new()
+	_sector_tree.name = "SectorTree"
 	_sector_tree.hide_root = true
 	_sector_tree.column_titles_visible = false
 	_sector_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_sector_tree.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_sector_tree.item_selected.connect(_on_sector_tree_item_selected)
-	vbox.add_child(_sector_tree)
+	tree_margin.add_child(_sector_tree)
 
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
@@ -189,8 +198,10 @@ func _populate_sector_tree() -> void:
 		return str(renderable.get(a, a)) < str(renderable.get(b, b))
 	)
 
+	var tree_root := _sector_tree.create_item()
+
 	for hub_id in hub_ids:
-		var hub_item := _sector_tree.create_item()
+		var hub_item := _sector_tree.create_item(tree_root)
 		hub_item.set_text(0, str(renderable.get(hub_id, hub_id)))
 		hub_item.set_metadata(0, hub_id)
 		_sector_ids.append(hub_id)
@@ -214,33 +225,19 @@ func _populate_sector_tree() -> void:
 		return str(renderable.get(a, a)) < str(renderable.get(b, b))
 	)
 	for orphan_id in orphan_ids:
-		var orphan_item := _sector_tree.create_item()
+		var orphan_item := _sector_tree.create_item(tree_root)
 		orphan_item.set_text(0, str(renderable.get(orphan_id, orphan_id)))
 		orphan_item.set_metadata(0, orphan_id)
 		_sector_ids.append(orphan_id)
 
 
-func _select_sector_in_tree(sector_id: String) -> bool:
-	var item := _find_tree_item_by_sector_id(sector_id)
-	if item == null:
-		return false
-	item.select(0)
-	return true
-
-
-func _select_first_sector_in_tree() -> void:
+func _scroll_sector_tree_to_top() -> void:
 	var root := _sector_tree.get_root()
 	if root == null:
 		return
 	var first := root.get_first_child()
 	if first != null:
-		first.select(0)
-
-
-func _scroll_sector_tree_to_top() -> void:
-	var bar := _sector_tree.get_v_scroll_bar()
-	if bar != null:
-		bar.value = bar.min_value
+		_sector_tree.scroll_to_item(first, false)
 
 
 func _find_tree_item_by_sector_id(sector_id: String) -> TreeItem:
@@ -280,6 +277,10 @@ func _load_selected_sector() -> void:
 	var sector_id := str(item.get_metadata(0))
 	if sector_id.is_empty():
 		return
+	_load_sector(sector_id)
+
+
+func _load_sector(sector_id: String) -> void:
 	session.sector_id = sector_id
 	var sector := catalog.get_sector_def(sector_id)
 	if sector != null and sector.has_source_key("orbit_name") and not sector.orbit_name.is_empty():
