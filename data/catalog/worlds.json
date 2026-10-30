@@ -3651,6 +3651,451 @@
 			"luminosity": 1.0
 		}
 	},
+	"junkers_world": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "junkers_world_habitat_obj",
+					"kind": "habitat",
+					"label": "Junker's World",
+					"interactable": "junkers_world_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#6a7068"
+				},
+				{
+					"id": "junkers_world_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "junkers_world_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "junkers_world_beacon_obj",
+			"label": "Junker's World Translation Beacon",
+			"interactable": "junkers_world_jump_gate",
+			"destination": "fennet",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1600,
+			"modulate": "#505850"
+		},
+		"entities": [
+			{
+				"id": "junkers_world_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "junkers_world_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "junkers_world_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "junkers_world_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "junkers_world_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"swan": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "swan_habitat_obj",
+					"kind": "habitat",
+					"label": "Swan",
+					"interactable": "swan_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#e8f0f8"
+				},
+				{
+					"id": "swan_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				},
+				{
+					"id": "swan_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "swan_beacon_obj",
+			"label": "Swan Translation Beacon",
+			"interactable": "swan_jump_gate",
+			"destination": "fennet",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 750,
+			"modulate": "#f0f4ff"
+		},
+		"entities": [
+			{
+				"id": "swan_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "swan_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "swan_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "swan_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "swan_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"freediver": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "freediver_habitat_obj",
+					"kind": "habitat",
+					"label": "Freediver",
+					"interactable": "freediver_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#8898a8"
+				},
+				{
+					"id": "freediver_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "freediver_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "freediver_beacon_obj",
+			"label": "Freediver Translation Beacon",
+			"interactable": "freediver_jump_gate",
+			"destination": "fennet",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 680,
+			"modulate": "#708090"
+		},
+		"entities": [
+			{
+				"id": "freediver_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "freediver_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "freediver_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "freediver_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "freediver_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"nostromo": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "nostromo_habitat_obj",
+					"kind": "habitat",
+					"label": "Nostromo",
+					"interactable": "nostromo_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#8090a0"
+				},
+				{
+					"id": "nostromo_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				},
+				{
+					"id": "nostromo_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "nostromo_beacon_obj",
+			"label": "Nostromo Translation Beacon",
+			"interactable": "nostromo_jump_gate",
+			"destination": "fennet",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 720,
+			"modulate": "#607080"
+		},
+		"entities": [
+			{
+				"id": "nostromo_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "nostromo_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "nostromo_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "nostromo_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "nostromo_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
+	"eternum": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "eternum_habitat_obj",
+					"kind": "habitat",
+					"label": "Eternum Resort",
+					"interactable": "eternum_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c8d8e8"
+				},
+				{
+					"id": "eternum_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "eternum_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "eternum_beacon_obj",
+			"label": "Eternum Translation Beacon",
+			"interactable": "eternum_jump_gate",
+			"destination": "fennet",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 680,
+			"modulate": "#d0e0f0"
+		},
+		"entities": [
+			{
+				"id": "eternum_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "eternum_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			},
+			{
+				"id": "eternum_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2940,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "eternum_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3220,
+					"y": 1400
+				},
+				"rotation": 0.3
+			},
+			{
+				"id": "eternum_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3500,
+					"y": -1400
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5800,
+			"luminosity": 1.0
+		}
+	},
 	"n5_default": {
 		"entities": []
 	},

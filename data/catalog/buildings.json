@@ -1856,5 +1856,95 @@
 		"name": "Long Drift Exchange",
 		"short_desc": "Exchange at Long Drift Observatory.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/junkers_world_terminal.png",
+		"description": "Customs for surface mining and emerald assay traffic at Junker's World.",
+		"id": "junkers_world_terminal",
+		"kind": "terminal",
+		"name": "Junker's World Terminal",
+		"short_desc": "Terminal for Junker's World traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/junkers_world_exchange.png",
+		"description": "Commodity exchange for Junker's World ore and gem contracts.",
+		"id": "junkers_world_exchange",
+		"kind": "merchant",
+		"name": "Junker's World Exchange",
+		"short_desc": "Exchange at Junker's World.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/swan_terminal.png",
+		"description": "Small customs desk for Swan comet traffic.",
+		"id": "swan_terminal",
+		"kind": "terminal",
+		"name": "Swan Terminal",
+		"short_desc": "Terminal for Swan traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/swan_exchange.png",
+		"description": "Commodity exchange for rare mineral and research contracts at Swan.",
+		"id": "swan_exchange",
+		"kind": "merchant",
+		"name": "Swan Exchange",
+		"short_desc": "Exchange at Swan.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/freediver_terminal.png",
+		"description": "Automated customs lane for Freediver core-extraction traffic.",
+		"id": "freediver_terminal",
+		"kind": "terminal",
+		"name": "Freediver Terminal",
+		"short_desc": "Terminal for Freediver traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/freediver_exchange.png",
+		"description": "Commodity exchange for chemical and energy contracts at Freediver.",
+		"id": "freediver_exchange",
+		"kind": "merchant",
+		"name": "Freediver Exchange",
+		"short_desc": "Exchange at Freediver.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/nostromo_terminal.png",
+		"description": "Customs for Nostromo research station supply traffic.",
+		"id": "nostromo_terminal",
+		"kind": "terminal",
+		"name": "Nostromo Terminal",
+		"short_desc": "Terminal for Nostromo traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/nostromo_exchange.png",
+		"description": "Commodity exchange for survey data and station supply at Nostromo.",
+		"id": "nostromo_exchange",
+		"kind": "merchant",
+		"name": "Nostromo Exchange",
+		"short_desc": "Exchange at Nostromo.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/eternum_terminal.png",
+		"description": "Arrival terminal for Eternum Resort. Adventure charter traffic shares the docks with ice haulers.",
+		"id": "eternum_terminal",
+		"kind": "terminal",
+		"name": "Eternum Terminal",
+		"short_desc": "Terminal for Eternum traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/eternum_exchange.png",
+		"description": "Commodity exchange for resort supply and comet-ice contracts at Eternum.",
+		"id": "eternum_exchange",
+		"kind": "merchant",
+		"name": "Eternum Exchange",
+		"short_desc": "Exchange at Eternum Resort.",
+		"type": "market"
 	}
 ]

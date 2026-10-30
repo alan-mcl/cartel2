@@ -794,5 +794,75 @@
 		"sector_id": "long_drift",
 		"short_desc": "Distant observatory at Long Drift.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/junkers_world_habitat.png",
+		"buildings": [
+			"junkers_world_terminal",
+			"junkers_world_exchange"
+		],
+		"default_building": "junkers_world_terminal",
+		"description": "Orbitals above a nitrogen wasteland. Assay traffic for Junkers Emeralds shares the ring with surface mining convoys.",
+		"id": "junkers_world_habitat",
+		"name": "Junker's World",
+		"sector_id": "junkers_world",
+		"short_desc": "Mining orbitals at Junker's World.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/swan_habitat.png",
+		"buildings": [
+			"swan_terminal",
+			"swan_exchange"
+		],
+		"default_building": "swan_terminal",
+		"description": "Small orbital on the high-albedo comet Swan. Opposed polar jets make the approaches lively; rare mineral work pays for the caution.",
+		"id": "swan_habitat",
+		"name": "Swan",
+		"sector_id": "swan",
+		"short_desc": "Research and extraction orbital at Swan.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/freediver_habitat.png",
+		"buildings": [
+			"freediver_terminal",
+			"freediver_exchange"
+		],
+		"default_building": "freediver_terminal",
+		"description": "Automated infrastructure orbits the eccentric comet Freediver. Core extraction traffic thins when perihelion approaches.",
+		"id": "freediver_habitat",
+		"name": "Freediver",
+		"sector_id": "freediver",
+		"short_desc": "Automated extraction at Freediver.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/nostromo_habitat.png",
+		"buildings": [
+			"nostromo_terminal",
+			"nostromo_exchange"
+		],
+		"default_building": "nostromo_terminal",
+		"description": "Research station orbiting icy Nostromo. Survey teams monitor the comet's unusual radioactive core.",
+		"id": "nostromo_habitat",
+		"name": "Nostromo",
+		"sector_id": "nostromo",
+		"short_desc": "Research station at Nostromo.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/eternum_habitat.png",
+		"buildings": [
+			"eternum_terminal",
+			"eternum_exchange"
+		],
+		"default_building": "eternum_terminal",
+		"description": "Resort habitat on long-period comet Eternum. Charter traffic spikes when the nucleus swings back toward Fennet.",
+		"id": "eternum_habitat",
+		"name": "Eternum Resort",
+		"sector_id": "eternum",
+		"short_desc": "Adventure resort at Eternum.",
+		"type": "habitat"
 	}
 ]

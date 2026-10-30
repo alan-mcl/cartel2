@@ -595,5 +595,70 @@
 		"title": "Long Drift Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "junkers_world_habitat",
+		"title": "Junker's World",
+		"inspect_text": "Docking at Junker's World. Surface mining convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "junkers_world_habitat"
+	},
+	{
+		"id": "junkers_world_jump_gate",
+		"title": "Junker's World Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "swan_habitat",
+		"title": "Swan",
+		"inspect_text": "Docking at Swan. Extraction and research traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "swan_habitat"
+	},
+	{
+		"id": "swan_jump_gate",
+		"title": "Swan Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "freediver_habitat",
+		"title": "Freediver",
+		"inspect_text": "Docking at Freediver. Automated extraction traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "freediver_habitat"
+	},
+	{
+		"id": "freediver_jump_gate",
+		"title": "Freediver Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "nostromo_habitat",
+		"title": "Nostromo",
+		"inspect_text": "Docking at Nostromo. Research and supply traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "nostromo_habitat"
+	},
+	{
+		"id": "nostromo_jump_gate",
+		"title": "Nostromo Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "eternum_habitat",
+		"title": "Eternum Resort",
+		"inspect_text": "Docking at Eternum Resort. Charter and ice traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "eternum_habitat"
+	},
+	{
+		"id": "eternum_jump_gate",
+		"title": "Eternum Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
+		"kind": "translate"
 	}
 ]

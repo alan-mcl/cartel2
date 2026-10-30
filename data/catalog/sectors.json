@@ -1085,5 +1085,115 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 55.0
+	},
+	{
+		"id": "junkers_world",
+		"name": "Junker's World Sector",
+		"orbit_name": "Junker's World near orbit",
+		"planet_name": "Junker's World",
+		"star_system": "18 Scorpii",
+		"description": "Rocky wasteland with a dense nitrogen atmosphere. Surface mineral extraction includes the renowned Junkers Emeralds.",
+		"gravity": 0.88,
+		"population_billions": 0.28,
+		"play_bounds": 8000,
+		"objective": "Explore Junker's World near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.0,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.215,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.215,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 2.1
+	},
+	{
+		"id": "swan",
+		"name": "Swan Sector",
+		"orbit_name": "Swan near orbit",
+		"planet_name": "Swan",
+		"star_system": "18 Scorpii",
+		"description": "Short-period high-albedo comet with opposed polar outgassing. A small orbital supports rare mineral extraction and research.",
+		"gravity": 0.06,
+		"population_billions": 0.06,
+		"play_bounds": 8000,
+		"objective": "Explore Swan near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.038,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.038,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 5.0
+	},
+	{
+		"id": "freediver",
+		"name": "Freediver Sector",
+		"orbit_name": "Freediver near orbit",
+		"planet_name": "Freediver",
+		"star_system": "18 Scorpii",
+		"description": "Highly eccentric comet that approaches close to 18 Scorpii. Chemical and energy extraction from its core runs on largely automated infrastructure.",
+		"gravity": 0.05,
+		"population_billions": 0.08,
+		"play_bounds": 8000,
+		"objective": "Explore Freediver near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.121,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.121,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 2.8
+	},
+	{
+		"id": "nostromo",
+		"name": "Nostromo Sector",
+		"orbit_name": "Nostromo near orbit",
+		"planet_name": "Nostromo",
+		"star_system": "18 Scorpii",
+		"description": "Ice-covered comet with an unusual radioactive core. A research station orbits the nucleus.",
+		"gravity": 0.07,
+		"population_billions": 0.05,
+		"play_bounds": 8000,
+		"objective": "Explore Nostromo near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0049,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0049,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 14.0
+	},
+	{
+		"id": "eternum",
+		"name": "Eternum Sector",
+		"orbit_name": "Eternum near orbit",
+		"planet_name": "Eternum",
+		"star_system": "18 Scorpii",
+		"description": "Very long-period icy comet. A small resort habitat serves adventure tourists on rare visits to the inner system.",
+		"gravity": 0.06,
+		"population_billions": 0.07,
+		"play_bounds": 8000,
+		"objective": "Explore Eternum near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.00093,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.00093,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 32.0
 	}
 ]

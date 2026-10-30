@@ -776,5 +776,70 @@
 				"solution_ba": -48152
 			}
 		]
+	},
+	{
+		"id": "fennet_junkers_world",
+		"a": "fennet",
+		"b": "junkers_world",
+		"friction": 5,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48153,
+				"solution_ba": -48154
+			}
+		]
+	},
+	{
+		"id": "fennet_swan",
+		"a": "fennet",
+		"b": "swan",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48155,
+				"solution_ba": -48156
+			}
+		]
+	},
+	{
+		"id": "fennet_freediver",
+		"a": "fennet",
+		"b": "freediver",
+		"friction": 9,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48157,
+				"solution_ba": -48158
+			}
+		]
+	},
+	{
+		"id": "fennet_nostromo",
+		"a": "fennet",
+		"b": "nostromo",
+		"friction": 12,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48159,
+				"solution_ba": -48160
+			}
+		]
+	},
+	{
+		"id": "fennet_eternum",
+		"a": "fennet",
+		"b": "eternum",
+		"friction": 14,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48161,
+				"solution_ba": -48162
+			}
+		]
 	}
 ]

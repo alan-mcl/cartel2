@@ -228,7 +228,7 @@ City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New 
 
 ### Solar neighbourhood
 
-At 0.98 AU, Fennet is the inner planet of the 18 Scopii system. Four other planets and some eccentric dwarfs complete the major orbital bodies, but an unusually dense comet cloud on a profusion of orbits fills the outer system. The skies of Fennet are famous for always showcasing at a variety passing cometary bodies.
+At 0.98 AU, Fennet is the inner planet of the 18 Scorpii system. Four other planets and some eccentric dwarfs complete the major orbital bodies, but an unusually dense comet cloud on a profusion of orbits fills the outer system. The skies of Fennet are famous for always showcasing at a variety passing cometary bodies.
 
 Planets and moons:
  - Junker's World (2.1 AU, 2nd planet): The only other non-gas giant in the system, Junker's World is a rocky wasteland with a dense Nitrogen atmosphere. Surface mineral extraction takes place, notably including the renowned Junkers Emeralds.
@@ -288,7 +288,7 @@ Other:
 ## New Carthage
 
  - **Classification:** E4
- - **System:** 61 Cygni
+ - **System:** 61 Cygni A
  - **Gravity:** 0.98 G
  - **Population:** 27 billion
  - **Ocean coverage:** 84%

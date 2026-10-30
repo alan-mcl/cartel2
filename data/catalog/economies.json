@@ -712,5 +712,73 @@
 			"food_products": 5.0,
 			"industrial_components": 2.0
 		}
+	},
+	{
+		"id": "junkers_world",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 9.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "swan",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 7.0,
+			"data": 2.0,
+			"minerals": 6.0
+		},
+		"consume": {
+			"food_products": 6.0,
+			"industrial_components": 2.0,
+			"water_ice": 4.0
+		}
+	},
+	{
+		"id": "freediver",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"chemicals": 9.0,
+			"energy": 4.0
+		},
+		"consume": {
+			"food_products": 7.0,
+			"minerals": 8.0
+		}
+	},
+	{
+		"id": "nostromo",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"data": 5.0,
+			"energy": 2.0
+		},
+		"consume": {
+			"food_products": 5.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "eternum",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"luxury_goods": 3.0,
+			"water_ice": 4.0
+		},
+		"consume": {
+			"consumer_goods": 2.0,
+			"food_products": 7.0,
+			"luxury_goods": 4.0
+		}
 	}
 ]

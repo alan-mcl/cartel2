@@ -236,6 +236,36 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "deepspace": 4.0,
         "mercury_communications": 3.0,
     },
+    "junkers_world": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+        "general_industrial": 4.0,
+    },
+    "swan": {
+        "atlas_concern": 6.0,
+        "mercury_communications": 4.0,
+        "continuity_foundation": 4.0,
+        "deepspace": 4.0,
+    },
+    "freediver": {
+        "general_industrial": 6.0,
+        "atlas_concern": 5.0,
+        "four_rivers_zaibatsu": 4.0,
+        "deepspace": 4.0,
+    },
+    "nostromo": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "mercury_communications": 4.0,
+        "deepspace": 3.0,
+    },
+    "eternum": {
+        "karaquazen": 6.0,
+        "liveworlds": 6.0,
+        "universal_house": 5.0,
+        "praetorium": 4.0,
+    },
 }
 
 FLOOR = 0.15
