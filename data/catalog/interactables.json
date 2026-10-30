@@ -439,5 +439,83 @@
 		"title": "Kestrel Resort Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to La Bella Vista near orbit. Only the public hop back to La Bella Vista is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "alecto_habitat",
+		"title": "Alecto",
+		"inspect_text": "Docking at Alecto. Darkside mining convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "alecto_habitat"
+	},
+	{
+		"id": "alecto_jump_gate",
+		"title": "Alecto Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "new_ceres_habitat",
+		"title": "New Ceres",
+		"inspect_text": "Docking at New Ceres. Greenhouse produce and chemical traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "new_ceres_habitat"
+	},
+	{
+		"id": "new_ceres_jump_gate",
+		"title": "New Ceres Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "virginis_belt_habitat",
+		"title": "Virginis Asteroid Station",
+		"inspect_text": "Docking at Virginis Asteroid Station. Assay and ore convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "virginis_belt_habitat"
+	},
+	{
+		"id": "virginis_belt_jump_gate",
+		"title": "Virginis Asteroid Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "varda_iii_habitat",
+		"title": "Varda III",
+		"inspect_text": "Docking at Varda III. Ice and subsurface-ocean extraction traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "varda_iii_habitat"
+	},
+	{
+		"id": "varda_iii_jump_gate",
+		"title": "Varda III Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "varda_belt_habitat",
+		"title": "Varda Asteroid Station",
+		"inspect_text": "Docking at Varda Asteroid Station. Ore and ice traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "varda_belt_habitat"
+	},
+	{
+		"id": "varda_belt_jump_gate",
+		"title": "Varda Asteroid Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "cressida_habitat",
+		"title": "Cressida Research Station",
+		"inspect_text": "Docking at Cressida. Survey and supply traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "cressida_habitat"
+	},
+	{
+		"id": "cressida_jump_gate",
+		"title": "Cressida Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
+		"kind": "translate"
 	}
 ]

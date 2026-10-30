@@ -545,5 +545,90 @@
 			"food_products": 7.0,
 			"luxury_goods": 4.0
 		}
+	},
+	{
+		"id": "alecto",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 8.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 6.0,
+			"industrial_components": 2.5,
+			"water_ice": 4.0
+		}
+	},
+	{
+		"id": "new_ceres",
+		"tier": "outer",
+		"wealth": 0.9,
+		"produce": {
+			"chemicals": 10.0,
+			"food_products": 9.0
+		},
+		"consume": {
+			"energy": 3.0,
+			"industrial_components": 2.5,
+			"pharmaceuticals": 2.0
+		}
+	},
+	{
+		"id": "virginis_belt",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 10.0,
+			"chemicals": 6.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 10.0,
+			"industrial_components": 2.5,
+			"water_ice": 3.0
+		}
+	},
+	{
+		"id": "varda_iii",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"chemicals": 5.0,
+			"minerals": 6.0,
+			"water_ice": 9.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.0,
+			"energy": 2.5
+		}
+	},
+	{
+		"id": "varda_belt",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"minerals": 9.0,
+			"water_ice": 6.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.0
+		}
+	},
+	{
+		"id": "cressida",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"data": 4.0,
+			"water_ice": 3.0
+		},
+		"consume": {
+			"energy": 3.5,
+			"food_products": 5.0,
+			"industrial_components": 2.0
+		}
 	}
 ]

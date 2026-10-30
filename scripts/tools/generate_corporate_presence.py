@@ -164,6 +164,42 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "universal_house": 5.0,
         "praetorium": 4.0,
     },
+    "alecto": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+    },
+    "new_ceres": {
+        "greenfields": 7.0,
+        "evergreen": 6.0,
+        "biogenesis": 5.0,
+        "general_industrial": 4.0,
+    },
+    "virginis_belt": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+    },
+    "varda_iii": {
+        "atlas_concern": 6.0,
+        "deepspace": 5.0,
+        "biogenesis": 4.0,
+        "general_industrial": 4.0,
+    },
+    "varda_belt": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "cressida": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "deepspace": 4.0,
+        "mercury_communications": 3.0,
+    },
 }
 
 FLOOR = 0.15

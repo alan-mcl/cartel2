@@ -1627,5 +1627,113 @@
 		"name": "Kestrel Exchange",
 		"short_desc": "Exchange at Kestrel Resort.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/alecto_terminal.png",
+		"description": "Customs for darkside mining convoys and automated ore traffic at Alecto.",
+		"id": "alecto_terminal",
+		"kind": "terminal",
+		"name": "Alecto Terminal",
+		"short_desc": "Terminal for Alecto traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/alecto_exchange.png",
+		"description": "Commodity exchange for Alecto ore and raw-material contracts.",
+		"id": "alecto_exchange",
+		"kind": "merchant",
+		"name": "Alecto Exchange",
+		"short_desc": "Exchange at Alecto.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/new_ceres_terminal.png",
+		"description": "Customs for sealed greenhouse produce and chemical exports at New Ceres.",
+		"id": "new_ceres_terminal",
+		"kind": "terminal",
+		"name": "New Ceres Terminal",
+		"short_desc": "Terminal for New Ceres traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/new_ceres_exchange.png",
+		"description": "Commodity exchange for New Ceres food and chemical contracts.",
+		"id": "new_ceres_exchange",
+		"kind": "merchant",
+		"name": "New Ceres Exchange",
+		"short_desc": "Exchange at New Ceres.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/virginis_belt_terminal.png",
+		"description": "Customs and convoy scheduling for the Virginis asteroid belt.",
+		"id": "virginis_belt_terminal",
+		"kind": "terminal",
+		"name": "Virginis Belt Terminal",
+		"short_desc": "Terminal for Virginis Asteroid Station.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/virginis_belt_exchange.png",
+		"description": "Commodity exchange for exotic minerals, crystals, and chemicals from the Virginis belt.",
+		"id": "virginis_belt_exchange",
+		"kind": "merchant",
+		"name": "Virginis Belt Exchange",
+		"short_desc": "Exchange at Virginis Asteroid Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_iii_terminal.png",
+		"description": "Customs for ice and subsurface-ocean extraction traffic at Varda III.",
+		"id": "varda_iii_terminal",
+		"kind": "terminal",
+		"name": "Varda III Terminal",
+		"short_desc": "Terminal for Varda III traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_iii_exchange.png",
+		"description": "Commodity exchange for Varda III ice and chemical contracts.",
+		"id": "varda_iii_exchange",
+		"kind": "merchant",
+		"name": "Varda III Exchange",
+		"short_desc": "Exchange at Varda III.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_belt_terminal.png",
+		"description": "Customs for the sparser belt beyond Varda.",
+		"id": "varda_belt_terminal",
+		"kind": "terminal",
+		"name": "Varda Belt Terminal",
+		"short_desc": "Terminal for Varda Asteroid Station.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_belt_exchange.png",
+		"description": "Commodity exchange for ore and ice contracts at the Varda belt.",
+		"id": "varda_belt_exchange",
+		"kind": "merchant",
+		"name": "Varda Belt Exchange",
+		"short_desc": "Exchange at Varda Asteroid Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/cressida_terminal.png",
+		"description": "Small customs desk for the research station at Cressida.",
+		"id": "cressida_terminal",
+		"kind": "terminal",
+		"name": "Cressida Terminal",
+		"short_desc": "Terminal for Cressida traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/cressida_exchange.png",
+		"description": "Commodity exchange for survey data and supply contracts at Cressida.",
+		"id": "cressida_exchange",
+		"kind": "merchant",
+		"name": "Cressida Exchange",
+		"short_desc": "Exchange at Cressida.",
+		"type": "market"
 	}
 ]

@@ -625,5 +625,89 @@
 		"sector_id": "kestrel",
 		"short_desc": "Resort habitat at the comet Kestrel.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/alecto_habitat.png",
+		"buildings": [
+			"alecto_terminal",
+			"alecto_exchange"
+		],
+		"default_building": "alecto_terminal",
+		"description": "Orbital docks above Alecto's darkside. Automated mining convoys share the ring with supply traffic from Irasia.",
+		"id": "alecto_habitat",
+		"name": "Alecto",
+		"sector_id": "alecto",
+		"short_desc": "Darkside mining orbitals at Alecto.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/new_ceres_habitat.png",
+		"buildings": [
+			"new_ceres_terminal",
+			"new_ceres_exchange"
+		],
+		"default_building": "new_ceres_terminal",
+		"description": "Sealed dome agriculture and chemical traffic orbit a dense greenhouse world. High-gravity haulers use the outer lanes.",
+		"id": "new_ceres_habitat",
+		"name": "New Ceres",
+		"sector_id": "new_ceres",
+		"short_desc": "Greenhouse agriculture orbitals at New Ceres.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/virginis_belt_habitat.png",
+		"buildings": [
+			"virginis_belt_terminal",
+			"virginis_belt_exchange"
+		],
+		"default_building": "virginis_belt_terminal",
+		"description": "Central habitat for the rich asteroid belt beyond New Ceres. Crystal and chemical assay traffic never sleeps.",
+		"id": "virginis_belt_habitat",
+		"name": "Virginis Asteroid Station",
+		"sector_id": "virginis_belt",
+		"short_desc": "Mining habitat in the Virginis belt.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_iii_habitat.png",
+		"buildings": [
+			"varda_iii_terminal",
+			"varda_iii_exchange"
+		],
+		"default_building": "varda_iii_terminal",
+		"description": "Extraction orbitals above Varda III. Ice haulers and subsurface-ocean chemistry share the ring beneath Varda's silvery glow.",
+		"id": "varda_iii_habitat",
+		"name": "Varda III",
+		"sector_id": "varda_iii",
+		"short_desc": "Subsurface-ocean extraction at Varda III.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/varda_belt_habitat.png",
+		"buildings": [
+			"varda_belt_terminal",
+			"varda_belt_exchange"
+		],
+		"default_building": "varda_belt_terminal",
+		"description": "Sparse belt beyond Varda. Smaller convoys than Virginis, but steady ore and ice traffic.",
+		"id": "varda_belt_habitat",
+		"name": "Varda Asteroid Station",
+		"sector_id": "varda_belt",
+		"short_desc": "Mining habitat in the outer Virginis belt.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/cressida_habitat.png",
+		"buildings": [
+			"cressida_terminal",
+			"cressida_exchange"
+		],
+		"default_building": "cressida_terminal",
+		"description": "Lonely research station in orbit of cold Cressida. Cryovolcanic survey traffic uses the outer lanes.",
+		"id": "cressida_habitat",
+		"name": "Cressida Research Station",
+		"sector_id": "cressida",
+		"short_desc": "Research station at Cressida.",
+		"type": "habitat"
 	}
 ]

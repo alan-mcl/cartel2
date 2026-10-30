@@ -620,5 +620,83 @@
 				"solution_ba": -48128
 			}
 		]
+	},
+	{
+		"id": "irasia_alecto",
+		"a": "irasia",
+		"b": "alecto",
+		"friction": 6,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48129,
+				"solution_ba": -48130
+			}
+		]
+	},
+	{
+		"id": "irasia_new_ceres",
+		"a": "irasia",
+		"b": "new_ceres",
+		"friction": 4,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48131,
+				"solution_ba": -48132
+			}
+		]
+	},
+	{
+		"id": "irasia_virginis_belt",
+		"a": "irasia",
+		"b": "virginis_belt",
+		"friction": 5,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48133,
+				"solution_ba": -48134
+			}
+		]
+	},
+	{
+		"id": "irasia_varda_iii",
+		"a": "irasia",
+		"b": "varda_iii",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48135,
+				"solution_ba": -48136
+			}
+		]
+	},
+	{
+		"id": "irasia_varda_belt",
+		"a": "irasia",
+		"b": "varda_belt",
+		"friction": 10,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48137,
+				"solution_ba": -48138
+			}
+		]
+	},
+	{
+		"id": "irasia_cressida",
+		"a": "irasia",
+		"b": "cressida",
+		"friction": 14,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48139,
+				"solution_ba": -48140
+			}
+		]
 	}
 ]

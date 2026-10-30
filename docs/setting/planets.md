@@ -150,13 +150,13 @@ Irasia is a prosperous and heavily industrialised world, with enormous coastal c
 
 ### Solar neighbourhood
 
-Irasia orbits the stable and steady 61 Virginis at 0.99 AU, one of eight planets in the system. Unusually for an E class world Irasia has four small moons in varying orbits, the outermost quite inclined.
+Irasia orbits the stable and steady 61 Virginis at 0.99 AU, one of nine planets in the system. Unusually for an E class world Irasia has four small moons in varying orbits, the outermost quite inclined.
 
 Planets and moons:
  - Alecto (planet 1): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
- - New Ceres (planet 5): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
- - Varda III (moon 3 of planet 6): sixth planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
- - Cressida: the eighth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
+ - New Ceres (planet 6): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
+ - Varda III (moon 3 of planet 7): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
+ - Cressida: the ninth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
 
  Other
  - Virginis Asteroid Station: the asteroid belt beyond New Ceres is rich in exotic minerals, crystals and chemicals
@@ -189,7 +189,17 @@ Tokirev is a large, cold industrial world dominated by manufacturing and heavy i
 
 ### Solar neighbourhood
 
-TBD
+Tokirev is one of just five planets orbiting the young G class star. 
+
+Planets and moons:
+ - Scoria (2.2AU, 3rd planet): a barren world of dark volcanic rock, Scoria has no magnetic field and only vestiges of an atmosphere. Surface mining operations are supported by multiple orbitals.
+ - Ursa XVI (4.5 AU, 16th moon of 4th planet): what 61 Ursae Majoris lacks in planets, it's only gas giant tries to make up in moons. The spectacularly banded Ursa has captured a coterie of 39 sattelites, the 16th of which supports surface resource extraction from it's rocky surface.
+ - Ursa XXIX (4.5 AU, 29th moon of 4th planet): the 29th moon is covered with methane oceans
+ 
+Other
+ - Ursa Belt Bases: a dense asteroid belt between Scoria and Ursa supports extensive resource extraction
+ - Ursa Belt Shipyard: a ship construction and testing facility located in the asteroid belt
+ - Long Drift Observatory: far out at 55 AU, a scientific base orbits an icy KBO
 
 ### Field conditions
 

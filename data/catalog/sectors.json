@@ -825,5 +825,135 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 6.0
+	},
+	{
+		"id": "alecto",
+		"name": "Alecto Sector",
+		"orbit_name": "Alecto near orbit",
+		"planet_name": "Alecto",
+		"star_system": "61 Virginis",
+		"description": "Tidally locked inner world of 61 Virginis. Scorched dayside; automated mining on the darkside.",
+		"gravity": 1.15,
+		"population_billions": 0.12,
+		"play_bounds": 8000,
+		"objective": "Explore Alecto near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.85,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 416.16,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 416.16,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 0.05
+	},
+	{
+		"id": "new_ceres",
+		"name": "New Ceres Sector",
+		"orbit_name": "New Ceres near orbit",
+		"planet_name": "New Ceres",
+		"star_system": "61 Virginis",
+		"description": "Dense super-Earth with a thick toxic greenhouse atmosphere. Unbreathable, but extensive agriculture operates under sealed domes.",
+		"gravity": 2.3,
+		"population_billions": 0.45,
+		"play_bounds": 8000,
+		"objective": "Explore New Ceres near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.25,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.462,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.462,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 1.5
+	},
+	{
+		"id": "virginis_belt",
+		"name": "Virginis Asteroid Station Sector",
+		"orbit_name": "Virginis Asteroid Station near orbit",
+		"star_system": "61 Virginis",
+		"description": "Central habitat for mining the asteroid belt beyond New Ceres. Rich in exotic minerals, crystals, and chemicals.",
+		"gravity": 0.18,
+		"population_billions": 0.38,
+		"play_bounds": 8000,
+		"objective": "Explore Virginis Asteroid Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.7,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.215,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.215,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 2.2
+	},
+	{
+		"id": "varda_iii",
+		"name": "Varda III Sector",
+		"orbit_name": "Varda III near orbit",
+		"planet_name": "Varda III",
+		"star_system": "61 Virginis",
+		"description": "Icy third moon of the gas giant Varda. Resource extraction from the subsurface ocean beneath the ice.",
+		"gravity": 0.26,
+		"population_billions": 0.2,
+		"play_bounds": 8000,
+		"objective": "Explore Varda III near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.6,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.08,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.08,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 3.6
+	},
+	{
+		"id": "varda_belt",
+		"name": "Varda Asteroid Station Sector",
+		"orbit_name": "Varda Asteroid Station near orbit",
+		"star_system": "61 Virginis",
+		"description": "Habitat at a sparser asteroid belt beyond Varda. Resource extraction and ore convoys share the lanes.",
+		"gravity": 0.16,
+		"population_billions": 0.28,
+		"play_bounds": 8000,
+		"objective": "Explore Varda Asteroid Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.65,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.031,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.031,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 5.8
+	},
+	{
+		"id": "cressida",
+		"name": "Cressida Sector",
+		"orbit_name": "Cressida near orbit",
+		"planet_name": "Cressida",
+		"star_system": "61 Virginis",
+		"description": "Outermost world of 61 Virginis on an inclined orbit. Cold, with active cryovulcanism and a lonely research station.",
+		"gravity": 0.32,
+		"population_billions": 0.05,
+		"play_bounds": 8000,
+		"objective": "Explore Cressida near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.55,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0053,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0053,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 14.0
 	}
 ]
