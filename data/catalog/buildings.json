@@ -1946,5 +1946,113 @@
 		"name": "Eternum Exchange",
 		"short_desc": "Exchange at Eternum Resort.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_terminal.png",
+		"description": "Customs for Janus ice and mineral traffic. High-gravity surface runs make every manifest interesting.",
+		"id": "janus_terminal",
+		"kind": "terminal",
+		"name": "Janus Terminal",
+		"short_desc": "Terminal for Janus traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_exchange.png",
+		"description": "Commodity exchange for Janus ice and ore contracts.",
+		"id": "janus_exchange",
+		"kind": "merchant",
+		"name": "Janus Exchange",
+		"short_desc": "Exchange at Janus.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/sapphire_xvi_terminal.png",
+		"description": "Customs for Sapphire XVI chemical and ice haulers.",
+		"id": "sapphire_xvi_terminal",
+		"kind": "terminal",
+		"name": "Sapphire XVI Terminal",
+		"short_desc": "Terminal for Sapphire XVI traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/sapphire_xvi_exchange.png",
+		"description": "Commodity exchange for methane ice and chemical contracts at Sapphire XVI.",
+		"id": "sapphire_xvi_exchange",
+		"kind": "merchant",
+		"name": "Sapphire XVI Exchange",
+		"short_desc": "Exchange at Sapphire XVI.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/vesuvius_v_terminal.png",
+		"description": "Customs for Vesuvius V mineral convoys.",
+		"id": "vesuvius_v_terminal",
+		"kind": "terminal",
+		"name": "Vesuvius V Terminal",
+		"short_desc": "Terminal for Vesuvius V traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/vesuvius_v_exchange.png",
+		"description": "Commodity exchange for ore and concentrate contracts at Vesuvius V.",
+		"id": "vesuvius_v_exchange",
+		"kind": "merchant",
+		"name": "Vesuvius V Exchange",
+		"short_desc": "Exchange at Vesuvius V.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_inner_disc_terminal.png",
+		"description": "Customs for the inner Tau Ceti debris disc. Convoy traffic queues in the outer lanes.",
+		"id": "tc_inner_disc_terminal",
+		"kind": "terminal",
+		"name": "TC Inner Disc Terminal",
+		"short_desc": "Terminal for TC Inner Disc traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_inner_disc_exchange.png",
+		"description": "Commodity exchange for inner disc ore and chemical contracts.",
+		"id": "tc_inner_disc_exchange",
+		"kind": "merchant",
+		"name": "TC Inner Disc Exchange",
+		"short_desc": "Exchange at TC Inner Disc Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_outer_disc_terminal.png",
+		"description": "Customs for the outer Tau Ceti debris disc.",
+		"id": "tc_outer_disc_terminal",
+		"kind": "terminal",
+		"name": "TC Outer Disc Terminal",
+		"short_desc": "Terminal for TC Outer Disc traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_outer_disc_exchange.png",
+		"description": "Commodity exchange for outer disc extraction contracts.",
+		"id": "tc_outer_disc_exchange",
+		"kind": "merchant",
+		"name": "TC Outer Disc Exchange",
+		"short_desc": "Exchange at TC Outer Disc Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/terminary_terminal.png",
+		"description": "Customs for Terminary Research Station supply and survey traffic.",
+		"id": "terminary_terminal",
+		"kind": "terminal",
+		"name": "Terminary Terminal",
+		"short_desc": "Terminal for Terminary traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/terminary_exchange.png",
+		"description": "Commodity exchange for survey data and station supply at Terminary.",
+		"id": "terminary_exchange",
+		"kind": "merchant",
+		"name": "Terminary Exchange",
+		"short_desc": "Exchange at Terminary.",
+		"type": "market"
 	}
 ]

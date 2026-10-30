@@ -841,5 +841,83 @@
 				"solution_ba": -48162
 			}
 		]
+	},
+	{
+		"id": "fortuna_janus",
+		"a": "fortuna",
+		"b": "janus",
+		"friction": 4,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48163,
+				"solution_ba": -48164
+			}
+		]
+	},
+	{
+		"id": "fortuna_sapphire_xvi",
+		"a": "fortuna",
+		"b": "sapphire_xvi",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48165,
+				"solution_ba": -48166
+			}
+		]
+	},
+	{
+		"id": "fortuna_vesuvius_v",
+		"a": "fortuna",
+		"b": "vesuvius_v",
+		"friction": 9,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48167,
+				"solution_ba": -48168
+			}
+		]
+	},
+	{
+		"id": "fortuna_tc_inner_disc",
+		"a": "fortuna",
+		"b": "tc_inner_disc",
+		"friction": 11,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48169,
+				"solution_ba": -48170
+			}
+		]
+	},
+	{
+		"id": "fortuna_tc_outer_disc",
+		"a": "fortuna",
+		"b": "tc_outer_disc",
+		"friction": 14,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48171,
+				"solution_ba": -48172
+			}
+		]
+	},
+	{
+		"id": "fortuna_terminary",
+		"a": "fortuna",
+		"b": "terminary",
+		"friction": 16,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48173,
+				"solution_ba": -48174
+			}
+		]
 	}
 ]

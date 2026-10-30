@@ -1,6 +1,6 @@
 # Public Unspace trade network
 
-**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` (60 edges) and `CommodityEconomy`. Economic events (blockades, friction spikes) are not implemented. Volatile mission translations are private navigation solutions and are not economy edges. Public unknown routes are not implemented.
+**Status:** The public route graph and daily commodity quotes are implemented in `data/catalog/routes.json` (66 edges) and `CommodityEconomy`. Economic events (blockades, friction spikes) are not implemented. Volatile mission translations are private navigation solutions and are not economy edges. Public unknown routes are not implemented.
 
 ## Overview
 
@@ -16,7 +16,7 @@ Three conceptual layers:
 
 ## Route graph
 
-[routes.json](../../../data/catalog/routes.json) is the live graph: **60** undirected public edges, including belt and station sectors beyond the eleven E-worlds sketched below. Translation beacons tie Aurelia, Boreas, Calypso VI, Hesper, and Kestrel to La Bella Vista; Alecto, New Ceres, Virginis Asteroid Station, Varda III, Varda Asteroid Station, and Cressida to Irasia; Scoria, Ursa Belt Bases, Ursa Belt Shipyard, Ursa XVI, Ursa XXIX, and Long Drift Observatory to Tokirev; and Junker's World, Swan, Freediver, Nostromo, and Eternum to Fennet. Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
+[routes.json](../../../data/catalog/routes.json) is the live graph: **66** undirected public edges, including belt and station sectors beyond the eleven E-worlds sketched below. Translation beacons tie Aurelia, Boreas, Calypso VI, Hesper, and Kestrel to La Bella Vista; Alecto, New Ceres, Virginis Asteroid Station, Varda III, Varda Asteroid Station, and Cressida to Irasia; Scoria, Ursa Belt Bases, Ursa Belt Shipyard, Ursa XVI, Ursa XXIX, and Long Drift Observatory to Tokirev; Junker's World, Swan, Freediver, Nostromo, and Eternum to Fennet; and Janus, Sapphire XVI, Vesuvius V, TC Inner Disc Station, TC Outer Disc Station, and Terminary Research Station to Fortuna. Jump gates list **translations** available from the player's current sector (nav computer plus player library); the daily economy still uses the public 4-space edge graph and friction only. Extra translations on the same sector pair do not add economy edges.
 
 ### Core network
 
@@ -45,7 +45,7 @@ Each route has a friction value (0–100) representing combined translation dura
 |---------:|------|
 | 0–20 | Excellent |
 | 21–40 | Good |
-| 41–60 | Moderate |
+| 41–66 | Moderate |
 | 61–80 | Difficult |
 | 81–100 | Hazardous |
 

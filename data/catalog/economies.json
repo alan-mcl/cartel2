@@ -780,5 +780,89 @@
 			"food_products": 7.0,
 			"luxury_goods": 4.0
 		}
+	},
+	{
+		"id": "janus",
+		"tier": "outer",
+		"wealth": 0.75,
+		"produce": {
+			"minerals": 6.0,
+			"water_ice": 5.0
+		},
+		"consume": {
+			"food_products": 6.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "sapphire_xvi",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"chemicals": 9.0,
+			"water_ice": 3.0
+		},
+		"consume": {
+			"food_products": 6.0,
+			"industrial_components": 2.0,
+			"minerals": 5.0
+		}
+	},
+	{
+		"id": "vesuvius_v",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 8.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.5,
+			"water_ice": 4.0
+		}
+	},
+	{
+		"id": "tc_inner_disc",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 10.0,
+			"chemicals": 6.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 10.0,
+			"industrial_components": 2.5,
+			"water_ice": 3.0
+		}
+	},
+	{
+		"id": "tc_outer_disc",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"advanced_raw_materials": 7.0,
+			"chemicals": 4.0,
+			"minerals": 8.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.0,
+			"water_ice": 3.0
+		}
+	},
+	{
+		"id": "terminary",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"data": 5.0,
+			"energy": 2.0
+		},
+		"consume": {
+			"food_products": 5.0,
+			"industrial_components": 2.5
+		}
 	}
 ]

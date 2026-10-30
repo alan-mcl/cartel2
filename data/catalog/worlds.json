@@ -4096,6 +4096,398 @@
 			"luminosity": 1.0
 		}
 	},
+	"janus": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "janus_habitat_obj",
+					"kind": "habitat",
+					"label": "Janus",
+					"interactable": "janus_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a8c0d0"
+				},
+				{
+					"id": "janus_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "janus_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "janus_beacon_obj",
+			"label": "Janus Translation Beacon",
+			"interactable": "janus_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1700,
+			"modulate": "#c8d8e8"
+		},
+		"entities": [
+			{
+				"id": "janus_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2380,
+					"y": -700
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "janus_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2660,
+					"y": 0
+				},
+				"rotation": -0.1
+			}
+		],
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"sapphire_xvi": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "sapphire_xvi_habitat_obj",
+					"kind": "habitat",
+					"label": "Sapphire XVI",
+					"interactable": "sapphire_xvi_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#80b0e0"
+				},
+				{
+					"id": "sapphire_xvi_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "sapphire_xvi_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "sapphire_xvi_beacon_obj",
+			"label": "Sapphire XVI Translation Beacon",
+			"interactable": "sapphire_xvi_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 720,
+			"modulate": "#b0d0f0"
+		},
+		"entities": [
+			{
+				"id": "sapphire_xvi_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2500,
+					"y": 800
+				},
+				"rotation": 0.2
+			}
+		],
+		"parent_body": {
+			"name": "Sapphire",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 8,
+			"angular_diameter_deg_max": 14,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#3a5880",
+				"band_colour_2": "#88b8e8",
+				"turbulence": 0.25
+			},
+			"rings": { "type": "none" }
+		},
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"vesuvius_v": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "vesuvius_v_habitat_obj",
+					"kind": "habitat",
+					"label": "Vesuvius V",
+					"interactable": "vesuvius_v_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c09070"
+				},
+				{
+					"id": "vesuvius_v_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "vesuvius_v_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "vesuvius_v_beacon_obj",
+			"label": "Vesuvius V Translation Beacon",
+			"interactable": "vesuvius_v_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 780,
+			"modulate": "#806050"
+		},
+		"entities": [
+			{
+				"id": "vesuvius_v_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2600,
+					"y": -600
+				},
+				"rotation": 0.4
+			}
+		],
+		"parent_body": {
+			"name": "Vesuvius",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 10,
+			"angular_diameter_deg_max": 16,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#704878",
+				"band_colour_2": "#d87848",
+				"turbulence": 0.9
+			},
+			"rings": { "type": "none" }
+		},
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"tc_inner_disc": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tc_inner_disc_habitat_obj",
+					"kind": "habitat",
+					"label": "TC Inner Disc Station",
+					"interactable": "tc_inner_disc_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#989890"
+				},
+				{
+					"id": "tc_inner_disc_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "tc_inner_disc_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "tc_inner_disc_beacon_obj",
+			"label": "TC Inner Disc Translation Beacon",
+			"interactable": "tc_inner_disc_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "tc_inner_disc_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2100,
+					"y": 900
+				},
+				"rotation": 0.2
+			},
+			{
+				"id": "tc_inner_disc_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2400,
+					"y": -1400
+				},
+				"rotation": -0.4
+			},
+			{
+				"id": "tc_inner_disc_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2800,
+					"y": 1700
+				},
+				"rotation": 1.1
+			},
+			{
+				"id": "tc_inner_disc_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3100,
+					"y": -400
+				},
+				"rotation": 0.6
+			},
+			{
+				"id": "tc_inner_disc_debris_5",
+				"kind": "debris",
+				"position": {
+					"x": 3400,
+					"y": 1200
+				},
+				"rotation": -0.2
+			}
+		],
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"tc_outer_disc": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tc_outer_disc_habitat_obj",
+					"kind": "habitat",
+					"label": "TC Outer Disc Station",
+					"interactable": "tc_outer_disc_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#787878"
+				},
+				{
+					"id": "tc_outer_disc_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				},
+				{
+					"id": "tc_outer_disc_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "tc_outer_disc_beacon_obj",
+			"label": "TC Outer Disc Translation Beacon",
+			"interactable": "tc_outer_disc_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "tc_outer_disc_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2200,
+					"y": 700
+				},
+				"rotation": 0.1
+			},
+			{
+				"id": "tc_outer_disc_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2700,
+					"y": -900
+				},
+				"rotation": -0.3
+			},
+			{
+				"id": "tc_outer_disc_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 3000,
+					"y": 1100
+				},
+				"rotation": 0.5
+			}
+		],
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
+	"terminary": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "terminary_habitat_obj",
+					"kind": "habitat",
+					"label": "Terminary Research Station",
+					"interactable": "terminary_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#9098a8"
+				},
+				{
+					"id": "terminary_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "terminary_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tower.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "terminary_beacon_obj",
+			"label": "Terminary Translation Beacon",
+			"interactable": "terminary_jump_gate",
+			"destination": "fortuna",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "terminary_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2400,
+					"y": 500
+				},
+				"rotation": 0.15
+			}
+		],
+		"star": {
+			"temperature_k": 5400,
+			"luminosity": 0.85
+		}
+	},
 	"n5_default": {
 		"entities": []
 	},

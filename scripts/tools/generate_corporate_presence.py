@@ -266,6 +266,42 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "universal_house": 5.0,
         "praetorium": 4.0,
     },
+    "janus": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 5.0,
+        "general_industrial": 3.0,
+    },
+    "sapphire_xvi": {
+        "general_industrial": 6.0,
+        "four_rivers_zaibatsu": 6.0,
+        "atlas_concern": 4.0,
+        "deepspace": 4.0,
+    },
+    "vesuvius_v": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "tc_inner_disc": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 5.0,
+        "general_industrial": 4.0,
+    },
+    "tc_outer_disc": {
+        "atlas_concern": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+        "general_industrial": 4.0,
+    },
+    "terminary": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "mercury_communications": 4.0,
+        "deepspace": 3.0,
+    },
 }
 
 FLOOR = 0.15

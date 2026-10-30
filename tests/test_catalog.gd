@@ -652,6 +652,16 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in fennet_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "fennet")
+	var fortuna_sites: Array[String] = [
+		"janus",
+		"sapphire_xvi",
+		"vesuvius_v",
+		"tc_inner_disc",
+		"tc_outer_disc",
+		"terminary",
+	]
+	for sector_id in fortuna_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "fortuna")
 
 
 static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:

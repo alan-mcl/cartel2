@@ -864,5 +864,89 @@
 		"sector_id": "eternum",
 		"short_desc": "Adventure resort at Eternum.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_habitat.png",
+		"buildings": [
+			"janus_terminal",
+			"janus_exchange"
+		],
+		"default_building": "janus_terminal",
+		"description": "Orbitals above frozen Janus. Ice-bound mining convoys share the ring with assay traffic that rarely pays for the gravity tax.",
+		"id": "janus_habitat",
+		"name": "Janus",
+		"sector_id": "janus",
+		"short_desc": "Ice mining orbitals at Janus.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/sapphire_xvi_habitat.png",
+		"buildings": [
+			"sapphire_xvi_terminal",
+			"sapphire_xvi_exchange"
+		],
+		"default_building": "sapphire_xvi_terminal",
+		"description": "Small orbital on Sapphire XVI. Frozen methane and chemical haulers use the outer lanes beneath the bluish gas giant.",
+		"id": "sapphire_xvi_habitat",
+		"name": "Sapphire XVI",
+		"sector_id": "sapphire_xvi",
+		"short_desc": "Chemical extraction at Sapphire XVI.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/vesuvius_v_habitat.png",
+		"buildings": [
+			"vesuvius_v_terminal",
+			"vesuvius_v_exchange"
+		],
+		"default_building": "vesuvius_v_terminal",
+		"description": "Mining orbital at Vesuvius V. Ore convoys depart under the turbulent colours of the parent gas giant.",
+		"id": "vesuvius_v_habitat",
+		"name": "Vesuvius V",
+		"sector_id": "vesuvius_v",
+		"short_desc": "Mineral mining at Vesuvius V.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_inner_disc_habitat.png",
+		"buildings": [
+			"tc_inner_disc_terminal",
+			"tc_inner_disc_exchange"
+		],
+		"default_building": "tc_inner_disc_terminal",
+		"description": "Hub for the dense inner Tau Ceti debris band. Assay and convoy traffic never quite clears the approach lanes.",
+		"id": "tc_inner_disc_habitat",
+		"name": "TC Inner Disc Station",
+		"sector_id": "tc_inner_disc",
+		"short_desc": "Inner debris-disc extraction hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/tc_outer_disc_habitat.png",
+		"buildings": [
+			"tc_outer_disc_terminal",
+			"tc_outer_disc_exchange"
+		],
+		"default_building": "tc_outer_disc_terminal",
+		"description": "Hub for the sparser outer debris disc. Lower density extraction still feeds Fortuna's markets.",
+		"id": "tc_outer_disc_habitat",
+		"name": "TC Outer Disc Station",
+		"sector_id": "tc_outer_disc",
+		"short_desc": "Outer debris-disc extraction hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/terminary_habitat.png",
+		"buildings": [
+			"terminary_terminal",
+			"terminary_exchange"
+		],
+		"default_building": "terminary_terminal",
+		"description": "Isolated research station beyond the debris disc. Supply runs and survey teams are the regular traffic.",
+		"id": "terminary_habitat",
+		"name": "Terminary Research Station",
+		"sector_id": "terminary",
+		"short_desc": "Research station at Terminary.",
+		"type": "habitat"
 	}
 ]

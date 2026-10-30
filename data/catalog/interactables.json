@@ -660,5 +660,83 @@
 		"title": "Eternum Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Fennet near orbit. Only the public hop back to Fennet is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "janus_habitat",
+		"title": "Janus",
+		"inspect_text": "Docking at Janus. Ice and mining convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "janus_habitat"
+	},
+	{
+		"id": "janus_jump_gate",
+		"title": "Janus Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "sapphire_xvi_habitat",
+		"title": "Sapphire XVI",
+		"inspect_text": "Docking at Sapphire XVI. Chemical and ice haulers use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "sapphire_xvi_habitat"
+	},
+	{
+		"id": "sapphire_xvi_jump_gate",
+		"title": "Sapphire XVI Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "vesuvius_v_habitat",
+		"title": "Vesuvius V",
+		"inspect_text": "Docking at Vesuvius V. Mineral convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "vesuvius_v_habitat"
+	},
+	{
+		"id": "vesuvius_v_jump_gate",
+		"title": "Vesuvius V Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "tc_inner_disc_habitat",
+		"title": "TC Inner Disc Station",
+		"inspect_text": "Docking at TC Inner Disc Station. Convoy and assay traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "tc_inner_disc_habitat"
+	},
+	{
+		"id": "tc_inner_disc_jump_gate",
+		"title": "TC Inner Disc Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "tc_outer_disc_habitat",
+		"title": "TC Outer Disc Station",
+		"inspect_text": "Docking at TC Outer Disc Station. Extraction convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "tc_outer_disc_habitat"
+	},
+	{
+		"id": "tc_outer_disc_jump_gate",
+		"title": "TC Outer Disc Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "terminary_habitat",
+		"title": "Terminary Research Station",
+		"inspect_text": "Docking at Terminary. Research and supply traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "terminary_habitat"
+	},
+	{
+		"id": "terminary_jump_gate",
+		"title": "Terminary Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
+		"kind": "translate"
 	}
 ]

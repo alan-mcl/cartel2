@@ -1195,5 +1195,134 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 32.0
+	},
+	{
+		"id": "janus",
+		"name": "Janus Sector",
+		"orbit_name": "Janus near orbit",
+		"planet_name": "Janus",
+		"star_system": "Tau Ceti",
+		"description": "Frozen rocky third planet lacking a magnetic field, with the barest trace of atmosphere. Resource extraction is possible but often unprofitable under harsh conditions, high gravity, and thick ice sheets.",
+		"gravity": 1.18,
+		"population_billions": 0.12,
+		"play_bounds": 8000,
+		"objective": "Explore Janus near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.0,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.356,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.2,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 1.5
+	},
+	{
+		"id": "sapphire_xvi",
+		"name": "Sapphire XVI Sector",
+		"orbit_name": "Sapphire XVI near orbit",
+		"planet_name": "Sapphire XVI",
+		"star_system": "Tau Ceti",
+		"description": "Sixteenth moon of Tau Ceti's fifth planet. The surface is heaped with frozen methane and other chemical resources; the parent gas giant is noted for its unusual bluish bands.",
+		"gravity": 0.11,
+		"population_billions": 0.09,
+		"play_bounds": 8000,
+		"objective": "Explore Sapphire XVI near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.022,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.012,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 6.1
+	},
+	{
+		"id": "vesuvius_v",
+		"name": "Vesuvius V Sector",
+		"orbit_name": "Vesuvius V near orbit",
+		"planet_name": "Vesuvius V",
+		"star_system": "Tau Ceti",
+		"description": "Fifth moon of the colourful gas giant Vesuvius. The moon is rich in valuable minerals; the turbulent parent planet is a signature sight in the outer system.",
+		"gravity": 0.14,
+		"population_billions": 0.15,
+		"play_bounds": 8000,
+		"objective": "Explore Vesuvius V near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.013,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.007,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 8.0
+	},
+	{
+		"id": "tc_inner_disc",
+		"name": "TC Inner Disc Station Sector",
+		"orbit_name": "TC Inner Disc Station near orbit",
+		"star_system": "Tau Ceti",
+		"description": "Hub for resource extraction in the dense inner debris disc between 11 and 19 AU. Convoys and assay traffic tie the belt to Fortuna's markets.",
+		"gravity": 0.16,
+		"population_billions": 0.38,
+		"play_bounds": 8000,
+		"objective": "Explore TC Inner Disc Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.18,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.004,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.002,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 15.0
+	},
+	{
+		"id": "tc_outer_disc",
+		"name": "TC Outer Disc Station Sector",
+		"orbit_name": "TC Outer Disc Station near orbit",
+		"star_system": "Tau Ceti",
+		"description": "Hub for the sparser outer debris disc. Extraction runs at lower density than the inner band but still feeds Fortuna's industrial appetite.",
+		"gravity": 0.14,
+		"population_billions": 0.22,
+		"play_bounds": 8000,
+		"objective": "Explore TC Outer Disc Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.001,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 35.0
+	},
+	{
+		"id": "terminary",
+		"name": "Terminary Research Station Sector",
+		"orbit_name": "Terminary Research Station near orbit",
+		"star_system": "Tau Ceti",
+		"description": "Isolated research station just beyond the debris disc. Survey teams and supply runs are the only regular traffic.",
+		"gravity": 0.08,
+		"population_billions": 0.04,
+		"play_bounds": 8000,
+		"objective": "Explore Terminary Research Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 55.0
 	}
 ]
