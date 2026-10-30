@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_headlines_sector_change_clears_push(runner, catalog)
 	_test_charter_gossip_quotes_live_offer(runner, catalog)
 	_test_menu_headline_tape_bindings(runner, catalog)
+	_test_menu_tape_hall_slots(runner, catalog)
 	_test_flavour_token_resolver(runner, catalog)
 	_test_pool_emitter_samples_one_channel(runner, catalog)
 	_test_commodity_emitter_quotes_a_price(runner, catalog)
@@ -176,6 +177,59 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 		habitat_label != corp_label,
 		"message emitters: habitat token must not duplicate corporation name"
 	)
+
+
+static func _menu_tape_scratch(catalog: Catalog) -> Dictionary:
+	var messages := MessageSubsystem.new()
+	var scratch := GameSession.new()
+	scratch.run_seed = 1
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+	return {"messages": messages, "scratch": scratch, "catalog": catalog, "rng": rng}
+
+
+static func _test_menu_tape_hall_slots(runner: TestRunner, catalog: Catalog) -> void:
+	var ctx := _menu_tape_scratch(catalog)
+	var messages: MessageSubsystem = ctx.messages
+	var scratch: GameSession = ctx.scratch
+	var rng: RandomNumberGenerator = ctx.rng
+	var top_three := [
+		{"callsign": "Alpha", "profit": 9000},
+		{"callsign": "Bravo", "profit": 5000},
+		{"callsign": "Charlie", "profit": 1000},
+	]
+	runner.check_eq(
+		MenuHeadlineTape.hall_line_for_rank(1, top_three),
+		"Hall of fame #1: Alpha, d9000 nett profit.",
+		"menu tape: hall line rank 1"
+	)
+	runner.check_eq(
+		MenuHeadlineTape.next_menu_line(1, top_three, messages, scratch, catalog, rng),
+		"Hall of fame #1: Alpha, d9000 nett profit.",
+		"menu tape: fill index 1 is rank 1"
+	)
+	runner.check_eq(
+		MenuHeadlineTape.next_menu_line(3, top_three, messages, scratch, catalog, rng),
+		"Hall of fame #2: Bravo, d5000 nett profit.",
+		"menu tape: fill index 3 is rank 2"
+	)
+	runner.check_eq(
+		MenuHeadlineTape.next_menu_line(5, top_three, messages, scratch, catalog, rng),
+		"Hall of fame #3: Charlie, d1000 nett profit.",
+		"menu tape: fill index 5 is rank 3"
+	)
+	var single := [{"callsign": "Solo", "profit": 42}]
+	runner.check_eq(
+		MenuHeadlineTape.next_menu_line(1, single, messages, scratch, catalog, rng),
+		"Hall of fame #1: Solo, d42 nett profit.",
+		"menu tape: single entry rank 1"
+	)
+	var fallback := MenuHeadlineTape.next_menu_line(3, single, messages, scratch, catalog, rng)
+	runner.check(
+		not fallback.begins_with("Hall of fame #2"),
+		"menu tape: missing rank 2 falls back to headline"
+	)
+	runner.check(not fallback.is_empty(), "menu tape: missing rank 2 fallback non-empty")
 
 
 static func _test_menu_headline_tape_bindings(runner: TestRunner, catalog: Catalog) -> void:

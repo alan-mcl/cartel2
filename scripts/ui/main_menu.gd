@@ -17,6 +17,8 @@ var _messages: MessageSubsystem
 var _scratch_session: GameSession
 var _tape_rng := RandomNumberGenerator.new()
 var _tape_active := false
+var _tape_fill_index := 0
+var _hall_entries: Array = []
 
 
 func _ready() -> void:
@@ -61,6 +63,8 @@ func _start_headline_tape() -> void:
 		return
 	_headline_tape.clear_queued_lines()
 	_tape_rng.randomize()
+	_tape_fill_index = 0
+	_hall_entries = LeaderboardStore.sorted_entries(LeaderboardStore.SortColumn.PROFIT, true)
 	_tape_active = true
 	set_process(true)
 	_headline_tape.play_line(
@@ -79,9 +83,17 @@ func _stop_headline_tape() -> void:
 func _enqueue_headline_line() -> bool:
 	if _headline_tape == null or _messages == null or _scratch_session == null or _catalog == null:
 		return false
-	var line := MenuHeadlineTape.next_headline(_messages, _scratch_session, _catalog, _tape_rng)
+	var line := MenuHeadlineTape.next_menu_line(
+		_tape_fill_index,
+		_hall_entries,
+		_messages,
+		_scratch_session,
+		_catalog,
+		_tape_rng
+	)
 	if line.is_empty():
 		return false
+	_tape_fill_index += 1
 	return _headline_tape.play_line(line, true, true)
 
 

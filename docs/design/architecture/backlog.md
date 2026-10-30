@@ -22,5 +22,4 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
 |F5|UI|med|Ship module names to support the popup-info dialog on hover wherever they are (some places do not support this yet)
-|F6|UI|low|Main menu ticker to include Leaderboard messages (top3, ranking, callsign and profit)
 
