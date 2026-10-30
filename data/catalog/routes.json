@@ -919,5 +919,57 @@
 				"solution_ba": -48174
 			}
 		]
+	},
+	{
+		"id": "new_carthage_byrsa",
+		"a": "new_carthage",
+		"b": "byrsa",
+		"friction": 3,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48175,
+				"solution_ba": -48176
+			}
+		]
+	},
+	{
+		"id": "new_carthage_depot_61c",
+		"a": "new_carthage",
+		"b": "depot_61c",
+		"friction": 6,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48177,
+				"solution_ba": -48178
+			}
+		]
+	},
+	{
+		"id": "new_carthage_nightjar",
+		"a": "new_carthage",
+		"b": "nightjar",
+		"friction": 10,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48179,
+				"solution_ba": -48180
+			}
+		]
+	},
+	{
+		"id": "new_carthage_tanit_xx",
+		"a": "new_carthage",
+		"b": "tanit_xx",
+		"friction": 11,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48181,
+				"solution_ba": -48182
+			}
+		]
 	}
 ]

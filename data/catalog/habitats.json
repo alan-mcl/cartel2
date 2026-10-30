@@ -948,5 +948,61 @@
 		"sector_id": "terminary",
 		"short_desc": "Research station at Terminary.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/byrsa_habitat.png",
+		"buildings": [
+			"byrsa_terminal",
+			"byrsa_exchange"
+		],
+		"default_building": "byrsa_terminal",
+		"description": "Orbitals above Byrsa. Tidal yards and component traffic share the sky with New Carthage and 61 Cygni B.",
+		"id": "byrsa_habitat",
+		"name": "Byrsa",
+		"sector_id": "byrsa",
+		"short_desc": "Industrial orbitals at Byrsa.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/depot_61c_habitat.png",
+		"buildings": [
+			"depot_61c_terminal",
+			"depot_61c_exchange"
+		],
+		"default_building": "depot_61c_terminal",
+		"description": "Depot 61C in the inner asteroid belt. Convoy traffic never quite clears the approach lanes.",
+		"id": "depot_61c_habitat",
+		"name": "Depot 61C",
+		"sector_id": "depot_61c",
+		"short_desc": "Belt depot near New Carthage.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/tanit_xx_habitat.png",
+		"buildings": [
+			"tanit_xx_terminal",
+			"tanit_xx_exchange"
+		],
+		"default_building": "tanit_xx_terminal",
+		"description": "Mining and energy orbital at Tanit XX. Warm subsurface work proceeds beneath the white-and-red bands of Tanit.",
+		"id": "tanit_xx_habitat",
+		"name": "Tanit XX",
+		"sector_id": "tanit_xx",
+		"short_desc": "Mining and energy at Tanit XX.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/nightjar_habitat.png",
+		"buildings": [
+			"nightjar_terminal",
+			"nightjar_exchange"
+		],
+		"default_building": "nightjar_terminal",
+		"description": "Orbitals above dark Nightjar, third planet of 61 Cygni B. Surface mining convoys use the outer lanes.",
+		"id": "nightjar_habitat",
+		"name": "Nightjar",
+		"sector_id": "nightjar",
+		"short_desc": "Mining orbitals at Nightjar.",
+		"type": "habitat"
 	}
 ]

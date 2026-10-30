@@ -4488,6 +4488,282 @@
 			"luminosity": 0.85
 		}
 	},
+	"byrsa": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "byrsa_habitat_obj",
+					"kind": "habitat",
+					"label": "Byrsa",
+					"interactable": "byrsa_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#70c8b8"
+				},
+				{
+					"id": "byrsa_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "byrsa_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "byrsa_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "byrsa_beacon_obj",
+			"label": "Byrsa Translation Beacon",
+			"interactable": "byrsa_jump_gate",
+			"destination": "new_carthage",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1400,
+			"modulate": "#889890"
+		},
+		"parent_body": {
+			"name": "New Carthage",
+			"type": "planet",
+			"angular_diameter_deg_min": 12,
+			"angular_diameter_deg_max": 18,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#1a6878",
+				"band_colour_2": "#c8d8c0",
+				"turbulence": 0.15
+			},
+			"rings": { "type": "none" }
+		},
+		"companion_stars": [
+			{
+				"star": "61 Cygni B",
+				"separation_deg": 70
+			}
+		],
+		"star": {
+			"temperature_k": 3800,
+			"luminosity": 0.35
+		}
+	},
+	"depot_61c": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "depot_61c_habitat_obj",
+					"kind": "habitat",
+					"label": "Depot 61C",
+					"interactable": "depot_61c_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#909088"
+				},
+				{
+					"id": "depot_61c_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "depot_61c_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "depot_61c_beacon_obj",
+			"label": "Depot 61C Translation Beacon",
+			"interactable": "depot_61c_jump_gate",
+			"destination": "new_carthage",
+			"radius": 5400
+		},
+		"entities": [
+			{
+				"id": "depot_61c_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2100,
+					"y": 900
+				},
+				"rotation": 0.2
+			},
+			{
+				"id": "depot_61c_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2500,
+					"y": -1100
+				},
+				"rotation": -0.35
+			},
+			{
+				"id": "depot_61c_debris_3",
+				"kind": "debris",
+				"position": {
+					"x": 2900,
+					"y": 1500
+				},
+				"rotation": 0.55
+			},
+			{
+				"id": "depot_61c_debris_4",
+				"kind": "debris",
+				"position": {
+					"x": 3200,
+					"y": -500
+				},
+				"rotation": 0.25
+			}
+		],
+		"companion_stars": [
+			{
+				"star": "61 Cygni B",
+				"separation_deg": 70
+			}
+		],
+		"star": {
+			"temperature_k": 3800,
+			"luminosity": 0.35
+		}
+	},
+	"tanit_xx": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tanit_xx_habitat_obj",
+					"kind": "habitat",
+					"label": "Tanit XX",
+					"interactable": "tanit_xx_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#88a898"
+				},
+				{
+					"id": "tanit_xx_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				},
+				{
+					"id": "tanit_xx_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "tanit_xx_beacon_obj",
+			"label": "Tanit XX Translation Beacon",
+			"interactable": "tanit_xx_jump_gate",
+			"destination": "new_carthage",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 800,
+			"modulate": "#607870"
+		},
+		"parent_body": {
+			"name": "Tanit",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 14,
+			"angular_diameter_deg_max": 20,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#f0ece4",
+				"band_colour_2": "#c04030",
+				"turbulence": 0.7
+			},
+			"rings": { "type": "none" }
+		},
+		"companion_stars": [
+			{
+				"star": "61 Cygni B",
+				"separation_deg": 70
+			}
+		],
+		"star": {
+			"temperature_k": 3800,
+			"luminosity": 0.35
+		}
+	},
+	"nightjar": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "nightjar_habitat_obj",
+					"kind": "habitat",
+					"label": "Nightjar",
+					"interactable": "nightjar_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#505058"
+				},
+				{
+					"id": "nightjar_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "nightjar_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "nightjar_beacon_obj",
+			"label": "Nightjar Translation Beacon",
+			"interactable": "nightjar_jump_gate",
+			"destination": "new_carthage",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1200,
+			"modulate": "#282830"
+		},
+		"entities": [
+			{
+				"id": "nightjar_debris_1",
+				"kind": "debris",
+				"position": {
+					"x": 2400,
+					"y": 700
+				},
+				"rotation": 0.2
+			},
+			{
+				"id": "nightjar_debris_2",
+				"kind": "debris",
+				"position": {
+					"x": 2700,
+					"y": -800
+				},
+				"rotation": -0.2
+			}
+		],
+		"companion_stars": [
+			{
+				"star": "61 Cygni A",
+				"separation_deg": 70
+			}
+		],
+		"star": {
+			"temperature_k": 4040,
+			"luminosity": 0.04
+		}
+	},
 	"n5_default": {
 		"entities": []
 	},

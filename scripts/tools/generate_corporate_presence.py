@@ -302,6 +302,30 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "mercury_communications": 4.0,
         "deepspace": 3.0,
     },
+    "byrsa": {
+        "general_industrial": 7.0,
+        "atlas_concern": 5.0,
+        "four_rivers_zaibatsu": 5.0,
+        "deepspace": 4.0,
+    },
+    "depot_61c": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 5.0,
+        "general_industrial": 4.0,
+    },
+    "tanit_xx": {
+        "atlas_concern": 6.0,
+        "general_industrial": 6.0,
+        "deepspace": 5.0,
+        "four_rivers_zaibatsu": 4.0,
+    },
+    "nightjar": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 5.0,
+        "general_industrial": 4.0,
+    },
 }
 
 FLOOR = 0.15

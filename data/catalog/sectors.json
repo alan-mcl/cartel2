@@ -1324,5 +1324,92 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 55.0
+	},
+	{
+		"id": "byrsa",
+		"name": "Byrsa Sector",
+		"orbit_name": "Byrsa near orbit",
+		"planet_name": "Byrsa",
+		"star_system": "61 Cygni",
+		"description": "New Carthage's large moon. Strong tidal influence and extensive orbital infrastructure share the sky with the partner star.",
+		"gravity": 0.42,
+		"population_billions": 0.85,
+		"play_bounds": 8000,
+		"objective": "Explore Byrsa near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.25,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.55,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.5,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 1.0
+	},
+	{
+		"id": "depot_61c",
+		"name": "Depot 61C Sector",
+		"orbit_name": "Depot 61C near orbit",
+		"star_system": "61 Cygni",
+		"description": "Populated hub in the 61 Cygni A asteroid belt between the third and fourth planets. Ore convoys and assay traffic feed New Carthage's yards.",
+		"gravity": 0.16,
+		"population_billions": 0.35,
+		"play_bounds": 8000,
+		"objective": "Explore Depot 61C near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.18,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 1.53,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 1.39,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 0.6
+	},
+	{
+		"id": "tanit_xx",
+		"name": "Tanit XX Sector",
+		"orbit_name": "Tanit XX near orbit",
+		"planet_name": "Tanit XX",
+		"star_system": "61 Cygni",
+		"description": "Twentieth moon of the gas giant Tanit at 8 AU. Warm subsurface oceans support mining and energy extraction beneath an extremely large parent disc.",
+		"gravity": 0.16,
+		"population_billions": 0.18,
+		"play_bounds": 8000,
+		"objective": "Explore Tanit XX near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.009,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.008,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 8.0
+	},
+	{
+		"id": "nightjar",
+		"name": "Nightjar Sector",
+		"orbit_name": "Nightjar near orbit",
+		"planet_name": "Nightjar",
+		"star_system": "61 Cygni",
+		"description": "Third planet of orange 61 Cygni B at 3.5 AU. A small, dark rocky world heavily developed for surface mining.",
+		"gravity": 0.72,
+		"population_billions": 0.14,
+		"play_bounds": 8000,
+		"objective": "Explore Nightjar near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.2,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.005,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.005,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 3.5
 	}
 ]

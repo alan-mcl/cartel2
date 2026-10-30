@@ -738,5 +738,57 @@
 		"title": "Terminary Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "byrsa_habitat",
+		"title": "Byrsa",
+		"inspect_text": "Docking at Byrsa. Component and yard traffic uses the outer lanes beneath New Carthage.",
+		"kind": "dock",
+		"dock_location_id": "byrsa_habitat"
+	},
+	{
+		"id": "byrsa_jump_gate",
+		"title": "Byrsa Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to New Carthage near orbit. Only the public hop back to New Carthage is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "depot_61c_habitat",
+		"title": "Depot 61C",
+		"inspect_text": "Docking at Depot 61C. Belt convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "depot_61c_habitat"
+	},
+	{
+		"id": "depot_61c_jump_gate",
+		"title": "Depot 61C Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to New Carthage near orbit. Only the public hop back to New Carthage is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "tanit_xx_habitat",
+		"title": "Tanit XX",
+		"inspect_text": "Docking at Tanit XX. Mining and energy traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "tanit_xx_habitat"
+	},
+	{
+		"id": "tanit_xx_jump_gate",
+		"title": "Tanit XX Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to New Carthage near orbit. Only the public hop back to New Carthage is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "nightjar_habitat",
+		"title": "Nightjar",
+		"inspect_text": "Docking at Nightjar. Surface mining convoys use the outer lanes under 61 Cygni B.",
+		"kind": "dock",
+		"dock_location_id": "nightjar_habitat"
+	},
+	{
+		"id": "nightjar_jump_gate",
+		"title": "Nightjar Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to New Carthage near orbit. Only the public hop back to New Carthage is available here.",
+		"kind": "translate"
 	}
 ]

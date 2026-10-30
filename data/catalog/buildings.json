@@ -2054,5 +2054,77 @@
 		"name": "Terminary Exchange",
 		"short_desc": "Exchange at Terminary.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/byrsa_terminal.png",
+		"description": "Customs for Byrsa orbital and component traffic.",
+		"id": "byrsa_terminal",
+		"kind": "terminal",
+		"name": "Byrsa Terminal",
+		"short_desc": "Terminal for Byrsa traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/byrsa_exchange.png",
+		"description": "Commodity exchange for industrial components and tidal-yard contracts at Byrsa.",
+		"id": "byrsa_exchange",
+		"kind": "merchant",
+		"name": "Byrsa Exchange",
+		"short_desc": "Exchange at Byrsa.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/depot_61c_terminal.png",
+		"description": "Customs for Depot 61C belt convoys.",
+		"id": "depot_61c_terminal",
+		"kind": "terminal",
+		"name": "Depot 61C Terminal",
+		"short_desc": "Terminal for Depot 61C traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/depot_61c_exchange.png",
+		"description": "Commodity exchange for belt ore and assay contracts at Depot 61C.",
+		"id": "depot_61c_exchange",
+		"kind": "merchant",
+		"name": "Depot 61C Exchange",
+		"short_desc": "Exchange at Depot 61C.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tanit_xx_terminal.png",
+		"description": "Customs for Tanit XX mining and energy traffic.",
+		"id": "tanit_xx_terminal",
+		"kind": "terminal",
+		"name": "Tanit XX Terminal",
+		"short_desc": "Terminal for Tanit XX traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tanit_xx_exchange.png",
+		"description": "Commodity exchange for subsurface mining and power contracts at Tanit XX.",
+		"id": "tanit_xx_exchange",
+		"kind": "merchant",
+		"name": "Tanit XX Exchange",
+		"short_desc": "Exchange at Tanit XX.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/nightjar_terminal.png",
+		"description": "Customs for Nightjar surface mining convoys.",
+		"id": "nightjar_terminal",
+		"kind": "terminal",
+		"name": "Nightjar Terminal",
+		"short_desc": "Terminal for Nightjar traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/nightjar_exchange.png",
+		"description": "Commodity exchange for ore contracts at Nightjar.",
+		"id": "nightjar_exchange",
+		"kind": "merchant",
+		"name": "Nightjar Exchange",
+		"short_desc": "Exchange at Nightjar.",
+		"type": "market"
 	}
 ]

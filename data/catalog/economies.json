@@ -864,5 +864,59 @@
 			"food_products": 5.0,
 			"industrial_components": 2.5
 		}
+	},
+	{
+		"id": "byrsa",
+		"tier": "outer",
+		"wealth": 0.9,
+		"produce": {
+			"industrial_components": 9.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"minerals": 7.0
+		}
+	},
+	{
+		"id": "depot_61c",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 10.0,
+			"minerals": 11.0
+		},
+		"consume": {
+			"food_products": 9.0,
+			"industrial_components": 2.5,
+			"water_ice": 3.0
+		}
+	},
+	{
+		"id": "tanit_xx",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"energy": 5.0,
+			"minerals": 8.0,
+			"water_ice": 3.0
+		},
+		"consume": {
+			"food_products": 7.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "nightjar",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"advanced_raw_materials": 8.0,
+			"minerals": 10.0
+		},
+		"consume": {
+			"food_products": 7.0,
+			"industrial_components": 2.5,
+			"water_ice": 4.0
+		}
 	}
 ]
