@@ -11,6 +11,8 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 static func run(runner: TestRunner) -> void:
 	_test_node_pool_reparents_and_clears(runner)
 	_test_traffic_view_lifecycle(runner)
+	_test_traffic_destroy_breakup(runner)
+	_test_npc_play_destroyed_breakup(runner)
 	_test_traffic_detection_fade(runner)
 
 
@@ -97,6 +99,58 @@ static func _test_traffic_view_lifecycle(runner: TestRunner) -> void:
 	runner.check(view._far_sprite_pool.is_empty(), "traffic view: clear drops far pool")
 	runner.check(view._near_pool._available.is_empty(), "traffic view: clear drops near pool")
 	runner.check_eq(view._traffic_root, null, "traffic view: clear releases traffic root")
+
+
+static func _test_traffic_destroy_breakup(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	var world_root := Node2D.new()
+	var view := TrafficView.new()
+	view.setup(world_root)
+	var actor: Variant = _actor(catalog, "presentation_destroy")
+	actor.player_detected = true
+	actor.near_lod = true
+	view.sync([actor], catalog)
+	runner.check(view._nodes_by_id.has(actor.id), "traffic destroy: near node active")
+	actor.ai_state = TrafficActorScript.STATE_DESTROYED
+	view.sync([actor], catalog)
+	runner.check(
+		not view._nodes_by_id.has(actor.id),
+		"traffic destroy: actor leaves active map"
+	)
+	runner.check(
+		_has_ship_breakup_child(world_root),
+		"traffic destroy: spawns ShipBreakup on world"
+	)
+	runner.check(
+		view._near_pool._available.size() >= 1,
+		"traffic destroy: returns near hull to pool"
+	)
+	view.clear()
+
+
+static func _test_npc_play_destroyed_breakup(runner: TestRunner) -> void:
+	var world_root := Node2D.new()
+	var traffic_root := Node2D.new()
+	world_root.add_child(traffic_root)
+	var packed := load("res://scenes/npc_ship.tscn") as PackedScene
+	runner.check(packed != null, "npc destroy: npc scene loads")
+	if packed == null:
+		return
+	var ship: Node2D = packed.instantiate()
+	traffic_root.add_child(ship)
+	runner.check(ship.has_method("play_destroyed"), "npc destroy: play_destroyed exists")
+	ship.call("play_destroyed")
+	runner.check(
+		_has_ship_breakup_child(world_root),
+		"npc destroy: play_destroyed spawns ShipBreakup on world"
+	)
+
+
+static func _has_ship_breakup_child(root: Node) -> bool:
+	for child in root.get_children():
+		if child is ShipBreakup:
+			return true
+	return false
 
 
 static func _test_traffic_detection_fade(runner: TestRunner) -> void:

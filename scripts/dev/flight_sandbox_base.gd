@@ -379,7 +379,7 @@ func _spawn_bound_npc(actor, spawn_pos: Vector2) -> Node2D:
 	var node: Node2D = NPC_SHIP_SCENE.instantiate()
 	_traffic_root.add_child(node)
 	node.global_position = spawn_pos
-	node.bind_actor(actor, catalog)
+	node.bind_actor(actor, catalog, _world)
 	return node
 
 

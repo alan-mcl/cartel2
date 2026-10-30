@@ -158,17 +158,9 @@ func _start_destroy_fx(actor) -> void:
 		return
 	var node: Node2D = _nodes_by_id.get(actor.id)
 	if node != null and is_instance_valid(node):
-		if node.has_method("play_destroyed"):
-			node.call("play_destroyed")
-		else:
-			var tint := Color.WHITE
-			var hull: Sprite2D = node.get_node_or_null("Hull") as Sprite2D
-			if hull != null:
-				tint = hull.modulate
-			var parent := _traffic_root.get_parent() as Node2D
-			if parent != null:
-				ShipBreakupScript.spawn(parent, actor.position, actor.motion.velocity, tint)
-			node.queue_free()
+		var was_near := bool(_near_lod_by_id.get(actor.id, false))
+		_spawn_breakup_for_actor(node, actor)
+		_release_lod_node(node, was_near)
 	_nodes_by_id.erase(actor.id)
 	_far_thrust_by_id.erase(actor.id)
 	_far_exhaust_by_id.erase(actor.id)
@@ -245,6 +237,21 @@ func _apply_detection_visibility(actor, node: Node2D, delta: float) -> void:
 		delta
 	)
 	apply_detection_opacity(node, opacity)
+
+
+func _spawn_breakup_for_actor(node: Node2D, actor) -> void:
+	if _world_root == null or not is_instance_valid(_world_root):
+		return
+	var tint := Color.WHITE
+	var hull: Sprite2D = node.get_node_or_null("Hull") as Sprite2D
+	if hull == null:
+		hull = node.get_node_or_null("Visual/Hull") as Sprite2D
+	if hull != null:
+		tint = hull.modulate
+	var ship_velocity := Vector2.ZERO
+	if actor != null:
+		ship_velocity = actor.motion.velocity
+	ShipBreakupScript.spawn(_world_root, node.global_position, ship_velocity, tint)
 
 
 func _spawn_near_ship(actor, catalog: Catalog) -> void:

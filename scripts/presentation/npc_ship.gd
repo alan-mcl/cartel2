@@ -153,7 +153,13 @@ func _hull_base_modulate() -> Color:
 func _get_world_root() -> Node2D:
 	if _weapon_spawn_root != null and is_instance_valid(_weapon_spawn_root):
 		return _weapon_spawn_root
-	return null
+	var parent := get_parent()
+	if parent == null:
+		return null
+	var grand := parent.get_parent() as Node2D
+	if grand != null:
+		return grand
+	return parent as Node2D
 
 
 func _update_thrust_visual(active: bool) -> void:

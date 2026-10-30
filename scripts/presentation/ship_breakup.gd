@@ -22,6 +22,7 @@ static func spawn(
 	if parent == null:
 		return
 	var breakup := ShipBreakup.new()
+	breakup.z_index = 10
 	breakup.process_mode = Node.PROCESS_MODE_ALWAYS
 	breakup._tint = tint
 	breakup._build_fragments(ship_velocity)
