@@ -150,7 +150,17 @@ Irasia is a prosperous and heavily industrialised world, with enormous coastal c
 
 ### Solar neighbourhood
 
-TBD
+Irasia orbits the stable and steady 61 Virginis at 0.99 AU, one of eight planets in the system. Unusually for an E class world Irasia has four small moons in varying orbits, the outermost quite inclined.
+
+Planets and moons:
+ - Alecto (planet 1): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
+ - New Ceres (planet 5): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
+ - Varda III (moon 3 of planet 6): sixth planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
+ - Cressida: the eighth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
+
+ Other
+ - Virginis Asteroid Station: the asteroid belt beyond New Ceres is rich in exotic minerals, crystals and chemicals
+ - Varda Asteroid Station: beyond Varda lies another, sparser asteroid belt, also a site of resource extraction
 
 ### Field conditions
 
