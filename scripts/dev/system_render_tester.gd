@@ -19,7 +19,7 @@ var _sector_ids: Array[String] = []
 
 var _overlay_root: Control
 var _surface_labels: Control
-var _sector_option: OptionButton
+var _sector_tree: Tree
 var _auto_spin_check: CheckButton
 var _frame_button: Button
 
@@ -33,7 +33,7 @@ func _ready() -> void:
 	catalog = Catalog.load_default()
 	session = _build_session()
 	_build_overlay()
-	_populate_sector_options()
+	_populate_sector_tree()
 
 	if _starfield.has_method("bind_camera"):
 		_starfield.bind_camera(_camera)
@@ -45,11 +45,11 @@ func _ready() -> void:
 		push_error("System render tester: no renderable sectors in catalog.")
 		return
 
-	var default_idx := _sector_ids.find("proxima")
-	if default_idx >= 0:
-		_sector_option.selected = default_idx
+	if not _select_sector_in_tree("proxima"):
+		_select_first_sector_in_tree()
 
 	_load_selected_sector()
+	call_deferred("_scroll_sector_tree_to_top")
 
 
 func _build_session() -> GameSession:
@@ -78,10 +78,11 @@ func _build_overlay() -> void:
 	var panel := PanelContainer.new()
 	panel.name = "Panel"
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	panel.anchor_bottom = 1.0
 	panel.offset_left = 12.0
 	panel.offset_top = 12.0
 	panel.offset_right = 420.0
-	panel.offset_bottom = 148.0
+	panel.offset_bottom = -12.0
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_overlay_root.add_child(panel)
 
@@ -90,10 +91,12 @@ func _build_overlay() -> void:
 	margin.add_theme_constant_override("margin_top", 10)
 	margin.add_theme_constant_override("margin_right", 10)
 	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_child(margin)
 
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 8)
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(vbox)
 
 	var title := Label.new()
@@ -101,10 +104,13 @@ func _build_overlay() -> void:
 	title.add_theme_font_size_override("font_size", 18)
 	vbox.add_child(title)
 
-	_sector_option = OptionButton.new()
-	_sector_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_sector_option.item_selected.connect(_on_sector_selected)
-	vbox.add_child(_sector_option)
+	_sector_tree = Tree.new()
+	_sector_tree.hide_root = true
+	_sector_tree.column_titles_visible = false
+	_sector_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_sector_tree.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_sector_tree.item_selected.connect(_on_sector_tree_item_selected)
+	vbox.add_child(_sector_tree)
 
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
@@ -128,11 +134,24 @@ func _build_overlay() -> void:
 	vbox.add_child(hint)
 
 
-func _populate_sector_options() -> void:
-	_sector_ids.clear()
-	_sector_option.clear()
+func _sector_tree_label(sector: Dictionary) -> String:
+	var sector_id := str(sector.get("id", ""))
+	var display_name := str(sector.get("planet_name", ""))
+	if display_name.is_empty():
+		display_name = str(sector.get("name", sector_id))
+	var star_label := str(sector.get("star", ""))
+	if star_label.is_empty():
+		star_label = str(sector.get("star_system", ""))
+	if star_label.is_empty():
+		return display_name
+	return "%s - %s" % [display_name, star_label]
 
-	var entries: Array = []
+
+func _populate_sector_tree() -> void:
+	_sector_ids.clear()
+	_sector_tree.clear()
+
+	var renderable: Dictionary = {}
 	for sector_variant in catalog.list_sectors():
 		if typeof(sector_variant) != TYPE_DICTIONARY:
 			continue
@@ -145,26 +164,108 @@ func _populate_sector_options() -> void:
 			continue
 		if not world_data.has("planet") and not world_data.has("orbital_ring"):
 			continue
-		var display_name := str(sector.get("planet_name", ""))
-		if display_name.is_empty():
-			display_name = str(sector.get("name", sector_id))
-		var star_label := str(sector.get("star", ""))
-		if star_label.is_empty():
-			star_label = str(sector.get("star_system", ""))
-		var label := display_name if star_label.is_empty() else "%s - %s" % [display_name, star_label]
-		entries.append({"id": sector_id, "label": label})
+		renderable[sector_id] = _sector_tree_label(sector)
 
-	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return str(a.get("label", "")) < str(b.get("label", ""))
+	var hub_ids: Array[String] = []
+	var beacons_by_hub: Dictionary = {}
+	var orphan_ids: Array[String] = []
+
+	for sector_id_variant in renderable.keys():
+		var sector_id := str(sector_id_variant)
+		var world_data := catalog.get_world(sector_id)
+		if world_data.has("jump_gate"):
+			hub_ids.append(sector_id)
+			continue
+		var beacon: Variant = world_data.get("translation_beacon", {})
+		if typeof(beacon) == TYPE_DICTIONARY and not beacon.is_empty():
+			var hub_id := str(beacon.get("destination", ""))
+			if not beacons_by_hub.has(hub_id):
+				beacons_by_hub[hub_id] = []
+			(beacons_by_hub[hub_id] as Array).append(sector_id)
+		else:
+			orphan_ids.append(sector_id)
+
+	hub_ids.sort_custom(func(a: String, b: String) -> bool:
+		return str(renderable.get(a, a)) < str(renderable.get(b, b))
 	)
 
-	for entry_variant in entries:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
-			continue
-		var entry: Dictionary = entry_variant
-		var sector_id := str(entry.get("id", ""))
-		_sector_ids.append(sector_id)
-		_sector_option.add_item(str(entry.get("label", sector_id)))
+	for hub_id in hub_ids:
+		var hub_item := _sector_tree.create_item()
+		hub_item.set_text(0, str(renderable.get(hub_id, hub_id)))
+		hub_item.set_metadata(0, hub_id)
+		_sector_ids.append(hub_id)
+
+		var beacon_ids: Array = beacons_by_hub.get(hub_id, [])
+		beacon_ids.sort_custom(func(a: String, b: String) -> bool:
+			return str(renderable.get(a, a)) < str(renderable.get(b, b))
+		)
+		for beacon_id_variant in beacon_ids:
+			var beacon_id := str(beacon_id_variant)
+			if not renderable.has(beacon_id):
+				continue
+			var beacon_item := _sector_tree.create_item(hub_item)
+			beacon_item.set_text(0, str(renderable.get(beacon_id, beacon_id)))
+			beacon_item.set_metadata(0, beacon_id)
+			_sector_ids.append(beacon_id)
+
+		hub_item.set_collapsed(false)
+
+	orphan_ids.sort_custom(func(a: String, b: String) -> bool:
+		return str(renderable.get(a, a)) < str(renderable.get(b, b))
+	)
+	for orphan_id in orphan_ids:
+		var orphan_item := _sector_tree.create_item()
+		orphan_item.set_text(0, str(renderable.get(orphan_id, orphan_id)))
+		orphan_item.set_metadata(0, orphan_id)
+		_sector_ids.append(orphan_id)
+
+
+func _select_sector_in_tree(sector_id: String) -> bool:
+	var item := _find_tree_item_by_sector_id(sector_id)
+	if item == null:
+		return false
+	item.select(0)
+	return true
+
+
+func _select_first_sector_in_tree() -> void:
+	var root := _sector_tree.get_root()
+	if root == null:
+		return
+	var first := root.get_first_child()
+	if first != null:
+		first.select(0)
+
+
+func _scroll_sector_tree_to_top() -> void:
+	var bar := _sector_tree.get_v_scroll_bar()
+	if bar != null:
+		bar.value = bar.min_value
+
+
+func _find_tree_item_by_sector_id(sector_id: String) -> TreeItem:
+	var root := _sector_tree.get_root()
+	if root == null:
+		return null
+	var item := root.get_first_child()
+	while item != null:
+		var found := _find_tree_item_in_subtree(item, sector_id)
+		if found != null:
+			return found
+		item = item.get_next()
+	return null
+
+
+func _find_tree_item_in_subtree(item: TreeItem, sector_id: String) -> TreeItem:
+	if str(item.get_metadata(0)) == sector_id:
+		return item
+	var child := item.get_first_child()
+	while child != null:
+		var found := _find_tree_item_in_subtree(child, sector_id)
+		if found != null:
+			return found
+		child = child.get_next()
+	return null
 
 
 ## Headless smoke teardown before the tester node is freed.
@@ -173,10 +274,12 @@ func smoke_unload() -> void:
 
 
 func _load_selected_sector() -> void:
-	if _sector_ids.is_empty():
+	var item := _sector_tree.get_selected()
+	if item == null:
 		return
-	var index := clampi(_sector_option.selected, 0, _sector_ids.size() - 1)
-	var sector_id := _sector_ids[index]
+	var sector_id := str(item.get_metadata(0))
+	if sector_id.is_empty():
+		return
 	session.sector_id = sector_id
 	var sector := catalog.get_sector_def(sector_id)
 	if sector != null and sector.has_source_key("orbit_name") and not sector.orbit_name.is_empty():
@@ -200,7 +303,7 @@ func _apply_planet_auto_spin() -> void:
 		planet.call("set_auto_spin_enabled", _auto_spin_check.button_pressed)
 
 
-func _on_sector_selected(_index: int) -> void:
+func _on_sector_tree_item_selected() -> void:
 	_load_selected_sector()
 
 

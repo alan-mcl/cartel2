@@ -308,7 +308,15 @@ New Carthage is a largely oceanic world whose major population centres developed
 
 ### Solar neighbourhood
 
-TBD
+New Carthage is the fourth of five planets orbitting 61 Cygni A. It's single moon, Byrsa, is large and has a great deal of tidal influence. Both Byrsa and the solar partner, orange 61 Cygni B, are usually brightly visible in the night skies.
+
+Planets and moons:
+ - Byrsa (only moon of 4th planet): New Carthage's own large moon is orbited by significant orbital infrastructure.
+ - Tanit XX (8 AU, 20th moon of the 5th planet): 61 Cygni A's only gas giant, Tanit, is a extremely large and displays spectacular white and red bands. The 20th moon has active warm subsurface oceans and is a useful site for both mining and energy generation.
+ - Nightjar: (3.5 AU, 3rd planet of 61 Cygni B): The partner star has three planets, the last of which is a small, dark rocky world heavily developed for mining.
+
+Other:
+ - Depot 61C: a populated hub in the 61 Cygni A asteroid belt between the 3rd and 4th planets.
 
 ### Field conditions
 
