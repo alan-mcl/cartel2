@@ -149,6 +149,7 @@ func _ensure_sector_nav_cache(loader: WorldLoader, catalog: Catalog) -> void:
 			"short_label": "G",
 			"contact_kind": "landmark",
 			"landmark_role": "parent_planet",
+			"parent_type_label": str(parent_meta.get("type_label", "")),
 			"position": Vector2.ZERO,
 		}
 		_merge_lock_display_fields(loader, parent_contact, "", 280.0)

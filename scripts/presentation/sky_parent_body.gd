@@ -9,21 +9,23 @@ var _sprite: Sprite2D
 var _material: ShaderMaterial
 var _display_name: String = ""
 var _disc_radius: float = 0.0
+var _angular_diameter_deg: float = 0.0
 
 
 func configure(
 	parent_data: Dictionary,
 	world_position: Vector2,
 	star_position: Vector2,
+	angular_diameter_deg: float,
+	appearance: Dictionary,
+	ring: Dictionary,
 	seed_key: String = ""
 ) -> void:
 	_display_name = str(parent_data.get("name", "Parent"))
-	var appearance := str(parent_data.get("appearance", "banded"))
-	var rings := str(parent_data.get("rings", "none"))
-	var angular_deg := float(parent_data.get("angular_diameter_deg", 10.0))
+	_angular_diameter_deg = angular_diameter_deg
 
 	var distance := world_position.length()
-	_disc_radius = SkyBackdropLayout.disc_radius_from_angular(angular_deg, distance)
+	_disc_radius = SkyBackdropLayout.disc_radius_from_angular(angular_diameter_deg, distance)
 
 	position = world_position
 	z_index = -60
@@ -34,14 +36,20 @@ func configure(
 	var band_angle := float(band_axis_hash % 628318) / 100000.0
 
 	var sun_3d := PlanetBackdropScript.sun_direction_3d_from_star(star_position)
+	var band_colour_1 := SkyParentBodyParams.hex_tint_to_vec3(str(appearance.get("band_colour_1", "#ffffff")))
+	var band_colour_2 := SkyParentBodyParams.hex_tint_to_vec3(str(appearance.get("band_colour_2", "#ffffff")))
+	var turbulence := float(appearance.get("turbulence", 0.0))
+	var ring_outer_scale := SkyParentBodyParams.ring_outer_scale(ring)
+	var ring_colour := SkyParentBodyParams.hex_tint_to_vec3(str(ring.get("colour", "#ffffff")))
 
 	_material = ShaderMaterial.new()
 	_material.shader = PARENT_SHADER
-	_material.set_shader_parameter("base_tint", _tint_for_appearance(appearance, false))
-	_material.set_shader_parameter("highlight_tint", _tint_for_appearance(appearance, true))
+	_material.set_shader_parameter("band_colour_1", band_colour_1)
+	_material.set_shader_parameter("band_colour_2", band_colour_2)
+	_material.set_shader_parameter("ring_colour", ring_colour)
 	_material.set_shader_parameter("sun_direction", sun_3d)
-	_material.set_shader_parameter("appearance_mix", SkyBackdropLayout.appearance_mix(appearance))
-	_material.set_shader_parameter("ring_mode", SkyBackdropLayout.ring_mode(rings))
+	_material.set_shader_parameter("appearance_mix", turbulence)
+	_material.set_shader_parameter("ring_outer_scale", ring_outer_scale)
 	_material.set_shader_parameter("seed", seed_val)
 	_material.set_shader_parameter("band_angle", band_angle)
 
@@ -49,8 +57,7 @@ func configure(
 		_sprite.queue_free()
 		_sprite = null
 
-	var ring_scale := SkyBackdropLayout.ring_outer_scale(rings)
-	var world_diameter := _disc_radius * 2.0 * ring_scale
+	var world_diameter := _disc_radius * 2.0 * maxf(ring_outer_scale, 1.0)
 
 	var image := Image.create(TEXTURE_SIZE, TEXTURE_SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(Color(1.0, 1.0, 1.0, 1.0))
@@ -73,17 +80,5 @@ func get_disc_radius() -> float:
 	return _disc_radius
 
 
-static func _tint_for_appearance(appearance: String, highlight: bool) -> Vector3:
-	match appearance:
-		"silver":
-			if highlight:
-				return Vector3(0.82, 0.86, 0.92)
-			return Vector3(0.58, 0.62, 0.68)
-		"turbulent":
-			if highlight:
-				return Vector3(0.78, 0.55, 0.42)
-			return Vector3(0.48, 0.32, 0.28)
-		_:
-			if highlight:
-				return Vector3(0.78, 0.68, 0.52)
-			return Vector3(0.52, 0.44, 0.38)
+func get_angular_diameter_deg() -> float:
+	return _angular_diameter_deg

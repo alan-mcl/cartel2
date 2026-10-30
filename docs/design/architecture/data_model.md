@@ -386,7 +386,9 @@ Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Off
 
 ## Sectors, worlds, interactables, habitats
 
-3-space world rows in `worlds.json` may include optional **`parent_body`** (moon parent giant) and **`companion_stars`** (binary or hierarchical companions). Both are presentation-only; only the primary **`star`** block drives globe lighting. Validators in `validate_catalog_refs.py` enforce angular size, appearance enums, and companion star references.
+3-space world rows in `worlds.json` may include optional **`parent_body`** (distant moon parent: `name`, body `type` id for scan labelling, visit-random `angular_diameter_deg_min` / `angular_diameter_deg_max`, and inline **`appearance`** / **`rings`** objects) and **`companion_stars`** (binary or hierarchical companions). Both are presentation-only; only the primary **`star`** block drives globe lighting. Validators in `validate_catalog_refs.py` enforce appearance and ring shapes, angular ranges, and companion star references.
+
+**`parent_body.appearance`** — object with `type` (`banded` today), `band_colour_1` / `band_colour_2` (`#` hex), and `turbulence` (0–1). **`parent_body.rings`** — object with `type` `none` (no other fields), `small` (`outer_scale` 1.05–1.8, `colour`), or `broad` (`outer_scale` 1.8–2.6, `colour`).
 
 Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `Catalog` synthesizes bidirectional mappings from `routes.json`. Each mapping includes `target`, `solution`, `n`, `label`, `friction`, `entry_seconds`, `exit_seconds`, and `time_jitter`. GST lumps use `friction × 240` seconds.
 

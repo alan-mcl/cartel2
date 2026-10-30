@@ -6,6 +6,8 @@ const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_angular_radius_math(runner)
+	_test_parent_params(runner)
+	_test_titania_angular_roll(runner, tree)
 	_test_sector_spawns(runner, tree)
 
 
@@ -13,13 +15,55 @@ static func _test_angular_radius_math(runner: TestRunner) -> void:
 	var distance := 8000.0
 	var radius := SkyBackdropLayout.disc_radius_from_angular(14.0, distance)
 	runner.check(radius > 900.0 and radius < 1100.0, "sky backdrop: 14 deg disc radius at 8k")
-	var min_dist := SkyBackdropLayout.min_distance_for_parent(20.0, "broad")
+	var min_dist := SkyBackdropLayout.min_distance_for_parent(20.0, 2.2)
 	runner.check(min_dist >= SkyBackdropLayout.STAR_MIN_RADIUS, "sky backdrop: parent min distance on annulus")
 	runner.check(
 		min_dist - SkyBackdropLayout.disc_radius_from_angular(20.0, min_dist) * 2.2
 		>= SkyBackdropLayout.INNER_CLEARANCE_RADIUS - 1.0,
 		"sky backdrop: broad parent clears play ring"
 	)
+
+
+static func _test_parent_params(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	var world := catalog.get_world("titania")
+	var parent_data: Dictionary = world.get("parent_body", {})
+	var resolved := SkyParentBodyParams.resolve_from_parent(parent_data)
+	runner.check(str(resolved.get("type_label", "")) == "Gas giant", "sky backdrop: type label")
+	var appearance: Dictionary = resolved.get("appearance", {})
+	runner.check(
+		str(appearance.get("band_colour_1", "")) == "#857052",
+		"sky backdrop: band colour from world"
+	)
+	var ring: Dictionary = resolved.get("ring", {})
+	runner.check(
+		absf(SkyParentBodyParams.ring_outer_scale(ring) - 1.0) < 0.001,
+		"sky backdrop: none ring outer_scale 1"
+	)
+
+
+static func _test_titania_angular_roll(runner: TestRunner, tree: SceneTree) -> void:
+	if tree == null:
+		tree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		runner.check(false, "sky backdrop: SceneTree for titania roll")
+		return
+	var catalog := Catalog.load_default()
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "SKY-2", "tester"), "sky backdrop: session for titania roll")
+	var host := Node2D.new()
+	tree.root.add_child(host)
+	for _attempt in range(12):
+		for child in host.get_children():
+			child.free()
+		var loader := WorldLoader.new()
+		loader.load_sector(host, catalog, session, "titania")
+		var parent: Variant = loader.spawned_by_id.get("parent_body")
+		runner.check(parent != null, "sky backdrop: titania parent on roll attempt")
+		if parent != null and parent.has_method("get_angular_diameter_deg"):
+			var angular := float(parent.call("get_angular_diameter_deg"))
+			runner.check(angular >= 10.0 and angular <= 16.0, "sky backdrop: titania angular in 10-16")
+	host.queue_free()
 
 
 static func _test_sector_spawns(runner: TestRunner, tree: SceneTree) -> void:

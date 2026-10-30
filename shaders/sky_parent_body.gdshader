@@ -1,15 +1,13 @@
 shader_type canvas_item;
 
-uniform vec3 base_tint : source_color = vec3(0.55, 0.48, 0.42);
-uniform vec3 highlight_tint : source_color = vec3(0.72, 0.68, 0.62);
+uniform vec3 band_colour_1 : source_color = vec3(0.55, 0.48, 0.42);
+uniform vec3 band_colour_2 : source_color = vec3(0.72, 0.68, 0.62);
+uniform vec3 ring_colour : source_color = vec3(0.72, 0.68, 0.62);
 uniform vec3 sun_direction = vec3(0.85, 0.25, 0.45);
 uniform float appearance_mix = 0.0;
-uniform float ring_mode = 0.0;
+uniform float ring_outer_scale = 1.0;
 uniform float seed = 0.0;
 uniform float band_angle = 0.0;
-
-const float SMALL_RING = 1.4;
-const float BROAD_RING = 2.2;
 
 float hash21(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -31,18 +29,18 @@ void fragment() {
 	vec2 centered = UV - vec2(0.5);
 	float dist = length(centered);
 	float disc_r = 0.42;
-	float ring_scale = mix(SMALL_RING, BROAD_RING, smoothstep(0.01, 0.99, ring_mode));
-	float ring_outer = disc_r * mix(1.0, ring_scale, step(0.01, ring_mode));
+	float ring_scale = max(ring_outer_scale, 1.0);
+	float ring_outer = disc_r * ring_scale;
 
 	if (dist > ring_outer + 0.02) {
 		COLOR = vec4(0.0);
-	} else if (ring_mode > 0.01 && dist > disc_r && dist <= ring_outer) {
+	} else if (ring_scale > 1.001 && dist > disc_r && dist <= ring_outer) {
 		float ring_mid = disc_r + (ring_outer - disc_r) * 0.55;
 		float band = smoothstep(ring_mid - 0.04, ring_mid, dist) * (1.0 - smoothstep(ring_mid + 0.02, ring_outer, dist));
 		float tilt = 0.35 + 0.15 * sin(seed);
 		float edge = abs(centered.y / max(disc_r, 0.001)) - tilt;
 		float ring_alpha = band * smoothstep(0.15, 0.0, edge) * 0.55;
-		vec3 ring_col = mix(base_tint, highlight_tint, 0.35);
+		vec3 ring_col = ring_colour;
 		COLOR = vec4(ring_col, ring_alpha);
 	} else if (dist <= disc_r) {
 		vec2 sphere_uv = centered / disc_r;
@@ -64,7 +62,7 @@ void fragment() {
 			sphere_uv.x * sa + sphere_uv.y * ca
 		);
 		bands = mix(bands, hash21(rot_uv * 4.0 + seed), appearance_mix * 0.85);
-		vec3 albedo = mix(base_tint, highlight_tint, bands * 0.55);
+		vec3 albedo = mix(band_colour_1, band_colour_2, bands * 0.55);
 		albedo = mix(albedo, albedo * vec3(0.85, 0.9, 1.0), appearance_mix * 0.25);
 		float shade = mix(0.12, 1.0, ndl) * limb;
 		COLOR = vec4(albedo * shade, 1.0);

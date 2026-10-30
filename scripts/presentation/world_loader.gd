@@ -537,22 +537,39 @@ func _spawn_sky_backdrop(
 	var parent_raw: Variant = world_data.get("parent_body", {})
 	if typeof(parent_raw) == TYPE_DICTIONARY and not parent_raw.is_empty():
 		var parent_data: Dictionary = parent_raw
-		var angular_deg := float(parent_data.get("angular_diameter_deg", 10.0))
-		var rings := str(parent_data.get("rings", "none"))
-		var distance := SkyBackdropLayout.min_distance_for_parent(angular_deg, rings)
-		var rng := RandomNumberGenerator.new()
-		rng.seed = absi(("%s:parent" % sector_id).hash())
-		var angle := SkyBackdropLayout.pick_parent_angle(primary_star_pos, rng)
-		var parent_pos := Vector2.from_angle(angle) * distance
-		var parent := SkyParentBodyScript.new()
-		parent.name = "ParentBody"
-		world_root.add_child(parent)
-		parent.configure(parent_data, parent_pos, primary_star_pos, sector_id)
-		spawned_by_id["parent_body"] = parent
-		_sky_parent_nav = {
-			"id": "parent_body",
-			"name": parent.get_display_name(),
-		}
+		var resolved := SkyParentBodyParams.resolve_from_parent(parent_data)
+		if not resolved.is_empty():
+			var angular_min := float(parent_data.get("angular_diameter_deg_min", 10.0))
+			var angular_max := float(parent_data.get("angular_diameter_deg_max", angular_min))
+			var appearance: Dictionary = resolved.get("appearance", {})
+			var ring: Dictionary = resolved.get("ring", {})
+			var ring_outer_scale := SkyParentBodyParams.ring_outer_scale(ring)
+			var visit_rng := RandomNumberGenerator.new()
+			visit_rng.randomize()
+			var angular_deg := visit_rng.randf_range(angular_min, angular_max)
+			var distance := SkyBackdropLayout.min_distance_for_parent(angular_max, ring_outer_scale)
+			var rng := RandomNumberGenerator.new()
+			rng.seed = absi(("%s:parent" % sector_id).hash())
+			var angle := SkyBackdropLayout.pick_parent_angle(primary_star_pos, rng)
+			var parent_pos := Vector2.from_angle(angle) * distance
+			var parent := SkyParentBodyScript.new()
+			parent.name = "ParentBody"
+			world_root.add_child(parent)
+			parent.configure(
+				parent_data,
+				parent_pos,
+				primary_star_pos,
+				angular_deg,
+				appearance,
+				ring,
+				sector_id
+			)
+			spawned_by_id["parent_body"] = parent
+			_sky_parent_nav = {
+				"id": "parent_body",
+				"name": parent.get_display_name(),
+				"type_label": str(resolved.get("type_label", "")),
+			}
 
 
 func _resolve_primary_catalog_star_name(

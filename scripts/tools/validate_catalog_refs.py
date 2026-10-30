@@ -229,8 +229,63 @@ def check_world_entity_kinds(worlds: dict) -> list[str]:
     return errors
 
 
-PARENT_APPEARANCES = frozenset({"banded", "silver", "turbulent"})
-PARENT_RINGS = frozenset({"none", "small", "broad"})
+def _is_hex_colour(value: object) -> bool:
+    if not isinstance(value, str):
+        return False
+    text = value.strip()
+    if len(text) != 7 or not text.startswith("#"):
+        return False
+    try:
+        int(text[1:], 16)
+    except ValueError:
+        return False
+    return True
+
+
+def check_parent_body_appearance(label: str, appearance: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(appearance, dict):
+        errors.append(f"{label}: appearance must be an object")
+        return errors
+    appearance_type = str(appearance.get("type", "")).strip()
+    if appearance_type != "banded":
+        errors.append(f"{label}: appearance.type must be 'banded'")
+        return errors
+    for field in ("band_colour_1", "band_colour_2"):
+        if not _is_hex_colour(appearance.get(field)):
+            errors.append(f"{label}: appearance.{field} must be #RRGGBB")
+    turbulence = appearance.get("turbulence")
+    if not isinstance(turbulence, (int, float)) or turbulence < 0 or turbulence > 1:
+        errors.append(f"{label}: appearance.turbulence must be between 0 and 1")
+    return errors
+
+
+def check_parent_body_rings(label: str, rings: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(rings, dict):
+        errors.append(f"{label}: rings must be an object")
+        return errors
+    ring_type = str(rings.get("type", "")).strip()
+    if ring_type == "none":
+        extra = set(rings.keys()) - {"type"}
+        if extra:
+            errors.append(f"{label}: rings type 'none' must not include {sorted(extra)}")
+        return errors
+    if ring_type == "small":
+        outer_min, outer_max = 1.05, 1.8
+    elif ring_type == "broad":
+        outer_min, outer_max = 1.8, 2.6
+    else:
+        errors.append(f"{label}: rings.type must be none, small, or broad")
+        return errors
+    outer = rings.get("outer_scale")
+    if not isinstance(outer, (int, float)) or outer < outer_min or outer > outer_max:
+        errors.append(
+            f"{label}: rings.outer_scale must be between {outer_min} and {outer_max} for type '{ring_type}'"
+        )
+    if not _is_hex_colour(rings.get("colour")):
+        errors.append(f"{label}: rings.colour must be #RRGGBB")
+    return errors
 
 
 def check_world_sky_backdrop(
@@ -266,17 +321,23 @@ def check_world_sky_backdrop(
                 name = str(parent.get("name", "")).strip()
                 if not name:
                     errors.append(f"{label}: missing name")
-                angular = parent.get("angular_diameter_deg")
-                if not isinstance(angular, (int, float)) or angular < 2 or angular > 20:
-                    errors.append(f"{label}: angular_diameter_deg must be between 2 and 20")
-                appearance = str(parent.get("appearance", ""))
-                if appearance not in PARENT_APPEARANCES:
-                    errors.append(
-                        f"{label}: appearance must be one of {sorted(PARENT_APPEARANCES)}"
-                    )
-                rings = str(parent.get("rings", ""))
-                if rings not in PARENT_RINGS:
-                    errors.append(f"{label}: rings must be one of {sorted(PARENT_RINGS)}")
+                type_id = str(parent.get("type", "")).strip()
+                if not type_id:
+                    errors.append(f"{label}: missing type")
+                errors.extend(check_parent_body_appearance(label, parent.get("appearance")))
+                errors.extend(check_parent_body_rings(label, parent.get("rings")))
+                angular_min = parent.get("angular_diameter_deg_min")
+                angular_max = parent.get("angular_diameter_deg_max")
+                if not isinstance(angular_min, (int, float)) or angular_min < 2 or angular_min > 20:
+                    errors.append(f"{label}: angular_diameter_deg_min must be between 2 and 20")
+                if not isinstance(angular_max, (int, float)) or angular_max < 2 or angular_max > 20:
+                    errors.append(f"{label}: angular_diameter_deg_max must be between 2 and 20")
+                if (
+                    isinstance(angular_min, (int, float))
+                    and isinstance(angular_max, (int, float))
+                    and angular_min > angular_max
+                ):
+                    errors.append(f"{label}: angular_diameter_deg_min must not exceed max")
 
         companions = world_data.get("companion_stars")
         if companions is None:
@@ -2320,7 +2381,13 @@ def main() -> int:
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))
     errors.extend(check_world_entity_kinds(worlds))
-    errors.extend(check_world_sky_backdrop(worlds, sectors, load_object(CATALOG / "stars.json")))
+    errors.extend(
+        check_world_sky_backdrop(
+            worlds,
+            sectors,
+            load_object(CATALOG / "stars.json"),
+        )
+    )
 
     if errors:
         for err in errors:

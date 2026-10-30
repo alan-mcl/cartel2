@@ -610,9 +610,16 @@
 		},
 		"parent_body": {
 			"name": "Titania",
-			"angular_diameter_deg": 14,
-			"appearance": "banded",
-			"rings": "none"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 10,
+			"angular_diameter_deg_max": 16,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": { "type": "none" }
 		},
 		"star": {
 			"temperature_k": 2800,
@@ -1699,9 +1706,16 @@
 		],
 		"parent_body": {
 			"name": "Denarius",
-			"angular_diameter_deg": 10,
-			"appearance": "silver",
-			"rings": "none"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 7,
+			"angular_diameter_deg_max": 13,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#949ea8",
+				"band_colour_2": "#d1dbe8",
+				"turbulence": 0.35
+			},
+			"rings": { "type": "none" }
 		},
 		"star": {
 			"temperature_k": 8500,
@@ -1852,9 +1866,20 @@
 		],
 		"parent_body": {
 			"name": "Typhon",
-			"angular_diameter_deg": 16,
-			"appearance": "turbulent",
-			"rings": "broad"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 12,
+			"angular_diameter_deg_max": 18,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#7a5246",
+				"band_colour_2": "#c78c6b",
+				"turbulence": 0.85
+			},
+			"rings": {
+				"type": "broad",
+				"outer_scale": 2.2,
+				"colour": "#c78c6b"
+			}
 		},
 		"star": {
 			"temperature_k": 8500,
@@ -2242,9 +2267,20 @@
 		],
 		"parent_body": {
 			"name": "Calypso",
-			"angular_diameter_deg": 18,
-			"appearance": "banded",
-			"rings": "broad"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 14,
+			"angular_diameter_deg_max": 20,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": {
+				"type": "broad",
+				"outer_scale": 2.2,
+				"colour": "#c7ae85"
+			}
 		},
 		"star": {
 			"temperature_k": 5200,
@@ -2822,9 +2858,20 @@
 		],
 		"parent_body": {
 			"name": "Varda",
-			"angular_diameter_deg": 9,
-			"appearance": "silver",
-			"rings": "small"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 6,
+			"angular_diameter_deg_max": 12,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#949ea8",
+				"band_colour_2": "#d1dbe8",
+				"turbulence": 0.35
+			},
+			"rings": {
+				"type": "small",
+				"outer_scale": 1.4,
+				"colour": "#d1dbe8"
+			}
 		},
 		"star": {
 			"temperature_k": 5800,
@@ -3397,9 +3444,16 @@
 		],
 		"parent_body": {
 			"name": "Ursa",
-			"angular_diameter_deg": 7,
-			"appearance": "banded",
-			"rings": "none"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 4,
+			"angular_diameter_deg_max": 10,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": { "type": "none" }
 		},
 		"star": {
 			"temperature_k": 5800,
@@ -3492,9 +3546,16 @@
 		],
 		"parent_body": {
 			"name": "Ursa",
-			"angular_diameter_deg": 3,
-			"appearance": "banded",
-			"rings": "none"
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 2,
+			"angular_diameter_deg_max": 5,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": { "type": "none" }
 		},
 		"star": {
 			"temperature_k": 5800,

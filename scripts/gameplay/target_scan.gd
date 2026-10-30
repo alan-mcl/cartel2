@@ -243,6 +243,9 @@ static func _kind_display(kind: String, contact: Dictionary) -> String:
 			"jump_gate":
 				return "Jump gate"
 			"parent_planet":
+				var type_label := str(contact.get("parent_type_label", "")).strip_edges()
+				if not type_label.is_empty():
+					return type_label
 				return "Parent planet"
 			_:
 				return "Landmark"

@@ -228,7 +228,16 @@ City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New 
 
 ### Solar neighbourhood
 
-TBD
+At 0.98 AU, Fennet is the inner planet of the 18 Scopii system. Four other planets and some eccentric dwarfs complete the major orbital bodies, but an unusually dense comet cloud on a profusion of orbits fills the outer system. The skies of Fennet are famous for always showcasing at a variety passing cometary bodies.
+
+Planets and moons:
+ - Junker's World (2.1 AU, 2nd planet): The only other non-gas giant in the system, Junker's World is a rocky wasteland with a dense Nitrogen atmosphere. Surface mineral extraction takes place, notably including the renowned Junkers Emeralds.
+
+Other:
+ - Swan: a short period high-albedo comet so named for it's opposed polar outgassing. Rare mineral extraction and research is supported by a small orbital.
+ - The Freediver: a highly eccentric cometary body that approaches very close to 18 Scorpii. Chemical and energy extraction from it's core is supported by largely automated infrastructure - and paused during perihelion.
+ - Nostromo: an icy-covered comet with an unusual radioactive core. Research station.
+ - Eternum: a very long period icy comet that has only visited Fennet once during human habitation there. A small resort habitat supports the dedicated adventure tourists who want to tick this one off.
 
 ### Field neighborhood
 
@@ -259,7 +268,17 @@ Fortuna is a wealthy and densely populated world whose prosperity was built on f
 
 ### Solar neighbourhood
 
-TBD
+Fortuna is Tau Ceti' second planet, orbiting 0.7 AU from it's dim parent star. The system of six planets is surrounded by a notable debris disc spanning the orbits from 11 to 50 AU. It's unclear why there is an unusually large surviving reservoir of planetesimals and debris.
+
+Planets and moons:
+ - Janus (1.5 AU, 3rd planet): An frozen rocky world lacking a magnetic field, and with the barest traces of atmosphere. Resource extraction on Janus is possible but often not very profitable due to the harsh conditions, high gravity and thick ice sheets.
+ - Sapphire XVI (6.1 AU, 16th moon of the 5th planet): This moon surface is heaped with frozen methane and other chemical resources. It's gas giant parent is so called for it's unusual blueish bands.
+ - Vesuvius V: (8 AU, 5th moon of 6th planet): Vesuvius is the systems signature gas giant, notably for it's extremely colourful and turbulent atmosphere. The 5th moon is rich in valuable minerals.
+
+Other:
+ - TC Inner Disc Station: Tau Ceti's debris disk is extensively exploited for resource extraction. The inner belt station is the hub for activities in the very dense 11-19 AU band.
+ - TC Outer Disc Station: This is the hub for resource extraction in the less dense outer debris disc.
+ - Terminary Research Station: An isolated research station just beyond the debris disc.
 
 ### Field conditions
 
