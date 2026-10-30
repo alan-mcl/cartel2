@@ -229,6 +229,100 @@ def check_world_entity_kinds(worlds: dict) -> list[str]:
     return errors
 
 
+PARENT_APPEARANCES = frozenset({"banded", "silver", "turbulent"})
+PARENT_RINGS = frozenset({"none", "small", "broad"})
+
+
+def check_world_sky_backdrop(
+    worlds: dict,
+    sectors: dict[str, dict],
+    stars: dict,
+) -> list[str]:
+    errors: list[str] = []
+
+    def sector_primary_name(sector_row: dict | None) -> str:
+        if not isinstance(sector_row, dict):
+            return ""
+        return str(sector_row.get("star", "")).strip()
+
+    def sector_system(sector_row: dict | None) -> str:
+        if not isinstance(sector_row, dict):
+            return ""
+        return str(sector_row.get("star_system", "")).strip()
+
+    for world_id, world_data in worlds.items():
+        if not isinstance(world_data, dict):
+            continue
+        sector_row = sectors.get(str(world_id))
+        system = sector_system(sector_row)
+        primary_name = sector_primary_name(sector_row)
+
+        parent = world_data.get("parent_body")
+        if parent is not None:
+            label = f"world {world_id} parent_body"
+            if not isinstance(parent, dict):
+                errors.append(f"{label}: must be an object")
+            else:
+                name = str(parent.get("name", "")).strip()
+                if not name:
+                    errors.append(f"{label}: missing name")
+                angular = parent.get("angular_diameter_deg")
+                if not isinstance(angular, (int, float)) or angular < 2 or angular > 20:
+                    errors.append(f"{label}: angular_diameter_deg must be between 2 and 20")
+                appearance = str(parent.get("appearance", ""))
+                if appearance not in PARENT_APPEARANCES:
+                    errors.append(
+                        f"{label}: appearance must be one of {sorted(PARENT_APPEARANCES)}"
+                    )
+                rings = str(parent.get("rings", ""))
+                if rings not in PARENT_RINGS:
+                    errors.append(f"{label}: rings must be one of {sorted(PARENT_RINGS)}")
+
+        companions = world_data.get("companion_stars")
+        if companions is None:
+            continue
+        if not isinstance(companions, list):
+            errors.append(f"world {world_id} companion_stars: must be an array")
+            continue
+        for index, entry in enumerate(companions):
+            clabel = f"world {world_id} companion_stars[{index}]"
+            if not isinstance(entry, dict):
+                errors.append(f"{clabel}: must be an object")
+                continue
+            separation = entry.get("separation_deg")
+            if not isinstance(separation, (int, float)):
+                errors.append(f"{clabel}: separation_deg must be a number")
+            if entry.get("star") is not None:
+                star_name = str(entry.get("star", "")).strip()
+                if not star_name:
+                    errors.append(f"{clabel}: star must be non-empty")
+                    continue
+                if star_name not in stars:
+                    errors.append(f"{clabel}: unknown star '{star_name}'")
+                    continue
+                star_row = stars[star_name]
+                if system and str(star_row.get("star_system", "")) != system:
+                    errors.append(
+                        f"{clabel}: star '{star_name}' is not in sector system '{system}'"
+                    )
+                if primary_name and star_name == primary_name:
+                    errors.append(
+                        f"{clabel}: companion must not duplicate sector primary '{primary_name}'"
+                    )
+            elif entry.get("name") is not None:
+                display = str(entry.get("name", "")).strip()
+                if not display:
+                    errors.append(f"{clabel}: name must be non-empty")
+                for field in ("temperature_k", "luminosity", "disc_radius"):
+                    value = entry.get(field)
+                    if not isinstance(value, (int, float)) or value <= 0:
+                        errors.append(f"{clabel}: {field} must be a number greater than 0")
+            else:
+                errors.append(f"{clabel}: must include star or name")
+
+    return errors
+
+
 ENGINE_TYPES = {
     "chemical",
     "hydro_thermal",
@@ -2226,6 +2320,7 @@ def main() -> int:
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))
     errors.extend(check_world_entity_kinds(worlds))
+    errors.extend(check_world_sky_backdrop(worlds, sectors, load_object(CATALOG / "stars.json")))
 
     if errors:
         for err in errors:

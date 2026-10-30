@@ -121,6 +121,38 @@ func _ensure_sector_nav_cache(loader: WorldLoader, catalog: Catalog) -> void:
 		}
 		_merge_lock_display_fields(loader, star_contact, "", 220.0)
 		_sector_nav_cache.append(star_contact)
+	for companion_variant in loader.get_companion_star_nav_entries():
+		if typeof(companion_variant) != TYPE_DICTIONARY:
+			continue
+		var companion_meta: Dictionary = companion_variant
+		var companion_id := str(companion_meta.get("id", ""))
+		if companion_id.is_empty():
+			continue
+		var companion_contact := {
+			"id": companion_id,
+			"name": str(companion_meta.get("name", "Companion star")),
+			"short_label": "S",
+			"contact_kind": "star",
+			"position": Vector2.ZERO,
+			"star_name": str(companion_meta.get("star_name", "")),
+			"star_temperature_k": float(companion_meta.get("star_temperature_k", 0.0)),
+			"star_luminosity": float(companion_meta.get("star_luminosity", 0.0)),
+			"presentation_only": bool(companion_meta.get("presentation_only", false)),
+		}
+		_merge_lock_display_fields(loader, companion_contact, "", 220.0)
+		_sector_nav_cache.append(companion_contact)
+	var parent_meta := loader.get_parent_body_nav_entry()
+	if not parent_meta.is_empty():
+		var parent_contact := {
+			"id": "parent_body",
+			"name": str(parent_meta.get("name", "Parent planet")),
+			"short_label": "G",
+			"contact_kind": "landmark",
+			"landmark_role": "parent_planet",
+			"position": Vector2.ZERO,
+		}
+		_merge_lock_display_fields(loader, parent_contact, "", 280.0)
+		_sector_nav_cache.append(parent_contact)
 	for entry_variant in loader._orbital_entries:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
@@ -160,8 +192,22 @@ func _refresh_sector_nav_positions(loader: WorldLoader) -> void:
 					entry["nav_color"] = star_display.get("color", Color.WHITE)
 			"planet":
 				entry["position"] = Vector2.ZERO
+			"parent_body":
+				var parent_node: Variant = loader.spawned_by_id.get("parent_body")
+				if parent_node is Node2D and is_instance_valid(parent_node):
+					entry["position"] = (parent_node as Node2D).global_position
+				else:
+					entry["position"] = Vector2.ZERO
 			_:
-				if str(entry.get("contact_kind", "")) == "orbital":
+				if str(entry.get("contact_kind", "")) == "star" and str(entry.get("id", "")).begins_with("companion_star_"):
+					var companion_node: Variant = loader.spawned_by_id.get(str(entry.get("id", "")))
+					if companion_node is Node2D and is_instance_valid(companion_node):
+						entry["position"] = (companion_node as Node2D).global_position
+						if companion_node.has_method("get_light_color"):
+							entry["nav_color"] = companion_node.call("get_light_color")
+					else:
+						entry["position"] = Vector2.ZERO
+				elif str(entry.get("contact_kind", "")) == "orbital":
 					entry["position"] = _orbital_contact_position(loader, str(entry.get("id", "")))
 					entry["heading_rad"] = _orbital_contact_heading(loader, str(entry.get("id", "")))
 

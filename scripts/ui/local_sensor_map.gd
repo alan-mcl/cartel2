@@ -115,12 +115,16 @@ func _contact_map_pos(
 	map_radius: float,
 	scale: float,
 	contact_kind: String,
-	draw_radius: float
+	draw_radius: float,
+	contact: Dictionary = {}
 ) -> Vector2:
 	var map_pos := _world_to_map(world_pos, center, scale)
 	if _is_inside_disc(map_pos, center, map_radius, draw_radius):
 		return map_pos
-	if contact_kind != "star":
+	var rim_pin := contact_kind == "star"
+	if not rim_pin and contact_kind == "landmark":
+		rim_pin = str(contact.get("landmark_role", "")) == "parent_planet"
+	if not rim_pin:
 		return Vector2(INF, INF)
 
 	var offset := map_pos - center
@@ -148,7 +152,9 @@ func _draw_contacts(center: Vector2, map_radius: float, scale: float, color: Col
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var contact_kind := str(contact.get("contact_kind", "landmark"))
 		var draw_radius := NavMapDraw.contact_draw_radius(contact_kind, contact)
-		var map_pos := _contact_map_pos(world_pos, center, map_radius, scale, contact_kind, draw_radius)
+		var map_pos := _contact_map_pos(
+			world_pos, center, map_radius, scale, contact_kind, draw_radius, contact
+		)
 		if map_pos.x == INF:
 			continue
 
@@ -225,7 +231,7 @@ func _find_contact_at(local_pos: Vector2) -> Dictionary:
 		var draw_radius := NavMapDraw.contact_draw_radius(contact_kind, contact)
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var map_pos := _contact_map_pos(
-			world_pos, map_center, map_radius, scale, contact_kind, draw_radius
+			world_pos, map_center, map_radius, scale, contact_kind, draw_radius, contact
 		)
 		if map_pos.x == INF:
 			continue

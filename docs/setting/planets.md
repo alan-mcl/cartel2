@@ -386,5 +386,5 @@ TBD
 
 ### Field conditions
 
- - Solar: Kepler-16 binary with radiant swings with orbital phase, near basline wind
+ - Solar: Kepler-16 binary with radiant swings with orbital phase, near baseline wind
  - Magnetic: near-baseline dipole

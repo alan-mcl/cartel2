@@ -162,9 +162,7 @@ func _apply_optional_textures(planet_data: Dictionary) -> void:
 				_material.set_shader_parameter("use_night_lights", 1.0)
 
 
-func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> void:
-	if _material == null:
-		return
+static func sun_direction_3d_from_star(world_direction: Vector2) -> Vector3:
 	var star_radius := world_direction.length()
 	var direction := world_direction
 	if star_radius < 0.001:
@@ -176,7 +174,13 @@ func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> v
 		1.35
 	)
 	var sun_z := lerpf(SUN_Z_NEAR, SUN_Z_FAR, distance_t)
-	var sun_3d := Vector3(direction.x, -direction.y, sun_z).normalized()
+	return Vector3(direction.x, -direction.y, sun_z).normalized()
+
+
+func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> void:
+	if _material == null:
+		return
+	var sun_3d := sun_direction_3d_from_star(world_direction)
 	_material.set_shader_parameter("sun_direction", sun_3d)
 	_material.set_shader_parameter(
 		"sun_color",

@@ -386,6 +386,8 @@ Terminal-only daily board (`freight_offers_by_habitat`, `freight_accepted`). Off
 
 ## Sectors, worlds, interactables, habitats
 
+3-space world rows in `worlds.json` may include optional **`parent_body`** (moon parent giant) and **`companion_stars`** (binary or hierarchical companions). Both are presentation-only; only the primary **`star`** block drives globe lighting. Validators in `validate_catalog_refs.py` enforce angular size, appearance enums, and companion star references.
+
 Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `Catalog` synthesizes bidirectional mappings from `routes.json`. Each mapping includes `target`, `solution`, `n`, `label`, `friction`, `entry_seconds`, `exit_seconds`, and `time_jitter`. GST lumps use `friction × 240` seconds.
 
 `habitats.json` entries include `sector_id` for market quote lookup. Exchange buildings use `type: market`.

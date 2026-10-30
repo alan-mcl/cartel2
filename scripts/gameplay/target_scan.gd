@@ -242,6 +242,8 @@ static func _kind_display(kind: String, contact: Dictionary) -> String:
 				return "Translation beacon"
 			"jump_gate":
 				return "Jump gate"
+			"parent_planet":
+				return "Parent planet"
 			_:
 				return "Landmark"
 	match kind:

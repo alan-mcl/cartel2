@@ -6,6 +6,7 @@ const TRAFFIC_BEACON_DRAW_RADIUS := 2.5
 const ASCIDIAN_DRAW_RADIUS := 2.0
 const ORBITAL_DRAW_RADIUS := 3.0
 const STAR_DRAW_RADIUS := 5.0
+const PARENT_PLANET_DRAW_RADIUS := 6.0
 const STAR_RIM_INSET := 6.0
 const CONTACT_DRAW_RADIUS := 4.0
 const AREA_CONTACT_SCALE := 1.35
@@ -34,6 +35,10 @@ static func _base_contact_draw_radius(contact_kind: String, contact: Dictionary 
 			return ORBITAL_DRAW_RADIUS
 		"star":
 			return STAR_DRAW_RADIUS
+		"landmark":
+			if str(contact.get("landmark_role", "")) == "parent_planet":
+				return PARENT_PLANET_DRAW_RADIUS
+			return CONTACT_DRAW_RADIUS
 		_:
 			return CONTACT_DRAW_RADIUS
 
@@ -73,12 +78,16 @@ static func contact_map_pos(
 	map_extent: float,
 	scale: float,
 	contact_kind: String,
-	draw_radius: float
+	draw_radius: float,
+	contact: Dictionary = {}
 ) -> Vector2:
 	var map_pos := center + (world_pos - ship_pos) * scale
 	if is_inside_square(map_pos, center, map_extent, draw_radius):
 		return map_pos
-	if contact_kind != "star":
+	var rim_pin := contact_kind == "star"
+	if not rim_pin and contact_kind == "landmark":
+		rim_pin = str(contact.get("landmark_role", "")) == "parent_planet"
+	if not rim_pin:
 		return Vector2(INF, INF)
 	var offset := map_pos - center
 	if offset.length_squared() < 0.001:

@@ -64,6 +64,16 @@
 			"interactable": "proxima_jump_gate",
 			"radius": 5400
 		},
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri B",
+				"separation_deg": 55
+			},
+			{
+				"star": "Alpha Centauri C",
+				"separation_deg": 110
+			}
+		],
 		"star": {
 			"temperature_k": 5800,
 			"luminosity": 1.0
@@ -142,6 +152,19 @@
 					"x": 1.15,
 					"y": 0.9
 				}
+			}
+		],
+		"companion_stars": [
+			{
+				"name": "The Widow",
+				"temperature_k": 10000,
+				"luminosity": 0.35,
+				"disc_radius": 3,
+				"separation_deg": 1.2
+			},
+			{
+				"star": "Regulus B",
+				"separation_deg": 80
 			}
 		],
 		"star": {
@@ -469,6 +492,12 @@
 			"interactable": "new_carthage_jump_gate",
 			"radius": 5400
 		},
+		"companion_stars": [
+			{
+				"star": "61 Cygni B",
+				"separation_deg": 70
+			}
+		],
 		"star": {
 			"temperature_k": 3800,
 			"luminosity": 0.35
@@ -579,6 +608,12 @@
 			"interactable": "titania_jump_gate",
 			"radius": 5400
 		},
+		"parent_body": {
+			"name": "Titania",
+			"angular_diameter_deg": 14,
+			"appearance": "banded",
+			"rings": "none"
+		},
 		"star": {
 			"temperature_k": 2800,
 			"luminosity": 0.12
@@ -629,6 +664,12 @@
 			"interactable": "pelagos_jump_gate",
 			"radius": 5400
 		},
+		"companion_stars": [
+			{
+				"star": "Kepler-16 B",
+				"separation_deg": 14
+			}
+		],
 		"star": {
 			"temperature_k": 4500,
 			"luminosity": 1.0
@@ -854,6 +895,16 @@
 				}
 			}
 		],
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri B",
+				"separation_deg": 55
+			},
+			{
+				"star": "Alpha Centauri C",
+				"separation_deg": 110
+			}
+		],
 		"star": {
 			"temperature_k": 5800,
 			"luminosity": 1.0
@@ -953,6 +1004,12 @@
 					"y": -700
 				},
 				"rotation": 0.7
+			}
+		],
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri A",
+				"separation_deg": 40
 			}
 		],
 		"star": {
@@ -1089,6 +1146,12 @@
 				"rotation": 1.5
 			}
 		],
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri A",
+				"separation_deg": 40
+			}
+		],
 		"star": {
 			"temperature_k": 5200,
 			"luminosity": 1.15
@@ -1187,6 +1250,12 @@
 				"rotation": 0.7
 			}
 		],
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri A",
+				"separation_deg": 40
+			}
+		],
 		"star": {
 			"temperature_k": 5200,
 			"luminosity": 1.15
@@ -1276,6 +1345,12 @@
 				"rotation": 0.5
 			}
 		],
+		"companion_stars": [
+			{
+				"star": "Alpha Centauri A",
+				"separation_deg": 4
+			}
+		],
 		"star": {
 			"temperature_k": 5200,
 			"luminosity": 0.55
@@ -1354,6 +1429,19 @@
 					"y": 1400
 				},
 				"rotation": 0.3
+			}
+		],
+		"companion_stars": [
+			{
+				"name": "The Widow",
+				"temperature_k": 10000,
+				"luminosity": 0.35,
+				"disc_radius": 3,
+				"separation_deg": 1.2
+			},
+			{
+				"star": "Regulus B",
+				"separation_deg": 80
 			}
 		],
 		"star": {
@@ -1465,6 +1553,19 @@
 					"y": 700
 				},
 				"rotation": 1.1
+			}
+		],
+		"companion_stars": [
+			{
+				"name": "The Widow",
+				"temperature_k": 10000,
+				"luminosity": 0.35,
+				"disc_radius": 3,
+				"separation_deg": 1.2
+			},
+			{
+				"star": "Regulus B",
+				"separation_deg": 80
 			}
 		],
 		"star": {
@@ -1583,6 +1684,25 @@
 				"rotation": 1.1
 			}
 		],
+		"companion_stars": [
+			{
+				"name": "The Widow",
+				"temperature_k": 10000,
+				"luminosity": 0.35,
+				"disc_radius": 3,
+				"separation_deg": 1.2
+			},
+			{
+				"star": "Regulus B",
+				"separation_deg": 80
+			}
+		],
+		"parent_body": {
+			"name": "Denarius",
+			"angular_diameter_deg": 10,
+			"appearance": "silver",
+			"rings": "none"
+		},
 		"star": {
 			"temperature_k": 8500,
 			"luminosity": 2.0
@@ -1717,6 +1837,25 @@
 				"rotation": 1.5
 			}
 		],
+		"companion_stars": [
+			{
+				"name": "The Widow",
+				"temperature_k": 10000,
+				"luminosity": 0.35,
+				"disc_radius": 3,
+				"separation_deg": 1.2
+			},
+			{
+				"star": "Regulus B",
+				"separation_deg": 80
+			}
+		],
+		"parent_body": {
+			"name": "Typhon",
+			"angular_diameter_deg": 16,
+			"appearance": "turbulent",
+			"rings": "broad"
+		},
 		"star": {
 			"temperature_k": 8500,
 			"luminosity": 2.0
@@ -1826,6 +1965,12 @@
 					"y": 700
 				},
 				"rotation": 1.1
+			}
+		],
+		"companion_stars": [
+			{
+				"star": "Kepler-16 B",
+				"separation_deg": 14
 			}
 		],
 		"star": {
@@ -2095,6 +2240,12 @@
 				"rotation": 0.5
 			}
 		],
+		"parent_body": {
+			"name": "Calypso",
+			"angular_diameter_deg": 18,
+			"appearance": "banded",
+			"rings": "broad"
+		},
 		"star": {
 			"temperature_k": 5200,
 			"luminosity": 1.1
@@ -2669,6 +2820,12 @@
 				"rotation": 0.5
 			}
 		],
+		"parent_body": {
+			"name": "Varda",
+			"angular_diameter_deg": 9,
+			"appearance": "silver",
+			"rings": "small"
+		},
 		"star": {
 			"temperature_k": 5800,
 			"luminosity": 1.0
@@ -3238,6 +3395,12 @@
 				"rotation": 0.5
 			}
 		],
+		"parent_body": {
+			"name": "Ursa",
+			"angular_diameter_deg": 7,
+			"appearance": "banded",
+			"rings": "none"
+		},
 		"star": {
 			"temperature_k": 5800,
 			"luminosity": 1.0
@@ -3327,6 +3490,12 @@
 				"rotation": 0.5
 			}
 		],
+		"parent_body": {
+			"name": "Ursa",
+			"angular_diameter_deg": 3,
+			"appearance": "banded",
+			"rings": "none"
+		},
 		"star": {
 			"temperature_k": 5800,
 			"luminosity": 1.0

@@ -51,6 +51,7 @@ func _init() -> void:
 	TestPresentation.run(runner)
 	TestStarfieldTiling.run(runner)
 	TestPlanetSurfaceLabels.run(runner)
+	TestSkyBackdrop.run(runner, self)
 	TestFlightSandbox.run(runner)
 	TestMotion.run(runner)
 	TestDebris.run(runner)

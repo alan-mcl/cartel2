@@ -313,7 +313,7 @@ func _draw_contacts(center: Vector2, half_px: float, scale: float, info: Color, 
 		var draw_radius := NavMapDraw.contact_draw_radius(contact_kind, contact, true)
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var map_pos := NavMapDraw.contact_map_pos(
-			world_pos, _ship_pos, center, half_px, scale, contact_kind, draw_radius
+			world_pos, _ship_pos, center, half_px, scale, contact_kind, draw_radius, contact
 		)
 		if map_pos.x == INF:
 			continue
@@ -464,7 +464,7 @@ func _find_contact_at(local_pos: Vector2) -> Dictionary:
 		var draw_radius := NavMapDraw.contact_draw_radius(contact_kind, contact, true)
 		var world_pos: Vector2 = contact.get("position", Vector2.ZERO)
 		var map_pos := NavMapDraw.contact_map_pos(
-			world_pos, _ship_pos, center, half_px, scale, contact_kind, draw_radius
+			world_pos, _ship_pos, center, half_px, scale, contact_kind, draw_radius, contact
 		)
 		if map_pos.x == INF:
 			continue

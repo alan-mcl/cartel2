@@ -5,6 +5,7 @@ const OrbitalRingScript := preload("res://scripts/presentation/orbital_ring.gd")
 const NspaceField := preload("res://scripts/presentation/nspace_field.gd")
 const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
 const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
+const SkyParentBodyScript := preload("res://scripts/presentation/sky_parent_body.gd")
 
 const STAR_MIN_RADIUS := 7000.0
 const STAR_MAX_RADIUS := 12000.0
@@ -51,6 +52,8 @@ var _volatile_scan_contact: Dictionary = {}
 var _volatile_orbital_entity_ids: Array[String] = []
 var _volatile_entity_contact_meta: Dictionary = {}
 var _volatile_star_setup: Dictionary = {}
+var _sky_companion_nav: Array = []
+var _sky_parent_nav: Dictionary = {}
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -82,6 +85,8 @@ func clear_world(world_root: Node2D) -> void:
 	_volatile_orbital_entity_ids.clear()
 	_volatile_entity_contact_meta.clear()
 	_volatile_star_setup = {}
+	_sky_companion_nav.clear()
+	_sky_parent_nav = {}
 
 
 func load_sector(
@@ -411,7 +416,8 @@ func _spawn_orbital_station_layout(
 		var gate_data: Dictionary = world_data.get("jump_gate", {})
 		_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
 
-	_spawn_local_star(world_root, world_data, planet)
+	var star_pos := _spawn_local_star(world_root, world_data, planet)
+	_spawn_sky_backdrop(world_root, world_data, catalog, sector_id, star_pos)
 
 	var entities: Variant = world_data.get("entities", [])
 	if typeof(entities) == TYPE_ARRAY:
@@ -430,7 +436,7 @@ func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> Node2D:
 	return planet
 
 
-func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2D) -> void:
+func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2D) -> Vector2:
 	var star_data: Variant = world_data.get("star", {})
 	if typeof(star_data) != TYPE_DICTIONARY:
 		star_data = {"temperature_k": 5800.0, "luminosity": 1.0}
@@ -448,6 +454,145 @@ func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2
 
 	if planet != null and planet.has_method("set_sun"):
 		planet.call("set_sun", star_pos, star.get_light_color(), star.get_luminosity())
+	return star_pos
+
+
+func _spawn_sky_backdrop(
+	world_root: Node2D,
+	world_data: Dictionary,
+	catalog: Catalog,
+	sector_id: String,
+	primary_star_pos: Vector2
+) -> void:
+	_sky_companion_nav.clear()
+	_sky_parent_nav = {}
+
+	var star_block: Dictionary = world_data.get("star", {})
+	if typeof(star_block) != TYPE_DICTIONARY:
+		star_block = {}
+	var primary_resolved := LocalStarScript.defaults_from_star_data(star_block)
+	var primary_disc := float(primary_resolved.get("disc_radius", LocalStarScript.DISC_RADIUS_BASE))
+
+	var sector := catalog.get_sector_def(sector_id)
+	var primary_catalog_name := _resolve_primary_catalog_star_name(catalog, sector, star_block)
+	var primary_catalog := catalog.get_star(primary_catalog_name)
+	var primary_cat_lum := float(primary_catalog.get("luminosity", primary_resolved.get("luminosity", 1.0)))
+
+	var companions_raw: Variant = world_data.get("companion_stars", [])
+	if typeof(companions_raw) == TYPE_ARRAY:
+		var companion_index := 0
+		for entry_variant in companions_raw:
+			if typeof(entry_variant) != TYPE_DICTIONARY:
+				continue
+			var entry: Dictionary = entry_variant
+			var separation_deg := float(entry.get("separation_deg", 0.0))
+			var comp_pos := SkyBackdropLayout.companion_world_position(primary_star_pos, separation_deg)
+			var render_data: Dictionary = {}
+			var contact_name := ""
+			var catalog_star_name := ""
+			var presentation_only := false
+			if entry.has("star"):
+				catalog_star_name = str(entry.get("star", "")).strip_edges()
+				if catalog_star_name.is_empty():
+					continue
+				var facts := catalog.get_star(catalog_star_name)
+				if facts.is_empty():
+					continue
+				var disc := SkyBackdropLayout.companion_disc_radius(
+					primary_disc, primary_cat_lum, float(facts.get("luminosity", 1.0))
+				)
+				render_data = {
+					"temperature_k": float(facts.get("temperature_k", 5800.0)),
+					"luminosity": float(facts.get("luminosity", 1.0)),
+					"disc_radius": disc,
+				}
+				contact_name = catalog_star_name
+			else:
+				presentation_only = true
+				contact_name = str(entry.get("name", "")).strip_edges()
+				if contact_name.is_empty():
+					continue
+				render_data = {
+					"temperature_k": float(entry.get("temperature_k", 10000.0)),
+					"luminosity": float(entry.get("luminosity", 0.35)),
+					"disc_radius": float(entry.get("disc_radius", 3.0)),
+				}
+
+			var companion := LocalStarScript.new()
+			companion.name = "CompanionStar%d" % companion_index
+			world_root.add_child(companion)
+			companion.configure(render_data, comp_pos)
+			var nav_id := "companion_star_%d" % companion_index
+			spawned_by_id[nav_id] = companion
+			_sky_companion_nav.append({
+				"id": nav_id,
+				"name": contact_name,
+				"star_name": catalog_star_name if not presentation_only else contact_name,
+				"presentation_only": presentation_only,
+				"star_temperature_k": render_data.get("temperature_k", 5800.0),
+				"star_luminosity": render_data.get("luminosity", 1.0),
+			})
+			companion_index += 1
+
+	var parent_raw: Variant = world_data.get("parent_body", {})
+	if typeof(parent_raw) == TYPE_DICTIONARY and not parent_raw.is_empty():
+		var parent_data: Dictionary = parent_raw
+		var angular_deg := float(parent_data.get("angular_diameter_deg", 10.0))
+		var rings := str(parent_data.get("rings", "none"))
+		var distance := SkyBackdropLayout.min_distance_for_parent(angular_deg, rings)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = absi(("%s:parent" % sector_id).hash())
+		var angle := SkyBackdropLayout.pick_parent_angle(primary_star_pos, rng)
+		var parent_pos := Vector2.from_angle(angle) * distance
+		var parent := SkyParentBodyScript.new()
+		parent.name = "ParentBody"
+		world_root.add_child(parent)
+		parent.configure(parent_data, parent_pos, primary_star_pos, sector_id)
+		spawned_by_id["parent_body"] = parent
+		_sky_parent_nav = {
+			"id": "parent_body",
+			"name": parent.get_display_name(),
+		}
+
+
+func _resolve_primary_catalog_star_name(
+	catalog: Catalog,
+	sector: SectorDef,
+	world_star_data: Dictionary
+) -> String:
+	if sector != null:
+		var named := sector.star.strip_edges()
+		if not named.is_empty():
+			return named
+		var system := sector.star_system.strip_edges()
+		if system.is_empty():
+			return ""
+		var names := catalog.list_star_names_for_system(system)
+		if names.is_empty():
+			return ""
+		if names.size() == 1:
+			return str(names[0])
+		var target_temp := float(world_star_data.get("temperature_k", 0.0))
+		var best_name := str(names[0])
+		var best_delta := INF
+		for star_name in names:
+			var facts := catalog.get_star(str(star_name))
+			if facts.is_empty():
+				continue
+			var delta := absf(float(facts.get("temperature_k", 0.0)) - target_temp)
+			if delta < best_delta:
+				best_delta = delta
+				best_name = str(star_name)
+		return best_name
+	return ""
+
+
+func get_companion_star_nav_entries() -> Array:
+	return _sky_companion_nav.duplicate(true)
+
+
+func get_parent_body_nav_entry() -> Dictionary:
+	return _sky_parent_nav.duplicate(true)
 
 
 func get_surface_labels() -> Array:
