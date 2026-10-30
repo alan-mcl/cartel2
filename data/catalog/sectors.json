@@ -955,5 +955,135 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 14.0
+	},
+	{
+		"id": "scoria",
+		"name": "Scoria Sector",
+		"orbit_name": "Scoria near orbit",
+		"planet_name": "Scoria",
+		"star_system": "61 Ursae Majoris",
+		"description": "Barren third planet of 61 Ursae Majoris. Dark volcanic rock, vestigial atmosphere, and surface mining with multiple orbitals.",
+		"gravity": 0.85,
+		"population_billions": 0.22,
+		"play_bounds": 8000,
+		"objective": "Explore Scoria near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.0,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.207,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.207,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 2.2
+	},
+	{
+		"id": "ursa_belt",
+		"name": "Ursa Belt Bases Sector",
+		"orbit_name": "Ursa Belt Bases near orbit",
+		"star_system": "61 Ursae Majoris",
+		"description": "Dense asteroid belt between Scoria and the gas giant Ursa. Extensive resource extraction and ore convoys.",
+		"gravity": 0.18,
+		"population_billions": 0.42,
+		"play_bounds": 8000,
+		"objective": "Explore Ursa Belt Bases near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.092,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.092,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 3.3
+	},
+	{
+		"id": "ursa_belt_shipyard",
+		"name": "Ursa Belt Shipyard Sector",
+		"orbit_name": "Ursa Belt Shipyard near orbit",
+		"star_system": "61 Ursae Majoris",
+		"description": "Ship construction and testing facility in the Ursa asteroid belt.",
+		"gravity": 0.16,
+		"population_billions": 0.35,
+		"play_bounds": 8000,
+		"objective": "Explore Ursa Belt Shipyard near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.092,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.092,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 3.3
+	},
+	{
+		"id": "ursa_xvi",
+		"name": "Ursa XVI Sector",
+		"orbit_name": "Ursa XVI near orbit",
+		"planet_name": "Ursa XVI",
+		"star_system": "61 Ursae Majoris",
+		"description": "Rocky sixteenth moon of the banded gas giant Ursa. Surface resource extraction with orbital support.",
+		"gravity": 0.28,
+		"population_billions": 0.18,
+		"play_bounds": 8000,
+		"objective": "Explore Ursa XVI near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.18,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.049,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.049,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 4.5
+	},
+	{
+		"id": "ursa_xxix",
+		"name": "Ursa XXIX Sector",
+		"orbit_name": "Ursa XXIX near orbit",
+		"planet_name": "Ursa XXIX",
+		"star_system": "61 Ursae Majoris",
+		"description": "Twenty-ninth moon of Ursa, covered with methane oceans. Chemical extraction and sealed traffic share the orbitals.",
+		"gravity": 0.24,
+		"population_billions": 0.14,
+		"play_bounds": 8000,
+		"objective": "Explore Ursa XXIX near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 1.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.049,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.049,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 4.5
+	},
+	{
+		"id": "long_drift",
+		"name": "Long Drift Observatory Sector",
+		"orbit_name": "Long Drift Observatory near orbit",
+		"planet_name": "Long Drift",
+		"star_system": "61 Ursae Majoris",
+		"description": "Scientific base orbiting an icy Kuiper-belt object far from the inner system.",
+		"gravity": 0.08,
+		"population_billions": 0.04,
+		"play_bounds": 8000,
+		"objective": "Explore Long Drift Observatory near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.5,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.00033,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.00033,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 55.0
 	}
 ]

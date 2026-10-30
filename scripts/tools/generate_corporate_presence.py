@@ -200,6 +200,42 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "deepspace": 4.0,
         "mercury_communications": 3.0,
     },
+    "scoria": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+    },
+    "ursa_belt": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+    },
+    "ursa_belt_shipyard": {
+        "orion_aerospace": 7.0,
+        "general_industrial": 7.0,
+        "snedecorp": 6.0,
+        "atlas_concern": 4.0,
+    },
+    "ursa_xvi": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+    },
+    "ursa_xxix": {
+        "general_industrial": 6.0,
+        "atlas_concern": 5.0,
+        "biogenesis": 4.0,
+        "four_rivers_zaibatsu": 4.0,
+    },
+    "long_drift": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "deepspace": 4.0,
+        "mercury_communications": 3.0,
+    },
 }
 
 FLOOR = 0.15

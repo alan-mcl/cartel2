@@ -698,5 +698,83 @@
 				"solution_ba": -48140
 			}
 		]
+	},
+	{
+		"id": "tokirev_scoria",
+		"a": "tokirev",
+		"b": "scoria",
+		"friction": 6,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48141,
+				"solution_ba": -48142
+			}
+		]
+	},
+	{
+		"id": "tokirev_ursa_belt",
+		"a": "tokirev",
+		"b": "ursa_belt",
+		"friction": 7,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48143,
+				"solution_ba": -48144
+			}
+		]
+	},
+	{
+		"id": "tokirev_ursa_belt_shipyard",
+		"a": "tokirev",
+		"b": "ursa_belt_shipyard",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48145,
+				"solution_ba": -48146
+			}
+		]
+	},
+	{
+		"id": "tokirev_ursa_xvi",
+		"a": "tokirev",
+		"b": "ursa_xvi",
+		"friction": 9,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48147,
+				"solution_ba": -48148
+			}
+		]
+	},
+	{
+		"id": "tokirev_ursa_xxix",
+		"a": "tokirev",
+		"b": "ursa_xxix",
+		"friction": 10,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48149,
+				"solution_ba": -48150
+			}
+		]
+	},
+	{
+		"id": "tokirev_long_drift",
+		"a": "tokirev",
+		"b": "long_drift",
+		"friction": 16,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48151,
+				"solution_ba": -48152
+			}
+		]
 	}
 ]

@@ -633,6 +633,16 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in irasia_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "irasia")
+	var tokirev_sites: Array[String] = [
+		"scoria",
+		"ursa_belt",
+		"ursa_belt_shipyard",
+		"ursa_xvi",
+		"ursa_xxix",
+		"long_drift",
+	]
+	for sector_id in tokirev_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "tokirev")
 
 
 static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:

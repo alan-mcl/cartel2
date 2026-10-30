@@ -709,5 +709,90 @@
 		"sector_id": "cressida",
 		"short_desc": "Research station at Cressida.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/scoria_habitat.png",
+		"buildings": [
+			"scoria_terminal",
+			"scoria_exchange"
+		],
+		"default_building": "scoria_terminal",
+		"description": "Multiple orbitals above Scoria's dark volcanic surface. Surface mining convoys share the ring with supply traffic from Tokirev.",
+		"id": "scoria_habitat",
+		"name": "Scoria",
+		"sector_id": "scoria",
+		"short_desc": "Surface mining orbitals at Scoria.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_habitat.png",
+		"buildings": [
+			"ursa_belt_terminal",
+			"ursa_belt_exchange"
+		],
+		"default_building": "ursa_belt_terminal",
+		"description": "Central bases in the dense Ursa asteroid belt. Extraction traffic between Scoria and the gas giant never thins.",
+		"id": "ursa_belt_habitat",
+		"name": "Ursa Belt Bases",
+		"sector_id": "ursa_belt",
+		"short_desc": "Mining bases in the Ursa belt.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_shipyard_habitat.png",
+		"buildings": [
+			"ursa_belt_shipyard_terminal",
+			"ursa_belt_shipyard_exchange",
+			"ursa_belt_shipyard_yard"
+		],
+		"default_building": "ursa_belt_shipyard_terminal",
+		"description": "Construction and testing yards embedded in the Ursa belt. Hull cradles and trial lanes share the approaches with ore haulers.",
+		"id": "ursa_belt_shipyard_habitat",
+		"name": "Ursa Belt Shipyard",
+		"sector_id": "ursa_belt_shipyard",
+		"short_desc": "Belt shipyard between Scoria and Ursa.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xvi_habitat.png",
+		"buildings": [
+			"ursa_xvi_terminal",
+			"ursa_xvi_exchange"
+		],
+		"default_building": "ursa_xvi_terminal",
+		"description": "Orbital docks above rocky Ursa XVI. Surface extraction traffic uses the outer lanes beneath the banded giant.",
+		"id": "ursa_xvi_habitat",
+		"name": "Ursa XVI",
+		"sector_id": "ursa_xvi",
+		"short_desc": "Mining orbitals at Ursa XVI.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xxix_habitat.png",
+		"buildings": [
+			"ursa_xxix_terminal",
+			"ursa_xxix_exchange"
+		],
+		"default_building": "ursa_xxix_terminal",
+		"description": "Sealed orbitals above methane oceans on Ursa XXIX. Chemical extraction and tanker traffic fill the ring.",
+		"id": "ursa_xxix_habitat",
+		"name": "Ursa XXIX",
+		"sector_id": "ursa_xxix",
+		"short_desc": "Chemical extraction at Ursa XXIX.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/long_drift_habitat.png",
+		"buildings": [
+			"long_drift_terminal",
+			"long_drift_exchange"
+		],
+		"default_building": "long_drift_terminal",
+		"description": "Remote observatory orbiting an icy Kuiper-belt object. Supply runs from the inner system are long and infrequent.",
+		"id": "long_drift_habitat",
+		"name": "Long Drift Observatory",
+		"sector_id": "long_drift",
+		"short_desc": "Distant observatory at Long Drift.",
+		"type": "habitat"
 	}
 ]

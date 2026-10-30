@@ -517,5 +517,83 @@
 		"title": "Cressida Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Irasia near orbit. Only the public hop back to Irasia is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "scoria_habitat",
+		"title": "Scoria",
+		"inspect_text": "Docking at Scoria. Surface mining convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "scoria_habitat"
+	},
+	{
+		"id": "scoria_jump_gate",
+		"title": "Scoria Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "ursa_belt_habitat",
+		"title": "Ursa Belt Bases",
+		"inspect_text": "Docking at Ursa Belt Bases. Extraction convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "ursa_belt_habitat"
+	},
+	{
+		"id": "ursa_belt_jump_gate",
+		"title": "Ursa Belt Bases Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "ursa_belt_shipyard_habitat",
+		"title": "Ursa Belt Shipyard",
+		"inspect_text": "Docking at Ursa Belt Shipyard. Construction trials and supply traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "ursa_belt_shipyard_habitat"
+	},
+	{
+		"id": "ursa_belt_shipyard_jump_gate",
+		"title": "Ursa Belt Shipyard Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "ursa_xvi_habitat",
+		"title": "Ursa XVI",
+		"inspect_text": "Docking at Ursa XVI. Surface extraction traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "ursa_xvi_habitat"
+	},
+	{
+		"id": "ursa_xvi_jump_gate",
+		"title": "Ursa XVI Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "ursa_xxix_habitat",
+		"title": "Ursa XXIX",
+		"inspect_text": "Docking at Ursa XXIX. Chemical and tanker traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "ursa_xxix_habitat"
+	},
+	{
+		"id": "ursa_xxix_jump_gate",
+		"title": "Ursa XXIX Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "long_drift_habitat",
+		"title": "Long Drift Observatory",
+		"inspect_text": "Docking at Long Drift Observatory. Supply and survey traffic use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "long_drift_habitat"
+	},
+	{
+		"id": "long_drift_jump_gate",
+		"title": "Long Drift Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Tokirev near orbit. Only the public hop back to Tokirev is available here.",
+		"kind": "translate"
 	}
 ]

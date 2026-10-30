@@ -1735,5 +1735,126 @@
 		"name": "Cressida Exchange",
 		"short_desc": "Exchange at Cressida.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/scoria_terminal.png",
+		"description": "Customs for surface mining convoys and ore traffic at Scoria.",
+		"id": "scoria_terminal",
+		"kind": "terminal",
+		"name": "Scoria Terminal",
+		"short_desc": "Terminal for Scoria traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/scoria_exchange.png",
+		"description": "Commodity exchange for Scoria ore and raw-material contracts.",
+		"id": "scoria_exchange",
+		"kind": "merchant",
+		"name": "Scoria Exchange",
+		"short_desc": "Exchange at Scoria.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_terminal.png",
+		"description": "Customs and convoy scheduling for the Ursa belt bases.",
+		"id": "ursa_belt_terminal",
+		"kind": "terminal",
+		"name": "Ursa Belt Terminal",
+		"short_desc": "Terminal for Ursa Belt Bases.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_exchange.png",
+		"description": "Commodity exchange for belt ore and extraction contracts.",
+		"id": "ursa_belt_exchange",
+		"kind": "merchant",
+		"name": "Ursa Belt Exchange",
+		"short_desc": "Exchange at Ursa Belt Bases.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_shipyard_terminal.png",
+		"description": "Arrival terminal for the Ursa Belt Shipyard. Trial runs and fit-out traffic share the lanes with ore haulers.",
+		"id": "ursa_belt_shipyard_terminal",
+		"kind": "terminal",
+		"name": "Ursa Belt Shipyard Terminal",
+		"short_desc": "Terminal for Ursa Belt Shipyard traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_shipyard_exchange.png",
+		"description": "Commodity exchange for yard supply and component contracts at the Ursa Belt Shipyard.",
+		"id": "ursa_belt_shipyard_exchange",
+		"kind": "merchant",
+		"name": "Ursa Belt Shipyard Exchange",
+		"short_desc": "Exchange at Ursa Belt Shipyard.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_belt_shipyard_yard.png",
+		"description": "Heavy cradles and trial lanes in the Ursa belt. Hulls are built and tested before they join Tokirev's factory lanes.",
+		"id": "ursa_belt_shipyard_yard",
+		"kind": "workshop",
+		"name": "Ursa Belt Construction Yards",
+		"services": [
+			"assembly",
+			"parts"
+		],
+		"short_desc": "Ship construction and testing in the Ursa belt.",
+		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xvi_terminal.png",
+		"description": "Customs for surface extraction traffic at Ursa XVI.",
+		"id": "ursa_xvi_terminal",
+		"kind": "terminal",
+		"name": "Ursa XVI Terminal",
+		"short_desc": "Terminal for Ursa XVI traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xvi_exchange.png",
+		"description": "Commodity exchange for Ursa XVI ore contracts.",
+		"id": "ursa_xvi_exchange",
+		"kind": "merchant",
+		"name": "Ursa XVI Exchange",
+		"short_desc": "Exchange at Ursa XVI.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xxix_terminal.png",
+		"description": "Customs for methane-ocean chemical traffic at Ursa XXIX.",
+		"id": "ursa_xxix_terminal",
+		"kind": "terminal",
+		"name": "Ursa XXIX Terminal",
+		"short_desc": "Terminal for Ursa XXIX traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/ursa_xxix_exchange.png",
+		"description": "Commodity exchange for Ursa XXIX chemical contracts.",
+		"id": "ursa_xxix_exchange",
+		"kind": "merchant",
+		"name": "Ursa XXIX Exchange",
+		"short_desc": "Exchange at Ursa XXIX.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/long_drift_terminal.png",
+		"description": "Small customs desk for the Long Drift Observatory.",
+		"id": "long_drift_terminal",
+		"kind": "terminal",
+		"name": "Long Drift Terminal",
+		"short_desc": "Terminal for Long Drift traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/long_drift_exchange.png",
+		"description": "Commodity exchange for observatory data and supply contracts at Long Drift.",
+		"id": "long_drift_exchange",
+		"kind": "merchant",
+		"name": "Long Drift Exchange",
+		"short_desc": "Exchange at Long Drift Observatory.",
+		"type": "market"
 	}
 ]

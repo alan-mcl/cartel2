@@ -21,6 +21,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F1|missions|med|Charters to include incentives for early finish, also include 7,8,9-space translations with scaled remuneration
 |F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
+|F4|art|med|Support systems rendering parent planets and binary stars where applicable (e.g. gas giant parent for Titania IX)
 |F5|UI|med|Ship module names to support the popup-info dialog on hover wherever they are (some places do not support this yet)
 
 
