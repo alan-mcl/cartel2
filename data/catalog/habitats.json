@@ -101,7 +101,7 @@
 			"corp_hq_holt_winters_tokirev"
 		],
 		"default_building": "tokirev_habitat_terminal",
-		"description": "Utilitarian orbital city above a cold factory world. Automated yards fill the skyline.",
+		"description": "The system's primary orbital city hangs above a cold factory world. .",
 		"id": "tokirev_habitat",
 		"name": "Tokirev Habitat",
 		"sector_id": "tokirev",
