@@ -2126,5 +2126,131 @@
 		"name": "Nightjar Exchange",
 		"short_desc": "Exchange at Nightjar.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/alpha_disc_terminal.png",
+		"description": "Customs for Alpha Disc Hub convoys.",
+		"id": "alpha_disc_terminal",
+		"kind": "terminal",
+		"name": "Alpha Disc Terminal",
+		"short_desc": "Terminal for Alpha Disc traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/alpha_disc_exchange.png",
+		"description": "Commodity exchange for rare-element and ore contracts at Alpha Disc Hub.",
+		"id": "alpha_disc_exchange",
+		"kind": "merchant",
+		"name": "Alpha Disc Exchange",
+		"short_desc": "Exchange at Alpha Disc Hub.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/cueball_terminal.png",
+		"description": "Customs for The Cueball manufacturing and tourism traffic.",
+		"id": "cueball_terminal",
+		"kind": "terminal",
+		"name": "The Cueball Terminal",
+		"short_desc": "Terminal for Cueball traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/cueball_exchange.png",
+		"description": "Commodity exchange for ice, components, and charter contracts at The Cueball.",
+		"id": "cueball_exchange",
+		"kind": "merchant",
+		"name": "The Cueball Exchange",
+		"short_desc": "Exchange at The Cueball.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/halo_station_terminal.png",
+		"description": "Customs for Halo Station research and tourism traffic.",
+		"id": "halo_station_terminal",
+		"kind": "terminal",
+		"name": "Halo Station Terminal",
+		"short_desc": "Terminal for Halo Station traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/halo_station_exchange.png",
+		"description": "Commodity exchange for ring-gap tourism and survey data at Halo Station.",
+		"id": "halo_station_exchange",
+		"kind": "merchant",
+		"name": "Halo Station Exchange",
+		"short_desc": "Exchange at Halo Station.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_i_terminal.png",
+		"description": "Customs for KB Station I belt convoys.",
+		"id": "kb_station_i_terminal",
+		"kind": "terminal",
+		"name": "KB Station I Terminal",
+		"short_desc": "Terminal for KB Station I traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_i_exchange.png",
+		"description": "Commodity exchange for outer belt ice and ore at KB Station I.",
+		"id": "kb_station_i_exchange",
+		"kind": "merchant",
+		"name": "KB Station I Exchange",
+		"short_desc": "Exchange at KB Station I.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_ii_terminal.png",
+		"description": "Customs for KB Station II convoys.",
+		"id": "kb_station_ii_terminal",
+		"kind": "terminal",
+		"name": "KB Station II Terminal",
+		"short_desc": "Terminal for KB Station II traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_ii_exchange.png",
+		"description": "Commodity exchange for outer belt contracts at KB Station II.",
+		"id": "kb_station_ii_exchange",
+		"kind": "merchant",
+		"name": "KB Station II Exchange",
+		"short_desc": "Exchange at KB Station II.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_iii_terminal.png",
+		"description": "Customs for KB Station III convoys.",
+		"id": "kb_station_iii_terminal",
+		"kind": "terminal",
+		"name": "KB Station III Terminal",
+		"short_desc": "Terminal for KB Station III traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_iii_exchange.png",
+		"description": "Commodity exchange for the outermost belt hub at KB Station III.",
+		"id": "kb_station_iii_exchange",
+		"kind": "merchant",
+		"name": "KB Station III Exchange",
+		"short_desc": "Exchange at KB Station III.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/nocturn_terminal.png",
+		"description": "Customs for Nocturn Research Lab supply traffic.",
+		"id": "nocturn_terminal",
+		"kind": "terminal",
+		"name": "Nocturn Terminal",
+		"short_desc": "Terminal for Nocturn traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/nocturn_exchange.png",
+		"description": "Commodity exchange for survey data and station supply at Nocturn.",
+		"id": "nocturn_exchange",
+		"kind": "merchant",
+		"name": "Nocturn Exchange",
+		"short_desc": "Exchange at Nocturn Research Lab.",
+		"type": "market"
 	}
 ]

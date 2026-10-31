@@ -971,5 +971,96 @@
 				"solution_ba": -48182
 			}
 		]
+	},
+	{
+		"id": "horizon_alpha_disc",
+		"a": "horizon",
+		"b": "alpha_disc",
+		"friction": 5,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48183,
+				"solution_ba": -48184
+			}
+		]
+	},
+	{
+		"id": "horizon_cueball",
+		"a": "horizon",
+		"b": "cueball",
+		"friction": 8,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48185,
+				"solution_ba": -48186
+			}
+		]
+	},
+	{
+		"id": "horizon_halo_station",
+		"a": "horizon",
+		"b": "halo_station",
+		"friction": 9,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48187,
+				"solution_ba": -48188
+			}
+		]
+	},
+	{
+		"id": "horizon_kb_station_i",
+		"a": "horizon",
+		"b": "kb_station_i",
+		"friction": 16,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48189,
+				"solution_ba": -48190
+			}
+		]
+	},
+	{
+		"id": "horizon_nocturn",
+		"a": "horizon",
+		"b": "nocturn",
+		"friction": 17,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48191,
+				"solution_ba": -48192
+			}
+		]
+	},
+	{
+		"id": "horizon_kb_station_ii",
+		"a": "horizon",
+		"b": "kb_station_ii",
+		"friction": 18,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48193,
+				"solution_ba": -48194
+			}
+		]
+	},
+	{
+		"id": "horizon_kb_station_iii",
+		"a": "horizon",
+		"b": "kb_station_iii",
+		"friction": 20,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48195,
+				"solution_ba": -48196
+			}
+		]
 	}
 ]

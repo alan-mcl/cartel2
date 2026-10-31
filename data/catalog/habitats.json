@@ -1004,5 +1004,82 @@
 		"sector_id": "nightjar",
 		"short_desc": "Mining orbitals at Nightjar.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/alpha_disc_habitat.png",
+		"buildings": ["alpha_disc_terminal", "alpha_disc_exchange"],
+		"default_building": "alpha_disc_terminal",
+		"description": "Hub for the warm rare-element debris disc. Processing traffic never quite clears the approach lanes.",
+		"id": "alpha_disc_habitat",
+		"name": "Alpha Disc Hub",
+		"sector_id": "alpha_disc",
+		"short_desc": "Warm disc extraction hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/cueball_habitat.png",
+		"buildings": ["cueball_terminal", "cueball_exchange"],
+		"default_building": "cueball_terminal",
+		"description": "Orbitals above the smooth ice moon The Cueball. Manufacturing, tourism, and ore traffic share the ring with gas giant B.",
+		"id": "cueball_habitat",
+		"name": "The Cueball",
+		"sector_id": "cueball",
+		"short_desc": "Ice moon industry and tourism.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/halo_station_habitat.png",
+		"buildings": ["halo_station_terminal", "halo_station_exchange"],
+		"default_building": "halo_station_terminal",
+		"description": "Halo Station rides a clear gap in the dusty rings of B. Research charters and tourism share the docks.",
+		"id": "halo_station_habitat",
+		"name": "Halo Station",
+		"sector_id": "halo_station",
+		"short_desc": "Ring-gap research and tourism.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_i_habitat.png",
+		"buildings": ["kb_station_i_terminal", "kb_station_i_exchange"],
+		"default_building": "kb_station_i_terminal",
+		"description": "KB Station I anchors extraction in the outer planetesimal belt.",
+		"id": "kb_station_i_habitat",
+		"name": "KB Station I",
+		"sector_id": "kb_station_i",
+		"short_desc": "Outer belt extraction hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_ii_habitat.png",
+		"buildings": ["kb_station_ii_terminal", "kb_station_ii_exchange"],
+		"default_building": "kb_station_ii_terminal",
+		"description": "KB Station II serves the cold outer belt farther from Epsilon Eridani.",
+		"id": "kb_station_ii_habitat",
+		"name": "KB Station II",
+		"sector_id": "kb_station_ii",
+		"short_desc": "Mid outer belt hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/kb_station_iii_habitat.png",
+		"buildings": ["kb_station_iii_terminal", "kb_station_iii_exchange"],
+		"default_building": "kb_station_iii_terminal",
+		"description": "KB Station III is the outermost of the three belt hubs, on the edge of the swarm.",
+		"id": "kb_station_iii_habitat",
+		"name": "KB Station III",
+		"sector_id": "kb_station_iii",
+		"short_desc": "Outermost belt hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/nocturn_habitat.png",
+		"buildings": ["nocturn_terminal", "nocturn_exchange"],
+		"default_building": "nocturn_terminal",
+		"description": "Nocturn Research Lab orbits a large outer-belt planetesimal. Supply runs are the regular traffic.",
+		"id": "nocturn_habitat",
+		"name": "Nocturn Research Lab",
+		"sector_id": "nocturn",
+		"short_desc": "Outer belt research lab.",
+		"type": "habitat"
 	}
 ]

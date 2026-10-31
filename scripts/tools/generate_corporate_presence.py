@@ -326,6 +326,48 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "oklahoma_combine": 5.0,
         "general_industrial": 4.0,
     },
+    "alpha_disc": {
+        "atlas_concern": 7.0,
+        "deepspace": 6.0,
+        "general_industrial": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "cueball": {
+        "general_industrial": 7.0,
+        "four_rivers_zaibatsu": 5.0,
+        "karaquazen": 5.0,
+        "liveworlds": 4.0,
+    },
+    "halo_station": {
+        "continuity_foundation": 5.0,
+        "karaquazen": 6.0,
+        "liveworlds": 6.0,
+        "mercury_communications": 4.0,
+    },
+    "kb_station_i": {
+        "atlas_concern": 6.0,
+        "deepspace": 6.0,
+        "oklahoma_combine": 4.0,
+        "general_industrial": 4.0,
+    },
+    "kb_station_ii": {
+        "atlas_concern": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+        "general_industrial": 3.0,
+    },
+    "kb_station_iii": {
+        "atlas_concern": 5.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 3.0,
+        "general_industrial": 3.0,
+    },
+    "nocturn": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "mercury_communications": 4.0,
+        "deepspace": 3.0,
+    },
 }
 
 FLOOR = 0.15

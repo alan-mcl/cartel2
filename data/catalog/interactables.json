@@ -790,5 +790,96 @@
 		"title": "Nightjar Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to New Carthage near orbit. Only the public hop back to New Carthage is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "alpha_disc_habitat",
+		"title": "Alpha Disc Hub",
+		"inspect_text": "Docking at Alpha Disc Hub. Extraction and processing convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "alpha_disc_habitat"
+	},
+	{
+		"id": "alpha_disc_jump_gate",
+		"title": "Alpha Disc Hub Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "cueball_habitat",
+		"title": "The Cueball",
+		"inspect_text": "Docking at The Cueball. Industry and tourism traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "cueball_habitat"
+	},
+	{
+		"id": "cueball_jump_gate",
+		"title": "The Cueball Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "halo_station_habitat",
+		"title": "Halo Station",
+		"inspect_text": "Docking at Halo Station. Research and tourism traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "halo_station_habitat"
+	},
+	{
+		"id": "halo_station_jump_gate",
+		"title": "Halo Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "kb_station_i_habitat",
+		"title": "KB Station I",
+		"inspect_text": "Docking at KB Station I. Belt convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "kb_station_i_habitat"
+	},
+	{
+		"id": "kb_station_i_jump_gate",
+		"title": "KB Station I Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "kb_station_ii_habitat",
+		"title": "KB Station II",
+		"inspect_text": "Docking at KB Station II. Belt convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "kb_station_ii_habitat"
+	},
+	{
+		"id": "kb_station_ii_jump_gate",
+		"title": "KB Station II Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "kb_station_iii_habitat",
+		"title": "KB Station III",
+		"inspect_text": "Docking at KB Station III. Belt convoys use the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "kb_station_iii_habitat"
+	},
+	{
+		"id": "kb_station_iii_jump_gate",
+		"title": "KB Station III Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "nocturn_habitat",
+		"title": "Nocturn Research Lab",
+		"inspect_text": "Docking at Nocturn Research Lab. Supply and survey traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "nocturn_habitat"
+	},
+	{
+		"id": "nocturn_jump_gate",
+		"title": "Nocturn Research Lab Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
+		"kind": "translate"
 	}
 ]

@@ -94,7 +94,7 @@ Decompose for ratio math:
 | 10 | `proxima`, `irasia`, `tokirev` |
 | 6 | `new_carthage`, `fortuna`, `horizon` |
 | 4 | `bela`, `pelagos`, `fennet`, `titania`, `tycho` |
-| 2 | `vulcan_research`, `centauri_a_beltworks`, `acb1`, `acb2`, `acb3`, `terminus`, `regulus_belt`, `denarius_ii`, `typhon_xvi`, `pelagos_belt`, `aurelia`, `boreas`, `calypso_vi`, `hesper`, `kestrel`, `alecto`, `new_ceres`, `virginis_belt`, `varda_iii`, `varda_belt`, `cressida`, `scoria`, `ursa_belt`, `ursa_belt_shipyard`, `ursa_xvi`, `ursa_xxix`, `long_drift`, `junkers_world`, `swan`, `freediver`, `nostromo`, `eternum`, `janus`, `sapphire_xvi`, `vesuvius_v`, `tc_inner_disc`, `tc_outer_disc`, `terminary`, `byrsa`, `depot_61c`, `tanit_xx`, `nightjar` |
+| 2 | `vulcan_research`, `centauri_a_beltworks`, `acb1`, `acb2`, `acb3`, `terminus`, `regulus_belt`, `denarius_ii`, `typhon_xvi`, `pelagos_belt`, `aurelia`, `boreas`, `calypso_vi`, `hesper`, `kestrel`, `alecto`, `new_ceres`, `virginis_belt`, `varda_iii`, `varda_belt`, `cressida`, `scoria`, `ursa_belt`, `ursa_belt_shipyard`, `ursa_xvi`, `ursa_xxix`, `long_drift`, `junkers_world`, `swan`, `freediver`, `nostromo`, `eternum`, `janus`, `sapphire_xvi`, `vesuvius_v`, `tc_inner_disc`, `tc_outer_disc`, `terminary`, `byrsa`, `depot_61c`, `tanit_xx`, `nightjar`, `alpha_disc`, `cueball`, `halo_station`, `kb_station_i`, `kb_station_ii`, `kb_station_iii`, `nocturn` |
 
 Population from `sectors.json` is **not** read by `CommodityEconomy`.
 

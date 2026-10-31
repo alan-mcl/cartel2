@@ -670,6 +670,17 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in new_carthage_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "new_carthage")
+	var horizon_sites: Array[String] = [
+		"alpha_disc",
+		"cueball",
+		"halo_station",
+		"kb_station_i",
+		"kb_station_ii",
+		"kb_station_iii",
+		"nocturn",
+	]
+	for sector_id in horizon_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "horizon")
 
 
 static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:

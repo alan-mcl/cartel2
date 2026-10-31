@@ -1411,5 +1411,154 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 3.5
+	},
+	{
+		"id": "alpha_disc",
+		"name": "Alpha Disc Hub Sector",
+		"orbit_name": "Alpha Disc Hub near orbit",
+		"star_system": "Epsilon Eridani",
+		"description": "Populated hub for resource extraction and industrial processing in the warm debris disc between Horizon and the gas giant B.",
+		"gravity": 0.17,
+		"population_billions": 0.41,
+		"play_bounds": 8000,
+		"objective": "Explore Alpha Disc Hub near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.18,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.25,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.4,
+			"charged_particle_fluctuation": 0.063
+		},
+		"star_distance_au": 2.0
+	},
+	{
+		"id": "cueball",
+		"name": "The Cueball Sector",
+		"orbit_name": "The Cueball near orbit",
+		"planet_name": "The Cueball",
+		"star_system": "Epsilon Eridani",
+		"description": "Colloquial name for moon B III at 3.5 AU. A smooth ice-covered world with orbital infrastructure for extraction, processing, manufacturing, and tourism.",
+		"gravity": 0.22,
+		"population_billions": 0.52,
+		"play_bounds": 8000,
+		"objective": "Explore The Cueball near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.082,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.131,
+			"charged_particle_fluctuation": 0.02
+		},
+		"star_distance_au": 3.5
+	},
+	{
+		"id": "halo_station",
+		"name": "Halo Station Sector",
+		"orbit_name": "Halo Station near orbit",
+		"star_system": "Epsilon Eridani",
+		"description": "Research and tourism station in a relatively clear gap in the dusty rings of gas giant B.",
+		"gravity": 0.1,
+		"population_billions": 0.19,
+		"play_bounds": 8000,
+		"objective": "Explore Halo Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.082,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.131,
+			"charged_particle_fluctuation": 0.02
+		},
+		"star_distance_au": 3.5
+	},
+	{
+		"id": "kb_station_i",
+		"name": "KB Station I Sector",
+		"orbit_name": "KB Station I near orbit",
+		"star_system": "Epsilon Eridani",
+		"description": "Extraction and processing hub in the distant outer planetesimal belt.",
+		"gravity": 0.12,
+		"population_billions": 0.11,
+		"play_bounds": 8000,
+		"objective": "Explore KB Station I near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.001,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 55.0
+	},
+	{
+		"id": "kb_station_ii",
+		"name": "KB Station II Sector",
+		"orbit_name": "KB Station II near orbit",
+		"star_system": "Epsilon Eridani",
+		"description": "Second extraction hub in the cold outer belt, farther from the inner system than KB Station I.",
+		"gravity": 0.11,
+		"population_billions": 0.08,
+		"play_bounds": 8000,
+		"objective": "Explore KB Station II near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 70.0
+	},
+	{
+		"id": "kb_station_iii",
+		"name": "KB Station III Sector",
+		"orbit_name": "KB Station III near orbit",
+		"star_system": "Epsilon Eridani",
+		"description": "Outermost of the three Kuiper-belt extraction hubs, on the edge of the 50–90 AU planetesimal swarm.",
+		"gravity": 0.1,
+		"population_billions": 0.06,
+		"play_bounds": 8000,
+		"objective": "Explore KB Station III near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 85.0
+	},
+	{
+		"id": "nocturn",
+		"name": "Nocturn Research Lab Sector",
+		"orbit_name": "Nocturn Research Lab near orbit",
+		"planet_name": "Nocturn",
+		"star_system": "Epsilon Eridani",
+		"description": "Research laboratory orbiting one of the larger planetesimals in the outer belt.",
+		"gravity": 0.08,
+		"population_billions": 0.04,
+		"play_bounds": 8000,
+		"objective": "Explore Nocturn Research Lab near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.12,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.0,
+			"radiant_fluctuation": 0.0,
+			"charged_particle": 0.0,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 65.0
 	}
 ]
