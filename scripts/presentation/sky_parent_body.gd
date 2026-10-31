@@ -38,7 +38,8 @@ func configure(
 	var merged: Dictionary = resolved.get("appearance", {})
 	var seed_val := float(resolved.get("seed_val", 0.0))
 	var rings_cfg: Dictionary = resolved.get("rings", {})
-	var planet_params := SkyParentBodyParams.build_planet_shader_params(merged, seed_val)
+	var seed_text := str(resolved.get("seed_text", ""))
+	var planet_params := SkyParentBodyParams.build_planet_shader_params(merged, seed_val, seed_text)
 	var sun_3d := PlanetBackdropScript.sun_direction_3d_from_star(star_position)
 
 	var planet_diameter := _disc_radius * 2.0
@@ -106,8 +107,13 @@ func _apply_planet_material(sprite: Sprite2D, params: Dictionary, sun_3d: Vector
 	material.set_shader_parameter("band_contrast", float(params.get("band_contrast", 0.55)))
 	material.set_shader_parameter("band_distortion", float(params.get("band_distortion", 0.2)))
 	material.set_shader_parameter("band_turbulence", float(params.get("band_turbulence", 0.0)))
-	material.set_shader_parameter("band_edge_softness", float(params.get("band_edge_softness", 0.25)))
+	material.set_shader_parameter(
+		"band_edge_softness",
+		float(params.get("band_edge_softness", SkyParentBodyParams.DEFAULT_BAND_EDGE_SOFTNESS))
+	)
 	material.set_shader_parameter("band_fine_detail", float(params.get("band_fine_detail", 0.2)))
+	material.set_shader_parameter("scheme", int(params.get("scheme", 0)))
+	_set_band_palette_array(material, params.get("band_palette", PackedInt32Array()))
 	material.set_shader_parameter("turbulence_scale", float(params.get("turbulence_scale", 2.0)))
 	material.set_shader_parameter("turbulence_octaves", float(params.get("turbulence_octaves", 2.0)))
 	material.set_shader_parameter("polar_colour", params.get("polar_colour", Vector3.ONE))
@@ -131,6 +137,17 @@ func _set_colour_array(material: ShaderMaterial, colours: Array) -> void:
 		else:
 			packed.append(fallback)
 	material.set_shader_parameter("colours", packed)
+
+
+func _set_band_palette_array(material: ShaderMaterial, palette: PackedInt32Array) -> void:
+	var packed := PackedInt32Array()
+	packed.resize(SkyParentBodyParams.BAND_PALETTE_SIZE)
+	for i in SkyParentBodyParams.BAND_PALETTE_SIZE:
+		if i < palette.size():
+			packed[i] = palette[i]
+		else:
+			packed[i] = 0
+	material.set_shader_parameter("band_palette", packed)
 
 
 func _apply_ring_material(

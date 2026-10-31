@@ -248,26 +248,37 @@ def check_parent_body_appearance(label: str, appearance: object) -> list[str]:
         errors.append(f"{label}: appearance must be an object")
         return errors
     appearance_type = str(appearance.get("type", "")).strip()
-    if appearance_type not in ("banded", "gas_giant"):
-        errors.append(f"{label}: appearance.type must be 'banded' or 'gas_giant'")
+    allowed_types = ("banded", "gas_giant", "uniform", "mottled", "gradient")
+    if appearance_type not in allowed_types:
+        errors.append(
+            f"{label}: appearance.type must be one of {', '.join(repr(t) for t in allowed_types)}"
+        )
         return errors
     atmosphere = appearance.get("atmosphere")
     if isinstance(atmosphere, dict) and atmosphere.get("colours") is not None:
         colours = atmosphere.get("colours")
-        if not isinstance(colours, list) or len(colours) < 2 or len(colours) > 6:
-            errors.append(f"{label}: appearance.atmosphere.colours must be an array of 2–6 entries")
+        min_colours = 1 if appearance_type == "uniform" else 2
+        if not isinstance(colours, list) or len(colours) < min_colours or len(colours) > 6:
+            errors.append(
+                f"{label}: appearance.atmosphere.colours must be an array of "
+                f"{min_colours}–6 entries for type '{appearance_type}'"
+            )
         else:
             for index, colour in enumerate(colours):
                 if not _is_hex_colour(colour):
                     errors.append(f"{label}: appearance.atmosphere.colours[{index}] must be #RRGGBB")
         _check_parent_atmosphere_ranges(label, atmosphere, errors)
-    else:
+    elif appearance_type in ("banded", "gas_giant"):
         for field in ("band_colour_1", "band_colour_2"):
             if not _is_hex_colour(appearance.get(field)):
                 errors.append(f"{label}: appearance.{field} must be #RRGGBB")
         turbulence = appearance.get("turbulence")
         if not isinstance(turbulence, (int, float)) or turbulence < 0 or turbulence > 1:
             errors.append(f"{label}: appearance.turbulence must be between 0 and 1")
+    else:
+        errors.append(
+            f"{label}: appearance.atmosphere.colours is required for type '{appearance_type}'"
+        )
     orientation = appearance.get("orientation")
     if isinstance(orientation, dict):
         for key, lo, hi in (
@@ -303,6 +314,7 @@ def _check_parent_atmosphere_ranges(label: str, atmosphere: dict, errors: list[s
         "band_distortion": (0, 1),
         "band_turbulence": (0, 1),
         "band_edge_softness": (0, 1),
+        "band_blur": (0, 1),
         "band_fine_detail": (0, 1),
         "turbulence_scale": (0.5, 8.0),
         "turbulence_octaves": (1, 4),

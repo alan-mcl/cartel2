@@ -48,6 +48,65 @@ static func _test_parent_params(runner: TestRunner) -> void:
 		absf(SkyParentBodyParams.ring_outer_scale(typhon_rings) - 2.2) < 0.01,
 		"sky backdrop: broad legacy ring outer radius 2.2"
 	)
+	_test_appearance_schemes(runner)
+
+
+static func _test_appearance_schemes(runner: TestRunner) -> void:
+	var uniform_parent := {
+		"name": "Test Uniform",
+		"type": "gas_giant",
+		"appearance": {
+			"type": "uniform",
+			"atmosphere": {"colours": ["#445566"]},
+		},
+	}
+	var uniform_resolved := SkyParentBodyParams.resolve_from_parent(uniform_parent, "scheme-test")
+	runner.check(not uniform_resolved.is_empty(), "sky backdrop: uniform appearance resolves")
+	runner.check(
+		SkyParentBodyParams.appearance_scheme_index("uniform") == 1,
+		"sky backdrop: uniform scheme index"
+	)
+	var mottled_parent := {
+		"name": "Test Mottled",
+		"type": "gas_giant",
+		"appearance": {
+			"type": "mottled",
+			"atmosphere": {
+				"colours": ["#112233", "#445566", "#778899"],
+				"band_edge_softness": 0.4,
+			},
+		},
+	}
+	runner.check(
+		not SkyParentBodyParams.resolve_from_parent(mottled_parent, "mottled").is_empty(),
+		"sky backdrop: mottled appearance resolves"
+	)
+	var atm: Dictionary = {"band_edge_softness": 0.2}
+	runner.check(
+		absf(SkyParentBodyParams.resolve_band_edge_softness(atm) - 0.2) < 0.001,
+		"sky backdrop: band_edge_softness"
+	)
+	atm = {"band_blur": 0.15}
+	runner.check(
+		absf(SkyParentBodyParams.resolve_band_edge_softness(atm) - 0.15) < 0.001,
+		"sky backdrop: band_blur aliases to edge softness"
+	)
+	atm = {}
+	runner.check(
+		absf(
+			SkyParentBodyParams.resolve_band_edge_softness(atm)
+			- SkyParentBodyParams.DEFAULT_BAND_EDGE_SOFTNESS
+		) < 0.001,
+		"sky backdrop: default edge softness"
+	)
+	var palette := SkyParentBodyParams.build_band_palette("palette-test", 4)
+	runner.check(palette.size() == SkyParentBodyParams.BAND_PALETTE_SIZE, "sky backdrop: band_palette length")
+	for i in range(1, palette.size()):
+		if palette[i - 1] == palette[i]:
+			runner.check(false, "sky backdrop: adjacent band_palette indices differ")
+			return
+		runner.check(palette[i] >= 0 and palette[i] < 4, "sky backdrop: band_palette index in range")
+	runner.check(true, "sky backdrop: adjacent band_palette indices differ")
 
 
 static func _test_titania_angular_roll(runner: TestRunner, tree: SceneTree) -> void:

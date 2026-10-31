@@ -3,6 +3,11 @@ extends RefCounted
 
 const APPEARANCE_BANDED := "banded"
 const APPEARANCE_GAS_GIANT := "gas_giant"
+const APPEARANCE_UNIFORM := "uniform"
+const APPEARANCE_MOTTLED := "mottled"
+const APPEARANCE_GRADIENT := "gradient"
+const BAND_PALETTE_SIZE := 32
+const DEFAULT_BAND_EDGE_SOFTNESS := 0.4
 const RING_NONE := "none"
 const RING_SMALL := "small"
 const RING_BROAD := "broad"
@@ -69,7 +74,7 @@ static func resolve_from_parent(parent_data: Dictionary, seed_key: String = "") 
 	if typeof(appearance_raw) != TYPE_DICTIONARY:
 		return {}
 	var appearance_type := str(appearance_raw.get("type", "")).strip_edges()
-	if appearance_type != APPEARANCE_BANDED and appearance_type != APPEARANCE_GAS_GIANT:
+	if not _is_supported_appearance_type(appearance_type):
 		return {}
 	var seed_text := seed_key if not seed_key.strip_edges().is_empty() else str(parent_data.get("name", "parent"))
 	var seed_val := seed_value(seed_text)
@@ -90,14 +95,23 @@ static func ring_outer_scale(rings_cfg: Dictionary) -> float:
 	return maxf(float(rings_cfg.get("outer_radius", 1.0)), 1.0)
 
 
-static func build_planet_shader_params(merged_appearance: Dictionary, seed_val: float) -> Dictionary:
+static func build_planet_shader_params(
+	merged_appearance: Dictionary,
+	seed_val: float,
+	seed_text: String = ""
+) -> Dictionary:
 	var atm: Dictionary = _dict(merged_appearance.get("atmosphere", {}))
 	var light: Dictionary = _dict(merged_appearance.get("lighting", {}))
 	var orient: Dictionary = _dict(merged_appearance.get("orientation", {}))
-	var colours := _resolve_colours(atm, merged_appearance)
+	var appearance_type := str(merged_appearance.get("type", APPEARANCE_BANDED)).strip_edges()
+	var colours := _resolve_colours(atm, merged_appearance, appearance_type)
+	var colour_count := colours.size()
+	var palette_key := seed_text if not seed_text.strip_edges().is_empty() else "parent"
 	return {
 		"colours": colours,
-		"colour_count": colours.size(),
+		"colour_count": colour_count,
+		"band_palette": build_band_palette(palette_key, colour_count),
+		"scheme": appearance_scheme_index(appearance_type),
 		"seed": seed_val,
 		"rotation_phase": deg_to_rad(float(orient.get("rotation_phase_deg", 0.0))),
 		"axis": _resolve_axis_vector(orient, merged_appearance, seed_val),
@@ -107,7 +121,7 @@ static func build_planet_shader_params(merged_appearance: Dictionary, seed_val: 
 		"band_contrast": float(atm.get("band_contrast", 0.55)),
 		"band_distortion": float(atm.get("band_distortion", 0.2)),
 		"band_turbulence": float(atm.get("band_turbulence", 0.0)),
-		"band_edge_softness": float(atm.get("band_edge_softness", 0.25)),
+		"band_edge_softness": resolve_band_edge_softness(atm),
 		"band_fine_detail": float(atm.get("band_fine_detail", 0.2)),
 		"turbulence_scale": float(atm.get("turbulence_scale", 2.0)),
 		"turbulence_octaves": float(atm.get("turbulence_octaves", 2.0)),
@@ -119,6 +133,52 @@ static func build_planet_shader_params(merged_appearance: Dictionary, seed_val: 
 		"limb_curve": float(light.get("limb_curve", 0.35)),
 		"terminator_softness": float(light.get("terminator_softness", 0.08)),
 	}
+
+
+static func _is_supported_appearance_type(appearance_type: String) -> bool:
+	return (
+		appearance_type == APPEARANCE_BANDED
+		or appearance_type == APPEARANCE_GAS_GIANT
+		or appearance_type == APPEARANCE_UNIFORM
+		or appearance_type == APPEARANCE_MOTTLED
+		or appearance_type == APPEARANCE_GRADIENT
+	)
+
+
+static func appearance_scheme_index(appearance_type: String) -> int:
+	match appearance_type.strip_edges():
+		APPEARANCE_UNIFORM:
+			return 1
+		APPEARANCE_MOTTLED:
+			return 2
+		APPEARANCE_GRADIENT:
+			return 3
+		_:
+			return 0
+
+
+static func resolve_band_edge_softness(atm: Dictionary) -> float:
+	if atm.has("band_edge_softness"):
+		return clampf(float(atm.get("band_edge_softness", DEFAULT_BAND_EDGE_SOFTNESS)), 0.0, 1.0)
+	if atm.has("band_blur"):
+		return clampf(float(atm.get("band_blur", DEFAULT_BAND_EDGE_SOFTNESS)), 0.0, 1.0)
+	return DEFAULT_BAND_EDGE_SOFTNESS
+
+
+static func build_band_palette(seed_text: String, colour_count: int) -> PackedInt32Array:
+	var count := clampi(colour_count, 1, 6)
+	var out := PackedInt32Array()
+	out.resize(BAND_PALETTE_SIZE)
+	var prev := -1
+	for i in BAND_PALETTE_SIZE:
+		var slot_key := "%s:belt:%d" % [seed_text, i]
+		var h := absi(slot_key.hash())
+		var idx := h % count if count > 0 else 0
+		if count >= 2 and idx == prev:
+			idx = (idx + 1) % count
+		out[i] = idx
+		prev = idx
+	return out
 
 
 static func build_ring_shader_params(
@@ -153,7 +213,8 @@ static func _merge_appearance(raw: Dictionary, seed_text: String, seed_val: floa
 			for key in preset.keys():
 				if not _has_nested(merged, "atmosphere", key):
 					_set_nested(merged, "atmosphere", key, preset[key])
-	if str(raw.get("type", "")) == APPEARANCE_BANDED:
+	var raw_type := str(raw.get("type", "")).strip_edges()
+	if raw_type == APPEARANCE_BANDED or raw_type == APPEARANCE_GAS_GIANT:
 		var atm := _dict(merged.get("atmosphere", {}))
 		if not atm.has("colours"):
 			var c1 := str(raw.get("band_colour_1", "#857052"))
@@ -195,7 +256,7 @@ static func default_axis_position_rad(seed_text: String) -> float:
 	return float(band_axis_hash % 628318) / 100000.0
 
 
-static func _resolve_colours(atm: Dictionary, merged: Dictionary) -> Array:
+static func _resolve_colours(atm: Dictionary, merged: Dictionary, appearance_type: String = "") -> Array:
 	var raw: Variant = atm.get("colours", [])
 	var out: Array = []
 	if typeof(raw) == TYPE_ARRAY:
@@ -203,9 +264,12 @@ static func _resolve_colours(atm: Dictionary, merged: Dictionary) -> Array:
 			out.append(hex_tint_to_vec3(str(entry)))
 	if out.is_empty():
 		out.append(hex_tint_to_vec3(str(merged.get("band_colour_1", "#857052"))))
-		out.append(hex_tint_to_vec3(str(merged.get("band_colour_2", "#c7ae85"))))
+		if appearance_type != APPEARANCE_UNIFORM:
+			out.append(hex_tint_to_vec3(str(merged.get("band_colour_2", "#c7ae85"))))
 	while out.size() > 6:
 		out.pop_back()
+	if out.is_empty():
+		out.append(hex_tint_to_vec3("#857052"))
 	return out
 
 

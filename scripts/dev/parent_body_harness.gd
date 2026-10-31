@@ -8,6 +8,7 @@ const ZOOM_MAX := 4.0
 const ZOOM_WHEEL_FACTOR := 1.12
 const MAX_RING_BANDS := 6
 const MAX_RING_GAPS := 4
+const MAX_PALETTE_COLOURS := 6
 
 const RING_MODE_NONE := 0
 const RING_MODE_LEGACY_SMALL := 1
@@ -57,8 +58,11 @@ var _band_editor_host: VBoxContainer
 var _gap_editor_host: VBoxContainer
 var _ring_bands_data: Array = []
 var _ring_gaps_data: Array = []
-var _band1_picker: ColorPickerButton
-var _band2_picker: ColorPickerButton
+var _palette_colour_box: VBoxContainer
+var _palette_pickers: Array[ColorPickerButton] = []
+var _band_spec_box: VBoxContainer
+var _edge_softness_slider: HSlider
+var _turbulence_row: HBoxContainer
 var _json_output: TextEdit
 var _status_label: Label
 
@@ -202,6 +206,9 @@ func _build_overlay() -> void:
 
 	_appearance_type_option = OptionButton.new()
 	_appearance_type_option.add_item("banded", 0)
+	_appearance_type_option.add_item("uniform", 1)
+	_appearance_type_option.add_item("mottled", 2)
+	_appearance_type_option.add_item("gradient", 3)
 	_appearance_type_option.item_selected.connect(_on_appearance_type_changed)
 	vbox.add_child(_labeled_row("Appearance type", _appearance_type_option))
 
@@ -217,6 +224,10 @@ func _build_overlay() -> void:
 	_banded_controls = VBoxContainer.new()
 	_banded_controls.add_theme_constant_override("separation", 6)
 	vbox.add_child(_banded_controls)
+
+	_band_spec_box = VBoxContainer.new()
+	_band_spec_box.add_theme_constant_override("separation", 6)
+	_banded_controls.add_child(_band_spec_box)
 
 	_auto_polar_check = CheckButton.new()
 	_auto_polar_check.text = "Polar inclination from seed"
@@ -240,12 +251,9 @@ func _build_overlay() -> void:
 	_band_meridian_spin.value_changed.connect(_on_live_tweak_f)
 	_banded_controls.add_child(_labeled_row("Band meridian (deg)", _band_meridian_spin))
 
-	_band1_picker = ColorPickerButton.new()
-	_band1_picker.color = Color("#857052")
-	_band1_picker.color_changed.connect(_on_live_tweak_color)
 	_band_count_spin = _make_spin(4.0, 32.0, 1.0, 12.0)
 	_band_count_spin.value_changed.connect(_on_live_tweak_f)
-	_banded_controls.add_child(_labeled_row("Band count", _band_count_spin))
+	_band_spec_box.add_child(_labeled_row("Band count", _band_count_spin))
 
 	_band_contrast_slider = HSlider.new()
 	_band_contrast_slider.min_value = 0.0
@@ -254,14 +262,31 @@ func _build_overlay() -> void:
 	_band_contrast_slider.value = 0.55
 	_band_contrast_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_band_contrast_slider.value_changed.connect(_on_live_tweak_f)
-	_banded_controls.add_child(_labeled_row("Band contrast", _band_contrast_slider))
+	_band_spec_box.add_child(_labeled_row("Band contrast", _band_contrast_slider))
 
-	_banded_controls.add_child(_labeled_row("Band colour 1", _band1_picker))
+	_edge_softness_slider = HSlider.new()
+	_edge_softness_slider.min_value = 0.0
+	_edge_softness_slider.max_value = 1.0
+	_edge_softness_slider.step = 0.01
+	_edge_softness_slider.value = SkyParentBodyParams.DEFAULT_BAND_EDGE_SOFTNESS
+	_edge_softness_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_edge_softness_slider.value_changed.connect(_on_live_tweak_f)
+	_banded_controls.add_child(_labeled_row("Edge softness", _edge_softness_slider))
 
-	_band2_picker = ColorPickerButton.new()
-	_band2_picker.color = Color("#c7ae85")
-	_band2_picker.color_changed.connect(_on_live_tweak_color)
-	_banded_controls.add_child(_labeled_row("Band colour 2", _band2_picker))
+	_palette_colour_box = VBoxContainer.new()
+	_palette_colour_box.add_theme_constant_override("separation", 4)
+	_banded_controls.add_child(_palette_colour_box)
+	var palette_btn_row := HBoxContainer.new()
+	var add_palette_btn := Button.new()
+	add_palette_btn.text = "Add colour"
+	add_palette_btn.pressed.connect(_on_add_palette_colour)
+	palette_btn_row.add_child(add_palette_btn)
+	var remove_palette_btn := Button.new()
+	remove_palette_btn.text = "Remove colour"
+	remove_palette_btn.pressed.connect(_on_remove_palette_colour)
+	palette_btn_row.add_child(remove_palette_btn)
+	_banded_controls.add_child(palette_btn_row)
+	_set_palette_colours(["#857052", "#c7ae85"])
 
 	_turbulence_slider = HSlider.new()
 	_turbulence_slider.min_value = 0.0
@@ -280,7 +305,8 @@ func _build_overlay() -> void:
 	_turbulence_label.custom_minimum_size.x = 36.0
 	_turbulence_label.text = "0.00"
 	turb_row.add_child(_turbulence_label)
-	_banded_controls.add_child(turb_row)
+	_turbulence_row = turb_row
+	_banded_controls.add_child(_turbulence_row)
 
 	var ring_title := Label.new()
 	ring_title.text = "Rings"
@@ -394,6 +420,7 @@ func _build_overlay() -> void:
 	_refresh_ring_editors()
 	_on_ring_mode_changed(_ring_mode_option.selected)
 	_on_ring_axis_override_toggled(_ring_use_planet_axis_check.button_pressed)
+	_sync_scheme_control_visibility()
 
 	var button_row := HBoxContainer.new()
 	button_row.add_theme_constant_override("separation", 8)
@@ -463,9 +490,36 @@ func _load_preset_index(preset_id: int) -> void:
 	var appearance: Dictionary = parent.get("appearance", {})
 	if typeof(appearance) == TYPE_DICTIONARY:
 		_select_appearance_type(str(appearance.get("type", "banded")))
-		_band1_picker.color = Color(str(appearance.get("band_colour_1", "#ffffff")))
-		_band2_picker.color = Color(str(appearance.get("band_colour_2", "#ffffff")))
-		_turbulence_slider.value = float(appearance.get("turbulence", 0.0))
+		var palette_hex: Array = []
+		var atm: Dictionary = appearance.get("atmosphere", {})
+		if typeof(atm) == TYPE_DICTIONARY and typeof(atm.get("colours")) == TYPE_ARRAY:
+			for entry in atm.get("colours", []):
+				palette_hex.append(str(entry))
+		if palette_hex.is_empty():
+			palette_hex = [
+				str(appearance.get("band_colour_1", "#857052")),
+				str(appearance.get("band_colour_2", "#c7ae85")),
+			]
+		_set_palette_colours(palette_hex)
+		if typeof(atm) == TYPE_DICTIONARY:
+			if atm.has("band_count"):
+				_band_count_spin.value = float(atm.get("band_count", 12.0))
+			if atm.has("band_contrast"):
+				_band_contrast_slider.value = float(atm.get("band_contrast", 0.55))
+			if atm.has("band_edge_softness"):
+				_edge_softness_slider.value = float(
+					atm.get("band_edge_softness", SkyParentBodyParams.DEFAULT_BAND_EDGE_SOFTNESS)
+				)
+			elif atm.has("band_blur"):
+				_edge_softness_slider.value = float(
+					atm.get("band_blur", SkyParentBodyParams.DEFAULT_BAND_EDGE_SOFTNESS)
+				)
+			var turb := float(
+				atm.get("band_turbulence", appearance.get("turbulence", 0.0))
+			)
+			_turbulence_slider.value = turb
+		else:
+			_turbulence_slider.value = float(appearance.get("turbulence", 0.0))
 		var has_polar := appearance.has("polar_inclination_deg") or appearance.has("orbital_inclination_deg")
 		_auto_polar_check.button_pressed = not has_polar
 		if appearance.has("polar_inclination_deg"):
@@ -485,23 +539,110 @@ func _load_preset_index(preset_id: int) -> void:
 
 
 func _select_appearance_type(type_id: String) -> void:
-	if type_id == "banded":
-		_appearance_type_option.select(0)
+	var normalized := type_id.strip_edges()
+	if normalized == "gas_giant":
+		normalized = "banded"
+	for i in _appearance_type_option.item_count:
+		if _appearance_type_option.get_item_text(i) == normalized:
+			_appearance_type_option.select(i)
+			break
 	_on_appearance_type_changed(_appearance_type_option.selected)
 
 
 func _on_appearance_type_changed(_index: int) -> void:
-	var is_banded := _current_appearance_type() == "banded"
-	_banded_controls.visible = is_banded
+	_sync_scheme_control_visibility()
+	_enforce_palette_size_for_scheme()
 	_queue_rebuild()
 
 
 func _current_appearance_type() -> String:
-	match _appearance_type_option.get_item_id(_appearance_type_option.selected):
-		0:
-			return "banded"
-		_:
-			return "banded"
+	return _appearance_type_option.get_item_text(_appearance_type_option.selected)
+
+
+func _sync_scheme_control_visibility() -> void:
+	var appearance_type := _current_appearance_type()
+	var is_banded := appearance_type == "banded"
+	_band_spec_box.visible = is_banded
+	_art_preset_option.get_parent().visible = is_banded
+	_turbulence_row.visible = is_banded or appearance_type == "mottled"
+	_edge_softness_slider.get_parent().visible = appearance_type != "uniform"
+
+
+func _min_palette_colours() -> int:
+	return 1 if _current_appearance_type() == "uniform" else 2
+
+
+func _enforce_palette_size_for_scheme() -> void:
+	var min_colours := _min_palette_colours()
+	while _palette_pickers.size() < min_colours:
+		_append_palette_picker(_default_palette_hex(_palette_pickers.size()))
+	while _palette_pickers.size() > MAX_PALETTE_COLOURS:
+		_remove_last_palette_picker()
+
+
+func _default_palette_hex(index: int) -> String:
+	var defaults := ["#857052", "#c7ae85", "#6a8f7a", "#a65c4a", "#4a6a8f", "#8f7a4a"]
+	if index >= 0 and index < defaults.size():
+		return defaults[index]
+	return "#857052"
+
+
+func _set_palette_colours(hex_colours: Array) -> void:
+	for picker in _palette_pickers:
+		picker.queue_free()
+	_palette_pickers.clear()
+	for child in _palette_colour_box.get_children():
+		child.queue_free()
+	for i in hex_colours.size():
+		var hex := str(hex_colours[i])
+		_append_palette_picker(hex)
+
+
+func _append_palette_picker(hex: String) -> void:
+	var picker := ColorPickerButton.new()
+	picker.color = Color(hex)
+	picker.color_changed.connect(_on_live_tweak_color)
+	_palette_pickers.append(picker)
+	var label := "Colour %d" % (_palette_pickers.size())
+	_palette_colour_box.add_child(_labeled_row(label, picker))
+
+
+func _remove_last_palette_picker() -> void:
+	if _palette_pickers.is_empty():
+		return
+	var picker: ColorPickerButton = _palette_pickers.pop_back()
+	picker.queue_free()
+	var last_child := _palette_colour_box.get_child(_palette_colour_box.get_child_count() - 1)
+	last_child.queue_free()
+
+
+func _collect_palette_colours() -> Array:
+	var out: Array = []
+	for picker in _palette_pickers:
+		out.append(_color_to_hex(picker.color))
+	return out
+
+
+func _palette_colour_or_default(index: int) -> Color:
+	if index >= 0 and index < _palette_pickers.size():
+		return _palette_pickers[index].color
+	if _palette_pickers.size() > 0:
+		return _palette_pickers[0].color
+	return Color("#c7ae85")
+
+
+func _on_add_palette_colour() -> void:
+	if _palette_pickers.size() >= MAX_PALETTE_COLOURS:
+		return
+	_append_palette_picker(_default_palette_hex(_palette_pickers.size()))
+	_on_live_tweak_color(_palette_pickers.back().color)
+
+
+func _on_remove_palette_colour() -> void:
+	if _palette_pickers.size() <= _min_palette_colours():
+		return
+	_remove_last_palette_picker()
+	_on_live_tweak_f()
 
 
 func _seed_key_text() -> String:
@@ -589,20 +730,26 @@ func _current_ring_mode() -> int:
 
 func _build_appearance_dict() -> Dictionary:
 	var appearance_type := _current_appearance_type()
+	var colours := _collect_palette_colours()
 	var row := {"type": appearance_type}
-	if appearance_type != "banded" and appearance_type != "gas_giant":
-		return row
-	if _art_preset_option.selected > 0:
-		row["preset"] = _art_preset_option.get_item_text(_art_preset_option.selected)
-	row["band_colour_1"] = _color_to_hex(_band1_picker.color)
-	row["band_colour_2"] = _color_to_hex(_band2_picker.color)
-	row["turbulence"] = snappedf(float(_turbulence_slider.value), 0.01)
 	var atmosphere := {
-		"colours": [row["band_colour_1"], row["band_colour_2"]],
-		"band_count": int(_band_count_spin.value),
-		"band_contrast": snappedf(float(_band_contrast_slider.value), 0.01),
-		"band_turbulence": snappedf(float(_turbulence_slider.value), 0.01),
+		"colours": colours,
 	}
+	if appearance_type != "uniform":
+		atmosphere["band_edge_softness"] = snappedf(float(_edge_softness_slider.value), 0.01)
+	if appearance_type == "banded":
+		if _art_preset_option.selected > 0:
+			row["preset"] = _art_preset_option.get_item_text(_art_preset_option.selected)
+		if colours.size() > 0:
+			row["band_colour_1"] = colours[0]
+		if colours.size() > 1:
+			row["band_colour_2"] = colours[1]
+		row["turbulence"] = snappedf(float(_turbulence_slider.value), 0.01)
+		atmosphere["band_count"] = int(_band_count_spin.value)
+		atmosphere["band_contrast"] = snappedf(float(_band_contrast_slider.value), 0.01)
+		atmosphere["band_turbulence"] = snappedf(float(_turbulence_slider.value), 0.01)
+	elif appearance_type == "mottled":
+		atmosphere["band_turbulence"] = snappedf(float(_turbulence_slider.value), 0.01)
 	row["atmosphere"] = atmosphere
 	var orientation := {}
 	if not _auto_polar_check.button_pressed:
@@ -725,9 +872,9 @@ func _rebuild_preview() -> void:
 
 
 func _match_ring_to_band2() -> void:
-	_ring_colour_picker.color = _band2_picker.color
+	_ring_colour_picker.color = _palette_colour_or_default(1)
 	if not _ring_bands_data.is_empty():
-		_ring_bands_data[0]["colour"] = _color_to_hex(_band2_picker.color)
+		_ring_bands_data[0]["colour"] = _color_to_hex(_palette_colour_or_default(1))
 		_refresh_ring_editors()
 	_queue_rebuild()
 

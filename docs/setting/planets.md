@@ -385,7 +385,12 @@ The ninth moon of the gas giant Titania in the Wolf 359 system is an E class wor
 
 ### Solar neighbourhood
 
-TBD
+The stately Titania is the fourth planet and first gas giant on Wolf 359's system, orbiting at 3.2 AU. Two other frozen giants orbit further out.
+
+Planets and moons:
+ - Titania V (5th moon): this large, rocky, high G world has a strong tidal influence on the other nearby moons. Unihabitable but the site of much orbital infrastructure.
+ - Titania IXX (19th moon): A frozen moon which is the furthest out not on an inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.
+ - Tartarus (24 AU, 5th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence including a well known research station orbits it.
 
 ### Field conditions
 
