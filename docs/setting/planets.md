@@ -159,7 +159,7 @@ Irasia orbits the stable and steady 61 Virginis at 0.95 AU, one of nine planets 
 
 Planets and moons:
  - Alecto (1st planet, 0.05 AU): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
- - New Ceres (6th planet, 1.1 AU): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
+ - New Ceres (6th planet, 1.5 AU): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
  - Varda III (3rd moon of 7th planet, 2.5 AU): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
  - Cressida (9th planet, 12 AU): the ninth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
 
@@ -395,7 +395,7 @@ The stately Titania is the fourth planet and first gas giant on Wolf 359's syste
 Planets and moons:
  - Titania V (5th moon): this large, rocky, high G world has a strong tidal influence on the other nearby moons. Unihabitable but the site of much orbital infrastructure.
  - Titania IXX (19th moon): A frozen moon which is the furthest out not on an inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.
- - Tartarus (24 AU, 5th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence including a well known research station orbits it.
+ - Tartarus (24 AU, 6th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence including a well known research station orbits it.
 
 ### Field conditions
 
@@ -438,5 +438,5 @@ Other
 
 ### Field conditions
 
- - Solar: Kepler-16 binary with radiant swings with orbital phase, near baseline wind
+ - Solar: Kepler-35 binary with radiant swings with orbital phase, near baseline wind
  - Magnetic: near-baseline dipole
