@@ -332,7 +332,7 @@ Other:
  - **Ocean coverage:** 77%
  - **Climate:** Temperate
 
-Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
+Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Famous for its fast paced lifestyle, its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
 
 ### Planet Surface
 
@@ -345,7 +345,16 @@ Horizon is one of the galaxy's great population centres, with many urban develop
 
 ### Solar neighbourhood
 
-TBD
+One of just two planets in the system, Horizon rapidly orbits its cool orange parent at 0.57 AU. A dense, warm debris disc rich in rare elements lies between it and the other planet, an impressively massive ringed gas giant at 3.5 AU that never really lost it's formal designation B. Beyond B at a distant 50-90 AU orbits a large, cold planetesimal Kuiper Belt.
+
+Planets and moons:
+ - Cueball (3.5 AU, 3rd moon of 2nd planet): The colloquial name for moon B III, this is a smooth ice covered world with extensive orbital infrastructure dedicated to resource extraction, industrial processing, manufacturing and tourism.
+
+Other
+ - Alpha Disc Hub: populated hub station for the resource extraction and industrial processing operations in the warm debris disc.
+ - Halo Station: Gas giant B has few moons but a substantial dusty set of rings. A research and tourism station lies in a relatively clear orbital gap.
+ - KB Station I, II and III: Hubs for extraction and processing operations in the distant outer belt.
+ - Nocturn Research Lab: orbiting one of the larger planetesimals in the outer belt.
 
 ### Field neighborhood
 

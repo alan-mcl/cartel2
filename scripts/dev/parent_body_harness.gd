@@ -21,6 +21,12 @@ var _star_angle_spin: SpinBox
 var _parent_angle_spin: SpinBox
 var _star_distance_spin: SpinBox
 var _seed_edit: LineEdit
+var _appearance_type_option: OptionButton
+var _banded_controls: VBoxContainer
+var _auto_polar_check: CheckButton
+var _polar_inclination_spin: SpinBox
+var _auto_meridian_check: CheckButton
+var _band_meridian_spin: SpinBox
 var _turbulence_slider: HSlider
 var _turbulence_label: Label
 var _ring_type_option: OptionButton
@@ -169,15 +175,46 @@ func _build_overlay() -> void:
 	_seed_edit.text_changed.connect(_on_live_tweak)
 	vbox.add_child(_labeled_row("Seed key", _seed_edit))
 
+	_appearance_type_option = OptionButton.new()
+	_appearance_type_option.add_item("banded", 0)
+	_appearance_type_option.item_selected.connect(_on_appearance_type_changed)
+	vbox.add_child(_labeled_row("Appearance type", _appearance_type_option))
+
+	_banded_controls = VBoxContainer.new()
+	_banded_controls.add_theme_constant_override("separation", 6)
+	vbox.add_child(_banded_controls)
+
+	_auto_polar_check = CheckButton.new()
+	_auto_polar_check.text = "Polar inclination from seed"
+	_auto_polar_check.button_pressed = true
+	_auto_polar_check.toggled.connect(_on_polar_auto_toggled)
+	_banded_controls.add_child(_auto_polar_check)
+
+	_polar_inclination_spin = _make_spin(0.0, 90.0, 0.5, 30.0)
+	_polar_inclination_spin.editable = false
+	_polar_inclination_spin.value_changed.connect(_on_live_tweak_f)
+	_banded_controls.add_child(_labeled_row("Polar inclination (deg)", _polar_inclination_spin))
+
+	_auto_meridian_check = CheckButton.new()
+	_auto_meridian_check.text = "Band meridian from seed"
+	_auto_meridian_check.button_pressed = true
+	_auto_meridian_check.toggled.connect(_on_meridian_auto_toggled)
+	_banded_controls.add_child(_auto_meridian_check)
+
+	_band_meridian_spin = _make_spin(0.0, 360.0, 1.0, 0.0)
+	_band_meridian_spin.editable = false
+	_band_meridian_spin.value_changed.connect(_on_live_tweak_f)
+	_banded_controls.add_child(_labeled_row("Band meridian (deg)", _band_meridian_spin))
+
 	_band1_picker = ColorPickerButton.new()
 	_band1_picker.color = Color("#857052")
 	_band1_picker.color_changed.connect(_on_live_tweak_color)
-	vbox.add_child(_labeled_row("Band colour 1", _band1_picker))
+	_banded_controls.add_child(_labeled_row("Band colour 1", _band1_picker))
 
 	_band2_picker = ColorPickerButton.new()
 	_band2_picker.color = Color("#c7ae85")
 	_band2_picker.color_changed.connect(_on_live_tweak_color)
-	vbox.add_child(_labeled_row("Band colour 2", _band2_picker))
+	_banded_controls.add_child(_labeled_row("Band colour 2", _band2_picker))
 
 	_turbulence_slider = HSlider.new()
 	_turbulence_slider.min_value = 0.0
@@ -196,7 +233,7 @@ func _build_overlay() -> void:
 	_turbulence_label.custom_minimum_size.x = 36.0
 	_turbulence_label.text = "0.00"
 	turb_row.add_child(_turbulence_label)
-	vbox.add_child(turb_row)
+	_banded_controls.add_child(turb_row)
 
 	_ring_type_option = OptionButton.new()
 	_ring_type_option.add_item("none", 0)
@@ -281,9 +318,20 @@ func _load_preset_index(preset_id: int) -> void:
 	_seed_edit.text = str(row.get("world_id", "harness"))
 	var appearance: Dictionary = parent.get("appearance", {})
 	if typeof(appearance) == TYPE_DICTIONARY:
+		_select_appearance_type(str(appearance.get("type", "banded")))
 		_band1_picker.color = Color(str(appearance.get("band_colour_1", "#ffffff")))
 		_band2_picker.color = Color(str(appearance.get("band_colour_2", "#ffffff")))
 		_turbulence_slider.value = float(appearance.get("turbulence", 0.0))
+		var has_polar := appearance.has("polar_inclination_deg") or appearance.has("orbital_inclination_deg")
+		_auto_polar_check.button_pressed = not has_polar
+		if appearance.has("polar_inclination_deg"):
+			_polar_inclination_spin.value = float(appearance.get("polar_inclination_deg", 0.0))
+		elif appearance.has("orbital_inclination_deg"):
+			_polar_inclination_spin.value = float(appearance.get("orbital_inclination_deg", 0.0))
+		_auto_meridian_check.button_pressed = not appearance.has("band_meridian_deg")
+		if appearance.has("band_meridian_deg"):
+			_band_meridian_spin.value = float(appearance.get("band_meridian_deg", 0.0))
+		_sync_seed_derived_angles()
 	var rings: Dictionary = parent.get("rings", {})
 	if typeof(rings) == TYPE_DICTIONARY:
 		var ring_type := str(rings.get("type", "none"))
@@ -310,6 +358,56 @@ func _select_ring_type(ring_type: String) -> void:
 			_ring_type_option.select(0)
 
 
+func _select_appearance_type(type_id: String) -> void:
+	if type_id == "banded":
+		_appearance_type_option.select(0)
+	_on_appearance_type_changed(_appearance_type_option.selected)
+
+
+func _on_appearance_type_changed(_index: int) -> void:
+	var is_banded := _current_appearance_type() == "banded"
+	_banded_controls.visible = is_banded
+	_queue_rebuild()
+
+
+func _current_appearance_type() -> String:
+	match _appearance_type_option.get_item_id(_appearance_type_option.selected):
+		0:
+			return "banded"
+		_:
+			return "banded"
+
+
+func _seed_key_text() -> String:
+	var seed_key := _seed_edit.text.strip_edges()
+	if seed_key.is_empty():
+		return "harness"
+	return seed_key
+
+
+func _sync_seed_derived_angles() -> void:
+	var seed_text := _seed_key_text()
+	var seed_val := SkyParentBodyParams.seed_value(seed_text)
+	if _auto_polar_check.button_pressed:
+		var incl_rad := SkyParentBodyParams.default_polar_inclination_rad(seed_val)
+		_polar_inclination_spin.set_value_no_signal(rad_to_deg(incl_rad))
+	if _auto_meridian_check.button_pressed:
+		var mer_rad := SkyParentBodyParams.default_band_meridian_rad(seed_text)
+		_band_meridian_spin.set_value_no_signal(rad_to_deg(mer_rad))
+
+
+func _on_polar_auto_toggled(enabled: bool) -> void:
+	_polar_inclination_spin.editable = not enabled
+	_sync_seed_derived_angles()
+	_on_live_tweak_f()
+
+
+func _on_meridian_auto_toggled(enabled: bool) -> void:
+	_band_meridian_spin.editable = not enabled
+	_sync_seed_derived_angles()
+	_on_live_tweak_f()
+
+
 func _on_ring_type_changed(_index: int) -> void:
 	var ring_type := _current_ring_type()
 	var is_none := ring_type == "none"
@@ -332,6 +430,7 @@ func _on_turbulence_changed(value: float) -> void:
 
 func _on_live_tweak(_unused: String = "") -> void:
 	_preset_option.select(0)
+	_sync_seed_derived_angles()
 	_queue_rebuild()
 
 
@@ -363,12 +462,18 @@ func _current_ring_type() -> String:
 
 
 func _build_appearance_dict() -> Dictionary:
-	return {
-		"type": "banded",
-		"band_colour_1": _color_to_hex(_band1_picker.color),
-		"band_colour_2": _color_to_hex(_band2_picker.color),
-		"turbulence": snappedf(float(_turbulence_slider.value), 0.01),
-	}
+	var appearance_type := _current_appearance_type()
+	var row := {"type": appearance_type}
+	if appearance_type != "banded":
+		return row
+	row["band_colour_1"] = _color_to_hex(_band1_picker.color)
+	row["band_colour_2"] = _color_to_hex(_band2_picker.color)
+	row["turbulence"] = snappedf(float(_turbulence_slider.value), 0.01)
+	if not _auto_polar_check.button_pressed:
+		row["polar_inclination_deg"] = snappedf(float(_polar_inclination_spin.value), 0.1)
+	if not _auto_meridian_check.button_pressed:
+		row["band_meridian_deg"] = snappedf(float(_band_meridian_spin.value), 0.1)
+	return row
 
 
 func _build_rings_dict() -> Dictionary:
@@ -414,6 +519,7 @@ func _update_json_display() -> void:
 
 func _rebuild_preview() -> void:
 	_rebuild_queued = false
+	_sync_seed_derived_angles()
 	_update_json_display()
 	for child in _world.get_children():
 		child.free()

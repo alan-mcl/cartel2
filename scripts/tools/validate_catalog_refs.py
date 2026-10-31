@@ -257,6 +257,18 @@ def check_parent_body_appearance(label: str, appearance: object) -> list[str]:
     turbulence = appearance.get("turbulence")
     if not isinstance(turbulence, (int, float)) or turbulence < 0 or turbulence > 1:
         errors.append(f"{label}: appearance.turbulence must be between 0 and 1")
+    if "polar_inclination_deg" in appearance:
+        inclination = appearance.get("polar_inclination_deg")
+        if not isinstance(inclination, (int, float)) or inclination < 0 or inclination > 90:
+            errors.append(f"{label}: appearance.polar_inclination_deg must be between 0 and 90")
+    if "orbital_inclination_deg" in appearance:
+        inclination = appearance.get("orbital_inclination_deg")
+        if not isinstance(inclination, (int, float)) or inclination < 0 or inclination > 90:
+            errors.append(f"{label}: appearance.orbital_inclination_deg must be between 0 and 90")
+    if "band_meridian_deg" in appearance:
+        meridian = appearance.get("band_meridian_deg")
+        if not isinstance(meridian, (int, float)) or meridian < 0 or meridian > 360:
+            errors.append(f"{label}: appearance.band_meridian_deg must be between 0 and 360")
     return errors
 
 

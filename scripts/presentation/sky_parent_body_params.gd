@@ -22,6 +22,33 @@ static func hex_tint_to_vec3(hex: String) -> Vector3:
 	return Vector3(colour.r, colour.g, colour.b)
 
 
+static func seed_value(seed_text: String) -> float:
+	return float(absi(seed_text.hash()) % 10000) / 10000.0
+
+
+static func default_band_meridian_rad(seed_text: String) -> float:
+	var band_axis_hash := absi((seed_text + ":bands").hash())
+	return float(band_axis_hash % 628318) / 100000.0
+
+
+static func default_polar_inclination_rad(seed_val: float) -> float:
+	return 0.2 + 0.65 * fmod(seed_val * 17.0 + 0.31, 1.0)
+
+
+static func resolve_band_meridian_rad(appearance: Dictionary, seed_text: String) -> float:
+	if appearance.has("band_meridian_deg"):
+		return deg_to_rad(float(appearance.get("band_meridian_deg", 0.0)))
+	return default_band_meridian_rad(seed_text)
+
+
+static func resolve_polar_inclination_rad(appearance: Dictionary, seed_val: float) -> float:
+	if appearance.has("polar_inclination_deg"):
+		return deg_to_rad(clampf(float(appearance.get("polar_inclination_deg", 0.0)), 0.0, 90.0))
+	if appearance.has("orbital_inclination_deg"):
+		return deg_to_rad(clampf(float(appearance.get("orbital_inclination_deg", 0.0)), 0.0, 90.0))
+	return default_polar_inclination_rad(seed_val)
+
+
 static func resolve_from_parent(parent_data: Dictionary) -> Dictionary:
 	if parent_data.is_empty():
 		return {}

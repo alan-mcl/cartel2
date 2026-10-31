@@ -31,9 +31,9 @@ func configure(
 	z_index = -60
 
 	var seed_text := seed_key if not seed_key.is_empty() else _display_name
-	var seed_val := float(absi(seed_text.hash()) % 10000) / 10000.0
-	var band_axis_hash := absi((seed_text + ":bands").hash())
-	var band_angle := float(band_axis_hash % 628318) / 100000.0
+	var seed_val := SkyParentBodyParams.seed_value(seed_text)
+	var band_angle := SkyParentBodyParams.resolve_band_meridian_rad(appearance, seed_text)
+	var axis_inclination := SkyParentBodyParams.resolve_polar_inclination_rad(appearance, seed_val)
 
 	var sun_3d := PlanetBackdropScript.sun_direction_3d_from_star(star_position)
 	var band_colour_1 := SkyParentBodyParams.hex_tint_to_vec3(str(appearance.get("band_colour_1", "#ffffff")))
@@ -52,6 +52,7 @@ func configure(
 	_material.set_shader_parameter("ring_outer_scale", ring_outer_scale)
 	_material.set_shader_parameter("seed", seed_val)
 	_material.set_shader_parameter("band_angle", band_angle)
+	_material.set_shader_parameter("axis_inclination", axis_inclination)
 
 	if _sprite != null:
 		_sprite.queue_free()

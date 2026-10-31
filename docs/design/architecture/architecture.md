@@ -103,7 +103,7 @@ For planetary layout and globe texture inspection without player, ships, or traf
 
 ### Parent body harness
 
-For tuning **`parent_body`** appearance and rings before editing catalog JSON, run `./scripts/dev/parent_body_harness.sh` or **F6** on `parent_body_harness.tscn`. The left panel loads presets from worlds that already define a parent, exposes band colours, turbulence, ring type/scale, angular diameter, backdrop distance, star/parent angles, and seed key. **SkyParentBody** and **LocalStar** use the same shaders as flight. Live edits rebuild the preview; **Copy JSON** puts the `appearance` and `rings` objects on the clipboard. Pan (LMB), zoom (wheel), **F** / **Frame** to fit the parent and star.
+For tuning **`parent_body`** appearance and rings before editing catalog JSON, run `./scripts/dev/parent_body_harness.sh` or **F6** on `parent_body_harness.tscn`. The left panel loads presets from worlds that already define a parent, exposes appearance type (`banded`), band colours, turbulence, polar inclination and band meridian (manual or seed-derived; rings follow the equator), ring type/scale, angular diameter, backdrop distance, star/parent angles, and seed key. **SkyParentBody** and **LocalStar** use the same shaders as flight. Live edits rebuild the preview; **Copy JSON** puts the `appearance` and `rings` objects on the clipboard. Pan (LMB), zoom (wheel), **F** / **Frame** to fit the parent and star.
 
 ## Main scene structure
 
