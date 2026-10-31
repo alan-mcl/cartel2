@@ -44,12 +44,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 1.379,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 1.0,
+			"charged_particle": 0.907,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 1.05
 	},
 	{
 		"id": "tycho",
@@ -80,12 +80,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.7,
 			"magnetic_fluctuation": 0.45,
-			"radiant": 2.2,
+			"radiant": 1.469,
 			"radiant_fluctuation": 0.35,
-			"charged_particle": 1.8,
+			"charged_particle": 0.01,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.05
+		"star_distance_au": 14.0
 	},
 	{
 		"id": "bela",
@@ -121,12 +121,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.8,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.6,
+			"radiant": 1.008,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 1.15,
+			"charged_particle": 0.913,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.98
+		"star_distance_au": 1.1
 	},
 	{
 		"id": "irasia",
@@ -170,12 +170,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.05,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 0.92,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 1.0,
+			"charged_particle": 1.153,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.02
+		"star_distance_au": 0.95
 	},
 	{
 		"id": "tokirev",
@@ -220,7 +220,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 0.59,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
@@ -265,12 +265,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.95,
+			"radiant": 1.093,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.95,
+			"charged_particle": 0.989,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 0.98
 	},
 	{
 		"id": "fortuna",
@@ -311,12 +311,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.8,
+			"radiant": 1.061,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.45,
+			"charged_particle": 0.918,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 0.7
 	},
 	{
 		"id": "new_carthage",
@@ -356,7 +356,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.9,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.55,
+			"radiant": 0.15,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
@@ -404,12 +404,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 1.046,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 1.6,
+			"charged_particle": 5.024,
 			"charged_particle_fluctuation": 0.25
 		},
-		"star_distance_au": 1.01
+		"star_distance_au": 0.57
 	},
 	{
 		"id": "titania",
@@ -441,12 +441,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.35,
+			"radiant": 0.0,
 			"radiant_fluctuation": 0.55,
-			"charged_particle": 2.4,
+			"charged_particle": 0.273,
 			"charged_particle_fluctuation": 0.7
 		},
-		"star_distance_au": 1.08
+		"star_distance_au": 3.2
 	},
 	{
 		"id": "pelagos",
@@ -485,7 +485,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 1.021,
 			"radiant_fluctuation": 0.3,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
@@ -507,12 +507,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.7,
 			"magnetic_fluctuation": 0.05,
-			"radiant": 0.85,
+			"radiant": 0.243,
 			"radiant_fluctuation": 0.15,
-			"charged_particle": 0.85,
+			"charged_particle": 0.783,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 2.4
+		"star_distance_au": 2.5
 	},
 	{
 		"id": "acb1",
@@ -530,12 +530,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.85,
 			"magnetic_fluctuation": 0.2,
-			"radiant": 1.45,
+			"radiant": 50.0,
 			"radiant_fluctuation": 0.25,
-			"charged_particle": 1.2,
+			"charged_particle": 12.288,
 			"charged_particle_fluctuation": 0.15
 		},
-		"star_distance_au": 0.32
+		"star_distance_au": 0.1
 	},
 	{
 		"id": "acb2",
@@ -553,12 +553,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.75,
 			"magnetic_fluctuation": 0.1,
-			"radiant": 1.35,
+			"radiant": 3.125,
 			"radiant_fluctuation": 0.2,
-			"charged_particle": 1.15,
+			"charged_particle": 1.656,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 0.48
+		"star_distance_au": 0.4
 	},
 	{
 		"id": "acb3",
@@ -576,12 +576,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.7,
 			"magnetic_fluctuation": 0.08,
-			"radiant": 1.1,
+			"radiant": 0.195,
 			"radiant_fluctuation": 0.18,
-			"charged_particle": 1.0,
+			"charged_particle": 0.202,
 			"charged_particle_fluctuation": 0.08
 		},
-		"star_distance_au": 0.72
+		"star_distance_au": 1.6
 	},
 	{
 		"id": "terminus",
@@ -598,12 +598,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.55,
 			"magnetic_fluctuation": 0.05,
-			"radiant": 0.45,
+			"radiant": 0.002,
 			"radiant_fluctuation": 0.12,
-			"charged_particle": 0.5,
+			"charged_particle": 7.347,
 			"charged_particle_fluctuation": 0.08
 		},
-		"star_distance_au": 115.0
+		"star_distance_au": 30.0
 	},
 	{
 		"id": "vulcan_research",
@@ -620,12 +620,12 @@
 		"neighborhood": {
 			"magnetic_surface": 2.0,
 			"magnetic_fluctuation": 0.55,
-			"radiant": 2.8,
+			"radiant": 128.0,
 			"radiant_fluctuation": 0.45,
-			"charged_particle": 2.2,
+			"charged_particle": 0.077,
 			"charged_particle_fluctuation": 0.2
 		},
-		"star_distance_au": 0.28
+		"star_distance_au": 1.5
 	},
 	{
 		"id": "regulus_belt",
@@ -642,12 +642,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.2,
 			"magnetic_fluctuation": 0.35,
-			"radiant": 1.6,
+			"radiant": 0.798,
 			"radiant_fluctuation": 0.3,
-			"charged_particle": 1.4,
+			"charged_particle": 0.04,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 3.2
+		"star_distance_au": 19.0
 	},
 	{
 		"id": "denarius_ii",
@@ -665,12 +665,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.5,
 			"magnetic_fluctuation": 0.4,
-			"radiant": 1.9,
+			"radiant": 14.222,
 			"radiant_fluctuation": 0.32,
-			"charged_particle": 1.6,
+			"charged_particle": 2.39,
 			"charged_particle_fluctuation": 0.12
 		},
-		"star_distance_au": 5.5
+		"star_distance_au": 4.5
 	},
 	{
 		"id": "typhon_xvi",
@@ -688,12 +688,12 @@
 		"neighborhood": {
 			"magnetic_surface": 1.45,
 			"magnetic_fluctuation": 0.42,
-			"radiant": 1.75,
+			"radiant": 0.281,
 			"radiant_fluctuation": 0.28,
-			"charged_particle": 1.55,
+			"charged_particle": 0.107,
 			"charged_particle_fluctuation": 0.15
 		},
-		"star_distance_au": 8.4
+		"star_distance_au": 32.0
 	},
 	{
 		"id": "pelagos_belt",
@@ -709,7 +709,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.0,
+			"radiant": 0.2,
 			"radiant_fluctuation": 0.3,
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
@@ -731,7 +731,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.5,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 5.08,
+			"radiant": 4.033,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 3.65,
 			"charged_particle_fluctuation": 0.0
@@ -753,7 +753,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.1,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.6,
+			"radiant": 0.477,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.43,
 			"charged_particle_fluctuation": 0.0
@@ -775,7 +775,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.4,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.15,
+			"radiant": 0.119,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.11,
 			"charged_particle_fluctuation": 0.0
@@ -797,7 +797,7 @@
 		"neighborhood": {
 			"magnetic_surface": 4.0,
 			"magnetic_fluctuation": 0.25,
-			"radiant": 0.013,
+			"radiant": 0.01,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.009,
 			"charged_particle_fluctuation": 0.0
@@ -819,7 +819,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.1,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.04,
+			"radiant": 0.034,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.03,
 			"charged_particle_fluctuation": 0.0
@@ -841,7 +841,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.85,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 416.16,
+			"radiant": 332.0,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 416.16,
 			"charged_particle_fluctuation": 0.0
@@ -863,7 +863,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.25,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.462,
+			"radiant": 0.369,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.462,
 			"charged_particle_fluctuation": 0.0
@@ -884,12 +884,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.7,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.215,
+			"radiant": 0.23,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.215,
+			"charged_particle": 0.288,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.2
+		"star_distance_au": 1.9
 	},
 	{
 		"id": "varda_iii",
@@ -906,12 +906,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.6,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.08,
+			"radiant": 0.133,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.08,
+			"charged_particle": 0.166,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.6
+		"star_distance_au": 2.5
 	},
 	{
 		"id": "varda_belt",
@@ -927,12 +927,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.65,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.031,
+			"radiant": 0.033,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.031,
+			"charged_particle": 0.042,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 5.8
+		"star_distance_au": 5.0
 	},
 	{
 		"id": "cressida",
@@ -949,12 +949,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.55,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.0053,
+			"radiant": 0.006,
 			"radiant_fluctuation": 0.0,
-			"charged_particle": 0.0053,
+			"charged_particle": 0.007,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 14.0
+		"star_distance_au": 12.0
 	},
 	{
 		"id": "scoria",
@@ -971,7 +971,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.207,
+			"radiant": 0.122,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.207,
 			"charged_particle_fluctuation": 0.0
@@ -992,7 +992,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.12,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.092,
+			"radiant": 0.054,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.092,
 			"charged_particle_fluctuation": 0.0
@@ -1013,7 +1013,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.12,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.092,
+			"radiant": 0.054,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.092,
 			"charged_particle_fluctuation": 0.0
@@ -1035,7 +1035,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.18,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.049,
+			"radiant": 0.029,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.049,
 			"charged_particle_fluctuation": 0.0
@@ -1057,7 +1057,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.049,
+			"radiant": 0.029,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.049,
 			"charged_particle_fluctuation": 0.0
@@ -1101,7 +1101,7 @@
 		"neighborhood": {
 			"magnetic_surface": 1.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.215,
+			"radiant": 0.238,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.215,
 			"charged_particle_fluctuation": 0.0
@@ -1123,7 +1123,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.038,
+			"radiant": 0.042,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.038,
 			"charged_particle_fluctuation": 0.0
@@ -1145,7 +1145,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.121,
+			"radiant": 0.134,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.121,
 			"charged_particle_fluctuation": 0.0
@@ -1211,7 +1211,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.356,
+			"radiant": 0.231,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.2,
 			"charged_particle_fluctuation": 0.0
@@ -1233,7 +1233,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.022,
+			"radiant": 0.014,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.012,
 			"charged_particle_fluctuation": 0.0
@@ -1255,7 +1255,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.12,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.013,
+			"radiant": 0.008,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.007,
 			"charged_particle_fluctuation": 0.0
@@ -1276,7 +1276,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.18,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.004,
+			"radiant": 0.002,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.002,
 			"charged_particle_fluctuation": 0.0
@@ -1340,7 +1340,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.25,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.55,
+			"radiant": 0.15,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
@@ -1361,7 +1361,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.18,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 1.53,
+			"radiant": 0.417,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 1.39,
 			"charged_particle_fluctuation": 0.0
@@ -1383,7 +1383,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.009,
+			"radiant": 0.002,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.008,
 			"charged_particle_fluctuation": 0.0
@@ -1405,7 +1405,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.2,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.005,
+			"radiant": 0.008,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.005,
 			"charged_particle_fluctuation": 0.0
@@ -1426,7 +1426,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.18,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.25,
+			"radiant": 0.085,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.4,
 			"charged_particle_fluctuation": 0.063
@@ -1448,7 +1448,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.12,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.082,
+			"radiant": 0.028,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.131,
 			"charged_particle_fluctuation": 0.02
@@ -1469,7 +1469,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.082,
+			"radiant": 0.028,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.131,
 			"charged_particle_fluctuation": 0.02
@@ -1576,7 +1576,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.35,
+			"radiant": 0.0,
 			"radiant_fluctuation": 0.55,
 			"charged_particle": 2.4,
 			"charged_particle_fluctuation": 0.7
@@ -1598,7 +1598,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.0,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.35,
+			"radiant": 0.0,
 			"radiant_fluctuation": 0.55,
 			"charged_particle": 2.4,
 			"charged_particle_fluctuation": 0.7
@@ -1619,7 +1619,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.1,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.006,
+			"radiant": 0.0,
 			"radiant_fluctuation": 0.01,
 			"charged_particle": 0.043,
 			"charged_particle_fluctuation": 0.012
@@ -1641,7 +1641,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.15,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 3.67,
+			"radiant": 3.75,
 			"radiant_fluctuation": 1.1,
 			"charged_particle": 3.67,
 			"charged_particle_fluctuation": 0.0
@@ -1663,7 +1663,7 @@
 		"neighborhood": {
 			"magnetic_surface": 0.5,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.273,
+			"radiant": 0.279,
 			"radiant_fluctuation": 0.082,
 			"charged_particle": 0.273,
 			"charged_particle_fluctuation": 0.0

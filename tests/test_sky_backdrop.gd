@@ -218,4 +218,4 @@ static func _assert_tycho_widow(
 		if str(entry.get("name", "")) == "The Widow":
 			widow_sep = float(entry.get("separation_deg", -1.0))
 	runner.check(widow_found, "sky backdrop: tycho widow nav entry")
-	runner.check(absf(widow_sep - 1.2) < 0.01, "sky backdrop: widow separation 1.2 deg")
+	runner.check(absf(widow_sep - 1.4) < 0.01, "sky backdrop: widow separation 1.4 deg at Tycho")

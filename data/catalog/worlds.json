@@ -160,7 +160,7 @@
 				"temperature_k": 10000,
 				"luminosity": 0.35,
 				"disc_radius": 3,
-				"separation_deg": 1.2
+				"separation_deg": 1.4
 			},
 			{
 				"star": "Regulus B",
@@ -619,11 +619,13 @@
 				"band_colour_2": "#c7ae85",
 				"turbulence": 0
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 2800,
-			"luminosity": 0.12
+			"luminosity": 0.001
 		}
 	},
 	"pelagos": {
@@ -678,8 +680,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4500,
-			"luminosity": 1.0
+			"temperature_k": 5606,
+			"luminosity": 0.94
 		}
 	},
 	"centauri_a_beltworks": {
@@ -1444,7 +1446,7 @@
 				"temperature_k": 10000,
 				"luminosity": 0.35,
 				"disc_radius": 3,
-				"separation_deg": 1.2
+				"separation_deg": 13.1
 			},
 			{
 				"star": "Regulus B",
@@ -1568,7 +1570,7 @@
 				"temperature_k": 10000,
 				"luminosity": 0.35,
 				"disc_radius": 3,
-				"separation_deg": 1.2
+				"separation_deg": 1.1
 			},
 			{
 				"star": "Regulus B",
@@ -1697,7 +1699,7 @@
 				"temperature_k": 10000,
 				"luminosity": 0.35,
 				"disc_radius": 3,
-				"separation_deg": 1.2
+				"separation_deg": 4.4
 			},
 			{
 				"star": "Regulus B",
@@ -1715,7 +1717,9 @@
 				"band_colour_2": "#d1dbe8",
 				"turbulence": 0.35
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 8500,
@@ -1857,7 +1861,7 @@
 				"temperature_k": 10000,
 				"luminosity": 0.35,
 				"disc_radius": 3,
-				"separation_deg": 1.2
+				"separation_deg": 0.6
 			},
 			{
 				"star": "Regulus B",
@@ -1999,8 +2003,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4500,
-			"luminosity": 1.0
+			"temperature_k": 5606,
+			"luminosity": 0.94
 		}
 	},
 	"aurelia": {
@@ -3453,7 +3457,9 @@
 				"band_colour_2": "#c7ae85",
 				"turbulence": 0
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 5800,
@@ -3555,7 +3561,9 @@
 				"band_colour_2": "#c7ae85",
 				"turbulence": 0
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 5800,
@@ -4217,7 +4225,9 @@
 				"band_colour_2": "#88b8e8",
 				"turbulence": 0.25
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 5400,
@@ -4283,7 +4293,9 @@
 				"band_colour_2": "#d87848",
 				"turbulence": 0.9
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 5400,
@@ -4541,7 +4553,9 @@
 				"band_colour_2": "#c8d8c0",
 				"turbulence": 0.15
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"companion_stars": [
 			{
@@ -4683,7 +4697,9 @@
 				"band_colour_2": "#c04030",
 				"turbulence": 0.7
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"companion_stars": [
 			{
@@ -4800,31 +4816,46 @@
 			{
 				"id": "alpha_disc_debris_1",
 				"kind": "debris",
-				"position": { "x": 2100, "y": 900 },
+				"position": {
+					"x": 2100,
+					"y": 900
+				},
 				"rotation": 0.2
 			},
 			{
 				"id": "alpha_disc_debris_2",
 				"kind": "debris",
-				"position": { "x": 2400, "y": -1200 },
+				"position": {
+					"x": 2400,
+					"y": -1200
+				},
 				"rotation": -0.35
 			},
 			{
 				"id": "alpha_disc_debris_3",
 				"kind": "debris",
-				"position": { "x": 2800, "y": 1600 },
+				"position": {
+					"x": 2800,
+					"y": 1600
+				},
 				"rotation": 0.5
 			},
 			{
 				"id": "alpha_disc_debris_4",
 				"kind": "debris",
-				"position": { "x": 3100, "y": -400 },
+				"position": {
+					"x": 3100,
+					"y": -400
+				},
 				"rotation": 0.15
 			},
 			{
 				"id": "alpha_disc_debris_5",
 				"kind": "debris",
-				"position": { "x": 3400, "y": 1100 },
+				"position": {
+					"x": 3400,
+					"y": 1100
+				},
 				"rotation": -0.2
 			}
 		],
@@ -4987,31 +5018,46 @@
 			{
 				"id": "kb_station_i_debris_1",
 				"kind": "debris",
-				"position": { "x": 2200, "y": 800 },
+				"position": {
+					"x": 2200,
+					"y": 800
+				},
 				"rotation": 0.2
 			},
 			{
 				"id": "kb_station_i_debris_2",
 				"kind": "debris",
-				"position": { "x": 2600, "y": -900 },
+				"position": {
+					"x": 2600,
+					"y": -900
+				},
 				"rotation": -0.3
 			},
 			{
 				"id": "kb_station_i_debris_3",
 				"kind": "debris",
-				"position": { "x": 2900, "y": 1200 },
+				"position": {
+					"x": 2900,
+					"y": 1200
+				},
 				"rotation": 0.4
 			},
 			{
 				"id": "kb_station_i_debris_4",
 				"kind": "debris",
-				"position": { "x": 3200, "y": -300 },
+				"position": {
+					"x": 3200,
+					"y": -300
+				},
 				"rotation": 0.1
 			},
 			{
 				"id": "kb_station_i_debris_5",
 				"kind": "debris",
-				"position": { "x": 3500, "y": 900 },
+				"position": {
+					"x": 3500,
+					"y": 900
+				},
 				"rotation": -0.15
 			}
 		],
@@ -5051,19 +5097,28 @@
 			{
 				"id": "kb_station_ii_debris_1",
 				"kind": "debris",
-				"position": { "x": 2300, "y": 600 },
+				"position": {
+					"x": 2300,
+					"y": 600
+				},
 				"rotation": 0.15
 			},
 			{
 				"id": "kb_station_ii_debris_2",
 				"kind": "debris",
-				"position": { "x": 2700, "y": -700 },
+				"position": {
+					"x": 2700,
+					"y": -700
+				},
 				"rotation": -0.25
 			},
 			{
 				"id": "kb_station_ii_debris_3",
 				"kind": "debris",
-				"position": { "x": 3000, "y": 1000 },
+				"position": {
+					"x": 3000,
+					"y": 1000
+				},
 				"rotation": 0.35
 			}
 		],
@@ -5103,13 +5158,19 @@
 			{
 				"id": "kb_station_iii_debris_1",
 				"kind": "debris",
-				"position": { "x": 2400, "y": 500 },
+				"position": {
+					"x": 2400,
+					"y": 500
+				},
 				"rotation": 0.1
 			},
 			{
 				"id": "kb_station_iii_debris_2",
 				"kind": "debris",
-				"position": { "x": 2800, "y": -600 },
+				"position": {
+					"x": 2800,
+					"y": -600
+				},
 				"rotation": -0.2
 			}
 		],
@@ -5208,11 +5269,13 @@
 				"band_colour_2": "#c7ae85",
 				"turbulence": 0
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 2800,
-			"luminosity": 0.12
+			"luminosity": 0.001
 		}
 	},
 	"titania_ixx": {
@@ -5263,11 +5326,13 @@
 				"band_colour_2": "#c7ae85",
 				"turbulence": 0
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 2800,
-			"luminosity": 0.12
+			"luminosity": 0.001
 		}
 	},
 	"tartarus": {
@@ -5313,11 +5378,13 @@
 				"band_colour_2": "#d8e4ee",
 				"turbulence": 0.25
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"star": {
 			"temperature_k": 2800,
-			"luminosity": 0.12
+			"luminosity": 0.001
 		}
 	},
 	"janus_ii": {
@@ -5368,7 +5435,9 @@
 				"band_colour_2": "#e8a060",
 				"turbulence": 0.55
 			},
-			"rings": { "type": "none" }
+			"rings": {
+				"type": "none"
+			}
 		},
 		"companion_stars": [
 			{
@@ -5377,8 +5446,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4500,
-			"luminosity": 1.0
+			"temperature_k": 5606,
+			"luminosity": 0.94
 		}
 	},
 	"caldera": {
@@ -5430,8 +5499,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4500,
-			"luminosity": 1.0
+			"temperature_k": 5606,
+			"luminosity": 0.94
 		}
 	},
 	"tulima": {
@@ -5478,8 +5547,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4500,
-			"luminosity": 1.0
+			"temperature_k": 5606,
+			"luminosity": 0.94
 		}
 	},
 	"n5_default": {

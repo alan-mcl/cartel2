@@ -59,9 +59,9 @@ Other:
  - **Ocean coverage:** 62%  
  - **Climate:** Arid
 
-Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-class planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource rich and industrialised.
+Although on paper Tycho seems a tame world, the reality is quite different. Tycho is an E-class planet where none should be: amongst a family of fifteen gas giants orbiting a fierce blue star. It suffers from wildly fluctuating magnetic poles, and severe earth tremors and volcanoes. Still it is resource-rich and industrialised.
 
-Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-visible white companion dominate the day. They are often eclipsed by one of the inner giants, Denarius in particular often being visible in the dayside sky. At night the two inner gas giants are prominently visible and their distant relatives march across the skies on various trajectories. The distant stellar companions Regulus BC are the brightest star in the night sky.
+Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-visible white companion dominate the day. They are often eclipsed by one of the inner giants, Denarius in particular often being visible in the dayside sky. At night the two inner gas giants are prominently visible and their distant relatives march across the skies on various trajectories. The distant stellar companions Regulus BC are the brightest stars in the night sky.
 
 ### Planet Surface
 
@@ -159,11 +159,11 @@ Irasia orbits the stable and steady 61 Virginis at 0.95 AU, one of nine planets 
 
 Planets and moons:
  - Alecto (1st planet, 0.05 AU): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
- - New Ceres (6th planet, 1.5 AU): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
- - Varda III (3rd moon of 7th planet, 2.5 AU): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
+ - New Ceres (6th planet, 1.5 AU): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. Its thick, toxic atmosphere of greenhouse gases is unbreathable but still useful for extensive agriculture operations.
+ - Varda III (3rd moon of 7th planet, 2.5 AU): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath its icy surface.
  - Cressida (9th planet, 12 AU): the ninth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
 
- Other
+Other:
  - Virginis Asteroid Station (1.9 AU): the asteroid belt beyond New Ceres is rich in exotic minerals, crystals and chemicals
  - Varda Asteroid Station (5 AU): beyond Varda lies another, sparser asteroid belt, also a site of resource extraction
 
@@ -179,7 +179,7 @@ Planets and moons:
  - **Gravity:** 1.02 G
  - **Population:** 56 billion  
  - **Ocean coverage:** 62%  
- - **CLimate:** Cold
+ - **Climate:** Cold
 
 Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
 
@@ -197,8 +197,8 @@ Tokirev is a large, cold industrial world dominated by manufacturing and heavy i
 Tokirev is one of just five planets orbiting the young G class star. 
 
 Planets and moons:
- - Scoria (2.2AU, 3rd planet): a barren world of dark volcanic rock, Scoria has no magnetic field and only vestiges of an atmosphere. Surface mining operations are supported by multiple orbitals.
- - Ursa XVI (4.5 AU, 16th moon of 4th planet): what 61 Ursae Majoris lacks in planets, it's only gas giant tries to make up in moons. The spectacularly banded Ursa has captured a coterie of 39 sattelites, the 16th of which supports surface resource extraction from it's rocky surface.
+ - Scoria (2.2 AU, 3rd planet): a barren world of dark volcanic rock, Scoria has no magnetic field and only vestiges of an atmosphere. Surface mining operations are supported by multiple orbitals.
+ - Ursa XVI (4.5 AU, 16th moon of 4th planet): what 61 Ursae Majoris lacks in planets, its only gas giant tries to make up in moons. The spectacularly banded Ursa has captured a coterie of 39 satellites, the 16th of which supports surface resource extraction from its rocky surface.
  - Ursa XXIX (4.5 AU, 29th moon of 4th planet): the 29th moon is covered with methane oceans
  
 Other
@@ -218,7 +218,7 @@ Other
  - **Gravity:** .95 G
  - **Population:** 29 billion  
  - **Ocean coverage:** 78%  
- - **Average temperature:** 20°C  
+ - **Climate:** Temperate  
 
 Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
 
@@ -233,21 +233,21 @@ City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New 
 
 ### Solar neighbourhood
 
-At 0.98 AU, Fennet is the inner planet of the 18 Scorpii system. Four other planets and some eccentric dwarfs complete the major orbital bodies, but an unusually dense comet cloud on a profusion of orbits fills the outer system. The skies of Fennet are famous for always showcasing at a variety passing cometary bodies.
+At 0.98 AU, Fennet is the inner planet of the 18 Scorpii system. Four other planets and some eccentric dwarfs complete the major orbital bodies, but an unusually dense comet cloud on a profusion of orbits fills the outer system. The skies of Fennet are famous for always showcasing a variety of passing cometary bodies.
 
 Planets and moons:
  - Junker's World (2.1 AU, 2nd planet): The only other non-gas giant in the system, Junker's World is a rocky wasteland with a dense Nitrogen atmosphere. Surface mineral extraction takes place, notably including the renowned Junkers Emeralds.
 
 Other:
- - Swan: a short period high-albedo comet so named for it's opposed polar outgassing. Rare mineral extraction and research is supported by a small orbital.
- - The Freediver: a highly eccentric cometary body that approaches very close to 18 Scorpii. Chemical and energy extraction from it's core is supported by largely automated infrastructure - and paused during perihelion.
+ - Swan: a short period high-albedo comet so named for its opposed polar outgassing. Rare mineral extraction and research is supported by a small orbital.
+ - The Freediver: a highly eccentric cometary body that approaches very close to 18 Scorpii. Chemical and energy extraction from its core is supported by largely automated infrastructure - and paused during perihelion.
  - Nostromo: an icy-covered comet with an unusual radioactive core. Research station.
- - Eternum: a very long period icy comet that has only visited Fennet once during human habitation there. A small resort habitat supports the dedicated adventure tourists who want to tick this one off.
+ - Eternum: a very long period ice-covered comet that has only visited Fennet once during human habitation there. A small resort habitat supports the dedicated adventure tourists who want to tick this one off.
 
-### Field neighborhood
+### Field conditions
 
  - Solar influence: 18 Scorpii with quiet radiance and wind
- - Magnetic: standard dipole.
+ - Magnetic: standard dipole
 
 ## Fortuna
 
@@ -273,15 +273,15 @@ Fortuna is a wealthy and densely populated world whose prosperity was built on f
 
 ### Solar neighbourhood
 
-Fortuna is Tau Ceti' second planet, orbiting 0.7 AU from it's dim parent star. The system of six planets is surrounded by a notable debris disc spanning the orbits from 11 to 50 AU. It's unclear why there is an unusually large surviving reservoir of planetesimals and debris.
+Fortuna is Tau Ceti's second planet, orbiting 0.7 AU from its dim parent star. The system of six planets is surrounded by a notable debris disc spanning the orbits from 11 to 50 AU. It's unclear why there is an unusually large surviving reservoir of planetesimals and debris.
 
 Planets and moons:
- - Janus (1.5 AU, 3rd planet): An frozen rocky world lacking a magnetic field, and with the barest traces of atmosphere. Resource extraction on Janus is possible but often not very profitable due to the harsh conditions, high gravity and thick ice sheets.
- - Sapphire XVI (6.1 AU, 16th moon of the 5th planet): This moon surface is heaped with frozen methane and other chemical resources. It's gas giant parent is so called for it's unusual blueish bands.
- - Vesuvius V: (8 AU, 5th moon of 6th planet): Vesuvius is the systems signature gas giant, notably for it's extremely colourful and turbulent atmosphere. The 5th moon is rich in valuable minerals.
+ - Janus (1.5 AU, 3rd planet): A frozen rocky world lacking a magnetic field, and with the barest traces of atmosphere. Resource extraction on Janus is possible but often not very profitable due to the harsh conditions, high gravity and thick ice sheets.
+ - Sapphire XVI (6.1 AU, 16th moon of the 5th planet): This moon's surface is heaped with frozen methane and other chemical resources. Its gas giant parent is so called for its unusual blueish bands.
+ - Vesuvius V (8 AU, 5th moon of 6th planet): Vesuvius is the system's signature gas giant, notably for its extremely colourful and turbulent atmosphere. The 5th moon is rich in valuable minerals.
 
 Other:
- - TC Inner Disc Station: Tau Ceti's debris disk is extensively exploited for resource extraction. The inner belt station is the hub for activities in the very dense 11-19 AU band.
+ - TC Inner Disc Station: Tau Ceti's debris disc is extensively exploited for resource extraction. The inner belt station is the hub for activities in the very dense 11-19 AU band.
  - TC Outer Disc Station: This is the hub for resource extraction in the less dense outer debris disc.
  - Terminary Research Station: An isolated research station just beyond the debris disc.
 
@@ -313,11 +313,11 @@ New Carthage is a largely oceanic world whose major population centres developed
 
 ### Solar neighbourhood
 
-New Carthage is the fourth of five planets orbitting 61 Cygni A. It's single moon, Byrsa, is large and has a great deal of tidal influence. Both Byrsa and the solar partner, orange 61 Cygni B, are usually brightly visible in the night skies.
+New Carthage is the fourth of five planets orbiting 61 Cygni A. Its single moon, Byrsa, is large and has a great deal of tidal influence. Both Byrsa and the solar partner, orange 61 Cygni B, are usually brightly visible in the night skies.
 
 Planets and moons:
  - Byrsa (only moon of 4th planet): New Carthage's own large moon is orbited by significant orbital infrastructure.
- - Tanit XX (8 AU, 20th moon of the 5th planet): 61 Cygni A's only gas giant, Tanit, is a extremely large and displays spectacular white and red bands. The 20th moon has active warm subsurface oceans and is a useful site for both mining and energy generation.
+ - Tanit XX (8 AU, 20th moon of the 5th planet): 61 Cygni A's only gas giant, Tanit, is an extremely large world and displays spectacular white and red bands. The 20th moon has active warm subsurface oceans and is a useful site for both mining and energy generation.
  - Nightjar: (3.5 AU, 3rd planet of 61 Cygni B): The partner star has three planets, the last of which is a small, dark rocky world heavily developed for mining.
 
 Other:
@@ -337,7 +337,7 @@ Other:
  - **Ocean coverage:** 77%
  - **Climate:** Temperate
 
-Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Famous for its fast paced lifestyle, its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
+Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Famous for its fast-paced lifestyle, its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
 
 ### Planet Surface
 
@@ -350,7 +350,7 @@ Horizon is one of the galaxy's great population centres, with many urban develop
 
 ### Solar neighbourhood
 
-One of just two planets in the system, Horizon rapidly orbits its cool orange parent at 0.57 AU. A dense, warm debris disc rich in rare elements lies between it and the other planet, an impressively massive ringed gas giant at 3.5 AU that never really lost it's formal designation B. Beyond B at a distant 50-90 AU orbits a large, cold planetesimal Kuiper Belt.
+One of just two planets in the system, Horizon rapidly orbits its cool orange parent at 0.57 AU. A dense, warm debris disc rich in rare elements lies between it and the other planet, an impressively massive ringed gas giant at 3.5 AU that never really lost its formal designation B. Beyond B at a distant 50-90 AU orbits a large, cold planetesimal Kuiper Belt.
 
 Planets and moons:
  - The Cueball (3.5 AU, 3rd moon of 2nd planet): The colloquial name for moon B III, this is a smooth ice covered world with extensive orbital infrastructure dedicated to resource extraction, industrial processing, manufacturing and tourism.
@@ -361,7 +361,7 @@ Other
  - KB Station I, II and III: Hubs for extraction and processing operations in the distant outer belt.
  - Nocturn Research Lab: orbiting one of the larger planetesimals in the outer belt.
 
-### Field neighborhood
+### Field conditions
 
  - Solar: Epsilon Eridani with elevated particle wind with moderate fluctuation, typical radiance.
  - Magnetic: typical dipole
@@ -390,18 +390,18 @@ The ninth moon of the gas giant Titania in the Wolf 359 system is an E class wor
 
 ### Solar neighbourhood
 
-The stately Titania is the fourth planet and first gas giant on Wolf 359's system, orbiting at 3.2 AU. Two other frozen giants orbit further out.
+The stately Titania is the fourth planet and first gas giant in Wolf 359's system, orbiting at 3.2 AU. Two other frozen giants orbit further out.
 
 Planets and moons:
- - Titania V (5th moon): this large, rocky, high G world has a strong tidal influence on the other nearby moons. Unihabitable but the site of much orbital infrastructure.
+ - Titania V (5th moon): this large, rocky, high G world has a strong tidal influence on the other nearby moons. Uninhabitable but the site of much orbital infrastructure.
  - Titania IXX (19th moon): A frozen moon which is the furthest out not on an inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.
- - Tartarus (24 AU, 6th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence including a well known research station orbits it.
+ - Tartarus (24 AU, 6th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence, including a well-known research station that orbits it.
 
 ### Field conditions
 
  - Solar: Wolf 359 is a dim flare star: low mean radiant, high radiant and particle fluctuation, heavy unshielded wind at orbit.
- - Magnetic: No intrinsic planetary dipole (moon body). 
- - general high fluctuations due to the gas giant primary nearby
+ - Magnetic: No intrinsic planetary dipole (moon body).
+ - General high fluctuations due to the gas giant primary nearby
 
 ## Pelagos
 
@@ -429,8 +429,8 @@ Pelagos is a prosperous world orbiting two suns, with enormous coastal cities an
 Kepler-35's inner gas giant Janus orbits at 0.6 AU but doesn't yet have a known translation solution. Pelagos is the second planet at 1.15 AU, beyond which orbit six increasingly cold rocky worlds. Pelagos' skies are famous for the binary sunset and sunrise.
 
 Planets and moons:
- - Janus II (2nd moon of 1st planet): A small, fast orbiting moon of the system's only gas giant. Janus is a hot, barren world where ancient vulcanism has left significant mineral resources.
- - Caldera (3rd planet, 2.2 AU): A dry geologically active world and a thin dusty inert atmosphere. Caldera has extensively developed resource extraction and manufacturing orbital infrastructure.
+ - Janus II (2nd moon of 1st planet): A small, fast-orbiting moon of the system's only gas giant. The moon is a hot, barren world where ancient vulcanism has left significant mineral resources.
+ - Caldera (3rd planet, 2.2 AU): A dry geologically active world with a thin dusty inert atmosphere. Caldera has extensively developed resource extraction and manufacturing orbital infrastructure.
  - Tulima (8th planet, 15 AU): An isolated airless world, covered with frozen volatiles. An orbital station supports mining and research.
 
 Other

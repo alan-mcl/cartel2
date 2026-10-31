@@ -21,7 +21,7 @@
     "star_system": "Alpha Centauri",
     "spectral_class": "M5.5Ve",
     "temperature_k": 3042,
-    "luminosity": 0.00017,
+    "luminosity": 0.0015,
     "mass_solar": 0.122,
     "radius_solar": 0.154,
     "description": "The red dwarf Proxima; it dominates Proxima's night sky though it lies far from the A–B pair."
@@ -39,7 +39,7 @@
     "star_system": "Delta Pavonis",
     "spectral_class": "G8IV",
     "temperature_k": 5602,
-    "luminosity": 1.55,
+    "luminosity": 1.22,
     "mass_solar": 0.991,
     "radius_solar": 1.56,
     "description": "Quiet G-type subgiant; La Bella Vista orbits under warm, steady light."
@@ -57,7 +57,7 @@
     "star_system": "61 Ursae Majoris",
     "spectral_class": "G8V",
     "temperature_k": 5459,
-    "luminosity": 0.76,
+    "luminosity": 0.59,
     "mass_solar": 0.92,
     "radius_solar": 0.96,
     "description": "Stable main-sequence star anchoring Tokirev's cold industrial orbit."
@@ -83,8 +83,8 @@
   "61 Cygni A": {
     "star_system": "61 Cygni",
     "spectral_class": "K5V",
-    "temperature_k": 4340,
-    "luminosity": 0.08,
+    "temperature_k": 4400,
+    "luminosity": 0.15,
     "mass_solar": 0.7,
     "radius_solar": 0.665,
     "description": "Orange dwarf of the 61 Cygni binary; New Carthage trades under its ruddy light."
@@ -102,18 +102,18 @@
     "star_system": "Wolf 359",
     "spectral_class": "M6.5V",
     "temperature_k": 2800,
-    "luminosity": 2e-05,
+    "luminosity": 0.001,
     "mass_solar": 0.09,
     "radius_solar": 0.16,
     "description": "Dim flare star; Titania IX rides the turbulent skies of its gas-giant primary nearby."
   },
   "Kepler-35 A": {
     "star_system": "Kepler-35",
-    "spectral_class": "K",
-    "temperature_k": 4450,
-    "luminosity": 0.12,
-    "mass_solar": 0.69,
-    "radius_solar": 0.65,
+    "spectral_class": "G",
+    "temperature_k": 5606,
+    "luminosity": 0.94,
+    "mass_solar": 0.888,
+    "radius_solar": 1.028,
     "description": "Primary of the Kepler-35 circumbinary; Pelagos sees two sols from its sky."
   },
   "Sirius A": {
@@ -335,8 +335,8 @@
   "61 Cygni B": {
     "star_system": "61 Cygni",
     "spectral_class": "K7V",
-    "temperature_k": 4040,
-    "luminosity": 0.04,
+    "temperature_k": 4170,
+    "luminosity": 0.097,
     "mass_solar": 0.63,
     "radius_solar": 0.59,
     "description": "Cooler companion of 61 Cygni A, with deep orange-red light."
@@ -577,11 +577,11 @@
   },
   "Kepler-35 B": {
     "star_system": "Kepler-35",
-    "spectral_class": "M",
-    "temperature_k": 3310,
-    "luminosity": 0.004,
-    "mass_solar": 0.2,
-    "radius_solar": 0.23,
+    "spectral_class": "G",
+    "temperature_k": 5202,
+    "luminosity": 0.41,
+    "mass_solar": 0.809,
+    "radius_solar": 0.786,
     "description": "Low-mass companion that makes the Kepler-35 system a true binary-star planetary environment."
   },
   "Kepler-90": {
