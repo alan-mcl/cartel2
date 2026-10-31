@@ -17,6 +17,7 @@ func _run() -> void:
 	await _smoke_save_loaded_world(catalog)
 	await _smoke_combat_motion()
 	await _smoke_system_render_tester()
+	await _smoke_parent_body_harness()
 	await _smoke_mission_harness()
 	await _smoke_audio_sandbox()
 	await _finish()
@@ -213,6 +214,16 @@ func _smoke_system_render_tester() -> void:
 				beacon_row = beacon_row.get_next()
 			_check(beacon_count == 5, "fennet hub has five beacon rows")
 	await _free_and_drain(tester)
+
+
+func _smoke_parent_body_harness() -> void:
+	var harness := preload("res://scenes/dev/parent_body_harness.tscn").instantiate()
+	root.add_child(harness)
+	await process_frame
+	await process_frame
+	var parent: Node = harness.get_node("World/ParentBody")
+	_check(parent != null, "parent body harness spawns preview parent")
+	await _free_and_drain(harness)
 
 
 func _check(condition: bool, label: String) -> void:

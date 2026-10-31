@@ -101,6 +101,10 @@ For volatile translation sites and scan/bounty objectives without the outbound j
 
 For planetary layout and globe texture inspection without player, ships, or traffic, run `./scripts/dev/system_render_tester.sh` or editor **F6** on `system_render_tester.tscn`. A toolbar lists catalog sectors that define a `planet` in `worlds.json` (`planet_name - star_system`). **WorldLoader.load_sector** builds the same near-orbit visuals as flight (planet backdrop, orbital ring, jump gate, local star, dust ring). A free **Camera2D** supports pan (LMB drag), zoom (wheel), and **F** / **Frame** to fit the system. **RMB drag** yaws/pitches the globe via `PlanetBackdrop.add_inspection_rotation`; **Planet auto-spin** toggles catalog rotation. Each load starts from a random yaw. City-Mall anchors from a night habitations sidecar use the same screen labels as the flight HUD, and they track auto-spin and inspection drag. Orbital ring motion uses `session.advance_orbital_phase` only - no traffic director or simulation subsystems.
 
+### Parent body harness
+
+For tuning **`parent_body`** appearance and rings before editing catalog JSON, run `./scripts/dev/parent_body_harness.sh` or **F6** on `parent_body_harness.tscn`. The left panel loads presets from worlds that already define a parent, exposes band colours, turbulence, ring type/scale, angular diameter, backdrop distance, star/parent angles, and seed key. **SkyParentBody** and **LocalStar** use the same shaders as flight. Live edits rebuild the preview; **Copy JSON** puts the `appearance` and `rings` objects on the clipboard. Pan (LMB), zoom (wheel), **F** / **Frame** to fit the parent and star.
+
 ## Main scene structure
 
 `scenes/main.tscn`:

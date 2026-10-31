@@ -96,7 +96,7 @@ $GODOT --headless --path . --script res://scripts/tools/build_cartel_theme.gd
 
 # Dev sandboxes (F6 in editor, or ./scripts/dev/<name>.sh) — see docs/design/architecture/dev_sandboxes.md
 #   theme_showcase.sh  ship_assembly_sandbox.sh  combat_sandbox.sh
-#   stealth_sandbox.sh  mission_harness.sh  system_render_tester.sh
+#   stealth_sandbox.sh  mission_harness.sh  system_render_tester.sh  parent_body_harness.sh
 ```
 
 ## Documentation map
