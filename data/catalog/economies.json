@@ -1053,5 +1053,44 @@
 			"food_products": 5.0,
 			"industrial_components": 2.5
 		}
+	},
+	{
+		"id": "janus_ii",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"minerals": 10.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.0
+		}
+	},
+	{
+		"id": "caldera",
+		"tier": "outer",
+		"wealth": 0.9,
+		"produce": {
+			"minerals": 8.0,
+			"industrial_components": 7.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "tulima",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"minerals": 6.0,
+			"water_ice": 7.0,
+			"data": 3.0
+		},
+		"consume": {
+			"food_products": 5.0,
+			"industrial_components": 2.5
+		}
 	}
 ]

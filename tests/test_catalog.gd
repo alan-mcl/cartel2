@@ -611,7 +611,12 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in tycho_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "tycho")
-	var pelagos_sites: Array[String] = ["pelagos_belt"]
+	var pelagos_sites: Array[String] = [
+		"pelagos_belt",
+		"janus_ii",
+		"caldera",
+		"tulima",
+	]
 	for sector_id in pelagos_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "pelagos")
 	var bela_sites: Array[String] = [

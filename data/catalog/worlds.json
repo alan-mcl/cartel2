@@ -673,8 +673,8 @@
 		},
 		"companion_stars": [
 			{
-				"star": "Kepler-16 B",
-				"separation_deg": 14
+				"star": "Kepler-35 B",
+				"separation_deg": 8.7
 			}
 		],
 		"star": {
@@ -1994,8 +1994,8 @@
 		],
 		"companion_stars": [
 			{
-				"star": "Kepler-16 B",
-				"separation_deg": 14
+				"star": "Kepler-35 B",
+				"separation_deg": 3.9
 			}
 		],
 		"star": {
@@ -5318,6 +5318,168 @@
 		"star": {
 			"temperature_k": 2800,
 			"luminosity": 0.12
+		}
+	},
+	"janus_ii": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "janus_ii_habitat_obj",
+					"kind": "habitat",
+					"label": "Janus II",
+					"interactable": "janus_ii_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#c87858"
+				},
+				{
+					"id": "janus_ii_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "janus_ii_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "janus_ii_beacon_obj",
+			"label": "Janus II Translation Beacon",
+			"interactable": "janus_ii_jump_gate",
+			"destination": "pelagos",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 720,
+			"modulate": "#c06038"
+		},
+		"parent_body": {
+			"name": "Janus",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 12,
+			"angular_diameter_deg_max": 18,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#c06040",
+				"band_colour_2": "#e8a060",
+				"turbulence": 0.55
+			},
+			"rings": { "type": "none" }
+		},
+		"companion_stars": [
+			{
+				"star": "Kepler-35 B",
+				"separation_deg": 16.4
+			}
+		],
+		"star": {
+			"temperature_k": 4500,
+			"luminosity": 1.0
+		}
+	},
+	"caldera": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "caldera_habitat_obj",
+					"kind": "habitat",
+					"label": "Caldera",
+					"interactable": "caldera_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#b89868"
+				},
+				{
+					"id": "caldera_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "caldera_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "caldera_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "caldera_beacon_obj",
+			"label": "Caldera Translation Beacon",
+			"interactable": "caldera_jump_gate",
+			"destination": "pelagos",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1300,
+			"modulate": "#c4a070"
+		},
+		"companion_stars": [
+			{
+				"star": "Kepler-35 B",
+				"separation_deg": 4.6
+			}
+		],
+		"star": {
+			"temperature_k": 4500,
+			"luminosity": 1.0
+		}
+	},
+	"tulima": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tulima_habitat_obj",
+					"kind": "habitat",
+					"label": "Tulima",
+					"interactable": "tulima_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#a8b8c8"
+				},
+				{
+					"id": "tulima_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "tulima_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "tulima_beacon_obj",
+			"label": "Tulima Translation Beacon",
+			"interactable": "tulima_jump_gate",
+			"destination": "pelagos",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 900,
+			"modulate": "#d0e0ee"
+		},
+		"companion_stars": [
+			{
+				"star": "Kepler-35 B",
+				"separation_deg": 0.7
+			}
+		],
+		"star": {
+			"temperature_k": 4500,
+			"luminosity": 1.0
 		}
 	},
 	"n5_default": {

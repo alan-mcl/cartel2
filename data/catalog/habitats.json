@@ -1114,5 +1114,38 @@
 		"sector_id": "tartarus",
 		"short_desc": "Outer sub-giant research station.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_ii_habitat.png",
+		"buildings": ["janus_ii_terminal", "janus_ii_exchange"],
+		"default_building": "janus_ii_terminal",
+		"description": "Janus II is a hot barren moon of the inner gas giant. Mineral extraction runs through the fast orbital lanes.",
+		"id": "janus_ii_habitat",
+		"name": "Janus II",
+		"sector_id": "janus_ii",
+		"short_desc": "Hot moon mineral hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/caldera_habitat.png",
+		"buildings": ["caldera_terminal", "caldera_exchange"],
+		"default_building": "caldera_terminal",
+		"description": "Caldera combines dusty surface geology with yards and platforms for extraction and manufacturing.",
+		"id": "caldera_habitat",
+		"name": "Caldera",
+		"sector_id": "caldera",
+		"short_desc": "Geologically active world hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/tulima_habitat.png",
+		"buildings": ["tulima_terminal", "tulima_exchange"],
+		"default_building": "tulima_terminal",
+		"description": "Tulima station serves mining and research on this isolated airless world of frozen volatiles.",
+		"id": "tulima_habitat",
+		"name": "Tulima",
+		"sector_id": "tulima",
+		"short_desc": "Outer ice-world station.",
+		"type": "habitat"
 	}
 ]

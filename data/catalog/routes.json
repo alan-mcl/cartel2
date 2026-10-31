@@ -1101,5 +1101,44 @@
 				"solution_ba": -48202
 			}
 		]
+	},
+	{
+		"id": "pelagos_janus_ii",
+		"a": "pelagos",
+		"b": "janus_ii",
+		"friction": 5,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48203,
+				"solution_ba": -48204
+			}
+		]
+	},
+	{
+		"id": "pelagos_caldera",
+		"a": "pelagos",
+		"b": "caldera",
+		"friction": 7,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48205,
+				"solution_ba": -48206
+			}
+		]
+	},
+	{
+		"id": "pelagos_tulima",
+		"a": "pelagos",
+		"b": "tulima",
+		"friction": 14,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48207,
+				"solution_ba": -48208
+			}
+		]
 	}
 ]

@@ -107,14 +107,14 @@
     "radius_solar": 0.16,
     "description": "Dim flare star; Titania IX rides the turbulent skies of its gas-giant primary nearby."
   },
-  "Kepler-16 A": {
-    "star_system": "Kepler-16",
+  "Kepler-35 A": {
+    "star_system": "Kepler-35",
     "spectral_class": "K",
     "temperature_k": 4450,
     "luminosity": 0.12,
     "mass_solar": 0.69,
     "radius_solar": 0.65,
-    "description": "Primary of the Kepler-16 circumbinary; Pelagos sees two sols from its sky."
+    "description": "Primary of the Kepler-35 circumbinary; Pelagos sees two sols from its sky."
   },
   "Sirius A": {
     "star_system": "Sirius",
@@ -575,14 +575,14 @@
     "radius_solar": 1.6,
     "description": "F-type star with a historically important multi-planet system."
   },
-  "Kepler-16 B": {
-    "star_system": "Kepler-16",
+  "Kepler-35 B": {
+    "star_system": "Kepler-35",
     "spectral_class": "M",
     "temperature_k": 3310,
     "luminosity": 0.004,
     "mass_solar": 0.2,
     "radius_solar": 0.23,
-    "description": "Low-mass companion that makes the Kepler-16 system a true binary-star planetary environment."
+    "description": "Low-mass companion that makes the Kepler-35 system a true binary-star planetary environment."
   },
   "Kepler-90": {
     "star_system": "Kepler-90",

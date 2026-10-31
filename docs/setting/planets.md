@@ -36,11 +36,14 @@ Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-type
 
 Alpha Centauri B, the system's K-type companion star, has its own small planetary system of several uninhabitable worlds and industrial installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
 
- - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
- - ACB1: hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes
+Planets and moons:
+ - ACB1 (1st planet, 0.1 AU): hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes
  - ACB2: also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
  - ACB3: a small ice covered planet near Alpha Centauri B's orbital boundary
  - Terminus: a large frozen planet on a distant circum-binary orbit
+
+Other:
+ - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
 
 ### Field Conditions
 
@@ -421,8 +424,7 @@ Pelagos is a prosperous world orbiting two suns, with enormous coastal cities an
 
 ### Solar neighbourhood
 
-Kepler-35's inner gas giant Janus orbits at 0.6 AU but doesn't yet have a known translation solution. Pelagos is the second planet at 1.15 AU, beyond which orbit six increasingly cold rocky worlds.
-Pelagos' skies are famous for the binary sunset and sunrise.
+Kepler-35's inner gas giant Janus orbits at 0.6 AU but doesn't yet have a known translation solution. Pelagos is the second planet at 1.15 AU, beyond which orbit six increasingly cold rocky worlds. Pelagos' skies are famous for the binary sunset and sunrise.
 
 Planets and moons:
  - Janus II (2nd moon of 1st planet): A small, fast orbiting moon of the system's only gas giant. Janus is a hot, barren world where ancient vulcanism has left significant mineral resources.

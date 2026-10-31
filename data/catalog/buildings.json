@@ -2306,5 +2306,59 @@
 		"name": "Tartarus Exchange",
 		"short_desc": "Exchange at Tartarus Research Station.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_ii_terminal.png",
+		"description": "Customs for Janus II mineral extraction traffic.",
+		"id": "janus_ii_terminal",
+		"kind": "terminal",
+		"name": "Janus II Terminal",
+		"short_desc": "Terminal for Janus II traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/janus_ii_exchange.png",
+		"description": "Commodity exchange for ore and supply at Janus II.",
+		"id": "janus_ii_exchange",
+		"kind": "merchant",
+		"name": "Janus II Exchange",
+		"short_desc": "Exchange at Janus II.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/caldera_terminal.png",
+		"description": "Customs for Caldera extraction and manufacturing traffic.",
+		"id": "caldera_terminal",
+		"kind": "terminal",
+		"name": "Caldera Terminal",
+		"short_desc": "Terminal for Caldera traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/caldera_exchange.png",
+		"description": "Commodity exchange for minerals and components at Caldera.",
+		"id": "caldera_exchange",
+		"kind": "merchant",
+		"name": "Caldera Exchange",
+		"short_desc": "Exchange at Caldera.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tulima_terminal.png",
+		"description": "Customs for Tulima mining and research traffic.",
+		"id": "tulima_terminal",
+		"kind": "terminal",
+		"name": "Tulima Terminal",
+		"short_desc": "Terminal for Tulima traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tulima_exchange.png",
+		"description": "Commodity exchange for ice, minerals, and survey data at Tulima.",
+		"id": "tulima_exchange",
+		"kind": "merchant",
+		"name": "Tulima Exchange",
+		"short_desc": "Exchange at Tulima.",
+		"type": "market"
 	}
 ]

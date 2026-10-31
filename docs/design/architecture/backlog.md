@@ -13,6 +13,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
 |B2| art | med | Sail drive animation should be a semi-circle in front the of the ship ('n' shape), not a 'C' shape
 |B3| art | med | no active sensors can't active-scan a target
+|B4| art | high | parent body renderer should align the lighting to where the star is located in the sector
 
 ## Features
 

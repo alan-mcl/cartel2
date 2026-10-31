@@ -453,7 +453,7 @@
 		"name": "Pelagos Sector",
 		"orbit_name": "Pelagos near orbit",
 		"planet_name": "Pelagos",
-		"star_system": "Kepler-16",
+		"star_system": "Kepler-35",
 		"description": "Arid world of two suns, with coastal cities, mineral wealth, and manufacturing.",
 		"classification": "E2",
 		"gravity": 1.01,
@@ -490,7 +490,7 @@
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 1.15
 	},
 	{
 		"id": "centauri_a_beltworks",
@@ -699,8 +699,8 @@
 		"id": "pelagos_belt",
 		"name": "Pelagos Belt Station Sector",
 		"orbit_name": "Pelagos Belt Station near orbit",
-		"star_system": "Kepler-16",
-		"description": "Asteroid belt in the Kepler-16 system beyond Pelagos. Mining convoys and cooperative haulage share the lanes.",
+		"star_system": "Kepler-35",
+		"description": "Asteroid belt in the Kepler-35 system after Caldera. Mining convoys and cooperative haulage share the lanes.",
 		"gravity": 0.18,
 		"population_billions": 0.35,
 		"play_bounds": 8000,
@@ -1625,5 +1625,71 @@
 			"charged_particle_fluctuation": 0.012
 		},
 		"star_distance_au": 24.0
+	},
+	{
+		"id": "janus_ii",
+		"name": "Janus II Sector",
+		"orbit_name": "Janus II near orbit",
+		"planet_name": "Janus II",
+		"star_system": "Kepler-35",
+		"description": "Small, fast-orbiting moon of the inner gas giant Janus. Ancient vulcanism has left significant mineral resources on this hot, barren world.",
+		"gravity": 0.14,
+		"population_billions": 0.08,
+		"play_bounds": 8000,
+		"objective": "Explore Janus II near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.15,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 3.67,
+			"radiant_fluctuation": 1.1,
+			"charged_particle": 3.67,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 0.6
+	},
+	{
+		"id": "caldera",
+		"name": "Caldera Sector",
+		"orbit_name": "Caldera near orbit",
+		"planet_name": "Caldera",
+		"star_system": "Kepler-35",
+		"description": "Dry, geologically active world with a thin dusty inert atmosphere. Resource extraction and manufacturing rely on extensive orbital infrastructure.",
+		"gravity": 0.88,
+		"population_billions": 0.31,
+		"play_bounds": 8000,
+		"objective": "Explore Caldera near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.5,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.273,
+			"radiant_fluctuation": 0.082,
+			"charged_particle": 0.273,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 2.2
+	},
+	{
+		"id": "tulima",
+		"name": "Tulima Sector",
+		"orbit_name": "Tulima near orbit",
+		"planet_name": "Tulima",
+		"star_system": "Kepler-35",
+		"description": "Isolated airless world covered with frozen volatiles. An orbital station supports mining and research.",
+		"gravity": 0.25,
+		"population_billions": 0.06,
+		"play_bounds": 8000,
+		"objective": "Explore Tulima near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.006,
+			"radiant_fluctuation": 0.002,
+			"charged_particle": 0.006,
+			"charged_particle_fluctuation": 0.0
+		},
+		"star_distance_au": 15.0
 	}
 ]

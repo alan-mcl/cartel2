@@ -920,5 +920,44 @@
 		"title": "Tartarus Research Station Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Titania IX near orbit. Only the public hop back to Titania IX is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "janus_ii_habitat",
+		"title": "Janus II",
+		"inspect_text": "Docking at Janus II. Hot moon extraction traffic uses the inner lanes.",
+		"kind": "dock",
+		"dock_location_id": "janus_ii_habitat"
+	},
+	{
+		"id": "janus_ii_jump_gate",
+		"title": "Janus II Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Pelagos near orbit. Only the public hop back to Pelagos is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "caldera_habitat",
+		"title": "Caldera",
+		"inspect_text": "Docking at Caldera orbital infrastructure. Extraction and manufacturing share the dusty lanes.",
+		"kind": "dock",
+		"dock_location_id": "caldera_habitat"
+	},
+	{
+		"id": "caldera_jump_gate",
+		"title": "Caldera Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Pelagos near orbit. Only the public hop back to Pelagos is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "tulima_habitat",
+		"title": "Tulima",
+		"inspect_text": "Docking at Tulima station. Mining and research traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "tulima_habitat"
+	},
+	{
+		"id": "tulima_jump_gate",
+		"title": "Tulima Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Pelagos near orbit. Only the public hop back to Pelagos is available here.",
+		"kind": "translate"
 	}
 ]
