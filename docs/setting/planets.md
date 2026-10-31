@@ -32,18 +32,18 @@ Proxima high orbit is bustling with civilian and commercial traffic.
 
 ### Solar neighbourhood
 
-Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-type star. Beyond its orbit lies a broad asteroid belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
+Rather unusually, Proxima is the only planet orbiting Alpha Centauri A, a G-type star, at 1.05 AU. Beyond its orbit lies a broad asteroid belt, heavily exploited for mining and industry but still containing remote and hazardous regions. 
 
 Alpha Centauri B, the system's K-type companion star, has its own small planetary system of several uninhabitable worlds and industrial installations. Far beyond both stellar systems is a sparse circumbinary region of icy bodies and minor planets.
 
 Planets and moons:
  - ACB1 (1st planet, 0.1 AU): hot rocky inner planet of Alpha Centauri B, tidally locked, magma and volcanoes
- - ACB2: also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
- - ACB3: a small ice covered planet near Alpha Centauri B's orbital boundary
- - Terminus: a large frozen planet on a distant circum-binary orbit
+ - ACB2 (2nd planet, 0.4 AU): also called "Scar", this is a rocky inner planet of Alpha Centauri B, no atmosphere, mining operations are present on the surface with orbital support
+ - ACB3 (3rd planet, 1.6 AU): a small ice covered planet near Alpha Centauri B's orbital boundary
+ - Terminus (30 AU from the system center of gravity): a large frozen planet on a distant circum-binary orbit
 
 Other:
- - Centauri A Beltworks: a central habitat for mining operations in the Alpha Centauri A asteroid belt
+ - Centauri A Beltworks (2.5 AU): a central habitat for mining operations in the Alpha Centauri A asteroid belt
 
 ### Field Conditions
 
@@ -78,13 +78,15 @@ Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-
 
 Regulus A is itself a close binary: a rapidly rotating bright blue star with a faint white dwarf companion (called The Widow by the earliest Tycho settlers) at only 0.35 AU.
 
-Two volatile gas giants keep tight orbits around the pair, then a good deal further out lies Tycho in a narrow habitable zone. Beyond Tycho is an asteroid belt, followed by a gaggle of increasingly distant gas giants, some in very eccentric orbits, and their numerous moons.
+Two volatile gas giants keep tight orbits around the pair, then a good deal further out at 14 AU lies Tycho in a narrow habitable zone. Beyond Tycho is an asteroid belt, followed by a gaggle of increasingly distant gas giants, some in very eccentric orbits, and their numerous moons.
 
- - Regulus Belt Station: habitat central to mining the asteroid belt beyond Tycho
- - Vulcan: The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in orbit.
- - Denarius II: The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure.
- - Typhon XVI: The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure.
- - others TBD
+Planets and moons:
+ - Vulcan (1st planet, 1.5 AU): The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in orbit.
+ - Denarius II (2nd moon of 2nd planet, 4.5 AU): The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure.
+ - Typhon XVI (16th moon of 4th planet, 32 AU): The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure.
+
+Other:
+ - Regulus Belt Station (19 AU): habitat central to mining the asteroid belt beyond Tycho
 
 ### Field conditions
 
@@ -114,7 +116,7 @@ La Bella Vista, often called Bela, is a water world with only one continental la
 
 ### Solar neighbourhood
 
-Delta Pavonis has a busy orbit of ten planets (Bela being the fourth of them), some of which are easily reachable via translation beacons. The tourism industry on the main E-class world spills out into these other accessible places in the system.
+Delta Pavonis has a busy orbit of ten planets (Bela being the fourth of them at 1.1 AU), some of which are easily reachable via translation beacons. The tourism industry on the main E-class world spills out into these other accessible places in the system.
 
 Planets and moons:
  - Aurelia: the third planet (0.55 AU); a dry rocky world with a marginal atmosphere. Mining and research infrastructure, as well as tourist locations for low-G hab-suit mountaineering, rock climbing and base jumping.
@@ -153,17 +155,17 @@ Irasia is a prosperous and heavily industrialised world, with enormous coastal c
 
 ### Solar neighbourhood
 
-Irasia orbits the stable and steady 61 Virginis at 0.99 AU, one of nine planets in the system. Unusually for an E class world Irasia has four small moons in varying orbits, the outermost quite inclined.
+Irasia orbits the stable and steady 61 Virginis at 0.95 AU, one of nine planets in the system. Unusually for an E class world Irasia has four small moons in varying orbits, the outermost quite inclined.
 
 Planets and moons:
- - Alecto (planet 1): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
- - New Ceres (planet 6): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
- - Varda III (moon 3 of planet 7): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
- - Cressida: the ninth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
+ - Alecto (1st planet, 0.05 AU): a large rocky planet nearest 61 Virginis, tidally locked at 0.05 AU. Scorched and airless, the darkside hosts automated mining operations.
+ - New Ceres (6th planet, 1.1 AU): a dense super-E, the sixth planet out beyond Irasia at 1.5 AU. It's thick, toxic atmosphere of greenhouse gasses is unbreathable but still useful for extensive agriculture operations.
+ - Varda III (3rd moon of 7th planet, 2.5 AU): seventh planet and the largest gas giant in the system, Varda has a small ring system and a distinctive silvery atmosphere. The third moon is site of resource extraction from the subsurface ocean beneath it's icy surface.
+ - Cressida (9th planet, 12 AU): the ninth and last planet, on an unusually inclined orbit. Cressida is a small world, cold but with active cryovulcanism. A lonely research station orbits it.
 
  Other
- - Virginis Asteroid Station: the asteroid belt beyond New Ceres is rich in exotic minerals, crystals and chemicals
- - Varda Asteroid Station: beyond Varda lies another, sparser asteroid belt, also a site of resource extraction
+ - Virginis Asteroid Station (1.9 AU): the asteroid belt beyond New Ceres is rich in exotic minerals, crystals and chemicals
+ - Varda Asteroid Station (5 AU): beyond Varda lies another, sparser asteroid belt, also a site of resource extraction
 
 ### Field conditions
 
