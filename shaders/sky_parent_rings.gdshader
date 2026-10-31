@@ -5,6 +5,7 @@ uniform vec3 sun_direction = vec3(0.85, 0.25, 0.45);
 uniform vec3 axis = vec3(0.0, 0.0, 1.0);
 uniform float outer_radius = 2.0;
 uniform float ring_brightness = 1.0;
+uniform float shadow_enabled = 1.0;
 uniform float shadow_strength = 0.5;
 uniform float shadow_softness = 0.03;
 uniform float render_front = 1.0;
@@ -35,17 +36,21 @@ void fragment() {
 				vec3 ring_normal = spin_axis;
 				float ndl = max(dot(ring_normal, light_dir), 0.0);
 				float lit = 0.35 + ndl * 0.65;
-				vec3 light_from = normalize(-light_dir);
-				float t_hit = 1.0;
-				float denom = dot(light_from, ring_normal);
-				if (abs(denom) > 0.001) {
-					float t = -dot(vec3(0.0), ring_normal) / denom;
-					vec3 hit = light_from * t;
-					if (length(hit.xy) < 1.0 && hit.z > 0.0) {
-						t_hit = smoothstep(0.0, shadow_softness + 0.001, t - 1.0);
+				float shadow = 1.0;
+				if (shadow_enabled > 0.5 && shadow_strength > 0.001) {
+					vec3 P = plane_point;
+					vec3 L = light_dir;
+					float b_val = dot(P, L);
+					float c = dot(P, P) - 1.0;
+					float disc = b_val * b_val - c;
+					if (disc > 0.0) {
+						float t0 = -b_val - sqrt(disc);
+						if (t0 > 0.001) {
+							float shade = smoothstep(0.001, shadow_softness + 0.001, t0);
+							shadow = mix(1.0, 1.0 - shadow_strength, shade);
+						}
 					}
 				}
-				float shadow = mix(1.0 - shadow_strength, 1.0, t_hit);
 				vec3 col = profile.rgb * ring_brightness * lit * shadow;
 				COLOR = vec4(col, profile.a);
 			}

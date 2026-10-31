@@ -132,10 +132,12 @@ static func build_ring_shader_params(
 	var axis := _resolve_axis_vector(orient, merged_appearance, seed_val)
 	if ring_orient.has("ring_tilt_deg") or ring_orient.has("position_angle_deg"):
 		axis = _resolve_ring_axis(orient, ring_orient, merged_appearance)
+	var shadow_on := bool(rings_cfg.get("shadow_enabled", true))
 	return {
 		"render_front": render_front,
 		"outer_radius": float(rings_cfg.get("outer_radius", 1.0)),
 		"ring_brightness": float(rings_cfg.get("brightness", 1.0)),
+		"shadow_enabled": shadow_on,
 		"shadow_strength": float(rings_cfg.get("shadow_strength", 0.5)),
 		"shadow_softness": float(rings_cfg.get("shadow_softness", 0.03)),
 		"axis": axis,

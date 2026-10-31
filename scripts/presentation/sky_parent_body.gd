@@ -155,6 +155,10 @@ func _apply_ring_material(
 	material.set_shader_parameter("axis", ring_params.get("axis", Vector3(0, 0, 1)))
 	material.set_shader_parameter("outer_radius", float(ring_params.get("outer_radius", 1.0)))
 	material.set_shader_parameter("ring_brightness", float(ring_params.get("ring_brightness", 1.0)))
+	material.set_shader_parameter(
+		"shadow_enabled",
+		1.0 if bool(ring_params.get("shadow_enabled", true)) else 0.0
+	)
 	material.set_shader_parameter("shadow_strength", float(ring_params.get("shadow_strength", 0.5)))
 	material.set_shader_parameter("shadow_softness", float(ring_params.get("shadow_softness", 0.03)))
 	material.set_shader_parameter("render_front", 1.0 if render_front else 0.0)
