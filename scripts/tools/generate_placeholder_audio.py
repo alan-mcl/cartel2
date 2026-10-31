@@ -121,8 +121,12 @@ def main() -> int:
         ("music/shipyard/shipyard_01.ogg", 8.0),
         ("music/market/market_01.ogg", 8.0),
         ("music/exploration/danger_01.ogg", 8.0),
+        ("music/unspace/unspace_01.ogg", 8.0),
+        ("music/unspace/unspace_02.ogg", 8.0),
+        ("music/unspace/unspace_03.ogg", 8.0),
         ("ambience/space/space_ambience_01.ogg", 6.0),
         ("ambience/habitat/habitat_ambience_01.ogg", 6.0),
+        ("ambience/unspace/unspace_ambience_01.ogg", 6.0),
     ]
     tone_specs: list[tuple[str, float, float, bool]] = [
         ("sfx/ui/ui_button_click_01.ogg", 880.0, 0.06, False),

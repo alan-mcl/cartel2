@@ -42,11 +42,11 @@ func _ready() -> void:
 	body.add_child(_status)
 
 	body.add_child(_section_label("Music"))
-	for ctx in ["menu", "exploration", "habitat"]:
+	for ctx in ["menu", "exploration", "habitat", "unspace"]:
 		body.add_child(_action_button("Play %s" % ctx, _play_music.bind(ctx)))
 
 	body.add_child(_section_label("Ambience"))
-	for ctx in ["space", "habitat"]:
+	for ctx in ["space", "habitat", "unspace"]:
 		body.add_child(_action_button("Play %s" % ctx, _play_ambience.bind(ctx)))
 
 	body.add_child(_section_label("SFX"))

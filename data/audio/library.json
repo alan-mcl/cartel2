@@ -5,11 +5,17 @@
     "habitat": ["res://assets/audio/music/habitat/habitat_01.ogg"],
     "shipyard": ["res://assets/audio/music/shipyard/shipyard_01.ogg"],
     "market": ["res://assets/audio/music/market/market_01.ogg"],
-    "danger": ["res://assets/audio/music/exploration/danger_01.ogg"]
+    "danger": ["res://assets/audio/music/exploration/danger_01.ogg"],
+    "unspace": [
+      "res://assets/audio/music/unspace/unspace_01.ogg",
+      "res://assets/audio/music/unspace/unspace_02.ogg",
+      "res://assets/audio/music/unspace/unspace_03.ogg"
+    ]
   },
   "ambience": {
     "space": ["res://assets/audio/ambience/space/space_ambience_01.ogg"],
-    "habitat": ["res://assets/audio/ambience/habitat/habitat_ambience_01.ogg"]
+    "habitat": ["res://assets/audio/ambience/habitat/habitat_ambience_01.ogg"],
+    "unspace": ["res://assets/audio/ambience/unspace/unspace_ambience_01.ogg"]
   },
   "sfx": {
     "ui.click": {

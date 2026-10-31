@@ -140,7 +140,7 @@ func play_music(context: String, immediate: bool = false) -> void:
 		return
 	if not _gates.request_music(context):
 		return
-	var path := _library.music_track_for_context(context)
+	var path := _library.music_track_for_context(context, _rng)
 	var stream := _load_stream(path, true)
 	if stream == null:
 		return

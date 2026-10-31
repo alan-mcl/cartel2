@@ -25,6 +25,21 @@ static func _mgr() -> Node:
 	return null
 
 
+static func sync_flight_context(session: GameSession, ship_world_position: Vector2 = Vector2.ZERO) -> void:
+	if session == null:
+		return
+	if session.docked:
+		play_music("habitat")
+		play_ambience("habitat")
+		set_ship_thrust(0.0, false, ship_world_position)
+	elif session.in_unspace:
+		play_music("unspace")
+		play_ambience("unspace")
+	else:
+		play_music("exploration")
+		play_ambience("space")
+
+
 static func play_music(context: String, immediate: bool = false) -> void:
 	var mgr := _mgr()
 	if mgr != null:

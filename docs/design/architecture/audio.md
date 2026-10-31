@@ -22,8 +22,8 @@ User volume sliders write bus levels via `AudioServer`; individual players are n
 
 [`data/audio/library.json`](../../../data/audio/library.json) maps:
 
-- **Music contexts** — `menu`, `exploration`, `habitat`, `shipyard`, `market`, `danger` → one or more OGG paths (v1 plays the first track).
-- **Ambience contexts** — `space`, `habitat`, …
+- **Music contexts** — `menu`, `exploration`, `habitat`, `shipyard`, `market`, `danger`, `unspace` → one or more OGG paths. Contexts with multiple tracks (notably `unspace`) pick a random variant each time the context is entered.
+- **Ambience contexts** — `space`, `habitat`, `unspace`, …
 - **SFX ids** — dotted names such as `ui.click`, `ship.collision`, `interaction.salvage`, `ship.thruster` (loop).
 
 Callers use [`AudioService`](../../../scripts/presentation/audio/audio_service.gd) static methods (`play_music("habitat")`, `play_sfx("interaction.salvage")`, `play_ui("click")`, and so on), which delegate to the autoload at runtime. Catalog JSON may gain optional `audio` fields later using the same ids; this pass does not add them.
@@ -42,8 +42,10 @@ The **Audio** entry on the main menu and pause overlay opens [`scripts/ui/audio_
 |--------|--------|
 | Main menu | `menu` music; ambience stopped |
 | In-flight space | `exploration` + `space` ambience |
+| Unspace transit | `unspace` music (random track from the playlist) + `unspace` ambience |
 | Docked habitat UI | `habitat` music and ambience; engine thrust cleared |
 | Undock | Return to exploration / space |
+| Emerge from unspace | Return to exploration / space |
 | Salvage success | Positional `interaction.salvage` |
 | Hull slide collision | Positional `ship.collision` (rate-limited) |
 | Ship thrust | Loop `ship.thruster` driven by normalized thrust and boost |

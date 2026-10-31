@@ -547,10 +547,4 @@ func on_career_end_leaderboard_requested() -> void:
 
 
 func _sync_audio_context() -> void:
-	if _main.session.docked:
-		AudioService.play_music("habitat")
-		AudioService.play_ambience("habitat")
-		AudioService.set_ship_thrust(0.0, false, _player.global_position)
-	else:
-		AudioService.play_music("exploration")
-		AudioService.play_ambience("space")
+	AudioService.sync_flight_context(_main.session, _player.global_position)

@@ -81,13 +81,21 @@ func has_sfx(sound_id: String) -> bool:
 	return _sfx.has(sound_id)
 
 
-func music_track_for_context(context: String, _track_index: int = 0) -> String:
+func music_track_count(context: String) -> int:
+	if not _music.has(context):
+		return 0
+	return (_music[context] as Array).size()
+
+
+func music_track_for_context(context: String, rng: RandomNumberGenerator = null) -> String:
 	if not _music.has(context):
 		return ""
 	var tracks: Array = _music[context]
 	if tracks.is_empty():
 		return ""
-	return String(tracks[0])
+	if tracks.size() == 1 or rng == null:
+		return String(tracks[0])
+	return String(tracks[rng.randi_range(0, tracks.size() - 1)])
 
 
 func ambience_track_for_context(context: String, _track_index: int = 0) -> String:

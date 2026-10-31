@@ -12,7 +12,17 @@ static func run(runner: TestRunner) -> void:
 static func _test_library(runner: TestRunner) -> void:
 	var lib := AudioLibrary.load_default()
 	runner.check(lib.has_music_context("exploration"), "audio: exploration music context")
+	runner.check(lib.has_music_context("unspace"), "audio: unspace music context")
+	runner.check_eq(lib.music_track_count("unspace"), 3, "audio: unspace track count")
 	runner.check(lib.has_ambience_context("space"), "audio: space ambience context")
+	runner.check(lib.has_ambience_context("unspace"), "audio: unspace ambience context")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 42
+	var picks: Dictionary = {}
+	for _i in 20:
+		var path := lib.music_track_for_context("unspace", rng)
+		picks[path] = true
+	runner.check(picks.size() > 1, "audio: unspace random track selection varies")
 	runner.check(lib.has_sfx("ship.collision"), "audio: collision sfx id")
 	runner.check_eq(lib.sfx_variant_count("ship.collision"), 3, "audio: collision variants")
 	runner.check(
