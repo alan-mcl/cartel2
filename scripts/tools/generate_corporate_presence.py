@@ -368,6 +368,24 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "mercury_communications": 4.0,
         "deepspace": 3.0,
     },
+    "titania_v": {
+        "general_industrial": 7.0,
+        "atlas_concern": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "titania_ixx": {
+        "atlas_concern": 7.0,
+        "general_industrial": 6.0,
+        "deepspace": 5.0,
+        "oklahoma_combine": 4.0,
+    },
+    "tartarus": {
+        "continuity_foundation": 6.0,
+        "biogenesis": 5.0,
+        "mercury_communications": 4.0,
+        "deepspace": 3.0,
+    },
 }
 
 FLOOR = 0.15

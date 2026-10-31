@@ -1081,5 +1081,38 @@
 		"sector_id": "nocturn",
 		"short_desc": "Outer belt research lab.",
 		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_v_habitat.png",
+		"buildings": ["titania_v_terminal", "titania_v_exchange"],
+		"default_building": "titania_v_terminal",
+		"description": "Titania V is uninhabitable on the surface, but orbital yards and platforms serve the high-G moon and its tidal neighbourhood.",
+		"id": "titania_v_habitat",
+		"name": "Titania V",
+		"sector_id": "titania_v",
+		"short_desc": "High-G moon orbital industry.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_ixx_habitat.png",
+		"buildings": ["titania_ixx_terminal", "titania_ixx_exchange"],
+		"default_building": "titania_ixx_terminal",
+		"description": "Titania IXX combines frozen-surface extraction with orbital manufacturing on the outer regular moon of the gas giant Titania.",
+		"id": "titania_ixx_habitat",
+		"name": "Titania IXX",
+		"sector_id": "titania_ixx",
+		"short_desc": "Frozen outer moon hub.",
+		"type": "habitat"
+	},
+	{
+		"art": "res://assets/ui/locations/tartarus_habitat.png",
+		"buildings": ["tartarus_terminal", "tartarus_exchange"],
+		"default_building": "tartarus_terminal",
+		"description": "Tartarus Research Station orbits the dim outer sub-giant. Supply and survey traffic uses the local lanes.",
+		"id": "tartarus_habitat",
+		"name": "Tartarus Research Station",
+		"sector_id": "tartarus",
+		"short_desc": "Outer sub-giant research station.",
+		"type": "habitat"
 	}
 ]

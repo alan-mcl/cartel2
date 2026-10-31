@@ -1062,5 +1062,44 @@
 				"solution_ba": -48196
 			}
 		]
+	},
+	{
+		"id": "titania_titania_v",
+		"a": "titania",
+		"b": "titania_v",
+		"friction": 6,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48197,
+				"solution_ba": -48198
+			}
+		]
+	},
+	{
+		"id": "titania_titania_ixx",
+		"a": "titania",
+		"b": "titania_ixx",
+		"friction": 9,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48199,
+				"solution_ba": -48200
+			}
+		]
+	},
+	{
+		"id": "titania_tartarus",
+		"a": "titania",
+		"b": "tartarus",
+		"friction": 15,
+		"translations": [
+			{
+				"n": 4,
+				"solution_ab": 48201,
+				"solution_ba": -48202
+			}
+		]
 	}
 ]

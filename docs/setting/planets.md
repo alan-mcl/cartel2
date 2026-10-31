@@ -401,7 +401,7 @@ Planets and moons:
 ## Pelagos
 
  - **Classification:** E2
- - **System:** Kepler-16
+ - **System:** Kepler-35
  - **Gravity:** 1.01 G
  - **Population:** 21 billion
  - **Ocean coverage:** 69%
@@ -421,9 +421,16 @@ Pelagos is a prosperous world orbiting two suns, with enormous coastal cities an
 
 ### Solar neighbourhood
 
-TBD
+Kepler-35's inner gas giant Janus orbits at 0.6 AU but doesn't yet have a known translation solution. Pelagos is the second planet at 1.15 AU, beyond which orbit six increasingly cold rocky worlds.
+Pelagos' skies are famous for the binary sunset and sunrise.
 
-- Pelagos Belt Station: habitat central to mining the asteroid belt in the Pelagos system
+Planets and moons:
+ - Janus II (2nd moon of 1st planet): A small, fast orbiting moon of the system's only gas giant. Janus is a hot, barren world where ancient vulcanism has left significant mineral resources.
+ - Caldera (3rd planet, 2.2 AU): A dry geologically active world and a thin dusty inert atmosphere. Caldera has extensively developed resource extraction and manufacturing orbital infrastructure.
+ - Tulima (8th planet, 15 AU): An isolated airless world, covered with frozen volatiles. An orbital station supports mining and research.
+
+Other
+ - Pelagos Belt Station: habitat central to mining the asteroid belt in the Pelagos system, located after Caldera
 
 ### Field conditions
 

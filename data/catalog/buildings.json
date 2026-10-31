@@ -2252,5 +2252,59 @@
 		"name": "Nocturn Exchange",
 		"short_desc": "Exchange at Nocturn Research Lab.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_v_terminal.png",
+		"description": "Customs for Titania V orbital industry and supply traffic.",
+		"id": "titania_v_terminal",
+		"kind": "terminal",
+		"name": "Titania V Terminal",
+		"short_desc": "Terminal for Titania V traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_v_exchange.png",
+		"description": "Commodity exchange for components and ore at Titania V.",
+		"id": "titania_v_exchange",
+		"kind": "merchant",
+		"name": "Titania V Exchange",
+		"short_desc": "Exchange at Titania V.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_ixx_terminal.png",
+		"description": "Customs for Titania IXX extraction and manufacturing traffic.",
+		"id": "titania_ixx_terminal",
+		"kind": "terminal",
+		"name": "Titania IXX Terminal",
+		"short_desc": "Terminal for Titania IXX traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_ixx_exchange.png",
+		"description": "Commodity exchange for ice, minerals, and components at Titania IXX.",
+		"id": "titania_ixx_exchange",
+		"kind": "merchant",
+		"name": "Titania IXX Exchange",
+		"short_desc": "Exchange at Titania IXX.",
+		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/tartarus_terminal.png",
+		"description": "Customs for Tartarus Research Station supply traffic.",
+		"id": "tartarus_terminal",
+		"kind": "terminal",
+		"name": "Tartarus Terminal",
+		"short_desc": "Terminal for Tartarus traffic.",
+		"type": "terminal"
+	},
+	{
+		"art": "res://assets/ui/locations/tartarus_exchange.png",
+		"description": "Commodity exchange for survey data and station supply at Tartarus.",
+		"id": "tartarus_exchange",
+		"kind": "merchant",
+		"name": "Tartarus Exchange",
+		"short_desc": "Exchange at Tartarus Research Station.",
+		"type": "market"
 	}
 ]

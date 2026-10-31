@@ -681,6 +681,13 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	]
 	for sector_id in horizon_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "horizon")
+	var titania_sites: Array[String] = [
+		"titania_v",
+		"titania_ixx",
+		"tartarus",
+	]
+	for sector_id in titania_sites:
+		_test_beacon_outpost_route(runner, catalog, sector_id, "titania")
 
 
 static func _validate_corporate_headquarters(runner: TestRunner, catalog: Catalog) -> void:

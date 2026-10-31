@@ -5155,6 +5155,171 @@
 			"luminosity": 1.0
 		}
 	},
+	"titania_v": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "titania_v_habitat_obj",
+					"kind": "habitat",
+					"label": "Titania V",
+					"interactable": "titania_v_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#908878"
+				},
+				{
+					"id": "titania_v_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "titania_v_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				},
+				{
+					"id": "titania_v_orbital_3",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/platform.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "titania_v_beacon_obj",
+			"label": "Titania V Translation Beacon",
+			"interactable": "titania_v_jump_gate",
+			"destination": "titania",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 1500,
+			"modulate": "#8a8078"
+		},
+		"parent_body": {
+			"name": "Titania",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 14,
+			"angular_diameter_deg_max": 20,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": { "type": "none" }
+		},
+		"star": {
+			"temperature_k": 2800,
+			"luminosity": 0.12
+		}
+	},
+	"titania_ixx": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "titania_ixx_habitat_obj",
+					"kind": "habitat",
+					"label": "Titania IXX",
+					"interactable": "titania_ixx_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#b8c8d8"
+				},
+				{
+					"id": "titania_ixx_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/yard.svg"
+				},
+				{
+					"id": "titania_ixx_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "titania_ixx_beacon_obj",
+			"label": "Titania IXX Translation Beacon",
+			"interactable": "titania_ixx_jump_gate",
+			"destination": "titania",
+			"radius": 5400
+		},
+		"planet": {
+			"sprite": "res://assets/world/planet.png",
+			"diameter": 900,
+			"modulate": "#e4eef8"
+		},
+		"parent_body": {
+			"name": "Titania",
+			"type": "gas_giant",
+			"angular_diameter_deg_min": 4,
+			"angular_diameter_deg_max": 8,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#857052",
+				"band_colour_2": "#c7ae85",
+				"turbulence": 0
+			},
+			"rings": { "type": "none" }
+		},
+		"star": {
+			"temperature_k": 2800,
+			"luminosity": 0.12
+		}
+	},
+	"tartarus": {
+		"orbital_ring": {
+			"radius": 1600,
+			"period_seconds": 720,
+			"orbitals": [
+				{
+					"id": "tartarus_habitat_obj",
+					"kind": "habitat",
+					"label": "Tartarus Research Station",
+					"interactable": "tartarus_habitat",
+					"sprite": "res://assets/world/habitat_proxima.svg",
+					"modulate": "#8898a8"
+				},
+				{
+					"id": "tartarus_orbital_1",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/array.svg"
+				},
+				{
+					"id": "tartarus_orbital_2",
+					"kind": "orbital",
+					"sprite": "res://assets/world/orbitals/torus.svg"
+				}
+			]
+		},
+		"translation_beacon": {
+			"id": "tartarus_beacon_obj",
+			"label": "Tartarus Research Station Translation Beacon",
+			"interactable": "tartarus_jump_gate",
+			"destination": "titania",
+			"radius": 5400
+		},
+		"parent_body": {
+			"name": "Tartarus",
+			"type": "sub_giant",
+			"angular_diameter_deg_min": 12,
+			"angular_diameter_deg_max": 18,
+			"appearance": {
+				"type": "banded",
+				"band_colour_1": "#9aa8b8",
+				"band_colour_2": "#d8e4ee",
+				"turbulence": 0.25
+			},
+			"rings": { "type": "none" }
+		},
+		"star": {
+			"temperature_k": 2800,
+			"luminosity": 0.12
+		}
+	},
 	"n5_default": {
 		"entities": []
 	},

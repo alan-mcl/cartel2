@@ -1560,5 +1560,70 @@
 			"charged_particle_fluctuation": 0.0
 		},
 		"star_distance_au": 65.0
+	},
+	{
+		"id": "titania_v",
+		"name": "Titania V Sector",
+		"orbit_name": "Titania V near orbit",
+		"planet_name": "Titania V",
+		"star_system": "Wolf 359",
+		"description": "Large rocky high-G moon of the gas giant Titania. The surface is uninhabitable, but strong tidal influence on nearby moons supports extensive orbital infrastructure.",
+		"gravity": 1.7,
+		"population_billions": 0.22,
+		"play_bounds": 8000,
+		"objective": "Explore Titania V near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.0,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.35,
+			"radiant_fluctuation": 0.55,
+			"charged_particle": 2.4,
+			"charged_particle_fluctuation": 0.7
+		},
+		"star_distance_au": 3.2
+	},
+	{
+		"id": "titania_ixx",
+		"name": "Titania IXX Sector",
+		"orbit_name": "Titania IXX near orbit",
+		"planet_name": "Titania IXX",
+		"star_system": "Wolf 359",
+		"description": "Frozen moon of Titania, the furthest out on a non-inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.",
+		"gravity": 0.2,
+		"population_billions": 0.09,
+		"play_bounds": 8000,
+		"objective": "Explore Titania IXX near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.0,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.35,
+			"radiant_fluctuation": 0.55,
+			"charged_particle": 2.4,
+			"charged_particle_fluctuation": 0.7
+		},
+		"star_distance_au": 3.2
+	},
+	{
+		"id": "tartarus",
+		"name": "Tartarus Research Station Sector",
+		"orbit_name": "Tartarus Research Station near orbit",
+		"star_system": "Wolf 359",
+		"description": "Well-known research station orbiting Tartarus, the outermost sub-giant in the Wolf 359 system, where the parent star is barely visible.",
+		"gravity": 0.1,
+		"population_billions": 0.05,
+		"play_bounds": 8000,
+		"objective": "Explore Tartarus Research Station near orbit",
+		"mappings": [],
+		"neighborhood": {
+			"magnetic_surface": 0.1,
+			"magnetic_fluctuation": 0.0,
+			"radiant": 0.006,
+			"radiant_fluctuation": 0.01,
+			"charged_particle": 0.043,
+			"charged_particle_fluctuation": 0.012
+		},
+		"star_distance_au": 24.0
 	}
 ]

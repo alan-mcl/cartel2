@@ -881,5 +881,44 @@
 		"title": "Nocturn Research Lab Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Horizon near orbit. Only the public hop back to Horizon is available here.",
 		"kind": "translate"
+	},
+	{
+		"id": "titania_v_habitat",
+		"title": "Titania V",
+		"inspect_text": "Docking at Titania V orbital infrastructure. Surface access is restricted; industry uses the high-G lanes.",
+		"kind": "dock",
+		"dock_location_id": "titania_v_habitat"
+	},
+	{
+		"id": "titania_v_jump_gate",
+		"title": "Titania V Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Titania IX near orbit. Only the public hop back to Titania IX is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "titania_ixx_habitat",
+		"title": "Titania IXX",
+		"inspect_text": "Docking at Titania IXX. Extraction and manufacturing traffic uses the frozen moon lanes.",
+		"kind": "dock",
+		"dock_location_id": "titania_ixx_habitat"
+	},
+	{
+		"id": "titania_ixx_jump_gate",
+		"title": "Titania IXX Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Titania IX near orbit. Only the public hop back to Titania IX is available here.",
+		"kind": "translate"
+	},
+	{
+		"id": "tartarus_habitat",
+		"title": "Tartarus Research Station",
+		"inspect_text": "Docking at Tartarus Research Station. Supply and survey traffic uses the outer lanes.",
+		"kind": "dock",
+		"dock_location_id": "tartarus_habitat"
+	},
+	{
+		"id": "tartarus_jump_gate",
+		"title": "Tartarus Research Station Translation Beacon",
+		"inspect_text": "Compact translation beacon tuned to Titania IX near orbit. Only the public hop back to Titania IX is available here.",
+		"kind": "translate"
 	}
 ]

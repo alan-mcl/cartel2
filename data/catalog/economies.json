@@ -1013,5 +1013,45 @@
 			"food_products": 5.0,
 			"industrial_components": 2.5
 		}
+	},
+	{
+		"id": "titania_v",
+		"tier": "outer",
+		"wealth": 0.9,
+		"produce": {
+			"industrial_components": 9.0,
+			"minerals": 4.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.0
+		}
+	},
+	{
+		"id": "titania_ixx",
+		"tier": "outer",
+		"wealth": 0.85,
+		"produce": {
+			"minerals": 8.0,
+			"water_ice": 7.0,
+			"industrial_components": 5.0
+		},
+		"consume": {
+			"food_products": 8.0,
+			"industrial_components": 2.5
+		}
+	},
+	{
+		"id": "tartarus",
+		"tier": "outer",
+		"wealth": 0.8,
+		"produce": {
+			"data": 5.0,
+			"energy": 2.0
+		},
+		"consume": {
+			"food_products": 5.0,
+			"industrial_components": 2.5
+		}
 	}
 ]
