@@ -15,7 +15,7 @@ Shared runner:
 | [`scripts/dev/stealth_sandbox.sh`](../../../scripts/dev/stealth_sandbox.sh) | `stealth_sandbox.tscn` | Signature and detection drill with transponders off |
 | [`scripts/dev/mission_harness.sh`](../../../scripts/dev/mission_harness.sh) | `mission_harness.tscn` | Volatile sites and scan/bounty objectives; **Begin** starts in-flight at the site; **F8** or pause quit reloads setup |
 | [`scripts/dev/system_render_tester.sh`](../../../scripts/dev/system_render_tester.sh) | `system_render_tester.tscn` | Planetary layout and globe inspection (pan, zoom, frame) |
-| [`scripts/dev/parent_body_harness.sh`](../../../scripts/dev/parent_body_harness.sh) | `parent_body_harness.tscn` | Procedural parent gas giant: colours, turbulence, rings; copy JSON for `worlds.json` |
+| [`scripts/dev/parent_body_harness.sh`](../../../scripts/dev/parent_body_harness.sh) | `parent_body_harness.tscn` | Procedural parent gas giant: atmosphere, orientation, legacy or multi-band rings (gaps, shadow, plane tilt); copy JSON for `worlds.json` |
 | [`scripts/dev/theme_showcase.sh`](../../../scripts/dev/theme_showcase.sh) | `theme_showcase.tscn` | UI theme tokens and control variations |
 | [`scripts/dev/audio_sandbox.sh`](../../../scripts/dev/audio_sandbox.sh) | `audio_sandbox.tscn` | Music, ambience, SFX, thrust, bus volumes, and positional collision |
 

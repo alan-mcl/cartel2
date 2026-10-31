@@ -348,7 +348,7 @@ Horizon is one of the galaxy's great population centres, with many urban develop
 One of just two planets in the system, Horizon rapidly orbits its cool orange parent at 0.57 AU. A dense, warm debris disc rich in rare elements lies between it and the other planet, an impressively massive ringed gas giant at 3.5 AU that never really lost it's formal designation B. Beyond B at a distant 50-90 AU orbits a large, cold planetesimal Kuiper Belt.
 
 Planets and moons:
- - Cueball (3.5 AU, 3rd moon of 2nd planet): The colloquial name for moon B III, this is a smooth ice covered world with extensive orbital infrastructure dedicated to resource extraction, industrial processing, manufacturing and tourism.
+ - The Cueball (3.5 AU, 3rd moon of 2nd planet): The colloquial name for moon B III, this is a smooth ice covered world with extensive orbital infrastructure dedicated to resource extraction, industrial processing, manufacturing and tourism.
 
 Other
  - Alpha Disc Hub: populated hub station for the resource extraction and industrial processing operations in the warm debris disc.
@@ -370,7 +370,7 @@ Other
  - **Ocean coverage:** 78%
  - **Climate:** Cold
 
-The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
+The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans (warmed by tidal heating of the core) punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
 
 ### Planet Surface
 

@@ -35,10 +35,18 @@ static func _test_parent_params(runner: TestRunner) -> void:
 		str(appearance.get("band_colour_1", "")) == "#857052",
 		"sky backdrop: band colour from world"
 	)
-	var ring: Dictionary = resolved.get("ring", {})
+	var rings: Dictionary = resolved.get("rings", {})
 	runner.check(
-		absf(SkyParentBodyParams.ring_outer_scale(ring) - 1.0) < 0.001,
+		absf(SkyParentBodyParams.ring_outer_scale(rings) - 1.0) < 0.001,
 		"sky backdrop: none ring outer_scale 1"
+	)
+	var typhon_world := catalog.get_world("typhon_xvi")
+	var typhon: Dictionary = typhon_world.get("parent_body", {})
+	var typhon_resolved := SkyParentBodyParams.resolve_from_parent(typhon)
+	var typhon_rings: Dictionary = typhon_resolved.get("rings", {})
+	runner.check(
+		absf(SkyParentBodyParams.ring_outer_scale(typhon_rings) - 2.2) < 0.01,
+		"sky backdrop: broad legacy ring outer radius 2.2"
 	)
 
 

@@ -248,15 +248,37 @@ def check_parent_body_appearance(label: str, appearance: object) -> list[str]:
         errors.append(f"{label}: appearance must be an object")
         return errors
     appearance_type = str(appearance.get("type", "")).strip()
-    if appearance_type != "banded":
-        errors.append(f"{label}: appearance.type must be 'banded'")
+    if appearance_type not in ("banded", "gas_giant"):
+        errors.append(f"{label}: appearance.type must be 'banded' or 'gas_giant'")
         return errors
-    for field in ("band_colour_1", "band_colour_2"):
-        if not _is_hex_colour(appearance.get(field)):
-            errors.append(f"{label}: appearance.{field} must be #RRGGBB")
-    turbulence = appearance.get("turbulence")
-    if not isinstance(turbulence, (int, float)) or turbulence < 0 or turbulence > 1:
-        errors.append(f"{label}: appearance.turbulence must be between 0 and 1")
+    atmosphere = appearance.get("atmosphere")
+    if isinstance(atmosphere, dict) and atmosphere.get("colours") is not None:
+        colours = atmosphere.get("colours")
+        if not isinstance(colours, list) or len(colours) < 2 or len(colours) > 6:
+            errors.append(f"{label}: appearance.atmosphere.colours must be an array of 2–6 entries")
+        else:
+            for index, colour in enumerate(colours):
+                if not _is_hex_colour(colour):
+                    errors.append(f"{label}: appearance.atmosphere.colours[{index}] must be #RRGGBB")
+        _check_parent_atmosphere_ranges(label, atmosphere, errors)
+    else:
+        for field in ("band_colour_1", "band_colour_2"):
+            if not _is_hex_colour(appearance.get(field)):
+                errors.append(f"{label}: appearance.{field} must be #RRGGBB")
+        turbulence = appearance.get("turbulence")
+        if not isinstance(turbulence, (int, float)) or turbulence < 0 or turbulence > 1:
+            errors.append(f"{label}: appearance.turbulence must be between 0 and 1")
+    orientation = appearance.get("orientation")
+    if isinstance(orientation, dict):
+        for key, lo, hi in (
+            ("axis_inclination_deg", 0, 90),
+            ("axis_position_angle_deg", 0, 360),
+            ("rotation_phase_deg", 0, 360),
+        ):
+            if key in orientation:
+                val = orientation.get(key)
+                if not isinstance(val, (int, float)) or val < lo or val > hi:
+                    errors.append(f"{label}: appearance.orientation.{key} must be between {lo} and {hi}")
     if "polar_inclination_deg" in appearance:
         inclination = appearance.get("polar_inclination_deg")
         if not isinstance(inclination, (int, float)) or inclination < 0 or inclination > 90:
@@ -272,10 +294,53 @@ def check_parent_body_appearance(label: str, appearance: object) -> list[str]:
     return errors
 
 
+def _check_parent_atmosphere_ranges(label: str, atmosphere: dict, errors: list[str]) -> None:
+    ranges = {
+        "band_count": (4, 32),
+        "band_frequency": (0.5, 4.0),
+        "band_width_variation": (0, 1),
+        "band_contrast": (0, 1),
+        "band_distortion": (0, 1),
+        "band_turbulence": (0, 1),
+        "band_edge_softness": (0, 1),
+        "band_fine_detail": (0, 1),
+        "turbulence_scale": (0.5, 8.0),
+        "turbulence_octaves": (1, 4),
+        "polar_blend": (0, 1),
+    }
+    for key, (lo, hi) in ranges.items():
+        if key not in atmosphere:
+            continue
+        val = atmosphere.get(key)
+        if not isinstance(val, (int, float)) or val < lo or val > hi:
+            errors.append(f"{label}: appearance.atmosphere.{key} must be between {lo} and {hi}")
+    if "polar_colour" in atmosphere and not _is_hex_colour(atmosphere.get("polar_colour")):
+        errors.append(f"{label}: appearance.atmosphere.polar_colour must be #RRGGBB")
+
+
 def check_parent_body_rings(label: str, rings: object) -> list[str]:
     errors: list[str] = []
     if not isinstance(rings, dict):
         errors.append(f"{label}: rings must be an object")
+        return errors
+    if bool(rings.get("enabled", False)) and isinstance(rings.get("bands"), list):
+        bands = rings.get("bands", [])
+        if not bands:
+            errors.append(f"{label}: rings.enabled requires at least one band")
+        for index, band in enumerate(bands):
+            if not isinstance(band, dict):
+                continue
+            blabel = f"{label} rings.bands[{index}]"
+            inner = band.get("inner_radius")
+            outer = band.get("outer_radius")
+            if not isinstance(inner, (int, float)) or not isinstance(outer, (int, float)) or outer <= inner:
+                errors.append(f"{blabel}: inner_radius and outer_radius must be numbers with outer > inner")
+            if not _is_hex_colour(band.get("colour")):
+                errors.append(f"{blabel}: colour must be #RRGGBB")
+        if "outer_radius" in rings:
+            outer = rings.get("outer_radius")
+            if not isinstance(outer, (int, float)) or outer < 1.0:
+                errors.append(f"{label}: rings.outer_radius must be >= 1")
         return errors
     ring_type = str(rings.get("type", "")).strip()
     if ring_type == "none":

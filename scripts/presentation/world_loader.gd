@@ -537,13 +537,12 @@ func _spawn_sky_backdrop(
 	var parent_raw: Variant = world_data.get("parent_body", {})
 	if typeof(parent_raw) == TYPE_DICTIONARY and not parent_raw.is_empty():
 		var parent_data: Dictionary = parent_raw
-		var resolved := SkyParentBodyParams.resolve_from_parent(parent_data)
+		var resolved := SkyParentBodyParams.resolve_from_parent(parent_data, sector_id)
 		if not resolved.is_empty():
 			var angular_min := float(parent_data.get("angular_diameter_deg_min", 10.0))
 			var angular_max := float(parent_data.get("angular_diameter_deg_max", angular_min))
-			var appearance: Dictionary = resolved.get("appearance", {})
-			var ring: Dictionary = resolved.get("ring", {})
-			var ring_outer_scale := SkyParentBodyParams.ring_outer_scale(ring)
+			var rings_cfg: Dictionary = resolved.get("rings", {})
+			var ring_outer_scale := SkyParentBodyParams.ring_outer_scale(rings_cfg)
 			var visit_rng := RandomNumberGenerator.new()
 			visit_rng.randomize()
 			var angular_deg := visit_rng.randf_range(angular_min, angular_max)
@@ -560,8 +559,7 @@ func _spawn_sky_backdrop(
 				parent_pos,
 				primary_star_pos,
 				angular_deg,
-				appearance,
-				ring,
+				resolved,
 				sector_id
 			)
 			spawned_by_id["parent_body"] = parent
