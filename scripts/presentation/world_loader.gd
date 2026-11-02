@@ -443,23 +443,24 @@ func _spawn_local_star(
 	catalog: Catalog,
 	sector_id: String
 ) -> Vector2:
-	var star_data: Variant = world_data.get("star", {})
-	if typeof(star_data) != TYPE_DICTIONARY:
-		star_data = {"temperature_k": 5800.0, "luminosity": 1.0}
+	var star_block: Dictionary = world_data.get("star", {})
+	if typeof(star_block) != TYPE_DICTIONARY:
+		star_block = {"temperature_k": 5800.0, "luminosity": 1.0}
+	star_block = _presentation_star_block(catalog, sector_id, star_block)
 
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	var ref_pos := get_habitat_world_position()
 	var star_pos := _pick_star_position(rng, ref_pos)
 
-	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_data as Dictionary)
+	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_block)
 	var distance_au: float = orbit_pres["distance_au"]
 	var radius_solar: float = orbit_pres["radius_solar"]
 
 	var star := LocalStarScript.new()
 	star.name = "LocalStar"
 	world_root.add_child(star)
-	star.configure(star_data, star_pos, distance_au, radius_solar)
+	star.configure(star_block, star_pos, distance_au, radius_solar)
 	spawned_by_id["local_star"] = star
 
 	if planet != null and planet.has_method("set_sun"):
@@ -481,6 +482,7 @@ func _spawn_sky_backdrop(
 	var star_block: Dictionary = world_data.get("star", {})
 	if typeof(star_block) != TYPE_DICTIONARY:
 		star_block = {}
+	star_block = _presentation_star_block(catalog, sector_id, star_block)
 	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_block)
 	var primary_resolved := LocalStarScript.defaults_from_star_data(
 		star_block, orbit_pres["distance_au"], orbit_pres["radius_solar"]
@@ -586,6 +588,27 @@ func _spawn_sky_backdrop(
 				"name": parent.get_display_name(),
 				"type_label": str(resolved.get("type_label", "")),
 			}
+
+
+## World `star` blocks are layout hints; merge catalog facts for the resolved primary when available.
+func _presentation_star_block(
+	catalog: Catalog,
+	sector_id: String,
+	star_block: Dictionary
+) -> Dictionary:
+	var out := star_block.duplicate(true)
+	if catalog == null or sector_id.is_empty():
+		return out
+	var sector := catalog.get_sector_def(sector_id)
+	var star_name := _resolve_primary_catalog_star_name(catalog, sector, star_block)
+	if star_name.is_empty():
+		return out
+	var facts := catalog.get_star(star_name)
+	if facts.is_empty():
+		return out
+	out["luminosity"] = float(facts.get("luminosity", out.get("luminosity", 1.0)))
+	out["temperature_k"] = float(facts.get("temperature_k", out.get("temperature_k", 5800.0)))
+	return out
 
 
 func _heliocentric_star_presentation(

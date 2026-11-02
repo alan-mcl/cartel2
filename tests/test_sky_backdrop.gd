@@ -15,6 +15,10 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 
 static func _test_planet_irradiance_at_orbit(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
+	_test_sector_irradiance_matches_radiant(runner, catalog, "horizon", "Epsilon Eridani")
+	_test_sector_irradiance_matches_radiant(runner, catalog, "new_carthage", "61 Cygni A")
+	_test_sector_irradiance_matches_radiant(runner, catalog, "depot_61c", "61 Cygni A")
+	_test_sector_irradiance_matches_radiant(runner, catalog, "nightjar", "61 Cygni B")
 	var sector := catalog.get_sector_def("titania")
 	var world := catalog.get_world("titania")
 	var star_data: Dictionary = world.get("star", {})
@@ -33,6 +37,22 @@ static func _test_planet_irradiance_at_orbit(runner: TestRunner) -> void:
 	runner.check(
 		absf(angular - 3.18 / 3.2) < 0.05,
 		"titania primary angular disc scale is radius over distance"
+	)
+
+
+static func _test_sector_irradiance_matches_radiant(
+	runner: TestRunner,
+	catalog: Catalog,
+	sector_id: String,
+	catalog_star_name: String
+) -> void:
+	var sector := catalog.get_sector_def(sector_id)
+	var facts := catalog.get_star(catalog_star_name)
+	var lum := float(facts.get("luminosity", 1.0))
+	var ir := PlanetBackdropScript.irradiance_index(lum, sector.star_distance_au)
+	runner.check(
+		absf(ir - sector.neighborhood.radiant) < 0.02,
+		"%s catalog irradiance matches sector radiant" % sector_id
 	)
 
 

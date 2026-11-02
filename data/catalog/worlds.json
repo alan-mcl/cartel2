@@ -499,8 +499,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 3800,
-			"luminosity": 0.35
+			"temperature_k": 4400,
+			"luminosity": 0.15
 		}
 	},
 	"horizon": {
@@ -4564,8 +4564,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 3800,
-			"luminosity": 0.35
+			"temperature_k": 4400,
+			"luminosity": 0.15
 		}
 	},
 	"depot_61c": {
@@ -4645,8 +4645,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 3800,
-			"luminosity": 0.35
+			"temperature_k": 4400,
+			"luminosity": 0.15
 		}
 	},
 	"tanit_xx": {
@@ -4708,8 +4708,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 3800,
-			"luminosity": 0.35
+			"temperature_k": 4400,
+			"luminosity": 0.15
 		}
 	},
 	"nightjar": {
@@ -4776,8 +4776,8 @@
 			}
 		],
 		"star": {
-			"temperature_k": 4040,
-			"luminosity": 0.04
+			"temperature_k": 4170,
+			"luminosity": 0.097
 		}
 	},
 	"alpha_disc": {
