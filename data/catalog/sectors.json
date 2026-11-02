@@ -357,12 +357,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.9,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.15,
+			"radiant": 0.938,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 0.4
 	},
 	{
 		"id": "horizon",
@@ -1342,12 +1342,12 @@
 		"neighborhood": {
 			"magnetic_surface": 0.25,
 			"magnetic_fluctuation": 0.0,
-			"radiant": 0.15,
+			"radiant": 0.938,
 			"radiant_fluctuation": 0.0,
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 0.4
 	},
 	{
 		"id": "depot_61c",
