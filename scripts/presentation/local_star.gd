@@ -31,20 +31,36 @@ static func color_from_temperature_k(temperature_k: float) -> Color:
 	return Color(red, green, blue, 1.0)
 
 
-static func defaults_from_star_data(star_data: Dictionary) -> Dictionary:
+## Apparent disc scale at orbit: stellar radius over heliocentric distance (1.0 = Sun from 1 AU).
+static func angular_disc_scale(radius_solar: float, distance_au: float) -> float:
+	return maxf(radius_solar, 0.01) / maxf(distance_au, 0.01)
+
+
+static func defaults_from_star_data(
+	star_data: Dictionary,
+	distance_au: float = 1.0,
+	radius_solar: float = 1.0
+) -> Dictionary:
 	var temperature_k := float(star_data.get("temperature_k", 5800.0))
 	var luminosity := float(star_data.get("luminosity", 1.0))
-	var disc_radius := float(star_data.get("disc_radius", DISC_RADIUS_BASE * sqrt(maxf(luminosity, 0.01))))
+	var angular := angular_disc_scale(radius_solar, distance_au)
+	var disc_radius := float(star_data.get("disc_radius", DISC_RADIUS_BASE * angular))
 	return {
 		"temperature_k": temperature_k,
 		"luminosity": luminosity,
+		"angular_disc_scale": angular,
 		"disc_radius": disc_radius,
 		"color": color_from_temperature_k(temperature_k),
 	}
 
 
-func configure(star_data: Dictionary, world_position: Vector2) -> void:
-	var resolved := defaults_from_star_data(star_data)
+func configure(
+	star_data: Dictionary,
+	world_position: Vector2,
+	distance_au: float = 1.0,
+	radius_solar: float = 1.0
+) -> void:
+	var resolved := defaults_from_star_data(star_data, distance_au, radius_solar)
 	_luminosity = float(resolved.get("luminosity", 1.0))
 	_temperature_k = float(resolved.get("temperature_k", 5800.0))
 	_star_color = resolved.get("color", Color.WHITE)
@@ -75,12 +91,13 @@ func _build_sprite(resolved: Dictionary) -> void:
 	var disc_radius := float(resolved.get("disc_radius", DISC_RADIUS_BASE))
 	var corona_radius := disc_radius * 4.0
 	var world_diameter := corona_radius * 2.0
+	var angular := float(resolved.get("angular_disc_scale", 1.0))
 
 	_material = ShaderMaterial.new()
 	_material.shader = STAR_SHADER
 	_material.set_shader_parameter("corona_color", Vector3(_star_color.r, _star_color.g, _star_color.b))
 	_material.set_shader_parameter("luminosity", _luminosity)
-	var disc_uv := 0.12 * sqrt(maxf(_luminosity, 0.01))
+	var disc_uv := 0.12 * angular
 	_material.set_shader_parameter("disc_uv_radius", disc_uv)
 	_material.set_shader_parameter("corona_uv_radius", 0.48)
 

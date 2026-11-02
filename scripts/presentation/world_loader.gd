@@ -416,7 +416,7 @@ func _spawn_orbital_station_layout(
 		var gate_data: Dictionary = world_data.get("jump_gate", {})
 		_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
 
-	var star_pos := _spawn_local_star(world_root, world_data, planet)
+	var star_pos := _spawn_local_star(world_root, world_data, planet, catalog, sector_id)
 	_spawn_sky_backdrop(world_root, world_data, catalog, sector_id, star_pos)
 
 	var entities: Variant = world_data.get("entities", [])
@@ -436,7 +436,13 @@ func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> Node2D:
 	return planet
 
 
-func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2D) -> Vector2:
+func _spawn_local_star(
+	world_root: Node2D,
+	world_data: Dictionary,
+	planet: Node2D,
+	catalog: Catalog,
+	sector_id: String
+) -> Vector2:
 	var star_data: Variant = world_data.get("star", {})
 	if typeof(star_data) != TYPE_DICTIONARY:
 		star_data = {"temperature_k": 5800.0, "luminosity": 1.0}
@@ -446,14 +452,19 @@ func _spawn_local_star(world_root: Node2D, world_data: Dictionary, planet: Node2
 	var ref_pos := get_habitat_world_position()
 	var star_pos := _pick_star_position(rng, ref_pos)
 
+	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_data as Dictionary)
+	var distance_au: float = orbit_pres["distance_au"]
+	var radius_solar: float = orbit_pres["radius_solar"]
+
 	var star := LocalStarScript.new()
 	star.name = "LocalStar"
 	world_root.add_child(star)
-	star.configure(star_data, star_pos)
+	star.configure(star_data, star_pos, distance_au, radius_solar)
 	spawned_by_id["local_star"] = star
 
 	if planet != null and planet.has_method("set_sun"):
-		planet.call("set_sun", star_pos, star.get_light_color(), star.get_luminosity())
+		var irradiance := PlanetBackdropScript.irradiance_index(star.get_luminosity(), distance_au)
+		planet.call("set_sun", star_pos, star.get_light_color(), irradiance)
 	return star_pos
 
 
@@ -470,13 +481,18 @@ func _spawn_sky_backdrop(
 	var star_block: Dictionary = world_data.get("star", {})
 	if typeof(star_block) != TYPE_DICTIONARY:
 		star_block = {}
-	var primary_resolved := LocalStarScript.defaults_from_star_data(star_block)
+	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_block)
+	var primary_resolved := LocalStarScript.defaults_from_star_data(
+		star_block, orbit_pres["distance_au"], orbit_pres["radius_solar"]
+	)
 	var primary_disc := float(primary_resolved.get("disc_radius", LocalStarScript.DISC_RADIUS_BASE))
 
 	var sector := catalog.get_sector_def(sector_id)
 	var primary_catalog_name := _resolve_primary_catalog_star_name(catalog, sector, star_block)
 	var primary_catalog := catalog.get_star(primary_catalog_name)
-	var primary_cat_lum := float(primary_catalog.get("luminosity", primary_resolved.get("luminosity", 1.0)))
+	var primary_radius_solar := float(
+		primary_catalog.get("radius_solar", orbit_pres["radius_solar"])
+	)
 
 	var companions_raw: Variant = world_data.get("companion_stars", [])
 	if typeof(companions_raw) == TYPE_ARRAY:
@@ -499,7 +515,9 @@ func _spawn_sky_backdrop(
 				if facts.is_empty():
 					continue
 				var disc := SkyBackdropLayout.companion_disc_radius(
-					primary_disc, primary_cat_lum, float(facts.get("luminosity", 1.0))
+					primary_disc,
+					primary_radius_solar,
+					float(facts.get("radius_solar", 1.0))
 				)
 				render_data = {
 					"temperature_k": float(facts.get("temperature_k", 5800.0)),
@@ -568,6 +586,25 @@ func _spawn_sky_backdrop(
 				"name": parent.get_display_name(),
 				"type_label": str(resolved.get("type_label", "")),
 			}
+
+
+func _heliocentric_star_presentation(
+	catalog: Catalog,
+	sector_id: String,
+	star_block: Dictionary
+) -> Dictionary:
+	var distance_au := 1.0
+	var radius_solar := 1.0
+	if catalog == null or sector_id.is_empty():
+		return {"distance_au": distance_au, "radius_solar": radius_solar}
+	var sector := catalog.get_sector_def(sector_id)
+	if sector != null and sector.star_distance_au > 0.0:
+		distance_au = sector.star_distance_au
+	var star_name := _resolve_primary_catalog_star_name(catalog, sector, star_block)
+	if not star_name.is_empty():
+		var facts := catalog.get_star(star_name)
+		radius_solar = float(facts.get("radius_solar", 1.0))
+	return {"distance_au": distance_au, "radius_solar": radius_solar}
 
 
 func _resolve_primary_catalog_star_name(

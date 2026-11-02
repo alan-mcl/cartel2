@@ -27,12 +27,12 @@ static func min_distance_for_parent(angular_diameter_deg: float, ring_outer_scal
 
 static func companion_disc_radius(
 	primary_disc_radius: float,
-	catalog_primary_luminosity: float,
-	catalog_companion_luminosity: float
+	primary_radius_solar: float,
+	companion_radius_solar: float
 ) -> float:
-	var primary_lum := maxf(catalog_primary_luminosity, 1e-6)
-	var companion_lum := maxf(catalog_companion_luminosity, 1e-6)
-	var scaled := primary_disc_radius * sqrt(companion_lum / primary_lum)
+	if primary_radius_solar <= 0.01:
+		return maxf(primary_disc_radius * 0.5, COMPANION_MIN_DISC_RADIUS)
+	var scaled := primary_disc_radius * (companion_radius_solar / primary_radius_solar)
 	return maxf(scaled, COMPANION_MIN_DISC_RADIUS)
 
 

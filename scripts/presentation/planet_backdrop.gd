@@ -162,6 +162,12 @@ func _apply_optional_textures(planet_data: Dictionary) -> void:
 				_material.set_shader_parameter("use_night_lights", 1.0)
 
 
+## Irradiance index at orbit: stellar luminosity in solar units divided by heliocentric distance squared.
+static func irradiance_index(stellar_luminosity: float, distance_au: float) -> float:
+	var au := maxf(distance_au, 0.01)
+	return stellar_luminosity / (au * au)
+
+
 static func sun_direction_3d_from_star(world_direction: Vector2) -> Vector3:
 	var star_radius := world_direction.length()
 	var direction := world_direction

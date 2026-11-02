@@ -2,13 +2,38 @@ class_name TestSkyBackdrop
 extends RefCounted
 
 const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
+const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
 
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
+	_test_planet_irradiance_at_orbit(runner)
 	_test_angular_radius_math(runner)
 	_test_parent_params(runner)
 	_test_titania_angular_roll(runner, tree)
 	_test_sector_spawns(runner, tree)
+
+
+static func _test_planet_irradiance_at_orbit(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	var sector := catalog.get_sector_def("titania")
+	var world := catalog.get_world("titania")
+	var star_data: Dictionary = world.get("star", {})
+	var lum := float(star_data.get("luminosity", 1.0))
+	var au := sector.star_distance_au
+	var irradiance := PlanetBackdropScript.irradiance_index(lum, au)
+	runner.check(
+		absf(irradiance - sector.neighborhood.radiant) < 0.02,
+		"planet irradiance matches sector radiant for titania"
+	)
+	var star_facts := catalog.get_star("Epsilon Reticuli A")
+	var angular := LocalStarScript.angular_disc_scale(
+		float(star_facts.get("radius_solar", 1.0)),
+		au
+	)
+	runner.check(
+		absf(angular - 3.18 / 3.2) < 0.05,
+		"titania primary angular disc scale is radius over distance"
+	)
 
 
 static func _test_angular_radius_math(runner: TestRunner) -> void:
