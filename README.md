@@ -115,6 +115,7 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 - [sprite sizes](docs/design/architecture/sprite_sizes.md)
 - [dev sandboxes](docs/design/architecture/dev_sandboxes.md)
 - [audio](docs/design/architecture/audio.md) - buses, logical ids, settings, sandbox
+- [asset backlog](docs/design/architecture/asset_backlog.md) - art and audio still to supply
 - [backlog](docs/design/architecture/backlog.md) - open work
 
 **Content** (playable rules and rosters):
