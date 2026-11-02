@@ -98,6 +98,24 @@
     "radius_solar": 0.74,
     "description": "Young K dwarf with elevated particle wind; Horizon's vast cities orbit here."
   },
+  "Epsilon Reticuli A": {
+    "star_system": "Epsilon Reticuli",
+    "spectral_class": "K2III-IV",
+    "temperature_k": 4961,
+    "luminosity": 6.2,
+    "mass_solar": 1.46,
+    "radius_solar": 3.18,
+    "description": "Quiet orange subgiant; Titania IX and its gas-giant primary orbit under steady K-type light."
+  },
+  "Epsilon Reticuli B": {
+    "star_system": "Epsilon Reticuli",
+    "spectral_class": "DA3.3",
+    "temperature_k": 15310,
+    "luminosity": 0.009,
+    "mass_solar": 0.6,
+    "radius_solar": 0.0132,
+    "description": "White-dwarf companion to Epsilon Reticuli A at hundreds of AU; negligible light at the inner system."
+  },
   "Wolf 359": {
     "star_system": "Wolf 359",
     "spectral_class": "M6.5V",
@@ -105,7 +123,7 @@
     "luminosity": 0.001,
     "mass_solar": 0.09,
     "radius_solar": 0.16,
-    "description": "Dim flare star; Titania IX rides the turbulent skies of its gas-giant primary nearby."
+    "description": "Dim nearby flare star in Leo; a familiar red spark on deep-space charts."
   },
   "Kepler-35 A": {
     "star_system": "Kepler-35",

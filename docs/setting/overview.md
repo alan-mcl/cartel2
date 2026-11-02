@@ -33,7 +33,7 @@ Eleven major inhabited systems. Each has an orbital habitat where ships dock, tr
 | **Fortuna** | Banks, exchanges, and a comfortable standard of living. |
 | **New Carthage** | Oceanic world built on shipping and old mercantile money. |
 | **Horizon** | A great population centre spread across one equatorial continent. |
-| **Titania IX** | Cold moon of a gas giant; tourism and winter sports under a dim flare star. |
+| **Titania IX** | Cold moon of a gas giant; tourism and winter sports under a quiet orange subgiant. |
 | **Pelagos** | Prosperous world orbiting a binary star. |
 
 ## N-space

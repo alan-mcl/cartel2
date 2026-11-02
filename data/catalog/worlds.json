@@ -624,8 +624,8 @@
 			}
 		},
 		"star": {
-			"temperature_k": 2800,
-			"luminosity": 0.001
+			"temperature_k": 4961,
+			"luminosity": 6.2
 		}
 	},
 	"pelagos": {
@@ -5274,8 +5274,8 @@
 			}
 		},
 		"star": {
-			"temperature_k": 2800,
-			"luminosity": 0.001
+			"temperature_k": 4961,
+			"luminosity": 6.2
 		}
 	},
 	"titania_ixx": {
@@ -5331,8 +5331,8 @@
 			}
 		},
 		"star": {
-			"temperature_k": 2800,
-			"luminosity": 0.001
+			"temperature_k": 4961,
+			"luminosity": 6.2
 		}
 	},
 	"tartarus": {
@@ -5383,8 +5383,8 @@
 			}
 		},
 		"star": {
-			"temperature_k": 2800,
-			"luminosity": 0.001
+			"temperature_k": 4961,
+			"luminosity": 6.2
 		}
 	},
 	"janus_ii": {

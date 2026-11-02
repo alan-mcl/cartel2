@@ -369,13 +369,13 @@ Other
 ## Titania IX
 
  - **Classification:** E4.9
- - **System:** Wolf 359
+ - **System:** Epsilon Reticuli
  - **Gravity:** 0.86 G
  - **Population:** 6.5 billion
  - **Ocean coverage:** 78%
  - **Climate:** Cold
 
-The ninth moon of the gas giant Titania in the Wolf 359 system is an E class world with extensive oceans (warmed by tidal heating of the core) punctuated by rugged tracts of land. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
+The ninth moon of the gas giant Titania in the Epsilon Reticuli system is an E class world with extensive oceans punctuated by rugged tracts of land. It sits on the outer edge of the habitable zone around a quiet orange subgiant, so the climate is cold despite liquid seas. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
 
 ### Planet Surface
 
@@ -390,18 +390,17 @@ The ninth moon of the gas giant Titania in the Wolf 359 system is an E class wor
 
 ### Solar neighbourhood
 
-The stately Titania is the fourth planet and first gas giant in Wolf 359's system, orbiting at 3.2 AU. Two other frozen giants orbit further out.
+The stately Titania is the fourth planet and first gas giant in Epsilon Reticuli's system, orbiting at 3.2 AU. Two other frozen giants orbit further out.
 
 Planets and moons:
  - Titania V (5th moon): this large, rocky, high G world has a strong tidal influence on the other nearby moons. Uninhabitable but the site of much orbital infrastructure.
  - Titania IXX (19th moon): A frozen moon which is the furthest out not on an inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.
- - Tartarus (24 AU, 6th planet): the outermost planet orbiting so far out that it can barely see its dim parent star. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence, including a well-known research station that orbits it.
+ - Tartarus (24 AU, 6th planet): the outermost planet, where the orange primary is only a small distant disc. Tartarus is a sub-giant with a frozen core and a dense, semi-frozen atmosphere. There is some orbital presence, including a well-known research station that orbits it.
 
 ### Field conditions
 
- - Solar: Wolf 359 is a dim flare star: low mean radiant, high radiant and particle fluctuation, heavy unshielded wind at orbit.
+ - Solar: quiet K2 subgiant; moderate steady radiant and calm particle wind at orbit.
  - Magnetic: No intrinsic planetary dipole (moon body).
- - General high fluctuations due to the gas giant primary nearby
 
 ## Pelagos
 

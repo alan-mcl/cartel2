@@ -83,7 +83,7 @@ Each hub uses **2048×1024** (2:1) equirectangular albedo and matching night-lig
 | Tau Ceti | `janus`, `sapphire_xvi`, `vesuvius_v` |
 | Regulus | `denarius_ii`, `typhon_xvi`, `vulcan_research` |
 | Epsilon Eridani | `cueball`, `nocturn` |
-| Wolf 359 | `titania_v`, `titania_ixx` |
+| Epsilon Reticuli | `titania_v`, `titania_ixx` |
 | Kepler-35 | `caldera`, `janus_ii`, `tulima` |
 
 Supplying full maps for a minor sector means adding `albedo` and `night_lights` under `assets/world/planets/<sector_id>_*.png` and wiring them in `worlds.json` for that sector id.
@@ -155,7 +155,7 @@ Eleven chassis in `chassis.json`. Canvas sizes on disk **do not yet match** the 
 | Star system | Unique banner files (habitats / docks) |
 |-------------|----------------------------------------|
 | Epsilon Eridani (Horizon neighbourhood) | 8 — e.g. `horizon_habitat.png`, `alpha_disc_habitat.png`, `cueball_habitat.png`, `halo_station_habitat.png`, `kb_station_i|ii|iii_habitat.png`, `nocturn_habitat.png` |
-| Wolf 359 (Titania) | 6 — e.g. `titania_habitat.png`, `titania_v_habitat.png`, `titania_ixx_habitat.png`, `tartarus_habitat.png`, `sta_chimera_titania.png`, `sta_cult_of_apex_titania.png` |
+| Epsilon Reticuli (Titania) | 6 — e.g. `titania_habitat.png`, `titania_v_habitat.png`, `titania_ixx_habitat.png`, `tartarus_habitat.png`, `sta_chimera_titania.png`, `sta_cult_of_apex_titania.png` |
 | Kepler-35 (Pelagos) | 6 — e.g. `pelagos_belt_habitat.png`, `concordia_habitat.png`, `caldera_habitat.png`, `janus_ii_habitat.png`, `tulima_habitat.png`, `sta_terra_nova_pelagos.png` |
 
 Remaining banners cover terminals, markets, corporate offices, shipyards, and bars across all hubs — same production requirement, lower visibility until players visit those buildings.
