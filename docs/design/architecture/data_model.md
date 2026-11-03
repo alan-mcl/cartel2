@@ -394,6 +394,8 @@ Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `C
 
 `habitats.json` entries include `sector_id` for market quote lookup. Exchange buildings use `type: market`.
 
+Each of the eleven E-world hubs lists exactly one `chassis_dealer` and one `ship_dealer`. Those buildings set `stock_source: "daily"` and omit `stock`. [`DealerStock`](../../../scripts/gameplay/dealer_stock.gd) samples a deterministic lot each GST day from the full chassis or ship catalog: count `round(fraction × pool size)` clamped to `[1, pool]`, where `fraction = 0.20 + 0.55 × (population_billions − 3.5) / (60 − 3.5)` using the habitat sector’s `population_billions` (Tycho → 20%, Proxima → 75%). Seeding matches charter boards (`run_seed`, day, habitat id, building id). Legacy static `stock` arrays on dealers are disallowed when `stock_source` is `daily`.
+
 Daily commodity quotes are computed at runtime by `CommodityEconomy` from `economies.json`, `routes.json`, and `commodities.json`. Session stores `market_quotes` and `market_quotes_day` (recomputed on load from `gst_seconds`). Full algorithm: [commodity_economy.md](commodity_economy.md).
 
 **Sector completeness:** `scripts/tools/validate_sector_completeness.py` (wired into `validate_catalog_refs.py`) checks every `sectors.json` id has a matching world, economy, exactly one habitat (`sector_id`), resolvable buildings, dock/translate interactables linked from the world layout, and at least one route edge. Legacy ids may differ from `{id}_habitat` templates (e.g. `bela_orbital_habitat`, `concordia_habitat` on sector `pelagos`); validation is structural, not string-prefix rules.

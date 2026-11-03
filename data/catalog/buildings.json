@@ -19,78 +19,23 @@
 	},
 	{
 		"art": "res://assets/ui/locations/skyedge.png",
-		"description": "Skyedge is where you start when you want to build a ship. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
+		"description": "Skyedge is where you start when you want to build a ship. Bare hulls hang in display cradles across a vast orbital lot; the selection changes each GST day. Register your frame and fit it out at the Shipyard.",
 		"id": "skyedge_space_ships",
 		"kind": "merchant",
 		"name": "Skyedge Space Ships",
 		"short_desc": "Ship chassis dealer and frame registrar.",
-		"stock": [
-			"flare_on_chassis",
-			"pegasus_chassis",
-			"krypton_chassis",
-			"wolff_chassis",
-			"dragon_chassis",
-			"juno_chassis",
-			"silhouette_chassis",
-			"mantis_chassis",
-			"blackbird_chassis",
-			"lancer_chassis",
-			"ave_chassis"
-		],
-		"type": "chassis_dealer"
+		"type": "chassis_dealer",
+		"stock_source": "daily"
 	},
 	{
 		"art": "res://assets/ui/locations/concord_scouts.png",
-		"description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used and trade-in civilian ships line the showroom, ready to fly. The showroom occupies a sprawling orbital lot within the Habitat, with completed light civilian vessels arranged in long rows beneath enormous illuminated canopies.",
+		"description": "Orbital lot of complete light civilian hulls, trade-ins welcome. Used ships line the showroom beneath illuminated canopies; the lot changes each GST day.",
 		"id": "concord_scouts",
 		"kind": "merchant",
 		"name": "Concord Scouts",
 		"short_desc": "No finer place to purchase new or used space craft.",
-		"stock": [
-			"flare_on_ss",
-			"flare_on_sk",
-			"flare_on_cx",
-			"pegasus_p101",
-			"pegasus_p103",
-			"pegasus_p103a",
-			"pegasus_p105",
-			"pegasus_p107",
-			"pegasus_p109",
-			"pegasus_p111",
-			"pegasus_p113",
-			"pegasus_p115",
-			"krypton_k2",
-			"krypton_k3",
-			"krypton_k4",
-			"wolff_warrior",
-			"wolff_gladius",
-			"wolff_bastion",
-			"wolff_logistico",
-			"dragon_bronze",
-			"dragon_post",
-			"dragon_gold",
-			"juno_1030",
-			"juno_1045",
-			"juno_1060",
-			"juno_1088",
-			"juno_1090",
-			"silhouette_mk8",
-			"silhouette_mk6",
-			"silhouette_warden",
-			"mantis_xf900",
-			"mantis_xf4400",
-			"mantis_xf5700",
-			"blackbird_bb_10s",
-			"blackbird_bb_10r",
-			"blackbird_bb_10x",
-			"lancer_2sv",
-			"lancer_2st",
-			"lancer_25s",
-			"lancer_2sx",
-			"ave_one",
-			"ave_x"
-		],
-		"type": "ship_dealer"
+		"type": "ship_dealer",
+		"stock_source": "daily"
 	},
 	{
 		"art": "res://assets/ui/locations/proxima_shipyard.png",
@@ -146,6 +91,26 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/tycho_frames.png",
+		"description": "Tycho Frame Lot displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "tycho_frames",
+		"kind": "merchant",
+		"name": "Tycho Frame Lot",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/tycho_trade_ins.png",
+		"description": "Tycho Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "tycho_trade_ins",
+		"kind": "merchant",
+		"name": "Tycho Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
+	},
+	{
 		"art": "res://assets/ui/locations/bela_habitat_terminal.png",
 		"description": "The main terminal of La Bella Vista system is spacious and modern. The stunning blue seas of the planet below are framed in panoramic observation windows. Tourists drift along the concourses, worked by swarms of vendors, concierges, and hustlers.",
 		"id": "bela_habitat_terminal",
@@ -166,6 +131,26 @@
 		],
 		"short_desc": "Resort orbital outfitting docks with ocean views.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_frames.png",
+		"description": "Vista Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "bela_frames",
+		"kind": "merchant",
+		"name": "Vista Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/bela_trade_ins.png",
+		"description": "Vista Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "bela_trade_ins",
+		"kind": "merchant",
+		"name": "Vista Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
 	},
 	{
 		"art": "res://assets/ui/locations/the_atoll.png",
@@ -199,6 +184,26 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/irasia_frames.png",
+		"description": "Irasia Frame Hall displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "irasia_frames",
+		"kind": "merchant",
+		"name": "Irasia Frame Hall",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/irasia_trade_ins.png",
+		"description": "Irasia Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "irasia_trade_ins",
+		"kind": "merchant",
+		"name": "Irasia Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
+	},
+	{
 		"art": "res://assets/ui/locations/terminal_9.png",
 		"description": "Terminal 9 is a popular haunt for independent pilots, traders and shipping agents. Its neon-lit interior, diversely-stocked bar and intimate booths make it a favoured spot for deals and gossip. It's never quiet. You can hear the karaoke stage from well outside.",
 		"id": "terminal_9",
@@ -228,6 +233,26 @@
 		],
 		"short_desc": "Automated outfitting yards above Tokirev.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_frames.png",
+		"description": "Tokirev Frame Bays displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "tokirev_frames",
+		"kind": "merchant",
+		"name": "Tokirev Frame Bays",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/tokirev_trade_ins.png",
+		"description": "Tokirev Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "tokirev_trade_ins",
+		"kind": "merchant",
+		"name": "Tokirev Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
 	},
 	{
 		"art": "res://assets/ui/locations/dead_reckoning.png",
@@ -261,6 +286,26 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/fennet_frames.png",
+		"description": "Fennet Frame Yard displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "fennet_frames",
+		"kind": "merchant",
+		"name": "Fennet Frame Yard",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_trade_ins.png",
+		"description": "Fennet Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "fennet_trade_ins",
+		"kind": "merchant",
+		"name": "Fennet Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
+	},
+	{
 		"art": "res://assets/ui/locations/perihelion.png",
 		"description": "Pilot bar catering to visiting traders and independent operators with money to spend. Its panoramic windows look out across the system, while the clientele trade stories and count comets over beer, soup and dominoes.",
 		"id": "perihelion",
@@ -290,6 +335,26 @@
 		],
 		"short_desc": "Private outfitting yards above a finance world.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_frames.png",
+		"description": "Fortuna Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "fortuna_frames",
+		"kind": "merchant",
+		"name": "Fortuna Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/fortuna_trade_ins.png",
+		"description": "Fortuna Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "fortuna_trade_ins",
+		"kind": "merchant",
+		"name": "Fortuna Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
 	},
 	{
 		"art": "res://assets/ui/locations/the_invisible_hand.png",
@@ -323,6 +388,26 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/new_carthage_frames.png",
+		"description": "Carthage Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "new_carthage_frames",
+		"kind": "merchant",
+		"name": "Carthage Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/new_carthage_trade_ins.png",
+		"description": "Carthage Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "new_carthage_trade_ins",
+		"kind": "merchant",
+		"name": "Carthage Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
+	},
+	{
 		"art": "res://assets/ui/locations/the_letter_of_marque.png",
 		"description": "An establishment with a deliberately old-fashioned nautical theme. Pilots mix with wealthy merchants, shipping family scions mix with corporate fixers and mercenaries. The service is quick, the drinks are excellent, and almost everyone seems to be conducting business of some kind.",
 		"id": "the_letter_of_marque",
@@ -352,6 +437,26 @@
 		],
 		"short_desc": "Civic outfitting yards above a great population centre.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_frames.png",
+		"description": "Horizon Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "horizon_frames",
+		"kind": "merchant",
+		"name": "Horizon Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_trade_ins.png",
+		"description": "Horizon Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "horizon_trade_ins",
+		"kind": "merchant",
+		"name": "Horizon Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
 	},
 	{
 		"art": "res://assets/ui/locations/vector.png",
@@ -385,6 +490,26 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/titania_frames.png",
+		"description": "Titania Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "titania_frames",
+		"kind": "merchant",
+		"name": "Titania Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_trade_ins.png",
+		"description": "Titania Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "titania_trade_ins",
+		"kind": "merchant",
+		"name": "Titania Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
+	},
+	{
 		"art": "res://assets/ui/locations/the_far_side.png",
 		"description": "A lively pilots' bar overlooking the parent gas giant. Operators come here to drink spiced wine away from the madding crowds, and the booths are popular for private conversations and deals. Everybody's got a better story than the last one.",
 		"id": "the_far_side",
@@ -414,6 +539,26 @@
 		],
 		"short_desc": "Manufacturing outfitting yards above Pelagos.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_frames.png",
+		"description": "Pelagos Frames displays unfitted chassis in orbital cradles. Register a frame and fit it out at the local shipyard. The lot changes each GST day.",
+		"id": "pelagos_frames",
+		"kind": "merchant",
+		"name": "Pelagos Frames",
+		"short_desc": "Daily chassis lot above the habitat.",
+		"stock_source": "daily",
+		"type": "chassis_dealer"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_trade_ins.png",
+		"description": "Pelagos Trade-ins lines ready-to-fly used hulls beneath the habitat canopy. Trade-ins welcome. The lot changes each GST day.",
+		"id": "pelagos_trade_ins",
+		"kind": "merchant",
+		"name": "Pelagos Trade-ins",
+		"short_desc": "Daily used-ship lot above the habitat.",
+		"stock_source": "daily",
+		"type": "ship_dealer"
 	},
 	{
 		"art": "res://assets/ui/locations/double_sunrise.png",

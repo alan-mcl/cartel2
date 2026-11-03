@@ -53,7 +53,7 @@ Mount counts come from chassis `mounts`. Unused mounts are normal.
 | `mantis_chassis` | The Praetorium | high | Dedicated interceptor |
 | `ave_chassis` | Tukey Enterprises | medium | Budget solo courier |
 
-Each chassis has a **list price** (`cost` in JSON) for sale at **Skyedge Space Ships** on Proxima Habitat. Unfitted frames must be outfitted at **Centauri Shipyard** (or the local habitat shipyard elsewhere) before they can undock.
+Each chassis has a **list price** (`cost` in JSON) at any habitat **chassis dealer**; the daily lot is a population-scaled subset of the catalog (full price unchanged). Unfitted frames must be outfitted at the local habitat **shipyard** before they can undock.
 
 Each chassis references a hull **sprite** path (SVG paint owns colour). Optional **hull_color** is identity metadata, not a runtime sprite tint.
 

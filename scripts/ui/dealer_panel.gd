@@ -15,7 +15,7 @@ func configure(building: Dictionary) -> void:
 func session_changed() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
-	if _can_soft_refresh():
+	if _can_soft_refresh() and not _dealer_stock_ids_changed():
 		_soft_refresh()
 		return
 	refresh()
@@ -50,10 +50,31 @@ func _soft_refresh() -> void:
 		_rebuild_chassis_dealer_detail(detail)
 
 
+func _dealer_stock_ids_changed() -> bool:
+	var current := _resolve_dealer_stock_ids()
+	if current.size() != _dealer_stock_ids.size():
+		return true
+	for i in current.size():
+		if current[i] != _dealer_stock_ids[i]:
+			return true
+	return false
+
+
+func _resolve_dealer_stock_ids() -> PackedStringArray:
+	if _context == null or _context.session == null or _context.catalog == null:
+		return PackedStringArray()
+	return DealerStock.list_stock_ids(
+		_context.catalog,
+		_context.session,
+		_context.session.habitat_id,
+		_building
+	)
+
+
 func _build_ship_dealer_content(building: Dictionary) -> void:
 	_dealer_stock_ids.clear()
-	var stock: Variant = building.get("stock", [])
-	if typeof(stock) != TYPE_ARRAY or stock.is_empty():
+	var stock := _resolve_dealer_stock_ids()
+	if stock.is_empty():
 		var empty := Label.new()
 		empty.text = "No ships in stock."
 		add_child(empty)
@@ -84,7 +105,7 @@ func _build_ship_dealer_content(building: Dictionary) -> void:
 	var detail := _add_scroll_pane(split, "dealer_detail_host")
 
 	for template_id in stock:
-		var id := str(template_id)
+		var id := template_id
 		var template := _context.catalog.get_ship_def(id)
 		if template == null:
 			continue
@@ -103,8 +124,8 @@ func _build_ship_dealer_content(building: Dictionary) -> void:
 
 func _build_chassis_dealer_content(building: Dictionary) -> void:
 	_dealer_stock_ids.clear()
-	var stock: Variant = building.get("stock", [])
-	if typeof(stock) != TYPE_ARRAY or stock.is_empty():
+	var stock := _resolve_dealer_stock_ids()
+	if stock.is_empty():
 		var empty := Label.new()
 		empty.text = "No chassis in stock."
 		add_child(empty)
@@ -135,7 +156,7 @@ func _build_chassis_dealer_content(building: Dictionary) -> void:
 	var detail := _add_scroll_pane(split, "dealer_detail_host")
 
 	for chassis_id in stock:
-		var id := str(chassis_id)
+		var id := chassis_id
 		var chassis := _context.catalog.get_chassis_def(id)
 		if chassis == null:
 			continue

@@ -8,6 +8,7 @@ func _init() -> void:
 	TestUiRegistry.run(runner)
 	TestGameScreen.run(runner, self)
 	TestSession.run(runner)
+	TestDealerStock.run(runner)
 	TestTranslation.run(runner)
 	TestVolatileTranslation.run(runner)
 	TestSave.run(runner)

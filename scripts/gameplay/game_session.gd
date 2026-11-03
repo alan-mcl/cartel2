@@ -1116,7 +1116,7 @@ func buy_chassis(catalog: Catalog, chassis_id: String) -> bool:
 	var building := catalog.get_building(world.building_id)
 	if catalog.get_building_type(building) != "chassis_dealer":
 		return false
-	if not _building_stock_has(building, chassis_id):
+	if not DealerStock.has_stock_id(catalog, self, world.habitat_id, building, chassis_id):
 		return fail_action("Chassis not available here.")
 
 	var chassis := catalog.get_chassis_def(chassis_id)
@@ -1162,7 +1162,7 @@ func buy_used_ship(catalog: Catalog, template_id: String) -> bool:
 	var building := catalog.get_building(world.building_id)
 	if catalog.get_building_type(building) != "ship_dealer":
 		return false
-	if not _building_stock_has(building, template_id):
+	if not DealerStock.has_stock_id(catalog, self, world.habitat_id, building, template_id):
 		return fail_action("Ship not available here.")
 
 	var template := catalog.get_ship_def(template_id)
@@ -1344,13 +1344,3 @@ static func _commodity_sort_name(catalog: Catalog, commodity_id: String) -> Stri
 	return commodity_id
 
 
-func _building_stock_has(building: Dictionary, stock_id: String) -> bool:
-	if stock_id.is_empty() or building.is_empty():
-		return false
-	var stock: Variant = building.get("stock", [])
-	if typeof(stock) != TYPE_ARRAY:
-		return false
-	for entry in stock:
-		if str(entry) == stock_id:
-			return true
-	return false

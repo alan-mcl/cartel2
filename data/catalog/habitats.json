@@ -30,6 +30,8 @@
 		"buildings": [
 			"tycho_habitat_terminal",
 			"tycho_shipyard",
+			"tycho_frames",
+			"tycho_trade_ins",
 			"tycho_exchange",
 			"tycho_peaceforce",
 			"blue_star_bar",
@@ -52,6 +54,8 @@
 		"buildings": [
 			"bela_habitat_terminal",
 			"bela_shipyard",
+			"bela_frames",
+			"bela_trade_ins",
 			"bela_exchange",
 			"bela_peaceforce",
 			"the_atoll",
@@ -73,6 +77,8 @@
 		"buildings": [
 			"irasia_habitat_terminal",
 			"irasia_shipyard",
+			"irasia_frames",
+			"irasia_trade_ins",
 			"irasia_exchange",
 			"irasia_peaceforce",
 			"terminal_9",
@@ -95,6 +101,8 @@
 		"buildings": [
 			"tokirev_habitat_terminal",
 			"tokirev_shipyard",
+			"tokirev_frames",
+			"tokirev_trade_ins",
 			"tokirev_exchange",
 			"tokirev_peaceforce",
 			"dead_reckoning",
@@ -116,6 +124,8 @@
 		"buildings": [
 			"fennet_habitat_terminal",
 			"fennet_shipyard",
+			"fennet_frames",
+			"fennet_trade_ins",
 			"fennet_exchange",
 			"fennet_peaceforce",
 			"perihelion",
@@ -136,6 +146,8 @@
 		"buildings": [
 			"fortuna_habitat_terminal",
 			"fortuna_shipyard",
+			"fortuna_frames",
+			"fortuna_trade_ins",
 			"fortuna_exchange",
 			"fortuna_peaceforce",
 			"the_invisible_hand",
@@ -158,6 +170,8 @@
 		"buildings": [
 			"new_carthage_habitat_terminal",
 			"new_carthage_shipyard",
+			"new_carthage_frames",
+			"new_carthage_trade_ins",
 			"new_carthage_exchange",
 			"new_carthage_peaceforce",
 			"the_letter_of_marque",
@@ -179,6 +193,8 @@
 		"buildings": [
 			"horizon_habitat_terminal",
 			"horizon_shipyard",
+			"horizon_frames",
+			"horizon_trade_ins",
 			"horizon_exchange",
 			"horizon_peaceforce",
 			"vector",
@@ -203,6 +219,8 @@
 		"buildings": [
 			"titania_habitat_terminal",
 			"titania_shipyard",
+			"titania_frames",
+			"titania_trade_ins",
 			"titania_exchange",
 			"titania_peaceforce",
 			"the_far_side",
@@ -225,6 +243,8 @@
 		"buildings": [
 			"concordia_orbital_terminal",
 			"concordia_shipyard",
+			"pelagos_frames",
+			"pelagos_trade_ins",
 			"concordia_exchange",
 			"pelagos_peaceforce",
 			"double_sunrise",
@@ -1016,7 +1036,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/alpha_disc_habitat.png",
-		"buildings": ["alpha_disc_terminal", "alpha_disc_exchange"],
+		"buildings": [
+			"alpha_disc_terminal",
+			"alpha_disc_exchange"
+		],
 		"default_building": "alpha_disc_terminal",
 		"description": "Hub for the warm rare-element debris disc. Processing traffic never quite clears the approach lanes.",
 		"id": "alpha_disc_habitat",
@@ -1027,7 +1050,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/cueball_habitat.png",
-		"buildings": ["cueball_terminal", "cueball_exchange"],
+		"buildings": [
+			"cueball_terminal",
+			"cueball_exchange"
+		],
 		"default_building": "cueball_terminal",
 		"description": "Orbitals above the smooth ice moon The Cueball. Manufacturing, tourism, and ore traffic share the ring with gas giant B.",
 		"id": "cueball_habitat",
@@ -1038,7 +1064,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/halo_station_habitat.png",
-		"buildings": ["halo_station_terminal", "halo_station_exchange"],
+		"buildings": [
+			"halo_station_terminal",
+			"halo_station_exchange"
+		],
 		"default_building": "halo_station_terminal",
 		"description": "Halo Station rides a clear gap in the dusty rings of B. Research charters and tourism share the docks.",
 		"id": "halo_station_habitat",
@@ -1049,7 +1078,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_i_habitat.png",
-		"buildings": ["kb_station_i_terminal", "kb_station_i_exchange"],
+		"buildings": [
+			"kb_station_i_terminal",
+			"kb_station_i_exchange"
+		],
 		"default_building": "kb_station_i_terminal",
 		"description": "KB Station I anchors extraction in the outer planetesimal belt.",
 		"id": "kb_station_i_habitat",
@@ -1060,7 +1092,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_ii_habitat.png",
-		"buildings": ["kb_station_ii_terminal", "kb_station_ii_exchange"],
+		"buildings": [
+			"kb_station_ii_terminal",
+			"kb_station_ii_exchange"
+		],
 		"default_building": "kb_station_ii_terminal",
 		"description": "KB Station II serves the cold outer belt farther from Epsilon Eridani.",
 		"id": "kb_station_ii_habitat",
@@ -1071,7 +1106,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_iii_habitat.png",
-		"buildings": ["kb_station_iii_terminal", "kb_station_iii_exchange"],
+		"buildings": [
+			"kb_station_iii_terminal",
+			"kb_station_iii_exchange"
+		],
 		"default_building": "kb_station_iii_terminal",
 		"description": "KB Station III is the outermost of the three belt hubs, on the edge of the swarm.",
 		"id": "kb_station_iii_habitat",
@@ -1082,7 +1120,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/nocturn_habitat.png",
-		"buildings": ["nocturn_terminal", "nocturn_exchange"],
+		"buildings": [
+			"nocturn_terminal",
+			"nocturn_exchange"
+		],
 		"default_building": "nocturn_terminal",
 		"description": "Nocturn Research Lab orbits a large outer-belt planetesimal. Supply runs are the regular traffic.",
 		"id": "nocturn_habitat",
@@ -1093,7 +1134,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/titania_v_habitat.png",
-		"buildings": ["titania_v_terminal", "titania_v_exchange"],
+		"buildings": [
+			"titania_v_terminal",
+			"titania_v_exchange"
+		],
 		"default_building": "titania_v_terminal",
 		"description": "Titania V is uninhabitable on the surface, but orbital yards and platforms serve the high-G moon and its tidal neighbourhood.",
 		"id": "titania_v_habitat",
@@ -1104,7 +1148,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/titania_ixx_habitat.png",
-		"buildings": ["titania_ixx_terminal", "titania_ixx_exchange"],
+		"buildings": [
+			"titania_ixx_terminal",
+			"titania_ixx_exchange"
+		],
 		"default_building": "titania_ixx_terminal",
 		"description": "Titania IXX combines frozen-surface extraction with orbital manufacturing on the outer regular moon of the gas giant Titania.",
 		"id": "titania_ixx_habitat",
@@ -1115,7 +1162,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/tartarus_habitat.png",
-		"buildings": ["tartarus_terminal", "tartarus_exchange"],
+		"buildings": [
+			"tartarus_terminal",
+			"tartarus_exchange"
+		],
 		"default_building": "tartarus_terminal",
 		"description": "Tartarus Research Station orbits the dim outer sub-giant. Supply and survey traffic uses the local lanes.",
 		"id": "tartarus_habitat",
@@ -1126,7 +1176,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/janus_ii_habitat.png",
-		"buildings": ["janus_ii_terminal", "janus_ii_exchange"],
+		"buildings": [
+			"janus_ii_terminal",
+			"janus_ii_exchange"
+		],
 		"default_building": "janus_ii_terminal",
 		"description": "Janus II is a hot barren moon of the inner gas giant. Mineral extraction runs through the fast orbital lanes.",
 		"id": "janus_ii_habitat",
@@ -1137,7 +1190,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/caldera_habitat.png",
-		"buildings": ["caldera_terminal", "caldera_exchange"],
+		"buildings": [
+			"caldera_terminal",
+			"caldera_exchange"
+		],
 		"default_building": "caldera_terminal",
 		"description": "Caldera combines dusty surface geology with yards and platforms for extraction and manufacturing.",
 		"id": "caldera_habitat",
@@ -1148,7 +1204,10 @@
 	},
 	{
 		"art": "res://assets/ui/locations/tulima_habitat.png",
-		"buildings": ["tulima_terminal", "tulima_exchange"],
+		"buildings": [
+			"tulima_terminal",
+			"tulima_exchange"
+		],
 		"default_building": "tulima_terminal",
 		"description": "Tulima station serves mining and research on this isolated airless world of frozen volatiles.",
 		"id": "tulima_habitat",

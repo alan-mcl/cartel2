@@ -1406,6 +1406,8 @@ def check_habitat_building_uniqueness(
             continue
 
         shipyard_count = 0
+        chassis_dealer_count = 0
+        ship_dealer_count = 0
         for building_id_variant in building_ids:
             building_id = str(building_id_variant)
             if not building_id:
@@ -1423,15 +1425,90 @@ def check_habitat_building_uniqueness(
             if not building:
                 continue
             register_art(str(building.get("art", "")), f"building {building_id}")
-            if str(building.get("type", "")) == "shipyard":
+            building_type = str(building.get("type", ""))
+            if building_type == "shipyard":
                 shipyard_count += 1
+            elif building_type == "chassis_dealer":
+                chassis_dealer_count += 1
+            elif building_type == "ship_dealer":
+                ship_dealer_count += 1
 
         if shipyard_count > 1:
             errors.append(
                 f"habitat {habitat_id}: expected at most one shipyard building, "
                 f"found {shipyard_count}"
             )
+        if chassis_dealer_count > 1:
+            errors.append(
+                f"habitat {habitat_id}: expected at most one chassis dealer, "
+                f"found {chassis_dealer_count}"
+            )
+        if ship_dealer_count > 1:
+            errors.append(
+                f"habitat {habitat_id}: expected at most one ship dealer, "
+                f"found {ship_dealer_count}"
+            )
 
+    return errors
+
+
+E_WORLD_HABITAT_IDS = (
+    "proxima_habitat",
+    "tycho_habitat",
+    "bela_orbital_habitat",
+    "irasia_habitat",
+    "tokirev_habitat",
+    "fennet_habitat",
+    "fortuna_habitat",
+    "new_carthage_habitat",
+    "horizon_habitat",
+    "titania_habitat",
+    "concordia_habitat",
+)
+
+
+def check_e_world_daily_dealers(
+    habitats: dict[str, dict],
+    buildings_by_id: dict[str, dict],
+) -> list[str]:
+    errors: list[str] = []
+    for habitat_id in E_WORLD_HABITAT_IDS:
+        habitat = habitats.get(habitat_id)
+        if not habitat:
+            errors.append(f"e-world habitat missing: {habitat_id}")
+            continue
+        chassis_dealers: list[str] = []
+        ship_dealers: list[str] = []
+        for building_id_variant in habitat.get("buildings", []):
+            building_id = str(building_id_variant)
+            building = buildings_by_id.get(building_id)
+            if not building:
+                continue
+            building_type = str(building.get("type", ""))
+            if building_type == "chassis_dealer":
+                chassis_dealers.append(building_id)
+            elif building_type == "ship_dealer":
+                ship_dealers.append(building_id)
+        if len(chassis_dealers) != 1:
+            errors.append(
+                f"habitat {habitat_id}: expected exactly one chassis dealer, "
+                f"found {len(chassis_dealers)}"
+            )
+        if len(ship_dealers) != 1:
+            errors.append(
+                f"habitat {habitat_id}: expected exactly one ship dealer, "
+                f"found {len(ship_dealers)}"
+            )
+        for building_id in chassis_dealers + ship_dealers:
+            building = buildings_by_id[building_id]
+            if str(building.get("stock_source", "")) != "daily":
+                errors.append(
+                    f"building {building_id}: e-world dealer must have stock_source 'daily'"
+                )
+            if building.get("stock") is not None:
+                errors.append(
+                    f"building {building_id}: daily dealer must not define static stock"
+                )
     return errors
 
 
@@ -2386,6 +2463,12 @@ def main() -> int:
             continue
         if building_type not in ("ship_dealer", "chassis_dealer"):
             continue
+        if str(building.get("stock_source", "")) == "daily":
+            if stock:
+                errors.append(
+                    f"building {building_id}: daily dealer must not define static stock"
+                )
+            continue
         for stock_id in stock:
             stock_id = str(stock_id)
             if building_type == "ship_dealer" and stock_id not in ships:
@@ -2472,6 +2555,7 @@ def main() -> int:
     errors.extend(check_module_category_icons())
     errors.extend(check_chassis_ui_headers(chassis))
     errors.extend(check_habitat_building_uniqueness(habitats, buildings_by_id))
+    errors.extend(check_e_world_daily_dealers(habitats, buildings_by_id))
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))
     errors.extend(check_world_entity_kinds(worlds))

@@ -2634,7 +2634,10 @@ static func _probe_first_purchase(ctx: Dictionary, session: GameSession, probe: 
 	var best_template := ""
 	var best_run := {}
 	var best_profit := -1
-	for stock_variant in catalog.get_building(dealer_id).get("stock", []):
+	var dealer_building := catalog.get_building(dealer_id)
+	for stock_variant in DealerStock.list_stock_ids(
+		catalog, session, session.world.habitat_id, dealer_building
+	):
 		var template_id := str(stock_variant)
 		var price := ShipAssembly.used_ship_price(catalog, template_id)
 		if price > liquid:

@@ -338,7 +338,6 @@ UI styling uses the shared **Cartel corporate theme** - see [ui_theme.md](ui_the
 - Unspace solution typing (integers shown as flavour only)
 - **N-space flux** (F5), **folds** (F6), **shards** (F7), **ascidian hazards** (F8), and per-N catalog backdrops (`n4_default` … `n9_default`) are in place.
 - Paid workshop beyond parts inventory model
-- Hull merchants beyond Proxima Habitat (Concord Scouts, Skyedge)
 - Economic events (blockades and other friction overrides). `route_friction_delta` is a session field read by `CommodityEconomy`. There is no player UI for it
 - Public unknown Unspace routes. Private off-catalog translations already exist as volatile mission grants (see above)
 

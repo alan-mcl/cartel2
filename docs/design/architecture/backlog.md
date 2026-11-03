@@ -15,6 +15,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B3| art | med | no active sensors can't active-scan a target
 |B4| art | high | parent body renderer should align the lighting to where the star is located in the sector
 |B5| balance | high | charters at all places in a location should be scaled per the location population, between 1-12
+|B6| missions | med | bounty target "run away" behaviour isn't fun, should be reworked
 
 
 ## Features
@@ -26,5 +27,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
 |F4|gameplay|med|Bar: add a "buy a round" button usable once per day that refreshes all the charters available, cost is proportional to system population from d50-d300
 |F5|UI|med|Ship module names to support the popup-info dialog on hover wherever they are (some places do not support this yet)
+|F6|gameplay|high|Drones as a weapon-slot module: capabilties defence (similar to point defense), attack (one light hardpoint), sensor suite extension, retrieval (i.e. of items/samples, not a combat use case).
+|F7|missions|med|New charter type: retrieval: go to a volatile location, retrieve something (requires a drone), return. Examples: Old Earth time capsule, jettisoned cargo, asteroid sample, etc
 
 

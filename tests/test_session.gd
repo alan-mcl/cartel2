@@ -81,12 +81,23 @@ static func run(runner: TestRunner) -> void:
 	runner.check(entrepreneur.dock(catalog, "proxima_habitat"), "entrepreneur docks at Proxima to buy a hull")
 	runner.check(entrepreneur.visit(catalog, "skyedge_space_ships"), "entrepreneur visits Skyedge")
 	runner.check(
+		DealerStock.advance_until_stock(
+			entrepreneur, catalog, "proxima_habitat", "skyedge_space_ships", "flare_on_chassis"
+		),
+		"entrepreneur waits for flare_on_chassis on the lot"
+	)
+	var chassis_price := ShipAssembly.chassis_price(catalog, "flare_on_chassis")
+	runner.check(
 		entrepreneur.buy_chassis(catalog, "flare_on_chassis"),
 		"entrepreneur buys empty Flare-ON chassis"
 	)
 	runner.check_eq(entrepreneur.owned_ships.size(), 1, "entrepreneur owns one hull")
 	runner.check(entrepreneur.owned_ships[0].modules.is_empty(), "purchased chassis is unfitted")
-	runner.check_eq(entrepreneur.credits, 24000, "entrepreneur credits after chassis purchase")
+	runner.check_eq(
+		entrepreneur.credits,
+		32000 - chassis_price,
+		"entrepreneur credits after chassis purchase"
+	)
 	runner.check(
 		not entrepreneur.undock(catalog, entrepreneur.owned_ships[0].id),
 		"empty chassis cannot undock"
@@ -96,6 +107,12 @@ static func run(runner: TestRunner) -> void:
 	runner.check(buyer.start_new_game(catalog, "BUY-1", "entrepreneur"), "buyer session starts")
 	runner.check(buyer.dock(catalog, "proxima_habitat"), "buyer at Proxima for used ships")
 	runner.check(buyer.visit(catalog, "concord_scouts"), "buyer visits Concord Scouts")
+	runner.check(
+		DealerStock.advance_until_stock(
+			buyer, catalog, "proxima_habitat", "concord_scouts", "flare_on_ss"
+		),
+		"buyer waits for flare_on_ss on the lot"
+	)
 	var used_price := ShipAssembly.used_ship_price(catalog, "flare_on_ss")
 	runner.check(used_price > 0, "used ship price computed")
 	runner.check(
@@ -126,6 +143,12 @@ static func run(runner: TestRunner) -> void:
 	)
 	runner.check(beacon_only.dock(catalog, "proxima_habitat"), "beacon-only at Proxima for Skyedge")
 	runner.check(beacon_only.visit(catalog, "skyedge_space_ships"), "beacon-only visits Skyedge")
+	runner.check(
+		DealerStock.advance_until_stock(
+			beacon_only, catalog, "proxima_habitat", "skyedge_space_ships", "flare_on_chassis"
+		),
+		"beacon-only waits for flare_on_chassis on the lot"
+	)
 	runner.check(beacon_only.buy_chassis(catalog, "flare_on_chassis"), "beacon-only buys chassis")
 	runner.check(beacon_only.visit(catalog, "proxima_shipyard"), "beacon-only visits shipyard")
 	runner.check(
