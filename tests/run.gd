@@ -50,6 +50,7 @@ func _init() -> void:
 	TestShipVisual.run(runner)
 	TestPresentation.run(runner)
 	TestStarfieldTiling.run(runner)
+	TestStarAppearance.run(runner)
 	TestPlanetSurfaceLabels.run(runner)
 	TestSkyBackdrop.run(runner, self)
 	TestFlightSandbox.run(runner)

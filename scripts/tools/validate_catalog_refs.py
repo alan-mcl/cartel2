@@ -442,6 +442,11 @@ def check_world_sky_backdrop(
             separation = entry.get("separation_deg")
             if not isinstance(separation, (int, float)):
                 errors.append(f"{clabel}: separation_deg must be a number")
+            distance_au = entry.get("distance_au")
+            if distance_au is not None and (
+                not isinstance(distance_au, (int, float)) or float(distance_au) <= 0
+            ):
+                errors.append(f"{clabel}: distance_au must be a number greater than 0")
             if entry.get("star") is not None:
                 star_name = str(entry.get("star", "")).strip()
                 if not star_name:

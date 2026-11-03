@@ -4,7 +4,6 @@ extends RefCounted
 const STAR_MIN_RADIUS := 7000.0
 const STAR_MAX_RADIUS := 12000.0
 const INNER_CLEARANCE_RADIUS := 6200.0
-const COMPANION_MIN_DISC_RADIUS := 8.0
 
 
 static func disc_radius_from_angular(angular_diameter_deg: float, distance: float) -> float:
@@ -23,17 +22,6 @@ static func min_distance_for_parent(angular_diameter_deg: float, ring_outer_scal
 		if distance - outer >= INNER_CLEARANCE_RADIUS:
 			return distance
 	return STAR_MAX_RADIUS
-
-
-static func companion_disc_radius(
-	primary_disc_radius: float,
-	primary_radius_solar: float,
-	companion_radius_solar: float
-) -> float:
-	if primary_radius_solar <= 0.01:
-		return maxf(primary_disc_radius * 0.5, COMPANION_MIN_DISC_RADIUS)
-	var scaled := primary_disc_radius * (companion_radius_solar / primary_radius_solar)
-	return maxf(scaled, COMPANION_MIN_DISC_RADIUS)
 
 
 static func companion_world_position(

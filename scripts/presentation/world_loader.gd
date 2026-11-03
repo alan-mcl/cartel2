@@ -464,8 +464,13 @@ func _spawn_local_star(
 	spawned_by_id["local_star"] = star
 
 	if planet != null and planet.has_method("set_sun"):
-		var irradiance := PlanetBackdropScript.irradiance_index(star.get_luminosity(), distance_au)
-		planet.call("set_sun", star_pos, star.get_light_color(), irradiance)
+		var illum: Dictionary = star.get_illumination()
+		planet.call(
+			"set_sun",
+			star_pos,
+			illum.get("color", star.get_light_color()),
+			float(illum.get("irradiance", star.get_irradiance()))
+		)
 	return star_pos
 
 
@@ -484,17 +489,7 @@ func _spawn_sky_backdrop(
 		star_block = {}
 	star_block = _presentation_star_block(catalog, sector_id, star_block)
 	var orbit_pres := _heliocentric_star_presentation(catalog, sector_id, star_block)
-	var primary_resolved := LocalStarScript.defaults_from_star_data(
-		star_block, orbit_pres["distance_au"], orbit_pres["radius_solar"]
-	)
-	var primary_disc := float(primary_resolved.get("disc_radius", LocalStarScript.DISC_RADIUS_BASE))
-
-	var sector := catalog.get_sector_def(sector_id)
-	var primary_catalog_name := _resolve_primary_catalog_star_name(catalog, sector, star_block)
-	var primary_catalog := catalog.get_star(primary_catalog_name)
-	var primary_radius_solar := float(
-		primary_catalog.get("radius_solar", orbit_pres["radius_solar"])
-	)
+	var primary_distance_au: float = orbit_pres["distance_au"]
 
 	var companions_raw: Variant = world_data.get("companion_stars", [])
 	if typeof(companions_raw) == TYPE_ARRAY:
@@ -516,16 +511,10 @@ func _spawn_sky_backdrop(
 				var facts := catalog.get_star(catalog_star_name)
 				if facts.is_empty():
 					continue
-				var disc := SkyBackdropLayout.companion_disc_radius(
-					primary_disc,
-					primary_radius_solar,
-					float(facts.get("radius_solar", 1.0))
-				)
-				render_data = {
-					"temperature_k": float(facts.get("temperature_k", 5800.0)),
-					"luminosity": float(facts.get("luminosity", 1.0)),
-					"disc_radius": disc,
-				}
+				render_data = facts.duplicate(true)
+				render_data["name"] = catalog_star_name
+				if entry.has("preset"):
+					render_data["preset"] = entry.get("preset")
 				contact_name = catalog_star_name
 			else:
 				presentation_only = true
@@ -533,15 +522,27 @@ func _spawn_sky_backdrop(
 				if contact_name.is_empty():
 					continue
 				render_data = {
+					"name": contact_name,
 					"temperature_k": float(entry.get("temperature_k", 10000.0)),
 					"luminosity": float(entry.get("luminosity", 0.35)),
 					"disc_radius": float(entry.get("disc_radius", 3.0)),
 				}
+				if entry.has("preset"):
+					render_data["preset"] = entry.get("preset")
 
 			var companion := LocalStarScript.new()
 			companion.name = "CompanionStar%d" % companion_index
 			world_root.add_child(companion)
-			companion.configure(render_data, comp_pos)
+			if presentation_only:
+				companion.configure(render_data, comp_pos, primary_distance_au, 1.0)
+			else:
+				var comp_radius := float(render_data.get("radius_solar", 1.0))
+				var comp_au := primary_distance_au
+				var entry_au_val: Variant = entry.get("distance_au", null)
+				if typeof(entry_au_val) == TYPE_FLOAT or typeof(entry_au_val) == TYPE_INT:
+					if float(entry_au_val) > 0.0:
+						comp_au = float(entry_au_val)
+				companion.configure(render_data, comp_pos, comp_au, comp_radius)
 			var nav_id := "companion_star_%d" % companion_index
 			spawned_by_id[nav_id] = companion
 			_sky_companion_nav.append({
@@ -608,6 +609,7 @@ func _presentation_star_block(
 		return out
 	out["luminosity"] = float(facts.get("luminosity", out.get("luminosity", 1.0)))
 	out["temperature_k"] = float(facts.get("temperature_k", out.get("temperature_k", 5800.0)))
+	out["spectral_class"] = str(facts.get("spectral_class", out.get("spectral_class", "")))
 	return out
 
 

@@ -101,7 +101,7 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 
 ## Documentation
 
-`docs/setting/` is frozen lore: [overview](docs/setting/overview.md) (premise and glossary), [planets](docs/setting/planets.md), [corporations](docs/setting/corporations.md), and the [calendar](docs/setting/date_time.md). Edit those only when a change request names a setting doc.
+`docs/setting/` is frozen lore: [overview](docs/setting/overview.md) (premise and glossary), [planets](docs/setting/planets.md), [corporations](docs/setting/corporations.md), and the [calendar](docs/setting/date_time.md). Edit those only when a change request names a setting doc. [Star rendering](docs/design/architecture/star_rendering.md) documents in-flight local and companion stars (what the build draws today).
 
 `docs/design/` is what this repository implements today. Update the doc that states a behaviour in the same change as the code or catalog.
 
