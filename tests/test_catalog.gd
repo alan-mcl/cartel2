@@ -106,6 +106,7 @@ static func run(runner: TestRunner) -> void:
 	runner.check(not catalog.get_background("soldier").is_empty(), "soldier background exists")
 	runner.check(not catalog.get_background("old_money").is_empty(), "old_money background exists")
 	runner.check(not catalog.get_background("influencer").is_empty(), "influencer background exists")
+	runner.check(not catalog.get_background("white_collar").is_empty(), "white_collar background exists")
 
 	_validate_power_plants(runner, catalog)
 	_validate_compute_cores(runner, catalog)

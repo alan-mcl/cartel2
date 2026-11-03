@@ -412,6 +412,27 @@
           "chassis_id": "krypton_chassis"
         }
       ]
+    },
+    {
+      "id": "white_collar",
+      "name": "White Collar",
+      "description": "A corporate drone who burned out.",
+      "background": "After a decade at a major corp you had the apartment, the salary and the pension. Slowly you realised that there must be more to life than late nights at the office and after-work drinking sessions. You resigned, cashed out, and ended your unhappy marriage.",
+      "starting_location": "Irasia Habitat.",
+      "ship": "You always dreamed of weekends in a Pegasus P103, now you have one to fly every day.",
+      "money": "d3800 remains after the mortgage closure, divorce settlement and ship purchase. It's less than you expected.",
+      "credits": 3800,
+      "reputation": 0,
+      "habitat_id": "irasia_habitat",
+      "spare_parts": {},
+      "ships": [
+        {
+          "id": "pegasus_p103_1",
+          "name": "Pegasus P103",
+          "template_id": "pegasus_p103",
+          "chassis_id": "pegasus_chassis"
+        }
+      ]
     }
   ]
 }

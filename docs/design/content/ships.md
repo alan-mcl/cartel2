@@ -1,6 +1,6 @@
 # Ships
 
-**Status:** Eight ship families below are **setting intent** from original `Ships.doc` plus the Mantis interceptor line. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit - see `data/catalog/backgrounds.json`.
+**Status:** Eight ship families below are **setting intent** from original `Ships.doc` plus the Mantis interceptor line. The **Tester** background starts with **Flare-ON SS** (first in fleet) plus one parked instance of every catalog template for shipyard testing at Proxima Habitat. Other backgrounds start with a single hull appropriate to their kit - see `data/catalog/backgrounds.json` (including **White Collar** at Irasia Habitat in a **Pegasus P103**).
 
 **Hull sales at E-world hubs:** Each of the eleven major habitats has a **chassis dealer** (unfitted frames) and a **used-ship dealer** (manufacturer-fitted templates). **Skyedge Space Ships** and **Concord Scouts** on Proxima Habitat are the flagship lots; other hubs run local frame yards and trade-in rows. Every dealer refreshes its lot each GST day. The fraction of the catalog on offer scales with the world’s population from **20%** (Tycho) to **75%** (Proxima). **Centauri Shipyard** (and each habitat’s shipyard) fits modules on registered frames. Used ship price is chassis list cost plus half the fitted module value.
 
