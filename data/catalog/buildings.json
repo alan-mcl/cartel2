@@ -18,15 +18,6 @@
 		"type": "bar"
 	},
 	{
-		"art": "res://assets/ui/locations/blue_star_bar.png",
-		"description": "Tycho Habitat's most well known pilot bar. The Blue Star is famous for its mixed crowd, brandy cocktails, and native planet menu. Try Tycho's signature ore prawns.",
-		"id": "blue_star_bar",
-		"kind": "landmark",
-		"name": "The Blue Star Bar",
-		"short_desc": "Tycho's larges pilot bar serves hot prawns and brandy to a mixed crowd at all hours.",
-		"type": "bar"
-	},
-	{
 		"art": "res://assets/ui/locations/skyedge.png",
 		"description": "Skyedge is where you start when you want to build a ship. Large or small, we have a frame to suit your needs. The showroom is dominated by bare spacecraft chassis: clean, unfitted hulls suspended in individual display cradles or arranged across a vast orbital lot. Register your hull and fit it out at the Shipyard.",
 		"id": "skyedge_space_ships",
@@ -133,6 +124,15 @@
 		"type": "terminal"
 	},
 	{
+		"art": "res://assets/ui/locations/blue_star_bar.png",
+		"description": "Tycho Habitat's most well known pilot bar. The Blue Star is famous for its mixed crowd, brandy cocktails, and native planet menu. Try Tycho's signature ore prawns.",
+		"id": "blue_star_bar",
+		"kind": "landmark",
+		"name": "The Blue Star Bar",
+		"short_desc": "Tycho's largest pilot bar serves hot prawns and brandy to a mixed crowd at all hours.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/tycho_shipyard.png",
 		"description": "Large cradles and gantries dominate the Tycho Habitat yard. Crews fit armour and industrial systems beneath large radiation-shielded observation decks.",
 		"id": "tycho_shipyard",
@@ -168,6 +168,15 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/the_atoll.png",
+		"description": "A pilots' cocktail bar on the habitat concourse. Most of the crowd is between shuttles: crews laying over while their passengers drop down the well to the islands and casinos. The windows face the blue oceans, and the drinks list is way longer than the food menu.",
+		"id": "the_atoll",
+		"kind": "landmark",
+		"name": "The Atoll",
+		"short_desc": "Cocktail bar for crews laying over above La Bella Vista.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/irasia_habitat_terminal.png",
 		"description": "Terminal A at Irasia habitat is a hive of commercial activity. Endless volumes of commodities stream in and out of the automated handling lanes and the concourses are thronged with people who have places to be and things to do.",
 		"id": "irasia_habitat_terminal",
@@ -188,6 +197,15 @@
 		],
 		"short_desc": "Commercial ship outfitting yards on a major trade spine.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/terminal_9.png",
+		"description": "Terminal 9 is a popular haunt for independent pilots, traders and shipping agents. Its neon-lit interior, diversely-stocked bar and intimate booths make it a favoured spot for deals and gossip. It's never quiet. You can hear the karaoke stage from well outside.",
+		"id": "terminal_9",
+		"kind": "landmark",
+		"name": "Terminal 9",
+		"short_desc": "Popular pilot's bar, never closed.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/tokirev_habitat_terminal.png",
@@ -212,6 +230,15 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/dead_reckoning.png",
+		"description": "Dead Reckoning Bar is a favourite of pilots and freight crews. The clientele are transient, the drinks are strong and hot and nobody asks too many questions about where you've been.",
+		"id": "dead_reckoning",
+		"kind": "landmark",
+		"name": "Dead Reckoning",
+		"short_desc": "Pilot bar that is always open, no questions asked.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/fennet_habitat_terminal.png",
 		"description": "Rim terminal that still feels like a frontier stop, even as regional traffic fills the lanes.",
 		"id": "fennet_habitat_terminal",
@@ -232,6 +259,15 @@
 		],
 		"short_desc": "Regional rim outfitting works.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/perihelion.png",
+		"description": "Pilot bar catering to visiting traders and independent operators with money to spend. Its panoramic windows look out across the system, while the clientele trade stories and count comets over beer, soup and dominoes.",
+		"id": "perihelion",
+		"kind": "landmark",
+		"name": "Perihelion",
+		"short_desc": "Pilot bar with a panoramic view and hot soup.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/fortuna_habitat_terminal.png",
@@ -256,6 +292,15 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/the_invisible_hand.png",
+		"description": "An elegant bar frequented by pilots, financiers and corporate executives alike. Private booths, discreet service and a carefully curated drinks menu make it a natural setting for conversations that are best kept off the record.",
+		"id": "the_invisible_hand",
+		"kind": "landmark",
+		"name": "The Invisible Hand",
+		"short_desc": "Fortuna Habitat's famous bar where all walks of life mingle.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/new_carthage_habitat_terminal.png",
 		"description": "Shipping terminal above an oceanic mercantile hub. Manifests matter more than passports.",
 		"id": "new_carthage_habitat_terminal",
@@ -276,6 +321,15 @@
 		],
 		"short_desc": "Mercantile slipways above New Carthage.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/the_letter_of_marque.png",
+		"description": "An establishment with a deliberately old-fashioned nautical theme. Pilots mix with wealthy merchants, shipping family scions mix with corporate fixers and mercenaries. The service is quick, the drinks are excellent, and almost everyone seems to be conducting business of some kind.",
+		"id": "the_letter_of_marque",
+		"kind": "landmark",
+		"name": "The Letter of Marque",
+		"short_desc": "Nautical bar at the cosmopolitan New Carthage Habitat.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/horizon_habitat_terminal.png",
@@ -300,6 +354,15 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/vector.png",
+		"description": "A dingy bar popular with professional pilots and flight crews. Its tinted windows overlook the traffic corridors, while radar readouts and flight tracker screens provide a constant reminder of the ongoing business outside. The lights are too low and music is too loud.",
+		"id": "vector",
+		"kind": "landmark",
+		"name": "Vector",
+		"short_desc": "Dingy pilots' bar.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/titania_habitat_terminal.png",
 		"description": "Tourist terminal with low-gravity docking lanes and a view of Titania's storms.",
 		"id": "titania_habitat_terminal",
@@ -322,6 +385,15 @@
 		"type": "shipyard"
 	},
 	{
+		"art": "res://assets/ui/locations/the_far_side.png",
+		"description": "A lively pilots' bar overlooking the parent gas giant. Operators come here to drink spiced wine away from the madding crowds, and the booths are popular for private conversations and deals. Everybody's got a better story than the last one.",
+		"id": "the_far_side",
+		"kind": "landmark",
+		"name": "The Far Side",
+		"short_desc": "Lively pilots' bar away from the resort regulars.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/concordia_orbital_terminal.png",
 		"description": "Commerce terminal above Pelagos. Twin-sun glare is filtered at the observation decks.",
 		"id": "concordia_orbital_terminal",
@@ -342,6 +414,15 @@
 		],
 		"short_desc": "Manufacturing outfitting yards above Pelagos.",
 		"type": "shipyard"
+	},
+	{
+		"art": "res://assets/ui/locations/double_sunrise.png",
+		"description": "A popular pilot's bar with a sociable, cosmopolitan crowd. Its panoramic windows frame the twin suns, and the mirrored crystal interior is designed to make the most of the spectacular light. Try the signature cocktail.",
+		"id": "double_sunrise",
+		"kind": "landmark",
+		"name": "Double Sunrise",
+		"short_desc": "Popular pilot's bar with a sociable, cosmopolitan crowd.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_exchange.png",
