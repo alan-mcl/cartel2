@@ -397,7 +397,7 @@ static func _test_legacy_habitat_workshop_building(runner: TestRunner, catalog: 
 	if not session.start_new_game(catalog, "LEG-YARD-1", "entrepreneur"):
 		runner.check(false, "legacy yard: session starts")
 		return
-	runner.check(session.visit(catalog, "proxima_shipyard"), "legacy yard: at proxima shipyard")
+	runner.check(session.visit(catalog, "fortuna_shipyard"), "legacy yard: at fortuna shipyard")
 	session.world.building_id = "habitat_workshop"
 	var data := SaveStore.build_save_data(
 		session.player_to_dict(),
@@ -410,6 +410,6 @@ static func _test_legacy_habitat_workshop_building(runner: TestRunner, catalog: 
 	runner.check(loaded.from_save(catalog, data), "legacy yard: save with habitat_workshop loads")
 	runner.check_eq(
 		loaded.building_id,
-		"proxima_shipyard",
+		"fortuna_shipyard",
 		"legacy yard: habitat_workshop remapped to local shipyard"
 	)

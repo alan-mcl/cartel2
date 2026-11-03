@@ -53,7 +53,7 @@ static func run(runner: TestRunner) -> void:
 		influencer.start_new_game(catalog, "INF-1", "influencer"),
 		"start_new_game influencer succeeds"
 	)
-	runner.check_eq(influencer.habitat_id, "fortuna_habitat", "influencer starts at fortuna")
+	runner.check_eq(influencer.habitat_id, "horizon_habitat", "influencer starts at horizon")
 	runner.check(influencer.docked, "influencer begins docked")
 	runner.check_eq(influencer.credits, 4000, "influencer credits")
 	runner.check_eq(influencer.player.reputation, 25, "influencer reputation")
@@ -70,9 +70,15 @@ static func run(runner: TestRunner) -> void:
 		"start_new_game entrepreneur succeeds"
 	)
 	runner.check(entrepreneur.docked, "entrepreneur begins docked")
+	runner.check_eq(entrepreneur.habitat_id, "fortuna_habitat", "entrepreneur starts at fortuna")
 	runner.check_eq(entrepreneur.owned_ships.size(), 0, "entrepreneur has no ships")
 	runner.check_eq(entrepreneur.credits, 32000, "entrepreneur credits")
 
+	runner.check(
+		not entrepreneur.visit(catalog, "skyedge_space_ships"),
+		"Skyedge is not on Fortuna"
+	)
+	runner.check(entrepreneur.dock(catalog, "proxima_habitat"), "entrepreneur docks at Proxima to buy a hull")
 	runner.check(entrepreneur.visit(catalog, "skyedge_space_ships"), "entrepreneur visits Skyedge")
 	runner.check(
 		entrepreneur.buy_chassis(catalog, "flare_on_chassis"),
@@ -88,6 +94,7 @@ static func run(runner: TestRunner) -> void:
 
 	var buyer := GameSession.new()
 	runner.check(buyer.start_new_game(catalog, "BUY-1", "entrepreneur"), "buyer session starts")
+	runner.check(buyer.dock(catalog, "proxima_habitat"), "buyer at Proxima for used ships")
 	runner.check(buyer.visit(catalog, "concord_scouts"), "buyer visits Concord Scouts")
 	var used_price := ShipAssembly.used_ship_price(catalog, "flare_on_ss")
 	runner.check(used_price > 0, "used ship price computed")
@@ -105,6 +112,7 @@ static func run(runner: TestRunner) -> void:
 	var broke := GameSession.new()
 	runner.check(broke.start_new_game(catalog, "POOR-1", "entrepreneur"), "poor buyer session starts")
 	broke.wallet.credits = 750
+	runner.check(broke.dock(catalog, "proxima_habitat"), "poor buyer at Proxima for used ships")
 	runner.check(broke.visit(catalog, "concord_scouts"), "poor buyer visits Concord Scouts")
 	runner.check(
 		not broke.buy_used_ship(catalog, "dragon_gold"),
@@ -116,6 +124,7 @@ static func run(runner: TestRunner) -> void:
 		beacon_only.start_new_game(catalog, "BEACON-1", "entrepreneur"),
 		"beacon-only session starts"
 	)
+	runner.check(beacon_only.dock(catalog, "proxima_habitat"), "beacon-only at Proxima for Skyedge")
 	runner.check(beacon_only.visit(catalog, "skyedge_space_ships"), "beacon-only visits Skyedge")
 	runner.check(beacon_only.buy_chassis(catalog, "flare_on_chassis"), "beacon-only buys chassis")
 	runner.check(beacon_only.visit(catalog, "proxima_shipyard"), "beacon-only visits shipyard")
