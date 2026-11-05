@@ -25,7 +25,7 @@ Every income source and cost is compared in the same units, for the same referen
 - **Credits per hop** is the primary unit. A hop is one gate translation to an adjacent sector, plus the in-system flying at each end.
 - **Credits per GST hour** is the secondary unit. It uses the charter deadline model: each translation's entry and exit lumps (`friction × 240` GST seconds each way on public 4-space routes), plus `deadline_orbit_hours_per_hop` (2 hours) per hop.
 - **Credits per real minute** is the player's experience. Realspace and menus run one GST second per real second, while translations are lumps that take only the unspace flight's real time ([gst.md](gst.md)). So GST hours per hop are mostly translation, and real minutes per hop are mostly in-system flight and docking. Real minutes per hop have not been measured yet. Measure them in playtests and record them here; until then, compare activities per hop.
-- **Reference hulls** are the starting kits (Pegasus P101, Krypton K2, Juno 1088, Flare-ON SS, Silhouette Mk8, and Wolff Warrior) plus the Pegasus P105, the 20 t hauler the Entrepreneur buys.
+- **Reference hulls** are the starting kits (Pegasus P101, Krypton K2, Juno 1095-JSF for the Soldier and Juno 1088 for trade-ratio sampling, Flare-ON SS, Silhouette Mk8, and Wolff Warrior) plus the Pegasus P105, the 20 t hauler the Entrepreneur buys.
 - **Statistics:** use the median over a 30-day market window and several board seeds, and the 10th percentile when the downside matters.
 
 ## Money flow

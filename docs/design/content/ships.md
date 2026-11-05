@@ -30,7 +30,7 @@ SpaceShip
 | Krypton | Orion Aerospace | Mid-range saucer | K2, K3, K4 |
 | Wolff | Bayes Inc (defunct) | Armed freighter / gunship | Warrior, Gladius, Bastion, Logistico |
 | Dragon | Seven Bells Inc | Interceptor w/ hyperdrive | Bronze, Gold, Post |
-| Juno | General Industrial | Light scout / freighter | 1030, 1045, 1060, 1088, 1090 |
+| Juno | General Industrial | Light scout / freighter | 1030, 1045, 1060, 1088, 1090, 1095-JSF |
 | Silhouette | Oklahoma Combine | Tactical fighter | Mk8, Mk6, Warden |
 | Mantis | The Praetorium | Dedicated interceptor | XF900, XF4400, XF5700 |
 | Blackbird | SnedeCorp | Stealth scout | BB-10S, BB-10R, BB-10X |
@@ -161,7 +161,7 @@ Translation courier: alpha hyperdrive, compact fusion, light laser, no plasma. B
 
 ## Juno
 
-The stubby Juno is an old design now built by **General Industrial**. It is a light craft that is only slightly less popular than the older Pegasus. Known configurations include unarmed freighter **1030**, budget scout **1045**, picket **1060**, mid scout **1088**, and long-hop **1090**.
+The stubby Juno is an old design now built by **General Industrial**. It is a light craft that is only slightly less popular than the older Pegasus. Known configurations include unarmed freighter **1030**, budget scout **1045**, picket **1060**, mid scout **1088**, long-hop **1090**, and upgunned scout **1095-JSF**.
 
 ### 1030
 
@@ -170,6 +170,10 @@ Unarmed cargo freighter: hydro-thermal drive, modest life support, and the large
 ### 1060
 
 Scout picket: strong sensors for the chassis, small fuel, one light laser, no cargo bay.
+
+### 1095-JSF
+
+Top-line joint-strike scout: Privy Seal Null antimatter, Helios Arc fusion plant, Lumina photon core, Circinus sensors and SnedOS Astrolabe navigation, 10 mm chitanium, Helios deflector and Guard point defence, and both light mounts (Helios laser and River mass driver) with a hundred-round kinetic magazine inside the Juno mass limit. The long-hop **1090** is a freight-minded dual-gun trim on GI fission and Rhumb plasma; the **1095-JSF** spends the frame on speed and layered defence instead of cargo.
 
 ---
 
@@ -284,7 +288,7 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 | `krypton_k2`, `krypton_k3`, `krypton_k4` | `krypton_chassis` | K2 fusion / K3 antimatter / K4 passenger |
 | `wolff_warrior`, `wolff_gladius`, `wolff_bastion`, `wolff_logistico` | `wolff_chassis` | Bastion = armed freighter; Logistico = bulk hold |
 | `dragon_bronze`, `dragon_gold`, `dragon_post` | `dragon_chassis` | Gold/Post = alpha hyperdrive |
-| `juno_1030`, `1045`, `1060`, `1088`, `1090` | `juno_chassis` | 1030 unarmed cargo; scouts 1045–1090 |
+| `juno_1030`, `1045`, `1060`, `1088`, `1090`, `juno_1095_jsf` | `juno_chassis` | 1030 unarmed cargo; scouts 1045–1095-JSF |
 | `silhouette_mk8`, `silhouette_mk6`, `silhouette_warden` | `silhouette_chassis` | Mk8 contract fighter; Warden picket |
 | `mantis_xf900`, `mantis_xf4400`, `mantis_xf5700` | `mantis_chassis` | Praetorium interceptors; XF900 legacy |
 | `blackbird_bb_10s`, `bb_10r`, `bb_10x` | `blackbird_chassis` | Stealth scout; BB-10X = Needle hyperdrive |

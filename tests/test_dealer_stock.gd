@@ -16,14 +16,18 @@ static func run(runner: TestRunner) -> void:
 
 
 static func _test_fraction_counts(runner: TestRunner, catalog: Catalog, session: GameSession) -> void:
+	var chassis_pool := catalog.list_chassis().size()
+	var ship_pool := catalog.list_ships().size()
+	runner.check(chassis_pool >= 11, "dealer stock: chassis pool for fraction test")
+	runner.check(ship_pool >= 42, "dealer stock: ship pool for fraction test")
 	runner.check_eq(
 		DealerStock.stock_count(3.5, 11),
 		2,
 		"dealer stock: tycho chassis count at 20%"
 	)
 	runner.check_eq(
-		DealerStock.stock_count(3.5, 42),
-		8,
+		DealerStock.stock_count(3.5, ship_pool),
+		int(round(float(ship_pool) * 0.2)),
 		"dealer stock: tycho ship count at 20%"
 	)
 	runner.check_eq(
@@ -32,8 +36,8 @@ static func _test_fraction_counts(runner: TestRunner, catalog: Catalog, session:
 		"dealer stock: proxima chassis count at 75%"
 	)
 	runner.check_eq(
-		DealerStock.stock_count(60.0, 42),
-		32,
+		DealerStock.stock_count(60.0, ship_pool),
+		int(round(float(ship_pool) * 0.75)),
 		"dealer stock: proxima ship count at 75%"
 	)
 
@@ -47,7 +51,7 @@ static func _test_fraction_counts(runner: TestRunner, catalog: Catalog, session:
 	)
 	runner.check_eq(
 		DealerStock.list_stock_ids(catalog, session, "tycho_habitat", tycho_trade).size(),
-		8,
+		DealerStock.stock_count(3.5, ship_pool),
 		"dealer stock: tycho trade-ins lot size"
 	)
 
@@ -56,12 +60,12 @@ static func _test_fraction_counts(runner: TestRunner, catalog: Catalog, session:
 	var concord := catalog.get_building("concord_scouts")
 	runner.check_eq(
 		DealerStock.list_stock_ids(catalog, session, "proxima_habitat", skyedge).size(),
-		8,
+		DealerStock.stock_count(60.0, chassis_pool),
 		"dealer stock: skyedge lot size"
 	)
 	runner.check_eq(
 		DealerStock.list_stock_ids(catalog, session, "proxima_habitat", concord).size(),
-		32,
+		DealerStock.stock_count(60.0, ship_pool),
 		"dealer stock: concord lot size"
 	)
 

@@ -356,17 +356,17 @@
       "description": "An ex-military pilot tired of taking orders.",
       "background": "You have just resigned your dead-end commission in one of the corporate armies to strike out on your own. You know you can fly and fight, but you're not sure how far those skills will take you in civilian life.",
       "starting_location": "Proxima Habitat.",
-      "ship": "Your savings have bought you a battered but sound Juno 1088, rather a step down from the Dragon you used to pilot.",
-      "money": "After the ship you have d8000 left.",
-      "credits": 8000,
+      "ship": "Your savings have bought a fully kitted Juno 1095-JSF, still a step down from the Dragon you used to pilot.",
+      "money": "After the ship you have d925 left.",
+      "credits": 925,
       "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {},
       "ships": [
         {
-          "id": "juno_1088_1",
-          "name": "Juno 1088",
-          "template_id": "juno_1088",
+          "id": "juno_1095_jsf_1",
+          "name": "Juno 1095-JSF",
+          "template_id": "juno_1095_jsf",
           "chassis_id": "juno_chassis"
         }
       ]
@@ -417,7 +417,7 @@
       "id": "white_collar",
       "name": "White Collar",
       "description": "A corporate drone who burned out.",
-      "background": "After a decade at a major corp you had the apartment, the salary and the pension. Slowly you realised that there must be more to life than late nights at the office and after-work drinking sessions. You resigned, cashed out, and ended your unhappy marriage.",
+      "background": "After a decade at a major corp you had the apartment, the salary and the pension. Slowly you realised that there must be more to life than late nights at the office and after-work drinking sessions. You resigned, ended your unhappy marriage, and liquidated your assets.",
       "starting_location": "Irasia Habitat.",
       "ship": "You always dreamed of weekends in a Pegasus P103, now you have one to fly every day.",
       "money": "d3800 remains after the mortgage closure, divorce settlement and ship purchase. It's less than you expected.",

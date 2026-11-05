@@ -478,6 +478,29 @@
     ]
   },
   {
+    "id": "juno_1095_jsf",
+    "name": "Juno 1095-JSF",
+    "maker": "General Industrial",
+    "description": "Top-line joint-strike scout: Privy Seal Null antimatter, Helios Arc fusion plant, Lumina photon core, Circinus and Astrolabe avionics, 10mm chitanium, Helios deflector and Guard point defence, and both light mounts (Helios laser and River mass driver) with a hundred-round kinetic magazine inside the Juno mass limit.",
+    "chassis": "juno_chassis",
+    "modules": [
+      "hw_helios_arc_9",
+      "roth_privy_seal_null",
+      "prv_lumina_lx",
+      "tmc_transit_air",
+      "hg_hermes_circinus",
+      "vessel_registration_beacon",
+      "sne_astrolabe",
+      "fuel_tank_medium",
+      "hw_helios_chitanium_10mm",
+      "hw_helios_light_laser",
+      "oc_river_light_mass_driver",
+      "oc_river_md_light_magazine_100",
+      "hw_helios_deflector",
+      "hw_helios_guard_pd"
+    ]
+  },
+  {
     "id": "juno_1030",
     "name": "Juno 1030",
     "maker": "General Industrial",
