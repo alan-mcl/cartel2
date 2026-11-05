@@ -19,7 +19,7 @@
     },
     "power_demand": 8.0,
     "cost": 3200,
-    "description": "General-purpose Helios deflector fitted to charter Pegasus and Wolff Gladius.",
+    "description": "The general-purpose Helios Deflector shielding solution provides excellent cost effective protection to small space craft.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -47,7 +47,7 @@
     },
     "power_demand": 6.0,
     "cost": 2400,
-    "description": "Kinetic-specialist Helios deflector for escorts that expect mass driver fire.",
+    "description": "The Helios Bulwark deflector shielding solution is ideal for operators anticipating incoming high velocity kinetic rounds.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -75,7 +75,7 @@
     },
     "power_demand": 10.0,
     "cost": 3600,
-    "description": "Helios energy shield for laser-heavy engagement zones.",
+    "description": "The Helios Energy shielding solution is designed specifically for operators expecting laser-heavy engagement zones or unstable N-space transits.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -103,7 +103,7 @@
     },
     "power_demand": 6.0,
     "cost": 2600,
-    "description": "Rugged OC deflector for freighter escorts.",
+    "description": "The River range of shields provides the best value for money protection.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -131,7 +131,7 @@
     },
     "power_demand": 9.0,
     "cost": 3400,
-    "description": "PRV energy shield tuned for plasma and laser fire.",
+    "description": "Incoming plasma and laser fire is no problem with the Ionique!",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -159,7 +159,7 @@
     },
     "power_demand": 7.0,
     "cost": 3000,
-    "description": "Mixed Bellatrix shield for multi-threat patrol craft.",
+    "description": "The Bellatrix shield provides versatile protection in multi-threat environments.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -187,7 +187,7 @@
     },
     "power_demand": 4.0,
     "cost": 2800,
-    "description": "SnedOS electronic shield for cyber-heavy defence.",
+    "description": "The SnedOS electronic shield provides basic cyber defence.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -215,7 +215,7 @@
     },
     "power_demand": 5.0,
     "cost": 3400,
-    "description": "Heavier SnedOS lattice for dedicated EW platforms.",
+    "description": "The SnedOS lattice shield provides a dedicated ECM suite.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -243,7 +243,7 @@
     },
     "power_demand": 6.0,
     "cost": 2500,
-    "description": "GO deflector for gunship hardpoints.",
+    "description": "The Brutus Deflector is very effective against kinetic and concussive threats.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -271,7 +271,7 @@
     },
     "power_demand": 6.0,
     "cost": 2640,
-    "description": "FRZ deflector line for budget militia contracts.",
+    "description": "FRZ Deflector Shield will protect against a variety of missile and projectile threats.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
