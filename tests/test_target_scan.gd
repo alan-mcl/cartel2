@@ -4,6 +4,7 @@ extends RefCounted
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
+	_test_active_scan_block_reason(runner)
 	_test_ship_scan_shows_callsign_when_silent(runner, catalog)
 	_test_ship_scan_shows_identity_when_broadcasting(runner, catalog)
 	_test_planet_scan_uses_planet_name_and_population(runner, catalog)
@@ -13,6 +14,45 @@ static func run(runner: TestRunner) -> void:
 	_test_habitat_scan_includes_inspect_text(runner, catalog)
 	_test_debris_scan_includes_integrity(runner)
 	_test_scanned_contacts_save_round_trip(runner, catalog)
+
+
+static func _test_active_scan_block_reason(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	var passive := _assembled_with_sensor_module(catalog, "hw_glimmer_ember")
+	runner.check_eq(
+		TargetScan.active_scan_block_reason(passive, ShipOperatingState.new()),
+		"No active sensors fitted.",
+		"passive fit blocks active scan"
+	)
+
+	var active := _assembled_with_sensor_module(catalog, "hw_glimmer_glance")
+	var sensors_off := ShipOperatingState.new()
+	sensors_off.active_systems = {"active_sensors": false}
+	runner.check_eq(
+		TargetScan.active_scan_block_reason(active, sensors_off),
+		"Active sensors are off.",
+		"active package with sensors off blocks scan"
+	)
+
+	var sensors_on := ShipOperatingState.new()
+	sensors_on.active_systems = {"active_sensors": true}
+	runner.check_eq(
+		TargetScan.active_scan_block_reason(active, sensors_on),
+		"",
+		"active package with sensors on allows scan"
+	)
+
+
+static func _assembled_with_sensor_module(catalog: Catalog, module_id: String) -> AssembledShip:
+	var module_def := catalog.get_module_def(module_id)
+	var assembled := AssembledShip.new()
+	assembled.chassis = {"mass": 3.2}
+	assembled.envelope = {"dry_mass": 3.2}
+	assembled.installed_modules = [
+		{"slot": "sensor", "module_id": module_id, "data": module_def},
+	]
+	assembled.build_caches()
+	return assembled
 
 
 static func _test_ship_scan_shows_callsign_when_silent(runner: TestRunner, catalog: Catalog) -> void:

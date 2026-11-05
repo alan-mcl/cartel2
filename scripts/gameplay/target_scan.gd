@@ -4,6 +4,18 @@ extends RefCounted
 ## Read-only active-scan report for the current target lock.
 
 
+static func active_scan_block_reason(assembled: AssembledShip, state: ShipOperatingState) -> String:
+	if assembled == null:
+		return "No active sensors fitted."
+	if not assembled.has_active_sensor_package():
+		return "No active sensors fitted."
+	if state == null:
+		return "Active sensors are off."
+	if not bool(state.active_systems.get("active_sensors", false)):
+		return "Active sensors are off."
+	return ""
+
+
 static func build(
 	session: GameSession,
 	catalog: Catalog,

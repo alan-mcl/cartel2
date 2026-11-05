@@ -279,6 +279,10 @@ func request_target_scan() -> void:
 	if locked_contact.is_empty():
 		_main.session.last_log = "No target lock held."
 		return
+	var block := TargetScan.active_scan_block_reason(_player.assembled_ship, _player.operating_state)
+	if not block.is_empty():
+		_main.session.last_log = block
+		return
 	var beacon_destination := ""
 	if not _main.session.in_unspace:
 		beacon_destination = _world_loader.get_translation_beacon_destination(_catalog)
