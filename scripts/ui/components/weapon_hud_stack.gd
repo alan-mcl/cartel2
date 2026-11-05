@@ -30,6 +30,9 @@ func rebuild_if_needed(
 			continue
 		var module_def: ModuleDef = entry.get("data", null)
 		var display_name := module_def.name if module_def != null else str(entry.get("module_id", slot))
+		var tooltip := ""
+		if module_def != null:
+			tooltip = ModuleSpecText.format_tooltip(module_def.to_dict())
 		var hotkey := str(index + 1) if index < 9 else ""
 		var chit: WeaponHudChit = CHIT_SCENE.instantiate()
 		add_child(chit)
@@ -40,7 +43,8 @@ func rebuild_if_needed(
 			hotkey,
 			_format_ammo(module_def, owned),
 			slot == weapons.selected_slot,
-			_cooldown_fraction(weapons, module_def, slot)
+			_cooldown_fraction(weapons, module_def, slot),
+			tooltip
 		)
 		_chits_by_slot[slot] = chit
 		index += 1

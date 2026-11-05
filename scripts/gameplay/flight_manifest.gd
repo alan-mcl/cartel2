@@ -61,6 +61,7 @@ static func _build_modules(assembled: AssembledShip) -> Array:
 		var category := module_data.category if module_data != null else ""
 		rows.append({
 			"slot": str(entry.get("slot", "")),
+			"module_id": str(entry.get("module_id", "")),
 			"name": module_name,
 			"category": category,
 		})

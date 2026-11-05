@@ -97,11 +97,19 @@ func _populate_modules(modules: Array) -> void:
 		if typeof(row_variant) != TYPE_DICTIONARY:
 			continue
 		var row: Dictionary = row_variant
+		var tooltip := ""
+		var module_id := str(row.get("module_id", ""))
+		if not module_id.is_empty() and _catalog != null:
+			var module_def := _catalog.get_module_def(module_id)
+			if module_def != null:
+				tooltip = ModuleSpecText.format_tooltip(module_def.to_dict())
 		_modules_list.add_child(
 			ModuleIcons.make_module_status_row(
 				str(row.get("slot", "")),
 				str(row.get("name", "")),
-				str(row.get("category", ""))
+				str(row.get("category", "")),
+				120.0,
+				tooltip
 			)
 		)
 

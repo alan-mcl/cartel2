@@ -80,7 +80,10 @@ func refresh() -> void:
 			var module_data: ModuleDef = entry.get("data", null)
 			var module_name := module_data.name if module_data != null else str(entry.get("module_id", ""))
 			var category := module_data.category if module_data != null else ""
-			add_child(ModuleIcons.make_module_status_row(slot, module_name, category))
+			var tooltip := ""
+			if module_data != null:
+				tooltip = ModuleSpecText.format_tooltip(module_data.to_dict())
+			add_child(ModuleIcons.make_module_status_row(slot, module_name, category, 120.0, tooltip))
 
 	var engineering := ShipAssembly.get_engineering_block(_catalog, _ship)
 	var stats: Dictionary = engineering.get("stats", {})

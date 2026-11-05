@@ -67,7 +67,8 @@ static func make_module_status_row(
 	slot_text: String,
 	module_name: String,
 	category: String,
-	key_min_width: float = 120.0
+	key_min_width: float = 120.0,
+	tooltip: String = ""
 ) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override(&"separation", 8)
@@ -77,4 +78,15 @@ static func make_module_status_row(
 	var status := UiPatterns.status_row(slot_text, module_name, key_min_width)
 	status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(status)
+	if not tooltip.is_empty():
+		row.tooltip_text = tooltip
+		row.mouse_filter = Control.MOUSE_FILTER_STOP
+		_set_children_mouse_ignore(row)
 	return row
+
+
+static func _set_children_mouse_ignore(node: Node) -> void:
+	for child in node.get_children():
+		if child is Control:
+			(child as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_set_children_mouse_ignore(child)

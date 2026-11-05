@@ -2,7 +2,7 @@ class_name TestAssembler
 extends RefCounted
 
 
-static func run(runner: TestRunner) -> void:
+static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	var catalog := Catalog.load_default()
 
 	for ship_id in ["flare_on_ss", "pegasus_p101"]:
@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cargo_capabilities(runner, catalog)
 	_test_chassis_def_keeps_dictionary(runner, catalog)
 	_test_stock_list_meta(runner, catalog)
+	_test_module_status_row_tooltip(runner, catalog, tree)
 	_test_full_load_limits_fitting_and_launch(runner, catalog)
 	_test_templates_fit_a_full_load(runner, catalog)
 	_test_seed_skips_unfired_rounds(runner, catalog)
@@ -145,6 +146,36 @@ static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:
 			packet_tooltip.contains("Damage packets"),
 			"weapon tooltip lists damage packets"
 		)
+
+
+static func _test_module_status_row_tooltip(
+	runner: TestRunner,
+	catalog: Catalog,
+	tree: SceneTree
+) -> void:
+	if tree == null:
+		tree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		runner.check(false, "module status row: SceneTree available")
+		return
+	var module_def := catalog.get_module_def("hw_glimmer_glance")
+	if module_def == null:
+		runner.check(false, "module status row: sample module exists")
+		return
+	var tooltip := ModuleSpecText.format_tooltip(module_def.to_dict())
+	runner.check(not tooltip.is_empty(), "module status row: sample tooltip non-empty")
+	var host := Control.new()
+	tree.root.add_child(host)
+	var row := ModuleIcons.make_module_status_row(
+		"sensor",
+		module_def.name,
+		module_def.category,
+		120.0,
+		tooltip
+	)
+	host.add_child(row)
+	runner.check_eq(row.tooltip_text, tooltip, "module status row: tooltip on row")
+	host.queue_free()
 
 
 static func _test_full_load_limits_fitting_and_launch(runner: TestRunner, catalog: Catalog) -> void:

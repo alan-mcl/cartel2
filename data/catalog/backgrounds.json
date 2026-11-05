@@ -8,8 +8,8 @@
       "background": "You are a test pilot with every hull in the yard.",
       "starting_location": "Proxima Habitat.",
       "ship": "Every catalog template is parked here for fitting and flight tests.",
-      "money": "d3000 and a spare GI-HT-18 in the parts locker.",
-      "credits": 3000,
+      "money": "d300000 and a spare GI-HT-18 in the parts locker.",
+      "credits": 300000,
       "reputation": 0,
       "habitat_id": "proxima_habitat",
       "spare_parts": {

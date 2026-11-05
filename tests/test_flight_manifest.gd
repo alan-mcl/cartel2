@@ -48,6 +48,7 @@ static func _test_modules_for_current_ship(runner: TestRunner, catalog: Catalog)
 			continue
 		var row: Dictionary = row_variant
 		runner.check(not str(row.get("slot", "")).is_empty(), "flight manifest: module slot set")
+		runner.check(not str(row.get("module_id", "")).is_empty(), "flight manifest: module id set")
 		runner.check(not str(row.get("name", "")).is_empty(), "flight manifest: module name set")
 
 

@@ -7,6 +7,7 @@ var slot_id: String = ""
 var _display_name: String = ""
 var _hotkey_text: String = ""
 var _ammo_text: String = ""
+var _tooltip: String = ""
 var _selected: bool = false
 var _cooldown_fraction: float = 0.0
 
@@ -23,12 +24,14 @@ func configure(
 	hotkey_text: String,
 	ammo_text: String,
 	selected: bool,
-	cooldown_fraction: float
+	cooldown_fraction: float,
+	tooltip: String = ""
 ) -> void:
 	slot_id = p_slot_id
 	_display_name = display_name
 	_hotkey_text = hotkey_text
 	_ammo_text = ammo_text
+	_tooltip = tooltip
 	_selected = selected
 	_cooldown_fraction = cooldown_fraction
 	if is_node_ready():
@@ -67,6 +70,7 @@ func _apply_visuals() -> void:
 	ModuleIcons.configure_texture_rect(_icon, "weapon")
 	_hotkey.text = _hotkey_text
 	_name.text = _display_name
+	tooltip_text = _tooltip
 	update_state(_ammo_text, _selected, _cooldown_fraction)
 
 

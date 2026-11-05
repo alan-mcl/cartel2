@@ -215,7 +215,7 @@ A fitted ship's **fitted potential** is the **sum** of installed module contribu
 
 In flight, the **live signature** applies each module only while that system is in use (with a ~1.5 s afterglow for propulsion and weapons). Power-plant emissions scale with load (minimum idle waste heat). The computational channel scales with compute demand vs capacity. Gravitational hull mass and passive modules (armour, life support) stay on.
 
-The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engineering panels show **fitted potential**. Module tooltips show each part's catalog contribution.
+The flight HUD (`basic_hud`) shows **live** totals. Shipyard and terminal engineering panels show **fitted potential**. Hover any discrete module name (terminal and shipyard **MODULES** lists, in-flight manifest module rows, weapon HUD chits, refit slots, and yard stock) for full specs via `ModuleSpecText.format_tooltip()`.
 
 ### Sensor (`category: sensor`, mount: `system`)
 
