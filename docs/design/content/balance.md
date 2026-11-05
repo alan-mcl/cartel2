@@ -35,8 +35,8 @@ Every income source and cost is compared in the same units, for the same referen
 | Commodity trade | Listing quantity is the book at the posted price. Trades move that price and recover over GST days. | A book-limited hold earns 1.5 to 3 times the best charter hop for the same hull. |
 | Passenger charters | Terminal and bar boards. Pay scales by role, comfort tier, and route. | The benchmark for a 1-hop run. |
 | Freight charters | Terminal board. Lots reserve tonnes; several can stack to one destination when the hold fits. | At least half of passenger pay per GST hour on a stacked 1-hop run (P101/P105). |
-| Scan contracts | Low, narrow pay band for an active scan at a volatile site or planet. Volatile-site pay scales **×1 / ×1.5 / ×2** for translation N 4 / 5 / 6. | Below charters per hop at 4-space, unless the site carries combat risk or a deeper layer. |
-| Bounties | Pay scales with the target's hull, best weapon, and escorts (`BountyCharters.target_pay_strength`), then with volatile translation N (**×1 / ×1.5 / ×2** for 4 / 5 / 6). | Median near d2,200 at 4-space. Keeps at least 60% of the paid bounty after rearm and a 25% hull repair. Re-check after N scaling. |
+| Scan contracts | Low, narrow pay band for an active scan at a volatile site or planet. Volatile-site pay scales **×1 … ×3.5** for translation N 4–9; 7–9 roll more often at high-population habitats. | Below charters per hop at 4-space, unless the site carries combat risk or a deeper layer. |
+| Bounties | Pay scales with the target's hull, best weapon, and escorts (`BountyCharters.target_pay_strength`), then with volatile translation N (**×1 … ×3.5** for 4–9; population-weighted roll). | Median near d2,200 at 4-space. Keeps at least 60% of the paid bounty after rearm and a 25% hull repair. Re-check after N scaling. |
 | Part sales | 60% of list price. Counted as revenue. | Stay revenue. Nett worth books the module at 50% until it is sold. |
 | Salvage | Wired into the session and career stats. No catalog content. | Small extra income from exploration. |
 | Ship and part purchases | Expenses. | Stay expenses. Profit counts the full spend. |
@@ -78,7 +78,8 @@ A typical career should draw income from at least two sources, and no single sou
 - **Margin bands.** The Pegasus P105's book-limited hold still earns about 4.3× its best charter hop. Bring that hull into the 1.5 to 3× band without pushing the 4 t hulls under 1.5×. Goods that need a special hold may earn up to about 1.5 times the unflagged best per tonne, so the special hold pays back. Compute cores still earn about five times the best unflagged good per tonne.
 - **No dominant good.** No single commodity should be the best route on most days for most hulls. Value-dense goods carry a hold flag or enough mass per unit to keep them in their band.
 - **Charter benchmarks.** Measure passenger and freight pay per hop and per GST hour for the reference hulls at reputation 0. Freight earns at least half of passenger pay per GST hour. Reputation-gated work (from reputation 15) pays its multipliers on top.
-- **Bounty and scan pay.** Bounty pay scales with the target's scaled hull, its best weapon, and its escorts, then with volatile translation N (×1 / ×1.5 / ×2 for 4 / 5 / 6). Scan pay uses the same N multipliers on volatile sites; planet surveys are unchanged. Scan pay stays below charter pay per hop at 4-space unless the site carries combat risk or a deeper layer.
+- **Bounty and scan pay.** Bounty pay scales with the target's scaled hull, its best weapon, and its escorts, then with volatile translation N (×1 … ×3.5 for 4–9; deeper N weighted by habitat population). Scan pay uses the same N multipliers on volatile sites; planet surveys are unchanged. Scan pay stays below charter pay per hop at 4-space unless the site carries combat risk or a deeper layer.
+- **Early finish.** On-time passenger, freight, scan, and bounty completion in the first half of the accept-to-deadline window pays **+25%** on top of the posted reward (`CharterResolution`).
 
 ## Gear pricing
 

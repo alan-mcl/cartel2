@@ -316,6 +316,8 @@ func _commit_accepted(
 	charter: Dictionary,
 	log_line: String
 ) -> void:
+	if not charter.has("accepted_gst"):
+		charter["accepted_gst"] = session.gst_seconds
 	book.accepted.append(charter)
 	session.last_log = log_line
 	if not session.player.sandbox:
@@ -341,6 +343,7 @@ func accept_offer(
 		return false
 
 	var charter := _take_offer(passengers, offer, ship_id)
+	charter["accepted_gst"] = session.gst_seconds
 	_apply_charter_deadline(session, charter)
 	_commit_accepted(
 		session,
@@ -374,6 +377,7 @@ func accept_freight_offer(
 		return false
 
 	var charter := _take_offer(freight, offer, ship_id)
+	charter["accepted_gst"] = session.gst_seconds
 	_apply_charter_deadline(session, charter)
 	_commit_accepted(
 		session,

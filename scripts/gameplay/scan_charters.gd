@@ -337,6 +337,10 @@ static func _build_offer(
 	var deadline_hours := duration_hours
 	if target_kind == "planet":
 		deadline_hours = duration_hours + 4
+	var population := DealerStock.population_for_habitat(catalog, habitat_id)
+	var volatile_n := 4
+	if target_kind != "planet":
+		volatile_n = VolatileTranslation.roll_charter_n(rng, population)
 	return _assemble_offer(
 		catalog,
 		cfg,
@@ -354,7 +358,7 @@ static func _build_offer(
 		volatile_site_id,
 		volatile_site,
 		deadline_hours,
-		4 + rng.randi_range(0, 2)
+		volatile_n
 	)
 
 

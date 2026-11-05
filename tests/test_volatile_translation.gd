@@ -14,6 +14,7 @@ static func run(runner: TestRunner) -> void:
 	_test_exit_lag_on_arrival(runner, catalog)
 	_test_volatile_site_stars(runner, catalog)
 	_test_charter_pay_multiplier(runner)
+	_test_roll_charter_n_by_population(runner)
 
 
 static func _assembled_with_nav(catalog: Catalog) -> AssembledShip:
@@ -44,14 +45,22 @@ static func runner_check_start(session: GameSession, catalog: Catalog) -> void:
 
 static func _test_grant_validation(runner: TestRunner, catalog: Catalog) -> void:
 	var session := _session_at_proxima(catalog)
+	var deep_id := VolatileTranslation.grant(session, catalog, {
+		"source_sector_id": "proxima",
+		"label": "Prospect site",
+		"duration_hours": 4,
+		"n": 7,
+	})
+	runner.check(not deep_id.is_empty(), "volatile: grant accepts n7")
+	session.player.volatile_translations.clear()
 	runner.check(
 		VolatileTranslation.grant(session, catalog, {
 			"source_sector_id": "proxima",
-			"label": "Prospect site",
+			"label": "Too deep",
 			"duration_hours": 4,
-			"n": 7,
+			"n": 10,
 		}).is_empty(),
-		"volatile: reject n outside 4-6"
+		"volatile: reject n outside 4-9"
 	)
 	runner.check(
 		VolatileTranslation.grant(session, catalog, {
@@ -479,10 +488,33 @@ static func _test_save_volatile_sector(runner: TestRunner, catalog: Catalog) -> 
 	runner.check_eq(loaded.player.volatile_translations.size(), 1, "volatile: record round-trip")
 
 
+static func _test_roll_charter_n_by_population(runner: TestRunner) -> void:
+	var low_rng := RandomNumberGenerator.new()
+	low_rng.seed = 4242
+	for _i in range(30):
+		var n := VolatileTranslation.roll_charter_n(low_rng, DealerStock.POP_MIN_BILLIONS)
+		runner.check(n >= 4 and n <= 6, "volatile roll: low population stays in 4-6")
+	var high_rng := RandomNumberGenerator.new()
+	high_rng.seed = 9001
+	var saw_deep := false
+	var saw_shallow := false
+	for _i in range(200):
+		var n := VolatileTranslation.roll_charter_n(high_rng, DealerStock.POP_MAX_BILLIONS)
+		if n >= 7:
+			saw_deep = true
+		if n <= 6:
+			saw_shallow = true
+	runner.check(saw_deep, "volatile roll: high population can roll 7-9")
+	runner.check(saw_shallow, "volatile roll: high population still rolls 4-6")
+
+
 static func _test_charter_pay_multiplier(runner: TestRunner) -> void:
 	runner.check_eq(VolatileTranslation.charter_pay_multiplier(4), 1.0, "volatile pay: n4 multiplier")
 	runner.check_eq(VolatileTranslation.charter_pay_multiplier(5), 1.5, "volatile pay: n5 multiplier")
 	runner.check_eq(VolatileTranslation.charter_pay_multiplier(6), 2.0, "volatile pay: n6 multiplier")
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(7), 2.5, "volatile pay: n7 multiplier")
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(8), 3.0, "volatile pay: n8 multiplier")
+	runner.check_eq(VolatileTranslation.charter_pay_multiplier(9), 3.5, "volatile pay: n9 multiplier")
 	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 4), 320, "volatile pay: n4 reward")
 	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 5), 480, "volatile pay: n5 reward")
 	runner.check_eq(VolatileTranslation.scale_charter_reward(320, 6), 640, "volatile pay: n6 reward")

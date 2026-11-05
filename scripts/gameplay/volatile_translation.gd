@@ -4,7 +4,7 @@ extends RefCounted
 const SECTOR_PREFIX := "volatile:"
 const SOLUTION_BASE := 900_000_000
 const DEFAULT_FRICTION := 10
-const ALLOWED_N := [4, 5, 6]
+const ALLOWED_N := [4, 5, 6, 7, 8, 9]
 const ALLOWED_ENTITY_KINDS: Array[String] = [
 	"debris",
 	"orbital",
@@ -34,8 +34,52 @@ static func charter_pay_multiplier(n: int) -> float:
 			return 1.5
 		6:
 			return 2.0
+		7:
+			return 2.5
+		8:
+			return 3.0
+		9:
+			return 3.5
 		_:
 			return 1.0
+
+
+static func population_t_for_charter_n(population_billions: float) -> float:
+	var span := DealerStock.POP_MAX_BILLIONS - DealerStock.POP_MIN_BILLIONS
+	if span <= 0.0:
+		return 0.0
+	return clampf((population_billions - DealerStock.POP_MIN_BILLIONS) / span, 0.0, 1.0)
+
+
+static func roll_charter_n(rng: RandomNumberGenerator, population_billions: float) -> int:
+	if rng == null:
+		return 4
+	var t := population_t_for_charter_n(population_billions)
+	var weights: Array = [
+		{"n": 4, "w": 1.0},
+		{"n": 5, "w": 1.0},
+		{"n": 6, "w": 1.0},
+		{"n": 7, "w": t},
+		{"n": 8, "w": t * 2.0 / 3.0},
+		{"n": 9, "w": t / 3.0},
+	]
+	var total := 0.0
+	for entry_variant in weights:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		total += float((entry_variant as Dictionary).get("w", 0.0))
+	if total <= 0.0:
+		return 4
+	var roll := rng.randf() * total
+	var acc := 0.0
+	for entry_variant in weights:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		acc += float(entry.get("w", 0.0))
+		if roll <= acc:
+			return int(entry.get("n", 4))
+	return 9
 
 
 static func scale_charter_reward(base_reward: int, n: int) -> int:

@@ -27,6 +27,7 @@ static func format_passenger(
 	var deadline := _deadline_line(entry)
 	if not deadline.is_empty():
 		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
 
 	var suggested := _suggested_route_line(entry)
 	if not suggested.is_empty():
@@ -70,6 +71,7 @@ static func format_freight(
 	var deadline := _deadline_line(entry)
 	if not deadline.is_empty():
 		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
 
 	var suggested := _suggested_route_line(entry)
 	if not suggested.is_empty():
@@ -119,6 +121,7 @@ static func format_scan(
 	var deadline := _deadline_line(entry, reference_gst)
 	if not deadline.is_empty():
 		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
 
 	var requirements := _scan_requirement_lines(entry)
 	if not requirements.is_empty():
@@ -170,12 +173,20 @@ static func format_bounty(
 	var deadline := _deadline_line(entry, reference_gst)
 	if not deadline.is_empty():
 		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
 
 	var extra_trimmed := extra.strip_edges()
 	if not extra_trimmed.is_empty():
 		_append_section(lines, extra_trimmed)
 
 	return "\n".join(lines)
+
+
+static func _append_early_finish_bonus(lines: PackedStringArray) -> void:
+	_append_section(
+		lines,
+		"Dock in the first half of the contract window for a 25% early bonus (on-time only)."
+	)
 
 
 static func _bounty_contract_line(

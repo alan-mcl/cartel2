@@ -10,7 +10,7 @@
     "mass": 0.6,
     "volume": 0.8,
     "cost": 800,
-    "description": "Light OC chitanium plate. Standard on Pegasus and Wolff freighter fits.",
+    "description": "OC Chitanium five-mil: best value for money protection on the market.",
     "protection": {
       "kinetic": 0.35,
       "concussive": 0.3,
@@ -35,7 +35,7 @@
     "mass": 1.2,
     "volume": 1.4,
     "cost": 1800,
-    "description": "Heavy Helios chitanium for Silhouette and Dragon patrol variants.",
+    "description": "When only the best protection on the market will do, Helios from Holt-Winters Corp has your back.",
     "protection": {
       "kinetic": 0.55,
       "concussive": 0.48,
@@ -60,7 +60,7 @@
     "mass": 0.9,
     "volume": 1.1,
     "cost": 1200,
-    "description": "Mid-weight OC plate for escorts between courier and gunship roles.",
+    "description": "OC Chitanium eight-mil: ruggedise your ride with us.",
     "protection": {
       "kinetic": 0.45,
       "concussive": 0.38,
@@ -85,7 +85,7 @@
     "mass": 0.8,
     "volume": 1.0,
     "cost": 1100,
-    "description": "Orion aerospace plate kit for armed pickets.",
+    "description": "Expecting trouble: armour up with Bellatrix Plate.",
     "protection": {
       "kinetic": 0.4,
       "concussive": 0.35,
@@ -110,7 +110,7 @@
     "mass": 0.75,
     "volume": 0.95,
     "cost": 1050,
-    "description": "PRV composite plate with modest energy absorption.",
+    "description": "Leave your worries behind and bolt on some Ionique composite!",
     "protection": {
       "kinetic": 0.32,
       "concussive": 0.28,
@@ -135,7 +135,7 @@
     "mass": 1.0,
     "volume": 1.2,
     "cost": 1500,
-    "description": "GO ablative plate for Wolff gunship hardpoints.",
+    "description": "Brutus Ablative Plate provides excellent protection against a range of threats.",
     "protection": {
       "kinetic": 0.48,
       "concussive": 0.42,
@@ -160,7 +160,7 @@
     "mass": 0.5,
     "volume": 0.7,
     "cost": 650,
-    "description": "Budget GI plate for militia conversions.",
+    "description": "GI Plate is a cost-effective method of protecting your ship.",
     "protection": {
       "kinetic": 0.28,
       "concussive": 0.24,
@@ -185,7 +185,7 @@
     "mass": 1.1,
     "volume": 1.3,
     "cost": 1700,
-    "description": "Atlas laminate for fixed-mount patrol platforms.",
+    "description": "Atlas Laminate is a state of the art composite defense solution for personal space craft.",
     "protection": {
       "kinetic": 0.52,
       "concussive": 0.45,
@@ -210,7 +210,7 @@
     "mass": 0.55,
     "volume": 0.75,
     "cost": 720,
-    "description": "Light Chimera flex plate for interceptors.",
+    "description": "Flex Plate comes with good kinetic, concussive and energy absorbtion ratings.",
     "protection": {
       "kinetic": 0.3,
       "concussive": 0.26,
@@ -235,7 +235,7 @@
     "mass": 0.85,
     "volume": 1.0,
     "cost": 1150,
-    "description": "FRZ hardened plate for corporate escorts.",
+    "description": "FRZ Plate is your best choice for hardening a craft.",
     "protection": {
       "kinetic": 0.42,
       "concussive": 0.36,
@@ -260,7 +260,7 @@
     "mass": 0.65,
     "volume": 0.85,
     "cost": 880,
-    "description": "Seven Bells plate for mixed-fleet contracts.",
+    "description": "Seven Bells plate: buy it to protect your ship.",
     "protection": {
       "kinetic": 0.34,
       "concussive": 0.3,
@@ -285,7 +285,7 @@
     "mass": 0.5,
     "volume": 0.7,
     "cost": 900,
-    "description": "SnedOS hardened plate with modest EM shielding.",
+    "description": "SnedOS Plate is the only armour solution on the market to include EM shielding capability.",
     "protection": {
       "kinetic": 0.25,
       "concussive": 0.22,

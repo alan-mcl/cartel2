@@ -15,13 +15,13 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B4| art | high | parent body renderer should align the lighting to where the star is located in the sector
 |B5| balance | high | charters at all places in a location should be scaled per the location population, between 1-12
 |B6| missions | med | bounty target "run away" behaviour isn't fun, should be reworked
+|B7| ui | med | Need UI-friendly labels for module capabilities (e.g. "Habitat" instead of "ls_habitat")
 
 
 ## Features
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|F1|missions|med|Charters to include incentives for early finish, also include 7,8,9-space translations with scaled remuneration
 |F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
 |F4|gameplay|med|Bar: add a "buy a round" button usable once per day that refreshes all the charters available, cost is proportional to system population from d50-d300

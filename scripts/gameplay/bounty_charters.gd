@@ -195,7 +195,8 @@ static func _build_offer(
 	pay_mult *= float(source_def.get("pay_multiplier", 1.0))
 	pay_mult *= float(objective_def.get("difficulty", 1.0))
 	var strength := target_pay_strength(catalog, template_id, threat_profile)
-	var volatile_n := pinned_n if pinned_n > 0 else 4 + rng.randi_range(0, 2)
+	var population := DealerStock.population_for_habitat(catalog, habitat_id)
+	var volatile_n := pinned_n if pinned_n > 0 else VolatileTranslation.roll_charter_n(rng, population)
 	var base_reward := int(
 		round(float(cfg.get("base_pay", 1100)) * pay_mult * rng.randf_range(0.9, 1.15) * strength)
 	)

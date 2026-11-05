@@ -187,7 +187,16 @@ static func _test_on_time_destination_pays(runner: TestRunner, catalog: Catalog)
 	runner.check(session.enter_sector(catalog, "bela", false), "charter hops: travel bela")
 	runner.check(session.dock(catalog, "bela_orbital_habitat"), "charter hops: dock on time")
 	runner.check(missions.list_accepted().is_empty(), "charter hops: on-time clears charter")
-	runner.check(session.credits >= credits_before + reward, "charter hops: on-time pays reward")
+	var bonus := int(round(float(reward) * CharterResolution.EARLY_FINISH_BONUS_FRACTION))
+	runner.check_eq(
+		session.credits,
+		credits_before + reward + bonus,
+		"charter hops: on-time pays reward plus early bonus"
+	)
+	runner.check(
+		session.last_log.contains("Early bonus"),
+		"charter hops: on-time log mentions early bonus"
+	)
 
 
 static func _test_late_destination_charges_cancel_fee(runner: TestRunner, catalog: Catalog) -> void:

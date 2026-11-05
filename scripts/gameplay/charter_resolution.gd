@@ -4,6 +4,25 @@ extends RefCounted
 ## Shared dock pay, late fee, and missed-deadline settlement.
 ## Offer lists, id counters, and accept paths stay on MissionSubsystem.
 
+const EARLY_FINISH_BONUS_FRACTION := 0.25
+
+
+static func early_finish_bonus_amount(reward: int, session: GameSession, charter: Dictionary) -> int:
+	if reward <= 0 or session == null:
+		return 0
+	if is_late(session, charter):
+		return 0
+	if not charter.has("accepted_gst") or not charter.has("deadline_gst"):
+		return 0
+	var accepted := float(charter.get("accepted_gst", 0.0))
+	var deadline := float(charter.get("deadline_gst", 0.0))
+	if deadline <= accepted:
+		return 0
+	var midpoint := accepted + (deadline - accepted) * 0.5
+	if session.gst_seconds > midpoint:
+		return 0
+	return int(round(float(reward) * EARLY_FINISH_BONUS_FRACTION))
+
 
 static func is_late(session: GameSession, charter: Dictionary) -> bool:
 	if session == null or not charter.has("deadline_gst"):
@@ -29,11 +48,16 @@ static func settle_on_dock(
 			session.career.missions_late += 1
 			session.career.record_mission_penalty(penalty)
 	elif reward > 0:
-		session.add_credits(reward)
-		log_with_reputation_delta(session, 1, paid_log)
+		var bonus := early_finish_bonus_amount(reward, session, charter)
+		var total := reward + bonus
+		session.add_credits(total)
+		var message := paid_log
+		if bonus > 0:
+			message = "%s Early bonus d%d." % [paid_log.strip_edges(), bonus]
+		log_with_reputation_delta(session, 1, message)
 		if not session.player.sandbox:
 			session.career.missions_completed_on_time += 1
-			session.career.record_charter_reward(reward)
+			session.career.record_charter_reward(total)
 	else:
 		log_with_reputation_delta(session, 1, unpaid_log)
 		if not session.player.sandbox:
