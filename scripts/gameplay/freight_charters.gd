@@ -148,18 +148,25 @@ static func generate_offers(
 	origin_habitat_id: String,
 	day: int,
 	count: int,
-	run_seed: int = 0
+	run_seed: int = 0,
+	scale_count_by_population: bool = false
 ) -> Array:
 	var cfg := config(catalog)
 	var cargos: Array = []
 	for cargo_variant in cfg.get("cargos", []):
 		if typeof(cargo_variant) == TYPE_DICTIONARY:
 			cargos.append(cargo_variant)
-	if cargos.is_empty() or count <= 0:
+	if cargos.is_empty():
 		return []
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = board_seed(day, origin_habitat_id, run_seed)
+	var offer_count := count
+	if scale_count_by_population:
+		var pop := DealerStock.population_for_habitat(catalog, origin_habitat_id)
+		offer_count = DealerStock.roll_charter_offer_count(rng, pop)
+	if offer_count <= 0:
+		return []
 	var max_hops := PassengerCharters.max_hops_from_config(cfg)
 	var adjacency := PassengerCharters.sector_adjacency(catalog)
 	var sector_habitats := PassengerCharters.sector_habitat_index(catalog)
@@ -173,7 +180,7 @@ static func generate_offers(
 	var desc_by_cargo := description_index(cfg)
 
 	var offers: Array = []
-	for index in count:
+	for index in offer_count:
 		var cargo: Dictionary = cargos[rng.randi() % cargos.size()]
 		var cargo_id := str(cargo.get("id", ""))
 		var dest: Dictionary = PassengerCharters.pick_destination_from_pool(

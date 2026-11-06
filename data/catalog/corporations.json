@@ -354,7 +354,7 @@
 		"name": "Fellowship of Apex",
 		"callsign_prefix": "APEX",
 		"ad_voice": "severe",
-		"trade": "The Fellowship of Apex. Join us to thread the needle of infinity.",
+		"trade": "The Fellowship of Apex. Join us threading the needle of infinity.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "titania",
@@ -1515,7 +1515,7 @@
 		"name": "SnedeCorp",
 		"callsign_prefix": "SNE",
 		"ad_voice": "blunt",
-		"trade": "SnedeCorp industrial chemicals and process equipment.",
+		"trade": "SnedeCorp software solutions, industrial chemicals and process equipment.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "proxima",

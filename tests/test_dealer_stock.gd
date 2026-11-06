@@ -11,6 +11,7 @@ static func run(runner: TestRunner) -> void:
 	session.run_seed = 4242
 
 	_test_fraction_counts(runner, catalog, session)
+	_test_charter_offer_counts(runner)
 	_test_day_stability(runner, catalog, session)
 	_test_buy_gate(runner, catalog, session)
 
@@ -68,6 +69,32 @@ static func _test_fraction_counts(runner: TestRunner, catalog: Catalog, session:
 		DealerStock.stock_count(60.0, ship_pool),
 		"dealer stock: concord lot size"
 	)
+
+
+static func _test_charter_offer_counts(runner: TestRunner) -> void:
+	var belt_band := DealerStock.charter_offer_band(0.04)
+	runner.check_eq(belt_band.x, 1, "charter count: belt band floor")
+	runner.check_eq(belt_band.y, 2, "charter count: belt band ceiling")
+
+	var proxima_band := DealerStock.charter_offer_band(60.0)
+	runner.check_eq(proxima_band.x, 10, "charter count: proxima band floor")
+	runner.check_eq(proxima_band.y, 12, "charter count: proxima band ceiling")
+
+	var tycho_band := DealerStock.charter_offer_band(3.5)
+	runner.check(tycho_band.x > belt_band.y, "charter count: tycho floor above belt ceiling")
+	runner.check(tycho_band.y < proxima_band.x, "charter count: tycho ceiling below proxima floor")
+
+	for seed in 256:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = seed
+		var belt_count := DealerStock.roll_charter_offer_count(rng, 0.04)
+		runner.check(belt_count >= 1 and belt_count <= 2, "charter count: belt roll in 1–2")
+		rng.seed = seed + 100_000
+		var proxima_count := DealerStock.roll_charter_offer_count(rng, 60.0)
+		runner.check(
+			proxima_count >= 10 and proxima_count <= 12,
+			"charter count: proxima roll in 10–12"
+		)
 
 
 static func _test_day_stability(runner: TestRunner, catalog: Catalog, session: GameSession) -> void:

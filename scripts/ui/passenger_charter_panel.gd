@@ -1,8 +1,13 @@
 extends GameScreen
 
 var board_mode: String = PassengerCharters.BOARD_TERMINAL
+var _board_key: String = ""
 var _resolve_ship_id: Callable = Callable()
 var _board: CharterBoard
+
+
+func configure(building: Dictionary) -> void:
+	_board_key = str(building.get("id", ""))
 
 
 func set_ship_resolver(resolver: Callable) -> void:
@@ -41,10 +46,16 @@ func posted_chits() -> Array:
 	if missions == null or _context == null or _context.session == null:
 		return []
 	return CharterChit.from_rows(
-		missions.list_offers(_context.session.habitat_id, board_mode),
+		missions.list_offers(_context.session.habitat_id, _passenger_board_key()),
 		Callable(self, "_describe_offer"),
 		Callable(self, "_accept_offer")
 	)
+
+
+func _passenger_board_key() -> String:
+	if not _board_key.is_empty():
+		return _board_key
+	return board_mode
 
 
 func accepted_chits() -> Array:

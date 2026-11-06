@@ -1,7 +1,12 @@
 extends GameScreen
 
 var _resolve_ship_id: Callable = Callable()
+var _bar_building_id: String = ""
 var _board: CharterBoard
+
+
+func configure_bar(building_id: String) -> void:
+	_bar_building_id = building_id
 
 
 func set_ship_resolver(resolver: Callable) -> void:
@@ -39,8 +44,13 @@ func posted_chits() -> Array:
 	var missions := _missions()
 	if missions == null or _context == null or _context.session == null:
 		return []
+	var rows: Array = []
+	if _bar_building_id.is_empty():
+		rows = missions.list_freight_offers(_context.session.habitat_id)
+	else:
+		rows = missions.list_bar_freight_offers(_context.session.habitat_id, _bar_building_id)
 	return CharterChit.from_rows(
-		missions.list_freight_offers(_context.session.habitat_id),
+		rows,
 		Callable(self, "_describe_offer"),
 		Callable(self, "_accept_offer")
 	)

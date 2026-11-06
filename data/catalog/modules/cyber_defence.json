@@ -7,14 +7,14 @@
     "power_demand": 2.0,
     "compute_demand": 4.0,
     "id": "sne_snedeos_cyberwall",
-    "name": "SnedOS Cyberwall",
+    "name": "SnedOS Cyberwall CND",
     "maker": "SnedeCorp",
     "brand": "SnedOS",
     "protection": {
       "cyber": 0.4
     },
     "cost": 3200,
-    "description": "Top-tier SnedOS cyber defence. Trades compute for resilience.",
+    "description": "SnedOS Cyberwall provides best-in-class Cyber Network Defence.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,
@@ -30,14 +30,14 @@
     "power_demand": 2.0,
     "compute_demand": 4.0,
     "id": "sne_snedeos_cipher_ring",
-    "name": "SnedOS Cipher Ring",
+    "name": "SnedOS CipherRing CND",
     "maker": "SnedeCorp",
     "brand": "SnedOS",
     "protection": {
       "cyber": 0.28
     },
     "cost": 2400,
-    "description": "Mid-tier SnedOS cyber defence for corporate escorts.",
+    "description": "SnedOS CipherRing is a cost effective CND solution.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,
@@ -60,7 +60,7 @@
       "cyber": 0.3
     },
     "cost": 2600,
-    "description": "PRV compute guard for mixed-energy fleets.",
+    "description": "Problems with hackers? No longer a problem with this great Ionique CND appliance!",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,
@@ -76,14 +76,14 @@
     "power_demand": 2.0,
     "compute_demand": 4.0,
     "id": "chi_chimera_firewall",
-    "name": "Chimera Firewall",
+    "name": "Chimera Firewall CND",
     "maker": "Chimera Corporation",
     "brand": "Chimera",
     "protection": {
       "cyber": 0.35
     },
     "cost": 2800,
-    "description": "Chimera firewall for interceptors running hot software loads.",
+    "description": "The Firewall provides standards-compliant Cyber Network Defence.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,

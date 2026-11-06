@@ -2,6 +2,7 @@ extends GameScreen
 
 const PASSENGER_CHARTER := preload("res://scripts/ui/passenger_charter_panel.gd")
 const SCAN_CHARTER := preload("res://scripts/ui/scan_charter_panel.gd")
+const FREIGHT_CHARTER := preload("res://scripts/ui/freight_charter_panel.gd")
 const GOSSIP_TAPE_TOP_UP_MAX_TRIES := 12
 
 var _layout: VBoxContainer
@@ -9,6 +10,7 @@ var _charter_host: Control
 var _board: CharterBoard
 var _passenger_factory: Control
 var _scan_factory: Control
+var _freight_factory: Control
 var _gossip_bar: MessageBar
 var _gossip_rng := RandomNumberGenerator.new()
 var _gossip_started := false
@@ -42,6 +44,10 @@ func configure(building: Dictionary) -> void:
 	_building = building.duplicate(true)
 	if _scan_factory != null and is_instance_valid(_scan_factory) and _scan_factory.has_method("configure"):
 		_scan_factory.configure(_building)
+	if _passenger_factory != null and is_instance_valid(_passenger_factory) and _passenger_factory.has_method("configure"):
+		_passenger_factory.configure(_building)
+	if _freight_factory != null and is_instance_valid(_freight_factory) and _freight_factory.has_method("configure_bar"):
+		_freight_factory.configure_bar(str(_building.get("id", "")))
 
 
 func session_changed() -> void:
@@ -141,6 +147,8 @@ func _ensure_board() -> void:
 		_passenger_factory.board_mode = PassengerCharters.BOARD_BAR
 	if _scan_factory == null or not is_instance_valid(_scan_factory):
 		_scan_factory = SCAN_CHARTER.new()
+	if _freight_factory == null or not is_instance_valid(_freight_factory):
+		_freight_factory = FREIGHT_CHARTER.new()
 
 
 func _sync_factories() -> void:
@@ -151,6 +159,11 @@ func _sync_factories() -> void:
 			_scan_factory.bind(_context)
 		if _scan_factory.has_method("configure"):
 			_scan_factory.configure(_building)
+	if _freight_factory != null:
+		if _freight_factory.has_method("bind"):
+			_freight_factory.bind(_context)
+		if _freight_factory.has_method("configure_bar"):
+			_freight_factory.configure_bar(str(_building.get("id", "")))
 
 
 func _refresh_board() -> void:
@@ -180,6 +193,7 @@ func _sections() -> Array:
 	posted.empty_text = "Nothing posted tonight."
 	posted.chits = CharterBoard.interleave([
 		_passenger_factory.posted_chits(),
+		_freight_factory.posted_chits(),
 		_scan_factory.posted_scan_chits(),
 		_scan_factory.posted_bounty_chits(),
 	])
@@ -189,6 +203,7 @@ func _sections() -> Array:
 	accepted.empty_text = "Nothing accepted."
 	accepted.chits = CharterBoard.interleave([
 		_passenger_factory.accepted_chits(),
+		_freight_factory.accepted_chits(),
 		_scan_factory.accepted_scan_chits(),
 		_scan_factory.accepted_bounty_chits(),
 	])

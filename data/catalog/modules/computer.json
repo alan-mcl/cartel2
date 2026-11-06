@@ -1,7 +1,7 @@
 [
   {
     "id": "apex_capsule_mind",
-    "name": "Capsule Mind",
+    "name": "Capsule Mind Quantum Core",
     "maker": "Fellowship of Apex",
     "brand": "Capsule",
     "core_type": "quantum",
@@ -15,7 +15,7 @@
       "basic_hud"
     ],
     "cost": 7200,
-    "description": "Quantum enclosure inspired by recovered capsule writings. Faith optional; isolation mandatory.",
+    "description": "Try the Capsule Mind. Quantum computing is the future. It is written.",
     "signature": {
       "thermal": 1.64,
       "gravitational": 0.23,
@@ -25,7 +25,7 @@
   },
   {
     "id": "chi_glass",
-    "name": "Chimera Glass",
+    "name": "Chimera Glass CPU",
     "maker": "Chimera Corporation",
     "brand": "Chimera",
     "core_type": "photon",
@@ -39,7 +39,7 @@
       "basic_hud"
     ],
     "cost": 4500,
-    "description": "Photonic glass architecture. Excellent parallel throughput; questionable origin story.",
+    "description": "Chimera Glass cores provide best-in-class photonic compute capability.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.09,
@@ -49,7 +49,7 @@
   },
   {
     "id": "chi_hydra_node",
-    "name": "Hydra Node",
+    "name": "Hydra Compute Node",
     "maker": "Chimera Corporation",
     "brand": "Hydra",
     "core_type": "silicon",
@@ -63,7 +63,7 @@
       "basic_hud"
     ],
     "cost": 899,
-    "description": "Research-division silicon in a commercial chassis. The marketing team insists it is normal.",
+    "description": "Hydra compute modules provide best value-for-money compute capability.",
     "signature": {
       "thermal": 1.2,
       "gravitational": 0.08,
@@ -73,7 +73,7 @@
   },
   {
     "id": "chi_oracle_well",
-    "name": "Oracle Well",
+    "name": "Oracle Well Quantum Core",
     "maker": "Chimera Corporation",
     "brand": "Oracle",
     "core_type": "quantum",
@@ -87,7 +87,7 @@
       "basic_hud"
     ],
     "cost": 14000,
-    "description": "Deep-well quantum for optimisation and simulation. Delicate, expensive, occasionally sentient-adjacent.",
+    "description": "Oracle compute modules provide industry leading quantum computing capability. ",
     "signature": {
       "thermal": 1.72,
       "gravitational": 0.25,
@@ -97,7 +97,7 @@
   },
   {
     "id": "frz_mizuki_600",
-    "name": "Mizuki 600",
+    "name": "Mizuki 600 Compute Core",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Mizuki",
     "core_type": "silicon",
@@ -111,7 +111,7 @@
       "basic_hud"
     ],
     "cost": 1450,
-    "description": "Mizuki-series silicon for zaibatsu fleet refits.",
+    "description": "Mizuki-series silicon cores: for all your computing needs.",
     "signature": {
       "thermal": 1.36,
       "gravitational": 0.09,
@@ -121,7 +121,7 @@
   },
   {
     "id": "frz_shirakawa_type_2",
-    "name": "Shirakawa Type 2",
+    "name": "Shirakawa Type 2 Compute Core",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Shirakawa",
     "core_type": "silicon",
@@ -135,7 +135,7 @@
       "basic_hud"
     ],
     "cost": 549,
-    "description": "Type-number silicon from the Shirakawa house. Conservative and durable.",
+    "description": "Shirakawa-series cores: conservative and durable compute capability",
     "signature": {
       "thermal": 1.08,
       "gravitational": 0.07,
@@ -145,7 +145,7 @@
   },
   {
     "id": "hg_caduceus_c30",
-    "name": "Caduceus C-30",
+    "name": "Caduceus C-30 CPU",
     "maker": "Mercury Communications",
     "brand": "Caduceus",
     "core_type": "silicon",
@@ -159,7 +159,7 @@
       "basic_hud"
     ],
     "cost": 819,
-    "description": "Relay-grade silicon from the Caduceus family. Built for nav and comms stacks.",
+    "description": "Caduceus-grade silicon from the HG family. Built for nav and comms stacks.",
     "signature": {
       "thermal": 1.24,
       "gravitational": 0.08,
@@ -169,7 +169,7 @@
   },
   {
     "id": "hg_caduceus_quiet",
-    "name": "Caduceus Quiet",
+    "name": "Caduceus Quiet QCore",
     "maker": "Mercury Communications",
     "brand": "Caduceus",
     "core_type": "quantum",
@@ -183,7 +183,7 @@
       "basic_hud"
     ],
     "cost": 8600,
-    "description": "Quantum enclosure tuned for crypto and secure comms workloads.",
+    "description": "Quantum enclosure tuned for crypto and secure comms workloads, with the Caduceus seal of quality.",
     "signature": {
       "thermal": 1.44,
       "gravitational": 0.2,
@@ -193,7 +193,7 @@
   },
   {
     "id": "hg_hermes_beam",
-    "name": "Hermes Beam",
+    "name": "Hermes Beam CPU",
     "maker": "Mercury Communications",
     "brand": "Hermes",
     "core_type": "photon",
@@ -207,7 +207,7 @@
       "basic_hud"
     ],
     "cost": 4100,
-    "description": "Photonic beam core for high-bandwidth sensor and comms processing.",
+    "description": "Photonic beam core for high-bandwidth sensor and comms processing. Trust Hermes with your computing needs.",
     "signature": {
       "thermal": 2.4,
       "gravitational": 0.09,
@@ -217,7 +217,7 @@
   },
   {
     "id": "hg_relay_pack_8",
-    "name": "Relay Pack 8",
+    "name": "Relay Pack 8 CPU",
     "maker": "Mercury Communications",
     "brand": "Relay",
     "core_type": "silicon",
@@ -231,7 +231,7 @@
       "basic_hud"
     ],
     "cost": 479,
-    "description": "Compact relay silicon for light hulls and messenger routes.",
+    "description": "Compact Relay silicon for all your onboard compute. With Relay you can't be delayed.",
     "signature": {
       "thermal": 1.0,
       "gravitational": 0.07,
@@ -241,7 +241,7 @@
   },
   {
     "id": "hw_helios_prism",
-    "name": "Helios Prism",
+    "name": "Helios Prism Core",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "core_type": "photon",
@@ -255,7 +255,7 @@
       "basic_hud"
     ],
     "cost": 5200,
-    "description": "Prism photon for pilots who read spec sheets at the dealership.",
+    "description": "Helios provides industry leading photonic compute cores.",
     "signature": {
       "thermal": 2.7,
       "gravitational": 0.1,

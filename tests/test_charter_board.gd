@@ -176,6 +176,7 @@ static func _test_panels_keep_their_copy(runner: TestRunner, catalog: Catalog) -
 			"life_support": "spartan",
 		}],
 	}
+	missions.mark_habitat_boards_materialised(session.habitat_id)
 	passengers.board_mode = PassengerCharters.BOARD_TERMINAL
 	board.present(context, Callable(passengers, "_sections"), passengers._blocked_text())
 	runner.check(_texts(board).has("Night courier"), "charter board: a passenger offer uses the panel title")

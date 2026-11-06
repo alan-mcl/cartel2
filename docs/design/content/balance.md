@@ -142,7 +142,7 @@ A typical career should draw income from at least two sources, and no single sou
 - **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index, ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
 - **Freight pay.** `freight_missions.json` uses `base_pay` 200 and `friction_pay` 13. The balance tool's freight row measures stacked 1-hop lots on the Pegasus P101 and P105 (same destination, greedy fill). Leftover hold trade to that destination is noted beside the stack and is not part of the target.
 - **Bounty pay.** `bounty_missions.json` uses `base_pay` 2100, multiplied by desk, objective, jitter, and `target_pay_strength` (scaled hull, best hull-damage weapon over reference 17.5 hull DPS, and `1 + escort_count`), then by volatile translation N (×1 / ×1.5 / ×2 for 4 / 5 / 6). Threat cards no longer apply a separate pay multiplier for escorts. Re-check median pay and the 60% kept-after-costs rule after weapon retuning and N scaling.
-- **Weapon tiers.** Ammunition alpha is capped under the smallest unarmoured hull (16 hits on the Juno 1030). Mount medians land near 13 / 15.3 / 22.2 bare hull DPS for light, medium, and heavy mounts. Bounty strength uses reference hull DPS 17.5; sampled expected pay stays near d2,788 and armed hunters keep at least 60% after rearm and a 25% hull repair.
+- **Weapon tiers.** Ammunition alpha is capped under the smallest unarmoured hull (16 hits on the Juno 1030). Mount medians land near 13 / 15.3 / 22.2 bare hull DPS for light, medium, and heavy mounts. Bounty strength uses reference hull DPS 17.5; sampled expected pay stays near d3,560 and armed hunters keep at least 60% after rearm and a 25% hull repair.
 
 **Target:**
 
@@ -150,7 +150,7 @@ A typical career should draw income from at least two sources, and no single sou
   - The rate is the same for every hull. A tougher hull already paid for its toughness in its purchase price, and armour and shields pay back through smaller bills.
   - Power and compute damage cost the same share of module value per unit: about d3.53 per unit of generation and d3.93 per compute unit at index 1.0.
 - **Breach.** A breach costs one to two typical runs of income for the median hull. That is a band of d48 to d96 per hull point at the median yard.
-- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the bounty it was paid after rearming and repairing a quarter of its hull. With `base_pay` 2100 and strength scaling, sampled median pay is about d2,769. The Wolff Bastion and Gladius both keep about 80% at 25% hull repair after rearm at the median index.
+- **Bounties after costs.** At the median yard, every armed hull keeps at least 60% of the bounty it was paid after rearming and repairing a quarter of its hull. With `base_pay` 2100 and strength scaling, sampled median pay is about d3,560. The Wolff Bastion and Gladius both keep about 80% at 25% hull repair after rearm at the median index.
 - **Ammunition weapons** must justify their running cost through range, alpha damage, or point-defence-proof delivery. Measure that as cost per kill against a laser of similar price.
 - **Retune with the band.** Retune the repair rate with the balance tool whenever the commodity price band changes, because the index moves with it.
 
@@ -186,7 +186,7 @@ A start at reputation R is R successful charters ahead of a start at 0. For each
 
 `Value(R) = sum over gates G of min(R, G) * D(G)`
 
-Measured with the balance tool's charter sample (6 days, three run seeds, 468 boards) on the Pegasus P111, the luxury charter hull that can fly the passenger roles those gates open. D(15) is 0: the performers' work does not beat the best ungated offer. The later steps are small. P goes 281, 281, 296, 296, 313, 313, 325 at reputations 0, 15, 25, 30, 40, 50, and 75.
+Measured with the balance tool's charter sample (6 days, three run seeds, 1,188 habitat-day passenger boards; desk offer counts scale with sector population) on the Pegasus P111, the luxury charter hull that can fly the passenger roles those gates open. P is the median best 1-hop charter pay divided by that offer's deadline hours (credits per GST hour). D(15) is 0: the performers' work does not beat the best ungated offer. The later steps are small. P goes 281, 281, 296, 296, 313, 313, 325 at reputations 0, 15, 25, 30, 40, 50, and 75.
 
 - Value(5) is d220.
 - Value(8) is d352.

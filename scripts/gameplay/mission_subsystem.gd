@@ -5,7 +5,7 @@ extends SimSubsystem
 
 var generated_day: int = -1
 var passengers := CharterBook.new("charter_")
-var freight := CharterBook.new("freight_", true)
+var freight := CharterBook.new("freight_", false)
 var scans := CharterBook.new("scan_")
 var bounties := CharterBook.new("bounty_")
 var _pursuit_spawned_charter_id: String = ""
@@ -13,7 +13,7 @@ var _pursuit_spawned_charter_id: String = ""
 
 func _init() -> void:
 	id = "missions"
-	save_version = 5
+	save_version = 6
 
 
 func on_day(_session: GameSession, _catalog: Catalog, day: int) -> void:
@@ -53,6 +53,20 @@ func ensure_boards(session: GameSession, catalog: Catalog) -> void:
 	if habitat_id.is_empty():
 		return
 	_ensure_habitat_boards(session, catalog, habitat_id, day)
+
+
+## Harness/tests that inject offers for one book call this so `ensure_boards` does not rebuild the habitat.
+func mark_habitat_boards_materialised(habitat_id: String) -> void:
+	if habitat_id.is_empty():
+		return
+	if not passengers.offers.has(habitat_id):
+		passengers.offers[habitat_id] = {}
+	if not freight.offers.has(habitat_id):
+		freight.offers[habitat_id] = {}
+	if not scans.offers.has(habitat_id):
+		scans.offers[habitat_id] = {}
+	if not bounties.offers.has(habitat_id):
+		bounties.offers[habitat_id] = {}
 
 
 ## Dev harness only. One peacekeeping scan offer, built by ScanCharters, replaces today's board.
@@ -118,7 +132,11 @@ func list_offers(habitat_id: String, board: String) -> Array:
 
 
 func list_freight_offers(habitat_id: String) -> Array:
-	return freight.list_flat(habitat_id)
+	return freight.list_board(habitat_id, DeskCharterBoards.FREIGHT_BOARD_TERMINAL)
+
+
+func list_bar_freight_offers(habitat_id: String, building_id: String) -> Array:
+	return freight.list_board(habitat_id, building_id)
 
 
 func list_accepted() -> Array:
@@ -685,6 +703,11 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 			out["bounty_accepted"] = []
 		if not out.has("next_bounty_charter_id"):
 			out["next_bounty_charter_id"] = 1
+	if from_version <= 5:
+		out["offers_by_habitat"] = {}
+		out["freight_offers_by_habitat"] = {}
+		out["scan_offers_by_habitat"] = {}
+		out["bounty_offers_by_habitat"] = {}
 	return out
 
 
@@ -733,116 +756,31 @@ func _ensure_habitat_boards(
 	habitat_id: String,
 	day: int
 ) -> void:
-	var need_passenger := not passengers.offers.has(habitat_id)
-	var need_freight := not freight.offers.has(habitat_id)
-	var need_scan := not scans.offers.has(habitat_id)
-	var need_bounty := not bounties.offers.has(habitat_id)
-	if not need_passenger and not need_freight and not need_scan and not need_bounty:
+	if _habitat_boards_complete(habitat_id):
 		return
-	var is_station := catalog.location_is_station(habitat_id)
-	var cfg := PassengerCharters.config(catalog)
-	var terminal_count := int(cfg.get("terminal_offers_per_day", 4))
-	var bar_count := int(cfg.get("bar_offers_per_day", 2))
-	var freight_cfg := FreightCharters.config(catalog)
-	var freight_count := int(freight_cfg.get("offers_per_day", 4))
-	var run_seed := session.run_seed
-	if need_passenger and not is_station:
-		var boards := {
-			PassengerCharters.BOARD_TERMINAL: PassengerCharters.generate_offers(
-				catalog,
-				habitat_id,
-				PassengerCharters.BOARD_TERMINAL,
-				day,
-				terminal_count,
-				run_seed
-			),
-		}
-		if PassengerCharters.habitat_has_bar(catalog, habitat_id):
-			boards[PassengerCharters.BOARD_BAR] = PassengerCharters.generate_offers(
-				catalog,
-				habitat_id,
-				PassengerCharters.BOARD_BAR,
-				day,
-				bar_count,
-				run_seed
-			)
-		passengers.offers[habitat_id] = boards
-	elif need_passenger and is_station:
-		passengers.offers[habitat_id] = {}
-	if need_freight and not is_station:
-		freight.offers[habitat_id] = FreightCharters.generate_offers(
-			catalog,
-			habitat_id,
-			day,
-			freight_count,
-			run_seed
-		)
-	elif need_freight and is_station:
-		freight.offers[habitat_id] = {}
-	if need_scan:
-		_ensure_scan_boards_for_habitat(session, catalog, habitat_id, day, run_seed)
-	if need_bounty:
-		_ensure_bounty_boards_for_habitat(session, catalog, habitat_id, day, run_seed)
+	_populate_habitat_boards(catalog, habitat_id, day, session.run_seed)
 
 
-func _ensure_scan_boards_for_habitat(
-	session: GameSession,
+func _habitat_boards_complete(habitat_id: String) -> bool:
+	return (
+		passengers.has_habitat(habitat_id)
+		and freight.has_habitat(habitat_id)
+		and scans.has_habitat(habitat_id)
+		and bounties.has_habitat(habitat_id)
+	)
+
+
+func _populate_habitat_boards(
 	catalog: Catalog,
 	habitat_id: String,
 	day: int,
 	run_seed: int
 ) -> void:
-	var boards: Dictionary = {}
-	var next_index := 0
-	for building_id_variant in ScanCharters.scan_building_ids(catalog, habitat_id):
-		var building_id := str(building_id_variant)
-		var building := catalog.get_building(building_id)
-		if building.is_empty():
-			continue
-		var building_type := catalog.get_building_type(building)
-		var offers := ScanCharters.generate_offers_for_building(
-			catalog,
-			habitat_id,
-			building_id,
-			building_type,
-			day,
-			run_seed,
-			next_index
-		)
-		next_index += offers.size()
-		if not offers.is_empty():
-			boards[building_id] = offers
-	scans.offers[habitat_id] = boards
-
-
-func _ensure_bounty_boards_for_habitat(
-	session: GameSession,
-	catalog: Catalog,
-	habitat_id: String,
-	day: int,
-	run_seed: int
-) -> void:
-	var boards: Dictionary = {}
-	var next_index := 0
-	for building_id_variant in ScanCharters.scan_building_ids(catalog, habitat_id):
-		var building_id := str(building_id_variant)
-		var building := catalog.get_building(building_id)
-		if building.is_empty():
-			continue
-		var building_type := catalog.get_building_type(building)
-		var offers := BountyCharters.generate_offers_for_building(
-			catalog,
-			habitat_id,
-			building_id,
-			building_type,
-			day,
-			run_seed,
-			next_index
-		)
-		next_index += offers.size()
-		if not offers.is_empty():
-			boards[building_id] = offers
-	bounties.offers[habitat_id] = boards
+	var generated := DeskCharterBoards.generate_for_habitat(catalog, habitat_id, day, run_seed)
+	passengers.offers[habitat_id] = generated["passenger"]
+	freight.offers[habitat_id] = generated["freight"]
+	scans.offers[habitat_id] = generated["scan"]
+	bounties.offers[habitat_id] = generated["bounty"]
 
 
 func _try_complete_charters(session: GameSession, catalog: Catalog, habitat_id: String) -> void:

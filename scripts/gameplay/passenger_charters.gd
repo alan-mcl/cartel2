@@ -472,17 +472,24 @@ static func generate_offers(
 	board: String,
 	day: int,
 	count: int,
-	run_seed: int = 0
+	run_seed: int = 0,
+	scale_count_by_population: bool = false
 ) -> Array:
 	var cfg := config(catalog)
 	var roles := roles_for_board(cfg, board)
-	if roles.is_empty() or count <= 0:
+	if roles.is_empty():
 		return []
 
 	var origin := catalog.get_habitat(origin_habitat_id)
 	var origin_sector := str(origin.get("sector_id", ""))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = board_seed(day, origin_habitat_id, board, run_seed)
+	var offer_count := count
+	if scale_count_by_population:
+		var pop := DealerStock.population_for_habitat(catalog, origin_habitat_id)
+		offer_count = DealerStock.roll_charter_offer_count(rng, pop)
+	if offer_count <= 0:
+		return []
 	var max_hops := max_hops_from_config(cfg)
 	var adjacency := sector_adjacency(catalog)
 	var sector_habitats := sector_habitat_index(catalog)
@@ -496,7 +503,7 @@ static func generate_offers(
 	var description_index := description_index_for_board(cfg, board)
 
 	var offers: Array = []
-	for index in count:
+	for index in offer_count:
 		var role: Dictionary = roles[rng.randi() % roles.size()]
 		var dest: Dictionary = pick_destination_from_pool(destination_pool, board, cfg, rng)
 		if dest.is_empty():

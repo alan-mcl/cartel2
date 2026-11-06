@@ -95,6 +95,7 @@ static func _inject_test_offer(
 	missions.passengers.offers[origin_habitat_id] = {
 		PassengerCharters.BOARD_TERMINAL: [offer],
 	}
+	missions.mark_habitat_boards_materialised(origin_habitat_id)
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 	return offer
 
@@ -177,7 +178,7 @@ static func _test_boards_use_distinct_roles(runner: TestRunner, catalog: Catalog
 	for offer in missions.list_offers("proxima_habitat", PassengerCharters.BOARD_TERMINAL):
 		terminal_roles[str(offer.get("role_id", ""))] = true
 	var bar_roles: Dictionary = {}
-	for offer in missions.list_offers("proxima_habitat", PassengerCharters.BOARD_BAR):
+	for offer in missions.list_offers("proxima_habitat", "davidsons"):
 		bar_roles[str(offer.get("role_id", ""))] = true
 	runner.check(not terminal_roles.has("bar_drifters"), "missions: terminal excludes bar roles")
 	runner.check(not terminal_roles.has("bar_couple"), "missions: terminal excludes bar couple")
@@ -196,7 +197,7 @@ static func _test_docked_ship_can_accept_spartan_offer(runner: TestRunner, catal
 		return
 	missions.ensure_boards(session, catalog)
 	var found_eligible := false
-	for board in [PassengerCharters.BOARD_TERMINAL, PassengerCharters.BOARD_BAR]:
+	for board in [PassengerCharters.BOARD_TERMINAL, "davidsons"]:
 		for offer_variant in missions.list_offers("proxima_habitat", board):
 			if typeof(offer_variant) != TYPE_DICTIONARY:
 				continue

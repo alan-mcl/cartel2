@@ -534,7 +534,7 @@ static func _test_commodity_emitter_quotes_a_price(runner: TestRunner, catalog: 
 
 static func _charter_destination_names(missions: MissionSubsystem, habitat_id: String) -> Array[String]:
 	var names: Array[String] = []
-	for board in [PassengerCharters.BOARD_BAR, PassengerCharters.BOARD_TERMINAL]:
+	for board in ["davidsons", PassengerCharters.BOARD_TERMINAL]:
 		for offer_variant in missions.list_offers(habitat_id, board):
 			if typeof(offer_variant) != TYPE_DICTIONARY:
 				continue

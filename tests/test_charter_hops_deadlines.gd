@@ -115,6 +115,7 @@ static func _inject_passenger_offer(
 	missions.passengers.offers[habitat_id] = {
 		PassengerCharters.BOARD_TERMINAL: [offer],
 	}
+	missions.mark_habitat_boards_materialised(habitat_id)
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -310,7 +311,10 @@ static func _test_late_freight_elsewhere_keeps_contract(runner: TestRunner, cata
 		"hold_label": "refrigerated",
 		"reward": 100,
 	}
-	missions.freight.offers["proxima_habitat"] = [offer]
+	missions.freight.offers["proxima_habitat"] = {
+		DeskCharterBoards.FREIGHT_BOARD_TERMINAL: [offer],
+	}
+	missions.mark_habitat_boards_materialised("proxima_habitat")
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 	runner.check(missions.accept_freight_offer(session, catalog, offer.id, ship.id), "charter hops: accept freight keep test")
 	session.advance_gst(float(GalacticCalendar.SECONDS_PER_HOUR * 2))

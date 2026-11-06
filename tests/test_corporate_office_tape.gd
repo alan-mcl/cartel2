@@ -37,7 +37,7 @@ static func _inject_scan_offer(missions: MissionSubsystem, session: GameSession,
 	missions.generated_day = day
 	# Stub other boards so ensure_boards does not regenerate and overwrite the inject.
 	missions.passengers.offers[habitat_id] = {}
-	missions.freight.offers[habitat_id] = []
+	missions.freight.offers[habitat_id] = {}
 	missions.bounties.offers[habitat_id] = {}
 	if not missions.scans.offers.has(habitat_id):
 		missions.scans.offers[habitat_id] = {}

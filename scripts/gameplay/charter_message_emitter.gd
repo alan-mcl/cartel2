@@ -36,18 +36,24 @@ func sample(
 
 static func _collect_offer_entries(missions: MissionSubsystem, habitat_id: String) -> Array:
 	var entries: Array = []
-	for offer_variant in missions.list_offers(habitat_id, PassengerCharters.BOARD_BAR):
-		if typeof(offer_variant) != TYPE_DICTIONARY:
-			continue
-		entries.append({"offer": offer_variant, "desk": "bar", "kind": "passenger"})
-	for offer_variant in missions.list_offers(habitat_id, PassengerCharters.BOARD_TERMINAL):
-		if typeof(offer_variant) != TYPE_DICTIONARY:
-			continue
-		entries.append({"offer": offer_variant, "desk": "terminal", "kind": "passenger"})
-	for offer_variant in missions.list_freight_offers(habitat_id):
-		if typeof(offer_variant) != TYPE_DICTIONARY:
-			continue
-		entries.append({"offer": offer_variant, "desk": "terminal", "kind": "freight"})
+	var passenger_boards: Variant = missions.passengers.offers.get(habitat_id, {})
+	if typeof(passenger_boards) == TYPE_DICTIONARY:
+		for board_key_variant in passenger_boards.keys():
+			var board_key := str(board_key_variant)
+			var desk := "terminal" if board_key == PassengerCharters.BOARD_TERMINAL else "bar"
+			for offer_variant in passenger_boards[board_key_variant]:
+				if typeof(offer_variant) != TYPE_DICTIONARY:
+					continue
+				entries.append({"offer": offer_variant, "desk": desk, "kind": "passenger"})
+	var freight_boards: Variant = missions.freight.offers.get(habitat_id, {})
+	if typeof(freight_boards) == TYPE_DICTIONARY:
+		for board_key_variant in freight_boards.keys():
+			var board_key := str(board_key_variant)
+			var desk := "terminal" if board_key == DeskCharterBoards.FREIGHT_BOARD_TERMINAL else "bar"
+			for offer_variant in freight_boards[board_key_variant]:
+				if typeof(offer_variant) != TYPE_DICTIONARY:
+					continue
+				entries.append({"offer": offer_variant, "desk": desk, "kind": "freight"})
 	return entries
 
 

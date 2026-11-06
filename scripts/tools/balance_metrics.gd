@@ -2239,14 +2239,10 @@ static func _leftover_trade_to_destination(
 # --- Charters and bounties --------------------------------------------------------------------
 
 
-## Board generation mirrors `MissionSubsystem._ensure_habitat_boards`.
+## Board generation mirrors `MissionSubsystem._populate_habitat_boards`.
 static func _sample_charters(ctx: Dictionary) -> Dictionary:
 	var catalog: Catalog = ctx["catalog"]
 	var opts: Dictionary = ctx["options"]
-	var passenger_cfg := PassengerCharters.config(catalog)
-	var terminal_count := int(passenger_cfg.get("terminal_offers_per_day", 4))
-	var bar_count := int(passenger_cfg.get("bar_offers_per_day", 2))
-	var freight_count := int(FreightCharters.config(catalog).get("offers_per_day", 4))
 	var samples := {"terminal": [], "bar": [], "freight": [], "scan": [], "bounty": []}
 	var boards: Array = []
 	var habitat_ids: Array = catalog.habitats_by_id.keys()
@@ -2254,39 +2250,50 @@ static func _sample_charters(ctx: Dictionary) -> Dictionary:
 	for habitat_variant in habitat_ids:
 		var habitat_id := str(habitat_variant)
 		var is_station := catalog.location_is_station(habitat_id)
-		var has_bar := PassengerCharters.habitat_has_bar(catalog, habitat_id)
 		for day_offset in range(maxi(1, int(opts.get("charter_days", 1)))):
 			var day := int(ctx["start_day"]) + day_offset
 			for run_seed_variant in opts.get("charter_seeds", [0]):
 				var run_seed := int(run_seed_variant)
+				var generated := DeskCharterBoards.generate_for_habitat(
+					catalog, habitat_id, day, run_seed
+				)
+				var passenger_boards: Dictionary = generated["passenger"]
+				var freight_boards: Dictionary = generated["freight"]
+				var scan_boards: Dictionary = generated["scan"]
+				var bounty_boards: Dictionary = generated["bounty"]
 				var board := {"passenger": [], "freight": []}
 				if not is_station:
-					var terminal := PassengerCharters.generate_offers(
-						catalog, habitat_id, PassengerCharters.BOARD_TERMINAL, day, terminal_count, run_seed
+					var terminal_rows: Variant = passenger_boards.get(PassengerCharters.BOARD_TERMINAL, [])
+					if typeof(terminal_rows) == TYPE_ARRAY:
+						(samples["terminal"] as Array).append_array(terminal_rows)
+						(board["passenger"] as Array).append_array(terminal_rows)
+					var terminal_freight: Variant = freight_boards.get(
+						DeskCharterBoards.FREIGHT_BOARD_TERMINAL, []
 					)
-					(samples["terminal"] as Array).append_array(terminal)
-					(board["passenger"] as Array).append_array(terminal)
-					if has_bar:
-						var bar := PassengerCharters.generate_offers(
-							catalog, habitat_id, PassengerCharters.BOARD_BAR, day, bar_count, run_seed
-						)
-						(samples["bar"] as Array).append_array(bar)
-						(board["passenger"] as Array).append_array(bar)
-					var freight := FreightCharters.generate_offers(catalog, habitat_id, day, freight_count, run_seed)
-					(samples["freight"] as Array).append_array(freight)
-					(board["freight"] as Array).append_array(freight)
+					if typeof(terminal_freight) == TYPE_ARRAY:
+						(samples["freight"] as Array).append_array(terminal_freight)
+						(board["freight"] as Array).append_array(terminal_freight)
 					boards.append(board)
-				for building_variant in ScanCharters.scan_building_ids(catalog, habitat_id):
-					var building_id := str(building_variant)
-					if not catalog.buildings_by_id.has(building_id):
+				for board_key in passenger_boards.keys():
+					if str(board_key) == PassengerCharters.BOARD_TERMINAL:
 						continue
-					var building_type := catalog.get_building_type(catalog.get_building(building_id))
-					(samples["scan"] as Array).append_array(ScanCharters.generate_offers_for_building(
-						catalog, habitat_id, building_id, building_type, day, run_seed, 0
-					))
-					(samples["bounty"] as Array).append_array(BountyCharters.generate_offers_for_building(
-						catalog, habitat_id, building_id, building_type, day, run_seed, 0
-					))
+					var bar_rows: Variant = passenger_boards[board_key]
+					if typeof(bar_rows) == TYPE_ARRAY:
+						(samples["bar"] as Array).append_array(bar_rows)
+				for board_key in freight_boards.keys():
+					if str(board_key) == DeskCharterBoards.FREIGHT_BOARD_TERMINAL:
+						continue
+					var bar_freight: Variant = freight_boards[board_key]
+					if typeof(bar_freight) == TYPE_ARRAY:
+						(samples["freight"] as Array).append_array(bar_freight)
+				for building_id in scan_boards.keys():
+					var scan_rows: Variant = scan_boards[building_id]
+					if typeof(scan_rows) == TYPE_ARRAY:
+						(samples["scan"] as Array).append_array(scan_rows)
+				for building_id in bounty_boards.keys():
+					var bounty_rows: Variant = bounty_boards[building_id]
+					if typeof(bounty_rows) == TYPE_ARRAY:
+						(samples["bounty"] as Array).append_array(bounty_rows)
 	return {"samples": samples, "boards": boards}
 
 

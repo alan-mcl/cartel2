@@ -143,6 +143,7 @@ static func _test_passenger_early_finish_on_dock(runner: TestRunner, catalog: Ca
 	missions.passengers.offers["proxima_habitat"] = {
 		PassengerCharters.BOARD_TERMINAL: [offer],
 	}
+	missions.mark_habitat_boards_materialised("proxima_habitat")
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 	var accepted_ok := missions.accept_offer(session, catalog, offer.id, ship.id)
 	if not accepted_ok:
@@ -323,7 +324,9 @@ static func _test_books_keep_save_keys(runner: TestRunner) -> void:
 	missions.passengers.offers["proxima_habitat"] = {"terminal": [{"id": "p1"}]}
 	missions.passengers.accepted.append({"charter_id": "charter_1", "reward": 10})
 	missions.passengers.next_id = 2
-	missions.freight.offers["proxima_habitat"] = [{"id": "f1"}]
+	missions.freight.offers["proxima_habitat"] = {
+		DeskCharterBoards.FREIGHT_BOARD_TERMINAL: [{"id": "f1"}],
+	}
 	missions.freight.next_id = 3
 	missions.scans.next_id = 4
 	missions.bounties.next_id = 5
@@ -335,7 +338,7 @@ static func _test_books_keep_save_keys(runner: TestRunner) -> void:
 	runner.check(data.has("offers_by_habitat"), "charter book: passenger offers keep their save key")
 	runner.check(data.has("freight_offers_by_habitat"), "charter book: freight offers keep their save key")
 	var freight_rows: Variant = data["freight_offers_by_habitat"]["proxima_habitat"]
-	runner.check(typeof(freight_rows) == TYPE_ARRAY, "charter book: freight offers stay a flat list")
+	runner.check(typeof(freight_rows) == TYPE_DICTIONARY, "charter book: freight offers keyed by desk")
 	var loaded := MissionSubsystem.new()
 	loaded.from_dict(data)
 	runner.check_eq(loaded.passengers.next_id, 2, "charter book: passenger id counter round-trips")

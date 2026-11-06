@@ -115,6 +115,7 @@ static func _inject_scan_offer(
 	var boards: Dictionary = missions.scans.offers[habitat_id]
 	boards[building_id] = [offer]
 	missions.scans.offers[habitat_id] = boards
+	missions.mark_habitat_boards_materialised(habitat_id)
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -206,21 +207,17 @@ static func _test_peaceforce_board_generates(runner: TestRunner, catalog: Catalo
 
 
 static func _test_bar_can_generate_empty(runner: TestRunner, catalog: Catalog) -> void:
-	var found_empty := false
-	for day in range(0, 40):
-		var offers := ScanCharters.generate_offers_for_building(
-			catalog,
-			"proxima_habitat",
-			"davidsons",
-			ScanCharters.BOARD_BAR,
-			day,
-			12345,
-			0
-		)
-		if offers.is_empty():
-			found_empty = true
-			break
-	runner.check(found_empty, "scan: bar chance can yield no offer")
+	var offers := ScanCharters.generate_offers_for_building(
+		catalog,
+		"proxima_habitat",
+		"davidsons",
+		ScanCharters.BOARD_BAR,
+		1,
+		12345,
+		0,
+		0
+	)
+	runner.check(offers.is_empty(), "scan: zero desk scan slots yield no offers")
 
 
 static func _test_second_bar_configures_its_own_desk(runner: TestRunner, catalog: Catalog) -> void:

@@ -84,6 +84,7 @@ static func _inject_bounty_offer(
 	var boards: Dictionary = missions.bounties.offers[habitat_id]
 	boards[building_id] = [offer]
 	missions.bounties.offers[habitat_id] = boards
+	missions.mark_habitat_boards_materialised(habitat_id)
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 
@@ -133,39 +134,31 @@ static func _test_peaceforce_board_generates(runner: TestRunner, catalog: Catalo
 
 
 static func _test_corporate_can_generate_empty(runner: TestRunner, catalog: Catalog) -> void:
-	var found_empty := false
-	for day in range(0, 40):
-		var offers := BountyCharters.generate_offers_for_building(
-			catalog,
-			"proxima_habitat",
-			ScanCharters.corporate_building_id("creus", "proxima"),
-			BountyCharters.BOARD_CORPORATE,
-			day,
-			54321,
-			0
-		)
-		if offers.is_empty():
-			found_empty = true
-			break
-	runner.check(found_empty, "bounty: corporate chance can yield no offer")
+	var offers := BountyCharters.generate_offers_for_building(
+		catalog,
+		"proxima_habitat",
+		ScanCharters.corporate_building_id("creus", "proxima"),
+		BountyCharters.BOARD_CORPORATE,
+		1,
+		54321,
+		0,
+		0
+	)
+	runner.check(offers.is_empty(), "bounty: zero desk bounty slots yield no offers")
 
 
 static func _test_bar_can_generate_empty(runner: TestRunner, catalog: Catalog) -> void:
-	var found_empty := false
-	for day in range(0, 80):
-		var offers := BountyCharters.generate_offers_for_building(
-			catalog,
-			"proxima_habitat",
-			"davidsons",
-			BountyCharters.BOARD_BAR,
-			day,
-			99999,
-			0
-		)
-		if offers.is_empty():
-			found_empty = true
-			break
-	runner.check(found_empty, "bounty: bar chance can yield no offer")
+	var offers := BountyCharters.generate_offers_for_building(
+		catalog,
+		"proxima_habitat",
+		"davidsons",
+		BountyCharters.BOARD_BAR,
+		1,
+		99999,
+		0,
+		0
+	)
+	runner.check(offers.is_empty(), "bounty: zero desk bounty slots yield no offers")
 
 
 static func _test_accept_grants_bounty_target(runner: TestRunner, catalog: Catalog) -> void:
@@ -300,7 +293,8 @@ static func _test_composed_peacekeeping_copy(runner: TestRunner, catalog: Catalo
 		BountyCharters.BOARD_PEACEKEEPING,
 		12,
 		777,
-		0
+		0,
+		4
 	)
 	runner.check(not offers.is_empty(), "bounty compose: peacekeeping generates")
 	var offer: Dictionary = offers[0]
@@ -323,14 +317,24 @@ static func _test_disable_objective_distinct(runner: TestRunner, catalog: Catalo
 	var destroy_offer: Dictionary = {}
 	var disable_offer: Dictionary = {}
 	for day in range(0, 200):
+		var building_id := ScanCharters.peacekeeping_building_id("proxima")
+		var counts := DeskCharterBoards.counts_for_building(
+			catalog,
+			"proxima_habitat",
+			building_id,
+			BountyCharters.BOARD_PEACEKEEPING,
+			day,
+			8888
+		)
 		var offers := BountyCharters.generate_offers_for_building(
 			catalog,
 			"proxima_habitat",
-			ScanCharters.peacekeeping_building_id("proxima"),
+			building_id,
 			BountyCharters.BOARD_PEACEKEEPING,
 			day,
 			8888,
-			0
+			0,
+			int(counts.get("bounty", 0))
 		)
 		if offers.is_empty():
 			continue

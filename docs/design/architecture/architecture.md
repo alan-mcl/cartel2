@@ -183,14 +183,22 @@ Volatile grants carry optional `setup.scan_contact` ship contacts spawned in
 `WorldLoader._load_volatile_sector`. Daily boards invalidate at GST day rollover; the first
 charter UI open at a docked habitat generates that habitat’s passenger, freight, and scan
 offers only (not every habitat in the catalog). Accepted charters persist in subsystem
-save data (missions save version 5); completion and cancellation are handled in gameplay,
+save data (missions save version 6); completion and cancellation are handled in gameplay,
 not UI. On-time pay, a late fee, and a missed deadline settle through `CharterResolution`.
 Each kind keeps its offer map, accepted list, and id counter on a `CharterBook`. Passenger and freight accept share that book path. Scan and bounty still grant the volatile site inside `accept_scan_offer` and `accept_bounty_offer`. Save keys and id prefixes are unchanged.
 A scan contract is complete when `ScanCharters.charter_satisfied` matches the active scan.
 
 **Bounty charters** from `bounty_missions.json` post on the same peacekeeping, corporate,
-and bar desks as scan work (peaceforce always one per day; corporate and bar roll at lower
-chance). Each habitat building of type `bar` posts its own board. `BarPanel` configures that desk from the building it was opened with. Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
+and bar desks as scan work. Each **desk** (terminal departures, terminal freight tab, peacekeeping,
+corporate office, or a specific bar building) rolls one daily **total** offer count from the
+habitat sector’s `population_billions` (log-scaled from belt spokes at **0.04** billion up to
+Proxima at **60**): the band floor lerps **1→10**, the ceiling **2→12** (belt spokes **1–2**,
+Tycho about **7–8**, Proxima **10–12**), seeded with that desk’s day/habitat/building RNG.
+That total is split across mission kinds on mixed desks: peacekeeping and corporate **50/50**
+scan and bounty; a bar **60/20/15/5** passenger, freight, scan, and bounty. Terminal departures
+and the terminal freight tab each roll their own total (all passenger or all freight). Bar
+passenger and bar freight are stored per building id; `BarPanel` interleaves that building’s
+mix in one grid. Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
 draws an **objective** (destroy, intercept, disable, eliminate), wanted **reason** and **status**
 lines, a **threat** (pay multiplier plus a profile), any catalog **armed ship** template, a volatile **site** from
 [`volatile_sites.json`](../../../data/catalog/volatile_sites.json), and a desk **frame** with substituted
@@ -213,7 +221,7 @@ power generation reaches zero and still pays if the target is destroyed instead.
 `BountyCharters.charter_satisfied`, which uses `PlayerState.scan_satisfies_contract_kinds`
 (sector and post-accept timestamp); pay lands when the
 pilot docks back at the origin habitat before the return gate expires. Sanctions do not apply in
-volatile sectors. Missions save version 5 adds bounty offer and accepted lists.
+volatile sectors. Missions save version 6 clears stale offer maps on load from v5 so desks rebuild with per-desk totals and mixes.
 
 [`PlotlineSubsystem`](../../../scripts/gameplay/plotline_subsystem.gd) (`plotlines`, save version 1) runs optional background arcs from [`plotlines.json`](../../../data/catalog/plotlines.json). Each arc is a small state machine: GST day rollover and typed session events advance states; `accept_gig` / `complete_gig` are the write path for future desk UI. While in a state, the subsystem can contribute weighted ticker lines and derived gig records. [`MissionSubsystem.list_plot_gigs`](../../../scripts/gameplay/mission_subsystem.gd) exposes gigs; no board UI yet. Full rules: [plotlines.md](../content/plotlines.md).
 

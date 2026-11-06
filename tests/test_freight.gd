@@ -95,7 +95,8 @@ static func _inject_freight_offer(
 	offer: Dictionary
 ) -> void:
 	var habitat_id := str(offer.get("origin_habitat_id", ""))
-	missions.freight.offers[habitat_id] = [offer]
+	missions.freight.offers[habitat_id] = {DeskCharterBoards.FREIGHT_BOARD_TERMINAL: [offer]}
+	missions.mark_habitat_boards_materialised(habitat_id)
 	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
 
 

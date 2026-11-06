@@ -30,7 +30,7 @@ Some passenger **roles** require a minimum pilot **reputation** (touring perform
 
 Some **freight** cargo types use the same gate (bonded luxury, prototypes, race animals, museum objects under seal).
 
-Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances.
+Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances. How many tiles each **desk** shows scales with sector **population** (log-scaled from the smallest belt spokes through Proxima): one roll between a population-derived floor and ceiling (roughly **1–2** on the rim, **10–12** at Proxima) is the **total** for that desk. Peacekeeping and corporate offices split that total **50/50** between scan and bounty work; a pilot bar splits it **60/20/15/5** across passenger, freight, scan, and bounty. Terminal departures and the terminal freight tab each get their own roll (all passenger or all freight). Each desk has its own seed, so totals differ between desks on the same day.
 
 At the habitat UI, each building’s desk shows **open work in one tile grid** and **accepted contracts in a second** (types the building does not post simply add no tiles). The terminal keeps **Departures** (passenger only) and **Freight** on separate tabs; bars, peacekeeping, and corporate offices mix the kinds they post in the open grid.
 

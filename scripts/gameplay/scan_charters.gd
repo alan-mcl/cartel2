@@ -180,7 +180,8 @@ static func generate_offers_for_building(
 	building_type: String,
 	day: int,
 	run_seed: int,
-	offer_index_start: int
+	offer_index_start: int,
+	offer_count: int = 0
 ) -> Array:
 	var cfg := config(catalog)
 	var sector_id := catalog.get_habitat_sector_id(habitat_id)
@@ -190,18 +191,14 @@ static func generate_offers_for_building(
 	var rng := RandomNumberGenerator.new()
 	rng.seed = board_seed(day, habitat_id, building_id, run_seed)
 
-	var count := 0
+	var count := offer_count
 	match building_type:
-		BOARD_PEACEKEEPING:
-			count = int(cfg.get("peacekeeping_offers_per_day", 3))
-		BOARD_CORPORATE:
-			count = int(cfg.get("corporate_offers_per_day", 2))
-		BOARD_BAR:
-			if rng.randf() >= float(cfg.get("bar_scan_chance", 0.25)):
-				return []
-			count = 1
+		BOARD_PEACEKEEPING, BOARD_CORPORATE, BOARD_BAR:
+			pass
 		_:
 			return []
+	if count <= 0:
+		return []
 
 	var offers: Array = []
 	var next_id := offer_index_start

@@ -6,6 +6,13 @@ const POP_MAX_BILLIONS := 60.0
 const FRACTION_MIN := 0.20
 const FRACTION_SPAN := 0.55
 
+const CHARTER_POP_MIN_BILLIONS := 0.04
+const CHARTER_POP_MAX_BILLIONS := 60.0
+const CHARTER_COUNT_FLOOR_MIN := 1
+const CHARTER_COUNT_FLOOR_MAX := 10
+const CHARTER_COUNT_CEIL_MIN := 2
+const CHARTER_COUNT_CEIL_MAX := 12
+
 const STOCK_SOURCE_DAILY := "daily"
 
 
@@ -37,6 +44,45 @@ static func population_for_habitat(catalog: Catalog, habitat_id: String) -> floa
 	if sector.is_empty():
 		return POP_MIN_BILLIONS
 	return float(sector.get("population_billions", POP_MIN_BILLIONS))
+
+
+static func charter_population_t(population_billions: float) -> float:
+	var lo := CHARTER_POP_MIN_BILLIONS
+	var hi := CHARTER_POP_MAX_BILLIONS
+	if population_billions <= lo:
+		return 0.0
+	if population_billions >= hi:
+		return 1.0
+	var log_lo := log(lo)
+	var log_hi := log(hi)
+	var log_pop := log(maxf(population_billions, lo))
+	return clampf((log_pop - log_lo) / (log_hi - log_lo), 0.0, 1.0)
+
+
+static func charter_offer_band(population_billions: float) -> Vector2i:
+	var t := charter_population_t(population_billions)
+	var floor := int(round(lerpf(
+		float(CHARTER_COUNT_FLOOR_MIN),
+		float(CHARTER_COUNT_FLOOR_MAX),
+		t
+	)))
+	var ceil := int(round(lerpf(
+		float(CHARTER_COUNT_CEIL_MIN),
+		float(CHARTER_COUNT_CEIL_MAX),
+		t
+	)))
+	floor = clampi(floor, CHARTER_COUNT_FLOOR_MIN, CHARTER_COUNT_FLOOR_MAX)
+	ceil = clampi(ceil, CHARTER_COUNT_CEIL_MIN, CHARTER_COUNT_CEIL_MAX)
+	if ceil < floor:
+		ceil = floor
+	return Vector2i(floor, ceil)
+
+
+static func roll_charter_offer_count(rng: RandomNumberGenerator, population_billions: float) -> int:
+	if rng == null:
+		return CHARTER_COUNT_FLOOR_MIN
+	var band := charter_offer_band(population_billions)
+	return rng.randi_range(band.x, band.y)
 
 
 static func uses_daily_stock(building: Dictionary) -> bool:
