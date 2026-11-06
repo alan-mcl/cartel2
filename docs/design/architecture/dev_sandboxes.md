@@ -11,7 +11,7 @@ Shared runner:
 | Launcher | Scene | Purpose |
 |----------|-------|---------|
 | [`scripts/dev/ship_assembly_sandbox.sh`](../../../scripts/dev/ship_assembly_sandbox.sh) | `ship_assembly_sandbox.tscn` | Fitting and engineering: drag modules, read budgets, no buy/sell loop |
-| [`scripts/dev/combat_sandbox.sh`](../../../scripts/dev/combat_sandbox.sh) | `combat_sandbox.tscn` | 1v1 bout: pick hulls, attitude, pilot skill; **Esc** back to setup |
+| [`scripts/dev/combat_sandbox.sh`](../../../scripts/dev/combat_sandbox.sh) | `combat_sandbox.tscn` | 1v1 bout: pick hulls, attitude (including **Passive** idle foe), pilot skill; **Esc** back to setup |
 | [`scripts/dev/stealth_sandbox.sh`](../../../scripts/dev/stealth_sandbox.sh) | `stealth_sandbox.tscn` | Signature and detection drill with transponders off |
 | [`scripts/dev/mission_harness.sh`](../../../scripts/dev/mission_harness.sh) | `mission_harness.tscn` | Volatile sites and scan/bounty objectives; **Begin** starts in-flight at the site; **F8** or pause quit reloads setup |
 | [`scripts/dev/system_render_tester.sh`](../../../scripts/dev/system_render_tester.sh) | `system_render_tester.tscn` | Planetary layout and globe inspection (pan, zoom, frame) |

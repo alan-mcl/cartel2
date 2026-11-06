@@ -13,7 +13,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
 |B2| art | med | Sail drive animation should be a semi-circle in front the of the ship ('n' shape), not a 'C' shape
 |B4| art | high | parent body renderer should align the lighting to where the star is located in the sector
-B6| missions | med | bounty target "run away" behaviour isn't fun, should be reworked
+|B6| missions | med | bounty target "run away" behaviour isn't fun, should be reworked
 |B7| ui | med | Need UI-friendly labels for module capabilities (e.g. "Habitat" instead of "ls_habitat")
 
 
@@ -24,7 +24,8 @@ B6| missions | med | bounty target "run away" behaviour isn't fun, should be rew
 |F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
 |F4|gameplay|med|Bar: add a "buy a round" button usable once per day that refreshes all the charters available, cost is proportional to system population from d50-d300
-|F6|gameplay|high|Drones as a weapon-slot module: capabilties defence (similar to point defense), attack (one light hardpoint), sensor suite extension, retrieval (i.e. of items/samples, not a combat use case).
-|F7|missions|med|New charter type: retrieval: go to a volatile location, retrieve something (requires a drone), return. Examples: Old Earth time capsule, jettisoned cargo, asteroid sample, etc
+|F7|missions|med|New charter type: retrieval: go to a volatile location, retrieve something (requires a drone), return. Examples: Old Earth time capsule, jettisoned cargo, asteroid sample, etc|
+|F8|gameplay|med|Time limits as a game mode: 1 month, 1 year, unlimited. Different leaderboards. Option to continue playing (transitions to unlimited mode)|
+|F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 
 

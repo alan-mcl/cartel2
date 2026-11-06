@@ -94,7 +94,19 @@ static func spawn_weapon_orders(
 		var speed := float(order.get("projectile_speed", ShipWeapons.DEFAULT_PROJECTILE_SPEED))
 		var weapon_type := str(order.get("weapon_type", ""))
 		var facing_offset := float(order.get("facing_offset", 0.0))
-		var direction := Vector2.from_angle(facing + facing_offset)
+		var order_origin: Variant = order.get("spawn_origin", null)
+		var order_facing: Variant = order.get("spawn_facing", null)
+		var order_velocity: Variant = order.get("spawn_velocity", null)
+		var fire_origin := origin
+		var fire_facing := facing
+		var fire_velocity := ship_velocity
+		if order_origin is Vector2:
+			fire_origin = order_origin
+		if order_facing != null:
+			fire_facing = float(order_facing)
+		if order_velocity is Vector2:
+			fire_velocity = order_velocity
+		var direction := Vector2.from_angle(fire_facing + facing_offset)
 		var visual_variant := str(order.get("visual_variant", ""))
 		var guidance: Dictionary = order.get("guidance", {})
 		var splash := bool(order.get("splash", false))
@@ -102,7 +114,7 @@ static func spawn_weapon_orders(
 		if delivery in ["beam", "cyber"]:
 			_LaserBeam.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, sprite_path),
+				muzzle_global(fire_origin, fire_facing + facing_offset, sprite_path),
 				direction,
 				max_range,
 				delivery,
@@ -115,7 +127,7 @@ static func spawn_weapon_orders(
 		elif weapon_type in ["rocket", "missile"] or delivery == "guided":
 			_RocketProjectile.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, sprite_path, _RocketProjectile.ROCKET_RADIUS),
+				muzzle_global(fire_origin, fire_facing + facing_offset, sprite_path, _RocketProjectile.ROCKET_RADIUS),
 				direction,
 				speed,
 				max_range,
@@ -123,7 +135,7 @@ static func spawn_weapon_orders(
 				packets,
 				collision_mask,
 				exclude,
-				ship_velocity,
+				fire_velocity,
 				shooter,
 				guidance,
 				visual_variant,
@@ -132,7 +144,7 @@ static func spawn_weapon_orders(
 		elif delivery in ["ballistic", "plasma"]:
 			_MassDriverRound.spawn(
 				world,
-				muzzle_global(origin, facing + facing_offset, sprite_path, _MassDriverRound.ROUND_RADIUS),
+				muzzle_global(fire_origin, fire_facing + facing_offset, sprite_path, _MassDriverRound.ROUND_RADIUS),
 				direction,
 				speed,
 				max_range,

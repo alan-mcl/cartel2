@@ -447,6 +447,17 @@ Weapons (`category: weapon`) require `maker`, `brand`, `weapon_type`, and `deliv
 | `rocket` | `ballistic` | kinetic + concussive (from ammo) |
 | `missile` | `guided` | kinetic + concussive (from ammo) |
 | `cyber` | `cyber` | cyber |
+| `drone` | `drone` | (none on the bay; see below) |
+
+### Weapon-slot drones
+
+A drone is a `weapon` module with `weapon_type` and `delivery_type` **`drone`**, fitted to a `light_weapon`, `medium_weapon`, or `heavy_weapon` slot. Firing that slot **launches** the airframe if one is stowed; firing again while it is airborne **orders it home**: the airframe flies back to the hull (its cruise cap scales with hull velocity along the closure vector so a fast-moving ship is still caught), then restocks one round. **Docking** or **jumping** still clears the bay and restocks immediately. Only **one** drone may be airborne per hull at a time.
+
+Each SKU stores **`capabilities`**: `attack`, `defence`, `sensor`, and/or `retrieval`. Attack and defence reference catalog weapons via **`attack_weapon_id`** and **`point_defence_id`**; the bay fires those definitions from the drone’s position without consuming their magazine ammo. On **`defence`**, the airframe **circles the parent hull** at a short leash-scaled standoff so `point_defence_id` intercept checks apply (`DroneRuntime.try_drone_point_defence_intercept`). On **`attack`**, it **circles the focused hostile** (locked hostile ship, else nearest hostile contact in range) at roughly weapon **range**—biased inside the leash—then fires `attack_weapon_id` when in range. Sensor SKUs carry **`sensor_range`** and **`sensor_sensitivity`**; while the drone is on a sensor task it acts as a **second observer origin** in `SensorSystem` (detection is evaluated from the drone’s position as well as the hull). Retrieval flies to the current lock and returns; it does **not** salvage or alter the contact (retrieval charters remain backlog **F7**).
+
+Drone rounds use the normal ship **`ammunition`** map and **Rearm** path (`ammunition_type` + `ammunition_capacity` on the module). Launch spends one round; recall puts it back; destruction does not restock. Makers: existing weapon houses **Galactic Outcomes** and **ParaRamcoVidia**, plus drone-only lines from **Mercury Communications**, **Monday Corporation**, **BioGenesis Life Sciences**, and **Crown & Anchor** (see `drone_weapon` in `module_rules.json`).
+
+Job choice (`DroneDirector`, first capability that matches): non-ship lock → retrieval, else sensor, else defence if no hostile ship in sensor range, else attack if a hostile is present; hostile ship lock → attack, else defence, else sensor; friendly ship lock → retrieval, else sensor, else defence; no lock with a hostile in range → defence, else attack, else sensor; quiet → sensor, else hold ahead of the hull.
 
 **Pegasus P101 lore:** mass driver for defence. **Flare-ON SS lore:** rotating laser turret. **Wolff lore:** rocket launcher + scatter cannon.
 

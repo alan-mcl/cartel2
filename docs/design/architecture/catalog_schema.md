@@ -169,6 +169,10 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `nav_rating` | number | no | `0.0` |  |
 | `translation_capacity` | number | no | `0.0` |  |
 | `solution_skill` | number | no | `0.0` |  |
+| `attack_weapon_id` | string | no | `` | ref → `modules.json` |
+| `point_defence_id` | string | no | `` | ref → `modules.json` |
+| `leash_m` | number | no | `0.0` |  |
+| `drone_silhouette` | string | no | `` | enum: ``, `sensor_puck`, `claw`, `gun_wasp`, `interceptor` |
 
 ## SectorDef
 

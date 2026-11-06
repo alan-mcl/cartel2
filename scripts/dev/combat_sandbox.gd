@@ -124,12 +124,18 @@ func _spawn_opponent(
 	_opponent_actor.freeze_traffic_route()
 
 	if attitude_index == 0:
+		_opponent_actor.sandbox_passive_foe = false
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
 		_opponent_actor.ai_state = TrafficActorScript.STATE_ENGAGE
 		_opponent_actor.engage_timer = 9999.0
 		_opponent_actor.begin_combat_pilot()
 		_apply_pilot_skill(_opponent_actor, pilot_skill)
+	elif attitude_index == 1:
+		_opponent_actor.sandbox_passive_foe = false
+		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
+		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
 	else:
+		_opponent_actor.sandbox_passive_foe = true
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
 

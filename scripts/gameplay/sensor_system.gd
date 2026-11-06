@@ -451,6 +451,52 @@ static func sensor_profile(
 	return tick_observer_profile(assembled, effectiveness, active_sensors_enabled)
 
 
+static func observer_profile_from_drone_module(
+	module_def: ModuleDef,
+	effectiveness: float = 1.0,
+	active_sensors_enabled: bool = true
+) -> Dictionary:
+	var profile := {
+		"has_local_sensor": false,
+		"range": 0.0,
+		"sensitivity": empty_signature(),
+		"sensitivity_active": empty_signature(),
+		"sensitivity_passive": empty_signature(),
+		"effectiveness": effectiveness,
+		"max_detect_range": 0.0,
+	}
+	if module_def == null or module_def.sensor_range <= 0.0:
+		return profile
+	profile["has_local_sensor"] = true
+	profile["range"] = module_def.sensor_range
+	var active_channels := _module_sensitivity_for_toggle(module_def, true)
+	var passive_channels := _module_sensitivity_for_toggle(module_def, false)
+	profile["sensitivity_active"] = active_channels
+	profile["sensitivity_passive"] = passive_channels
+	profile["sensitivity"] = active_channels if active_sensors_enabled else passive_channels
+	profile["max_detect_range"] = module_def.sensor_range
+	return profile
+
+
+static func extends_detection_from_position(
+	observer_profile: Dictionary,
+	observer_pos: Vector2,
+	target_pos: Vector2,
+	target_signature: Dictionary,
+	target_broadcasting: bool,
+	visual_radius: float
+) -> bool:
+	var distance := observer_pos.distance_to(target_pos)
+	var stage := detection_stage(distance, target_broadcasting, observer_profile, visual_radius)
+	match stage:
+		DetectStage.VISUAL, DetectStage.BEACON:
+			return true
+		DetectStage.NEEDS_SIGNATURE:
+			return _signature_detected(distance, target_signature, observer_profile)
+		_:
+			return false
+
+
 static func detection_stage(
 	distance: float,
 	target_broadcasting: bool,

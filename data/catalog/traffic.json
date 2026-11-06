@@ -123,6 +123,7 @@
       "juno_1045",
       "juno_1030",
       "wolff_bastion",
+      "wolff_mothership",
       "wolff_logistico",
       "flare_on_cx"
     ],
@@ -166,6 +167,7 @@
       "juno_1045",
       "juno_1030",
       "wolff_bastion",
+      "wolff_mothership",
       "wolff_logistico",
       "flare_on_cx"
     ]
@@ -190,6 +192,7 @@
     "wolff_gladius": "WLF",
     "wolff_bastion": "WLF",
     "wolff_logistico": "WLF",
+    "wolff_mothership": "WLF",
     "dragon_gold": "DRG",
     "dragon_bronze": "DRG",
     "dragon_post": "DRG",

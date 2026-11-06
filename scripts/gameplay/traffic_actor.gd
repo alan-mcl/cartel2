@@ -106,6 +106,8 @@ var pending_weapon_orders: Array = []
 var _fire_pressed_prev: bool = false
 var near_lod: bool = false
 var has_sim_slot: bool = false
+## Combat sandbox: foe does not manoeuvre or fire (for drone and weapons testing).
+var sandbox_passive_foe: bool = false
 var player_detected: bool = false
 var has_player_contact: bool = false
 var locked_target_id: String = ""
@@ -614,6 +616,9 @@ func _build_ai_inputs(
 	traffic_envelope: float
 ) -> Dictionary:
 	_reset_ai_inputs()
+
+	if sandbox_passive_foe and role == "combat_sandbox":
+		return _ai_inputs
 
 	match ai_state:
 		AiState.ENGAGE:

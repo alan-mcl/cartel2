@@ -360,6 +360,27 @@
     ]
   },
   {
+    "id": "wolff_mothership",
+    "name": "Wolff Mothership",
+    "maker": "Bayes Inc",
+    "description": "A specialist drone host on the Wolff frame: Bellatrix fusion, Hermes N6, and four weapon-hardpoint bays carrying only airframes. Scout, screen, sample, and strike by swapping the active slot; only one bird flies at a time.",
+    "chassis": "wolff_chassis",
+    "modules": [
+      "gi_utility_fusion_55",
+      "ora_bellatrix_ap_f2",
+      "oc_workhorse_brain",
+      "oc_workhorse_lungs",
+      "hg_hermes_n6",
+      "vessel_registration_beacon",
+      "fuel_tank_large",
+      "merc_lark_survey",
+      "ca_convoy_screen",
+      "bio_vial_sample",
+      "go_hornet_bay",
+      "mdc_almanac"
+    ]
+  },
+  {
     "id": "dragon_bronze",
     "name": "Dragon Bronze",
     "maker": "Seven Bells Inc",

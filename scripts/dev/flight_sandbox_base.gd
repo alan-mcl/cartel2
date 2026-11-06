@@ -162,6 +162,7 @@ func _populate_attitude_options() -> void:
 	_attitude_option.clear()
 	_attitude_option.add_item("Fight to the death")
 	_attitude_option.add_item("Standard NPC")
+	_attitude_option.add_item("Passive")
 	_attitude_option.selected = 0
 
 

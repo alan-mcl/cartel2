@@ -444,6 +444,9 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 
 
 func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true) -> bool:
+	var active_ship := fleet.get_current_owned_ship()
+	if active_ship != null:
+		DroneRuntime.recall_if_deployed(active_ship, catalog)
 	if VolatileTranslation.is_volatile_sector_id(new_sector_id):
 		var record := VolatileTranslation.find_by_sector_id(self, new_sector_id)
 		if record.is_empty():
@@ -856,6 +859,7 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	world.location_name = "%s / %s" % [str(habitat.get("name", location_id)), str(default_building.get("name", default_building_id))]
 	var docked_ship := fleet.get_current_owned_ship()
 	if docked_ship != null:
+		DroneRuntime.recall_if_deployed(docked_ship, catalog)
 		persist_combat_to_ship(docked_ship.id)
 	player.last_log = "Docked at %s." % str(default_building.get("name", default_building_id))
 	events.publish(SimEvent.docked(world.habitat_id))

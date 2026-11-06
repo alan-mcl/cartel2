@@ -651,5 +651,279 @@
       "electromagnetic": 3.9,
       "computational": 0.4
     }
+  },
+  {
+    "category": "weapon",
+    "mass": 0.35,
+    "volume": 0.45,
+    "id": "merc_lark_survey",
+    "name": "Lark Survey Drone",
+    "maker": "Mercury Communications",
+    "brand": "Lark",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "light_weapon",
+    "rate_of_fire": 0.35,
+    "power_demand": 1.2,
+    "cost": 2800,
+    "description": "Hermes Lark puck extends the parent hull's sensor envelope on a light hardpoint.",
+    "capabilities": ["sensor"],
+    "ammunition_type": "merc_lark_survey_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "merc_lark_survey_airframe": 1
+    },
+    "sensor_range": 6200.0,
+    "sensor_sensitivity": {
+      "thermal": 1.1,
+      "gravitational": 0.55,
+      "electromagnetic": 1.35,
+      "computational": 0.15
+    },
+    "leash_m": 2800.0,
+    "drone_silhouette": "sensor_puck",
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.04,
+      "electromagnetic": 0.8,
+      "computational": 0.6
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 0.38,
+    "volume": 0.48,
+    "id": "mon_relay_link",
+    "name": "Relay Link Drone",
+    "maker": "Monday Corporation",
+    "brand": "Relay",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "light_weapon",
+    "rate_of_fire": 0.35,
+    "power_demand": 1.4,
+    "cost": 3100,
+    "description": "Monday Relay scouts contacts and can ferry samples from a locked salvage contact.",
+    "capabilities": ["sensor", "retrieval"],
+    "ammunition_type": "mon_relay_link_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "mon_relay_link_airframe": 1
+    },
+    "sensor_range": 5800.0,
+    "sensor_sensitivity": {
+      "thermal": 1.0,
+      "gravitational": 0.5,
+      "electromagnetic": 1.25,
+      "computational": 0.2
+    },
+    "leash_m": 2800.0,
+    "drone_silhouette": "claw",
+    "signature": {
+      "thermal": 0.38,
+      "gravitational": 0.05,
+      "electromagnetic": 0.85,
+      "computational": 0.65
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 0.55,
+    "volume": 0.62,
+    "id": "go_wasp_strike",
+    "name": "Wasp Strike Drone",
+    "maker": "Galactic Outcomes",
+    "brand": "Wasp",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "light_weapon",
+    "rate_of_fire": 0.4,
+    "power_demand": 2.2,
+    "cost": 5200,
+    "description": "Galactic Outcomes Wasp carries a Disruptor EMP rocket pod for stand-off cyber strikes.",
+    "capabilities": ["attack"],
+    "attack_weapon_id": "go_disruptor_emp_rocket",
+    "ammunition_type": "go_wasp_strike_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "go_wasp_strike_airframe": 4
+    },
+    "leash_m": 2800.0,
+    "drone_silhouette": "gun_wasp",
+    "signature": {
+      "thermal": 0.45,
+      "gravitational": 0.06,
+      "electromagnetic": 1.1,
+      "computational": 0.55
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 0.72,
+    "volume": 0.85,
+    "id": "ca_convoy_screen",
+    "name": "Convoy Screen Drone",
+    "maker": "Crown & Anchor",
+    "brand": "Convoy",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "medium_weapon",
+    "rate_of_fire": 0.35,
+    "power_demand": 2.8,
+    "cost": 4400,
+    "description": "Crown & Anchor escort puck borrows Holt-Winters Sentinel intercept logic for inbound fire.",
+    "capabilities": ["defence"],
+    "point_defence_id": "hw_helios_sentinel_pd",
+    "ammunition_type": "ca_convoy_screen_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "ca_convoy_screen_airframe": 1
+    },
+    "leash_m": 3400.0,
+    "drone_silhouette": "interceptor",
+    "signature": {
+      "thermal": 0.42,
+      "gravitational": 0.06,
+      "electromagnetic": 0.95,
+      "computational": 0.5
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 0.68,
+    "volume": 0.8,
+    "id": "bio_vial_sample",
+    "name": "Vial Sample Drone",
+    "maker": "BioGenesis Life Sciences",
+    "brand": "Vial",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "medium_weapon",
+    "rate_of_fire": 0.35,
+    "power_demand": 2.0,
+    "cost": 3900,
+    "description": "BioGenesis Vial combines a sterile claw with a compact survey puck for field sampling runs.",
+    "capabilities": ["retrieval", "sensor"],
+    "ammunition_type": "bio_vial_sample_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "bio_vial_sample_airframe": 1
+    },
+    "sensor_range": 6000.0,
+    "sensor_sensitivity": {
+      "thermal": 1.05,
+      "gravitational": 0.52,
+      "electromagnetic": 1.2,
+      "computational": 0.18
+    },
+    "leash_m": 3400.0,
+    "drone_silhouette": "claw",
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.05,
+      "electromagnetic": 0.88,
+      "computational": 0.62
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 1.4,
+    "volume": 1.6,
+    "id": "go_hornet_bay",
+    "name": "Hornet Bay Drone",
+    "maker": "Galactic Outcomes",
+    "brand": "Hornet",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "heavy_weapon",
+    "rate_of_fire": 0.32,
+    "power_demand": 4.5,
+    "cost": 9800,
+    "description": "Heavy Hornet bay pairs Brutus scatter fire with Brutus point defence while off-hull.",
+    "capabilities": ["attack", "defence"],
+    "attack_weapon_id": "go_brutus_scatter_cannon",
+    "point_defence_id": "go_brutus_pd",
+    "ammunition_type": "go_hornet_bay_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "go_hornet_bay_airframe": 2
+    },
+    "leash_m": 4200.0,
+    "drone_silhouette": "gun_wasp",
+    "signature": {
+      "thermal": 0.55,
+      "gravitational": 0.08,
+      "electromagnetic": 1.25,
+      "computational": 0.7
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 1.35,
+    "volume": 1.55,
+    "id": "merc_surveyor_bay",
+    "name": "Surveyor Bay Drone",
+    "maker": "Mercury Communications",
+    "brand": "Surveyor",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "heavy_weapon",
+    "rate_of_fire": 0.32,
+    "power_demand": 3.8,
+    "cost": 8600,
+    "description": "Mercury Surveyor heavy bay scouts, retrieves samples, and borrows Helios Guard intercepts.",
+    "capabilities": ["sensor", "retrieval", "defence"],
+    "point_defence_id": "hw_helios_guard_pd",
+    "ammunition_type": "merc_surveyor_bay_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "merc_surveyor_bay_airframe": 1
+    },
+    "sensor_range": 6400.0,
+    "sensor_sensitivity": {
+      "thermal": 1.15,
+      "gravitational": 0.58,
+      "electromagnetic": 1.4,
+      "computational": 0.2
+    },
+    "leash_m": 4200.0,
+    "drone_silhouette": "sensor_puck",
+    "signature": {
+      "thermal": 0.48,
+      "gravitational": 0.07,
+      "electromagnetic": 1.0,
+      "computational": 0.75
+    }
+  },
+  {
+    "category": "weapon",
+    "mass": 1.25,
+    "volume": 1.45,
+    "id": "prv_ionique_dart",
+    "name": "Ionique Dart Drone",
+    "maker": "ParaRamcoVidia",
+    "brand": "Ionique",
+    "weapon_type": "drone",
+    "delivery_type": "drone",
+    "mount": "heavy_weapon",
+    "rate_of_fire": 0.38,
+    "power_demand": 5.0,
+    "cost": 11200,
+    "description": "ParaRamcoVidia Dart heavy bay carries the Ionique plasma cannon off-hull for sustained fire.",
+    "capabilities": ["attack"],
+    "attack_weapon_id": "prv_ionique_plasma_cannon",
+    "ammunition_type": "prv_ionique_dart_airframe",
+    "ammunition_per_shot": 1,
+    "ammunition_capacity": {
+      "prv_ionique_dart_airframe": 6
+    },
+    "leash_m": 4200.0,
+    "drone_silhouette": "gun_wasp",
+    "signature": {
+      "thermal": 0.52,
+      "gravitational": 0.07,
+      "electromagnetic": 1.35,
+      "computational": 0.65
+    }
   }
 ]

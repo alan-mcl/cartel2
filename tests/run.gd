@@ -19,6 +19,7 @@ func _init() -> void:
 	TestRepairs.run(runner)
 	TestAssembler.run(runner, self)
 	TestCombat.run(runner)
+	TestDrones.run(runner)
 	TestCombatPersistence.run(runner)
 	TestBallisticHit.run(runner)
 	TestProjectGuidance.run(runner)

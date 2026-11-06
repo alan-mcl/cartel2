@@ -44,6 +44,7 @@ LIFE_SUPPORT_MAKERS = _rule_names("makers", "life_support")
 CARGO_MAKERS = _rule_names("makers", "cargo")
 PROPULSION_MAKERS = _rule_names("makers", "propulsion")
 WEAPON_MAKERS = _rule_names("makers", "weapon")
+DRONE_WEAPON_MAKERS = {str(row) for row in MODULE_RULES.get("drone_weapon", [])}
 ARMOUR_SHIELD_MAKERS = _rule_names("makers", "armour_shield")
 HYPERDRIVE_MAKERS = _rule_names("makers", "hyperdrive")
 RETIRED_POWER_IDS = _rule_names("retired_ids", "power")
@@ -518,9 +519,13 @@ WEAPON_TYPES = {
     "rocket",
     "missile",
     "cyber",
+    "drone",
 }
 
-DELIVERY_TYPES = {"ballistic", "beam", "plasma", "guided", "cyber"}
+DELIVERY_TYPES = {"ballistic", "beam", "plasma", "guided", "cyber", "drone"}
+
+DRONE_CAPABILITIES = {"attack", "defence", "sensor", "retrieval"}
+DRONE_SILHOUETTES = {"sensor_puck", "claw", "gun_wasp", "interceptor"}
 
 SHIELD_TYPES = {"deflector", "energy", "electronic"}
 
@@ -2233,13 +2238,18 @@ def main() -> int:
                 if field not in module:
                     errors.append(f"weapon module {module_id}: missing {field}")
             maker = str(module.get("maker", ""))
+            weapon_type = str(module.get("weapon_type", ""))
             if maker in BANNED_WEAPON_MAKERS:
                 errors.append(f"weapon module {module_id}: {maker} must not make weapons")
-            if maker and maker not in WEAPON_MAKERS:
+            if weapon_type == "drone":
+                if maker and maker not in DRONE_WEAPON_MAKERS:
+                    errors.append(
+                        f"weapon module {module_id}: unknown drone maker '{maker}'"
+                    )
+            elif maker and maker not in WEAPON_MAKERS:
                 errors.append(f"weapon module {module_id}: unknown maker '{maker}'")
             if module_id in RETIRED_WEAPON_IDS:
                 errors.append(f"modules.json: retired weapon id '{module_id}' still present")
-            weapon_type = str(module.get("weapon_type", ""))
             if weapon_type and weapon_type not in WEAPON_TYPES:
                 errors.append(f"weapon module {module_id}: invalid weapon_type '{weapon_type}'")
             delivery_type = str(module.get("delivery_type", ""))
@@ -2247,9 +2257,52 @@ def main() -> int:
                 errors.append(f"weapon module {module_id}: invalid delivery_type '{delivery_type}'")
             if weapon_type == "plasma" and delivery_type != "plasma":
                 errors.append(f"weapon module {module_id}: plasma weapons require plasma delivery")
+            if weapon_type == "drone" and delivery_type != "drone":
+                errors.append(f"weapon module {module_id}: drone weapons require drone delivery")
             ammo_type = str(module.get("ammunition_type", ""))
             has_packets = "damage_packets" in module
-            if ammo_type:
+            if weapon_type == "drone":
+                caps = module.get("ammunition_capacity", {})
+                if not ammo_type:
+                    errors.append(f"weapon module {module_id}: drone requires ammunition_type")
+                elif ammo_type not in ammunition:
+                    errors.append(
+                        f"weapon module {module_id}: unknown ammunition '{ammo_type}'"
+                    )
+                if not isinstance(caps, dict) or not caps:
+                    errors.append(
+                        f"weapon module {module_id}: drone requires ammunition_capacity"
+                    )
+                silhouette = str(module.get("drone_silhouette", ""))
+                if silhouette not in DRONE_SILHOUETTES:
+                    errors.append(
+                        f"weapon module {module_id}: invalid drone_silhouette '{silhouette}'"
+                    )
+                leash = float(module.get("leash_m", -1.0))
+                if leash <= 0.0:
+                    errors.append(f"weapon module {module_id}: drone requires leash_m > 0")
+                for cap in module.get("capabilities", []):
+                    if str(cap) not in DRONE_CAPABILITIES:
+                        errors.append(
+                            f"weapon module {module_id}: invalid drone capability '{cap}'"
+                        )
+                if "attack" in module.get("capabilities", []):
+                    attack_id = str(module.get("attack_weapon_id", ""))
+                    if not attack_id:
+                        errors.append(
+                            f"weapon module {module_id}: attack drone requires attack_weapon_id"
+                        )
+                if "defence" in module.get("capabilities", []):
+                    pd_id = str(module.get("point_defence_id", ""))
+                    if not pd_id:
+                        errors.append(
+                            f"weapon module {module_id}: defence drone requires point_defence_id"
+                        )
+                if has_packets:
+                    errors.append(
+                        f"weapon module {module_id}: drone must not set damage_packets"
+                    )
+            elif ammo_type:
                 if has_packets:
                     errors.append(
                         f"weapon module {module_id}: must not set damage_packets when using ammo"

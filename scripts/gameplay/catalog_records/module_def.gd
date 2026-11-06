@@ -59,6 +59,10 @@ var intercept_chance: float = 0.0
 var nav_rating: float = 0.0
 var translation_capacity: float = 0.0
 var solution_skill: float = 0.0
+var attack_weapon_id: String = ""
+var point_defence_id: String = ""
+var leash_m: float = 0.0
+var drone_silhouette: String = ""
 
 static func from_dict(data: Dictionary) -> ModuleDef:
 	var def := ModuleDef.new()
@@ -128,6 +132,10 @@ static func from_dict(data: Dictionary) -> ModuleDef:
 	def.nav_rating = float(data.get("nav_rating", 0.0))
 	def.translation_capacity = float(data.get("translation_capacity", 0.0))
 	def.solution_skill = float(data.get("solution_skill", 0.0))
+	def.attack_weapon_id = str(data.get("attack_weapon_id", ""))
+	def.point_defence_id = str(data.get("point_defence_id", ""))
+	def.leash_m = float(data.get("leash_m", 0.0))
+	def.drone_silhouette = str(data.get("drone_silhouette", ""))
 	return def
 
 func to_dict() -> Dictionary:
@@ -231,10 +239,18 @@ func to_dict() -> Dictionary:
 		out["translation_capacity"] = translation_capacity
 	if _present_keys.has("solution_skill") or solution_skill != 0.0:
 		out["solution_skill"] = solution_skill
+	if _present_keys.has("attack_weapon_id") or attack_weapon_id != "":
+		out["attack_weapon_id"] = attack_weapon_id
+	if _present_keys.has("point_defence_id") or point_defence_id != "":
+		out["point_defence_id"] = point_defence_id
+	if _present_keys.has("leash_m") or leash_m != 0.0:
+		out["leash_m"] = leash_m
+	if _present_keys.has("drone_silhouette") or drone_silhouette != "":
+		out["drone_silhouette"] = drone_silhouette
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "fuel_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "pellet_count", "pellet_spread_deg", "guidance_turn_rate", "intercept_chance", "nav_rating", "translation_capacity", "solution_skill"])
+	return PackedStringArray(["id", "name", "maker", "brand", "category", "mount", "mounts", "mass", "volume", "cost", "description", "capabilities", "signature", "engine_type", "fuel_type", "thrust", "max_speed", "boost_multiplier", "fuel_consumption", "plant_type", "power_generation", "power_demand", "core_type", "compute_capacity", "compute_demand", "life_support_capacity", "hits", "protection", "cargo_capacity", "fuel_capacity", "weapon_type", "delivery_type", "rate_of_fire", "range", "projectile_speed", "ammunition_type", "ammunition_per_shot", "ammunition_capacity", "damage_packets", "shield_type", "shield_capacity", "regen", "has_active", "sensor_range", "sensor_sensitivity", "sensor_sensitivity_passive", "area_effect", "pellet_count", "pellet_spread_deg", "guidance_turn_rate", "intercept_chance", "nav_rating", "translation_capacity", "solution_skill", "attack_weapon_id", "point_defence_id", "leash_m", "drone_silhouette"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "maker", "category", "mass", "volume", "cost", "description", "signature"])

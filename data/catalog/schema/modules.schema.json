@@ -82,7 +82,15 @@
     "intercept_chance": { "type": "number", "default": 0.0 },
     "nav_rating": { "type": "number", "default": 0.0 },
     "translation_capacity": { "type": "number", "default": 0.0 },
-    "solution_skill": { "type": "number", "minimum": 0, "maximum": 100, "default": 0.0 }
+    "solution_skill": { "type": "number", "minimum": 0, "maximum": 100, "default": 0.0 },
+    "attack_weapon_id": { "type": "string", "default": "", "x-ref-catalog": "modules" },
+    "point_defence_id": { "type": "string", "default": "", "x-ref-catalog": "modules" },
+    "leash_m": { "type": "number", "minimum": 0, "default": 0.0 },
+    "drone_silhouette": {
+      "type": "string",
+      "default": "",
+      "enum": ["", "sensor_puck", "claw", "gun_wasp", "interceptor"]
+    }
   },
   "$defs": {
     "signature": {

@@ -42,6 +42,8 @@ var _autopilot_target: Dictionary = {}
 var _hull_destroyed_fx_played := false
 var _try_interact: Callable = Callable()
 var _weapon_spawn_root: Node2D
+var _drone_visual: Node2D
+var _nav_contacts: Array = []
 var _flux_electrify: HullFluxElectrify
 
 
@@ -58,6 +60,62 @@ func pulse_unspace_sting_hull() -> void:
 func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -> void:
 	_try_interact = try_interact
 	_weapon_spawn_root = weapon_spawn_root
+	if _drone_visual == null and weapon_spawn_root != null:
+		_drone_visual = preload("res://scripts/presentation/drone_visual.gd").new()
+		weapon_spawn_root.add_child(_drone_visual)
+
+
+func set_nav_contacts(contacts: Array) -> void:
+	_nav_contacts = contacts
+
+
+func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> void:
+	if owned_ship == null or catalog == null or assembled_ship == null:
+		return
+	if session != null and session.docked:
+		return
+	_nav_contacts = contacts
+	if not DroneRuntime.is_deployed(owned_ship):
+		if _drone_visual != null and _drone_visual.has_method("hide_drone"):
+			_drone_visual.call("hide_drone")
+		return
+	var sensor_range := float(assembled_ship.sensor_profile.get("range", 0.0))
+	var hostile_ids := DroneRuntime.collect_hostile_ship_ids(session, traffic_director, global_position)
+	var context := DroneRuntime.build_context(
+		global_position,
+		motion.facing,
+		sensor_range,
+		locked_target_id,
+		_nav_contacts,
+		hostile_ids,
+		motion.velocity
+	)
+	var max_speed := float(assembled_ship.capacities.get("max_speed", 400.0))
+	if max_speed <= 0.0:
+		max_speed = 400.0
+	var tick_result := DroneRuntime.tick(
+		catalog,
+		assembled_ship,
+		owned_ship,
+		delta,
+		context,
+		max_speed
+	)
+	var drone_orders: Array = tick_result.get("orders", [])
+	if not drone_orders.is_empty():
+		_spawn_weapon_orders(drone_orders)
+	var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
+	var pose: Dictionary = tick_result.get("pose", {})
+	if _drone_visual != null and _drone_visual.has_method("sync_pose"):
+		_drone_visual.call(
+			"sync_pose",
+			catalog,
+			module_id,
+			pose.get("position", global_position),
+			pose.get("velocity", Vector2.ZERO)
+		)
+	if (bool(tick_result.get("destroyed", false)) or bool(tick_result.get("ammo_changed", false))) and session != null:
+		session.changed.emit()
 
 
 func configure(
@@ -295,6 +353,9 @@ func _weapon_guidance_context() -> Dictionary:
 	return {
 		"lock_active": _guidance_lock_active and not locked_target_id.is_empty(),
 		"target_id": locked_target_id,
+		"ship_pos": global_position,
+		"ship_facing": motion.facing,
+		"ship_velocity": motion.velocity,
 	}
 
 

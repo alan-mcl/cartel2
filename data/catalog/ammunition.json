@@ -66,5 +66,61 @@
       "kinetic": 9,
       "concussive": 7
     }
+  },
+  {
+    "id": "merc_lark_survey_airframe",
+    "name": "Lark Survey Airframe",
+    "mass": 0.12,
+    "cost": 420,
+    "damage_packets": {}
+  },
+  {
+    "id": "mon_relay_link_airframe",
+    "name": "Relay Link Airframe",
+    "mass": 0.14,
+    "cost": 480,
+    "damage_packets": {}
+  },
+  {
+    "id": "go_wasp_strike_airframe",
+    "name": "Wasp Strike Airframe",
+    "mass": 0.18,
+    "cost": 220,
+    "damage_packets": {}
+  },
+  {
+    "id": "ca_convoy_screen_airframe",
+    "name": "Convoy Screen Airframe",
+    "mass": 0.22,
+    "cost": 560,
+    "damage_packets": {}
+  },
+  {
+    "id": "bio_vial_sample_airframe",
+    "name": "Vial Sample Airframe",
+    "mass": 0.2,
+    "cost": 510,
+    "damage_packets": {}
+  },
+  {
+    "id": "go_hornet_bay_airframe",
+    "name": "Hornet Bay Airframe",
+    "mass": 0.35,
+    "cost": 680,
+    "damage_packets": {}
+  },
+  {
+    "id": "merc_surveyor_bay_airframe",
+    "name": "Surveyor Bay Airframe",
+    "mass": 0.38,
+    "cost": 920,
+    "damage_packets": {}
+  },
+  {
+    "id": "prv_ionique_dart_airframe",
+    "name": "Ionique Dart Airframe",
+    "mass": 0.28,
+    "cost": 340,
+    "damage_packets": {}
   }
 ]

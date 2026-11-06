@@ -184,6 +184,14 @@
       "scatter_cannon"
     ]
   },
+  "drone_weapon": [
+    "BioGenesis Life Sciences",
+    "Crown & Anchor",
+    "Galactic Outcomes",
+    "Mercury Communications",
+    "Monday Corporation",
+    "ParaRamcoVidia"
+  ],
   "banned_makers": {
     "propulsion": [
       "Bayes Inc"

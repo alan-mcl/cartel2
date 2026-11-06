@@ -139,6 +139,10 @@ The original armed freighter trim: fusion drive, a short unguided rocket rack, l
 
 Bulk freighter trim: ten-tonne hold, habitat bunks, fusion drive, and one light laser - no rocket launcher and no scatter cannon. A full tank will not lift the twenty-tonne bay. The Bastion is armed; the **Logistico** is the hold.
 
+### Mothership
+
+The **Mothership** is a drone-focused trim: fusion drive, Hermes N6, and all four weapon hardpoints fitted with drone bays only (survey puck, convoy screen, retrieval sampler, and a heavy Hornet strike bay). No cargo and no fixed gun; one airframe deploys at a time.
+
 ---
 
 ## Dragon
@@ -279,14 +283,14 @@ Flight behaviour uses derived thrust, speed, and maneuver from assembled modules
 
 ### In catalog (`ships.json`)
 
-**Forty-two** manufacturer templates with launch-legal loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations remain **invented placeholders** where the design doc is sparse; role trims (P105–P115, CX, K4, Logistico, Post, Warden, Juno 1030/1060, Blackbird, Lancer) extend the roster on existing chassis.
+**Forty-three** manufacturer templates with launch-legal loadouts. Juno 1045/1088/1090 and Wolff Gladius configurations remain **invented placeholders** where the design doc is sparse; role trims (P105–P115, CX, K4, Logistico, Post, Warden, Juno 1030/1060, Blackbird, Lancer) extend the roster on existing chassis.
 
 | Template id | Chassis | Notes |
 |-------------|---------|-------|
 | `flare_on_ss`, `flare_on_sk`, `flare_on_cx` | `flare_on_chassis` | SS = player default; SK = gravitic + turbo laser; CX = unarmed courier |
 | `pegasus_p101`, `p103`, `p103a`, `p105`–`p115` | `pegasus_chassis` | P103a = law-enforcement antimatter + plasma; P105–P115 = role trims |
 | `krypton_k2`, `krypton_k3`, `krypton_k4` | `krypton_chassis` | K2 fusion / K3 antimatter / K4 passenger |
-| `wolff_warrior`, `wolff_gladius`, `wolff_bastion`, `wolff_logistico` | `wolff_chassis` | Bastion = armed freighter; Logistico = bulk hold |
+| `wolff_warrior`, `wolff_gladius`, `wolff_bastion`, `wolff_logistico`, `wolff_mothership` | `wolff_chassis` | Bastion = armed freighter; Logistico = bulk hold; Mothership = all-drone weapon fit |
 | `dragon_bronze`, `dragon_gold`, `dragon_post` | `dragon_chassis` | Gold/Post = alpha hyperdrive |
 | `juno_1030`, `1045`, `1060`, `1088`, `1090`, `juno_1095_jsf` | `juno_chassis` | 1030 unarmed cargo; scouts 1045–1095-JSF |
 | `silhouette_mk8`, `silhouette_mk6`, `silhouette_warden` | `silhouette_chassis` | Mk8 contract fighter; Warden picket |

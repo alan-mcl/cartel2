@@ -142,6 +142,29 @@ func tick(
 	if module_def == null or module_def.rate_of_fire <= 0.0:
 		return {"orders": orders, "out_of_ammo": out_of_ammo, "ammo_changed": ammo_changed}
 
+	if DroneRuntime.is_drone_module(module_def):
+		var ship_pos: Vector2 = guidance_context.get("ship_pos", Vector2.ZERO)
+		var ship_facing := float(guidance_context.get("ship_facing", 0.0))
+		var ship_velocity: Vector2 = guidance_context.get("ship_velocity", Vector2.ZERO)
+		var drone_result := DroneRuntime.handle_weapon_fire(
+			catalog,
+			assembled,
+			owned,
+			slot,
+			module_def,
+			firing,
+			_cooldowns,
+			ship_pos,
+			ship_facing,
+			ship_velocity
+		)
+		if bool(drone_result.get("handled", false)):
+			return {
+				"orders": drone_result.get("orders", []),
+				"out_of_ammo": bool(drone_result.get("out_of_ammo", false)),
+				"ammo_changed": bool(drone_result.get("ammo_changed", false)),
+			}
+
 	var ammo_per_shot := int(module_def.ammunition_per_shot) if module_def.ammunition_per_shot > 0.0 else 1
 	if not module_def.ammunition_type.is_empty():
 		if owned.get_ammo_count(module_def.ammunition_type) < ammo_per_shot:

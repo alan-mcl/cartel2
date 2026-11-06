@@ -137,6 +137,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			_tick_bounty_pursuit_traffic(delta, physics_frame)
 
 	var contacts := _collect_nav_contacts()
+	if _player.has_method("tick_deployed_drone"):
+		_player.tick_deployed_drone(delta, _traffic_director, contacts)
 	var nav_radius: float = _main.play_bounds
 	if not _main.session.in_unspace:
 		nav_radius = _world_loader.get_content_radius()

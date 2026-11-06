@@ -265,7 +265,7 @@
   },
   {
     "id": "hw_helios_spark",
-    "name": "Helios Spark",
+    "name": "Helios Spark CPU",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "core_type": "silicon",
@@ -279,7 +279,7 @@
       "basic_hud"
     ],
     "cost": 1400,
-    "description": "Sport silicon from the Helios line. Pairs well with a compact fusion plant.",
+    "description": "The Helios Spark core provides cutting edge efficiency embodying the Holt-Winters design philosophy.",
     "signature": {
       "thermal": 1.32,
       "gravitational": 0.09,
@@ -289,7 +289,7 @@
   },
   {
     "id": "lw_arena_sim",
-    "name": "Arena Sim",
+    "name": "Arena Sim Photonic CPU",
     "maker": "LiveWorlds",
     "brand": "Arena",
     "core_type": "photon",
@@ -303,7 +303,7 @@
       "basic_hud"
     ],
     "cost": 2900,
-    "description": "Entertainment photon hardware repurposed for ship sim workloads. Not the best photon, but it sells.",
+    "description": "You won't find a better photonic core than the Arena Sim! Billions of gamers can't be wrong.",
     "signature": {
       "thermal": 2.0,
       "gravitational": 0.08,
@@ -313,7 +313,7 @@
   },
   {
     "id": "mdc_365_nav",
-    "name": "Monday 365 Nav",
+    "name": "Monday 365 NavCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "silicon",
@@ -327,7 +327,7 @@
       "basic_hud"
     ],
     "cost": 480,
-    "description": "Subscription-era nav silicon. The license expired; the hardware didn't.",
+    "description": "Upgrade your ship systems with the excellent Monday NavCore. 365 days of uptime per year!",
     "signature": {
       "thermal": 1.0,
       "gravitational": 0.06,
@@ -337,7 +337,7 @@
   },
   {
     "id": "mdc_monday_core",
-    "name": "Monday Core",
+    "name": "Monday 365 WorkCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "silicon",
@@ -351,7 +351,7 @@
       "basic_hud"
     ],
     "cost": 550,
-    "description": "The core that survived every merger. Unremarkable name, remarkable ubiquity.",
+    "description": "Never run out of compute again with the peerless Monday WorkCore. 365 reasons to love Monday!",
     "signature": {
       "thermal": 1.08,
       "gravitational": 0.07,
@@ -361,7 +361,7 @@
   },
   {
     "id": "mdc_surface",
-    "name": "Monday Surface",
+    "name": "Monday SurfaceCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "photon",
@@ -375,7 +375,7 @@
       "basic_hud"
     ],
     "cost": 3200,
-    "description": "Thin photon package with the Surface finish. Looks good in a showroom hull.",
+    "description": "Fly at the speed of light with the brilliant Mondat SurfaceCore. 365 reasons to brighten up!",
     "signature": {
       "thermal": 2.2,
       "gravitational": 0.09,
@@ -385,7 +385,7 @@
   },
   {
     "id": "mdc_workplace_12",
-    "name": "Monday Workplace 12",
+    "name": "Monday Workplace 12 ServerCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "silicon",
@@ -399,7 +399,7 @@
       "basic_hud"
     ],
     "cost": 1100,
-    "description": "Workplace-tier silicon for ships that treat compute like office furniture.",
+    "description": "Good enough for your office means good enough for your ship! Monday ServerCore bring workplace efficiency and reliability to your commute.",
     "signature": {
       "thermal": 1.32,
       "gravitational": 0.09,
@@ -409,7 +409,7 @@
   },
   {
     "id": "oc_field_core_16",
-    "name": "Field Core 16",
+    "name": "Field Core 16 CPU",
     "maker": "Oklahoma Combine",
     "brand": "Field Core",
     "core_type": "silicon",
@@ -423,7 +423,7 @@
       "basic_hud"
     ],
     "cost": 819,
-    "description": "Sixteen compute units of practical Combine engineering.",
+    "description": "Practical OC engineering brings you the Field Core range of expeditionary CPUs.",
     "signature": {
       "thermal": 1.24,
       "gravitational": 0.08,
@@ -433,7 +433,7 @@
   },
   {
     "id": "oc_red_dirt_logic",
-    "name": "Red Dirt Logic",
+    "name": "Red Dirt Logic CPU",
     "maker": "Oklahoma Combine",
     "brand": "Red Dirt",
     "core_type": "silicon",
@@ -447,7 +447,7 @@
       "basic_hud"
     ],
     "cost": 500,
-    "description": "Field silicon that keeps working after the dust settles.",
+    "description": "Use the OC Red Dirt range of CPUs for value-conscious shipboard compute.",
     "signature": {
       "thermal": 1.04,
       "gravitational": 0.07,
@@ -457,7 +457,7 @@
   },
   {
     "id": "oc_workhorse_brain",
-    "name": "Workhorse Brain",
+    "name": "Workhorse Brain CPU",
     "maker": "Oklahoma Combine",
     "brand": "Workhorse",
     "core_type": "silicon",
@@ -471,7 +471,7 @@
       "basic_hud"
     ],
     "cost": 1550,
-    "description": "Workhorse silicon for gunships and fighters that need headroom.",
+    "description": "OC Workhorse range silicon CPUs won't let you down.",
     "signature": {
       "thermal": 1.48,
       "gravitational": 0.1,
@@ -481,7 +481,7 @@
   },
   {
     "id": "ora_avionics_a40",
-    "name": "Avionics A-40",
+    "name": "Orion A-40 Core",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "core_type": "silicon",
@@ -495,7 +495,7 @@
       "basic_hud"
     ],
     "cost": 1500,
-    "description": "Avionics-grade silicon for mid-range saucers and patrol craft.",
+    "description": "Needing quality compute on board? Go with Orion for your ship today.",
     "signature": {
       "thermal": 1.4,
       "gravitational": 0.1,
@@ -505,7 +505,7 @@
   },
   {
     "id": "ora_glasspack",
-    "name": "Orion Glasspack",
+    "name": "Orion Glasspack Core",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "core_type": "photon",
@@ -519,7 +519,7 @@
       "basic_hud"
     ],
     "cost": 4400,
-    "description": "Glasspack photon for sensor-heavy yard configurations.",
+    "description": "Are photonic circuits what you need? Orion has the best.",
     "signature": {
       "thermal": 2.5,
       "gravitational": 0.09,
@@ -529,7 +529,7 @@
   },
   {
     "id": "ora_yardfit_nav",
-    "name": "Yardfit Nav",
+    "name": "Yardfit NavCore",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "core_type": "silicon",
@@ -543,7 +543,7 @@
       "basic_hud"
     ],
     "cost": 754,
-    "description": "Yard-standard nav silicon. Installed on more hulls than anyone admits.",
+    "description": "Budget compute options got you confused? Just go with Orion, you can't go wrong.",
     "signature": {
       "thermal": 1.16,
       "gravitational": 0.08,
@@ -553,7 +553,7 @@
   },
   {
     "id": "osc_spur_compact",
-    "name": "Spur Compact",
+    "name": "Spur Compact Core",
     "maker": "Orion Spur Company",
     "brand": "Spur",
     "core_type": "silicon",
@@ -567,7 +567,7 @@
       "basic_hud"
     ],
     "cost": 390,
-    "description": "Budget silicon from an acquired brand. Eight CU of honest economy.",
+    "description": "With more than enough compute for small ships, Spur Compact Core will light up your HUD and put a smile on your face!",
     "signature": {
       "thermal": 0.92,
       "gravitational": 0.06,
@@ -577,7 +577,7 @@
   },
   {
     "id": "osc_spur_standard",
-    "name": "Spur Standard",
+    "name": "Spur Standard Core",
     "maker": "Orion Spur Company",
     "brand": "Spur",
     "core_type": "silicon",
@@ -591,7 +591,7 @@
       "basic_hud"
     ],
     "cost": 640,
-    "description": "Standard Spur silicon for rim operators on a budget.",
+    "description": "Spur Standard Core: nothing standard about the good feeling you'll get!",
     "signature": {
       "thermal": 1.12,
       "gravitational": 0.07,
@@ -601,7 +601,7 @@
   },
   {
     "id": "prv_lumina_lx",
-    "name": "Lumina LX",
+    "name": "Lumina LX LightCore",
     "maker": "ParaRamcoVidia",
     "brand": "Lumina",
     "core_type": "photon",
@@ -615,7 +615,7 @@
       "basic_hud"
     ],
     "cost": 5600,
-    "description": "Flagship photon core for parallel sensor and comms workloads.",
+    "description": "Parallel photonic circuits! Lumina brand quality! What's not to love? Go with PRV Lumina today!",
     "signature": {
       "thermal": 2.9,
       "gravitational": 0.1,
@@ -625,7 +625,7 @@
   },
   {
     "id": "prv_qbit_foundry",
-    "name": "PRV Qbit Foundry",
+    "name": "PRV Qbit QuantCore",
     "maker": "ParaRamcoVidia",
     "brand": "PRV",
     "core_type": "quantum",
@@ -639,7 +639,7 @@
       "basic_hud"
     ],
     "cost": 11200,
-    "description": "Foundry-grade quantum. Not a faster ship computer \u2014 a different kind of math.",
+    "description": "It's not a faster ship computer - it's a different kind of math! Don't think too hard about it, just go with PRV Qbit today.",
     "signature": {
       "thermal": 1.48,
       "gravitational": 0.22,
@@ -649,7 +649,7 @@
   },
   {
     "id": "prv_tensor_t4",
-    "name": "Tensor T4",
+    "name": "Tensor T4 Core",
     "maker": "ParaRamcoVidia",
     "brand": "Tensor",
     "core_type": "silicon",
@@ -663,7 +663,7 @@
       "basic_hud"
     ],
     "cost": 753,
-    "description": "Consumer silicon from the Tensor line. Glossy packaging, dependable silicon.",
+    "description": "Dependable silicon compute - proven centuries-old temp. Hundreds of years later it's still the best bang for buck!",
     "signature": {
       "thermal": 1.20,
       "gravitational": 0.08,
@@ -673,7 +673,7 @@
   },
   {
     "id": "prv_tensor_t9",
-    "name": "Tensor T9",
+    "name": "Tensor T9 Core",
     "maker": "ParaRamcoVidia",
     "brand": "Tensor",
     "core_type": "silicon",
@@ -687,7 +687,7 @@
       "basic_hud"
     ],
     "cost": 1549,
-    "description": "The T9 tier \u2014 more CU, same Tensor badge on the bezel.",
+    "description": "The T9 tier from PRV - more compute, same great Tensor badge on the bezel!",
     "signature": {
       "thermal": 1.48,
       "gravitational": 0.1,
@@ -697,7 +697,7 @@
   },
   {
     "id": "sakuraya_kikyo",
-    "name": "Kikyo Processor",
+    "name": "Kikyo Silicon Core",
     "maker": "Sakuraya Shinise",
     "brand": "Kikyo",
     "core_type": "silicon",
@@ -711,7 +711,7 @@
       "basic_hud"
     ],
     "cost": 639,
-    "description": "Conservative silicon from a house that still signs off on every wafer.",
+    "description": "Tradition and efficiency find the perfect marriage in the elegant Kikyo range of silicon compute cores.",
     "signature": {
       "thermal": 1.12,
       "gravitational": 0.07,
@@ -721,7 +721,7 @@
   },
   {
     "id": "sakuraya_shirayuki",
-    "name": "Shirayuki",
+    "name": "Shirayuki Silicon Core",
     "maker": "Sakuraya Shinise",
     "brand": "Shirayuki",
     "core_type": "silicon",
@@ -735,7 +735,7 @@
       "basic_hud"
     ],
     "cost": 1700,
-    "description": "Quiet, reliable silicon. No photon line \u2014 tradition over fashion.",
+    "description": "With refined and timeless silicon core technology, Shirayuki represents the pinacle of computing reliability and elegance.",
     "signature": {
       "thermal": 1.4,
       "gravitational": 0.09,
@@ -745,7 +745,7 @@
   },
   {
     "id": "sbi_carillon_light",
-    "name": "Carillon Light",
+    "name": "Carillon Light CPU",
     "maker": "Seven Bells Inc",
     "brand": "Carillon",
     "core_type": "photon",
@@ -759,7 +759,7 @@
       "basic_hud"
     ],
     "cost": 3600,
-    "description": "Light photon carillon for ships that want bandwidth without the full peal.",
+    "description": "Carillon Light provides photonic compute at an affordable price range.",
     "signature": {
       "thermal": 2.1,
       "gravitational": 0.09,
@@ -769,7 +769,7 @@
   },
   {
     "id": "sbi_peal_logic_5",
-    "name": "Peal Logic 5",
+    "name": "Peal Logic5 CPU",
     "maker": "Seven Bells Inc",
     "brand": "Peal",
     "core_type": "silicon",
@@ -783,7 +783,7 @@
       "basic_hud"
     ],
     "cost": 738,
-    "description": "Fifth peal in the Logic series. Rings reliably under load.",
+    "description": "Peal Logic5 provides a good compute-to-cost value proposition.",
     "signature": {
       "thermal": 1.16,
       "gravitational": 0.08,
@@ -793,7 +793,7 @@
   },
   {
     "id": "sne_bridge_200",
-    "name": "SnedOS Bridge 200",
+    "name": "SnedOS Bridge 200 Core",
     "maker": "SnedeCorp",
     "brand": "SnedOS",
     "core_type": "silicon",
@@ -807,7 +807,7 @@
       "basic_hud"
     ],
     "cost": 814,
-    "description": "Attested silicon core. License terms apply to the enclosure, not the silicon.",
+    "description": "SnedOS is the brand that you trust with your computation. Bridge 200 delivers efficiency and reliability.",
     "signature": {
       "thermal": 1.24,
       "gravitational": 0.08,
@@ -817,7 +817,7 @@
   },
   {
     "id": "sne_bridge_440",
-    "name": "SnedOS Bridge 440",
+    "name": "SnedOS Bridge 440 Core",
     "maker": "SnedeCorp",
     "brand": "SnedOS",
     "core_type": "silicon",
@@ -831,7 +831,7 @@
       "basic_hud"
     ],
     "cost": 1800,
-    "description": "Mid-tier attested core for hulls that outgrew the Bridge 200 but not the audit schedule.",
+    "description": "SnedOS is the brand that you trust with your computation. Bridge 400 delivers scalability and availability.",
     "signature": {
       "thermal": 1.56,
       "gravitational": 0.11,
@@ -841,7 +841,7 @@
   },
   {
     "id": "sne_lattice",
-    "name": "SnedOS Lattice",
+    "name": "SnedOS Lattice Core",
     "maker": "SnedeCorp",
     "brand": "SnedOS",
     "core_type": "photon",
@@ -855,7 +855,7 @@
       "basic_hud"
     ],
     "cost": 4800,
-    "description": "Photonic lattice in a sealed Snede chassis. The brochure mentions software; the invoice mentions hardware.",
+    "description": "SnedOS is the brand that you trust with your computation. Lattic Core delivers performance and accuracy.",
     "signature": {
       "thermal": 2.6,
       "gravitational": 0.1,
@@ -879,7 +879,7 @@
       "basic_hud"
     ],
     "cost": 9800,
-    "description": "Isolated quantum enclosure. Snede attestation covers the cage, not the physics.",
+    "description": "The Vault isolated quantum enclosure. SnedeCorp attestation assures you of it's quality.",
     "signature": {
       "thermal": 1.56,
       "gravitational": 0.21,
@@ -889,7 +889,7 @@
   },
   {
     "id": "te_handy_core",
-    "name": "HandyCore",
+    "name": "Tukey HandyCore",
     "maker": "Tukey Enterprises",
     "brand": "HandyCore",
     "core_type": "silicon",
@@ -903,7 +903,7 @@
       "basic_hud"
     ],
     "cost": 420,
-    "description": "Odd-lot silicon from a surplus pallet. Cheap enough not to ask questions.",
+    "description": "If you're in the market for some budget compute, Tukey HandyCore is what you're looking for today.",
     "signature": {
       "thermal": 0.96,
       "gravitational": 0.06,
@@ -913,7 +913,7 @@
   },
   {
     "id": "te_lot_9_special",
-    "name": "Lot 9 Special",
+    "name": "Tukey Lot 9 Core",
     "maker": "Tukey Enterprises",
     "brand": "Lot 9",
     "core_type": "silicon",
@@ -927,7 +927,7 @@
       "basic_hud"
     ],
     "cost": 680,
-    "description": "Lot 9 clearance silicon. Suspiciously good CU for the price.",
+    "description": "That's right, read the specs again. Tukey's Lot 9 packs more punch that the competition.",
     "signature": {
       "thermal": 1.28,
       "gravitational": 0.08,
@@ -937,7 +937,7 @@
   },
   {
     "id": "tmc_channel_4",
-    "name": "Channel 4",
+    "name": "TMC Channel 4 Core",
     "maker": "The Meridian Company",
     "brand": "Channel",
     "core_type": "silicon",
@@ -951,7 +951,7 @@
       "basic_hud"
     ],
     "cost": 1600,
-    "description": "Channel-series silicon for ships that live between ports.",
+    "description": "Channel-series silicon delivers unparalleled functionality. Choose it today for your ship and leave behind your computational worries.",
     "signature": {
       "thermal": 1.44,
       "gravitational": 0.1,
@@ -961,7 +961,7 @@
   },
   {
     "id": "tmc_transit_nav",
-    "name": "Transit Nav",
+    "name": "TMC Transit NavCore",
     "maker": "The Meridian Company",
     "brand": "Transit",
     "core_type": "silicon",
@@ -975,7 +975,7 @@
       "basic_hud"
     ],
     "cost": 900,
-    "description": "Transit-grade silicon for channel routes and hub traffic.",
+    "description": "Transit-series silicon provides unmatched value for your computing money. Install a NavCore today and let it handle your solutioning.",
     "signature": {
       "thermal": 1.2,
       "gravitational": 0.08,

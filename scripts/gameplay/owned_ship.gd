@@ -21,6 +21,7 @@ var combat_hull: float = -1.0
 var combat_power_lost: float = 0.0
 var combat_compute_lost: float = 0.0
 var combat_shield_charges: Dictionary = {}
+var deployed_drone: Dictionary = {}
 
 
 static func from_dict(data: Dictionary) -> OwnedShip:
@@ -49,6 +50,7 @@ static func from_dict(data: Dictionary) -> OwnedShip:
 	ship.combat_power_lost = float(data.get("combat_power_lost", 0.0))
 	ship.combat_compute_lost = float(data.get("combat_compute_lost", 0.0))
 	ship.combat_shield_charges = _float_dict_from_variant(data.get("combat_shield_charges", {}))
+	ship.deployed_drone = DroneRuntime.migrate_deployed_drone_from_variant(data.get("deployed_drone", {}))
 	return ship
 
 
@@ -130,6 +132,8 @@ func to_dict() -> Dictionary:
 		out["combat_compute_lost"] = combat_compute_lost
 		if not combat_shield_charges.is_empty():
 			out["combat_shield_charges"] = combat_shield_charges.duplicate()
+	if not deployed_drone.is_empty() and bool(deployed_drone.get("active", false)):
+		out["deployed_drone"] = deployed_drone.duplicate(true)
 	return out
 
 
