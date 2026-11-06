@@ -4,7 +4,7 @@ extends RefCounted
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
-	var ctx := BalanceMetrics.build_context(catalog, {})
+	var ctx := BalanceMetrics.build_context(catalog, {"phases": ["templates"]})
 	var probes: Array = ctx["templates"]
 	runner.check(probes.size() >= 1, "template power: probes built")
 	for probe_variant in probes:

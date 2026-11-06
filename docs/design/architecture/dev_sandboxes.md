@@ -22,4 +22,4 @@ Shared runner:
 
 Behaviour and architecture notes for each sandbox (except theme showcase) live in [architecture.md](architecture.md) under **Dev sandboxes** / **Mission harness** / **System render tester**. Theme tokens: [ui_theme.md](ui_theme.md).
 
-Headless smoke coverage for several of these scenes is in [`scripts/dev/smoke_scenes.gd`](../../../scripts/dev/smoke_scenes.gd), invoked by `./scripts/ci/smoke_scenes.sh` as part of `./scripts/ci/check.sh`.
+Headless smoke coverage for several of these scenes is in [`scripts/dev/smoke_scenes.gd`](../../../scripts/dev/smoke_scenes.gd), invoked by [`scripts/ci/smoke_scenes.sh`](../../../scripts/ci/smoke_scenes.sh) (and the full gate [`scripts/ci/check.sh`](../../../scripts/ci/check.sh)).

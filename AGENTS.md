@@ -42,13 +42,13 @@ Or with an explicit Godot path:
 GODOT=~/opt/Godot_v4.7.2-stable_linux.x86_64 ./scripts/ci/check.sh
 ```
 
-The script runs catalog validation, Godot import, a single-process parse sweep across `scripts/` and `tests/` ([`scripts/ci/check_scripts.gd`](scripts/ci/check_scripts.gd)), headless unit tests, and the scene smoke suite.
+The orchestrator is [`scripts/ci/check.sh`](scripts/ci/check.sh). Stages: [`scripts/ci/validators.sh`](scripts/ci/validators.sh) (Python), [`scripts/ci/import.sh`](scripts/ci/import.sh), [`scripts/ci/sweep.sh`](scripts/ci/sweep.sh) (parse sweep via [`scripts/ci/check_scripts.gd`](scripts/ci/check_scripts.gd)), [`scripts/ci/tests.sh`](scripts/ci/tests.sh) (headless [`tests/run.gd`](tests/run.gd)), and [`scripts/ci/smoke_scenes.sh`](scripts/ci/smoke_scenes.sh).
 
-For the inner loop, `--fast` skips import, the parse sweep, and smokes (validators plus unit tests only). The unit suite includes balance metrics and can take a few minutes; `--scripts-only` and `--tests-only` run one half each. `--fast` is not sufficient to mark work complete - run the full check before you finish.
+For the inner loop, `--fast` skips import, the parse sweep, and smokes (validators plus unit tests only). Use `--suite TestCombat` (repeatable; passes through to `tests/run.gd`) to run one `class_name` suite. `--scripts-only` runs validators, import, and the parse sweep only; `--tests-only` runs unit tests only. `--fast` is not sufficient to mark work complete — run the full check before you finish.
 
-**Important:** Godot may exit `0` even when a script has parse errors. The check script scans output for `SCRIPT ERROR`, `Parse Error`, and `Failed to load script`. Do not claim compile-clean without running it.
+**Important:** Godot may exit `0` even when a script has parse errors. The check scans output for `SCRIPT ERROR`, `Parse Error`, and `Failed to load script`. Do not claim compile-clean without running it.
 
-Do **not** use `--check-only` with `--debug` (interactive debugger can hang).
+Optional advisory lint: set `CARTEL_GDLINT=1` so the parse sweep runs `gdlint` when installed (still non-blocking).
 
 ## Writing tests
 
@@ -58,7 +58,7 @@ Gameplay is `RefCounted` with no scene-tree dependency, so it is testable headle
 - `TestRunner` offers `check(condition, label)` and `check_eq(actual, expected, label)`. Compare floats with a tolerance, not `check_eq`.
 - Canonical examples: [tests/test_combat.gd](tests/test_combat.gd) and [tests/test_sensors.gd](tests/test_sensors.gd) for breadth, [tests/test_save.gd](tests/test_save.gd) for round-trip persistence.
 - **Do not assert exact catalog counts.** Adding a SKU must never fail the suite; assert floors and structural invariants instead. See `_check_min_count` in [tests/test_catalog.gd](tests/test_catalog.gd).
-- New `class_name` scripts are not visible to other scripts until an import pass runs, so run `./scripts/ci/check.sh` (or `--scripts-only`) rather than the test runner alone after adding a file.
+- New `class_name` scripts are not visible to other scripts until an import pass runs, so run `./scripts/ci/check.sh` (or `./scripts/ci/sweep.sh`) rather than the test runner alone after adding a file.
 - No GUT or gdUnit4 in this repo.
 
 ## Language

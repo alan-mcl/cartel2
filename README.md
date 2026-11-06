@@ -69,7 +69,7 @@ After changing GDScript or files under `data/catalog/`, run the full verificatio
 GODOT=/path/to/Godot ./scripts/ci/check.sh
 ```
 
-The script validates catalogs, imports assets, parses scripts, and runs unit tests. Use `./scripts/ci/check.sh --fast` for a quicker loop (validators + tests only).
+[`scripts/ci/check.sh`](scripts/ci/check.sh) runs validators, import, parse sweep, headless tests ([`tests/run.gd`](tests/run.gd)), and scene smokes. Use `./scripts/ci/check.sh --fast` for a quicker loop (validators + tests only). Run a single suite with `./scripts/ci/check.sh --suite TestCombat` (repeat the flag for more than one). Optional: `CARTEL_GDLINT=1` runs advisory `gdlint` during the parse sweep.
 
 **Useful commands** (from repo root, with `GODOT` set):
 

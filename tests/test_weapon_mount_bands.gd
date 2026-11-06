@@ -10,7 +10,7 @@ const MOUNT_BANDS := {
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
-	var ctx := BalanceMetrics.build_context(catalog, {})
+	var ctx := BalanceMetrics.build_context(catalog, {"phases": ["weapons"]})
 	var weapons: Dictionary = ctx["weapons"]
 	var min_hull := _min_unarmoured_template_hull(catalog)
 	runner.check(min_hull > 0.0, "weapon bands: min unarmoured hull hits")

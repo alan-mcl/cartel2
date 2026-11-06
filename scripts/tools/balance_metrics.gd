@@ -22,6 +22,22 @@ const DEFAULT_OPTIONS := {
 	"top_outliers": 25,
 }
 
+## Optional `options["phases"]` lists which expensive context slices to build. Omitted or empty means all
+## slices (full balance report). Listed phases pull in dependencies automatically (e.g. templates
+## implies weapons). Used by headless tests that only need weapon stats or template probes.
+const _CONTEXT_PHASE_DEPS: Dictionary = {
+	"trade": [],
+	"charters": [],
+	"weapons": [],
+	"templates": ["weapons"],
+	"refits": ["templates"],
+	"freight": ["trade", "charters"],
+	"bounty": ["charters", "templates"],
+	"earnings": ["trade", "charters", "templates", "bounty"],
+	"repair": ["trade"],
+	"rearm": ["repair", "bounty"],
+}
+
 ## Paid repairs are not in the game yet. Until they land, the tool prices them with these proposal
 ## values; once they ship, read the shipped rule instead.
 const REPAIR_INDEX_COMMODITY := "industrial_components"
@@ -76,6 +92,8 @@ static func build_all(catalog: Catalog, options: Dictionary = {}) -> Array:
 static func build_context(catalog: Catalog, options: Dictionary = {}) -> Dictionary:
 	var opts: Dictionary = DEFAULT_OPTIONS.duplicate(true)
 	opts.merge(options, true)
+	var want_phases := _expanded_context_phases(opts)
+	opts.erase("phases")
 	var start_seconds := GalacticCalendar.start_seconds_from_player(catalog.get_player())
 	var ctx := {
 		"catalog": catalog,
@@ -83,18 +101,55 @@ static func build_context(catalog: Catalog, options: Dictionary = {}) -> Diction
 		"start_day": CommodityEconomy.gst_day(start_seconds),
 		"part_sale_cache": {},
 	}
-	ctx["trade"] = _build_trade(ctx)
-	ctx["fuel_observed"] = _observe_fuel_quotes(ctx)
-	ctx["weapons"] = _build_weapon_stats(ctx)
-	ctx["templates"] = _build_template_probes(ctx)
-	ctx["refits"] = _build_refits(ctx)
-	ctx["charters"] = _sample_charters(ctx)
-	ctx["freight_stack"] = _measure_freight_stack(ctx)
-	ctx["bounty"] = _build_bounty_costs(ctx)
-	_attach_template_earnings(ctx)
-	ctx["repair"] = _build_repair_model(ctx)
-	_apply_rearm_index(ctx)
+
+	if want_phases.is_empty() or want_phases.has("trade"):
+		ctx["trade"] = _build_trade(ctx)
+		ctx["fuel_observed"] = _observe_fuel_quotes(ctx)
+	if want_phases.is_empty() or want_phases.has("charters"):
+		ctx["charters"] = _sample_charters(ctx)
+	if want_phases.is_empty() or want_phases.has("weapons"):
+		ctx["weapons"] = _build_weapon_stats(ctx)
+	if want_phases.is_empty() or want_phases.has("templates"):
+		ctx["templates"] = _build_template_probes(ctx)
+	if want_phases.is_empty() or want_phases.has("refits"):
+		ctx["refits"] = _build_refits(ctx)
+	if want_phases.is_empty() or want_phases.has("freight"):
+		ctx["freight_stack"] = _measure_freight_stack(ctx)
+	if want_phases.is_empty() or want_phases.has("bounty"):
+		ctx["bounty"] = _build_bounty_costs(ctx)
+	if want_phases.is_empty() or want_phases.has("earnings"):
+		_attach_template_earnings(ctx)
+	if want_phases.is_empty() or want_phases.has("repair"):
+		ctx["repair"] = _build_repair_model(ctx)
+	if want_phases.is_empty() or want_phases.has("rearm"):
+		_apply_rearm_index(ctx)
 	return ctx
+
+
+## Resolves `options["phases"]` into the set of context slices to build, including dependencies.
+## Missing or empty `phases` → full context (returns empty dictionary, interpreted as “all” above).
+static func _expanded_context_phases(opts: Dictionary) -> Dictionary:
+	var raw: Variant = opts.get("phases", null)
+	if raw == null:
+		return {}
+	var listed: Array = raw as Array
+	if listed.is_empty():
+		return {}
+	var want := {}
+	var queue: Array = []
+	for entry in listed:
+		var phase_id := str(entry)
+		if not want.has(phase_id):
+			want[phase_id] = true
+			queue.append(phase_id)
+	while not queue.is_empty():
+		var phase: String = str(queue.pop_front())
+		for dep_variant in _CONTEXT_PHASE_DEPS.get(phase, []):
+			var dep := str(dep_variant)
+			if not want.has(dep):
+				want[dep] = true
+				queue.append(dep)
+	return want
 
 
 # --- Sections ---------------------------------------------------------------------------------
