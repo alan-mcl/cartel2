@@ -15,6 +15,15 @@ static func is_drone_module(module_def: ModuleDef) -> bool:
 	return module_def != null and module_def.weapon_type == "drone"
 
 
+static func module_has_drone_capability(module_def: ModuleDef, capability: String) -> bool:
+	if module_def == null or capability.is_empty():
+		return false
+	for cap_variant in module_def.capabilities:
+		if str(cap_variant) == capability:
+			return true
+	return false
+
+
 static func is_deployed(owned: OwnedShip) -> bool:
 	return owned != null and bool(owned.deployed_drone.get("active", false))
 
@@ -453,7 +462,8 @@ static func build_context(
 	contacts: Array,
 	hostile_ship_ids: Array,
 	ship_velocity: Vector2 = Vector2.ZERO,
-	hostile_positions: Array = []
+	hostile_positions: Array = [],
+	npc_combat_drone: bool = false
 ) -> Dictionary:
 	var locked := TargetLock.contact_for_id(contacts, locked_target_id)
 	return {
@@ -467,6 +477,7 @@ static func build_context(
 		"contacts": contacts,
 		"hostile_ship_ids": hostile_ship_ids,
 		"hostile_positions": hostile_positions,
+		"npc_combat_drone": npc_combat_drone,
 	}
 
 

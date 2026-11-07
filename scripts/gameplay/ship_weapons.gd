@@ -80,6 +80,32 @@ static func first_drone_weapon_slot(assembled: AssembledShip) -> String:
 	return ""
 
 
+static func first_combat_drone_weapon_slot(assembled: AssembledShip) -> String:
+	if assembled == null:
+		return ""
+	var attack_slot := ""
+	var defence_slot := ""
+	for entry in assembled.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null or not DroneRuntime.is_drone_module(module_def):
+			continue
+		var slot := str(entry.get("slot", ""))
+		if slot.is_empty():
+			continue
+		if DroneRuntime.module_has_drone_capability(module_def, DroneDirector.CAP_ATTACK):
+			attack_slot = slot
+		elif (
+			defence_slot.is_empty()
+			and DroneRuntime.module_has_drone_capability(module_def, DroneDirector.CAP_DEFENCE)
+		):
+			defence_slot = slot
+	if not attack_slot.is_empty():
+		return attack_slot
+	return defence_slot
+
+
 static func weapon_slot_order(assembled: AssembledShip) -> Array[String]:
 	var slots: Array[String] = []
 	if assembled == null:

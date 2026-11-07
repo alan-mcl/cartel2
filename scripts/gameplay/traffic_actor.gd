@@ -394,7 +394,7 @@ func _tick_full_sim(
 		traffic_envelope,
 		drone_contacts
 	)
-	_apply_npc_drone_combat_inputs(inputs, catalog, player_pos)
+	var npc_drone_launching := _apply_npc_drone_combat_inputs(inputs, catalog, player_pos)
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
@@ -406,7 +406,7 @@ func _tick_full_sim(
 
 	# Sim-slot cadence: full ops/weapons/stats every slotted tick; stats refresh on interval.
 	var fire_requested := bool(inputs.get("fire", false))
-	if fire_requested and not _fire_pressed_prev:
+	if fire_requested and not _fire_pressed_prev and not npc_drone_launching:
 		weapons.arm_next(assembled_ship)
 	_fire_pressed_prev = fire_requested
 
@@ -655,28 +655,33 @@ func _combat_target_pos(player_pos: Vector2) -> Vector2:
 	return player_pos
 
 
-func _apply_npc_drone_combat_inputs(inputs: Dictionary, catalog: Catalog, player_pos: Vector2) -> void:
+func _apply_npc_drone_combat_inputs(
+	inputs: Dictionary,
+	catalog: Catalog,
+	player_pos: Vector2
+) -> bool:
 	if ai_state != AiState.ENGAGE or assembled_ship == null or owned_ship == null:
-		return
+		return false
 	if DroneRuntime.is_deployed(owned_ship):
 		inputs["fire"] = false
-		return
-	var drone_slot := ShipWeapons.first_drone_weapon_slot(assembled_ship)
+		return false
+	var drone_slot := ShipWeapons.first_combat_drone_weapon_slot(assembled_ship)
 	if drone_slot.is_empty():
-		return
+		return false
 	var entry := _weapon_entry_for_slot(drone_slot)
 	var module_def: ModuleDef = entry.get("data", null)
 	if module_def == null or module_def.ammunition_type.is_empty():
-		return
+		return false
 	if owned_ship.get_ammo_count(module_def.ammunition_type) < 1:
-		return
+		return false
 	if weapons.cooldown_remaining(drone_slot) > 0.0:
-		return
+		return false
 	var aim_pos := _combat_target_pos(player_pos)
 	if position.distance_to(aim_pos) > NPC_DRONE_LAUNCH_RANGE:
-		return
+		return false
 	weapons.select_slot(drone_slot)
 	inputs["fire"] = true
+	return true
 
 
 func _append_npc_drone_weapon_orders(
@@ -701,7 +706,8 @@ func _append_npc_drone_weapon_orders(
 		contacts,
 		hostile_ids,
 		motion.velocity,
-		[player_pos]
+		[player_pos],
+		true
 	)
 	var max_speed := float(assembled_ship.capacities.get("max_speed", 400.0))
 	if max_speed <= 0.0:

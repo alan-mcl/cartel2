@@ -26,7 +26,21 @@ static func resolved_lock(context: Dictionary) -> Dictionary:
 	return TargetLock.contact_for_id(context.get("contacts", []), target_id)
 
 
+static func pick_task_npc_combat(module_def: ModuleDef, context: Dictionary) -> String:
+	var caps := _drone_capabilities(module_def)
+	if caps.is_empty():
+		return TASK_HOLD
+	var hostile_present := bool(context.get("hostile_present", false))
+	if caps.has(CAP_ATTACK) and hostile_present:
+		return TASK_ATTACK
+	if caps.has(CAP_DEFENCE):
+		return TASK_DEFENCE
+	return TASK_HOLD
+
+
 static func pick_task(module_def: ModuleDef, context: Dictionary) -> String:
+	if bool(context.get("npc_combat_drone", false)):
+		return pick_task_npc_combat(module_def, context)
 	if module_def == null:
 		return TASK_HOLD
 	var caps := _drone_capabilities(module_def)

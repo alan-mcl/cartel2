@@ -4,6 +4,7 @@ extends RefCounted
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_job_order(runner, catalog)
+	_test_npc_combat_drone_tasks(runner, catalog)
 	_test_launch_recall(runner, catalog)
 	_test_recall_bay_ready_to_fire(runner, catalog)
 	_test_recall_catches_moving_hull(runner, catalog)
@@ -150,6 +151,46 @@ static func _test_job_order(runner: TestRunner, catalog: Catalog) -> void:
 		DroneDirector.pick_task(_module(catalog, "ca_convoy_screen"), ctx_actor_threat),
 		DroneDirector.TASK_DEFENCE,
 		"defence-only bay screens when threat actor in range"
+	)
+
+
+static func _test_npc_combat_drone_tasks(runner: TestRunner, catalog: Catalog) -> void:
+	var hornet := _module(catalog, "go_hornet_bay")
+	var screen := _module(catalog, "ca_convoy_screen")
+	var relay := _module(catalog, "mon_relay_link")
+	var ctx := _context({}, [], [TargetLock.PLAYER_TARGET_ID], 9000.0, Vector2.ZERO)
+	ctx["hostile_present"] = true
+	ctx["npc_combat_drone"] = true
+	runner.check_eq(
+		DroneDirector.pick_task(hornet, ctx),
+		DroneDirector.TASK_ATTACK,
+		"npc combat: attack bay attacks"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(screen, ctx),
+		DroneDirector.TASK_DEFENCE,
+		"npc combat: defence bay screens"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(relay, ctx),
+		DroneDirector.TASK_HOLD,
+		"npc combat: relay bay not used"
+	)
+	var owned := OwnedShip.from_template(
+		catalog,
+		{
+			"id": "npc_drone_slot_pick",
+			"template_id": "wolff_mothership",
+			"chassis_id": "wolff_chassis",
+		}
+	)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var slot := ShipWeapons.first_combat_drone_weapon_slot(assembled)
+	runner.check(not slot.is_empty(), "npc launch slot finds combat bay")
+	var slot_def := catalog.get_module_def(assembled.get_module_id(slot))
+	runner.check(
+		DroneRuntime.module_has_drone_capability(slot_def, DroneDirector.CAP_ATTACK),
+		"npc launch slot prefers attack bay"
 	)
 
 
