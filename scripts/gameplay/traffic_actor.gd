@@ -391,7 +391,8 @@ func _tick_full_sim(
 		player_thrusting,
 		anchors,
 		traffic_config,
-		traffic_envelope
+		traffic_envelope,
+		drone_contacts
 	)
 	_apply_npc_drone_combat_inputs(inputs, catalog, player_pos)
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
@@ -614,6 +615,35 @@ func get_sensor_contact(
 	)
 
 
+func _engage_target_motion(
+	player_pos: Vector2,
+	player_vel: Vector2,
+	player_facing: float,
+	player_thrusting: bool,
+	drone_contacts: Array
+) -> Dictionary:
+	if locked_target_id.begins_with("drone:"):
+		for contact_variant in drone_contacts:
+			if typeof(contact_variant) != TYPE_DICTIONARY:
+				continue
+			var contact: Dictionary = contact_variant
+			if str(contact.get("id", "")) != locked_target_id:
+				continue
+			var drone_vel: Vector2 = contact.get("velocity", Vector2.ZERO)
+			return {
+				"target_pos": contact.get("position", locked_drone_lock_pos),
+				"target_vel": drone_vel,
+				"target_facing": float(contact.get("heading_rad", drone_vel.angle())),
+				"target_thrusting": drone_vel.length_squared() > 25.0,
+			}
+	return {
+		"target_pos": _combat_target_pos(player_pos),
+		"target_vel": player_vel,
+		"target_facing": player_facing,
+		"target_thrusting": player_thrusting,
+	}
+
+
 func _combat_target_pos(player_pos: Vector2) -> Vector2:
 	if locked_target_id.begins_with("drone:") and locked_drone_lock_pos.is_finite():
 		return locked_drone_lock_pos
@@ -726,7 +756,8 @@ func _build_ai_inputs(
 	player_thrusting: bool,
 	anchors: Array,
 	traffic_config: Dictionary,
-	traffic_envelope: float
+	traffic_envelope: float,
+	drone_contacts: Array = []
 ) -> Dictionary:
 	_reset_ai_inputs()
 
@@ -748,14 +779,17 @@ func _build_ai_inputs(
 			var maneuver := "medium"
 			if assembled_ship != null:
 				maneuver = assembled_ship.chassis_maneuver()
+			var target_motion := _engage_target_motion(
+				player_pos, player_vel, player_facing, player_thrusting, drone_contacts
+			)
 			_copy_ai_inputs_from(combat_pilot.tick({
 				"ship_pos": position,
 				"facing": motion.facing,
 				"ship_vel": motion.velocity,
-				"target_pos": _combat_target_pos(player_pos),
-				"target_vel": player_vel,
-				"target_facing": player_facing,
-				"target_thrusting": player_thrusting,
+				"target_pos": target_motion.get("target_pos", player_pos),
+				"target_vel": target_motion.get("target_vel", player_vel),
+				"target_facing": float(target_motion.get("target_facing", player_facing)),
+				"target_thrusting": bool(target_motion.get("target_thrusting", player_thrusting)),
 				"max_speed": max_speed,
 				"maneuver": maneuver,
 				"profile": _combat_weapon_profile,

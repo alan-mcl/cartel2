@@ -115,7 +115,10 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 	)
 	var drone_orders: Array = tick_result.get("orders", [])
 	if not drone_orders.is_empty():
-		_spawn_weapon_orders(drone_orders)
+		if _drone_visual != null and _drone_visual.has_method("spawn_weapon_orders"):
+			_drone_visual.call("spawn_weapon_orders", drone_orders)
+		else:
+			_spawn_weapon_orders(drone_orders)
 	var recalled_slot := str(tick_result.get("recalled_slot", ""))
 	if not recalled_slot.is_empty():
 		_on_drone_recall_docked(recalled_slot)
@@ -128,7 +131,8 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 				catalog,
 				module_id,
 				pose.get("position", global_position),
-				pose.get("velocity", Vector2.ZERO)
+				pose.get("velocity", Vector2.ZERO),
+				float(pose.get("facing", NAN))
 			)
 	elif _drone_visual != null and _drone_visual.has_method("hide_drone"):
 		_drone_visual.call("hide_drone")

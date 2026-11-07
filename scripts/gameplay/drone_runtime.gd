@@ -85,7 +85,7 @@ static func nav_contact(
 		"short_label": display_name,
 		"ship_name": display_name,
 		"lock_hull_radius": DRONE_HIT_RADIUS,
-		"heading_rad": vel.angle() if vel.length_squared() > 0.01 else 0.0,
+		"heading_rad": _read_facing(owned.deployed_drone, vel),
 		"lock_hull_display_scale": 1.0,
 		"drone_task": str(owned.deployed_drone.get("task", "")),
 		"drone_owner_player": drone_owner_player,
@@ -191,12 +191,13 @@ static func handle_weapon_fire(
 		"module_id": module_def.id,
 		"position": {"x": launch_pos.x, "y": launch_pos.y},
 		"velocity": {"x": ship_velocity.x, "y": ship_velocity.y},
+		"facing": ship_facing,
 		"task": DroneDirector.TASK_HOLD,
 		"retrieval_phase": "outbound",
-		"attack_cooldown": 0.0,
 		"recalling": false,
 		"orbit_phase": NAN,
 		"orbit_task": "",
+		"craft_cooldowns": {},
 	}
 	cooldowns[slot] = ShipWeapons.fire_cycle_seconds(module_def)
 	return {"handled": true, "orders": [], "out_of_ammo": false, "ammo_changed": true}
@@ -227,25 +228,52 @@ static func tick(
 		result["destroyed"] = true
 		return result
 
+	return _tick_craft_motion(catalog, module_def, owned, delta, context, max_speed, result)
+
+
+static func _tick_craft_motion(
+	catalog: Catalog,
+	module_def: ModuleDef,
+	owned: OwnedShip,
+	delta: float,
+	context: Dictionary,
+	max_speed: float,
+	result: Dictionary
+) -> Dictionary:
 	var ship_pos: Vector2 = context.get("ship_pos", Vector2.ZERO)
 	var ship_facing := float(context.get("ship_facing", 0.0))
 	var pos := _read_pos(owned.deployed_drone)
 	var vel := _read_vel(owned.deployed_drone)
+	var facing := _read_facing(owned.deployed_drone, vel)
+	var craft := DroneCraft.new()
+	craft.sync_motion_from_pose(facing, vel)
+	var weapons := ShipWeapons.new()
+	DroneCraft.restore_weapon_cooldowns(weapons, owned.deployed_drone)
+	var craft_assembled := DroneCraft.build_assembled(catalog, module_def)
+	var attack_weapon: ModuleDef = null
+	if not module_def.attack_weapon_id.is_empty():
+		attack_weapon = catalog.get_module_def(module_def.attack_weapon_id)
+	var craft_owned := DroneCraft.craft_owned_for_weapon(attack_weapon)
 
 	if bool(owned.deployed_drone.get("recalling", false)):
 		var hull_vel: Vector2 = context.get("ship_velocity", Vector2.ZERO)
 		var cruise_speed := _closure_cruise_speed(max_speed, hull_vel, pos, ship_pos)
-		var motion_return: Array = _steer_toward(pos, vel, ship_pos, cruise_speed, delta)
-		pos = motion_return[0]
-		vel = motion_return[1]
+		var stats := DroneCraft.flat_stats(cruise_speed)
+		var recall_inputs := DroneCraft.steer_toward_point(
+			pos, facing, vel, ship_pos, cruise_speed
+		)
+		craft.step_physics(delta, recall_inputs, stats)
+		pos += craft.motion.velocity * delta
+		facing = craft.motion.facing
+		vel = craft.motion.velocity
 		if pos.distance_to(ship_pos) <= ARRIVAL_DISTANCE:
 			var recalled_slot := complete_recall(catalog, owned)
 			if not recalled_slot.is_empty():
 				result["ammo_changed"] = true
 				result["recalled_slot"] = recalled_slot
 			return result
-		_write_pose(owned.deployed_drone, pos, vel)
-		result["pose"] = {"position": pos, "velocity": vel, "facing": vel.angle()}
+		_write_pose(owned.deployed_drone, pos, vel, facing)
+		result["pose"] = {"position": pos, "velocity": vel, "facing": facing}
 		return result
 
 	var director_ctx := context.duplicate()
@@ -278,9 +306,32 @@ static func tick(
 		if _has_hostile_ship_in_context(director_ctx) and focus.is_finite():
 			var atk_radius := _attack_orbit_radius(catalog, module_def, leash)
 			steer_target = _orbit_ring_target(owned, pos, focus, atk_radius, cruise_speed, delta)
-	var motion: Array = _steer_toward(pos, vel, steer_target, cruise_speed, delta)
-	pos = motion[0]
-	vel = motion[1]
+
+	var stats := DroneCraft.flat_stats(cruise_speed)
+	var inputs: Dictionary
+	var hostile_ids: Array = context.get("hostile_ship_ids", [])
+	var attack_target := _resolve_attack_target_contact(context, hostile_ids)
+	if task == DroneDirector.TASK_ATTACK and not attack_target.is_empty() and attack_weapon != null:
+		var target_pos: Vector2 = attack_target.get("position", Vector2.ZERO)
+		var target_vel: Vector2 = attack_target.get("velocity", Vector2.ZERO)
+		inputs = DroneCraft.attack_pilot_inputs(
+			pos,
+			facing,
+			vel,
+			target_pos,
+			target_vel,
+			cruise_speed,
+			craft_assembled,
+			craft_owned
+		)
+	else:
+		inputs = DroneCraft.steer_toward_point(pos, facing, vel, steer_target, cruise_speed)
+		inputs["fire"] = false
+
+	craft.step_physics(delta, inputs, stats)
+	pos += craft.motion.velocity * delta
+	facing = craft.motion.facing
+	vel = craft.motion.velocity
 	pos = _apply_leash(pos, vel, ship_pos, leash, delta)
 
 	if (
@@ -294,16 +345,26 @@ static func tick(
 			result["recalled_slot"] = recalled_slot
 		return result
 
-	var attack_cd := float(owned.deployed_drone.get("attack_cooldown", 0.0))
-	attack_cd = maxf(0.0, attack_cd - delta)
-	owned.deployed_drone["attack_cooldown"] = attack_cd
-	if task == DroneDirector.TASK_ATTACK and attack_cd <= 0.0:
-		var attack_orders := _attack_orders(catalog, module_def, pos, vel, context)
-		if not attack_orders.is_empty():
-			result["orders"] = attack_orders
-			var attack_weapon := catalog.get_module_def(module_def.attack_weapon_id)
-			if attack_weapon != null:
-				owned.deployed_drone["attack_cooldown"] = ShipWeapons.fire_cycle_seconds(attack_weapon)
+	if task == DroneDirector.TASK_ATTACK and attack_weapon != null:
+		weapons.select_slot(DroneCraft.WEAPON_SLOT)
+		weapons.sync_selection(craft_assembled)
+		var guidance := {}
+		if not attack_target.is_empty():
+			guidance = DroneCraft.weapon_guidance_for_attack(context, attack_target)
+		var weapon_out := weapons.tick(
+			catalog,
+			craft_assembled,
+			craft_owned,
+			delta,
+			bool(inputs.get("fire", false)) and not attack_target.is_empty(),
+			true,
+			guidance
+		)
+		var craft_orders: Array = weapon_out.get("orders", [])
+		DroneCraft.stamp_order_origins(craft_orders, pos, facing, vel)
+		if not craft_orders.is_empty():
+			result["orders"] = craft_orders
+		DroneCraft.store_weapon_cooldowns(weapons, owned.deployed_drone)
 
 	if task == DroneDirector.TASK_SENSOR:
 		result["sensor_origin"] = {
@@ -311,8 +372,8 @@ static func tick(
 			"profile": SensorSystem.observer_profile_from_drone_module(module_def, 1.0, true),
 		}
 
-	_write_pose(owned.deployed_drone, pos, vel)
-	result["pose"] = {"position": pos, "velocity": vel, "facing": vel.angle()}
+	_write_pose(owned.deployed_drone, pos, vel, facing)
+	result["pose"] = {"position": pos, "velocity": vel, "facing": facing}
 	return result
 
 
@@ -466,48 +527,6 @@ static func collect_hostile_actor_positions(traffic_director, _player_pos: Vecto
 	return positions
 
 
-static func _attack_orders(
-	catalog: Catalog,
-	drone_module: ModuleDef,
-	drone_pos: Vector2,
-	drone_vel: Vector2,
-	context: Dictionary
-) -> Array:
-	var attack_id := drone_module.attack_weapon_id
-	if attack_id.is_empty() or catalog == null:
-		return []
-	var weapon_def := catalog.get_module_def(attack_id)
-	if weapon_def == null:
-		return []
-	var hostile_ids: Array = context.get("hostile_ship_ids", [])
-	var target_contact := _resolve_attack_target_contact(context, hostile_ids)
-	if target_contact.is_empty():
-		return []
-	var target_pos: Vector2 = target_contact.get("position", Vector2.ZERO)
-	if drone_pos.distance_to(target_pos) > weapon_def.range:
-		return []
-	var facing := (target_pos - drone_pos).angle()
-	var packets := ShipCombat.packets_from_module(catalog, weapon_def)
-	if packets.is_empty():
-		return []
-	var delivery := ShipCombat.delivery_type_from_module(weapon_def)
-	var speed := weapon_def.projectile_speed if weapon_def.projectile_speed > 0.0 else ShipWeapons.DEFAULT_PROJECTILE_SPEED
-	var orders: Array = []
-	orders.append({
-		"slot": str(drone_module.id),
-		"module_id": attack_id,
-		"delivery_type": delivery,
-		"weapon_type": weapon_def.weapon_type,
-		"packets": packets,
-		"range": weapon_def.range,
-		"projectile_speed": speed,
-		"spawn_origin": drone_pos,
-		"spawn_facing": facing,
-		"spawn_velocity": drone_vel,
-	})
-	return orders
-
-
 static func _steering_target(
 	task: String,
 	module_def: ModuleDef,
@@ -646,24 +665,6 @@ static func _update_retrieval_phase(owned: OwnedShip, drone_pos: Vector2, contex
 	context["retrieval_phase"] = str(owned.deployed_drone.get("retrieval_phase", "outbound"))
 
 
-static func _steer_toward(
-	pos: Vector2,
-	vel: Vector2,
-	target: Vector2,
-	max_speed: float,
-	delta: float
-) -> Array:
-	var to_target := target - pos
-	var desired := Vector2.ZERO
-	if to_target.length_squared() > 1.0:
-		desired = to_target.normalized() * max_speed
-	var steer := (desired - vel) * clampf(4.5 * delta, 0.0, 1.0)
-	var new_vel := vel + steer
-	if new_vel.length() > max_speed:
-		new_vel = new_vel.normalized() * max_speed
-	return [pos + new_vel * delta, new_vel]
-
-
 static func _apply_leash(
 	pos: Vector2,
 	vel: Vector2,
@@ -678,6 +679,18 @@ static func _apply_leash(
 	return pulled + (vel * delta * 0.25)
 
 
+static func airframe_pose(owned: OwnedShip) -> Dictionary:
+	if owned == null or not is_deployed(owned):
+		return {}
+	var state := owned.deployed_drone
+	var vel := _read_vel(state)
+	return {
+		"position": _read_pos(state),
+		"velocity": vel,
+		"facing": _read_facing(state, vel),
+	}
+
+
 static func _read_pos(state: Dictionary) -> Vector2:
 	var p: Dictionary = state.get("position", {})
 	return Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))
@@ -688,9 +701,18 @@ static func _read_vel(state: Dictionary) -> Vector2:
 	return Vector2(float(v.get("x", 0.0)), float(v.get("y", 0.0)))
 
 
-static func _write_pose(state: Dictionary, pos: Vector2, vel: Vector2) -> void:
+static func _read_facing(state: Dictionary, velocity: Vector2) -> float:
+	if state.has("facing"):
+		return float(state.get("facing", 0.0))
+	if velocity.length_squared() > 0.01:
+		return velocity.angle()
+	return -PI / 2.0
+
+
+static func _write_pose(state: Dictionary, pos: Vector2, vel: Vector2, facing: float) -> void:
 	state["position"] = {"x": pos.x, "y": pos.y}
 	state["velocity"] = {"x": vel.x, "y": vel.y}
+	state["facing"] = facing
 
 
 static func migrate_deployed_drone_from_variant(data: Variant) -> Dictionary:

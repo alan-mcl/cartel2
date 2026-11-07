@@ -21,6 +21,14 @@ func reset() -> void:
 	_npc_weapon_index = -1
 
 
+func export_cooldowns() -> Dictionary:
+	return _cooldowns.duplicate()
+
+
+func import_cooldowns(from_state: Dictionary) -> void:
+	_cooldowns = from_state.duplicate()
+
+
 func sync_selection(assembled: AssembledShip) -> void:
 	var slots := weapon_slot_order(assembled)
 	if slots.is_empty():

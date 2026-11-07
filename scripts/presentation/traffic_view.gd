@@ -23,6 +23,7 @@ var _far_exhaust_by_id: Dictionary = {}
 var _near_lod_by_id: Dictionary = {}
 var _destroy_fx_started: Dictionary = {}
 var _opacity_by_id: Dictionary = {}
+var _drone_visual_by_id: Dictionary = {}
 
 var _npc_ship_packed: PackedScene
 var _near_pool := PresentationNodePool.new()
@@ -51,6 +52,10 @@ func clear() -> void:
 	_near_lod_by_id.clear()
 	_destroy_fx_started.clear()
 	_opacity_by_id.clear()
+	for drone_variant in _drone_visual_by_id.values():
+		if typeof(drone_variant) == TYPE_OBJECT and is_instance_valid(drone_variant):
+			(drone_variant as Node).queue_free()
+	_drone_visual_by_id.clear()
 	_near_pool.clear()
 	for far_node in _far_sprite_pool:
 		if is_instance_valid(far_node):
@@ -110,8 +115,10 @@ func sync(actors: Array, catalog: Catalog, delta: float = 0.0) -> void:
 					actor.hull_current / maxf(actor.hull_max, 1.0)
 				)
 			_spawn_actor_weapons(actor, node)
+			_sync_actor_drone_visual(actor, catalog)
 		else:
 			_sync_far_node(actor, node)
+			_hide_actor_drone_visual(actor.id)
 
 	_prune_stale_nodes(active_ids)
 
@@ -186,6 +193,7 @@ func _prune_stale_nodes(active_ids: Dictionary) -> void:
 		_near_lod_by_id.erase(actor_id)
 		_destroy_fx_started.erase(actor_id)
 		_opacity_by_id.erase(actor_id)
+		_hide_actor_drone_visual(actor_id)
 
 
 static func advance_detection_opacity(
@@ -347,6 +355,34 @@ func _sync_far_node(actor, node: Node2D) -> void:
 	if exhaust != null and is_instance_valid(exhaust):
 		var thrusting: bool = actor.motion.is_thrusting()
 		exhaust.set_thrusting(thrusting, 1.0 if thrusting else 0.0)
+
+
+const DroneVisualScript := preload("res://scripts/presentation/drone_visual.gd")
+
+
+func _sync_actor_drone_visual(actor, catalog: Catalog) -> void:
+	if catalog == null or actor.owned_ship == null or not DroneRuntime.is_deployed(actor.owned_ship):
+		_hide_actor_drone_visual(actor.id)
+		return
+	var drone_node = _drone_visual_by_id.get(actor.id)
+	if drone_node == null or not is_instance_valid(drone_node):
+		drone_node = DroneVisualScript.new()
+		_traffic_root.add_child(drone_node)
+		_drone_visual_by_id[actor.id] = drone_node
+		drone_node.bind(actor.owned_ship, null)
+	var module_id := str(actor.owned_ship.deployed_drone.get("module_id", ""))
+	var pose := DroneRuntime.airframe_pose(actor.owned_ship)
+	var pos: Vector2 = pose.get("position", Vector2.ZERO)
+	var vel: Vector2 = pose.get("velocity", Vector2.ZERO)
+	var facing: float = float(pose.get("facing", 0.0))
+	if drone_node.has_method("sync_pose"):
+		drone_node.call("sync_pose", catalog, module_id, pos, vel, facing)
+
+
+func _hide_actor_drone_visual(actor_id: String) -> void:
+	var drone_node = _drone_visual_by_id.get(actor_id)
+	if drone_node != null and is_instance_valid(drone_node) and drone_node.has_method("hide_drone"):
+		drone_node.call("hide_drone")
 
 
 func _spawn_actor_weapons(actor, node: Node2D) -> void:

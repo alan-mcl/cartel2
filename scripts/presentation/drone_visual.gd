@@ -1,6 +1,7 @@
-extends Area2D
+extends CharacterBody2D
 
-const DRONE_COLLISION_LAYER := 1
+const NPC_LAYER := 16
+const WEAPON_MASK := 2 | NPC_LAYER | 1
 
 const SILHOUETTE_PATHS := {
 	"sensor_puck": "res://assets/world/drones/sensor_puck.svg",
@@ -10,6 +11,7 @@ const SILHOUETTE_PATHS := {
 }
 
 var _sprite: Sprite2D
+var _collision_shape: CollisionShape2D
 var _owned_ship: OwnedShip
 var _session: GameSession
 var _scale_light := 0.55
@@ -18,14 +20,14 @@ var _scale_heavy := 0.9
 
 
 func _ready() -> void:
-	collision_layer = DRONE_COLLISION_LAYER
+	collision_layer = NPC_LAYER
 	collision_mask = 0
-	monitoring = false
-	var shape_node := CollisionShape2D.new()
+	add_to_group("npc_ship")
+	_collision_shape = CollisionShape2D.new()
 	var circle := CircleShape2D.new()
 	circle.radius = DroneRuntime.DRONE_HIT_RADIUS
-	shape_node.shape = circle
-	add_child(shape_node)
+	_collision_shape.shape = circle
+	add_child(_collision_shape)
 	_sprite = Sprite2D.new()
 	add_child(_sprite)
 	visible = false
@@ -36,7 +38,13 @@ func bind(owned: OwnedShip, game_session: GameSession = null) -> void:
 	_session = game_session
 
 
-func sync_pose(catalog: Catalog, module_id: String, world_pos: Vector2, velocity: Vector2) -> void:
+func sync_pose(
+	catalog: Catalog,
+	module_id: String,
+	world_pos: Vector2,
+	velocity: Vector2,
+	facing: float = NAN
+) -> void:
 	if catalog == null or module_id.is_empty():
 		visible = false
 		return
@@ -56,8 +64,10 @@ func sync_pose(catalog: Catalog, module_id: String, world_pos: Vector2, velocity
 		scale = _scale_heavy
 	_sprite.scale = Vector2(scale, scale)
 	global_position = world_pos
-	if velocity.length_squared() > 4.0:
-		rotation = velocity.angle() + PI * 0.5
+	var heading := facing
+	if is_nan(heading):
+		heading = velocity.angle() if velocity.length_squared() > 4.0 else -PI / 2.0
+	rotation = heading + PI * 0.5
 	visible = true
 
 
@@ -85,3 +95,29 @@ func take_combat_hit(
 	if _session != null:
 		_session.changed.emit()
 	return {"destroyed": true, "intercepted": false}
+
+
+func spawn_weapon_orders(orders: Array) -> void:
+	var world := _get_world_root()
+	if world == null:
+		return
+	ShipVisual.spawn_weapon_orders(
+		world,
+		orders,
+		global_position,
+		rotation - PI * 0.5,
+		velocity,
+		WEAPON_MASK,
+		[self.get_parent()] if get_parent() != null else [self],
+		self,
+		""
+	)
+
+
+func _get_world_root() -> Node2D:
+	var node: Node = self
+	while node != null:
+		if node is Node2D and node.name == "World":
+			return node as Node2D
+		node = node.get_parent()
+	return null

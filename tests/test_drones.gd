@@ -15,6 +15,8 @@ static func run(runner: TestRunner) -> void:
 	_test_attack_orbit_fires(runner, catalog)
 	_test_drone_launch_ignores_weapons_gate(runner, catalog)
 	_test_drone_targetable_destructible(runner, catalog)
+	_test_drone_ship_motion_facing(runner, catalog)
+	_test_drone_attack_via_ship_weapons(runner, catalog)
 
 
 static func _module(catalog: Catalog, module_id: String) -> ModuleDef:
@@ -384,7 +386,7 @@ static func _test_retrieval_return(runner: TestRunner, catalog: Catalog) -> void
 	)
 	var reached_return := false
 	var last_tick: Dictionary = {}
-	for _i in range(400):
+	for _i in range(600):
 		last_tick = DroneRuntime.tick(
 			catalog, assembled, owned, 0.05, context, 500.0
 		)
@@ -436,10 +438,11 @@ static func _test_defence_orbit_hull(runner: TestRunner, catalog: Catalog) -> vo
 		"module_id": module_def.id,
 		"position": {"x": 320.0, "y": 0.0},
 		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": 0.0,
 		"task": DroneDirector.TASK_DEFENCE,
 		"retrieval_phase": "outbound",
-		"attack_cooldown": 0.0,
 		"recalling": false,
+		"craft_cooldowns": {},
 	}
 	## Lock the hostile so [DroneDirector] keeps [TASK_DEFENCE] for this module (otherwise it switches to attack and orbits the NPC).
 	var ctx: Dictionary = DroneRuntime.build_context(
@@ -449,7 +452,7 @@ static func _test_defence_orbit_hull(runner: TestRunner, catalog: Catalog) -> vo
 	var want_r := DroneRuntime._defence_orbit_radius(leash)
 	var sum := 0.0
 	var n := 0
-	for _i in range(160):
+	for _i in range(320):
 		DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 500.0)
 		var p: Dictionary = owned.deployed_drone.get("position", {})
 		var drone_pos := Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))
@@ -475,16 +478,17 @@ static func _test_attack_orbit_fires(runner: TestRunner, catalog: Catalog) -> vo
 		"module_id": module_def.id,
 		"position": {"x": 1300.0, "y": 0.0},
 		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": 0.0,
 		"task": DroneDirector.TASK_ATTACK,
 		"retrieval_phase": "outbound",
-		"attack_cooldown": 0.0,
 		"recalling": false,
+		"craft_cooldowns": {},
 	}
 	var ctx: Dictionary = DroneRuntime.build_context(
 		Vector2.ZERO, 0.0, 9000.0, "", [hostile], ["npc_atk"], Vector2.ZERO
 	)
 	var got := false
-	for _i in range(60):
+	for _i in range(240):
 		var tick: Dictionary = DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 500.0)
 		if not (tick.get("orders", []) as Array).is_empty():
 			got = true
@@ -594,3 +598,80 @@ static func _test_drone_targetable_destructible(runner: TestRunner, catalog: Cat
 	runner.check(not DroneRuntime.is_deployed(owned), "destroy clears deployment")
 	runner.check_eq(owned.get_ammo_count(ammo_id), before - 1, "destroy does not restock")
 	runner.check(not DroneRuntime.try_destroy_at(owned, drone_pos), "miss after destroy is no-op")
+
+
+static func _test_drone_ship_motion_facing(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := _owned_with_drone(catalog, "merc_lark_survey")
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	owned.deployed_drone = {
+		"active": true,
+		"slot": "light_weapon_1",
+		"module_id": "merc_lark_survey",
+		"position": {"x": 0.0, "y": 0.0},
+		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": -PI / 2.0,
+		"task": DroneDirector.TASK_HOLD,
+		"retrieval_phase": "outbound",
+		"recalling": false,
+		"craft_cooldowns": {},
+	}
+	var start_facing := -PI / 2.0
+	var ctx := DroneRuntime.build_context(
+		Vector2.ZERO, 0.0, 5000.0, "", [], [], Vector2.ZERO
+	)
+	for _i in range(80):
+		DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 400.0)
+	var pose := DroneRuntime.airframe_pose(owned)
+	var facing: float = float(pose.get("facing", start_facing))
+	var vel: Vector2 = pose.get("velocity", Vector2.ZERO)
+	runner.check(
+		absf(wrapf(facing - start_facing, -PI, PI)) > 0.12,
+		"drone turns under ShipMotion steering"
+	)
+	runner.check(vel.length() > 8.0, "drone accelerates along thrust axis")
+
+
+static func _test_drone_attack_via_ship_weapons(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.new()
+	owned.id = "craft_weapon"
+	owned.modules = [{"slot": "light_weapon_1", "module_id": "go_wasp_strike"}]
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var attack_weapon := _module(catalog, "go_wasp_strike").attack_weapon_id
+	var parent_ammo_before := 0.0
+	if not attack_weapon.is_empty():
+		var atk_def := catalog.get_module_def(attack_weapon)
+		if atk_def != null and not atk_def.ammunition_type.is_empty():
+			parent_ammo_before = owned.get_ammo_count(atk_def.ammunition_type)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var module_def := _module(catalog, "go_wasp_strike")
+	var hostile := _contact("npc_atk2", "traffic_npc", Vector2(800, 0))
+	owned.deployed_drone = {
+		"active": true,
+		"slot": "light_weapon_1",
+		"module_id": module_def.id,
+		"position": {"x": 200.0, "y": 0.0},
+		"velocity": {"x": 80.0, "y": 0.0},
+		"facing": 0.0,
+		"task": DroneDirector.TASK_ATTACK,
+		"retrieval_phase": "outbound",
+		"recalling": false,
+		"craft_cooldowns": {},
+	}
+	var ctx := DroneRuntime.build_context(
+		Vector2.ZERO, 0.0, 9000.0, "", [hostile], ["npc_atk2"], Vector2.ZERO
+	)
+	var got_orders := false
+	for _i in range(300):
+		var tick := DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 500.0)
+		if not (tick.get("orders", []) as Array).is_empty():
+			got_orders = true
+			break
+	runner.check(got_orders, "attack craft fires through ShipWeapons")
+	if not attack_weapon.is_empty():
+		var atk_def := catalog.get_module_def(attack_weapon)
+		if atk_def != null and not atk_def.ammunition_type.is_empty():
+			runner.check_eq(
+				owned.get_ammo_count(atk_def.ammunition_type),
+				parent_ammo_before,
+				"parent hull magazine unchanged for drone craft weapon"
+			)
