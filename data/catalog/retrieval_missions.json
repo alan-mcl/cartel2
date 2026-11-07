@@ -1,0 +1,160 @@
+{
+  "base_pay": 360,
+  "cancel_penalty_fraction": 0.25,
+  "volatile_duration_hours": 8,
+  "volatile_return_hours": 8,
+  "types": {
+    "time_capsule": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "cargo",
+      "designation": "Time capsule retrieval",
+      "specimen_label": "Old Earth time capsule",
+      "difficulty": 1.0
+    },
+    "jettisoned_cargo": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "cargo",
+      "designation": "Jettisoned cargo recovery",
+      "specimen_label": "Jettisoned cargo pod",
+      "difficulty": 1.02
+    },
+    "sealed_lifepod": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "cargo",
+      "designation": "Lifepod extraction",
+      "specimen_label": "Sealed lifepod",
+      "difficulty": 1.05
+    },
+    "asteroid_sample": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "debris",
+      "designation": "Asteroid sample retrieval",
+      "specimen_label": "Asteroid sample",
+      "difficulty": 1.0
+    },
+    "derelict_wreck": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "derelict",
+      "designation": "Derelict wreck salvage",
+      "specimen_label": "Derelict wreck",
+      "difficulty": 1.18
+    },
+    "flight_recorder": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "derelict",
+      "designation": "Flight recorder recovery",
+      "specimen_label": "Flight recorder",
+      "difficulty": 1.12
+    },
+    "survey_probe": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "marker",
+      "designation": "Survey probe retrieval",
+      "specimen_label": "Abandoned survey probe",
+      "difficulty": 1.06
+    },
+    "drifting_ship": {
+      "objective": "drone_retrieval",
+      "sources": ["peacekeeping", "corporate_office", "bar"],
+      "target_kind": "ship",
+      "designation": "Drifting hull salvage",
+      "specimen_label": "Drifting ship",
+      "difficulty": 1.22
+    }
+  },
+  "sources": {
+    "peacekeeping": {
+      "pay_multiplier": 1.0,
+      "frames": [
+        "Retrieval contract: recover the {specimen} from {site}. Lock the contact and bring it back with a retrieval drone.",
+        "Peaceforce posting: {designation} at {site}. A retrieval drone is required on the contracted hull.",
+        "Field salvage at {site}: secure the {specimen} and return to this desk before the gate closes.",
+        "Marked specimen at {site}. Complete the {designation}; report to peacekeeping with the recovery.",
+        "Independent operator wanted for {designation} at {site}. Drone recovery only — do not scuttle the contact."
+      ]
+    },
+    "corporate_office": {
+      "pay_multiplier": 1.0
+    },
+    "bar": {
+      "pay_multiplier": 0.65,
+      "anonymous_frames": [
+        "Someone will pay to fetch the {specimen} from {site}. Bring a retrieval drone.",
+        "Bar tip: paid {designation} at {site} if you can reach it and get back.",
+        "Quiet money for a {specimen} pickup at {site}.",
+        "Unadvertised salvage at {site} — retrieval drone required.",
+        "A client wants the {specimen} from {site}. Cash on safe return."
+      ]
+    }
+  },
+  "voices": {
+    "polished": {
+      "corporate_office": [
+        "{client} requests a {designation} at {site}. Recover the {specimen} with a retrieval drone.",
+        "Contract from {client}: {designation} at {site}. Return the specimen to this desk.",
+        "{client} has commissioned a {designation} at {site}. The deliverable is the recovered {specimen}."
+      ],
+      "bar": [
+        "{client} is quietly paying for a {specimen} retrieval at {site}.",
+        "Word from {client}: a {designation} at {site} for the right pilot."
+      ]
+    },
+    "blunt": {
+      "corporate_office": [
+        "{client} wants the {specimen} from {site}. Retrieval drone. Come back.",
+        "Paid {designation} for {client} at {site}. Get it or don't take the job."
+      ],
+      "bar": [
+        "{client} money for a {specimen} at {site}.",
+        "{designation} at {site}. {client} is paying."
+      ]
+    },
+    "cheerful": {
+      "corporate_office": [
+        "{client} has a friendly {designation} at {site}. Fetch the {specimen} and swing back!",
+        "Good contract from {client}: {designation} at {site}."
+      ],
+      "bar": [
+        "Heard {client} is paying for the {specimen} at {site}.",
+        "Easy money — {designation} at {site}, {client} rates."
+      ]
+    },
+    "severe": {
+      "corporate_office": [
+        "{client} requires a {designation} at {site}. Failure to return the {specimen} voids payment.",
+        "Mandatory retrieval for {client}: {specimen} at {site}."
+      ],
+      "bar": [
+        "Do not discuss this loudly. {client} needs the {specimen} from {site}.",
+        "{client} expects discretion on a {designation} at {site}."
+      ]
+    },
+    "slick": {
+      "corporate_office": [
+        "{client} has a discreet {designation} at {site}. Drone in, specimen out.",
+        "Opportunity from {client}: {specimen} at {site} — terms are straightforward."
+      ],
+      "bar": [
+        "Between us: {client} is funding a {specimen} run to {site}.",
+        "Quiet money from {client} for a {designation} at {site}."
+      ]
+    },
+    "courtly": {
+      "corporate_office": [
+        "{client} invites a qualified operator for a {designation} at {site}.",
+        "You are requested to recover the {specimen} at {site} on behalf of {client}."
+      ],
+      "bar": [
+        "A patron suggests {client} may remunerate a {designation} at {site}.",
+        "Whispers mention {client} and a {specimen} waiting at {site}."
+      ]
+    }
+  }
+}

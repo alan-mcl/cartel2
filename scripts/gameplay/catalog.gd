@@ -22,6 +22,7 @@ const PASSENGER_MISSIONS_PATH := "res://data/catalog/passenger_missions.json"
 const FREIGHT_MISSIONS_PATH := "res://data/catalog/freight_missions.json"
 const SCAN_MISSIONS_PATH := "res://data/catalog/scan_missions.json"
 const BOUNTY_MISSIONS_PATH := "res://data/catalog/bounty_missions.json"
+const RETRIEVAL_MISSIONS_PATH := "res://data/catalog/retrieval_missions.json"
 const VOLATILE_SITES_PATH := "res://data/catalog/volatile_sites.json"
 const ROUTES_PATH := "res://data/catalog/routes.json"
 const ECONOMIES_PATH := "res://data/catalog/economies.json"
@@ -60,6 +61,7 @@ var passenger_missions_config: Dictionary = {}
 var freight_missions_config: Dictionary = {}
 var scan_missions_config: Dictionary = {}
 var bounty_missions_config: Dictionary = {}
+var retrieval_missions_config: Dictionary = {}
 var volatile_sites_by_id: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
@@ -104,6 +106,7 @@ func load_all() -> void:
 	freight_missions_config = _load_json_object(FREIGHT_MISSIONS_PATH)
 	scan_missions_config = _load_json_object(SCAN_MISSIONS_PATH)
 	bounty_missions_config = _load_json_object(BOUNTY_MISSIONS_PATH)
+	retrieval_missions_config = _load_json_object(RETRIEVAL_MISSIONS_PATH)
 	volatile_sites_by_id = _load_volatile_sites()
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
@@ -404,6 +407,10 @@ func get_scan_missions_config() -> Dictionary:
 
 func get_bounty_missions_config() -> Dictionary:
 	return bounty_missions_config
+
+
+func get_retrieval_missions_config() -> Dictionary:
+	return retrieval_missions_config
 
 
 func get_volatile_site(id: String) -> Dictionary:

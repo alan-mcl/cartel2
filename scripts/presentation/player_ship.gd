@@ -62,6 +62,7 @@ func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -
 	_weapon_spawn_root = weapon_spawn_root
 	if _drone_visual == null and weapon_spawn_root != null:
 		_drone_visual = preload("res://scripts/presentation/drone_visual.gd").new()
+		_drone_visual.z_index = 4
 		weapon_spawn_root.add_child(_drone_visual)
 	if _drone_visual != null and _drone_visual.has_method("bind"):
 		_drone_visual.call("bind", owned_ship, session)
@@ -122,18 +123,15 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 	var recalled_slot := str(tick_result.get("recalled_slot", ""))
 	if not recalled_slot.is_empty():
 		_on_drone_recall_docked(recalled_slot)
-	elif DroneRuntime.is_deployed(owned_ship):
-		var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
-		var pose: Dictionary = tick_result.get("pose", {})
-		if _drone_visual != null and _drone_visual.has_method("sync_pose"):
-			_drone_visual.call(
-				"sync_pose",
-				catalog,
-				module_id,
-				pose.get("position", global_position),
-				pose.get("velocity", Vector2.ZERO),
-				float(pose.get("facing", NAN))
-			)
+	var pickup_id := str(tick_result.get("retrieval_pickup_contact_id", ""))
+	if (
+		not pickup_id.is_empty()
+		and session != null
+		and session.bound_missions != null
+	):
+		session.bound_missions.notify_retrieval_pickup(session, pickup_id)
+	if DroneRuntime.is_deployed(owned_ship):
+		_sync_drone_visual_pose(tick_result)
 	elif _drone_visual != null and _drone_visual.has_method("hide_drone"):
 		_drone_visual.call("hide_drone")
 	if (bool(tick_result.get("destroyed", false)) or bool(tick_result.get("ammo_changed", false))) and session != null:
@@ -294,6 +292,8 @@ func _physics_process(delta: float) -> void:
 
 		var weapon_result: Dictionary = _sim.step_weapons(delta, firing, _weapon_guidance_context())
 		session.apply_player_flight_step(operating_state, physics_inputs, firing, weapon_result)
+		if bool(weapon_result.get("ammo_changed", false)) and DroneRuntime.is_deployed(owned_ship):
+			_sync_drone_visual_pose({})
 		var orders: Array = weapon_result.get("orders", [])
 		if not orders.is_empty():
 			_spawn_weapon_orders(orders)
@@ -373,6 +373,34 @@ func query_weapon_guidance(target_id: String) -> Dictionary:
 	return {"active": true, "position": _guidance_lock_position}
 
 
+func _sync_drone_visual_pose(tick_result: Dictionary) -> void:
+	if _drone_visual == null or owned_ship == null or not DroneRuntime.is_deployed(owned_ship):
+		return
+	var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
+	var pose: Dictionary = tick_result.get("pose", {})
+	var world_pos: Vector2 = global_position
+	var pos_variant: Variant = pose.get("position", null)
+	if pos_variant is Vector2:
+		world_pos = pos_variant
+	else:
+		var stored: Variant = owned_ship.deployed_drone.get("position", {})
+		if typeof(stored) == TYPE_DICTIONARY:
+			var pd: Dictionary = stored
+			world_pos = Vector2(float(pd.get("x", 0.0)), float(pd.get("y", 0.0)))
+	var vel: Vector2 = Vector2.ZERO
+	var vel_variant: Variant = pose.get("velocity", null)
+	if vel_variant is Vector2:
+		vel = vel_variant
+	else:
+		var stored_vel: Variant = owned_ship.deployed_drone.get("velocity", {})
+		if typeof(stored_vel) == TYPE_DICTIONARY:
+			var vd: Dictionary = stored_vel
+			vel = Vector2(float(vd.get("x", 0.0)), float(vd.get("y", 0.0)))
+	var facing := float(pose.get("facing", NAN))
+	if _drone_visual.has_method("sync_pose"):
+		_drone_visual.call("sync_pose", catalog, module_id, world_pos, vel, facing)
+
+
 func _on_drone_recall_docked(recalled_slot: String) -> void:
 	if _drone_visual != null and _drone_visual.has_method("hide_drone"):
 		_drone_visual.call("hide_drone")
@@ -391,9 +419,12 @@ func _on_drone_recall_docked(recalled_slot: String) -> void:
 
 
 func _weapon_guidance_context() -> Dictionary:
+	var locked := TargetLock.contact_for_id(_nav_contacts, locked_target_id)
 	return {
 		"lock_active": _guidance_lock_active and not locked_target_id.is_empty(),
 		"target_id": locked_target_id,
+		"locked_contact": locked,
+		"contacts": _nav_contacts,
 		"ship_pos": global_position,
 		"ship_facing": motion.facing,
 		"ship_velocity": motion.velocity,

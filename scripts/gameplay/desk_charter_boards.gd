@@ -3,13 +3,15 @@ extends RefCounted
 
 const FREIGHT_BOARD_TERMINAL := "terminal"
 
-const WEIGHT_SCAN_DUAL := 50
-const WEIGHT_BOUNTY_DUAL := 50
+const WEIGHT_SCAN_DUAL := 40
+const WEIGHT_BOUNTY_DUAL := 40
+const WEIGHT_RETRIEVAL_DUAL := 20
 
-const BAR_WEIGHT_PASSENGER := 60
+const BAR_WEIGHT_PASSENGER := 55
 const BAR_WEIGHT_FREIGHT := 20
-const BAR_WEIGHT_SCAN := 15
+const BAR_WEIGHT_SCAN := 10
 const BAR_WEIGHT_BOUNTY := 5
+const BAR_WEIGHT_RETRIEVAL := 10
 
 
 static func desk_seed(day: int, habitat_id: String, building_id: String, run_seed: int) -> int:
@@ -23,12 +25,17 @@ static func roll_desk_total(rng: RandomNumberGenerator, population_billions: flo
 static func split_dual_desk(total: int, rng: RandomNumberGenerator) -> Dictionary:
 	var scan := 0
 	var bounty := 0
+	var retrieval := 0
+	var dual_total := WEIGHT_SCAN_DUAL + WEIGHT_BOUNTY_DUAL + WEIGHT_RETRIEVAL_DUAL
 	for _i in range(total):
-		if rng.randi_range(1, WEIGHT_SCAN_DUAL + WEIGHT_BOUNTY_DUAL) <= WEIGHT_SCAN_DUAL:
+		var roll := rng.randi_range(1, dual_total)
+		if roll <= WEIGHT_SCAN_DUAL:
 			scan += 1
-		else:
+		elif roll <= WEIGHT_SCAN_DUAL + WEIGHT_BOUNTY_DUAL:
 			bounty += 1
-	return {"scan": scan, "bounty": bounty}
+		else:
+			retrieval += 1
+	return {"scan": scan, "bounty": bounty, "retrieval": retrieval}
 
 
 static func split_bar_desk(total: int, rng: RandomNumberGenerator) -> Dictionary:
@@ -36,6 +43,7 @@ static func split_bar_desk(total: int, rng: RandomNumberGenerator) -> Dictionary
 	var freight := 0
 	var scan := 0
 	var bounty := 0
+	var retrieval := 0
 	for _i in range(total):
 		var roll := rng.randi_range(1, 100)
 		if roll <= BAR_WEIGHT_PASSENGER:
@@ -44,13 +52,16 @@ static func split_bar_desk(total: int, rng: RandomNumberGenerator) -> Dictionary
 			freight += 1
 		elif roll <= BAR_WEIGHT_PASSENGER + BAR_WEIGHT_FREIGHT + BAR_WEIGHT_SCAN:
 			scan += 1
-		else:
+		elif roll <= BAR_WEIGHT_PASSENGER + BAR_WEIGHT_FREIGHT + BAR_WEIGHT_SCAN + BAR_WEIGHT_BOUNTY:
 			bounty += 1
+		else:
+			retrieval += 1
 	return {
 		"passenger": passenger,
 		"freight": freight,
 		"scan": scan,
 		"bounty": bounty,
+		"retrieval": retrieval,
 	}
 
 
@@ -76,6 +87,7 @@ static func counts_for_building(
 				"freight": 0,
 				"scan": int(dual["scan"]),
 				"bounty": int(dual["bounty"]),
+				"retrieval": int(dual["retrieval"]),
 			}
 		ScanCharters.BOARD_BAR:
 			var bar := split_bar_desk(total, rng)
@@ -84,13 +96,14 @@ static func counts_for_building(
 				"freight": int(bar["freight"]),
 				"scan": int(bar["scan"]),
 				"bounty": int(bar["bounty"]),
+				"retrieval": int(bar["retrieval"]),
 			}
 		_:
 			return _empty_counts(building_type)
 
 
 static func _empty_counts(_building_type: String) -> Dictionary:
-	return {"passenger": 0, "freight": 0, "scan": 0, "bounty": 0}
+	return {"passenger": 0, "freight": 0, "scan": 0, "bounty": 0, "retrieval": 0}
 
 
 ## Same desk totals and mixes as `MissionSubsystem._populate_habitat_boards`.
@@ -105,8 +118,10 @@ static func generate_for_habitat(
 	var freight_boards: Dictionary = {}
 	var scan_boards: Dictionary = {}
 	var bounty_boards: Dictionary = {}
+	var retrieval_boards: Dictionary = {}
 	var scan_index := 0
 	var bounty_index := 0
+	var retrieval_index := 0
 
 	if not is_station:
 		passenger_boards[PassengerCharters.BOARD_TERMINAL] = PassengerCharters.generate_offers(
@@ -186,10 +201,25 @@ static func generate_for_habitat(
 		bounty_index += bounty_offers.size()
 		if not bounty_offers.is_empty():
 			bounty_boards[building_id] = bounty_offers
+		var retrieval_count := int(counts.get("retrieval", 0))
+		var retrieval_offers := RetrievalCharters.generate_offers_for_building(
+			catalog,
+			habitat_id,
+			building_id,
+			building_type,
+			day,
+			run_seed,
+			retrieval_index,
+			retrieval_count
+		)
+		retrieval_index += retrieval_offers.size()
+		if not retrieval_offers.is_empty():
+			retrieval_boards[building_id] = retrieval_offers
 
 	return {
 		"passenger": passenger_boards,
 		"freight": freight_boards,
 		"scan": scan_boards,
 		"bounty": bounty_boards,
+		"retrieval": retrieval_boards,
 	}

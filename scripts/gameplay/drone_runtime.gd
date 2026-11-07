@@ -5,6 +5,8 @@ const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 
 const CRUISE_SPEED_SCALE := 0.62
 const ARRIVAL_DISTANCE := 48.0
+## Min metres the airframe must travel from its launch point before outbound completion or return dock counts.
+const MIN_OUTBOUND_TRAVEL := 12.0
 const HOLD_AHEAD_M := 220.0
 const PD_INTERCEPT_RANGE := 950.0
 const DRONE_HIT_RADIUS := 22.0
@@ -157,7 +159,8 @@ static func handle_weapon_fire(
 	cooldowns: Dictionary,
 	ship_pos: Vector2,
 	ship_facing: float,
-	ship_velocity: Vector2
+	ship_velocity: Vector2,
+	guidance_context: Dictionary = {}
 ) -> Dictionary:
 	var noop := {
 		"handled": false,
@@ -194,7 +197,8 @@ static func handle_weapon_fire(
 
 	var launch_offset := Vector2.from_angle(ship_facing) * ShipWeapons.MUZZLE_OFFSET
 	var launch_pos := ship_pos + launch_offset
-	owned.deployed_drone = {
+	var locked := _locked_contact_from_guidance(guidance_context)
+	var deployed := {
 		"active": true,
 		"slot": slot,
 		"module_id": module_def.id,
@@ -207,7 +211,12 @@ static func handle_weapon_fire(
 		"orbit_phase": NAN,
 		"orbit_task": "",
 		"craft_cooldowns": {},
+		"launch_pos": {"x": launch_pos.x, "y": launch_pos.y},
+		"outbound_travel": 0.0,
 	}
+	if not locked.is_empty():
+		deployed["retrieval_anchor"] = locked.duplicate(true)
+	owned.deployed_drone = deployed
 	cooldowns[slot] = ShipWeapons.fire_cycle_seconds(module_def)
 	return {"handled": true, "orders": [], "out_of_ammo": false, "ammo_changed": true}
 
@@ -242,19 +251,13 @@ static func tick(
 
 
 static func _stabilise_retrieval_lock(owned: OwnedShip, context: Dictionary) -> void:
-	var lock_id := str(context.get("locked_target_id", ""))
 	var locked := DroneDirector.resolved_lock(context)
 	if not locked.is_empty():
 		owned.deployed_drone["retrieval_anchor"] = locked.duplicate(true)
-	elif lock_id.is_empty():
-		owned.deployed_drone.erase("retrieval_anchor")
-		return
 	var anchor: Variant = owned.deployed_drone.get("retrieval_anchor", {})
 	if typeof(anchor) != TYPE_DICTIONARY:
 		return
 	var anchor_dict: Dictionary = anchor
-	if str(anchor_dict.get("id", "")) != lock_id:
-		return
 	if context.get("locked_contact", {}).is_empty():
 		context["locked_contact"] = anchor_dict.duplicate(true)
 
@@ -273,6 +276,7 @@ static func _tick_craft_motion(
 	var pos := _read_pos(owned.deployed_drone)
 	var vel := _read_vel(owned.deployed_drone)
 	var facing := _read_facing(owned.deployed_drone, vel)
+	_accumulate_outbound_travel(owned, pos)
 	var craft := DroneCraft.new()
 	craft.sync_motion_from_pose(facing, vel)
 	var weapons := ShipWeapons.new()
@@ -365,12 +369,18 @@ static func _tick_craft_motion(
 	if (
 		task == DroneDirector.TASK_RETRIEVAL
 		and str(owned.deployed_drone.get("retrieval_phase", "outbound")) == "return"
-		and pos.distance_to(ship_pos) <= ARRIVAL_DISTANCE
+		and _retrieval_clear_to_dock(owned, pos, ship_pos)
 	):
+		var pick_id := ""
+		var anchor: Variant = owned.deployed_drone.get("retrieval_anchor", {})
+		if typeof(anchor) == TYPE_DICTIONARY:
+			pick_id = str((anchor as Dictionary).get("id", ""))
 		var recalled_slot := complete_recall(catalog, owned)
 		if not recalled_slot.is_empty():
 			result["ammo_changed"] = true
 			result["recalled_slot"] = recalled_slot
+			if not pick_id.is_empty():
+				result["retrieval_pickup_contact_id"] = pick_id
 		return result
 
 	if task == DroneDirector.TASK_ATTACK and attack_weapon != null:
@@ -683,15 +693,55 @@ static func _nearest_hostile_pos(context: Dictionary, drone_pos: Vector2) -> Vec
 	return best
 
 
+static func _locked_contact_from_guidance(guidance: Dictionary) -> Dictionary:
+	var locked: Dictionary = guidance.get("locked_contact", {})
+	if not locked.is_empty():
+		return locked
+	var target_id := str(guidance.get("target_id", ""))
+	if target_id.is_empty():
+		return {}
+	var contacts: Array = guidance.get("contacts", [])
+	return TargetLock.contact_for_id(contacts, target_id)
+
+
+static func _read_launch_pos(owned: OwnedShip) -> Vector2:
+	var stored: Variant = owned.deployed_drone.get("launch_pos", {})
+	if typeof(stored) == TYPE_DICTIONARY:
+		var lp: Dictionary = stored
+		return Vector2(float(lp.get("x", 0.0)), float(lp.get("y", 0.0)))
+	return _read_pos(owned.deployed_drone)
+
+
+static func _accumulate_outbound_travel(owned: OwnedShip, drone_pos: Vector2) -> void:
+	var launch_pos := _read_launch_pos(owned)
+	var travel := drone_pos.distance_to(launch_pos)
+	var prior := float(owned.deployed_drone.get("outbound_travel", 0.0))
+	if travel > prior:
+		owned.deployed_drone["outbound_travel"] = travel
+
+
+static func _retrieval_clear_to_dock(owned: OwnedShip, drone_pos: Vector2, ship_pos: Vector2) -> bool:
+	if drone_pos.distance_to(ship_pos) > ARRIVAL_DISTANCE:
+		return false
+	return float(owned.deployed_drone.get("outbound_travel", 0.0)) > MIN_OUTBOUND_TRAVEL
+
+
 static func _update_retrieval_phase(owned: OwnedShip, drone_pos: Vector2, context: Dictionary) -> void:
 	var locked: Dictionary = DroneDirector.resolved_lock(context)
 	if locked.is_empty():
-		if str(context.get("locked_target_id", "")).is_empty():
-			owned.deployed_drone["retrieval_phase"] = "return"
+		var anchor: Variant = owned.deployed_drone.get("retrieval_anchor", {})
+		if typeof(anchor) == TYPE_DICTIONARY:
+			locked = anchor
+	if locked.is_empty():
+		context["retrieval_phase"] = str(owned.deployed_drone.get("retrieval_phase", "outbound"))
 		return
 	var target: Vector2 = locked.get("position", Vector2.ZERO)
 	var phase := str(owned.deployed_drone.get("retrieval_phase", "outbound"))
-	if phase == "outbound" and drone_pos.distance_to(target) <= ARRIVAL_DISTANCE:
+	if (
+		phase == "outbound"
+		and drone_pos.distance_to(target) <= ARRIVAL_DISTANCE
+		and float(owned.deployed_drone.get("outbound_travel", 0.0)) > MIN_OUTBOUND_TRAVEL
+	):
 		owned.deployed_drone["retrieval_phase"] = "return"
 	context["retrieval_phase"] = str(owned.deployed_drone.get("retrieval_phase", "outbound"))
 

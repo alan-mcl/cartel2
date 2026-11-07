@@ -136,6 +136,62 @@ static func format_scan(
 	return "\n".join(lines)
 
 
+
+
+static func format_retrieval(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	var lines: PackedStringArray = PackedStringArray()
+
+	var title := str(entry.get("specimen_label", entry.get("designation", "Retrieval"))).strip_edges()
+	if not title.is_empty():
+		lines.append(title)
+
+	var contract := _scan_contract_line(entry, accepted_origin, accepted_ship, catalog)
+	if not contract.is_empty():
+		_append_section(lines, contract)
+
+	var description := str(entry.get("description", "")).strip_edges()
+	if not description.is_empty():
+		_append_section(lines, description)
+
+	var site_kind := _retrieval_site_kind_line(entry)
+	if not site_kind.is_empty():
+		_append_section(lines, site_kind)
+
+	_append_section(
+		lines,
+		"Fly to the site, lock the specimen, launch a retrieval drone, and return with the sample to origin."
+	)
+
+	var deadline := _deadline_line(entry, reference_gst)
+	if not deadline.is_empty():
+		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
+
+	_append_section(lines, "Requirements")
+	lines.append(BULLET + "Docked ship at posting habitat")
+	lines.append(BULLET + "Retrieval drone fitted with at least one stowed round")
+	var min_reputation := int(entry.get("min_reputation", 0))
+	if min_reputation > 0:
+		lines.append(BULLET + "Reputation %d" % min_reputation)
+
+	var extra_trimmed := extra.strip_edges()
+	if not extra_trimmed.is_empty():
+		_append_section(lines, extra_trimmed)
+
+	return "\n".join(lines)
+
+
+static func _retrieval_site_kind_line(entry: Dictionary) -> String:
+	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
+	return "Volatile retrieval site (temporary %s translation)." % n_label
+
 static func format_bounty(
 	entry: Dictionary,
 	extra: String = "",

@@ -372,7 +372,7 @@
   },
   {
     "id": "evergreen_cool_live_10",
-    "name": "CoolLive 10",
+    "name": "CoolLive 10 Hold",
     "maker": "Evergreen Group",
     "brand": "AgriLive",
     "category": "cargo",
@@ -382,7 +382,7 @@
     "power_demand": 2.6,
     "compute_demand": 1.0,
     "cost": 2600,
-    "description": "Dual-mode hold for chilled produce and live nursery stock.",
+    "description": "AgriLive holds provide best-in class dual-mode cargo capacity for chilled produce and live freight.",
     "capabilities": [
       "refrigerated",
       "life_support_integrated"
@@ -396,7 +396,7 @@
   },
   {
     "id": "gi_pharma_cold_10",
-    "name": "PharmaCold 10",
+    "name": "PharmaCold 10 Bay",
     "maker": "General Industrial",
     "brand": "ChemLock",
     "category": "cargo",
@@ -406,7 +406,7 @@
     "power_demand": 2.0,
     "compute_demand": 1.2,
     "cost": 2800,
-    "description": "Cold-chain biohazard hold for temperature-sensitive pharma.",
+    "description": "GI Chemlock. The best cold-chain biohazard hold for temperature-sensitive pharma on the market.",
     "capabilities": [
       "biohazard",
       "refrigerated"
@@ -420,7 +420,7 @@
   },
   {
     "id": "chettiar_secure_compute_10",
-    "name": "Secure Compute 10",
+    "name": "Secure Compute 10 Cargo",
     "maker": "Chettiar Holdings",
     "brand": "VaultLine",
     "category": "cargo",
@@ -430,7 +430,7 @@
     "power_demand": 2.4,
     "compute_demand": 4.0,
     "cost": 4200,
-    "description": "Bonded vault with data-centre conditioning for classified hardware.",
+    "description": "Use VaultLine holds from Chettiar. Secure Compute 10 bonded vault with data-centre conditioning for classified hardware.",
     "capabilities": [
       "compute_integrated",
       "secure_cargo"

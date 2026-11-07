@@ -1174,6 +1174,73 @@ def check_scan_missions(doc: object, corporations: dict[str, dict]) -> list[str]
     return errors
 
 
+VALID_RETRIEVAL_OBJECTIVES = frozenset({"drone_retrieval"})
+VALID_RETRIEVAL_TARGET_KINDS = frozenset(
+    {"cargo", "debris", "derelict", "marker", "ship"}
+)
+
+
+def check_retrieval_missions(doc: object) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("retrieval_missions.json must be an object")
+        return errors
+
+    for key in (
+        "base_pay",
+        "cancel_penalty_fraction",
+        "volatile_duration_hours",
+        "volatile_return_hours",
+    ):
+        if key not in doc:
+            errors.append(f"retrieval_missions.json: missing {key}")
+
+    types = doc.get("types", {})
+    if not isinstance(types, dict) or not types:
+        errors.append("retrieval_missions.json: types must be a non-empty object")
+        return errors
+
+    for type_id, type_def in types.items():
+        if not isinstance(type_def, dict):
+            errors.append(f"retrieval_missions type {type_id}: must be object")
+            continue
+        objective = str(type_def.get("objective", ""))
+        if objective not in VALID_RETRIEVAL_OBJECTIVES:
+            errors.append(f"retrieval_missions type {type_id}: invalid objective '{objective}'")
+        sources = type_def.get("sources", [])
+        if not isinstance(sources, list) or not sources:
+            errors.append(f"retrieval_missions type {type_id}: sources required")
+        else:
+            for src in sources:
+                if str(src) not in VALID_SCAN_SOURCES:
+                    errors.append(f"retrieval_missions type {type_id}: invalid source '{src}'")
+        target_kind = str(type_def.get("target_kind", ""))
+        if target_kind not in VALID_RETRIEVAL_TARGET_KINDS:
+            errors.append(
+                f"retrieval_missions type {type_id}: invalid target_kind '{target_kind}'"
+            )
+        for req in ("designation", "specimen_label", "difficulty"):
+            if req not in type_def:
+                errors.append(f"retrieval_missions type {type_id}: missing {req}")
+        diff = type_def.get("difficulty")
+        if diff is not None and float(diff) <= 0.0:
+            errors.append(f"retrieval_missions type {type_id}: difficulty must be positive")
+
+    sources_cfg = doc.get("sources", {})
+    if not isinstance(sources_cfg, dict):
+        errors.append("retrieval_missions.json: sources must be an object")
+    else:
+        for src in VALID_SCAN_SOURCES:
+            if src not in sources_cfg:
+                errors.append(f"retrieval_missions.json: missing sources.{src}")
+
+    voices = doc.get("voices", {})
+    if not isinstance(voices, dict):
+        errors.append("retrieval_missions.json: voices must be an object")
+
+    return errors
+
+
 def check_volatile_sites(doc: object) -> list[str]:
     errors: list[str] = []
     if not isinstance(doc, dict):
@@ -1919,6 +1986,7 @@ def main() -> int:
     freight_missions = load_object(CATALOG / "freight_missions.json")
     bounty_missions = load_object(CATALOG / "bounty_missions.json")
     scan_missions = load_object(CATALOG / "scan_missions.json")
+    retrieval_missions = load_object(CATALOG / "retrieval_missions.json")
     volatile_sites = load_object(CATALOG / "volatile_sites.json")
     sanctions_doc = load_object(CATALOG / "sanctions.json")
     commodities = load_array(CATALOG / "commodities.json")
@@ -1938,6 +2006,7 @@ def main() -> int:
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))
     errors.extend(check_bounty_missions(bounty_missions, ships))
     errors.extend(check_scan_missions(scan_missions, corporations))
+    errors.extend(check_retrieval_missions(retrieval_missions))
     errors.extend(check_volatile_sites(volatile_sites))
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)

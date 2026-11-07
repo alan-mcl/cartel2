@@ -5,7 +5,7 @@ const DEFAULT_PLAYER_TEMPLATE := "flare_on_ss"
 const HARNESS_CALLSIGN := "MHAR"
 const HARNESS_BACKGROUND := "trader"
 
-enum JobKind { SCAN, BOUNTY, SITE_ONLY }
+enum JobKind { SCAN, BOUNTY, RETRIEVAL, SITE_ONLY }
 
 var _main: Node2D
 var _catalog: Catalog
@@ -17,9 +17,11 @@ var _job_option: OptionButton
 var _scan_type_option: OptionButton
 var _scan_target_option: OptionButton
 var _bounty_target_option: OptionButton
+var _retrieval_type_option: OptionButton
 var _site_option: OptionButton
 var _scan_row: HBoxContainer
 var _bounty_row: HBoxContainer
+var _retrieval_row: HBoxContainer
 var _player_spec_host: VBoxContainer
 var _begin_button: Button
 var _status_label: Label
@@ -29,6 +31,7 @@ var _habitat_entries: Array[Dictionary] = []
 var _site_ids: Array[String] = []
 var _scan_type_keys: Array[String] = []
 var _bounty_template_ids: Array[String] = []
+var _retrieval_type_keys: Array[String] = []
 var _run_active: bool = false
 
 
@@ -139,6 +142,7 @@ func _build_setup_overlay() -> void:
 	_job_option = OptionButton.new()
 	_job_option.add_item("Scan charter")
 	_job_option.add_item("Bounty")
+	_job_option.add_item("Retrieval charter")
 	_job_option.add_item("Site only")
 	right.add_child(_job_option)
 
@@ -166,6 +170,15 @@ func _build_setup_overlay() -> void:
 	_bounty_target_option = OptionButton.new()
 	bounty_box.add_child(_bounty_target_option)
 	_bounty_row.add_child(bounty_box)
+
+	_retrieval_row = HBoxContainer.new()
+	right.add_child(_retrieval_row)
+	var retrieval_box := VBoxContainer.new()
+	retrieval_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	retrieval_box.add_child(_field_label("Retrieval specimen"))
+	_retrieval_type_option = OptionButton.new()
+	retrieval_box.add_child(_retrieval_type_option)
+	_retrieval_row.add_child(retrieval_box)
 
 	right.add_child(_field_label("Volatile site"))
 	_site_option = OptionButton.new()
@@ -289,6 +302,20 @@ func _populate_options() -> void:
 	if _bounty_target_option.item_count > 0:
 		_bounty_target_option.select(0)
 
+	_retrieval_type_keys.clear()
+	_retrieval_type_option.clear()
+	var retrieval_cfg := RetrievalCharters.config(_catalog)
+	var retrieval_types: Dictionary = retrieval_cfg.get("types", {})
+	for key in retrieval_types.keys():
+		_retrieval_type_keys.append(str(key))
+	_retrieval_type_keys.sort()
+	for key in _retrieval_type_keys:
+		var type_def: Dictionary = retrieval_types.get(key, {})
+		var label := str(type_def.get("specimen_label", key.capitalize()))
+		_retrieval_type_option.add_item(label)
+	if _retrieval_type_option.item_count > 0:
+		_retrieval_type_option.select(0)
+
 	_site_ids.clear()
 	_site_option.clear()
 	_site_option.add_item("Random")
@@ -308,6 +335,7 @@ func _refresh_job_controls() -> void:
 	var job := _job_option.selected as JobKind
 	_scan_row.visible = job == JobKind.SCAN
 	_bounty_row.visible = job == JobKind.BOUNTY
+	_retrieval_row.visible = job == JobKind.RETRIEVAL
 
 
 func _select_template_option(option: OptionButton, template_id: String) -> void:
@@ -423,6 +451,8 @@ func _on_begin_pressed() -> void:
 		return
 
 	var ship := _owned_ship_from_template(template_id, "harness_ship")
+	if (_job_option.selected as JobKind) == JobKind.RETRIEVAL:
+		_ensure_retrieval_drone(_catalog, ship)
 	OwnedShip.finalize_loaded_ship(ship, _catalog)
 	ship.location = habitat_id
 	session.owned_ships.clear()
@@ -473,6 +503,22 @@ func _on_begin_pressed() -> void:
 				_status_label.text = session.last_log
 				return
 			record_id = _volatile_record_from_bounty(missions)
+		JobKind.RETRIEVAL:
+			var type_key := (
+				_retrieval_type_keys[_retrieval_type_option.selected]
+				if _retrieval_type_option.selected >= 0
+				else "time_capsule"
+			)
+			var offer := missions.seed_harness_retrieval_offer(
+				session, _catalog, habitat_id, type_key, volatile_site, rng
+			)
+			if offer.is_empty():
+				_status_label.text = "Could not build retrieval offer."
+				return
+			if not missions.accept_retrieval_offer(session, _catalog, str(offer.get("id", "")), ship.id):
+				_status_label.text = session.last_log
+				return
+			record_id = _volatile_record_from_retrieval(missions)
 		JobKind.SITE_ONLY:
 			var params := _build_site_only_grant_params(sector_id, volatile_site, rng)
 			record_id = VolatileTranslation.grant(session, _catalog, params)
@@ -552,6 +598,35 @@ func _volatile_record_from_bounty(missions: MissionSubsystem) -> String:
 		return ""
 	var charter: Dictionary = accepted[accepted.size() - 1]
 	return str(charter.get("volatile_record_id", ""))
+
+
+func _volatile_record_from_retrieval(missions: MissionSubsystem) -> String:
+	var accepted := missions.list_retrieval_accepted()
+	if accepted.is_empty():
+		return ""
+	var charter: Dictionary = accepted[accepted.size() - 1]
+	return str(charter.get("volatile_record_id", ""))
+
+
+func _ensure_retrieval_drone(catalog: Catalog, owned: OwnedShip) -> void:
+	if RetrievalCharters.ship_has_retrieval_drone(catalog, owned):
+		return
+	var fitted := false
+	for i in range(owned.modules.size()):
+		var entry_variant = owned.modules[i]
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var slot := str(entry.get("slot", ""))
+		if not slot.begins_with("light_weapon"):
+			continue
+		entry["module_id"] = "mon_relay_link"
+		owned.modules[i] = entry
+		fitted = true
+		break
+	if not fitted:
+		owned.modules.append({"slot": "light_weapon_1", "module_id": "mon_relay_link"})
+	ShipAssembler.seed_ammunition(catalog, owned)
 
 
 func smoke_begin_site_only(deep_space_site_id: String = "deep_space") -> bool:

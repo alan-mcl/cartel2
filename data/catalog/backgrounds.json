@@ -131,6 +131,12 @@
           "chassis_id": "wolff_chassis"
         },
         {
+          "id": "wolff_mothership_1",
+          "name": "Wolff Mothership",
+          "template_id": "wolff_mothership",
+          "chassis_id": "wolff_chassis"
+        },
+        {
           "id": "dragon_gold_1",
           "name": "Dragon Gold",
           "template_id": "dragon_gold",

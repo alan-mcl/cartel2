@@ -39,11 +39,13 @@ static func _inject_scan_offer(missions: MissionSubsystem, session: GameSession,
 	missions.passengers.offers[habitat_id] = {}
 	missions.freight.offers[habitat_id] = {}
 	missions.bounties.offers[habitat_id] = {}
+	missions.retrievals.offers[habitat_id] = {}
 	if not missions.scans.offers.has(habitat_id):
 		missions.scans.offers[habitat_id] = {}
 	var boards: Dictionary = missions.scans.offers[habitat_id]
 	boards[building_id] = [offer]
 	missions.scans.offers[habitat_id] = boards
+	missions.mark_habitat_boards_materialised(habitat_id)
 
 
 static func _test_holt_winters_sku(runner: TestRunner, catalog: Catalog) -> void:

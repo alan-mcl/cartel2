@@ -220,7 +220,8 @@ func tick(
 			_cooldowns,
 			ship_pos,
 			ship_facing,
-			ship_velocity
+			ship_velocity,
+			guidance_context
 		)
 		if bool(drone_result.get("handled", false)):
 			return {

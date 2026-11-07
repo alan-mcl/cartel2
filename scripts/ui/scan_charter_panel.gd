@@ -51,6 +51,17 @@ func posted_scan_chits() -> Array:
 	)
 
 
+func posted_retrieval_chits() -> Array:
+	var missions := _missions()
+	if missions == null or _context == null or _context.session == null:
+		return []
+	return CharterChit.from_rows(
+		missions.list_retrieval_offers(_context.session.habitat_id, _building_id),
+		Callable(self, "_describe_retrieval_offer"),
+		Callable(self, "_accept_retrieval")
+	)
+
+
 func posted_bounty_chits() -> Array:
 	var missions := _missions()
 	if missions == null or _context == null or _context.session == null:
@@ -73,6 +84,17 @@ func accepted_scan_chits() -> Array:
 	)
 
 
+func accepted_retrieval_chits() -> Array:
+	var missions := _missions()
+	if missions == null:
+		return []
+	return CharterChit.from_rows(
+		_accepted_for_building(missions.list_retrieval_accepted()),
+		Callable(self, "_describe_retrieval_accepted"),
+		Callable(self, "_cancel_retrieval")
+	)
+
+
 func accepted_bounty_chits() -> Array:
 	var missions := _missions()
 	if missions == null:
@@ -87,12 +109,12 @@ func accepted_bounty_chits() -> Array:
 func _sections() -> Array:
 	var posted := CharterBoardSection.new()
 	posted.empty_text = "Nothing posted today."
-	posted.chits = CharterBoard.interleave([posted_scan_chits(), posted_bounty_chits()])
+	posted.chits = CharterBoard.interleave([posted_scan_chits(), posted_bounty_chits(), posted_retrieval_chits()])
 
 	var accepted := CharterBoardSection.new()
 	accepted.heading = "ACCEPTED"
 	accepted.empty_text = "Nothing accepted."
-	accepted.chits = CharterBoard.interleave([accepted_scan_chits(), accepted_bounty_chits()])
+	accepted.chits = CharterBoard.interleave([accepted_scan_chits(), accepted_bounty_chits(), accepted_retrieval_chits()])
 	return [posted, accepted]
 
 
@@ -195,7 +217,8 @@ func _describe_accepted_contract(
 	title: String,
 	eligible: bool,
 	penalty: int,
-	scan_tooltip: bool
+	scan_tooltip: bool,
+	retrieval_tooltip: bool = false
 ) -> Dictionary:
 	var ship_name := CharterBoard.ship_name(_context.session, str(charter.get("ship_id", "")))
 	var origin := CharterBoard.habitat_name(_context.catalog, str(charter.get("origin_habitat_id", "")))
@@ -211,7 +234,16 @@ func _describe_accepted_contract(
 	else:
 		status_line = "In progress - cannot cancel."
 	var tooltip := ""
-	if scan_tooltip:
+	if retrieval_tooltip:
+		tooltip = CharterTooltipText.format_retrieval(
+			charter,
+			status_line,
+			origin,
+			ship_name,
+			_context.session.gst_seconds,
+			_context.catalog
+		)
+	elif scan_tooltip:
 		tooltip = CharterTooltipText.format_scan(
 			charter,
 			status_line,
@@ -320,3 +352,68 @@ func _clear_children(node: Node) -> void:
 	for child in node.get_children():
 		node.remove_child(child)
 		child.queue_free()
+
+func _describe_retrieval_offer(offer: Dictionary, ship_id: String) -> Dictionary:
+	var lines := _retrieval_offer_lines(offer)
+	var check := _missions().evaluate_retrieval_offer(
+		_context.session,
+		_context.catalog,
+		str(offer.get("id", "")),
+		ship_id
+	)
+	return {
+		"title": str(offer.get("specimen_label", offer.get("designation", "Retrieval"))),
+		"lines": lines,
+		"body": str(offer.get("description", "")),
+		"button_text": "Accept",
+		"button_enabled": bool(check.get("ok", false)),
+		"tooltip": CharterTooltipText.format_retrieval(
+			offer,
+			str(check.get("reason", "")),
+			"",
+			"",
+			_context.session.gst_seconds,
+			_context.catalog
+		),
+		"status": "",
+	}
+
+
+func _describe_retrieval_accepted(charter: Dictionary, _ship_id: String) -> Dictionary:
+	return _describe_accepted_contract(
+		charter,
+		str(charter.get("specimen_label", charter.get("designation", "Retrieval"))),
+		_missions().cancel_retrieval_charter_eligible(_context.session, str(charter.get("charter_id", ""))),
+		RetrievalCharters.cancel_penalty(
+			RetrievalCharters.config(_context.catalog),
+			int(charter.get("reward", 0))
+		),
+		false,
+		true
+	)
+
+
+func _accept_retrieval(offer: Dictionary, ship_id: String) -> bool:
+	return _missions().accept_retrieval_offer(
+		_context.session,
+		_context.catalog,
+		str(offer.get("id", "")),
+		ship_id
+	)
+
+
+func _cancel_retrieval(charter: Dictionary, _ship_id: String) -> bool:
+	return _missions().cancel_retrieval_charter(
+		_context.session,
+		_context.catalog,
+		str(charter.get("charter_id", ""))
+	)
+
+
+func _retrieval_offer_lines(offer: Dictionary) -> Array:
+	var lines: Array = []
+	lines.append(VolatileTranslation.charter_site_fee_line(offer, true))
+	var timing := _charter_timing_line(offer)
+	if not timing.is_empty():
+		lines.append(timing)
+	return lines

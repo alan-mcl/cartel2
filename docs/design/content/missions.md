@@ -1,12 +1,16 @@
 # Missions
 
-**Status:** Passenger, freight, scan, and bounty charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (no desk UI yet); see [plotlines.md](plotlines.md). Named-NPC dialogue is not implemented. Scan charters (other than a planet target) and bounty charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
+**Status:** Passenger, freight, scan, bounty, and retrieval charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (no desk UI yet); see [plotlines.md](plotlines.md). Named-NPC dialogue is not implemented. Scan charters (other than a planet target), bounty charters, and retrieval charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
 
-## Scan and bounty volatile hops
+## Scan, bounty, and retrieval volatile hops
 
-Peacekeeping, corporate, and bar desks that post scan or bounty work show the site, the translation layer (`4-space` through `9-space` where rolled), and the fee on each tile; the hover popup repeats the layer. In-system **planet** scan targets omit the layer. Pay for volatile-site scans and all bounties scales with that layer: **×1 / ×1.5 / ×2 / ×2.5 / ×3 / ×3.5** for N 4 through 9 (`VolatileTranslation.charter_pay_multiplier`), applied when the offer is rolled. Deeper layers appear more often at high-population habitats (Tycho stays 4–6 only; Proxima mixes 7–9 in proportion to population).
+Peacekeeping, corporate, and bar desks that post scan, bounty, or retrieval work show the site, the translation layer (`4-space` through `9-space` where rolled), and the fee on each tile; the hover popup repeats the layer. In-system **planet** scan targets omit the layer. Pay for volatile-site scans, all bounties, and retrieval jobs scales with that layer: **×1 / ×1.5 / ×2 / ×2.5 / ×3 / ×3.5** for N 4 through 9 (`VolatileTranslation.charter_pay_multiplier`), applied when the offer is rolled. Deeper layers appear more often at high-population habitats (Tycho stays 4–6 only; Proxima mixes 7–9 in proportion to population).
 
 All charter kinds share the same **early-finish** rule: dock on time in the **first half** of the contract window (from accept to deadline) for a **25%** bonus on top of the posted fee. The tile shows the contract reward; hover text states the bonus. Late or missed deadlines are unchanged.
+
+## Retrieval charters
+
+**Retrieval** contracts post from peacekeeping offices, corporate charter desks, and pilot bars (`data/catalog/retrieval_missions.json`). Each job names a **specimen** at a volatile site (`cargo`, `debris`, `derelict`, `marker`, or an inert **ship** contact). Accepting requires a docked ship with a **retrieval** drone bay fitted and at least one stowed round. At the site the pilot locks the contracted contact and launches the drone; the contract is satisfied when the airframe completes the **return** leg and docks on the hull (a manual recall before the drone reaches the lock does not count). Payment is at the **origin habitat** on the contracted ship, with the same early-window bonus, late fee, and origin cancellation rules as scan work.
 
 ## Bounty charters
 
@@ -30,7 +34,7 @@ Some passenger **roles** require a minimum pilot **reputation** (touring perform
 
 Some **freight** cargo types use the same gate (bonded luxury, prototypes, race animals, museum objects under seal).
 
-Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances. How many tiles each **desk** shows scales with sector **population** (log-scaled from the smallest belt spokes through Proxima): one roll between a population-derived floor and ceiling (roughly **1–2** on the rim, **10–12** at Proxima) is the **total** for that desk. Peacekeeping and corporate offices split that total **50/50** between scan and bounty work; a pilot bar splits it **60/20/15/5** across passenger, freight, scan, and bounty. Terminal departures and the terminal freight tab each get their own roll (all passenger or all freight). Each desk has its own seed, so totals differ between desks on the same day.
+Each new game draws a **run seed** stored with the save; daily boards mix that seed with the GST day and habitat so day-one charters differ between playthroughs while staying stable for a given save until the calendar advances. How many tiles each **desk** shows scales with sector **population** (log-scaled from the smallest belt spokes through Proxima): one roll between a population-derived floor and ceiling (roughly **1–2** on the rim, **10–12** at Proxima) is the **total** for that desk. Peacekeeping and corporate offices split that total **40/40/20** across scan, bounty, and retrieval work; a pilot bar splits it **55/20/10/5/10** across passenger, freight, scan, bounty, and retrieval. Terminal departures and the terminal freight tab each get their own roll (all passenger or all freight). Each desk has its own seed, so totals differ between desks on the same day.
 
 At the habitat UI, each building’s desk shows **open work in one tile grid** and **accepted contracts in a second** (types the building does not post simply add no tiles). The terminal keeps **Departures** (passenger only) and **Freight** on separate tabs; bars, peacekeeping, and corporate offices mix the kinds they post in the open grid.
 
