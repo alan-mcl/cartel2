@@ -336,7 +336,7 @@
     "power_demand": 1.5,
     "compute_demand": 0.5,
     "cost": 1300,
-    "description": "Short-hop live cargo pod for feeder routes.",
+    "description": "If you need short-hop live cargo pod capability for feeder routes, look no further that the LiveBox line of bays.",
     "capabilities": [
       "life_support_integrated"
     ],
@@ -359,7 +359,7 @@
     "power_demand": 1.8,
     "compute_demand": 2.5,
     "cost": 2100,
-    "description": "Compact compute vault for high-value silicon freight.",
+    "description": "Compact cargo capacity from Edge Vault for your edge compute loads in transit.",
     "capabilities": [
       "compute_integrated"
     ],

@@ -384,6 +384,11 @@ func _spawn_bound_npc(actor, spawn_pos: Vector2) -> Node2D:
 	return node
 
 
+const DroneVisualScript := preload("res://scripts/presentation/drone_visual.gd")
+
+var _sandbox_drone_visual = null
+
+
 func _sync_npc_node(node: Node2D, actor) -> void:
 	if node == null or not is_instance_valid(node) or actor == null:
 		return
@@ -396,6 +401,39 @@ func _sync_npc_node(node: Node2D, actor) -> void:
 		)
 	if node.has_method("spawn_weapon_orders"):
 		node.call("spawn_weapon_orders", actor.pending_weapon_orders)
+	_sync_sandbox_drone_visual(actor)
+
+
+func _sync_sandbox_drone_visual(actor) -> void:
+	if catalog == null or actor == null or actor.owned_ship == null:
+		return
+	if not DroneRuntime.is_deployed(actor.owned_ship):
+		if _sandbox_drone_visual != null and is_instance_valid(_sandbox_drone_visual):
+			if _sandbox_drone_visual.has_method("hide_drone"):
+				_sandbox_drone_visual.call("hide_drone")
+		return
+	if _traffic_root == null or not is_instance_valid(_traffic_root):
+		_traffic_root = _ensure_traffic_root()
+	if _sandbox_drone_visual == null or not is_instance_valid(_sandbox_drone_visual):
+		_sandbox_drone_visual = DroneVisualScript.new()
+		_sandbox_drone_visual.z_index = 4
+		_traffic_root.add_child(_sandbox_drone_visual)
+		_sandbox_drone_visual.bind(actor.owned_ship, null)
+	var module_id := str(actor.owned_ship.deployed_drone.get("module_id", ""))
+	var pose := DroneRuntime.airframe_pose(actor.owned_ship)
+	if _sandbox_drone_visual.has_method("sync_pose"):
+		_sandbox_drone_visual.call(
+			"sync_pose",
+			catalog,
+			module_id,
+			pose.get("position", Vector2.ZERO),
+			pose.get("velocity", Vector2.ZERO),
+			float(pose.get("facing", 0.0))
+		)
+	if not actor.pending_weapon_orders.is_empty() and _sandbox_drone_visual.has_method(
+		"spawn_weapon_orders"
+	):
+		_sandbox_drone_visual.call("spawn_weapon_orders", actor.pending_weapon_orders)
 
 
 func _play_destroyed_or_free(node: Node2D) -> void:
@@ -412,6 +450,7 @@ func _update_hud_nav() -> void:
 
 
 func _clear_traffic_root() -> void:
+	_sandbox_drone_visual = null
 	if _traffic_root != null and is_instance_valid(_traffic_root):
 		_traffic_root.free()
 	_traffic_root = null

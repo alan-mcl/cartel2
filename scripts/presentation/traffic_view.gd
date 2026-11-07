@@ -115,10 +115,13 @@ func sync(actors: Array, catalog: Catalog, delta: float = 0.0) -> void:
 					actor.hull_current / maxf(actor.hull_max, 1.0)
 				)
 			_spawn_actor_weapons(actor, node)
-			_sync_actor_drone_visual(actor, catalog)
 		else:
 			_sync_far_node(actor, node)
-			_hide_actor_drone_visual(actor.id)
+		_sync_actor_drone_visual(actor, catalog)
+		if _opacity_by_id.has(actor.id):
+			var drone_vis = _drone_visual_by_id.get(actor.id)
+			if drone_vis != null and is_instance_valid(drone_vis):
+				apply_detection_opacity(drone_vis, float(_opacity_by_id[actor.id]))
 
 	_prune_stale_nodes(active_ids)
 
@@ -168,6 +171,7 @@ func _start_destroy_fx(actor) -> void:
 		var was_near := bool(_near_lod_by_id.get(actor.id, false))
 		_spawn_breakup_for_actor(node, actor)
 		_release_lod_node(node, was_near)
+	_hide_actor_drone_visual(actor.id)
 	_nodes_by_id.erase(actor.id)
 	_far_thrust_by_id.erase(actor.id)
 	_far_exhaust_by_id.erase(actor.id)
@@ -245,6 +249,9 @@ func _apply_detection_visibility(actor, node: Node2D, delta: float) -> void:
 		delta
 	)
 	apply_detection_opacity(node, opacity)
+	var drone_node = _drone_visual_by_id.get(actor.id)
+	if drone_node != null and is_instance_valid(drone_node):
+		apply_detection_opacity(drone_node, opacity)
 
 
 func _spawn_breakup_for_actor(node: Node2D, actor) -> void:
@@ -367,6 +374,7 @@ func _sync_actor_drone_visual(actor, catalog: Catalog) -> void:
 	var drone_node = _drone_visual_by_id.get(actor.id)
 	if drone_node == null or not is_instance_valid(drone_node):
 		drone_node = DroneVisualScript.new()
+		drone_node.z_index = 4
 		_traffic_root.add_child(drone_node)
 		_drone_visual_by_id[actor.id] = drone_node
 		drone_node.bind(actor.owned_ship, null)

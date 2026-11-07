@@ -20,6 +20,12 @@ var _scale_heavy := 0.9
 
 
 func _ready() -> void:
+	_ensure_nodes()
+
+
+func _ensure_nodes() -> void:
+	if _sprite != null:
+		return
 	collision_layer = NPC_LAYER
 	collision_mask = 0
 	add_to_group("npc_ship")
@@ -34,6 +40,7 @@ func _ready() -> void:
 
 
 func bind(owned: OwnedShip, game_session: GameSession = null) -> void:
+	_ensure_nodes()
 	_owned_ship = owned
 	_session = game_session
 
@@ -54,6 +61,7 @@ func sync_pose(
 		return
 	var silhouette := module_def.drone_silhouette
 	var path := str(SILHOUETTE_PATHS.get(silhouette, SILHOUETTE_PATHS["sensor_puck"]))
+	_ensure_nodes()
 	if _sprite.texture == null or _sprite.texture.resource_path != path:
 		_sprite.texture = load(path)
 	var mount := module_def.mount
