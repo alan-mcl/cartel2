@@ -16,6 +16,7 @@ static func run(runner: TestRunner) -> void:
 	_test_save_round_trip(runner, catalog)
 	_test_legacy_save(runner, catalog)
 	_test_leaderboard_store(runner, catalog)
+	_test_time_modes(runner, catalog)
 	_test_nett_worth(runner, catalog)
 	_test_starting_nett_worth_bands(runner, catalog)
 	CareerStats.reset_factory()
@@ -300,6 +301,115 @@ static func _test_leaderboard_store(runner: TestRunner, catalog: Catalog) -> voi
 			"career: legacy gst origin backfill preserves elapsed gst"
 		)
 	LeaderboardStore.store_dir = "user://"
+	if DirAccess.dir_exists_absolute(temp_dir):
+		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
+		DirAccess.remove_absolute(temp_dir)
+
+
+static func _test_time_modes(runner: TestRunner, catalog: Catalog) -> void:
+	var catalog_local := catalog
+	var month_seconds := float(GalacticCalendar.MONTH_LENGTHS[0] * GalacticCalendar.SECONDS_PER_DAY)
+	runner.check(
+		absf(CareerTimeMode.allowance_seconds(CareerTimeMode.MONTH, GalacticCalendar.default_start_seconds())
+		- month_seconds)
+		< EPSILON,
+		"time mode: january month allowance"
+	)
+	runner.check_eq(
+		int(CareerTimeMode.allowance_seconds(CareerTimeMode.YEAR, 0.0)),
+		GalacticCalendar.SECONDS_PER_YEAR,
+		"time mode: year allowance"
+	)
+	var unlimited := GameSession.new()
+	runner.check(
+		unlimited.start_new_game(catalog_local, "CR-OPEN", "trader", "", CareerTimeMode.UNLIMITED),
+		"time mode: unlimited career starts"
+	)
+	unlimited.career.bind_gst_origin_at_career_start(unlimited.gst_seconds)
+	var latched := false
+	unlimited.time_limit_reached.connect(func() -> void: latched = true)
+	unlimited.advance_gst(float(GalacticCalendar.SECONDS_PER_YEAR))
+	runner.check(not latched, "time mode: unlimited does not latch")
+	runner.check(not unlimited.career.time_limit_pending, "time mode: unlimited not pending")
+
+	var month := GameSession.new()
+	runner.check(
+		month.start_new_game(catalog_local, "CR-MON", "trader", "", CareerTimeMode.MONTH),
+		"time mode: month career starts"
+	)
+	month.career.bind_gst_origin_at_career_start(month.gst_seconds)
+	month.advance_gst(month_seconds - 1.0)
+	runner.check(not month.career.time_limit_pending, "time mode: month latch only at deadline")
+	month.advance_gst(2.0)
+	runner.check(month.career.time_limit_pending, "time mode: month latches once")
+	month.advance_gst(1000.0)
+	runner.check(month.career.time_limit_pending, "time mode: month latch is idempotent")
+
+	var temp_dir := _leaderboard_test_dir()
+	var prev_lb := LeaderboardStore.store_dir
+	LeaderboardStore.store_dir = temp_dir
+	if DirAccess.dir_exists_absolute(temp_dir):
+		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
+	month.career.career_id = "time_mode_month"
+	month.career.record_charter_reward(400)
+	LeaderboardStore.seal_timed_run(month, "2026-02-01T00:00:00", catalog_local)
+	var sealed_profit := 0
+	for row in LeaderboardStore.read_all():
+		if str(row.get("career_id", "")) == "time_mode_month":
+			sealed_profit = int(row.get("profit", 0))
+			runner.check(bool(row.get("sealed", false)), "time mode: sealed row marked")
+			runner.check_eq(
+				str(row.get("time_mode", "")),
+				CareerTimeMode.MONTH,
+				"time mode: sealed row mode"
+			)
+	runner.check_eq(sealed_profit, 400, "time mode: sealed profit")
+	month.career.record_charter_reward(1000)
+	LeaderboardStore.upsert_from_session(month, "2026-02-02T00:00:00", catalog_local)
+	for row in LeaderboardStore.read_all():
+		if str(row.get("career_id", "")) == "time_mode_month":
+			runner.check_eq(int(row.get("profit", 0)), 400, "time mode: pending blocks timed upsert")
+	month.career.continue_after_time_limit()
+	LeaderboardStore.upsert_from_session(month, "2026-02-03T00:00:00", catalog_local)
+	var month_profit := -1
+	var unlimited_profit := -1
+	for row in LeaderboardStore.read_all():
+		if str(row.get("career_id", "")) != "time_mode_month":
+			continue
+		var mode := CareerTimeMode.normalise(str(row.get("time_mode", CareerTimeMode.UNLIMITED)))
+		if mode == CareerTimeMode.MONTH:
+			month_profit = int(row.get("profit", 0))
+		elif mode == CareerTimeMode.UNLIMITED:
+			unlimited_profit = int(row.get("profit", 0))
+	runner.check_eq(month_profit, 400, "time mode: sealed month row unchanged")
+	runner.check_eq(unlimited_profit, 1400, "time mode: unlimited row after continue")
+
+	var legacy_rows := LeaderboardStore.read_all()
+	legacy_rows.append({
+		"career_id": "legacy_no_mode",
+		"callsign": "OLD",
+		"profit": 42,
+		"saved_at": "2019-01-01",
+	})
+	LeaderboardStore.write_all(legacy_rows)
+	var month_only := LeaderboardStore.sorted_entries(
+		LeaderboardStore.SortColumn.PROFIT, true, CareerTimeMode.MONTH
+	)
+	var found_legacy_on_month := false
+	for row in month_only:
+		if str(row.get("career_id", "")) == "legacy_no_mode":
+			found_legacy_on_month = true
+	runner.check(not found_legacy_on_month, "time mode: legacy row only on unlimited board")
+	var unlimited_board := LeaderboardStore.sorted_entries(
+		LeaderboardStore.SortColumn.PROFIT, true, CareerTimeMode.UNLIMITED
+	)
+	var found_legacy := false
+	for row in unlimited_board:
+		if str(row.get("career_id", "")) == "legacy_no_mode":
+			found_legacy = true
+	runner.check(found_legacy, "time mode: legacy row on unlimited board")
+
+	LeaderboardStore.store_dir = prev_lb
 	if DirAccess.dir_exists_absolute(temp_dir):
 		DirAccess.remove_absolute(temp_dir.path_join(LeaderboardStore.FILE_NAME))
 		DirAccess.remove_absolute(temp_dir)

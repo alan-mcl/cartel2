@@ -21,6 +21,8 @@ static var _career_id_factory: Callable = Callable()
 
 var career_id: String = ""
 var ended: bool = false
+var time_mode: String = CareerTimeMode.UNLIMITED
+var time_limit_pending: bool = false
 var flight_gst_seconds_real: float = 0.0
 var flight_gst_seconds_unspace: float = 0.0
 ## GST clock at career start; unset until [bind_gst_origin_at_career_start] or legacy backfill.
@@ -68,6 +70,8 @@ static func reset_factory() -> void:
 func reset_for_new_career() -> void:
 	career_id = generate_career_id()
 	ended = false
+	time_mode = CareerTimeMode.UNLIMITED
+	time_limit_pending = false
 	flight_gst_seconds_real = 0.0
 	flight_gst_seconds_unspace = 0.0
 	gst_origin_seconds = NAN
@@ -144,6 +148,46 @@ func elapsed_gst_seconds(current_gst_seconds: float) -> float:
 	if not gst_origin_is_set():
 		return maxf(0.0, flight_gst_seconds_real + flight_gst_seconds_unspace)
 	return maxf(0.0, current_gst_seconds - gst_origin_seconds)
+
+
+func is_timed_mode() -> bool:
+	return CareerTimeMode.is_timed(time_mode)
+
+
+func time_allowance_seconds() -> float:
+	return CareerTimeMode.allowance_seconds(time_mode, gst_origin_seconds)
+
+
+func remaining_gst_seconds(current_gst_seconds: float) -> float:
+	if not is_timed_mode() or time_limit_pending:
+		return -1.0
+	var allowance := time_allowance_seconds()
+	if allowance < 0.0:
+		return -1.0
+	return maxf(0.0, allowance - elapsed_gst_seconds(current_gst_seconds))
+
+
+func is_past_time_allowance(current_gst_seconds: float) -> bool:
+	if not is_timed_mode():
+		return false
+	var allowance := time_allowance_seconds()
+	if allowance < 0.0:
+		return false
+	return elapsed_gst_seconds(current_gst_seconds) >= allowance
+
+
+func latch_time_limit_if_due(current_gst_seconds: float) -> bool:
+	if time_limit_pending or ended or not is_timed_mode():
+		return false
+	if not is_past_time_allowance(current_gst_seconds):
+		return false
+	time_limit_pending = true
+	return true
+
+
+func continue_after_time_limit() -> void:
+	time_limit_pending = false
+	time_mode = CareerTimeMode.UNLIMITED
 
 
 func record_played_seconds(delta: float) -> void:
@@ -366,6 +410,8 @@ func to_session_dict() -> Dictionary:
 		"infractions_incurred": infractions_incurred,
 		"salvage_count": salvage_count,
 		"ships_purchased": ships_purchased,
+		"time_mode": time_mode,
+		"time_limit_pending": time_limit_pending,
 	}
 
 
@@ -405,4 +451,6 @@ func load_session_dict(data: Dictionary) -> void:
 	infractions_incurred = int(data.get("infractions_incurred", 0))
 	salvage_count = int(data.get("salvage_count", 0))
 	ships_purchased = int(data.get("ships_purchased", 0))
+	time_mode = CareerTimeMode.normalise(str(data.get("time_mode", CareerTimeMode.UNLIMITED)))
+	time_limit_pending = bool(data.get("time_limit_pending", false))
 	ensure_career_id()

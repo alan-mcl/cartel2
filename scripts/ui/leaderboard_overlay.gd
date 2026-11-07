@@ -15,24 +15,63 @@ const COLUMNS := [
 ]
 
 @onready var _title: Label = $Center/Panel/VBox/TitleLabel
+@onready var _mode_row: HBoxContainer = $Center/Panel/VBox/ModeRow
+@onready var _month_mode: Button = $Center/Panel/VBox/ModeRow/MonthModeButton
+@onready var _year_mode: Button = $Center/Panel/VBox/ModeRow/YearModeButton
+@onready var _unlimited_mode: Button = $Center/Panel/VBox/ModeRow/UnlimitedModeButton
 @onready var _header_row: HBoxContainer = $Center/Panel/VBox/HeaderRow
 @onready var _rows: VBoxContainer = $Center/Panel/VBox/Scroll/Rows
 @onready var _empty: Label = $Center/Panel/VBox/EmptyLabel
 
 var _sort_column: LeaderboardStore.SortColumn = LeaderboardStore.SortColumn.PROFIT
 var _sort_descending: bool = true
+var _filter_time_mode: String = CareerTimeMode.UNLIMITED
+var _mode_group: ButtonGroup
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	$Center/Panel/VBox/CloseButton.pressed.connect(_on_close_pressed)
+	_mode_group = ButtonGroup.new()
+	_month_mode.button_group = _mode_group
+	_year_mode.button_group = _mode_group
+	_unlimited_mode.button_group = _mode_group
+	_month_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_set_filter_mode(CareerTimeMode.MONTH)
+	)
+	_year_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_set_filter_mode(CareerTimeMode.YEAR)
+	)
+	_unlimited_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_set_filter_mode(CareerTimeMode.UNLIMITED)
+	)
 	_build_headers()
 
 
-func open() -> void:
+func open(time_mode: String = CareerTimeMode.UNLIMITED) -> void:
+	_filter_time_mode = CareerTimeMode.normalise(time_mode)
+	_sync_mode_buttons()
 	visible = true
 	_refresh()
+
+
+func _set_filter_mode(time_mode: String) -> void:
+	_filter_time_mode = CareerTimeMode.normalise(time_mode)
+	_refresh()
+
+
+func _sync_mode_buttons() -> void:
+	match _filter_time_mode:
+		CareerTimeMode.MONTH:
+			_month_mode.button_pressed = true
+		CareerTimeMode.YEAR:
+			_year_mode.button_pressed = true
+		_:
+			_unlimited_mode.button_pressed = true
 
 
 func close() -> void:
@@ -75,10 +114,10 @@ func _on_header_pressed(column: LeaderboardStore.SortColumn) -> void:
 func _refresh() -> void:
 	for child in _rows.get_children():
 		child.queue_free()
-	var entries := LeaderboardStore.sorted_entries(_sort_column, _sort_descending)
+	var entries := LeaderboardStore.sorted_entries(_sort_column, _sort_descending, _filter_time_mode)
 	_empty.visible = entries.is_empty()
 	if entries.is_empty():
-		_empty.text = "No careers saved yet."
+		_empty.text = _empty_message_for_mode(_filter_time_mode)
 		return
 	var rank := 1
 	for entry_variant in entries:
@@ -156,3 +195,13 @@ func _format_cell(entry: Dictionary, column: LeaderboardStore.SortColumn) -> Str
 func _on_close_pressed() -> void:
 	close()
 	closed.emit()
+
+
+static func _empty_message_for_mode(time_mode: String) -> String:
+	match CareerTimeMode.normalise(time_mode):
+		CareerTimeMode.MONTH:
+			return "No month careers yet."
+		CareerTimeMode.YEAR:
+			return "No year careers yet."
+		_:
+			return "No unlimited careers yet."

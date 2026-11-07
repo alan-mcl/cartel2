@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-signal confirmed(callsign: String, background_id: String, portrait_path: String)
+signal confirmed(callsign: String, background_id: String, portrait_path: String, time_mode: String)
 signal cancelled
 
 const PORTRAITS_DIR := "res://assets/ui/portraits/"
@@ -12,8 +12,17 @@ const PORTRAIT_EXTENSIONS := ["png", "webp", "jpg", "jpeg"]
 @onready var _background_list: ItemList = $Background/Center/Panel/VBox/BodySplit/Left/BackgroundList
 @onready var _detail_label: Label = $Background/Center/Panel/VBox/BodySplit/Center/DetailScroll/DetailLabel
 @onready var _confirm_button: Button = $Background/Center/Panel/VBox/ConfirmButton
+@onready var _month_mode: Button = (
+	$Background/Center/Panel/VBox/BodySplit/Right/TimeModeRow/MonthModeButton
+)
+@onready var _year_mode: Button = $Background/Center/Panel/VBox/BodySplit/Right/TimeModeRow/YearModeButton
+@onready var _unlimited_mode: Button = (
+	$Background/Center/Panel/VBox/BodySplit/Right/TimeModeRow/UnlimitedModeButton
+)
 
 var _catalog: Catalog
+var _time_mode: String = CareerTimeMode.UNLIMITED
+var _time_mode_group: ButtonGroup
 var _background_ids: PackedStringArray = PackedStringArray()
 var _selected_background_id: String = ""
 var _portrait_paths: PackedStringArray = PackedStringArray()
@@ -29,6 +38,22 @@ func _ready() -> void:
 	_confirm_button.pressed.connect(_on_confirm_pressed)
 	_random_callsign_button.pressed.connect(_on_random_callsign_pressed)
 	$Background/Center/Panel/VBox/BackButton.pressed.connect(_on_back_pressed)
+	_time_mode_group = ButtonGroup.new()
+	_month_mode.button_group = _time_mode_group
+	_year_mode.button_group = _time_mode_group
+	_unlimited_mode.button_group = _time_mode_group
+	_month_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_time_mode = CareerTimeMode.MONTH
+	)
+	_year_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_time_mode = CareerTimeMode.YEAR
+	)
+	_unlimited_mode.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			_time_mode = CareerTimeMode.UNLIMITED
+	)
 	$Background/Center/Panel/VBox/BodySplit/Right/PortraitRow/PrevPortrait.pressed.connect(_on_prev_portrait)
 	$Background/Center/Panel/VBox/BodySplit/Right/PortraitRow/NextPortrait.pressed.connect(_on_next_portrait)
 
@@ -45,6 +70,8 @@ func open(default_callsign: String = "") -> void:
 	_portrait_index = 0 if not _portrait_paths.is_empty() else -1
 	_update_portrait_preview()
 	_select_default_background()
+	_time_mode = CareerTimeMode.UNLIMITED
+	_unlimited_mode.button_pressed = true
 	_on_field_changed("")
 
 
@@ -209,7 +236,7 @@ func _on_confirm_pressed() -> void:
 	var callsign := _callsign_field.text.strip_edges()
 	if callsign.is_empty() or _selected_background_id.is_empty():
 		return
-	confirmed.emit(callsign, _selected_background_id, _current_portrait_path())
+	confirmed.emit(callsign, _selected_background_id, _current_portrait_path(), _time_mode)
 
 
 func _on_back_pressed() -> void:

@@ -3,6 +3,7 @@ extends RefCounted
 
 signal changed
 signal career_ended
+signal time_limit_reached
 
 var player := PlayerState.new()
 var world := WorldPresence.new()
@@ -220,7 +221,8 @@ func start_new_game(
 	catalog: Catalog,
 	new_callsign: String,
 	new_background_id: String,
-	new_portrait_path: String = ""
+	new_portrait_path: String = "",
+	time_mode: String = CareerTimeMode.UNLIMITED
 ) -> bool:
 	player.callsign = new_callsign.strip_edges()
 	player.portrait_path = new_portrait_path.strip_edges()
@@ -229,6 +231,7 @@ func start_new_game(
 		return false
 
 	career.reset_for_new_career()
+	career.time_mode = CareerTimeMode.normalise(time_mode)
 
 	var kit := catalog.get_background(player.background_id)
 	if kit.is_empty():
@@ -363,6 +366,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	player.load_session_dict(session_data)
 	career.load_session_dict(session_data)
 	career.ensure_gst_origin_after_load(world.gst_seconds)
+	_sync_time_limit_after_load(false)
 
 	var save_version := int(data.get("version", SaveStore.SAVE_VERSION))
 	var legacy_cargo := PlayerState._int_dict_from_variant(session_data.get("cargo", {}))
@@ -603,6 +607,14 @@ func arrive_from_unspace(catalog: Catalog) -> bool:
 
 func advance_gst(seconds: float) -> void:
 	world.advance_gst(seconds)
+	_sync_time_limit_after_load(true)
+
+
+func _sync_time_limit_after_load(emit_signal: bool) -> void:
+	if player.sandbox or career.ended:
+		return
+	if career.latch_time_limit_if_due(world.gst_seconds) and emit_signal:
+		time_limit_reached.emit()
 
 
 func refresh_market_quotes(catalog: Catalog) -> bool:

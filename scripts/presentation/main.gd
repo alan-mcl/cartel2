@@ -24,6 +24,7 @@ var _exit_shutdown_done: bool = false
 @onready var _save_overlay: CanvasLayer = $SaveOverlay
 @onready var _career: CanvasLayer = $CareerOverlay
 @onready var _career_end: CanvasLayer = $CareerEndOverlay
+@onready var _time_limit: CanvasLayer = $TimeLimitOverlay
 @onready var _leaderboard: CanvasLayer = $LeaderboardOverlay
 @onready var _audio_settings: CanvasLayer = $AudioSettingsOverlay
 @onready var _starfield: Node2D = $Starfield
@@ -81,6 +82,10 @@ func _ready() -> void:
 	_career_end.main_menu_requested.connect(_menu.on_career_end_main_menu_requested)
 	_career_end.leaderboard_requested.connect(_menu.on_career_end_leaderboard_requested)
 
+	_time_limit.continue_requested.connect(_menu.on_time_limit_continue_requested)
+	_time_limit.main_menu_requested.connect(_menu.on_time_limit_main_menu_requested)
+	_time_limit.leaderboard_requested.connect(_menu.on_time_limit_leaderboard_requested)
+
 	var tree := get_tree()
 	if tree != null and tree.has_signal("about_to_quit"):
 		if not tree.about_to_quit.is_connected(_on_about_to_quit):
@@ -101,6 +106,7 @@ func _ready() -> void:
 	_save_overlay.close()
 	_career.close()
 	_career_end.close()
+	_time_limit.close()
 	_leaderboard.close()
 
 	_menu.show_main_menu()
@@ -145,6 +151,7 @@ func _bind_controllers() -> void:
 		_pause,
 		_career,
 		_career_end,
+		_time_limit,
 		_leaderboard,
 		_jump,
 		_hyperdrive,

@@ -10,6 +10,7 @@ var _save_overlay: CanvasLayer
 var _pause: CanvasLayer
 var _career: CanvasLayer
 var _career_end: CanvasLayer
+var _time_limit: CanvasLayer
 var _leaderboard: CanvasLayer
 var _jump: CanvasLayer
 var _hyperdrive: CanvasLayer
@@ -37,6 +38,7 @@ func bind(
 	pause: CanvasLayer,
 	career: CanvasLayer,
 	career_end: CanvasLayer,
+	time_limit: CanvasLayer,
 	leaderboard: CanvasLayer,
 	jump: CanvasLayer,
 	hyperdrive: CanvasLayer,
@@ -58,6 +60,7 @@ func bind(
 	_pause = pause
 	_career = career
 	_career_end = career_end
+	_time_limit = time_limit
 	_leaderboard = leaderboard
 	_jump = jump
 	_hyperdrive = hyperdrive
@@ -86,6 +89,8 @@ func is_gst_frozen() -> bool:
 		return true
 	if _career_end != null and _career_end.visible:
 		return true
+	if _time_limit != null and _time_limit.visible:
+		return true
 	if _pause.visible and _tree.paused:
 		return true
 	return false
@@ -95,6 +100,8 @@ func can_toggle_pause() -> bool:
 	if not _main.game_active:
 		return false
 	if _career_end != null and _career_end.visible:
+		return false
+	if _time_limit != null and _time_limit.visible:
 		return false
 	if _main.session != null and _main.session.career.ended:
 		return false
@@ -141,6 +148,8 @@ func show_main_menu() -> void:
 		_leaderboard.close()
 	if _career_end != null:
 		_career_end.close()
+	if _time_limit != null:
+		_time_limit.close()
 	_hud.visible = false
 	_player.freeze_motion()
 	_world.clear_world()
@@ -210,9 +219,15 @@ func start_game_from_session() -> void:
 		_simulation.reset_unspace_pulse()
 
 	_sync_audio_context()
+	_maybe_open_time_limit_overlay()
 
 
-func begin_new_game(callsign: String, background_id: String, portrait_path: String) -> void:
+func begin_new_game(
+	callsign: String,
+	background_id: String,
+	portrait_path: String,
+	time_mode: String = CareerTimeMode.UNLIMITED
+) -> void:
 	var session: GameSession = _main.session
 	if session != null:
 		unbind_session_events(session)
@@ -223,7 +238,7 @@ func begin_new_game(callsign: String, background_id: String, portrait_path: Stri
 	_main.session.changed.connect(_on_session_changed)
 	bind_session_events(_main.session)
 
-	if not _main.session.start_new_game(_catalog, callsign, background_id, portrait_path):
+	if not _main.session.start_new_game(_catalog, callsign, background_id, portrait_path, time_mode):
 		push_error("Failed to start new game.")
 		return
 
@@ -366,8 +381,13 @@ func on_main_menu_exit() -> void:
 	_tree.quit()
 
 
-func on_new_game_confirmed(callsign: String, background_id: String, portrait_path: String) -> void:
-	begin_new_game(callsign, background_id, portrait_path)
+func on_new_game_confirmed(
+	callsign: String,
+	background_id: String,
+	portrait_path: String,
+	time_mode: String = CareerTimeMode.UNLIMITED
+) -> void:
+	begin_new_game(callsign, background_id, portrait_path, time_mode)
 
 
 func on_new_game_cancelled() -> void:
@@ -432,10 +452,10 @@ func open_career_overlay() -> void:
 		_tree.paused = true
 
 
-func open_leaderboard_overlay() -> void:
+func open_leaderboard_overlay(time_mode: String = CareerTimeMode.UNLIMITED) -> void:
 	if _leaderboard == null:
 		return
-	_leaderboard.open()
+	_leaderboard.open(time_mode)
 
 
 func on_career_overlay_closed() -> void:
@@ -456,6 +476,8 @@ func on_career_leaderboard_requested() -> void:
 
 func _restore_pause_after_overlay() -> void:
 	if _career_end != null and _career_end.visible:
+		return
+	if _time_limit != null and _time_limit.visible:
 		return
 	if _career != null and _career.visible:
 		return
@@ -478,6 +500,8 @@ func bind_session_events(game_session: GameSession) -> void:
 	_simulation.attach_events(game_session, _catalog)
 	if not game_session.career_ended.is_connected(_on_career_ended):
 		game_session.career_ended.connect(_on_career_ended)
+	if not game_session.time_limit_reached.is_connected(_on_time_limit_reached):
+		game_session.time_limit_reached.connect(_on_time_limit_reached)
 
 
 func unbind_session_events(game_session: GameSession) -> void:
@@ -486,6 +510,8 @@ func unbind_session_events(game_session: GameSession) -> void:
 	_simulation.detach_events(game_session)
 	if game_session != null and game_session.career_ended.is_connected(_on_career_ended):
 		game_session.career_ended.disconnect(_on_career_ended)
+	if game_session != null and game_session.time_limit_reached.is_connected(_on_time_limit_reached):
+		game_session.time_limit_reached.disconnect(_on_time_limit_reached)
 
 
 func _on_career_ended() -> void:
@@ -544,6 +570,64 @@ func on_career_end_main_menu_requested() -> void:
 
 func on_career_end_leaderboard_requested() -> void:
 	open_leaderboard_overlay()
+
+
+func _on_time_limit_reached() -> void:
+	if _main.session == null or _time_limit == null:
+		return
+	_pause.close()
+	_save_overlay.close()
+	_jump.close()
+	if _hud.has_method("close_flight_manifest"):
+		_hud.close_flight_manifest()
+	if _hud.has_method("close_target_scan"):
+		_hud.close_target_scan()
+	_main.session.career.ensure_career_id()
+	var saved_at := Time.get_datetime_string_from_system(true)
+	LeaderboardStore.seal_timed_run(_main.session, saved_at, _catalog)
+	_open_time_limit_overlay()
+
+
+func _maybe_open_time_limit_overlay() -> void:
+	if _main.session == null or not _main.session.career.time_limit_pending:
+		return
+	if _time_limit != null and _time_limit.visible:
+		return
+	_open_time_limit_overlay()
+
+
+func _open_time_limit_overlay() -> void:
+	if _main.session == null or _time_limit == null:
+		return
+	if not _main.session.career.time_limit_pending:
+		return
+	_tree.paused = true
+	_time_limit.open(_main.session, _catalog)
+
+
+func on_time_limit_continue_requested() -> void:
+	if _main.session == null or _time_limit == null:
+		return
+	_main.session.career.continue_after_time_limit()
+	_time_limit.close()
+	_tree.paused = _main.session.docked
+	if _main.session.docked:
+		_hud.visible = false
+		_ui_root.session = _main.session
+		if not _ui_root.visible:
+			_ui_root.open_habitat()
+	else:
+		_hud.visible = true
+	_main.session.changed.emit()
+
+
+func on_time_limit_main_menu_requested() -> void:
+	_tree.paused = false
+	show_main_menu()
+
+
+func on_time_limit_leaderboard_requested(sealed_time_mode: String) -> void:
+	open_leaderboard_overlay(sealed_time_mode)
 
 
 func _sync_audio_context() -> void:
