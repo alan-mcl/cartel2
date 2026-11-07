@@ -11,7 +11,7 @@
     "brand": "Helios",
     "intercept_chance": 0.32,
     "cost": 2100,
-    "description": "Helios close-in point defence turret.",
+    "description": "Choose Helios for your close-in point defence turret requirements.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,
@@ -31,7 +31,7 @@
     "brand": "Helios",
     "intercept_chance": 0.26,
     "cost": 1699,
-    "description": "Efficient Helios PD grid for escorts on a power budget.",
+    "description": "Helios Sentinel PD for best in class point defence.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,
@@ -51,7 +51,7 @@
     "brand": "River",
     "intercept_chance": 0.28,
     "cost": 1700,
-    "description": "OC point defence for freighter escorts.",
+    "description": "River brand Point Defence. It's the best.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,
@@ -71,7 +71,7 @@
     "brand": "Bellatrix",
     "intercept_chance": 0.25,
     "cost": 1600,
-    "description": "Bellatrix intercept grid for missile-heavy lanes.",
+    "description": "The Bellatrix PD intercept array provides excellent protection from incoming projectiles.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,
@@ -91,7 +91,7 @@
     "brand": "Bellatrix",
     "intercept_chance": 0.34,
     "cost": 2200,
-    "description": "Heavy Bellatrix PD for dedicated picket hulls.",
+    "description": "The Bellatrix Heavy PD intercept grid provides the best point defence on the market.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,
@@ -111,7 +111,7 @@
     "brand": "Brutus",
     "intercept_chance": 0.3,
     "cost": 1900,
-    "description": "GO point defence for gunship hardpoints.",
+    "description": "Brutus point defence is very effective at mitigating incoming kinetic threats.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,

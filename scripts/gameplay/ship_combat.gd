@@ -1,6 +1,8 @@
 class_name ShipCombat
 extends RefCounted
 
+const DroneRuntimeScript := preload("res://scripts/gameplay/drone_runtime.gd")
+
 const PACKET_TYPES := ["kinetic", "concussive", "energy", "cyber"]
 const PD_DELIVERIES := ["ballistic", "guided"]
 const IMPULSE_SCALE := 8.0
@@ -61,7 +63,11 @@ static func resolve_hit(
 	assembled: AssembledShip,
 	state: ShipCombatState,
 	delivery_type: String,
-	packets: Dictionary
+	packets: Dictionary,
+	impact_pos: Vector2 = Vector2(NAN, NAN),
+	owner_hull_pos: Vector2 = Vector2(NAN, NAN),
+	owned_ship: OwnedShip = null,
+	catalog: Catalog = null
 ) -> Dictionary:
 	var result := {
 		"intercepted": false,
@@ -80,7 +86,20 @@ static func resolve_hit(
 	if working.is_empty():
 		return result
 
-	if delivery_type in PD_DELIVERIES and _roll_point_defence_intercept(assembled):
+	var pd_extras: Array = []
+	if (
+		delivery_type in PD_DELIVERIES
+		and catalog != null
+		and owned_ship != null
+		and impact_pos.is_finite()
+		and owner_hull_pos.is_finite()
+	):
+		var drone_pd := DroneRuntimeScript.point_defence_module_if_covering(
+			catalog, owned_ship, impact_pos, owner_hull_pos
+		)
+		if drone_pd != null:
+			pd_extras.append(drone_pd.intercept_chance)
+	if delivery_type in PD_DELIVERIES and _roll_point_defence_intercept(assembled, pd_extras):
 		result["intercepted"] = true
 		result["remaining_packets"] = {}
 		result["defence_layers"]["point_defence_intercepted"] = true
@@ -206,7 +225,7 @@ static func _packets_total(packets: Dictionary) -> float:
 	return total
 
 
-static func _roll_point_defence_intercept(assembled: AssembledShip) -> bool:
+static func _roll_point_defence_intercept(assembled: AssembledShip, extra_chances: Array = []) -> bool:
 	var miss_chance := 1.0
 	for entry in assembled.modules_in_category("point_defence"):
 		var module_def: ModuleDef = entry.get("data", null)
@@ -214,6 +233,8 @@ static func _roll_point_defence_intercept(assembled: AssembledShip) -> bool:
 			continue
 		var chance := clampf(module_def.intercept_chance, 0.0, 1.0)
 		miss_chance *= 1.0 - chance
+	for ch in extra_chances:
+		miss_chance *= 1.0 - clampf(float(ch), 0.0, 1.0)
 	return randf() >= miss_chance
 
 

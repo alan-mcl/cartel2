@@ -102,7 +102,9 @@ class _Probe:
 	var hits: Array = []
 	var impulses: Array = []
 
-	func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
+	func take_combat_hit(
+		delivery_type: String, packets: Dictionary, _impact_pos: Vector2 = Vector2(NAN, NAN)
+	) -> Dictionary:
 		hits.append({
 			"delivery": delivery_type,
 			"packets": packets.duplicate(true),

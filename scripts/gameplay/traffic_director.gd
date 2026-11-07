@@ -97,10 +97,14 @@ func tick(
 	player_assembled: AssembledShip = null,
 	player_operating: ShipOperatingState = null,
 	player_broadcasting: bool = false,
-	world: WorldPresence = null
+	world: WorldPresence = null,
+	player_owned: OwnedShip = null
 ) -> void:
 	if _catalog == null:
 		return
+
+	var drone_contacts: Array = []
+	DroneRuntime.append_deployed_contacts(drone_contacts, _catalog, player_owned, actors)
 
 	var anchors := world_loader.get_traffic_anchors()
 	var cycle_queue: Array = []
@@ -142,7 +146,8 @@ func tick(
 				player_signature,
 				player_broadcasting,
 				_traffic_config,
-				player_reads_beacons
+				player_reads_beacons,
+				drone_contacts
 			)
 		else:
 			_touch_stale_detection(actor)
@@ -169,7 +174,8 @@ func tick(
 			player_vel,
 			player_facing,
 			player_thrusting,
-			world
+			world,
+			drone_contacts
 		)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:

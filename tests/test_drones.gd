@@ -5,6 +5,7 @@ static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_job_order(runner, catalog)
 	_test_launch_recall(runner, catalog)
+	_test_recall_bay_ready_to_fire(runner, catalog)
 	_test_recall_catches_moving_hull(runner, catalog)
 	_test_second_launch_refused(runner, catalog)
 	_test_destruction_no_restock(runner, catalog)
@@ -12,6 +13,8 @@ static func run(runner: TestRunner) -> void:
 	_test_sensor_extension(runner, catalog)
 	_test_defence_orbit_hull(runner, catalog)
 	_test_attack_orbit_fires(runner, catalog)
+	_test_drone_launch_ignores_weapons_gate(runner, catalog)
+	_test_drone_targetable_destructible(runner, catalog)
 
 
 static func _module(catalog: Catalog, module_id: String) -> ModuleDef:
@@ -67,7 +70,12 @@ static func _test_job_order(runner: TestRunner, catalog: Catalog) -> void:
 	runner.check_eq(
 		DroneDirector.pick_task(wasp, ctx_cargo_hostile),
 		DroneDirector.TASK_ATTACK,
-		"non-ship lock with hostile: attack"
+		"wasp non-ship lock with hostile: attack"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "mon_relay_link"), ctx_cargo_hostile),
+		DroneDirector.TASK_RETRIEVAL,
+		"relay non-ship lock with hostile: retrieval before defence"
 	)
 	var ctx_cargo_peace := _context(cargo_lock, [cargo_lock], [], 8000.0, Vector2.ZERO)
 	ctx_cargo_peace["hostile_present"] = false
@@ -83,9 +91,9 @@ static func _test_job_order(runner: TestRunner, catalog: Catalog) -> void:
 		"hostile ship lock: attack"
 	)
 	runner.check_eq(
-		DroneDirector.pick_task(_module(catalog, "ca_convoy_screen"), ctx_hostile_ship),
-		DroneDirector.TASK_DEFENCE,
-		"hostile ship lock without attack: defence"
+		DroneDirector.pick_task(_module(catalog, "go_hornet_bay"), ctx_hostile_ship),
+		DroneDirector.TASK_ATTACK,
+		"hostile ship lock: attack before defence when bay has both"
 	)
 	var ctx_friendly_ship := _context(friendly, [friendly], [])
 	runner.check_eq(
@@ -98,9 +106,41 @@ static func _test_job_order(runner: TestRunner, catalog: Catalog) -> void:
 		ctx_no_lock_hostile
 	)
 	runner.check_eq(
-		DroneDirector.pick_task(_module(catalog, "ca_convoy_screen"), ctx_no_lock_hostile),
+		DroneDirector.pick_task(_module(catalog, "go_hornet_bay"), ctx_no_lock_hostile),
+		DroneDirector.TASK_ATTACK,
+		"no lock hostile nearby: attack before defence when bay has both"
+	)
+	var ctx_friendly_with_hostile := _context(friendly, [friendly, hostile], ["npc_1"], 9000.0, Vector2.ZERO)
+	ctx_friendly_with_hostile["hostile_present"] = DroneDirector.hostile_present_in_sensor_range(
+		ctx_friendly_with_hostile
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "go_hornet_bay"), ctx_friendly_with_hostile),
+		DroneDirector.TASK_ATTACK,
+		"dual bay: attack when hostiles nearby even on friendly ship lock"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "merc_surveyor_bay"), ctx_no_lock_hostile),
 		DroneDirector.TASK_DEFENCE,
-		"no lock hostile nearby: defence"
+		"no attack capability: defence when hostile present"
+	)
+	var neutral_ship := _contact("npc_neutral", "traffic_npc", Vector2(1000, 0))
+	var ctx_actor_threat := _context(neutral_ship, [neutral_ship], [], 0.0, Vector2.ZERO)
+	ctx_actor_threat["hostile_positions"] = [Vector2(1500, 0)]
+	ctx_actor_threat["hostile_present"] = DroneDirector.hostile_present_in_sensor_range(ctx_actor_threat)
+	runner.check(
+		ctx_actor_threat["hostile_present"],
+		"threat actor position counts without radar contact id"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "go_hornet_bay"), ctx_actor_threat),
+		DroneDirector.TASK_ATTACK,
+		"dual bay attacks when threat actor in range off contact list"
+	)
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "ca_convoy_screen"), ctx_actor_threat),
+		DroneDirector.TASK_DEFENCE,
+		"defence-only bay screens when threat actor in range"
 	)
 
 
@@ -157,8 +197,9 @@ static func _test_launch_recall(runner: TestRunner, catalog: Catalog) -> void:
 		[],
 		[]
 	)
+	var last_tick: Dictionary = {}
 	for _i in range(400):
-		DroneRuntime.tick(
+		last_tick = DroneRuntime.tick(
 			catalog,
 			assembled,
 			owned,
@@ -170,6 +211,53 @@ static func _test_launch_recall(runner: TestRunner, catalog: Catalog) -> void:
 			break
 	runner.check(not DroneRuntime.is_deployed(owned), "recall completes after flyback")
 	runner.check_eq(owned.get_ammo_count(ammo_id), before, "recall restocks round")
+	runner.check_eq(str(last_tick.get("recalled_slot", "")), "light_weapon_1", "recall reports bay slot")
+
+
+static func _test_recall_bay_ready_to_fire(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := _owned_with_drone(catalog, "merc_lark_survey")
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var module_def := _module(catalog, "merc_lark_survey")
+	var ammo_id := module_def.ammunition_type
+	var slot := "light_weapon_1"
+	var before := owned.get_ammo_count(ammo_id)
+	var weapons := ShipWeapons.new()
+	weapons.sync_selection(assembled)
+	var guidance := {
+		"ship_pos": Vector2.ZERO,
+		"ship_facing": 0.0,
+		"ship_velocity": Vector2.ZERO,
+	}
+	var cycle := ShipWeapons.fire_cycle_seconds(module_def)
+	weapons.tick(catalog, assembled, owned, 0.1, true, true, guidance)
+	runner.check(DroneRuntime.is_deployed(owned), "dock cooldown: launch via ShipWeapons")
+	weapons.clear_cooldown(slot)
+	weapons.tick(catalog, assembled, owned, 0.0, true, true, guidance)
+	runner.check(bool(owned.deployed_drone.get("recalling", false)), "dock cooldown: recall ordered")
+	var context: Dictionary = DroneRuntime.build_context(
+		Vector2.ZERO,
+		0.0,
+		7000.0,
+		"",
+		[],
+		[]
+	)
+	var last_tick: Dictionary = {}
+	for _i in range(400):
+		last_tick = DroneRuntime.tick(catalog, assembled, owned, 0.05, context, 500.0)
+		if not DroneRuntime.is_deployed(owned):
+			break
+	runner.check_eq(str(last_tick.get("recalled_slot", "")), slot, "dock cooldown: dock-in slot reported")
+	runner.check_eq(owned.get_ammo_count(ammo_id), before, "dock cooldown: stowed round after dock-in")
+	weapons.start_cooldown(slot, cycle)
+	runner.check(weapons.cooldown_remaining(slot) > 0.0, "dock cooldown: bay on fire cycle after dock-in")
+	var blocked: Dictionary = weapons.tick(catalog, assembled, owned, 0.0, true, true, guidance)
+	runner.check(not DroneRuntime.is_deployed(owned), "dock cooldown: launch blocked until cycle ends")
+	runner.check(weapons.cooldown_remaining(slot) > 0.0, "dock cooldown: tick while cooling")
+	weapons.clear_cooldown(slot)
+	var relaunch: Dictionary = weapons.tick(catalog, assembled, owned, 0.0, true, true, guidance)
+	runner.check(DroneRuntime.is_deployed(owned), "dock cooldown: relaunch after cycle")
+	runner.check(not bool(relaunch.get("out_of_ammo", false)), "dock cooldown: relaunch has ammo")
 
 
 static func _test_recall_catches_moving_hull(runner: TestRunner, catalog: Catalog) -> void:
@@ -275,8 +363,12 @@ static func _test_retrieval_return(runner: TestRunner, catalog: Catalog) -> void
 	var owned := OwnedShip.new()
 	owned.id = "retrieval_ship"
 	owned.modules = [{"slot": "light_weapon_1", "module_id": "mon_relay_link"}]
+	ShipAssembler.seed_ammunition(catalog, owned)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	var module_def := _module(catalog, "mon_relay_link")
+	var ammo_id := module_def.ammunition_type
+	var before := owned.get_ammo_count(ammo_id)
+	runner.check(owned.remove_ammo(ammo_id, 1), "retrieval test simulates launch spend")
 	var lock := _contact("crate_1", "debris", Vector2(120, 0))
 	owned.deployed_drone = {
 		"active": true,
@@ -290,23 +382,26 @@ static func _test_retrieval_return(runner: TestRunner, catalog: Catalog) -> void
 	var context: Dictionary = DroneRuntime.build_context(
 		Vector2.ZERO, 0.0, 7000.0, "crate_1", [lock], []
 	)
-	var reached := false
-	var tick: Dictionary = {}
-	for _i in range(120):
-		tick = DroneRuntime.tick(
+	var reached_return := false
+	var last_tick: Dictionary = {}
+	for _i in range(400):
+		last_tick = DroneRuntime.tick(
 			catalog, assembled, owned, 0.05, context, 500.0
 		)
-		var phase := str(owned.deployed_drone.get("retrieval_phase", ""))
-		if phase == "return":
-			reached = true
+		if DroneRuntime.is_deployed(owned):
+			if str(owned.deployed_drone.get("retrieval_phase", "")) == "return":
+				reached_return = true
+		else:
 			break
-	runner.check(reached, "retrieval reaches lock and returns")
+	runner.check(reached_return, "retrieval reaches lock and returns")
+	runner.check(not DroneRuntime.is_deployed(owned), "retrieval docks at hull")
 	runner.check_eq(
-		str(owned.deployed_drone.get("retrieval_phase", "")),
-		"return",
-		"retrieval phase return"
+		str(last_tick.get("recalled_slot", "")),
+		"light_weapon_1",
+		"retrieval dock reports slot"
 	)
-	runner.check(tick.get("orders", []).is_empty(), "retrieval does not salvage")
+	runner.check_eq(owned.get_ammo_count(ammo_id), before, "retrieval dock restocks round")
+	runner.check(last_tick.get("orders", []).is_empty(), "retrieval does not salvage")
 
 
 static func _test_sensor_extension(runner: TestRunner, catalog: Catalog) -> void:
@@ -351,7 +446,7 @@ static func _test_defence_orbit_hull(runner: TestRunner, catalog: Catalog) -> vo
 		Vector2.ZERO, 0.0, 8000.0, "npc_orbit", [hostile], ["npc_orbit"], Vector2.ZERO
 	)
 	var leash := module_def.leash_m
-	var want_r := clampf(leash * 0.14, 140.0, 560.0)
+	var want_r := DroneRuntime._defence_orbit_radius(leash)
 	var sum := 0.0
 	var n := 0
 	for _i in range(160):
@@ -402,3 +497,100 @@ static func _test_attack_orbit_fires(runner: TestRunner, catalog: Catalog) -> vo
 		dist > 400.0 and dist < float(module_def.leash_m),
 		"attack drone keeps standoff from hostile"
 	)
+
+
+static func _test_drone_launch_ignores_weapons_gate(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := _owned_with_drone(catalog, "merc_lark_survey")
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var module_def := _module(catalog, "merc_lark_survey")
+	var weapons := ShipWeapons.new()
+	weapons.sync_selection(assembled)
+	var guidance := {
+		"ship_pos": Vector2(100, 200),
+		"ship_facing": 0.7,
+		"ship_velocity": Vector2(50, -20),
+	}
+	var out := weapons.tick(
+		catalog, assembled, owned, 0.016, true, false, guidance
+	)
+	runner.check(DroneRuntime.is_deployed(owned), "drone deploys when weapons gate denies fixed guns")
+	runner.check(bool(out.get("ammo_changed", false)), "drone launch spends round under weapons gate")
+	runner.check(
+		owned.deployed_drone.has("orbit_phase"),
+		"deployed state carries orbit fields"
+	)
+
+
+static func _test_drone_targetable_destructible(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := _owned_with_drone(catalog, "go_hornet_bay")
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var module_def := _module(catalog, "go_hornet_bay")
+	var ammo_id := module_def.ammunition_type
+	var before := owned.get_ammo_count(ammo_id)
+	var cooldowns := {}
+	DroneRuntime.handle_weapon_fire(
+		catalog,
+		assembled,
+		owned,
+		"light_weapon_1",
+		module_def,
+		true,
+		cooldowns,
+		Vector2.ZERO,
+		0.0,
+		Vector2.ZERO
+	)
+	owned.deployed_drone["task"] = DroneDirector.TASK_ATTACK
+	var drone_contact := DroneRuntime.nav_contact(catalog, owned, owned.id, true)
+	runner.check(not drone_contact.is_empty(), "nav contact while deployed")
+	runner.check_eq(
+		str(drone_contact.get("contact_kind", "")),
+		"drone",
+		"nav contact kind drone"
+	)
+	var contacts: Array = [drone_contact]
+	var observer := Vector2(1200, 0)
+	var ids := TargetLock.candidate_ids(contacts, observer)
+	runner.check(ids.has(DroneRuntime.nav_contact_id(owned.id)), "player lock list includes drone")
+	var opponent_ids := TargetLock.candidate_ids(contacts, Vector2.ZERO)
+	runner.check(opponent_ids.has(DroneRuntime.nav_contact_id(owned.id)), "opponent lock list includes drone")
+	var TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+	var actor = TrafficActorScript.new()
+	actor.id = "npc_drone_hunter"
+	actor.ai_state = TrafficActorScript.AiState.ENGAGE
+	actor.assembled_ship = ShipAssembler.assemble_owned(
+		catalog,
+		OwnedShip.from_template(
+			catalog,
+			{
+				"id": "npc_drone_hunter_ship",
+				"template_id": "pegasus_p101",
+				"chassis_id": "pegasus_chassis",
+			}
+		)
+	)
+	actor.owned_ship = OwnedShip.new()
+	actor._position = Vector2(300, 0)
+	actor.last_known_player_pos = Vector2(1000, 0)
+	actor.has_player_contact = true
+	TargetLock.refresh_npc_lock(actor, true, contacts)
+	runner.check_eq(
+		actor.locked_target_id,
+		DroneRuntime.nav_contact_id(owned.id),
+		"npc prefers closer drone lock"
+	)
+	var drone_pos: Vector2 = drone_contact.get("position", Vector2.ZERO)
+	runner.check(
+		not DroneRuntime.try_destroy_at(
+			owned,
+			drone_pos + Vector2(DroneRuntime.DRONE_HIT_RADIUS * 2.0, 0.0)
+		),
+		"impact outside radius misses"
+	)
+	runner.check(
+		DroneRuntime.try_destroy_at(owned, drone_pos),
+		"impact at airframe destroys"
+	)
+	runner.check(not DroneRuntime.is_deployed(owned), "destroy clears deployment")
+	runner.check_eq(owned.get_ammo_count(ammo_id), before - 1, "destroy does not restock")
+	runner.check(not DroneRuntime.try_destroy_at(owned, drone_pos), "miss after destroy is no-op")

@@ -63,6 +63,8 @@ func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -
 	if _drone_visual == null and weapon_spawn_root != null:
 		_drone_visual = preload("res://scripts/presentation/drone_visual.gd").new()
 		weapon_spawn_root.add_child(_drone_visual)
+	if _drone_visual != null and _drone_visual.has_method("bind"):
+		_drone_visual.call("bind", owned_ship, session)
 
 
 func set_nav_contacts(contacts: Array) -> void:
@@ -80,7 +82,16 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 			_drone_visual.call("hide_drone")
 		return
 	var sensor_range := float(assembled_ship.sensor_profile.get("range", 0.0))
-	var hostile_ids := DroneRuntime.collect_hostile_ship_ids(session, traffic_director, global_position)
+	var hostile_ids := DroneRuntime.collect_hostile_ship_ids(
+		session,
+		traffic_director,
+		global_position,
+		locked_target_id
+	)
+	var hostile_positions := DroneRuntime.collect_hostile_actor_positions(
+		traffic_director,
+		global_position
+	)
 	var context := DroneRuntime.build_context(
 		global_position,
 		motion.facing,
@@ -88,7 +99,8 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 		locked_target_id,
 		_nav_contacts,
 		hostile_ids,
-		motion.velocity
+		motion.velocity,
+		hostile_positions
 	)
 	var max_speed := float(assembled_ship.capacities.get("max_speed", 400.0))
 	if max_speed <= 0.0:
@@ -104,16 +116,22 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 	var drone_orders: Array = tick_result.get("orders", [])
 	if not drone_orders.is_empty():
 		_spawn_weapon_orders(drone_orders)
-	var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
-	var pose: Dictionary = tick_result.get("pose", {})
-	if _drone_visual != null and _drone_visual.has_method("sync_pose"):
-		_drone_visual.call(
-			"sync_pose",
-			catalog,
-			module_id,
-			pose.get("position", global_position),
-			pose.get("velocity", Vector2.ZERO)
-		)
+	var recalled_slot := str(tick_result.get("recalled_slot", ""))
+	if not recalled_slot.is_empty():
+		_on_drone_recall_docked(recalled_slot)
+	elif DroneRuntime.is_deployed(owned_ship):
+		var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
+		var pose: Dictionary = tick_result.get("pose", {})
+		if _drone_visual != null and _drone_visual.has_method("sync_pose"):
+			_drone_visual.call(
+				"sync_pose",
+				catalog,
+				module_id,
+				pose.get("position", global_position),
+				pose.get("velocity", Vector2.ZERO)
+			)
+	elif _drone_visual != null and _drone_visual.has_method("hide_drone"):
+		_drone_visual.call("hide_drone")
 	if (bool(tick_result.get("destroyed", false)) or bool(tick_result.get("ammo_changed", false))) and session != null:
 		session.changed.emit()
 
@@ -128,6 +146,8 @@ func configure(
 	owned_ship = owned
 	catalog = game_catalog
 	session = game_session
+	if _drone_visual != null and _drone_visual.has_method("bind"):
+		_drone_visual.call("bind", owned, game_session)
 	weapons.reset()
 	weapons.sync_selection(ship)
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
@@ -349,6 +369,23 @@ func query_weapon_guidance(target_id: String) -> Dictionary:
 	return {"active": true, "position": _guidance_lock_position}
 
 
+func _on_drone_recall_docked(recalled_slot: String) -> void:
+	if _drone_visual != null and _drone_visual.has_method("hide_drone"):
+		_drone_visual.call("hide_drone")
+	if assembled_ship == null:
+		return
+	for entry in assembled_ship.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if str(entry.get("slot", "")) != recalled_slot:
+			continue
+		var module_def: ModuleDef = entry.get("data", null)
+		if module_def == null:
+			return
+		weapons.start_cooldown(recalled_slot, ShipWeapons.fire_cycle_seconds(module_def))
+		return
+
+
 func _weapon_guidance_context() -> Dictionary:
 	return {
 		"lock_active": _guidance_lock_active and not locked_target_id.is_empty(),
@@ -431,10 +468,17 @@ func _wants_to_fire() -> bool:
 	return true
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
+func take_combat_hit(
+	delivery_type: String,
+	packets: Dictionary,
+	impact_pos: Vector2 = Vector2(NAN, NAN)
+) -> Dictionary:
 	if session == null or catalog == null or assembled_ship == null:
 		return {}
-	var result := session.apply_combat_hit(catalog, assembled_ship, delivery_type, packets)
+	var hull_pos := global_position
+	var result := session.apply_combat_hit(
+		catalog, assembled_ship, delivery_type, packets, impact_pos, hull_pos
+	)
 	refresh_hull_destroyed_presentation()
 	if _defence_visual != null:
 		var layers: Dictionary = result.get("defence_layers", {})

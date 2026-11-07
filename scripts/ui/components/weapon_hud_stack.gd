@@ -41,7 +41,7 @@ func rebuild_if_needed(
 			slot,
 			display_name,
 			hotkey,
-			_format_ammo(module_def, owned),
+			_format_ammo(module_def, owned, slot),
 			slot == weapons.selected_slot,
 			_cooldown_fraction(weapons, module_def, slot),
 			tooltip
@@ -63,7 +63,7 @@ func refresh_states(assembled: AssembledShip, weapons: ShipWeapons, owned: Owned
 			continue
 		var module_def: ModuleDef = entry.get("data", null)
 		chit.update_state(
-			_format_ammo(module_def, owned),
+			_format_ammo(module_def, owned, slot),
 			slot == weapons.selected_slot,
 			_cooldown_fraction(weapons, module_def, slot)
 		)
@@ -90,12 +90,19 @@ func _build_signature(assembled: AssembledShip) -> String:
 	return "|".join(parts)
 
 
-static func _format_ammo(module_def: ModuleDef, owned: OwnedShip) -> String:
+static func _format_ammo(module_def: ModuleDef, owned: OwnedShip, slot: String = "") -> String:
 	if module_def == null:
 		return "-"
 	if module_def.ammunition_type.is_empty():
 		return "-"
 	if owned == null:
+		return "0"
+	if (
+		module_def.weapon_type == "drone"
+		and not slot.is_empty()
+		and DroneRuntime.is_deployed(owned)
+		and DroneRuntime.deployed_slot(owned) == slot
+	):
 		return "0"
 	return str(owned.get_ammo_count(module_def.ammunition_type))
 

@@ -52,10 +52,16 @@ func take_weapon_hit(damage: float) -> void:
 	take_combat_hit("ballistic", {"kinetic": damage})
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary) -> Dictionary:
+func take_combat_hit(
+	delivery_type: String,
+	packets: Dictionary,
+	impact_pos: Vector2 = Vector2(NAN, NAN)
+) -> Dictionary:
 	if actor == null or catalog == null:
 		return {}
-	var result: Dictionary = actor.take_combat_hit(delivery_type, packets, catalog.get_traffic_config())
+	var result: Dictionary = actor.take_combat_hit(
+		delivery_type, packets, catalog.get_traffic_config(), impact_pos
+	)
 	if _defence_visual != null:
 		_defence_visual.play_hit_layers(result.get("defence_layers", {}))
 	return result
@@ -90,6 +96,8 @@ func query_weapon_guidance(target_id: String) -> Dictionary:
 		return {"active": false}
 	if target_id == TargetLock.PLAYER_TARGET_ID:
 		return {"active": true, "position": actor.last_known_player_pos}
+	if target_id.begins_with("drone:"):
+		return {"active": true, "position": actor.locked_drone_lock_pos}
 	return {"active": false}
 
 

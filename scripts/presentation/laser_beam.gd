@@ -34,7 +34,8 @@ static func spawn(
 			packets,
 			shooter,
 			direction,
-			WeaponAttributionScript.capture(shooter)
+			WeaponAttributionScript.capture(shooter),
+			hit.position
 		)
 
 	var beam := Line2D.new()

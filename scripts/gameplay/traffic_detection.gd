@@ -57,12 +57,14 @@ static func refresh_player_detection(
 	player_signature: Dictionary,
 	player_broadcasting: bool,
 	traffic_config: Dictionary,
-	observer_reads_beacons: bool = false
+	observer_reads_beacons: bool = false,
+	drone_contacts: Array = []
 ) -> void:
 	if actor.assembled_ship == null:
 		actor.player_detected = false
 		actor.has_player_contact = false
 		actor.locked_target_id = ""
+		actor.locked_drone_lock_pos = Vector2.ZERO
 		actor._cached_player_contact.clear()
 		return
 
@@ -131,7 +133,7 @@ static func refresh_player_detection(
 	else:
 		actor._cached_player_contact.clear()
 
-	TargetLock.refresh_npc_lock(actor, actor.has_player_contact)
+	TargetLock.refresh_npc_lock(actor, actor.has_player_contact, drone_contacts)
 
 
 static func get_cached_player_contact(actor) -> Dictionary:

@@ -21,6 +21,7 @@ const COAST_HEADING_TOLERANCE := TrafficRouting.COAST_HEADING_TOLERANCE
 const LAUNCH_SPEED := TrafficSpawn.LAUNCH_SPEED
 const DETECTION_STAGGER_FRAMES := TrafficDetection.DETECTION_STAGGER_FRAMES
 const DETECTION_RANGE_HYSTERESIS := TrafficDetection.DETECTION_RANGE_HYSTERESIS
+const NPC_DRONE_LAUNCH_RANGE := 2200.0
 
 
 static func create(
@@ -111,6 +112,7 @@ var sandbox_passive_foe: bool = false
 var player_detected: bool = false
 var has_player_contact: bool = false
 var locked_target_id: String = ""
+var locked_drone_lock_pos: Vector2 = Vector2.ZERO
 var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
 var cycle_pending: bool = false
@@ -154,6 +156,9 @@ func weapon_guidance_context() -> Dictionary:
 	return {
 		"lock_active": not locked_target_id.is_empty(),
 		"target_id": locked_target_id,
+		"ship_pos": position,
+		"ship_facing": motion.facing,
+		"ship_velocity": motion.velocity,
 	}
 
 
@@ -175,13 +180,28 @@ func take_weapon_hit(damage: float, traffic_config: Dictionary) -> void:
 	take_combat_hit("ballistic", {"kinetic": damage}, traffic_config)
 
 
-func take_combat_hit(delivery_type: String, packets: Dictionary, traffic_config: Dictionary) -> Dictionary:
+func take_combat_hit(
+	delivery_type: String,
+	packets: Dictionary,
+	traffic_config: Dictionary,
+	impact_pos: Vector2 = Vector2(NAN, NAN)
+) -> Dictionary:
 	if ai_state == AiState.DESTROYED:
 		return {"intercepted": false, "hull_damage": 0.0}
 	if combat_state == null:
 		combat_state = ShipCombatState.from_assembled(assembled_ship)
 
-	var result := ShipCombat.resolve_hit(assembled_ship, combat_state, delivery_type, packets)
+	var hull_pos := position
+	var result := ShipCombat.resolve_hit(
+		assembled_ship,
+		combat_state,
+		delivery_type,
+		packets,
+		impact_pos,
+		hull_pos,
+		null,
+		null
+	)
 	if bool(result.get("intercepted", false)):
 		return result
 
@@ -283,7 +303,8 @@ func tick(
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
 	player_thrusting: bool = false,
-	world: WorldPresence = null
+	world: WorldPresence = null,
+	drone_contacts: Array = []
 ) -> void:
 	pending_weapon_orders.clear()
 	cycle_pending = false
@@ -330,7 +351,8 @@ func tick(
 		traffic_envelope,
 		world_loader,
 		prev_position,
-		world
+		world,
+		drone_contacts
 	)
 	_tick_bounty_escape(catalog, traffic_config)
 
@@ -357,7 +379,8 @@ func _tick_full_sim(
 	traffic_envelope: float,
 	world_loader: WorldLoader,
 	prev_position: Vector2,
-	world: WorldPresence = null
+	world: WorldPresence = null,
+	drone_contacts: Array = []
 ) -> void:
 	_ensure_sim(catalog)
 	var inputs := _build_ai_inputs(
@@ -370,6 +393,7 @@ func _tick_full_sim(
 		traffic_config,
 		traffic_envelope
 	)
+	_apply_npc_drone_combat_inputs(inputs, catalog, player_pos)
 	var use_cruise_cap := ai_state == AiState.ENGAGE or ai_state == AiState.FLEE
 	var use_peaceful_blend := ai_state != AiState.ENGAGE
 
@@ -402,7 +426,8 @@ func _tick_full_sim(
 
 	var firing := fire_requested and operating_state.weapons_allowed
 	var weapon_result: Dictionary = sim.step_weapons(delta, firing, weapon_guidance_context())
-	pending_weapon_orders = weapon_result.get("orders", [])
+	pending_weapon_orders.assign(weapon_result.get("orders", []))
+	_append_npc_drone_weapon_orders(catalog, delta, player_pos, player_vel, drone_contacts)
 
 	if bool(weapon_result.get("ammo_changed", false)):
 		_weapon_profile_dirty = true
@@ -555,7 +580,8 @@ func refresh_player_detection(
 	player_signature: Dictionary,
 	player_broadcasting: bool,
 	traffic_config: Dictionary,
-	observer_reads_beacons: bool = false
+	observer_reads_beacons: bool = false,
+	drone_contacts: Array = []
 ) -> void:
 	TrafficDetection.refresh_player_detection(
 		self,
@@ -564,7 +590,8 @@ func refresh_player_detection(
 		player_signature,
 		player_broadcasting,
 		traffic_config,
-		observer_reads_beacons
+		observer_reads_beacons,
+		drone_contacts
 	)
 
 
@@ -588,11 +615,97 @@ func get_sensor_contact(
 
 
 func _combat_target_pos(player_pos: Vector2) -> Vector2:
-	if has_player_contact:
-		return player_pos
-	if last_known_player_pos != Vector2.ZERO:
-		return last_known_player_pos
+	if locked_target_id.begins_with("drone:") and locked_drone_lock_pos.is_finite():
+		return locked_drone_lock_pos
+	if locked_target_id == TargetLock.PLAYER_TARGET_ID or locked_target_id.is_empty():
+		if has_player_contact:
+			return player_pos
+		if last_known_player_pos != Vector2.ZERO:
+			return last_known_player_pos
 	return player_pos
+
+
+func _apply_npc_drone_combat_inputs(inputs: Dictionary, catalog: Catalog, player_pos: Vector2) -> void:
+	if ai_state != AiState.ENGAGE or assembled_ship == null or owned_ship == null:
+		return
+	if DroneRuntime.is_deployed(owned_ship):
+		inputs["fire"] = false
+		return
+	var drone_slot := ShipWeapons.first_drone_weapon_slot(assembled_ship)
+	if drone_slot.is_empty():
+		return
+	var entry := _weapon_entry_for_slot(drone_slot)
+	var module_def: ModuleDef = entry.get("data", null)
+	if module_def == null or module_def.ammunition_type.is_empty():
+		return
+	if owned_ship.get_ammo_count(module_def.ammunition_type) < 1:
+		return
+	if weapons.cooldown_remaining(drone_slot) > 0.0:
+		return
+	var aim_pos := _combat_target_pos(player_pos)
+	if position.distance_to(aim_pos) > NPC_DRONE_LAUNCH_RANGE:
+		return
+	weapons.select_slot(drone_slot)
+	inputs["fire"] = true
+
+
+func _append_npc_drone_weapon_orders(
+	catalog: Catalog,
+	delta: float,
+	player_pos: Vector2,
+	player_vel: Vector2,
+	drone_contacts: Array
+) -> void:
+	if catalog == null or owned_ship == null or assembled_ship == null:
+		return
+	if not DroneRuntime.is_deployed(owned_ship):
+		return
+	var sensor_range := float(assembled_ship.sensor_profile.get("range", 0.0))
+	var contacts := DroneRuntime.combat_contacts_for_npc(player_pos, player_vel, drone_contacts)
+	var hostile_ids := DroneRuntime.hostile_ids_for_npc_actor(self)
+	var context := DroneRuntime.build_context(
+		position,
+		motion.facing,
+		sensor_range,
+		locked_target_id,
+		contacts,
+		hostile_ids,
+		motion.velocity,
+		[player_pos]
+	)
+	var max_speed := float(assembled_ship.capacities.get("max_speed", 400.0))
+	if max_speed <= 0.0:
+		max_speed = 400.0
+	var tick_result := DroneRuntime.tick(
+		catalog,
+		assembled_ship,
+		owned_ship,
+		delta,
+		context,
+		max_speed
+	)
+	var drone_orders: Array = tick_result.get("orders", [])
+	if not drone_orders.is_empty():
+		pending_weapon_orders.append_array(drone_orders)
+	var recalled_slot := str(tick_result.get("recalled_slot", ""))
+	if not recalled_slot.is_empty():
+		var bay_entry := _weapon_entry_for_slot(recalled_slot)
+		var bay_def: ModuleDef = bay_entry.get("data", null)
+		DroneRuntime.complete_recall(catalog, owned_ship)
+		if bay_def != null:
+			weapons.start_cooldown(recalled_slot, ShipWeapons.fire_cycle_seconds(bay_def))
+
+
+func _weapon_entry_for_slot(slot: String) -> Dictionary:
+	if assembled_ship == null or slot.is_empty():
+		return {}
+	for entry_variant in assembled_ship.modules_in_category("weapon"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("slot", "")) == slot:
+			return entry
+	return {}
 
 
 func should_engage(traffic_config: Dictionary) -> bool:

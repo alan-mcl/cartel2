@@ -235,7 +235,8 @@ func _apply_hit(collider: Object) -> void:
 		_packets,
 		_shooter,
 		_velocity,
-		_hit_context
+		_hit_context,
+		global_position
 	)
 
 

@@ -739,10 +739,27 @@ func load_combat_from_owned_ship(catalog: Catalog, ship_id: String) -> void:
 	combat.apply_combat_state(state)
 
 
-func apply_combat_hit(catalog: Catalog, assembled_ship: AssembledShip, delivery_type: String, packets: Dictionary) -> Dictionary:
+func apply_combat_hit(
+	catalog: Catalog,
+	assembled_ship: AssembledShip,
+	delivery_type: String,
+	packets: Dictionary,
+	impact_pos: Vector2 = Vector2(NAN, NAN),
+	owner_hull_pos: Vector2 = Vector2(NAN, NAN)
+) -> Dictionary:
 	var state := combat.build_combat_state(assembled_ship)
 	var hull_was_disabled := state.is_hull_disabled()
-	var result := ShipCombat.resolve_hit(assembled_ship, state, delivery_type, packets)
+	var owned := fleet.get_current_owned_ship()
+	var result := ShipCombat.resolve_hit(
+		assembled_ship,
+		state,
+		delivery_type,
+		packets,
+		impact_pos,
+		owner_hull_pos,
+		owned,
+		catalog
+	)
 	combat.apply_combat_state(state)
 	if _track_career_enabled():
 		career.record_hull_damage(float(result.get("hull_damage", 0.0)))

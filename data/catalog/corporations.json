@@ -315,7 +315,7 @@
 		"name": "Crown & Anchor",
 		"callsign_prefix": "CA",
 		"ad_voice": "polished",
-		"trade": "Crown & Anchor — insured freight and charter brokerage.",
+		"trade": "Crown & Anchor - insured freight and charter brokerage.",
 		"hq": {
 			"placement": "orbital",
 			"sector_id": "new_carthage",

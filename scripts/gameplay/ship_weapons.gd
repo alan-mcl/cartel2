@@ -58,6 +58,20 @@ func arm_next(assembled: AssembledShip) -> void:
 		_cooldowns[selected_slot] = maxf(cooldown_remaining(selected_slot), stagger)
 
 
+static func first_drone_weapon_slot(assembled: AssembledShip) -> String:
+	if assembled == null:
+		return ""
+	for entry in assembled.modules_in_category("weapon"):
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var module_def: ModuleDef = entry.get("data", null)
+		if DroneRuntime.is_drone_module(module_def):
+			var slot := str(entry.get("slot", ""))
+			if not slot.is_empty():
+				return slot
+	return ""
+
+
 static func weapon_slot_order(assembled: AssembledShip) -> Array[String]:
 	var slots: Array[String] = []
 	if assembled == null:
@@ -73,6 +87,18 @@ static func weapon_slot_order(assembled: AssembledShip) -> Array[String]:
 
 func cooldown_remaining(slot: String) -> float:
 	return maxf(float(_cooldowns.get(slot, 0.0)), 0.0)
+
+
+func clear_cooldown(slot: String) -> void:
+	if slot.is_empty():
+		return
+	_cooldowns.erase(slot)
+
+
+func start_cooldown(slot: String, seconds: float) -> void:
+	if slot.is_empty() or seconds <= 0.0:
+		return
+	_cooldowns[slot] = seconds
 
 
 func cooldown_fraction(slot: String, cycle_seconds: float) -> float:
@@ -124,7 +150,7 @@ func tick(
 		else:
 			_cooldowns[slot] = remaining
 
-	if not firing or not weapons_allowed or assembled == null or owned == null or catalog == null:
+	if not firing or assembled == null or owned == null or catalog == null:
 		return {"orders": orders, "out_of_ammo": out_of_ammo, "ammo_changed": ammo_changed}
 
 	if selected_slot.is_empty():
@@ -140,6 +166,10 @@ func tick(
 
 	var module_def: ModuleDef = entry.get("data", null)
 	if module_def == null or module_def.rate_of_fire <= 0.0:
+		return {"orders": orders, "out_of_ammo": out_of_ammo, "ammo_changed": ammo_changed}
+
+	## Drone bays only allocate the bay’s airframe round; they do not draw weapon-bus power like fixed guns.
+	if not weapons_allowed and not DroneRuntime.is_drone_module(module_def):
 		return {"orders": orders, "out_of_ammo": out_of_ammo, "ammo_changed": ammo_changed}
 
 	if DroneRuntime.is_drone_module(module_def):

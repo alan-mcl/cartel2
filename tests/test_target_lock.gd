@@ -12,6 +12,8 @@ static func run(runner: TestRunner) -> void:
 	_test_no_capability(runner)
 	_test_hull_radius_scales_with_mass(runner)
 	_test_npc_lock_on_player_contact(runner, catalog)
+	_test_npc_lock_player_attack_drone_nearest(runner, catalog)
+	_test_npc_lock_attack_before_defence(runner, catalog)
 	_test_peaceful_npc_no_lock(runner, catalog)
 	_test_acquire_landmark(runner)
 	_test_cycle_mixed_kinds(runner)
@@ -158,6 +160,85 @@ static func _test_npc_lock_on_player_contact(runner: TestRunner, catalog: Catalo
 		actor.locked_target_id,
 		TargetLock.PLAYER_TARGET_ID,
 		"engager locks player with capability"
+	)
+
+
+static func _test_npc_lock_player_attack_drone_nearest(runner: TestRunner, catalog: Catalog) -> void:
+	var TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+	var actor = TrafficActorScript.new()
+	actor.id = "engager"
+	actor.ai_state = TrafficActorScript.AiState.ENGAGE
+	actor.assembled_ship = ShipAssembler.assemble_owned(
+		catalog,
+		OwnedShip.from_template(
+			catalog,
+			{
+				"id": "npc_engager_drone",
+				"template_id": "pegasus_p101",
+				"chassis_id": "pegasus_chassis",
+			}
+		)
+	)
+	actor.owned_ship = OwnedShip.new()
+	actor._position = Vector2(500, 0)
+	actor.last_known_player_pos = Vector2(2000, 0)
+	actor.has_player_contact = true
+	var attack_drone := {
+		"id": "drone:player_ship",
+		"contact_kind": "drone",
+		"position": Vector2(800, 0),
+		"drone_task": "attack",
+		"drone_owner_player": true,
+	}
+	TargetLock.refresh_npc_lock(actor, true, [attack_drone])
+	runner.check_eq(
+		actor.locked_target_id,
+		"drone:player_ship",
+		"npc locks nearer player attack drone over distant player hull"
+	)
+
+
+static func _test_npc_lock_attack_before_defence(runner: TestRunner, catalog: Catalog) -> void:
+	var TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+	var actor = TrafficActorScript.new()
+	actor.id = "engager"
+	actor.ai_state = TrafficActorScript.AiState.ENGAGE
+	actor.assembled_ship = ShipAssembler.assemble_owned(
+		catalog,
+		OwnedShip.from_template(
+			catalog,
+			{
+				"id": "npc_engager_drone2",
+				"template_id": "pegasus_p101",
+				"chassis_id": "pegasus_chassis",
+			}
+		)
+	)
+	actor.owned_ship = OwnedShip.new()
+	actor._position = Vector2.ZERO
+	actor.last_known_player_pos = Vector2(5000, 0)
+	actor.has_player_contact = true
+	var contacts: Array = [
+		{
+			"id": "drone:player_ship",
+			"contact_kind": "drone",
+			"position": Vector2(400, 0),
+			"drone_task": "defence",
+			"drone_owner_player": true,
+		},
+		{
+			"id": "drone:player_ship_b",
+			"contact_kind": "drone",
+			"position": Vector2(900, 0),
+			"drone_task": "attack",
+			"drone_owner_player": true,
+		},
+	]
+	TargetLock.refresh_npc_lock(actor, true, contacts)
+	runner.check_eq(
+		actor.locked_target_id,
+		"drone:player_ship_b",
+		"npc prefers player attack drone over nearer defence drone"
 	)
 
 

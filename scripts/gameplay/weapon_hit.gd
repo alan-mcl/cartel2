@@ -8,7 +8,8 @@ static func apply(
 	packets: Dictionary,
 	shooter: Variant = null,
 	shot_velocity: Vector2 = Vector2.ZERO,
-	context: WeaponHitContext = null
+	context: WeaponHitContext = null,
+	impact_pos: Vector2 = Vector2(NAN, NAN)
 ) -> void:
 	if collider == null:
 		return
@@ -17,7 +18,7 @@ static func apply(
 		return
 	var result: Dictionary = {}
 	if collider.has_method("take_combat_hit"):
-		result = collider.call("take_combat_hit", delivery_type, packets)
+		result = collider.call("take_combat_hit", delivery_type, packets, impact_pos)
 	elif collider.has_method("take_weapon_hit"):
 		collider.call("take_weapon_hit", ShipCombat.sum_packets(packets))
 	else:

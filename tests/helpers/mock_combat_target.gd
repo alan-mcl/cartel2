@@ -5,7 +5,9 @@ var destroy_on_hit: bool = true
 var hit_count: int = 0
 
 
-func take_combat_hit(_delivery_type: String, _packets: Dictionary) -> Dictionary:
+func take_combat_hit(
+	_delivery_type: String, _packets: Dictionary, _impact_pos: Vector2 = Vector2(NAN, NAN)
+) -> Dictionary:
 	hit_count += 1
 	if destroy_on_hit and hit_count == 1:
 		return {"destroyed": true, "hull_damage": 1.0, "intercepted": false}

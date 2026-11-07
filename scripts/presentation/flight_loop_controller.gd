@@ -130,7 +130,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				_player.assembled_ship,
 				_player.operating_state,
 				player_broadcasting,
-				_main.session.world
+				_main.session.world,
+				_main.session.get_current_owned_ship()
 			)
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog, delta)
@@ -332,6 +333,11 @@ func _collect_nav_contacts() -> Array:
 		_ensure_traffic_director()
 		if _traffic_director != null:
 			contacts.append_array(_traffic_director.get_traffic_contacts())
+		var player_owned: OwnedShip = _main.session.get_current_owned_ship()
+		var traffic_actors: Array = []
+		if _traffic_director != null:
+			traffic_actors = _traffic_director.actors
+		DroneRuntime.append_deployed_contacts(contacts, _catalog, player_owned, traffic_actors)
 	return contacts
 
 
@@ -440,7 +446,8 @@ func _tick_volatile_site_traffic(delta: float, physics_frame: int) -> void:
 		_player.assembled_ship,
 		_player.operating_state,
 		player_broadcasting,
-		_main.session.world
+		_main.session.world,
+		_main.session.get_current_owned_ship()
 	)
 	if _traffic_view != null:
 		_traffic_view.sync(_traffic_director.actors, _catalog, delta)

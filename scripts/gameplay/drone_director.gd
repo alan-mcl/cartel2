@@ -12,6 +12,9 @@ const CAP_DEFENCE := "defence"
 const CAP_SENSOR := "sensor"
 const CAP_RETRIEVAL := "retrieval"
 
+## Minimum observer radius when classifying nearby threat actors (hulls without a sensor module).
+const HOSTILE_THREAT_SENSOR_FLOOR := 8000.0
+
 
 static func pick_task(module_def: ModuleDef, context: Dictionary) -> String:
 	if module_def == null:
@@ -25,17 +28,18 @@ static func pick_task(module_def: ModuleDef, context: Dictionary) -> String:
 	var hostile_ids: Array = context.get("hostile_ship_ids", [])
 
 	if not locked.is_empty():
-		var lock_id := str(locked.get("id", ""))
 		if _is_ship_lock(locked):
 			if is_hostile_ship(locked, hostile_ids):
 				return _first_cap(caps, [CAP_ATTACK, CAP_DEFENCE, CAP_SENSOR])
+			if _has_attack_and_defence(module_def) and hostile_present:
+				return _first_cap(caps, [CAP_ATTACK, CAP_DEFENCE, CAP_SENSOR])
 			return _first_cap(caps, [CAP_RETRIEVAL, CAP_SENSOR, CAP_DEFENCE])
 		if hostile_present:
-			return _first_cap(caps, [CAP_RETRIEVAL, CAP_SENSOR, CAP_DEFENCE, CAP_ATTACK])
+			return _first_cap(caps, [CAP_ATTACK, CAP_RETRIEVAL, CAP_SENSOR, CAP_DEFENCE])
 		return _first_cap(caps, [CAP_RETRIEVAL, CAP_SENSOR, CAP_DEFENCE, CAP_ATTACK])
 
 	if hostile_present:
-		return _first_cap(caps, [CAP_DEFENCE, CAP_ATTACK, CAP_SENSOR])
+		return _first_cap(caps, [CAP_ATTACK, CAP_DEFENCE, CAP_SENSOR])
 	return _first_cap(caps, [CAP_SENSOR, TASK_HOLD])
 
 
@@ -58,6 +62,11 @@ static func _drone_capabilities(module_def: ModuleDef) -> PackedStringArray:
 	return out
 
 
+static func _has_attack_and_defence(module_def: ModuleDef) -> bool:
+	var caps := _drone_capabilities(module_def)
+	return caps.has(CAP_ATTACK) and caps.has(CAP_DEFENCE)
+
+
 static func _is_ship_lock(contact: Dictionary) -> bool:
 	return str(contact.get("contact_kind", "")) == "traffic_npc"
 
@@ -72,10 +81,13 @@ static func is_hostile_ship(contact: Dictionary, hostile_ids: Array) -> bool:
 	return false
 
 
-static func hostile_present_in_sensor_range(context: Dictionary) -> bool:
+static func hostile_detection_range(context: Dictionary) -> float:
 	var sensor_range := float(context.get("sensor_range", 0.0))
-	if sensor_range <= 0.0:
-		return false
+	return maxf(sensor_range, HOSTILE_THREAT_SENSOR_FLOOR)
+
+
+static func hostile_present_in_sensor_range(context: Dictionary) -> bool:
+	var detection_range := hostile_detection_range(context)
 	var observer: Vector2 = context.get("observer_pos", Vector2.ZERO)
 	var hostile_ids: Array = context.get("hostile_ship_ids", [])
 	var contacts: Array = context.get("contacts", [])
@@ -88,6 +100,19 @@ static func hostile_present_in_sensor_range(context: Dictionary) -> bool:
 		if not is_hostile_ship(contact, hostile_ids):
 			continue
 		var pos: Vector2 = contact.get("position", Vector2.ZERO)
-		if observer.distance_to(pos) <= sensor_range:
+		if observer.distance_to(pos) <= detection_range:
+			return true
+	for pos_variant in context.get("hostile_positions", []):
+		var threat_pos := _read_world_position(pos_variant)
+		if threat_pos.is_finite() and observer.distance_to(threat_pos) <= detection_range:
 			return true
 	return false
+
+
+static func _read_world_position(value: Variant) -> Vector2:
+	if value is Vector2:
+		return value
+	if typeof(value) != TYPE_DICTIONARY:
+		return Vector2(NAN, NAN)
+	var p: Dictionary = value
+	return Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))

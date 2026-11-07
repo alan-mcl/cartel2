@@ -1,7 +1,7 @@
 [
   {
     "id": "cargo_bay_4",
-    "name": "Cargo Bay 4",
+    "name": "BulkLine Cargo Bay 4",
     "maker": "Tukey Enterprises",
     "brand": "BulkLine",
     "category": "cargo",
@@ -9,7 +9,7 @@
     "volume": 3.0,
     "cargo_capacity": 4.0,
     "cost": 400,
-    "description": "Compact internal cargo hold.",
+    "description": "BulkLine Cargo Bays are the best, forget the rest and pack your freight with us!",
     "capabilities": [],
     "signature": {
       "thermal": 0.3,
@@ -20,7 +20,7 @@
   },
   {
     "id": "cargo_bay_10",
-    "name": "Cargo Bay 10",
+    "name": "BulkLine Cargo Bay 10",
     "maker": "Tukey Enterprises",
     "brand": "BulkLine",
     "category": "cargo",
@@ -28,7 +28,7 @@
     "volume": 6.0,
     "cargo_capacity": 10.0,
     "cost": 750,
-    "description": "Standard freighter cargo bay.",
+    "description": "BulkLine Cargo Bays are the best, forget the rest and pack your freight with us!",
     "capabilities": [],
     "signature": {
       "thermal": 0.3,
@@ -39,7 +39,7 @@
   },
   {
     "id": "cargo_bay_20",
-    "name": "Cargo Bay 20",
+    "name": "BulkLine Cargo Bay 20",
     "maker": "Tukey Enterprises",
     "brand": "BulkLine",
     "category": "cargo",
@@ -47,7 +47,7 @@
     "volume": 10.0,
     "cargo_capacity": 20.0,
     "cost": 1100,
-    "description": "Large internal cargo hold.",
+    "description": "BulkLine Cargo Bays are the best, forget the rest and pack your freight with us!",
     "capabilities": [],
     "signature": {
       "thermal": 0.3,
@@ -58,7 +58,7 @@
   },
   {
     "id": "gi_dry_hold_4",
-    "name": "Dry Hold 4",
+    "name": "GI Freight Dry Hold 4",
     "maker": "General Industrial",
     "brand": "GI Freight",
     "category": "cargo",
@@ -66,7 +66,7 @@
     "volume": 3.0,
     "cargo_capacity": 4.0,
     "cost": 390,
-    "description": "GI's entry dry bulk cell for light couriers.",
+    "description": "GI Freight provides cost effective dry bulk freight capacity.",
     "capabilities": [],
     "signature": {
       "thermal": 0.3,
@@ -85,7 +85,7 @@
     "volume": 10.0,
     "cargo_capacity": 20.0,
     "cost": 1075,
-    "description": "Atlas industrial dry hold sized for heavy haulers.",
+    "description": "Atlas Loadmaster industrial dry hold line is sized for heavy haulers with bulk cargo requirements.",
     "capabilities": [],
     "signature": {
       "thermal": 0.32,
@@ -96,7 +96,7 @@
   },
   {
     "id": "ok_coolstore_10",
-    "name": "Coolstore 10",
+    "name": "Heartland Coolstore 10",
     "maker": "Oklahoma Combine",
     "brand": "Heartland",
     "category": "cargo",
@@ -106,7 +106,7 @@
     "power_demand": 1.4,
     "compute_demand": 0.4,
     "cost": 1400,
-    "description": "Refrigerated hold for agri cold chain between worlds.",
+    "description": "Heartland refrigerated holds maintain the cold chain between worlds.",
     "capabilities": [
       "refrigerated"
     ],
@@ -119,7 +119,7 @@
   },
   {
     "id": "gf_agri_live_10",
-    "name": "AgriLive 10",
+    "name": "AgriLive 10T Bay",
     "maker": "Evergreen Group",
     "brand": "AgriLive",
     "category": "cargo",
@@ -129,7 +129,7 @@
     "power_demand": 2.0,
     "compute_demand": 0.8,
     "cost": 1850,
-    "description": "Climate-controlled live cargo for stock and nursery shipments.",
+    "description": "No better way to move your livestock or nursery plants that Evergreen's climate-controlled Agrilive cargo bay.",
     "capabilities": [
       "life_support_integrated"
     ],
@@ -142,7 +142,7 @@
   },
   {
     "id": "chettiar_compute_vault_10",
-    "name": "Compute Vault 10",
+    "name": "VaultLine 10 Cargo",
     "maker": "Chettiar Holdings",
     "brand": "VaultLine",
     "category": "cargo",
@@ -152,7 +152,7 @@
     "power_demand": 2.2,
     "compute_demand": 3.5,
     "cost": 3200,
-    "description": "Data-centre grade conditioning for shipped compute cores.",
+    "description": "Use VaultLine holds from Chettiar. Data-centre grade conditions meet even the most rigourous compliance requirements for any kind of shipped compute.",
     "capabilities": [
       "compute_integrated"
     ],
@@ -165,7 +165,7 @@
   },
   {
     "id": "gi_chemlock_10",
-    "name": "ChemLock 10",
+    "name": "GI ChemLock 10 Hold",
     "maker": "General Industrial",
     "brand": "ChemLock",
     "category": "cargo",
@@ -175,7 +175,7 @@
     "power_demand": 1.6,
     "compute_demand": 1.0,
     "cost": 2100,
-    "description": "Containment-rated hold for chemicals and pharma.",
+    "description": "GI Chemlock holds provide containment-rated cargo capability for chemicals, pharma and other biohazardous loads.",
     "capabilities": [
       "biohazard"
     ],
@@ -198,7 +198,7 @@
     "power_demand": 0.6,
     "compute_demand": 1.2,
     "cost": 2400,
-    "description": "Chain-of-custody hold for insured and high-value freight.",
+    "description": "Bonded brand holding bays from C&A ensure standards-compliant chain-of-custody for insured and high-value freight.",
     "capabilities": [
       "secure_cargo"
     ],
@@ -211,7 +211,7 @@
   },
   {
     "id": "ok_armory_cell_10",
-    "name": "Armoury Cell 10",
+    "name": "Heartland Armoury Cell 10",
     "maker": "Oklahoma Combine",
     "brand": "Heartland",
     "category": "cargo",
@@ -221,7 +221,7 @@
     "power_demand": 0.4,
     "compute_demand": 0.5,
     "cost": 3500,
-    "description": "Blast-rated magazine cell for military goods and ordnance.",
+    "description": "Heartland military grade holds provide secure and blast-rated magazine cells for military goods and ordnance.",
     "capabilities": [
       "military_grade"
     ],
@@ -234,7 +234,7 @@
   },
   {
     "id": "mer_coldchain_4",
-    "name": "Coldchain 4",
+    "name": "Coldchain Hold 4",
     "maker": "The Meridian Company",
     "brand": "Meridian Cold",
     "category": "cargo",
@@ -244,7 +244,7 @@
     "power_demand": 1.0,
     "compute_demand": 0.3,
     "cost": 950,
-    "description": "Compact refrigerated cell for courier food runs.",
+    "description": "Choose Meridian Cold chain holds for refrigerated cargo apacity at an unbeatable value-based price point.",
     "capabilities": [
       "refrigerated"
     ],
@@ -257,7 +257,7 @@
   },
   {
     "id": "hanseatic_pharma_4",
-    "name": "PharmaSeal 4",
+    "name": "PharmaSeal 4T Bay",
     "maker": "Hanseatic Ltd",
     "brand": "PharmaSeal",
     "category": "cargo",
@@ -267,7 +267,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.6,
     "cost": 1200,
-    "description": "Small biohazard-rated box for high-value medical cargo.",
+    "description": "PharmaSeal 4T is an elegant and refined biohazard-rated cargo solution for small high-value medical cargo manifests.",
     "capabilities": [
       "biohazard"
     ],
@@ -280,7 +280,7 @@
   },
   {
     "id": "frz_custody_4",
-    "name": "Custody 4",
+    "name": "Custody Hold 4",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Custody",
     "category": "cargo",
@@ -290,7 +290,7 @@
     "power_demand": 0.5,
     "compute_demand": 0.9,
     "cost": 1100,
-    "description": "Bonded courier cell with audit logging.",
+    "description": "Custory holds. Bonded courier cargo bay with audit logging.",
     "capabilities": [
       "secure_cargo"
     ],
@@ -303,7 +303,7 @@
   },
   {
     "id": "ok_armory_4",
-    "name": "Armoury 4",
+    "name": "Heartland Armoury Cell 4",
     "maker": "Oklahoma Combine",
     "brand": "Heartland",
     "category": "cargo",
@@ -313,7 +313,7 @@
     "power_demand": 0.3,
     "compute_demand": 0.2,
     "cost": 1600,
-    "description": "Reinforced small cell for licensed military shipments.",
+    "description": "Heartland military grade holds provide secure and blast-rated magazine cells for military goods and ordnance.",
     "capabilities": [
       "military_grade"
     ],
@@ -326,7 +326,7 @@
   },
   {
     "id": "carthage_live_4",
-    "name": "LiveBox 4",
+    "name": "LiveBox Cargo Bay 4",
     "maker": "Carthage Mercantile",
     "brand": "LiveBox",
     "category": "cargo",

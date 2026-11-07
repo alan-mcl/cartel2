@@ -9,6 +9,9 @@ const PEGASUS_LONGEST_AXIS := 70.0
 const FAR_LOD_HULL_SCALE := 0.65
 const MIN_HULL_RADIUS := 10.0
 
+const NPC_DRONE_TIER_PLAYER_OR_ATTACK := 0
+const NPC_DRONE_TIER_DEFENCE := 1
+
 
 static func has_capability(assembled: AssembledShip) -> bool:
 	return assembled != null and assembled.has_capability(CAPABILITY_ID)
@@ -155,17 +158,83 @@ static func _round_to_even(value: float) -> float:
 	return float(rounded)
 
 
+static func npc_drone_lock_tier(contact: Dictionary) -> int:
+	if not bool(contact.get("drone_owner_player", false)):
+		return 99
+	var task := str(contact.get("drone_task", ""))
+	if task == "attack":
+		return NPC_DRONE_TIER_PLAYER_OR_ATTACK
+	if task == "defence":
+		return NPC_DRONE_TIER_DEFENCE
+	return 99
+
+
 static func refresh_npc_lock(
 	actor,
-	has_player_contact: bool
+	has_player_contact: bool,
+	drone_contacts: Array = []
 ) -> void:
 	if actor == null:
 		return
-	if (
+	actor.locked_drone_lock_pos = Vector2.ZERO
+	if not (
 		has_player_contact
 		and actor.assembled_ship != null
 		and actor.assembled_ship.has_capability(CAPABILITY_ID)
 	):
-		actor.locked_target_id = PLAYER_TARGET_ID
-	else:
 		actor.locked_target_id = ""
+		return
+	var observer_pos: Vector2 = actor.position
+	var player_pos: Vector2 = actor.last_known_player_pos
+	var best_id := ""
+	var best_pos := Vector2.ZERO
+	var best_tier := 99
+	var best_dist_sq := INF
+	var own_drone_id := DroneRuntime.nav_contact_id(str(actor.id))
+	var lock_candidates: Array = [
+		{
+			"id": PLAYER_TARGET_ID,
+			"position": player_pos,
+			"tier": NPC_DRONE_TIER_PLAYER_OR_ATTACK,
+		},
+	]
+	for contact_variant in drone_contacts:
+		if typeof(contact_variant) != TYPE_DICTIONARY:
+			continue
+		var contact: Dictionary = contact_variant
+		if str(contact.get("contact_kind", "")) != "drone":
+			continue
+		var contact_id := str(contact.get("id", ""))
+		if contact_id.is_empty() or contact_id == own_drone_id:
+			continue
+		var tier := npc_drone_lock_tier(contact)
+		if tier >= 99:
+			continue
+		lock_candidates.append({
+			"id": contact_id,
+			"position": contact.get("position", Vector2.ZERO),
+			"tier": tier,
+		})
+	for candidate_variant in lock_candidates:
+		if typeof(candidate_variant) != TYPE_DICTIONARY:
+			continue
+		var candidate: Dictionary = candidate_variant
+		var target_id := str(candidate.get("id", ""))
+		var target_pos: Vector2 = candidate.get("position", Vector2.ZERO)
+		var tier := int(candidate.get("tier", 99))
+		if target_id.is_empty() or not target_pos.is_finite():
+			continue
+		var dist_sq := observer_pos.distance_squared_to(target_pos)
+		if tier < best_tier or (tier == best_tier and dist_sq < best_dist_sq):
+			best_tier = tier
+			best_dist_sq = dist_sq
+			best_id = target_id
+			best_pos = target_pos
+
+	if best_id.is_empty():
+		actor.locked_target_id = PLAYER_TARGET_ID
+	elif best_id.begins_with("drone:"):
+		actor.locked_target_id = best_id
+		actor.locked_drone_lock_pos = best_pos
+	else:
+		actor.locked_target_id = best_id

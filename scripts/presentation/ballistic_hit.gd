@@ -35,9 +35,10 @@ static func apply(
 	packets: Dictionary,
 	shooter: Variant,
 	shot_velocity: Vector2,
-	context: WeaponHitContext = null
+	context: WeaponHitContext = null,
+	impact_pos: Vector2 = Vector2(NAN, NAN)
 ) -> void:
 	var attributed: Variant = shooter
 	if not is_instance_valid(shooter):
 		attributed = null
-	WeaponHit.apply(collider, delivery_type, packets, attributed, shot_velocity, context)
+	WeaponHit.apply(collider, delivery_type, packets, attributed, shot_velocity, context, impact_pos)

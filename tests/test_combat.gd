@@ -11,6 +11,7 @@ static func run(runner: TestRunner) -> void:
 	_test_cyber_ignores_armour(runner)
 	_test_packet_conversion(runner)
 	_test_point_defence_intercept(runner)
+	_test_drone_point_defence_shares_roll(runner)
 	_test_fight_to_death_attitude(runner)
 	_test_typed_chassis_beats_stub(runner)
 	_test_standard_npc_attitude(runner)
@@ -191,6 +192,36 @@ static func _test_point_defence_intercept(runner: TestRunner) -> void:
 			intercepted = true
 			break
 	runner.check(intercepted, "point defence intercepts ballistic at 100% chance")
+
+
+static func _test_drone_point_defence_shares_roll(runner: TestRunner) -> void:
+	var assembled := _assembled_with_modules([])
+	var state := ShipCombatState.from_assembled(assembled)
+	var owned := OwnedShip.new()
+	owned.deployed_drone = {
+		"active": true,
+		"module_id": "go_hornet_bay",
+		"task": DroneDirector.TASK_DEFENCE,
+	}
+	var catalog := Catalog.load_default()
+	var impact := Vector2(90, 0)
+	var hull_pos := Vector2.ZERO
+	var hits := 0
+	for _i in range(40):
+		var trial_state := ShipCombatState.from_assembled(assembled)
+		var r := ShipCombat.resolve_hit(
+			assembled,
+			trial_state,
+			"ballistic",
+			{"kinetic": 10.0},
+			impact,
+			hull_pos,
+			owned,
+			catalog
+		)
+		if bool(r.get("intercepted", false)):
+			hits += 1
+	runner.check(hits >= 1 and hits < 35, "deployed drone PD contributes to intercept roll")
 
 
 static func _traffic_config() -> Dictionary:

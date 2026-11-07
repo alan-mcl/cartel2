@@ -8,7 +8,7 @@ const ARRIVAL_DISTANCE := 48.0
 const HOLD_AHEAD_M := 220.0
 const PD_INTERCEPT_RANGE := 950.0
 const DRONE_HIT_RADIUS := 22.0
-const DEFENCE_ORBIT_FRAC := 0.14
+const DEFENCE_ORBIT_FRAC := 0.048
 const ATTACK_ORBIT_RANGE_FRAC := 0.58
 
 static func is_drone_module(module_def: ModuleDef) -> bool:
@@ -32,20 +32,22 @@ static func clear_deployed(owned: OwnedShip) -> void:
 
 
 ## Restock the bay round and clear airborne state (instant recall: dock, jump, or arrival).
-static func complete_recall(catalog: Catalog, owned: OwnedShip) -> bool:
+## Returns the weapon slot that docked in, or empty when nothing was recalled.
+static func complete_recall(catalog: Catalog, owned: OwnedShip) -> String:
 	if owned == null or not is_deployed(owned):
-		return false
+		return ""
+	var slot := deployed_slot(owned)
 	var module_id := str(owned.deployed_drone.get("module_id", ""))
 	var module_def := catalog.get_module_def(module_id) if catalog != null else null
 	if module_def == null:
 		clear_deployed(owned)
-		return false
+		return ""
 	var ammo_type := module_def.ammunition_type
 	if not ammo_type.is_empty():
 		var current := owned.get_ammo_count(ammo_type)
 		owned.ammunition[ammo_type] = float(current + 1)
 	clear_deployed(owned)
-	return true
+	return slot
 
 
 static func destroy_deployed(owned: OwnedShip) -> void:
@@ -54,10 +56,86 @@ static func destroy_deployed(owned: OwnedShip) -> void:
 	clear_deployed(owned)
 
 
+static func nav_contact_id(owner_id: String) -> String:
+	if owner_id.is_empty():
+		return ""
+	return "drone:%s" % owner_id
+
+
+static func nav_contact(
+	catalog: Catalog,
+	owned: OwnedShip,
+	owner_id: String,
+	drone_owner_player: bool = false
+) -> Dictionary:
+	if catalog == null or owned == null or owner_id.is_empty() or not is_deployed(owned):
+		return {}
+	var module_id := str(owned.deployed_drone.get("module_id", ""))
+	var module_def := catalog.get_module_def(module_id)
+	var display_name := module_def.name if module_def != null else module_id
+	if display_name.is_empty():
+		display_name = "Drone"
+	var pos := _read_pos(owned.deployed_drone)
+	var vel := _read_vel(owned.deployed_drone)
+	return {
+		"id": nav_contact_id(owner_id),
+		"contact_kind": "drone",
+		"position": pos,
+		"velocity": vel,
+		"short_label": display_name,
+		"ship_name": display_name,
+		"lock_hull_radius": DRONE_HIT_RADIUS,
+		"heading_rad": vel.angle() if vel.length_squared() > 0.01 else 0.0,
+		"lock_hull_display_scale": 1.0,
+		"drone_task": str(owned.deployed_drone.get("task", "")),
+		"drone_owner_player": drone_owner_player,
+	}
+
+
+static func append_deployed_contacts(
+	contacts: Array,
+	catalog: Catalog,
+	player_owned: OwnedShip,
+	actors: Array
+) -> void:
+	if catalog == null:
+		return
+	if player_owned != null and is_deployed(player_owned):
+		var player_contact := nav_contact(catalog, player_owned, player_owned.id, true)
+		if not player_contact.is_empty():
+			contacts.append(player_contact)
+	if actors.is_empty():
+		return
+	for actor_variant in actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if actor.owned_ship == null or not is_deployed(actor.owned_ship):
+			continue
+		var owner_id := str(actor.id)
+		if owner_id.is_empty():
+			continue
+		var npc_contact := nav_contact(catalog, actor.owned_ship, owner_id)
+		if not npc_contact.is_empty():
+			contacts.append(npc_contact)
+
+
+static func try_destroy_at(owned: OwnedShip, impact_pos: Vector2) -> bool:
+	if owned == null or not is_deployed(owned):
+		return false
+	if not impact_pos.is_finite():
+		return false
+	var drone_pos := _read_pos(owned.deployed_drone)
+	if drone_pos.distance_to(impact_pos) > DRONE_HIT_RADIUS:
+		return false
+	destroy_deployed(owned)
+	return true
+
+
 static func recall_if_deployed(owned: OwnedShip, catalog: Catalog) -> bool:
 	if not is_deployed(owned):
 		return false
-	return complete_recall(catalog, owned)
+	return not complete_recall(catalog, owned).is_empty()
 
 
 static func handle_weapon_fire(
@@ -161,7 +239,10 @@ static func tick(
 		pos = motion_return[0]
 		vel = motion_return[1]
 		if pos.distance_to(ship_pos) <= ARRIVAL_DISTANCE:
-			result["ammo_changed"] = complete_recall(catalog, owned)
+			var recalled_slot := complete_recall(catalog, owned)
+			if not recalled_slot.is_empty():
+				result["ammo_changed"] = true
+				result["recalled_slot"] = recalled_slot
 			return result
 		_write_pose(owned.deployed_drone, pos, vel)
 		result["pose"] = {"position": pos, "velocity": vel, "facing": vel.angle()}
@@ -202,6 +283,17 @@ static func tick(
 	vel = motion[1]
 	pos = _apply_leash(pos, vel, ship_pos, leash, delta)
 
+	if (
+		task == DroneDirector.TASK_RETRIEVAL
+		and str(owned.deployed_drone.get("retrieval_phase", "outbound")) == "return"
+		and pos.distance_to(ship_pos) <= ARRIVAL_DISTANCE
+	):
+		var recalled_slot := complete_recall(catalog, owned)
+		if not recalled_slot.is_empty():
+			result["ammo_changed"] = true
+			result["recalled_slot"] = recalled_slot
+		return result
+
 	var attack_cd := float(owned.deployed_drone.get("attack_cooldown", 0.0))
 	attack_cd = maxf(0.0, attack_cd - delta)
 	owned.deployed_drone["attack_cooldown"] = attack_cd
@@ -224,28 +316,53 @@ static func tick(
 	return result
 
 
-static func try_drone_point_defence_intercept(
+## Resolves the bay’s point-defence module when the airframe covers the impact and parent hull on [TASK_DEFENCE].
+static func point_defence_module_if_covering(
 	catalog: Catalog,
 	owned: OwnedShip,
 	inbound_pos: Vector2,
-	owner_pos: Vector2
-) -> bool:
+	owner_hull_pos: Vector2
+) -> ModuleDef:
 	if not is_deployed(owned) or catalog == null:
-		return false
-	var module_id := str(owned.deployed_drone.get("module_id", ""))
-	var module_def := catalog.get_module_def(module_id)
-	if module_def == null or module_def.point_defence_id.is_empty():
-		return false
+		return null
 	if str(owned.deployed_drone.get("task", "")) != DroneDirector.TASK_DEFENCE:
-		return false
+		return null
+	var module_id := str(owned.deployed_drone.get("module_id", ""))
+	var bay_def := catalog.get_module_def(module_id)
+	if bay_def == null or bay_def.point_defence_id.is_empty():
+		return null
 	var drone_pos := _read_pos(owned.deployed_drone)
 	if drone_pos.distance_to(inbound_pos) > PD_INTERCEPT_RANGE:
-		return false
-	var pd_def := catalog.get_module_def(module_def.point_defence_id)
-	if pd_def == null:
-		return false
-	var chance := clampf(pd_def.intercept_chance, 0.0, 1.0)
-	return randf() < chance
+		return null
+	if drone_pos.distance_to(owner_hull_pos) > PD_INTERCEPT_RANGE * 1.12:
+		return null
+	return catalog.get_module_def(bay_def.point_defence_id)
+
+
+static func hostile_ids_for_npc_actor(actor) -> Array:
+	if actor == null:
+		return []
+	if (
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE
+		or actor.ai_state == TrafficActorScript.STATE_FLEE
+	):
+		return [TargetLock.PLAYER_TARGET_ID]
+	return []
+
+
+static func combat_contacts_for_npc(
+	player_pos: Vector2,
+	player_vel: Vector2,
+	drone_contacts: Array
+) -> Array:
+	var out: Array = drone_contacts.duplicate()
+	out.append({
+		"id": TargetLock.PLAYER_TARGET_ID,
+		"contact_kind": "player",
+		"position": player_pos,
+		"velocity": player_vel,
+	})
+	return out
 
 
 static func build_context(
@@ -255,7 +372,8 @@ static func build_context(
 	locked_target_id: String,
 	contacts: Array,
 	hostile_ship_ids: Array,
-	ship_velocity: Vector2 = Vector2.ZERO
+	ship_velocity: Vector2 = Vector2.ZERO,
+	hostile_positions: Array = []
 ) -> Dictionary:
 	var locked := TargetLock.contact_for_id(contacts, locked_target_id)
 	return {
@@ -268,24 +386,84 @@ static func build_context(
 		"locked_target_id": locked_target_id,
 		"contacts": contacts,
 		"hostile_ship_ids": hostile_ship_ids,
+		"hostile_positions": hostile_positions,
 	}
 
 
-static func collect_hostile_ship_ids(session: GameSession, traffic_director, player_pos: Vector2) -> Array:
+static func actor_is_hostile_threat(actor) -> bool:
+	if actor == null:
+		return false
+	if (
+		actor.ai_state == TrafficActorScript.STATE_ENGAGE
+		or actor.ai_state == TrafficActorScript.STATE_FLEE
+	):
+		return true
+	if actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH:
+		return true
+	var role := str(actor.role)
+	if role == "bounty" or role == "combat_sandbox":
+		return true
+	if bool(actor.bounty_provoked):
+		return true
+	return false
+
+
+static func collect_hostile_ship_ids(
+	session: GameSession,
+	traffic_director,
+	_player_pos: Vector2,
+	locked_target_id: String = ""
+) -> Array:
 	var ids: Array = []
-	if session == null:
-		return ids
-	for target_id in session.player.bounty_contract_sectors.keys():
-		ids.append(str(target_id))
+	var seen: Dictionary = {}
+	if session != null:
+		for target_id in session.player.bounty_contract_sectors.keys():
+			var bounty_id := str(target_id)
+			if bounty_id.is_empty() or seen.has(bounty_id):
+				continue
+			seen[bounty_id] = true
+			ids.append(bounty_id)
 	if traffic_director == null:
 		return ids
 	for actor_variant in traffic_director.actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
 			continue
 		var actor = actor_variant
-		if actor.ai_state == TrafficActorScript.STATE_ENGAGE:
-			ids.append(str(actor.contact_id))
+		if not actor_is_hostile_threat(actor):
+			continue
+		var actor_id := str(actor.id)
+		if actor_id.is_empty() or seen.has(actor_id):
+			continue
+		seen[actor_id] = true
+		ids.append(actor_id)
+	if not locked_target_id.is_empty() and not seen.has(locked_target_id):
+		for actor_variant in traffic_director.actors:
+			if typeof(actor_variant) != TYPE_OBJECT:
+				continue
+			var actor = actor_variant
+			if str(actor.id) != locked_target_id:
+				continue
+			if actor_is_hostile_threat(actor):
+				seen[locked_target_id] = true
+				ids.append(locked_target_id)
+			break
 	return ids
+
+
+static func collect_hostile_actor_positions(traffic_director, _player_pos: Vector2) -> Array:
+	var positions: Array = []
+	if traffic_director == null:
+		return positions
+	for actor_variant in traffic_director.actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if not actor_is_hostile_threat(actor):
+			continue
+		if not actor.is_active():
+			continue
+		positions.append(actor.position)
+	return positions
 
 
 static func _attack_orders(
@@ -359,7 +537,7 @@ static func _steering_target(
 
 
 static func _defence_orbit_radius(leash_m: float) -> float:
-	return clampf(leash_m * DEFENCE_ORBIT_FRAC, 140.0, 560.0)
+	return clampf(leash_m * DEFENCE_ORBIT_FRAC, 48.0, 220.0)
 
 
 static func _attack_orbit_radius(catalog: Catalog, drone_module: ModuleDef, leash_m: float) -> float:
@@ -405,7 +583,8 @@ static func _resolve_attack_target_contact(context: Dictionary, hostile_ids: Arr
 		if typeof(contact_variant) != TYPE_DICTIONARY:
 			continue
 		var contact: Dictionary = contact_variant
-		if str(contact.get("contact_kind", "")) != "traffic_npc":
+		var kind := str(contact.get("contact_kind", ""))
+		if kind != "traffic_npc" and kind != "player":
 			continue
 		if DroneDirector.is_hostile_ship(contact, hostile_ids):
 			return contact
@@ -442,7 +621,8 @@ static func _nearest_hostile_pos(context: Dictionary, drone_pos: Vector2) -> Vec
 		if typeof(contact_variant) != TYPE_DICTIONARY:
 			continue
 		var contact: Dictionary = contact_variant
-		if str(contact.get("contact_kind", "")) != "traffic_npc":
+		var kind := str(contact.get("contact_kind", ""))
+		if kind != "traffic_npc" and kind != "player":
 			continue
 		if not DroneDirector.is_hostile_ship(contact, hostile_ids):
 			continue
