@@ -228,7 +228,26 @@ static func tick(
 		result["destroyed"] = true
 		return result
 
+	_stabilise_retrieval_lock(owned, context)
 	return _tick_craft_motion(catalog, module_def, owned, delta, context, max_speed, result)
+
+
+static func _stabilise_retrieval_lock(owned: OwnedShip, context: Dictionary) -> void:
+	var lock_id := str(context.get("locked_target_id", ""))
+	var locked := DroneDirector.resolved_lock(context)
+	if not locked.is_empty():
+		owned.deployed_drone["retrieval_anchor"] = locked.duplicate(true)
+	elif lock_id.is_empty():
+		owned.deployed_drone.erase("retrieval_anchor")
+		return
+	var anchor: Variant = owned.deployed_drone.get("retrieval_anchor", {})
+	if typeof(anchor) != TYPE_DICTIONARY:
+		return
+	var anchor_dict: Dictionary = anchor
+	if str(anchor_dict.get("id", "")) != lock_id:
+		return
+	if context.get("locked_contact", {}).is_empty():
+		context["locked_contact"] = anchor_dict.duplicate(true)
 
 
 static func _tick_craft_motion(
@@ -545,7 +564,7 @@ static func _steering_target(
 			var phase := str(context.get("retrieval_phase", "outbound"))
 			if phase == "return":
 				return ship_pos
-			var lock: Dictionary = context.get("locked_contact", {})
+			var lock: Dictionary = DroneDirector.resolved_lock(context)
 			if not lock.is_empty():
 				return lock.get("position", Vector2.ZERO)
 			return ship_pos + Vector2.from_angle(ship_facing) * HOLD_AHEAD_M
@@ -654,9 +673,10 @@ static func _nearest_hostile_pos(context: Dictionary, drone_pos: Vector2) -> Vec
 
 
 static func _update_retrieval_phase(owned: OwnedShip, drone_pos: Vector2, context: Dictionary) -> void:
-	var locked: Dictionary = context.get("locked_contact", {})
+	var locked: Dictionary = DroneDirector.resolved_lock(context)
 	if locked.is_empty():
-		owned.deployed_drone["retrieval_phase"] = "return"
+		if str(context.get("locked_target_id", "")).is_empty():
+			owned.deployed_drone["retrieval_phase"] = "return"
 		return
 	var target: Vector2 = locked.get("position", Vector2.ZERO)
 	var phase := str(owned.deployed_drone.get("retrieval_phase", "outbound"))

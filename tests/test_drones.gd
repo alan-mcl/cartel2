@@ -103,6 +103,13 @@ static func _test_job_order(runner: TestRunner, catalog: Catalog) -> void:
 		DroneDirector.TASK_RETRIEVAL,
 		"friendly ship lock: retrieval"
 	)
+	var ctx_cargo_id_only := _context({}, [cargo_lock], [])
+	ctx_cargo_id_only["locked_target_id"] = "cargo_1"
+	runner.check_eq(
+		DroneDirector.pick_task(_module(catalog, "mon_relay_link"), ctx_cargo_id_only),
+		DroneDirector.TASK_RETRIEVAL,
+		"retrieval lock id resolves through contacts"
+	)
 	var ctx_no_lock_hostile := _context({}, [hostile], ["npc_1"], 9000.0, Vector2.ZERO)
 	ctx_no_lock_hostile["hostile_present"] = DroneDirector.hostile_present_in_sensor_range(
 		ctx_no_lock_hostile

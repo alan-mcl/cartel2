@@ -16,6 +16,16 @@ const CAP_RETRIEVAL := "retrieval"
 const HOSTILE_THREAT_SENSOR_FLOOR := 8000.0
 
 
+static func resolved_lock(context: Dictionary) -> Dictionary:
+	var locked: Dictionary = context.get("locked_contact", {})
+	if not locked.is_empty():
+		return locked
+	var target_id := str(context.get("locked_target_id", ""))
+	if target_id.is_empty():
+		return {}
+	return TargetLock.contact_for_id(context.get("contacts", []), target_id)
+
+
 static func pick_task(module_def: ModuleDef, context: Dictionary) -> String:
 	if module_def == null:
 		return TASK_HOLD
@@ -23,9 +33,13 @@ static func pick_task(module_def: ModuleDef, context: Dictionary) -> String:
 	if caps.is_empty():
 		return TASK_HOLD
 
-	var locked: Dictionary = context.get("locked_contact", {})
+	var locked: Dictionary = resolved_lock(context)
 	var hostile_present := bool(context.get("hostile_present", false))
 	var hostile_ids: Array = context.get("hostile_ship_ids", [])
+
+	if caps.has(CAP_RETRIEVAL) and not locked.is_empty():
+		if not (_is_ship_lock(locked) and is_hostile_ship(locked, hostile_ids)):
+			return TASK_RETRIEVAL
 
 	if not locked.is_empty():
 		if _is_ship_lock(locked):
