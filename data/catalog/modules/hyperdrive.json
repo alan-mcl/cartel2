@@ -1,7 +1,7 @@
 [
   {
     "id": "te_span_hyperdrive",
-    "name": "Span Hyperdrive",
+    "name": "The Span Hyperdrive",
     "maker": "Tukey Enterprises",
     "brand": "Span",
     "category": "hyperdrive",
@@ -11,7 +11,7 @@
     "power_demand": 26.0,
     "compute_demand": 10.0,
     "cost": 7500,
-    "description": "Tukey's budget translation coil. Heavy, hungry, and the cheapest way off the standard gate network.",
+    "description": "The Span Hyperdrive is by far the most cost effective way off the public jump gate network and onto your own free routes.",
     "signature": {
       "thermal": 5.2,
       "gravitational": 7.0,
@@ -22,7 +22,7 @@
   },
   {
     "id": "hyperdrive_alpha",
-    "name": "Alpha Hyperdrive",
+    "name": "SBI Alpha Hyperdrive",
     "maker": "Seven Bells Inc",
     "brand": "Alpha",
     "category": "hyperdrive",
@@ -32,7 +32,7 @@
     "power_demand": 18.0,
     "compute_demand": 8.0,
     "cost": 12000,
-    "description": "Seven Bells Alpha-class coil sized for Dragon couriers. Spools from deep orbit on a modest plant; not while the main drive is at full draw.",
+    "description": "SBI Alpha-class hyperdrive is the market leader in efficient accurate personal N-space translation.",
     "signature": {
       "thermal": 4.4,
       "gravitational": 6.0,
@@ -43,7 +43,7 @@
   },
   {
     "id": "hw_aperture_hyperdrive",
-    "name": "Aperture Hyperdrive",
+    "name": "HW Aperture Hyperdrive",
     "maker": "Holt-Winters Corp",
     "brand": "Aperture",
     "category": "hyperdrive",
@@ -53,7 +53,7 @@
     "power_demand": 15.0,
     "compute_demand": 7.0,
     "cost": 16800,
-    "description": "Holt-Winters mid-market aperture stack for escorts that need translation without a gate queue.",
+    "description": "With the Holt-Winters mid-market Aperture translation engine you'll never need to sit in the gate queue again.",
     "signature": {
       "thermal": 4.0,
       "gravitational": 5.4,
@@ -64,7 +64,7 @@
   },
   {
     "id": "prv_vertex_hyperdrive",
-    "name": "Vertex Hyperdrive",
+    "name": "Vertex Translation Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Vertex",
     "category": "hyperdrive",
@@ -74,7 +74,7 @@
     "power_demand": 13.0,
     "compute_demand": 6.0,
     "cost": 21500,
-    "description": "ParaRamcoVidia Vertex coil with a lighter spool profile for mixed-energy fleets.",
+    "description": "PRV Vertex: Fueled by your adventurous spirit. Choose Vertex and you'll never run out of places to go!",
     "signature": {
       "thermal": 3.6,
       "gravitational": 4.8,
@@ -85,7 +85,7 @@
   },
   {
     "id": "ora_needle_hyperdrive",
-    "name": "Needle Hyperdrive",
+    "name": "Needle359 HyperDrive",
     "maker": "Orion Aerospace",
     "brand": "Needle",
     "category": "hyperdrive",
@@ -95,7 +95,7 @@
     "power_demand": 11.0,
     "compute_demand": 5.0,
     "cost": 27500,
-    "description": "Orion's premium Needle translation core. Low draw and signature for hulls that can afford the yard price.",
+    "description": "Orion's premium Needle359 Hyperdrive engine provides unmatched translation efficiency.",
     "signature": {
       "thermal": 3.2,
       "gravitational": 4.2,

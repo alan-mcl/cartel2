@@ -8,10 +8,15 @@ const ARRIVAL_DISTANCE := 48.0
 ## Min metres the airframe must travel from its launch point before outbound completion or return dock counts.
 const MIN_OUTBOUND_TRAVEL := 12.0
 const HOLD_AHEAD_M := 220.0
+## Visible flight frame: 1920×1080 at zoom 0.72 → ~750 m half-height; stay inside with look-ahead margin.
+const SCREEN_LEASH_M := 690.0
+const DEFENCE_ABEAM_M := 40.0
+const DEFENCE_BEAM_SWITCH_MARGIN_M := 24.0
 const PD_INTERCEPT_RANGE := 950.0
 const DRONE_HIT_RADIUS := 22.0
 const DEFENCE_ORBIT_FRAC := 0.048
 const ATTACK_ORBIT_RANGE_FRAC := 0.58
+const FORMATION_HULL_SPEED_PAD := 36.0
 
 static func is_drone_module(module_def: ModuleDef) -> bool:
 	return module_def != null and module_def.weapon_type == "drone"
@@ -320,7 +325,8 @@ static func _tick_craft_motion(
 
 	var hull_vel: Vector2 = context.get("ship_velocity", Vector2.ZERO)
 	var cruise_speed := maxf(120.0, max_speed * CRUISE_SPEED_SCALE)
-	var leash := module_def.leash_m if module_def.leash_m > 0.0 else 3000.0
+	var catalog_leash := module_def.leash_m if module_def.leash_m > 0.0 else 3000.0
+	var leash := minf(catalog_leash, SCREEN_LEASH_M)
 	if task == DroneDirector.TASK_RETRIEVAL:
 		_update_retrieval_phase(owned, pos, director_ctx)
 		director_ctx["retrieval_phase"] = str(owned.deployed_drone.get("retrieval_phase", "outbound"))
@@ -330,9 +336,16 @@ static func _tick_craft_motion(
 	var steer_target: Vector2 = _steering_target(
 		task, module_def, director_ctx, ship_pos, ship_facing, pos
 	)
+	var use_formation_pilot := false
 	if task == DroneDirector.TASK_DEFENCE:
-		var def_radius := _defence_orbit_radius(leash)
-		steer_target = _orbit_ring_target(owned, pos, ship_pos, def_radius, cruise_speed, delta)
+		var beam_sign := _update_defence_beam(owned, director_ctx, ship_pos, ship_facing)
+		steer_target = _defence_abeam_slot(ship_pos, ship_facing, beam_sign)
+		cruise_speed = maxf(cruise_speed, hull_vel.length() + FORMATION_HULL_SPEED_PAD)
+		use_formation_pilot = true
+	elif task == DroneDirector.TASK_SENSOR:
+		steer_target = ship_pos + Vector2.from_angle(ship_facing) * SCREEN_LEASH_M
+		cruise_speed = maxf(cruise_speed, hull_vel.length() + FORMATION_HULL_SPEED_PAD)
+		use_formation_pilot = true
 	elif task == DroneDirector.TASK_ATTACK:
 		var focus := _attack_focus_center(director_ctx, pos)
 		if _has_hostile_ship_in_context(director_ctx) and focus.is_finite():
@@ -356,6 +369,10 @@ static func _tick_craft_motion(
 			craft_assembled,
 			craft_owned
 		)
+	elif use_formation_pilot:
+		inputs = DroneCraft.formation_station_inputs(
+			pos, facing, vel, steer_target, hull_vel, cruise_speed
+		)
 	else:
 		inputs = DroneCraft.steer_toward_point(pos, facing, vel, steer_target, cruise_speed)
 		inputs["fire"] = false
@@ -364,6 +381,9 @@ static func _tick_craft_motion(
 	pos += craft.motion.velocity * delta
 	facing = craft.motion.facing
 	vel = craft.motion.velocity
+	if use_formation_pilot and pos.distance_to(steer_target) <= ARRIVAL_DISTANCE * 1.1:
+		vel = vel.lerp(hull_vel, clampf(delta * 5.5, 0.0, 1.0))
+		craft.motion.velocity = vel
 	pos = _apply_leash(pos, vel, ship_pos, leash, delta)
 
 	if (
@@ -590,13 +610,62 @@ static func _steering_target(
 				return lock.get("position", Vector2.ZERO)
 			return ship_pos + Vector2.from_angle(ship_facing) * HOLD_AHEAD_M
 		DroneDirector.TASK_SENSOR:
-			return ship_pos + Vector2.from_angle(ship_facing) * (HOLD_AHEAD_M * 0.85)
+			return ship_pos + Vector2.from_angle(ship_facing) * SCREEN_LEASH_M
 		_:
 			return ship_pos + Vector2.from_angle(ship_facing) * HOLD_AHEAD_M
 
 
-static func _defence_orbit_radius(leash_m: float) -> float:
-	return clampf(leash_m * DEFENCE_ORBIT_FRAC, 48.0, 220.0)
+static func _defence_abeam_slot(ship_pos: Vector2, ship_facing: float, beam_sign: int) -> Vector2:
+	var forward := Vector2.from_angle(ship_facing)
+	## Godot y-down: port is −orthogonal, starboard is +orthogonal.
+	return ship_pos - forward.orthogonal() * float(beam_sign) * DEFENCE_ABEAM_M
+
+
+## Port = +1, starboard = −1. Picks the threatened beam; holds station unless the other side is clearly nearer.
+static func _update_defence_beam(
+	owned: OwnedShip,
+	context: Dictionary,
+	ship_pos: Vector2,
+	ship_facing: float
+) -> int:
+	var forward := Vector2.from_angle(ship_facing)
+	var hostile_ids: Array = context.get("hostile_ship_ids", [])
+	var contacts: Array = context.get("contacts", [])
+	var nearest_port := INF
+	var nearest_stbd := INF
+	for contact_variant in contacts:
+		if typeof(contact_variant) != TYPE_DICTIONARY:
+			continue
+		var contact: Dictionary = contact_variant
+		var kind := str(contact.get("contact_kind", ""))
+		if kind != "traffic_npc" and kind != "player":
+			continue
+		if not DroneDirector.is_hostile_ship(contact, hostile_ids):
+			continue
+		var hpos: Vector2 = contact.get("position", Vector2.ZERO)
+		var rel := hpos - ship_pos
+		var lateral := forward.x * rel.y - forward.y * rel.x
+		var dist := rel.length()
+		if lateral >= 0.0:
+			nearest_port = minf(nearest_port, dist)
+		else:
+			nearest_stbd = minf(nearest_stbd, dist)
+	var current := str(owned.deployed_drone.get("defence_beam", "port"))
+	if current != "port" and current != "starboard":
+		current = "port"
+	var preferred := current
+	if nearest_port < INF or nearest_stbd < INF:
+		if nearest_port < INF and nearest_stbd < INF:
+			if nearest_stbd + DEFENCE_BEAM_SWITCH_MARGIN_M < nearest_port:
+				preferred = "starboard"
+			elif nearest_port + DEFENCE_BEAM_SWITCH_MARGIN_M < nearest_stbd:
+				preferred = "port"
+		elif nearest_port < INF:
+			preferred = "port"
+		else:
+			preferred = "starboard"
+	owned.deployed_drone["defence_beam"] = preferred
+	return 1 if preferred == "port" else -1
 
 
 static func _attack_orbit_radius(catalog: Catalog, drone_module: ModuleDef, leash_m: float) -> float:

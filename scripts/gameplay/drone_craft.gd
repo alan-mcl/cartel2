@@ -95,6 +95,41 @@ static func steer_toward_point(
 	return inputs
 
 
+## Close on a formation slot; near the slot, blend toward hull velocity (match-vector hold).
+static func formation_station_inputs(
+	pos: Vector2,
+	facing: float,
+	velocity: Vector2,
+	slot: Vector2,
+	hull_vel: Vector2,
+	cruise_cap: float
+) -> Dictionary:
+	var to_slot := slot - pos
+	var inputs := steer_toward_point(pos, facing, velocity, slot, cruise_cap)
+	if to_slot.length() > ARRIVAL_DISTANCE:
+		return inputs
+	var desired := hull_vel
+	if to_slot.length_squared() > 9.0:
+		desired += to_slot * 2.2
+	var delta_v := desired - velocity
+	if delta_v.length() < 2.5:
+		return inputs
+	var desired_dir := delta_v.angle()
+	var delta_facing := wrapf(desired_dir - facing, -PI, PI)
+	inputs["rotate_left"] = false
+	inputs["rotate_right"] = false
+	inputs["thrust"] = false
+	inputs["reverse"] = false
+	if delta_facing > ROTATE_THRESHOLD:
+		inputs["rotate_right"] = true
+	elif delta_facing < -ROTATE_THRESHOLD:
+		inputs["rotate_left"] = true
+	var aligned := absf(delta_facing) < ROTATE_THRESHOLD * 2.0
+	if aligned and delta_v.length() > 2.5:
+		inputs["thrust"] = true
+	return inputs
+
+
 func sync_motion_from_pose(facing: float, velocity: Vector2) -> void:
 	motion.facing = facing
 	motion.velocity = velocity

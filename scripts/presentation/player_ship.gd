@@ -60,11 +60,20 @@ func pulse_unspace_sting_hull() -> void:
 func set_presentation_hooks(try_interact: Callable, weapon_spawn_root: Node2D) -> void:
 	_try_interact = try_interact
 	_weapon_spawn_root = weapon_spawn_root
-	if _drone_visual == null and weapon_spawn_root != null:
-		_drone_visual = preload("res://scripts/presentation/drone_visual.gd").new()
-		_drone_visual.z_index = 4
-		weapon_spawn_root.add_child(_drone_visual)
-	if _drone_visual != null and _drone_visual.has_method("bind"):
+	_ensure_drone_visual()
+
+
+func _ensure_drone_visual() -> void:
+	if _weapon_spawn_root == null or not is_instance_valid(_weapon_spawn_root):
+		return
+	if _drone_visual != null and is_instance_valid(_drone_visual):
+		if _drone_visual.has_method("bind"):
+			_drone_visual.call("bind", owned_ship, session)
+		return
+	_drone_visual = preload("res://scripts/presentation/drone_visual.gd").new()
+	_drone_visual.z_index = 4
+	_weapon_spawn_root.add_child(_drone_visual)
+	if _drone_visual.has_method("bind"):
 		_drone_visual.call("bind", owned_ship, session)
 
 
@@ -79,8 +88,7 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 		return
 	_nav_contacts = contacts
 	if not DroneRuntime.is_deployed(owned_ship):
-		if _drone_visual != null and _drone_visual.has_method("hide_drone"):
-			_drone_visual.call("hide_drone")
+		_hide_drone_visual()
 		return
 	var sensor_range := float(assembled_ship.sensor_profile.get("range", 0.0))
 	var hostile_ids := DroneRuntime.collect_hostile_ship_ids(
@@ -116,7 +124,10 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 	)
 	var drone_orders: Array = tick_result.get("orders", [])
 	if not drone_orders.is_empty():
-		if _drone_visual != null and _drone_visual.has_method("spawn_weapon_orders"):
+		_ensure_drone_visual()
+		if _drone_visual != null and is_instance_valid(_drone_visual) and _drone_visual.has_method(
+			"spawn_weapon_orders"
+		):
 			_drone_visual.call("spawn_weapon_orders", drone_orders)
 		else:
 			_spawn_weapon_orders(drone_orders)
@@ -132,8 +143,8 @@ func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> voi
 		session.bound_missions.notify_retrieval_pickup(session, pickup_id)
 	if DroneRuntime.is_deployed(owned_ship):
 		_sync_drone_visual_pose(tick_result)
-	elif _drone_visual != null and _drone_visual.has_method("hide_drone"):
-		_drone_visual.call("hide_drone")
+	else:
+		_hide_drone_visual()
 	if (bool(tick_result.get("destroyed", false)) or bool(tick_result.get("ammo_changed", false))) and session != null:
 		session.changed.emit()
 
@@ -148,8 +159,7 @@ func configure(
 	owned_ship = owned
 	catalog = game_catalog
 	session = game_session
-	if _drone_visual != null and _drone_visual.has_method("bind"):
-		_drone_visual.call("bind", owned, game_session)
+	_ensure_drone_visual()
 	weapons.reset()
 	weapons.sync_selection(ship)
 	_sim.bind(catalog, assembled_ship, owned_ship, motion, operating_state, weapons)
@@ -373,8 +383,18 @@ func query_weapon_guidance(target_id: String) -> Dictionary:
 	return {"active": true, "position": _guidance_lock_position}
 
 
+func _hide_drone_visual() -> void:
+	if _drone_visual == null or not is_instance_valid(_drone_visual):
+		return
+	if _drone_visual.has_method("hide_drone"):
+		_drone_visual.call("hide_drone")
+
+
 func _sync_drone_visual_pose(tick_result: Dictionary) -> void:
-	if _drone_visual == null or owned_ship == null or not DroneRuntime.is_deployed(owned_ship):
+	if owned_ship == null or not DroneRuntime.is_deployed(owned_ship):
+		return
+	_ensure_drone_visual()
+	if _drone_visual == null or not is_instance_valid(_drone_visual):
 		return
 	var module_id := str(owned_ship.deployed_drone.get("module_id", ""))
 	var pose: Dictionary = tick_result.get("pose", {})
@@ -402,8 +422,7 @@ func _sync_drone_visual_pose(tick_result: Dictionary) -> void:
 
 
 func _on_drone_recall_docked(recalled_slot: String) -> void:
-	if _drone_visual != null and _drone_visual.has_method("hide_drone"):
-		_drone_visual.call("hide_drone")
+	_hide_drone_visual()
 	if assembled_ship == null:
 		return
 	for entry in assembled_ship.modules_in_category("weapon"):

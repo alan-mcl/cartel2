@@ -12,7 +12,9 @@ static func run(runner: TestRunner) -> void:
 	_test_destruction_no_restock(runner, catalog)
 	_test_retrieval_return(runner, catalog)
 	_test_sensor_extension(runner, catalog)
-	_test_defence_orbit_hull(runner, catalog)
+	_test_defence_abeam_station(runner, catalog)
+	_test_defence_beam_switch(runner, catalog)
+	_test_sensor_screen_leash(runner, catalog)
 	_test_attack_orbit_fires(runner, catalog)
 	_test_drone_launch_ignores_weapons_gate(runner, catalog)
 	_test_drone_targetable_destructible(runner, catalog)
@@ -472,19 +474,20 @@ static func _test_sensor_extension(runner: TestRunner, catalog: Catalog) -> void
 	runner.check(from_drone, "drone origin detects target")
 
 
-static func _test_defence_orbit_hull(runner: TestRunner, catalog: Catalog) -> void:
+static func _test_defence_abeam_station(runner: TestRunner, catalog: Catalog) -> void:
 	var owned := OwnedShip.new()
-	owned.id = "def_orbit"
+	owned.id = "def_abeam"
 	owned.modules = [{"slot": "medium_weapon_1", "module_id": "ca_convoy_screen"}]
 	ShipAssembler.seed_ammunition(catalog, owned)
 	var assembled := ShipAssembler.assemble_owned(catalog, owned)
 	var module_def := _module(catalog, "ca_convoy_screen")
-	var hostile := _contact("npc_orbit", "traffic_npc", Vector2(1800, 0))
+	var hostile := _contact("npc_abeam", "traffic_npc", Vector2(500, 120))
+	var hull_vel := Vector2.ZERO
 	owned.deployed_drone = {
 		"active": true,
 		"slot": "medium_weapon_1",
 		"module_id": module_def.id,
-		"position": {"x": 320.0, "y": 0.0},
+		"position": {"x": 0.0, "y": 12.0},
 		"velocity": {"x": 0.0, "y": 0.0},
 		"facing": 0.0,
 		"task": DroneDirector.TASK_DEFENCE,
@@ -492,24 +495,106 @@ static func _test_defence_orbit_hull(runner: TestRunner, catalog: Catalog) -> vo
 		"recalling": false,
 		"craft_cooldowns": {},
 	}
-	## Lock the hostile so [DroneDirector] keeps [TASK_DEFENCE] for this module (otherwise it switches to attack and orbits the NPC).
 	var ctx: Dictionary = DroneRuntime.build_context(
-		Vector2.ZERO, 0.0, 8000.0, "npc_orbit", [hostile], ["npc_orbit"], Vector2.ZERO
+		Vector2.ZERO, 0.0, 8000.0, "", [hostile], ["npc_abeam"], hull_vel
 	)
-	var leash := module_def.leash_m
-	var want_r := DroneRuntime._defence_orbit_radius(leash)
-	var sum := 0.0
-	var n := 0
-	for _i in range(320):
+	for _i in range(240):
 		DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 500.0)
+	var p: Dictionary = owned.deployed_drone.get("position", {})
+	var drone_pos := Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))
+	runner.check_eq(
+		str(owned.deployed_drone.get("defence_beam", "")),
+		"port",
+		"defence picks port when threat is to port"
+	)
+	var offset := drone_pos
+	runner.check(
+		absf(offset.length() - DroneRuntime.DEFENCE_ABEAM_M) < 16.0,
+		"defence holds abeam standoff"
+	)
+	runner.check(absf(offset.y) > absf(offset.x) * 0.8, "defence station is abeam not astern")
+	runner.check_eq(
+		str(owned.deployed_drone.get("task", "")),
+		DroneDirector.TASK_DEFENCE,
+		"defence task while screening"
+	)
+
+
+static func _test_defence_beam_switch(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.new()
+	owned.id = "def_switch"
+	owned.modules = [{"slot": "medium_weapon_1", "module_id": "ca_convoy_screen"}]
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var hostile_port := _contact("npc_port", "traffic_npc", Vector2(800, 200))
+	var hostile_stbd := _contact("npc_stbd", "traffic_npc", Vector2(120, -80))
+	owned.deployed_drone = {
+		"active": true,
+		"slot": "medium_weapon_1",
+		"module_id": "ca_convoy_screen",
+		"position": {"x": 0.0, "y": 28.0},
+		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": 0.0,
+		"task": DroneDirector.TASK_DEFENCE,
+		"defence_beam": "port",
+		"retrieval_phase": "outbound",
+		"recalling": false,
+		"craft_cooldowns": {},
+	}
+	var ctx: Dictionary = DroneRuntime.build_context(
+		Vector2.ZERO,
+		0.0,
+		8000.0,
+		"npc_port",
+		[hostile_port, hostile_stbd],
+		["npc_port", "npc_stbd"],
+		Vector2.ZERO
+	)
+	for _i in range(360):
+		DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 500.0)
+	runner.check_eq(
+		str(owned.deployed_drone.get("defence_beam", "")),
+		"starboard",
+		"defence crosses beam when opposite threat is nearer"
+	)
+
+
+static func _test_sensor_screen_leash(runner: TestRunner, catalog: Catalog) -> void:
+	var owned := OwnedShip.new()
+	owned.id = "sensor_leash"
+	owned.modules = [{"slot": "medium_weapon_1", "module_id": "merc_lark_survey"}]
+	ShipAssembler.seed_ammunition(catalog, owned)
+	var assembled := ShipAssembler.assemble_owned(catalog, owned)
+	var ship_pos := Vector2(200.0, -50.0)
+	var ship_facing := -0.35
+	owned.deployed_drone = {
+		"active": true,
+		"slot": "medium_weapon_1",
+		"module_id": "merc_lark_survey",
+		"position": {"x": ship_pos.x, "y": ship_pos.y},
+		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": ship_facing,
+		"task": DroneDirector.TASK_SENSOR,
+		"retrieval_phase": "outbound",
+		"recalling": false,
+		"craft_cooldowns": {},
+	}
+	var ctx: Dictionary = DroneRuntime.build_context(
+		ship_pos, ship_facing, 8000.0, "", [], [], Vector2(40.0, 10.0)
+	)
+	var max_dist := 0.0
+	var last_pos := ship_pos
+	for _i in range(400):
+		DroneRuntime.tick(catalog, assembled, owned, 0.05, ctx, 420.0)
 		var p: Dictionary = owned.deployed_drone.get("position", {})
-		var drone_pos := Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))
-		sum += drone_pos.length()
-		n += 1
-	runner.check(n > 0, "defence orbit samples")
-	var avg_r := sum / float(n)
-	var tol := maxf(200.0, want_r * 0.42)
-	runner.check(absf(avg_r - want_r) < tol, "defence drone orbits near hull standoff")
+		last_pos = Vector2(float(p.get("x", 0.0)), float(p.get("y", 0.0)))
+		max_dist = maxf(max_dist, last_pos.distance_to(ship_pos))
+	var want := ship_pos + Vector2.from_angle(ship_facing) * DroneRuntime.SCREEN_LEASH_M
+	runner.check(max_dist <= DroneRuntime.SCREEN_LEASH_M + 8.0, "sensor drone never exceeds screen leash")
+	runner.check(
+		last_pos.distance_to(want) < 95.0,
+		"sensor drone settles ahead at screen range"
+	)
 
 
 static func _test_attack_orbit_fires(runner: TestRunner, catalog: Catalog) -> void:

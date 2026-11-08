@@ -444,7 +444,7 @@
   },
   {
     "id": "caa_arsenal_bonded_20",
-    "name": "Arsenal Bonded 20",
+    "name": "Arsenal Bonded Hold 20",
     "maker": "Crown & Anchor",
     "brand": "Bonded",
     "category": "cargo",
@@ -454,7 +454,7 @@
     "power_demand": 0.8,
     "compute_demand": 1.5,
     "cost": 5200,
-    "description": "Large bonded magazine for licensed ordnance and military freight.",
+    "description": "Bonded brand holding bays from C&A ensure standards-compliant chain-of-custody for insured and high-value freight.",
     "capabilities": [
       "military_grade",
       "secure_cargo"
@@ -468,7 +468,7 @@
   },
   {
     "id": "atl_heavy_dry_20",
-    "name": "Heavy Dry 20",
+    "name": "Loadmaster Heavy DryHold 20",
     "maker": "Atlas Concern",
     "brand": "Loadmaster",
     "category": "cargo",
@@ -476,7 +476,7 @@
     "volume": 10.0,
     "cargo_capacity": 20.0,
     "cost": 1095,
-    "description": "Unmarked dry bulk for industrial feedstock and components.",
+    "description": "Loadmaster brand holds: unmatched dry bulk space for industrial feedstock and components.",
     "capabilities": [],
     "signature": {
       "thermal": 0.32,
@@ -495,7 +495,7 @@
     "volume": 6.0,
     "cargo_capacity": 10.0,
     "cost": 780,
-    "description": "Pacific Triad general-purpose internal hold.",
+    "description": "Triad brand from PT: general-purpose internal hold.",
     "capabilities": [],
     "signature": {
       "thermal": 0.31,
@@ -514,7 +514,7 @@
     "volume": 6.2,
     "cargo_capacity": 10.0,
     "cost": 740,
-    "description": "House-standard dry hold for mixed merchant fleets.",
+    "description": "When you've tried the rest, come back to the best! Universal house-standard dry hold for all your cargo needs.",
     "capabilities": [],
     "signature": {
       "thermal": 0.3,
