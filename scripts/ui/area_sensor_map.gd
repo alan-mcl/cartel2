@@ -257,7 +257,8 @@ func _draw_range_circles(center: Vector2, half_px: float, scale: float) -> void:
 			continue
 		var col := _circle_color(circle, sensor_drawn)
 		col.a = 0.85
-		_draw_range_circle(center, radius_px, col, 1.25)
+		var ring_center := _range_circle_center(center, circle, scale)
+		_draw_range_circle(ring_center, radius_px, col, 1.25)
 		sensor_drawn += 1
 	if not visual_circle.is_empty():
 		var visual_px := float(visual_circle.get("range_m", 0.0)) * scale
@@ -265,6 +266,17 @@ func _draw_range_circles(center: Vector2, half_px: float, scale: float) -> void:
 			var vcol := _circle_color(visual_circle, 0)
 			vcol.a = 0.95
 			_draw_range_circle(center, visual_px, vcol, 1.5)
+
+
+func _range_circle_center(map_center: Vector2, circle: Dictionary, scale: float) -> Vector2:
+	if not circle.has("origin"):
+		return map_center
+	var stored: Variant = circle.get("origin", {})
+	if typeof(stored) != TYPE_DICTIONARY:
+		return map_center
+	var origin_dict: Dictionary = stored
+	var origin := Vector2(float(origin_dict.get("x", 0.0)), float(origin_dict.get("y", 0.0)))
+	return map_center + (origin - _ship_pos) * scale
 
 
 func _draw_range_circle(center: Vector2, radius_px: float, color: Color, width: float) -> void:

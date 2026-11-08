@@ -58,7 +58,8 @@ static func refresh_player_detection(
 	player_broadcasting: bool,
 	traffic_config: Dictionary,
 	observer_reads_beacons: bool = false,
-	drone_contacts: Array = []
+	drone_contacts: Array = [],
+	drone_observer: Dictionary = {}
 ) -> void:
 	if actor.assembled_ship == null:
 		actor.player_detected = false
@@ -91,6 +92,19 @@ static func refresh_player_detection(
 				SensorSystem.live_signature(actor.assembled_ship, actor.operating_state),
 				broadcasting,
 				observer_profile,
+				visual_radius
+			)
+
+	if not actor.player_detected and not drone_observer.is_empty():
+		var drone_pos: Vector2 = drone_observer.get("position", Vector2.ZERO)
+		var drone_profile: Dictionary = drone_observer.get("profile", {})
+		if not drone_profile.is_empty():
+			actor.player_detected = SensorSystem.extends_detection_from_position(
+				drone_profile,
+				drone_pos,
+				actor.position,
+				SensorSystem.live_signature(actor.assembled_ship, actor.operating_state),
+				broadcasting,
 				visual_radius
 			)
 

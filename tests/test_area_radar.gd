@@ -9,6 +9,7 @@ static func run(runner: TestRunner) -> void:
 	_test_shared_ranges_merged(runner)
 	_test_view_half_extent(runner, catalog)
 	_test_no_local_sensor_empty_modules(runner)
+	_test_sensor_drone_offset_circle(runner, catalog)
 
 
 static func _assembled_with_sensors(modules: Array) -> AssembledShip:
@@ -111,3 +112,40 @@ static func _test_no_local_sensor_empty_modules(runner: TestRunner) -> void:
 			sensor_circles += 1
 	runner.check_eq(sensor_circles, 0, "no local_sensor means no sensor circles")
 	runner.check(snapshot.get("circles", []).size() >= 1, "visual circle still present")
+
+
+static func _test_sensor_drone_offset_circle(runner: TestRunner, catalog: Catalog) -> void:
+	var assembled := _assembled_with_sensors([_sensor_module_entry({"id": "s1", "name": "Alpha"})])
+	var owned := OwnedShip.new()
+	owned.deployed_drone = {
+		"active": true,
+		"slot": "light_weapon_1",
+		"module_id": "merc_lark_survey",
+		"task": DroneDirector.TASK_SENSOR,
+		"position": {"x": 5000.0, "y": -200.0},
+		"velocity": {"x": 0.0, "y": 0.0},
+		"facing": 0.0,
+	}
+	var ship_pos := Vector2.ZERO
+	var snapshot := AreaRadar.build_snapshot(assembled, null, catalog)
+	AreaRadar.append_sensor_drone_circle(snapshot, catalog, owned, ship_pos, 1.0, true)
+	var found := false
+	for circle_variant in snapshot.get("circles", []):
+		if typeof(circle_variant) != TYPE_DICTIONARY:
+			continue
+		var circle: Dictionary = circle_variant
+		if not circle.has("origin"):
+			continue
+		found = true
+		runner.check(float(circle.get("range_m", 0.0)) > 1000.0, "drone circle carries module sensor range")
+		var origin: Dictionary = circle.get("origin", {})
+		runner.check_eq(
+			float(origin.get("x", -1.0)),
+			5000.0,
+			"drone circle origin matches airframe"
+		)
+	runner.check(found, "sensor drone adds offset circle to snapshot")
+	runner.check(
+		float(snapshot.get("view_half_extent_m", 0.0)) > 5000.0,
+		"view extent grows for offset drone envelope"
+	)

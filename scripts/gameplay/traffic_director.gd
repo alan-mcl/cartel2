@@ -122,6 +122,12 @@ func tick(
 	var player_reads_beacons := (
 		player_assembled != null and player_assembled.has_capability("sensor_read_beacons")
 	)
+	var drone_observer := DroneRuntime.player_sensor_drone_observer(
+		_catalog,
+		player_owned,
+		player_effectiveness,
+		player_active_sensors
+	)
 
 	_sim_slot_assign_counter += 1
 	if _sim_slot_assign_counter >= SIM_SLOT_ASSIGN_INTERVAL:
@@ -147,7 +153,8 @@ func tick(
 				player_broadcasting,
 				_traffic_config,
 				player_reads_beacons,
-				drone_contacts
+				drone_contacts,
+				drone_observer
 			)
 		else:
 			_touch_stale_detection(actor)

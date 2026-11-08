@@ -582,7 +582,8 @@ func refresh_player_detection(
 	player_broadcasting: bool,
 	traffic_config: Dictionary,
 	observer_reads_beacons: bool = false,
-	drone_contacts: Array = []
+	drone_contacts: Array = [],
+	drone_observer: Dictionary = {}
 ) -> void:
 	TrafficDetection.refresh_player_detection(
 		self,
@@ -592,7 +593,8 @@ func refresh_player_detection(
 		player_broadcasting,
 		traffic_config,
 		observer_reads_beacons,
-		drone_contacts
+		drone_contacts,
+		drone_observer
 	)
 
 

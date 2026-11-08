@@ -484,6 +484,29 @@ static func combat_contacts_for_npc(
 	return out
 
 
+## Player hull sensor extension while the deployed airframe is on [DroneDirector.TASK_SENSOR].
+static func player_sensor_drone_observer(
+	catalog: Catalog,
+	owned: OwnedShip,
+	effectiveness: float,
+	active_sensors_enabled: bool
+) -> Dictionary:
+	if catalog == null or owned == null or not is_deployed(owned):
+		return {}
+	if str(owned.deployed_drone.get("task", "")) != DroneDirector.TASK_SENSOR:
+		return {}
+	var module_id := str(owned.deployed_drone.get("module_id", ""))
+	var module_def := catalog.get_module_def(module_id)
+	if module_def == null:
+		return {}
+	return {
+		"position": _read_pos(owned.deployed_drone),
+		"profile": SensorSystem.observer_profile_from_drone_module(
+			module_def, effectiveness, active_sensors_enabled
+		),
+	}
+
+
 static func build_context(
 	ship_pos: Vector2,
 	ship_facing: float,

@@ -232,6 +232,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			_hud.toggle_flight_manifest()
 			get_viewport().set_input_as_handled()
 			return
+	if event.is_action_pressed("area_map"):
+		if _menu.can_toggle_pause():
+			_hud.toggle_area_sensor_map()
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("hyperdrive"):
 		if _menu.can_toggle_pause() and not _jump.visible and not _hyperdrive.visible:
 			_world.try_hyperdrive_spool()

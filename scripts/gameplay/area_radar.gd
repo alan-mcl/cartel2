@@ -97,3 +97,41 @@ static func _cluster_by_range(module_entries: Array) -> Array:
 		else:
 			clusters.append({"range_m": range_m, "labels": PackedStringArray([name])})
 	return clusters
+
+
+## Adds an offset sensor ring when the player airframe is on a sensor task.
+static func append_sensor_drone_circle(
+	snapshot: Dictionary,
+	catalog: Catalog,
+	player_owned: OwnedShip,
+	ship_pos: Vector2,
+	effectiveness: float,
+	active_sensors_enabled: bool
+) -> void:
+	if snapshot.is_empty() or catalog == null or player_owned == null:
+		return
+	var observer := DroneRuntime.player_sensor_drone_observer(
+		catalog, player_owned, effectiveness, active_sensors_enabled
+	)
+	if observer.is_empty():
+		return
+	var module_id := str(player_owned.deployed_drone.get("module_id", ""))
+	var module_def := catalog.get_module_def(module_id)
+	if module_def == null:
+		return
+	var profile: Dictionary = observer.get("profile", {})
+	var range_m := float(profile.get("range", 0.0)) * effectiveness
+	if range_m <= 0.0:
+		return
+	var drone_pos: Vector2 = observer.get("position", Vector2.ZERO)
+	var circles: Array = snapshot.get("circles", []).duplicate()
+	circles.append({
+		"kind": "sensor",
+		"range_m": range_m,
+		"labels": PackedStringArray([module_def.name]),
+		"origin": {"x": drone_pos.x, "y": drone_pos.y},
+	})
+	snapshot["circles"] = circles
+	var envelope := drone_pos.distance_to(ship_pos) + range_m
+	var half_extent := float(snapshot.get("view_half_extent_m", 0.0))
+	snapshot["view_half_extent_m"] = maxf(half_extent, envelope * VIEW_MARGIN_FACTOR)

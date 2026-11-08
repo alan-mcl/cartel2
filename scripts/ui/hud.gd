@@ -424,7 +424,8 @@ func set_nav_state(
 	camera: Camera2D,
 	player_broadcast: Dictionary = {},
 	locked_contact: Dictionary = {},
-	ship_velocity: Vector2 = Vector2.ZERO
+	ship_velocity: Vector2 = Vector2.ZERO,
+	player_owned: OwnedShip = null
 ) -> void:
 	_player_broadcast_text = TransponderBroadcastScript.format_tooltip(player_broadcast)
 	_last_nav_contacts = contacts
@@ -435,6 +436,19 @@ func set_nav_state(
 		_local_sensor_map.set_nav_state(nav_radius, ship_pos, ship_heading_deg, contacts)
 	if _has_capability("local_sensor") and _area_sensor_map != null and _area_sensor_map.has_method("set_frame"):
 		var snapshot := AreaRadar.build_snapshot(_assembled_ship, _operating_state, _catalog)
+		if player_owned != null:
+			var effectiveness := SensorSystem.sensor_effectiveness(_assembled_ship, _operating_state)
+			var active_sensors := true
+			if _operating_state != null:
+				active_sensors = bool(_operating_state.active_systems.get("active_sensors", true))
+			AreaRadar.append_sensor_drone_circle(
+				snapshot,
+				_catalog,
+				player_owned,
+				ship_pos,
+				effectiveness,
+				active_sensors
+			)
 		_area_sensor_map.set_frame(
 			snapshot,
 			ship_pos,

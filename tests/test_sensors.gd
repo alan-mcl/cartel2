@@ -26,6 +26,7 @@ static func run(runner: TestRunner) -> void:
 	_test_threshold_detection_close_boost(runner)
 	_test_branded_sensor_quiet_profile(runner, catalog)
 	_test_branded_sensor_signatures(runner, catalog)
+	_test_sensor_drone_extends_player_detection(runner, catalog)
 
 
 static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -> AssembledShip:
@@ -734,3 +735,56 @@ static func _test_branded_sensor_signatures(runner: TestRunner, catalog: Catalog
 		float(sig_off.get("electromagnetic", 0.0)) <= float(idle.get("electromagnetic", 0.0)) + 0.01,
 		"Glance idle signature stays quiet without active ping"
 	)
+
+
+static func _test_sensor_drone_extends_player_detection(runner: TestRunner, catalog: Catalog) -> void:
+	var TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
+	var actor = TrafficActorScript.new()
+	actor.id = "drone_sensor_extend"
+	actor.assembled_ship = _assembled_with_modules([
+		_module_entry({"id": "beacon", "category": "transponder", "signature": {}}),
+		_module_entry({
+			"id": "em_target",
+			"category": "weapon",
+			"signature": {
+				"thermal": 0.0,
+				"gravitational": 0.0,
+				"electromagnetic": 85.0,
+				"computational": 0.0,
+			},
+		}),
+	])
+	actor.assembled_ship.signature = SensorSystem.compute_ship_signature(actor.assembled_ship)
+	actor.owned_ship = OwnedShip.new()
+	actor._position = Vector2(5500.0, 0.0)
+	actor.owned_ship.transponder_enabled = true
+	actor.operating_state.transponder_broadcasting = true
+	var hull_profile := _observer_profile(1200.0, {"electromagnetic": 1.0})
+	var traffic_config := {"visual_contact_radius": 250.0}
+	var module_def := catalog.get_module_def("merc_lark_survey")
+	var drone_observer := {
+		"position": Vector2(4800.0, 0.0),
+		"profile": SensorSystem.observer_profile_from_drone_module(module_def, 1.0, true),
+	}
+	actor.refresh_player_detection(
+		Vector2.ZERO,
+		hull_profile,
+		SensorSystem.empty_signature(),
+		false,
+		traffic_config,
+		false,
+		[],
+		{}
+	)
+	runner.check(not actor.player_detected, "hull observer alone misses distant contact")
+	actor.refresh_player_detection(
+		Vector2.ZERO,
+		hull_profile,
+		SensorSystem.empty_signature(),
+		false,
+		traffic_config,
+		false,
+		[],
+		drone_observer
+	)
+	runner.check(actor.player_detected, "sensor drone observer detects contact beyond hull range")
