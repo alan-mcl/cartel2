@@ -992,7 +992,7 @@
     "power_demand": 0.45,
     "compute_demand": 0.28,
     "cost": 520,
-    "description": "Cockpit 1 delivers air to the pilots who have other things to worry about.",
+    "description": "The Aegis Cockpit 1 delivers air to pilots who have other things to worry about.",
     "signature": {
       "thermal": 2.1,
       "gravitational": 0.04,
