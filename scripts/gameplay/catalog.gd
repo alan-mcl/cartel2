@@ -29,6 +29,7 @@ const ECONOMIES_PATH := "res://data/catalog/economies.json"
 const SANCTIONS_PATH := "res://data/catalog/sanctions.json"
 const MESSAGE_EMITTERS_PATH := "res://data/catalog/message_emitters.json"
 const PLOTLINES_PATH := "res://data/catalog/plotlines.json"
+const ENCOUNTERS_PATH := "res://data/catalog/encounters.json"
 const CELEBRITY_PILOTS_PATH := "res://data/catalog/celebrity_pilots.json"
 const CORPORATE_OFFICE_TICKER_PATH := "res://data/catalog/corporate_office_ticker.json"
 const STARS_PATH := "res://data/catalog/stars.json"
@@ -66,6 +67,7 @@ var volatile_sites_by_id: Dictionary = {}
 var sanction_infractions_by_id: Dictionary = {}
 var message_emitters_by_id: Dictionary = {}
 var plotlines_by_id: Dictionary = {}
+var encounters_config: Dictionary = {}
 var celebrity_pilots_by_id: Dictionary = {}
 var corporate_office_ticker_config: Dictionary = {}
 var stars_by_name: Dictionary = {}
@@ -111,6 +113,7 @@ func load_all() -> void:
 	_load_sanctions()
 	message_emitters_by_id = _load_indexed_array(MESSAGE_EMITTERS_PATH)
 	plotlines_by_id = _load_indexed_array(PLOTLINES_PATH)
+	encounters_config = _load_json_object(ENCOUNTERS_PATH)
 	celebrity_pilots_by_id = _load_indexed_array(CELEBRITY_PILOTS_PATH)
 	corporate_office_ticker_config = _load_json_object(CORPORATE_OFFICE_TICKER_PATH)
 	stars_by_name = _load_json_object(STARS_PATH)
@@ -379,6 +382,23 @@ func get_plotline(id: String) -> Dictionary:
 
 func list_plotlines() -> Array:
 	return plotlines_by_id.values()
+
+
+func get_encounters_config() -> Dictionary:
+	return encounters_config
+
+
+func get_encounter_def(id: String) -> Dictionary:
+	var entries: Variant = encounters_config.get("encounters", [])
+	if typeof(entries) != TYPE_ARRAY:
+		return {}
+	for entry_variant in entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		if str(entry.get("id", "")) == id:
+			return entry.duplicate(true)
+	return {}
 
 
 func get_celebrity_pilot(id: String) -> Dictionary:

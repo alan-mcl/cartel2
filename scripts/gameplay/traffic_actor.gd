@@ -117,6 +117,10 @@ var last_known_player_pos: Vector2 = Vector2.ZERO
 var needs_systems_catchup: bool = false
 var cycle_pending: bool = false
 var cycle_spawn_hint: Dictionary = {}
+var encounter_pinned: bool = false
+var encounter_engagement: String = ""
+var encounter_peer_slot: String = ""
+var encounter_lock_pos: Vector2 = Vector2.ZERO
 
 var _position: Vector2 = Vector2.ZERO
 var _route_initialized: bool = false
@@ -217,7 +221,11 @@ func take_combat_hit(
 		bounty_provoked = true
 		_bounty_commit_after_notice(traffic_config)
 	elif ai_state == AiState.TRAFFIC or ai_state == AiState.DOCKING:
-		if combat_attitude == CombatAttitude.FIGHT_TO_DEATH or should_engage(traffic_config):
+		if encounter_engagement == "peer":
+			ai_state = AiState.ENGAGE
+			engage_timer = 9999.0
+			begin_combat_pilot()
+		elif combat_attitude == CombatAttitude.FIGHT_TO_DEATH or should_engage(traffic_config):
 			ai_state = AiState.ENGAGE
 			engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
 			begin_combat_pilot()
@@ -649,6 +657,8 @@ func _engage_target_motion(
 func _combat_target_pos(player_pos: Vector2) -> Vector2:
 	if locked_target_id.begins_with("drone:") and locked_drone_lock_pos.is_finite():
 		return locked_drone_lock_pos
+	if encounter_engagement == "peer" and encounter_lock_pos.is_finite():
+		return encounter_lock_pos
 	if locked_target_id == TargetLock.PLAYER_TARGET_ID or locked_target_id.is_empty():
 		if has_player_contact:
 			return player_pos

@@ -46,6 +46,12 @@ func complete_gig(session: GameSession, catalog: Catalog, plotline_id: String, g
 	return _apply_gig_stimulus(session, catalog, plotline_id, gig_id, "gig_completed")
 
 
+func instance_state(plotline_id: String) -> String:
+	if not _instances.has(plotline_id):
+		return ""
+	return str(_instances[plotline_id].get("state", ""))
+
+
 func contribute_messages(
 	channel: String,
 	session: GameSession,

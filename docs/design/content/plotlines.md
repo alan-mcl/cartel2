@@ -17,7 +17,7 @@ Plotlines are optional background arcs. Each arc is a small state machine in [`p
 
 | Kind | Fired by |
 |------|----------|
-| `event` | `GameSession.events` / `Simulation.dispatch_event` — requires `type` matching [`SimEvent`](../../../scripts/gameplay/sim_event.gd); optional extra keys must equal the event payload (`habitat_id`, `sector_id`, …). |
+| `event` | `GameSession.events` / `Simulation.dispatch_event` — requires `type` matching [`SimEvent`](../../../scripts/gameplay/sim_event.gd); optional extra keys must equal the event payload (`habitat_id`, `sector_id`, `encounter_id`, …). Includes `encounter_started` from [`EncounterSubsystem`](../../../scripts/gameplay/encounter_subsystem.gd). |
 | `days_in_state` | `PlotlineSubsystem.on_day` — `days` is the minimum GST days since `entered_gst`. |
 | `gig_accepted` | `PlotlineSubsystem.accept_gig(plotline_id, gig_id)` |
 | `gig_completed` | `PlotlineSubsystem.complete_gig(plotline_id, gig_id)` |

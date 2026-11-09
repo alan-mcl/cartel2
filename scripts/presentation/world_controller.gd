@@ -442,7 +442,12 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 
 	_flight.clear_traffic()
 	if not _main.session.in_unspace:
-		_flight.setup_traffic(_world)
+		_flight.setup_traffic(_world, _simulation)
+	else:
+		var field := _world_loader.get_nspace_field()
+		if field != null:
+			field.apply_encounter_ascidians(_main.session, _catalog)
+	_flight.announce_encounter(_simulation)
 
 	if place_player:
 		match spawn_near:

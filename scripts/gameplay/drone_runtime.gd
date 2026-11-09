@@ -465,6 +465,10 @@ static func hostile_ids_for_npc_actor(actor) -> Array:
 		actor.ai_state == TrafficActorScript.STATE_ENGAGE
 		or actor.ai_state == TrafficActorScript.STATE_FLEE
 	):
+		if str(actor.encounter_engagement) == "peer":
+			var peer_id := str(actor.locked_target_id).strip_edges()
+			if not peer_id.is_empty():
+				return [peer_id]
 		return [TargetLock.PLAYER_TARGET_ID]
 	return []
 

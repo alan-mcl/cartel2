@@ -5,6 +5,7 @@ const TrafficDirectorScript := preload("res://scripts/gameplay/traffic_director.
 const TrafficViewScript := preload("res://scripts/presentation/traffic_view.gd")
 const TransponderBroadcastScript := preload("res://scripts/gameplay/transponder_broadcast.gd")
 const TrafficSpawnScript := preload("res://scripts/gameplay/traffic_spawn.gd")
+const EncounterMaterializeScript := preload("res://scripts/gameplay/encounter_materialize.gd")
 
 var _traffic_director = null
 var _traffic_view = null
@@ -61,9 +62,10 @@ func clear_traffic() -> void:
 		_traffic_director.clear()
 
 
-func setup_traffic(world: Node2D) -> void:
+func setup_traffic(world: Node2D, simulation: Simulation = null) -> void:
 	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
 		_setup_volatile_site_traffic(world)
+		_apply_active_encounter_ships(world, simulation)
 		return
 	_ensure_traffic_director()
 	if _traffic_director == null:
@@ -75,6 +77,7 @@ func setup_traffic(world: Node2D) -> void:
 		_player.global_position,
 		_world_loader
 	)
+	_apply_active_encounter_ships(world, simulation)
 	if _traffic_view != null:
 		_traffic_view.setup(world)
 		_traffic_view.sync(_traffic_director.actors, _catalog)
@@ -413,7 +416,7 @@ func _setup_volatile_site_traffic(world: Node2D) -> void:
 					)
 					if escort_actor != null:
 						roster.append(escort_actor)
-	if roster.is_empty():
+	if roster.is_empty() and not _encounter_has_ship_spawns():
 		clear_traffic()
 		return
 	_traffic_director.setup_scripted_volatile_roster(
@@ -715,6 +718,55 @@ func _tick_unspace_flux(delta: float) -> void:
 	if not log_msg.is_empty():
 		_main.session.last_log = log_msg
 		_main.session.changed.emit()
+
+
+func _encounter_has_ship_spawns() -> bool:
+	if _main.session.bound_encounters == null:
+		return false
+	var plan: Dictionary = _main.session.bound_encounters.get_active_plan()
+	var spawns: Variant = plan.get("spawns", [])
+	return typeof(spawns) == TYPE_ARRAY and not (spawns as Array).is_empty()
+
+
+func _apply_active_encounter_ships(world: Node2D, simulation: Simulation) -> void:
+	if _main == null or _main.session == null or _main.session.in_unspace:
+		return
+	var encounters: EncounterSubsystem = _main.session.bound_encounters
+	if encounters == null and simulation != null:
+		encounters = simulation.get_subsystem("encounters") as EncounterSubsystem
+	if encounters == null or _traffic_director == null:
+		return
+	if encounters.get_active_plan().is_empty():
+		return
+	var traffic_config := _catalog.get_traffic_config()
+	var extras := EncounterMaterializeScript.spawn_actors_for_plan(
+		encounters,
+		_catalog,
+		traffic_config,
+		_main.session.sector_id,
+		_world_loader,
+		_player.global_position
+	)
+	if extras.is_empty():
+		return
+	_traffic_director.append_encounter_actors(extras)
+	if _traffic_view != null:
+		_traffic_view.setup(world)
+		_traffic_view.sync(_traffic_director.actors, _catalog)
+
+
+func announce_encounter(simulation: Simulation) -> void:
+	if _main == null or _main.session == null:
+		return
+	var encounters: EncounterSubsystem = _main.session.bound_encounters
+	if encounters == null and simulation != null:
+		encounters = simulation.get_subsystem("encounters") as EncounterSubsystem
+	if encounters == null:
+		return
+	var messages: MessageSubsystem = null
+	if simulation != null:
+		messages = simulation.get_subsystem("messages") as MessageSubsystem
+	encounters.announce_if_needed(_main.session, _catalog, messages)
 
 
 static func active_sensors_hud_label(assembled: AssembledShip, state: ShipOperatingState) -> String:

@@ -16,6 +16,9 @@ var events := EventBus.new()
 var bound_missions: MissionSubsystem = null
 ## Set while a Simulation is attached; used for plot gig queries when UI does not pass plotlines.
 var bound_plotlines: PlotlineSubsystem = null
+var bound_encounters: EncounterSubsystem = null
+## Dev harness only: `default` (catalog chance), `off`, or ignored when a plan is pre-granted.
+var harness_encounter_roll: String = "default"
 
 const HULL_STRESS_LOG_STEP := 10.0
 var _hull_stress_next_log_below: float = -1.0
@@ -564,6 +567,9 @@ func enter_unspace(
 	world.location_name = "%d-space" % n
 	if _track_career_enabled():
 		career.record_translation(n)
+	events.publish(
+		SimEvent.unspace_entered(destination_id, n, int(mapping.get("solution", solution)))
+	)
 	changed.emit()
 	return true
 

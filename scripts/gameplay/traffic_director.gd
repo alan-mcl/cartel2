@@ -62,6 +62,19 @@ func setup_lone_bounty_actor(
 	setup_scripted_volatile_roster(catalog, sector_id, traffic_envelope, player_pos, roster)
 
 
+func append_encounter_actors(extra: Array) -> void:
+	if extra.is_empty():
+		return
+	for actor_variant in extra:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		actor.encounter_pinned = true
+		actor.has_sim_slot = true
+		actor.near_lod = true
+		actors.append(actor)
+
+
 func setup_scripted_volatile_roster(
 	catalog: Catalog,
 	sector_id: String,
@@ -138,6 +151,7 @@ func tick(
 		if typeof(actor_variant) != TYPE_OBJECT:
 			continue
 		var actor = actor_variant
+		_refresh_encounter_peer_lock(actor)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
 			if _handle_destroyed(actor, delta, player_pos, anchors, world_loader):
@@ -416,7 +430,7 @@ func _retire_and_replace(
 	if index >= 0:
 		actors.remove_at(index)
 	_destroyed_timers.erase(actor.id)
-	if _lone_actor_mode:
+	if actor.encounter_pinned or _lone_actor_mode:
 		return
 	_spawn_replacement(hint, player_pos, anchors, world_loader)
 
@@ -424,8 +438,16 @@ func _retire_and_replace(
 func _maintain_fleet_size(player_pos: Vector2, anchors: Array, world_loader: WorldLoader) -> void:
 	if _lone_actor_mode:
 		return
-	while actors.size() < _target_fleet_size:
+	var ambient_count := 0
+	for actor_variant in actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if not actor.encounter_pinned:
+			ambient_count += 1
+	while ambient_count < _target_fleet_size:
 		_spawn_replacement({}, player_pos, anchors, world_loader)
+		ambient_count += 1
 
 
 func _handle_destroyed(
@@ -443,6 +465,12 @@ func _handle_destroyed(
 	if float(_destroyed_timers[actor.id]) > 0.0:
 		return true
 
+	if actor.encounter_pinned:
+		var pinned_index := actors.find(actor)
+		if pinned_index >= 0:
+			actors.remove_at(pinned_index)
+		_destroyed_timers.erase(actor.id)
+		return true
 	if _lone_actor_mode:
 		var index := actors.find(actor)
 		if index >= 0:
@@ -451,6 +479,21 @@ func _handle_destroyed(
 		return true
 	_retire_and_replace(actor, {"reason": "destroyed"}, player_pos, anchors, world_loader)
 	return true
+
+
+func _refresh_encounter_peer_lock(actor) -> void:
+	if str(actor.encounter_engagement) != "peer":
+		return
+	var peer_id := str(actor.locked_target_id).strip_edges()
+	if peer_id.is_empty():
+		return
+	for other_variant in actors:
+		if typeof(other_variant) != TYPE_OBJECT:
+			continue
+		var other = other_variant
+		if str(other.id) == peer_id:
+			actor.encounter_lock_pos = other.position
+			return
 
 
 func _pick_role() -> String:

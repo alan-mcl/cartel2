@@ -98,6 +98,8 @@ func query_weapon_guidance(target_id: String) -> Dictionary:
 		return {"active": true, "position": actor.last_known_player_pos}
 	if target_id.begins_with("drone:"):
 		return {"active": true, "position": actor.locked_drone_lock_pos}
+	if str(actor.encounter_engagement) == "peer" and actor.encounter_lock_pos.is_finite():
+		return {"active": true, "position": actor.encounter_lock_pos}
 	return {"active": false}
 
 

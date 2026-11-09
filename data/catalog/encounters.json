@@ -1,0 +1,93 @@
+{
+  "chance": 0.1,
+  "encounters": [
+    {
+      "id": "celebrity_arrival",
+      "location_classes": ["hub"],
+      "weight": 1,
+      "effects": [
+        {
+          "kind": "message",
+          "log": "{celebrity} has dropped into {sector} orbit on an unscheduled hop.",
+          "headline": "WIRE — {celebrity} sighted near {habitat} ring."
+        },
+        {
+          "kind": "spawn_ship",
+          "slot": "celebrity",
+          "template_id": "pegasus_p109",
+          "attitude": "passive",
+          "transponder": true,
+          "callsign_from": "celebrity"
+        }
+      ]
+    },
+    {
+      "id": "salvage_dispute",
+      "location_classes": ["branch"],
+      "weight": 1,
+      "effects": [
+        {
+          "kind": "message",
+          "log": "Salvage tugs are exchanging fire over a claim beacon."
+        },
+        {
+          "kind": "spawn_ship",
+          "slot": "salvager_a",
+          "template_id": "wolff_gladius",
+          "attitude": "hostile_peer",
+          "peer": "salvager_b",
+          "transponder": true
+        },
+        {
+          "kind": "spawn_ship",
+          "slot": "salvager_b",
+          "template_id": "juno_1088",
+          "attitude": "hostile_peer",
+          "peer": "salvager_a",
+          "transponder": true
+        }
+      ]
+    },
+    {
+      "id": "player_ambush",
+      "location_classes": ["volatile"],
+      "weight": 1,
+      "effects": [
+        {
+          "kind": "message",
+          "log": "Hostile contacts closing—no transponder."
+        },
+        {
+          "kind": "spawn_ship",
+          "slot": "ambush_a",
+          "template_id": "wolff_warrior",
+          "attitude": "hostile_player",
+          "transponder": false
+        },
+        {
+          "kind": "spawn_ship",
+          "slot": "ambush_b",
+          "template_id": "mantis_xf900",
+          "attitude": "hostile_player",
+          "transponder": false
+        }
+      ]
+    },
+    {
+      "id": "ascidian_congregation",
+      "location_classes": ["unspace"],
+      "weight": 1,
+      "effects": [
+        {
+          "kind": "message",
+          "log": "Unusual ascidian congregation near the flux ridge."
+        },
+        {
+          "kind": "ascidian_cluster",
+          "extra_count": 6,
+          "spread_fraction": 0.35
+        }
+      ]
+    }
+  ]
+}

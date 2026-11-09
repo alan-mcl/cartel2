@@ -19,6 +19,8 @@ var _scan_target_option: OptionButton
 var _bounty_target_option: OptionButton
 var _retrieval_type_option: OptionButton
 var _site_option: OptionButton
+var _encounter_option: OptionButton
+var _encounter_choice_keys: Array[String] = []
 var _scan_row: HBoxContainer
 var _bounty_row: HBoxContainer
 var _retrieval_row: HBoxContainer
@@ -184,6 +186,10 @@ func _build_setup_overlay() -> void:
 	_site_option = OptionButton.new()
 	right.add_child(_site_option)
 
+	right.add_child(_field_label("Random encounter"))
+	_encounter_option = OptionButton.new()
+	right.add_child(_encounter_option)
+
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 12)
 	vbox.add_child(footer)
@@ -329,6 +335,56 @@ func _populate_options() -> void:
 		_site_ids.append(site_id)
 		_site_option.add_item(VolatileSites.site_label(site))
 	_site_option.select(0)
+
+	_encounter_choice_keys.clear()
+	_encounter_option.clear()
+	_encounter_option.add_item("Default (catalog chance)")
+	_encounter_choice_keys.append("default")
+	_encounter_option.add_item("Off")
+	_encounter_choice_keys.append("off")
+	_encounter_option.add_item("Random volatile")
+	_encounter_choice_keys.append("random")
+	for def_variant in EncounterSubsystem.list_defs_for_class(_catalog, "volatile"):
+		if typeof(def_variant) != TYPE_DICTIONARY:
+			continue
+		var def: Dictionary = def_variant
+		var encounter_id := str(def.get("id", "")).strip_edges()
+		if encounter_id.is_empty():
+			continue
+		_encounter_choice_keys.append(encounter_id)
+		_encounter_option.add_item(_encounter_harness_label(encounter_id))
+	_encounter_option.select(0)
+
+
+func _encounter_harness_label(encounter_id: String) -> String:
+	return encounter_id.replace("_", " ").capitalize()
+
+
+func _apply_harness_encounter(session: GameSession, volatile_sector: String) -> void:
+	var choice := "default"
+	var index := _encounter_option.selected
+	if index >= 0 and index < _encounter_choice_keys.size():
+		choice = _encounter_choice_keys[index]
+	session.harness_encounter_roll = "off" if choice == "off" else "default"
+	var encounters := _main.get_simulation().get_subsystem("encounters") as EncounterSubsystem
+	if encounters == null:
+		return
+	encounters.clear_active()
+	match choice:
+		"off":
+			pass
+		"default":
+			encounters.try_arrival_roll(session, _catalog)
+		"random":
+			if not encounters.grant_random_for_class(
+				session, _catalog, "volatile", volatile_sector
+			):
+				push_warning("Mission harness: no volatile encounter available for random grant.")
+		_:
+			if not encounters.grant_for_location(
+				session, _catalog, choice, volatile_sector, "volatile"
+			):
+				push_warning("Mission harness: could not grant encounter '%s'." % choice)
 
 
 func _refresh_job_controls() -> void:
@@ -543,6 +599,8 @@ func _on_begin_pressed() -> void:
 	if not session.enter_sector(_catalog, volatile_sector):
 		_status_label.text = "Could not enter volatile sector."
 		return
+
+	_apply_harness_encounter(session, volatile_sector)
 
 	_main.dev_set_quit_to_menu(Callable(self, "_reload_harness"))
 	_main.dev_start_game_from_session()

@@ -12,6 +12,8 @@ const MODULE_INSTALLED := "module_installed"
 const CREDITS_CHANGED := "credits_changed"
 const SHIP_DESTROYED := "ship_destroyed"
 const SALVAGE_TAKEN := "salvage_taken"
+const UNSPACE_ENTERED := "unspace_entered"
+const ENCOUNTER_STARTED := "encounter_started"
 
 
 static func make(type: String, payload: Dictionary = {}) -> Dictionary:
@@ -79,4 +81,26 @@ static func salvage_taken(interactable_id: String, reward: int) -> Dictionary:
 	return make(SALVAGE_TAKEN, {
 		"interactable_id": interactable_id,
 		"reward": reward,
+	})
+
+
+static func unspace_entered(destination_id: String, n: int, solution: int) -> Dictionary:
+	return make(UNSPACE_ENTERED, {
+		"destination_id": destination_id,
+		"n": n,
+		"solution": solution,
+	})
+
+
+static func encounter_started(
+	encounter_id: String,
+	location_class: String,
+	sector_id: String,
+	unspace_n: int = 0
+) -> Dictionary:
+	return make(ENCOUNTER_STARTED, {
+		"encounter_id": encounter_id,
+		"location_class": location_class,
+		"sector_id": sector_id,
+		"n": unspace_n,
 	})

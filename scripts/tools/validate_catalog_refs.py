@@ -1755,6 +1755,99 @@ def check_message_emitters(emitters: list) -> list[str]:
     return errors
 
 
+ENCOUNTER_LOCATION_CLASSES = frozenset({"hub", "branch", "volatile", "unspace"})
+ENCOUNTER_ATTITUDES = frozenset({"passive", "hostile_player", "hostile_peer"})
+ENCOUNTER_EFFECT_KINDS = frozenset({"message", "spawn_ship", "ascidian_cluster"})
+ENCOUNTER_PLUGIN_IDS = frozenset()
+
+
+def check_encounters(doc: dict, ships: dict) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(doc, dict):
+        errors.append("encounters.json: root must be an object")
+        return errors
+    chance = doc.get("chance", 0.0)
+    if isinstance(chance, bool) or not isinstance(chance, (int, float)):
+        errors.append("encounters.json: chance must be a number")
+    elif chance < 0.0 or chance > 1.0:
+        errors.append("encounters.json: chance must be between 0 and 1")
+    entries = doc.get("encounters", [])
+    if not isinstance(entries, list):
+        errors.append("encounters.json: encounters must be an array")
+        return errors
+    seen: set[str] = set()
+    for index, entry in enumerate(entries):
+        label = f"encounters.json[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be an object")
+            continue
+        encounter_id = str(entry.get("id", "")).strip()
+        if not encounter_id:
+            errors.append(f"{label}: missing id")
+            continue
+        label = f"encounters.json {encounter_id}"
+        if encounter_id in seen:
+            errors.append(f"{label}: duplicate id")
+        seen.add(encounter_id)
+        classes = entry.get("location_classes", [])
+        if not isinstance(classes, list) or not classes:
+            errors.append(f"{label}: location_classes must be a non-empty array")
+        else:
+            for cls in classes:
+                if str(cls) not in ENCOUNTER_LOCATION_CLASSES:
+                    errors.append(f"{label}: unknown location_class '{cls}'")
+        weight = entry.get("weight", 1.0)
+        if isinstance(weight, bool) or not isinstance(weight, (int, float)) or weight <= 0:
+            errors.append(f"{label}: weight must be a number greater than 0")
+        plugin = str(entry.get("plugin", "")).strip()
+        if plugin and plugin not in ENCOUNTER_PLUGIN_IDS:
+            errors.append(f"{label}: unknown plugin '{plugin}'")
+        require = entry.get("require_plotline")
+        if require is not None and not isinstance(require, dict):
+            errors.append(f"{label}: require_plotline must be an object when present")
+        elif isinstance(require, dict) and require:
+            if not str(require.get("id", "")).strip():
+                errors.append(f"{label}: require_plotline missing id")
+            if not str(require.get("state", "")).strip():
+                errors.append(f"{label}: require_plotline missing state")
+        effects = entry.get("effects", [])
+        if not isinstance(effects, list) or not effects:
+            errors.append(f"{label}: effects must be a non-empty array")
+            continue
+        slots: set[str] = set()
+        for fx_index, effect in enumerate(effects):
+            fx_label = f"{label} effects[{fx_index}]"
+            if not isinstance(effect, dict):
+                errors.append(f"{fx_label}: effect must be an object")
+                continue
+            kind = str(effect.get("kind", ""))
+            if kind not in ENCOUNTER_EFFECT_KINDS:
+                errors.append(f"{fx_label}: unknown kind '{kind}'")
+                continue
+            if kind == "spawn_ship":
+                slot = str(effect.get("slot", "")).strip()
+                if not slot:
+                    errors.append(f"{fx_label}: spawn_ship missing slot")
+                elif slot in slots:
+                    errors.append(f"{fx_label}: duplicate slot '{slot}'")
+                else:
+                    slots.add(slot)
+                template_id = str(effect.get("template_id", ""))
+                if not template_id or template_id not in ships:
+                    errors.append(f"{fx_label}: unknown template_id '{template_id}'")
+                attitude = str(effect.get("attitude", "passive"))
+                if attitude not in ENCOUNTER_ATTITUDES:
+                    errors.append(f"{fx_label}: unknown attitude '{attitude}'")
+                peer = str(effect.get("peer", "")).strip()
+                if attitude == "hostile_peer" and not peer:
+                    errors.append(f"{fx_label}: hostile_peer requires peer slot")
+            if kind == "ascidian_cluster":
+                extra = effect.get("extra_count", 0)
+                if not isinstance(extra, int) or extra < 0:
+                    errors.append(f"{fx_label}: extra_count must be a non-negative integer")
+    return errors
+
+
 def check_plotlines(plotlines: list) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
@@ -2000,6 +2093,7 @@ def main() -> int:
     errors.extend(check_fuels(load_array(CATALOG / "fuels.json"), load_modules()))
     errors.extend(check_message_emitters(load_array(CATALOG / "message_emitters.json")))
     errors.extend(check_plotlines(load_array(CATALOG / "plotlines.json")))
+    errors.extend(check_encounters(load_object(CATALOG / "encounters.json"), ships))
     errors.extend(check_celebrity_pilots(load_array(CATALOG / "celebrity_pilots.json")))
     errors.extend(check_stars(load_object(CATALOG / "stars.json")))
     errors.extend(check_passenger_missions(passenger_missions))

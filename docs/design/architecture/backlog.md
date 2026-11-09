@@ -27,3 +27,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
 |F4|gameplay|med|Bar: add a "buy a round" button usable once per day that refreshes all the charters available, cost is proportional to system population from d50-d300
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
+|F10|ui|med|Transition solution purchase: allow the player to purchase translation solutions. Occasionally at the bar, selection available at some corp offices, refreshed daily|
+|F11|ui|med|Library: each major habitat to have a 'library' building (named differently) - function is just info/documentation browsing from the existing game catalog data, stars, planets, modules, corporations, etc. Add catalog data as needed (e.g. Corp write ups)|
+

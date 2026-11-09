@@ -1034,6 +1034,38 @@ func _spawn_ascidians(unspace: Dictionary) -> void:
 		_ascidians.append(ascidian)
 
 
+func apply_encounter_ascidians(session: GameSession, catalog: Catalog) -> void:
+	if session == null or catalog == null or session.bound_encounters == null:
+		return
+	var extras: Dictionary = session.bound_encounters.ascidian_extras(session, catalog)
+	if extras.is_empty():
+		return
+	var positions: Variant = extras.get("positions", [])
+	if typeof(positions) != TYPE_ARRAY or positions.is_empty():
+		return
+	if _inhabitants_cfg.is_empty():
+		return
+	var wander_fraction := float(_inhabitants_cfg.get("wander_radius_fraction", 0.72))
+	var mid_height := get_mid_vertex_height()
+	var spawn_cfg := _inhabitants_cfg.duplicate()
+	spawn_cfg["play_bounds"] = _play_bounds
+	spawn_cfg["wander_radius_fraction"] = wander_fraction
+	spawn_cfg["initial_swim_depth"] = mid_height
+	var plan_seed := int(session.bound_encounters.get_active_plan().get("seed", 1))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = plan_seed
+	for pos_variant in positions:
+		if typeof(pos_variant) != TYPE_DICTIONARY:
+			continue
+		var pos_dict: Dictionary = pos_variant
+		var start_pos := Vector2(float(pos_dict.get("x", 0.0)), float(pos_dict.get("y", 0.0)))
+		var ascidian: Ascidian = Ascidian.new()
+		ascidian.name = "Ascidian_enc_%d" % (_ascidians.size() + 1)
+		add_child(ascidian)
+		ascidian.configure(self, spawn_cfg, start_pos, rng)
+		_ascidians.append(ascidian)
+
+
 func _pick_ascidian_spawn(
 	spawn_hint: Vector2,
 	portal_pos: Vector2,
