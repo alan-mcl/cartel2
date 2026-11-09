@@ -1,82 +1,833 @@
 [
   {
     "id": "reaper_cosmos",
-    "name": "Reaper Cosmos"
+    "name": "Reaper Cosmos",
+    "livery": "#8B5CF6",
+    "ships": [
+      {
+        "id": "reaper_cosmos_infinity",
+        "name": "Infinity",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_ap_56",
+          "ora_bellatrix_trace",
+          "prv_lumina_lx",
+          "ora_glasspack_air",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "prv_ionique_plasma_magazine_50",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "chi_chimera_plasma_burst",
+          "sbi_sextant"
+        ]
+      },
+      {
+        "id": "reaper_cosmos_names_to_conjure_with",
+        "name": "Names to Conjure With",
+        "chassis": "mantis_chassis",
+        "modules": [
+          "prv_voltcore_x7",
+          "roth_privy_seal_null",
+          "prv_lumina_lx",
+          "prae_aegis_seat",
+          "prv_lumina_sight",
+          "vessel_registration_beacon",
+          "fuel_tank_small",
+          "hw_helios_turbo_laser",
+          "sne_snedeos_electronic_shield",
+          "sne_snedeos_cyberwall"
+        ]
+      }
+    ]
   },
   {
     "id": "the_link",
-    "name": "The Link"
+    "name": "The Link",
+    "livery": "#EC4899",
+    "ships": [
+      {
+        "id": "the_link_revenge_of_the_rose",
+        "name": "Revenge of the Rose",
+        "chassis": "mantis_chassis",
+        "modules": [
+          "prv_voltcore_x7",
+          "roth_privy_seal_null",
+          "prv_lumina_lx",
+          "prae_aegis_seat",
+          "prv_lumina_sight",
+          "vessel_registration_beacon",
+          "fuel_tank_small",
+          "hw_helios_turbo_laser",
+          "sne_snedeos_electronic_shield",
+          "sne_snedeos_cyberwall"
+        ]
+      },
+      {
+        "id": "the_link_the_aristotle_file",
+        "name": "The Aristotle File",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "binary",
-    "name": "Binary"
+    "name": "Binary",
+    "livery": "#06B6D4",
+    "ships": [
+      {
+        "id": "binary_good_idea_gone_bad",
+        "name": "Good Idea Gone Bad",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "binary_bit_shifter",
+        "name": "Bit Shifter",
+        "chassis": "krypton_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "ora_bellatrix_main_44",
+          "ora_avionics_a40",
+          "ora_cabin_a20",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "exterminator",
-    "name": "Exterminator"
+    "name": "Exterminator",
+    "livery": "#EF4444",
+    "ships": [
+      {
+        "id": "exterminator_damage",
+        "name": "Damage",
+        "chassis": "krypton_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "ora_bellatrix_main_44",
+          "ora_avionics_a40",
+          "ora_cabin_a20",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "exterminator_gun_porn",
+        "name": "Gun Porn",
+        "chassis": "juno_chassis",
+        "modules": [
+          "gi_type_40_industrial",
+          "tmc_rhumb_longhaul",
+          "hg_hermes_beam",
+          "tmc_channel_cabin",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_100",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      }
+    ]
   },
   {
     "id": "export",
-    "name": "Export"
+    "name": "Export",
+    "livery": "#F97316",
+    "ships": [
+      {
+        "id": "export_la_bella_mafia",
+        "name": "La Bella Mafia",
+        "chassis": "juno_chassis",
+        "modules": [
+          "gi_type_40_industrial",
+          "tmc_rhumb_longhaul",
+          "hg_hermes_beam",
+          "tmc_channel_cabin",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_100",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      },
+      {
+        "id": "export_beauty_and_the_bullet",
+        "name": "Beauty and the Bullet",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_ap_56",
+          "ora_bellatrix_trace",
+          "prv_lumina_lx",
+          "ora_glasspack_air",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "prv_ionique_plasma_magazine_50",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "chi_chimera_plasma_burst",
+          "sbi_sextant"
+        ]
+      }
+    ]
   },
   {
     "id": "pipeline",
-    "name": "Pipeline"
+    "name": "Pipeline",
+    "livery": "#22C55E",
+    "ships": [
+      {
+        "id": "pipeline_fear_uncertainty_doubt",
+        "name": "Fear Uncertainty Doubt",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_ap_56",
+          "ora_bellatrix_trace",
+          "prv_lumina_lx",
+          "ora_glasspack_air",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "prv_ionique_plasma_magazine_50",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "chi_chimera_plasma_burst",
+          "sbi_sextant"
+        ]
+      },
+      {
+        "id": "pipeline_driven",
+        "name": "Driven",
+        "chassis": "mantis_chassis",
+        "modules": [
+          "prv_voltcore_x7",
+          "roth_privy_seal_null",
+          "prv_lumina_lx",
+          "prae_aegis_seat",
+          "prv_lumina_sight",
+          "vessel_registration_beacon",
+          "fuel_tank_small",
+          "hw_helios_turbo_laser",
+          "sne_snedeos_electronic_shield",
+          "sne_snedeos_cyberwall"
+        ]
+      }
+    ]
   },
   {
     "id": "ivanova",
-    "name": "Ivanova"
+    "name": "Ivanova",
+    "livery": "#3B82F6",
+    "ships": [
+      {
+        "id": "ivanova_spear_of_the_nation",
+        "name": "Spear of the Nation",
+        "chassis": "mantis_chassis",
+        "modules": [
+          "prv_voltcore_x7",
+          "roth_privy_seal_null",
+          "prv_lumina_lx",
+          "prae_aegis_seat",
+          "prv_lumina_sight",
+          "vessel_registration_beacon",
+          "fuel_tank_small",
+          "hw_helios_turbo_laser",
+          "sne_snedeos_electronic_shield",
+          "sne_snedeos_cyberwall"
+        ]
+      },
+      {
+        "id": "ivanova_rainbow",
+        "name": "Rainbow",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "red_flag",
-    "name": "Red Flag"
+    "name": "Red Flag",
+    "livery": "#DC2626",
+    "ships": [
+      {
+        "id": "red_flag_lost_in_the_game",
+        "name": "Lost in the Game",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "hammerfest",
-    "name": "Hammerfest"
+    "name": "Hammerfest",
+    "livery": "#A855F7",
+    "ships": [
+      {
+        "id": "hammerfest_kingdom_of_kernow",
+        "name": "Kingdom of Kernow",
+        "chassis": "pegasus_chassis",
+        "modules": [
+          "gi_utility_fusion_55",
+          "gi_ht_18",
+          "mdc_monday_core",
+          "gi_ls_4",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "ora_bellatrix_he_rocket_magazine_16",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "oc_chitanium_5mm",
+          "ora_bellatrix_rocket_launcher",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "hammerfest_game_of_static_patterns",
+        "name": "Game of Static Patterns",
+        "chassis": "silhouette_chassis",
+        "modules": [
+          "oc_workhorse_dynamo",
+          "oc_drawbar_30",
+          "oc_workhorse_brain",
+          "oc_red_dirt_recycle",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_200",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      }
+    ]
   },
   {
     "id": "santiago",
-    "name": "Santiago"
+    "name": "Santiago",
+    "livery": "#14B8A6",
+    "ships": [
+      {
+        "id": "santiago_dead_in_the_water",
+        "name": "Dead in the Water",
+        "chassis": "silhouette_chassis",
+        "modules": [
+          "oc_workhorse_dynamo",
+          "oc_drawbar_30",
+          "oc_workhorse_brain",
+          "oc_red_dirt_recycle",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_200",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      },
+      {
+        "id": "santiago_storm_s_mouth",
+        "name": "Storm's Mouth",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "hw_sundancer_compact",
+          "ora_yardfit_nav",
+          "ora_glasspack_air",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "dijon",
-    "name": "Dijon"
+    "name": "Dijon",
+    "livery": "#EAB308",
+    "ships": [
+      {
+        "id": "dijon_heisenberg_express",
+        "name": "Heisenberg Express",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "hw_sundancer_compact",
+          "ora_yardfit_nav",
+          "ora_glasspack_air",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "dijon_idefix",
+        "name": "Idefix",
+        "chassis": "lancer_chassis",
+        "modules": [
+          "ora_ap_56",
+          "hw_sundancer_compact",
+          "sne_bridge_440",
+          "tmc_transit_air",
+          "sne_astrolabe",
+          "vessel_registration_beacon",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "ora_octant_plumb",
+          "prv_nexus_locus",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "hw_helios_turbo_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "kismet",
-    "name": "Kismet"
+    "name": "Kismet",
+    "livery": "#6366F1",
+    "ships": [
+      {
+        "id": "kismet_city_of_ice",
+        "name": "City of Ice",
+        "chassis": "lancer_chassis",
+        "modules": [
+          "ora_ap_56",
+          "hw_sundancer_compact",
+          "sne_bridge_440",
+          "tmc_transit_air",
+          "sne_astrolabe",
+          "vessel_registration_beacon",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "ora_octant_plumb",
+          "prv_nexus_locus",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "hw_helios_turbo_laser"
+        ]
+      },
+      {
+        "id": "kismet_jade_melody",
+        "name": "Jade Melody",
+        "chassis": "wolff_chassis",
+        "modules": [
+          "gi_utility_fusion_55",
+          "roth_privy_seal_null",
+          "oc_workhorse_brain",
+          "oc_workhorse_lungs",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "go_brutus_scatter_magazine_24",
+          "fuel_tank_large",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "go_brutus_scatter_cannon",
+          "mdc_almanac"
+        ]
+      }
+    ]
   },
   {
     "id": "serial",
-    "name": "Serial"
+    "name": "Serial",
+    "livery": "#84CC16",
+    "ships": [
+      {
+        "id": "serial_heatseeker",
+        "name": "Heatseeker",
+        "chassis": "wolff_chassis",
+        "modules": [
+          "gi_utility_fusion_55",
+          "roth_privy_seal_null",
+          "oc_workhorse_brain",
+          "oc_workhorse_lungs",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "go_brutus_scatter_magazine_24",
+          "fuel_tank_large",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "go_brutus_scatter_cannon",
+          "mdc_almanac"
+        ]
+      }
+    ]
   },
   {
     "id": "stone_token",
-    "name": "Stone Token"
+    "name": "Stone Token",
+    "livery": "#0EA5E9",
+    "ships": [
+      {
+        "id": "stone_token_santoro",
+        "name": "Santoro",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "stone_token_got_the_goods",
+        "name": "Got the Goods!",
+        "chassis": "krypton_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "ora_bellatrix_main_44",
+          "ora_avionics_a40",
+          "ora_cabin_a20",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "kanebo",
-    "name": "Kanebo"
+    "name": "Kanebo",
+    "livery": "#F43F5E",
+    "ships": [
+      {
+        "id": "kanebo_sliptip",
+        "name": "Sliptip",
+        "chassis": "krypton_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "ora_bellatrix_main_44",
+          "ora_avionics_a40",
+          "ora_cabin_a20",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "kanebo_kindjal",
+        "name": "Kindjal",
+        "chassis": "juno_chassis",
+        "modules": [
+          "gi_type_40_industrial",
+          "tmc_rhumb_longhaul",
+          "hg_hermes_beam",
+          "tmc_channel_cabin",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_100",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "hw_helios_light_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      },
+      {
+        "id": "kanebo_tsai",
+        "name": "Tsai",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_ap_56",
+          "ora_bellatrix_trace",
+          "prv_lumina_lx",
+          "ora_glasspack_air",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "prv_ionique_plasma_magazine_50",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "chi_chimera_plasma_burst",
+          "sbi_sextant"
+        ]
+      }
+    ]
   },
   {
     "id": "metagame",
-    "name": "Metagame"
+    "name": "Metagame",
+    "livery": "#10B981",
+    "ships": [
+      {
+        "id": "metagame_immanent_carnation",
+        "name": "Immanent Carnation",
+        "chassis": "dragon_chassis",
+        "modules": [
+          "ora_yardfit_24",
+          "hw_sundancer_compact",
+          "ora_yardfit_nav",
+          "ora_glasspack_air",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "hyperdrive_alpha",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "metagame_money_power_respect",
+        "name": "Money Power Respect",
+        "chassis": "lancer_chassis",
+        "modules": [
+          "ora_ap_56",
+          "hw_sundancer_compact",
+          "sne_bridge_440",
+          "tmc_transit_air",
+          "sne_astrolabe",
+          "vessel_registration_beacon",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "ora_octant_plumb",
+          "prv_nexus_locus",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "hw_helios_turbo_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "tin_man",
-    "name": "Tin Man"
+    "name": "Tin Man",
+    "livery": "#64748B",
+    "ships": [
+      {
+        "id": "tin_man_souleater",
+        "name": "Souleater",
+        "chassis": "lancer_chassis",
+        "modules": [
+          "ora_ap_56",
+          "hw_sundancer_compact",
+          "sne_bridge_440",
+          "tmc_transit_air",
+          "sne_astrolabe",
+          "vessel_registration_beacon",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "ora_octant_plumb",
+          "prv_nexus_locus",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_light_laser",
+          "hw_helios_turbo_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "talisman",
-    "name": "Talisman"
+    "name": "Talisman",
+    "livery": "#7C3AED",
+    "ships": [
+      {
+        "id": "talisman_forcefield",
+        "name": "ForceField",
+        "chassis": "mantis_chassis",
+        "modules": [
+          "prv_voltcore_x7",
+          "roth_privy_seal_null",
+          "prv_lumina_lx",
+          "prae_aegis_seat",
+          "prv_lumina_sight",
+          "vessel_registration_beacon",
+          "fuel_tank_small",
+          "hw_helios_turbo_laser",
+          "sne_snedeos_electronic_shield",
+          "sne_snedeos_cyberwall"
+        ]
+      },
+      {
+        "id": "talisman_black_magic",
+        "name": "Black Magic",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "clarity",
-    "name": "Clarity"
+    "name": "Clarity",
+    "livery": "#D946EF",
+    "ships": [
+      {
+        "id": "clarity_code_warrior",
+        "name": "Code Warrior",
+        "chassis": "blackbird_chassis",
+        "modules": [
+          "prv_voltcore_x3",
+          "ora_lumen_yard",
+          "chi_oracle_well",
+          "prae_aegis_seat",
+          "mdc_almanac",
+          "vessel_registration_beacon",
+          "ora_needle_hyperdrive",
+          "prv_lumina_wellhead",
+          "hw_glimmer_ember",
+          "hg_hermes_sideband",
+          "prv_nexus_listen",
+          "hw_helios_light_laser"
+        ]
+      }
+    ]
   },
   {
     "id": "rockets",
-    "name": "Rockets"
+    "name": "Rockets",
+    "livery": "#0284C7",
+    "ships": [
+      {
+        "id": "rockets_double_trouble",
+        "name": "Double Trouble",
+        "chassis": "pegasus_chassis",
+        "modules": [
+          "gi_utility_fusion_55",
+          "gi_ht_18",
+          "mdc_monday_core",
+          "gi_ls_4",
+          "hg_hermes_n6",
+          "vessel_registration_beacon",
+          "ora_bellatrix_he_rocket_magazine_16",
+          "fuel_tank_medium",
+          "cargo_bay_4",
+          "oc_chitanium_5mm",
+          "ora_bellatrix_rocket_launcher",
+          "hw_helios_light_laser"
+        ]
+      },
+      {
+        "id": "rockets_firefly",
+        "name": "Firefly",
+        "chassis": "silhouette_chassis",
+        "modules": [
+          "oc_workhorse_dynamo",
+          "oc_drawbar_30",
+          "oc_workhorse_brain",
+          "oc_red_dirt_recycle",
+          "hg_hermes_circinus",
+          "vessel_registration_beacon",
+          "oc_river_md_light_magazine_200",
+          "fuel_tank_medium",
+          "oc_chitanium_5mm",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "sbi_sextant"
+        ]
+      }
+    ]
   }
 ]

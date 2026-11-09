@@ -91,7 +91,8 @@ static func price_move_label(base_price: int, quoted_price: int) -> String:
 static func build_sector_bindings(
 	session: GameSession,
 	catalog: Catalog,
-	rng: RandomNumberGenerator
+	rng: RandomNumberGenerator,
+	dead_celebrity_ids: Array = []
 ) -> Dictionary:
 	var sector_id := session.sector_id
 	var sector := catalog.get_sector_def(sector_id)
@@ -129,7 +130,10 @@ static func build_sector_bindings(
 	if not city_mall2.is_empty():
 		bindings["city-mall2"] = city_mall2
 
-	var celebrity := _pick_celebrity_pilot(catalog, rng)
+	var dead_ids := dead_celebrity_ids
+	if dead_ids.is_empty() and session != null and session.bound_encounters != null:
+		dead_ids = session.bound_encounters.get_dead_pilot_ids()
+	var celebrity := _pick_celebrity_pilot(catalog, rng, dead_ids)
 	if not celebrity.is_empty():
 		bindings["celebrity-pilot"] = celebrity
 		bindings["celebrity"] = celebrity
@@ -280,12 +284,15 @@ static func _pick_city_mall_pair(sector: SectorDef, rng: RandomNumberGenerator) 
 	return {"city-mall": first, "city-mall2": second}
 
 
-static func _pick_celebrity_pilot(catalog: Catalog, rng: RandomNumberGenerator) -> String:
-	var pilots := catalog.list_celebrity_pilots()
-	if pilots.is_empty():
+static func _pick_celebrity_pilot(
+	catalog: Catalog,
+	rng: RandomNumberGenerator,
+	dead_ids: Array = []
+) -> String:
+	var pilot := CelebrityPilots.pick_living(catalog, dead_ids, rng)
+	if pilot.is_empty():
 		return ""
-	var pick: Dictionary = pilots[rng.randi_range(0, pilots.size() - 1)]
-	return str(pick.get("name", "")).strip_edges()
+	return CelebrityPilots.pilot_display_name(pilot)
 
 
 static func _star_system_planet_labels(catalog: Catalog, sector_id: String) -> Array[String]:

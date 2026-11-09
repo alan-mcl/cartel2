@@ -44,9 +44,12 @@ static func spawn_actors_for_plan(
 			entry["id"] = actor_id
 		slot_to_actor_id[slot] = actor_id
 
+		var loadout: Variant = entry.get("celebrity_loadout", {})
 		var template_id := str(entry.get("template_id", ""))
-		if template_id.is_empty() or catalog.get_ship_def(template_id) == null:
-			continue
+		var has_loadout: bool = typeof(loadout) == TYPE_DICTIONARY and not loadout.is_empty()
+		if not has_loadout:
+			if template_id.is_empty() or catalog.get_ship_def(template_id) == null:
+				continue
 
 		var spawn_pos := _resolve_spawn_position(entry, rng, player_pos, anchors, world_loader)
 		entry["position"] = {"x": spawn_pos.x, "y": spawn_pos.y}
@@ -54,15 +57,26 @@ static func spawn_actors_for_plan(
 			entry["heading_rad"] = rng.randf() * TAU
 
 		var spawn_facing := float(entry.get("heading_rad", 0.0))
-		var actor = TrafficSpawnScript.create(
-			catalog,
-			traffic_config,
-			"loiter",
-			template_id,
-			spawn_pos,
-			spawn_facing,
-			sector_id
-		)
+		var actor = null
+		if has_loadout:
+			actor = TrafficSpawnScript.create_from_celebrity_loadout(
+				catalog,
+				traffic_config,
+				loadout,
+				spawn_pos,
+				spawn_facing,
+				sector_id
+			)
+		else:
+			actor = TrafficSpawnScript.create(
+				catalog,
+				traffic_config,
+				"loiter",
+				template_id,
+				spawn_pos,
+				spawn_facing,
+				sector_id
+			)
 		if actor == null:
 			continue
 		actor.id = actor_id
@@ -143,4 +157,10 @@ static func _apply_transponder_and_callsign(actor, entry: Dictionary, plan: Dict
 		callsign = str(plan.get("bindings", {}).get("celebrity", "")).strip_edges()
 	if not callsign.is_empty():
 		actor.callsign = callsign
+	var ship_name := str(entry.get("ship_name", "")).strip_edges()
+	if ship_name.is_empty():
+		ship_name = str(entry.get("celebrity_loadout", {}).get("ship_name", "")).strip_edges()
+	if not ship_name.is_empty():
+		actor.owned_ship.name = ship_name
+	elif not callsign.is_empty():
 		actor.owned_ship.name = callsign

@@ -1863,7 +1863,11 @@ def check_encounters(doc: dict, ships: dict) -> list[str]:
                 else:
                     slots.add(slot)
                 template_id = str(effect.get("template_id", ""))
-                if not template_id or template_id not in ships:
+                callsign_from = str(effect.get("callsign_from", "")).strip()
+                if callsign_from == "celebrity":
+                    if template_id and template_id not in ships:
+                        errors.append(f"{fx_label}: unknown template_id '{template_id}'")
+                elif not template_id or template_id not in ships:
                     errors.append(f"{fx_label}: unknown template_id '{template_id}'")
                 attitude = str(effect.get("attitude", "passive"))
                 if attitude not in ENCOUNTER_ATTITUDES:
@@ -2013,10 +2017,55 @@ def check_plotlines(plotlines: list) -> list[str]:
     return errors
 
 
-def check_celebrity_pilots(pilots: list) -> list[str]:
+def _ship_template_fit_errors(
+    label: str,
+    chassis_by_id: dict[str, dict],
+    modules_by_id: dict[str, dict],
+    chassis_id: str,
+    module_ids: list,
+) -> list[str]:
     errors: list[str] = []
-    seen_ids: set[str] = set()
-    seen_names: set[str] = set()
+    chassis = chassis_by_id.get(chassis_id)
+    if chassis is None:
+        errors.append(f"{label}: unknown chassis '{chassis_id}'")
+        return errors
+    dry_mass = float(chassis.get("mass", 0.0))
+    volume_used = 0.0
+    missing: list[str] = []
+    for module_id in module_ids:
+        module = modules_by_id.get(module_id)
+        if module is None:
+            missing.append(module_id)
+            continue
+        dry_mass += float(module.get("mass", 0.0))
+        volume_used += float(module.get("volume", 0.0))
+    if missing:
+        errors.append(f"{label}: missing modules {missing}")
+        return errors
+    mass_limit = float(chassis.get("mass_limit", dry_mass))
+    volume_limit = float(chassis.get("volume", volume_used))
+    if dry_mass > mass_limit:
+        errors.append(
+            f"{label}: dry mass {dry_mass:.1f} exceeds limit {mass_limit:.1f} t"
+        )
+    if volume_used > volume_limit:
+        errors.append(
+            f"{label}: volume {volume_used:.1f} exceeds limit {volume_limit:.1f} m³"
+        )
+    return errors
+
+
+def check_celebrity_pilots(
+    pilots: list,
+    chassis_by_id: dict[str, dict],
+    modules_by_id: dict[str, dict],
+) -> list[str]:
+    errors: list[str] = []
+    seen_pilot_ids: set[str] = set()
+    seen_pilot_names: set[str] = set()
+    seen_livery: set[str] = set()
+    seen_ship_ids: set[str] = set()
+    seen_ship_names: set[str] = set()
     for index, pilot in enumerate(pilots):
         label = f"celebrity_pilots.json[{index}]"
         if not isinstance(pilot, dict):
@@ -2028,15 +2077,62 @@ def check_celebrity_pilots(pilots: list) -> list[str]:
             errors.append(f"{label}: missing id")
             continue
         label = f"celebrity_pilots.json {pilot_id}"
-        if pilot_id in seen_ids:
+        if pilot_id in seen_pilot_ids:
             errors.append(f"{label}: duplicate id")
-        seen_ids.add(pilot_id)
+        seen_pilot_ids.add(pilot_id)
         if not name:
             errors.append(f"{label}: missing name")
             continue
-        if name in seen_names:
+        if name in seen_pilot_names:
             errors.append(f"{label}: duplicate name '{name}'")
-        seen_names.add(name)
+        seen_pilot_names.add(name)
+        livery = str(pilot.get("livery", "")).strip()
+        if not livery:
+            errors.append(f"{label}: missing livery colour")
+        elif livery in seen_livery:
+            errors.append(f"{label}: duplicate livery '{livery}'")
+        else:
+            seen_livery.add(livery)
+        ships = pilot.get("ships", [])
+        if not isinstance(ships, list) or not ships:
+            errors.append(f"{label}: ships must be a non-empty array")
+            continue
+        for ship_index, ship in enumerate(ships):
+            ship_label = f"{label} ships[{ship_index}]"
+            if not isinstance(ship, dict):
+                errors.append(f"{ship_label}: ship must be an object")
+                continue
+            ship_id = str(ship.get("id", "")).strip()
+            ship_name = str(ship.get("name", "")).strip()
+            chassis_id = str(ship.get("chassis", "")).strip()
+            modules_list = ship.get("modules", [])
+            if not ship_id:
+                errors.append(f"{ship_label}: missing id")
+                continue
+            if ship_id in seen_ship_ids:
+                errors.append(f"{ship_label}: duplicate ship id '{ship_id}'")
+            seen_ship_ids.add(ship_id)
+            if not ship_name:
+                errors.append(f"{ship_label}: missing name")
+                continue
+            if ship_name in seen_ship_names:
+                errors.append(f"{ship_label}: duplicate ship name '{ship_name}'")
+            seen_ship_names.add(ship_name)
+            if not chassis_id:
+                errors.append(f"{ship_label}: missing chassis")
+                continue
+            if not isinstance(modules_list, list) or not modules_list:
+                errors.append(f"{ship_label}: modules must be a non-empty array")
+                continue
+            errors.extend(
+                _ship_template_fit_errors(
+                    ship_label,
+                    chassis_by_id,
+                    modules_by_id,
+                    chassis_id,
+                    [str(m) for m in modules_list],
+                )
+            )
     return errors
 
 
@@ -2124,7 +2220,14 @@ def main() -> int:
     errors.extend(check_message_emitters(load_array(CATALOG / "message_emitters.json")))
     errors.extend(check_plotlines(load_array(CATALOG / "plotlines.json")))
     errors.extend(check_encounters(load_object(CATALOG / "encounters.json"), ships))
-    errors.extend(check_celebrity_pilots(load_array(CATALOG / "celebrity_pilots.json")))
+    modules_by_id = index_by_id(load_modules())
+    errors.extend(
+        check_celebrity_pilots(
+            load_array(CATALOG / "celebrity_pilots.json"),
+            chassis,
+            modules_by_id,
+        )
+    )
     errors.extend(check_stars(load_object(CATALOG / "stars.json")))
     errors.extend(check_passenger_missions(passenger_missions))
     errors.extend(check_freight_missions(freight_missions, commodities_by_id))

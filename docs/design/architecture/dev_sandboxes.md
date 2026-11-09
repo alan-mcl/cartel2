@@ -14,6 +14,7 @@ Shared runner:
 | [`scripts/dev/combat_sandbox.sh`](../../../scripts/dev/combat_sandbox.sh) | `combat_sandbox.tscn` | 1v1 bout: pick hulls, attitude (including **Passive** idle foe), pilot skill; **Esc** back to setup |
 | [`scripts/dev/stealth_sandbox.sh`](../../../scripts/dev/stealth_sandbox.sh) | `stealth_sandbox.tscn` | Signature and detection drill with transponders off |
 | [`scripts/dev/mission_harness.sh`](../../../scripts/dev/mission_harness.sh) | `mission_harness.tscn` | Volatile sites and scan/bounty objectives; **Begin** starts in-flight at the site; **F8** or pause quit reloads setup |
+| [`scripts/dev/system_sandbox.sh`](../../../scripts/dev/system_sandbox.sh) | `system_sandbox.tscn` | Full catalog sector with ambient traffic; pick sector, starter-kit ship, and encounter; **F8** or pause quit reloads setup |
 | [`scripts/dev/system_render_tester.sh`](../../../scripts/dev/system_render_tester.sh) | `system_render_tester.tscn` | Planetary layout and globe inspection (pan, zoom, frame) |
 | [`scripts/dev/parent_body_harness.sh`](../../../scripts/dev/parent_body_harness.sh) | `parent_body_harness.tscn` | Procedural parent gas giant: atmosphere, orientation, legacy or multi-band rings (gaps, shadow, plane tilt); copy JSON for `worlds.json` |
 | [`scripts/dev/star_rendering_harness.sh`](../../../scripts/dev/star_rendering_harness.sh) | `star_rendering_harness.tscn` | Any `stars.json` entry at configurable AU with companions (world layout or same-system); primary centred on load; pan, zoom, **F** frame |

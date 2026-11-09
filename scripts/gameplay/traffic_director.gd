@@ -12,6 +12,7 @@ var _sector_id: String = ""
 var _traffic_envelope: float = 6750.0
 var _target_fleet_size: int = 0
 var _destroyed_timers: Dictionary = {}
+var _pending_celebrity_deaths: Array = []
 var _rng := RandomNumberGenerator.new()
 var _sim_slot_pool: Array = []
 var _sim_slot_assign_counter: int = 0
@@ -40,9 +41,16 @@ func setup(
 	_sim_slot_assign_counter = 0
 
 
+func take_pending_celebrity_deaths() -> Array:
+	var out: Array = _pending_celebrity_deaths.duplicate()
+	_pending_celebrity_deaths.clear()
+	return out
+
+
 func clear() -> void:
 	actors.clear()
 	_destroyed_timers.clear()
+	_pending_celebrity_deaths.clear()
 	_sim_slot_pool.clear()
 	_sim_slot_assign_counter = 0
 	_target_fleet_size = 0
@@ -200,7 +208,7 @@ func tick(
 		)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-			_destroyed_timers[actor.id] = float(_traffic_config.get("destroyed_respawn_seconds", 8.0))
+			_begin_destroyed_timer(actor)
 		elif actor.cycle_pending:
 			cycle_queue.append({
 				"actor": actor,
@@ -417,6 +425,16 @@ func _pick_trip_for_role(role: String, anchors: Array) -> Dictionary:
 	return {}
 
 
+func _begin_destroyed_timer(actor) -> void:
+	if actor == null or _destroyed_timers.has(actor.id):
+		return
+	_destroyed_timers[actor.id] = float(_traffic_config.get("destroyed_respawn_seconds", 8.0))
+	var pilot_id := str(actor.celebrity_pilot_id).strip_edges()
+	if pilot_id.is_empty() or _pending_celebrity_deaths.has(pilot_id):
+		return
+	_pending_celebrity_deaths.append(pilot_id)
+
+
 func _retire_and_replace(
 	actor,
 	hint: Dictionary,
@@ -458,7 +476,7 @@ func _handle_destroyed(
 	world_loader: WorldLoader
 ) -> bool:
 	if not _destroyed_timers.has(actor.id):
-		_destroyed_timers[actor.id] = float(_traffic_config.get("destroyed_respawn_seconds", 8.0))
+		_begin_destroyed_timer(actor)
 		return true
 
 	_destroyed_timers[actor.id] = float(_destroyed_timers[actor.id]) - delta

@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_roll_and_save(runner, catalog)
 	_test_once_flag(runner, catalog)
 	_test_peer_combat_aim(runner, catalog)
+	_test_celebrity_ships(runner, catalog)
 
 
 static func _session(catalog: Catalog) -> GameSession:
@@ -117,4 +118,78 @@ static func _test_peer_combat_aim(_runner: TestRunner, catalog: Catalog) -> void
 	_runner.check(
 		target.distance_to(Vector2(500.0, -200.0)) < 1.0,
 		"encounters: peer engagement aims at lock position"
+	)
+
+
+static func _test_celebrity_ships(runner: TestRunner, catalog: Catalog) -> void:
+	var encounters := EncounterSubsystem.new()
+	var session := _session(catalog)
+	var granted := encounters.grant_for_location(
+		session,
+		catalog,
+		"celebrity_arrival",
+		"proxima",
+		"hub"
+	)
+	runner.check(granted, "encounters: celebrity_arrival grants on hub")
+	var plan := encounters.get_active_plan()
+	runner.check_eq(str(plan.get("id", "")), "celebrity_arrival", "encounters: celebrity plan id")
+	var pilot_id := str(plan.get("bindings", {}).get("celebrity_pilot_id", ""))
+	runner.check(not pilot_id.is_empty(), "encounters: celebrity plan binds pilot id")
+	var spawns: Variant = plan.get("spawns", [])
+	runner.check(typeof(spawns) == TYPE_ARRAY and spawns.size() >= 1, "encounters: celebrity spawn row")
+	if typeof(spawns) == TYPE_ARRAY and spawns.size() >= 1:
+		var row: Dictionary = spawns[0]
+		var loadout: Variant = row.get("celebrity_loadout", {})
+		runner.check(
+			typeof(loadout) == TYPE_DICTIONARY and not loadout.is_empty(),
+			"encounters: celebrity loadout on spawn"
+		)
+		var ship_name := str(row.get("ship_name", ""))
+		var callsign := str(row.get("callsign", ""))
+		runner.check(not ship_name.is_empty(), "encounters: celebrity ship name on spawn")
+		runner.check(not callsign.is_empty(), "encounters: celebrity callsign on spawn")
+		runner.check(ship_name != callsign, "encounters: ship name distinct from callsign")
+
+	var traffic_config := catalog.get_traffic_config()
+	var roster := EncounterMaterialize.spawn_actors_for_plan(
+		encounters,
+		catalog,
+		traffic_config,
+		"proxima",
+		null,
+		Vector2.ZERO
+	)
+	runner.check(roster.size() >= 1, "encounters: celebrity materialises actor")
+	if roster.size() >= 1:
+		var actor = roster[0]
+		runner.check_eq(
+			str(actor.celebrity_pilot_id),
+			pilot_id,
+			"encounters: actor carries pilot id"
+		)
+		runner.check(actor.hull_livery.a > 0.01, "encounters: actor has livery colour")
+
+	runner.check(
+		encounters.mark_pilot_dead(pilot_id, catalog) != "",
+		"encounters: mark pilot dead returns name"
+	)
+	runner.check(encounters.is_pilot_dead(pilot_id), "encounters: pilot marked dead")
+	var saved := encounters.to_dict()
+	var fresh := EncounterSubsystem.new()
+	fresh.from_dict(saved)
+	runner.check(fresh.is_pilot_dead(pilot_id), "encounters: dead pilots round-trip save")
+
+	runner.check(
+		fresh.grant_for_location(session, catalog, "celebrity_arrival", "proxima", "hub"),
+		"encounters: celebrity still grants with other living pilots"
+	)
+	var all_dead := EncounterSubsystem.new()
+	for pilot_variant in catalog.list_celebrity_pilots():
+		if typeof(pilot_variant) != TYPE_DICTIONARY:
+			continue
+		all_dead.mark_pilot_dead(str(pilot_variant.get("id", "")), catalog)
+	runner.check(
+		not all_dead.grant_for_location(session, catalog, "celebrity_arrival", "proxima", "hub"),
+		"encounters: celebrity grant blocked when all pilots dead"
 	)

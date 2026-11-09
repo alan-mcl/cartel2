@@ -91,6 +91,7 @@ $GODOT --headless --path . --script res://scripts/tools/balance_report.gd -- --o
 
 ```bash
 ./scripts/dev/mission_harness.sh
+./scripts/dev/system_sandbox.sh
 ./scripts/dev/combat_sandbox.sh
 # … see docs/design/architecture/dev_sandboxes.md for the full list
 ```

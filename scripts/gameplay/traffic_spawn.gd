@@ -114,6 +114,85 @@ static func create_from_bounty_target(
 	return actor
 
 
+static func create_from_celebrity_loadout(
+	catalog: Catalog,
+	traffic_config: Dictionary,
+	loadout: Dictionary,
+	spawn_pos: Vector2,
+	spawn_facing: float,
+	sector_id: String
+) -> RefCounted:
+	if catalog == null or loadout.is_empty():
+		return null
+	var chassis_id := str(loadout.get("chassis_id", "")).strip_edges()
+	if chassis_id.is_empty() or catalog.get_chassis_def(chassis_id) == null:
+		return null
+	var module_ids: Array = []
+	var raw_modules: Variant = loadout.get("module_ids", [])
+	if typeof(raw_modules) == TYPE_ARRAY:
+		for entry in raw_modules:
+			module_ids.append(str(entry))
+	if module_ids.is_empty():
+		return null
+
+	var actor: RefCounted = load(ACTOR_SCRIPT_PATH).new()
+	actor.id = "traffic_%d" % randi()
+	actor.role = "loiter"
+	actor.template_id = ""
+	actor.hull_color_shift = 0.0
+	actor.celebrity_pilot_id = str(loadout.get("pilot_id", "")).strip_edges()
+	var livery_hex := str(loadout.get("livery", "")).strip_edges()
+	actor.hull_livery = Color.TRANSPARENT if livery_hex.is_empty() else Color.html(livery_hex)
+
+	actor.affiliation = ""
+	actor.callsign = str(loadout.get("pilot_name", "")).strip_edges()
+	actor.owned_ship = _create_owned_from_celebrity_loadout(catalog, loadout, module_ids)
+	actor.assembled_ship = ShipAssembler.assemble_owned(catalog, actor.owned_ship)
+	var loaded_mass := ShipAssembler.calculate_loaded_mass(catalog, actor.owned_ship, actor.assembled_ship)
+	actor.assembled_ship.stats = ShipAssembler.derive_stats(actor.assembled_ship, loaded_mass)
+	actor.hull_max = float(actor.assembled_ship.capacities.get("hull_hits", 18.0))
+	actor.combat_state = ShipCombatState.from_assembled(actor.assembled_ship)
+	actor.hull_current = actor.combat_state.hull_current
+	actor.hull_max = actor.combat_state.hull_max
+	actor.motion.facing = spawn_facing
+	actor._position = spawn_pos
+	actor.cruise_speed_cap = _pick_cruise_speed(traffic_config, actor.assembled_ship)
+	actor.motion.velocity = Vector2.from_angle(spawn_facing) * LAUNCH_SPEED
+	actor.loiter_angle = randf() * TAU
+	actor.sim = ShipSimCoreScript.new()
+	actor.sim.bind(
+		catalog,
+		actor.assembled_ship,
+		actor.owned_ship,
+		actor.motion,
+		actor.operating_state,
+		actor.weapons
+	)
+	TrafficRouting.assign_route_endpoints(actor, sector_id)
+	return actor
+
+
+static func _create_owned_from_celebrity_loadout(
+	catalog: Catalog,
+	loadout: Dictionary,
+	module_ids: Array
+) -> OwnedShip:
+	var owned := OwnedShip.new()
+	owned.id = "npc_%d" % randi()
+	owned.name = str(loadout.get("ship_name", "")).strip_edges()
+	var ship_id := str(loadout.get("ship_id", "")).strip_edges()
+	var pilot_id := str(loadout.get("pilot_id", "")).strip_edges()
+	var reg_key := ship_id if not ship_id.is_empty() else pilot_id
+	owned.registration = TransponderBroadcastScript.generate_registration(catalog, reg_key)
+	owned.template_id = ""
+	owned.chassis_id = str(loadout.get("chassis_id", "")).strip_edges()
+	var chassis := catalog.get_chassis_def(owned.chassis_id)
+	owned.modules = ShipAssembler.assign_modules_to_slots(catalog, chassis, module_ids)
+	ShipFuel.fill_active_to_capacity(catalog, owned)
+	ShipAssembler.seed_ammunition(catalog, owned)
+	return owned
+
+
 static func create_from_ambient_ship(
 	catalog: Catalog,
 	traffic_config: Dictionary,

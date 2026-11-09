@@ -121,6 +121,24 @@ static func _test_sector_token_bindings(runner: TestRunner, catalog: Catalog) ->
 			"message emitters: celebrity alias matches celebrity-pilot"
 		)
 
+	var dead_probe := EncounterSubsystem.new()
+	for pilot_variant in catalog.list_celebrity_pilots():
+		if typeof(pilot_variant) != TYPE_DICTIONARY:
+			continue
+		dead_probe.mark_pilot_dead(str(pilot_variant.get("id", "")), catalog)
+	var dead_rng := RandomNumberGenerator.new()
+	dead_rng.seed = 77
+	var dead_bindings := MessageEmitterTokens.build_sector_bindings(
+		session,
+		catalog,
+		dead_rng,
+		dead_probe.get_dead_pilot_ids()
+	)
+	runner.check(
+		str(dead_bindings.get("celebrity-pilot", "")).is_empty(),
+		"message emitters: no living celebrity when all dead"
+	)
+
 	var proxima_def := catalog.get_sector_def("proxima")
 	var star_system := proxima_def.star_system.strip_edges() if proxima_def != null else ""
 	var other_main_planets: Array[String] = []

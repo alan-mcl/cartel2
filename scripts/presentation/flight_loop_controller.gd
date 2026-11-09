@@ -138,6 +138,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 			)
 			if _traffic_view != null:
 				_traffic_view.sync(_traffic_director.actors, _catalog, delta)
+			_process_celebrity_deaths()
 			_tick_bounty_pursuit_traffic(delta, physics_frame)
 
 	var contacts := _collect_nav_contacts()
@@ -717,6 +718,23 @@ func _tick_unspace_flux(delta: float) -> void:
 	var log_msg := str(flux_result.get("log", ""))
 	if not log_msg.is_empty():
 		_main.session.last_log = log_msg
+		_main.session.changed.emit()
+
+
+func _process_celebrity_deaths() -> void:
+	if _traffic_director == null or _main == null or _main.session == null:
+		return
+	var encounters: EncounterSubsystem = _main.session.bound_encounters
+	if encounters == null:
+		return
+	for pilot_id_variant in _traffic_director.take_pending_celebrity_deaths():
+		var pilot_id := str(pilot_id_variant).strip_edges()
+		if pilot_id.is_empty():
+			continue
+		var pilot_name := encounters.mark_pilot_dead(pilot_id, _catalog)
+		if pilot_name.is_empty():
+			continue
+		_main.session.last_log = "%s reported down — celebrity circuit notes the loss." % pilot_name
 		_main.session.changed.emit()
 
 

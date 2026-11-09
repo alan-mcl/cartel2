@@ -14,7 +14,6 @@
         {
           "kind": "spawn_ship",
           "slot": "celebrity",
-          "template_id": "pegasus_p109",
           "attitude": "passive",
           "transponder": true,
           "callsign_from": "celebrity"

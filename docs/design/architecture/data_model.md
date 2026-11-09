@@ -42,7 +42,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `stars.json` | object | Background star names for volatile sites and ticker tokens |
 | `message_emitters.json` | array | Weighted flavour pools for headline and gossip tickers |
 | `plotlines.json` | array | Background arc state machines (states, transitions, optional ticker lines and desk gigs) |
-| `celebrity_pilots.json` | array | Celebrity pilot names for message ticker tokens |
+| `celebrity_pilots.json` | array | Celebrity pilots for tickers and hub encounters (signature ships, livery) |
 | `encounters.json` | object | Random encounter definitions (`chance`, `encounters[]` effects by location class) |
 
 Loader: `scripts/gameplay/catalog.gd` - `Catalog.load_default()`. Modules merge from `data/catalog/modules/*.json` into `ModuleDef` records; `AssembledShip.installed_modules[].data` is `ModuleDef`. `commodities.json` and `economies.json` materialise as `CommodityDef` / `EconomyDef`; `economies.json` `produce`/`consume` object keys are schema-validated against commodity ids. `fuels.json` materialises as `FuelDef`. `unspaces.json` materialises as `UnspaceDef` (nested `spawn`, `gst`, and `field` blocks stay dictionaries; completeness validated in `validate_catalog_refs.py`). Typed getters (`get_module_def`, `list_module_defs`, `get_unspace_def`, `get_fuel_def`, …) are preferred in assembly/combat/sensors; dictionary getters still return `to_dict()` for presentation UI. Chassis/ships/sectors dictionary getters remain until a later pass. `backgrounds.json`, `scan_missions.json`, `bounty_missions.json`, `retrieval_missions.json`, `volatile_sites.json`, `sanctions.json`, and `stars.json` load as indexed dictionaries. `stars.json`, `message_emitters.json`, `plotlines.json`, and `celebrity_pilots.json` stay dictionaries; `validate_catalog_refs.py` checks their shape, ids, and ticker placeholders (plotline transition and gig shape when entries exist).
@@ -376,6 +376,10 @@ Daily offers are generated per habitat (terminal board; bar board where a `bar` 
 | `max_hops`, `deadline_slack_hours`, `deadline_orbit_hours_per_hop`, `hop_offer_weights` | Multi-hop generation and deadline tuning (deadlines count entry+exit GST per edge) |
 
 Accepted charters persist under `Simulation` save key `missions` (`accepted`, `offers_by_habitat`, `generated_day`). Completion fires on `SimEvent.DOCKED` at the destination habitat with the contracted ship active. `PlayerAffiliation.is_affiliated` is a stub (always false) until standing exists.
+
+### Celebrity pilots (`celebrity_pilots.json`)
+
+Each pilot: `id`, display `name`, unique HTML `livery`, and `ships[]`. Each ship has `id`, display `name`, `chassis`, and `modules[]` (same fit rules as `ships.json` but not listed in dealer stock). Hub encounter `celebrity_arrival` picks a living pilot, one signature ship, and materialises it with pilot callsign and ship name. Career save tracks `dead_pilots` on the `encounters` subsystem; dead pilots are excluded from hub rolls and `{celebrity-pilot}` sampling during play (main-menu ticker may still name anyone).
 
 ### Message emitters (`message_emitters.json`, `MessageSubsystem`)
 

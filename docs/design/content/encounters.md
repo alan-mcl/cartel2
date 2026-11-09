@@ -22,13 +22,13 @@ Leaving clears the active plan; the next arrival rolls again with an incremented
 Effect kinds:
 
 - **`message`** — `log` and optional `headline` (WIRE on hubs only when announced).
-- **`spawn_ship`** — `slot`, `template_id`, `attitude` (`passive`, `hostile_player`, `hostile_peer` + `peer` slot), `transponder`, optional `callsign_from: celebrity`.
+- **`spawn_ship`** — `slot`, `template_id` (omit when `callsign_from: celebrity`), `attitude` (`passive`, `hostile_player`, `hostile_peer` + `peer` slot), `transponder`, optional `callsign_from: celebrity` (binds a living pilot from `celebrity_pilots.json` and one of their signature ships; persisted plan carries `celebrity_loadout`).
 - **`ascidian_cluster`** — `extra_count`, `spread_fraction` (Unspace only).
 
 Optional **`plugin`** ids must appear in [`EncounterPlugins`](../../../scripts/gameplay/encounter_plugins.gd) and pass catalog validation.
 
 ## Runtime
 
-[`EncounterSubsystem`](../../../scripts/gameplay/encounter_subsystem.gd) on [`Simulation`](../../../scripts/gameplay/simulation.gd): save key `encounters`. [`EncounterMaterialize`](../../../scripts/gameplay/encounter_materialize.gd) builds pinned traffic actors after sector load; [`NspaceField.apply_encounter_ascidians`](../../../scripts/presentation/nspace_field.gd) adds extra inhabitants.
+[`EncounterSubsystem`](../../../scripts/gameplay/encounter_subsystem.gd) on [`Simulation`](../../../scripts/gameplay/simulation.gd): save key `encounters` (active plan, `dead_pilots`). Hub `celebrity_arrival` skips pilots marked dead; killing a pinned celebrity in flight records death immediately. [`EncounterMaterialize`](../../../scripts/gameplay/encounter_materialize.gd) builds pinned traffic actors after sector load; celebrity ships use additive hull livery per pilot. [`NspaceField.apply_encounter_ascidians`](../../../scripts/presentation/nspace_field.gd) adds extra inhabitants.
 
 Plot arcs can listen for `encounter_started` like other [`SimEvent`](../../../scripts/gameplay/sim_event.gd) types — see [plotlines.md](plotlines.md).

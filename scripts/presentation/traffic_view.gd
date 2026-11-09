@@ -318,12 +318,21 @@ func _build_far_sprite_root(actor) -> Node2D:
 	var hull := Sprite2D.new()
 	hull.name = "Hull"
 	root.add_child(hull)
+	var livery := Sprite2D.new()
+	livery.name = "Livery"
+	livery.visible = false
+	livery.z_index = 1
+	var livery_material := CanvasItemMaterial.new()
+	livery_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	livery.material = livery_material
+	root.add_child(livery)
 	_apply_far_sprite_actor(root, actor)
 	return root
 
 
 func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 	var hull: Sprite2D = root.get_node_or_null("Hull") as Sprite2D
+	var livery: Sprite2D = root.get_node_or_null("Livery") as Sprite2D
 	var thrust_flame: Sprite2D = root.get_node_or_null("ThrustFlame") as Sprite2D
 	var exhaust: EngineExhaust = root.get_node_or_null("EngineExhaust") as EngineExhaust
 	if hull == null or thrust_flame == null:
@@ -334,6 +343,22 @@ func _apply_far_sprite_actor(root: Node2D, actor) -> void:
 	hull.scale = Vector2(0.65, 0.65)
 	var brightness: float = 1.0 + actor.hull_color_shift
 	hull.modulate = Color(brightness, brightness, brightness, 1.0)
+	if livery != null:
+		if actor.hull_livery.a < 0.01 or sprite_path.is_empty():
+			livery.visible = false
+		else:
+			livery.texture = ChassisSpriteScript.get_texture(sprite_path)
+			HullHitboxScript.apply_hull_and_thrust(livery, null, sprite_path)
+			livery.scale = Vector2(0.65, 0.65)
+			livery.visible = true
+			var tint: Color = actor.hull_livery
+			tint.a = 0.42
+			livery.modulate = Color(
+				tint.r * brightness,
+				tint.g * brightness,
+				tint.b * brightness,
+				tint.a
+			)
 	thrust_flame.scale = Vector2(0.65, 0.65)
 	thrust_flame.visible = false
 	if _thrust_texture != null:

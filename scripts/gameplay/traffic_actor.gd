@@ -64,6 +64,8 @@ var affiliation: String = ""
 var role: String = "transit"
 var template_id: String = ""
 var hull_color_shift: float = 0.0
+var celebrity_pilot_id: String = ""
+var hull_livery: Color = Color.TRANSPARENT
 
 var owned_ship: OwnedShip
 var assembled_ship: AssembledShip

@@ -20,6 +20,7 @@ func _run() -> void:
 	await _smoke_parent_body_harness()
 	await _smoke_star_rendering_harness()
 	await _smoke_mission_harness()
+	await _smoke_system_sandbox()
 	await _smoke_audio_sandbox()
 	await _finish()
 
@@ -169,6 +170,23 @@ func _smoke_mission_harness() -> void:
 	_check(not main.session.docked, "mission harness player undocked")
 	var world: Node2D = main.get_node("World")
 	_check(world.get_child_count() > 0, "mission harness loads volatile world")
+	paused = false
+	await _free_and_drain(harness)
+
+
+func _smoke_system_sandbox() -> void:
+	var harness := preload("res://scenes/dev/system_sandbox.tscn").instantiate()
+	root.add_child(harness)
+	await process_frame
+	await process_frame
+	var ok: bool = harness.smoke_begin_proxima_trader()
+	_check(ok, "system sandbox begins proxima trader flight")
+	await process_frame
+	var main: Node2D = harness.get_node("Main")
+	_check(not main.session.docked, "system sandbox player undocked")
+	_check(main.session.sector_id == "proxima", "system sandbox proxima sector")
+	var world: Node2D = main.get_node("World")
+	_check(world.get_child_count() > 0, "system sandbox loads world layout")
 	paused = false
 	await _free_and_drain(harness)
 

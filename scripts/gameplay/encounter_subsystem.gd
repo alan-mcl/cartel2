@@ -7,6 +7,7 @@ const MAX_ROLL_ATTEMPTS := 48
 var _arrival_ordinal: int = 0
 var _seen_ids: Array = []
 var _active: Dictionary = {}
+var _dead_pilot_ids: Array = []
 
 
 func _init() -> void:
@@ -72,6 +73,8 @@ func grant_for_location(
 	rng.seed = hash("grant:%s:%s" % [location_key, id_key])
 	var plan := _resolve_encounter(session, catalog, def, location_key, location_class, rng)
 	if plan.is_empty():
+		return false
+	if _plan_requires_celebrity(def) and str(plan.get("bindings", {}).get("celebrity_pilot_id", "")).is_empty():
 		return false
 	_active = plan
 	return true
@@ -170,11 +173,31 @@ func ascidian_extras(session: GameSession, catalog: Catalog) -> Dictionary:
 	return asc if typeof(asc) == TYPE_DICTIONARY else {}
 
 
+func get_dead_pilot_ids() -> Array:
+	return _dead_pilot_ids.duplicate()
+
+
+func is_pilot_dead(pilot_id: String) -> bool:
+	var key := pilot_id.strip_edges()
+	if key.is_empty():
+		return false
+	return _dead_pilot_ids.has(key)
+
+
+func mark_pilot_dead(pilot_id: String, catalog: Catalog) -> String:
+	var key := pilot_id.strip_edges()
+	if key.is_empty() or is_pilot_dead(key):
+		return ""
+	_dead_pilot_ids.append(key)
+	return CelebrityPilots.get_pilot_name(catalog, key)
+
+
 func to_dict() -> Dictionary:
 	return {
 		"arrival_ordinal": _arrival_ordinal,
 		"seen": _seen_ids.duplicate(),
 		"active": _active.duplicate(true),
+		"dead_pilots": _dead_pilot_ids.duplicate(),
 	}
 
 
@@ -185,6 +208,13 @@ func from_dict(data: Dictionary) -> void:
 	if typeof(seen) == TYPE_ARRAY:
 		for entry in seen:
 			_seen_ids.append(str(entry))
+	_dead_pilot_ids = []
+	var dead: Variant = data.get("dead_pilots", [])
+	if typeof(dead) == TYPE_ARRAY:
+		for entry in dead:
+			var id_key := str(entry).strip_edges()
+			if not id_key.is_empty() and not _dead_pilot_ids.has(id_key):
+				_dead_pilot_ids.append(id_key)
 	var active: Variant = data.get("active", {})
 	if typeof(active) == TYPE_DICTIONARY:
 		_active = active.duplicate(true)
@@ -230,6 +260,8 @@ func _handle_arrival(session: GameSession, catalog: Catalog, evt: Dictionary) ->
 	var plan := _resolve_encounter(session, catalog, picked, location_key, location_class, resolve_rng)
 	if plan.is_empty():
 		return
+	if _plan_requires_celebrity(picked) and str(plan.get("bindings", {}).get("celebrity_pilot_id", "")).is_empty():
+		return
 
 	_active = plan
 	var encounter_id := str(plan.get("id", ""))
@@ -272,6 +304,8 @@ func _pick_encounter(
 		if typeof(classes) != TYPE_ARRAY or not classes.has(location_class):
 			continue
 		if not _plotline_requirement_met(session, catalog, entry):
+			continue
+		if not _encounter_pool_eligible(catalog, entry):
 			continue
 		var weight := float(entry.get("weight", 1.0))
 		if weight <= 0.0:
@@ -343,7 +377,9 @@ func _resolve_encounter(
 						"headline": str(effect.get("headline", "")),
 					}
 			"spawn_ship":
-				spawns.append(_spawn_effect_record(effect, bindings))
+				var spawn_row := _spawn_effect_record(effect, bindings)
+				_attach_celebrity_loadout_to_spawn(spawn_row, effect, bindings)
+				spawns.append(spawn_row)
 			"ascidian_cluster":
 				ascidians = _ascidian_cluster_record(effect, session, catalog, rng)
 
@@ -410,11 +446,22 @@ func _ascidian_cluster_record(
 
 
 func _build_bindings(session: GameSession, catalog: Catalog, rng: RandomNumberGenerator) -> Dictionary:
-	var out := MessageEmitterTokens.build_sector_bindings(session, catalog, rng)
-	var pilots: Array = catalog.list_celebrity_pilots()
-	if not pilots.is_empty():
-		var pick: Dictionary = pilots[rng.randi_range(0, pilots.size() - 1)]
-		out["celebrity"] = str(pick.get("name", ""))
+	var out := MessageEmitterTokens.build_sector_bindings(
+		session,
+		catalog,
+		rng,
+		_dead_pilot_ids
+	)
+	var pilot := CelebrityPilots.pick_living(catalog, _dead_pilot_ids, rng)
+	if not pilot.is_empty():
+		var ship := CelebrityPilots.pick_ship(pilot, rng)
+		if not ship.is_empty():
+			var pilot_name := CelebrityPilots.pilot_display_name(pilot)
+			out["celebrity"] = pilot_name
+			out["celebrity-pilot"] = pilot_name
+			out["celebrity_pilot_id"] = str(pilot.get("id", ""))
+			out["celebrity_ship_name"] = str(ship.get("name", ""))
+			out["celebrity_loadout"] = CelebrityPilots.build_loadout_record(pilot, ship)
 	var sector_id := session.sector_id
 	out["sector"] = MessageEmitterTokens.sector_display_label(catalog, sector_id)
 	return out
@@ -433,3 +480,39 @@ func _substitute(
 	out = out.replace("{sector}", str(bindings.get("sector", "")))
 	out = out.replace("{habitat}", str(bindings.get("habitat", "")))
 	return out.strip_edges()
+
+
+func _plan_requires_celebrity(def: Dictionary) -> bool:
+	var effects: Variant = def.get("effects", [])
+	if typeof(effects) != TYPE_ARRAY:
+		return false
+	for effect_variant in effects:
+		if typeof(effect_variant) != TYPE_DICTIONARY:
+			continue
+		var effect: Dictionary = effect_variant
+		if str(effect.get("kind", "")) != "spawn_ship":
+			continue
+		if str(effect.get("callsign_from", "")).strip_edges() == "celebrity":
+			return true
+	return false
+
+
+func _encounter_pool_eligible(catalog: Catalog, entry: Dictionary) -> bool:
+	if str(entry.get("id", "")) != "celebrity_arrival":
+		return true
+	return CelebrityPilots.has_living(catalog, _dead_pilot_ids)
+
+
+func _attach_celebrity_loadout_to_spawn(
+	spawn_row: Dictionary,
+	effect: Dictionary,
+	bindings: Dictionary
+) -> void:
+	if str(effect.get("callsign_from", "")).strip_edges() != "celebrity":
+		return
+	var loadout: Variant = bindings.get("celebrity_loadout", {})
+	if typeof(loadout) != TYPE_DICTIONARY or loadout.is_empty():
+		return
+	spawn_row["celebrity_loadout"] = loadout.duplicate(true)
+	spawn_row["ship_name"] = str(bindings.get("celebrity_ship_name", ""))
+	spawn_row["template_id"] = ""

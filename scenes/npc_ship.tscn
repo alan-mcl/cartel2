@@ -34,3 +34,9 @@ centered = true
 [node name="Hull" type="Sprite2D" parent="Visual"]
 texture = ExtResource("2")
 centered = true
+
+[node name="Livery" type="Sprite2D" parent="Visual"]
+visible = false
+z_index = 1
+texture = ExtResource("2")
+centered = true

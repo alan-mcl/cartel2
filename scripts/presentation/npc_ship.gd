@@ -13,6 +13,7 @@ var catalog: Catalog
 @onready var _thrust_flame: Sprite2D = $Visual/ThrustFlame
 @onready var _engine_exhaust: EngineExhaust = $Visual/EngineExhaust
 @onready var _hull: Sprite2D = $Visual/Hull
+@onready var _livery: Sprite2D = $Visual/Livery
 @onready var _collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var _visual_root: Node2D = $Visual
 
@@ -76,6 +77,8 @@ func apply_hull_damage_visual(health_ratio: float) -> void:
 	if _hull == null:
 		return
 	ShipVisual.apply_damage_tint(_hull, health_ratio, _hull_base_modulate())
+	if _livery != null and _livery.visible:
+		ShipVisual.apply_damage_tint(_livery, health_ratio, _livery_base_modulate())
 
 
 func play_destroyed() -> void:
@@ -133,6 +136,10 @@ func _ready() -> void:
 	var thrust_texture := load(THRUST_SPRITE) as Texture2D
 	if _thrust_flame and thrust_texture:
 		_thrust_flame.texture = thrust_texture
+	if _livery != null:
+		var livery_material := CanvasItemMaterial.new()
+		livery_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		_livery.material = livery_material
 
 
 func _apply_hull_visual() -> void:
@@ -151,6 +158,7 @@ func _apply_hull_visual() -> void:
 
 	var brightness: float = 1.0 + actor.hull_color_shift
 	_hull.modulate = Color(brightness, brightness, brightness, 1.0)
+	_sync_livery_overlay(sprite_path, brightness)
 
 
 func _hull_base_modulate() -> Color:
@@ -158,6 +166,43 @@ func _hull_base_modulate() -> Color:
 		return Color.WHITE
 	var brightness: float = 1.0 + actor.hull_color_shift
 	return Color(brightness, brightness, brightness, 1.0)
+
+
+func _livery_base_modulate() -> Color:
+	if actor == null or actor.hull_livery.a < 0.01:
+		return Color.WHITE
+	var brightness: float = 1.0 + actor.hull_color_shift
+	var tint: Color = actor.hull_livery
+	tint.a = 0.42
+	return Color(
+		tint.r * brightness,
+		tint.g * brightness,
+		tint.b * brightness,
+		tint.a
+	)
+
+
+func _sync_livery_overlay(sprite_path: String, hull_brightness: float) -> void:
+	if _livery == null:
+		return
+	if actor == null or actor.hull_livery.a < 0.01:
+		_livery.visible = false
+		return
+	if sprite_path.is_empty():
+		_livery.visible = false
+		return
+	_livery.texture = ChassisSprite.get_texture(sprite_path)
+	HullHitbox.apply_hull_and_thrust(_livery, null, sprite_path)
+	_livery.visible = true
+	var tint: Color = actor.hull_livery
+	tint.a = 0.42
+	tint = Color(
+		tint.r * hull_brightness,
+		tint.g * hull_brightness,
+		tint.b * hull_brightness,
+		tint.a
+	)
+	_livery.modulate = tint
 
 
 func _get_world_root() -> Node2D:
