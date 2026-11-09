@@ -13,6 +13,7 @@ var _event_listener: Callable = Callable()
 func _init() -> void:
 	register(EconomySubsystem.new())
 	register(MissionSubsystem.new())
+	register(TranslationMarket.new())
 	register(MessageSubsystem.new())
 	register(PlotlineSubsystem.new())
 	register(EncounterSubsystem.new())

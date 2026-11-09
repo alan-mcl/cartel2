@@ -438,6 +438,10 @@ static func _finish(
 	session.changed.emit()
 
 
+static func library_has_solution(session: GameSession, source: String, solution: int) -> bool:
+	return _library_has_solution(session, source, solution)
+
+
 static func _library_has_solution(session: GameSession, source: String, solution: int) -> bool:
 	if session == null or session.player == null:
 		return false

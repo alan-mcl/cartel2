@@ -355,6 +355,8 @@
 			"Crown Infrastructure",
 			"Harbour House"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 6,
 		"practice": "logistics",
 		"description": "Crown & Anchor is an old and enormously wealthy corporation with deep roots in shipping, insurance and maritime commerce. Today it operates across finance, transportation, property, hospitality and infrastructure, with particular strength in ports, orbital docks and long-distance logistics. Its conservative culture and distinctive old-world branding conceal a highly sophisticated and aggressively expanding commercial empire."
 	},
@@ -475,6 +477,8 @@
 			"DeepSpace Properties",
 			"Commonwealth Development"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 6,
 		"practice": "logistics",
 		"description": "DeepSpace Cooperative traces its origins to the first generation of humans born away from Earth. The early off-world communities pooled their resources to survive in isolated settlements, gradually developing a cooperative commercial structure that grew alongside the frontier. Today DSC is a vast diversified corporation owned collectively by its members, with interests spanning mining, shipping, aerospace, manufacturing, finance and planetary development."
 	},
@@ -633,6 +637,8 @@
 			"General Engineering",
 			"Standard Facilities"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 6,
 		"practice": "industrial",
 		"description": "GI is a conglomerate whose interests extend across manufacturing, energy, mining, construction, logistics and infrastructure. Its corporate philosophy is brutally simple: own the things everyone else needs. General Industrial has little public identity beyond its deliberately anonymous name, but its subsidiaries are embedded throughout the galactic economy, giving it extraordinary reach and leverage."
 	},
@@ -870,6 +876,8 @@
 			"Wintertech Appliances",
 			"Holt-Winters Research"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 7,
 		"practice": "aerospace",
 		"description": "Holt-Winters is a young, ambitious conglomerate with a reputation for innovation and aggressive expansion. It is a major player in energy, aerospace, electronics and advanced materials, with particularly strong positions in compact power systems and shield technology. Holt-Winters also operates extensive consumer and industrial businesses, and its light spacecraft are popular with independent operators."
 	},
@@ -1029,6 +1037,8 @@
 			"Relay Systems",
 			"Mercury Business Services"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 8,
 		"practice": "media",
 		"description": "Mercury Communications is a dominant provider of communications infrastructure throughout human space. Its networks span planetary telecommunications, interplanetary relays, navigation systems, data services and broadcasting infrastructure, connecting corporations, habitats and billions of individuals. Mercury's immense network is effectively indispensable to modern commerce, and its reputation for reliability has made its distinctive name synonymous with communication itself."
 	},
@@ -1069,6 +1079,8 @@
 			"Current Systems",
 			"Meridian Business Services"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 8,
 		"practice": "aerospace",
 		"description": "TMC is a vast diversified corporation with roots in global trade, shipping and navigation. Today its interests span transportation, finance, communications, energy, infrastructure and consumer services, with operations extending across much of human space. Meridian's reputation is one of relentless expansion, and its distinctive name has become synonymous with connectivity, movement and commerce."
 	},
@@ -1309,6 +1321,8 @@
 			"Skyway Consumer",
 			"Orion Technical Services"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 7,
 		"practice": "aerospace",
 		"description": "Orion Aerospace is one of the galaxy's dominant spacecraft manufacturers, producing everything from small private vessels to enormous commercial and industrial ships. Its interests extend into propulsion, avionics, shipyards, aerospace engineering and orbital infrastructure. Orion's ships are known for reliability and longevity, and its extensive network of yards and service facilities supports fleets throughout human space."
 	},
@@ -1428,6 +1442,8 @@
 			"Vidia Consumer Services",
 			"PRV Family Entertainment"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 7,
 		"practice": "media",
 		"description": "ParaRamcoVidia is a vast conglomerate and a dominant force in media, entertainment, energy, computing and communications, with extensive interests across manufacturing, infrastructure, consumer technology and research. Its media division controls major broadcast networks, studios and entertainment platforms, while its energy and technology divisions provide essential infrastructure throughout human space."
 	},
@@ -1546,6 +1562,8 @@
 			"Bell Communications",
 			"Campana Development"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 7,
 		"practice": "extractive",
 		"description": "Seven Bells began as a small family manufacturer of precision bells and signaling equipment, eventually expanding into communications, electronics and industrial systems. Today it is a diversified conglomerate with major interests in communications, manufacturing, consumer technology, aerospace and infrastructure. The corporation retains a peculiar affection for its origins, and seven bells remain a prominent symbol throughout its branding."
 	},
@@ -1665,6 +1683,8 @@
 			"Tukey Provisioning",
 			"EndOfLine Supply"
 		],
+		"desks": ["translation_solutions"],
+		"translation_max_n": 6,
 		"practice": "aerospace",
 		"description": "Tukey Enterprises is a diversified commercial conglomerate with interests across manufacturing, logistics, technology and consumer goods. It has built its reputation by entering overlooked markets and supplying products that larger corporations consider too small or uninteresting to pursue. This opportunistic strategy has made Tukey a surprisingly influential supplier across human space, with a broad and constantly changing portfolio."
 	},

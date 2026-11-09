@@ -102,6 +102,7 @@ func _suite_entries(runner: TestRunner) -> Array:
 		{"name": "TestEvents", "run": func() -> void: TestEvents.run(runner)},
 		{"name": "TestMissions", "run": func() -> void: TestMissions.run(runner)},
 		{"name": "TestBarRound", "run": func() -> void: TestBarRound.run(runner)},
+		{"name": "TestTranslationMarket", "run": func() -> void: TestTranslationMarket.run(runner)},
 		{"name": "TestCharterResolution", "run": func() -> void: TestCharterResolution.run(runner)},
 		{"name": "TestCharterBoard", "run": func() -> void: TestCharterBoard.run(runner)},
 		{"name": "TestScanCharters", "run": func() -> void: TestScanCharters.run(runner)},

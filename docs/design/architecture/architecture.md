@@ -199,7 +199,7 @@ That total is split across mission kinds on mixed desks: peacekeeping and corpor
 scan, bounty, and retrieval; a bar **55/20/10/5/10** passenger, freight, scan, bounty, and retrieval. Terminal departures
 and the terminal freight tab each roll their own total (all passenger or all freight). Bar
 passenger and bar freight are stored per building id; `BarPanel` interleaves that building’s
-mix in one grid. Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
+mix in one grid, including any translation-solution chits [`TranslationMarket`](../../../scripts/gameplay/translation_market.gd) posted for the day. Each offer is **combinatorial**: [`BountyCharters`](../../../scripts/gameplay/bounty_charters.gd)
 draws an **objective** (destroy, intercept, disable, eliminate), wanted **reason** and **status**
 lines, a **threat** (pay multiplier plus a profile), any catalog **armed ship** template, a volatile **site** from
 [`volatile_sites.json`](../../../data/catalog/volatile_sites.json), and a desk **frame** with substituted
@@ -223,6 +223,8 @@ power generation reaches zero and still pays if the target is destroyed instead.
 (sector and post-accept timestamp); pay lands when the
 pilot docks back at the origin habitat before the return gate expires. Sanctions do not apply in
 volatile sectors. **Retrieval charters** from `retrieval_missions.json` share those desks and volatile-hop rules. [`RetrievalCharters`](../../../scripts/gameplay/retrieval_charters.gd) composes specimen type, site, and pay; accepting requires a fitted **retrieval** drone with at least one stowed round. The grant places one contracted contact (`retrieval_<record_id>`) as cargo, debris, derelict, marker, or inert ship (`setup.scan_contact` for hull jobs). `DroneRuntime` reports `retrieval_pickup_contact_id` only when the airframe completes the **return** leg after reaching the lock (manual recall does not). `MissionSubsystem.notify_retrieval_pickup` sets `retrieved` on the accepted charter; pay lands at the origin habitat like scan work. Missions save version 8 adds `bar_rounds_by_building`; version 7 cleared stale offer maps on load from v6 and added retrieval book keys; v5 migration cleared offers for per-desk totals.
+
+[`TranslationMarket`](../../../scripts/gameplay/translation_market.gd) (`translation_market`, save version 1) sells private library solutions. A bar mixes any day's chits into the posted grid. A corporate office whose corporation lists the `translation_solutions` desk adds two tabs under the ticker: charters, titled from `ad_voice` (Charters, Job Board, Gigs, Contracts, Engagements, or Commissions), and **Translation solutions** (no charter-ship row). Origin and destination are both rolled from catalog sectors. Purchase appends `translation_library`. Further office desks stay future `desks` entries. Rules: [translations.md](../content/translations.md).
 
 [`PlotlineSubsystem`](../../../scripts/gameplay/plotline_subsystem.gd) (`plotlines`, save version 1) runs optional background arcs from [`plotlines.json`](../../../data/catalog/plotlines.json). Each arc is a small state machine: GST day rollover and typed session events advance states; `accept_gig` / `complete_gig` are the write path for future desk UI. While in a state, the subsystem can contribute weighted ticker lines and derived gig records. [`MissionSubsystem.list_plot_gigs`](../../../scripts/gameplay/mission_subsystem.gd) exposes gigs; no board UI yet. Full rules: [plotlines.md](../content/plotlines.md).
 

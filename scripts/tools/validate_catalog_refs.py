@@ -1324,6 +1324,36 @@ def check_volatile_sites(doc: object) -> list[str]:
     return errors
 
 
+KNOWN_CORPORATION_DESKS = frozenset({"translation_solutions"})
+
+
+def check_corporation_desks(corporations: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    for corp_id, corp in sorted(corporations.items()):
+        if not isinstance(corp, dict):
+            continue
+        desks = corp.get("desks", [])
+        if "desks" in corp:
+            if not isinstance(desks, list) or not desks:
+                errors.append(f"corporations.json: {corp_id} desks must be a non-empty array")
+            else:
+                for desk in desks:
+                    if str(desk) not in KNOWN_CORPORATION_DESKS:
+                        errors.append(f"corporations.json: {corp_id} unknown desk '{desk}'")
+        sells = isinstance(desks, list) and "translation_solutions" in desks
+        if sells:
+            max_n = corp.get("translation_max_n")
+            if type(max_n) is not int or not 4 <= max_n <= 8:
+                errors.append(
+                    f"corporations.json: {corp_id} translation_max_n must be an integer from 4 to 8"
+                )
+        elif "translation_max_n" in corp:
+            errors.append(
+                f"corporations.json: {corp_id} translation_max_n set without a translation_solutions desk"
+            )
+    return errors
+
+
 def check_corporation_office_ticker(
     corporations: dict[str, dict],
     ships: dict[str, dict],
@@ -2105,6 +2135,7 @@ def main() -> int:
     errors.extend(
         check_corporate_presence(sectors, corporations, corporate_presence, traffic)
     )
+    errors.extend(check_corporation_desks(corporations))
     errors.extend(
         check_corporation_office_ticker(
             corporations,

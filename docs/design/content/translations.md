@@ -1,6 +1,6 @@
 # Translation and navigation stability
 
-**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Jump gates pause the sim and list offered translations. Fitted hyperdrives open the same **route database** from deep orbit (**H**) without pausing: **Routes** for jumps, **Compute solution** for any catalog destination (off-network from 6-space up). Calculation runs for **15 seconds to 3 minutes** GST while the ship stays in the origin sector. Buying or copying solutions from vendors is not implemented. Each translation N loads its matching catalog unspace row (4–9). Library-only solutions appear in a separate **Library solutions** block on the jump and hyperdrive route UI (labelled and tinted; not mixed into the public N-space grid). In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
+**Status:** Playable for jump-gate selection, nav inventory, accuracy, and per-jump stability. Jump gates pause the sim and list offered translations. Fitted hyperdrives open the same **route database** from deep orbit (**H**) without pausing: **Routes** for jumps, **Compute solution** for any catalog destination (off-network from 6-space up). Calculation runs for **15 seconds to 3 minutes** GST while the ship stays in the origin sector. The same library record can be bought: a bar sometimes posts one or two solution chits in the mixed board, and offices of navigation, aerospace, and logistics corporations keep a **Translation solutions** tab beside a voice-named charter tab. Both ends of a bought route are rolled from the catalog; the pilot flies it later from the origin. Stock refreshes each GST day. Each translation N loads its matching catalog unspace row (4–9). Library-only solutions appear in a separate **Library solutions** block on the jump and hyperdrive route UI (labelled and tinted; not mixed into the public N-space grid). In-flight layout, session fields, and catalog wiring are specified in [n-space.md](n-space.md).
 
 ## Stored translations
 
@@ -26,7 +26,13 @@ Fill policy in play:
 
 The player also has a **translation library** (saved, empty on a new game). Library entries are unioned into the jump list when the ship is at the matching source. Access does not copy solutions onto the ship; a basic computer still shows a learned 6-space solution but computes low accuracy for it.
 
-Mechanics to acquire, buy, or copy translations are future work.
+A purchased solution is the same library record as a successful hyperdrive calculation (`source`, `solution`, `target`, `n`). Credits replace the wait and the convergence roll. A fitted hyperdrive is not required to buy, or to fly the route from a jump gate once the ship is in the origin sector. Spooling it outside the well still needs a hyperdrive. Public catalog translations, and pairs already in the library, are not sold.
+
+Vendors are corporations with `desks` containing `translation_solutions` and a `translation_max_n` (4–8). At habitats of about 30 billion and above, a book of 8 may also post 9-space. The current set is Meridian and Mercury (8), Orion Aerospace, Holt-Winters, Seven Bells, and ParaRamcoVidia (7), and Crown & Anchor, General Industrial, Tukey Enterprises, and DeepSpace Cooperative (6). The desk appears on that corporation’s existing liaison offices and headquarters. Other offices keep a single charter board.
+
+Bars roll a solution on about two days in five (a second line only in higher-population habitats, and never deeper than 7-space). Corporate desks always list a short selection, about one line on the rim and three or four at Proxima. Price is `120 × friction × 1.6^(n−4)` credits, clamped, with bars at 1.55 times that list price. **Buy a round** rerolls charters only.
+
+Copying a solution off another ship is still not implemented.
 
 ## Jump gates and translation beacons
 

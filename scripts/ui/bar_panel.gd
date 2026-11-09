@@ -250,6 +250,7 @@ func _sections() -> Array:
 		_freight_factory.posted_chits(),
 		_scan_factory.posted_scan_chits(),
 		_scan_factory.posted_bounty_chits(),
+		_solution_chits(),
 	])
 
 	var accepted := CharterBoardSection.new()
@@ -262,6 +263,27 @@ func _sections() -> Array:
 		_scan_factory.accepted_bounty_chits(),
 	])
 	return [posted, accepted]
+
+
+func _solution_chits() -> Array:
+	var market := _market()
+	if market == null or _context == null or _context.session == null or _context.catalog == null:
+		return []
+	var building_id := str(_building.get("id", ""))
+	if building_id.is_empty():
+		building_id = str(_context.session.building_id)
+	return TranslationSolutionChits.for_board(
+		_context.session,
+		_context.catalog,
+		market,
+		building_id
+	)
+
+
+func _market() -> TranslationMarket:
+	if _context == null or _context.simulation == null:
+		return null
+	return _context.simulation.get_subsystem("translation_market") as TranslationMarket
 
 
 func _missions() -> MissionSubsystem:

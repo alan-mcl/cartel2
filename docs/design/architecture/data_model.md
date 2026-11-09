@@ -355,10 +355,14 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `trade` | corporations | One-sentence trade advertising line for corporate office ticker |
 | `brands` | corporations | Three to five non-SKU advertising labels (services, franchises, desks); must not duplicate catalogue module or ship `name` or `brand` |
 | `description` | corporations | Player-facing corporate write-up (sourced from setting prose; shown in habitat libraries) |
+| `desks` | corporations | Optional extra office desks beyond the shared charter board. `translation_solutions` sells private translations |
+| `translation_max_n` | corporations | Deepest N that desk lists before the Proxima-scale 9-space bump. Required when `desks` includes `translation_solutions`; integer 4–8 |
 | *(sector id)* | corporate_presence | Key matching `sectors.json` |
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
 After adding a corporation, run `python3 scripts/tools/generate_corporate_presence.py` to insert a presence row for any **new** sector id only; hand-tune weights in `corporate_presence.json`. The script does not rewrite existing sector rows.
+
+**Translation solutions** (`TranslationMarket`, save key `translation_market`, version 1) are a daily offer list per building (`offers_by_building`, `generated_day`). Bars may store an empty list when the day rolled no stall. Purchases append to `PlayerState.translation_library` and drop the offer. Rules and the vendor list are in [translations.md](../content/translations.md).
 
 ### Passenger charters (`passenger_missions.json`, `MissionSubsystem`)
 

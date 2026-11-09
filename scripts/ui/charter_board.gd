@@ -13,6 +13,8 @@ var rerender: Callable = Callable()
 var expand_plain_labels: bool = false
 ## Optional control shown on the charter-ship row (right-aligned). Detached before `present` clears the board.
 var ship_line_trailing: Control = null
+## Translation-solution tabs omit the charter-ship row; the library is the pilot's.
+var include_ship_line: bool = true
 
 var _context: UiContext
 
@@ -79,8 +81,10 @@ func present(context: UiContext, build_sections: Callable, blocked_text: String 
 	if context == null or context.session == null:
 		return
 
-	var docked := context.session.ships_at(context.session.habitat_id)
-	_sync_ship(docked)
+	var docked: Array[OwnedShip] = []
+	if include_ship_line:
+		docked = context.session.ships_at(context.session.habitat_id)
+		_sync_ship(docked)
 	var sections: Array = []
 	if build_sections.is_valid():
 		var built: Variant = build_sections.call()
@@ -99,7 +103,8 @@ func present(context: UiContext, build_sections: Callable, blocked_text: String 
 	body.add_theme_constant_override("separation", 10)
 	scroll.add_child(body)
 
-	_add_ship_line(body, docked)
+	if include_ship_line:
+		_add_ship_line(body, docked)
 	for section_variant in sections:
 		if section_variant is CharterBoardSection:
 			_add_section(body, section_variant)
