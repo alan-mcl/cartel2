@@ -17,6 +17,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B8| sensors | med | Active scan range (and thus target lock) should not exceed max sensor range |
 |B9| ui | med | "Career" details should show the Time metrics in GST/game time
 |B11| art |high| need bespoke graphics for retrieval mission targets|
+|B12| ui | med|habitat buildings to be sorted alphabetically|
 
 ## Features
 
@@ -25,6 +26,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F1| modules | low | per-chemistry fuel tank SKUs, and reactor fuel for fission and fusion plants.
 |F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there
-|F4|gameplay|med|Bar: add a "buy a round" button usable once per day that refreshes all the charters available, cost is proportional to system population from d50-d300
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 |F10|ui|med|Transition solution purchase: allow the player to purchase translation solutions. Occasionally at the bar, selection available at some corp offices, refreshed daily|
+|F12|data|med|Celebrity pilot ships|

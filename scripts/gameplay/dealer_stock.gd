@@ -13,6 +13,11 @@ const CHARTER_COUNT_FLOOR_MAX := 10
 const CHARTER_COUNT_CEIL_MIN := 2
 const CHARTER_COUNT_CEIL_MAX := 12
 
+const BAR_ROUND_COST_MIN := 20
+const BAR_ROUND_COST_MAX := 500
+const BAR_ROUND_POP_MIN := 0.04
+const BAR_ROUND_POP_MAX := 60.0
+
 const STOCK_SOURCE_DAILY := "daily"
 
 
@@ -76,6 +81,14 @@ static func charter_offer_band(population_billions: float) -> Vector2i:
 	if ceil < floor:
 		ceil = floor
 	return Vector2i(floor, ceil)
+
+
+static func bar_round_cost(population_billions: float) -> int:
+	var span := BAR_ROUND_POP_MAX - BAR_ROUND_POP_MIN
+	if span <= 0.0:
+		return BAR_ROUND_COST_MIN
+	var t := clampf((population_billions - BAR_ROUND_POP_MIN) / span, 0.0, 1.0)
+	return int(round(lerpf(float(BAR_ROUND_COST_MIN), float(BAR_ROUND_COST_MAX), t)))
 
 
 static func roll_charter_offer_count(rng: RandomNumberGenerator, population_billions: float) -> int:

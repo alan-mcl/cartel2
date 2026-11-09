@@ -12,6 +12,7 @@ var _passenger_factory: Control
 var _scan_factory: Control
 var _freight_factory: Control
 var _gossip_bar: MessageBar
+var _round_button: Button
 var _gossip_rng := RandomNumberGenerator.new()
 var _gossip_started := false
 var _building: Dictionary = {}
@@ -30,6 +31,12 @@ func _ready() -> void:
 	_gossip_bar.custom_minimum_size = Vector2(0, 28)
 	_gossip_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_layout.add_child(_gossip_bar)
+
+	_round_button = Button.new()
+	_round_button.size_flags_horizontal = Control.SIZE_SHRINK_END
+	_round_button.pressed.connect(_on_buy_round_pressed)
+	add_child(_round_button)
+	_round_button.visible = false
 
 	_charter_host = Control.new()
 	_charter_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -64,6 +71,7 @@ func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
 	_reset_gossip_tape()
+	_refresh_round_button()
 	_refresh_board()
 
 
@@ -166,6 +174,50 @@ func _sync_factories() -> void:
 			_freight_factory.configure_bar(str(_building.get("id", "")))
 
 
+func _refresh_round_button() -> void:
+	if _round_button == null or _context == null or _context.session == null or _context.catalog == null:
+		return
+	var building_id := str(_building.get("id", ""))
+	if building_id.is_empty():
+		building_id = str(_context.session.building_id)
+	var missions := _missions()
+	var habitat_id := str(_context.session.habitat_id)
+	var cost := 0
+	var day := CommodityEconomy.gst_day(_context.session.gst_seconds)
+	if missions != null:
+		cost = missions.bar_round_cost_for_habitat(_context.catalog, habitat_id)
+	if missions != null and missions.bar_round_used_today(building_id, day):
+		_round_button.disabled = true
+		_round_button.text = "Round bought today"
+	elif _context.session.credits < cost:
+		_round_button.disabled = true
+		_round_button.text = "Buy a round (d%d) — insufficient credits" % cost
+	else:
+		_round_button.disabled = false
+		_round_button.text = "Buy a round (d%d)" % cost
+
+
+func _on_buy_round_pressed() -> void:
+	if _context == null or _context.session == null or _context.catalog == null:
+		return
+	var missions := _missions()
+	if missions == null:
+		return
+	var building_id := str(_building.get("id", ""))
+	if building_id.is_empty():
+		building_id = str(_context.session.building_id)
+	var result := missions.buy_bar_round(_context.session, _context.catalog, building_id)
+	if not bool(result.get("ok", false)):
+		var reason := str(result.get("reason", ""))
+		if reason == "already_bought":
+			_context.session.last_log = "You have already bought a round here today."
+		elif reason == "insufficient_credits":
+			_context.session.last_log = "Not enough credits for a round."
+		else:
+			_context.session.last_log = "Could not buy a round."
+		_context.session.changed.emit()
+
+
 func _refresh_board() -> void:
 	if not is_node_ready() or _context == null:
 		return
@@ -174,6 +226,8 @@ func _refresh_board() -> void:
 	if _board == null:
 		return
 	_board.ship_score = Callable(_passenger_factory, "_ship_score")
+	_board.ship_line_trailing = _round_button
+	_round_button.visible = true
 	var blocked := _blocked_text()
 	if blocked.is_empty():
 		var missions := _missions()

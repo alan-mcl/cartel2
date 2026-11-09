@@ -1,7 +1,7 @@
 [
   {
     "id": "atl_foundation_air",
-    "name": "Foundation Air",
+    "name": "Foundation Air4 LSS",
     "maker": "Atlas Concern",
     "brand": "Foundation",
     "category": "life_support",
@@ -12,7 +12,7 @@
     "power_demand": 2.0,
     "compute_demand": 1.0,
     "cost": 1800,
-    "description": "Foundation-grade four-berth industrial habitat for heavy hulls and loadmasters.",
+    "description": "The Foundation line of Life Support Systems: robust and efficient industrial-grade habitats for heavy hulls and long trips.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -25,9 +25,9 @@
   },
   {
     "id": "atl_loadmaster_habitat",
-    "name": "Loadmaster Habitat",
+    "name": "Foundation Loadmaster6 Habitat",
     "maker": "Atlas Concern",
-    "brand": "Loadmaster",
+    "brand": "Foundation",
     "category": "life_support",
     "mount": "system",
     "mass": 3.5,
@@ -36,7 +36,7 @@
     "power_demand": 2.8,
     "compute_demand": 1.5,
     "cost": 2800,
-    "description": "Six-berth industrial habitat. Capacity bought with mass and cubic metres no current template has.",
+    "description": "The Foundation line of Life Support Systems: robust and efficient industrial-grade habitats for heavy hulls and long trips.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -49,7 +49,7 @@
   },
   {
     "id": "bls_clinic_air",
-    "name": "Clinic Air",
+    "name": "VitaLoop Comfort Cabin",
     "maker": "BioGenesis Life Sciences",
     "brand": "VitaLoop",
     "category": "life_support",
@@ -60,7 +60,7 @@
     "power_demand": 2.2,
     "compute_demand": 2.4,
     "cost": 2600,
-    "description": "Clinic-standard seating for four. Shuttle comfort BioGenesis expects to outlive the warranty.",
+    "description": "Don't compromise on your life support solution. VitaLoop cabins come with the BioGenesis guarantee to outlive the warranty, the ship, and you.",
     "capabilities": [
       "ls_comfort"
     ],
@@ -73,7 +73,7 @@
   },
   {
     "id": "bls_longbreath",
-    "name": "Longbreath",
+    "name": "Longbreath LSS",
     "maker": "BioGenesis Life Sciences",
     "brand": "Longbreath",
     "category": "life_support",
@@ -84,7 +84,7 @@
     "power_demand": 2.6,
     "compute_demand": 3.8,
     "cost": 3600,
-    "description": "Two-berth long-haul luxury from the life-sciences house. Expensive air that feels worth it.",
+    "description": "Long fights in luxury conditions are not negotiable with the Longbreath range from BioGenesis. Your passengers will notice the difference.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -98,7 +98,7 @@
   },
   {
     "id": "bls_vitaloop_4",
-    "name": "VitaLoop 4",
+    "name": "VitaLoop Cabin 4",
     "maker": "BioGenesis Life Sciences",
     "brand": "VitaLoop",
     "category": "life_support",
@@ -109,7 +109,7 @@
     "power_demand": 1.6,
     "compute_demand": 2.0,
     "cost": 1780,
-    "description": "Medical-grade two-berth air loop. Not a hospital \u2014 just bunks whose air passes a clinical audit.",
+    "description": "Don't compromise on your life support solution. VitaLoop cabins come with the BioGenesis guarantee to outlive the warranty, the ship, and you.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -123,7 +123,7 @@
   },
   {
     "id": "eg_greenhouse_6",
-    "name": "Greenhouse 6",
+    "name": "Greenhouse 6 LSS",
     "maker": "Evergreen Group",
     "brand": "Greenhouse",
     "category": "life_support",
@@ -134,7 +134,7 @@
     "power_demand": 1.7,
     "compute_demand": 1.8,
     "cost": 1650,
-    "description": "Greenhouse two-berth comfort for crews that spend too long between ports. The 6 is a product number.",
+    "description": "Long haul with a buddy? Don't want to share a single bunk? The Greenhouse 6 offers two-berth comfort that preserves your personal space.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -148,7 +148,7 @@
   },
   {
     "id": "eg_leaf_recycle",
-    "name": "Leaf Recycle",
+    "name": "Leaf Recycle LSS",
     "maker": "Evergreen Group",
     "brand": "Leaf",
     "category": "life_support",
@@ -159,7 +159,7 @@
     "power_demand": 1.0,
     "compute_demand": 0.7,
     "cost": 2295,
-    "description": "Leaf-branded four-berth habitat for frontier and agricultural routes.",
+    "description": "Going places? Things to do on the way? Don't need the frills? The Leaf Recycle LSS is your best choice of cabin.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -183,7 +183,7 @@
     "power_demand": 2.1,
     "compute_demand": 3.0,
     "cost": 3200,
-    "description": "Mizuki-series two-berth hospitality for zaibatsu fleet refits.",
+    "description": "The Mizuki is the best available two seater luxury cabin.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -197,7 +197,7 @@
   },
   {
     "id": "frz_shirakawa_type_3_air",
-    "name": "Shirakawa Type 3 Air",
+    "name": "Shirakawa Type 3 Cabin",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Shirakawa",
     "category": "life_support",
@@ -208,7 +208,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.85,
     "cost": 2260,
-    "description": "Type-number four-berth habitat from the Shirakawa house. Conservative and durable.",
+    "description": "The Shirakawa Type 3 is a durable and cost effective four seater cabin choice.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -221,7 +221,7 @@
   },
   {
     "id": "gc_canopy_recycle",
-    "name": "Canopy Recycle",
+    "name": "Canopy Recycle LSS",
     "maker": "Greenfields Corporation",
     "brand": "Canopy",
     "category": "life_support",
@@ -232,7 +232,7 @@
     "power_demand": 1.1,
     "compute_demand": 0.75,
     "cost": 2285,
-    "description": "Green-branded four-berth habitat from the agriculture division. Honest spartan bunks.",
+    "description": "The Canopy Recycle LSS has got more bunks that you'd expect at the price!",
     "capabilities": [
       "ls_habitat"
     ],
@@ -245,7 +245,7 @@
   },
   {
     "id": "gc_harvest_air_4",
-    "name": "Harvest Air 4",
+    "name": "Harvest Air4 LSS",
     "maker": "Greenfields Corporation",
     "brand": "Harvest",
     "category": "life_support",
@@ -256,7 +256,7 @@
     "power_demand": 1.9,
     "compute_demand": 1.9,
     "cost": 1580,
-    "description": "Harvest-line two-berth comfort for populous-world routes and long cargo runs.",
+    "description": "The Harvest-line Air4 gives you and your passengers a comfortable ride and a good nights rest!",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -270,7 +270,7 @@
   },
   {
     "id": "gi_ls_1",
-    "name": "GI-LS-1",
+    "name": "GI-LS-1 Life Support",
     "maker": "General Industrial",
     "brand": "GI",
     "category": "life_support",
@@ -281,7 +281,7 @@
     "power_demand": 0.5,
     "compute_demand": 0.3,
     "cost": 320,
-    "description": "The galactic default solo cockpit pack. One seat, anonymous reliability.",
+    "description": "One seat, GI reliability. That's all.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.05,
@@ -291,7 +291,7 @@
   },
   {
     "id": "gi_ls_4",
-    "name": "GI-LS-4",
+    "name": "GI-LS-4 Life Support",
     "maker": "General Industrial",
     "brand": "GI",
     "category": "life_support",
@@ -302,7 +302,7 @@
     "power_demand": 1.0,
     "compute_demand": 0.7,
     "cost": 2300,
-    "description": "Four hot bunks of anonymous reliability. The workhorse of civilian spartan habitats.",
+    "description": "Four seats, two hot bunks, GI reliability. Keep working with GI.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -315,7 +315,7 @@
   },
   {
     "id": "gi_standard_civic_air",
-    "name": "Standard Air Civic",
+    "name": "Standard Air Civic LSS",
     "maker": "General Industrial",
     "brand": "Standard Air",
     "category": "life_support",
@@ -326,7 +326,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.8,
     "cost": 720,
-    "description": "GI's oddly friendly commuter label. Four seats in a grey box.",
+    "description": "Standard Air life support systems: more than just seats in a grey box.",
     "signature": {
       "thermal": 4.7,
       "gravitational": 0.14,
@@ -336,7 +336,7 @@
   },
   {
     "id": "gi_type_6_industrial",
-    "name": "GI Type 6 Industrial",
+    "name": "GI Type 6 Industrial Life Support",
     "maker": "General Industrial",
     "brand": "GI",
     "category": "life_support",
@@ -347,7 +347,7 @@
     "power_demand": 2.4,
     "compute_demand": 1.2,
     "cost": 2850,
-    "description": "Type-six industrial habitat for freighters and bulk haulers that have the cubic metres to spare.",
+    "description": "Six seats, four hot bunks, GI reliability. Haul your freight and passengers with GI.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -360,7 +360,7 @@
   },
   {
     "id": "gi_utility_recycle_6",
-    "name": "GI Utility Recycle 6",
+    "name": "GI Utility Recycle 6 Life Support",
     "maker": "General Industrial",
     "brand": "GI",
     "category": "life_support",
@@ -371,7 +371,7 @@
     "power_demand": 1.8,
     "compute_demand": 1.0,
     "cost": 3050,
-    "description": "Industrial six-berth habitat for hulls that outgrew the LS-4 but not the budget.",
+    "description": "Seats and bunks for six, with GI reliability. Go places with GI.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -384,7 +384,7 @@
   },
   {
     "id": "hw_helios_breath",
-    "name": "Helios Breath",
+    "name": "Helios Breath LSS",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "category": "life_support",
@@ -395,7 +395,7 @@
     "power_demand": 0.9,
     "compute_demand": 1.2,
     "cost": 1100,
-    "description": "Sport cockpit pack. Climate, a decent seat, and air in a volume that still leaves room for the rest of a Flare-ON.",
+    "description": "The ultimate in solo piloting comfort, from Helios by HW.",
     "capabilities": [
       "ls_comfort"
     ],
@@ -408,7 +408,7 @@
   },
   {
     "id": "hw_helios_cabin",
-    "name": "Helios Cabin",
+    "name": "Helios Exclusive Cabin",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "category": "life_support",
@@ -419,7 +419,7 @@
     "power_demand": 2.4,
     "compute_demand": 3.4,
     "cost": 4200,
-    "description": "Two-berth hospitality from the Helios line. A live-aboard cabin that wants a Pegasus-sized envelope.",
+    "description": "The Exclusive Cabin from Helios. Premium seating and luxurious long-stay accomodation for two people.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -433,7 +433,7 @@
   },
   {
     "id": "hw_helios_lounge",
-    "name": "Helios Lounge",
+    "name": "Helios Exclusive Lounge",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "category": "life_support",
@@ -444,7 +444,7 @@
     "power_demand": 2.2,
     "compute_demand": 3.2,
     "cost": 5200,
-    "description": "Single-berth resort sleeper. Headline comfort in a truck-cab habitat that fills a Flare-ON if you skip cargo.",
+    "description": "The Exclusive Lounge from Helios: unmatched luxury and privacy. Tour the galaxy solo, with no compromises on comfort or amenities.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -458,7 +458,7 @@
   },
   {
     "id": "hw_life_plant_4",
-    "name": "HW Life Plant 4",
+    "name": "HW Life Plant 4 LSS",
     "maker": "Holt-Winters Corp",
     "brand": "HW",
     "category": "life_support",
@@ -469,7 +469,7 @@
     "power_demand": 2.2,
     "compute_demand": 1.2,
     "cost": 2200,
-    "description": "Catalog-number four-berth habitat. Hot bunks, honest recyclers, still on the price list.",
+    "description": "Choose Life Plant 4 from HW for your long trips. Market leading quality at an affordable price point.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -482,7 +482,7 @@
   },
   {
     "id": "mns_continuance_4",
-    "name": "Continuance 4",
+    "name": "Continuance Cabin 4",
     "maker": "Morrow & Sons",
     "brand": "Continuance",
     "category": "life_support",
@@ -493,7 +493,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.9,
     "cost": 2220,
-    "description": "Four-berth sleeper from the continuity division. Dry, dependable, never cheerful.",
+    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accomodation. Choose the Cabin 4 for an affordable and efficient long haul fit.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -506,7 +506,7 @@
   },
   {
     "id": "mns_quiet_cabin",
-    "name": "Quiet Cabin",
+    "name": "Continuance Quiet Cabin",
     "maker": "Morrow & Sons",
     "brand": "Continuance",
     "category": "life_support",
@@ -517,7 +517,7 @@
     "power_demand": 1.7,
     "compute_demand": 2.9,
     "cost": 3400,
-    "description": "Two-berth luxury air for passengers Morrow expects to rest peacefully.",
+    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accomodation. Choose the Quiet Cabin to guarantee a peaceful overnight commute.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -531,7 +531,7 @@
   },
   {
     "id": "oc_field_air_2",
-    "name": "Field Air 2",
+    "name": "Field Air 2 LSS",
     "maker": "Oklahoma Combine",
     "brand": "Field Core",
     "category": "life_support",
@@ -542,7 +542,7 @@
     "power_demand": 1.4,
     "compute_demand": 0.9,
     "cost": 960,
-    "description": "Two-berth sleeper of practical Combine engineering. Fits a gunship that still wants magazines.",
+    "description": "Field Air 2: two-berth sleeper accomodation from trustworthy Field Core brand.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -555,7 +555,7 @@
   },
   {
     "id": "oc_red_dirt_recycle",
-    "name": "Red Dirt Recycle",
+    "name": "Red Dirt Recycle LSS",
     "maker": "Oklahoma Combine",
     "brand": "Red Dirt",
     "category": "life_support",
@@ -566,7 +566,7 @@
     "power_demand": 0.55,
     "compute_demand": 0.35,
     "cost": 305,
-    "description": "Field cockpit pack that keeps working after the dust settles.",
+    "description": "Red Dirt Recycle: solo cabin for hard working pilots, from a hard working brand.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.05,
@@ -576,7 +576,7 @@
   },
   {
     "id": "oc_workhorse_lungs",
-    "name": "Workhorse Lungs",
+    "name": "Workhorse Lungs LSS",
     "maker": "Oklahoma Combine",
     "brand": "Workhorse",
     "category": "life_support",
@@ -587,7 +587,7 @@
     "power_demand": 1.9,
     "compute_demand": 1.1,
     "cost": 920,
-    "description": "Workhorse two-berth habitat for gunships that need to sleep between sorties.",
+    "description": "Workhorse Lungs: two-berth habitat for gunships that need to sleep between sorties.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -600,7 +600,7 @@
   },
   {
     "id": "ora_cabin_a20",
-    "name": "Cabin A-20",
+    "name": "Orion Cabin A-20",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "category": "life_support",
@@ -611,7 +611,7 @@
     "power_demand": 1.5,
     "compute_demand": 1.8,
     "cost": 1820,
-    "description": "Avionics-grade two-berth comfort for mid-range saucers and patrol craft.",
+    "description": "Choose the A-20 for avionics-grade two-berth long route comfort.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -625,7 +625,7 @@
   },
   {
     "id": "ora_glasspack_air",
-    "name": "Orion Glasspack Air",
+    "name": "Orion Cabin A-21",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "category": "life_support",
@@ -636,7 +636,7 @@
     "power_demand": 2.0,
     "compute_demand": 3.2,
     "cost": 2600,
-    "description": "Glasspack two-berth comfort for sensor-heavy and interceptor configurations.",
+    "description": "Choose the A-21 for two-berth comfort on sensor-heavy and interceptor configurations.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -650,7 +650,7 @@
   },
   {
     "id": "ora_habitat_6",
-    "name": "Habitat 6",
+    "name": "Orion Habitat 6",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "category": "life_support",
@@ -661,7 +661,7 @@
     "power_demand": 1.9,
     "compute_demand": 2.0,
     "cost": 2100,
-    "description": "Six-berth industrial habitat. Needs a stripped or future hull; it will not hide in a stock Pegasus.",
+    "description": "Choose the Habitat 6 for six-berth long route capability.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -674,7 +674,7 @@
   },
   {
     "id": "ora_yardfit_air",
-    "name": "Yardfit Air",
+    "name": "Orion Yardfit LSS",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "category": "life_support",
@@ -685,7 +685,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.8,
     "cost": 985,
-    "description": "Yard-standard two-berth sleeper. Installed on more hulls than anyone admits.",
+    "description": "Choose the Yardfit LSS for an affordable standard two-berth sleeper.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -709,7 +709,7 @@
     "power_demand": 2.6,
     "compute_demand": 1.4,
     "cost": 2920,
-    "description": "Six-berth workhorse from the media conglomerate's infrastructure division. Catalogue-only on current hulls.",
+    "description": "Get moving and keep moving with PRV Habitat. More than enough bunks for everyone!",
     "capabilities": [
       "ls_habitat"
     ],
@@ -722,7 +722,7 @@
   },
   {
     "id": "prv_vitacore_l",
-    "name": "VitaCore L",
+    "name": "VitaCore L Cabin",
     "maker": "ParaRamcoVidia",
     "brand": "VitaCore",
     "category": "life_support",
@@ -733,7 +733,7 @@
     "power_demand": 2.4,
     "compute_demand": 3.6,
     "cost": 4150,
-    "description": "The L line \u2014 a two-berth live-aboard cabin with the same glossy brochure photography.",
+    "description": "The L line cabin from VitaCore: L is for Luxury! The glossy brochure doesn't do it justice; fit it now to experience VitaCore Luxury for yourself!",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -747,7 +747,7 @@
   },
   {
     "id": "prv_vitacore_s",
-    "name": "VitaCore S",
+    "name": "VitaCore S Cabin",
     "maker": "ParaRamcoVidia",
     "brand": "VitaCore",
     "category": "life_support",
@@ -758,7 +758,7 @@
     "power_demand": 1.3,
     "compute_demand": 1.6,
     "cost": 1400,
-    "description": "Four seats of consumer comfort from the VitaCore line. Glossy packaging, airliner-grade air.",
+    "description": "The S line from VitaCore: comfort and style! Four seats of consumer comfort from the VitaCore line, and a minibar!",
     "capabilities": [
       "ls_comfort"
     ],
@@ -771,7 +771,7 @@
   },
   {
     "id": "sakuraya_kaze",
-    "name": "Kaze",
+    "name": "Kaze Life Support System 1",
     "maker": "Sakuraya Shinise",
     "brand": "Kaze",
     "category": "life_support",
@@ -782,7 +782,7 @@
     "power_demand": 1.3,
     "compute_demand": 1.7,
     "cost": 1920,
-    "description": "Conservative two-berth comfort from a house that still signs off on every filter.",
+    "description": "The Kaze brand brings Sakuraya values and attention to detail to your travels. Conservative two-berth comfort and refined finishings will provide for your every need.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -796,7 +796,7 @@
   },
   {
     "id": "sakuraya_tokonoma",
-    "name": "Tokonoma",
+    "name": "Tokonoma Luxury Cabin",
     "maker": "Sakuraya Shinise",
     "brand": "Tokonoma",
     "category": "life_support",
@@ -807,7 +807,7 @@
     "power_demand": 2.3,
     "compute_demand": 3.4,
     "cost": 4300,
-    "description": "Quiet two-berth hospitality. Tradition over fashion.",
+    "description": "Enjoy traditional Tokonoma luxury in a two-berth setting. Your nights will be as comfortable as your days with Tokonoma's signature private hospitality modules.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -821,7 +821,7 @@
   },
   {
     "id": "te_handy_air",
-    "name": "HandyAir",
+    "name": "HandyAir LSS",
     "maker": "Tukey Enterprises",
     "brand": "HandyAir",
     "category": "life_support",
@@ -832,7 +832,7 @@
     "power_demand": 0.5,
     "compute_demand": 0.3,
     "cost": 500,
-    "description": "Odd-lot solo cockpit pack from a surplus pallet. Cheap enough not to ask questions.",
+    "description": "Get this sweet solo cockpit pack from the innovators at HandyAir. No need for bling when you're moving this fast.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.04,
@@ -842,7 +842,7 @@
   },
   {
     "id": "te_lot_6_special",
-    "name": "Lot 6 Special",
+    "name": "Lot 6 Special LSS",
     "maker": "Tukey Enterprises",
     "brand": "Lot 6",
     "category": "life_support",
@@ -853,7 +853,7 @@
     "power_demand": 1.3,
     "compute_demand": 0.85,
     "cost": 3120,
-    "description": "Lot 6 clearance six-berth habitat. Suspiciously good cubic metres for the price, and too big for stock hulls.",
+    "description": "Lot 6 gives you a great six-berth living pod. Keep moving those bodies.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -866,7 +866,7 @@
   },
   {
     "id": "tmc_channel_cabin",
-    "name": "Channel Cabin",
+    "name": "Channel Cabin Pod",
     "maker": "The Meridian Company",
     "brand": "Channel",
     "category": "life_support",
@@ -877,7 +877,7 @@
     "power_demand": 1.8,
     "compute_demand": 2.1,
     "cost": 1700,
-    "description": "Two comfort seats for ships that live between ports. Still a hop cabin, not a bunk.",
+    "description": "Two comfort seats for pilots that live between ports. Channel by TMC: get the best.",
     "capabilities": [
       "ls_comfort"
     ],
@@ -890,7 +890,7 @@
   },
   {
     "id": "tmc_transit_air",
-    "name": "Transit Air",
+    "name": "Transit Air Pod",
     "maker": "The Meridian Company",
     "brand": "Transit",
     "category": "life_support",
@@ -901,7 +901,7 @@
     "power_demand": 1.1,
     "compute_demand": 0.8,
     "cost": 750,
-    "description": "Two spartan seats for channel hops and hub traffic. You sit; you do not linger.",
+    "description": "Two spartan seats for volatile translations and hub traffic. Transit by TMC: keep moving your way.",
     "signature": {
       "thermal": 3.1,
       "gravitational": 0.08,
@@ -911,7 +911,7 @@
   },
   {
     "id": "tmc_transit_solo",
-    "name": "Transit Solo",
+    "name": "Transit Solo Pod",
     "maker": "The Meridian Company",
     "brand": "Transit",
     "category": "life_support",
@@ -922,7 +922,7 @@
     "power_demand": 0.52,
     "compute_demand": 0.32,
     "cost": 310,
-    "description": "Solo transit cockpit for channel pilots between hub runs.",
+    "description": "Solo transit cockpit for pilots on a mission. Transit by TMC: keep moving your way.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.05,
@@ -932,7 +932,7 @@
   },
   {
     "id": "uni_house_air",
-    "name": "House Air",
+    "name": "House Air LSS",
     "maker": "Universal House",
     "brand": "House",
     "category": "life_support",
@@ -943,7 +943,7 @@
     "power_demand": 1.15,
     "compute_demand": 1.5,
     "cost": 1480,
-    "description": "Franchise seating for four from the mall conglomerate. Recognisable anywhere.",
+    "description": "Choose House life support systems: choose comfort, choose style, choose practicality and choose to keep the good times rolling.",
     "capabilities": [
       "ls_comfort"
     ],
@@ -956,7 +956,7 @@
   },
   {
     "id": "uni_mall_cabin",
-    "name": "Mall Cabin",
+    "name": "House Mall LSS",
     "maker": "Universal House",
     "brand": "House",
     "category": "life_support",
@@ -967,7 +967,7 @@
     "power_demand": 2.5,
     "compute_demand": 3.8,
     "cost": 4000,
-    "description": "Two-berth mall-grade hospitality. You have seen this carpet before.",
+    "description": "Choose House life support systems: choose comfort, choose style, choose practicality and choose to keep the good times rolling.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -981,7 +981,7 @@
   },
   {
     "id": "prae_aegis_seat",
-    "name": "Aegis Seat",
+    "name": "Aegis Cockpit 1",
     "maker": "The Praetorium",
     "brand": "Aegis",
     "category": "life_support",
@@ -992,7 +992,7 @@
     "power_demand": 0.45,
     "compute_demand": 0.28,
     "cost": 520,
-    "description": "Single-seat interceptor cockpit pack. Enough air for the pilot and nothing else.",
+    "description": "Cockpit 1 delivers air to the pilots who have other things to worry about.",
     "signature": {
       "thermal": 2.1,
       "gravitational": 0.04,

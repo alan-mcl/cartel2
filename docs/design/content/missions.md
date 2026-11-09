@@ -38,6 +38,8 @@ Each new game draws a **run seed** stored with the save; daily boards mix that s
 
 At the habitat UI, each building’s desk shows **open work in one tile grid** and **accepted contracts in a second** (types the building does not post simply add no tiles). The terminal keeps **Departures** (passenger only) and **Freight** on separate tabs; bars, peacekeeping, and corporate offices mix the kinds they post in the open grid.
 
+At a pilot **bar**, **Buy a round** spends credits once per GST day (per bar building) to reroll that bar’s posted charters only; accepted contracts and other desks are unchanged. Cost scales linearly with the habitat sector’s `population_billions` from **d20** at the charter floor (0.04 billion, Hesper-class) to **d500** at Proxima (60 billion), clamped outside that range.
+
 ## Freight charters
 
 **Freight charters** are virtual consignments posted at orbital **terminals** on a dedicated **Freight Charters** tab beside passenger departures. They do not put Exchange stock into the ship’s cargo manifest; accepting a lot **reserves tonnes** (and any special seat, compute, or power draw) against the selected docked hull the same way passenger headcount reserves life support. Pay lands when the pilot **docks at the destination habitat** on the contracted ship. **Launch** is refused when commodity mass plus reserved freight tonnes exceed that hull’s cargo capacity.

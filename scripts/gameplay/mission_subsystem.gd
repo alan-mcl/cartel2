@@ -9,12 +9,13 @@ var freight := CharterBook.new("freight_", false)
 var scans := CharterBook.new("scan_")
 var bounties := CharterBook.new("bounty_")
 var retrievals := CharterBook.new("retrieval_")
+var bar_rounds_by_building: Dictionary = {}
 var _pursuit_spawned_charter_id: String = ""
 
 
 func _init() -> void:
 	id = "missions"
-	save_version = 7
+	save_version = 8
 
 
 func on_day(_session: GameSession, _catalog: Catalog, day: int) -> void:
@@ -56,6 +57,91 @@ func ensure_boards(session: GameSession, catalog: Catalog) -> void:
 	if habitat_id.is_empty():
 		return
 	_ensure_habitat_boards(session, catalog, habitat_id, day)
+
+
+func bar_round_cost_for_habitat(catalog: Catalog, habitat_id: String) -> int:
+	var pop := DealerStock.population_for_habitat(catalog, habitat_id)
+	return DealerStock.bar_round_cost(pop)
+
+
+func bar_round_used_today(building_id: String, day: int) -> bool:
+	if building_id.is_empty():
+		return false
+	return int(bar_rounds_by_building.get(building_id, -1)) == day
+
+
+func buy_bar_round(session: GameSession, catalog: Catalog, building_id: String) -> Dictionary:
+	var result := {"ok": false, "reason": "", "cost": 0}
+	if session == null or catalog == null:
+		result["reason"] = "unavailable"
+		return result
+	if not session.docked:
+		result["reason"] = "not_docked"
+		return result
+	var habitat_id := str(session.habitat_id)
+	if habitat_id.is_empty():
+		result["reason"] = "no_habitat"
+		return result
+	var building := catalog.get_building(building_id)
+	if building.is_empty():
+		result["reason"] = "unknown_building"
+		return result
+	if catalog.get_building_type(building) != ScanCharters.BOARD_BAR:
+		result["reason"] = "not_a_bar"
+		return result
+	if not catalog.habitat_allows_building(catalog.get_habitat(habitat_id), building_id):
+		result["reason"] = "wrong_habitat"
+		return result
+	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	if bar_round_used_today(building_id, day):
+		result["reason"] = "already_bought"
+		return result
+	var cost := bar_round_cost_for_habitat(catalog, habitat_id)
+	result["cost"] = cost
+	if session.credits < cost:
+		result["reason"] = "insufficient_credits"
+		return result
+	ensure_boards(session, catalog)
+	if not session.try_spend_credits(cost):
+		result["reason"] = "insufficient_credits"
+		return result
+	var round_seed := DeskCharterBoards.bar_round_run_seed(session.run_seed, building_id)
+	var start := DeskCharterBoards.BAR_ROUND_OFFER_INDEX_START
+	var slices := DeskCharterBoards.generate_bar_building(
+		catalog,
+		habitat_id,
+		building_id,
+		day,
+		round_seed,
+		start,
+		start,
+		start,
+		start
+	)
+	_apply_bar_board_slices(habitat_id, building_id, slices)
+	bar_rounds_by_building[building_id] = day
+	session.last_log = "You bought a round for d%d. Fresh charters are on the board." % cost
+	session.changed.emit()
+	result["ok"] = true
+	return result
+
+
+func _apply_bar_board_slices(habitat_id: String, building_id: String, slices: Dictionary) -> void:
+	_set_habitat_board_slice(passengers, habitat_id, building_id, slices.get("passenger", []))
+	_set_habitat_board_slice(freight, habitat_id, building_id, slices.get("freight", []))
+	_set_habitat_board_slice(scans, habitat_id, building_id, slices.get("scan", []))
+	_set_habitat_board_slice(bounties, habitat_id, building_id, slices.get("bounty", []))
+	_set_habitat_board_slice(retrievals, habitat_id, building_id, slices.get("retrieval", []))
+
+
+func _set_habitat_board_slice(book: CharterBook, habitat_id: String, board_key: String, rows: Array) -> void:
+	if not book.offers.has(habitat_id):
+		book.offers[habitat_id] = {}
+	var habitat_boards: Dictionary = book.offers[habitat_id]
+	if typeof(rows) != TYPE_ARRAY or rows.is_empty():
+		habitat_boards.erase(board_key)
+	else:
+		habitat_boards[board_key] = rows
 
 
 ## Harness/tests that inject offers for one book call this so `ensure_boards` does not rebuild the habitat.
@@ -859,6 +945,7 @@ func to_dict() -> Dictionary:
 		"next_scan_charter_id": scans.next_id,
 		"next_bounty_charter_id": bounties.next_id,
 		"next_retrieval_charter_id": retrievals.next_id,
+		"bar_rounds_by_building": bar_rounds_by_building.duplicate(true),
 	}
 
 
@@ -904,12 +991,16 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 		out["scan_offers_by_habitat"] = {}
 		out["bounty_offers_by_habitat"] = {}
 		out["retrieval_offers_by_habitat"] = {}
+	if from_version <= 7:
+		if not out.has("bar_rounds_by_building"):
+			out["bar_rounds_by_building"] = {}
 	return out
 
 
 func from_dict(data: Dictionary) -> void:
 	if data.is_empty():
 		generated_day = -1
+		bar_rounds_by_building = {}
 		passengers.reset()
 		freight.reset()
 		scans.reset()
@@ -942,6 +1033,10 @@ func from_dict(data: Dictionary) -> void:
 		data.get("retrieval_accepted", []),
 		data.get("next_retrieval_charter_id", 1)
 	)
+	bar_rounds_by_building = {}
+	var stored_rounds: Variant = data.get("bar_rounds_by_building", {})
+	if typeof(stored_rounds) == TYPE_DICTIONARY:
+		bar_rounds_by_building = (stored_rounds as Dictionary).duplicate(true)
 
 
 func _invalidate_boards(day: int) -> void:

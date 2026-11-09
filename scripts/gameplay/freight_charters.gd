@@ -149,7 +149,8 @@ static func generate_offers(
 	day: int,
 	count: int,
 	run_seed: int = 0,
-	scale_count_by_population: bool = false
+	scale_count_by_population: bool = false,
+	offer_index_start: int = 0
 ) -> Array:
 	var cfg := config(catalog)
 	var cargos: Array = []
@@ -180,7 +181,8 @@ static func generate_offers(
 	var desc_by_cargo := description_index(cfg)
 
 	var offers: Array = []
-	for index in offer_count:
+	for i in offer_count:
+		var index := offer_index_start + i
 		var cargo: Dictionary = cargos[rng.randi() % cargos.size()]
 		var cargo_id := str(cargo.get("id", ""))
 		var dest: Dictionary = PassengerCharters.pick_destination_from_pool(

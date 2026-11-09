@@ -11,6 +11,8 @@ var resolve_ship_id: Callable = Callable()
 var ship_score: Callable = Callable()
 var rerender: Callable = Callable()
 var expand_plain_labels: bool = false
+## Optional control shown on the charter-ship row (right-aligned). Detached before `present` clears the board.
+var ship_line_trailing: Control = null
 
 var _context: UiContext
 
@@ -69,6 +71,7 @@ static func interleave(groups: Array) -> Array:
 
 func present(context: UiContext, build_sections: Callable, blocked_text: String = "") -> void:
 	_context = context
+	_detach_ship_line_trailing()
 	_clear_children(self)
 	if not blocked_text.is_empty():
 		add_child(_plain_label(blocked_text))
@@ -154,18 +157,25 @@ func _active_ship_id() -> String:
 func _add_ship_line(body: VBoxContainer, docked: Array[OwnedShip]) -> void:
 	if docked.is_empty():
 		body.add_child(_plain_label("No ships docked at this habitat."))
-	elif docked.size() > 1:
-		body.add_child(_ship_selector(docked))
-	else:
-		body.add_child(_plain_label("Charter ship: %s" % docked[0].name))
-
-
-func _ship_selector(docked: Array[OwnedShip]) -> HBoxContainer:
+		return
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
-	var caption := Label.new()
-	caption.text = "Charter ship:"
-	row.add_child(caption)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if docked.size() > 1:
+		var caption := Label.new()
+		caption.text = "Charter ship:"
+		row.add_child(caption)
+		row.add_child(_ship_selector_menu(docked))
+	else:
+		var caption := Label.new()
+		caption.text = "Charter ship: %s" % docked[0].name
+		caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(caption)
+	_attach_ship_line_trailing(row)
+	body.add_child(row)
+
+
+func _ship_selector_menu(docked: Array[OwnedShip]) -> OptionButton:
 	var menu := OptionButton.new()
 	menu.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var selected_index := 0
@@ -182,8 +192,23 @@ func _ship_selector(docked: Array[OwnedShip]) -> HBoxContainer:
 		if rerender.is_valid():
 			rerender.call()
 	)
-	row.add_child(menu)
-	return row
+	return menu
+
+
+func _detach_ship_line_trailing() -> void:
+	if ship_line_trailing == null or not is_instance_valid(ship_line_trailing):
+		return
+	var parent := ship_line_trailing.get_parent()
+	if parent != null:
+		parent.remove_child(ship_line_trailing)
+
+
+func _attach_ship_line_trailing(row: HBoxContainer) -> void:
+	if ship_line_trailing == null or not is_instance_valid(ship_line_trailing):
+		return
+	ship_line_trailing.size_flags_horizontal = Control.SIZE_SHRINK_END
+	ship_line_trailing.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(ship_line_trailing)
 
 
 func _add_section(body: VBoxContainer, section: CharterBoardSection) -> void:
