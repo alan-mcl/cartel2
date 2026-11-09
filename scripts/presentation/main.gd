@@ -211,9 +211,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			_flight.toggle_target_lock()
 			get_viewport().set_input_as_handled()
 			return
+	if event.is_action_pressed("cycle_target_lock_prev"):
+		if _flight.can_use_target_lock():
+			_flight.cycle_target_lock(true)
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("cycle_target_lock"):
 		if _flight.can_use_target_lock():
-			_flight.cycle_target_lock()
+			_flight.cycle_target_lock(false)
 			get_viewport().set_input_as_handled()
 			return
 	for autopilot_index in range(1, 10):

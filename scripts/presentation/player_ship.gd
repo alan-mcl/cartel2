@@ -334,9 +334,29 @@ func _physics_process(delta: float) -> void:
 	motion_changed.emit(motion.get_speed(), rad_to_deg(motion.facing), motion.is_boosting())
 
 
+func _active_sensors_for_lock() -> bool:
+	if owned_ship != null:
+		return owned_ship.active_sensors_enabled
+	if operating_state != null:
+		return bool(operating_state.active_systems.get("active_sensors", true))
+	return true
+
+
+func _lock_observers() -> Array:
+	return TargetLock.build_player_observers(
+		catalog,
+		assembled_ship,
+		operating_state,
+		owned_ship,
+		global_position,
+		_active_sensors_for_lock()
+	)
+
+
 func toggle_target_lock(contacts: Array) -> void:
+	var observers := _lock_observers()
 	locked_target_id = TargetLock.toggle(
-		locked_target_id, assembled_ship, contacts, global_position
+		locked_target_id, assembled_ship, contacts, global_position, observers
 	)
 
 
@@ -348,21 +368,29 @@ func apply_target_lock_on_contact(contact_id: String, contacts: Array) -> void:
 	if locked_target_id == contact_id:
 		locked_target_id = TargetLock.clear()
 		return
-	var ids := TargetLock.candidate_ids(contacts, global_position)
+	var observers := _lock_observers()
+	var ids := TargetLock.candidate_ids(contacts, global_position, observers)
 	if not ids.has(contact_id):
 		return
 	locked_target_id = contact_id
 
 
-func cycle_target_lock(contacts: Array) -> void:
-	locked_target_id = TargetLock.cycle_next(
-		locked_target_id, assembled_ship, contacts, global_position
-	)
+func cycle_target_lock(contacts: Array, reverse: bool = false) -> void:
+	var observers := _lock_observers()
+	if reverse:
+		locked_target_id = TargetLock.cycle_previous(
+			locked_target_id, assembled_ship, contacts, global_position, observers
+		)
+	else:
+		locked_target_id = TargetLock.cycle_next(
+			locked_target_id, assembled_ship, contacts, global_position, observers
+		)
 
 
 func retain_target_lock(contacts: Array) -> void:
+	var observers := _lock_observers()
 	locked_target_id = TargetLock.retain(
-		locked_target_id, assembled_ship, contacts, global_position
+		locked_target_id, assembled_ship, contacts, global_position, observers
 	)
 
 

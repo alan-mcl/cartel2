@@ -17,7 +17,67 @@ static func has_capability(assembled: AssembledShip) -> bool:
 	return assembled != null and assembled.has_capability(CAPABILITY_ID)
 
 
-static func lockable_contacts(contacts: Array, observer_pos: Vector2) -> Array:
+static func build_player_observers(
+	catalog: Catalog,
+	assembled: AssembledShip,
+	operating_state: ShipOperatingState,
+	owned: OwnedShip,
+	ship_pos: Vector2,
+	active_sensors_enabled: bool
+) -> Array:
+	var observers: Array = []
+	if assembled == null:
+		return observers
+	var profile := SensorSystem.sensor_profile(
+		assembled, operating_state, active_sensors_enabled
+	)
+	var ship_range := float(profile.get("range", 0.0)) * float(profile.get("effectiveness", 1.0))
+	if ship_range > 0.0:
+		observers.append({"position": ship_pos, "range": ship_range})
+	if catalog != null and owned != null:
+		var effectiveness := float(profile.get("effectiveness", 1.0))
+		var drone_obs := DroneRuntime.player_sensor_drone_observer(
+			catalog, owned, effectiveness, active_sensors_enabled
+		)
+		if not drone_obs.is_empty():
+			var drone_profile: Dictionary = drone_obs.get("profile", {})
+			var drone_range := float(drone_profile.get("range", 0.0)) * effectiveness
+			if drone_range > 0.0:
+				var drone_pos: Vector2 = drone_obs.get("position", Vector2.ZERO)
+				observers.append({"position": drone_pos, "range": drone_range})
+	return observers
+
+
+static func contact_in_lock_envelope(contact: Dictionary, observers: Array) -> bool:
+	return _within_observer_envelope(contact.get("position", Vector2.ZERO), observers)
+
+
+static func _within_observer_envelope(
+	contact_pos: Vector2,
+	observers: Array
+) -> bool:
+	if observers.is_empty():
+		return true
+	if not contact_pos.is_finite():
+		return false
+	for observer_variant in observers:
+		if typeof(observer_variant) != TYPE_DICTIONARY:
+			continue
+		var observer: Dictionary = observer_variant
+		var observer_pos: Vector2 = observer.get("position", Vector2.ZERO)
+		var max_range := float(observer.get("range", 0.0))
+		if max_range <= 0.0:
+			continue
+		if observer_pos.distance_to(contact_pos) <= max_range:
+			return true
+	return false
+
+
+static func lockable_contacts(
+	contacts: Array,
+	observer_pos: Vector2,
+	observers: Array = []
+) -> Array:
 	var candidates: Array = []
 	for contact_variant in contacts:
 		if typeof(contact_variant) != TYPE_DICTIONARY:
@@ -27,6 +87,8 @@ static func lockable_contacts(contacts: Array, observer_pos: Vector2) -> Array:
 		if id.is_empty():
 			continue
 		var pos: Vector2 = contact.get("position", Vector2.ZERO)
+		if not _within_observer_envelope(pos, observers):
+			continue
 		var dist_sq := observer_pos.distance_squared_to(pos)
 		candidates.append({"id": id, "distance_sq": dist_sq, "contact": contact})
 
@@ -40,9 +102,13 @@ static func lockable_contacts(contacts: Array, observer_pos: Vector2) -> Array:
 	return candidates
 
 
-static func candidate_ids(contacts: Array, observer_pos: Vector2) -> PackedStringArray:
+static func candidate_ids(
+	contacts: Array,
+	observer_pos: Vector2,
+	observers: Array = []
+) -> PackedStringArray:
 	var ids := PackedStringArray()
-	for entry in lockable_contacts(contacts, observer_pos):
+	for entry in lockable_contacts(contacts, observer_pos, observers):
 		ids.append(str(entry.get("id", "")))
 	return ids
 
@@ -62,11 +128,12 @@ static func contact_for_id(contacts: Array, target_id: String) -> Dictionary:
 static func acquire_nearest(
 	assembled: AssembledShip,
 	contacts: Array,
-	observer_pos: Vector2
+	observer_pos: Vector2,
+	observers: Array = []
 ) -> String:
 	if not has_capability(assembled):
 		return ""
-	var ids := candidate_ids(contacts, observer_pos)
+	var ids := candidate_ids(contacts, observer_pos, observers)
 	if ids.is_empty():
 		return ""
 	return ids[0]
@@ -80,11 +147,12 @@ static func cycle_next(
 	current_id: String,
 	assembled: AssembledShip,
 	contacts: Array,
-	observer_pos: Vector2
+	observer_pos: Vector2,
+	observers: Array = []
 ) -> String:
 	if current_id.is_empty() or not has_capability(assembled):
 		return current_id
-	var ids := candidate_ids(contacts, observer_pos)
+	var ids := candidate_ids(contacts, observer_pos, observers)
 	if ids.is_empty():
 		return ""
 	if ids.size() == 1:
@@ -95,17 +163,38 @@ static func cycle_next(
 	return ids[(index + 1) % ids.size()]
 
 
+static func cycle_previous(
+	current_id: String,
+	assembled: AssembledShip,
+	contacts: Array,
+	observer_pos: Vector2,
+	observers: Array = []
+) -> String:
+	if current_id.is_empty() or not has_capability(assembled):
+		return current_id
+	var ids := candidate_ids(contacts, observer_pos, observers)
+	if ids.is_empty():
+		return ""
+	if ids.size() == 1:
+		return ids[0]
+	var index := ids.find(current_id)
+	if index < 0:
+		return ids[0]
+	return ids[(index - 1 + ids.size()) % ids.size()]
+
+
 static func retain(
 	current_id: String,
 	assembled: AssembledShip,
 	contacts: Array,
-	observer_pos: Vector2
+	observer_pos: Vector2,
+	observers: Array = []
 ) -> String:
 	if current_id.is_empty():
 		return ""
 	if not has_capability(assembled):
 		return ""
-	var ids := candidate_ids(contacts, observer_pos)
+	var ids := candidate_ids(contacts, observer_pos, observers)
 	if ids.is_empty() or not ids.has(current_id):
 		return ""
 	return current_id
@@ -115,13 +204,14 @@ static func toggle(
 	current_id: String,
 	assembled: AssembledShip,
 	contacts: Array,
-	observer_pos: Vector2
+	observer_pos: Vector2,
+	observers: Array = []
 ) -> String:
 	if not has_capability(assembled):
 		return ""
 	if not current_id.is_empty():
 		return clear()
-	return acquire_nearest(assembled, contacts, observer_pos)
+	return acquire_nearest(assembled, contacts, observer_pos, observers)
 
 
 static func hull_radius_world(assembled: AssembledShip, far_lod: bool) -> float:

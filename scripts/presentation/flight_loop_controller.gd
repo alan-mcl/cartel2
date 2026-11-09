@@ -266,14 +266,14 @@ func toggle_target_lock() -> void:
 		_player.toggle_target_lock(contacts)
 
 
-func cycle_target_lock() -> void:
+func cycle_target_lock(reverse: bool = false) -> void:
 	if not can_use_target_lock():
 		return
 	if _player.locked_target_id.is_empty():
 		return
 	var contacts := _collect_nav_contacts()
 	if _player.has_method("cycle_target_lock"):
-		_player.cycle_target_lock(contacts)
+		_player.cycle_target_lock(contacts, reverse)
 
 
 func request_target_scan() -> void:
@@ -290,6 +290,19 @@ func request_target_scan() -> void:
 	var block := TargetScan.active_scan_block_reason(_player.assembled_ship, _player.operating_state)
 	if not block.is_empty():
 		_main.session.last_log = block
+		return
+	var owned: OwnedShip = _main.session.get_current_owned_ship()
+	var active_sensors := owned.active_sensors_enabled if owned != null else true
+	var observers := TargetLock.build_player_observers(
+		_catalog,
+		_player.assembled_ship,
+		_player.operating_state,
+		owned,
+		_player.global_position,
+		active_sensors
+	)
+	if not observers.is_empty() and not TargetLock.contact_in_lock_envelope(locked_contact, observers):
+		_main.session.last_log = "Target is outside sensor range."
 		return
 	var beacon_destination := ""
 	if not _main.session.in_unspace:

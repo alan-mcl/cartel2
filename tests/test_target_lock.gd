@@ -17,6 +17,9 @@ static func run(runner: TestRunner) -> void:
 	_test_peaceful_npc_no_lock(runner, catalog)
 	_test_acquire_landmark(runner)
 	_test_cycle_mixed_kinds(runner)
+	_test_lock_sensor_envelope(runner)
+	_test_lock_drone_observer_envelope(runner)
+	_test_cycle_previous_wrap(runner)
 
 
 static func _assembled_with_lock() -> AssembledShip:
@@ -79,6 +82,64 @@ static func _test_cycle_wrap(runner: TestRunner) -> void:
 	]
 	var next := TargetLock.cycle_next("c", assembled, contacts, Vector2.ZERO)
 	runner.check_eq(next, "a", "cycle wraps from last to first")
+
+
+static func _test_cycle_previous_wrap(runner: TestRunner) -> void:
+	var assembled := _assembled_with_lock()
+	var contacts: Array = [
+		_traffic_contact("a", Vector2(100.0, 0.0)),
+		_traffic_contact("b", Vector2(200.0, 0.0)),
+		_traffic_contact("c", Vector2(300.0, 0.0)),
+	]
+	var prev := TargetLock.cycle_previous("a", assembled, contacts, Vector2.ZERO)
+	runner.check_eq(prev, "c", "reverse cycle wraps from first to last")
+
+
+static func _test_lock_sensor_envelope(runner: TestRunner) -> void:
+	var assembled := _assembled_with_lock()
+	var contacts: Array = [
+		_traffic_contact("far", Vector2(8000.0, 0.0)),
+		_traffic_contact("near", Vector2(400.0, 0.0)),
+		{"id": "gate", "contact_kind": "landmark", "position": Vector2(2000.0, 0.0)},
+	]
+	var ship_only: Array = [{"position": Vector2.ZERO, "range": 500.0}]
+	runner.check_eq(
+		TargetLock.acquire_nearest(assembled, contacts, Vector2.ZERO, ship_only),
+		"near",
+		"envelope acquire picks nearest in-range contact"
+	)
+	runner.check(
+		not TargetLock.candidate_ids(contacts, Vector2.ZERO, ship_only).has("gate"),
+		"landmark outside envelope not lockable"
+	)
+	runner.check_eq(
+		TargetLock.retain("gate", assembled, contacts, Vector2.ZERO, ship_only),
+		"",
+		"retain drops lock outside envelope"
+	)
+
+
+static func _test_lock_drone_observer_envelope(runner: TestRunner) -> void:
+	var assembled := _assembled_with_lock()
+	var contacts: Array = [
+		{"id": "beyond_ship", "contact_kind": "landmark", "position": Vector2(1200.0, 0.0)},
+	]
+	var observers: Array = [
+		{"position": Vector2.ZERO, "range": 500.0},
+		{"position": Vector2(1000.0, 0.0), "range": 800.0},
+	]
+	runner.check(
+		TargetLock.candidate_ids(contacts, Vector2.ZERO, observers).has("beyond_ship"),
+		"drone observer extends lock envelope beyond ship bubble"
+	)
+	runner.check(
+		TargetLock.contact_in_lock_envelope(contacts[0], observers),
+		"contact inside drone envelope"
+	)
+	runner.check(
+		not TargetLock.contact_in_lock_envelope(contacts[0], [{"position": Vector2.ZERO, "range": 500.0}]),
+		"same contact outside ship-only envelope"
+	)
 
 
 static func _test_retain_drops_invalid(runner: TestRunner) -> void:

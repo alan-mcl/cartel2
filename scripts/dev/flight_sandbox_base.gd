@@ -501,6 +501,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			_player.toggle_target_lock(contacts)
 			get_viewport().set_input_as_handled()
 			return
+	if event.is_action_pressed("cycle_target_lock_prev"):
+		if (
+			_player.assembled_ship != null
+			and TargetLock.has_capability(_player.assembled_ship)
+			and not _player.locked_target_id.is_empty()
+		):
+			var contacts: Array = _collect_nav_contacts()
+			_player.cycle_target_lock(contacts, true)
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("cycle_target_lock"):
 		if (
 			_player.assembled_ship != null
@@ -508,7 +518,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			and not _player.locked_target_id.is_empty()
 		):
 			var contacts: Array = _collect_nav_contacts()
-			_player.cycle_target_lock(contacts)
+			_player.cycle_target_lock(contacts, false)
 			get_viewport().set_input_as_handled()
 			return
 	for autopilot_index in range(1, 10):
