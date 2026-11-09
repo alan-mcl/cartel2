@@ -14,7 +14,7 @@
       "cyber": 0.4
     },
     "cost": 3200,
-    "description": "SnedOS Cyberwall provides best-in-class Cyber Network Defence.",
+    "description": "SnedOS Cyberwall. Best Cyber Network Defence in the rack",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,
@@ -83,7 +83,7 @@
       "cyber": 0.35
     },
     "cost": 2800,
-    "description": "The Firewall provides standards-compliant Cyber Network Defence.",
+    "description": "The Chimera Firewall provides good Cyber Network Defence. Install it and keep it up to date.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.1,

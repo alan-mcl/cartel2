@@ -32,7 +32,7 @@
     "power_demand": 18.0,
     "compute_demand": 8.0,
     "cost": 12000,
-    "description": "SBI Alpha-class hyperdrive is the market leader in efficient accurate personal N-space translation.",
+    "description": "Buy the SBI Alpha for market-leading personal N-space translation.",
     "signature": {
       "thermal": 4.4,
       "gravitational": 6.0,
@@ -74,7 +74,7 @@
     "power_demand": 13.0,
     "compute_demand": 6.0,
     "cost": 21500,
-    "description": "PRV Vertex: Fueled by your adventurous spirit. Choose Vertex and you'll never run out of places to go!",
+    "description": "PRV Vertex: fueled by your adventurous spirit. Choose Vertex and you'll never run out of places to go!",
     "signature": {
       "thermal": 3.6,
       "gravitational": 4.8,
@@ -95,7 +95,7 @@
     "power_demand": 11.0,
     "compute_demand": 5.0,
     "cost": 27500,
-    "description": "Orion's premium Needle359 Hyperdrive engine provides unmatched translation efficiency.",
+    "description": "Orion's Needle359 is the premium Hyperdrive on the market.",
     "signature": {
       "thermal": 3.2,
       "gravitational": 4.2,

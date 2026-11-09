@@ -71,7 +71,7 @@
     "brand": "Bellatrix",
     "intercept_chance": 0.25,
     "cost": 1600,
-    "description": "The Bellatrix PD intercept array provides excellent protection from incoming projectiles.",
+    "description": "Bellatrix PD. Excellent against incoming projectiles. Fit it.",
     "signature": {
       "thermal": 0.8,
       "gravitational": 0.1,

@@ -19,7 +19,7 @@
     },
     "power_demand": 8.0,
     "cost": 3200,
-    "description": "The general-purpose Helios Deflector shielding solution provides excellent cost effective protection to small space craft.",
+    "description": "The general-purpose Helios Deflector shielding solution provides excellent cost effective protection to small spacecraft.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,
@@ -159,7 +159,7 @@
     },
     "power_demand": 7.0,
     "cost": 3000,
-    "description": "The Bellatrix shield provides versatile protection in multi-threat environments.",
+    "description": "Bellatrix Aegis. Versatile protection in a multi-threat fight. Fit it.",
     "signature": {
       "thermal": 3.9,
       "gravitational": 0.2,

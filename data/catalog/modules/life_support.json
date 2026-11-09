@@ -84,7 +84,7 @@
     "power_demand": 2.6,
     "compute_demand": 3.8,
     "cost": 3600,
-    "description": "Long fights in luxury conditions are not negotiable with the Longbreath range from BioGenesis. Your passengers will notice the difference.",
+    "description": "Long flights in luxury conditions are not negotiable with the Longbreath range from BioGenesis.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -232,7 +232,7 @@
     "power_demand": 1.1,
     "compute_demand": 0.75,
     "cost": 2285,
-    "description": "The Canopy Recycle LSS has got more bunks that you'd expect at the price!",
+    "description": "The Canopy Recycle LSS has got more bunks than you'd expect at the price!",
     "capabilities": [
       "ls_habitat"
     ],
@@ -256,7 +256,7 @@
     "power_demand": 1.9,
     "compute_demand": 1.9,
     "cost": 1580,
-    "description": "The Harvest-line Air4 gives you and your passengers a comfortable ride and a good nights rest!",
+    "description": "The Harvest-line Air4 gives you and your passengers a comfortable ride and a good night's rest!",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -326,7 +326,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.8,
     "cost": 720,
-    "description": "Standard Air life support systems: more than just seats in a grey box.",
+    "description": "Standard Air life support systems: more than just seats in a grey box. Keep working with GI.",
     "signature": {
       "thermal": 4.7,
       "gravitational": 0.14,
@@ -419,7 +419,7 @@
     "power_demand": 2.4,
     "compute_demand": 3.4,
     "cost": 4200,
-    "description": "The Exclusive Cabin from Helios. Premium seating and luxurious long-stay accomodation for two people.",
+    "description": "The Exclusive Cabin from Helios. Premium seating and luxurious long-stay accommodation for two people.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -493,7 +493,7 @@
     "power_demand": 1.2,
     "compute_demand": 0.9,
     "cost": 2220,
-    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accomodation. Choose the Cabin 4 for an affordable and efficient long haul fit.",
+    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accommodation. The house offers Cabin 4: comfortable and refined shipboard accommodation.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -517,7 +517,7 @@
     "power_demand": 1.7,
     "compute_demand": 2.9,
     "cost": 3400,
-    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accomodation. Choose the Quiet Cabin to guarantee a peaceful overnight commute.",
+    "description": "The Continuance brand cabins from Morrow & Sons offer comfortable and refined ship-board accommodation. The house offers Quiet Cabin: elegant and well appointed shipboard accommodation.",
     "capabilities": [
       "ls_habitat",
       "ls_luxury"
@@ -542,7 +542,7 @@
     "power_demand": 1.4,
     "compute_demand": 0.9,
     "cost": 960,
-    "description": "Field Air 2: two-berth sleeper accomodation from trustworthy Field Core brand.",
+    "description": "Field Air 2: two-berth sleeper accommodation. It works.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -611,7 +611,7 @@
     "power_demand": 1.5,
     "compute_demand": 1.8,
     "cost": 1820,
-    "description": "Choose the A-20 for avionics-grade two-berth long route comfort.",
+    "description": "A-20. Two-berth long route comfort. The one to fit.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -636,7 +636,7 @@
     "power_demand": 2.0,
     "compute_demand": 3.2,
     "cost": 2600,
-    "description": "Choose the A-21 for two-berth comfort on sensor-heavy and interceptor configurations.",
+    "description": "A-21. Two-berth comfort for scouts and interceptors. Fit it now.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -782,7 +782,7 @@
     "power_demand": 1.3,
     "compute_demand": 1.7,
     "cost": 1920,
-    "description": "The Kaze brand brings Sakuraya values and attention to detail to your travels. Conservative two-berth comfort and refined finishings will provide for your every need.",
+    "description": "We are pleased to offer Kaze: Sakuraya care in every detail, conservative two-berth comfort, and refined finishes for your every need.",
     "capabilities": [
       "ls_habitat",
       "ls_comfort"
@@ -853,7 +853,7 @@
     "power_demand": 1.3,
     "compute_demand": 0.85,
     "cost": 3120,
-    "description": "Lot 6 gives you a great six-berth living pod. Keep moving those bodies.",
+    "description": "Lot 6 gives you a great six-berth living pod. The terms are better than they will be tomorrow. Speak to the desk.",
     "capabilities": [
       "ls_habitat"
     ],
@@ -877,7 +877,7 @@
     "power_demand": 1.8,
     "compute_demand": 2.1,
     "cost": 1700,
-    "description": "Two comfort seats for pilots that live between ports. Channel by TMC: get the best.",
+    "description": "Two comfort seats for pilots who live between ports. Channel by TMC: get the best.",
     "capabilities": [
       "ls_comfort"
     ],
@@ -992,7 +992,7 @@
     "power_demand": 0.45,
     "compute_demand": 0.28,
     "cost": 520,
-    "description": "The Aegis Cockpit 1 delivers air to pilots who have other things to worry about.",
+    "description": "The Aegis Cockpit 1. Air to one (1) pilot. Maintain the specified regular service intervals.",
     "signature": {
       "thermal": 2.1,
       "gravitational": 0.04,

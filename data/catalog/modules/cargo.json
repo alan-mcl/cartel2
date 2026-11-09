@@ -129,7 +129,7 @@
     "power_demand": 2.0,
     "compute_demand": 0.8,
     "cost": 1850,
-    "description": "No better way to move your livestock or nursery plants that Evergreen's climate-controlled Agrilive cargo bay.",
+    "description": "No better way to move your livestock or nursery plants than Evergreen's Agrilive cargo bay.",
     "capabilities": [
       "life_support_integrated"
     ],
@@ -152,7 +152,7 @@
     "power_demand": 2.2,
     "compute_demand": 3.5,
     "cost": 3200,
-    "description": "Use VaultLine holds from Chettiar. Data-centre grade conditions meet even the most rigourous compliance requirements for any kind of shipped compute.",
+    "description": "Use VaultLine holds from Chettiar. Data-centre grade conditions for shipped compute, documented to a rigorous standard.",
     "capabilities": [
       "compute_integrated"
     ],
@@ -244,7 +244,7 @@
     "power_demand": 1.0,
     "compute_demand": 0.3,
     "cost": 950,
-    "description": "Choose Meridian Cold chain holds for refrigerated cargo apacity at an unbeatable value-based price point.",
+    "description": "Choose Meridian Cold chain holds for refrigerated cargo capacity at an unbeatable value-based price point.",
     "capabilities": [
       "refrigerated"
     ],
@@ -290,7 +290,7 @@
     "power_demand": 0.5,
     "compute_demand": 0.9,
     "cost": 1100,
-    "description": "Custory holds. Bonded courier cargo bay with audit logging.",
+    "description": "Custody holds. Bonded courier cargo bay with audit logging.",
     "capabilities": [
       "secure_cargo"
     ],
@@ -336,7 +336,7 @@
     "power_demand": 1.5,
     "compute_demand": 0.5,
     "cost": 1300,
-    "description": "If you need short-hop live cargo pod capability for feeder routes, look no further that the LiveBox line of bays.",
+    "description": "If you need short-hop live cargo pod capability for feeder routes, look no further than the LiveBox line of bays.",
     "capabilities": [
       "life_support_integrated"
     ],
@@ -382,7 +382,7 @@
     "power_demand": 2.6,
     "compute_demand": 1.0,
     "cost": 2600,
-    "description": "AgriLive holds provide best-in class dual-mode cargo capacity for chilled produce and live freight.",
+    "description": "AgriLive holds provide best-in-class dual-mode cargo capacity for chilled produce and live freight.",
     "capabilities": [
       "refrigerated",
       "life_support_integrated"

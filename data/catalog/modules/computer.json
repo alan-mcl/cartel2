@@ -15,7 +15,7 @@
       "basic_hud"
     ],
     "cost": 7200,
-    "description": "Try the Capsule Mind. Quantum computing is the future. It is written.",
+    "description": "Apex Capsule Mind. Quantum computing is the future. It is written.",
     "signature": {
       "thermal": 1.64,
       "gravitational": 0.23,
@@ -39,7 +39,7 @@
       "basic_hud"
     ],
     "cost": 4500,
-    "description": "Chimera Glass cores provide best-in-class photonic compute capability.",
+    "description": "Chimera Glass. Best photonic core in the rack. Fit it.",
     "signature": {
       "thermal": 2.3,
       "gravitational": 0.09,
@@ -63,7 +63,7 @@
       "basic_hud"
     ],
     "cost": 899,
-    "description": "Hydra compute modules provide best value-for-money compute capability.",
+    "description": "Chimera Hydra. Best compute for the money. Fit it and fly.",
     "signature": {
       "thermal": 1.2,
       "gravitational": 0.08,
@@ -87,7 +87,7 @@
       "basic_hud"
     ],
     "cost": 14000,
-    "description": "Oracle compute modules provide industry leading quantum computing capability. ",
+    "description": "Chimera Oracle. Industry-leading quantum. It computes, quietly.",
     "signature": {
       "thermal": 1.72,
       "gravitational": 0.25,
@@ -135,7 +135,7 @@
       "basic_hud"
     ],
     "cost": 549,
-    "description": "Shirakawa-series cores: conservative and durable compute capability",
+    "description": "Shirakawa-series cores: conservative and durable compute capability.",
     "signature": {
       "thermal": 1.08,
       "gravitational": 0.07,
@@ -159,7 +159,7 @@
       "basic_hud"
     ],
     "cost": 819,
-    "description": "Caduceus-grade silicon from the HG family. Built for nav and comms stacks.",
+    "description": "Caduceus C-30. Nav and comms silicon. The operators who hear about it first are already fitting it.",
     "signature": {
       "thermal": 1.24,
       "gravitational": 0.08,
@@ -183,7 +183,7 @@
       "basic_hud"
     ],
     "cost": 8600,
-    "description": "Quantum enclosure tuned for crypto and secure comms workloads, with the Caduceus seal of quality.",
+    "description": "Caduceus Quiet. Quantum for crypto and secure comms. Ask this shift. The quiet units go first.",
     "signature": {
       "thermal": 1.44,
       "gravitational": 0.2,
@@ -207,7 +207,7 @@
       "basic_hud"
     ],
     "cost": 4100,
-    "description": "Photonic beam core for high-bandwidth sensor and comms processing. Trust Hermes with your computing needs.",
+    "description": "Hermes Beam. Photonic throughput for sensor and comms. The smart money is fitting it now.",
     "signature": {
       "thermal": 2.4,
       "gravitational": 0.09,
@@ -231,7 +231,7 @@
       "basic_hud"
     ],
     "cost": 479,
-    "description": "Compact Relay silicon for all your onboard compute. With Relay you can't be delayed.",
+    "description": "Relay Pack 8. Compact silicon, with Relay you can't be delayed. Ask before the pallet moves.",
     "signature": {
       "thermal": 1.0,
       "gravitational": 0.07,
@@ -313,7 +313,7 @@
   },
   {
     "id": "mdc_365_nav",
-    "name": "Monday 365 NavCore",
+    "name": "Monday 364 NavCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "silicon",
@@ -327,7 +327,7 @@
       "basic_hud"
     ],
     "cost": 480,
-    "description": "Upgrade your ship systems with the excellent Monday NavCore. 365 days of uptime per year!",
+    "description": "Upgrade your ship systems with the excellent Monday NavCore. 364 days of uptime per year!",
     "signature": {
       "thermal": 1.0,
       "gravitational": 0.06,
@@ -337,7 +337,7 @@
   },
   {
     "id": "mdc_monday_core",
-    "name": "Monday 365 WorkCore",
+    "name": "Monday 364 WorkCore",
     "maker": "Monday Corporation",
     "brand": "Monday",
     "core_type": "silicon",
@@ -351,7 +351,7 @@
       "basic_hud"
     ],
     "cost": 550,
-    "description": "Never run out of compute again with the peerless Monday WorkCore. 365 reasons to love Monday!",
+    "description": "Never run out of compute again with the peerless Monday WorkCore. 364 reasons to love Monday!",
     "signature": {
       "thermal": 1.08,
       "gravitational": 0.07,
@@ -375,7 +375,7 @@
       "basic_hud"
     ],
     "cost": 3200,
-    "description": "Fly at the speed of light with the brilliant Mondat SurfaceCore. 365 reasons to brighten up!",
+    "description": "Fly at the speed of light with the brilliant Monday SurfaceCore. 364 reasons to brighten up!",
     "signature": {
       "thermal": 2.2,
       "gravitational": 0.09,
@@ -399,7 +399,7 @@
       "basic_hud"
     ],
     "cost": 1100,
-    "description": "Good enough for your office means good enough for your ship! Monday ServerCore bring workplace efficiency and reliability to your commute.",
+    "description": "Good enough for your office means good enough for your ship! Monday ServerCore brings workplace efficiency and reliability to your commute.",
     "signature": {
       "thermal": 1.32,
       "gravitational": 0.09,
@@ -495,7 +495,7 @@
       "basic_hud"
     ],
     "cost": 1500,
-    "description": "Needing quality compute on board? Go with Orion for your ship today.",
+    "description": "A-40. Quality onboard compute from Orion. Fit it today.",
     "signature": {
       "thermal": 1.4,
       "gravitational": 0.1,
@@ -519,7 +519,7 @@
       "basic_hud"
     ],
     "cost": 4400,
-    "description": "Are photonic circuits what you need? Orion has the best.",
+    "description": "Glasspack. Photonic circuits from Orion. Fit it today.",
     "signature": {
       "thermal": 2.5,
       "gravitational": 0.09,
@@ -543,7 +543,7 @@
       "basic_hud"
     ],
     "cost": 754,
-    "description": "Budget compute options got you confused? Just go with Orion, you can't go wrong.",
+    "description": "Yardfit. Budget compute from Orion. You can't go wrong, just fit it.",
     "signature": {
       "thermal": 1.16,
       "gravitational": 0.08,
@@ -663,7 +663,7 @@
       "basic_hud"
     ],
     "cost": 753,
-    "description": "Dependable silicon compute - proven centuries-old temp. Hundreds of years later it's still the best bang for buck!",
+    "description": "Dependable silicon compute - proven centuries-old tech. Hundreds of years later it's still the best bang for buck!",
     "signature": {
       "thermal": 1.20,
       "gravitational": 0.08,
@@ -711,7 +711,7 @@
       "basic_hud"
     ],
     "cost": 639,
-    "description": "Tradition and efficiency find the perfect marriage in the elegant Kikyo range of silicon compute cores.",
+    "description": "The house commends Kikyo: tradition and efficiency, joined in an elegant silicon core.",
     "signature": {
       "thermal": 1.12,
       "gravitational": 0.07,
@@ -735,7 +735,7 @@
       "basic_hud"
     ],
     "cost": 1700,
-    "description": "With refined and timeless silicon core technology, Shirayuki represents the pinacle of computing reliability and elegance.",
+    "description": "Shirayuki stands as the pinnacle of computing reliability and elegance, for those requiring a discerning standard.",
     "signature": {
       "thermal": 1.4,
       "gravitational": 0.09,
@@ -783,7 +783,7 @@
       "basic_hud"
     ],
     "cost": 738,
-    "description": "Peal Logic5 provides a good compute-to-cost value proposition.",
+    "description": "Peal Logic 5 - good compute for the coin. A sound buy.",
     "signature": {
       "thermal": 1.16,
       "gravitational": 0.08,
@@ -831,7 +831,7 @@
       "basic_hud"
     ],
     "cost": 1800,
-    "description": "SnedOS is the brand that you trust with your computation. Bridge 400 delivers scalability and availability.",
+    "description": "SnedOS is the brand that you trust with your computation. Bridge 440 delivers scalability and availability.",
     "signature": {
       "thermal": 1.56,
       "gravitational": 0.11,
@@ -855,7 +855,7 @@
       "basic_hud"
     ],
     "cost": 4800,
-    "description": "SnedOS is the brand that you trust with your computation. Lattic Core delivers performance and accuracy.",
+    "description": "SnedOS is the brand that you trust with your computation. Lattice Core delivers performance and accuracy.",
     "signature": {
       "thermal": 2.6,
       "gravitational": 0.1,
@@ -879,7 +879,7 @@
       "basic_hud"
     ],
     "cost": 9800,
-    "description": "The Vault isolated quantum enclosure. SnedeCorp attestation assures you of it's quality.",
+    "description": "The Vault isolated quantum enclosure. SnedeCorp attestation assures you of its quality.",
     "signature": {
       "thermal": 1.56,
       "gravitational": 0.21,
@@ -903,7 +903,7 @@
       "basic_hud"
     ],
     "cost": 420,
-    "description": "If you're in the market for some budget compute, Tukey HandyCore is what you're looking for today.",
+    "description": "HandyCore budget compute, on the desk today. Ask for HandyCore before someone else does.",
     "signature": {
       "thermal": 0.96,
       "gravitational": 0.06,
@@ -927,7 +927,7 @@
       "basic_hud"
     ],
     "cost": 680,
-    "description": "That's right, read the specs again. Tukey's Lot 9 packs more punch that the competition.",
+    "description": "That's right, read the specs again. Tukey's Lot 9 packs more punch than the competition.",
     "signature": {
       "thermal": 1.28,
       "gravitational": 0.08,
@@ -951,7 +951,7 @@
       "basic_hud"
     ],
     "cost": 1600,
-    "description": "Channel-series silicon delivers unparalleled functionality. Choose it today for your ship and leave behind your computational worries.",
+    "description": "Channel-series silicon delivers unparalleled functionality. Specify it where the core has to be dependable.",
     "signature": {
       "thermal": 1.44,
       "gravitational": 0.1,
@@ -975,7 +975,7 @@
       "basic_hud"
     ],
     "cost": 900,
-    "description": "Transit-series silicon provides unmatched value for your computing money. Install a NavCore today and let it handle your solutioning.",
+    "description": "Transit-series silicon provides unmatched value for your computing money. Install a NavCore today and let it handle the solution.",
     "signature": {
       "thermal": 1.2,
       "gravitational": 0.08,
