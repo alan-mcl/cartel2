@@ -2586,5 +2586,104 @@
 		"name": "Tulima Exchange",
 		"short_desc": "Exchange at Tulima.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/the_alexandria_center.png",
+		"description": "A tiered reading hall beside the main concourses where clerks keep public reference stacks on stars, trade lanes, corporations, and ship systems. Quiet carrels overlook the docking bays; most visitors are students, brokers, and curious crew on layover.",
+		"id": "the_alexandria_center",
+		"kind": "archive",
+		"name": "The Alexandria Center",
+		"short_desc": "Public reference stacks at the heart of Proxima Habitat.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_tycho_archive.png",
+		"description": "Radiation-shielded vaults and heavy-duty stacks hold industrial manuals, ore assay tables, and corridor histories from Tycho's restless sky. The Archive is utilitarian and bluntly labelled; noise from the yards is never far away.",
+		"id": "the_tycho_archive",
+		"kind": "archive",
+		"name": "The Tycho Archive",
+		"short_desc": "Shielded reference vaults above Tycho.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_lanai_library.png",
+		"description": "Open-air galleries and shaded reading patios look out over La Bella Vista's oceans. The Lanai Library leans toward travel, resort trade, and leisure commerce rather than heavy industry.",
+		"id": "the_lanai_library",
+		"kind": "archive",
+		"name": "The Lanai Library",
+		"short_desc": "Resort reference library on the orbital.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_irasia_index.png",
+		"description": "Neon-signed aisles never close on the Night Index: freight schedules, corporate filings, and module catalogues updated from passing convoys. The crowd is fast, loud, and mostly sober.",
+		"id": "the_irasia_index",
+		"kind": "archive",
+		"name": "The Irasia Index",
+		"short_desc": "Round-the-clock trade reference on Irasia Habitat.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_atlas_institute.png",
+		"description": "Precision shelving and calibrated readers suit Tokirev's factory temperament. The Institute publishes tolerances, standards, and manufacturer spec sheets used across the yards.",
+		"id": "the_atlas_institute",
+		"kind": "archive",
+		"name": "The Atlas Institute",
+		"short_desc": "Technical reference institute above Tokirev.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/fennet_survey_office.png",
+		"description": "Claims maps, assay notebooks, and frontier gazetteers pile up in a no-frills survey office. Prospectors copy routes here before pushing rimward.",
+		"id": "fennet_survey_office",
+		"kind": "archive",
+		"name": "Fennet Survey Office",
+		"short_desc": "Frontier reference and survey records.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_prospectus.png",
+		"description": "Polished reading rooms and discrete terminals cater to analysts tracing markets, charters, and corporate filings. The Prospectus is where Fortuna's confidence meets footnotes.",
+		"id": "the_prospectus",
+		"kind": "archive",
+		"name": "The Prospectus",
+		"short_desc": "Finance and market reference on Fortuna Habitat.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/the_compendium.png",
+		"description": "Shipping ledgers, treaty excerpts, and merchant house genealogies fill the Compendium's shelves. New Carthage traders treat it as the first stop before negotiating cargo.",
+		"id": "the_compendium",
+		"kind": "archive",
+		"name": "The Compendium",
+		"short_desc": "Mercantile reference library on New Carthage Habitat.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/horizon_registry.png",
+		"description": "Counters and public desks log habitats, franchises, and street-level deals under Horizon's fast concourses. The Registry is bureaucratic on purpose: everything worth handshaking is worth indexing.",
+		"id": "horizon_registry",
+		"kind": "archive",
+		"name": "Horizon Registry",
+		"short_desc": "Civic and commercial reference for Horizon Habitat.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/titania_vault.png",
+		"description": "Cold-storage stacks and ring-tourism archives sit behind reinforced panes with views of Titania's parent gas giant. The Vault is part library, part resort brochure, part engineering folio.",
+		"id": "titania_vault",
+		"kind": "archive",
+		"name": "Titania Vault",
+		"short_desc": "Tourism and technical reference above Titania IX.",
+		"type": "library"
+	},
+	{
+		"art": "res://assets/ui/locations/pelagos_bureau.png",
+		"description": "Twin-sun daylight floods the Bureau's main hall, where binary-star almanacs, mineral surveys, and manufacturing circulars share the same shelves. Pelagos traders use it to settle arguments before they reach the exchange floor.",
+		"id": "pelagos_bureau",
+		"kind": "archive",
+		"name": "Pelagos Bureau",
+		"short_desc": "Commercial reference under Kepler-35's binary sky.",
+		"type": "library"
 	}
 ]

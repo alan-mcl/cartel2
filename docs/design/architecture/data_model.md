@@ -29,7 +29,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `commodities.json` | array | Trade goods (mass, base_price) |
 | `fuels.json` | array | Propulsion fuel chemistries and daily price bounds |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
-| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, `ad_voice`, `trade`, `brands`) |
+| `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, `ad_voice`, `trade`, `brands`, `description`) |
 | `corporate_office_ticker.json` | object | Shared SKU/brand/job/recruitment templates keyed by `ad_voice` |
 | `corporate_presence.json` | object | Per-sector corporate share percents (sum 100; all corps > 0) |
 | `passenger_missions.json` | object | Passenger charter roles, descriptions, and pay tuning |
@@ -354,6 +354,7 @@ Ephemeral civilian ships in sector orbit only (not Unspace). Implemented by `Tra
 | `ad_voice` | corporations | Office ticker tone: `polished`, `blunt`, `cheerful`, `severe`, `slick`, or `courtly` |
 | `trade` | corporations | One-sentence trade advertising line for corporate office ticker |
 | `brands` | corporations | Three to five non-SKU advertising labels (services, franchises, desks); must not duplicate catalogue module or ship `name` or `brand` |
+| `description` | corporations | Player-facing corporate write-up (sourced from setting prose; shown in habitat libraries) |
 | *(sector id)* | corporate_presence | Key matching `sectors.json` |
 | *(corp id)* | corporate_presence | Percent share of **corporate** traffic on that world (not including independents) |
 
@@ -397,6 +398,8 @@ Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `C
 `habitats.json` entries include `sector_id` for market quote lookup. Exchange buildings use `type: market`.
 
 Each of the eleven E-world hubs lists exactly one `chassis_dealer` and one `ship_dealer`. Those buildings set `stock_source: "daily"` and omit `stock`. [`DealerStock`](../../../scripts/gameplay/dealer_stock.gd) samples a deterministic lot each GST day from the full chassis or ship catalog: count `round(fraction × pool size)` clamped to `[1, pool]`, where `fraction = 0.20 + 0.55 × (population_billions − 3.5) / (60 − 3.5)` using the habitat sector’s `population_billions` (Tycho → 20%, Proxima → 75%). Seeding matches charter boards (`run_seed`, day, habitat id, building id). Legacy static `stock` arrays on dealers are disallowed when `stock_source` is `daily`.
+
+Each E-world principal habitat also lists one `library` building (`type: library`, `kind: archive`) with a locally distinct name. Libraries do not post mission desks; browsing uses [`LibraryIndex`](../../../scripts/gameplay/library_index.gd) in the habitat UI.
 
 Daily commodity quotes are computed at runtime by `CommodityEconomy` from `economies.json`, `routes.json`, and `commodities.json`. Session stores `market_quotes` and `market_quotes_day` (recomputed on load from `gst_seconds`). Full algorithm: [commodity_economy.md](commodity_economy.md).
 

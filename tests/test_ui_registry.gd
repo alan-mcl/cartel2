@@ -8,7 +8,15 @@ static func run(runner: TestRunner) -> void:
 		"GameScreen global class name"
 	)
 
-	for embed_type in ["terminal", "market", "ship_dealer", "chassis_dealer", "shipyard", "bar"]:
+	for embed_type in [
+		"terminal",
+		"market",
+		"ship_dealer",
+		"chassis_dealer",
+		"shipyard",
+		"bar",
+		"library",
+	]:
 		runner.check_eq(
 			BuildingPanelRegistry.mode_for(embed_type),
 			BuildingPanelRegistry.MODE_EMBED,
