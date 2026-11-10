@@ -379,7 +379,7 @@ Accepted charters persist under `Simulation` save key `missions` (`accepted`, `o
 
 ### Celebrity pilots (`celebrity_pilots.json`)
 
-Each pilot: `id`, display `name`, unique HTML `livery`, and `ships[]`. Each ship has `id`, display `name`, `chassis`, and `modules[]` (same fit rules as `ships.json` but not listed in dealer stock). Hub encounter `celebrity_arrival` picks a living pilot, one signature ship, and materialises it with pilot callsign and ship name. Career save tracks `dead_pilots` on the `encounters` subsystem; dead pilots are excluded from hub rolls and `{celebrity-pilot}` sampling during play (main-menu ticker may still name anyone).
+Each pilot: `id`, display `name`, unique HTML `livery`, and `ships[]`. Each ship has `id`, display `name`, `chassis`, and `modules[]` (same fit rules as `ships.json` but not listed in dealer stock). Signature `modules` are bespoke top-tier fits, not copies of catalog `ships.json` templates. Hub encounter `celebrity_arrival` picks a living pilot, one signature ship, and materialises it with pilot callsign and ship name. Career save tracks `dead_pilots` on the `encounters` subsystem; dead pilots are excluded from hub rolls and `{celebrity-pilot}` sampling during play (main-menu ticker may still name anyone).
 
 ### Message emitters (`message_emitters.json`, `MessageSubsystem`)
 

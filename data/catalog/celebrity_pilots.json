@@ -9,19 +9,22 @@
         "name": "Infinity",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_ap_56",
-          "ora_bellatrix_trace",
-          "prv_lumina_lx",
-          "ora_glasspack_air",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "prv_ionique_plasma_magazine_50",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser",
-          "chi_chimera_plasma_burst",
-          "sbi_sextant"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -29,16 +32,19 @@
         "name": "Names to Conjure With",
         "chassis": "mantis_chassis",
         "modules": [
-          "prv_voltcore_x7",
-          "roth_privy_seal_null",
-          "prv_lumina_lx",
           "prae_aegis_seat",
-          "prv_lumina_sight",
           "vessel_registration_beacon",
-          "fuel_tank_small",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
-          "sne_snedeos_electronic_shield",
-          "sne_snedeos_cyberwall"
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       }
     ]
@@ -53,16 +59,19 @@
         "name": "Revenge of the Rose",
         "chassis": "mantis_chassis",
         "modules": [
-          "prv_voltcore_x7",
-          "roth_privy_seal_null",
-          "prv_lumina_lx",
           "prae_aegis_seat",
-          "prv_lumina_sight",
           "vessel_registration_beacon",
-          "fuel_tank_small",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
-          "sne_snedeos_electronic_shield",
-          "sne_snedeos_cyberwall"
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       },
       {
@@ -70,18 +79,20 @@
         "name": "The Aristotle File",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -96,18 +107,20 @@
         "name": "Good Idea Gone Bad",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -115,15 +128,22 @@
         "name": "Bit Shifter",
         "chassis": "krypton_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "ora_bellatrix_main_44",
-          "ora_avionics_a40",
-          "ora_cabin_a20",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -138,15 +158,22 @@
         "name": "Damage",
         "chassis": "krypton_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "ora_bellatrix_main_44",
-          "ora_avionics_a40",
-          "ora_cabin_a20",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -154,18 +181,21 @@
         "name": "Gun Porn",
         "chassis": "juno_chassis",
         "modules": [
-          "gi_type_40_industrial",
-          "tmc_rhumb_longhaul",
-          "hg_hermes_beam",
-          "tmc_channel_cabin",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_100",
-          "fuel_tank_medium",
-          "cargo_bay_4",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
           "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       }
     ]
@@ -180,18 +210,21 @@
         "name": "La Bella Mafia",
         "chassis": "juno_chassis",
         "modules": [
-          "gi_type_40_industrial",
-          "tmc_rhumb_longhaul",
-          "hg_hermes_beam",
-          "tmc_channel_cabin",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_100",
-          "fuel_tank_medium",
-          "cargo_bay_4",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
           "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       },
       {
@@ -199,19 +232,22 @@
         "name": "Beauty and the Bullet",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_ap_56",
-          "ora_bellatrix_trace",
-          "prv_lumina_lx",
-          "ora_glasspack_air",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "prv_ionique_plasma_magazine_50",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser",
-          "chi_chimera_plasma_burst",
-          "sbi_sextant"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -226,19 +262,22 @@
         "name": "Fear Uncertainty Doubt",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_ap_56",
-          "ora_bellatrix_trace",
-          "prv_lumina_lx",
-          "ora_glasspack_air",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "prv_ionique_plasma_magazine_50",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
-          "chi_chimera_plasma_burst",
-          "sbi_sextant"
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -246,16 +285,19 @@
         "name": "Driven",
         "chassis": "mantis_chassis",
         "modules": [
-          "prv_voltcore_x7",
-          "roth_privy_seal_null",
-          "prv_lumina_lx",
           "prae_aegis_seat",
-          "prv_lumina_sight",
           "vessel_registration_beacon",
-          "fuel_tank_small",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
-          "sne_snedeos_electronic_shield",
-          "sne_snedeos_cyberwall"
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       }
     ]
@@ -270,16 +312,19 @@
         "name": "Spear of the Nation",
         "chassis": "mantis_chassis",
         "modules": [
-          "prv_voltcore_x7",
-          "roth_privy_seal_null",
-          "prv_lumina_lx",
           "prae_aegis_seat",
-          "prv_lumina_sight",
           "vessel_registration_beacon",
-          "fuel_tank_small",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
-          "sne_snedeos_electronic_shield",
-          "sne_snedeos_cyberwall"
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       },
       {
@@ -287,18 +332,20 @@
         "name": "Rainbow",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -313,18 +360,20 @@
         "name": "Lost in the Game",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -339,18 +388,22 @@
         "name": "Kingdom of Kernow",
         "chassis": "pegasus_chassis",
         "modules": [
-          "gi_utility_fusion_55",
-          "gi_ht_18",
-          "mdc_monday_core",
-          "gi_ls_4",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "ora_bellatrix_he_rocket_magazine_16",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "oc_chitanium_5mm",
-          "ora_bellatrix_rocket_launcher",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -358,18 +411,22 @@
         "name": "Game of Static Patterns",
         "chassis": "silhouette_chassis",
         "modules": [
-          "oc_workhorse_dynamo",
-          "oc_drawbar_30",
-          "oc_workhorse_brain",
-          "oc_red_dirt_recycle",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_200",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_turbo_laser",
-          "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -384,18 +441,22 @@
         "name": "Dead in the Water",
         "chassis": "silhouette_chassis",
         "modules": [
-          "oc_workhorse_dynamo",
-          "oc_drawbar_30",
-          "oc_workhorse_brain",
-          "oc_red_dirt_recycle",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_200",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_turbo_laser",
-          "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -403,16 +464,22 @@
         "name": "Storm's Mouth",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "hw_sundancer_compact",
-          "ora_yardfit_nav",
-          "ora_glasspack_air",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -427,16 +494,22 @@
         "name": "Heisenberg Express",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "hw_sundancer_compact",
-          "ora_yardfit_nav",
-          "ora_glasspack_air",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -444,21 +517,22 @@
         "name": "Idefix",
         "chassis": "lancer_chassis",
         "modules": [
-          "ora_ap_56",
-          "hw_sundancer_compact",
-          "sne_bridge_440",
-          "tmc_transit_air",
-          "sne_astrolabe",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "ora_octant_plumb",
-          "prv_nexus_locus",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
-          "hw_helios_turbo_laser"
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -473,21 +547,22 @@
         "name": "City of Ice",
         "chassis": "lancer_chassis",
         "modules": [
-          "ora_ap_56",
-          "hw_sundancer_compact",
-          "sne_bridge_440",
-          "tmc_transit_air",
-          "sne_astrolabe",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "ora_octant_plumb",
-          "prv_nexus_locus",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser",
-          "hw_helios_turbo_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -495,18 +570,21 @@
         "name": "Jade Melody",
         "chassis": "wolff_chassis",
         "modules": [
-          "gi_utility_fusion_55",
-          "roth_privy_seal_null",
-          "oc_workhorse_brain",
-          "oc_workhorse_lungs",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "go_brutus_scatter_magazine_24",
-          "fuel_tank_large",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
           "hw_helios_chitanium_10mm",
           "hw_helios_deflector",
-          "go_brutus_scatter_cannon",
-          "mdc_almanac"
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_sunspike_laser",
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "chi_glass"
         ]
       }
     ]
@@ -521,18 +599,22 @@
         "name": "Heatseeker",
         "chassis": "wolff_chassis",
         "modules": [
-          "gi_utility_fusion_55",
-          "roth_privy_seal_null",
-          "oc_workhorse_brain",
-          "oc_workhorse_lungs",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "go_brutus_scatter_magazine_24",
-          "fuel_tank_large",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
           "hw_helios_chitanium_10mm",
           "hw_helios_deflector",
-          "go_brutus_scatter_cannon",
-          "mdc_almanac"
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_sunspike_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "prv_energy_deepwell",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -547,18 +629,20 @@
         "name": "Santoro",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -566,15 +650,22 @@
         "name": "Got the Goods!",
         "chassis": "krypton_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "ora_bellatrix_main_44",
-          "ora_avionics_a40",
-          "ora_cabin_a20",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -589,15 +680,22 @@
         "name": "Sliptip",
         "chassis": "krypton_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "ora_bellatrix_main_44",
-          "ora_avionics_a40",
-          "ora_cabin_a20",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -605,18 +703,21 @@
         "name": "Kindjal",
         "chassis": "juno_chassis",
         "modules": [
-          "gi_type_40_industrial",
-          "tmc_rhumb_longhaul",
-          "hg_hermes_beam",
-          "tmc_channel_cabin",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_100",
-          "fuel_tank_medium",
-          "cargo_bay_4",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
           "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       },
       {
@@ -624,19 +725,22 @@
         "name": "Tsai",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_ap_56",
-          "ora_bellatrix_trace",
-          "prv_lumina_lx",
-          "ora_glasspack_air",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "prv_ionique_plasma_magazine_50",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
-          "chi_chimera_plasma_burst",
-          "sbi_sextant"
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -651,16 +755,22 @@
         "name": "Immanent Carnation",
         "chassis": "dragon_chassis",
         "modules": [
-          "ora_yardfit_24",
-          "hw_sundancer_compact",
-          "ora_yardfit_nav",
-          "ora_glasspack_air",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "hyperdrive_alpha",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -668,21 +778,22 @@
         "name": "Money Power Respect",
         "chassis": "lancer_chassis",
         "modules": [
-          "ora_ap_56",
-          "hw_sundancer_compact",
-          "sne_bridge_440",
-          "tmc_transit_air",
-          "sne_astrolabe",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "ora_octant_plumb",
-          "prv_nexus_locus",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
-          "hw_helios_light_laser",
-          "hw_helios_turbo_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_turbo_laser",
+          "oc_river_light_mass_driver",
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -697,21 +808,22 @@
         "name": "Souleater",
         "chassis": "lancer_chassis",
         "modules": [
-          "ora_ap_56",
-          "hw_sundancer_compact",
-          "sne_bridge_440",
-          "tmc_transit_air",
-          "sne_astrolabe",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "ora_octant_plumb",
-          "prv_nexus_locus",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_light_laser",
-          "hw_helios_turbo_laser"
+          "ora_bellatrix_rocket_launcher",
+          "ora_bellatrix_he_rocket_magazine_3",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -726,16 +838,19 @@
         "name": "ForceField",
         "chassis": "mantis_chassis",
         "modules": [
-          "prv_voltcore_x7",
-          "roth_privy_seal_null",
-          "prv_lumina_lx",
           "prae_aegis_seat",
-          "prv_lumina_sight",
           "vessel_registration_beacon",
-          "fuel_tank_small",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
-          "sne_snedeos_electronic_shield",
-          "sne_snedeos_cyberwall"
+          "hw_energy_plant_60",
+          "prv_lumina_lx"
         ]
       },
       {
@@ -743,18 +858,20 @@
         "name": "Black Magic",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -769,18 +886,20 @@
         "name": "Code Warrior",
         "chassis": "blackbird_chassis",
         "modules": [
-          "prv_voltcore_x3",
-          "ora_lumen_yard",
-          "chi_oracle_well",
           "prae_aegis_seat",
-          "mdc_almanac",
           "vessel_registration_beacon",
-          "ora_needle_hyperdrive",
           "prv_lumina_wellhead",
-          "hw_glimmer_ember",
-          "hg_hermes_sideband",
-          "prv_nexus_listen",
-          "hw_helios_light_laser"
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
@@ -795,18 +914,22 @@
         "name": "Double Trouble",
         "chassis": "pegasus_chassis",
         "modules": [
-          "gi_utility_fusion_55",
-          "gi_ht_18",
-          "mdc_monday_core",
-          "gi_ls_4",
-          "hg_hermes_n6",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "ora_bellatrix_he_rocket_magazine_16",
-          "fuel_tank_medium",
-          "cargo_bay_4",
-          "oc_chitanium_5mm",
-          "ora_bellatrix_rocket_launcher",
-          "hw_helios_light_laser"
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
+          "hw_helios_light_laser",
+          "prv_ionique_plasma_cannon",
+          "prv_ionique_plasma_magazine_50",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       },
       {
@@ -814,18 +937,22 @@
         "name": "Firefly",
         "chassis": "silhouette_chassis",
         "modules": [
-          "oc_workhorse_dynamo",
-          "oc_drawbar_30",
-          "oc_workhorse_brain",
-          "oc_red_dirt_recycle",
-          "hg_hermes_circinus",
+          "prae_aegis_seat",
           "vessel_registration_beacon",
-          "oc_river_md_light_magazine_200",
-          "fuel_tank_medium",
-          "oc_chitanium_5mm",
+          "prv_lumina_wellhead",
+          "sne_astrolabe",
+          "hw_sundancer_apex",
+          "hw_helios_chitanium_10mm",
+          "hw_helios_deflector",
+          "hw_helios_energy_shield",
+          "ora_bellatrix_pd_heavy",
+          "ora_needle_hyperdrive",
           "hw_helios_turbo_laser",
           "oc_river_light_mass_driver",
-          "sbi_sextant"
+          "oc_river_md_light_magazine_100",
+          "hw_energy_plant_60",
+          "prv_lumina_lx",
+          "ora_octant_plumb"
         ]
       }
     ]
