@@ -42,7 +42,7 @@ After replacing art: `godot --path . --headless --import --quit`.
 | SFX / UI OGG | 10 files | **10** dry-tone stubs → real one-shots / loops |
 | Logo banner | 1 PNG | Optional polish (`assets/logo/logo_banner.png`) |
 
-Related **code** follow-ons that affect how art reads in flight (not missing files): [backlog.md](backlog.md) **B2** (sail drive shape), **B4** (parent-body lighting vs star direction).
+Related **code** follow-ons that affect how art reads in flight (not missing files): [backlog.md](backlog.md) **B4** (parent-body lighting vs star direction).
 
 ---
 
@@ -140,7 +140,7 @@ Eleven chassis in `chassis.json`. Canvas sizes on disk **do not yet match** the 
 | Thrust alignment | `assets/ships/fx/thrust.svg` | **Placeholder** (32×32); author **20×24**; hidden at runtime — exhaust is procedural |
 | Mass driver round | `assets/ships/fx/mass_driver_round.svg` | 16×16 — verify against spec when refreshing |
 | Lasers, cyber beams, engine plumes | — | **Procedural** (no sprite backlog) |
-| Sail drive | — | **B2**: animation shape fix in code, not a missing file |
+| Sail drive | — | Procedural bow semicircle in `engine_exhaust.gd` (integrated sail) |
 
 ---
 

@@ -10,7 +10,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|B2| art | med | Sail drive animation should be a semi-circle in front the of the ship ('^'-type shape), not a 'C' shape
 |B4| art | high | parent body renderer should align the lighting to where the star is located in the sector
 |B6| missions | med | bounty target "run away" behaviour isn't fun, should be reworked
 |B7| ui | med | Need UI-friendly labels for module capabilities (e.g. "Habitat" instead of "ls_habitat")

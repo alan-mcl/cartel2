@@ -279,10 +279,11 @@ func _draw_integrated_sail() -> void:
 	var bow := _bow_local()
 	var phase := _time_phase()
 	var sway := sin(phase * 5.5) * 6.0 + sin(phase * 2.1) * 3.0
-	var arc_center := bow + Vector2(sway * 0.15, -8.0)
+	var arc_center := bow + Vector2(sway * 0.12, 0.0)
 	var radius := 22.0 + sin(phase * 4.0) * 3.0
-	var start := PI * 0.55 + sway * 0.01
-	var end := PI * 1.45 + sway * 0.01
+	# Semicircle ahead of the bow (^): arc from port to starboard through forward (-Y), not aft (+Y).
+	var start := PI + sway * 0.008
+	var end := TAU - sway * 0.008
 	var points := PackedVector2Array()
 	var steps := 14
 	for i in range(steps + 1):
@@ -291,7 +292,11 @@ func _draw_integrated_sail() -> void:
 		points.append(arc_center + Vector2.from_angle(angle) * radius)
 	var alpha := 0.55 + sin(phase * 7.0) * 0.15
 	draw_polyline(points, Color(0.55, 0.85, 1.0, alpha * _strength), 2.5, true)
-	draw_circle(bow + Vector2(sway * 0.2, -2.0), 3.5, Color(1.0, 0.95, 0.75, 0.45 * _strength))
+	draw_circle(
+		arc_center + Vector2(sway * 0.15, -radius),
+		3.5,
+		Color(1.0, 0.95, 0.75, 0.45 * _strength)
+	)
 
 
 func _draw_electric_plasma() -> void:
