@@ -97,6 +97,22 @@ static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:
 	if not lss.is_empty():
 		var lss_meta := ModuleSpecText.format_stock_list_meta("life_support", lss)
 		runner.check(lss_meta.contains("crew"), "life_support stock meta mentions crew")
+	var habitat_lss: Dictionary = {}
+	for mod in catalog.list_modules():
+		var data := mod as Dictionary
+		if str(data.get("category", "")) != "life_support":
+			continue
+		var capabilities: Variant = data.get("capabilities", [])
+		if typeof(capabilities) == TYPE_ARRAY and (capabilities as Array).has("ls_habitat"):
+			habitat_lss = data
+			break
+	if not habitat_lss.is_empty():
+		var habitat_tooltip := ModuleSpecText.format_tooltip(habitat_lss)
+		runner.check(habitat_tooltip.contains("Habitat"), "life_support tooltip shows Habitat label")
+		runner.check(
+			not habitat_tooltip.contains("ls_habitat"),
+			"life_support tooltip omits raw ls_habitat id"
+		)
 	runner.check(
 		ModuleSpecText.format_stock_list_meta("unknown_category", {}).is_empty(),
 		"unknown stock category yields empty meta"

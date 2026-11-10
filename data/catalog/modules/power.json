@@ -1,7 +1,7 @@
 [
   {
     "id": "ac_cumbre_45",
-    "name": "Andean Cumbre 45",
+    "name": "Andean Cumbre 45 Fission Plant",
     "maker": "Andean Consolidated",
     "brand": "Cumbre",
     "plant_type": "fission",
@@ -12,7 +12,7 @@
     "power_generation": 44.0,
     "fuel_consumption": 0.16,
     "cost": 2100,
-    "description": "Summit-rated output for mining haulers working difficult terrain.",
+    "description": "The Cumbre 45: heavy duty fission power generation.",
     "signature": {
       "thermal": 7.52,
       "gravitational": 0.7,
@@ -22,7 +22,7 @@
   },
   {
     "id": "ac_sierra_22",
-    "name": "AC Sierra 22",
+    "name": "AC Sierra 22 Fission Plant",
     "maker": "Andean Consolidated",
     "brand": "Sierra",
     "plant_type": "fission",
@@ -33,7 +33,7 @@
     "power_generation": 22.0,
     "fuel_consumption": 0.12,
     "cost": 1200,
-    "description": "Sierra-range fission for high-altitude yards and rough-field maintenance.",
+    "description": "The Sierra 22: cost effective fission power generation.",
     "signature": {
       "thermal": 5.76,
       "gravitational": 0.45,
@@ -43,7 +43,7 @@
   },
   {
     "id": "atl_foundation_32",
-    "name": "Atlas Foundation 32",
+    "name": "Atlas Foundation Plant 32 ",
     "maker": "Atlas Concern",
     "brand": "Atlas",
     "plant_type": "fission",
@@ -54,7 +54,7 @@
     "power_generation": 32.0,
     "fuel_consumption": 0.11,
     "cost": 2000,
-    "description": "Foundation-class fission for projects Atlas is already building anyway.",
+    "description": "Trust the Atlas brand for all your power generation needs. Foundation Plant 32 provides industry standard fission generation capability.",
     "signature": {
       "thermal": 6.56,
       "gravitational": 0.47,

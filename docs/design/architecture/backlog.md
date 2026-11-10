@@ -11,7 +11,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
-|B7 | ui | med | Need UI-friendly labels for module capabilities (e.g. "Habitat" instead of "ls_habitat") |
 |B11| art |high| need bespoke graphics for retrieval mission targets|
 |B12| ui | med|habitat buildings to be sorted alphabetically|
 |B13| data |med |Most outlying planets should have 0 population, the population all exists at the local habitats and stations in orbit. |

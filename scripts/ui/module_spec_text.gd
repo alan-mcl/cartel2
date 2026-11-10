@@ -36,16 +36,37 @@ const STAT_ROWS: Array[Dictionary] = [
 	{"key": "ammunition_per_shot", "label": "Ammo per shot", "float": true},
 ]
 
-const CARGO_CAPABILITY_LABELS := {
+const CAPABILITY_LABELS := {
+	"basic_hud": "Flight instruments",
 	"basic_target_lock": "Target lock",
+	"local_sensor": "Local sensors",
+	"local_system_waypoints": "System waypoints",
+	"sensor_read_beacons": "Beacon readout",
+	"4_space_topology": "4-space topology",
 	"autopilot_basic": "Autopilot",
+	"ls_habitat": "Habitat",
+	"ls_comfort": "Comfort",
+	"ls_luxury": "Luxury",
 	"life_support_integrated": "Live cargo",
 	"refrigerated": "Refrigerated",
 	"compute_integrated": "Compute vault",
 	"biohazard": "Biohazard",
 	"secure_cargo": "Secure / bonded",
 	"military_grade": "Military grade",
+	"attack": "Attack",
+	"defence": "Defence",
+	"sensor": "Sensor",
+	"retrieval": "Retrieval",
 }
+
+
+static func capability_label(cap_id: String) -> String:
+	var id := cap_id.strip_edges()
+	if id.is_empty():
+		return ""
+	if CAPABILITY_LABELS.has(id):
+		return str(CAPABILITY_LABELS[id])
+	return id.replace("_", " ").capitalize()
 
 const SKIP_EXTRA_KEYS := {
 	"id": true,
@@ -151,8 +172,7 @@ static func format_tooltip(module_def: Dictionary) -> String:
 			lines.append("")
 		var cap_parts: PackedStringArray = PackedStringArray()
 		for entry in capabilities:
-			var cap_id := str(entry)
-			cap_parts.append(CARGO_CAPABILITY_LABELS.get(cap_id, cap_id))
+			cap_parts.append(capability_label(str(entry)))
 		lines.append("Capabilities: %s" % ", ".join(cap_parts))
 
 	var mounts: Variant = module_def.get("mounts", [])

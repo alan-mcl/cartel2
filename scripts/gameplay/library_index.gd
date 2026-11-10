@@ -340,7 +340,7 @@ static func _commodity_detail(catalog: Catalog, commodity_id: String) -> String:
 		var cap_labels: PackedStringArray = PackedStringArray()
 		for entry in caps:
 			var cap_id := str(entry)
-			cap_labels.append(ModuleSpecText.CARGO_CAPABILITY_LABELS.get(cap_id, cap_id))
+			cap_labels.append(ModuleSpecText.capability_label(cap_id))
 		_append_line(lines, "Requires", ", ".join(cap_labels))
 	var description := str(commodity.get("description", "")).strip_edges()
 	if not description.is_empty():
