@@ -12,6 +12,7 @@ var _sector_option: OptionButton
 var _background_option: OptionButton
 var _ship_option: OptionButton
 var _encounter_option: OptionButton
+var _run_seed_edit: LineEdit
 var _encounter_choice_keys: Array[String] = []
 var _sector_ids: Array[String] = []
 var _background_ids: Array[String] = []
@@ -124,6 +125,15 @@ func _build_setup_overlay() -> void:
 	right.add_child(_field_label("Random encounter"))
 	_encounter_option = OptionButton.new()
 	right.add_child(_encounter_option)
+
+	right.add_child(_field_label("Run seed"))
+	_run_seed_edit = LineEdit.new()
+	_run_seed_edit.placeholder_text = "Empty = random (new career roll)"
+	_run_seed_edit.tooltip_text = (
+		"Career run_seed for this session. Mixed into forced encounter grants "
+		+ "(e.g. which celebrity visits). Change seed and reload setup to try another pilot."
+	)
+	right.add_child(_run_seed_edit)
 
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 12)
@@ -368,6 +378,13 @@ func _on_begin_pressed() -> void:
 	if not session.start_new_game(_catalog, HARNESS_CALLSIGN, background_id):
 		_status_label.text = "Could not start harness session."
 		return
+
+	var seed_text := _run_seed_edit.text.strip_edges()
+	if not seed_text.is_empty():
+		if not seed_text.is_valid_int():
+			_status_label.text = "Run seed must be a whole number."
+			return
+		session.run_seed = int(seed_text)
 
 	if not session.enter_sector(_catalog, sector_id, false):
 		_status_label.text = "Could not enter sector '%s'." % sector_id

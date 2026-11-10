@@ -11,6 +11,7 @@ static func run(runner: TestRunner) -> void:
 	_test_once_flag(runner, catalog)
 	_test_peer_combat_aim(runner, catalog)
 	_test_celebrity_ships(runner, catalog)
+	_test_forced_grant_run_seed(runner, catalog)
 
 
 static func _session(catalog: Catalog) -> GameSession:
@@ -119,6 +120,28 @@ static func _test_peer_combat_aim(_runner: TestRunner, catalog: Catalog) -> void
 		target.distance_to(Vector2(500.0, -200.0)) < 1.0,
 		"encounters: peer engagement aims at lock position"
 	)
+
+
+static func _test_forced_grant_run_seed(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(catalog)
+	session.run_seed = 915_337
+	var first := EncounterSubsystem.new()
+	runner.check(
+		first.grant_for_location(session, catalog, "celebrity_arrival", "tycho", "hub"),
+		"encounters: forced grant with run_seed on tycho"
+	)
+	var pilot_a := str(
+		first.get_active_plan().get("bindings", {}).get("celebrity_pilot_id", "")
+	)
+	var second := EncounterSubsystem.new()
+	runner.check(
+		second.grant_for_location(session, catalog, "celebrity_arrival", "tycho", "hub"),
+		"encounters: repeat forced grant"
+	)
+	var pilot_b := str(
+		second.get_active_plan().get("bindings", {}).get("celebrity_pilot_id", "")
+	)
+	runner.check_eq(pilot_a, pilot_b, "encounters: forced grant stable for location + run_seed")
 
 
 static func _test_celebrity_ships(runner: TestRunner, catalog: Catalog) -> void:

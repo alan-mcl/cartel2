@@ -70,7 +70,7 @@ func grant_for_location(
 	if def.is_empty():
 		return false
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("grant:%s:%s" % [location_key, id_key])
+	rng.seed = hash("grant:%s:%s:%d" % [location_key, id_key, session.run_seed])
 	var plan := _resolve_encounter(session, catalog, def, location_key, location_class, rng)
 	if plan.is_empty():
 		return false
