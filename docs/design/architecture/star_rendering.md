@@ -58,7 +58,7 @@ The visible star uses a compressed tone map on that value:
 
 `apparent_brightness = 1 − exp(−clamp(brightness_scale × irradiance^brightness_exponent, min, max) × exposure)`
 
-Planet **`PlanetBackdrop.set_sun`** receives **raw irradiance** and temperature colour from **`LocalStar.get_illumination()`**, not the tone-mapped brightness.
+Planet **`PlanetBackdrop.set_sun`** passes **raw irradiance** and temperature colour from **`LocalStar.get_illumination()`** into the globe shader (`sun_intensity`), not the tone-mapped star-disc brightness. Shaders compute physical day/night contrast from that value, then **`PlanetExposure`** applies a separate **display exposure** (`2.5 / irradiance^0.75`, clamped) and chroma-preserving Reinhard tone map so close orbits do not clip white and distant orbits stay readable without matching 1 AU noon brightness. A Sol–Pluto dayside (~900× less light) lands in a dusk band against 1 AU midday; near-orbit worlds still hit the minimum exposure clamp. City night lights on the system planet are added after tone mapping.
 
 Missing **`radius_solar`**, **`luminosity`**, or **`temperature_k`** fall back to 1.0, 1.0, and 5800 K. **`spectral_class`** does not invent those numbers; it selects visual presets only.
 
@@ -115,7 +115,7 @@ Companions are target-lockable **stars**; they are not second light sources for 
 
 ## Parent body (non-star backdrop)
 
-Moon sectors may define **`parent_body`**. **SkyParentBody** renders at **`z_index -60`**. Disc and ring shading uses **`PlanetBackdrop.sun_direction_canvas_from_star`** with the primary star’s visit-random world position (same 2D sky bearing as the system planet); light stays in the play plane with no globe depth tilt so the disc does not read bottom-lit.
+Moon sectors may define **`parent_body`**. **SkyParentBody** renders at **`z_index -60`**. Disc and ring shading uses the same **`sun_irradiance`**, **`display_exposure`**, and tone-map path as the system planet (`PlanetExposure`), with **`PlanetBackdrop.sun_direction_canvas_from_star`** on the primary star’s visit-random world position (same 2D sky bearing as the system planet). Limb and terminator controls from catalog remain; legacy `ambient_light` / `light_intensity` no longer drive shade.
 
 ## Volatile translation sites
 
@@ -137,4 +137,4 @@ Grant-time star setup may enforce a minimum **`disc_radius`** for visibility; ot
 - **System render tester** — `./scripts/dev/system_render_tester.sh`
 - **Parent body harness** — `./scripts/dev/parent_body_harness.sh`
 
-Implementation: `star_appearance.gd`, `local_star.gd`, `world_loader.gd`, `planet_backdrop.gd`, `tests/test_star_appearance.gd`, `tests/test_sky_backdrop.gd`.
+Implementation: `star_appearance.gd`, `planet_exposure.gd`, `local_star.gd`, `world_loader.gd`, `planet_backdrop.gd`, `sky_parent_body.gd`, `tests/test_star_appearance.gd`, `tests/test_sky_backdrop.gd`.

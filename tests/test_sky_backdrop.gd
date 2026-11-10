@@ -7,6 +7,7 @@ const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdro
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_parent_sun_direction_canvas(runner)
+	_test_planet_display_exposure(runner)
 	_test_planet_irradiance_at_orbit(runner)
 	_test_angular_radius_math(runner)
 	_test_parent_params(runner)
@@ -32,6 +33,67 @@ static func _test_parent_sun_direction_canvas(runner: TestRunner) -> void:
 		absf(right_canvas.z) < 0.001,
 		"parent sun: right-bearing sun has no depth tilt"
 	)
+
+
+static func _test_planet_display_exposure(runner: TestRunner) -> void:
+	runner.check(
+		absf(PlanetExposure.display_exposure(1.0) - 2.5) < 0.001,
+		"planet exposure: 1 AU reference exposure"
+	)
+	var pluto_irradiance := 1.0 / 900.0
+	var pluto_dayside := PlanetExposure.display_from_radiance(
+		Vector3.ONE * PlanetExposure.linear_irradiance_at_surface(pluto_irradiance, 1.0),
+		pluto_irradiance
+	)
+	var close_irradiance := StarAppearance.irradiance(1.0, 0.05)
+	runner.check(
+		close_irradiance > 300.0,
+		"planet exposure: close orbit irradiance stays physical"
+	)
+	var close_display := PlanetExposure.display_from_radiance(
+		Vector3.ONE * close_irradiance,
+		close_irradiance
+	)
+	runner.check(
+		close_display.x < 0.95,
+		"planet exposure: close-orbit dayside tonemaps below white clip"
+	)
+	var one_au := PlanetExposure.display_from_radiance(
+		Vector3.ONE * PlanetExposure.linear_irradiance_at_surface(1.0, 1.0),
+		1.0
+	)
+	runner.check(
+		one_au.x > 0.35 and one_au.x < 0.88,
+		"planet exposure: 1 AU dayside lands mid-bright"
+	)
+	runner.check(
+		pluto_dayside.x < one_au.x,
+		"planet exposure: ~30 AU Pluto dayside dimmer than 1 AU midday"
+	)
+	runner.check(
+		pluto_dayside.x > 0.22 and pluto_dayside.x < 0.45,
+		"planet exposure: Pluto dayside reads as dusk band"
+	)
+	var dim_irradiance := StarAppearance.irradiance(1.0, 32.0)
+	var dim_display := PlanetExposure.display_from_radiance(
+		Vector3.ONE * PlanetExposure.linear_irradiance_at_surface(dim_irradiance, 1.0),
+		dim_irradiance
+	)
+	runner.check(
+		dim_display.x > PlanetExposure.display_from_radiance(
+			Vector3.ONE * PlanetExposure.night_irradiance(dim_irradiance),
+			dim_irradiance
+		).x,
+		"planet exposure: dim dayside brighter than night side"
+	)
+	runner.check(dim_display.x > 0.03, "planet exposure: dim dayside stays above black floor")
+	var kuiper_irradiance := StarAppearance.irradiance(0.34, 85.0)
+	var kuiper_display := PlanetExposure.display_from_radiance(
+		Vector3.ONE * PlanetExposure.linear_irradiance_at_surface(kuiper_irradiance, 1.0),
+		kuiper_irradiance
+	)
+	runner.check(kuiper_display.x < pluto_dayside.x, "planet exposure: 85 AU dimmer than Pluto-scale dusk")
+	runner.check(kuiper_display.x > 0.1, "planet exposure: 85 AU outer belt stays above black floor")
 
 
 static func _test_planet_irradiance_at_orbit(runner: TestRunner) -> void:

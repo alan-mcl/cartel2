@@ -417,7 +417,11 @@ func _spawn_orbital_station_layout(
 		_spawn_sector_jump_gate(world_root, gate_data, catalog, session, sector_id)
 
 	var star_pos := _spawn_local_star(world_root, world_data, planet, catalog, sector_id)
-	_spawn_sky_backdrop(world_root, world_data, catalog, sector_id, star_pos)
+	var primary_irradiance := 1.0
+	var primary_star: Node = spawned_by_id.get("local_star") as Node
+	if primary_star != null and primary_star.has_method("get_irradiance"):
+		primary_irradiance = float(primary_star.call("get_irradiance"))
+	_spawn_sky_backdrop(world_root, world_data, catalog, sector_id, star_pos, primary_irradiance)
 
 	var entities: Variant = world_data.get("entities", [])
 	if typeof(entities) == TYPE_ARRAY:
@@ -479,7 +483,8 @@ func _spawn_sky_backdrop(
 	world_data: Dictionary,
 	catalog: Catalog,
 	sector_id: String,
-	primary_star_pos: Vector2
+	primary_star_pos: Vector2,
+	primary_irradiance: float = 1.0
 ) -> void:
 	_sky_companion_nav.clear()
 	_sky_parent_nav = {}
@@ -581,7 +586,8 @@ func _spawn_sky_backdrop(
 				primary_star_pos,
 				angular_deg,
 				resolved,
-				sector_id
+				sector_id,
+				primary_irradiance
 			)
 			spawned_by_id["parent_body"] = parent
 			_sky_parent_nav = {

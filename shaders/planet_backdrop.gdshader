@@ -9,9 +9,23 @@ uniform float use_night_lights = 0.0;
 uniform vec3 sun_direction = vec3(0.85, 0.25, 0.45);
 uniform vec3 sun_color : source_color = vec3(1.0, 0.98, 0.94);
 uniform float sun_intensity = 1.0;
+uniform float display_exposure = 2.5;
 uniform float night_emission_strength = 1.6;
 uniform float atmosphere_strength = 0.42;
 uniform vec3 atmosphere_color : source_color = vec3(0.42, 0.62, 0.98);
+
+float planet_night_irradiance(float irradiance) {
+	return min(0.02, 0.4 * max(irradiance, 0.0));
+}
+
+vec3 planet_tonemap_reinhard_chroma(vec3 rgb) {
+	float luma = dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+	if (luma <= 1e-8) {
+		return rgb;
+	}
+	float mapped = luma / (1.0 + luma);
+	return rgb * (mapped / luma);
+}
 
 float procedural_land(vec2 uv) {
 	float a = sin(uv.x * TAU * 3.0 + sin(uv.y * TAU * 2.0) * 1.7) * 0.5 + 0.5;
@@ -38,9 +52,17 @@ void fragment() {
 
 	float day = smoothstep(0.06, 0.50, ndotl);
 	float night = 1.0 - day;
+	float stellar_irr = max(sun_intensity, 0.0);
+	float night_side = planet_night_irradiance(stellar_irr);
+	float illum = night_side + stellar_irr * day;
 	vec3 day_tint = mix(vec3(1.0), sun_color, 0.35);
-	float lit_scale = mix(0.035, sun_intensity, day);
-	vec3 lit = base_color * day_tint * lit_scale;
+	vec3 radiance = base_color * day_tint * illum;
+
+	float fresnel = pow(1.0 - clamp(abs(dot(normal, view_dir)), 0.0, 1.0), 2.8);
+	vec3 atmo_tint = mix(atmosphere_color, sun_color, 0.45);
+	radiance += atmo_tint * fresnel * atmosphere_strength * mix(0.22, 1.0, day) * max(illum, night_side);
+
+	vec3 display_rgb = planet_tonemap_reinhard_chroma(radiance * display_exposure);
 
 	vec3 night_glow = vec3(0.0);
 	if (use_night_lights > 0.5) {
@@ -49,10 +71,5 @@ void fragment() {
 		night_glow = texture(night_lights, UV).rgb * night_emission_strength * city_night;
 	}
 
-	float fresnel = pow(1.0 - clamp(abs(dot(normal, view_dir)), 0.0, 1.0), 2.8);
-	vec3 atmo_tint = mix(atmosphere_color, sun_color, 0.45);
-	vec3 atmosphere = atmo_tint * fresnel * atmosphere_strength * mix(0.22, 1.0, day);
-
-	vec3 final_color = lit + night_glow + atmosphere;
-	ALBEDO = final_color;
+	ALBEDO = display_rgb + night_glow;
 }

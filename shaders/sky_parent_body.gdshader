@@ -5,6 +5,8 @@ uniform int colour_count = 2;
 uniform int band_palette[32];
 uniform int scheme = 0;
 uniform vec3 sun_direction = vec3(0.85, 0.25, 0.45);
+uniform float sun_irradiance = 1.0;
+uniform float display_exposure = 2.5;
 uniform vec3 axis = vec3(0.0, 0.0, 1.0);
 uniform float seed = 0.0;
 uniform float rotation_phase = 0.0;
@@ -20,11 +22,22 @@ uniform float turbulence_scale = 2.0;
 uniform float turbulence_octaves = 2.0;
 uniform vec3 polar_colour : source_color = vec3(1.0, 1.0, 1.0);
 uniform float polar_blend = 0.0;
-uniform float ambient_light = 0.12;
-uniform float light_intensity = 1.0;
 uniform float limb_darkening = 1.0;
 uniform float limb_curve = 0.35;
 uniform float terminator_softness = 0.08;
+
+float planet_night_irradiance(float irradiance) {
+	return min(0.02, 0.4 * max(irradiance, 0.0));
+}
+
+vec3 planet_tonemap_reinhard_chroma(vec3 rgb) {
+	float luma = dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+	if (luma <= 1e-8) {
+		return rgb;
+	}
+	float mapped = luma / (1.0 + luma);
+	return rgb * (mapped / luma);
+}
 
 float hash21(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -189,8 +202,12 @@ void fragment() {
 		ndl = smoothstep(-terminator_softness, 1.0, ndl);
 		ndl = max(ndl, 0.0);
 		float limb = pow(z, limb_curve);
-		float shade = mix(ambient_light, 1.0, ndl * light_intensity);
-		shade *= mix(1.0, limb, limb_darkening);
-		COLOR = vec4(albedo * shade, edge_aa);
+		float stellar_irr = max(sun_irradiance, 0.0);
+		float night_side = planet_night_irradiance(stellar_irr);
+		float illum = night_side + stellar_irr * ndl;
+		vec3 radiance = albedo * illum;
+		radiance *= mix(1.0, limb, limb_darkening);
+		vec3 display_rgb = planet_tonemap_reinhard_chroma(radiance * display_exposure);
+		COLOR = vec4(display_rgb, edge_aa);
 	}
 }

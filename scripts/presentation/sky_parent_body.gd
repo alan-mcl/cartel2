@@ -20,7 +20,8 @@ func configure(
 	star_position: Vector2,
 	angular_diameter_deg: float,
 	resolved: Dictionary,
-	seed_key: String = ""
+	seed_key: String = "",
+	stellar_irradiance: float = 1.0
 ) -> void:
 	_clear_sprites()
 	_display_name = str(parent_data.get("name", "Parent"))
@@ -41,13 +42,14 @@ func configure(
 	var seed_text := str(resolved.get("seed_text", ""))
 	var planet_params := SkyParentBodyParams.build_planet_shader_params(merged, seed_val, seed_text)
 	var sun_3d := PlanetBackdropScript.sun_direction_canvas_from_star(star_position)
+	var exposure := PlanetExposure.display_exposure(stellar_irradiance)
 
 	var planet_diameter := _disc_radius * 2.0
 	var planet_texture := _make_white_texture()
 
 	_planet_disc = _make_sprite("PlanetDisc", planet_texture, 0)
 	_planet_disc.scale = Vector2.ONE * (planet_diameter / float(TEXTURE_SIZE))
-	_apply_planet_material(_planet_disc, planet_params, sun_3d)
+	_apply_planet_material(_planet_disc, planet_params, sun_3d, stellar_irradiance, exposure)
 	add_child(_planet_disc)
 
 	if bool(rings_cfg.get("enabled", false)):
@@ -60,8 +62,12 @@ func configure(
 		var ring_scale := ring_diameter / float(TEXTURE_SIZE)
 		_rear_rings.scale = Vector2.ONE * ring_scale
 		_front_rings.scale = Vector2.ONE * ring_scale
-		_apply_ring_material(_rear_rings, rings_cfg, merged, profile, sun_3d, false, seed_val)
-		_apply_ring_material(_front_rings, rings_cfg, merged, profile, sun_3d, true, seed_val)
+		_apply_ring_material(
+			_rear_rings, rings_cfg, merged, profile, sun_3d, false, seed_val, stellar_irradiance, exposure
+		)
+		_apply_ring_material(
+			_front_rings, rings_cfg, merged, profile, sun_3d, true, seed_val, stellar_irradiance, exposure
+		)
 		add_child(_rear_rings)
 		add_child(_front_rings)
 
@@ -91,13 +97,21 @@ func _make_white_texture() -> ImageTexture:
 	return ImageTexture.create_from_image(image)
 
 
-func _apply_planet_material(sprite: Sprite2D, params: Dictionary, sun_3d: Vector3) -> void:
+func _apply_planet_material(
+	sprite: Sprite2D,
+	params: Dictionary,
+	sun_3d: Vector3,
+	stellar_irradiance: float,
+	exposure: float
+) -> void:
 	var material := ShaderMaterial.new()
 	material.shader = PLANET_SHADER
 	var colours: Array = params.get("colours", [])
 	material.set_shader_parameter("colour_count", int(params.get("colour_count", 2)))
 	_set_colour_array(material, colours)
 	material.set_shader_parameter("sun_direction", sun_3d)
+	material.set_shader_parameter("sun_irradiance", maxf(stellar_irradiance, 0.0))
+	material.set_shader_parameter("display_exposure", exposure)
 	material.set_shader_parameter("axis", params.get("axis", Vector3(0, 0, 1)))
 	material.set_shader_parameter("seed", float(params.get("seed", 0.0)))
 	material.set_shader_parameter("rotation_phase", float(params.get("rotation_phase", 0.0)))
@@ -118,8 +132,6 @@ func _apply_planet_material(sprite: Sprite2D, params: Dictionary, sun_3d: Vector
 	material.set_shader_parameter("turbulence_octaves", float(params.get("turbulence_octaves", 2.0)))
 	material.set_shader_parameter("polar_colour", params.get("polar_colour", Vector3.ONE))
 	material.set_shader_parameter("polar_blend", float(params.get("polar_blend", 0.0)))
-	material.set_shader_parameter("ambient_light", float(params.get("ambient_light", 0.12)))
-	material.set_shader_parameter("light_intensity", float(params.get("light_intensity", 1.0)))
 	material.set_shader_parameter("limb_darkening", float(params.get("limb_darkening", 1.0)))
 	material.set_shader_parameter("limb_curve", float(params.get("limb_curve", 0.35)))
 	material.set_shader_parameter("terminator_softness", float(params.get("terminator_softness", 0.08)))
@@ -157,7 +169,9 @@ func _apply_ring_material(
 	profile: Texture2D,
 	sun_3d: Vector3,
 	render_front: bool,
-	seed_val: float
+	seed_val: float,
+	stellar_irradiance: float,
+	exposure: float
 ) -> void:
 	var material := ShaderMaterial.new()
 	material.shader = RING_SHADER
@@ -169,6 +183,8 @@ func _apply_ring_material(
 	)
 	material.set_shader_parameter("ring_profile", profile)
 	material.set_shader_parameter("sun_direction", sun_3d)
+	material.set_shader_parameter("sun_irradiance", maxf(stellar_irradiance, 0.0))
+	material.set_shader_parameter("display_exposure", exposure)
 	material.set_shader_parameter("axis", ring_params.get("axis", Vector3(0, 0, 1)))
 	material.set_shader_parameter("outer_radius", float(ring_params.get("outer_radius", 1.0)))
 	material.set_shader_parameter("ring_brightness", float(ring_params.get("ring_brightness", 1.0)))

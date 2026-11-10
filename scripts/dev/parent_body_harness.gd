@@ -867,7 +867,8 @@ func _rebuild_preview() -> void:
 		star_pos,
 		angular_deg,
 		resolved,
-		seed_key
+		seed_key,
+		star.get_irradiance()
 	)
 
 

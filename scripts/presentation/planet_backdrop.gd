@@ -119,6 +119,7 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	_material.set_shader_parameter("use_night_lights", 0.0)
 	_apply_optional_textures(planet_data)
 	_material.set_shader_parameter("sun_intensity", 1.0)
+	_material.set_shader_parameter("display_exposure", PlanetExposure.display_exposure(1.0))
 	_material.set_shader_parameter("sun_color", Vector3(1.0, 0.98, 0.94))
 
 	var sphere_mesh := SphereMesh.new()
@@ -204,7 +205,8 @@ func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> v
 		"sun_color",
 		Vector3(star_color.r, star_color.g, star_color.b)
 	)
-	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.05))
+	_material.set_shader_parameter("sun_intensity", maxf(intensity, 0.0))
+	_material.set_shader_parameter("display_exposure", PlanetExposure.display_exposure(intensity))
 	_request_viewport_render()
 
 
