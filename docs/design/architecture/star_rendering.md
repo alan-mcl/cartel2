@@ -115,7 +115,7 @@ Companions are target-lockable **stars**; they are not second light sources for 
 
 ## Parent body (non-star backdrop)
 
-Moon sectors may define **`parent_body`**. **SkyParentBody** renders at **`z_index -60`**. **Known gap:** parent-body shading is not aligned to the primary star’s world position ([backlog B4](backlog.md)).
+Moon sectors may define **`parent_body`**. **SkyParentBody** renders at **`z_index -60`**. Disc and ring shading uses **`PlanetBackdrop.sun_direction_canvas_from_star`** with the primary star’s visit-random world position (same 2D sky bearing as the system planet); light stays in the play plane with no globe depth tilt so the disc does not read bottom-lit.
 
 ## Volatile translation sites
 
@@ -130,7 +130,6 @@ Grant-time star setup may enforce a minimum **`disc_radius`** for visibility; ot
 - Per-system **starfield** tiles or constellations.
 - **Multi-star** planet illumination (interface prepared via **`get_illumination()`**).
 - Ephemeris or time-varying binary separation.
-- Parent-body light alignment with the local star.
 
 ## Inspection and tuning
 

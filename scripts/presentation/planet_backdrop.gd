@@ -183,6 +183,18 @@ static func sun_direction_3d_from_star(world_direction: Vector2) -> Vector3:
 	return Vector3(direction.x, -direction.y, sun_z).normalized()
 
 
+## Screen-space sun for canvas disc shaders (Godot Y down). Uses the same 2D sky bearing as [set_sun]
+## (pass the primary star world position from the play origin), with no depth tilt so parent discs
+## do not read as bottom-lit.
+static func sun_direction_canvas_from_star(world_direction: Vector2) -> Vector3:
+	var direction := world_direction
+	if direction.length() < 0.001:
+		direction = Vector2(1.0, 0.0)
+	else:
+		direction = direction.normalized()
+	return Vector3(direction.x, direction.y, 0.0)
+
+
 func set_sun(world_direction: Vector2, star_color: Color, intensity: float) -> void:
 	if _material == null:
 		return

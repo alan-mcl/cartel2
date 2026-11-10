@@ -40,7 +40,7 @@ func configure(
 	var rings_cfg: Dictionary = resolved.get("rings", {})
 	var seed_text := str(resolved.get("seed_text", ""))
 	var planet_params := SkyParentBodyParams.build_planet_shader_params(merged, seed_val, seed_text)
-	var sun_3d := PlanetBackdropScript.sun_direction_3d_from_star(star_position)
+	var sun_3d := PlanetBackdropScript.sun_direction_canvas_from_star(star_position)
 
 	var planet_diameter := _disc_radius * 2.0
 	var planet_texture := _make_white_texture()

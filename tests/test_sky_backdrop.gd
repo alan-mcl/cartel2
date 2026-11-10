@@ -6,11 +6,32 @@ const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdro
 
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
+	_test_parent_sun_direction_canvas(runner)
 	_test_planet_irradiance_at_orbit(runner)
 	_test_angular_radius_math(runner)
 	_test_parent_params(runner)
 	_test_titania_angular_roll(runner, tree)
 	_test_sector_spawns(runner, tree)
+
+
+static func _test_parent_sun_direction_canvas(runner: TestRunner) -> void:
+	var star_above := Vector2(0.0, -8000.0)
+	var canvas := PlanetBackdropScript.sun_direction_canvas_from_star(star_above)
+	runner.check(
+		canvas.y < 0.0,
+		"parent sun: star above yields negative canvas Y"
+	)
+	runner.check(
+		absf(canvas.z) < 0.001,
+		"parent sun: canvas sun stays in the play plane"
+	)
+	var star_right := Vector2(9000.0, 0.0)
+	var right_canvas := PlanetBackdropScript.sun_direction_canvas_from_star(star_right)
+	runner.check(right_canvas.x > 0.0, "parent sun: star to the right yields positive canvas X")
+	runner.check(
+		absf(right_canvas.z) < 0.001,
+		"parent sun: right-bearing sun has no depth tilt"
+	)
 
 
 static func _test_planet_irradiance_at_orbit(runner: TestRunner) -> void:

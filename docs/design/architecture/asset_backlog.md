@@ -42,8 +42,6 @@ After replacing art: `godot --path . --headless --import --quit`.
 | SFX / UI OGG | 10 files | **10** dry-tone stubs → real one-shots / loops |
 | Logo banner | 1 PNG | Optional polish (`assets/logo/logo_banner.png`) |
 
-Related **code** follow-ons that affect how art reads in flight (not missing files): [backlog.md](backlog.md) **B4** (parent-body lighting vs star direction).
-
 ---
 
 ## Planets and city-mall sidecars
