@@ -8,9 +8,11 @@ const EPSILON := 0.001
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	CareerStats._career_id_factory = Callable(TestCareer, "_test_career_id")
+	_test_format_gst_career_time(runner)
 	_test_new_game_resets(runner, catalog)
 	_test_profit_and_accounts(runner, catalog)
 	_test_flight_time_excludes_docked(runner, catalog)
+	_test_translation_lag_counts_as_flight(runner, catalog)
 	_test_kill_on_destroy_blow(runner, catalog)
 	_test_weapon_attribution(runner, catalog)
 	_test_save_round_trip(runner, catalog)
@@ -24,6 +26,14 @@ static func run(runner: TestRunner) -> void:
 
 static func _test_career_id() -> String:
 	return "career_test_fixed_id"
+
+
+static func _test_format_gst_career_time(runner: TestRunner) -> void:
+	runner.check_eq(
+		CareerStatsFormat.format_gst_career_time(7200.0),
+		"2 h 0 m GST",
+		"career: format_gst_career_time appends GST"
+	)
 
 
 static func _session(runner: TestRunner, catalog: Catalog, callsign: String) -> GameSession:
@@ -79,6 +89,35 @@ static func _test_flight_time_excludes_docked(runner: TestRunner, catalog: Catal
 	runner.check(
 		absf(session.career.played_seconds - 15.0) < EPSILON,
 		"career: played seconds include docked time"
+	)
+
+
+static func _test_translation_lag_counts_as_flight(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "CR-LAG")
+	if session == null:
+		return
+	var sim := Simulation.new()
+	session.in_unspace = true
+	var entry_applied := sim.apply_mapping_lump(
+		session, {"entry_seconds": 100.0}, "entry_seconds", null
+	)
+	runner.check(
+		absf(entry_applied - 100.0) < EPSILON,
+		"career: entry lag lump applies"
+	)
+	runner.check(
+		absf(session.career.flight_gst_seconds_unspace - 100.0) < EPSILON,
+		"career: entry lag accrues unspace flight GST"
+	)
+	session.in_unspace = false
+	var exit_applied := sim.apply_mapping_lump(session, {"exit_seconds": 50.0}, "exit_seconds", null)
+	runner.check(
+		absf(exit_applied - 50.0) < EPSILON,
+		"career: exit lag lump applies"
+	)
+	runner.check(
+		absf(session.career.flight_gst_seconds_real - 50.0) < EPSILON,
+		"career: exit lag accrues real-space flight GST"
 	)
 
 

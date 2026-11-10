@@ -99,6 +99,8 @@ func apply_mapping_lump(
 	var previous_day := CommodityEconomy.gst_day(session.gst_seconds)
 	var previous_hour := SimClock.gst_hour(session.gst_seconds)
 	session.advance_gst(applied)
+	if not session.player.sandbox:
+		session.career.record_flight_gst(applied, session.in_unspace)
 	var current_day := CommodityEconomy.gst_day(session.gst_seconds)
 	var current_hour := SimClock.gst_hour(session.gst_seconds)
 

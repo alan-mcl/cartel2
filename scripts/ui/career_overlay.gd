@@ -52,10 +52,13 @@ func _rebuild() -> void:
 
 	_add_section("Time")
 	var flight_total := career.flight_gst_seconds_real + career.flight_gst_seconds_unspace
-	_add_row("Flight time", CareerStatsFormat.format_flight_time(flight_total))
-	_add_row("Real-space flight", CareerStatsFormat.format_flight_time(career.flight_gst_seconds_real))
-	_add_row("N-space flight", CareerStatsFormat.format_flight_time(career.flight_gst_seconds_unspace))
-	_add_row("Total career time", CareerStatsFormat.format_flight_time(career.played_seconds))
+	_add_row("Flight time", CareerStatsFormat.format_gst_career_time(flight_total))
+	_add_row("Real-space flight", CareerStatsFormat.format_gst_career_time(career.flight_gst_seconds_real))
+	_add_row("N-space flight", CareerStatsFormat.format_gst_career_time(career.flight_gst_seconds_unspace))
+	_add_row(
+		"Total career time",
+		CareerStatsFormat.format_gst_career_time(career.elapsed_gst_seconds(_session.gst_seconds))
+	)
 
 	_add_section("Navigation")
 	_add_row("Translations", str(career.translations_count))
