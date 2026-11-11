@@ -27,7 +27,7 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `worlds.json` | object keyed by sector/unspace id | Orbital and 4-space entity layouts |
 | `interactables.json` | array | Interaction definitions |
 | `commodities.json` | array | Trade goods (mass, base_price) |
-| `fuels.json` | array | Propulsion fuel chemistries and daily price bounds |
+| `fuels.json` | array | Fuel chemistries (propulsion and reactor) and daily price bounds |
 | `traffic.json` | object | In-system NPC traffic tuning (LOD, roles, cruise fraction) |
 | `corporations.json` | array | Megacorporation identity (`id`, `name`, `callsign_prefix`, `ad_voice`, `trade`, `brands`, `description`) |
 | `corporate_office_ticker.json` | object | Shared SKU/brand/job/recruitment templates keyed by `ad_voice` |
@@ -153,7 +153,7 @@ New Game reads this template once; runtime progress is stored in save slots unde
 | `template_id` | string | Reference to `ships.json` |
 | `chassis_id` | string | Fixed chassis |
 | `modules` | array | `{ slot, module_id }` installed configuration |
-| `fuels` | object | Map of propulsion fuel id → stored units (active engine chemistry only) |
+| `fuels` | object | Map of fuel chemistry id → stored units (every chemistry required by the fitted drive and/or reactor) |
 | `ammunition` | object | `{ ammo_type_id: qty }` |
 | `cargo` | object | `{ commodity_id: qty }` per-ship hold |
 | `location` | string | `"aboard"` or habitat id |
@@ -209,8 +209,8 @@ In-system ships require an installed `vessel_registration_beacon` (`category: tr
 `ShipOperations.tick` each physics frame:
 
 - Allocates power by priority (life support + propulsion critical; sensors/computer high; weapons normal)
-- Consumes propulsion fuel from `owned.fuels` for the fitted engine’s `fuel_type` (power-plant `fuel_consumption` does not draw this pool yet)
-- Sets `thrust_factor` when fuel empty or power deficit
+- Consumes propulsion fuel from `owned.fuels` while thrusting; fission and fusion plants consume their chemistry in flight at roughly one tenth of a typical drive burn rate. Direct-fusion drives and fusion plants share the `fusion` pool. A dry reactor contributes no megawatts.
+- Sets `thrust_factor` when propulsion fuel is empty or power deficit; sail and gravitic hulls still need reactor fuel when a fission or fusion plant is fitted
 
 Fuel lives on the owned ship. Heat/signature simulation is deferred beyond the current build.
 

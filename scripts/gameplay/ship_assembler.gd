@@ -67,7 +67,7 @@ static func assemble_owned(catalog: Catalog, owned: OwnedShip, load_state: bool 
 	assembled.set_chassis(chassis_def)
 	assembled.installed_modules = _resolve_installed_modules(catalog, owned)
 	assembled.mounts = _calculate_mount_usage(assembled.chassis_mounts(), assembled.installed_modules)
-	assembled.capacities = _calculate_capacities(catalog, assembled)
+	assembled.capacities = _calculate_capacities(catalog, assembled, owned)
 	assembled.capabilities = _aggregate_capabilities(assembled)
 	assembled.envelope = _calculate_envelope(assembled)
 	assembled.build_caches()
@@ -232,7 +232,7 @@ static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipSt
 
 static func calculate_loaded_mass(catalog: Catalog, owned: OwnedShip, assembled: AssembledShip) -> float:
 	var mass := float(assembled.envelope.get("dry_mass", 0.0))
-	mass += ShipFuel.propulsion_fuel_mass(catalog, owned)
+	mass += ShipFuel.stored_fuel_mass(catalog, owned)
 
 	for commodity_id in owned.cargo.keys():
 		var qty := owned.get_cargo_count(str(commodity_id))
@@ -247,12 +247,11 @@ static func calculate_loaded_mass(catalog: Catalog, owned: OwnedShip, assembled:
 	return mass
 
 
-## Dry mass, a full tank of the engine's fuel, every magazine at its listed capacity, and a full hold.
-## A gravitic drive has no fuel, so its tank modules add only their own dry mass.
+## Dry mass, every fuel tank at capacity, every magazine at its listed capacity, and a full hold.
 static func projected_full_mass(catalog: Catalog, owned: OwnedShip, assembled: AssembledShip) -> float:
 	var mass := float(assembled.envelope.get("dry_mass", 0.0))
-	if not ShipFuel.active_fuel_id(catalog, owned).is_empty():
-		mass += ShipFuel.active_capacity(catalog, owned) * FUEL_MASS_PER_UNIT
+	for fuel_id in ShipFuel.required_fuel_ids(catalog, owned):
+		mass += ShipFuel.capacity_for_fuel(catalog, owned, fuel_id) * FUEL_MASS_PER_UNIT
 	var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
 	if typeof(caps) == TYPE_DICTIONARY:
 		for ammo_id in caps.keys():
@@ -390,7 +389,7 @@ static func _calculate_mount_usage(mounts_def: Dictionary, installed_modules: Ar
 	return usage
 
 
-static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) -> Dictionary:
+static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip, owned: OwnedShip) -> Dictionary:
 	var capacities := {
 		"power_generation": 0.0,
 		"power_distribution": 0.0,
@@ -424,21 +423,21 @@ static func _calculate_capacities(catalog: Catalog, assembled: AssembledShip) ->
 				current + int(module_def.ammunition_capacity[ammo_id])
 			)
 
-	capacities["fuel_capacity"] = _propulsion_fuel_capacity(catalog, assembled)
+	capacities["fuel_capacity"] = _propulsion_fuel_capacity(catalog, assembled, owned)
 	return capacities
 
 
-static func _propulsion_fuel_capacity(catalog: Catalog, assembled: AssembledShip) -> float:
-	var tank_units := 0.0
-	for entry in assembled.installed_modules:
-		if typeof(entry) != TYPE_DICTIONARY:
-			continue
-		var module_def: Variant = entry.get("data", null)
-		if module_def == null or not module_def is ModuleDef:
-			continue
-		if module_def.category == "fuel":
-			tank_units += module_def.fuel_capacity
-	return ShipFuel.stored_capacity(catalog, assembled.get_propulsion_module_def(), tank_units)
+static func _propulsion_fuel_capacity(
+	catalog: Catalog,
+	_assembled: AssembledShip,
+	owned: OwnedShip
+) -> float:
+	if owned == null:
+		return 0.0
+	var fuel_id := ShipFuel.propulsion_fuel_id(catalog, owned)
+	if fuel_id.is_empty():
+		return 0.0
+	return ShipFuel.capacity_for_fuel(catalog, owned, fuel_id)
 
 
 static func _aggregate_capabilities(assembled: AssembledShip) -> Dictionary:

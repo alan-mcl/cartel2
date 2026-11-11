@@ -107,7 +107,6 @@ Source: `data/catalog/schema/fuels.schema.json` → `fuels.json`
 | `name` | string | yes | `` |  |
 | `price_min` | number | yes | `` |  |
 | `price_max` | number | yes | `` |  |
-| `tank_scale` | number | no | `1` | Fraction of a tank module's rated capacity stored for this fuel. The engine bunker is not scaled. Omitted means 1. |
 
 ## ModuleDef
 
@@ -129,7 +128,7 @@ Source: `data/catalog/schema/modules.schema.json` → `modules/`
 | `capabilities` | array | no | `[]` |  |
 | `signature` | CatalogSignature | yes | `` |  |
 | `engine_type` | string | no | `` | enum: ``, `chemical`, `hydro_thermal`, `electric_plasma`, `direct_fusion`, `antimatter`, `gravitic`, `integrated_sail` |
-| `fuel_type` | string | no | `` | enum: ``, `chemical`, `hydrogen`, `reaction_mass`, `fusion`, `antimatter` |
+| `fuel_type` | string | no | `` | enum: ``, `chemical`, `hydrogen`, `reaction_mass`, `fusion`, `antimatter`, `fission` |
 | `thrust` | number | no | `0.0` |  |
 | `max_speed` | number | no | `0.0` |  |
 | `boost_multiplier` | number | no | `0.0` |  |

@@ -1,31 +1,35 @@
 [
   {
-    "id": "fuel_tank_large",
-    "name": "Fuel Tank Large",
-    "maker": "Bayes Inc",
+    "id": "gi_yard_tank_chemical_40",
+    "name": "GI Yard Tank 40 Chemical",
+    "maker": "General Industrial",
+    "brand": "Yard",
     "category": "fuel",
-    "mass": 0.9,
-    "volume": 6.0,
-    "fuel_capacity": 120.0,
-    "cost": 850,
-    "description": "Extended-range propulsion fuel storage.",
+    "fuel_type": "chemical",
+    "mass": 0.3,
+    "volume": 2.0,
+    "fuel_capacity": 40.0,
+    "cost": 350,
+    "description": "Compact chemical propellant storage for yard-fit hulls.",
     "signature": {
       "thermal": 0.3,
-      "gravitational": 0.48,
+      "gravitational": 0.16,
       "electromagnetic": 0.2,
       "computational": 0.0
     }
   },
   {
-    "id": "fuel_tank_medium",
-    "name": "Fuel Tank Medium",
-    "maker": "Bayes Inc",
+    "id": "gi_yard_tank_chemical_80",
+    "name": "GI Yard Tank 80 Chemical",
+    "maker": "General Industrial",
+    "brand": "Yard",
     "category": "fuel",
+    "fuel_type": "chemical",
     "mass": 0.6,
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 550,
-    "description": "Medium propulsion fuel storage for longer routes.",
+    "description": "Medium chemical propellant storage for longer chemical routes.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.32,
@@ -34,19 +38,306 @@
     }
   },
   {
-    "id": "fuel_tank_small",
-    "name": "Fuel Tank Small",
-    "maker": "Bayes Inc",
+    "id": "gi_yard_tank_hydrogen_40",
+    "name": "GI Yard Tank 40 Hydrogen",
+    "maker": "General Industrial",
+    "brand": "Yard",
     "category": "fuel",
+    "fuel_type": "hydrogen",
     "mass": 0.3,
     "volume": 2.0,
     "fuel_capacity": 40.0,
-    "cost": 350,
-    "description": "Compact propulsion fuel storage.",
+    "cost": 360,
+    "description": "Compact hydrogen storage for hydro-thermal drives.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.16,
       "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_hydrogen_80",
+    "name": "GI Yard Tank 80 Hydrogen",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "hydrogen",
+    "mass": 0.6,
+    "volume": 4.0,
+    "fuel_capacity": 80.0,
+    "cost": 560,
+    "description": "Medium hydrogen storage for extended hydro-thermal cruising.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.32,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_reaction_mass_40",
+    "name": "GI Yard Tank 40 Reaction Mass",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "reaction_mass",
+    "mass": 0.3,
+    "volume": 2.0,
+    "fuel_capacity": 40.0,
+    "cost": 380,
+    "description": "Compact reaction-mass storage for electric plasma drives.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.16,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_reaction_mass_80",
+    "name": "GI Yard Tank 80 Reaction Mass",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "reaction_mass",
+    "mass": 0.6,
+    "volume": 4.0,
+    "fuel_capacity": 80.0,
+    "cost": 580,
+    "description": "Medium reaction-mass storage for plasma cruisers.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.32,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_fusion_40",
+    "name": "GI Yard Tank 40 Fusion",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "fusion",
+    "mass": 0.3,
+    "volume": 2.0,
+    "fuel_capacity": 40.0,
+    "cost": 420,
+    "description": "Compact fusion fuel storage for direct-fusion drives and fusion plants.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.16,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_fusion_80",
+    "name": "GI Yard Tank 80 Fusion",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "fusion",
+    "mass": 0.6,
+    "volume": 4.0,
+    "fuel_capacity": 80.0,
+    "cost": 620,
+    "description": "Medium fusion fuel storage for long fusion runs.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.32,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_fission_40",
+    "name": "GI Yard Tank 40 Fission",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "fission",
+    "mass": 0.32,
+    "volume": 2.0,
+    "fuel_capacity": 40.0,
+    "cost": 400,
+    "description": "Compact fission fuel storage for reactor refit.",
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.17,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "gi_yard_tank_fission_80",
+    "name": "GI Yard Tank 80 Fission",
+    "maker": "General Industrial",
+    "brand": "Yard",
+    "category": "fuel",
+    "fuel_type": "fission",
+    "mass": 0.62,
+    "volume": 4.0,
+    "fuel_capacity": 80.0,
+    "cost": 600,
+    "description": "Medium fission fuel storage for extended reactor cruising.",
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.33,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_tank_chemical_120",
+    "name": "Loadmaster Tank 120 Chemical",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "fuel",
+    "fuel_type": "chemical",
+    "mass": 0.9,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 850,
+    "description": "Extended-range chemical propellant storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.48,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_tank_hydrogen_120",
+    "name": "Loadmaster Tank 120 Hydrogen",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "fuel",
+    "fuel_type": "hydrogen",
+    "mass": 0.9,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 870,
+    "description": "Extended-range hydrogen storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.48,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_tank_reaction_mass_120",
+    "name": "Loadmaster Tank 120 Reaction Mass",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "fuel",
+    "fuel_type": "reaction_mass",
+    "mass": 0.92,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 890,
+    "description": "Extended-range reaction-mass storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.48,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_tank_fusion_120",
+    "name": "Loadmaster Tank 120 Fusion",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "fuel",
+    "fuel_type": "fusion",
+    "mass": 0.95,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 950,
+    "description": "Extended-range fusion fuel storage.",
+    "signature": {
+      "thermal": 0.3,
+      "gravitational": 0.48,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "atl_loadmaster_tank_fission_120",
+    "name": "Loadmaster Tank 120 Fission",
+    "maker": "Atlas Concern",
+    "brand": "Loadmaster",
+    "category": "fuel",
+    "fuel_type": "fission",
+    "mass": 0.96,
+    "volume": 6.0,
+    "fuel_capacity": 120.0,
+    "cost": 920,
+    "description": "Extended-range fission fuel storage.",
+    "signature": {
+      "thermal": 0.35,
+      "gravitational": 0.49,
+      "electromagnetic": 0.2,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_vault_tank_antimatter_2",
+    "name": "Vault Containment 2 Antimatter",
+    "maker": "Orion Aerospace",
+    "brand": "Vault",
+    "category": "fuel",
+    "fuel_type": "antimatter",
+    "mass": 0.45,
+    "volume": 2.0,
+    "fuel_capacity": 2.0,
+    "cost": 1200,
+    "description": "Orion Vault magnetic containment for two antimatter units.",
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.18,
+      "electromagnetic": 0.45,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_vault_tank_antimatter_4",
+    "name": "Vault Containment 4 Antimatter",
+    "maker": "Orion Aerospace",
+    "brand": "Vault",
+    "category": "fuel",
+    "fuel_type": "antimatter",
+    "mass": 0.7,
+    "volume": 3.5,
+    "fuel_capacity": 4.0,
+    "cost": 2100,
+    "description": "Orion Vault magnetic containment for four antimatter units.",
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.3,
+      "electromagnetic": 0.5,
+      "computational": 0.0
+    }
+  },
+  {
+    "id": "ora_vault_tank_antimatter_6",
+    "name": "Vault Containment 6 Antimatter",
+    "maker": "Orion Aerospace",
+    "brand": "Vault",
+    "category": "fuel",
+    "fuel_type": "antimatter",
+    "mass": 0.95,
+    "volume": 5.0,
+    "fuel_capacity": 6.0,
+    "cost": 2900,
+    "description": "Orion Vault magnetic containment for six antimatter units.",
+    "signature": {
+      "thermal": 0.4,
+      "gravitational": 0.42,
+      "electromagnetic": 0.55,
       "computational": 0.0
     }
   }

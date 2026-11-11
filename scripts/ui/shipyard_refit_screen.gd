@@ -635,6 +635,19 @@ func _sort_stock_entries(category: String, entries: Array) -> Array:
 							_weapon_packet_total(left_data),
 							_weapon_packet_total(right_data)
 						)
+			"fuel":
+				match sort_key:
+					"price":
+						cmp = int(left_data.get("cost", 0)) - int(right_data.get("cost", 0))
+					_:
+						cmp = str(left_data.get("fuel_type", "")).nocasecmp_to(
+							str(right_data.get("fuel_type", ""))
+						)
+						if cmp == 0:
+							cmp = _float_compare(
+								float(left_data.get("fuel_capacity", 0.0)),
+								float(right_data.get("fuel_capacity", 0.0))
+							)
 			"armour":
 				match sort_key:
 					"price":

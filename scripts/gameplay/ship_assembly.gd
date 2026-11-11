@@ -394,25 +394,21 @@ static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String
 		result["log_reason"] = "Ship must be docked at this habitat."
 		return result
 
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	var fuel_id := ShipFuel.active_fuel_id(catalog, ship)
-	if fuel_id.is_empty():
+	var required := ShipFuel.required_fuel_ids(catalog, ship)
+	if required.is_empty():
 		result["button_text"] = "Refuel (N/A)"
-		result["log_reason"] = "Ship has no reaction-fuel engine fitted."
+		result["log_reason"] = "Ship has no fuelled drive or reactor fitted."
 		return result
 
-	var capacity := float(assembled.capacities.get("fuel_capacity", 0.0))
-	if capacity <= 0.0:
-		result["button_text"] = "Refuel (N/A)"
-		result["log_reason"] = "Ship has no propulsion fuel storage."
-		return result
-
-	var current := ShipFuel.active_amount(catalog, ship)
-	var needed := capacity - current
-	if needed <= 0.01:
+	var quote_lines := ShipFuel.refuel_quote_lines(session, catalog, ship)
+	if quote_lines.is_empty():
 		result["button_text"] = "Refuel (full)"
-		result["log_reason"] = "Propulsion fuel already full."
+		result["log_reason"] = "All fuel stores already full."
 		return result
+
+	var cost := 0
+	for row in quote_lines:
+		cost += int(row.get("cost", 0))
 
 	if session.sandbox:
 		result["enabled"] = true
@@ -420,14 +416,6 @@ static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String
 		result["button_text"] = "Refuel"
 		return result
 
-	var sector_id := session.world.get_market_sector_id(catalog)
-	var unit_price := FuelEconomy.price_for_sector(session, catalog, sector_id, fuel_id)
-	if unit_price <= 0:
-		result["button_text"] = "Refuel (N/A)"
-		result["log_reason"] = "Fuel price unavailable at this habitat."
-		return result
-
-	var cost := int(ceil(needed * float(unit_price)))
 	result["cost"] = cost
 	result["button_text"] = "Refuel (d%d)" % cost
 	result["enabled"] = session.can_afford_credits(cost)
@@ -456,11 +444,9 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	if cost > 0:
 		session.apply_credits_delta(-cost)
 
-	ShipFuel.fill_active_to_capacity(catalog, ship)
-	var fuel_id := ShipFuel.active_fuel_id(catalog, ship)
-	var fuel_name := str(catalog.get_fuel(fuel_id).get("name", fuel_id))
+	ShipFuel.fill_all_to_capacity(catalog, ship)
 	if cost > 0:
-		session.last_log = "Refuelled %s with %s for d%d." % [ship.name, fuel_name, cost]
+		session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
 		if not session.player.sandbox:
 			session.career.record_fuel_spend(cost)
 	else:

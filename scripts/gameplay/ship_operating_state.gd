@@ -20,6 +20,7 @@ var fuel_empty: bool = false
 var propulsion_fuel_id: String = ""
 var propulsion_requires_fuel: bool = false
 var propulsion_fuel_label: String = ""
+var fuel_gauge_text: String = ""
 
 var thrust_factor: float = 1.0
 var boost_allowed: bool = true

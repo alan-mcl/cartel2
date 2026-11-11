@@ -1732,10 +1732,18 @@ def check_fuels(fuels: list, modules: list) -> list[str]:
     for module in modules:
         if not isinstance(module, dict):
             continue
+        module_id = str(module.get("id", "?"))
+        if str(module.get("category", "")).strip() == "fuel":
+            fuel_type = str(module.get("fuel_type", "")).strip()
+            if not fuel_type:
+                errors.append(f"modules {module_id}: fuel module missing fuel_type")
+                continue
+            if fuel_type not in seen:
+                errors.append(f"modules {module_id}: unknown fuel_type '{fuel_type}'")
+            continue
         fuel_type = str(module.get("fuel_type", "")).strip()
         if not fuel_type:
             continue
-        module_id = str(module.get("id", "?"))
         if fuel_type not in seen:
             errors.append(f"modules {module_id}: unknown fuel_type '{fuel_type}'")
     return errors

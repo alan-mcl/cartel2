@@ -343,7 +343,9 @@ func set_operating_state(state: ShipOperatingState) -> void:
 	_sync_log()
 	if not _has_capability("basic_hud") or state == null:
 		return
-	if not state.propulsion_requires_fuel:
+	if not state.fuel_gauge_text.is_empty():
+		_fuel.text = state.fuel_gauge_text
+	elif not state.propulsion_requires_fuel:
 		_fuel.text = "Fuel: -"
 	elif state.propulsion_fuel_label.is_empty():
 		_fuel.text = "Fuel: %.0f / %.0f" % [state.fuel_current, state.fuel_capacity]

@@ -24,10 +24,15 @@
     "price_max": 50
   },
   {
+    "id": "fission",
+    "name": "Fission fuel",
+    "price_min": 6,
+    "price_max": 16
+  },
+  {
     "id": "antimatter",
     "name": "Antimatter",
     "price_min": 200,
-    "price_max": 800,
-    "tank_scale": 0.05
+    "price_max": 800
   }
 ]

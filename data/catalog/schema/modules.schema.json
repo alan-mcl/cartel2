@@ -34,7 +34,7 @@
     "fuel_type": {
       "type": "string",
       "default": "",
-      "enum": ["", "chemical", "hydrogen", "reaction_mass", "fusion", "antimatter"]
+      "enum": ["", "chemical", "hydrogen", "reaction_mass", "fusion", "antimatter", "fission"]
     },
     "thrust": { "type": "number", "default": 0.0 },
     "max_speed": { "type": "number", "default": 0.0 },

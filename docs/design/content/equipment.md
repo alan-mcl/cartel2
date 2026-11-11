@@ -74,7 +74,7 @@ Commercial main engines are branded products: **maker** (corporation), **brand**
 | Max speed | `max_speed` | Speed cap km/s |
 | Fuel use | `fuel_consumption` | Consumed in flight from the fitted engine’s fuel type (`fuels` on the ship) |
 | Fuel type | `fuel_type` | `chemical`, `hydrogen`, `reaction_mass`, `fusion`, or `antimatter` (reaction engines only) |
-| Bunker | `fuel_capacity` (engine) | Built-in storage on the propulsion module. Fuel tanks add untyped capacity, multiplied by the fuel's `tank_scale` (1, except antimatter at 0.05). The bunker is not scaled. |
+| Bunker | `fuel_capacity` (engine) | Built-in storage on the propulsion module. Typed fuel tanks add capacity only for their `fuel_type`. Fission and fusion plants carry an 8-unit reactor bunker by default. |
 | Boost | `boost_multiplier` | Boost speed factor |
 | Power | `power_demand` | Operating budget |
 | Type | `engine_type` | Technology class (see below) |
@@ -134,8 +134,8 @@ Three types are in the catalog today. All share the same fitting and operating r
 
 | Type | Role | Typical output | Fuel |
 |------|------|----------------|------|
-| **Fission** | Mature, compact, reliable. Default for older, cheaper, smaller, and frontier ships. | 16–72 MW | Moderate |
-| **Fusion** | Newer, advanced. Higher output and better fuel burn at a premium. Sporty and refitted hulls. | 28–54 MW | Lower |
+| **Fission** | Mature, compact, reliable. Default for older, cheaper, smaller, and frontier ships. | 16–72 MW | `fission` |
+| **Fusion** | Newer, advanced. Higher output and better fuel burn at a premium. Sporty and refitted hulls. | 28–54 MW | `fusion` (shared with direct-fusion drives) |
 | **Radioisotope** | Decay heat; always on, no refuelling. Low power - life support, beacon, sensors only on light hulls. | 6–12 MW | Zero |
 
 Reserved for later (no SKUs yet): **solar**, **chemical** - may ignore ship fuel or gate on environment.
@@ -154,6 +154,20 @@ Forty-eight branded SKUs across nineteen manufacturers (~31 fission, ~11 fusion,
 Ship templates: older workhorses (Pegasus, Juno, Krypton K2, Silhouette) carry fission; Holt-Winters Flare-ON and late refits carry fusion. No template defaults to a radioisotope plant.
 
 The POC `fusion_plant_mk1` / `fusion_plant_mk2` Bayes Inc placeholders are retired.
+
+Fission and fusion plants burn the matching fuel chemistry in flight. Direct-fusion drives share the `fusion` pool with a fusion plant; all other drive and reactor pairings use separate tanks when both need fuel.
+
+### Fuel tanks (`category: fuel`, mount: `other`)
+
+Eighteen SKUs across three makers. Every tank carries `fuel_type` and `fuel_capacity`; only tanks matching a fitted drive or reactor chemistry contribute to that pool.
+
+| Maker | Brand | Chemistries | Sizes (units) |
+|-------|-------|-------------|---------------|
+| General Industrial | Yard | chemical, hydrogen, reaction mass, fusion, fission | 40, 80 |
+| Atlas Concern | Loadmaster | same | 120 |
+| Orion Aerospace | Vault | antimatter | 2, 4, 6 |
+
+The habitat workshop sells the full catalogue. Refuel at dock fills every required chemistry in one purchase.
 
 ### Compute cores (`category: computer`, mount: `system`)
 

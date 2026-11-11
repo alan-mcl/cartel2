@@ -8,7 +8,7 @@
 		"reputation": 0,
 		"sanctions": []
 	},
-	"saved_at": "2026-11-10T14:38:49",
+	"saved_at": "2026-11-11T07:13:59",
 	"session": {
 		"bounty_contract_sectors": {},
 		"building_id": "proxima_habitat_terminal",
@@ -54,7 +54,7 @@
 		"power_integrity_lost": 0.0,
 		"revenue_by_source": {},
 		"route_friction_delta": {},
-		"run_seed": 3358811960,
+		"run_seed": 1673217260,
 		"salvage_count": 0,
 		"salvaged_ids": [],
 		"sanctions_paid_total": 0,
@@ -88,6 +88,7 @@
 			"cargo": {},
 			"chassis_id": "pegasus_chassis",
 			"fuels": {
+				"fission": 48.0,
 				"hydrogen": 92.0
 			},
 			"id": "pegasus_p101_1",
@@ -122,16 +123,12 @@
 					"slot": "other_1"
 				},
 				{
-					"module_id": "fuel_tank_medium",
+					"module_id": "cargo_bay_10",
 					"slot": "other_2"
 				},
 				{
-					"module_id": "cargo_bay_10",
-					"slot": "other_3"
-				},
-				{
 					"module_id": "oc_chitanium_5mm",
-					"slot": "other_4"
+					"slot": "other_3"
 				},
 				{
 					"module_id": "oc_river_light_mass_driver",
@@ -140,10 +137,18 @@
 				{
 					"module_id": "mdc_almanac",
 					"slot": "system_5"
+				},
+				{
+					"module_id": "gi_yard_tank_hydrogen_80",
+					"slot": "other_4"
+				},
+				{
+					"module_id": "gi_yard_tank_fission_40",
+					"slot": "other_5"
 				}
 			],
 			"name": "Pegasus P101",
-			"registration": "VR-PGS-3869",
+			"registration": "VR-PGS-9612",
 			"template_id": "pegasus_p101",
 			"transponder_enabled": true
 		}

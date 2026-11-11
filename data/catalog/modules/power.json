@@ -10,7 +10,7 @@
     "mass": 2.8,
     "volume": 3.8,
     "power_generation": 44.0,
-    "fuel_consumption": 0.16,
+    "fuel_consumption": 0.04,
     "cost": 2100,
     "description": "The Cumbre 45: heavy duty fission power generation.",
     "signature": {
@@ -18,7 +18,8 @@
       "gravitational": 0.7,
       "electromagnetic": 5.14,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ac_sierra_22",
@@ -31,7 +32,7 @@
     "mass": 1.8,
     "volume": 2.6,
     "power_generation": 22.0,
-    "fuel_consumption": 0.12,
+    "fuel_consumption": 0.03,
     "cost": 1200,
     "description": "The Sierra 22: cost effective fission power generation.",
     "signature": {
@@ -39,7 +40,8 @@
       "gravitational": 0.45,
       "electromagnetic": 3.82,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "atl_foundation_32",
@@ -52,19 +54,20 @@
     "mass": 1.9,
     "volume": 2.8,
     "power_generation": 32.0,
-    "fuel_consumption": 0.11,
+    "fuel_consumption": 0.0275,
     "cost": 2000,
-    "description": "Trust the Atlas brand for all your power generation needs. Foundation Plant 32 provides industry standard fission generation capability.",
+    "description": "Trust the Atlas brand for all your power generation needs. Foundation Plant 32 provides industry leading compact fission generation capability.",
     "signature": {
       "thermal": 6.56,
       "gravitational": 0.47,
       "electromagnetic": 4.42,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "atl_loadmaster",
-    "name": "Atlas Loadmaster",
+    "name": "Atlas Loadmaster Power Plant",
     "maker": "Atlas Concern",
     "brand": "Atlas",
     "plant_type": "fission",
@@ -73,19 +76,20 @@
     "mass": 2.5,
     "volume": 3.4,
     "power_generation": 48.0,
-    "fuel_consumption": 0.14,
+    "fuel_consumption": 0.035,
     "cost": 3000,
-    "description": "Mid-heavy fission for haulers that feed Atlas extraction sites.",
+    "description": "Trust the Atlas brand for all your power generation needs. The Loadmaster Plant provides versatile and industry leading fission generation capability.",
     "signature": {
       "thermal": 7.84,
       "gravitational": 0.62,
       "electromagnetic": 5.38,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "atl_titan_class",
-    "name": "Atlas Titan-class",
+    "name": "Atlas Titan Power Plant",
     "maker": "Atlas Concern",
     "brand": "Atlas",
     "plant_type": "fission",
@@ -94,19 +98,20 @@
     "mass": 3.8,
     "volume": 5.0,
     "power_generation": 72.0,
-    "fuel_consumption": 0.2,
+    "fuel_consumption": 0.05,
     "cost": 4800,
-    "description": "Titan-class output for the largest hulls Atlas touches. No fusion option \u2014 mass is the point.",
+    "description": "Trust the Atlas brand for all your power generation needs. The Titan Plant provides industry leading fission generation for heavy workloads.",
     "signature": {
       "thermal": 9.76,
       "gravitational": 0.95,
       "electromagnetic": 6.82,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ca_admiralty_dynamo",
-    "name": "CA Admiralty Dynamo",
+    "name": "CA Admiralty DynamoPower",
     "maker": "Crown & Anchor",
     "brand": "Admiralty",
     "plant_type": "fission",
@@ -115,19 +120,20 @@
     "mass": 1.9,
     "volume": 2.8,
     "power_generation": 22.0,
-    "fuel_consumption": 0.11,
+    "fuel_consumption": 0.0275,
     "cost": 1199,
-    "description": "Admiralty-spec fission with maritime pedigree. Slightly overpriced, always available.",
+    "description": "Admiralty DynamoPower: get the best value in the best looking package, with the C&A seal of quality.",
     "signature": {
       "thermal": 5.76,
       "gravitational": 0.47,
       "electromagnetic": 3.82,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ca_harbour_plant",
-    "name": "Harbour Plant",
+    "name": "CA Harbour FissionPower",
     "maker": "Crown & Anchor",
     "brand": "Harbour",
     "plant_type": "fission",
@@ -136,19 +142,20 @@
     "mass": 2.2,
     "volume": 3.2,
     "power_generation": 30.0,
-    "fuel_consumption": 0.14,
+    "fuel_consumption": 0.035,
     "cost": 1400,
-    "description": "Harbour-duty fission for tugs and short-haul runners in CA ports.",
+    "description": "Harbour FissionPower: only the best specifications and quality, like you always expect from C&A.",
     "signature": {
       "thermal": 6.4,
       "gravitational": 0.55,
       "electromagnetic": 4.3,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "chet_nagarathar_42",
-    "name": "CH Nagarathar 42",
+    "name": "CH Nagarathar 42 Power",
     "maker": "Chettiar Holdings",
     "brand": "Nagarathar",
     "plant_type": "fission",
@@ -157,19 +164,20 @@
     "mass": 2.1,
     "volume": 2.8,
     "power_generation": 42.0,
-    "fuel_consumption": 0.12,
+    "fuel_consumption": 0.03,
     "cost": 2399,
-    "description": "Nagarathar-line output for operators who value stewardship over flash.",
+    "description": "Choose the Nagarathar-line power solutions: for demanding operators who value stewardship and precision engineering.",
     "signature": {
       "thermal": 7.36,
       "gravitational": 0.53,
       "electromagnetic": 5.02,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "chet_steward_24",
-    "name": "Chettiar Steward 24",
+    "name": "CH Steward 24 Power",
     "maker": "Chettiar Holdings",
     "brand": "Steward",
     "plant_type": "fission",
@@ -178,19 +186,20 @@
     "mass": 1.5,
     "volume": 2.2,
     "power_generation": 24.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.0225,
     "cost": 1699,
-    "description": "Steward-class fission \u2014 careful engineering, long service intervals.",
+    "description": "Choose the Steward-class power solutions: for driven pilots who value careful engineering and long service intervals.",
     "signature": {
       "thermal": 5.92,
       "gravitational": 0.38,
       "electromagnetic": 3.94,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "eg_canopy_cell",
-    "name": "Evergreen Canopy Cell",
+    "name": "Evergreen Canopy PowerCell",
     "maker": "Evergreen Group",
     "brand": "Canopy",
     "plant_type": "radioisotope",
@@ -201,7 +210,7 @@
     "power_generation": 10.0,
     "fuel_consumption": 0.0,
     "cost": 1600,
-    "description": "Green-branded decay heat for remote monitoring and life-support auxiliaries.",
+    "description": "Fit the best sustainable shipboard power solution out there, fit Canopy's PowerCell!",
     "signature": {
       "thermal": 1.9,
       "gravitational": 0.38,
@@ -211,7 +220,7 @@
   },
   {
     "id": "eg_rootstock_36",
-    "name": "EG Rootstock 36",
+    "name": "EG Rootstock 36 PowerCell",
     "maker": "Evergreen Group",
     "brand": "Rootstock",
     "plant_type": "fission",
@@ -220,19 +229,20 @@
     "mass": 2.2,
     "volume": 3.2,
     "power_generation": 36.0,
-    "fuel_consumption": 0.14,
+    "fuel_consumption": 0.035,
     "cost": 1900,
-    "description": "Workhorse fission with Evergreen sustainability copy in the manual.",
+    "description": "Need more power? Go with Evergreen's neat Rootstock brand PowerCell - all the energy you need, none of the worries!",
     "signature": {
       "thermal": 6.88,
       "gravitational": 0.55,
       "electromagnetic": 4.66,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "frz_kawabe_k60",
-    "name": "Kawabe Energy K-60",
+    "name": "Kawabe Energy K-60 Fission Plant",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Kawabe Energy",
     "plant_type": "fission",
@@ -241,19 +251,20 @@
     "mass": 2.8,
     "volume": 3.8,
     "power_generation": 60.0,
-    "fuel_consumption": 0.16,
+    "fuel_consumption": 0.04,
     "cost": 3600,
-    "description": "Kawabe industrial fission for bulk carriers and extraction platforms.",
+    "description": "K-60 fission plant by Kawabe Energy. Industrial-scale power generation.",
     "signature": {
       "thermal": 8.8,
       "gravitational": 0.7,
       "electromagnetic": 6.1,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "frz_shirakawa_880",
-    "name": "Shirakawa 880",
+    "name": "FRZ Shirakawa 880 Fusion Plant",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Shirakawa",
     "plant_type": "fusion",
@@ -262,19 +273,20 @@
     "mass": 1.5,
     "volume": 2.2,
     "power_generation": 44.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.01,
     "cost": 4400,
-    "description": "The 880 series \u2014 conservative engineering with fusion efficiency.",
+    "description": "Shirakawa 880 series Fusion. Ample power generation for your ship.",
     "signature": {
       "thermal": 5.64,
       "gravitational": 0.38,
       "electromagnetic": 4.2,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "frz_shirakawa_type_4",
-    "name": "Shirakawa Type 4",
+    "name": "FRZ Shirakawa Type 4 Fusion Plant",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Shirakawa",
     "plant_type": "fusion",
@@ -283,19 +295,20 @@
     "mass": 1.0,
     "volume": 1.6,
     "power_generation": 30.0,
-    "fuel_consumption": 0.07,
+    "fuel_consumption": 0.0078,
     "cost": 3300,
-    "description": "Precision fusion from the Shirakawa subsidiary. Compact, quiet, expensive.",
+    "description": "Shirakawa Type 4 Fusion. Compact power generation.",
     "signature": {
       "thermal": 4.8,
       "gravitational": 0.25,
       "electromagnetic": 3.5,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gi_pp_18",
-    "name": "GI-PP-18",
+    "name": "GI PP-18 Power Plant",
     "maker": "General Industrial",
     "brand": "GI",
     "plant_type": "fission",
@@ -304,19 +317,20 @@
     "mass": 1.4,
     "volume": 2.2,
     "power_generation": 18.0,
-    "fuel_consumption": 0.1,
+    "fuel_consumption": 0.025,
     "cost": 1100,
-    "description": "The galactic default. Eighteen megawatts of anonymous reliability.",
+    "description": "The PP-18 from GI. Cost effective fission power.",
     "signature": {
       "thermal": 5.44,
       "gravitational": 0.35,
       "electromagnetic": 3.58,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gi_standard_civic_28",
-    "name": "Standard Power Civic 28",
+    "name": "Standard Power Civic Fission 28",
     "maker": "General Industrial",
     "brand": "Standard Power",
     "plant_type": "fission",
@@ -325,19 +339,20 @@
     "mass": 1.5,
     "volume": 2.2,
     "power_generation": 28.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.0225,
     "cost": 1650,
-    "description": "GI's oddly friendly consumer label. Still just a fission plant in a grey box.",
+    "description": "The Civic Fission 28 from Standard Power. An effective power solution for personal ships.",
     "signature": {
       "thermal": 6.36,
       "gravitational": 0.38,
       "electromagnetic": 4.18,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gi_type_40_industrial",
-    "name": "GI Type 40 Industrial",
+    "name": "GI PP-40 Power Plant",
     "maker": "General Industrial",
     "brand": "GI",
     "plant_type": "fission",
@@ -346,19 +361,20 @@
     "mass": 1.8,
     "volume": 2.6,
     "power_generation": 34.0,
-    "fuel_consumption": 0.11,
+    "fuel_consumption": 0.0275,
     "cost": 1900,
-    "description": "Industrial-grade output for hulls that outgrew the PP-18 but not the budget.",
+    "description": "The PP-40 from GI. Fission power for heavy users.",
     "signature": {
       "thermal": 6.72,
       "gravitational": 0.45,
       "electromagnetic": 4.54,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gi_utility_fusion_55",
-    "name": "GI Utility Fusion 55",
+    "name": "GI Utility 55 Power Plant",
     "maker": "General Industrial",
     "brand": "GI",
     "plant_type": "fusion",
@@ -367,19 +383,20 @@
     "mass": 2.6,
     "volume": 3.6,
     "power_generation": 52.0,
-    "fuel_consumption": 0.13,
+    "fuel_consumption": 0.0144,
     "cost": 3100,
-    "description": "GI sells everything everyone needs. This is their fusion line \u2014 no frills, all megawatts.",
+    "description": "The Utility 55 from GI. Industrial strength fusion power generation.",
     "signature": {
       "thermal": 6.12,
       "gravitational": 0.65,
       "electromagnetic": 4.6,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gz_pearl_river_35",
-    "name": "Pearl River 35",
+    "name": "Pearl River Type 35 Power",
     "maker": "Guangzhou Mercantile",
     "brand": "Pearl River",
     "plant_type": "fission",
@@ -388,19 +405,20 @@
     "mass": 2.6,
     "volume": 3.6,
     "power_generation": 34.0,
-    "fuel_consumption": 0.16,
+    "fuel_consumption": 0.04,
     "cost": 1500,
-    "description": "Pearl River fission \u2014 merchant-house rebadge, rim-world price.",
+    "description": "Pearl River fission power. Fit the Type 35 today.",
     "signature": {
       "thermal": 6.72,
       "gravitational": 0.65,
       "electromagnetic": 4.54,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "gz_trade_plant",
-    "name": "GM Trade Plant",
+    "name": "GM TradePlant PowerCell",
     "maker": "Guangzhou Mercantile",
     "brand": "GM",
     "plant_type": "radioisotope",
@@ -411,7 +429,7 @@
     "power_generation": 6.0,
     "fuel_consumption": 0.0,
     "cost": 550,
-    "description": "Rebadged decay heat from the trade desk. Six megawatts of courtesy power.",
+    "description": "The GM TradePlant: compact and efficiently.",
     "signature": {
       "thermal": 1.74,
       "gravitational": 0.35,
@@ -430,19 +448,20 @@
     "mass": 2.2,
     "volume": 3.0,
     "power_generation": 58.0,
-    "fuel_consumption": 0.14,
+    "fuel_consumption": 0.035,
     "cost": 3900,
-    "description": "Catalog-number industrial fission. Still on the price list because someone keeps ordering them.",
+    "description": "Plant 60 uses the HW cutting edge engineering to deliver industrial quality fission power for all your shipboard needs.",
     "signature": {
       "thermal": 8.64,
       "gravitational": 0.55,
       "electromagnetic": 5.98,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "hw_helios_arc_9",
-    "name": "Helios Arc 9",
+    "name": "Helios Arc 9 Fusion",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "plant_type": "fusion",
@@ -451,19 +470,20 @@
     "mass": 1.4,
     "volume": 2.0,
     "power_generation": 48.0,
-    "fuel_consumption": 0.1,
+    "fuel_consumption": 0.0111,
     "cost": 4200,
-    "description": "Nine-arc containment for pilots who want headline numbers and don't read the fine print.",
+    "description": "Get headline fusion power numbers from Helios with the great looking and hard working Arc 9 Fusion plant.",
     "signature": {
       "thermal": 5.88,
       "gravitational": 0.35,
       "electromagnetic": 4.4,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "hw_helios_compact_40",
-    "name": "Helios Compact 40",
+    "name": "Helios Compact 40 Fusion",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "plant_type": "fusion",
@@ -472,19 +492,20 @@
     "mass": 1.1,
     "volume": 1.8,
     "power_generation": 32.0,
-    "fuel_consumption": 0.08,
+    "fuel_consumption": 0.0089,
     "cost": 2600,
-    "description": "Sport-fusion in a package that fits where older fission plants used to live.",
+    "description": "Fit the best compact fusion power solution on the market, the Compact 40 from Helios..",
     "signature": {
       "thermal": 4.92,
       "gravitational": 0.28,
       "electromagnetic": 3.6,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "hw_helios_ember",
-    "name": "Helios Ember",
+    "name": "Helios Ember Radioisotope",
     "maker": "Holt-Winters Corp",
     "brand": "Helios",
     "plant_type": "radioisotope",
@@ -495,7 +516,7 @@
     "power_generation": 9.0,
     "fuel_consumption": 0.0,
     "cost": 1800,
-    "description": "Always-on decay heat for dockside yachts and auxiliary bays. No refuelling \u2014 ever.",
+    "description": "Take your shipboard power generation to the next level with the tiny Helios Ember radioisotope plant.",
     "signature": {
       "thermal": 1.86,
       "gravitational": 0.23,
@@ -514,19 +535,20 @@
     "mass": 1.6,
     "volume": 2.4,
     "power_generation": 30.0,
-    "fuel_consumption": 0.1,
+    "fuel_consumption": 0.025,
     "cost": 1600,
-    "description": "Field-rated fission for ag haulers and frontier runners. Dust doesn't scare it.",
+    "description": "Field-rated fission for heavy haulers. Choose the Combine Power Fieldplant 30.",
     "signature": {
       "thermal": 6.4,
       "gravitational": 0.4,
       "electromagnetic": 4.3,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "oc_red_dirt_70",
-    "name": "OC Red Dirt 70",
+    "name": "OC Red Dirt Fission70",
     "maker": "Oklahoma Combine",
     "brand": "OC",
     "plant_type": "fission",
@@ -535,19 +557,20 @@
     "mass": 3.4,
     "volume": 4.4,
     "power_generation": 64.0,
-    "fuel_consumption": 0.19,
+    "fuel_consumption": 0.0475,
     "cost": 3100,
-    "description": "Seventy megawatts of prairie pragmatism. Thirsty, heavy, and still running on rim routes.",
+    "description": "Heavy fission generation for demanding pilots. Choose the OC Fission70.",
     "signature": {
       "thermal": 9.12,
       "gravitational": 0.85,
       "electromagnetic": 6.34,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "oc_workhorse_dynamo",
-    "name": "Workhorse Dynamo",
+    "name": "Workhorse Dynamo Fission",
     "maker": "Oklahoma Combine",
     "brand": "Workhorse",
     "plant_type": "fission",
@@ -556,19 +579,20 @@
     "mass": 2.0,
     "volume": 2.8,
     "power_generation": 42.0,
-    "fuel_consumption": 0.12,
+    "fuel_consumption": 0.03,
     "cost": 2400,
-    "description": "The name says it. Combine Power's mid-range answer to 'will it start Monday?'",
+    "description": "Rugged fission generation for busy operators. Choose the Workhorse Dynamo.",
     "signature": {
       "thermal": 7.36,
       "gravitational": 0.5,
       "electromagnetic": 5.02,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ora_ap_56",
-    "name": "Orion AP-56",
+    "name": "Orion AP-56 Fusion Plant",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "plant_type": "fusion",
@@ -577,19 +601,20 @@
     "mass": 2.1,
     "volume": 2.8,
     "power_generation": 54.0,
-    "fuel_consumption": 0.11,
+    "fuel_consumption": 0.0122,
     "cost": 4100,
-    "description": "Advanced-plant fusion for customers who spec the AP-series from new.",
+    "description": "The heavy Orion AP-56 Fusion. Plug it in today.",
     "signature": {
       "thermal": 6.24,
       "gravitational": 0.53,
       "electromagnetic": 4.7,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ora_mainplant_40",
-    "name": "Orion Mainplant 40",
+    "name": "Orion Mainplant 40 Fission",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "plant_type": "fission",
@@ -598,19 +623,20 @@
     "mass": 1.7,
     "volume": 2.4,
     "power_generation": 38.0,
-    "fuel_consumption": 0.1,
+    "fuel_consumption": 0.025,
     "cost": 2500,
-    "description": "Main-line plant for medium hulls leaving an Orion service bay.",
+    "description": "The efficient Orion Mainplant 40. Plug it in today.",
     "signature": {
       "thermal": 7.04,
       "gravitational": 0.42,
       "electromagnetic": 4.78,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "ora_yardfit_24",
-    "name": "Orion YardFit 24",
+    "name": "Orion YardFit 24 Fission",
     "maker": "Orion Aerospace",
     "brand": "Orion",
     "plant_type": "fission",
@@ -619,19 +645,20 @@
     "mass": 1.3,
     "volume": 2.0,
     "power_generation": 24.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.0225,
     "cost": 1700,
-    "description": "OEM fission matched to Orion yard schedules. Fits first time, every time.",
+    "description": "The compact Orion YardFit 24. Plug it in today.",
     "signature": {
       "thermal": 5.92,
       "gravitational": 0.33,
       "electromagnetic": 3.94,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "prv_energy_deepwell",
-    "name": "PRV Energy Deepwell",
+    "name": "PRV Energy Deepwell Cell",
     "maker": "ParaRamcoVidia",
     "brand": "PRV Energy",
     "plant_type": "fission",
@@ -640,19 +667,20 @@
     "mass": 3.2,
     "volume": 4.2,
     "power_generation": 64.0,
-    "fuel_consumption": 0.18,
+    "fuel_consumption": 0.045,
     "cost": 4400,
-    "description": "Deepwell-rated core for stations and heavy freighters that can't afford downtime.",
+    "description": "The Deepwell - a big plant for pilots with big dreams! Light up your ride with PRV Energy.",
     "signature": {
       "thermal": 9.12,
       "gravitational": 0.8,
       "electromagnetic": 6.34,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "prv_energy_series_7",
-    "name": "PRV Energy Series 7",
+    "name": "PRV Energy Series 7 Cell",
     "maker": "ParaRamcoVidia",
     "brand": "PRV Energy",
     "plant_type": "fission",
@@ -661,19 +689,20 @@
     "mass": 2.0,
     "volume": 2.8,
     "power_generation": 50.0,
-    "fuel_consumption": 0.12,
+    "fuel_consumption": 0.03,
     "cost": 3200,
-    "description": "Big-fission workhorse from the energy division. Boring, dependable, everywhere.",
+    "description": "The Series 7 - more than enough juice for your orbital gear! Light up your ride with PRV Energy.",
     "signature": {
       "thermal": 8.0,
       "gravitational": 0.5,
       "electromagnetic": 5.5,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "prv_voltcore_x3",
-    "name": "VoltCore X3",
+    "name": "VoltCore X3 Cell",
     "maker": "ParaRamcoVidia",
     "brand": "VoltCore",
     "plant_type": "fusion",
@@ -682,19 +711,20 @@
     "mass": 0.95,
     "volume": 1.5,
     "power_generation": 28.0,
-    "fuel_consumption": 0.08,
+    "fuel_consumption": 0.0089,
     "cost": 2800,
-    "description": "Consumer fusion with the VoltCore badge. Plugs into most light hulls without a yard visit.",
+    "description": "If you need power in a small package, grab the VoltCore X3. It really packs a punch!",
     "signature": {
       "thermal": 4.68,
       "gravitational": 0.24,
       "electromagnetic": 3.4,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "prv_voltcore_x7",
-    "name": "VoltCore X7",
+    "name": "VoltCore X7 Cell",
     "maker": "ParaRamcoVidia",
     "brand": "VoltCore",
     "plant_type": "fusion",
@@ -703,19 +733,20 @@
     "mass": 1.2,
     "volume": 2.0,
     "power_generation": 40.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.01,
     "cost": 3600,
-    "description": "The X7 line \u2014 more output, same glossy brochure photography.",
+    "description": "Biggest power needs and smallest space? No problem for the VoltCore X7. It really packs a punch!",
     "signature": {
       "thermal": 5.4,
       "gravitational": 0.3,
       "electromagnetic": 4.0,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "pt_courtesy_38",
-    "name": "PT Courtesy 38",
+    "name": "PT Courtesy 38 Fission",
     "maker": "Pacific Triad",
     "brand": "PT",
     "plant_type": "fission",
@@ -724,15 +755,16 @@
     "mass": 2.5,
     "volume": 3.4,
     "power_generation": 38.0,
-    "fuel_consumption": 0.17,
+    "fuel_consumption": 0.0425,
     "cost": 1800,
-    "description": "Triad fission for operators who buy on relationship, not spec sheets.",
+    "description": "Efficient fission power generation. The Courtesy 38. PT delivers.",
     "signature": {
       "thermal": 7.04,
       "gravitational": 0.62,
       "electromagnetic": 4.78,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "pt_house_plant",
@@ -747,7 +779,7 @@
     "power_generation": 8.0,
     "fuel_consumption": 0.0,
     "cost": 899,
-    "description": "Courtesy decay heat for rim family ships between proper refits.",
+    "description": "Compact decay power generation. The House. Pacific delivers.",
     "signature": {
       "thermal": 1.82,
       "gravitational": 0.4,
@@ -757,7 +789,7 @@
   },
   {
     "id": "roth_energie_12",
-    "name": "Roth Energie 12",
+    "name": "Roth Energie 12 Plant",
     "maker": "House of Roth",
     "brand": "Roth Energie",
     "plant_type": "fission",
@@ -766,19 +798,20 @@
     "mass": 1.4,
     "volume": 2.0,
     "power_generation": 30.0,
-    "fuel_consumption": 0.08,
+    "fuel_consumption": 0.02,
     "cost": 2599,
-    "description": "Discreet fission with Roth fuel efficiency. Old money, low burn.",
+    "description": "Roth Energie presents the Energie 12, a refined and efficient fission power generation solution for pilots with class.",
     "signature": {
       "thermal": 6.4,
       "gravitational": 0.35,
       "electromagnetic": 4.3,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "roth_prive_continental",
-    "name": "Roth Priv\u00e9 Continental",
+    "name": "Roth Priv\u00e9 Continental Plant",
     "maker": "House of Roth",
     "brand": "Roth Energie",
     "plant_type": "fusion",
@@ -787,19 +820,20 @@
     "mass": 1.8,
     "volume": 2.4,
     "power_generation": 46.0,
-    "fuel_consumption": 0.07,
+    "fuel_consumption": 0.0078,
     "cost": 5200,
-    "description": "Continental fusion for owners who measure status in megawatts per tonne.",
+    "description": "Roth Energie presents the Priv\u00e9 Continental, the definitive fusion power solution for pilots who demand the best.",
     "signature": {
       "thermal": 5.76,
       "gravitational": 0.45,
       "electromagnetic": 4.3,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "sakuraya_asahi_plant",
-    "name": "Shinise Asahi Plant",
+    "name": "Shinise Asahi 38 Plant",
     "maker": "Sakuraya Shinise",
     "brand": "Sakuraya",
     "plant_type": "fusion",
@@ -808,19 +842,20 @@
     "mass": 1.6,
     "volume": 2.4,
     "power_generation": 38.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.01,
     "cost": 3700,
-    "description": "Morning-light fusion. Sakuraya's careful step into advanced plants.",
+    "description": "Sakuraya recommends the Asahi 38, an educated choice for fusion power generation.",
     "signature": {
       "thermal": 5.28,
       "gravitational": 0.4,
       "electromagnetic": 3.9,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "sakuraya_wakaba",
-    "name": "Sakuraya Wakaba",
+    "name": "Sakuraya Wakaba 24 Plant",
     "maker": "Sakuraya Shinise",
     "brand": "Sakuraya",
     "plant_type": "fission",
@@ -829,19 +864,20 @@
     "mass": 1.1,
     "volume": 1.8,
     "power_generation": 24.0,
-    "fuel_consumption": 0.08,
+    "fuel_consumption": 0.02,
     "cost": 2200,
-    "description": "Traditional fission in a refined envelope. Wakaba \u2014 young leaf \u2014 for cautious operators.",
+    "description": "Sakuraya recommends the Wakaba 24, a discerning choice for fission power generation.",
     "signature": {
       "thermal": 5.92,
       "gravitational": 0.28,
       "electromagnetic": 3.94,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "sbi_campana_fusion",
-    "name": "Campana Fusion",
+    "name": "Campana Fusion5 Generator",
     "maker": "Seven Bells Inc",
     "brand": "Campana",
     "plant_type": "fusion",
@@ -850,19 +886,20 @@
     "mass": 1.9,
     "volume": 2.6,
     "power_generation": 44.0,
-    "fuel_consumption": 0.11,
+    "fuel_consumption": 0.0122,
     "cost": 3300,
-    "description": "Seven Bells' fusion experiment \u2014 named after a bell that never sold.",
+    "description": "Campana Fusion5. All the power you need.",
     "signature": {
       "thermal": 5.64,
       "gravitational": 0.47,
       "electromagnetic": 4.2,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "sbi_peal_7",
-    "name": "Seven Bells Peal 7",
+    "name": "SBI Peal 7 Generator",
     "maker": "Seven Bells Inc",
     "brand": "Peal",
     "plant_type": "radioisotope",
@@ -873,7 +910,7 @@
     "power_generation": 12.0,
     "fuel_consumption": 0.0,
     "cost": 2400,
-    "description": "Always-on decay heat from the signaling heritage division. Rings reliably for decades.",
+    "description": "Peal 7 from SBI. Power for ages.",
     "signature": {
       "thermal": 1.98,
       "gravitational": 0.4,
@@ -894,7 +931,7 @@
     "power_generation": 8.0,
     "fuel_consumption": 0.0,
     "cost": 950,
-    "description": "Cheap always-on power from Tukey's surplus channel. Handy until you need weapons.",
+    "description": "Cheap always-on power from Tukey - it won't let you down.",
     "signature": {
       "thermal": 1.82,
       "gravitational": 0.35,
@@ -904,7 +941,7 @@
   },
   {
     "id": "te_lot_14_special",
-    "name": "TE Lot 14 Special",
+    "name": "TE Lot 14 SpecialPlant",
     "maker": "Tukey Enterprises",
     "brand": "Tukey",
     "plant_type": "fission",
@@ -913,19 +950,20 @@
     "mass": 2.4,
     "volume": 3.2,
     "power_generation": 40.0,
-    "fuel_consumption": 0.17,
+    "fuel_consumption": 0.0425,
     "cost": 1600,
-    "description": "Warehouse lot special. Forty megawatts if you don't ask where it came from.",
+    "description": "Get the SpecialPlant from Tukey - you won't regret it.",
     "signature": {
       "thermal": 7.2,
       "gravitational": 0.6,
       "electromagnetic": 4.9,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "tmc_current_28",
-    "name": "Meridian Current 28",
+    "name": "Meridian Current 28 Power",
     "maker": "The Meridian Company",
     "brand": "Meridian Current",
     "plant_type": "fission",
@@ -934,19 +972,20 @@
     "mass": 1.5,
     "volume": 2.2,
     "power_generation": 28.0,
-    "fuel_consumption": 0.09,
+    "fuel_consumption": 0.0225,
     "cost": 1653,
-    "description": "Transit-rated fission. Unexciting, on schedule, everywhere Meridian ships dock.",
+    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturuer, choose the Meridian Current 28.",
     "signature": {
       "thermal": 6.24,
       "gravitational": 0.38,
       "electromagnetic": 4.18,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "tmc_transit_plant",
-    "name": "Meridian Transit Plant",
+    "name": "Meridian Transit Power Plant",
     "maker": "The Meridian Company",
     "brand": "Meridian Current",
     "plant_type": "fission",
@@ -955,19 +994,20 @@
     "mass": 2.0,
     "volume": 2.8,
     "power_generation": 40.0,
-    "fuel_consumption": 0.12,
+    "fuel_consumption": 0.03,
     "cost": 2700,
-    "description": "Heavier transit plant for corridor freighters and passenger runners.",
+    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturuer, choose the Meridian Transit.",
     "signature": {
       "thermal": 7.2,
       "gravitational": 0.5,
       "electromagnetic": 4.9,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "tni_strip_26",
-    "name": "TN Strip 26",
+    "name": "TN Strip 26 Fission Plant",
     "maker": "Terra Nova",
     "brand": "TN",
     "plant_type": "fission",
@@ -976,19 +1016,20 @@
     "mass": 1.7,
     "volume": 2.6,
     "power_generation": 26.0,
-    "fuel_consumption": 0.13,
+    "fuel_consumption": 0.0325,
     "cost": 1400,
-    "description": "Strip-mine spec fission. Optimised for uptime, not elegance.",
+    "description": "The TN Strip 26 offers the most reliable and best value-for-money power generation solution for any personal spaceship.",
     "signature": {
       "thermal": 6.08,
       "gravitational": 0.42,
       "electromagnetic": 4.06,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   },
   {
     "id": "tni_terracore_harvest_50",
-    "name": "TerraCore Harvest 50",
+    "name": "TerraCore Harvest 50 Fission Plant",
     "maker": "Terra Nova",
     "brand": "TerraCore",
     "plant_type": "fission",
@@ -997,14 +1038,15 @@
     "mass": 3.0,
     "volume": 4.0,
     "power_generation": 50.0,
-    "fuel_consumption": 0.18,
+    "fuel_consumption": 0.045,
     "cost": 2400,
-    "description": "Harvest-class plant for extraction fleets that treat planets as inventory.",
+    "description": "With TerraCore's legendary Harvest 50, you're getting the plant that serious pilots have relied on to power their transits for decades.",
     "signature": {
       "thermal": 8.0,
       "gravitational": 0.75,
       "electromagnetic": 5.5,
       "computational": 0.3
-    }
+    },
+    "fuel_capacity": 8
   }
 ]

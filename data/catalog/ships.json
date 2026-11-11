@@ -12,10 +12,10 @@
       "hw_helios_breath",
       "hw_glimmer_glance",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "cargo_bay_4",
       "hw_helios_light_laser",
-      "oc_section"
+      "oc_section",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -31,8 +31,8 @@
       "tmc_transit_solo",
       "hw_glimmer_glance",
       "vessel_registration_beacon",
-      "fuel_tank_small",
-      "cargo_bay_4"
+      "cargo_bay_4",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -48,9 +48,9 @@
       "hw_helios_lounge",
       "prv_lumina_sight",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "hw_helios_turbo_laser",
-      "sne_astrolabe"
+      "sne_astrolabe",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -67,11 +67,12 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "oc_river_md_light_magazine_200",
-      "fuel_tank_medium",
       "cargo_bay_10",
       "oc_chitanium_5mm",
       "oc_river_light_mass_driver",
-      "mdc_almanac"
+      "mdc_almanac",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -87,10 +88,11 @@
       "prv_vitacore_l",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "cargo_bay_10",
       "oc_chitanium_5mm",
-      "mdc_almanac"
+      "mdc_almanac",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -107,10 +109,11 @@
       "hg_hermes_circinus",
       "vessel_registration_beacon",
       "prv_ionique_plasma_magazine_100",
-      "fuel_tank_medium",
       "cargo_bay_4",
       "prv_ionique_plasma_cannon",
-      "sbi_sextant"
+      "sbi_sextant",
+      "ora_vault_tank_antimatter_4",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -126,9 +129,10 @@
       "gi_ls_4",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_large",
       "cargo_bay_20",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "atl_loadmaster_tank_hydrogen_120",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -144,9 +148,10 @@
       "tmc_transit_air",
       "prv_lumina_wellhead",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "hw_helios_light_laser",
-      "sbi_sextant"
+      "sbi_sextant",
+      "gi_yard_tank_hydrogen_40",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -162,10 +167,11 @@
       "tmc_transit_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
-      "hw_helios_turbo_laser"
+      "hw_helios_turbo_laser",
+      "gi_yard_tank_chemical_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -183,8 +189,9 @@
       "vessel_registration_beacon",
       "hw_helios_deflector",
       "prv_ionique_energy_shield",
-      "fuel_tank_medium",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -201,11 +208,12 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "ora_bellatrix_he_rocket_magazine_16",
-      "fuel_tank_medium",
       "cargo_bay_4",
       "oc_chitanium_5mm",
       "ora_bellatrix_rocket_launcher",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -221,7 +229,8 @@
       "gi_ls_4",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_small"
+      "gi_yard_tank_hydrogen_40",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -237,10 +246,11 @@
       "ora_yardfit_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "cargo_bay_10",
       "hw_helios_light_laser",
-      "mdc_almanac"
+      "mdc_almanac",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -256,10 +266,11 @@
       "ora_cabin_a20",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "cargo_bay_4",
       "hw_helios_light_laser",
-      "mdc_almanac"
+      "mdc_almanac",
+      "ora_vault_tank_antimatter_4",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -275,9 +286,10 @@
       "ora_cabin_a20",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "cargo_bay_4",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -294,9 +306,10 @@
       "hw_glimmer_ember",
       "vessel_registration_beacon",
       "go_brutus_scatter_magazine_24",
-      "fuel_tank_small",
       "go_brutus_scatter_cannon",
-      "mdc_almanac"
+      "mdc_almanac",
+      "ora_vault_tank_antimatter_2",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -313,11 +326,12 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "go_brutus_scatter_magazine_24",
-      "fuel_tank_large",
       "hw_helios_chitanium_10mm",
       "hw_helios_deflector",
       "go_brutus_scatter_cannon",
-      "mdc_almanac"
+      "mdc_almanac",
+      "ora_vault_tank_antimatter_6",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -334,11 +348,11 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "ora_bellatrix_he_rocket_magazine_3",
-      "fuel_tank_large",
       "cargo_bay_10",
       "oc_chitanium_5mm",
       "ora_bellatrix_rocket_launcher",
-      "mdc_almanac"
+      "mdc_almanac",
+      "atl_loadmaster_tank_fusion_120"
     ]
   },
   {
@@ -354,9 +368,9 @@
       "oc_workhorse_lungs",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_large",
       "cargo_bay_10",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "atl_loadmaster_tank_fusion_120"
     ]
   },
   {
@@ -372,12 +386,12 @@
       "oc_workhorse_lungs",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_large",
       "merc_lark_survey",
       "ca_convoy_screen",
       "bio_vial_sample",
       "go_hornet_bay",
-      "mdc_almanac"
+      "mdc_almanac",
+      "atl_loadmaster_tank_fusion_120"
     ]
   },
   {
@@ -393,9 +407,10 @@
       "ora_glasspack_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_fusion_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -412,9 +427,10 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "hyperdrive_alpha",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_fusion_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -432,11 +448,11 @@
       "vessel_registration_beacon",
       "hyperdrive_alpha",
       "prv_ionique_plasma_magazine_50",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
       "chi_chimera_plasma_burst",
-      "sbi_sextant"
+      "sbi_sextant",
+      "ora_vault_tank_antimatter_4"
     ]
   },
   {
@@ -452,10 +468,11 @@
       "te_handy_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "cargo_bay_4",
       "hw_helios_light_laser",
-      "mdc_almanac"
+      "mdc_almanac",
+      "gi_yard_tank_chemical_40",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -471,10 +488,11 @@
       "tmc_transit_air",
       "hg_hermes_circinus",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "cargo_bay_4",
       "hw_helios_light_laser",
-      "sbi_sextant"
+      "sbi_sextant",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -491,11 +509,11 @@
       "hg_hermes_circinus",
       "vessel_registration_beacon",
       "oc_river_md_light_magazine_100",
-      "fuel_tank_medium",
       "cargo_bay_4",
       "hw_helios_light_laser",
       "oc_river_light_mass_driver",
-      "sbi_sextant"
+      "sbi_sextant",
+      "gi_yard_tank_reaction_mass_80"
     ]
   },
   {
@@ -512,13 +530,14 @@
       "hg_hermes_circinus",
       "vessel_registration_beacon",
       "sne_astrolabe",
-      "fuel_tank_medium",
       "hw_helios_chitanium_10mm",
       "hw_helios_light_laser",
       "oc_river_light_mass_driver",
       "oc_river_md_light_magazine_100",
       "hw_helios_deflector",
-      "hw_helios_guard_pd"
+      "hw_helios_guard_pd",
+      "ora_vault_tank_antimatter_4",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -534,8 +553,8 @@
       "te_handy_air",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
-      "cargo_bay_10"
+      "cargo_bay_10",
+      "gi_yard_tank_hydrogen_80"
     ]
   },
   {
@@ -551,8 +570,9 @@
       "tmc_transit_air",
       "hg_hermes_circinus",
       "vessel_registration_beacon",
-      "fuel_tank_small",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_40",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -569,11 +589,11 @@
       "hg_hermes_circinus",
       "vessel_registration_beacon",
       "oc_river_md_light_magazine_200",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_turbo_laser",
       "oc_river_light_mass_driver",
-      "sbi_sextant"
+      "sbi_sextant",
+      "gi_yard_tank_hydrogen_80"
     ]
   },
   {
@@ -590,10 +610,11 @@
       "hg_hermes_n6",
       "vessel_registration_beacon",
       "oc_river_md_light_magazine_200",
-      "fuel_tank_small",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
-      "oc_river_light_mass_driver"
+      "oc_river_light_mass_driver",
+      "gi_yard_tank_hydrogen_40",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -609,10 +630,11 @@
       "oc_red_dirt_recycle",
       "hg_hermes_circinus",
       "vessel_registration_beacon",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_turbo_laser",
-      "ora_bellatrix_pd"
+      "ora_bellatrix_pd",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fission_40"
     ]
   },
   {
@@ -628,8 +650,9 @@
       "prae_aegis_seat",
       "hg_hermes_n6",
       "vessel_registration_beacon",
-      "fuel_tank_small",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_40",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -645,9 +668,9 @@
       "prae_aegis_seat",
       "prv_lumina_sight",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "hw_helios_light_laser",
-      "hw_helios_turbo_laser"
+      "hw_helios_turbo_laser",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -663,10 +686,11 @@
       "prae_aegis_seat",
       "prv_lumina_sight",
       "vessel_registration_beacon",
-      "fuel_tank_small",
       "hw_helios_turbo_laser",
       "sne_snedeos_electronic_shield",
-      "sne_snedeos_cyberwall"
+      "sne_snedeos_cyberwall",
+      "ora_vault_tank_antimatter_2",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -684,7 +708,8 @@
       "vessel_registration_beacon",
       "prv_lumina_wellhead",
       "hw_glimmer_ember",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -704,7 +729,8 @@
       "hw_glimmer_ember",
       "hg_hermes_sideband",
       "prv_nexus_listen",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -725,7 +751,8 @@
       "hw_glimmer_ember",
       "hg_hermes_sideband",
       "prv_nexus_listen",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -744,8 +771,9 @@
       "prv_lumina_wellhead",
       "hw_glimmer_ember",
       "hg_hermes_sideband",
-      "fuel_tank_medium",
-      "cargo_bay_4"
+      "cargo_bay_4",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -765,9 +793,10 @@
       "hw_glimmer_ember",
       "hg_hermes_sideband",
       "ora_octant_plumb",
-      "fuel_tank_medium",
       "cargo_bay_4",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "gi_yard_tank_hydrogen_80",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -788,9 +817,10 @@
       "hg_hermes_sideband",
       "ora_octant_plumb",
       "prv_nexus_locus",
-      "fuel_tank_large",
       "cargo_bay_4",
-      "hw_helios_light_laser"
+      "hw_helios_light_laser",
+      "atl_loadmaster_tank_reaction_mass_120",
+      "gi_yard_tank_fusion_40"
     ]
   },
   {
@@ -811,10 +841,10 @@
       "hg_hermes_sideband",
       "ora_octant_plumb",
       "prv_nexus_locus",
-      "fuel_tank_medium",
       "oc_chitanium_5mm",
       "hw_helios_light_laser",
-      "hw_helios_turbo_laser"
+      "hw_helios_turbo_laser",
+      "gi_yard_tank_fusion_80"
     ]
   },
   {
@@ -825,14 +855,14 @@
     "chassis": "ave_chassis",
     "modules": [
       "te_knock_off_burner",
-      "fuel_tank_small",
       "te_handyplant",
       "te_handy_air",
       "te_handy_core",
       "vessel_registration_beacon",
       "hw_glimmer_ember",
       "oc_section",
-      "cargo_bay_4"
+      "cargo_bay_4",
+      "gi_yard_tank_chemical_40"
     ]
   },
   {
@@ -843,14 +873,14 @@
     "chassis": "ave_chassis",
     "modules": [
       "te_knock_off_burner",
-      "fuel_tank_small",
       "gz_trade_plant",
       "oc_red_dirt_recycle",
       "osc_spur_compact",
       "vessel_registration_beacon",
       "hw_glimmer_ember",
       "oc_section",
-      "gi_dry_hold_4"
+      "gi_dry_hold_4",
+      "gi_yard_tank_chemical_40"
     ]
   }
 ]

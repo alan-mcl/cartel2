@@ -233,6 +233,12 @@ static func format_stock_list_meta(category: String, data: Dictionary) -> String
 			if core_type.is_empty():
 				return ""
 			return "%s · %.0f CU" % [core_type.capitalize(), compute_cu]
+		"fuel":
+			var tank_fuel := str(data.get("fuel_type", ""))
+			var tank_cap := float(data.get("fuel_capacity", 0.0))
+			if tank_fuel.is_empty():
+				return ""
+			return "%s · %.0f" % [_format_fuel_type_label(tank_fuel), tank_cap]
 		"life_support":
 			var crew := float(data.get("life_support_capacity", 0.0))
 			var capabilities: Variant = data.get("capabilities", [])
@@ -352,7 +358,9 @@ static func _format_stat_row(row: Dictionary, value: Variant) -> String:
 	if bool(row.get("float", false)) or typeof(value) in [TYPE_FLOAT, TYPE_INT]:
 		return "%s: %s%s" % [label, _format_number(float(value)), suffix]
 	var text := str(value)
-	if key in ["plant_type", "core_type", "engine_type", "weapon_type", "delivery_type", "shield_type"]:
+	if key == "fuel_type":
+		text = _format_fuel_type_label(text)
+	elif key in ["plant_type", "core_type", "engine_type", "weapon_type", "delivery_type", "shield_type"]:
 		text = _format_type_label(key, text)
 	return "%s: %s%s" % [label, text, suffix]
 
@@ -365,6 +373,14 @@ static func _identity_label(key: String) -> String:
 
 static func format_engine_type(value: String) -> String:
 	return _format_type_label("engine_type", value)
+
+
+static func _format_fuel_type_label(value: String) -> String:
+	match value:
+		"reaction_mass":
+			return "Reaction mass"
+		_:
+			return value.capitalize()
 
 
 static func _format_type_label(key: String, value: String) -> String:

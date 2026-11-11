@@ -5,12 +5,16 @@ extends RefCounted
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	_test_capacity(runner, catalog)
-	_test_antimatter_tank_scale(runner, catalog)
+	_test_typed_tanks(runner, catalog)
+	_test_antimatter_tank(runner, catalog)
 	_test_gravitic_no_fuel(runner, catalog)
 	_test_consumption(runner, catalog)
+	_test_fission_plant_burn(runner, catalog)
+	_test_shared_fusion_pool(runner, catalog)
 	_test_prices(runner, catalog)
 	_test_save_migration(runner, catalog)
 	_test_mid_refill_within_used_price(runner, catalog)
+	_test_roster_reactor_storage(runner, catalog)
 
 
 static func _test_capacity(runner: TestRunner, catalog: Catalog) -> void:
@@ -19,7 +23,7 @@ static func _test_capacity(runner: TestRunner, catalog: Catalog) -> void:
 	ship.chassis_id = "pegasus_chassis"
 	ship.modules = [
 		{"slot": "main_engine_1", "module_id": "ac_altiplano_burn"},
-		{"slot": "other_1", "module_id": "fuel_tank_small"},
+		{"slot": "other_1", "module_id": "gi_yard_tank_chemical_40"},
 	]
 	OwnedShip.finalize_loaded_ship(ship, catalog)
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
@@ -30,24 +34,48 @@ static func _test_capacity(runner: TestRunner, catalog: Catalog) -> void:
 	)
 
 
-static func _test_antimatter_tank_scale(runner: TestRunner, catalog: Catalog) -> void:
+static func _test_typed_tanks(runner: TestRunner, catalog: Catalog) -> void:
+	var ship := OwnedShip.new()
+	ship.id = "typed_tank"
+	ship.chassis_id = "pegasus_chassis"
+	ship.modules = [
+		{"slot": "main_engine_1", "module_id": "gi_ht_18"},
+		{"slot": "power_1", "module_id": "gi_pp_18"},
+		{"slot": "other_1", "module_id": "gi_yard_tank_fusion_40"},
+		{"slot": "other_2", "module_id": "gi_yard_tank_hydrogen_40"},
+	]
+	OwnedShip.finalize_loaded_ship(ship, catalog)
+	runner.check_eq(
+		ShipFuel.capacity_for_fuel(catalog, ship, "hydrogen"),
+		52.0,
+		"fuel: hydrogen tank counts for drive only"
+	)
+	runner.check_eq(
+		ShipFuel.capacity_for_fuel(catalog, ship, "fusion"),
+		0.0,
+		"fuel: fusion tank ignored for fission plant"
+	)
+	runner.check_eq(
+		ShipFuel.capacity_for_fuel(catalog, ship, "fission"),
+		8.0,
+		"fuel: fusion tank does not count toward fission bunker"
+	)
+
+
+static func _test_antimatter_tank(runner: TestRunner, catalog: Catalog) -> void:
 	var ship := OwnedShip.new()
 	ship.id = "antimatter_tank"
 	ship.chassis_id = "wolff_chassis"
 	ship.modules = [
 		{"slot": "main_engine_1", "module_id": "chi_fable_kiss"},
-		{"slot": "other_1", "module_id": "fuel_tank_small"},
+		{"slot": "other_1", "module_id": "ora_vault_tank_antimatter_2"},
 	]
 	OwnedShip.finalize_loaded_ship(ship, catalog)
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	var stored := float(assembled.capacities.get("fuel_capacity", 0.0))
 	runner.check(
 		absf(stored - 5.0) < 0.001,
-		"fuel: antimatter bunker plus scaled small tank is %.3f" % stored
-	)
-	runner.check(
-		absf(ShipFuel.active_capacity(catalog, ship) - stored) < 0.001,
-		"fuel: refuel capacity matches the assembled tank"
+		"fuel: antimatter bunker plus dedicated tank is %.3f" % stored
 	)
 
 
@@ -61,7 +89,7 @@ static func _test_gravitic_no_fuel(runner: TestRunner, catalog: Catalog) -> void
 	runner.check_eq(
 		float(assembled.capacities.get("fuel_capacity", 0.0)),
 		0.0,
-		"fuel: gravitic engine has no storage"
+		"fuel: gravitic engine has no propulsion storage"
 	)
 	runner.check(
 		not ShipFuel.propulsion_requires_fuel(assembled),
@@ -78,6 +106,7 @@ static func _test_consumption(runner: TestRunner, catalog: Catalog) -> void:
 		{"slot": "power_1", "module_id": "ac_cumbre_45"},
 	]
 	ShipFuel.set_amount(ship, "chemical", 50.0)
+	ShipFuel.set_amount(ship, "fission", 20.0)
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	var state := ShipOperations.tick(
 		catalog,
@@ -92,10 +121,65 @@ static func _test_consumption(runner: TestRunner, catalog: Catalog) -> void:
 		ShipFuel.get_amount(ship, "chemical") < 50.0,
 		"fuel: chemical store decreases"
 	)
+	runner.check(
+		ShipFuel.get_amount(ship, "fission") < 20.0,
+		"fuel: fission store decreases in flight"
+	)
+	runner.check(
+		ShipFuel.get_amount(ship, "hydrogen") == 0.0,
+		"fuel: unrelated chemistries untouched"
+	)
+
+
+static func _test_fission_plant_burn(runner: TestRunner, catalog: Catalog) -> void:
+	var ship := OwnedShip.new()
+	ship.id = "dry_plant"
+	ship.chassis_id = "juno_chassis"
+	ship.modules = [
+		{"slot": "main_engine_1", "module_id": "gi_ht_18"},
+		{"slot": "power_1", "module_id": "gi_pp_18"},
+	]
+	ShipFuel.set_amount(ship, "hydrogen", 40.0)
+	ShipFuel.set_amount(ship, "fission", 0.0)
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var state := ShipOperations.tick(
+		catalog,
+		assembled,
+		ship,
+		1.0,
+		{"thrust": false, "boost": false, "in_flight": true},
+		1
+	)
+	runner.check_eq(state.power_available, 0.0, "fuel: dry fission plant outputs no MW")
+
+
+static func _test_shared_fusion_pool(runner: TestRunner, catalog: Catalog) -> void:
+	var ship := OwnedShip.new()
+	ship.id = "fusion_share"
+	ship.chassis_id = "flare_on_chassis"
+	ship.modules = [
+		{"slot": "main_engine_1", "module_id": "hw_sundancer_compact"},
+		{"slot": "power_1", "module_id": "hw_helios_compact_40"},
+		{"slot": "other_1", "module_id": "gi_yard_tank_fusion_40"},
+	]
+	ShipFuel.set_amount(ship, "fusion", 5.0)
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
 	runner.check_eq(
-		ShipFuel.get_amount(ship, "hydrogen"),
-		0.0,
-		"fuel: power plant does not drain hydrogen store"
+		ShipFuel.capacity_for_fuel(catalog, ship, "fusion"),
+		54.0,
+		"fuel: shared fusion bunker plus tank"
+	)
+	ShipOperations.tick(
+		catalog,
+		assembled,
+		ship,
+		10.0,
+		{"thrust": true, "boost": false, "in_flight": true},
+		1
+	)
+	runner.check(
+		ShipFuel.get_amount(ship, "fusion") < 5.0,
+		"fuel: shared fusion pool burns under thrust"
 	)
 
 
@@ -115,6 +199,9 @@ static func _test_prices(runner: TestRunner, catalog: Catalog) -> void:
 	var p3 := FuelEconomy.price_for_sector(session, catalog, "proxima", "hydrogen")
 	runner.check(p3 >= 4 and p3 <= 10, "fuel: next day price still in bounds")
 	runner.check(day != CommodityEconomy.gst_day(session.gst_seconds), "fuel: day advanced for price test")
+
+	var fission_price := FuelEconomy.price_for_sector(session, catalog, "proxima", "fission")
+	runner.check(fission_price >= 6 and fission_price <= 16, "fuel: fission price within catalog bounds")
 
 
 static func _test_save_migration(runner: TestRunner, catalog: Catalog) -> void:
@@ -189,3 +276,26 @@ static func _test_mid_refill_within_used_price(runner: TestRunner, catalog: Cata
 			rate + 0.01 >= fusion_low,
 			"fuel: antimatter burn stays at least fusion's (%.2f vs %.2f)" % [rate, fusion_low]
 		)
+
+
+static func _test_roster_reactor_storage(runner: TestRunner, catalog: Catalog) -> void:
+	var checked := 0
+	for ship_id_variant in catalog.ships_by_id.keys():
+		var ship_id := str(ship_id_variant)
+		var ship_def := catalog.get_ship_def(ship_id)
+		var owned := OwnedShip.from_template(catalog, {
+			"id": ship_id,
+			"template_id": ship_id,
+			"chassis_id": ship_def.chassis,
+		})
+		var assembled := ShipAssembler.assemble_owned(catalog, owned)
+		var plant := assembled.get_power_module_def()
+		var plant_fuel := ShipFuel.fuel_id_for_plant(plant)
+		if plant_fuel.is_empty():
+			continue
+		runner.check(
+			ShipFuel.capacity_for_fuel(catalog, owned, plant_fuel) > 0.0,
+			"fuel: %s has reactor fuel storage" % ship_id
+		)
+		checked += 1
+	runner.check(checked >= 40, "fuel: reactor storage check covers fission and fusion templates")

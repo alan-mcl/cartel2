@@ -24,6 +24,7 @@ var _module_caches_ready: bool = false
 var has_transponder_installed: bool = false
 var has_active_sensor_package_installed: bool = false
 var propulsion_module: ModuleDef = null
+var power_module: ModuleDef = null
 var armour_module: ModuleDef = null
 
 
@@ -187,6 +188,12 @@ func get_propulsion_module_def() -> ModuleDef:
 	return propulsion_module
 
 
+func get_power_module_def() -> ModuleDef:
+	if not _module_caches_ready:
+		_rebuild_module_caches()
+	return power_module
+
+
 func get_armour_module_def() -> ModuleDef:
 	if not _module_caches_ready:
 		_rebuild_module_caches()
@@ -253,6 +260,15 @@ func _rebuild_module_caches() -> void:
 		var module_data: Variant = (entry_variant as Dictionary).get("data", null)
 		if module_data is ModuleDef:
 			propulsion_module = module_data
+			break
+
+	power_module = null
+	for entry_variant in modules_in_category("power"):
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var module_data: Variant = (entry_variant as Dictionary).get("data", null)
+		if module_data is ModuleDef:
+			power_module = module_data
 			break
 
 	armour_module = null

@@ -1255,9 +1255,12 @@ static func module_dominance_entries(ctx: Dictionary, include_signature: bool, c
 			var signature := def.signature.to_dict()
 			for channel in signature.keys():
 				low["signature_%s" % channel] = float(signature[channel])
+		var dominance_group := "%s|%s" % [def.category, "/".join(PackedStringArray(_sorted_mounts(def)))]
+		if def.category == "fuel" and not def.fuel_type.is_empty():
+			dominance_group = "fuel|%s" % def.fuel_type
 		entries.append({
 			"id": def.id,
-			"group": "%s|%s" % [def.category, "/".join(PackedStringArray(_sorted_mounts(def)))],
+			"group": dominance_group,
 			"cost": def.cost,
 			"high": metrics["high"],
 			"low": low,
