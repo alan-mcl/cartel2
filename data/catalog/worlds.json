@@ -2158,6 +2158,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/boreas_albedo.png",
 			"diameter": 2200,
 			"modulate": "#9aafc0",
 			"atmosphere_strength": 0.16
@@ -2248,6 +2249,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/calypso_vi_albedo.png",
 			"diameter": 1200,
 			"modulate": "#8a9aaa"
 		},
@@ -2354,6 +2356,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/hesper_albedo.png",
 			"diameter": 2800,
 			"modulate": "#7eb6d6"
 		},
@@ -2443,6 +2446,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/kestrel_albedo.png",
 			"diameter": 700,
 			"modulate": "#d7eef8"
 		},
