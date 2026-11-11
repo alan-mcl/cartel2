@@ -15,6 +15,8 @@ static func run(runner: TestRunner) -> void:
 	_test_vial_launch_far_lock(runner, catalog)
 	_test_vial_launch_no_lock(runner, catalog)
 	_test_save_migration_v6(runner, catalog)
+	_test_retrieval_type_sprites_distinct(runner, catalog)
+	_test_ambient_derelict_wreck_sprite(runner, catalog)
 
 
 static func _simulation() -> Simulation:
@@ -125,6 +127,10 @@ static func _test_cargo_grant_contact(runner: TestRunner, catalog: Catalog) -> v
 		if str(entity.get("id", "")) == contact_id:
 			found = true
 			runner.check_eq(str(entity.get("kind", "")), "cargo", "retrieval cargo: kind")
+			runner.check(
+				str(entity.get("sprite", "")).ends_with("time_capsule.svg"),
+				"retrieval cargo: sprite path"
+			)
 			break
 	runner.check(found, "retrieval cargo: entity id")
 
@@ -145,6 +151,10 @@ static func _test_drifting_ship_grant_contact(runner: TestRunner, catalog: Catal
 	runner.check(
 		not bool(scan_contact.get("broadcasting", true)),
 		"retrieval ship: not broadcasting"
+	)
+	runner.check(
+		str(scan_contact.get("sprite_path", "")).ends_with("drifting_ship.svg"),
+		"retrieval ship: sprite path"
 	)
 
 
@@ -360,3 +370,28 @@ static func _test_save_migration_v6(runner: TestRunner, catalog: Catalog) -> voi
 	missions.from_dict(migrated)
 	runner.check_eq(missions.bounties.accepted.size(), 1, "retrieval save: keeps bounty accepted")
 	runner.check(missions.retrievals.accepted.is_empty(), "retrieval save: empty retrieval accepted")
+
+
+static func _test_retrieval_type_sprites_distinct(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := RetrievalCharters.config(catalog)
+	var types: Dictionary = cfg.get("types", {})
+	var paths := {}
+	for type_key in types.keys():
+		var path := RetrievalCharters.sprite_for_type_key(catalog, str(type_key))
+		runner.check(not path.is_empty(), "retrieval sprite: %s has path" % type_key)
+		runner.check(not paths.has(path), "retrieval sprite: unique path for %s" % type_key)
+		paths[path] = true
+
+
+static func _test_ambient_derelict_wreck_sprite(runner: TestRunner, catalog: Catalog) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 99
+	var entity := VolatileSites._entity_for_kind(
+		"derelict", rng, catalog, Vector2(1000, 0), 0
+	)
+	var sprite := str(entity.get("sprite", ""))
+	runner.check(sprite.ends_with("derelict_wreck.svg"), "ambient derelict: wreck sprite")
+	runner.check(
+		not sprite.contains("ships/"),
+		"ambient derelict: not a chassis sprite"
+	)

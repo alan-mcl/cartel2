@@ -22,6 +22,19 @@ static func config(catalog: Catalog) -> Dictionary:
 	return catalog.get_retrieval_missions_config()
 
 
+static func sprite_for_type_key(catalog: Catalog, type_key: String) -> String:
+	if type_key.is_empty():
+		return ""
+	var types: Dictionary = config(catalog).get("types", {})
+	var type_def: Dictionary = types.get(type_key, {})
+	return str(type_def.get("sprite", ""))
+
+
+static func sprite_for_offer(catalog: Catalog, offer: Dictionary) -> String:
+	var type_key := str(offer.get("type_key", offer.get("designation_key", "")))
+	return sprite_for_type_key(catalog, type_key)
+
+
 static func board_seed(day: int, habitat_id: String, building_id: String, run_seed: int) -> int:
 	return int(hash("%d:%d:%s:%s:retrieval" % [run_seed, day, habitat_id, building_id]))
 
@@ -184,6 +197,7 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 	var cfg := config(catalog)
 	var target_kind := str(offer.get("target_kind", ""))
 	var specimen_label := str(offer.get("specimen_label", "Specimen"))
+	var specimen_sprite := sprite_for_offer(catalog, offer)
 	var id_token := "{{ID}}"
 	var contact_id := "retrieval_%s" % id_token
 	var setup := {
@@ -196,51 +210,55 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 
 	match target_kind:
 		"cargo":
-			VolatileSites.append_entity(
-				setup,
-				{
-					"id": contact_id,
-					"kind": "cargo",
-					"label": specimen_label,
-					"position": {"x": 3000.0, "y": 1100.0},
-					"rotation": 0.15,
-				}
-			)
+			var cargo_entity := {
+				"id": contact_id,
+				"kind": "cargo",
+				"label": specimen_label,
+				"position": {"x": 3000.0, "y": 1100.0},
+				"rotation": 0.15,
+			}
+			if not specimen_sprite.is_empty():
+				cargo_entity["sprite"] = specimen_sprite
+			VolatileSites.append_entity(setup, cargo_entity)
 		"debris":
-			VolatileSites.append_entity(
-				setup,
-				{
-					"id": contact_id,
-					"kind": "debris",
-					"position": {"x": 3200.0, "y": 900.0},
-					"rotation": 0.4,
-				}
-			)
+			var debris_entity := {
+				"id": contact_id,
+				"kind": "debris",
+				"label": specimen_label,
+				"position": {"x": 3200.0, "y": 900.0},
+				"rotation": 0.4,
+			}
+			if not specimen_sprite.is_empty():
+				debris_entity["sprite"] = specimen_sprite
+			VolatileSites.append_entity(setup, debris_entity)
 		"derelict":
-			VolatileSites.append_entity(
-				setup,
-				{
-					"id": contact_id,
-					"kind": "derelict",
-					"label": specimen_label,
-					"position": {"x": 3800.0, "y": -400.0},
-					"rotation": 0.9,
-				}
-			)
+			var derelict_entity := {
+				"id": contact_id,
+				"kind": "derelict",
+				"label": specimen_label,
+				"position": {"x": 3800.0, "y": -400.0},
+				"rotation": 0.9,
+			}
+			if not specimen_sprite.is_empty():
+				derelict_entity["sprite"] = specimen_sprite
+			VolatileSites.append_entity(setup, derelict_entity)
 		"marker":
-			VolatileSites.append_entity(
-				setup,
-				{
-					"id": contact_id,
-					"kind": "marker",
-					"variant": "survey",
-					"label": specimen_label,
-					"position": {"x": 2600.0, "y": 600.0},
-					"rotation": 0.0,
-				}
-			)
+			var marker_entity := {
+				"id": contact_id,
+				"kind": "marker",
+				"variant": "survey",
+				"label": specimen_label,
+				"position": {"x": 2600.0, "y": 600.0},
+				"rotation": 0.0,
+			}
+			if not specimen_sprite.is_empty():
+				marker_entity["sprite"] = specimen_sprite
+			VolatileSites.append_entity(setup, marker_entity)
 		"ship":
 			var ship_fields := _random_ship_scan_fields(catalog, str(offer.get("corporation_id", "")))
+			var hull_sprite := specimen_sprite
+			if hull_sprite.is_empty():
+				hull_sprite = str(ship_fields.get("sprite_path", ""))
 			setup["scan_contact"] = {
 				"id": contact_id,
 				"position": {"x": 4100.0, "y": 1200.0},
@@ -249,7 +267,7 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 				"chassis_name": ship_fields.get("chassis_name", ""),
 				"ship_mass": ship_fields.get("ship_mass", 8.0),
 				"live_signature": ship_fields.get("live_signature", SensorSystem.empty_signature()),
-				"sprite_path": ship_fields.get("sprite_path", ""),
+				"sprite_path": hull_sprite,
 				"registration": ship_fields.get("registration", ""),
 				"callsign": ship_fields.get("callsign", specimen_label),
 				"affiliation": ship_fields.get("affiliation", ""),

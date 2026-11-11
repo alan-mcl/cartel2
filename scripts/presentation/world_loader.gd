@@ -43,6 +43,7 @@ var _nav := WorldNav.new()
 var _nspace_field: NspaceField = null
 var _uses_translation_beacon: bool = false
 var _debris_entity_ids: Array[String] = []
+var _debris_entity_contact_meta: Dictionary = {}
 var _planet_diameter: float = 2000.0
 var _habitat_interactable_id: String = ""
 var _gate_interactable_id: String = ""
@@ -75,6 +76,7 @@ func clear_world(world_root: Node2D) -> void:
 	_nspace_field = null
 	_uses_translation_beacon = false
 	_debris_entity_ids.clear()
+	_debris_entity_contact_meta.clear()
 	_volatile_entity_contact_meta.clear()
 	_planet_diameter = 2000.0
 	_habitat_interactable_id = ""
@@ -1047,6 +1049,8 @@ func _spawn_entity(
 		spawned_by_id[entity_id] = instance
 		if kind == "debris":
 			_debris_entity_ids.append(entity_id)
+			if not entity_id.is_empty():
+				_debris_entity_contact_meta[entity_id] = entity.duplicate(true)
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
@@ -1086,6 +1090,9 @@ func _entry_position_from_setup(setup: Dictionary) -> Vector2:
 
 
 func _configure_debris(instance: Node2D, entity: Dictionary) -> void:
+	if instance.has_method("configure"):
+		instance.call("configure", entity)
+		return
 	var pos: Dictionary = entity.get("position", {})
 	instance.position = Vector2(float(pos.get("x", 0.0)), float(pos.get("y", 0.0)))
 

@@ -125,6 +125,23 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 | Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** | Tall spar |
 | Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
 | Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON; shootable catalog rocks |
+| Cargo container | `world/cargo_container.svg` | 72×56 | **72×56** | Intact container; volatile-site ambient cargo |
+| Nav buoy | `world/nav_buoy.svg` | 64×64 | **64×64** | Volatile marker variant `buoy` |
+| Survey cross | `world/survey_marker.svg` | 64×64 | **64×64** | Volatile marker variant `survey` (not retrieval probe) |
+| Proximity mine | `world/mine.svg` | (see scene) | **64×64** | Volatile mine entity |
+
+Retrieval and clutter identities (`world/retrieval/*.svg`, ~64–96 px). Listed in `retrieval_missions.json` `types[].sprite`; ambient derelicts use `derelict_wreck.svg`:
+
+| Asset | Path | POC (W×H) | Role |
+|-------|------|-----------|------|
+| Time capsule | `world/retrieval/time_capsule.svg` | 72×56 | Retrieval `time_capsule` |
+| Jettisoned cargo pod | `world/retrieval/jettisoned_cargo.svg` | 80×64 | Retrieval `jettisoned_cargo` |
+| Sealed lifepod | `world/retrieval/sealed_lifepod.svg` | 72×72 | Retrieval `sealed_lifepod` |
+| Asteroid sample | `world/retrieval/asteroid_sample.svg` | 80×72 | Retrieval `asteroid_sample` (debris kind) |
+| Derelict wreck | `world/retrieval/derelict_wreck.svg` | 96×72 | Ambient derelict + retrieval `derelict_wreck` |
+| Flight recorder | `world/retrieval/flight_recorder.svg` | 64×72 | Retrieval `flight_recorder` |
+| Survey probe | `world/retrieval/survey_probe.svg` | 72×80 | Retrieval `survey_probe` |
+| Drifting ship | `world/retrieval/drifting_ship.svg` | 96×64 | Inert hull retrieval `drifting_ship` |
 
 World entity `modulate` in JSON still tints some sprites today. For a clean SVG pipeline, author final colour in the file and set catalog `modulate` to `#ffffff` when replacing placeholders.
 

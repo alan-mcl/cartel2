@@ -12,7 +12,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |----|------|-----|------|
 |B1|med|terminal|Need to support partial re-arm/refuel|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
-|B11| art |high| need bespoke graphics for retrieval mission targets|
 
 ## Features
 

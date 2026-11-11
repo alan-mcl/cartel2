@@ -114,7 +114,9 @@ N-space transit backdrops are **shader-driven** ([n-space.md](../content/n-space
 | Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** |
 | Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** |
 
-**Not yet in catalog but present on disk** (for debris / props if wired later): `world/debris.svg`, `world/cargo_container.svg`, `world/mine.svg`, `world/nav_buoy.svg`, `world/survey_marker.svg`, `world/habitat.svg`, `world/jump_gate.svg` — refresh to sprite_sizes if used.
+**Retrieval clutter** (`world/retrieval/*.svg`) is catalogued in `retrieval_missions.json` and summarised in [sprite_sizes.md](sprite_sizes.md).
+
+**Not yet in catalog but present on disk**: `world/habitat.svg`, `world/jump_gate.svg` — refresh to sprite_sizes if used.
 
 New neighborhoods reuse Proxima habitat and generic orbitals today; **sector-specific** habitat or station silhouettes are a future art pass when worlds stop sharing sprites.
 

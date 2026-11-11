@@ -11,6 +11,7 @@ const ORBITAL_SPRITES: Array[String] = [
 ]
 
 const CARGO_SPRITE := "res://assets/world/cargo_container.svg"
+const DERELICT_WRECK_SPRITE := "res://assets/world/retrieval/derelict_wreck.svg"
 const MARKER_SPRITES := {
 	"buoy": "res://assets/world/nav_buoy.svg",
 	"survey": "res://assets/world/survey_marker.svg",
@@ -205,7 +206,10 @@ static func _entity_for_kind(
 			entity["sprite"] = ORBITAL_SPRITES[rng.randi_range(0, ORBITAL_SPRITES.size() - 1)]
 		"derelict":
 			entity["label"] = "Derelict"
-			entity["sprite"] = _pick_chassis_sprite(catalog, rng)
+			entity["sprite"] = DERELICT_WRECK_SPRITE
+		"debris":
+			entity["label"] = "Debris"
+			entity["sprite"] = "res://assets/world/debris.svg"
 		"cargo":
 			entity["label"] = "Cargo container"
 			entity["sprite"] = CARGO_SPRITE

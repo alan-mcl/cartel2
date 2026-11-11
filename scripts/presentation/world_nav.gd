@@ -339,9 +339,14 @@ func _build_debris_contacts(loader: WorldLoader) -> Array:
 		var health_ratio := 1.0
 		if debris_node.has_method("health_ratio"):
 			health_ratio = float(debris_node.call("health_ratio"))
+		var meta: Dictionary = loader._debris_entity_contact_meta.get(debris_id, {})
+		var label := str(meta.get("label", "Debris"))
+		var sprite_path := str(meta.get("sprite", DEBRIS_SPRITE))
+		if sprite_path.is_empty():
+			sprite_path = DEBRIS_SPRITE
 		var debris_contact := {
 			"id": debris_id,
-			"name": "Debris",
+			"name": label,
 			"short_label": "",
 			"contact_kind": "debris",
 			"position": debris_node.global_position,
@@ -349,7 +354,7 @@ func _build_debris_contacts(loader: WorldLoader) -> Array:
 			"debris_health_ratio": health_ratio,
 			"heading_rad": debris_node.global_rotation - PI * 0.5,
 		}
-		_merge_lock_display_fields(loader, debris_contact, DEBRIS_SPRITE)
+		_merge_lock_display_fields(loader, debris_contact, sprite_path)
 		contacts.append(debris_contact)
 	loader._debris_entity_ids = surviving_ids
 	return contacts
