@@ -16,6 +16,29 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_titania_angular_roll(runner, tree)
 	_test_sector_spawns(runner, tree)
 	_test_interchangeable_renderers(runner, tree)
+	_test_atmosphere_strength(runner)
+
+
+static func _test_atmosphere_strength(runner: TestRunner) -> void:
+	var catalog := Catalog.load_default()
+	runner.check(
+		absf(
+			PlanetBackdropScript.resolve_atmosphere_strength(catalog.get_world("proxima").get("planet", {}))
+			- PlanetBackdropScript.DEFAULT_ATMOSPHERE_STRENGTH
+		) < 0.001,
+		"atmosphere strength: proxima defaults to 0.42"
+	)
+	var acb2: Dictionary = catalog.get_world("acb2").get("planet", {})
+	runner.check(
+		absf(PlanetBackdropScript.resolve_atmosphere_strength(acb2)) < 0.001,
+		"atmosphere strength: acb2 airless is 0"
+	)
+	var new_ceres: Dictionary = catalog.get_world("new_ceres").get("planet", {})
+	runner.check(
+		PlanetBackdropScript.resolve_atmosphere_strength(new_ceres)
+		> PlanetBackdropScript.DEFAULT_ATMOSPHERE_STRENGTH,
+		"atmosphere strength: new_ceres above default"
+	)
 
 
 static func _test_parent_sun_direction_canvas(runner: TestRunner) -> void:

@@ -402,7 +402,7 @@ For every sector, `population_billions` must equal `surface_population_billions`
 
 3-space world rows in `worlds.json` may include optional **`planet`**, **`parent_body`**, and **`companion_stars`**. **`planet`** and **`parent_body`** share two render paths: **`textured`** (equirectangular **`PlanetBackdrop`**) and **`procedural`** (**`SkyParentBody`** disc and optional rings). Slot semantics are fixed — the local **`planet`** sits at the origin (`z_index -50`); **`parent_body`** sits on a visit-random sky bearing (`z_index -60`). Only the primary **`star`** block drives lighting. Companions reference `stars.json` by name and optional **`distance_au`**; disc size uses **`StarAppearance`**.
 
-**`planet.renderer`** — `textured` (default) or `procedural`. Textured rows use `diameter`, optional `albedo` / `night_lights`, and `modulate` on the fallback. Procedural rows require the same inline **`appearance`** and **`rings`** objects as **`parent_body`** (albedo paths ignored).
+**`planet.renderer`** — `textured` (default) or `procedural`. Textured rows use `diameter`, optional `albedo` / `night_lights`, and `modulate` on the fallback. Optional **`atmosphere_strength`** (0–2, default **0.42**) scales the fresnel limb haze on **`PlanetBackdrop`**; **0** disables it. Procedural rows require the same inline **`appearance`** and **`rings`** objects as **`parent_body`** (albedo paths ignored).
 
 **`parent_body`** — `name`, body **`type`**, `angular_diameter_deg_min` / `max`, and **`renderer`**: `procedural` (default) or `textured`. Procedural parents require **`appearance`** and **`rings`**. Textured parents require **`texture_sector`** (another `worlds.json` id whose **`planet.albedo`** is reused); they omit procedural appearance/rings.
 

@@ -410,6 +410,11 @@ def check_world_planet_renderer(world_id: str, world_data: dict, worlds: dict) -
             errors.append(f"{label}: procedural renderer requires rings")
         else:
             errors.extend(check_parent_body_rings(label, rings))
+    strength = planet.get("atmosphere_strength")
+    if strength is not None and (
+        not isinstance(strength, (int, float)) or float(strength) < 0 or float(strength) > 2
+    ):
+        errors.append(f"{label}: atmosphere_strength must be between 0 and 2")
     return errors
 
 

@@ -958,7 +958,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/acb1_albedo.png",
 			"diameter": 1600,
-			"modulate": "#c85830"
+			"modulate": "#c85830",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -1063,7 +1064,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/acb2_albedo.png",
 			"diameter": 1400,
-			"modulate": "#8a8078"
+			"modulate": "#8a8078",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -1204,7 +1206,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/acb3_albedo.png",
 			"diameter": 1200,
-			"modulate": "#a8c8e0"
+			"modulate": "#a8c8e0",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -1309,7 +1312,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/terminus_albedo.png",
 			"diameter": 2200,
-			"modulate": "#b0c0d8"
+			"modulate": "#b0c0d8",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -1636,7 +1640,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/denarius_ii_albedo.png",
 			"diameter": 1300,
-			"modulate": "#908878"
+			"modulate": "#908878",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -1781,7 +1786,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/typhon_xvi_albedo.png",
 			"diameter": 1350,
-			"modulate": "#787068"
+			"modulate": "#787068",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2061,8 +2067,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/aurelia_albedo.png",
 			"diameter": 1500,
-			"modulate": "#c4a574"
+			"modulate": "#c4a574",
+			"atmosphere_strength": 0.16
 		},
 		"entities": [
 			{
@@ -2151,7 +2159,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 2200,
-			"modulate": "#9aafc0"
+			"modulate": "#9aafc0",
+			"atmosphere_strength": 0.16
 		},
 		"entities": [
 			{
@@ -2613,7 +2622,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 2400,
-			"modulate": "#4a6850"
+			"modulate": "#4a6850",
+			"atmosphere_strength": 1.1
 		},
 		"entities": [
 			{
@@ -3115,7 +3125,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 1700,
-			"modulate": "#3a2820"
+			"modulate": "#3a2820",
+			"atmosphere_strength": 0.08
 		},
 		"entities": [
 			{
@@ -3714,7 +3725,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 1600,
-			"modulate": "#505850"
+			"modulate": "#505850",
+			"atmosphere_strength": 0.8
 		},
 		"entities": [
 			{
@@ -5503,7 +5515,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 1300,
-			"modulate": "#c4a070"
+			"modulate": "#c4a070",
+			"atmosphere_strength": 0.2
 		},
 		"companion_stars": [
 			{

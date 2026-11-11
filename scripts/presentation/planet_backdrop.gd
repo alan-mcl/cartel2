@@ -13,6 +13,7 @@ const STAR_NEAR_RADIUS := 7000.0
 const STAR_FAR_RADIUS := 12000.0
 const SUN_Z_NEAR := 0.55
 const SUN_Z_FAR := 0.0
+const DEFAULT_ATMOSPHERE_STRENGTH := 0.42
 
 var _viewport: SubViewport
 var _planet_root: Node3D
@@ -133,6 +134,10 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 	_material.set_shader_parameter("use_albedo_map", 0.0)
 	_material.set_shader_parameter("use_night_lights", 0.0)
 	_apply_optional_textures(planet_data)
+	_material.set_shader_parameter(
+		"atmosphere_strength",
+		resolve_atmosphere_strength(planet_data)
+	)
 	_material.set_shader_parameter("sun_intensity", 1.0)
 	_material.set_shader_parameter("display_exposure", PlanetExposure.display_exposure(1.0))
 	_material.set_shader_parameter("sun_color", Vector3(1.0, 0.98, 0.94))
@@ -176,6 +181,15 @@ func _apply_optional_textures(planet_data: Dictionary) -> void:
 			if night_tex != null:
 				_material.set_shader_parameter("night_lights", night_tex)
 				_material.set_shader_parameter("use_night_lights", 1.0)
+
+
+static func resolve_atmosphere_strength(planet_data: Dictionary) -> float:
+	if not planet_data.has("atmosphere_strength"):
+		return DEFAULT_ATMOSPHERE_STRENGTH
+	var value: Variant = planet_data.get("atmosphere_strength")
+	if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
+		return DEFAULT_ATMOSPHERE_STRENGTH
+	return clampf(float(value), 0.0, 2.0)
 
 
 ## Irradiance index at orbit: stellar luminosity in solar units divided by heliocentric distance squared.
