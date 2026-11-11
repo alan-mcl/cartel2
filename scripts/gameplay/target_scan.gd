@@ -86,7 +86,7 @@ static func _detail_rows(
 		"star":
 			return _star_detail_rows(catalog, contact)
 		"orbital":
-			return _orbital_detail_rows(contact)
+			return _orbital_detail_rows(session, catalog, contact)
 		"debris":
 			return _debris_detail_rows(contact)
 		"ascidian", _:
@@ -138,6 +138,11 @@ static func _landmark_detail_rows(
 		rows.append_array(_planet_setting_rows(session, catalog))
 		return rows
 
+	if role == "habitat":
+		rows.append_array(
+			_orbital_population_rows(session, catalog, contact)
+		)
+
 	var interactable_id := str(contact.get("interactable_id", ""))
 	if not interactable_id.is_empty():
 		var data := catalog.get_interactable(interactable_id)
@@ -172,8 +177,12 @@ static func _planet_setting_rows(session: GameSession, catalog: Catalog) -> Arra
 	var gravity := sector.gravity
 	if gravity > 0.0:
 		rows.append(_row("Gravity", "%.2f G" % gravity))
-	if sector.has_source_key("population_billions"):
-		rows.append(_row("Population", _format_population_billions(sector.population_billions)))
+	if sector.has_source_key("surface_population_billions"):
+		var surface_pop := sector.surface_population_billions
+		if surface_pop > 0.0:
+			rows.append(
+				_row("Population", _format_population_billions(surface_pop))
+			)
 	if sector.has_source_key("ocean_coverage"):
 		rows.append(_row("Ocean coverage", "%.0f%%" % (sector.ocean_coverage * 100.0)))
 	var climate := sector.climate.strip_edges()
@@ -212,12 +221,68 @@ static func _star_detail_rows(catalog: Catalog, contact: Dictionary) -> Array:
 	return rows
 
 
-static func _orbital_detail_rows(contact: Dictionary) -> Array:
+static func _orbital_detail_rows(
+	session: GameSession,
+	catalog: Catalog,
+	contact: Dictionary
+) -> Array:
+	var rows: Array = []
 	var sprite_path := str(contact.get("orbital_sprite", contact.get("sprite_path", "")))
 	var structure := _orbital_structure_label(sprite_path)
-	if structure.is_empty():
-		return []
-	return [_row("Structure", structure)]
+	if not structure.is_empty():
+		rows.append(_row("Structure", structure))
+	rows.append_array(_orbital_population_rows(session, catalog, contact))
+	return rows
+
+
+static func _orbital_population_rows(
+	session: GameSession,
+	catalog: Catalog,
+	contact: Dictionary
+) -> Array:
+	var rows: Array = []
+	if session == null or catalog == null:
+		return rows
+	var sector_id := str(session.world.sector_id)
+	if sector_id.is_empty() or VolatileTranslation.is_volatile_sector_id(sector_id):
+		return rows
+	var habitat_id := _habitat_id_for_scan(catalog, contact, sector_id)
+	if habitat_id.is_empty():
+		return rows
+	var habitat := catalog.get_habitat(habitat_id)
+	if habitat.is_empty() or not habitat.has("population_billions"):
+		return rows
+	var pop := float(habitat.get("population_billions", 0.0))
+	if pop <= 0.0:
+		return rows
+	rows.append(_row("Population", _format_population_billions(pop)))
+	return rows
+
+
+static func _habitat_id_for_scan(
+	catalog: Catalog,
+	contact: Dictionary,
+	sector_id: String
+) -> String:
+	var interactable_id := str(contact.get("interactable_id", "")).strip_edges()
+	if not interactable_id.is_empty():
+		var interactable := catalog.get_interactable(interactable_id)
+		var dock_id := str(interactable.get("dock_location_id", "")).strip_edges()
+		if not dock_id.is_empty() and not catalog.get_habitat(dock_id).is_empty():
+			return dock_id
+	var explicit := str(contact.get("habitat_id", "")).strip_edges()
+	if not explicit.is_empty() and not catalog.get_habitat(explicit).is_empty():
+		return explicit
+	if str(contact.get("landmark_role", "")) == "habitat" and not sector_id.is_empty():
+		for habitat_variant in catalog.list_habitat_dicts():
+			if typeof(habitat_variant) != TYPE_DICTIONARY:
+				continue
+			var habitat: Dictionary = habitat_variant
+			if str(habitat.get("sector_id", "")) != sector_id:
+				continue
+			if str(habitat.get("type", "")) == "habitat":
+				return str(habitat.get("id", ""))
+	return ""
 
 
 static func _debris_detail_rows(contact: Dictionary) -> Array:

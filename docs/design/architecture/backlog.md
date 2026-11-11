@@ -13,7 +13,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B11| art |high| need bespoke graphics for retrieval mission targets|
 |B12| ui | med|habitat buildings to be sorted alphabetically|
-|B13| data |med |Most outlying planets should have 0 population, the population all exists at the local habitats and stations in orbit. |
 |B14| system| med| Very close systems (e.g. Alecto) are rendered white - can we represent very hot world better? |
 
 ## Features

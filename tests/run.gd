@@ -63,6 +63,7 @@ func _unknown_suite_names(filter: Dictionary) -> PackedStringArray:
 func _suite_entries(runner: TestRunner) -> Array:
 	return [
 		{"name": "TestCatalog", "run": func() -> void: TestCatalog.run(runner)},
+		{"name": "TestPopulationSplit", "run": func() -> void: TestPopulationSplit.run(runner)},
 		{"name": "TestAudio", "run": func() -> void: TestAudio.run(runner)},
 		{"name": "TestUiRegistry", "run": func() -> void: TestUiRegistry.run(runner)},
 		{"name": "TestLibrary", "run": func() -> void: TestLibrary.run(runner)},

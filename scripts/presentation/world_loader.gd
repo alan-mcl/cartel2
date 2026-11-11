@@ -394,7 +394,7 @@ func _spawn_planetary_layout(
 	sector_id: String
 ) -> void:
 	var planet_data: Dictionary = world_data.get("planet", {})
-	var planet := _spawn_planet(world_root, planet_data)
+	var planet := _spawn_planet(world_root, planet_data, catalog, sector_id)
 	_spawn_orbital_station_layout(world_root, world_data, catalog, session, sector_id, planet)
 
 
@@ -430,12 +430,22 @@ func _spawn_orbital_station_layout(
 				_spawn_entity(world_root, entity_variant, catalog, session)
 
 
-func _spawn_planet(world_root: Node2D, planet_data: Dictionary) -> Node2D:
+func _spawn_planet(
+	world_root: Node2D,
+	planet_data: Dictionary,
+	catalog: Catalog,
+	sector_id: String
+) -> Node2D:
 	_planet_diameter = float(planet_data.get("diameter", 2000.0))
 	var planet := PlanetBackdropScript.new()
 	planet.name = "Planet"
 	world_root.add_child(planet)
-	planet.configure(planet_data, _sector_id)
+	var camps: Array = []
+	var sector := catalog.get_sector(sector_id)
+	var malls: Variant = sector.get("city_malls", [])
+	if typeof(malls) == TYPE_ARRAY:
+		camps = (malls as Array).duplicate()
+	planet.configure(planet_data, sector_id, camps)
 	spawned_by_id["planet"] = planet
 	return planet
 

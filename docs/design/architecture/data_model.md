@@ -393,7 +393,10 @@ Terminal and bar freight boards (`freight_offers_by_habitat` maps habitat → de
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `population_billions` | number | Drives traffic density (log-scaled fleet size) |
+| `population_billions` | number | Sector census total; drives traffic density, charter boards, and dealer lot sizing (log-scaled) |
+| `surface_population_billions` | number | Share of the sector total living on the world (`city_malls`, surface camps). Orbital share is on habitats and stations |
+
+For every sector, `population_billions` must equal `surface_population_billions` plus the sum of `population_billions` on `habitats.json` rows with that `sector_id` (±0.001 bn). `validate_catalog_refs.py` enforces the rule. Classified E-worlds keep ~96% on the surface and ~4% orbital (75% of orbital on the principal `habitat`, remainder split across `type: station` rows). Most outlying worlds set surface to 0; named settlement and extraction camps use a single `city_malls` entry when surface population is non-zero.
 
 ## Sectors, worlds, interactables, habitats
 
@@ -403,7 +406,7 @@ Terminal and bar freight boards (`freight_offers_by_habitat` maps habitat → de
 
 Each sector in `sectors.json` has an empty `mappings[]` in JSON; at load time `Catalog` synthesizes bidirectional mappings from `routes.json`. Each mapping includes `target`, `solution`, `n`, `label`, `friction`, `entry_seconds`, `exit_seconds`, and `time_jitter`. GST lumps use `friction × 240` seconds.
 
-`habitats.json` entries include `sector_id` for market quote lookup. Exchange buildings use `type: market`.
+`habitats.json` entries include `sector_id` for market quote lookup and optional `population_billions` (orbital share of the parent sector census). Exchange buildings use `type: market`.
 
 Each of the eleven E-world hubs lists exactly one `chassis_dealer` and one `ship_dealer`. Those buildings set `stock_source: "daily"` and omit `stock`. [`DealerStock`](../../../scripts/gameplay/dealer_stock.gd) samples a deterministic lot each GST day from the full chassis or ship catalog: count `round(fraction × pool size)` clamped to `[1, pool]`, where `fraction = 0.20 + 0.55 × (population_billions − 3.5) / (60 − 3.5)` using the habitat sector’s `population_billions` (Tycho → 20%, Proxima → 75%). Seeding matches charter boards (`run_seed`, day, habitat id, building id). Legacy static `stock` arrays on dealers are disallowed when `stock_source` is `daily`.
 

@@ -17,6 +17,7 @@
     "classification": { "type": "string", "default": "" },
     "gravity": { "type": "number", "default": 1.0 },
     "population_billions": { "type": "number", "default": 0.0 },
+    "surface_population_billions": { "type": "number", "default": 0.0 },
     "ocean_coverage": { "type": "number", "default": 0.0 },
     "climate": { "type": "string", "default": "" },
     "city_malls": { "type": "array", "items": { "type": "string" }, "default": [] },

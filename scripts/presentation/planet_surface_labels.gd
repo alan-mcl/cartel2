@@ -50,6 +50,30 @@ static func anchors_from_data(data: Variant) -> Array:
 	return anchors
 
 
+static func synthetic_anchors(sector_id: String, names: Array) -> Array:
+	var anchors: Array = []
+	for name_variant in names:
+		var anchor_name := str(name_variant).strip_edges()
+		if anchor_name.is_empty():
+			continue
+		var key := "%s:%s" % [sector_id, anchor_name]
+		var h := absi(key.hash())
+		var u := float(h % 10000) / 10000.0
+		var v := float((h / 10000) % 10000) / 10000.0
+		var theta := u * TAU
+		var phi := acos(clampf(2.0 * v - 1.0, -1.0, 1.0))
+		var local := Vector3(
+			sin(phi) * cos(theta),
+			cos(phi),
+			sin(phi) * sin(theta)
+		)
+		anchors.append({
+			"name": anchor_name,
+			"local": local,
+		})
+	return anchors
+
+
 static func project_offset(local: Vector3, pitch: float, yaw: float, diameter: float) -> Variant:
 	var facing := facing_direction(local, pitch, yaw)
 	if facing.z <= LIMB_Z:

@@ -190,6 +190,7 @@ Source: `data/catalog/schema/sectors.schema.json` → `sectors.json`
 | `classification` | string | no | `` |  |
 | `gravity` | number | no | `1.0` |  |
 | `population_billions` | number | no | `0.0` |  |
+| `surface_population_billions` | number | no | `0.0` |  |
 | `ocean_coverage` | number | no | `0.0` |  |
 | `climate` | string | no | `` |  |
 | `city_malls` | array | no | `[]` |  |

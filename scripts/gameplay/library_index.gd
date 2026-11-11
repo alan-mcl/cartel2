@@ -250,6 +250,26 @@ static func _world_detail(catalog: Catalog, sector_id: String) -> String:
 	_append_line(lines, "Climate", str(sector.get("climate", "")))
 	_append_float_line(lines, "Gravity", float(sector.get("gravity", 0.0)), " g")
 	_append_float_line(lines, "Population", float(sector.get("population_billions", 0.0)), " bn")
+	if sector.has("surface_population_billions"):
+		_append_float_line(
+			lines,
+			"Surface",
+			float(sector.get("surface_population_billions", 0.0)),
+			" bn"
+		)
+	for habitat_variant in catalog.list_habitat_dicts():
+		if typeof(habitat_variant) != TYPE_DICTIONARY:
+			continue
+		var habitat: Dictionary = habitat_variant
+		if str(habitat.get("sector_id", "")) != sector_id:
+			continue
+		if not habitat.has("population_billions"):
+			continue
+		var orbital_pop := float(habitat.get("population_billions", 0.0))
+		if orbital_pop <= 0.0:
+			continue
+		var habitat_name := str(habitat.get("name", habitat.get("id", "")))
+		_append_float_line(lines, "Orbital (%s)" % habitat_name, orbital_pop, " bn")
 	_append_float_line(lines, "Ocean coverage", float(sector.get("ocean_coverage", 0.0)), "")
 	var malls: Variant = sector.get("city_malls", [])
 	if typeof(malls) == TYPE_ARRAY and not (malls as Array).is_empty():

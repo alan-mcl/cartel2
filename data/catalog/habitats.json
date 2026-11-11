@@ -24,7 +24,8 @@
 		"name": "Proxima Habitat",
 		"sector_id": "proxima",
 		"short_desc": "Orbital city hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 1.8
 	},
 	{
 		"art": "res://assets/ui/locations/tycho_habitat.png",
@@ -49,7 +50,8 @@
 		"name": "Tycho Habitat",
 		"sector_id": "tycho",
 		"short_desc": "Industrial orbital above a restless, resource-rich world.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.105
 	},
 	{
 		"art": "res://assets/ui/locations/bela_orbital_habitat.png",
@@ -73,7 +75,8 @@
 		"name": "La Bella Vista Habitat",
 		"sector_id": "bela",
 		"short_desc": "Resort orbital city above La Bella Vista's warm oceans.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.6
 	},
 	{
 		"art": "res://assets/ui/locations/irasia_habitat.png",
@@ -98,7 +101,8 @@
 		"name": "Irasia Habitat",
 		"sector_id": "irasia",
 		"short_desc": "Busy commercial orbital on a major trade spine.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 1.38
 	},
 	{
 		"art": "res://assets/ui/locations/tokirev_habitat.png",
@@ -122,7 +126,8 @@
 		"name": "Tokirev Habitat",
 		"sector_id": "tokirev",
 		"short_desc": "Utilitarian orbital city above a cold factory world.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 2.24
 	},
 	{
 		"art": "res://assets/ui/locations/fennet_habitat.png",
@@ -145,7 +150,8 @@
 		"name": "Fennet Habitat",
 		"sector_id": "fennet",
 		"short_desc": "Rim orbital that grew from a frontier stop into a regional hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 1.16
 	},
 	{
 		"art": "res://assets/ui/locations/fortuna_habitat.png",
@@ -170,7 +176,8 @@
 		"name": "Fortuna Habitat",
 		"sector_id": "fortuna",
 		"short_desc": "Polished orbital above a finance world.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 1.02
 	},
 	{
 		"art": "res://assets/ui/locations/new_carthage_habitat.png",
@@ -194,7 +201,8 @@
 		"name": "New Carthage Habitat",
 		"sector_id": "new_carthage",
 		"short_desc": "Mercantile orbital above an oceanic mercantile hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.81
 	},
 	{
 		"art": "res://assets/ui/locations/horizon_habitat.png",
@@ -221,7 +229,8 @@
 		"name": "Horizon Habitat",
 		"sector_id": "horizon",
 		"short_desc": "Spacious orbital above a fast-paced population centre.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 1.72
 	},
 	{
 		"art": "res://assets/ui/locations/titania_habitat.png",
@@ -246,7 +255,8 @@
 		"name": "Titania Habitat",
 		"sector_id": "titania",
 		"short_desc": "Low-gravity tourist orbital above Titania IX.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.195
 	},
 	{
 		"art": "res://assets/ui/locations/concordia_habitat.png",
@@ -270,7 +280,8 @@
 		"name": "Pelagos Habitat",
 		"sector_id": "pelagos",
 		"short_desc": "Commerce and manufacturing orbital above Pelagos.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.63
 	},
 	{
 		"art": "res://assets/ui/locations/centauri_a_beltworks_habitat.png",
@@ -284,7 +295,8 @@
 		"name": "Centauri A Beltworks",
 		"sector_id": "centauri_a_beltworks",
 		"short_desc": "Mining habitat in the Alpha Centauri A belt.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.5
 	},
 	{
 		"art": "res://assets/ui/locations/acb1_habitat.png",
@@ -298,7 +310,8 @@
 		"name": "ACB1",
 		"sector_id": "acb1",
 		"short_desc": "Volcanic inner-world mining orbitals.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/acb2_habitat.png",
@@ -312,7 +325,8 @@
 		"name": "Scar",
 		"sector_id": "acb2",
 		"short_desc": "Mining orbitals at Scar.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.33
 	},
 	{
 		"art": "res://assets/ui/locations/acb3_habitat.png",
@@ -326,7 +340,8 @@
 		"name": "ACB3",
 		"sector_id": "acb3",
 		"short_desc": "Ice-world mining habitat.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.12
 	},
 	{
 		"art": "res://assets/ui/locations/terminus_habitat.png",
@@ -340,7 +355,8 @@
 		"name": "Terminus",
 		"sector_id": "terminus",
 		"short_desc": "Circumbinary ice-world station.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/vulcan_research_habitat.png",
@@ -354,7 +370,8 @@
 		"name": "Vulcan Research Station",
 		"sector_id": "vulcan_research",
 		"short_desc": "Shielded research habitat at Vulcan.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.06
 	},
 	{
 		"art": "res://assets/ui/locations/regulus_belt_habitat.png",
@@ -369,7 +386,8 @@
 		"name": "Regulus Belt Station",
 		"sector_id": "regulus_belt",
 		"short_desc": "Belt mining habitat beyond Tycho.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.4
 	},
 	{
 		"art": "res://assets/ui/locations/denarius_ii_habitat.png",
@@ -383,7 +401,8 @@
 		"name": "Denarius II",
 		"sector_id": "denarius_ii",
 		"short_desc": "Mining moon orbitals at Denarius II.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.21
 	},
 	{
 		"art": "res://assets/ui/locations/typhon_xvi_habitat.png",
@@ -397,7 +416,8 @@
 		"name": "Typhon XVI",
 		"sector_id": "typhon_xvi",
 		"short_desc": "Mining orbitals at Typhon XVI.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.17
 	},
 	{
 		"art": "res://assets/ui/locations/pelagos_belt_habitat.png",
@@ -412,7 +432,8 @@
 		"name": "Pelagos Belt Station",
 		"sector_id": "pelagos_belt",
 		"short_desc": "Belt mining habitat beyond Pelagos.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.35
 	},
 	{
 		"art": "res://assets/ui/locations/sta_galactic_outcomes_tycho.png",
@@ -426,7 +447,8 @@
 		"name": "Galactic Outcomes",
 		"sector_id": "tycho",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.017
 	},
 	{
 		"art": "res://assets/ui/locations/sta_grc_fortuna.png",
@@ -440,7 +462,8 @@
 		"name": "GRC Inc",
 		"sector_id": "fortuna",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.17
 	},
 	{
 		"art": "res://assets/ui/locations/sta_creus_proxima.png",
@@ -454,7 +477,8 @@
 		"name": "Creus Corporation",
 		"sector_id": "proxima",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/sta_snedecorp_proxima.png",
@@ -468,7 +492,8 @@
 		"name": "SnedeCorp",
 		"sector_id": "proxima",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/sta_cult_of_apex_titania.png",
@@ -482,7 +507,8 @@
 		"name": "Fellowship of Apex",
 		"sector_id": "titania",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.033
 	},
 	{
 		"art": "res://assets/ui/locations/sta_general_industrial_tycho.png",
@@ -496,7 +522,8 @@
 		"name": "General Industrial",
 		"sector_id": "tycho",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.018
 	},
 	{
 		"art": "res://assets/ui/locations/sta_morrow_and_sons_proxima.png",
@@ -510,7 +537,8 @@
 		"name": "Morrow & Sons",
 		"sector_id": "proxima",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/sta_octagon_fortuna.png",
@@ -524,7 +552,8 @@
 		"name": "The Octagon",
 		"sector_id": "fortuna",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.17
 	},
 	{
 		"art": "res://assets/ui/locations/sta_crown_and_anchor_new_carthage.png",
@@ -538,7 +567,8 @@
 		"name": "Crown & Anchor",
 		"sector_id": "new_carthage",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.27
 	},
 	{
 		"art": "res://assets/ui/locations/sta_mercury_communications_proxima.png",
@@ -552,7 +582,8 @@
 		"name": "Mercury Communications",
 		"sector_id": "proxima",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/sta_orion_aerospace_irasia.png",
@@ -566,7 +597,8 @@
 		"name": "Orion Aerospace",
 		"sector_id": "irasia",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.46
 	},
 	{
 		"art": "res://assets/ui/locations/sta_chimera_titania.png",
@@ -580,7 +612,8 @@
 		"name": "Chimera Corporation",
 		"sector_id": "titania",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.032
 	},
 	{
 		"art": "res://assets/ui/locations/sta_terra_nova_pelagos.png",
@@ -594,7 +627,8 @@
 		"name": "Terra Nova",
 		"sector_id": "pelagos",
 		"short_desc": "Corporate headquarters orbital.",
-		"type": "station"
+		"type": "station",
+		"population_billions": 0.21
 	},
 	{
 		"art": "res://assets/ui/locations/aurelia_habitat.png",
@@ -608,7 +642,8 @@
 		"name": "Aurelia",
 		"sector_id": "aurelia",
 		"short_desc": "Mining and hab-suit tourism at Aurelia.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.23
 	},
 	{
 		"art": "res://assets/ui/locations/boreas_habitat.png",
@@ -622,7 +657,8 @@
 		"name": "Boreas",
 		"sector_id": "boreas",
 		"short_desc": "High-gravity mining orbitals at Boreas.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.12
 	},
 	{
 		"art": "res://assets/ui/locations/calypso_vi_habitat.png",
@@ -636,7 +672,8 @@
 		"name": "Calypso VI",
 		"sector_id": "calypso_vi",
 		"short_desc": "Ring-view resort on Calypso VI.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.2
 	},
 	{
 		"art": "res://assets/ui/locations/hesper_habitat.png",
@@ -650,7 +687,8 @@
 		"name": "Hesper",
 		"sector_id": "hesper",
 		"short_desc": "Orbital station at the ice giant Hesper.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.04
 	},
 	{
 		"art": "res://assets/ui/locations/kestrel_habitat.png",
@@ -664,7 +702,8 @@
 		"name": "Kestrel Resort",
 		"sector_id": "kestrel",
 		"short_desc": "Resort habitat at the comet Kestrel.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/alecto_habitat.png",
@@ -678,7 +717,8 @@
 		"name": "Alecto",
 		"sector_id": "alecto",
 		"short_desc": "Darkside mining orbitals at Alecto.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.12
 	},
 	{
 		"art": "res://assets/ui/locations/new_ceres_habitat.png",
@@ -692,7 +732,8 @@
 		"name": "New Ceres",
 		"sector_id": "new_ceres",
 		"short_desc": "Greenhouse agriculture orbitals at New Ceres.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.43
 	},
 	{
 		"art": "res://assets/ui/locations/virginis_belt_habitat.png",
@@ -706,7 +747,8 @@
 		"name": "Virginis Asteroid Station",
 		"sector_id": "virginis_belt",
 		"short_desc": "Mining habitat in the Virginis belt.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.38
 	},
 	{
 		"art": "res://assets/ui/locations/varda_iii_habitat.png",
@@ -720,7 +762,8 @@
 		"name": "Varda III",
 		"sector_id": "varda_iii",
 		"short_desc": "Subsurface-ocean extraction at Varda III.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.2
 	},
 	{
 		"art": "res://assets/ui/locations/varda_belt_habitat.png",
@@ -734,7 +777,8 @@
 		"name": "Varda Asteroid Station",
 		"sector_id": "varda_belt",
 		"short_desc": "Mining habitat in the outer Virginis belt.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.28
 	},
 	{
 		"art": "res://assets/ui/locations/cressida_habitat.png",
@@ -748,7 +792,8 @@
 		"name": "Cressida Research Station",
 		"sector_id": "cressida",
 		"short_desc": "Research station at Cressida.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.05
 	},
 	{
 		"art": "res://assets/ui/locations/scoria_habitat.png",
@@ -762,7 +807,8 @@
 		"name": "Scoria",
 		"sector_id": "scoria",
 		"short_desc": "Surface mining orbitals at Scoria.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.2
 	},
 	{
 		"art": "res://assets/ui/locations/ursa_belt_habitat.png",
@@ -776,7 +822,8 @@
 		"name": "Ursa Belt Bases",
 		"sector_id": "ursa_belt",
 		"short_desc": "Mining bases in the Ursa belt.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.42
 	},
 	{
 		"art": "res://assets/ui/locations/ursa_belt_shipyard_habitat.png",
@@ -791,7 +838,8 @@
 		"name": "Ursa Belt Shipyard",
 		"sector_id": "ursa_belt_shipyard",
 		"short_desc": "Belt shipyard between Scoria and Ursa.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.35
 	},
 	{
 		"art": "res://assets/ui/locations/ursa_xvi_habitat.png",
@@ -805,7 +853,8 @@
 		"name": "Ursa XVI",
 		"sector_id": "ursa_xvi",
 		"short_desc": "Mining orbitals at Ursa XVI.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.17
 	},
 	{
 		"art": "res://assets/ui/locations/ursa_xxix_habitat.png",
@@ -819,7 +868,8 @@
 		"name": "Ursa XXIX",
 		"sector_id": "ursa_xxix",
 		"short_desc": "Chemical extraction at Ursa XXIX.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.14
 	},
 	{
 		"art": "res://assets/ui/locations/long_drift_habitat.png",
@@ -833,7 +883,8 @@
 		"name": "Long Drift Observatory",
 		"sector_id": "long_drift",
 		"short_desc": "Distant observatory at Long Drift.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.04
 	},
 	{
 		"art": "res://assets/ui/locations/junkers_world_habitat.png",
@@ -847,7 +898,8 @@
 		"name": "Junker's World",
 		"sector_id": "junkers_world",
 		"short_desc": "Mining orbitals at Junker's World.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.26
 	},
 	{
 		"art": "res://assets/ui/locations/swan_habitat.png",
@@ -861,7 +913,8 @@
 		"name": "Swan",
 		"sector_id": "swan",
 		"short_desc": "Research and extraction orbital at Swan.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.06
 	},
 	{
 		"art": "res://assets/ui/locations/freediver_habitat.png",
@@ -875,7 +928,8 @@
 		"name": "Freediver",
 		"sector_id": "freediver",
 		"short_desc": "Automated extraction at Freediver.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/nostromo_habitat.png",
@@ -889,7 +943,8 @@
 		"name": "Nostromo",
 		"sector_id": "nostromo",
 		"short_desc": "Research station at Nostromo.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.05
 	},
 	{
 		"art": "res://assets/ui/locations/eternum_habitat.png",
@@ -903,7 +958,8 @@
 		"name": "Eternum Resort",
 		"sector_id": "eternum",
 		"short_desc": "Adventure resort at Eternum.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.07
 	},
 	{
 		"art": "res://assets/ui/locations/janus_habitat.png",
@@ -917,7 +973,8 @@
 		"name": "Janus",
 		"sector_id": "janus",
 		"short_desc": "Ice mining orbitals at Janus.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.11
 	},
 	{
 		"art": "res://assets/ui/locations/sapphire_xvi_habitat.png",
@@ -931,7 +988,8 @@
 		"name": "Sapphire XVI",
 		"sector_id": "sapphire_xvi",
 		"short_desc": "Chemical extraction at Sapphire XVI.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.09
 	},
 	{
 		"art": "res://assets/ui/locations/vesuvius_v_habitat.png",
@@ -945,7 +1003,8 @@
 		"name": "Vesuvius V",
 		"sector_id": "vesuvius_v",
 		"short_desc": "Mineral mining at Vesuvius V.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.15
 	},
 	{
 		"art": "res://assets/ui/locations/tc_inner_disc_habitat.png",
@@ -959,7 +1018,8 @@
 		"name": "TC Inner Disc Station",
 		"sector_id": "tc_inner_disc",
 		"short_desc": "Inner debris-disc extraction hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.38
 	},
 	{
 		"art": "res://assets/ui/locations/tc_outer_disc_habitat.png",
@@ -973,7 +1033,8 @@
 		"name": "TC Outer Disc Station",
 		"sector_id": "tc_outer_disc",
 		"short_desc": "Outer debris-disc extraction hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.22
 	},
 	{
 		"art": "res://assets/ui/locations/terminary_habitat.png",
@@ -987,7 +1048,8 @@
 		"name": "Terminary Research Station",
 		"sector_id": "terminary",
 		"short_desc": "Research station at Terminary.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.04
 	},
 	{
 		"art": "res://assets/ui/locations/byrsa_habitat.png",
@@ -1001,7 +1063,8 @@
 		"name": "Byrsa",
 		"sector_id": "byrsa",
 		"short_desc": "Industrial orbitals at Byrsa.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.8
 	},
 	{
 		"art": "res://assets/ui/locations/depot_61c_habitat.png",
@@ -1015,7 +1078,8 @@
 		"name": "Depot 61C",
 		"sector_id": "depot_61c",
 		"short_desc": "Belt depot near New Carthage.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.35
 	},
 	{
 		"art": "res://assets/ui/locations/tanit_xx_habitat.png",
@@ -1029,7 +1093,8 @@
 		"name": "Tanit XX",
 		"sector_id": "tanit_xx",
 		"short_desc": "Mining and energy at Tanit XX.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.18
 	},
 	{
 		"art": "res://assets/ui/locations/nightjar_habitat.png",
@@ -1043,7 +1108,8 @@
 		"name": "Nightjar",
 		"sector_id": "nightjar",
 		"short_desc": "Mining orbitals at Nightjar.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.13
 	},
 	{
 		"art": "res://assets/ui/locations/alpha_disc_habitat.png",
@@ -1057,7 +1123,8 @@
 		"name": "Alpha Disc Hub",
 		"sector_id": "alpha_disc",
 		"short_desc": "Warm disc extraction hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.41
 	},
 	{
 		"art": "res://assets/ui/locations/cueball_habitat.png",
@@ -1071,7 +1138,8 @@
 		"name": "The Cueball",
 		"sector_id": "cueball",
 		"short_desc": "Ice moon industry and tourism.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.52
 	},
 	{
 		"art": "res://assets/ui/locations/halo_station_habitat.png",
@@ -1085,7 +1153,8 @@
 		"name": "Halo Station",
 		"sector_id": "halo_station",
 		"short_desc": "Ring-gap research and tourism.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.19
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_i_habitat.png",
@@ -1099,7 +1168,8 @@
 		"name": "KB Station I",
 		"sector_id": "kb_station_i",
 		"short_desc": "Outer belt extraction hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.11
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_ii_habitat.png",
@@ -1113,7 +1183,8 @@
 		"name": "KB Station II",
 		"sector_id": "kb_station_ii",
 		"short_desc": "Mid outer belt hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/kb_station_iii_habitat.png",
@@ -1127,7 +1198,8 @@
 		"name": "KB Station III",
 		"sector_id": "kb_station_iii",
 		"short_desc": "Outermost belt hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.06
 	},
 	{
 		"art": "res://assets/ui/locations/nocturn_habitat.png",
@@ -1141,7 +1213,8 @@
 		"name": "Nocturn Research Lab",
 		"sector_id": "nocturn",
 		"short_desc": "Outer belt research lab.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.04
 	},
 	{
 		"art": "res://assets/ui/locations/titania_v_habitat.png",
@@ -1155,7 +1228,8 @@
 		"name": "Titania V",
 		"sector_id": "titania_v",
 		"short_desc": "High-G moon orbital industry.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.22
 	},
 	{
 		"art": "res://assets/ui/locations/titania_ixx_habitat.png",
@@ -1169,7 +1243,8 @@
 		"name": "Titania IXX",
 		"sector_id": "titania_ixx",
 		"short_desc": "Frozen outer moon hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/tartarus_habitat.png",
@@ -1183,7 +1258,8 @@
 		"name": "Tartarus Research Station",
 		"sector_id": "tartarus",
 		"short_desc": "Outer sub-giant research station.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.05
 	},
 	{
 		"art": "res://assets/ui/locations/janus_ii_habitat.png",
@@ -1197,7 +1273,8 @@
 		"name": "Janus II",
 		"sector_id": "janus_ii",
 		"short_desc": "Hot moon mineral hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.08
 	},
 	{
 		"art": "res://assets/ui/locations/caldera_habitat.png",
@@ -1211,7 +1288,8 @@
 		"name": "Caldera",
 		"sector_id": "caldera",
 		"short_desc": "Geologically active world hub.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.29
 	},
 	{
 		"art": "res://assets/ui/locations/tulima_habitat.png",
@@ -1225,6 +1303,7 @@
 		"name": "Tulima",
 		"sector_id": "tulima",
 		"short_desc": "Outer ice-world station.",
-		"type": "habitat"
+		"type": "habitat",
+		"population_billions": 0.06
 	}
 ]

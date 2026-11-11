@@ -16,6 +16,7 @@ var description: String = ""
 var classification: String = ""
 var gravity: float = 1.0
 var population_billions: float = 0.0
+var surface_population_billions: float = 0.0
 var ocean_coverage: float = 0.0
 var climate: String = ""
 var city_malls: Array = []
@@ -39,6 +40,7 @@ static func from_dict(data: Dictionary) -> SectorDef:
 	def.classification = str(data.get("classification", ""))
 	def.gravity = float(data.get("gravity", 1.0))
 	def.population_billions = float(data.get("population_billions", 0.0))
+	def.surface_population_billions = float(data.get("surface_population_billions", 0.0))
 	def.ocean_coverage = float(data.get("ocean_coverage", 0.0))
 	def.climate = str(data.get("climate", ""))
 	def.city_malls = []
@@ -77,6 +79,8 @@ func to_dict() -> Dictionary:
 		out["gravity"] = gravity
 	if _present_keys.has("population_billions") or population_billions != 0.0:
 		out["population_billions"] = population_billions
+	if _present_keys.has("surface_population_billions") or surface_population_billions != 0.0:
+		out["surface_population_billions"] = surface_population_billions
 	if _present_keys.has("ocean_coverage") or ocean_coverage != 0.0:
 		out["ocean_coverage"] = ocean_coverage
 	if _present_keys.has("climate") or climate != "":
@@ -93,7 +97,7 @@ func to_dict() -> Dictionary:
 	return out
 
 static func allowed_keys() -> PackedStringArray:
-	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star", "star_system", "star_distance_au", "description", "classification", "gravity", "population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings", "neighborhood"])
+	return PackedStringArray(["id", "name", "orbit_name", "planet_name", "star", "star_system", "star_distance_au", "description", "classification", "gravity", "population_billions", "surface_population_billions", "ocean_coverage", "climate", "city_malls", "play_bounds", "objective", "mappings", "neighborhood"])
 
 static func required_keys() -> PackedStringArray:
 	return PackedStringArray(["id", "name", "play_bounds"])

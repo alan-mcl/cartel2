@@ -494,7 +494,7 @@
     "power_generation": 32.0,
     "fuel_consumption": 0.0089,
     "cost": 2600,
-    "description": "Fit the best compact fusion power solution on the market, the Compact 40 from Helios..",
+    "description": "Fit the best compact fusion power solution on the market, the Compact 40 from Helios",
     "signature": {
       "thermal": 4.92,
       "gravitational": 0.28,

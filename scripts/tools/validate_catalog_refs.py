@@ -1569,6 +1569,77 @@ E_WORLD_HABITAT_IDS = (
 )
 
 
+POPULATION_SPLIT_TOLERANCE_BN = 0.001
+
+ALLOWED_OUTLYING_SURFACE_SECTOR_IDS = frozenset(
+    {
+        "new_ceres",
+        "junkers_world",
+        "byrsa",
+        "acb2",
+        "aurelia",
+        "scoria",
+        "caldera",
+        "denarius_ii",
+        "typhon_xvi",
+        "ursa_xvi",
+        "titania_ixx",
+        "nightjar",
+        "janus",
+    }
+)
+
+
+def check_sector_population_split(
+    sectors: dict[str, dict],
+    habitats: dict[str, dict],
+) -> list[str]:
+    errors: list[str] = []
+    orbital_by_sector: dict[str, float] = {}
+    for habitat_id, habitat in habitats.items():
+        sector_id = str(habitat.get("sector_id", ""))
+        if not sector_id:
+            errors.append(f"habitat {habitat_id}: missing sector_id")
+            continue
+        if sector_id not in sectors:
+            continue
+        pop = float(habitat.get("population_billions", 0.0))
+        orbital_by_sector[sector_id] = orbital_by_sector.get(sector_id, 0.0) + pop
+
+    for sector_id, sector in sorted(sectors.items()):
+        total = float(sector.get("population_billions", 0.0))
+        surface = float(sector.get("surface_population_billions", 0.0))
+        orbital = orbital_by_sector.get(sector_id, 0.0)
+        if abs(total - surface - orbital) > POPULATION_SPLIT_TOLERANCE_BN:
+            errors.append(
+                f"sector {sector_id}: population_billions ({total}) must equal "
+                f"surface_population_billions ({surface}) plus orbital ({orbital})"
+            )
+        classification = str(sector.get("classification", "")).strip()
+        if classification and total > 0.0 and surface <= orbital:
+            errors.append(
+                f"sector {sector_id}: classified world surface population must exceed orbital"
+            )
+        if not classification:
+            if surface > 0.0 and sector_id not in ALLOWED_OUTLYING_SURFACE_SECTOR_IDS:
+                errors.append(
+                    f"sector {sector_id}: unexpected surface_population_billions "
+                    f"on outlying world"
+                )
+            if sector_id in ALLOWED_OUTLYING_SURFACE_SECTOR_IDS:
+                malls = sector.get("city_malls", [])
+                if not isinstance(malls, list) or len(malls) != 1:
+                    errors.append(
+                        f"sector {sector_id}: outlying surface camp requires exactly one "
+                        f"city_malls entry"
+                    )
+        if total > 0.0 and orbital <= 0.0 and (total - surface) > POPULATION_SPLIT_TOLERANCE_BN:
+            errors.append(
+                f"sector {sector_id}: orbital population missing from habitats"
+            )
+    return errors
+
+
 def check_e_world_daily_dealers(
     habitats: dict[str, dict],
     buildings_by_id: dict[str, dict],
@@ -2913,6 +2984,7 @@ def main() -> int:
     errors.extend(check_module_category_icons())
     errors.extend(check_chassis_ui_headers(chassis))
     errors.extend(check_habitat_building_uniqueness(habitats, buildings_by_id))
+    errors.extend(check_sector_population_split(sectors, habitats))
     errors.extend(check_e_world_daily_dealers(habitats, buildings_by_id))
     errors.extend(check_sector_completeness(CATALOG))
     errors.extend(check_unspace_completeness(unspaces))

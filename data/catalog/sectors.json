@@ -49,7 +49,8 @@
 			"charged_particle": 0.907,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.05
+		"star_distance_au": 1.05,
+		"surface_population_billions": 57.6
 	},
 	{
 		"id": "tycho",
@@ -85,7 +86,8 @@
 			"charged_particle": 0.01,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 14.0
+		"star_distance_au": 14.0,
+		"surface_population_billions": 3.36
 	},
 	{
 		"id": "bela",
@@ -126,7 +128,8 @@
 			"charged_particle": 0.913,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.1
+		"star_distance_au": 1.1,
+		"surface_population_billions": 14.4
 	},
 	{
 		"id": "irasia",
@@ -175,7 +178,8 @@
 			"charged_particle": 1.153,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.95
+		"star_distance_au": 0.95,
+		"surface_population_billions": 44.16
 	},
 	{
 		"id": "tokirev",
@@ -225,7 +229,8 @@
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.0
+		"star_distance_au": 1.0,
+		"surface_population_billions": 53.76
 	},
 	{
 		"id": "fennet",
@@ -270,7 +275,8 @@
 			"charged_particle": 0.989,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.98
+		"star_distance_au": 0.98,
+		"surface_population_billions": 27.84
 	},
 	{
 		"id": "fortuna",
@@ -316,7 +322,8 @@
 			"charged_particle": 0.918,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.7
+		"star_distance_au": 0.7,
+		"surface_population_billions": 32.64
 	},
 	{
 		"id": "new_carthage",
@@ -362,7 +369,8 @@
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.4
+		"star_distance_au": 0.4,
+		"surface_population_billions": 25.92
 	},
 	{
 		"id": "horizon",
@@ -410,7 +418,8 @@
 			"charged_particle": 5.024,
 			"charged_particle_fluctuation": 0.25
 		},
-		"star_distance_au": 0.57
+		"star_distance_au": 0.57,
+		"surface_population_billions": 41.28
 	},
 	{
 		"id": "titania",
@@ -447,7 +456,8 @@
 			"charged_particle": 0.605,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.2
+		"star_distance_au": 3.2,
+		"surface_population_billions": 6.24
 	},
 	{
 		"id": "pelagos",
@@ -491,7 +501,8 @@
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.15
+		"star_distance_au": 1.15,
+		"surface_population_billions": 20.16
 	},
 	{
 		"id": "centauri_a_beltworks",
@@ -513,7 +524,8 @@
 			"charged_particle": 0.783,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 2.5
+		"star_distance_au": 2.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "acb1",
@@ -536,7 +548,8 @@
 			"charged_particle": 12.288,
 			"charged_particle_fluctuation": 0.15
 		},
-		"star_distance_au": 0.1
+		"star_distance_au": 0.1,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "acb2",
@@ -559,7 +572,11 @@
 			"charged_particle": 1.656,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 0.4
+		"star_distance_au": 0.4,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Scar Pit"
+		]
 	},
 	{
 		"id": "acb3",
@@ -582,7 +599,8 @@
 			"charged_particle": 0.202,
 			"charged_particle_fluctuation": 0.08
 		},
-		"star_distance_au": 1.6
+		"star_distance_au": 1.6,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "terminus",
@@ -604,7 +622,8 @@
 			"charged_particle": 7.347,
 			"charged_particle_fluctuation": 0.08
 		},
-		"star_distance_au": 30.0
+		"star_distance_au": 30.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "vulcan_research",
@@ -626,7 +645,8 @@
 			"charged_particle": 0.077,
 			"charged_particle_fluctuation": 0.2
 		},
-		"star_distance_au": 1.5
+		"star_distance_au": 1.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "regulus_belt",
@@ -648,7 +668,8 @@
 			"charged_particle": 0.04,
 			"charged_particle_fluctuation": 0.1
 		},
-		"star_distance_au": 19.0
+		"star_distance_au": 19.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "denarius_ii",
@@ -671,7 +692,11 @@
 			"charged_particle": 2.39,
 			"charged_particle_fluctuation": 0.12
 		},
-		"star_distance_au": 4.5
+		"star_distance_au": 4.5,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Denarius Camp"
+		]
 	},
 	{
 		"id": "typhon_xvi",
@@ -694,7 +719,11 @@
 			"charged_particle": 0.107,
 			"charged_particle_fluctuation": 0.15
 		},
-		"star_distance_au": 32.0
+		"star_distance_au": 32.0,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Typhon Camp"
+		]
 	},
 	{
 		"id": "pelagos_belt",
@@ -715,7 +744,8 @@
 			"charged_particle": 1.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.6
+		"star_distance_au": 2.6,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "aurelia",
@@ -737,7 +767,11 @@
 			"charged_particle": 3.65,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.55
+		"star_distance_au": 0.55,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Aurelia Camp"
+		]
 	},
 	{
 		"id": "boreas",
@@ -759,7 +793,8 @@
 			"charged_particle": 0.43,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.6
+		"star_distance_au": 1.6,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "calypso_vi",
@@ -781,7 +816,8 @@
 			"charged_particle": 0.11,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.2
+		"star_distance_au": 3.2,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "hesper",
@@ -803,7 +839,8 @@
 			"charged_particle": 0.009,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 11.0
+		"star_distance_au": 11.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "kestrel",
@@ -825,7 +862,8 @@
 			"charged_particle": 0.03,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 6.0
+		"star_distance_au": 6.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "alecto",
@@ -847,7 +885,8 @@
 			"charged_particle": 416.16,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.05
+		"star_distance_au": 0.05,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "new_ceres",
@@ -869,7 +908,11 @@
 			"charged_particle": 0.462,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.5
+		"star_distance_au": 1.5,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Ceres Aerie"
+		]
 	},
 	{
 		"id": "virginis_belt",
@@ -890,7 +933,8 @@
 			"charged_particle": 0.288,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.9
+		"star_distance_au": 1.9,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "varda_iii",
@@ -912,7 +956,8 @@
 			"charged_particle": 0.166,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.5
+		"star_distance_au": 2.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "varda_belt",
@@ -933,7 +978,8 @@
 			"charged_particle": 0.042,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 5.0
+		"star_distance_au": 5.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "cressida",
@@ -955,7 +1001,8 @@
 			"charged_particle": 0.007,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 12.0
+		"star_distance_au": 12.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "scoria",
@@ -977,7 +1024,11 @@
 			"charged_particle": 0.207,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.2
+		"star_distance_au": 2.2,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Scoria Camp"
+		]
 	},
 	{
 		"id": "ursa_belt",
@@ -998,7 +1049,8 @@
 			"charged_particle": 0.092,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.3
+		"star_distance_au": 3.3,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "ursa_belt_shipyard",
@@ -1019,7 +1071,8 @@
 			"charged_particle": 0.092,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.3
+		"star_distance_au": 3.3,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "ursa_xvi",
@@ -1041,7 +1094,11 @@
 			"charged_particle": 0.049,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 4.5
+		"star_distance_au": 4.5,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Ursa Camp"
+		]
 	},
 	{
 		"id": "ursa_xxix",
@@ -1063,7 +1120,8 @@
 			"charged_particle": 0.049,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 4.5
+		"star_distance_au": 4.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "long_drift",
@@ -1085,7 +1143,8 @@
 			"charged_particle": 0.00033,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 55.0
+		"star_distance_au": 55.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "junkers_world",
@@ -1107,7 +1166,11 @@
 			"charged_particle": 0.215,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.1
+		"star_distance_au": 2.1,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Emerald Camp"
+		]
 	},
 	{
 		"id": "swan",
@@ -1129,7 +1192,8 @@
 			"charged_particle": 0.038,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 5.0
+		"star_distance_au": 5.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "freediver",
@@ -1151,7 +1215,8 @@
 			"charged_particle": 0.121,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.8
+		"star_distance_au": 2.8,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "nostromo",
@@ -1173,7 +1238,8 @@
 			"charged_particle": 0.0049,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 14.0
+		"star_distance_au": 14.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "eternum",
@@ -1195,7 +1261,8 @@
 			"charged_particle": 0.00093,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 32.0
+		"star_distance_au": 32.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "janus",
@@ -1217,7 +1284,11 @@
 			"charged_particle": 0.2,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 1.5
+		"star_distance_au": 1.5,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Janus Camp"
+		]
 	},
 	{
 		"id": "sapphire_xvi",
@@ -1239,7 +1310,8 @@
 			"charged_particle": 0.012,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 6.1
+		"star_distance_au": 6.1,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "vesuvius_v",
@@ -1261,7 +1333,8 @@
 			"charged_particle": 0.007,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 8.0
+		"star_distance_au": 8.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "tc_inner_disc",
@@ -1282,7 +1355,8 @@
 			"charged_particle": 0.002,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 15.0
+		"star_distance_au": 15.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "tc_outer_disc",
@@ -1303,7 +1377,8 @@
 			"charged_particle": 0.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 35.0
+		"star_distance_au": 35.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "terminary",
@@ -1324,7 +1399,8 @@
 			"charged_particle": 0.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 55.0
+		"star_distance_au": 55.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "byrsa",
@@ -1347,7 +1423,11 @@
 			"charged_particle": 0.5,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.4
+		"star_distance_au": 0.4,
+		"surface_population_billions": 0.05,
+		"city_malls": [
+			"Byrsa Stack"
+		]
 	},
 	{
 		"id": "depot_61c",
@@ -1369,7 +1449,8 @@
 			"charged_particle": 1.39,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.6
+		"star_distance_au": 0.6,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "tanit_xx",
@@ -1392,7 +1473,8 @@
 			"charged_particle": 0.008,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 8.0
+		"star_distance_au": 8.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "nightjar",
@@ -1415,7 +1497,11 @@
 			"charged_particle": 0.005,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.5
+		"star_distance_au": 3.5,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Nightjar Camp"
+		]
 	},
 	{
 		"id": "alpha_disc",
@@ -1436,7 +1522,8 @@
 			"charged_particle": 0.4,
 			"charged_particle_fluctuation": 0.063
 		},
-		"star_distance_au": 2.0
+		"star_distance_au": 2.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "cueball",
@@ -1458,7 +1545,8 @@
 			"charged_particle": 0.131,
 			"charged_particle_fluctuation": 0.02
 		},
-		"star_distance_au": 3.5
+		"star_distance_au": 3.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "halo_station",
@@ -1479,7 +1567,8 @@
 			"charged_particle": 0.131,
 			"charged_particle_fluctuation": 0.02
 		},
-		"star_distance_au": 3.5
+		"star_distance_au": 3.5,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "kb_station_i",
@@ -1500,7 +1589,8 @@
 			"charged_particle": 0.001,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 55.0
+		"star_distance_au": 55.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "kb_station_ii",
@@ -1521,7 +1611,8 @@
 			"charged_particle": 0.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 70.0
+		"star_distance_au": 70.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "kb_station_iii",
@@ -1542,7 +1633,8 @@
 			"charged_particle": 0.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 85.0
+		"star_distance_au": 85.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "nocturn",
@@ -1564,7 +1656,8 @@
 			"charged_particle": 0.0,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 65.0
+		"star_distance_au": 65.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "titania_v",
@@ -1586,7 +1679,8 @@
 			"charged_particle": 0.605,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.2
+		"star_distance_au": 3.2,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "titania_ixx",
@@ -1608,7 +1702,11 @@
 			"charged_particle": 0.605,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 3.2
+		"star_distance_au": 3.2,
+		"surface_population_billions": 0.01,
+		"city_malls": [
+			"Titania Camp"
+		]
 	},
 	{
 		"id": "tartarus",
@@ -1629,7 +1727,8 @@
 			"charged_particle": 0.011,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 24.0
+		"star_distance_au": 24.0,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "janus_ii",
@@ -1651,7 +1750,8 @@
 			"charged_particle": 3.67,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 0.6
+		"star_distance_au": 0.6,
+		"surface_population_billions": 0.0
 	},
 	{
 		"id": "caldera",
@@ -1673,7 +1773,11 @@
 			"charged_particle": 0.273,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 2.2
+		"star_distance_au": 2.2,
+		"surface_population_billions": 0.02,
+		"city_malls": [
+			"Caldera Camp"
+		]
 	},
 	{
 		"id": "tulima",
@@ -1695,6 +1799,7 @@
 			"charged_particle": 0.006,
 			"charged_particle_fluctuation": 0.0
 		},
-		"star_distance_au": 15.0
+		"star_distance_au": 15.0,
+		"surface_population_billions": 0.0
 	}
 ]

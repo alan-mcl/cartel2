@@ -30,11 +30,18 @@ var _anchors: Array = []
 const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
 
 
-func configure(planet_data: Dictionary, sector_id: String = "") -> void:
+func configure(
+	planet_data: Dictionary,
+	sector_id: String = "",
+	surface_camp_names: Array = []
+) -> void:
 	_diameter = float(planet_data.get("diameter", 2000.0))
 	var tint := Color(str(planet_data.get("modulate", "#ffffff")))
 	var night_path := str(planet_data.get("night_lights", ""))
 	_anchors = SurfaceLabels.load_anchors(SurfaceLabels.habitations_path_for_night(night_path))
+	if _anchors.is_empty() and not surface_camp_names.is_empty():
+		var sid := sector_id if not sector_id.is_empty() else "planet"
+		_anchors = SurfaceLabels.synthetic_anchors(sid, surface_camp_names)
 
 	if planet_data.has("rotation_period_seconds"):
 		_spin_period = maxf(float(planet_data.get("rotation_period_seconds")), 1.0)

@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_star_scan_au_and_description(runner, catalog)
 	_test_volatile_star_scan_au(runner, catalog)
 	_test_habitat_scan_includes_inspect_text(runner, catalog)
+	_test_orbital_station_scan_lists_population(runner, catalog)
 	_test_debris_scan_includes_integrity(runner)
 	_test_scanned_contacts_save_round_trip(runner, catalog)
 
@@ -108,8 +109,15 @@ static func _test_planet_scan_uses_planet_name_and_population(runner: TestRunner
 	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
 	runner.check_eq(str(snapshot.get("title", "")), "Proxima", "planet scan title is planet name")
 	var rows: Array = snapshot.get("rows", [])
-	runner.check(_rows_contain_label(rows, "Population"), "planet scan lists population")
-	runner.check(_row_value_contains(rows, "Population", "60"), "planet scan population from sector")
+	runner.check(_rows_contain_label(rows, "Population"), "planet scan lists surface population")
+	runner.check(
+		_row_value_contains(rows, "Population", "58"),
+		"planet scan surface population not sector total"
+	)
+	runner.check(
+		not _row_value_contains(rows, "Population", "60"),
+		"planet scan omits aggregate sector total"
+	)
 
 
 static func _test_star_scan_uses_star_name_and_catalog_facts(runner: TestRunner, catalog: Catalog) -> void:
@@ -190,6 +198,7 @@ static func _test_volatile_star_scan_au(runner: TestRunner, catalog: Catalog) ->
 
 static func _test_habitat_scan_includes_inspect_text(runner: TestRunner, catalog: Catalog) -> void:
 	var session := GameSession.new()
+	session.world.sector_id = "proxima"
 	var contact := {
 		"id": "habitat",
 		"contact_kind": "landmark",
@@ -201,6 +210,28 @@ static func _test_habitat_scan_includes_inspect_text(runner: TestRunner, catalog
 	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
 	var rows: Array = snapshot.get("rows", [])
 	runner.check(_rows_contain_label(rows, "Scan"), "habitat scan includes inspect text row")
+	runner.check(_rows_contain_label(rows, "Population"), "habitat scan lists orbital population")
+	runner.check(
+		_row_value_contains(rows, "Population", "1.8"),
+		"habitat scan population from catalog split"
+	)
+
+
+static func _test_orbital_station_scan_lists_population(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	session.world.sector_id = "proxima"
+	var contact := {
+		"id": "sta_creus_proxima",
+		"contact_kind": "orbital",
+		"position": Vector2(1200.0, 0.0),
+		"velocity": Vector2.ZERO,
+		"interactable_id": "sta_creus_proxima_dock",
+		"orbital_sprite": "res://assets/world/orbitals/sta_creus_proxima.png",
+	}
+	var snapshot := TargetScan.build(session, catalog, contact, Vector2.ZERO)
+	var rows: Array = snapshot.get("rows", [])
+	runner.check(_rows_contain_label(rows, "Population"), "orbital station scan lists population")
+	runner.check(_row_value_contains(rows, "Population", "million"), "station population formatted")
 
 
 static func _test_debris_scan_includes_integrity(runner: TestRunner) -> void:
