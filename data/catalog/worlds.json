@@ -956,6 +956,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/acb1_albedo.png",
 			"diameter": 1600,
 			"modulate": "#c85830"
 		},
@@ -1060,6 +1061,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/acb2_albedo.png",
 			"diameter": 1400,
 			"modulate": "#8a8078"
 		},
@@ -1200,6 +1202,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/acb3_albedo.png",
 			"diameter": 1200,
 			"modulate": "#a8c8e0"
 		},
@@ -1304,6 +1307,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/terminus_albedo.png",
 			"diameter": 2200,
 			"modulate": "#b0c0d8"
 		},
@@ -1398,9 +1402,23 @@
 			"radius": 5400
 		},
 		"planet": {
-			"sprite": "res://assets/world/planet.png",
+			"renderer": "procedural",
 			"diameter": 2800,
-			"modulate": "#d07040"
+			"type": "gas_giant",
+			"appearance": {
+				"type": "banded",
+				"preset": "stormy",
+				"atmosphere": {
+					"colours": [
+						"#d07040",
+						"#a84828",
+						"#e89060"
+					]
+				}
+			},
+			"rings": {
+				"type": "none"
+			}
 		},
 		"entities": [
 			{
@@ -1616,6 +1634,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/denarius_ii_albedo.png",
 			"diameter": 1300,
 			"modulate": "#908878"
 		},
@@ -1760,6 +1779,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/typhon_xvi_albedo.png",
 			"diameter": 1350,
 			"modulate": "#787068"
 		},
@@ -4545,17 +4565,10 @@
 		"parent_body": {
 			"name": "New Carthage",
 			"type": "planet",
+			"renderer": "textured",
+			"texture_sector": "new_carthage",
 			"angular_diameter_deg_min": 12,
-			"angular_diameter_deg_max": 18,
-			"appearance": {
-				"type": "banded",
-				"band_colour_1": "#1a6878",
-				"band_colour_2": "#c8d8c0",
-				"turbulence": 0.15
-			},
-			"rings": {
-				"type": "none"
-			}
+			"angular_diameter_deg_max": 18
 		},
 		"companion_stars": [
 			{

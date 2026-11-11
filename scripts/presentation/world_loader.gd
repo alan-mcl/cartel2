@@ -432,6 +432,26 @@ func _spawn_orbital_station_layout(
 				_spawn_entity(world_root, entity_variant, catalog, session)
 
 
+func _planet_renderer(planet_data: Dictionary) -> String:
+	var renderer := str(planet_data.get("renderer", "textured")).strip_edges().to_lower()
+	return renderer if renderer == "procedural" else "textured"
+
+
+func _parent_body_renderer(parent_data: Dictionary) -> String:
+	var renderer := str(parent_data.get("renderer", "procedural")).strip_edges().to_lower()
+	return renderer if renderer == "textured" else "procedural"
+
+
+func _planet_data_from_texture_sector(catalog: Catalog, texture_sector: String) -> Dictionary:
+	var ref_world := catalog.get_world(texture_sector)
+	if ref_world.is_empty():
+		return {}
+	var ref_planet: Variant = ref_world.get("planet", {})
+	if typeof(ref_planet) != TYPE_DICTIONARY:
+		return {}
+	return (ref_planet as Dictionary).duplicate(true)
+
+
 func _spawn_planet(
 	world_root: Node2D,
 	planet_data: Dictionary,
@@ -439,6 +459,15 @@ func _spawn_planet(
 	sector_id: String
 ) -> Node2D:
 	_planet_diameter = float(planet_data.get("diameter", 2000.0))
+	if _planet_renderer(planet_data) == "procedural":
+		var resolved := SkyParentBodyParams.resolve_from_parent(planet_data, sector_id)
+		var body := SkyParentBodyScript.new()
+		body.name = "Planet"
+		world_root.add_child(body)
+		body.configure_local_procedural(planet_data, resolved, sector_id, 1.0)
+		spawned_by_id["planet"] = body
+		return body
+
 	var planet := PlanetBackdropScript.new()
 	planet.name = "Planet"
 	world_root.add_child(planet)
@@ -575,20 +604,59 @@ func _spawn_sky_backdrop(
 	var parent_raw: Variant = world_data.get("parent_body", {})
 	if typeof(parent_raw) == TYPE_DICTIONARY and not parent_raw.is_empty():
 		var parent_data: Dictionary = parent_raw
-		var resolved := SkyParentBodyParams.resolve_from_parent(parent_data, sector_id)
-		if not resolved.is_empty():
-			var angular_min := float(parent_data.get("angular_diameter_deg_min", 10.0))
-			var angular_max := float(parent_data.get("angular_diameter_deg_max", angular_min))
+		var parent_renderer := _parent_body_renderer(parent_data)
+		var angular_min := float(parent_data.get("angular_diameter_deg_min", 10.0))
+		var angular_max := float(parent_data.get("angular_diameter_deg_max", angular_min))
+		var ring_outer_scale := 1.0
+		if parent_renderer == "procedural":
+			var resolved := SkyParentBodyParams.resolve_from_parent(parent_data, sector_id)
+			if resolved.is_empty():
+				return
 			var rings_cfg: Dictionary = resolved.get("rings", {})
-			var ring_outer_scale := SkyParentBodyParams.ring_outer_scale(rings_cfg)
-			var visit_rng := RandomNumberGenerator.new()
-			visit_rng.randomize()
-			var angular_deg := visit_rng.randf_range(angular_min, angular_max)
-			var distance := SkyBackdropLayout.min_distance_for_parent(angular_max, ring_outer_scale)
-			var rng := RandomNumberGenerator.new()
-			rng.seed = absi(("%s:parent" % sector_id).hash())
-			var angle := SkyBackdropLayout.pick_parent_angle(primary_star_pos, rng)
-			var parent_pos := Vector2.from_angle(angle) * distance
+			ring_outer_scale = SkyParentBodyParams.ring_outer_scale(rings_cfg)
+		var visit_rng := RandomNumberGenerator.new()
+		visit_rng.randomize()
+		var angular_deg := visit_rng.randf_range(angular_min, angular_max)
+		var distance := SkyBackdropLayout.min_distance_for_parent(angular_max, ring_outer_scale)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = absi(("%s:parent" % sector_id).hash())
+		var angle := SkyBackdropLayout.pick_parent_angle(primary_star_pos, rng)
+		var parent_pos := Vector2.from_angle(angle) * distance
+		var type_label := SkyParentBodyParams.body_type_label(str(parent_data.get("type", "")))
+		var parent_name := str(parent_data.get("name", "Parent"))
+		if parent_renderer == "textured":
+			var texture_sector := str(parent_data.get("texture_sector", "")).strip_edges()
+			var texture_planet := _planet_data_from_texture_sector(catalog, texture_sector)
+			if texture_planet.is_empty():
+				return
+			var disc_radius := SkyBackdropLayout.disc_radius_from_angular(angular_deg, distance)
+			texture_planet["diameter"] = disc_radius * 2.0
+			var parent_globe := PlanetBackdropScript.new()
+			parent_globe.name = "ParentBody"
+			world_root.add_child(parent_globe)
+			parent_globe.configure(
+				texture_planet,
+				texture_sector,
+				[],
+				parent_pos,
+				-60,
+				false
+			)
+			var primary_star: Variant = spawned_by_id.get("local_star")
+			var star_color := Color.WHITE
+			if primary_star != null and primary_star.has_method("get_light_color"):
+				star_color = primary_star.call("get_light_color")
+			parent_globe.set_sun(primary_star_pos, star_color, primary_irradiance)
+			spawned_by_id["parent_body"] = parent_globe
+			_sky_parent_nav = {
+				"id": "parent_body",
+				"name": parent_name,
+				"type_label": type_label,
+			}
+		else:
+			var resolved := SkyParentBodyParams.resolve_from_parent(parent_data, sector_id)
+			if resolved.is_empty():
+				return
 			var parent := SkyParentBodyScript.new()
 			parent.name = "ParentBody"
 			world_root.add_child(parent)
@@ -604,8 +672,8 @@ func _spawn_sky_backdrop(
 			spawned_by_id["parent_body"] = parent
 			_sky_parent_nav = {
 				"id": "parent_body",
-				"name": parent.get_display_name(),
-				"type_label": str(resolved.get("type_label", "")),
+				"name": parent_name,
+				"type_label": str(resolved.get("type_label", type_label)),
 			}
 
 

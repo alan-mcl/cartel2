@@ -115,7 +115,7 @@ Companions are target-lockable **stars**; they are not second light sources for 
 
 ## Parent body (non-star backdrop)
 
-Moon sectors may define **`parent_body`**. **SkyParentBody** renders at **`z_index -60`**. Disc and ring shading uses the same **`sun_irradiance`**, **`display_exposure`**, and tone-map path as the system planet (`PlanetExposure`), with **`PlanetBackdrop.sun_direction_canvas_from_star`** on the primary star’s visit-random world position (same 2D sky bearing as the system planet). Limb and terminator controls from catalog remain; legacy `ambient_light` / `light_intensity` no longer drive shade.
+Moon sectors may define **`parent_body`**. Default **`renderer` `procedural`**: **SkyParentBody** at **`z_index -60`**. **`renderer` `textured`** with **`texture_sector`** draws **PlanetBackdrop** at the same bearing using another sector’s albedo/night maps (distant globe only; no City-Mall labels). Local **`planet`** may use **`renderer` `procedural`** at the origin (`z_index -50`) for gas-giant sectors such as Vulcan Research Station. Disc shading uses the same **`sun_irradiance`**, **`display_exposure`**, and tone-map path as textured globes (`PlanetExposure`), with **`PlanetBackdrop.sun_direction_canvas_from_star`** on the primary star’s visit-random position. Procedural slots call **`set_sun`** after **`LocalStar`** spawns so the terminator tracks the visit-random bearing.
 
 ## Volatile translation sites
 

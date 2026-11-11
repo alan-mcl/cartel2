@@ -378,6 +378,41 @@ def check_parent_body_rings(label: str, rings: object) -> list[str]:
     return errors
 
 
+PLANET_RENDERERS = frozenset({"textured", "procedural"})
+PARENT_BODY_RENDERERS = frozenset({"procedural", "textured"})
+
+
+def _world_renderer(value: object, default: str) -> str:
+    if value is None:
+        return default
+    text = str(value).strip().lower()
+    return text if text else default
+
+
+def check_world_planet_renderer(world_id: str, world_data: dict, worlds: dict) -> list[str]:
+    errors: list[str] = []
+    planet = world_data.get("planet")
+    if not isinstance(planet, dict):
+        return errors
+    label = f"world {world_id} planet"
+    renderer = _world_renderer(planet.get("renderer"), "textured")
+    if renderer not in PLANET_RENDERERS:
+        errors.append(f"{label}: renderer must be textured or procedural")
+        return errors
+    if renderer == "procedural":
+        appearance = planet.get("appearance")
+        if appearance is None:
+            errors.append(f"{label}: procedural renderer requires appearance")
+        else:
+            errors.extend(check_parent_body_appearance(label, appearance))
+        rings = planet.get("rings")
+        if rings is None:
+            errors.append(f"{label}: procedural renderer requires rings")
+        else:
+            errors.extend(check_parent_body_rings(label, rings))
+    return errors
+
+
 def check_world_sky_backdrop(
     worlds: dict,
     sectors: dict[str, dict],
@@ -402,6 +437,8 @@ def check_world_sky_backdrop(
         system = sector_system(sector_row)
         primary_name = sector_primary_name(sector_row)
 
+        errors.extend(check_world_planet_renderer(str(world_id), world_data, worlds))
+
         parent = world_data.get("parent_body")
         if parent is not None:
             label = f"world {world_id} parent_body"
@@ -414,8 +451,31 @@ def check_world_sky_backdrop(
                 type_id = str(parent.get("type", "")).strip()
                 if not type_id:
                     errors.append(f"{label}: missing type")
-                errors.extend(check_parent_body_appearance(label, parent.get("appearance")))
-                errors.extend(check_parent_body_rings(label, parent.get("rings")))
+                parent_renderer = _world_renderer(parent.get("renderer"), "procedural")
+                if parent_renderer not in PARENT_BODY_RENDERERS:
+                    errors.append(f"{label}: renderer must be procedural or textured")
+                elif parent_renderer == "textured":
+                    texture_sector = str(parent.get("texture_sector", "")).strip()
+                    if not texture_sector:
+                        errors.append(f"{label}: textured renderer requires texture_sector")
+                    elif texture_sector not in worlds:
+                        errors.append(f"{label}: unknown texture_sector '{texture_sector}'")
+                    else:
+                        ref_world = worlds.get(texture_sector)
+                        ref_planet = (
+                            ref_world.get("planet") if isinstance(ref_world, dict) else None
+                        )
+                        if not isinstance(ref_planet, dict):
+                            errors.append(
+                                f"{label}: texture_sector '{texture_sector}' has no planet block"
+                            )
+                        elif not str(ref_planet.get("albedo", "")).strip():
+                            errors.append(
+                                f"{label}: texture_sector '{texture_sector}' planet missing albedo"
+                            )
+                else:
+                    errors.extend(check_parent_body_appearance(label, parent.get("appearance")))
+                    errors.extend(check_parent_body_rings(label, parent.get("rings")))
                 angular_min = parent.get("angular_diameter_deg_min")
                 angular_max = parent.get("angular_diameter_deg_max")
                 if not isinstance(angular_min, (int, float)) or angular_min < 2 or angular_min > 20:

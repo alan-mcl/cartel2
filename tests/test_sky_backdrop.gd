@@ -3,6 +3,8 @@ extends RefCounted
 
 const LocalStarScript := preload("res://scripts/presentation/local_star.gd")
 const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
+const SkyParentBodyScript := preload("res://scripts/presentation/sky_parent_body.gd")
+const WorldLoaderScript := preload("res://scripts/presentation/world_loader.gd")
 
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
@@ -13,6 +15,7 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_parent_params(runner)
 	_test_titania_angular_roll(runner, tree)
 	_test_sector_spawns(runner, tree)
+	_test_interchangeable_renderers(runner, tree)
 
 
 static func _test_parent_sun_direction_canvas(runner: TestRunner) -> void:
@@ -258,6 +261,78 @@ static func _test_titania_angular_roll(runner: TestRunner, tree: SceneTree) -> v
 		if parent != null and parent.has_method("get_angular_diameter_deg"):
 			var angular := float(parent.call("get_angular_diameter_deg"))
 			runner.check(angular >= 10.0 and angular <= 16.0, "sky backdrop: titania angular in 10-16")
+	host.queue_free()
+
+
+static func _test_interchangeable_renderers(runner: TestRunner, tree: SceneTree) -> void:
+	if tree == null:
+		tree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.root == null:
+		runner.check(false, "interchangeable renderers: SceneTree available")
+		return
+	var catalog := Catalog.load_default()
+	var vulcan_world := catalog.get_world("vulcan_research")
+	var vulcan_planet: Dictionary = vulcan_world.get("planet", {})
+	runner.check(
+		str(vulcan_planet.get("renderer", "")) == "procedural",
+		"interchangeable: vulcan_research planet is procedural"
+	)
+	runner.check(
+		not SkyParentBodyParams.resolve_from_parent(vulcan_planet, "vulcan_research").is_empty(),
+		"interchangeable: vulcan procedural appearance resolves"
+	)
+	var byrsa_world := catalog.get_world("byrsa")
+	var byrsa_parent: Dictionary = byrsa_world.get("parent_body", {})
+	runner.check(
+		str(byrsa_parent.get("renderer", "")) == "textured",
+		"interchangeable: byrsa parent is textured"
+	)
+	runner.check(
+		str(byrsa_parent.get("texture_sector", "")) == "new_carthage",
+		"interchangeable: byrsa parent texture_sector"
+	)
+	var carthage: Dictionary = catalog.get_world("new_carthage").get("planet", {})
+	runner.check(carthage.has("albedo"), "interchangeable: new_carthage albedo for byrsa parent")
+
+	var host := Node2D.new()
+	tree.root.add_child(host)
+	var session := GameSession.new()
+	runner.check(
+		session.start_new_game(catalog, "INT-1", "tester"),
+		"interchangeable: session starts"
+	)
+	for child in host.get_children():
+		child.free()
+	var vulcan_loader := WorldLoaderScript.new()
+	vulcan_loader.load_sector(host, catalog, session, "vulcan_research")
+	var vulcan_planet_node: Variant = vulcan_loader.spawned_by_id.get("planet")
+	runner.check(vulcan_planet_node is SkyParentBodyScript, "interchangeable: vulcan spawns SkyParentBody at planet")
+	if vulcan_planet_node != null and vulcan_planet_node.has_method("get_disc_radius"):
+		runner.check(
+			absf(float(vulcan_planet_node.call("get_disc_radius")) - 1400.0) < 0.01,
+			"interchangeable: vulcan disc radius 1400"
+		)
+		runner.check(
+			(vulcan_planet_node as Node2D).global_position.length_squared() < 1.0,
+			"interchangeable: vulcan procedural planet at origin"
+		)
+
+	for child in host.get_children():
+		child.free()
+	var byrsa_loader := WorldLoaderScript.new()
+	byrsa_loader.load_sector(host, catalog, session, "byrsa")
+	var byrsa_parent_node: Variant = byrsa_loader.spawned_by_id.get("parent_body")
+	runner.check(byrsa_parent_node is PlanetBackdropScript, "interchangeable: byrsa parent is PlanetBackdrop")
+	if byrsa_parent_node is Node2D:
+		runner.check(
+			(byrsa_parent_node as Node2D).global_position.length_squared() > 1.0,
+			"interchangeable: byrsa textured parent off origin"
+		)
+	if byrsa_parent_node != null and byrsa_parent_node.has_method("visible_surface_labels"):
+		runner.check(
+			(byrsa_parent_node.call("visible_surface_labels") as Array).is_empty(),
+			"interchangeable: distant parent has no surface labels"
+		)
 	host.queue_free()
 
 

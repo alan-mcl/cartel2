@@ -81,7 +81,7 @@ Regulus A is itself a close binary: a rapidly rotating bright blue star with a f
 Two volatile gas giants keep tight orbits around the pair, then a good deal further out at 14 AU lies Tycho in a narrow habitable zone. Beyond Tycho is an asteroid belt, followed by a gaggle of increasingly distant gas giants, some in very eccentric orbits, and their numerous moons.
 
 Planets and moons:
- - Vulcan (1st planet, 1.5 AU): The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in orbit.
+ - Vulcan (1st planet, 1.5 AU): The innermost gas giant orbiting Regulus, a Neptune-sized hot ball of toxic storms. A heavily shielded scientific observation habitat is in high orbit.
  - Denarius II (2nd moon of 2nd planet, 4.5 AU): The second moon of the second gas giant (called Denarius because it's visible as a coin-sized silver disk in Tycho's skies). This is a rocky moon with surface and orbital mining infrastructure.
  - Typhon XVI (16th moon of 4th planet, 32 AU): The 16th moon of the gas giant Typhon, a huge turbulent world with a spectacular ring system. The moon is rocky and unstable, with surface and orbital mining infrastructure.
 

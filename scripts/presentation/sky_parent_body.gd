@@ -12,6 +12,7 @@ var _front_rings: Sprite2D
 var _display_name: String = ""
 var _disc_radius: float = 0.0
 var _angular_diameter_deg: float = 0.0
+var _stellar_irradiance: float = 1.0
 
 
 func configure(
@@ -70,6 +71,75 @@ func configure(
 		)
 		add_child(_rear_rings)
 		add_child(_front_rings)
+
+
+func configure_local_procedural(
+	planet_data: Dictionary,
+	resolved: Dictionary,
+	sector_id: String = "",
+	stellar_irradiance: float = 1.0
+) -> void:
+	_clear_sprites()
+	_display_name = "Planet"
+	_angular_diameter_deg = 0.0
+	_stellar_irradiance = stellar_irradiance
+
+	var planet_diameter := float(planet_data.get("diameter", 2000.0))
+	_disc_radius = planet_diameter * 0.5
+
+	position = Vector2.ZERO
+	z_index = -50
+
+	if resolved.is_empty():
+		return
+
+	var merged: Dictionary = resolved.get("appearance", {})
+	var seed_val := float(resolved.get("seed_val", 0.0))
+	var rings_cfg: Dictionary = resolved.get("rings", {})
+	var seed_text := str(resolved.get("seed_text", ""))
+	var planet_params := SkyParentBodyParams.build_planet_shader_params(merged, seed_val, seed_text)
+	var sun_3d := PlanetBackdropScript.sun_direction_canvas_from_star(Vector2.ZERO)
+	var exposure := PlanetExposure.display_exposure(stellar_irradiance)
+
+	var planet_texture := _make_white_texture()
+
+	_planet_disc = _make_sprite("PlanetDisc", planet_texture, 0)
+	_planet_disc.scale = Vector2.ONE * (planet_diameter / float(TEXTURE_SIZE))
+	_apply_planet_material(_planet_disc, planet_params, sun_3d, stellar_irradiance, exposure)
+	add_child(_planet_disc)
+
+	if bool(rings_cfg.get("enabled", false)):
+		var outer_radius := SkyParentBodyParams.ring_outer_scale(rings_cfg)
+		var ring_diameter := planet_diameter * outer_radius
+		var profile := SkyParentRingProfile.build_texture(rings_cfg, seed_val)
+		var ring_texture := _make_white_texture()
+		_rear_rings = _make_sprite("RearRings", ring_texture, -1)
+		_front_rings = _make_sprite("FrontRings", ring_texture, 1)
+		var ring_scale := ring_diameter / float(TEXTURE_SIZE)
+		_rear_rings.scale = Vector2.ONE * ring_scale
+		_front_rings.scale = Vector2.ONE * ring_scale
+		_apply_ring_material(
+			_rear_rings, rings_cfg, merged, profile, sun_3d, false, seed_val, stellar_irradiance, exposure
+		)
+		_apply_ring_material(
+			_front_rings, rings_cfg, merged, profile, sun_3d, true, seed_val, stellar_irradiance, exposure
+		)
+		add_child(_rear_rings)
+		add_child(_front_rings)
+
+
+func set_sun(world_direction: Vector2, _star_color: Color = Color.WHITE, intensity: float = 1.0) -> void:
+	_stellar_irradiance = intensity
+	var sun_3d := PlanetBackdropScript.sun_direction_canvas_from_star(world_direction)
+	var exposure := PlanetExposure.display_exposure(intensity)
+	for sprite in [_planet_disc, _rear_rings, _front_rings]:
+		if sprite == null or not is_instance_valid(sprite):
+			continue
+		var material: Material = sprite.material
+		if material is ShaderMaterial:
+			material.set_shader_parameter("sun_direction", sun_3d)
+			material.set_shader_parameter("sun_irradiance", maxf(intensity, 0.0))
+			material.set_shader_parameter("display_exposure", exposure)
 
 
 func _clear_sprites() -> void:

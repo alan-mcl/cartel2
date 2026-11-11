@@ -33,15 +33,20 @@ const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
 func configure(
 	planet_data: Dictionary,
 	sector_id: String = "",
-	surface_camp_names: Array = []
+	surface_camp_names: Array = [],
+	slot_position: Variant = null,
+	slot_z_index: int = -50,
+	load_surface_labels: bool = true
 ) -> void:
 	_diameter = float(planet_data.get("diameter", 2000.0))
 	var tint := Color(str(planet_data.get("modulate", "#ffffff")))
-	var night_path := str(planet_data.get("night_lights", ""))
-	_anchors = SurfaceLabels.load_anchors(SurfaceLabels.habitations_path_for_night(night_path))
-	if _anchors.is_empty() and not surface_camp_names.is_empty():
-		var sid := sector_id if not sector_id.is_empty() else "planet"
-		_anchors = SurfaceLabels.synthetic_anchors(sid, surface_camp_names)
+	_anchors = []
+	if load_surface_labels:
+		var night_path := str(planet_data.get("night_lights", ""))
+		_anchors = SurfaceLabels.load_anchors(SurfaceLabels.habitations_path_for_night(night_path))
+		if _anchors.is_empty() and not surface_camp_names.is_empty():
+			var sid := sector_id if not sector_id.is_empty() else "planet"
+			_anchors = SurfaceLabels.synthetic_anchors(sid, surface_camp_names)
 
 	if planet_data.has("rotation_period_seconds"):
 		_spin_period = maxf(float(planet_data.get("rotation_period_seconds")), 1.0)
@@ -54,8 +59,11 @@ func configure(
 	_inspection_yaw = 0.0
 	_inspection_pitch = 0.0
 
-	position = Vector2.ZERO
-	z_index = -50
+	if slot_position is Vector2:
+		position = slot_position
+	else:
+		position = Vector2.ZERO
+	z_index = slot_z_index
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 	_build_viewport_scene(planet_data, tint)
