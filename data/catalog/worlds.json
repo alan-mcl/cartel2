@@ -2536,6 +2536,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/alecto_albedo.png",
 			"diameter": 1800,
 			"modulate": "#6a3828"
 		},
@@ -2625,6 +2626,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/new_ceres_albedo.png",
 			"diameter": 2400,
 			"modulate": "#4a6850",
 			"atmosphere_strength": 1.1
@@ -2844,6 +2846,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/varda_iii_albedo.png",
 			"diameter": 1100,
 			"modulate": "#9ab0c0"
 		},
@@ -3034,6 +3037,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/cressida_albedo.png",
 			"diameter": 900,
 			"modulate": "#606878"
 		},
