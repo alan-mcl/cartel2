@@ -88,6 +88,7 @@ Implemented in `scripts/presentation/nspace_field.gd`, configured from the catal
 - **Ascidian hazards (F8):** scanning a locked ascidian triggers one reaction — either a **sting** (hull-stress lump, kick, jagged forked bolt from ascidian to ship, brief hull lightning like N-space flux) or, with a chance that rises with `UnspaceInstability`, an **N-space flux** storm attributed to the ascidian (no sting on that scan). Sting discharge has a **maximum range** (~2400 m); if the ascidian is farther away it **closes on the ship** first. Once in range, the zap lands after a **3–5 s** wind-up. No ticker log lines for these events. On a slow pulse, a random ascidian **sheds** a burst of shards on random headings (count scales with instability; shard cap still applies). When instability is above a modest floor, the **nearest** ascidian drifts toward the player but stops inside a standoff of about twice its radius. Occasionally an ascidian performs a **local fold**: topo vertices within a few hundred metres rotate by a fraction of `TAU / N` with rim falloff; the exit portal rotates if it lies in that disc; one static mesh bake at the end (skipped while a global fold animation plays). **Terrain flow:** a coarse height grid on the field drives timed contour-and-valley steering and swim-depth lerping so ascidians skirt peaks instead of cutting through them.
 - **Flux (F5):** short turbulence storms from `UnspaceFlux` — hull stress, velocity kick, irregular lightning flashes on the N-space palette (topo backdrop), and an electrified hull overlay on the player ship; rate scales with `UnspaceInstability` (stability and N).
 - **Folds (F6):** discrete events from `UnspaceFold` — over ~1 s, rotate topo vertices and the exit portal by `k × (360 / N)` around the player position at fold start (smoothstep easing). During the sweep, `NspaceBackdrop3D` applies a rigid transform on a fold root (topo, edges, portal mesh); vertex positions and meshes bake once when the animation completes. Ascidians and the ship keep world pose; radar exit blip follows `get_portal_position()`. Same mean event spacing as flux, independent rolls; no new fold while a rotation is playing.
+- **Rim folds:** when the ship exceeds **1.25 × play_bounds** from the mesh centre or **1.15 × play_bounds** from the exit portal, `UnspaceContainmentFold` picks a semi-random `k × (360 / N)` step and plays the same player-centred rotation as F6 (ascidians and shards stay put). Angle choice biases toward spins that point the ship’s velocity back into the disc when speed is above a small floor. An **8 s** cooldown on ephemeral fold state prevents back-to-back triggers. Rim scatter extends to the guard plus FOV margin so the viewport never shows the mesh edge.
 - **Shards (F7):** moving hazards from `UnspaceShards` in the play disc — spawn rate, count cap, and speed scale with `UnspaceInstability` and N; constant velocity (no homing). A hit applies a lump of hull stress and a smaller kick than flux; the shard shatters or occasionally glances off. Radar blips (`contact_kind` `shard`) appear on the local sensor map when active sensors are on. Presentation: `UnspaceShardVisual` on the field. Ascidian **shed** bursts use the same shard motion and hits (`spawn_burst`).
 
 ### Presentation
@@ -98,7 +99,7 @@ Implemented in `scripts/presentation/nspace_field.gd`, configured from the catal
 
 ### Play bounds
 
-`WorldController` sets `Main.play_bounds` from the loaded unspace entry. Local radar scales to this radius. The topo mesh extends beyond the disc for FOV fill; this is **not** infinite navigation (backlog: infinite unspace nav and retuned spawn/portal randomisation).
+`WorldController` sets `Main.play_bounds` from the loaded unspace entry. Local radar scales to this radius. Gameplay hazards and shard despawn still key off this disc. The visible topo extends to **1.25 × play_bounds** (rim guard) plus FOV margin; rim folds reorient the field about the ship before the clear colour appears.
 
 ## Exiting Unspace
 
@@ -160,14 +161,13 @@ The **`field`** object is validated loosely (`additionalProperties: true` on nes
 | Load field | `scripts/presentation/world_loader.gd` |
 | Field mesh, portal, ascidians | `scripts/presentation/nspace_field.gd`, `nspace_backdrop_3d.gd`, `ascidian.gd` |
 | Volatile mission sites | `scripts/gameplay/volatile_translation.gd`, separate world load |
-| Instability / flux / fold / shard / ascidian hazards | `scripts/gameplay/unspace_instability.gd`, `unspace_flux.gd`, `unspace_fold.gd`, `unspace_shards.gd`, `unspace_ascidian_hazards.gd`, `ascidian_terrain_steer.gd` |
+| Instability / flux / fold / shard / ascidian hazards | `scripts/gameplay/unspace_instability.gd`, `unspace_flux.gd`, `unspace_fold.gd`, `unspace_containment_fold.gd`, `unspace_shards.gd`, `unspace_ascidian_hazards.gd`, `ascidian_terrain_steer.gd` |
 
 ## Placeholders and follow-ons
 
 Documented gaps to close when expanding this spec:
 
-1. **Infinite or tiled** unspace navigation ([F2](../architecture/backlog.md)).
-2. **Randomised** entry spawn and exit portal placement policy (partially seeded today; backlog asks for broader randomisation).
-3. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).
+1. **Randomised** entry spawn and exit portal placement policy (partially seeded today; broader randomisation remains optional).
+2. **Economy** using n>4 edges—explicitly out of scope until designed ([commodity_economy.md](../architecture/commodity_economy.md)).
 
 When behaviour or catalog shape changes, update this file in the same change as the code or JSON.

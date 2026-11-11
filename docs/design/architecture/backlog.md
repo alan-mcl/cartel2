@@ -18,7 +18,6 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|F2|in flight|med| Unspace: infinite navigation within the play disc (or beyond), and broader randomised entry spawn plus exit-portal placement policy|
 |F3|gameplay|med|Plotlines: implementations now that the framework is there |
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 |F10|npc|med|NPC pilots to use hyperdrives if equipped|

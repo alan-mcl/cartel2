@@ -272,7 +272,7 @@ One entry per implemented N-space depth (`n` unique, `n >= 4`). `Catalog.get_uns
 | Block | Purpose |
 |-------|---------|
 | `palette` | Colour keys for topo fill and portal (`peak`, `trough`, `portal_*`, …) |
-| `topo` | Scatter/Delaunay mesh: `seed_salt`, `fov_vertex_count`, `scatter_margin`, `quad_merge_chance`, `height_scale`, `vertex_count_min`, `vertex_count_max`, `min_dist_factor`, `default_zoom` |
+| `topo` | Scatter/Delaunay mesh: `seed_salt`, `fov_vertex_count`, `scatter_margin`, `quad_merge_chance`, `height_scale`, `vertex_count_min`, `vertex_count_max` (raised per N so density stays consistent with the enlarged rim guard scatter disc), `min_dist_factor`, `default_zoom` |
 | `portal` | Exit interactable: `interactable`, `interact_radius`, placement fractions (`origin_min_fraction`, `origin_max_fraction`, `spawn_separation_fraction`, `score_spawn_weight`) |
 | `inhabitants` | Optional Ascidian spawn tuning (`count_min`/`max`, speed/radius ranges, wander fraction, …) |
 

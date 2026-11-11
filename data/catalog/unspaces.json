@@ -39,7 +39,7 @@
         "quad_merge_chance": 0.18,
         "height_scale": 600,
         "vertex_count_min": 120,
-        "vertex_count_max": 6000,
+        "vertex_count_max": 8500,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },
@@ -106,7 +106,7 @@
         "quad_merge_chance": 0.148,
         "height_scale": 720,
         "vertex_count_min": 192,
-        "vertex_count_max": 6600,
+        "vertex_count_max": 9350,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },
@@ -173,7 +173,7 @@
         "quad_merge_chance": 0.116,
         "height_scale": 840,
         "vertex_count_min": 264,
-        "vertex_count_max": 7200,
+        "vertex_count_max": 10200,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },
@@ -240,7 +240,7 @@
         "quad_merge_chance": 0.084,
         "height_scale": 960,
         "vertex_count_min": 336,
-        "vertex_count_max": 7800,
+        "vertex_count_max": 11050,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },
@@ -307,7 +307,7 @@
         "quad_merge_chance": 0.052,
         "height_scale": 1080,
         "vertex_count_min": 408,
-        "vertex_count_max": 8400,
+        "vertex_count_max": 11900,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },
@@ -374,7 +374,7 @@
         "quad_merge_chance": 0.02,
         "height_scale": 1200,
         "vertex_count_min": 480,
-        "vertex_count_max": 9000,
+        "vertex_count_max": 12750,
         "min_dist_factor": 0.92,
         "default_zoom": 0.72
       },

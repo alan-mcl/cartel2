@@ -7,6 +7,10 @@ static func run(runner: TestRunner) -> void:
 	_test_cumulative_angle_multiple_of_step(runner)
 	_test_fold_does_not_advance_outside_unspace(runner)
 	_test_fold_animation_lock(runner)
+	_test_rim_fold_distance_unchanged(runner)
+	_test_containment_trigger_predicates(runner)
+	_test_rim_fold_velocity_bias(runner)
+	_test_containment_cooldown_blocks_trigger(runner)
 
 
 static func _session_in_unspace(n: int) -> GameSession:
@@ -57,3 +61,82 @@ static func _test_fold_does_not_advance_outside_unspace(runner: TestRunner) -> v
 	var result: Dictionary = UnspaceFold.advance(session, 1.0)
 	runner.check(not bool(result.get("fold_applied", false)), "fold: no event outside unspace")
 	runner.check_eq(UnspaceFold.cumulative_angle_rad(session), 0.0, "fold: angle unchanged")
+
+
+static func _test_rim_fold_distance_unchanged(runner: TestRunner) -> void:
+	var ship := Vector2(9500.0, 1200.0)
+	var center := Vector2(200.0, -400.0)
+	var delta := float(2) * TAU / 6.0
+	runner.check(
+		UnspaceContainmentFold.distance_to_mesh_center_unchanged_by_player_spin(
+			ship, center, delta
+		),
+		"rim fold: ship-to-centre distance unchanged by player spin"
+	)
+
+
+static func _test_containment_trigger_predicates(runner: TestRunner) -> void:
+	var pb := 8000.0
+	var center := Vector2.ZERO
+	var portal := Vector2(5000.0, 0.0)
+	var ship_near := Vector2(1000.0, 0.0)
+	runner.check(
+		not UnspaceContainmentFold.should_trigger_containment(
+			ship_near, portal, center, pb, false
+		),
+		"rim fold: no trigger inside rim and near portal"
+	)
+	var ship_rim := Vector2(UnspaceContainmentFold.rim_guard_distance(pb) + 500.0, 0.0)
+	runner.check(
+		UnspaceContainmentFold.should_trigger_containment(
+			ship_rim, portal, center, pb, false
+		),
+		"rim fold: rim guard triggers"
+	)
+	runner.check(
+		not UnspaceContainmentFold.should_trigger_containment(
+			ship_rim, portal, center, pb, true
+		),
+		"rim fold: no trigger while animating"
+	)
+	var ship_far_portal := Vector2(0.0, 0.0)
+	portal = Vector2(12000.0, 0.0)
+	runner.check(
+		UnspaceContainmentFold.should_trigger_containment(
+			ship_far_portal, portal, center, pb, false
+		),
+		"rim fold: portal distance triggers"
+	)
+
+
+static func _test_rim_fold_velocity_bias(runner: TestRunner) -> void:
+	var ship := Vector2(9000.0, 0.0)
+	var center := Vector2.ZERO
+	var velocity := Vector2(200.0, 0.0)
+	var pick := UnspaceContainmentFold.pick_rim_fold_angle(6, ship, center, velocity, 99)
+	runner.check(int(pick.get("k", 0)) > 0, "rim fold: picks k with outward velocity")
+	var delta := float(pick.get("delta_rad", 0.0))
+	var outward := ship - center
+	var new_outward := UnspaceContainmentFold.rotate_vector(outward, delta)
+	var dot := velocity.normalized().dot(new_outward.normalized())
+	runner.check(
+		dot <= cos(deg_to_rad(70.0)) + 0.05,
+		"rim fold: rotated outward not aligned with velocity"
+	)
+	var stopped := UnspaceContainmentFold.pick_rim_fold_angle(
+		6, ship, center, Vector2.ZERO, 7
+	)
+	runner.check(int(stopped.get("k", 0)) > 0, "rim fold: random k when nearly stopped")
+
+
+static func _test_containment_cooldown_blocks_trigger(runner: TestRunner) -> void:
+	var pb := 8000.0
+	var center := Vector2.ZERO
+	var portal := Vector2(5000.0, 0.0)
+	var ship_rim := Vector2(UnspaceContainmentFold.rim_guard_distance(pb) + 500.0, 0.0)
+	runner.check(
+		not UnspaceContainmentFold.should_trigger_containment(
+			ship_rim, portal, center, pb, false, 3.0
+		),
+		"rim fold: cooldown suppresses trigger"
+	)

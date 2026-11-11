@@ -130,6 +130,16 @@ func apply_flight_state(flight: Dictionary) -> void:
 	_player.motion.facing = float(flight.get("facing", -PI / 2.0))
 	_player.velocity = _player.motion.velocity
 
+	if _main.session.in_unspace and not _main.session.docked:
+		var field := _world_loader.get_nspace_field()
+		if field != null:
+			if field.apply_rim_fold_immediate_if_needed(
+				_player.global_position,
+				_player.motion.velocity,
+				_main.session
+			):
+				UnspaceFold.begin_containment_cooldown(_main.session)
+
 	if _main.session.docked:
 		_player.freeze_motion()
 

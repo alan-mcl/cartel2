@@ -36,6 +36,8 @@ var _height_scale: float = 600.0
 var _static_backdrop_built: bool = false
 var _flux_storm_active: bool = false
 
+var _mesh_center: Vector2 = Vector2.ZERO
+
 var _fold_anim_active: bool = false
 var _fold_anim_elapsed: float = 0.0
 var _fold_anim_duration: float = 1.0
@@ -92,6 +94,7 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	)
 
 	_build_scatter_mesh()
+	_recompute_mesh_center()
 	_height_grid_extent = _play_bounds * float(_inhabitants_cfg.get("wander_radius_fraction", 0.72))
 	_build_height_grid()
 	_build_edge_catalog()
@@ -182,6 +185,81 @@ func start_fold_animation(pivot: Vector2, delta_rad: float, duration: float = 1.
 	_apply_fold_animation_angle(0.0, false)
 
 
+func get_mesh_center() -> Vector2:
+	return _mesh_center
+
+
+func try_start_rim_fold(
+	ship_pos: Vector2,
+	velocity: Vector2,
+	session: GameSession,
+	containment_cooldown: float
+) -> Dictionary:
+	var out := {
+		"started": false,
+		"delta_rad": 0.0,
+		"k": 0,
+	}
+	if session == null or _fold_anim_active or _animated.is_empty():
+		return out
+	var portal := get_portal_position()
+	if not UnspaceContainmentFold.should_trigger_containment(
+		ship_pos,
+		portal,
+		_mesh_center,
+		_play_bounds,
+		_fold_anim_active,
+		containment_cooldown
+	):
+		return out
+	var n := maxi(session.unspace_n, 4)
+	var seed := _route_seed ^ int(ship_pos.x) ^ int(ship_pos.y)
+	var pick := UnspaceContainmentFold.pick_rim_fold_angle(
+		n, ship_pos, _mesh_center, velocity, seed
+	)
+	var delta_rad := float(pick.get("delta_rad", 0.0))
+	var k := int(pick.get("k", 0))
+	if absf(delta_rad) < 0.0001 or k <= 0:
+		return out
+	start_fold_animation(ship_pos, delta_rad, UnspaceFold.FOLD_ANIM_SECONDS)
+	out["started"] = true
+	out["delta_rad"] = delta_rad
+	out["k"] = k
+	return out
+
+
+func apply_rim_fold_immediate_if_needed(
+	ship_pos: Vector2,
+	velocity: Vector2,
+	session: GameSession
+) -> bool:
+	if session == null or _fold_anim_active or _animated.is_empty():
+		return false
+	var portal := get_portal_position()
+	if not UnspaceContainmentFold.should_trigger_containment(
+		ship_pos,
+		portal,
+		_mesh_center,
+		_play_bounds,
+		false,
+		0.0
+	):
+		return false
+	var n := maxi(session.unspace_n, 4)
+	var pick := UnspaceContainmentFold.pick_rim_fold_angle(
+		n, ship_pos, _mesh_center, velocity, _route_seed
+	)
+	var delta_rad := float(pick.get("delta_rad", 0.0))
+	if absf(delta_rad) < 0.0001:
+		return false
+	_fold_anim_start_verts = _animated.duplicate()
+	_fold_anim_start_portal = _portal_world_pos
+	_fold_anim_pivot = ship_pos
+	_fold_anim_delta_rad = delta_rad
+	_apply_fold_animation_angle(delta_rad, true)
+	return true
+
+
 func tick_fold_animation(delta: float) -> void:
 	if not _fold_anim_active:
 		return
@@ -211,10 +289,23 @@ func _apply_fold_animation_angle(angle_rad: float, bake_mesh: bool) -> void:
 				_animated[i] = _rotate_about_pivot(
 					_fold_anim_start_verts[i], _fold_anim_pivot, angle_rad
 				)
+			_build_height_grid()
 			_backdrop_3d.clear_fold_transform()
 			_backdrop_3d.rebuild_static()
+			_recompute_mesh_center()
+			_static_backdrop_built = true
 		else:
 			_backdrop_3d.set_fold_transform(_fold_anim_pivot, angle_rad)
+
+
+func _recompute_mesh_center() -> void:
+	if _animated.is_empty():
+		_mesh_center = Vector2.ZERO
+		return
+	var sum := Vector2.ZERO
+	for v in _animated:
+		sum += v
+	_mesh_center = sum / float(_animated.size())
 
 
 static func _ease_fold_progress(t: float) -> float:
@@ -342,6 +433,7 @@ func apply_local_fold(center_world: Vector2, radius: float, angle_rad: float) ->
 		if _portal_node != null:
 			_portal_node.global_position = get_portal_position()
 	_build_height_grid()
+	_recompute_mesh_center()
 	if _backdrop_3d != null:
 		_backdrop_3d.clear_fold_transform()
 		_backdrop_3d.rebuild_static()
@@ -642,7 +734,8 @@ func _update_backdrop(delta: float) -> void:
 func _compute_scatter_radius() -> float:
 	var fov_half := _compute_fov_half_diagonal(null)
 	var margin := float(_topo.get("scatter_margin", 1.6))
-	return _play_bounds + fov_half * margin
+	var rim := UnspaceContainmentFold.rim_guard_distance(_play_bounds)
+	return rim + fov_half * margin
 
 
 func _default_zoom() -> float:

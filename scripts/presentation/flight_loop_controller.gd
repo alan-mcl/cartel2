@@ -105,6 +105,7 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if _main.session.in_unspace:
 		_tick_unspace_flux(delta)
 		_tick_unspace_fold(delta)
+		_tick_unspace_containment(delta)
 		_tick_unspace_shards(delta)
 		_tick_unspace_ascidian_hazards(delta)
 	elif _player.has_method("set_unspace_flux_stress"):
@@ -707,7 +708,29 @@ func _tick_unspace_fold(delta: float) -> void:
 	var fold_log := str(fold_result.get("log", ""))
 	if not fold_log.is_empty():
 		_main.session.last_log = fold_log
-		_main.session.changed.emit()
+
+
+func _tick_unspace_containment(delta: float) -> void:
+	UnspaceFold.tick_containment_cooldown(_main.session, delta)
+	if UnspaceFold.is_animation_locked(_main.session):
+		return
+	var field := _world_loader.get_nspace_field()
+	if field == null or field.is_fold_animating():
+		return
+	var rim_result: Dictionary = field.try_start_rim_fold(
+		_player.global_position,
+		_player.motion.velocity,
+		_main.session,
+		UnspaceFold.containment_cooldown(_main.session)
+	)
+	if not bool(rim_result.get("started", false)):
+		return
+	var k := int(rim_result.get("k", 0))
+	var n := maxi(_main.session.unspace_n, 4)
+	UnspaceFold.begin_animation(_main.session)
+	UnspaceFold.begin_containment_cooldown(_main.session)
+	_main.session.last_log = "Unspace fold — field rotated %d×360/%d." % [k, n]
+	_main.session.changed.emit()
 
 
 func _tick_unspace_flux(delta: float) -> void:

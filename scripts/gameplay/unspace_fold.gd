@@ -2,6 +2,7 @@ class_name UnspaceFold
 extends RefCounted
 
 const FOLD_ANIM_SECONDS := 1.0
+const CONTAINMENT_COOLDOWN_SEC := 8.0
 
 ## Ephemeral N-space fold scheduler (F6): rotate field and exit portal around the player.
 
@@ -34,6 +35,28 @@ static func tick_animation_lock(session: GameSession, delta: float) -> void:
 	if remaining <= 0.0:
 		return
 	state["anim_sec"] = maxf(0.0, remaining - delta)
+
+
+static func containment_cooldown(session: GameSession) -> float:
+	if session == null:
+		return 0.0
+	return maxf(0.0, float(_state(session).get("containment_cooldown", 0.0)))
+
+
+static func tick_containment_cooldown(session: GameSession, delta: float) -> void:
+	if session == null or delta <= 0.0:
+		return
+	var state := _state(session)
+	var remaining := float(state.get("containment_cooldown", 0.0))
+	if remaining <= 0.0:
+		return
+	state["containment_cooldown"] = maxf(0.0, remaining - delta)
+
+
+static func begin_containment_cooldown(session: GameSession) -> void:
+	if session == null:
+		return
+	_state(session)["containment_cooldown"] = CONTAINMENT_COOLDOWN_SEC
 
 
 static func advance(session: GameSession, delta: float) -> Dictionary:
