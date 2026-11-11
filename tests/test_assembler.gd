@@ -19,6 +19,8 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_templates_fit_a_full_load(runner, catalog)
 	_test_seed_skips_unfired_rounds(runner, catalog)
 	_test_rearm_charges_the_repair_index(runner, catalog)
+	_test_partial_rearm_at_fill_ratio(runner, catalog)
+	_test_partial_refuel_when_broke(runner, catalog)
 
 
 static func _test_cargo_capabilities(runner: TestRunner, catalog: Catalog) -> void:
@@ -357,3 +359,77 @@ static func _test_rearm_charges_the_repair_index(runner: TestRunner, catalog: Ca
 
 static func owned_ammo(ship: OwnedShip) -> int:
 	return ship.get_ammo_count("oc_river_md_round")
+
+
+static func _test_partial_rearm_at_fill_ratio(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "PARTIAL-R", "trader"), "assembler: partial rearm session starts")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		runner.check(false, "assembler: partial rearm has a ship")
+		return
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var caps: Dictionary = assembled.capacities.get("ammunition_capacity", {})
+	var capacity := int(caps.get("oc_river_md_round", 0))
+	runner.check(capacity > 0, "assembler: partial rearm ship has a magazine")
+	ship.ammunition = {"oc_river_md_round": 0.0}
+	var index := ShipAssembly.repair_price_index(session, catalog)
+	var unit := catalog.get_ammunition_def("oc_river_md_round").cost
+	var full_quote := ShipAssembly.rearm_quote(session, catalog, ship.id, 1.0)
+	var half_quote := ShipAssembly.rearm_quote(session, catalog, ship.id, 0.5)
+	var full_cost := int(full_quote.get("cost", 0))
+	var half_cost := int(half_quote.get("cost", 0))
+	var expected_half := int(ceil(float(capacity) * 0.5 * unit * index - 0.000001))
+	runner.check_eq(half_cost, expected_half, "assembler: partial rearm bill matches half capacity")
+	runner.check(
+		abs(half_cost * 2 - full_cost) <= 1,
+		"assembler: partial rearm cost is about half of a full rearm"
+	)
+	var credits_before := session.wallet.credits
+	runner.check(
+		ShipAssembly.rearm_ship(session, catalog, ship.id, 0.5),
+		"assembler: partial rearm succeeds"
+	)
+	var target := int(float(capacity) * 0.5)
+	runner.check_eq(owned_ammo(ship), target, "assembler: partial rearm fills to half capacity")
+	runner.check_eq(session.wallet.credits, credits_before - half_cost, "assembler: partial rearm spends the quoted bill")
+	runner.check_eq(
+		int(session.career.expenses_by_source.get("ammunition", 0)),
+		half_cost,
+		"assembler: partial rearm records ammunition spend"
+	)
+
+
+static func _test_partial_refuel_when_broke(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "PARTIAL-F", "trader"), "assembler: partial refuel session starts")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		runner.check(false, "assembler: partial refuel has a ship")
+		return
+	var fuel_id := ShipFuel.propulsion_fuel_id(catalog, ship)
+	runner.check(not fuel_id.is_empty(), "assembler: partial refuel ship has propulsion fuel")
+	ShipFuel.set_amount(ship, fuel_id, 0.0)
+	var full_quote := ShipAssembly.refuel_quote(session, catalog, ship.id, 1.0)
+	var half_quote := ShipAssembly.refuel_quote(session, catalog, ship.id, 0.5)
+	var full_cost := int(full_quote.get("cost", 0))
+	var half_cost := int(half_quote.get("cost", 0))
+	runner.check(full_cost > half_cost, "assembler: partial refuel costs less than a full tank")
+	var tight := maxi(half_cost, full_cost - 1)
+	session.wallet.credits = tight
+	var broke_full := ShipAssembly.refuel_quote(session, catalog, ship.id, 1.0)
+	var broke_half := ShipAssembly.refuel_quote(session, catalog, ship.id, 0.5)
+	runner.check(
+		tight < full_cost,
+		"assembler: partial refuel test wallet cannot pay for a full tank"
+	)
+	runner.check(not bool(broke_full.get("enabled", false)), "assembler: full refuel unaffordable on a tight wallet")
+	runner.check(bool(broke_half.get("enabled", false)), "assembler: partial refuel still affordable")
+	session.wallet.credits = half_cost
+	runner.check(ShipAssembly.refuel_ship(session, catalog, ship.id, 0.5), "assembler: partial refuel applies")
+	var capacity := ShipFuel.capacity_for_fuel(catalog, ship, fuel_id)
+	var expected := ShipFuel.target_amount_for_ratio(capacity, 0.0, 0.5)
+	runner.check(
+		abs(ShipFuel.get_amount(ship, fuel_id) - expected) < 0.05,
+		"assembler: partial refuel reaches the half-tank target"
+	)

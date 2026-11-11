@@ -31,6 +31,9 @@ var _ship_ids: PackedStringArray = PackedStringArray()
 var _ship_item_list: ItemList
 var _suppress_ship_select: bool = false
 var _refresh_pending := false
+var _refuel_fill_ratio: float = 1.0
+var _rearm_fill_ratio: float = 1.0
+var _repair_fill_ratio: float = 1.0
 
 var _module_tape_bar: MessageBar
 var _module_tape := YardModuleTape.new()
@@ -102,7 +105,12 @@ func _can_soft_refresh() -> bool:
 
 func _soft_refresh() -> void:
 	_sync_ship_list_labels()
-	_rebuild_ship_panels()
+	var detail := _find_meta_host("yard_detail_host")
+	if detail != null:
+		_rebuild_ship_detail(detail)
+	var admin := _find_meta_host("yard_admin_host")
+	if admin != null:
+		_refresh_yard_dock_service_quotes(admin)
 
 
 func _full_refresh() -> void:
@@ -215,6 +223,9 @@ func _on_ship_item_selected(index: int) -> void:
 	if index < 0 or index >= _ship_ids.size():
 		return
 	_selected_ship_id = _ship_ids[index]
+	_refuel_fill_ratio = 1.0
+	_rearm_fill_ratio = 1.0
+	_repair_fill_ratio = 1.0
 	_rebuild_ship_panels()
 
 
@@ -286,26 +297,50 @@ func _rebuild_admin_panel(admin: VBoxContainer) -> void:
 	refit.pressed.connect(_on_refit_pressed)
 	admin.add_child(refit)
 
-	var refuel_quote := ShipAssembly.refuel_quote(_context.session, _context.catalog, ship.id)
-	var refuel := Button.new()
-	refuel.text = str(refuel_quote.get("button_text", "Refuel"))
-	refuel.disabled = not bool(refuel_quote.get("enabled", false))
-	refuel.pressed.connect(_on_refuel_pressed)
-	admin.add_child(refuel)
+	var refuel_quote := ShipAssembly.refuel_quote(
+		_context.session, _context.catalog, ship.id, _refuel_fill_ratio
+	)
+	var on_refuel_ratio := func(ratio: float) -> Dictionary:
+		_refuel_fill_ratio = ratio
+		return ShipAssembly.refuel_quote(_context.session, _context.catalog, ship.id, ratio)
+	DockServiceControls.build_fill_service_row(
+		admin,
+		_refuel_fill_ratio,
+		refuel_quote,
+		_on_refuel_pressed,
+		on_refuel_ratio,
+		"refuel",
+	)
 
-	var rearm_quote := ShipAssembly.rearm_quote(_context.session, _context.catalog, ship.id)
-	var rearm := Button.new()
-	rearm.text = str(rearm_quote.get("button_text", "Rearm"))
-	rearm.disabled = not bool(rearm_quote.get("enabled", false))
-	rearm.pressed.connect(_on_rearm_pressed)
-	admin.add_child(rearm)
+	var rearm_quote := ShipAssembly.rearm_quote(
+		_context.session, _context.catalog, ship.id, _rearm_fill_ratio
+	)
+	var on_rearm_ratio := func(ratio: float) -> Dictionary:
+		_rearm_fill_ratio = ratio
+		return ShipAssembly.rearm_quote(_context.session, _context.catalog, ship.id, ratio)
+	DockServiceControls.build_fill_service_row(
+		admin,
+		_rearm_fill_ratio,
+		rearm_quote,
+		_on_rearm_pressed,
+		on_rearm_ratio,
+		"rearm",
+	)
 
-	var repair_quote := ShipAssembly.repair_quote(_context.session, _context.catalog, ship.id)
-	var repair := Button.new()
-	repair.text = str(repair_quote.get("button_text", "Repair"))
-	repair.disabled = not bool(repair_quote.get("enabled", false))
-	repair.pressed.connect(_on_repair_pressed)
-	admin.add_child(repair)
+	var repair_quote := ShipAssembly.repair_quote(
+		_context.session, _context.catalog, ship.id, _repair_fill_ratio
+	)
+	var on_repair_ratio := func(ratio: float) -> Dictionary:
+		_repair_fill_ratio = ratio
+		return ShipAssembly.repair_quote(_context.session, _context.catalog, ship.id, ratio)
+	DockServiceControls.build_fill_service_row(
+		admin,
+		_repair_fill_ratio,
+		repair_quote,
+		_on_repair_pressed,
+		on_repair_ratio,
+		"repair",
+	)
 
 
 func _sync_ship_list_labels() -> void:
@@ -327,6 +362,38 @@ func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: Strin
 	_suppress_ship_select = false
 
 
+func _refresh_yard_dock_service_quotes(admin: VBoxContainer) -> void:
+	if _selected_ship_id.is_empty() or _context == null:
+		return
+	var ship_id := _selected_ship_id
+	for child in admin.get_children():
+		if not child is VBoxContainer or not child.has_meta(DockServiceControls.META_SERVICE_ROW):
+			continue
+		var row := child as VBoxContainer
+		var service_key := str(row.get_meta(DockServiceControls.META_SERVICE_KEY, ""))
+		var ratio := DockServiceControls.slider_fill_ratio(row)
+		var quote: Dictionary = {}
+		match service_key:
+			"refuel":
+				_refuel_fill_ratio = ratio
+				quote = ShipAssembly.refuel_quote(
+					_context.session, _context.catalog, ship_id, ratio
+				)
+			"rearm":
+				_rearm_fill_ratio = ratio
+				quote = ShipAssembly.rearm_quote(
+					_context.session, _context.catalog, ship_id, ratio
+				)
+			"repair":
+				_repair_fill_ratio = ratio
+				quote = ShipAssembly.repair_quote(
+					_context.session, _context.catalog, ship_id, ratio
+				)
+			_:
+				continue
+		DockServiceControls.apply_quote_on_row(row, quote)
+
+
 func _on_refit_pressed() -> void:
 	if _selected_ship_id.is_empty() or _context == null or _context.stack == null:
 		return
@@ -340,7 +407,10 @@ func _on_refit_pressed() -> void:
 func _on_refuel_pressed() -> void:
 	if _selected_ship_id.is_empty():
 		return
-	if ShipAssembly.refuel_ship(_context.session, _context.catalog, _selected_ship_id):
+	if ShipAssembly.refuel_ship(
+		_context.session, _context.catalog, _selected_ship_id, _refuel_fill_ratio
+	):
+		_refuel_fill_ratio = 1.0
 		_rebuild_ship_panels()
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)
@@ -349,7 +419,10 @@ func _on_refuel_pressed() -> void:
 func _on_rearm_pressed() -> void:
 	if _selected_ship_id.is_empty():
 		return
-	if ShipAssembly.rearm_ship(_context.session, _context.catalog, _selected_ship_id):
+	if ShipAssembly.rearm_ship(
+		_context.session, _context.catalog, _selected_ship_id, _rearm_fill_ratio
+	):
+		_rearm_fill_ratio = 1.0
 		_rebuild_ship_panels()
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)
@@ -358,7 +431,10 @@ func _on_rearm_pressed() -> void:
 func _on_repair_pressed() -> void:
 	if _selected_ship_id.is_empty():
 		return
-	if ShipAssembly.repair_ship(_context.session, _context.catalog, _selected_ship_id):
+	if ShipAssembly.repair_ship(
+		_context.session, _context.catalog, _selected_ship_id, _repair_fill_ratio
+	):
+		_repair_fill_ratio = 1.0
 		_rebuild_ship_panels()
 		if _context.on_ship_changed.is_valid():
 			_context.on_ship_changed.call(_selected_ship_id)

@@ -377,12 +377,19 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 	return true
 
 
-static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+static func refuel_quote(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> Dictionary:
 	var result := {
 		"enabled": false,
 		"cost": 0,
 		"button_text": "Refuel",
 		"log_reason": "",
+		"fill_ratio": fill_ratio,
+		"has_shortfall": false,
 	}
 
 	var ship := session.get_owned_ship(ship_id)
@@ -400,12 +407,13 @@ static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String
 		result["log_reason"] = "Ship has no fuelled drive or reactor fitted."
 		return result
 
-	var quote_lines := ShipFuel.refuel_quote_lines(session, catalog, ship)
+	var quote_lines := ShipFuel.refuel_quote_lines(session, catalog, ship, fill_ratio)
 	if quote_lines.is_empty():
 		result["button_text"] = "Refuel (full)"
 		result["log_reason"] = "All fuel stores already full."
 		return result
 
+	result["has_shortfall"] = true
 	var cost := 0
 	for row in quote_lines:
 		cost += int(row.get("cost", 0))
@@ -417,15 +425,20 @@ static func refuel_quote(session: GameSession, catalog: Catalog, ship_id: String
 		return result
 
 	result["cost"] = cost
-	result["button_text"] = "Refuel (d%d)" % cost
-	result["enabled"] = session.can_afford_credits(cost)
+	result["button_text"] = "Refuel (d%d)" % cost if cost > 0 else "Refuel"
+	result["enabled"] = cost <= 0 or session.can_afford_credits(cost)
 	if not result["enabled"]:
 		result["log_reason"] = "Insufficient credits to refuel. Need d%d." % cost
 	return result
 
 
-static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
-	var quote := refuel_quote(session, catalog, ship_id)
+static func refuel_ship(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> bool:
+	var quote := refuel_quote(session, catalog, ship_id, fill_ratio)
 	if not bool(quote.get("enabled", false)):
 		var reason := str(quote.get("log_reason", ""))
 		if reason.is_empty():
@@ -444,13 +457,20 @@ static func refuel_ship(session: GameSession, catalog: Catalog, ship_id: String)
 	if cost > 0:
 		session.apply_credits_delta(-cost)
 
-	ShipFuel.fill_all_to_capacity(catalog, ship)
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
+	ShipFuel.fill_to_ratio(catalog, ship, ratio)
 	if cost > 0:
-		session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
+		if ratio < 0.999:
+			session.last_log = "Refuelled %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+		else:
+			session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
 		if not session.player.sandbox:
 			session.career.record_fuel_spend(cost)
 	else:
-		session.last_log = "Refuelled %s." % ship.name
+		if ratio < 0.999:
+			session.last_log = "Refuelled %s to %.0f%%." % [ship.name, ratio * 100.0]
+		else:
+			session.last_log = "Refuelled %s." % ship.name
 	session.changed.emit()
 	return true
 
@@ -469,13 +489,20 @@ static func repair_price_index(session: GameSession, catalog: Catalog) -> float:
 	return float(buy) / commodity.base_price
 
 
-static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+static func rearm_quote(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> Dictionary:
 	var result := {
 		"enabled": false,
 		"cost": 0,
 		"button_text": "Rearm",
 		"log_reason": "",
 		"shortfall": {},
+		"fill_ratio": fill_ratio,
+		"has_shortfall": false,
 	}
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
@@ -486,7 +513,7 @@ static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String)
 		return result
 
 	var assembled := assemble_owned(catalog, ship)
-	var shortfall := _ammunition_shortfall(catalog, ship, assembled)
+	var shortfall := _ammunition_shortfall(catalog, ship, assembled, fill_ratio)
 	if shortfall.is_empty():
 		var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
 		var fired := ShipAssembler.fired_ammunition_types(assembled)
@@ -504,6 +531,7 @@ static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String)
 			result["log_reason"] = "Ship has no ammunition to restock."
 		return result
 
+	result["has_shortfall"] = true
 	result["shortfall"] = shortfall
 	if session.sandbox:
 		result["enabled"] = true
@@ -520,7 +548,7 @@ static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String)
 	var raw := 0.0
 	for entry_variant in shortfall.values():
 		var entry: Dictionary = entry_variant
-		raw += float(entry["missing"]) * float(entry["unit_cost"]) * index
+		raw += float(entry["to_buy"]) * float(entry["unit_cost"]) * index
 	var cost := 0
 	if raw > 0.0:
 		cost = int(ceil(raw - 0.000001))
@@ -532,8 +560,13 @@ static func rearm_quote(session: GameSession, catalog: Catalog, ship_id: String)
 	return result
 
 
-static func rearm_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
-	var quote := rearm_quote(session, catalog, ship_id)
+static func rearm_ship(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> bool:
+	var quote := rearm_quote(session, catalog, ship_id, fill_ratio)
 	if not bool(quote.get("enabled", false)):
 		var reason := str(quote.get("log_reason", ""))
 		if reason.is_empty():
@@ -554,23 +587,59 @@ static func rearm_ship(session: GameSession, catalog: Catalog, ship_id: String) 
 	var shortfall: Dictionary = quote.get("shortfall", {})
 	for ammo_id in shortfall.keys():
 		var entry: Dictionary = shortfall[ammo_id]
-		ship.ammunition[str(ammo_id)] = float(entry["capacity"])
+		ship.ammunition[str(ammo_id)] = float(entry["target"])
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
 	if cost > 0:
-		session.last_log = "Rearmed %s for d%d." % [ship.name, cost]
+		if ratio < 0.999:
+			session.last_log = "Rearmed %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+		else:
+			session.last_log = "Rearmed %s for d%d." % [ship.name, cost]
 		if not session.sandbox:
 			session.career.record_ammunition_spend(cost)
 	else:
-		session.last_log = "Rearmed %s." % ship.name
+		if ratio < 0.999:
+			session.last_log = "Rearmed %s to %.0f%%." % [ship.name, ratio * 100.0]
+		else:
+			session.last_log = "Rearmed %s." % ship.name
 	session.changed.emit()
 	return true
 
 
-static func repair_quote(session: GameSession, catalog: Catalog, ship_id: String) -> Dictionary:
+static func _repair_damage_amounts(catalog: Catalog, ship: OwnedShip) -> Dictionary:
+	var amounts := {
+		"hull_points": 0.0,
+		"power_units": 0.0,
+		"compute_units": 0.0,
+	}
+	if ship == null or catalog == null:
+		return amounts
+	var assembled := ShipAssembler.assemble_owned(catalog, ship)
+	var state := ship.build_combat_state(assembled)
+	amounts["hull_points"] = maxf(0.0, state.hull_max - state.hull_current)
+	amounts["power_units"] = minf(
+		state.power_integrity_lost,
+		float(assembled.capacities.get("power_generation", 0.0))
+	)
+	amounts["compute_units"] = minf(
+		state.compute_integrity_lost,
+		float(assembled.capacities.get("compute_capacity", 0.0))
+	)
+	return amounts
+
+
+static func repair_quote(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> Dictionary:
 	var result := {
 		"enabled": false,
 		"cost": 0,
 		"button_text": "Repair",
 		"log_reason": "",
+		"fill_ratio": fill_ratio,
+		"has_shortfall": false,
 	}
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
@@ -580,21 +649,17 @@ static func repair_quote(session: GameSession, catalog: Catalog, ship_id: String
 		result["log_reason"] = "Ship must be docked at this habitat."
 		return result
 
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	var state := ship.build_combat_state(assembled)
-	var hull_points := maxf(0.0, state.hull_max - state.hull_current)
-	var power_units := minf(
-		state.power_integrity_lost,
-		float(assembled.capacities.get("power_generation", 0.0))
-	)
-	var compute_units := minf(
-		state.compute_integrity_lost,
-		float(assembled.capacities.get("compute_capacity", 0.0))
-	)
+	var amounts := _repair_damage_amounts(catalog, ship)
+	var hull_points := float(amounts["hull_points"])
+	var power_units := float(amounts["power_units"])
+	var compute_units := float(amounts["compute_units"])
 	if hull_points <= 0.001 and power_units <= 0.001 and compute_units <= 0.001:
 		result["button_text"] = "Repair (none)"
 		result["log_reason"] = "Ship has no hull, power, or compute damage."
 		return result
+
+	result["has_shortfall"] = true
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
 
 	if session.sandbox:
 		result["enabled"] = true
@@ -611,23 +676,28 @@ static func repair_quote(session: GameSession, catalog: Catalog, ship_id: String
 	var cost := int(
 		ceil(
 			(
-				hull_points * REPAIR_HULL_PER_POINT
-				+ power_units * REPAIR_POWER_PER_UNIT
-				+ compute_units * REPAIR_COMPUTE_PER_UNIT
+				hull_points * ratio * REPAIR_HULL_PER_POINT
+				+ power_units * ratio * REPAIR_POWER_PER_UNIT
+				+ compute_units * ratio * REPAIR_COMPUTE_PER_UNIT
 			)
 			* index
 		)
 	)
 	result["cost"] = cost
-	result["button_text"] = "Repair (d%d)" % cost
-	result["enabled"] = session.can_afford_credits(cost)
+	result["button_text"] = "Repair (d%d)" % cost if cost > 0 else "Repair"
+	result["enabled"] = cost <= 0 or session.can_afford_credits(cost)
 	if not result["enabled"]:
 		result["log_reason"] = "Insufficient credits to repair. Need d%d." % cost
 	return result
 
 
-static func repair_ship(session: GameSession, catalog: Catalog, ship_id: String) -> bool:
-	var quote := repair_quote(session, catalog, ship_id)
+static func repair_ship(
+	session: GameSession,
+	catalog: Catalog,
+	ship_id: String,
+	fill_ratio: float = 1.0
+) -> bool:
+	var quote := repair_quote(session, catalog, ship_id, fill_ratio)
 	if not bool(quote.get("enabled", false)):
 		var reason := str(quote.get("log_reason", ""))
 		if reason.is_empty():
@@ -647,16 +717,23 @@ static func repair_ship(session: GameSession, catalog: Catalog, ship_id: String)
 		session.apply_credits_delta(-cost)
 
 	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	ship.apply_repair_from_assembled(assembled)
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
+	ship.apply_partial_repair_from_assembled(assembled, ratio)
 	if ship.id == session.fleet.current_ship_id:
 		session.load_combat_from_owned_ship(catalog, ship.id)
 
 	if cost > 0:
-		session.last_log = "Repaired %s for d%d." % [ship.name, cost]
+		if ratio < 0.999:
+			session.last_log = "Repaired %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+		else:
+			session.last_log = "Repaired %s for d%d." % [ship.name, cost]
 		if not session.sandbox:
 			session.career.record_repair_spend(cost)
 	else:
-		session.last_log = "Repaired %s." % ship.name
+		if ratio < 0.999:
+			session.last_log = "Repaired %s to %.0f%%." % [ship.name, ratio * 100.0]
+		else:
+			session.last_log = "Repaired %s." % ship.name
 	session.changed.emit()
 	return true
 
@@ -664,27 +741,36 @@ static func repair_ship(session: GameSession, catalog: Catalog, ship_id: String)
 static func _ammunition_shortfall(
 	catalog: Catalog,
 	owned: OwnedShip,
-	assembled: AssembledShip
+	assembled: AssembledShip,
+	fill_ratio: float = 1.0
 ) -> Dictionary:
 	var shortfall := {}
 	var caps: Variant = assembled.capacities.get("ammunition_capacity", {})
 	if typeof(caps) != TYPE_DICTIONARY:
 		return shortfall
 	var fired := ShipAssembler.fired_ammunition_types(assembled)
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
 	for ammo_variant in caps.keys():
 		var ammo_id := str(ammo_variant)
 		if not fired.has(ammo_id):
 			continue
 		var capacity := int(caps[ammo_variant])
-		var missing := capacity - owned.get_ammo_count(ammo_id)
-		if missing <= 0:
+		if capacity <= 0:
+			continue
+		var current := owned.get_ammo_count(ammo_id)
+		var target := mini(capacity, maxi(current, int(float(capacity) * ratio)))
+		var to_buy := target - current
+		if to_buy <= 0:
 			continue
 		var unit_cost := 0.0
 		var ammo := catalog.get_ammunition_def(ammo_id)
 		if ammo != null:
 			unit_cost = ammo.cost
 		shortfall[ammo_id] = {
-			"missing": missing,
+			"current": current,
+			"target": target,
+			"to_buy": to_buy,
+			"missing": capacity - current,
 			"capacity": capacity,
 			"unit_cost": unit_cost,
 		}

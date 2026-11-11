@@ -280,7 +280,7 @@ One entry per implemented N-space depth (`n` unique, `n >= 4`). `Catalog.get_uns
 
 - `buy_part` / `sell_part` - yard stock ↔ credits ↔ `spare_parts`
 - `install_module` / `remove_module` - any compatible slot; validates mass/volume/mount
-- `refuel_ship` - fill fuel tank toward capacity for credits
+- `refuel_ship` / `rearm_ship` / `repair_ship` - top up fuel, ammunition, or repair damage toward a fill ratio (default 1.0 = full) for credits; quotes accept the same optional ratio
 - `preview_stats` / `get_engineering_block` - configuration + engineering readout for shipyard UI
 
 Chassis is **fixed**; undock is allowed even with incomplete fits (no thrust without engine/fuel).

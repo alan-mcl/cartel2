@@ -10,6 +10,7 @@ static func run(runner: TestRunner) -> void:
 	_test_unspace_does_not_heal(runner, catalog)
 	_test_second_ship_own_hull(runner, catalog)
 	_test_save_round_trip_damage(runner, catalog)
+	_test_partial_repair_at_fill_ratio(runner, catalog)
 
 
 static func _session(runner: TestRunner, catalog: Catalog, background_id: String) -> GameSession:
@@ -130,4 +131,30 @@ static func _test_save_round_trip_damage(runner: TestRunner, catalog: Catalog) -
 	runner.check(
 		is_equal_approx(loaded.combat.hull, 5.0),
 		"repairs: session combat restored from ship on load"
+	)
+
+
+static func _test_partial_repair_at_fill_ratio(runner: TestRunner, catalog: Catalog) -> void:
+	var session := _session(runner, catalog, "soldier")
+	var ship := session.get_current_owned_ship()
+	if ship == null:
+		return
+	var max_hull := session.combat.max_hull
+	session.combat.hull = max_hull - 4.0
+	session.persist_combat_to_ship(ship.id)
+	var full_quote := ShipAssembly.repair_quote(session, catalog, ship.id, 1.0)
+	var half_quote := ShipAssembly.repair_quote(session, catalog, ship.id, 0.5)
+	var full_cost := int(full_quote.get("cost", 0))
+	var half_cost := int(half_quote.get("cost", 0))
+	runner.check(full_cost > half_cost, "repairs: partial quote costs less than full")
+	runner.check(
+		abs(half_cost * 2 - full_cost) <= 1,
+		"repairs: partial repair bill scales with fill ratio"
+	)
+	var credits_before := session.wallet.credits
+	runner.check(ShipAssembly.repair_ship(session, catalog, ship.id, 0.5), "repairs: partial repair succeeds")
+	runner.check_eq(session.wallet.credits, credits_before - half_cost, "repairs: partial repair spends quoted cost")
+	runner.check(
+		is_equal_approx(session.combat.hull, max_hull - 2.0),
+		"repairs: partial repair restores half the hull gap"
 	)

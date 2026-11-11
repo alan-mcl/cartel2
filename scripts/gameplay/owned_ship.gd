@@ -181,10 +181,31 @@ func build_combat_state(assembled: AssembledShip) -> ShipCombatState:
 
 
 func apply_repair_from_assembled(assembled: AssembledShip) -> void:
-	combat_hull = -1.0
-	combat_power_lost = 0.0
-	combat_compute_lost = 0.0
-	combat_shield_charges.clear()
+	apply_partial_repair_from_assembled(assembled, 1.0)
+
+
+func apply_partial_repair_from_assembled(assembled: AssembledShip, fill_ratio: float = 1.0) -> void:
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
+	if ratio >= 0.999:
+		combat_hull = -1.0
+		combat_power_lost = 0.0
+		combat_compute_lost = 0.0
+		combat_shield_charges.clear()
+		return
+	if assembled == null:
+		return
+	var state := build_combat_state(assembled)
+	var hull_gap := state.hull_max - state.hull_current
+	if hull_gap > 0.001:
+		var target_hull := state.hull_current + hull_gap * ratio
+		if is_equal_approx(target_hull, state.hull_max):
+			combat_hull = -1.0
+		else:
+			combat_hull = target_hull
+	if state.power_integrity_lost > 0.001:
+		combat_power_lost = maxf(0.0, state.power_integrity_lost * (1.0 - ratio))
+	if state.compute_integrity_lost > 0.001:
+		combat_compute_lost = maxf(0.0, state.compute_integrity_lost * (1.0 - ratio))
 
 
 func get_module_id(slot: String) -> String:

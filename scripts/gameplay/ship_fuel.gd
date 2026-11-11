@@ -184,8 +184,24 @@ static func clamp_all_to_capacity(catalog: Catalog, owned: OwnedShip) -> void:
 
 
 static func fill_all_to_capacity(catalog: Catalog, owned: OwnedShip) -> void:
+	fill_to_ratio(catalog, owned, 1.0)
+
+
+static func target_amount_for_ratio(capacity: float, current: float, fill_ratio: float) -> float:
+	if capacity <= 0.0:
+		return current
+	var ratio := clampf(fill_ratio, 0.0, 1.0)
+	var target := capacity * ratio
+	target = minf(capacity, maxf(current, target))
+	return target
+
+
+static func fill_to_ratio(catalog: Catalog, owned: OwnedShip, fill_ratio: float) -> void:
 	for fuel_id in required_fuel_ids(catalog, owned):
-		set_amount(owned, fuel_id, capacity_for_fuel(catalog, owned, fuel_id))
+		var capacity := capacity_for_fuel(catalog, owned, fuel_id)
+		var current := get_amount(owned, fuel_id)
+		var target := target_amount_for_ratio(capacity, current, fill_ratio)
+		set_amount(owned, fuel_id, target)
 
 
 static func fill_active_to_capacity(catalog: Catalog, owned: OwnedShip) -> void:
@@ -292,7 +308,8 @@ static func plant_fuel_empty(catalog: Catalog, owned: OwnedShip) -> bool:
 static func refuel_quote_lines(
 	session: GameSession,
 	catalog: Catalog,
-	owned: OwnedShip
+	owned: OwnedShip,
+	fill_ratio: float = 1.0
 ) -> Array:
 	var lines: Array = []
 	if owned == null or session == null or catalog == null:
@@ -302,7 +319,9 @@ static func refuel_quote_lines(
 		var capacity := capacity_for_fuel(catalog, owned, fuel_id)
 		if capacity <= 0.0:
 			continue
-		var needed := capacity - get_amount(owned, fuel_id)
+		var current := get_amount(owned, fuel_id)
+		var target := target_amount_for_ratio(capacity, current, fill_ratio)
+		var needed := target - current
 		if needed <= 0.01:
 			continue
 		var unit_price := FuelEconomy.price_for_sector(session, catalog, sector_id, fuel_id)
@@ -311,6 +330,7 @@ static func refuel_quote_lines(
 		lines.append({
 			"fuel_id": fuel_id,
 			"needed": needed,
+			"target": target,
 			"unit_price": unit_price,
 			"cost": int(ceil(needed * float(unit_price))),
 		})

@@ -43,7 +43,7 @@ Every income source and cost is compared in the same units, for the same referen
 | Fuel | Refuelling at local `FuelEconomy` quotes. | See [Running costs](#running-costs). |
 | Fines and penalties | d500 for unlawful fire, d2,500 for a destroyed ship, and charter cancellation fees. | Unchanged. Piracy is not an income source. |
 | Repairs | Paid at the shipyard and the docking-bay terminal beside refuel and rearm. Damage is stored on each ship. | d30 per hull point at index 1.0 (see [Running costs](#running-costs)). |
-| Rearming | Shipyard and terminal rearm to listed capacity for fired types. | Priced per round at the local Industrial Components index. |
+| Rearming | Shipyard and terminal rearm to a chosen fill percent (default full) for fired types. | Priced per round bought times the local Industrial Components index. |
 
 ### Leaderboard metric
 
@@ -126,7 +126,7 @@ A typical career should draw income from at least two sources, and no single sou
 
 **Today:**
 
-- **Propulsion fuel.** Refuelling is priced by `ShipAssembly.refuel_quote` at the local `FuelEconomy` quote. Bands per unit:
+- **Propulsion fuel.** Refuelling is priced by `ShipAssembly.refuel_quote` at the local `FuelEconomy` quote. Docking Bay and shipyard UI use a fill-percent slider (1–100%); the bill tops up to that share of tank capacity only. Bands per unit:
 
   | Fuel | Band per unit |
   | --- | --- |
@@ -138,8 +138,8 @@ A typical career should draw income from at least two sources, and no single sou
 
 - **Antimatter.** The price band stays d200 to d800. Orion Vault containment tanks hold 2, 4, or 6 units natively; the engine bunker holds 3. The four drives burn 0.009 to 0.013 a second. At the midpoint that is d4.50 to d6.50 a thrust-second, against d3.50 to d4.20 on the fusion templates. A mid-price refill is 7.7% of used price on the Mantis XF5700 and 17.6% on the Krypton K3. Every template's mid-price refill is within 20% of its used price.
 - **Reactor fuel.** Fission and fusion plants burn `fission` or `fusion` fuel in flight at roughly one tenth of the catalog burn rate of a co-fitted drive in the same chemistry family. Refuel quotes sum every required chemistry. Fusion drives and fusion plants share one `fusion` pool.
-- **Repairs.** The shipyard and the docking-bay terminal repair hull, power, and compute damage through `ShipAssembly.repair_quote` and `repair_ship`. The bill is d30 per missing hull point, d3.53 per unit of lost generation, and d3.93 per lost compute unit, each times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Sandbox repair is free. A paid repair is a `repairs` career expense. Damage lives on each `OwnedShip` and persists in saves. Docking and unspace arrival do not heal. Shields are not billed; they regenerate in flight.
-- **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to the listed capacity of every round a fitted weapon fires. The bill is the ammunition `cost` per missing round times the local Industrial Components index, ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place.
+- **Repairs.** The shipyard and the docking-bay terminal repair hull, power, and compute damage through `ShipAssembly.repair_quote` and `repair_ship`, with the same fill-percent slider as refuel and rearm (default full). The bill is each damaged unit times the fill ratio times d30 per hull point, d3.53 per lost generation, and d3.93 per lost compute, then times the local Industrial Components index (`ShipAssembly.repair_price_index`), ceiled once. Partial repair restores the same fraction of hull, power, and compute damage; shield charges clear only on a full repair. Sandbox repair is free. A paid repair is a `repairs` career expense. Damage lives on each `OwnedShip` and persists in saves. Docking and unspace arrival do not heal. Shields are not billed; they regenerate in flight.
+- **Ammunition.** The shipyard and the docking-bay terminal rearm a docked ship to a chosen fill percent (default full) for every round a fitted weapon fires. The bill is the ammunition `cost` per round bought times the local Industrial Components index, ceiled once. Sandbox rearm is free. A paid rearm is an `ammunition` career expense. Seeding fills only those fired types; a magazine that also lists an unfired round leaves that type empty. Rounds already aboard are left in place; partial rearm never strips magazines.
 - **Freight pay.** `freight_missions.json` uses `base_pay` 200 and `friction_pay` 13. The balance tool's freight row measures stacked 1-hop lots on the Pegasus P101 and P105 (same destination, greedy fill). Leftover hold trade to that destination is noted beside the stack and is not part of the target.
 - **Bounty pay.** `bounty_missions.json` uses `base_pay` 2100, multiplied by desk, objective, jitter, and `target_pay_strength` (scaled hull, best hull-damage weapon over reference 17.5 hull DPS, and `1 + escort_count`), then by volatile translation N (×1 / ×1.5 / ×2 for 4 / 5 / 6). Threat cards no longer apply a separate pay multiplier for escorts. Re-check median pay and the 60% kept-after-costs rule after weapon retuning and N scaling.
 - **Weapon tiers.** Ammunition alpha is capped under the smallest unarmoured hull (16 hits on the Juno 1030). Mount medians land near 13 / 15.3 / 22.2 bare hull DPS for light, medium, and heavy mounts. Bounty strength uses reference hull DPS 17.5; sampled expected pay stays near d3,560 and armed hunters keep at least 60% after rearm and a 25% hull repair.
