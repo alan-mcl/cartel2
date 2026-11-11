@@ -119,14 +119,31 @@ func _rebuild_building_list(habitat: Dictionary) -> void:
 	if typeof(building_ids) != TYPE_ARRAY:
 		return
 
+	var rows: Array = []
 	for building_id_variant in building_ids:
 		var building_id := str(building_id_variant)
 		var building := _context.catalog.get_building(building_id)
 		if building.is_empty():
 			continue
+		rows.append({
+			"id": building_id,
+			"name": str(building.get("name", building_id)),
+			"short_desc": str(building.get("short_desc", "")),
+		})
+	rows.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
+		var name_left := str(left.get("name", "")).to_lower()
+		var name_right := str(right.get("name", "")).to_lower()
+		if name_left == name_right:
+			return str(left.get("id", "")) < str(right.get("id", ""))
+		return name_left < name_right
+	)
+
+	for row_variant in rows:
+		var row: Dictionary = row_variant
+		var building_id := str(row.get("id", ""))
 		_building_ids.append(building_id)
-		var index := _building_item_list.add_item(str(building.get("name", building_id)))
-		_building_item_list.set_item_tooltip(index, str(building.get("short_desc", "")))
+		var index := _building_item_list.add_item(str(row.get("name", building_id)))
+		_building_item_list.set_item_tooltip(index, str(row.get("short_desc", "")))
 
 	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
 

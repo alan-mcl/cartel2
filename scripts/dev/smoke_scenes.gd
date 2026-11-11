@@ -97,6 +97,11 @@ func _smoke_embedded_shipyard(catalog: Catalog) -> void:
 	screen.bind(context)
 	await process_frame
 	_check(screen._building_item_list.item_count > 0, "habitat lists buildings")
+	var building_list: ItemList = screen._building_item_list
+	for i in range(building_list.item_count - 1):
+		var label_a := building_list.get_item_text(i).to_lower()
+		var label_b := building_list.get_item_text(i + 1).to_lower()
+		_check(label_a <= label_b, "habitat buildings sorted at index %d" % i)
 	_check(screen._embedded_panel != null, "habitat embeds selected building panel")
 	_check(
 		screen._embedded_panel != null and screen._embedded_panel is Control,
