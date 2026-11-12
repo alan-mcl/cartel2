@@ -377,6 +377,12 @@ static func _test_retrieval_type_sprites_distinct(runner: TestRunner, catalog: C
 	var types: Dictionary = cfg.get("types", {})
 	var paths := {}
 	for type_key in types.keys():
+		if str(type_key) == "asteroid_sample":
+			runner.check(
+				RetrievalCharters.sprite_for_type_key(catalog, str(type_key)).is_empty(),
+				"retrieval sprite: asteroid_sample is procedural"
+			)
+			continue
 		var path := RetrievalCharters.sprite_for_type_key(catalog, str(type_key))
 		runner.check(not path.is_empty(), "retrieval sprite: %s has path" % type_key)
 		runner.check(not paths.has(path), "retrieval sprite: unique path for %s" % type_key)

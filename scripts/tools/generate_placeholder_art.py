@@ -378,13 +378,6 @@ def main() -> None:
     )
 
     write_text(
-        ASSETS / "world/debris.svg",
-        """<svg xmlns="http://www.w3.org/2000/svg" width="80" height="64" viewBox="-40 -32 80 64">
-  <polygon points="-28,-18 24,-22 32,12 -8,28 -34,8" fill="#737880" stroke="#565b62" stroke-width="2"/>
-</svg>""",
-    )
-
-    write_text(
         ASSETS / "world/cargo_container.svg",
         """<svg xmlns="http://www.w3.org/2000/svg" width="72" height="56" viewBox="-36 -28 72 56">
   <rect x="-30" y="-18" width="60" height="36" rx="4" fill="#6a7580" stroke="#4a5560" stroke-width="2"/>

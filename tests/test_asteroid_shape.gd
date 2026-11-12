@@ -12,6 +12,7 @@ static func run(runner: TestRunner) -> void:
 	_test_composition_brightness(runner)
 	_test_sun_normalisation(runner)
 	_test_static_sun_direction(runner)
+	_test_composition_for_seed(runner)
 
 
 static func _test_deterministic_params(runner: TestRunner) -> void:
@@ -89,6 +90,46 @@ static func _test_sun_normalisation(runner: TestRunner) -> void:
 	view.set_sun(Vector3.ZERO, 1.0)
 	var fallback := view.get_sun_direction()
 	runner.check(fallback.length() > 0.9, "asteroid view: zero sun falls back")
+
+
+static func _test_composition_for_seed(runner: TestRunner) -> void:
+	runner.check_eq(
+		AsteroidShape.composition_for_seed(0),
+		AsteroidShape.COMPOSITION_CARBONACEOUS,
+		"asteroid: composition bucket 0 carbonaceous"
+	)
+	runner.check_eq(
+		AsteroidShape.composition_for_seed(65),
+		AsteroidShape.COMPOSITION_STONY,
+		"asteroid: composition bucket 65 stony"
+	)
+	runner.check_eq(
+		AsteroidShape.composition_for_seed(95),
+		AsteroidShape.COMPOSITION_METALLIC,
+		"asteroid: composition bucket 95 metallic"
+	)
+	runner.check_eq(
+		AsteroidShape.composition_for_seed(99),
+		AsteroidShape.COMPOSITION_ICY,
+		"asteroid: composition bucket 99 icy"
+	)
+	var counts := {
+		AsteroidShape.COMPOSITION_CARBONACEOUS: 0,
+		AsteroidShape.COMPOSITION_STONY: 0,
+		AsteroidShape.COMPOSITION_METALLIC: 0,
+		AsteroidShape.COMPOSITION_ICY: 0,
+	}
+	for seed_val in 10_000:
+		var comp := AsteroidShape.composition_for_seed(seed_val)
+		counts[comp] = int(counts.get(comp, 0)) + 1
+	runner.check(
+		absf(float(counts[AsteroidShape.COMPOSITION_CARBONACEOUS]) / 10000.0 - 0.65) < 0.02,
+		"asteroid: composition mix near 65% carbonaceous"
+	)
+	runner.check(
+		absf(float(counts[AsteroidShape.COMPOSITION_STONY]) / 10000.0 - 0.30) < 0.02,
+		"asteroid: composition mix near 30% stony"
+	)
 
 
 static func _test_static_sun_direction(runner: TestRunner) -> void:

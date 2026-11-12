@@ -209,7 +209,6 @@ static func _entity_for_kind(
 			entity["sprite"] = DERELICT_WRECK_SPRITE
 		"debris":
 			entity["label"] = "Debris"
-			entity["sprite"] = "res://assets/world/debris.svg"
 		"cargo":
 			entity["label"] = "Cargo container"
 			entity["sprite"] = CARGO_SPRITE

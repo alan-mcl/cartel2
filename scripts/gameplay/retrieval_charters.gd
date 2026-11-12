@@ -228,8 +228,6 @@ static func build_volatile_grant_params(catalog: Catalog, offer: Dictionary) -> 
 				"position": {"x": 3200.0, "y": 900.0},
 				"rotation": 0.4,
 			}
-			if not specimen_sprite.is_empty():
-				debris_entity["sprite"] = specimen_sprite
 			VolatileSites.append_entity(setup, debris_entity)
 		"derelict":
 			var derelict_entity := {

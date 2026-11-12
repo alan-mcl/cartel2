@@ -1,7 +1,10 @@
 extends StaticBody2D
 
+const AsteroidViewScript := preload("res://scripts/presentation/asteroid_view.gd")
+
 var _health := DebrisHealth.new()
 var _entity_id: String = ""
+var _asteroid: Node2D
 
 
 func configure(entity: Dictionary) -> void:
@@ -13,16 +16,36 @@ func configure(entity: Dictionary) -> void:
 	if entity.has("scale"):
 		var scale_data: Dictionary = entity.get("scale", {})
 		scale = Vector2(float(scale_data.get("x", 1.0)), float(scale_data.get("y", 1.0)))
-	var visual: Sprite2D = get_node_or_null("Visual")
-	var sprite_path := str(entity.get("sprite", ""))
-	if visual != null and not sprite_path.is_empty():
-		var texture := load(sprite_path) as Texture2D
-		if texture != null:
-			visual.texture = texture
+	_configure_asteroid_visual()
+
+
+func _configure_asteroid_visual() -> void:
+	_ensure_asteroid()
+	if _asteroid == null:
+		return
+	var seed_val := AsteroidShape.entity_render_seed(_entity_id)
+	var composition := AsteroidShape.composition_for_seed(seed_val)
+	_asteroid.configure(seed_val, composition, AsteroidShape.DEBRIS_WORLD_SIZE)
+	var ratio := _health.health_ratio()
+	_asteroid.set_visual_modulate(Color(1.0, ratio, ratio))
+
+
+func _ensure_asteroid() -> void:
+	var existing := get_node_or_null("Asteroid")
+	if existing is Node2D:
+		_asteroid = existing as Node2D
+		return
+	_asteroid = AsteroidViewScript.new()
+	_asteroid.name = "Asteroid"
+	add_child(_asteroid)
 
 
 func entity_id() -> String:
 	return _entity_id
+
+
+func render_seed() -> int:
+	return AsteroidShape.entity_render_seed(_entity_id)
 
 
 func health_ratio() -> float:
@@ -34,8 +57,6 @@ func take_weapon_hit(damage: float) -> void:
 	if _health.is_destroyed():
 		queue_free()
 		return
-
-	var visual := get_node_or_null("Visual") as Sprite2D
-	if visual != null:
+	if _asteroid != null and is_instance_valid(_asteroid):
 		var health_ratio := _health.health_ratio()
-		visual.modulate = Color(1.0, health_ratio, health_ratio)
+		_asteroid.set_visual_modulate(Color(1.0, health_ratio, health_ratio))

@@ -30,6 +30,12 @@ func get_params() -> Dictionary:
 	return _params.duplicate(true)
 
 
+func set_visual_modulate(color: Color) -> void:
+	_ensure_sprite()
+	if _sprite != null:
+		_sprite.modulate = color
+
+
 func set_sun(direction: Vector3, intensity: float = 1.0) -> void:
 	if _material == null:
 		return

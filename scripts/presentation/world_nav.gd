@@ -2,7 +2,6 @@ class_name WorldNav
 extends RefCounted
 
 const HullHitboxScript := preload("res://scripts/presentation/hull_hitbox.gd")
-const DEBRIS_SPRITE := "res://assets/world/debris.svg"
 
 var _sector_nav_cache: Array = []
 var _sector_nav_cache_ready: bool = false
@@ -251,6 +250,13 @@ func _merge_lock_display_fields(loader: WorldLoader, contact: Dictionary,
 		contact["lock_hull_radius"] = 18.0
 	contact["heading_rad"] = float(contact.get("heading_rad", 0.0))
 
+
+static func _debris_lock_radius(debris_node: Node2D) -> float:
+	var display_scale := maxf(debris_node.scale.x, debris_node.scale.y)
+	var half := AsteroidShape.DEBRIS_WORLD_SIZE * 0.5 * display_scale
+	return maxf(half, TargetLock.MIN_HULL_RADIUS)
+
+
 func _build_volatile_site_contacts(loader: WorldLoader, _catalog: Catalog) -> Array:
 	var contacts: Array = []
 	if loader._jump_gate_node != null and is_instance_valid(loader._jump_gate_node):
@@ -341,9 +347,9 @@ func _build_debris_contacts(loader: WorldLoader) -> Array:
 			health_ratio = float(debris_node.call("health_ratio"))
 		var meta: Dictionary = loader._debris_entity_contact_meta.get(debris_id, {})
 		var label := str(meta.get("label", "Debris"))
-		var sprite_path := str(meta.get("sprite", DEBRIS_SPRITE))
-		if sprite_path.is_empty():
-			sprite_path = DEBRIS_SPRITE
+		var seed_val := AsteroidShape.entity_render_seed(debris_id)
+		if debris_node.has_method("render_seed"):
+			seed_val = int(debris_node.call("render_seed"))
 		var debris_contact := {
 			"id": debris_id,
 			"name": label,
@@ -353,8 +359,10 @@ func _build_debris_contacts(loader: WorldLoader) -> Array:
 			"velocity": Vector2.ZERO,
 			"debris_health_ratio": health_ratio,
 			"heading_rad": debris_node.global_rotation - PI * 0.5,
+			"asteroid_seed": seed_val,
 		}
-		_merge_lock_display_fields(loader, debris_contact, sprite_path)
+		_merge_lock_display_fields(loader, debris_contact, "")
+		debris_contact["lock_hull_radius"] = _debris_lock_radius(debris_node)
 		contacts.append(debris_contact)
 	loader._debris_entity_ids = surviving_ids
 	return contacts
@@ -371,7 +379,7 @@ func _build_volatile_prop_contacts(loader: WorldLoader) -> Array:
 		var prop_node := node as Node2D
 		var kind := str(meta.get("kind", ""))
 		var label := str(meta.get("label", kind.capitalize()))
-		var sprite_path := str(meta.get("sprite", DEBRIS_SPRITE))
+		var sprite_path := str(meta.get("sprite", ""))
 		var contact := {
 			"id": entity_id,
 			"name": label,

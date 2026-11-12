@@ -62,9 +62,12 @@ func update_lock(ship_pos: Vector2, contact: Dictionary) -> void:
 		_line1.text = _display_name(contact)
 		_line2.text = _kind_label(contact_kind)
 
-	var sprite_path := str(contact.get("sprite_path", ""))
 	var heading := float(contact.get("heading_rad", 0.0)) + PI * 0.5
-	_sprite_slot.set_sprite(sprite_path, heading)
+	if contact.has("asteroid_seed"):
+		_sprite_slot.set_asteroid(int(contact.get("asteroid_seed", 0)), heading)
+	else:
+		var sprite_path := str(contact.get("sprite_path", ""))
+		_sprite_slot.set_sprite(sprite_path, heading)
 
 
 func _display_name(contact: Dictionary) -> String:

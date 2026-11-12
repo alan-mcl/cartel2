@@ -13,6 +13,8 @@ const COMPOSITION_ICY := "icy"
 
 const DEFAULT_COMPOSITION := COMPOSITION_STONY
 
+const DEBRIS_WORLD_SIZE := 80.0
+
 const COMPOSITIONS := {
 	COMPOSITION_STONY: {
 		"colour_a": Color("#8a7d72"),
@@ -58,6 +60,21 @@ static func _radius_sample_dirs() -> PackedVector3Array:
 			Vector3(0.267261242, -0.534522484, 0.801783726),
 		]
 	)
+
+
+static func entity_render_seed(entity_id: String) -> int:
+	return absi(entity_id.hash())
+
+
+static func composition_for_seed(seed: int) -> String:
+	var bucket := absi(seed) % 100
+	if bucket < 65:
+		return COMPOSITION_CARBONACEOUS
+	if bucket < 95:
+		return COMPOSITION_STONY
+	if bucket < 99:
+		return COMPOSITION_METALLIC
+	return COMPOSITION_ICY
 
 
 static func normalize_composition(composition: String) -> String:

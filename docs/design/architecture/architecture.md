@@ -295,7 +295,7 @@ All 26 sectors in `sectors.json` use a structured layout in `worlds.json`, the e
 | `habitat` | `scenes/world/habitat.tscn` |
 | `jump_gate` | `scenes/world/jump_gate.tscn` |
 | `orbital` | `scenes/world/orbital.tscn` (visual-only station) |
-| `debris` | `scenes/world/debris_rock.tscn` (collision; weapon damage via `DebrisHealth`) |
+| `debris` | `scenes/world/debris_rock.tscn` (procedural `AsteroidView` 80 px; collision; weapon damage via `DebrisHealth`) |
 
 Habitat and jump gate have interactable areas but **no solid collision** - the player flies over them. Orbital ring phase is persisted in `GameSession.orbital_phase_by_sector` (saved/loaded). `Simulation.step` advances phase for the current sector when in realspace flight; `OrbitalRing` reads phase for rotation (does not write session while docked or in unspace).
 

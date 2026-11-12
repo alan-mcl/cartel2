@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cartel_volatile_static"]
 
 [ext_resource type="Script" path="res://scripts/presentation/volatile_static.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/world/debris.svg" id="2"]
+[ext_resource type="Texture2D" path="res://assets/world/cargo_container.svg" id="2"]
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_prop"]
 points = PackedVector2Array(-28, -18, 24, -22, 32, 12, -8, 28, -34, 8)

@@ -124,7 +124,7 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 | Array | `world/orbitals/array.svg` | 130×130 | **180×180** | Sensor / comms |
 | Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** | Tall spar |
 | Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
-| Debris rock | `world/debris.svg` | 80×64 | **16×20** | Smaller than Flare-ON; shootable catalog rocks |
+| Debris rock | procedural (`AsteroidView`) | 80×64 | **80×80** author view | Shootable catalog rocks; seed from entity id |
 | Cargo container | `world/cargo_container.svg` | 72×56 | **72×56** | Intact container; volatile-site ambient cargo |
 | Nav buoy | `world/nav_buoy.svg` | 64×64 | **64×64** | Volatile marker variant `buoy` |
 | Survey cross | `world/survey_marker.svg` | 64×64 | **64×64** | Volatile marker variant `survey` (not retrieval probe) |
@@ -137,7 +137,7 @@ Retrieval and clutter identities (`world/retrieval/*.svg`, ~64–96 px). Listed 
 | Time capsule | `world/retrieval/time_capsule.svg` | 72×56 | Retrieval `time_capsule` |
 | Jettisoned cargo pod | `world/retrieval/jettisoned_cargo.svg` | 80×64 | Retrieval `jettisoned_cargo` |
 | Sealed lifepod | `world/retrieval/sealed_lifepod.svg` | 72×72 | Retrieval `sealed_lifepod` |
-| Asteroid sample | `world/retrieval/asteroid_sample.svg` | 80×72 | Retrieval `asteroid_sample` (debris kind) |
+| Asteroid sample | procedural (`AsteroidView`) | 80×72 | Same renderer as debris; retrieval `asteroid_sample` |
 | Derelict wreck | `world/retrieval/derelict_wreck.svg` | 96×72 | Ambient derelict + retrieval `derelict_wreck` |
 | Flight recorder | `world/retrieval/flight_recorder.svg` | 64×72 | Retrieval `flight_recorder` |
 | Survey probe | `world/retrieval/survey_probe.svg` | 72×80 | Retrieval `survey_probe` |

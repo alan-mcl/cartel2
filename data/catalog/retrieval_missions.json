@@ -35,7 +35,6 @@
       "objective": "drone_retrieval",
       "sources": ["peacekeeping", "corporate_office", "bar"],
       "target_kind": "debris",
-      "sprite": "res://assets/world/retrieval/asteroid_sample.svg",
       "designation": "Asteroid sample retrieval",
       "specimen_label": "Asteroid sample",
       "difficulty": 1.0

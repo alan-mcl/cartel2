@@ -2,7 +2,7 @@
 
 Runtime debris and sample art today still use flat SVG placeholders ([sprite_sizes.md](sprite_sizes.md)). **AsteroidView** is a seeded canvas shader that draws a lit rocky body on a transparent background, in the same presentation family as [SkyParentBody](sky_parent_body.gd) (white quad + `canvas_item` shader).
 
-Flight sprites are **unchanged** in the first implementation: no catalog or scene wiring until the harness look is accepted.
+Flight **debris** and retrieval **asteroid_sample** contacts use **AsteroidView** in [`debris_rock.tscn`](../../../scenes/world/debris_rock.tscn). Shape seed is `absi(entity_id.hash())`; composition comes from the same seed via `composition_for_seed` (**carbonaceous 65%**, **stony 30%**, **metallic 4%**, **icy 1%**). World size is **80** px. Lighting uses the renderer default key until sector sun hook-up.
 
 ## Components
 
@@ -50,9 +50,8 @@ Or **F6** on `asteroid_harness.tscn`.
 
 Headless smoke: [`scripts/dev/smoke_scenes.gd`](../../../scripts/dev/smoke_scenes.gd) instantiates the harness and checks that `World/PrimaryAsteroid` spawns.
 
-## Follow-on (not in v1)
+## Follow-on
 
-- Replace `debris.svg` / retrieval sprites with `AsteroidView` in `debris_rock.tscn` and volatile placement, keyed per entity seed.
 - Tie light direction to `LocalStar` / sector irradiance like parent bodies.
 - Optional baked PNG export for catalog paths without changing the analytic shader path.
 
