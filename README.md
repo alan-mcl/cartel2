@@ -114,6 +114,7 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 - [commodity economy](docs/design/architecture/commodity_economy.md) - daily quote equations
 - [UI theme](docs/design/architecture/ui_theme.md)
 - [sprite sizes](docs/design/architecture/sprite_sizes.md)
+- [asteroid renderer](docs/design/architecture/asteroid_renderer.md) — procedural debris harness (sprites not wired yet)
 - [dev sandboxes](docs/design/architecture/dev_sandboxes.md)
 - [audio](docs/design/architecture/audio.md) - buses, logical ids, settings, sandbox
 - [asset backlog](docs/design/architecture/asset_backlog.md) - art and audio still to supply

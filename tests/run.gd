@@ -120,6 +120,7 @@ func _suite_entries(runner: TestRunner) -> Array:
 		{"name": "TestStarAppearance", "run": func() -> void: TestStarAppearance.run(runner)},
 		{"name": "TestPlanetSurfaceLabels", "run": func() -> void: TestPlanetSurfaceLabels.run(runner)},
 		{"name": "TestSkyBackdrop", "run": func() -> void: TestSkyBackdrop.run(runner, self)},
+		{"name": "TestAsteroidShape", "run": func() -> void: TestAsteroidShape.run(runner)},
 		{"name": "TestFlightSandbox", "run": func() -> void: TestFlightSandbox.run(runner)},
 		{"name": "TestMotion", "run": func() -> void: TestMotion.run(runner)},
 		{"name": "TestDebris", "run": func() -> void: TestDebris.run(runner)},

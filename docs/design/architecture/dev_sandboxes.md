@@ -17,6 +17,7 @@ Shared runner:
 | [`scripts/dev/system_sandbox.sh`](../../../scripts/dev/system_sandbox.sh) | `system_sandbox.tscn` | Full catalog sector with ambient traffic; pick sector, starter-kit ship, encounter, and optional run seed; **F8** or pause quit reloads setup |
 | [`scripts/dev/system_render_tester.sh`](../../../scripts/dev/system_render_tester.sh) | `system_render_tester.tscn` | Planetary layout and globe inspection (pan, zoom, frame) |
 | [`scripts/dev/parent_body_harness.sh`](../../../scripts/dev/parent_body_harness.sh) | `parent_body_harness.tscn` | Procedural parent gas giant: atmosphere, orientation, legacy or multi-band rings (gaps, shadow, plane tilt); copy JSON for `worlds.json` |
+| [`scripts/dev/asteroid_harness.sh`](../../../scripts/dev/asteroid_harness.sh) | `asteroid_harness.tscn` | Procedural asteroid/debris renderer: seed, composition, lighting, 20/72/256 px presets; honest pixel previews; see [asteroid_renderer.md](asteroid_renderer.md) |
 | [`scripts/dev/star_rendering_harness.sh`](../../../scripts/dev/star_rendering_harness.sh) | `star_rendering_harness.tscn` | Any `stars.json` entry at configurable AU with companions (world layout or same-system); primary centred on load; pan, zoom, **F** frame |
 | [`scripts/dev/theme_showcase.sh`](../../../scripts/dev/theme_showcase.sh) | `theme_showcase.tscn` | UI theme tokens and control variations |
 | [`scripts/dev/audio_sandbox.sh`](../../../scripts/dev/audio_sandbox.sh) | `audio_sandbox.tscn` | Music, ambience, SFX, thrust, bus volumes, and positional collision |

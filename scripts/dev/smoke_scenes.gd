@@ -18,6 +18,7 @@ func _run() -> void:
 	await _smoke_combat_motion()
 	await _smoke_system_render_tester()
 	await _smoke_parent_body_harness()
+	await _smoke_asteroid_harness()
 	await _smoke_star_rendering_harness()
 	await _smoke_mission_harness()
 	await _smoke_system_sandbox()
@@ -247,6 +248,16 @@ func _smoke_parent_body_harness() -> void:
 	await process_frame
 	var parent: Node = harness.get_node("World/ParentBody")
 	_check(parent != null, "parent body harness spawns preview parent")
+	await _free_and_drain(harness)
+
+
+func _smoke_asteroid_harness() -> void:
+	var harness := preload("res://scenes/dev/asteroid_harness.tscn").instantiate()
+	root.add_child(harness)
+	await process_frame
+	await process_frame
+	var primary: Node = harness.get_node("World/PrimaryAsteroid")
+	_check(primary != null, "asteroid harness spawns primary asteroid")
 	await _free_and_drain(harness)
 
 

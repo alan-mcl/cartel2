@@ -110,6 +110,8 @@ For planetary layout and globe texture inspection without player, ships, or traf
 
 For tuning **`parent_body`** appearance and rings before editing catalog JSON, run `./scripts/dev/parent_body_harness.sh` or **F6** on `parent_body_harness.tscn`. **SkyParentBody** renders a planet disc and separate front/rear ring sprites (`sky_parent_body.gdshader`, `sky_parent_rings.gdshader`) with equatorial ring geometry aligned to the rotational axis. The harness exposes appearance scheme (`banded`, `uniform`, `mottled`, `gradient`), atmosphere presets (banded), palette slots, edge softness, band/turbulence controls, orientation, legacy or multi-band rings, and copies resolved nested JSON. Pan (LMB), zoom (wheel), **F** / **Frame** to fit the parent and star.
 
+**AsteroidView** (`scripts/presentation/asteroid_view.gd`, `shaders/asteroid.gdshader`) procedurally draws lit rocky debris on a transparent quad. Tune seeds, composition presets, and light direction with `./scripts/dev/asteroid_harness.sh` or **F6** on `asteroid_harness.tscn`. Flight debris and retrieval sprites are unchanged until the look is accepted — see [asteroid_renderer.md](asteroid_renderer.md).
+
 ## Main scene structure
 
 `scenes/main.tscn`:
