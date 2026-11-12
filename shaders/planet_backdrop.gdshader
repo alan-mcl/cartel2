@@ -11,7 +11,7 @@ uniform vec3 sun_color : source_color = vec3(1.0, 0.98, 0.94);
 uniform float sun_intensity = 1.0;
 uniform float display_exposure = 2.5;
 uniform float night_emission_strength = 1.6;
-uniform float atmosphere_strength = 0.42;
+uniform float atmosphere_strength = 0.0;
 uniform vec3 atmosphere_color : source_color = vec3(0.42, 0.62, 0.98);
 
 float planet_night_irradiance(float irradiance) {

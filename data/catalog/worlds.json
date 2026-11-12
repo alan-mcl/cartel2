@@ -5,7 +5,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/proxima_albedo.png",
-			"night_lights": "res://assets/world/planets/proxima_night.png"
+			"night_lights": "res://assets/world/planets/proxima_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -85,7 +86,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/tycho_albedo.png",
-			"night_lights": "res://assets/world/planets/tycho_night.png"
+			"night_lights": "res://assets/world/planets/tycho_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -178,7 +180,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/bela_albedo.png",
-			"night_lights": "res://assets/world/planets/bela_night.png"
+			"night_lights": "res://assets/world/planets/bela_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -225,7 +228,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/irasia_albedo.png",
-			"night_lights": "res://assets/world/planets/irasia_night.png"
+			"night_lights": "res://assets/world/planets/irasia_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -285,7 +289,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/tokirev_albedo.png",
-			"night_lights": "res://assets/world/planets/tokirev_night.png"
+			"night_lights": "res://assets/world/planets/tokirev_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -343,7 +348,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/fennet_albedo.png",
-			"night_lights": "res://assets/world/planets/fennet_night.png"
+			"night_lights": "res://assets/world/planets/fennet_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -391,7 +397,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/fortuna_albedo.png",
-			"night_lights": "res://assets/world/planets/fortuna_night.png"
+			"night_lights": "res://assets/world/planets/fortuna_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -448,7 +455,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/new_carthage_albedo.png",
-			"night_lights": "res://assets/world/planets/new_carthage_night.png"
+			"night_lights": "res://assets/world/planets/new_carthage_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -509,7 +517,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/horizon_albedo.png",
-			"night_lights": "res://assets/world/planets/horizon_night.png"
+			"night_lights": "res://assets/world/planets/horizon_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -567,7 +576,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/titania_albedo.png",
-			"night_lights": "res://assets/world/planets/titania_night.png"
+			"night_lights": "res://assets/world/planets/titania_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -634,7 +644,8 @@
 			"diameter": 2000,
 			"modulate": "#ffffff",
 			"albedo": "res://assets/world/planets/pelagos_albedo.png",
-			"night_lights": "res://assets/world/planets/pelagos_night.png"
+			"night_lights": "res://assets/world/planets/pelagos_night.png",
+			"atmosphere_strength": 0.42
 		},
 		"orbital_ring": {
 			"radius": 1600,
@@ -1422,7 +1433,8 @@
 			},
 			"rings": {
 				"type": "none"
-			}
+			},
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2251,7 +2263,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/calypso_vi_albedo.png",
 			"diameter": 1200,
-			"modulate": "#8a9aaa"
+			"modulate": "#8a9aaa",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2358,7 +2371,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/hesper_albedo.png",
 			"diameter": 2800,
-			"modulate": "#7eb6d6"
+			"modulate": "#7eb6d6",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2448,7 +2462,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/kestrel_albedo.png",
 			"diameter": 700,
-			"modulate": "#d7eef8"
+			"modulate": "#d7eef8",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2538,7 +2553,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/alecto_albedo.png",
 			"diameter": 1800,
-			"modulate": "#6a3828"
+			"modulate": "#6a3828",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -2848,7 +2864,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/varda_iii_albedo.png",
 			"diameter": 1100,
-			"modulate": "#9ab0c0"
+			"modulate": "#9ab0c0",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3039,7 +3056,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/cressida_albedo.png",
 			"diameter": 900,
-			"modulate": "#606878"
+			"modulate": "#606878",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3438,7 +3456,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/ursa_xvi_albedo.png",
 			"diameter": 1100,
-			"modulate": "#707078"
+			"modulate": "#707078",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3543,7 +3562,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/ursa_xxix_albedo.png",
 			"diameter": 1200,
-			"modulate": "#506878"
+			"modulate": "#506878",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3648,7 +3668,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/long_drift_albedo.png",
 			"diameter": 650,
-			"modulate": "#607080"
+			"modulate": "#607080",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3829,7 +3850,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/swan_albedo.png",
 			"diameter": 750,
-			"modulate": "#f0f4ff"
+			"modulate": "#f0f4ff",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -3919,7 +3941,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/freediver_albedo.png",
 			"diameter": 680,
-			"modulate": "#708090"
+			"modulate": "#708090",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4009,7 +4032,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/nostromo_albedo.png",
 			"diameter": 720,
-			"modulate": "#607080"
+			"modulate": "#607080",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4099,7 +4123,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/eternum_albedo.png",
 			"diameter": 680,
-			"modulate": "#d0e0f0"
+			"modulate": "#d0e0f0",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4189,7 +4214,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/janus_albedo.png",
 			"diameter": 1700,
-			"modulate": "#c8d8e8"
+			"modulate": "#c8d8e8",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4252,7 +4278,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/sapphire_xvi_albedo.png",
 			"diameter": 720,
-			"modulate": "#b0d0f0"
+			"modulate": "#b0d0f0",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4321,7 +4348,8 @@
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/vesuvius_v_albedo.png",
 			"diameter": 780,
-			"modulate": "#806050"
+			"modulate": "#806050",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4591,8 +4619,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/byrsa_albedo.png",
 			"diameter": 1400,
-			"modulate": "#889890"
+			"modulate": "#889890",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "New Carthage",
@@ -4728,8 +4758,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/tanit_xx_albedo.png",
 			"diameter": 800,
-			"modulate": "#607870"
+			"modulate": "#607870",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "Tanit",
@@ -4791,8 +4823,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/nightjar_albedo.png",
 			"diameter": 1200,
-			"modulate": "#282830"
+			"modulate": "#282830",
+			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
@@ -4948,8 +4982,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/cueball_albedo.png",
 			"diameter": 1100,
-			"modulate": "#e8f0f8"
+			"modulate": "#e8f0f8",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "B",
@@ -5253,8 +5289,10 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/nocturn_albedo.png",
 			"diameter": 640,
-			"modulate": "#687078"
+			"modulate": "#687078",
+			"atmosphere_strength": 0
 		},
 		"star": {
 			"temperature_k": 5800,
@@ -5301,7 +5339,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 1500,
-			"modulate": "#8a8078"
+			"modulate": "#8a8078",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "Titania",
@@ -5358,7 +5397,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 900,
-			"modulate": "#e4eef8"
+			"modulate": "#e4eef8",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "Titania",
@@ -5467,7 +5507,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 720,
-			"modulate": "#c06038"
+			"modulate": "#c06038",
+			"atmosphere_strength": 0
 		},
 		"parent_body": {
 			"name": "Janus",
@@ -5584,7 +5625,8 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"diameter": 900,
-			"modulate": "#d0e0ee"
+			"modulate": "#d0e0ee",
+			"atmosphere_strength": 0
 		},
 		"companion_stars": [
 			{

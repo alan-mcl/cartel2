@@ -22,11 +22,12 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 static func _test_atmosphere_strength(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
 	runner.check(
-		absf(
-			PlanetBackdropScript.resolve_atmosphere_strength(catalog.get_world("proxima").get("planet", {}))
-			- PlanetBackdropScript.DEFAULT_ATMOSPHERE_STRENGTH
-		) < 0.001,
-		"atmosphere strength: proxima defaults to 0.42"
+		absf(PlanetBackdropScript.resolve_atmosphere_strength({})) < 0.001,
+		"atmosphere strength: omitted field resolves to 0"
+	)
+	runner.check(
+		absf(PlanetBackdropScript.resolve_atmosphere_strength(catalog.get_world("proxima").get("planet", {})) - 0.42) < 0.001,
+		"atmosphere strength: proxima catalog 0.42"
 	)
 	var acb2: Dictionary = catalog.get_world("acb2").get("planet", {})
 	runner.check(

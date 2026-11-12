@@ -13,7 +13,7 @@ const STAR_NEAR_RADIUS := 7000.0
 const STAR_FAR_RADIUS := 12000.0
 const SUN_Z_NEAR := 0.55
 const SUN_Z_FAR := 0.0
-const DEFAULT_ATMOSPHERE_STRENGTH := 0.42
+const DEFAULT_ATMOSPHERE_STRENGTH := 0.0
 
 var _viewport: SubViewport
 var _planet_root: Node3D
