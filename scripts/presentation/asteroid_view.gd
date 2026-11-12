@@ -1,6 +1,7 @@
 extends Node2D
 
 const ASTEROID_SHADER := preload("res://shaders/asteroid.gdshader")
+const PlanetBackdropScript := preload("res://scripts/presentation/planet_backdrop.gd")
 
 const TEXTURE_SIZE := 256
 const DEFAULT_SUN := Vector3(-0.6, -0.5, 0.62)
@@ -36,7 +37,16 @@ func set_visual_modulate(color: Color) -> void:
 		_sprite.modulate = color
 
 
+static func sun_direction_for_star_position(star_world_position: Vector2) -> Vector3:
+	return PlanetBackdropScript.sun_direction_canvas_from_star(star_world_position)
+
+
+func set_sun_from_star_position(star_world_position: Vector2, intensity: float = 1.0) -> void:
+	set_sun(sun_direction_for_star_position(star_world_position), intensity)
+
+
 func set_sun(direction: Vector3, intensity: float = 1.0) -> void:
+	_ensure_sprite()
 	if _material == null:
 		return
 	var dir := direction
@@ -44,8 +54,13 @@ func set_sun(direction: Vector3, intensity: float = 1.0) -> void:
 		dir = DEFAULT_SUN
 	else:
 		dir = dir.normalized()
+	var stellar_irradiance := maxf(intensity, 0.0)
 	_material.set_shader_parameter("sun_direction", dir)
-	_material.set_shader_parameter("sun_irradiance", maxf(intensity, 0.0))
+	_material.set_shader_parameter("sun_irradiance", stellar_irradiance)
+	_material.set_shader_parameter(
+		"display_exposure",
+		PlanetExposure.asteroid_display_exposure(stellar_irradiance)
+	)
 
 
 func get_sun_direction() -> Vector3:
@@ -55,6 +70,15 @@ func get_sun_direction() -> Vector3:
 	if value is Vector3:
 		return value
 	return DEFAULT_SUN
+
+
+func get_display_exposure() -> float:
+	if _material == null:
+		return PlanetExposure.asteroid_display_exposure(1.0)
+	var value: Variant = _material.get_shader_parameter("display_exposure")
+	if typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_INT:
+		return float(value)
+	return PlanetExposure.asteroid_display_exposure(1.0)
 
 
 func static_sun_direction(azimuth_deg: float, elevation_deg: float) -> Vector3:

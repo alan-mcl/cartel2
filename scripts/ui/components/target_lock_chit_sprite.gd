@@ -29,7 +29,12 @@ func set_sprite(sprite_path: String, heading: float) -> void:
 	queue_redraw()
 
 
-func set_asteroid(seed: int, heading: float) -> void:
+func set_asteroid(
+	seed: int,
+	heading: float,
+	star_world_position: Vector2 = Vector2.ZERO,
+	irradiance: float = 1.0
+) -> void:
 	_sprite_path = ""
 	_heading = heading
 	_texture = null
@@ -40,6 +45,8 @@ func set_asteroid(seed: int, heading: float) -> void:
 		_asteroid.rotation = heading
 		var composition := AsteroidShape.composition_for_seed(seed)
 		_asteroid.call("configure", seed, composition, SLOT_SIZE)
+		if star_world_position.length_squared() > 1.0 and _asteroid.has_method("set_sun_from_star_position"):
+			_asteroid.call("set_sun_from_star_position", star_world_position, irradiance)
 		_position_asteroid()
 	queue_redraw()
 

@@ -48,6 +48,12 @@ func render_seed() -> int:
 	return AsteroidShape.entity_render_seed(_entity_id)
 
 
+func apply_star_light(star_world_position: Vector2, irradiance: float = 1.0) -> void:
+	_ensure_asteroid()
+	if _asteroid != null and _asteroid.has_method("set_sun_from_star_position"):
+		_asteroid.call("set_sun_from_star_position", star_world_position, maxf(irradiance, 0.0))
+
+
 func health_ratio() -> float:
 	return _health.health_ratio()
 

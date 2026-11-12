@@ -427,7 +427,8 @@ func set_nav_state(
 	player_broadcast: Dictionary = {},
 	locked_contact: Dictionary = {},
 	ship_velocity: Vector2 = Vector2.ZERO,
-	player_owned: OwnedShip = null
+	player_owned: OwnedShip = null,
+	star_display: Dictionary = {}
 ) -> void:
 	_player_broadcast_text = TransponderBroadcastScript.format_tooltip(player_broadcast)
 	_last_nav_contacts = contacts
@@ -472,9 +473,9 @@ func set_nav_state(
 		if _target_lock_overlay.has_method("set_lock_state"):
 			_target_lock_overlay.set_lock_state(locked_contact, camera)
 	if _has_capability("basic_target_lock") and _target_lock_chit != null:
-		_target_lock_chit.update_lock(ship_pos, locked_contact)
+		_target_lock_chit.update_lock(ship_pos, locked_contact, star_display)
 	elif _target_lock_chit != null:
-		_target_lock_chit.update_lock(ship_pos, {})
+		_target_lock_chit.update_lock(ship_pos, {}, star_display)
 	if _target_scan != null and _target_scan.has_method("refresh_if_open"):
 		_target_scan.refresh_if_open(locked_contact, ship_pos)
 

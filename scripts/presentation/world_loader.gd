@@ -113,6 +113,7 @@ func load_sector(
 	if world_data.has("planet"):
 		_sector_id = sector_id
 		_spawn_planetary_layout(world_root, world_data, catalog, session, sector_id)
+		apply_star_light_to_debris()
 	elif (
 		world_data.has("orbital_ring")
 		or world_data.has("jump_gate")
@@ -120,8 +121,10 @@ func load_sector(
 	):
 		_sector_id = sector_id
 		_spawn_orbital_station_layout(world_root, world_data, catalog, session, sector_id)
+		apply_star_light_to_debris()
 	else:
 		_spawn_world_entities(world_root, world_data, catalog, session, play_bounds)
+		apply_star_light_to_debris()
 
 	return play_bounds
 
@@ -193,6 +196,7 @@ func _load_volatile_sector(
 	if typeof(scan_contact) == TYPE_DICTIONARY and not scan_contact.is_empty():
 		_spawn_volatile_scan_contact(world_root, scan_contact as Dictionary)
 
+	apply_star_light_to_debris()
 	return play_bounds
 
 
@@ -778,7 +782,36 @@ func get_local_star_display() -> Dictionary:
 		"color": star.get_light_color(),
 		"luminosity": star.get_luminosity() if star.has_method("get_luminosity") else 1.0,
 		"temperature_k": star.get_temperature_k() if star.has_method("get_temperature_k") else 5800.0,
+		"irradiance": star.get_irradiance() if star.has_method("get_irradiance") else 1.0,
 	}
+
+
+func apply_star_light_to_debris() -> void:
+	var star: Variant = spawned_by_id.get("local_star")
+	if star == null or not is_instance_valid(star):
+		return
+	var star_pos: Vector2 = (star as Node2D).global_position
+	var irradiance := 1.0
+	if star.has_method("get_irradiance"):
+		irradiance = float(star.call("get_irradiance"))
+	for debris_id in _debris_entity_ids:
+		var node: Variant = spawned_by_id.get(debris_id)
+		if node == null or not is_instance_valid(node):
+			continue
+		if node.has_method("apply_star_light"):
+			node.call("apply_star_light", star_pos, irradiance)
+
+
+func _try_apply_star_light_to_debris_node(node: Node) -> void:
+	if node == null or not node.has_method("apply_star_light"):
+		return
+	var star: Variant = spawned_by_id.get("local_star")
+	if star == null or not is_instance_valid(star):
+		return
+	var irradiance := 1.0
+	if star.has_method("get_irradiance"):
+		irradiance = float(star.call("get_irradiance"))
+	node.call("apply_star_light", (star as Node2D).global_position, irradiance)
 
 
 func _pick_star_position(rng: RandomNumberGenerator, ref_pos: Vector2) -> Vector2:
@@ -1122,6 +1155,7 @@ func _spawn_entity(
 
 	if kind == "debris":
 		_configure_debris(instance, entity)
+		_try_apply_star_light_to_debris_node(instance)
 	elif kind in ["derelict", "cargo", "marker"]:
 		if instance.has_method("configure"):
 			instance.call("configure", entity)

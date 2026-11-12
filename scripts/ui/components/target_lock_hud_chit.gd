@@ -35,7 +35,7 @@ func _on_gui_input(event: InputEvent) -> void:
 			accept_event()
 
 
-func update_lock(ship_pos: Vector2, contact: Dictionary) -> void:
+func update_lock(ship_pos: Vector2, contact: Dictionary, star_display: Dictionary = {}) -> void:
 	if not is_node_ready():
 		return
 	var has_lock := not contact.is_empty()
@@ -64,7 +64,12 @@ func update_lock(ship_pos: Vector2, contact: Dictionary) -> void:
 
 	var heading := float(contact.get("heading_rad", 0.0)) + PI * 0.5
 	if contact.has("asteroid_seed"):
-		_sprite_slot.set_asteroid(int(contact.get("asteroid_seed", 0)), heading)
+		_sprite_slot.set_asteroid(
+			int(contact.get("asteroid_seed", 0)),
+			heading,
+			star_display.get("world_position", Vector2.ZERO),
+			float(star_display.get("irradiance", 1.0))
+		)
 	else:
 		var sprite_path := str(contact.get("sprite_path", ""))
 		_sprite_slot.set_sprite(sprite_path, heading)

@@ -23,7 +23,20 @@ uniform float shape_seed = 0.0;
 uniform float radius_max = 1.05;
 uniform vec3 sun_direction = vec3(-0.6, -0.5, 0.62);
 uniform float sun_irradiance = 1.0;
-uniform float ambient = 0.22;
+uniform float display_exposure = 2.5;
+
+float asteroid_night_irradiance(float irradiance) {
+	return min(0.035, 0.55 * max(irradiance, 0.0));
+}
+
+vec3 asteroid_tonemap_reinhard_chroma(vec3 rgb) {
+	float luma = dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+	if (luma <= 1e-8) {
+		return rgb;
+	}
+	float mapped = luma / (1.0 + luma);
+	return rgb * (mapped / luma);
+}
 
 float hash31(vec3 p) {
 	return fract(sin(dot(p, vec3(127.1, 311.7, 74.7)) + shape_seed * 17.0) * 43758.5453);
@@ -204,13 +217,21 @@ void fragment() {
 			float ndl = dot(normal, light_dir);
 			float wrap = max(0.0, (ndl + 0.45) / 1.45);
 			float cavity = clamp(-dot(normal, dir_n), 0.0, 1.0) * 0.25;
-			float diff = ambient + max(sun_irradiance, 0.0) * wrap * (1.0 - cavity * 0.5);
-			vec3 lit = albedo * diff;
+			float day_factor = wrap * (1.0 - cavity * 0.5);
+			float stellar_irr = max(sun_irradiance, 0.0);
+			float night_side = asteroid_night_irradiance(stellar_irr);
+			float illum = night_side + stellar_irr * day_factor;
+			vec3 radiance = albedo * illum;
 
 			vec3 view_dir = vec3(0.0, 0.0, 1.0);
 			vec3 half_vec = normalize(light_dir + view_dir);
-			float spec = pow(max(dot(normal, half_vec), 0.0), 24.0) * spec_strength * max(sun_irradiance, 0.0);
-			lit += vec3(spec);
+			float spec_env = night_side + stellar_irr * max(ndl, 0.0);
+			float spec = pow(max(dot(normal, half_vec), 0.0), 24.0) * spec_strength * spec_env;
+			radiance += vec3(spec);
+
+			vec3 lit = asteroid_tonemap_reinhard_chroma(radiance * display_exposure);
+			float far_lift = 1.0 - smoothstep(0.00015, 0.045, stellar_irr);
+			lit = min(lit + albedo * far_lift * 0.11, vec3(0.94));
 
 			float sdf_edge = abs(implicit_sdf(hit));
 			float alpha = 1.0 - smoothstep(radius_max * 0.006, radius_max * 0.016, sdf_edge);

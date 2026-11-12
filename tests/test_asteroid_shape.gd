@@ -13,6 +13,8 @@ static func run(runner: TestRunner) -> void:
 	_test_sun_normalisation(runner)
 	_test_static_sun_direction(runner)
 	_test_composition_for_seed(runner)
+	_test_sun_from_star_position(runner)
+	_test_asteroid_display_exposure(runner)
 
 
 static func _test_deterministic_params(runner: TestRunner) -> void:
@@ -129,6 +131,62 @@ static func _test_composition_for_seed(runner: TestRunner) -> void:
 	runner.check(
 		absf(float(counts[AsteroidShape.COMPOSITION_STONY]) / 10000.0 - 0.30) < 0.02,
 		"asteroid: composition mix near 30% stony"
+	)
+
+
+static func _test_asteroid_display_exposure(runner: TestRunner) -> void:
+	runner.check(
+		absf(PlanetExposure.asteroid_display_exposure(1.0) - PlanetExposure.display_exposure(1.0)) < 0.001,
+		"asteroid exposure: 1 AU matches planet curve"
+	)
+	var close_irradiance := StarAppearance.irradiance(1.0, 0.05)
+	var albedo := Vector3(0.45, 0.42, 0.4)
+	var close_rad := albedo * (
+		PlanetExposure.asteroid_night_irradiance(close_irradiance) + close_irradiance
+	)
+	var close_display := PlanetExposure.asteroid_display_from_radiance(close_rad, close_irradiance)
+	runner.check(close_display.x < 0.95, "asteroid exposure: close orbit below white clip")
+	runner.check(close_display.x > 0.15, "asteroid exposure: close orbit stays visible")
+
+	var pluto_irradiance := 1.0 / 900.0
+	var far_rad := albedo * (
+		PlanetExposure.asteroid_night_irradiance(pluto_irradiance) + pluto_irradiance
+	)
+	var far_display := PlanetExposure.asteroid_display_from_radiance(far_rad, pluto_irradiance)
+	runner.check(far_display.x > 0.12, "asteroid exposure: distant dayside above black floor")
+	runner.check(
+		PlanetExposure.asteroid_display_exposure(pluto_irradiance)
+			> PlanetExposure.display_exposure(pluto_irradiance),
+		"asteroid exposure: far orbit gets readability boost"
+	)
+
+	var kuiper_irradiance := StarAppearance.irradiance(0.34, 85.0)
+	var kuiper_rad := albedo * (
+		PlanetExposure.asteroid_night_irradiance(kuiper_irradiance) + kuiper_irradiance
+	)
+	var kuiper_display := PlanetExposure.asteroid_display_from_radiance(kuiper_rad, kuiper_irradiance)
+	runner.check(kuiper_display.x > 0.14, "asteroid exposure: outer belt stays readable")
+
+	var view := AsteroidViewScript.new()
+	view.configure(9, AsteroidShape.COMPOSITION_STONY, 48.0)
+	view.set_sun(AsteroidViewScript.sun_direction_for_star_position(Vector2(100.0, -80.0)), close_irradiance)
+	runner.check(
+		absf(view.get_display_exposure() - PlanetExposure.asteroid_display_exposure(close_irradiance))
+			< 0.01,
+		"asteroid view: display_exposure tracks irradiance"
+	)
+
+
+static func _test_sun_from_star_position(runner: TestRunner) -> void:
+	var view := AsteroidViewScript.new()
+	var star_pos := Vector2(400.0, -500.0)
+	view.set_sun_from_star_position(star_pos, 1.2)
+	var expected := AsteroidViewScript.sun_direction_for_star_position(star_pos)
+	var actual := view.get_sun_direction()
+	runner.check(actual.distance_to(expected) < 1e-4, "asteroid view: star position sets canvas sun bearing")
+	runner.check(
+		absf(float(view.get_sun_direction().length()) - 1.0) < 1e-5,
+		"asteroid view: star bearing is unit length"
 	)
 
 

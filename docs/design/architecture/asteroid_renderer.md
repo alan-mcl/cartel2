@@ -2,7 +2,7 @@
 
 Runtime debris and sample art today still use flat SVG placeholders ([sprite_sizes.md](sprite_sizes.md)). **AsteroidView** is a seeded canvas shader that draws a lit rocky body on a transparent background, in the same presentation family as [SkyParentBody](sky_parent_body.gd) (white quad + `canvas_item` shader).
 
-Flight **debris** and retrieval **asteroid_sample** contacts use **AsteroidView** in [`debris_rock.tscn`](../../../scenes/world/debris_rock.tscn). Shape seed is `absi(entity_id.hash())`; composition comes from the same seed via `composition_for_seed` (**carbonaceous 65%**, **stony 30%**, **metallic 4%**, **icy 1%**). World size is **80** px. Lighting uses the renderer default key until sector sun hook-up.
+Flight **debris** and retrieval **asteroid_sample** contacts use **AsteroidView** in [`debris_rock.tscn`](../../../scenes/world/debris_rock.tscn). Shape seed is `absi(entity_id.hash())`; composition comes from the same seed via `composition_for_seed` (**carbonaceous 65%**, **stony 30%**, **metallic 4%**, **icy 1%**). World size is **80** px. Lighting follows the sector **LocalStar** (same canvas bearing as [`SkyParentBody`](sky_parent_body.gd) / [`PlanetBackdrop`](planet_backdrop.gd)): star world position and `get_irradiance()` applied when debris spawns and on the target-lock chit preview.
 
 ## Components
 
@@ -33,7 +33,7 @@ Renderer presets only (not catalog lore): `stony` (default), `carbonaceous`, `me
 
 ## Lighting
 
-`set_sun` passes a **normalised** `vec3` light direction and irradiance into the shader. Default key light is upper-left in canvas space (`Vector3(-0.6, -0.5, 0.62)`). Half-Lambert wrap and a small ambient term keep the dark side readable; composition controls specular strength.
+`set_sun` passes a **normalised** `vec3` light direction and **physical irradiance** (`LocalStar.get_irradiance()` in flight), matching [`PlanetExposure`](planet_exposure.gd) / planet globes: night-side fill from scaled stellar flux, day side from irradiance × half-Lambert wrap, then **display exposure** (`2.5 / irradiance^0.75`, with a modest extra boost below **0.05** irradiance for small-sprite readability) and chroma-preserving Reinhard tone mapping. Default harness key light is upper-left in canvas space (`Vector3(-0.6, -0.5, 0.62)`) at **1 AU** irradiance.
 
 ## Harness
 
@@ -52,7 +52,6 @@ Headless smoke: [`scripts/dev/smoke_scenes.gd`](../../../scripts/dev/smoke_scene
 
 ## Follow-on
 
-- Tie light direction to `LocalStar` / sector irradiance like parent bodies.
 - Optional baked PNG export for catalog paths without changing the analytic shader path.
 
 Unit tests: `TestAsteroidShape` in [`tests/test_asteroid_shape.gd`](../../../tests/test_asteroid_shape.gd) (CPU shape only; visual acceptance is the harness).
