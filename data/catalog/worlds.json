@@ -5338,6 +5338,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/titania_v_albedo.png",
 			"diameter": 1500,
 			"modulate": "#8a8078",
 			"atmosphere_strength": 0
@@ -5396,6 +5397,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/titania_ixx_albedo.png",
 			"diameter": 900,
 			"modulate": "#e4eef8",
 			"atmosphere_strength": 0
@@ -5506,6 +5508,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/janus_ii_albedo.png",
 			"diameter": 720,
 			"modulate": "#c06038",
 			"atmosphere_strength": 0
@@ -5575,6 +5578,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/caldera_albedo.png",
 			"diameter": 1300,
 			"modulate": "#c4a070",
 			"atmosphere_strength": 0.2
@@ -5624,6 +5628,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/tulima_albedo.png",
 			"diameter": 900,
 			"modulate": "#d0e0ee",
 			"atmosphere_strength": 0
