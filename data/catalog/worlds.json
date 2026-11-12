@@ -3132,6 +3132,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/scoria_albedo.png",
 			"diameter": 1700,
 			"modulate": "#3a2820",
 			"atmosphere_strength": 0.08
@@ -3435,6 +3436,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/ursa_xvi_albedo.png",
 			"diameter": 1100,
 			"modulate": "#707078"
 		},
@@ -3539,6 +3541,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/ursa_xxix_albedo.png",
 			"diameter": 1200,
 			"modulate": "#506878"
 		},
@@ -3643,6 +3646,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/long_drift_albedo.png",
 			"diameter": 650,
 			"modulate": "#607080"
 		},
@@ -3732,6 +3736,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/junkers_world_albedo.png",
 			"diameter": 1600,
 			"modulate": "#505850",
 			"atmosphere_strength": 0.8
@@ -3822,6 +3827,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/swan_albedo.png",
 			"diameter": 750,
 			"modulate": "#f0f4ff"
 		},
@@ -3911,6 +3917,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/freediver_albedo.png",
 			"diameter": 680,
 			"modulate": "#708090"
 		},
@@ -4000,6 +4007,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/nostromo_albedo.png",
 			"diameter": 720,
 			"modulate": "#607080"
 		},
@@ -4089,6 +4097,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/eternum_albedo.png",
 			"diameter": 680,
 			"modulate": "#d0e0f0"
 		},
@@ -4178,6 +4187,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/janus_albedo.png",
 			"diameter": 1700,
 			"modulate": "#c8d8e8"
 		},
@@ -4240,6 +4250,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/sapphire_xvi_albedo.png",
 			"diameter": 720,
 			"modulate": "#b0d0f0"
 		},
@@ -4308,6 +4319,7 @@
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
+			"albedo": "res://assets/world/planets/vesuvius_v_albedo.png",
 			"diameter": 780,
 			"modulate": "#806050"
 		},
