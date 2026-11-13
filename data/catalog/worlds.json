@@ -22,40 +22,40 @@
 				{
 					"id": "proxima_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_3_l.png",
 					"label": "Creus Corporation Headquarters",
 					"interactable": "sta_creus_proxima_dock"
 				},
 				{
 					"id": "proxima_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_4_l.png",
 					"label": "SnedeCorp Headquarters",
 					"interactable": "sta_snedecorp_proxima_dock"
 				},
 				{
 					"id": "proxima_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_7_l.png",
 					"label": "Morrow & Sons Headquarters",
 					"interactable": "sta_morrow_and_sons_proxima_dock"
 				},
 				{
 					"id": "proxima_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg",
+					"sprite": "res://assets/world/orbitals/corporate_campus_3_l.png",
 					"label": "Mercury Communications Headquarters",
 					"interactable": "sta_mercury_communications_proxima_dock"
 				},
 				{
 					"id": "proxima_orbital_5",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_2_l.png"
 				},
 				{
 					"id": "proxima_orbital_6",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_3_l.png"
 				}
 			]
 		},
@@ -103,14 +103,14 @@
 				{
 					"id": "tycho_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg",
+					"sprite": "res://assets/world/orbitals/corporate_campus_4_l.png",
 					"label": "Galactic Outcomes Headquarters",
 					"interactable": "sta_galactic_outcomes_tycho_dock"
 				},
 				{
 					"id": "tycho_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg",
+					"sprite": "res://assets/world/orbitals/corporate_campus_5_l.png",
 					"label": "General Industrial Headquarters",
 					"interactable": "sta_general_industrial_tycho_dock"
 				}
@@ -196,17 +196,17 @@
 				{
 					"id": "bela_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_8_s.png"
 				},
 				{
 					"id": "bela_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_10_m.png"
 				},
 				{
 					"id": "bela_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_1_m.png"
 				}
 			]
 		},
@@ -244,29 +244,29 @@
 				{
 					"id": "irasia_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_campus_8_l.png",
 					"label": "Orion Aerospace Headquarters",
 					"interactable": "sta_orion_aerospace_irasia_dock"
 				},
 				{
 					"id": "irasia_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_3_l.png"
 				},
 				{
 					"id": "irasia_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_4_l.png"
 				},
 				{
 					"id": "irasia_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_5_l.png"
 				},
 				{
 					"id": "irasia_orbital_5",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_6_l.png"
 				}
 			]
 		},
@@ -304,27 +304,27 @@
 				{
 					"id": "tokirev_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_7_m.png"
 				},
 				{
 					"id": "tokirev_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_8_s.png"
 				},
 				{
 					"id": "tokirev_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_10_m.png"
 				},
 				{
 					"id": "tokirev_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_1_m.png"
 				},
 				{
 					"id": "tokirev_orbital_5",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_2_m.png"
 				}
 			]
 		},
@@ -362,17 +362,17 @@
 				{
 					"id": "fennet_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/factory_7_m.png"
 				},
 				{
 					"id": "fennet_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_8_m.png"
 				},
 				{
 					"id": "fennet_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/factory_9_m.png"
 				}
 			]
 		},
@@ -410,26 +410,26 @@
 				{
 					"id": "fortuna_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_campus_9_l.png",
 					"label": "GRC Inc Headquarters",
 					"interactable": "sta_grc_fortuna_dock"
 				},
 				{
 					"id": "fortuna_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_10_m.png",
 					"label": "The Octagon Headquarters",
 					"interactable": "sta_octagon_fortuna_dock"
 				},
 				{
 					"id": "fortuna_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/foundry_smelter_1_l.png"
 				},
 				{
 					"id": "fortuna_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/foundry_smelter_2_l.png"
 				}
 			]
 		},
@@ -467,24 +467,24 @@
 				{
 					"id": "new_carthage_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_15_m.png",
 					"label": "Crown & Anchor Headquarters",
 					"interactable": "sta_crown_and_anchor_new_carthage_dock"
 				},
 				{
 					"id": "new_carthage_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/refinery_4_l.png"
 				},
 				{
 					"id": "new_carthage_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_10_m.png"
 				},
 				{
 					"id": "new_carthage_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_11_m.png"
 				}
 			]
 		},
@@ -528,27 +528,27 @@
 				{
 					"id": "horizon_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/mining_complex_5_s.png"
 				},
 				{
 					"id": "horizon_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_10_m.png"
 				},
 				{
 					"id": "horizon_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_11_m.png"
 				},
 				{
 					"id": "horizon_orbital_4",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_1_m.png"
 				},
 				{
 					"id": "horizon_orbital_5",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_2_l.png"
 				}
 			]
 		},
@@ -586,21 +586,21 @@
 				{
 					"id": "titania_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_16_m.png",
 					"label": "Fellowship of Apex Headquarters",
 					"interactable": "sta_cult_of_apex_titania_dock"
 				},
 				{
 					"id": "titania_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_17_m.png",
 					"label": "Chimera Corporation Headquarters",
 					"interactable": "sta_chimera_titania_dock"
 				},
 				{
 					"id": "titania_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_1_m.png"
 				}
 			]
 		},
@@ -653,19 +653,19 @@
 				{
 					"id": "pelagos_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg",
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_2_m.png",
 					"label": "Terra Nova Headquarters",
 					"interactable": "sta_terra_nova_pelagos_dock"
 				},
 				{
 					"id": "pelagos_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_7_m.png"
 				},
 				{
 					"id": "pelagos_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_8_l.png"
 				}
 			]
 		},
@@ -701,12 +701,12 @@
 				{
 					"id": "centauri_a_beltworks_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_6_m.png"
 				},
 				{
 					"id": "centauri_a_beltworks_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_8_m.png"
 				}
 			]
 		},
@@ -938,12 +938,12 @@
 				{
 					"id": "acb1_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_1_l.png"
 				},
 				{
 					"id": "acb1_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_2_l.png"
 				}
 			]
 		},
@@ -1043,12 +1043,12 @@
 				{
 					"id": "acb2_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_3_m.png"
 				},
 				{
 					"id": "acb2_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_5_m.png"
 				}
 			]
 		},
@@ -1184,12 +1184,12 @@
 				{
 					"id": "acb3_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_6_m.png"
 				},
 				{
 					"id": "acb3_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_1_m.png"
 				}
 			]
 		},
@@ -1289,12 +1289,12 @@
 				{
 					"id": "terminus_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_5_m.png"
 				},
 				{
 					"id": "terminus_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_6_m.png"
 				}
 			]
 		},
@@ -1385,12 +1385,12 @@
 				{
 					"id": "vulcan_research_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_5_l.png"
 				},
 				{
 					"id": "vulcan_research_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/factory_6_l.png"
 				}
 			]
 		},
@@ -1492,12 +1492,12 @@
 				{
 					"id": "regulus_belt_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_4_m.png"
 				},
 				{
 					"id": "regulus_belt_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_5_m.png"
 				}
 			]
 		},
@@ -1615,12 +1615,12 @@
 				{
 					"id": "denarius_ii_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_1_m.png"
 				},
 				{
 					"id": "denarius_ii_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/factory_2_m.png"
 				}
 			]
 		},
@@ -1760,12 +1760,12 @@
 				{
 					"id": "typhon_xvi_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_11_s.png"
 				},
 				{
 					"id": "typhon_xvi_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_12_s.png"
 				}
 			]
 		},
@@ -1925,12 +1925,12 @@
 				{
 					"id": "pelagos_belt_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_9_m.png"
 				},
 				{
 					"id": "pelagos_belt_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_1_l.png"
 				}
 			]
 		},
@@ -2041,12 +2041,12 @@
 				{
 					"id": "aurelia_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_6_m.png"
 				},
 				{
 					"id": "aurelia_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_7_m.png"
 				}
 			]
 		},
@@ -2131,12 +2131,12 @@
 				{
 					"id": "boreas_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_2_m.png"
 				},
 				{
 					"id": "boreas_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_6_m.png"
 				}
 			]
 		},
@@ -2221,12 +2221,12 @@
 				{
 					"id": "calypso_vi_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_1_s.png"
 				},
 				{
 					"id": "calypso_vi_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_5_m.png"
 				}
 			]
 		},
@@ -2328,12 +2328,12 @@
 				{
 					"id": "hesper_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/mining_complex_3_l.png"
 				},
 				{
 					"id": "hesper_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/mining_complex_4_m.png"
 				}
 			]
 		},
@@ -2418,12 +2418,12 @@
 				{
 					"id": "kestrel_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_8_m.png"
 				},
 				{
 					"id": "kestrel_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/refinery_1_l.png"
 				}
 			]
 		},
@@ -2508,12 +2508,12 @@
 				{
 					"id": "alecto_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_2_m.png"
 				},
 				{
 					"id": "alecto_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_3_m.png"
 				}
 			]
 		},
@@ -2598,12 +2598,12 @@
 				{
 					"id": "new_ceres_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_12_m.png"
 				},
 				{
 					"id": "new_ceres_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_1_m.png"
 				}
 			]
 		},
@@ -2688,12 +2688,12 @@
 				{
 					"id": "virginis_belt_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_3_m.png"
 				},
 				{
 					"id": "virginis_belt_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/factory_4_m.png"
 				}
 			]
 		},
@@ -2816,12 +2816,12 @@
 				{
 					"id": "varda_iii_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/factory_12_m.png"
 				},
 				{
 					"id": "varda_iii_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/factory_13_m.png"
 				}
 			]
 		},
@@ -2923,12 +2923,12 @@
 				{
 					"id": "varda_belt_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_10_l.png"
 				},
 				{
 					"id": "varda_belt_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/factory_11_m.png"
 				}
 			]
 		},
@@ -3006,12 +3006,12 @@
 				{
 					"id": "cressida_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_9_m.png"
 				},
 				{
 					"id": "cressida_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/factory_10_l.png"
 				}
 			]
 		},
@@ -3096,17 +3096,17 @@
 				{
 					"id": "scoria_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_10_m.png"
 				},
 				{
 					"id": "scoria_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_11_s.png"
 				},
 				{
 					"id": "scoria_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_12_l.png"
 				}
 			]
 		},
@@ -3191,12 +3191,12 @@
 				{
 					"id": "ursa_belt_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_13_s.png"
 				},
 				{
 					"id": "ursa_belt_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_14_s.png"
 				}
 			]
 		},
@@ -3319,12 +3319,12 @@
 				{
 					"id": "ursa_belt_shipyard_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_18_s.png"
 				},
 				{
 					"id": "ursa_belt_shipyard_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_1_s.png"
 				}
 			]
 		},
@@ -3402,12 +3402,12 @@
 				{
 					"id": "ursa_xvi_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_5_m.png"
 				},
 				{
 					"id": "ursa_xvi_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_6_m.png"
 				}
 			]
 		},
@@ -3507,12 +3507,12 @@
 				{
 					"id": "ursa_xxix_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_8_m.png"
 				},
 				{
 					"id": "ursa_xxix_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_9_m.png"
 				}
 			]
 		},
@@ -3612,12 +3612,12 @@
 				{
 					"id": "long_drift_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/refinery_2_l.png"
 				},
 				{
 					"id": "long_drift_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/refinery_3_l.png"
 				}
 			]
 		},
@@ -3702,12 +3702,12 @@
 				{
 					"id": "junkers_world_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_2_s.png"
 				},
 				{
 					"id": "junkers_world_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_3_s.png"
 				}
 			]
 		},
@@ -3792,12 +3792,12 @@
 				{
 					"id": "swan_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_13_l.png"
 				},
 				{
 					"id": "swan_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_1_m.png"
 				}
 			]
 		},
@@ -3882,12 +3882,12 @@
 				{
 					"id": "freediver_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/foundry_smelter_3_l.png"
 				},
 				{
 					"id": "freediver_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/foundry_smelter_4_m.png"
 				}
 			]
 		},
@@ -3972,12 +3972,12 @@
 				{
 					"id": "nostromo_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_5_m.png"
 				},
 				{
 					"id": "nostromo_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_6_m.png"
 				}
 			]
 		},
@@ -4062,12 +4062,12 @@
 				{
 					"id": "eternum_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/factory_5_l.png"
 				},
 				{
 					"id": "eternum_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/factory_6_l.png"
 				}
 			]
 		},
@@ -4152,12 +4152,12 @@
 				{
 					"id": "janus_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_7_l.png"
 				},
 				{
 					"id": "janus_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_8_l.png"
 				}
 			]
 		},
@@ -4215,12 +4215,12 @@
 				{
 					"id": "sapphire_xvi_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_6_m.png"
 				},
 				{
 					"id": "sapphire_xvi_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/shipyard_7_l.png"
 				}
 			]
 		},
@@ -4284,12 +4284,12 @@
 				{
 					"id": "vesuvius_v_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_1_m.png"
 				},
 				{
 					"id": "vesuvius_v_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/factory_2_m.png"
 				}
 			]
 		},
@@ -4353,12 +4353,12 @@
 				{
 					"id": "tc_inner_disc_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_6_s.png"
 				},
 				{
 					"id": "tc_inner_disc_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_7_m.png"
 				}
 			]
 		},
@@ -4436,12 +4436,12 @@
 				{
 					"id": "tc_outer_disc_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_8_m.png"
 				},
 				{
 					"id": "tc_outer_disc_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_1_l.png"
 				}
 			]
 		},
@@ -4501,12 +4501,12 @@
 				{
 					"id": "terminary_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_2_l.png"
 				},
 				{
 					"id": "terminary_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/commercial_exchange_3_m.png"
 				}
 			]
 		},
@@ -4548,17 +4548,17 @@
 				{
 					"id": "byrsa_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_7_m.png"
 				},
 				{
 					"id": "byrsa_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_11_s.png"
 				},
 				{
 					"id": "byrsa_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_12_s.png"
 				}
 			]
 		},
@@ -4610,12 +4610,12 @@
 				{
 					"id": "depot_61c_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_3_m.png"
 				},
 				{
 					"id": "depot_61c_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/factory_4_m.png"
 				}
 			]
 		},
@@ -4690,12 +4690,12 @@
 				{
 					"id": "tanit_xx_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_2_m.png"
 				},
 				{
 					"id": "tanit_xx_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_3_m.png"
 				}
 			]
 		},
@@ -4754,12 +4754,12 @@
 				{
 					"id": "nightjar_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_2_l.png"
 				},
 				{
 					"id": "nightjar_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_3_l.png"
 				}
 			]
 		},
@@ -4823,12 +4823,12 @@
 				{
 					"id": "alpha_disc_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_4_s.png"
 				},
 				{
 					"id": "alpha_disc_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_5_m.png"
 				}
 			]
 		},
@@ -4906,17 +4906,17 @@
 				{
 					"id": "cueball_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/factory_11_m.png"
 				},
 				{
 					"id": "cueball_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/factory_12_m.png"
 				},
 				{
 					"id": "cueball_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/factory_13_m.png"
 				}
 			]
 		},
@@ -4971,12 +4971,12 @@
 				{
 					"id": "halo_station_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/mining_complex_1_m.png"
 				},
 				{
 					"id": "halo_station_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tower.svg"
+					"sprite": "res://assets/world/orbitals/mining_complex_2_m.png"
 				}
 			]
 		},
@@ -5024,12 +5024,12 @@
 				{
 					"id": "kb_station_i_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_4_s.png"
 				},
 				{
 					"id": "kb_station_i_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_5_s.png"
 				}
 			]
 		},
@@ -5107,7 +5107,7 @@
 				{
 					"id": "kb_station_ii_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_6_m.png"
 				}
 			]
 		},
@@ -5167,7 +5167,7 @@
 				{
 					"id": "kb_station_iii_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_7_m.png"
 				}
 			]
 		},
@@ -5218,7 +5218,7 @@
 				{
 					"id": "nocturn_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/research_complex_4_l.png"
 				}
 			]
 		},
@@ -5256,17 +5256,17 @@
 				{
 					"id": "titania_v_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_4_s.png"
 				},
 				{
 					"id": "titania_v_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_5_m.png"
 				},
 				{
 					"id": "titania_v_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_6_m.png"
 				}
 			]
 		},
@@ -5319,12 +5319,12 @@
 				{
 					"id": "titania_ixx_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_2_m.png"
 				},
 				{
 					"id": "titania_ixx_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/communications_hub_3_m.png"
 				}
 			]
 		},
@@ -5377,12 +5377,12 @@
 				{
 					"id": "tartarus_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_4_s.png"
 				},
 				{
 					"id": "tartarus_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/tank_farm_5_s.png"
 				}
 			]
 		},
@@ -5428,12 +5428,12 @@
 				{
 					"id": "janus_ii_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/processing_complex_9_m.png"
 				},
 				{
 					"id": "janus_ii_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/radiator_complex_1_s.png"
 				}
 			]
 		},
@@ -5492,17 +5492,17 @@
 				{
 					"id": "caldera_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/yard.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_13_s.png"
 				},
 				{
 					"id": "caldera_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/torus.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_14_s.png"
 				},
 				{
 					"id": "caldera_orbital_3",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/platform.svg"
+					"sprite": "res://assets/world/orbitals/corporate_headquarters_18_s.png"
 				}
 			]
 		},
@@ -5546,12 +5546,12 @@
 				{
 					"id": "tulima_orbital_1",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/array.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_6_m.png"
 				},
 				{
 					"id": "tulima_orbital_2",
 					"kind": "orbital",
-					"sprite": "res://assets/world/orbitals/tank_farm.svg"
+					"sprite": "res://assets/world/orbitals/corporate_campus_7_m.png"
 				}
 			]
 		},

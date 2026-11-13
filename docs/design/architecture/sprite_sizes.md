@@ -117,12 +117,7 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 | Proxima habitat | `world/habitat_proxima.png` | 512×512 | **512×512** | XL anchor; largest orbital population (1.8 bn) |
 | Other habitat orbitals | `world/habitats/*.png` | (varies) | **128×128** (S) / **256×256** (M) / **384×384** (L) / **512×512** (XL) | Square PNG, 1 px = 1 world unit; assigned by orbital `population_billions` (Proxima keeps bespoke art). Legacy SVG placeholders: `habitat_proxima.svg`, `habitat_bela.svg`, `habitat.svg`. |
 | Jump gate | `world/jump_gate.svg` | 240×240 | **400×400** | Sector landmark |
-| Torus orbital | `world/orbitals/torus.svg` | 140×140 | **200×200** | Ring station |
-| Yard | `world/orbitals/yard.svg` | 160×100 | **240×150** | Shipyard silhouette |
-| Tank farm | `world/orbitals/tank_farm.svg` | 150×110 | **220×160** | Fuel storage |
-| Array | `world/orbitals/array.svg` | 130×130 | **180×180** | Sensor / comms |
-| Tower | `world/orbitals/tower.svg` | 90×160 | **100×220** | Tall spar |
-| Platform | `world/orbitals/platform.svg` | 170×90 | **240×120** | Wide deck |
+| Non-habitat orbitals | `world/orbitals/*.png` | (varies) | **128×128** (S) / **256×256** (M) / **384×384** (L) | Square PNG, 1 px = 1 world unit; labelled docks get corporate art, unlabelled slots share a mixed industrial pool. Legacy SVG placeholders (`torus`, `yard`, `tank_farm`, `array`, `tower`, `platform`) are unused by the ring. |
 | Debris rock | procedural (`AsteroidView`) | 80×64 | **80×80** author view | Shootable catalog rocks; seed from entity id |
 | Cargo container | `world/cargo_container.svg` | 72×56 | **72×56** | Intact container; volatile-site ambient cargo |
 | Nav buoy | `world/nav_buoy.svg` | 64×64 | **64×64** | Volatile marker variant `buoy` |
