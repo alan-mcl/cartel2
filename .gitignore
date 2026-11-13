@@ -13,6 +13,9 @@ export_presets.cfg
 data_*/
 mono_crash.*.json
 
+# Local scratch (habitat sources, assignments, etc.)
+temp/
+
 # Python
 __pycache__/
 *.py[cod]

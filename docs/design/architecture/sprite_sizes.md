@@ -114,9 +114,8 @@ Paths under `assets/world/`. Referenced from `data/catalog/worlds.json` entity `
 
 | Asset | Path(s) | POC | **Author at (W×H)** | Role |
 |-------|---------|-----|---------------------|------|
-| Proxima habitat | `world/habitat_proxima.svg` | 280×180 | **480×320** | Dockable; ~4× Pegasus footprint |
-| Bela habitat | `world/habitat_bela.svg` | 280×180 | **480×320** | Dockable |
-| Generic habitat (unused) | `world/habitat.svg` | 260×160 | **480×320** | Align if revived |
+| Proxima habitat | `world/habitat_proxima.png` | 512×512 | **512×512** | XL anchor; largest orbital population (1.8 bn) |
+| Other habitat orbitals | `world/habitats/*.png` | (varies) | **128×128** (S) / **256×256** (M) / **384×384** (L) / **512×512** (XL) | Square PNG, 1 px = 1 world unit; assigned by orbital `population_billions` (Proxima keeps bespoke art). Legacy SVG placeholders: `habitat_proxima.svg`, `habitat_bela.svg`, `habitat.svg`. |
 | Jump gate | `world/jump_gate.svg` | 240×240 | **400×400** | Sector landmark |
 | Torus orbital | `world/orbitals/torus.svg` | 140×140 | **200×200** | Ring station |
 | Yard | `world/orbitals/yard.svg` | 160×100 | **240×150** | Shipyard silhouette |
@@ -207,7 +206,7 @@ Building art paths live in `data/catalog/buildings.json` and `habitats.json` (`a
 | Hulls | 20×26 … 82×52 (Pegasus anchor 70×70; see table above) |
 | Thrust FX | 20×24 |
 | Mass driver | 16×16 |
-| Habitats | 480×320 |
+| Habitat orbitals (PNG) | 128×128 … 512×512 (square) |
 | Jump gate | 400×400 |
 | Orbitals | 100×220 … 240×240 |
 | Debris rock | 16×20 |
