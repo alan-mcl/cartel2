@@ -11,6 +11,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
+|B1|data|med|Double 'Janus' in the planets catalog|
 
 ## Features
 

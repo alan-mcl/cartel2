@@ -17,7 +17,7 @@
 					"kind": "habitat",
 					"label": "Proxima Habitat",
 					"interactable": "proxima_habitat",
-					"sprite": "res://assets/world/habitat_proxima.svg"
+					"sprite": "res://assets/world/habitat_proxima.png"
 				},
 				{
 					"id": "proxima_orbital_1",
