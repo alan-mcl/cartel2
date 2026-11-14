@@ -1,7 +1,7 @@
 [
   {
     "id": "oc_section",
-    "name": "Section",
+    "name": "OC Section Nav",
     "maker": "Oklahoma Combine",
     "brand": "Section",
     "category": "navigation",
@@ -13,7 +13,7 @@
     "nav_rating": 40,
     "translation_capacity": 56,
     "cost": 420,
-    "description": "Combine yard stock navigation computer. Loads the public 4-space route tables and little else.",
+    "description": "Section navigation computers. Accurate 4-space navigation.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.08,
@@ -23,7 +23,7 @@
   },
   {
     "id": "mdc_almanac",
-    "name": "Almanac",
+    "name": "Almanac Navigation Suite",
     "maker": "Monday Corporation",
     "brand": "Almanac",
     "category": "navigation",
@@ -38,7 +38,7 @@
       "autopilot_basic"
     ],
     "cost": 520,
-    "description": "Monday municipal nav computer. Public commercial translations with conservative higher-order headroom.",
+    "description": "Find your way with Almanac by Monday!",
     "signature": {
       "thermal": 0.7,
       "gravitational": 0.09,
@@ -48,7 +48,7 @@
   },
   {
     "id": "frz_compass",
-    "name": "Compass",
+    "name": "Compass NavComp",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Compass",
     "category": "navigation",
@@ -63,7 +63,7 @@
       "autopilot_basic"
     ],
     "cost": 680,
-    "description": "Four Rivers Compass line for operators who want catalogued 5-space alternatives on the same hull.",
+    "description": "Compass NavComp: 4- and 5-space solutions. Get it today.",
     "signature": {
       "thermal": 0.75,
       "gravitational": 0.1,
@@ -73,7 +73,7 @@
   },
   {
     "id": "sbi_sextant",
-    "name": "Sextant",
+    "name": "SBI Sextant Navigation",
     "maker": "Seven Bells Inc",
     "brand": "Sextant",
     "category": "navigation",
@@ -88,7 +88,7 @@
       "autopilot_basic"
     ],
     "cost": 920,
-    "description": "Seven Bells survey-grade navigation computer with deep translation inventory and 6-space support.",
+    "description": "SBI Sextant. Accurate solutions up to 6-space.",
     "signature": {
       "thermal": 0.85,
       "gravitational": 0.11,
@@ -98,7 +98,7 @@
   },
   {
     "id": "sne_astrolabe",
-    "name": "Astrolabe",
+    "name": "SnedeCorp Astrolabe NavSoln",
     "maker": "SnedeCorp",
     "brand": "Astrolabe",
     "category": "navigation",
@@ -113,7 +113,7 @@
       "autopilot_basic"
     ],
     "cost": 1450,
-    "description": "Snede attested deep-route navigator. Maximum catalog depth for experimental translations.",
+    "description": "Get the best: Astrolabe navigation. SnedeCorp quality.",
     "signature": {
       "thermal": 0.9,
       "gravitational": 0.12,

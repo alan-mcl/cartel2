@@ -10,7 +10,7 @@
     "volume": 2.0,
     "fuel_capacity": 40.0,
     "cost": 350,
-    "description": "Compact chemical propellant storage for yard-fit hulls.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.16,
@@ -29,7 +29,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 550,
-    "description": "Medium chemical propellant storage for longer chemical routes.",
+    "description": "GI Yard Tank 80. Robust propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.32,
@@ -48,7 +48,7 @@
     "volume": 2.0,
     "fuel_capacity": 40.0,
     "cost": 360,
-    "description": "Compact hydrogen storage for hydro-thermal drives.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.16,
@@ -67,7 +67,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 560,
-    "description": "Medium hydrogen storage for extended hydro-thermal cruising.",
+    "description": "GI Yard Tank 80. Robust propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.32,
@@ -86,7 +86,7 @@
     "volume": 2.0,
     "fuel_capacity": 40.0,
     "cost": 380,
-    "description": "Compact reaction-mass storage for electric plasma drives.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.16,
@@ -105,7 +105,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 580,
-    "description": "Medium reaction-mass storage for plasma cruisers.",
+    "description": "GI Yard Tank 80. Robust propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.32,
@@ -124,7 +124,7 @@
     "volume": 2.0,
     "fuel_capacity": 40.0,
     "cost": 420,
-    "description": "Compact fusion fuel storage for direct-fusion drives and fusion plants.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.16,
@@ -143,7 +143,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 620,
-    "description": "Medium fusion fuel storage for long fusion runs.",
+    "description": "GI Yard Tank 80. Robust propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.32,
@@ -162,7 +162,7 @@
     "volume": 2.0,
     "fuel_capacity": 40.0,
     "cost": 400,
-    "description": "Compact fission fuel storage for reactor refit.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.35,
       "gravitational": 0.17,
@@ -181,7 +181,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 600,
-    "description": "Medium fission fuel storage for extended reactor cruising.",
+    "description": "GI Yard Tank 40. Robust propellant storage.",
     "signature": {
       "thermal": 0.35,
       "gravitational": 0.33,
@@ -200,7 +200,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 850,
-    "description": "Extended-range chemical propellant storage.",
+    "description": "GI Yard Tank 40. Compact propellant storage.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.48,
@@ -219,7 +219,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 870,
-    "description": "Extended-range hydrogen storage.",
+    "description": "When range is your primary concern, fit Atlas Loadmaster Tanks. Loadmaster has a propellant storage solution for you.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.48,
@@ -238,7 +238,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 890,
-    "description": "Extended-range reaction-mass storage.",
+    "description": "When range is your primary concern, fit Atlas Loadmaster Tanks. Loadmaster has a propellant storage solution for you.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.48,
@@ -257,7 +257,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 950,
-    "description": "Extended-range fusion fuel storage.",
+    "description": "When range is your primary concern, fit Atlas Loadmaster Tanks. Loadmaster has a propellant storage solution for you.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.48,
@@ -276,7 +276,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 920,
-    "description": "Extended-range fission fuel storage.",
+    "description": "When range is your primary concern, fit Atlas Loadmaster Tanks. Loadmaster has a propellant storage solution for you.",
     "signature": {
       "thermal": 0.35,
       "gravitational": 0.49,
@@ -295,7 +295,7 @@
     "volume": 2.0,
     "fuel_capacity": 2.0,
     "cost": 1200,
-    "description": "Orion Vault magnetic containment for two antimatter units.",
+    "description": "Orion Vault 2: compact antimatter containment. Fuel your ship now.",
     "signature": {
       "thermal": 0.4,
       "gravitational": 0.18,
@@ -314,7 +314,7 @@
     "volume": 3.5,
     "fuel_capacity": 4.0,
     "cost": 2100,
-    "description": "Orion Vault magnetic containment for four antimatter units.",
+    "description": "Orion Vault 4: safe antimatter containment. Fuel your ship now.",
     "signature": {
       "thermal": 0.4,
       "gravitational": 0.3,
@@ -333,7 +333,7 @@
     "volume": 5.0,
     "fuel_capacity": 6.0,
     "cost": 2900,
-    "description": "Orion Vault magnetic containment for six antimatter units.",
+    "description": "Orion Vault 6: heavy duty antimatter containment. Fuel your ship now.",
     "signature": {
       "thermal": 0.4,
       "gravitational": 0.42,

@@ -43,7 +43,7 @@
   "weight": 0.8,
   "templates": [
     { "channel": "headlines", "text": "{planet} T20 league: {city-mall} beats {city-mall2} by {1-10} {runs|wickets}.", "tone": "positive" },
-    { "channel": "headlines", "text": "Corporate cup at {habitat} ends in overtime; {corporation} sponsors the trophy again.", "tone": "info" },
+    { "channel": "headlines", "text": "Corporate cup at {habitat} ends in overtime; {corporation} sponsors the trophy.", "tone": "info" },
     { "channel": "headlines", "text": "Pylon circuit - rematch scheduled at {city-mall} after a disputed finish.", "tone": "info" },
     { "channel": "headlines", "text": "{planet} {sport} qualifiers open; {city-mall} hosts the first heat.", "tone": "info" },
     { "channel": "headlines", "text": "{corporation-ticker} signs two new fighters ahead of the {planet} showcase.", "tone": "info" },
@@ -59,22 +59,26 @@
     { "channel": "headlines", "text": "Pylon teams begin environmental testing ahead of the {planet} race.", "tone": "info" },
     { "channel": "headlines", "text": "{habitat} betting houses report heavy action ahead of tonight's boxing card.", "tone": "info" },
 
-    { "channel": "gossip", "text": "Put your SolCoin on the rematch at {habitat}. It's already fixed. Boxing always is.", "tone": "warning" },
-    { "channel": "gossip", "text": "I lost a week's pay on yesterdays T20 spreads.", "tone": "info" },
-    { "channel": "gossip", "text": "{corporation}'s team cheated on the buzkashi battle royale, plain as day.", "tone": "warning" },
-    { "channel": "gossip", "text": "Those qualifiers are just {rival} scouting talent in plain clothes.", "tone": "info" },
-    { "channel": "gossip", "text": "Never bet against a {city-mall} cricket team. They have nothing else to do.", "tone": "info" },
+    { "channel": "gossip", "text": "Put your SolCoin on the rematch at {habitat}.", "tone": "warning" },
+    { "channel": "gossip", "text": "I lost a week's trades on the {T20|pylon|buzkashi} spreads.", "tone": "info" },
+    { "channel": "gossip", "text": "{corporation}'s team cheated, plain as day!", "tone": "warning" },
+    { "channel": "gossip", "text": "It's just {rival} scouting talent...", "tone": "info" },
+    { "channel": "gossip", "text": "Never bet against a {city-mall} {buzkashi|cricket|pylon} team.", "tone": "info" },
     { "channel": "gossip", "text": "The favourite's horse is supposed to be injured.", "tone": "warning" },
-    { "channel": "gossip", "text": "You see the pylon team from {planet}? Half their mechanics are former racers.", "tone": "info" },
-    { "channel": "gossip", "text": "That boxer didn't lose. His sponsor just decided the rematch would sell better.", "tone": "warning" },
+    { "channel": "gossip", "text": "Did you see the pylon roster from {planet}?", "tone": "info" },
+    { "channel": "gossip", "text": "His sponsor decided the rematch would sell better.", "tone": "warning" },
     { "channel": "gossip", "text": "Everyone at {habitat} knows who's winning tonight.", "tone": "info" },
-    { "channel": "gossip", "text": "The captain's retiring after the tour. Heard it from a physio.", "tone": "info" },
+    { "channel": "gossip", "text": "The captain's retiring after the tour.", "tone": "info" },
     { "channel": "gossip", "text": "Don't ask what they put in the horses before a final.", "tone": "warning" },
-    { "channel": "gossip", "text": "I watched the replay three times. Still can't tell whether that was a foul.", "tone": "info" },
+    { "channel": "gossip", "text": "I can't tell whether that was a foul.", "tone": "info" },
     { "channel": "gossip", "text": "{corporation} bought the best pylon engine team.", "tone": "warning" },
     { "channel": "gossip", "text": "The {city-mall} crowd will boo anyone who beats their side.", "tone": "info" },
     { "channel": "gossip", "text": "Someone's been betting very heavily against the favourite.", "tone": "warning" },
-    { "channel": "gossip", "text": "Umpire is blind, no way that was ever LBW.", "tone": "info" }
+    { "channel": "gossip", "text": "Umpire is blind, no way that was ever LBW.", "tone": "info" },
+    { "channel": "gossip", "text": "Test cricket is dying, it's a shame.", "tone": "info" },
+    { "channel": "gossip", "text": "Buzkashi just isn't the same with an artificial goat.", "tone": "info" },
+    { "channel": "gossip", "text": "Boxing? The fights are always rigged!", "tone": "info" },
+    { "channel": "gossip", "text": "Judges can't possibly know what happened from down there!", "tone": "info" }
   ]
 },
 {
@@ -159,7 +163,8 @@
     { "channel": "gossip", "text": "Someone's selling 'authentic Old Earth' antiques outside the museum.", "tone": "warning" },
     { "channel": "gossip", "text": "The cleaners know more about this habitat than the administrators do.", "tone": "info" },
     { "channel": "gossip", "text": "You ever notice how every city-mall claims to have the oldest bar in human space?", "tone": "info" },
-    { "channel": "gossip", "text": "I wouldn't sleep through the next docking cycle if I were you.", "tone": "warning" }
+    { "channel": "gossip", "text": "I wouldn't sleep through the next docking cycle if I were you.", "tone": "warning" },
+    { "channel": "gossip", "text": "Not your keys not your SolCoin.", "tone": "info" }
   ]
 },
 {
@@ -224,22 +229,22 @@
     { "channel": "headlines", "text": "{celebrity-pilot}'s ship undergoes major refit at {habitat}.", "tone": "info" },
     { "channel": "headlines", "text": "Independent pilot {celebrity-pilot} enters the {planet} orbit.", "tone": "positive" },
 
-    { "channel": "gossip", "text": "{celebrity-pilot} bought the whole bar a round then left before the second song.", "tone": "positive" },
-    { "channel": "gossip", "text": "I saw {celebrity-pilot}'s ship - recognise the decals from the feed.", "tone": "info" },
-    { "channel": "gossip", "text": "who knows where {celebrity-pilot} is headed.", "tone": "warning" },
+    { "channel": "gossip", "text": "... then {celebrity-pilot} bought the whole bar a round.", "tone": "positive" },
+    { "channel": "gossip", "text": "it was {celebrity-pilot}'s - I recognise the decals.", "tone": "info" },
+    { "channel": "gossip", "text": "Who knows where {celebrity-pilot} is headed next.", "tone": "warning" },
     { "channel": "gossip", "text": "I heard {celebrity-pilot} lost full hold at {habitat}.", "tone": "info" },
-    { "channel": "gossip", "text": "Apparently {celebrity-pilot} turned down three times the money to...", "tone": "info" },
-    { "channel": "gossip", "text": "You haven't seen a ship until you've seen {celebrity-pilot}'s up close.", "tone": "positive" },
+    { "channel": "gossip", "text": "{celebrity-pilot} turned down three times the money...", "tone": "info" },
+    { "channel": "gossip", "text": "You've gotta see {celebrity-pilot}'s ship up close.", "tone": "positive" },
     { "channel": "gossip", "text": "{rival} wants {celebrity-pilot} to repaint the ship.", "tone": "warning" },
-    { "channel": "gossip", "text": "My cousin serviced {celebrity-pilot}'s nav computer. Says it's nothing like the public spec.", "tone": "info" },
-    { "channel": "gossip", "text": "{celebrity-pilot} doesn't use the gate, obviously.", "tone": "warning" },
-    { "channel": "gossip", "text": "I heard {celebrity-pilot} made the 9-space translation all the way from {planet2}.", "tone": "info" },
+    { "channel": "gossip", "text": "{celebrity-pilot}'s nav computer is nothing like public spec.", "tone": "info" },
+    { "channel": "gossip", "text": "The gate? No {celebrity-pilot} always fits a hyperdrive.", "tone": "warning" },
+    { "channel": "gossip", "text": "I heard {celebrity-pilot} made the 9-space translation from {planet2}.", "tone": "info" },
     { "channel": "gossip", "text": "Paparazzi are following {celebrity-pilot} around {habitat}.", "tone": "info" },
-    { "channel": "gossip", "text": "{celebrity-pilot} refuses to fly anything with a corporate paint job.", "tone": "info" },
-    { "channel": "gossip", "text": "Someone says {celebrity-pilot} was offered it first. I'd take the money!", "tone": "info" },
-    { "channel": "gossip", "text": "The docking cameras an audience when {celebrity-pilot} is around.", "tone": "positive" },
-    { "channel": "gossip", "text": "{celebrity-pilot} tipped the refit crew more than they earned in a month!", "tone": "positive" },
-    { "channel": "gossip", "text": "I heard {celebrity-pilot} keeps a completely ordinary backup ship. No cameras, no decals.", "tone": "info" }
+    { "channel": "gossip", "text": "{celebrity-pilot} refuses to fly anything corporate.", "tone": "info" },
+    { "channel": "gossip", "text": "Someone says {celebrity-pilot} was offered it first...", "tone": "info" },
+    { "channel": "gossip", "text": "The docking bay cameras love following {celebrity-pilot}.", "tone": "positive" },
+    { "channel": "gossip", "text": "{celebrity-pilot} tipped the refit crew five grand!", "tone": "positive" },
+    { "channel": "gossip", "text": "I heard {celebrity-pilot} keeps an unmarked backup ship.", "tone": "info" }
   ]
 },
 {

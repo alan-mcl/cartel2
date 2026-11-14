@@ -18,7 +18,7 @@
       "oc_river_md_heavy_round": 80
     },
     "cost": 320,
-    "description": "River-line mass driver round storage.",
+    "description": "Fit River mass driver round storage. Don't run out of ammo.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.08,
@@ -44,7 +44,7 @@
       "prv_plasma_cell": 100
     },
     "cost": 480,
-    "description": "Ionique plasma cell storage.",
+    "description": "Get the compact plasma cell battery, from the Ionique brand. Keep your plasma weapons firing as long as you need them to.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.12,
@@ -70,7 +70,7 @@
       "go_rocket_emp": 8
     },
     "cost": 620,
-    "description": "Bellatrix rocket storage with EMP slots.",
+    "description": "Bellatrix rocket storage. Now with EMP slots.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.18,
@@ -95,7 +95,7 @@
       "go_scatter_shell": 80
     },
     "cost": 520,
-    "description": "Brutus scatter shell storage.",
+    "description": "Scatter cannon shell storage. GO Brutus delivers.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.16,
@@ -120,7 +120,7 @@
       "ora_missile_light": 24
     },
     "cost": 680,
-    "description": "Bellatrix guided missile storage rack.",
+    "description": "Bellatrix guided missile storage rack. Pack more missiles.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.2,
@@ -146,7 +146,7 @@
       "oc_river_md_round": 200
     },
     "cost": 280,
-    "description": "River-line storage for the light mass-driver round.",
+    "description": "Fit River light mass driver round storage. Don't run out of ammo.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.08,
@@ -172,7 +172,7 @@
       "oc_river_md_round": 100
     },
     "cost": 180,
-    "description": "Short River-line magazine for the light mass-driver round.",
+    "description": "Fit River light mass driver round storage. Don't run out of ammo.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.06,
@@ -197,7 +197,7 @@
       "go_scatter_shell": 24
     },
     "cost": 180,
-    "description": "Brutus scatter shell magazine sized for a full antimatter tank.",
+    "description": "Scatter cannon shell storage. GO Brutus delivers.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.1,
@@ -222,7 +222,7 @@
       "ora_rocket_he": 16
     },
     "cost": 520,
-    "description": "Bellatrix storage for high-explosive rockets.",
+    "description": "Bellatrix storage for high-explosive rockets. Pack more rockets.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.16,
@@ -247,7 +247,7 @@
       "ora_rocket_he": 3
     },
     "cost": 180,
-    "description": "Short Bellatrix rack for a fuelled freighter.",
+    "description": "Bellatrix storage for high-explosive rockets. Pack more rockets.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.08,
@@ -273,7 +273,7 @@
       "prv_plasma_cell": 50
     },
     "cost": 280,
-    "description": "Smaller Ionique plasma cell magazine.",
+    "description": "Get the compact plasma cell battery, from the Ionique brand. Keep your plasma weapons firing as long as you need them to.",
     "signature": {
       "thermal": 0.1,
       "gravitational": 0.08,

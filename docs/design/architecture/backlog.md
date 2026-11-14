@@ -21,8 +21,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 |F10|npc|med|NPC pilots to use hyperdrives if equipped|
 |F1|art|low|irregularly shaped planet renderer (for comets, KBOs, etc)|
-|F2|locations|med|asteroid/debris placement around maps & vectors|
-
+|F2|systems|med|asteroid/debris placement around maps & vectors|
 
 ## Addenda
 

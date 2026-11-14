@@ -924,6 +924,9 @@ func _spawn_orbital_ring(
 	ring_ref.set("period_seconds", float(ring_data.get("period_seconds", 720.0)))
 	ring_ref.set("sector_id", sector_id)
 	ring_ref.set("session", session)
+	var visit_rng := RandomNumberGenerator.new()
+	visit_rng.randomize()
+	session.set_orbital_phase(sector_id, visit_rng.randf() * TAU)
 	ring_ref.rotation = session.get_orbital_phase(sector_id)
 
 	_ring_radius = float(ring_data.get("radius", 1600.0))
@@ -947,6 +950,7 @@ func _spawn_orbital_ring(
 		instance.position = Vector2(cos(angle), sin(angle)) * _ring_radius
 		ring.add_child(instance)
 		_configure_orbital_instance(instance, orbital_def, catalog, session)
+		instance.rotation = visit_rng.randf() * TAU
 
 		var entity_id := str(orbital_def.get("id", ""))
 		if not entity_id.is_empty():
