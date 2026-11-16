@@ -15,6 +15,8 @@ const BAR_WEIGHT_RETRIEVAL := 10
 
 const BAR_ROUND_OFFER_INDEX_START := 1000
 
+const VOLATILE_DESK_KINDS: PackedStringArray = ["scan", "bounty", "retrieval"]
+
 
 static func bar_round_run_seed(session_run_seed: int, building_id: String) -> int:
 	return int(hash("%d:%s:bar_round" % [session_run_seed, building_id]))
@@ -112,6 +114,55 @@ static func _empty_counts(_building_type: String) -> Dictionary:
 	return {"passenger": 0, "freight": 0, "scan": 0, "bounty": 0, "retrieval": 0}
 
 
+static func generate_volatile_offers_for_building(
+	catalog: Catalog,
+	habitat_id: String,
+	building_id: String,
+	building_type: String,
+	day: int,
+	run_seed: int,
+	kind_key: String,
+	index_start: int,
+	count: int
+) -> Array:
+	match kind_key:
+		"scan":
+			return ScanCharters.generate_offers_for_building(
+				catalog,
+				habitat_id,
+				building_id,
+				building_type,
+				day,
+				run_seed,
+				index_start,
+				count
+			)
+		"bounty":
+			return BountyCharters.generate_offers_for_building(
+				catalog,
+				habitat_id,
+				building_id,
+				building_type,
+				day,
+				run_seed,
+				index_start,
+				count
+			)
+		"retrieval":
+			return RetrievalCharters.generate_offers_for_building(
+				catalog,
+				habitat_id,
+				building_id,
+				building_type,
+				day,
+				run_seed,
+				index_start,
+				count
+			)
+		_:
+			return []
+
+
 static func generate_bar_building(
 	catalog: Catalog,
 	habitat_id: String,
@@ -158,45 +209,32 @@ static func generate_bar_building(
 			false,
 			passenger_index_start
 		)
-	var scan_count := int(counts.get("scan", 0))
-	var scan_offers := ScanCharters.generate_offers_for_building(
-		catalog,
-		habitat_id,
-		building_id,
-		building_type,
-		day,
-		run_seed,
-		scan_index_start,
-		scan_count
-	)
-	var bounty_count := int(counts.get("bounty", 0))
-	var bounty_offers := BountyCharters.generate_offers_for_building(
-		catalog,
-		habitat_id,
-		building_id,
-		building_type,
-		day,
-		run_seed,
-		bounty_index_start,
-		bounty_count
-	)
-	var retrieval_count := int(counts.get("retrieval", 0))
-	var retrieval_offers := RetrievalCharters.generate_offers_for_building(
-		catalog,
-		habitat_id,
-		building_id,
-		building_type,
-		day,
-		run_seed,
-		retrieval_index_start,
-		retrieval_count
-	)
+	var volatile_slices := {"scan": [], "bounty": [], "retrieval": []}
+	var volatile_index_starts := {
+		"scan": scan_index_start,
+		"bounty": bounty_index_start,
+		"retrieval": retrieval_index_start,
+	}
+	for kind_key in VOLATILE_DESK_KINDS:
+		var count := int(counts.get(kind_key, 0))
+		var offers := generate_volatile_offers_for_building(
+			catalog,
+			habitat_id,
+			building_id,
+			building_type,
+			day,
+			run_seed,
+			kind_key,
+			int(volatile_index_starts[kind_key]),
+			count
+		)
+		volatile_slices[kind_key] = offers
 	return {
 		"passenger": passenger_offers,
 		"freight": freight_offers,
-		"scan": scan_offers,
-		"bounty": bounty_offers,
-		"retrieval": retrieval_offers,
+		"scan": volatile_slices["scan"],
+		"bounty": volatile_slices["bounty"],
+		"retrieval": volatile_slices["retrieval"],
 	}
 
 
@@ -286,48 +324,31 @@ static func generate_for_habitat(
 			if not bar_retrieval.is_empty():
 				retrieval_boards[building_id] = bar_retrieval
 			continue
-		var scan_count := int(counts.get("scan", 0))
-		var scan_offers := ScanCharters.generate_offers_for_building(
-			catalog,
-			habitat_id,
-			building_id,
-			building_type,
-			day,
-			run_seed,
-			scan_index,
-			scan_count
-		)
-		scan_index += scan_offers.size()
-		if not scan_offers.is_empty():
-			scan_boards[building_id] = scan_offers
-		var bounty_count := int(counts.get("bounty", 0))
-		var bounty_offers := BountyCharters.generate_offers_for_building(
-			catalog,
-			habitat_id,
-			building_id,
-			building_type,
-			day,
-			run_seed,
-			bounty_index,
-			bounty_count
-		)
-		bounty_index += bounty_offers.size()
-		if not bounty_offers.is_empty():
-			bounty_boards[building_id] = bounty_offers
-		var retrieval_count := int(counts.get("retrieval", 0))
-		var retrieval_offers := RetrievalCharters.generate_offers_for_building(
-			catalog,
-			habitat_id,
-			building_id,
-			building_type,
-			day,
-			run_seed,
-			retrieval_index,
-			retrieval_count
-		)
-		retrieval_index += retrieval_offers.size()
-		if not retrieval_offers.is_empty():
-			retrieval_boards[building_id] = retrieval_offers
+		var volatile_boards := {
+			"scan": scan_boards,
+			"bounty": bounty_boards,
+			"retrieval": retrieval_boards,
+		}
+		var volatile_indices := {"scan": scan_index, "bounty": bounty_index, "retrieval": retrieval_index}
+		for kind_key in VOLATILE_DESK_KINDS:
+			var count := int(counts.get(kind_key, 0))
+			var offers := generate_volatile_offers_for_building(
+				catalog,
+				habitat_id,
+				building_id,
+				building_type,
+				day,
+				run_seed,
+				kind_key,
+				int(volatile_indices[kind_key]),
+				count
+			)
+			volatile_indices[kind_key] = int(volatile_indices[kind_key]) + offers.size()
+			if not offers.is_empty():
+				volatile_boards[kind_key][building_id] = offers
+		scan_index = int(volatile_indices["scan"])
+		bounty_index = int(volatile_indices["bounty"])
+		retrieval_index = int(volatile_indices["retrieval"])
 
 	return {
 		"passenger": passenger_boards,
