@@ -56,7 +56,7 @@
     "power_generation": 32.0,
     "fuel_consumption": 0.0275,
     "cost": 2000,
-    "description": "Trust the Atlas brand for all your power generation needs. Foundation Plant 32 provides industry leading compact fission generation capability.",
+    "description": "Specify Atlas for all your power needs. Foundation Plant 32 provides industry leading compact fission generation capability.",
     "signature": {
       "thermal": 6.56,
       "gravitational": 0.47,
@@ -78,7 +78,7 @@
     "power_generation": 48.0,
     "fuel_consumption": 0.035,
     "cost": 3000,
-    "description": "Trust the Atlas brand for all your power generation needs. The Loadmaster Plant provides versatile and industry leading fission generation capability.",
+    "description": "Specify Atlas for all your power needs. The Loadmaster Plant provides versatile and industry leading fission generation capability.",
     "signature": {
       "thermal": 7.84,
       "gravitational": 0.62,
@@ -100,7 +100,7 @@
     "power_generation": 72.0,
     "fuel_consumption": 0.05,
     "cost": 4800,
-    "description": "Trust the Atlas brand for all your power generation needs. The Titan Plant provides industry leading fission generation for heavy workloads.",
+    "description": "Specify Atlas for all your power needs. The Titan Plant provides industry leading fission generation for heavy workloads.",
     "signature": {
       "thermal": 9.76,
       "gravitational": 0.95,
@@ -122,7 +122,7 @@
     "power_generation": 22.0,
     "fuel_consumption": 0.0275,
     "cost": 1199,
-    "description": "Admiralty DynamoPower: get the best value in the best looking package, with the C&A seal of quality.",
+    "description": "Admiralty DynamoPower: the best value in a well-finished package, with the C&A seal of quality.",
     "signature": {
       "thermal": 5.76,
       "gravitational": 0.47,
@@ -210,7 +210,7 @@
     "power_generation": 10.0,
     "fuel_consumption": 0.0,
     "cost": 1600,
-    "description": "Fit the best sustainable shipboard power solution out there, fit Canopy's PowerCell!",
+    "description": "Fit the best sustainable shipboard power solution out there. Fit Canopy's PowerCell!",
     "signature": {
       "thermal": 1.9,
       "gravitational": 0.38,
@@ -429,7 +429,7 @@
     "power_generation": 6.0,
     "fuel_consumption": 0.0,
     "cost": 550,
-    "description": "The GM TradePlant: compact and efficiently.",
+    "description": "The GM TradePlant: compact and efficient.",
     "signature": {
       "thermal": 1.74,
       "gravitational": 0.35,
@@ -450,7 +450,7 @@
     "power_generation": 58.0,
     "fuel_consumption": 0.035,
     "cost": 3900,
-    "description": "Plant 60 uses the HW cutting edge engineering to deliver industrial quality fission power for all your shipboard needs.",
+    "description": "Plant 60 uses the HW's cutting edge engineering to deliver industrial quality fission power for all your shipboard needs.",
     "signature": {
       "thermal": 8.64,
       "gravitational": 0.55,
@@ -472,7 +472,7 @@
     "power_generation": 48.0,
     "fuel_consumption": 0.0111,
     "cost": 4200,
-    "description": "Get headline fusion power numbers from Helios with the great looking and hard working Arc 9 Fusion plant.",
+    "description": "Headline fusion numbers from Helios. The Arc 9 is a hard-working plant, finished to the highest specification.",
     "signature": {
       "thermal": 5.88,
       "gravitational": 0.35,
@@ -494,7 +494,7 @@
     "power_generation": 32.0,
     "fuel_consumption": 0.0089,
     "cost": 2600,
-    "description": "Fit the best compact fusion power solution on the market, the Compact 40 from Helios",
+    "description": "Fit the best compact fusion power solution on the market, the Compact 40 from Helios.",
     "signature": {
       "thermal": 4.92,
       "gravitational": 0.28,
@@ -516,7 +516,7 @@
     "power_generation": 9.0,
     "fuel_consumption": 0.0,
     "cost": 1800,
-    "description": "Take your shipboard power generation to the next level with the tiny Helios Ember radioisotope plant.",
+    "description": "The Helios Ember: a small radioisotope plant, specified for hulls that need power without the mass of a reactor.",
     "signature": {
       "thermal": 1.86,
       "gravitational": 0.23,
@@ -800,7 +800,7 @@
     "power_generation": 30.0,
     "fuel_consumption": 0.02,
     "cost": 2599,
-    "description": "Roth Energie presents the Energie 12, a refined and efficient fission power generation solution for pilots with class.",
+    "description": "Roth Energie presents the Energie 12, a refined and efficient fission power generation solution for pilots with standing.",
     "signature": {
       "thermal": 6.4,
       "gravitational": 0.35,
@@ -822,7 +822,7 @@
     "power_generation": 46.0,
     "fuel_consumption": 0.0078,
     "cost": 5200,
-    "description": "Roth Energie presents the Priv\u00e9 Continental, the definitive fusion power solution for pilots who demand the best.",
+    "description": "Roth Energie presents the Priv\u00e9 Continental, the fusion plant the house commends to patrons who require the best.",
     "signature": {
       "thermal": 5.76,
       "gravitational": 0.45,
@@ -931,7 +931,7 @@
     "power_generation": 8.0,
     "fuel_consumption": 0.0,
     "cost": 950,
-    "description": "Cheap always-on power from Tukey - it won't let you down.",
+    "description": "Tukey HandyPlant. Always-on power, cheap, and going fast. Ask for Tukey today.",
     "signature": {
       "thermal": 1.82,
       "gravitational": 0.35,
@@ -952,7 +952,7 @@
     "power_generation": 40.0,
     "fuel_consumption": 0.0425,
     "cost": 1600,
-    "description": "Get the SpecialPlant from Tukey - you won't regret it.",
+    "description": "Lot 14 SpecialPlant. Read the dial twice. The operators who notice a price like this do not wait.",
     "signature": {
       "thermal": 7.2,
       "gravitational": 0.6,
@@ -974,7 +974,7 @@
     "power_generation": 28.0,
     "fuel_consumption": 0.0225,
     "cost": 1653,
-    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturuer, choose the Meridian Current 28.",
+    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturer, choose the Meridian Current 28.",
     "signature": {
       "thermal": 6.24,
       "gravitational": 0.38,
@@ -996,7 +996,7 @@
     "power_generation": 40.0,
     "fuel_consumption": 0.03,
     "cost": 2700,
-    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturuer, choose the Meridian Transit.",
+    "description": "Choose a proven power generation solution, choose a reliable and trustworthy manufacturer, choose the Meridian Transit.",
     "signature": {
       "thermal": 7.2,
       "gravitational": 0.5,
