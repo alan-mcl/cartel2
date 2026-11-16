@@ -1,6 +1,6 @@
 # Missions
 
-**Status:** Passenger, freight, scan, bounty, and retrieval charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (no desk UI yet); see [plotlines.md](plotlines.md). Named-NPC dialogue is not implemented. Scan charters (other than a planet target), bounty charters, and retrieval charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
+**Status:** Passenger, freight, scan, bounty, and retrieval charters are catalog-backed. Optional background **plotlines** expose derived gig records via `MissionSubsystem.list_plot_gigs` (bar desk); see [plotlines.md](plotlines.md). Dock settlement publishes `SimEvent.charter_completed`. Named-NPC dialogue is not implemented. Scan charters (other than a planet target), bounty charters, and retrieval charters grant a volatile translation; the travel rules are in [architecture.md](../architecture/architecture.md).
 
 ## Scan, bounty, and retrieval volatile hops
 

@@ -245,11 +245,21 @@ func _blocked_text() -> String:
 func _sections() -> Array:
 	var posted := CharterBoardSection.new()
 	posted.empty_text = "Nothing posted tonight."
+	var plot_gigs: Array = []
+	var missions := _missions()
+	if missions != null and _context.session != null:
+		plot_gigs = missions.list_plot_gigs(
+			str(_context.session.habitat_id),
+			"bar",
+			_context.session,
+			_context.catalog
+		)
 	posted.chits = CharterBoard.interleave([
 		_passenger_factory.posted_chits(),
 		_freight_factory.posted_chits(),
 		_scan_factory.posted_scan_chits(),
 		_scan_factory.posted_bounty_chits(),
+		PlotlineGigChits.chits(plot_gigs, _context.session, _context.catalog),
 		_solution_chits(),
 	])
 

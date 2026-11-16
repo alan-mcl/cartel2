@@ -4,6 +4,9 @@ extends RefCounted
 
 static func run(runner: TestRunner) -> void:
 	var catalog := Catalog.load_default()
+	_test_catalog_loads_empty_plotlines(runner, catalog)
+	_test_charter_completed_event(runner, catalog)
+	_test_bar_gig_chits_accept(runner, catalog)
 	_test_event_transition(runner, catalog)
 	_test_days_in_state(runner, catalog)
 	_test_gig_accept_and_flags(runner, catalog)
@@ -30,6 +33,169 @@ static func _install_def(catalog: Catalog, def: Dictionary) -> String:
 	var plotline_id := str(def.get("id", ""))
 	catalog.plotlines_by_id[plotline_id] = def
 	return plotline_id
+
+
+static func _simulation() -> Simulation:
+	return Simulation.new()
+
+
+static func _missions(simulation: Simulation) -> MissionSubsystem:
+	return simulation.get_subsystem("missions") as MissionSubsystem
+
+
+static func _best_docked_ship(session: GameSession, catalog: Catalog, habitat_id: String) -> OwnedShip:
+	var best: OwnedShip = null
+	var best_cap := -1.0
+	for ship in session.ships_at(habitat_id):
+		var assembled := ShipAssembler.assemble_owned(catalog, ship)
+		var cap := float(assembled.capacities.get("life_support_capacity", 0.0))
+		if cap > best_cap:
+			best_cap = cap
+			best = ship
+	return best
+
+
+static func _inject_passenger_offer(
+	missions: MissionSubsystem,
+	session: GameSession,
+	catalog: Catalog,
+	origin_habitat_id: String,
+	destination_habitat_id: String,
+	offer_id: String
+) -> Dictionary:
+	var dest := catalog.get_habitat(destination_habitat_id)
+	var cfg := PassengerCharters.config(catalog)
+	var friction := PassengerCharters.friction_between(
+		catalog,
+		str(catalog.get_habitat(origin_habitat_id).get("sector_id", "")),
+		str(dest.get("sector_id", ""))
+	)
+	var reward := PassengerCharters.compute_reward(cfg, 2, 1.0, friction)
+	var offer := {
+		"id": offer_id,
+		"board": PassengerCharters.BOARD_TERMINAL,
+		"origin_habitat_id": origin_habitat_id,
+		"destination_habitat_id": destination_habitat_id,
+		"destination_name": str(dest.get("name", destination_habitat_id)),
+		"destination_sector_id": str(dest.get("sector_id", "")),
+		"friction": friction,
+		"role_id": "steerage",
+		"role_title": "Steerage passengers",
+		"affiliation": "civilian",
+		"life_support": "spartan",
+		"quantity": 2,
+		"pay_multiplier": 1.0,
+		"requires_player_affiliation": false,
+		"corporation_id": "",
+		"corporation_name": "",
+		"description": "Test charter.",
+		"reward": reward,
+	}
+	missions.passengers.offers[origin_habitat_id] = {
+		PassengerCharters.BOARD_TERMINAL: [offer],
+	}
+	missions.mark_habitat_boards_materialised(origin_habitat_id)
+	missions.generated_day = CommodityEconomy.gst_day(session.gst_seconds)
+	return offer
+
+
+static func _test_catalog_loads_empty_plotlines(runner: TestRunner, catalog: Catalog) -> void:
+	var loaded := Catalog.load_default()
+	runner.check(loaded != null, "plotlines: default catalog loads")
+	runner.check(
+		typeof(loaded.list_plotlines()) == TYPE_ARRAY,
+		"plotlines: list_plotlines returns array when json empty"
+	)
+
+
+static func _test_charter_completed_event(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(catalog)
+	simulation.attach_events(session, catalog)
+	var ship := _best_docked_ship(session, catalog, "proxima_habitat")
+	if ship == null:
+		return
+	var picked := _inject_passenger_offer(
+		missions,
+		session,
+		catalog,
+		"proxima_habitat",
+		"bela_orbital_habitat",
+		"plotline_charter_complete"
+	)
+	runner.check(
+		missions.accept_offer(session, catalog, str(picked.get("id", "")), ship.id),
+		"plotlines: accept charter for completion event"
+	)
+	var charter_id := str(missions.list_accepted()[0].get("charter_id", ""))
+	var reward := int(picked.get("reward", 0))
+	var completed_events: Array = []
+	session.events.subscribe(SimEvent.CHARTER_COMPLETED, func(evt: Dictionary) -> void:
+		completed_events.append(evt)
+	)
+	runner.check(session.undock(catalog, ship.id, missions), "plotlines: undock for charter event")
+	runner.check(session.enter_sector(catalog, "bela", false), "plotlines: travel for charter event")
+	runner.check(session.dock(catalog, "bela_orbital_habitat"), "plotlines: dock for charter event")
+	runner.check(missions.list_accepted().is_empty(), "plotlines: charter completes on dock")
+	runner.check_eq(completed_events.size(), 1, "plotlines: charter_completed published once")
+	if completed_events.is_empty():
+		return
+	var seen: Dictionary = completed_events[0]
+	runner.check_eq(str(seen.get("type", "")), SimEvent.CHARTER_COMPLETED, "plotlines: charter_completed type")
+	runner.check_eq(str(seen.get("charter_kind", "")), "passenger", "plotlines: charter_kind passenger")
+	runner.check_eq(str(seen.get("charter_id", "")), charter_id, "plotlines: charter_id on event")
+	runner.check_eq(int(seen.get("reward", -1)), reward, "plotlines: reward on event")
+
+
+static func _test_bar_gig_chits_accept(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var session := _session(catalog)
+	simulation.attach_events(session, catalog)
+	var missions := _missions(simulation)
+	_install_def(
+		catalog,
+		{
+			"id": "bar_desk_arc",
+			"initial": "offer",
+			"states": {
+				"offer": {
+					"gigs": [
+						{"id": "tip", "desk": "bar", "title": "Tip", "text": "Quiet word."},
+					],
+					"transitions": [
+						{
+							"to": "done",
+							"when": {"kind": "gig_accepted", "gig_id": "tip"},
+						},
+					],
+				},
+				"done": {"terminal": true},
+			},
+		}
+	)
+	var gigs := missions.list_plot_gigs("proxima_habitat", "bar", session, catalog)
+	runner.check_eq(gigs.size(), 1, "plotlines: bar desk lists gig")
+	var chits: Array = PlotlineGigChits.chits(gigs, session, catalog)
+	runner.check(chits.size() >= 1, "plotlines: bar chits built")
+	var accept_chit: CharterChit = null
+	for chit_variant in chits:
+		if chit_variant is CharterChit and chit_variant.describe.is_valid():
+			var spec: Dictionary = chit_variant.describe.call(chit_variant.entry, "")
+			if str(spec.get("button_text", "")) == "Accept":
+				accept_chit = chit_variant
+				break
+	runner.check(accept_chit != null, "plotlines: accept chit present")
+	runner.check(
+		bool(accept_chit.act.call(accept_chit.entry, "")),
+		"plotlines: accept chit act succeeds"
+	)
+	runner.check_eq(
+		str(session.bound_plotlines.get_instance("bar_desk_arc").get("state", "")),
+		"done",
+		"plotlines: bar accept advances arc"
+	)
+	catalog.plotlines_by_id.erase("bar_desk_arc")
 
 
 static func _test_event_transition(runner: TestRunner, catalog: Catalog) -> void:

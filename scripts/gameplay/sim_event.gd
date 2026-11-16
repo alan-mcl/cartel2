@@ -14,6 +14,7 @@ const SHIP_DESTROYED := "ship_destroyed"
 const SALVAGE_TAKEN := "salvage_taken"
 const UNSPACE_ENTERED := "unspace_entered"
 const ENCOUNTER_STARTED := "encounter_started"
+const CHARTER_COMPLETED := "charter_completed"
 
 
 static func make(type: String, payload: Dictionary = {}) -> Dictionary:
@@ -103,4 +104,12 @@ static func encounter_started(
 		"location_class": location_class,
 		"sector_id": sector_id,
 		"n": unspace_n,
+	})
+
+
+static func charter_completed(charter_kind: String, charter_id: String, reward: int) -> Dictionary:
+	return make(CHARTER_COMPLETED, {
+		"charter_kind": charter_kind,
+		"charter_id": charter_id,
+		"reward": reward,
 	})

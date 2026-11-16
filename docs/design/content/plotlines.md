@@ -17,7 +17,7 @@ Plotlines are optional background arcs. Each arc is a small state machine in [`p
 
 | Kind | Fired by |
 |------|----------|
-| `event` | `GameSession.events` / `Simulation.dispatch_event` — requires `type` matching [`SimEvent`](../../../scripts/gameplay/sim_event.gd); optional extra keys must equal the event payload (`habitat_id`, `sector_id`, `encounter_id`, …). Includes `encounter_started` from [`EncounterSubsystem`](../../../scripts/gameplay/encounter_subsystem.gd). |
+| `event` | `GameSession.events` / `Simulation.dispatch_event` — requires `type` matching [`SimEvent`](../../../scripts/gameplay/sim_event.gd); optional extra keys must equal the event payload (`habitat_id`, `sector_id`, `encounter_id`, `charter_kind`, …). Includes `encounter_started` from [`EncounterSubsystem`](../../../scripts/gameplay/encounter_subsystem.gd) and `charter_completed` when any charter kind settles on dock. |
 | `days_in_state` | `PlotlineSubsystem.on_day` — `days` is the minimum GST days since `entered_gst`. |
 | `gig_accepted` | `PlotlineSubsystem.accept_gig(plotline_id, gig_id)` |
 | `gig_completed` | `PlotlineSubsystem.complete_gig(plotline_id, gig_id)` |
@@ -31,9 +31,10 @@ Ignoring a gig is simply not accepting it; a later `days_in_state` transition ca
 [`PlotlineSubsystem`](../../../scripts/gameplay/plotline_subsystem.gd) is registered on production [`Simulation`](../../../scripts/gameplay/simulation.gd).
 
 - **Messages** — `contribute_messages(channel, session, catalog)` supplies weighted templates. [`MessageSubsystem`](../../../scripts/gameplay/message_subsystem.gd) merges them into the same weighted pick as catalog emitters when a `Simulation` is passed (flight HUD **WIRE** and bar **BAR**). Main-menu ticker uses a scratch session and does not see career plotlines.
-- **Gigs** — `contribute_gigs(desk, habitat_id, session, catalog)` returns derived records (`source: plotline`, `plotline_id`, `gig_id`, desk, title, text, plus any extra authored fields). [`MissionSubsystem.list_plot_gigs`](../../../scripts/gameplay/mission_subsystem.gd) delegates to `session.bound_plotlines`. Nothing lists them in UI yet.
+- **Gigs** — `contribute_gigs(desk, habitat_id, session, catalog)` returns derived records (`source: plotline`, `plotline_id`, `gig_id`, desk, title, text, plus any extra authored fields). [`MissionSubsystem.list_plot_gigs`](../../../scripts/gameplay/mission_subsystem.gd) delegates to `session.bound_plotlines`. The bar desk lists them via [`PlotlineGigChits`](../../../scripts/ui/plotline_gig_chits.gd) (Accept and Complete tiles).
+- **Charter completion** — settling any of the five charter kinds on dock publishes [`SimEvent.charter_completed`](../../../scripts/gameplay/sim_event.gd) (`charter_kind`, `charter_id`, `reward`) on the session bus.
 
-Player actions that should advance an arc call `accept_gig` / `complete_gig` (or rely on world events already published on the session bus).
+Player actions that should advance an arc call `accept_gig` / `complete_gig` (or rely on world events already published on the session bus, including `charter_completed`).
 
 ## Save
 

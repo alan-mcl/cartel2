@@ -681,6 +681,9 @@ func _resolve_charter_on_dock(
 		str(logs.get("paid", "")),
 		str(logs.get("unpaid", ""))
 	)
+	session.events.publish(
+		SimEvent.charter_completed(kind.slice_key, charter_id, reward)
+	)
 
 
 func accept_offer(
