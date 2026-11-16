@@ -12,6 +12,8 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_setup_fleet_size(runner, catalog)
 	_test_sim_slot_cap(runner, catalog)
 	_test_near_lod_tracks_sim_slot(runner, catalog)
+	_test_slotted_peaceful_kinematic(runner, catalog)
+	_test_slotted_engage_weapon_orders(runner, catalog)
 	_test_detection_stagger(runner, catalog)
 	_test_detection_stagger_phase(runner)
 	_test_clear_drops_fleet(runner, catalog)
@@ -101,6 +103,67 @@ static func _test_sim_slot_cap(runner: TestRunner, catalog: Catalog) -> void:
 
 	runner.check(slotted <= sim_max, "at most sim_slot_max actors hold sim slots")
 	runner.check(slotted > 0, "proxima fleet assigns at least one sim slot near origin")
+
+
+static func _test_slotted_peaceful_kinematic(runner: TestRunner, catalog: Catalog) -> void:
+	var traffic_config := catalog.get_traffic_config()
+	var world_loader := WorldLoader.new()
+	var envelope := world_loader.get_traffic_envelope_radius()
+	var actor = TrafficActorScript.create(
+		catalog,
+		traffic_config,
+		"transit",
+		TrafficActorScript.pick_template_for_role(traffic_config, "transit"),
+		Vector2(800, 0),
+		0.0,
+		"proxima"
+	)
+	actor.has_sim_slot = true
+	actor.ai_state = TrafficActorScript.AiState.TRAFFIC
+	for _i in range(10):
+		actor.tick(
+			catalog,
+			traffic_config,
+			1.0 / 60.0,
+			Vector2.ZERO,
+			[],
+			envelope,
+			world_loader
+		)
+	runner.check(actor.pending_weapon_orders.is_empty(), "slotted peaceful traffic emits no weapon orders")
+
+
+static func _test_slotted_engage_weapon_orders(runner: TestRunner, catalog: Catalog) -> void:
+	var traffic_config := catalog.get_traffic_config()
+	var world_loader := WorldLoader.new()
+	var envelope := world_loader.get_traffic_envelope_radius()
+	var actor = TrafficActorScript.create(
+		catalog,
+		traffic_config,
+		"transit",
+		"flare_on_ss",
+		Vector2(350, 0),
+		PI,
+		"proxima"
+	)
+	actor.has_sim_slot = true
+	actor.ai_state = TrafficActorScript.AiState.ENGAGE
+	actor.begin_combat_pilot()
+	var got_orders := false
+	for _i in range(180):
+		actor.tick(
+			catalog,
+			traffic_config,
+			1.0 / 60.0,
+			Vector2.ZERO,
+			[],
+			envelope,
+			world_loader
+		)
+		if not actor.pending_weapon_orders.is_empty():
+			got_orders = true
+			break
+	runner.check(got_orders, "slotted engage traffic can emit weapon orders")
 
 
 static func _test_near_lod_tracks_sim_slot(runner: TestRunner, catalog: Catalog) -> void:

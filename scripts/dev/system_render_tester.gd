@@ -288,7 +288,7 @@ func _load_sector(sector_id: String) -> void:
 	else:
 		session.location_name = sector_id
 
-	_loader.load_sector(_world, catalog, session, sector_id)
+	_loader.load_sector(_world, catalog, session, sector_id, true)
 	_apply_planet_auto_spin()
 	_refresh_surface_labels()
 	_frame_view()

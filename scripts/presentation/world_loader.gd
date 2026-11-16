@@ -55,6 +55,7 @@ var _volatile_entity_contact_meta: Dictionary = {}
 var _volatile_star_setup: Dictionary = {}
 var _sky_companion_nav: Array = []
 var _sky_parent_nav: Dictionary = {}
+var _planet_high_quality_render: bool = false
 
 
 func clear_world(world_root: Node2D) -> void:
@@ -95,8 +96,10 @@ func load_sector(
 	world_root: Node2D,
 	catalog: Catalog,
 	session: GameSession,
-	sector_id: String
+	sector_id: String,
+	planet_high_quality_render: bool = false
 ) -> float:
+	_planet_high_quality_render = planet_high_quality_render
 	clear_world(world_root)
 
 	if VolatileTranslation.is_volatile_sector_id(sector_id):
@@ -480,7 +483,7 @@ func _spawn_planet(
 	var malls: Variant = sector.get("city_malls", [])
 	if typeof(malls) == TYPE_ARRAY:
 		camps = (malls as Array).duplicate()
-	planet.configure(planet_data, sector_id, camps)
+	planet.configure(planet_data, sector_id, camps, null, -50, true, _planet_high_quality_render)
 	spawned_by_id["planet"] = planet
 	return planet
 

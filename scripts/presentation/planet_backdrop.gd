@@ -3,10 +3,12 @@ extends Node2D
 const PLANET_SHADER := preload("res://shaders/planet_backdrop.gdshader")
 const SurfaceLabels := preload("res://scripts/presentation/planet_surface_labels.gd")
 
-const VIEWPORT_SIZE := 1024
+const VIEWPORT_SIZE_HIGH := 1024
+const VIEWPORT_SIZE_FLIGHT := 512
 const SPHERE_RADIAL_SEGMENTS := 48
 const SPHERE_RINGS := 24
-const VIEWPORT_RENDER_INTERVAL := 0.1
+const VIEWPORT_RENDER_INTERVAL_HIGH := 0.1
+const VIEWPORT_RENDER_INTERVAL_FLIGHT := 0.2
 const SPHERE_RADIUS := 1.0
 const CAMERA_DISTANCE := 3.2
 const STAR_NEAR_RADIUS := 7000.0
@@ -26,6 +28,8 @@ var _inspection_yaw: float = 0.0
 var _inspection_pitch: float = 0.0
 var _viewport_render_accum: float = 0.0
 var _diameter: float = 2000.0
+var _viewport_size: int = VIEWPORT_SIZE_FLIGHT
+var _viewport_render_interval: float = VIEWPORT_RENDER_INTERVAL_FLIGHT
 var _anchors: Array = []
 
 const INSPECTION_PITCH_LIMIT := deg_to_rad(85.0)
@@ -37,9 +41,16 @@ func configure(
 	surface_camp_names: Array = [],
 	slot_position: Variant = null,
 	slot_z_index: int = -50,
-	load_surface_labels: bool = true
+	load_surface_labels: bool = true,
+	high_quality_render: bool = false
 ) -> void:
 	_diameter = float(planet_data.get("diameter", 2000.0))
+	if high_quality_render:
+		_viewport_size = VIEWPORT_SIZE_HIGH
+		_viewport_render_interval = VIEWPORT_RENDER_INTERVAL_HIGH
+	else:
+		_viewport_size = VIEWPORT_SIZE_FLIGHT
+		_viewport_render_interval = VIEWPORT_RENDER_INTERVAL_FLIGHT
 	var tint := Color(str(planet_data.get("modulate", "#ffffff")))
 	_anchors = []
 	if load_surface_labels:
@@ -69,7 +80,7 @@ func configure(
 
 	_build_viewport_scene(planet_data, tint)
 	_apply_planet_rotation()
-	_sprite.scale = Vector2.ONE * (_diameter / float(VIEWPORT_SIZE))
+	_sprite.scale = Vector2.ONE * (_diameter / float(_viewport_size))
 	_sprite.modulate = Color.WHITE
 	_request_viewport_render()
 
@@ -84,7 +95,7 @@ func _build_viewport_scene(planet_data: Dictionary, tint: Color) -> void:
 
 	_viewport = SubViewport.new()
 	_viewport.name = "PlanetViewport"
-	_viewport.size = Vector2i(VIEWPORT_SIZE, VIEWPORT_SIZE)
+	_viewport.size = Vector2i(_viewport_size, _viewport_size)
 	_viewport.own_world_3d = true
 	_viewport.transparent_bg = true
 	_viewport.handle_input_locally = false
@@ -304,6 +315,6 @@ func _process(delta: float) -> void:
 		_auto_spin_yaw = fposmod(_auto_spin_yaw + TAU / _spin_period * delta, TAU)
 	_apply_planet_rotation()
 	_viewport_render_accum += delta
-	if _viewport_render_accum >= VIEWPORT_RENDER_INTERVAL:
-		_viewport_render_accum = fmod(_viewport_render_accum, VIEWPORT_RENDER_INTERVAL)
+	if _viewport_render_accum >= _viewport_render_interval:
+		_viewport_render_accum = fmod(_viewport_render_accum, _viewport_render_interval)
 		_request_viewport_render()

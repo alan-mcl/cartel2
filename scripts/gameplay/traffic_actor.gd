@@ -349,21 +349,37 @@ func tick(
 		_tick_bounty_escape(catalog, traffic_config)
 		return
 
-	_tick_full_sim(
-		catalog,
-		traffic_config,
-		delta,
-		player_pos,
-		player_vel,
-		player_facing,
-		player_thrusting,
-		anchors,
-		traffic_envelope,
-		world_loader,
-		prev_position,
-		world,
-		drone_contacts
-	)
+	if ai_state == AiState.ENGAGE or ai_state == AiState.FLEE:
+		_tick_full_sim(
+			catalog,
+			traffic_config,
+			delta,
+			player_pos,
+			player_vel,
+			player_facing,
+			player_thrusting,
+			anchors,
+			traffic_envelope,
+			world_loader,
+			prev_position,
+			world,
+			drone_contacts
+		)
+	else:
+		_tick_kinematic(
+			catalog,
+			delta,
+			player_pos,
+			player_vel,
+			player_facing,
+			player_thrusting,
+			anchors,
+			traffic_config,
+			traffic_envelope,
+			world_loader,
+			prev_position,
+			world
+		)
 	_tick_bounty_escape(catalog, traffic_config)
 
 
