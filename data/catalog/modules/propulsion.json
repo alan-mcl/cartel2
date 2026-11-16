@@ -1,7 +1,7 @@
 [
   {
     "id": "ac_altiplano_burn",
-    "name": "Altiplano Burn",
+    "name": "Altiplano Burn ChemJet",
     "maker": "Andean Consolidated",
     "brand": "Altiplano",
     "engine_type": "chemical",
@@ -15,7 +15,7 @@
     "fuel_consumption": 0.76,
     "power_demand": 2.8,
     "cost": 540,
-    "description": "High-altitude chemical heritage in a space-engine package.",
+    "description": "Altiplano Burn. Best specs. Best price. Go chemical.",
     "signature": {
       "thermal": 3.15,
       "gravitational": 0.8,
@@ -27,7 +27,7 @@
   },
   {
     "id": "atl_keystone_fusion",
-    "name": "Keystone F-60",
+    "name": "Keystone F-60 Fusion Drive",
     "maker": "Atlas Concern",
     "brand": "Keystone",
     "engine_type": "direct_fusion",
@@ -41,7 +41,7 @@
     "fuel_consumption": 0.09,
     "power_demand": 5.5,
     "cost": 4100,
-    "description": "Industrial direct-fusion for convoy lead ships and heavy tugs.",
+    "description": "Industrial grade fusion propulsion. Atlas Keystone: keeps going.",
     "signature": {
       "thermal": 7.66,
       "gravitational": 1.7,
@@ -53,7 +53,7 @@
   },
   {
     "id": "atl_keystone_h20",
-    "name": "Keystone H-20",
+    "name": "Keystone H-20 Hydrothermal Drive",
     "maker": "Atlas Concern",
     "brand": "Keystone",
     "engine_type": "hydro_thermal",
@@ -67,7 +67,7 @@
     "fuel_consumption": 0.29,
     "power_demand": 14.0,
     "cost": 1250,
-    "description": "Keystone hydro-thermal for industrial hulls leaving Atlas yards.",
+    "description": "Compact hydrothermal propulsion. Atlas Keystone: keeps going.",
     "signature": {
       "thermal": 6.4,
       "gravitational": 1.08,
@@ -79,7 +79,7 @@
   },
   {
     "id": "atl_keystone_h40",
-    "name": "Keystone H-40",
+    "name": "Keystone H-40 Hydrothermal Drive",
     "maker": "Atlas Concern",
     "brand": "Keystone",
     "engine_type": "hydro_thermal",
@@ -93,7 +93,7 @@
     "fuel_consumption": 0.34,
     "power_demand": 20.0,
     "cost": 1800,
-    "description": "Heavy Keystone rating for remote extraction convoys.",
+    "description": "Heavy duty hydrothermal propulsion. Atlas Keystone: keeps going.",
     "signature": {
       "thermal": 7.6,
       "gravitational": 1.2,
@@ -105,7 +105,7 @@
   },
   {
     "id": "atl_pithead_kick",
-    "name": "Pithead Kick",
+    "name": "Pithead Kick Chemical Rocket",
     "maker": "Atlas Concern",
     "brand": "Pithead",
     "engine_type": "chemical",
@@ -119,7 +119,7 @@
     "fuel_consumption": 0.8,
     "power_demand": 2.5,
     "cost": 580,
-    "description": "Pithead chemical for mine tugs and heavy-yard shunts.",
+    "description": "Pithead chemical rocket motor. Pithead keeps you ahead.",
     "signature": {
       "thermal": 3.56,
       "gravitational": 0.98,
@@ -131,7 +131,7 @@
   },
   {
     "id": "ca_blue_ensign_hydro_24",
-    "name": "Blue Ensign Hydro 24",
+    "name": "Blue Ensign Hydro-24 Drive",
     "maker": "Crown & Anchor",
     "brand": "Blue Ensign",
     "engine_type": "hydro_thermal",
@@ -145,7 +145,7 @@
     "fuel_consumption": 0.29,
     "power_demand": 13.0,
     "cost": 1300,
-    "description": "Conservative hydro-thermal from the old shipping houses.",
+    "description": "Blue Ensign presents the Hydro-24, market leader in efficient hydrothermal propulsion.",
     "signature": {
       "thermal": 6.5,
       "gravitational": 0.88,
@@ -157,7 +157,7 @@
   },
   {
     "id": "ca_capstan_chemical_16",
-    "name": "Capstan Chemical 16",
+    "name": "Capstan 16 Chemical Drive",
     "maker": "Crown & Anchor",
     "brand": "Capstan",
     "engine_type": "chemical",
@@ -171,7 +171,7 @@
     "fuel_consumption": 0.74,
     "power_demand": 2.2,
     "cost": 590,
-    "description": "Capstan chemical for harbour tugs and short coastal hops.",
+    "description": "Capstan blends the reliability of chemical propulsion with the engineering precision of Crown & Anchor. Keep your fires burning with the Capstan 16.",
     "signature": {
       "thermal": 2.96,
       "gravitational": 0.7,
@@ -183,7 +183,7 @@
   },
   {
     "id": "chi_fable_core",
-    "name": "Fable Core",
+    "name": "Fable Core Fusion Drive",
     "maker": "Chimera Corporation",
     "brand": "Fable",
     "engine_type": "direct_fusion",
@@ -197,7 +197,7 @@
     "fuel_consumption": 0.11,
     "power_demand": 4.8,
     "cost": 3700,
-    "description": "Fable direct-fusion \u2014 half science project, half ship engine.",
+    "description": "Get Fable Core from CHI. Direct fusion propulsion for your ship.",
     "signature": {
       "thermal": 6.81,
       "gravitational": 1.25,
@@ -209,7 +209,7 @@
   },
   {
     "id": "chi_fable_drift",
-    "name": "Fable Drift",
+    "name": "Fable Drift Gravitic Drive",
     "maker": "Chimera Corporation",
     "brand": "Fable",
     "engine_type": "gravitic",
@@ -223,7 +223,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 5.2,
     "cost": 7100,
-    "description": "Gravitic drive with a whimsical brochure and serious near-orbit punch.",
+    "description": "Get Fable Drift from CHI. Cost effective gravitic propulsion for your ship.",
     "signature": {
       "thermal": 4.14,
       "gravitational": 29.81,
@@ -234,7 +234,7 @@
   },
   {
     "id": "chi_fable_kiss",
-    "name": "Fable Kiss",
+    "name": "Fable Kiss AM Drive",
     "maker": "Chimera Corporation",
     "brand": "Fable",
     "engine_type": "antimatter",
@@ -248,7 +248,7 @@
     "fuel_consumption": 0.013,
     "power_demand": 6.5,
     "cost": 5600,
-    "description": "Antimatter with a whimsical name. Do not read the safety insert sober.",
+    "description": "Get Fable Kiss from CHI. Safe antimatter propulsion for your ship.",
     "signature": {
       "thermal": 11.62,
       "gravitational": 1.62,
@@ -260,7 +260,7 @@
   },
   {
     "id": "chi_ouroboros_coil",
-    "name": "Ouroboros Coil",
+    "name": "Ouroboros Coil PlasmaJet",
     "maker": "Chimera Corporation",
     "brand": "Ouroboros",
     "engine_type": "electric_plasma",
@@ -274,7 +274,7 @@
     "fuel_consumption": 0.06,
     "power_demand": 26.0,
     "cost": 2900,
-    "description": "Experimental plasma coil \u2014 Chimera's brochure never explains the warranty.",
+    "description": "Ouroboros PlasmaJet. An effective plasma propulsion system.",
     "signature": {
       "thermal": 3.04,
       "gravitational": 0.72,
@@ -286,7 +286,7 @@
   },
   {
     "id": "frz_mikuni_type_12",
-    "name": "Mikuni Type 12",
+    "name": "Mikuni Type 12 HydroDrive",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Mikuni",
     "engine_type": "hydro_thermal",
@@ -300,7 +300,7 @@
     "fuel_consumption": 0.26,
     "power_demand": 9.0,
     "cost": 980,
-    "description": "Conservative Mikuni hydro-thermal \u2014 long service intervals, modest numbers.",
+    "description": "Get the Mikuni Type 12: cheap propulsion, long service interval.",
     "signature": {
       "thermal": 5.9,
       "gravitational": 0.84,
@@ -312,7 +312,7 @@
   },
   {
     "id": "frz_mikuni_type_28",
-    "name": "Mikuni Type 28",
+    "name": "Mikuni Type 28 HydroDrive",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Mikuni",
     "engine_type": "hydro_thermal",
@@ -326,7 +326,7 @@
     "fuel_consumption": 0.31,
     "power_demand": 15.0,
     "cost": 1500,
-    "description": "Type 28 for hulls that outgrew the twelve but not the budget.",
+    "description": "Get the Mikuni Type 28: cheap propulsion, long service interval.",
     "signature": {
       "thermal": 7.1,
       "gravitational": 0.92,
@@ -338,7 +338,7 @@
   },
   {
     "id": "frz_tensho_fusion_8",
-    "name": "Tensho Fusion 8",
+    "name": "Tensho Fusion Drive 8",
     "maker": "Four Rivers Zaibatsu",
     "brand": "Tensho",
     "engine_type": "direct_fusion",
@@ -352,7 +352,7 @@
     "fuel_consumption": 0.09,
     "power_demand": 5.5,
     "cost": 4000,
-    "description": "Tensho direct-fusion \u2014 zaibatsu engineering without the marketing fuss.",
+    "description": "Tensho Drives are the best. Fusion Drive 8: burns hard.",
     "signature": {
       "thermal": 7.34,
       "gravitational": 1.6,
@@ -364,7 +364,7 @@
   },
   {
     "id": "gi_ht_18",
-    "name": "GI-HT-18",
+    "name": "GI HT-18 Engine",
     "maker": "General Industrial",
     "brand": "GI",
     "engine_type": "hydro_thermal",
@@ -378,7 +378,7 @@
     "fuel_consumption": 0.28,
     "power_demand": 3.0,
     "cost": 900,
-    "description": "The galactic workhorse hydro-thermal. Pegasus P101 still mounts these.",
+    "description": "Get the GI HT-18: reliable hydrothermal propulsion.",
     "signature": {
       "thermal": 6.0,
       "gravitational": 0.96,
@@ -390,7 +390,7 @@
   },
   {
     "id": "gi_standard_thrust_civic_30",
-    "name": "Standard Thrust Civic 30",
+    "name": "Standard Thrust Civic 30 Engine",
     "maker": "General Industrial",
     "brand": "Standard Thrust",
     "engine_type": "hydro_thermal",
@@ -404,7 +404,7 @@
     "fuel_consumption": 0.3,
     "power_demand": 12.0,
     "cost": 1200,
-    "description": "GI's one attempt at friendly consumer branding. Still a grey box inside.",
+    "description": "Fit the Civic 30 on your ship. Standard Thrust: best value for money propulsion.",
     "signature": {
       "thermal": 6.75,
       "gravitational": 0.92,
@@ -416,9 +416,9 @@
   },
   {
     "id": "gz_junk_rig_ch8",
-    "name": "Junk Rig CH-8",
+    "name": "JunkRig CH8 Chem Jet",
     "maker": "Guangzhou Mercantile",
-    "brand": "Junk Rig",
+    "brand": "JunkRig",
     "engine_type": "chemical",
     "category": "propulsion",
     "mount": "main_engine",
@@ -430,7 +430,7 @@
     "fuel_consumption": 0.79,
     "power_demand": 2.0,
     "cost": 480,
-    "description": "Merchant-house chemical \u2014 eight-tonne nominal class, negotiable quality.",
+    "description": "Fit the JunkRig CH8: value for money propulsion.",
     "signature": {
       "thermal": 3.04,
       "gravitational": 0.66,
@@ -442,7 +442,7 @@
   },
   {
     "id": "hw_daybreak_film",
-    "name": "Daybreak Film",
+    "name": "Daybreak Film Sail-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Daybreak",
     "engine_type": "integrated_sail",
@@ -456,7 +456,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 8.0,
     "cost": 1400,
-    "description": "Integrated sail \u2014 zero reaction mass, draws power from the plant.",
+    "description": "Never pay a fuel bill again. The Film sail from Daybreak is a stylish way to see the light.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.23,
@@ -467,7 +467,7 @@
   },
   {
     "id": "hw_sundancer_apex",
-    "name": "Sundancer Apex",
+    "name": "Sundancer Apex Grav-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "gravitic",
@@ -481,7 +481,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 5.5,
     "cost": 8200,
-    "description": "HW gravitic flagship \u2014 more thrust than Loft, still gravity-coupled.",
+    "description": "The Sundancer Apex runs rings around in-system traffic. Gravitic drive, engineered by Holt-Winters.",
     "signature": {
       "thermal": 4.38,
       "gravitational": 31.5,
@@ -492,7 +492,7 @@
   },
   {
     "id": "hw_sundancer_arc",
-    "name": "Sundancer Arc",
+    "name": "Sundancer Arc Plas-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "electric_plasma",
@@ -506,7 +506,7 @@
     "fuel_consumption": 0.06,
     "power_demand": 28.0,
     "cost": 3200,
-    "description": "Plasma cruise for hulls that already carry a generous plant.",
+    "description": "Expect premium performance and quality engineering from the Sundancer Arc. Plasma propulsion that won't let you down.",
     "signature": {
       "thermal": 2.76,
       "gravitational": 0.63,
@@ -518,7 +518,7 @@
   },
   {
     "id": "hw_sundancer_compact",
-    "name": "Sundancer Compact",
+    "name": "Sundancer Compact Nuke-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "direct_fusion",
@@ -532,7 +532,7 @@
     "fuel_consumption": 0.12,
     "power_demand": 4.0,
     "cost": 2400,
-    "description": "Compact direct-fusion \u2014 the Flare-ON SS default and HW's best-seller.",
+    "description": "Blast your way across the system with the Sundancer Compact. Fusion propulsion that won't let you down.",
     "signature": {
       "thermal": 6.5,
       "gravitational": 0.9,
@@ -544,7 +544,7 @@
   },
   {
     "id": "hw_sundancer_dart",
-    "name": "Sundancer Dart",
+    "name": "Sundancer Dart Nuke-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "chemical",
@@ -558,7 +558,7 @@
     "fuel_consumption": 0.72,
     "power_demand": 2.5,
     "cost": 680,
-    "description": "Hot chemical for pilots who want the lane now and the fuel bill later.",
+    "description": "Burn your way across the system with the Sundancer Dart. Chemical  propulsion for any budget.",
     "signature": {
       "thermal": 3.47,
       "gravitational": 0.56,
@@ -570,7 +570,7 @@
   },
   {
     "id": "hw_sundancer_loft",
-    "name": "Sundancer Loft",
+    "name": "Sundancer Loft Grav-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "gravitic",
@@ -584,7 +584,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 5.0,
     "cost": 6800,
-    "description": "Experimental gravitic drive. Thrust scales with local gravity \u2014 strongest near the planet and habitat ring.",
+    "description": "Fall across any planetary system with the Sundancer Loft, the leader in innovative gravitic propulsion.",
     "signature": {
       "thermal": 3.75,
       "gravitational": 27.0,
@@ -595,7 +595,7 @@
   },
   {
     "id": "hw_sundancer_slipstream",
-    "name": "Sundancer Slipstream",
+    "name": "Sundancer Slipstream Hydro-Drive",
     "maker": "Holt-Winters Corp",
     "brand": "Sundancer",
     "engine_type": "hydro_thermal",
@@ -609,7 +609,7 @@
     "fuel_consumption": 0.26,
     "power_demand": 14.0,
     "cost": 2100,
-    "description": "HW's hydro-thermal line \u2014 sporty exhaust without Sundancer Compact pricing.",
+    "description": "Blast across the systems with the Sundancer Slipstream. Hydrothermal propulsion meets HW engineering excellence.",
     "signature": {
       "thermal": 8.4,
       "gravitational": 0.68,
@@ -621,7 +621,7 @@
   },
   {
     "id": "oc_drawbar_30",
-    "name": "Drawbar 30",
+    "name": "OC Drawbar 30 Hydrothermal Engine",
     "maker": "Oklahoma Combine",
     "brand": "Drawbar",
     "engine_type": "hydro_thermal",
@@ -635,7 +635,7 @@
     "fuel_consumption": 0.32,
     "power_demand": 16.0,
     "cost": 1400,
-    "description": "Drawbar hydro-thermal \u2014 tactical fighter and gunship staple.",
+    "description": "OC Drawbar 30 delivers effective thrust for your ship.",
     "signature": {
       "thermal": 7.25,
       "gravitational": 1.0,
@@ -647,7 +647,7 @@
   },
   {
     "id": "oc_drawbar_36",
-    "name": "Drawbar 36",
+    "name": "OC Drawbar 36 Hydrothermal Engine",
     "maker": "Oklahoma Combine",
     "brand": "Drawbar",
     "engine_type": "hydro_thermal",
@@ -661,7 +661,7 @@
     "fuel_consumption": 0.3,
     "power_demand": 18.0,
     "cost": 1550,
-    "description": "Heavier Drawbar rating for frontier runners that need honest thrust.",
+    "description": "OC Drawbar 36 delivers exceptional thrust for your ship.",
     "signature": {
       "thermal": 6.9,
       "gravitational": 1.04,
@@ -673,7 +673,7 @@
   },
   {
     "id": "oc_drawbar_spark",
-    "name": "Drawbar Spark",
+    "name": "OC Drawbar Spark Plasma Engine",
     "maker": "Oklahoma Combine",
     "brand": "Drawbar",
     "engine_type": "electric_plasma",
@@ -687,7 +687,7 @@
     "fuel_consumption": 0.07,
     "power_demand": 24.0,
     "cost": 2650,
-    "description": "The Combine's slightly off-brand electric line \u2014 still Drawbar branded.",
+    "description": "OC Drawbar Spark delivers powerful thrust for your ship.",
     "signature": {
       "thermal": 2.95,
       "gravitational": 0.95,
@@ -699,7 +699,7 @@
   },
   {
     "id": "oc_prairie_fire_torch",
-    "name": "Prairie Fire Torch",
+    "name": "Prairie Fire TorchDrive",
     "maker": "Oklahoma Combine",
     "brand": "Prairie Fire",
     "engine_type": "chemical",
@@ -713,7 +713,7 @@
     "fuel_consumption": 0.75,
     "power_demand": 3.0,
     "cost": 620,
-    "description": "Ag-industrial chemical for field tugs and short-hop haulers.",
+    "description": "Get Prairie Fire. Get chemical propulsion for your ship.",
     "signature": {
       "thermal": 3.28,
       "gravitational": 0.84,
@@ -725,7 +725,7 @@
   },
   {
     "id": "ora_bellatrix_ap_f2",
-    "name": "Bellatrix AP-F2",
+    "name": "Bellatrix AP-F2 Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "direct_fusion",
@@ -739,7 +739,7 @@
     "fuel_consumption": 0.1,
     "power_demand": 5.0,
     "cost": 3600,
-    "description": "Direct-fusion main drive for long-haul Orion configurations.",
+    "description": "Direct-fusion main drive for long hauls. The AP-F2 from Bellatrix.",
     "signature": {
       "thermal": 7.12,
       "gravitational": 1.3,
@@ -751,7 +751,7 @@
   },
   {
     "id": "ora_bellatrix_ap_p40",
-    "name": "Bellatrix AP-P40",
+    "name": "Bellatrix AP-P40 Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "electric_plasma",
@@ -765,7 +765,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 22.0,
     "cost": 2800,
-    "description": "Advanced-plant plasma for customers who spec the AP-series from new.",
+    "description": "High-spec plasma. The AP-P40 from Bellatrix.",
     "signature": {
       "thermal": 3.09,
       "gravitational": 0.85,
@@ -777,7 +777,7 @@
   },
   {
     "id": "ora_bellatrix_main_28",
-    "name": "Bellatrix Main 28",
+    "name": "Bellatrix Main-28 Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "hydro_thermal",
@@ -791,7 +791,7 @@
     "fuel_consumption": 0.3,
     "power_demand": 10.0,
     "cost": 1100,
-    "description": "Main-line hydro-thermal matched to Orion hull schedules.",
+    "description": "Main-line hydro-thermal propulsion. The Main-28 from Bellatrix.",
     "signature": {
       "thermal": 6.6,
       "gravitational": 0.88,
@@ -803,7 +803,7 @@
   },
   {
     "id": "ora_bellatrix_main_44",
-    "name": "Bellatrix Main 44",
+    "name": "Bellatrix Main-44 Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "hydro_thermal",
@@ -817,7 +817,7 @@
     "fuel_consumption": 0.28,
     "power_demand": 12.0,
     "cost": 950,
-    "description": "Mid-tier hydro-thermal \u2014 deliberately modest so medium hulls still feel weighty.",
+    "description": "Proven hydro-thermal propulsion. The Main-44 from Bellatrix.",
     "signature": {
       "thermal": 6.0,
       "gravitational": 0.92,
@@ -829,7 +829,7 @@
   },
   {
     "id": "ora_bellatrix_trace",
-    "name": "Bellatrix Trace",
+    "name": "Bellatrix Trace-AM Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "antimatter",
@@ -843,7 +843,7 @@
     "fuel_consumption": 0.011,
     "power_demand": 6.0,
     "cost": 5400,
-    "description": "Antimatter trace engine \u2014 law-enforcement and interceptor tier.",
+    "description": "Antimatter, and it behaves. The Trace-AM from Bellatrix.",
     "signature": {
       "thermal": 12.0,
       "gravitational": 1.68,
@@ -855,7 +855,7 @@
   },
   {
     "id": "ora_bellatrix_well",
-    "name": "Bellatrix Well",
+    "name": "Bellatrix G-Well Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "gravitic",
@@ -869,7 +869,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 5.0,
     "cost": 6400,
-    "description": "OEM gravitic matched to Orion yard schedules.",
+    "description": "Reliable gravitic drive. The G-Well from Bellatrix.",
     "signature": {
       "thermal": 3.94,
       "gravitational": 28.35,
@@ -880,7 +880,7 @@
   },
   {
     "id": "ora_bellatrix_yard_c14",
-    "name": "Bellatrix Yard C-14",
+    "name": "Bellatrix Yard C-14 Drive",
     "maker": "Orion Aerospace",
     "brand": "Bellatrix",
     "engine_type": "chemical",
@@ -894,7 +894,7 @@
     "fuel_consumption": 0.68,
     "power_demand": 2.0,
     "cost": 750,
-    "description": "Yard-kit chemical for first-time owners leaving an Orion service bay.",
+    "description": "Chemical thrust you can afford. The Yard C-14 from Bellatrix.",
     "signature": {
       "thermal": 3.0,
       "gravitational": 0.7,
@@ -906,7 +906,7 @@
   },
   {
     "id": "ora_lumen_yard",
-    "name": "Lumen Yard",
+    "name": "Lumen Yard Drive",
     "maker": "Orion Aerospace",
     "brand": "Lumen",
     "engine_type": "integrated_sail",
@@ -920,7 +920,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 10.0,
     "cost": 1800,
-    "description": "Yard-kit sail for patient Orion customers.",
+    "description": "Fit the Lumen Yard - best in class integrated  sail drive.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.25,
@@ -931,7 +931,7 @@
   },
   {
     "id": "osc_outstation_packet",
-    "name": "Outstation Packet Chemical",
+    "name": "Outstation Packet Chemical Rocket",
     "maker": "Orion Spur Company",
     "brand": "Outstation",
     "engine_type": "chemical",
@@ -945,7 +945,7 @@
     "fuel_consumption": 0.77,
     "power_demand": 2.2,
     "cost": 460,
-    "description": "Rim packet-runner chemical \u2014 bought in bulk, installed in haste.",
+    "description": "Need to get there in a hurry? The Outstation Packet burns the competition!",
     "signature": {
       "thermal": 2.91,
       "gravitational": 0.63,
@@ -957,7 +957,7 @@
   },
   {
     "id": "prv_ionique_annihilon",
-    "name": "Ionique Annihilon",
+    "name": "Ionique Annihilon AM-Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Ionique",
     "engine_type": "antimatter",
@@ -971,7 +971,7 @@
     "fuel_consumption": 0.01,
     "power_demand": 7.0,
     "cost": 6200,
-    "description": "Glossy antimatter for agencies that buy on presentation as much as thrust.",
+    "description": "Thrust in style, with the Ionique Annihilon! The destruction of the universe has never been more fun or stylish!",
     "signature": {
       "thermal": 11.81,
       "gravitational": 1.74,
@@ -983,7 +983,7 @@
   },
   {
     "id": "prv_ionique_gossamer",
-    "name": "Ionique Gossamer",
+    "name": "Ionique Gossamer IS-Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Ionique",
     "engine_type": "integrated_sail",
@@ -997,7 +997,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 14.0,
     "cost": 2400,
-    "description": "Glossy sail with the highest field coupling in the Ionique line.",
+    "description": "Reach out and move somewhere, with the Ionique Gossamer! Going places has never been smoother!",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.24,
@@ -1008,7 +1008,7 @@
   },
   {
     "id": "prv_ionique_hover",
-    "name": "Ionique Hover",
+    "name": "Ionique Hover GW-Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Ionique",
     "engine_type": "gravitic",
@@ -1022,7 +1022,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 4.5,
     "cost": 7200,
-    "description": "Light gravitic with Ionique packaging \u2014 resort-world favourite.",
+    "description": "Scoot around the gravity well, with the Ionique Hover! Feel that acceleration in your belly!",
     "signature": {
       "thermal": 3.41,
       "gravitational": 24.53,
@@ -1033,7 +1033,7 @@
   },
   {
     "id": "prv_ionique_p3",
-    "name": "Ionique P3",
+    "name": "Ionique P3 EP-Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Ionique",
     "engine_type": "electric_plasma",
@@ -1047,7 +1047,7 @@
     "fuel_consumption": 0.04,
     "power_demand": 18.0,
     "cost": 2400,
-    "description": "Consumer plasma with the Ionique badge \u2014 brochure photography included.",
+    "description": "Burst through barriers, with the Ionique P3! Feel the heat, move to the plasma beat!",
     "signature": {
       "thermal": 2.59,
       "gravitational": 0.68,
@@ -1059,7 +1059,7 @@
   },
   {
     "id": "prv_ionique_p7",
-    "name": "Ionique P7",
+    "name": "Ionique P7 EP-Drive",
     "maker": "ParaRamcoVidia",
     "brand": "Ionique",
     "engine_type": "electric_plasma",
@@ -1073,7 +1073,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 32.0,
     "cost": 3400,
-    "description": "The P7 line \u2014 more cruise speed, same glossy packaging.",
+    "description": "Blast down the line, with the Ionique P7! Feel the heat, move to the plasma beat!",
     "signature": {
       "thermal": 3.32,
       "gravitational": 0.77,
@@ -1085,7 +1085,7 @@
   },
   {
     "id": "prv_novajet_series_drive",
-    "name": "NovaJet Series Drive",
+    "name": "NovaJet HT-Series Drive",
     "maker": "ParaRamcoVidia",
     "brand": "NovaJet",
     "engine_type": "hydro_thermal",
@@ -1099,7 +1099,7 @@
     "fuel_consumption": 0.27,
     "power_demand": 11.0,
     "cost": 1050,
-    "description": "Energy-division hydro-thermal that never quite matched the Ionique brochure.",
+    "description": "With NovaJet getting you around, you'll never look back! Easy on the wallet too!",
     "signature": {
       "thermal": 6.3,
       "gravitational": 0.88,
@@ -1111,7 +1111,7 @@
   },
   {
     "id": "prv_novajet_torch",
-    "name": "NovaJet Torch",
+    "name": "NovaJet Torch Drive",
     "maker": "ParaRamcoVidia",
     "brand": "NovaJet",
     "engine_type": "direct_fusion",
@@ -1125,7 +1125,7 @@
     "fuel_consumption": 0.11,
     "power_demand": 4.5,
     "cost": 3800,
-    "description": "NovaJet direct-fusion for customers who want PRV energy division hardware.",
+    "description": "With NovaJet getting you around, you'll never look back! Easy on the wallet too!",
     "signature": {
       "thermal": 6.88,
       "gravitational": 1.2,
@@ -1137,7 +1137,7 @@
   },
   {
     "id": "pt_jade_wake_burn",
-    "name": "Jade Wake Burn",
+    "name": "Jade Wake C-Burn Engine",
     "maker": "Pacific Triad",
     "brand": "Jade Wake",
     "engine_type": "chemical",
@@ -1151,7 +1151,7 @@
     "fuel_consumption": 0.71,
     "power_demand": 3.0,
     "cost": 600,
-    "description": "Rim-world chemical burn \u2014 cheap, loud, everywhere.",
+    "description": "Fit the C-Burn. Chemical thrust works. Jade Wake.",
     "signature": {
       "thermal": 3.22,
       "gravitational": 0.63,
@@ -1163,7 +1163,7 @@
   },
   {
     "id": "pt_nine_dragons_hydro_20",
-    "name": "Nine Dragons Hydro 20",
+    "name": "Nine Dragons Hydro20 Engine",
     "maker": "Pacific Triad",
     "brand": "Nine Dragons",
     "engine_type": "hydro_thermal",
@@ -1177,7 +1177,7 @@
     "fuel_consumption": 0.3,
     "power_demand": 14.5,
     "cost": 1280,
-    "description": "Nine Dragons hydro-thermal for family-network freight.",
+    "description": "Good hydrothermal vector capability. The Hydro20. Nine Dragons.",
     "signature": {
       "thermal": 6.7,
       "gravitational": 0.88,
@@ -1189,7 +1189,7 @@
   },
   {
     "id": "roth_albedo_dampf",
-    "name": "Albedo Dampf",
+    "name": "Albedo Dampf HJet",
     "maker": "House of Roth",
     "brand": "Albedo",
     "engine_type": "hydro_thermal",
@@ -1203,7 +1203,7 @@
     "fuel_consumption": 0.31,
     "power_demand": 17.0,
     "cost": 1650,
-    "description": "Old-money hydro-thermal \u2014 quiet, heavy, and built to outlast the mortgage.",
+    "description": "House of Roth presents the Albedo Dampf: a quietly refined hydrothermal drive, for pilots of discernment.",
     "signature": {
       "thermal": 7.0,
       "gravitational": 0.96,
@@ -1215,7 +1215,7 @@
   },
   {
     "id": "roth_privy_seal_f11",
-    "name": "Privy Seal F-11",
+    "name": "Privy Seal F-11 Fusion Drive",
     "maker": "House of Roth",
     "brand": "Privy Seal",
     "engine_type": "direct_fusion",
@@ -1229,7 +1229,7 @@
     "fuel_consumption": 0.1,
     "power_demand": 5.0,
     "cost": 4200,
-    "description": "Privy Seal fusion for clients who do not discuss thrust in public.",
+    "description": "House of Roth recommends the F-11 for any propulsion the voyage requires. Privy Seal remains the mark of a proper drive.",
     "signature": {
       "thermal": 7.56,
       "gravitational": 1.4,
@@ -1241,7 +1241,7 @@
   },
   {
     "id": "roth_privy_seal_null",
-    "name": "Privy Seal Null",
+    "name": "Privy Seal Null Antimatter Drive",
     "maker": "House of Roth",
     "brand": "Privy Seal",
     "engine_type": "antimatter",
@@ -1255,7 +1255,7 @@
     "fuel_consumption": 0.009,
     "power_demand": 8.0,
     "cost": 6800,
-    "description": "Antimatter without announcement. Terrifying in the fine print.",
+    "description": "House of Roth recommends the Null for the more demanding voyage. Privy Seal remains the mark of a proper drive.",
     "signature": {
       "thermal": 12.19,
       "gravitational": 1.8,
@@ -1267,7 +1267,7 @@
   },
   {
     "id": "sbi_change_ring_arc",
-    "name": "Change Ring Arc",
+    "name": "Change Ring Arc Plasma Engine",
     "maker": "Seven Bells Inc",
     "brand": "Change Ring",
     "engine_type": "electric_plasma",
@@ -1281,7 +1281,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 21.0,
     "cost": 2700,
-    "description": "Change Ring plasma arc \u2014 communications-house hardware repurposed for thrust.",
+    "description": "Electric Plasma drives are effective. Fit the Arc by Change Ring.",
     "signature": {
       "thermal": 2.81,
       "gravitational": 0.77,
@@ -1293,7 +1293,7 @@
   },
   {
     "id": "ss_washi_quiet",
-    "name": "Washi Quiet",
+    "name": "Washi Quiet ISD",
     "maker": "Sakuraya Shinise",
     "brand": "Washi",
     "engine_type": "integrated_sail",
@@ -1307,7 +1307,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 6.0,
     "cost": 1100,
-    "description": "Quiet sail fabric \u2014 traditional patience, modern fields.",
+    "description": "For times when patience is a virtue and the journey matters more than the destination, Sakuraya presents the Washi Quiet.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.21,
@@ -1318,7 +1318,7 @@
   },
   {
     "id": "te_knock_off_burner",
-    "name": "Knock-Off Burner",
+    "name": "TE Knock-Off Chemical Burner",
     "maker": "Tukey Enterprises",
     "brand": "Knock-Off",
     "engine_type": "chemical",
@@ -1332,7 +1332,7 @@
     "fuel_consumption": 0.82,
     "power_demand": 2.5,
     "cost": 450,
-    "description": "Tukey sideline chemical \u2014 suspiciously affordable.",
+    "description": "Fit the Knock-Off Burner from Tukey. You'll be too busy going forwards to look back.",
     "signature": {
       "thermal": 2.81,
       "gravitational": 0.59,
@@ -1344,7 +1344,7 @@
   },
   {
     "id": "te_sideline_rag",
-    "name": "Sideline Rag",
+    "name": "TE Sideline Rag Sail Drive",
     "maker": "Tukey Enterprises",
     "brand": "Sideline",
     "engine_type": "integrated_sail",
@@ -1358,7 +1358,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 6.0,
     "cost": 650,
-    "description": "Tukey sideline sail \u2014 suspiciously cheap membrane.",
+    "description": "Fit the Sideline Rag from Tukey - cheapest ship engine on the market, but you'll still get there.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.2,
@@ -1369,7 +1369,7 @@
   },
   {
     "id": "tmc_rhumb_drift",
-    "name": "Rhumb Drift",
+    "name": "Rhumb Drift ISD",
     "maker": "The Meridian Company",
     "brand": "Rhumb",
     "engine_type": "integrated_sail",
@@ -1383,7 +1383,7 @@
     "fuel_consumption": 0.0,
     "power_demand": 7.0,
     "cost": 1200,
-    "description": "Long-haul sail \u2014 no fuel burn, only corridor time.",
+    "description": "Integrated Sail Drives represent the ultimate low-footprint ship propulsion system. The Drift ISD from Rhumb combines TMC quality with ISD grace.",
     "signature": {
       "thermal": 0.6,
       "gravitational": 0.28,
@@ -1394,7 +1394,7 @@
   },
   {
     "id": "tmc_rhumb_longhaul",
-    "name": "Rhumb Longhaul",
+    "name": "Rhumb Longhaul EPD",
     "maker": "The Meridian Company",
     "brand": "Rhumb",
     "engine_type": "electric_plasma",
@@ -1408,7 +1408,7 @@
     "fuel_consumption": 0.05,
     "power_demand": 20.0,
     "cost": 2550,
-    "description": "Rhumb plasma cruise \u2014 built for routes measured in weeks, not burns.",
+    "description": "Electric Plasma Drives combine high performance thrust vectoring with efficient fuel consumption. The Longhaul EPD from Rhumb combines TMC quality with EPD endurance.",
     "signature": {
       "thermal": 2.87,
       "gravitational": 0.81,
@@ -1420,7 +1420,7 @@
   },
   {
     "id": "tmc_wake_hydro_22",
-    "name": "Wake Hydro 22",
+    "name": "Wake Hydro 22 HTD",
     "maker": "The Meridian Company",
     "brand": "Wake",
     "engine_type": "hydro_thermal",
@@ -1434,7 +1434,7 @@
     "fuel_consumption": 0.28,
     "power_demand": 10.5,
     "cost": 1150,
-    "description": "Wake hydro-thermal for corridor runners and scheduled freight.",
+    "description": "Wake branded hydro-thermal drives provide effective propulsion for freighters that require reliability and performance.",
     "signature": {
       "thermal": 6.2,
       "gravitational": 0.8,
@@ -1446,7 +1446,7 @@
   },
   {
     "id": "tmc_wake_kick",
-    "name": "Wake Kick",
+    "name": "Wake Kick CRD",
     "maker": "The Meridian Company",
     "brand": "Wake",
     "engine_type": "chemical",
@@ -1460,7 +1460,7 @@
     "fuel_consumption": 0.7,
     "power_demand": 2.8,
     "cost": 640,
-    "description": "Wake chemical \u2014 the exception in a hydro-heavy catalogue.",
+    "description": "Wake branded chemical rocket drives provide strong propulsion for freighters that need to move quickly.",
     "signature": {
       "thermal": 3.19,
       "gravitational": 0.66,
@@ -1472,7 +1472,7 @@
   },
   {
     "id": "tni_overburden_chemical_14",
-    "name": "Overburden Chemical 14",
+    "name": "Overburden Chem 14 Rocket",
     "maker": "Terra Nova",
     "brand": "Overburden",
     "engine_type": "chemical",
@@ -1486,7 +1486,7 @@
     "fuel_consumption": 0.85,
     "power_demand": 3.5,
     "cost": 500,
-    "description": "Frontier chemical for extraction tugs \u2014 optimised for dirt, not elegance.",
+    "description": "With the Chem 14 Rocket from Overburden you get excellent thrust at a market leading cost per joule.",
     "signature": {
       "thermal": 3.41,
       "gravitational": 0.91,

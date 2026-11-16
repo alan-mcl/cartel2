@@ -1,7 +1,7 @@
 [
   {
     "id": "hg_hermes_circinus",
-    "name": "Hermes Circinus",
+    "name": "Hermes Circinus Sensor Suite",
     "maker": "Mercury Communications",
     "brand": "Hermes",
     "category": "sensor",
@@ -19,7 +19,7 @@
       "basic_target_lock"
     ],
     "cost": 950,
-    "description": "Circinus extends the N6 stack with a gravimetric wave detector for survey and escort fits.",
+    "description": "Full-spectrum awareness, and the hulls that matter already fit Circinus. Hermes: taking you forward.",
     "sensor_range": 8000.0,
     "sensor_sensitivity": {
       "thermal": 1.35,
@@ -42,7 +42,7 @@
   },
   {
     "id": "hg_hermes_n6",
-    "name": "Hermes N6",
+    "name": "Hermes N6 Sensor Suite",
     "maker": "Mercury Communications",
     "brand": "Hermes",
     "category": "sensor",
@@ -60,7 +60,7 @@
       "basic_target_lock"
     ],
     "cost": 550,
-    "description": "Hermes N6 pairs an infrared receiver and EM array with a civilian radar \u2014 the municipal nav package on workhorse hulls.",
+    "description": "Hermes N6. Full-spectrum coverage, and it will not break the budget. Hermes: taking you forward.",
     "sensor_range": 6500.0,
     "sensor_sensitivity": {
       "thermal": 1.0,
@@ -83,7 +83,7 @@
   },
   {
     "id": "hg_hermes_sideband",
-    "name": "Hermes Sideband",
+    "name": "Hermes Sideband Passive Sensor Suite",
     "maker": "Mercury Communications",
     "brand": "Hermes",
     "category": "sensor",
@@ -98,7 +98,7 @@
       "basic_target_lock"
     ],
     "cost": 480,
-    "description": "Sideband is a listen-only EM array for operators who want emissions intelligence without painting the lane.",
+    "description": "Passive cover across the EM bands. Sideband is what the quiet hulls are fitting. Hermes: taking you forward.",
     "sensor_range": 7000.0,
     "sensor_sensitivity": {
       "thermal": 0.0,
@@ -115,7 +115,7 @@
   },
   {
     "id": "hw_glimmer_ember",
-    "name": "Glimmer Ember",
+    "name": "Glimmer Ember Passive Infrared",
     "maker": "Holt-Winters Corp",
     "brand": "Glimmer",
     "category": "sensor",
@@ -130,7 +130,7 @@
       "basic_target_lock"
     ],
     "cost": 380,
-    "description": "Ember is a passive infrared receiver for pilots who would rather stay dark than paint the belt.",
+    "description": "The Glimmer Ember is a highly rated passive infrared receiver for pilots who would rather stay dark than paint the sector.",
     "sensor_range": 6800.0,
     "sensor_sensitivity": {
       "thermal": 1.8,
@@ -147,7 +147,7 @@
   },
   {
     "id": "hw_glimmer_glance",
-    "name": "Glimmer Glance",
+    "name": "Glimmer Glance Full Spectrum",
     "maker": "Holt-Winters Corp",
     "brand": "Glimmer",
     "category": "sensor",
@@ -165,7 +165,7 @@
       "basic_target_lock"
     ],
     "cost": 620,
-    "description": "Glance keeps Holt-Winters sport hulls light: infrared receiver plus a short-range racing radar.",
+    "description": "The Glimmer Glance is a market leading full spectrum active sensor suite appropriate for a wide range of ship roles and budgets.",
     "sensor_range": 6200.0,
     "sensor_sensitivity": {
       "thermal": 1.1,
@@ -188,7 +188,7 @@
   },
   {
     "id": "ora_octant_12",
-    "name": "Octant 12",
+    "name": "Octant 12 Active Array",
     "maker": "Orion Aerospace",
     "brand": "Octant",
     "category": "sensor",
@@ -206,7 +206,7 @@
       "basic_target_lock"
     ],
     "cost": 780,
-    "description": "Octant 12 bundles an infrared receiver, radar, and thermal lidar for operators who want active ranging on every approach.",
+    "description": "Best all-round sensors. Fit the Octant 12.",
     "sensor_range": 6800.0,
     "sensor_sensitivity": {
       "thermal": 1.4,
@@ -229,7 +229,7 @@
   },
   {
     "id": "ora_octant_plumb",
-    "name": "Octant Plumb",
+    "name": "Octant Plumb Active Grav",
     "maker": "Orion Aerospace",
     "brand": "Octant",
     "category": "sensor",
@@ -244,7 +244,7 @@
       "basic_target_lock"
     ],
     "cost": 1100,
-    "description": "Plumb is a gravitational interferometer package \u2014 active gravimetric ranging for survey contractors who accept the ping.",
+    "description": "Best gravitational sensor. Fit the Octant Plumb.",
     "sensor_range": 8200.0,
     "sensor_sensitivity": {
       "thermal": 0.0,
@@ -261,7 +261,7 @@
   },
   {
     "id": "prv_lumina_sight",
-    "name": "Lumina Sight",
+    "name": "Lumina Sight Listening Suite",
     "maker": "ParaRamcoVidia",
     "brand": "Lumina",
     "category": "sensor",
@@ -279,7 +279,7 @@
       "basic_target_lock"
     ],
     "cost": 1400,
-    "description": "Lumina Sight layers a spectral resonance array over infrared and EM listen \u2014 glossy law-enforcement nav without active pings.",
+    "description": "Stay ahead of the competition with the Lumina Sight - you'll be listening in to everyone with no outgoing pings!",
     "sensor_range": 7200.0,
     "sensor_sensitivity": {
       "thermal": 1.3,
@@ -296,7 +296,7 @@
   },
   {
     "id": "prv_lumina_wellhead",
-    "name": "Lumina Wellhead",
+    "name": "Lumina Wellhead Listening Suite",
     "maker": "ParaRamcoVidia",
     "brand": "Lumina",
     "category": "sensor",
@@ -311,7 +311,7 @@
       "basic_target_lock"
     ],
     "cost": 2200,
-    "description": "Wellhead mounts a neutrino receptor tuned for reactor and drive activity \u2014 strong gravimetric and EM listen, no transmitters.",
+    "description": "Hold the silence with the Lumina Wellhead - you'll be listening in to everyone with no outgoing pings!",
     "sensor_range": 9000.0,
     "sensor_sensitivity": {
       "thermal": 0.3,
@@ -328,7 +328,7 @@
   },
   {
     "id": "prv_nexus_listen",
-    "name": "Nexus Listen",
+    "name": "Nexus Listen Suite",
     "maker": "ParaRamcoVidia",
     "brand": "Nexus",
     "category": "sensor",
@@ -343,7 +343,7 @@
       "basic_target_lock"
     ],
     "cost": 880,
-    "description": "Nexus Listen is a calculus wave detector for spotting active onboard compute workloads at range.",
+    "description": "Spot active onboard compute workloads at range - there's no better compute focused passive sensor than the Nexus Listen!",
     "sensor_range": 7500.0,
     "sensor_sensitivity": {
       "thermal": 0.0,
@@ -360,7 +360,7 @@
   },
   {
     "id": "prv_nexus_locus",
-    "name": "Nexus Locus",
+    "name": "Nexus Locus Active Suite",
     "maker": "ParaRamcoVidia",
     "brand": "Nexus",
     "category": "sensor",
@@ -375,7 +375,7 @@
       "basic_target_lock"
     ],
     "cost": 1050,
-    "description": "Locus drives a local geometry scanner \u2014 active computational ranging for operators who need to map thinking ships.",
+    "description": "Reach out and scan someone's compute with the Nexus Locus - there's no better compute focused active sensor!",
     "sensor_range": 7800.0,
     "sensor_sensitivity": {
       "thermal": 0.0,

@@ -181,7 +181,7 @@
     "volume": 4.0,
     "fuel_capacity": 80.0,
     "cost": 600,
-    "description": "GI Yard Tank 40. Robust propellant storage.",
+    "description": "GI Yard Tank 80. Robust propellant storage.",
     "signature": {
       "thermal": 0.35,
       "gravitational": 0.33,
@@ -200,7 +200,7 @@
     "volume": 6.0,
     "fuel_capacity": 120.0,
     "cost": 850,
-    "description": "GI Yard Tank 40. Compact propellant storage.",
+    "description": "When range is your primary concern, fit Atlas Loadmaster Tanks. Loadmaster has a propellant storage solution for you.",
     "signature": {
       "thermal": 0.3,
       "gravitational": 0.48,
