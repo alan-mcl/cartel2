@@ -40,6 +40,17 @@ func setup(world_root: Node2D) -> void:
 	world_root.add_child(_traffic_root)
 
 
+func _weapon_spawn_root() -> Node2D:
+	if _world_root == null:
+		return null
+	var scene := _world_root.get_parent()
+	if scene != null:
+		var fx := scene.get_node_or_null("WeaponFx") as Node2D
+		if fx != null:
+			return fx
+	return _world_root
+
+
 func clear() -> void:
 	for node_variant in _nodes_by_id.values():
 		if typeof(node_variant) != TYPE_OBJECT:
@@ -275,7 +286,7 @@ func _spawn_near_ship(actor, catalog: Catalog) -> void:
 		return
 	ship.global_position = actor.position
 	if ship.has_method("bind_actor"):
-		ship.call("bind_actor", actor, catalog, _world_root)
+		ship.call("bind_actor", actor, catalog, _weapon_spawn_root())
 	_nodes_by_id[actor.id] = ship
 
 

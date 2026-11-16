@@ -90,7 +90,7 @@ Same chassis SVGs appear in habitat/shipyard UI (`LocationArt` `TextureRect`, fi
 |-------|------|-----|---------------|-------|
 | Thrust alignment | `assets/ships/fx/thrust.svg` | 32×32 | **20×24** | Stern anchor only; flight exhaust is procedural per `engine_type` (`EngineExhaust`) |
 | Mass driver round | `assets/ships/fx/mass_driver_round.svg` | 16×16 | **16×16** | Keep |
-| Laser / cyber beams | - | Line2D | - | Procedural; no sprite |
+| Laser / cyber beams | - | `LaserBeam` (`Area2D` `_draw` on `$WeaponFx`, global z 50) | - | Procedural; ~0.12 s fade flash |
 
 ### Thrust attachment
 

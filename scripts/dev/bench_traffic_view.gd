@@ -165,7 +165,7 @@ func _bench_projectiles(world_root: Node2D) -> void:
 	for _i in range(SHOTS):
 		LaserBeamScript.spawn(world_root, origin, direction, 500.0, "beam", packets, mask, [], null)
 		for child in world_root.get_children():
-			if child is Line2D:
+			if child.is_in_group("laser_beam_fx"):
 				child.queue_free()
 	var laser_usec := Time.get_ticks_usec() - start_laser
 

@@ -13,6 +13,7 @@ var _menu := MenuController.new()
 var _exit_shutdown_done: bool = false
 
 @onready var _world_node: Node2D = $World
+@onready var _weapon_fx: Node2D = $WeaponFx
 @onready var _player: CharacterBody2D = $PlayerShip
 @onready var _hud: CanvasLayer = $HUD
 @onready var _pause: CanvasLayer = $PauseOverlay
@@ -47,7 +48,7 @@ func _ready() -> void:
 	_hud.bind(session, _player, AssembledShip.new(), _simulation, catalog)
 	_hud.set_weapon_select_handler(Callable(_player, "select_weapon_slot"))
 	if _player.has_method("set_presentation_hooks"):
-		_player.set_presentation_hooks(Callable(self, "try_interact"), _world_node)
+		_player.set_presentation_hooks(Callable(self, "try_interact"), _weapon_fx)
 	if not _hud.target_scan_requested.is_connected(_on_target_scan_requested):
 		_hud.target_scan_requested.connect(_on_target_scan_requested)
 	_bind_controllers()

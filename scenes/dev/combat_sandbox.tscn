@@ -27,6 +27,9 @@ script = ExtResource("2")
 
 [node name="PlayerShip" parent="." instance=ExtResource("3")]
 
+[node name="WeaponFx" type="Node2D" parent="."]
+z_index = 5
+
 [node name="HUD" parent="." instance=ExtResource("4")]
 
 [node name="SetupLayer" type="CanvasLayer" parent="."]

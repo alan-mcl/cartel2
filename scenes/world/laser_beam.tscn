@@ -2,5 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/presentation/laser_beam.gd" id="1"]
 
-[node name="LaserBeam" type="Line2D"]
+[node name="LaserBeam" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
 script = ExtResource("1")

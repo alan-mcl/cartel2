@@ -28,6 +28,9 @@ script = ExtResource("2")
 [node name="PlayerShip" parent="." unique_id=1176526834 instance=ExtResource("3")]
 position = Vector2(-400, -150)
 
+[node name="WeaponFx" type="Node2D" parent="."]
+z_index = 5
+
 [node name="HUD" parent="." unique_id=1110862757 instance=ExtResource("4")]
 
 [node name="PauseOverlay" parent="." unique_id=1101351505 instance=ExtResource("5")]

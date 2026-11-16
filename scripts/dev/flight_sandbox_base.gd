@@ -8,6 +8,7 @@ const DEFAULT_OPPONENT_TEMPLATE := "pegasus_p103a"
 
 @onready var _starfield: Node2D = $Starfield
 @onready var _world: Node2D = $World
+@onready var _weapon_fx: Node2D = $WeaponFx
 @onready var _player: CharacterBody2D = $PlayerShip
 @onready var _hud: CanvasLayer = $HUD
 @onready var _camera: Camera2D = $PlayerShip/FollowCamera
@@ -323,7 +324,7 @@ func _configure_player_for_run(player_owned: OwnedShip) -> AssembledShip:
 
 	_player.configure(player_assembled, player_owned, catalog, session)
 	if _player.has_method("set_presentation_hooks"):
-		_player.set_presentation_hooks(Callable(self, "try_interact"), _world)
+		_player.set_presentation_hooks(Callable(self, "try_interact"), _weapon_fx)
 	_player.global_position = Vector2.ZERO
 	_player.motion.facing = 0.0
 	_player.freeze_motion()
@@ -380,7 +381,7 @@ func _spawn_bound_npc(actor, spawn_pos: Vector2) -> Node2D:
 	var node: Node2D = NPC_SHIP_SCENE.instantiate()
 	_traffic_root.add_child(node)
 	node.global_position = spawn_pos
-	node.bind_actor(actor, catalog, _world)
+	node.bind_actor(actor, catalog, _weapon_fx)
 	return node
 
 
