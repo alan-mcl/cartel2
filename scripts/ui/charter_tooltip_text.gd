@@ -3,12 +3,101 @@ extends RefCounted
 
 const BULLET := "• "
 
+const KIND_PASSENGER := "passenger"
+const KIND_FREIGHT := "freight"
+const KIND_SCAN := "scan"
+const KIND_RETRIEVAL := "retrieval"
+const KIND_BOUNTY := "bounty"
+
 
 static func format_passenger(
 	entry: Dictionary,
 	extra: String = "",
 	accepted_origin: String = "",
 	accepted_ship: String = ""
+) -> String:
+	return format(KIND_PASSENGER, entry, extra, accepted_origin, accepted_ship)
+
+
+static func format_freight(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = ""
+) -> String:
+	return format(KIND_FREIGHT, entry, extra, accepted_origin, accepted_ship)
+
+
+static func format_scan(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	return format(KIND_SCAN, entry, extra, accepted_origin, accepted_ship, reference_gst, catalog)
+
+
+static func format_retrieval(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	return format(KIND_RETRIEVAL, entry, extra, accepted_origin, accepted_ship, reference_gst, catalog)
+
+
+static func format_bounty(
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	return format(
+		KIND_BOUNTY,
+		entry,
+		extra,
+		accepted_origin,
+		accepted_ship,
+		reference_gst,
+		catalog
+	)
+
+
+static func format(
+	kind: String,
+	entry: Dictionary,
+	extra: String = "",
+	accepted_origin: String = "",
+	accepted_ship: String = "",
+	reference_gst: float = -1.0,
+	catalog: Catalog = null
+) -> String:
+	match kind:
+		KIND_PASSENGER:
+			return _build_passenger(entry, extra, accepted_origin, accepted_ship)
+		KIND_FREIGHT:
+			return _build_freight(entry, extra, accepted_origin, accepted_ship)
+		KIND_SCAN:
+			return _build_scan(entry, extra, accepted_origin, accepted_ship, reference_gst, catalog)
+		KIND_RETRIEVAL:
+			return _build_retrieval(entry, extra, accepted_origin, accepted_ship, reference_gst, catalog)
+		KIND_BOUNTY:
+			return _build_bounty(entry, extra, accepted_origin, accepted_ship, reference_gst, catalog)
+		_:
+			return ""
+
+
+static func _build_passenger(
+	entry: Dictionary,
+	extra: String,
+	accepted_origin: String,
+	accepted_ship: String
 ) -> String:
 	var lines: PackedStringArray = PackedStringArray()
 
@@ -24,33 +113,23 @@ static func format_passenger(
 	if not description.is_empty():
 		_append_section(lines, description)
 
-	var deadline := _deadline_line(entry)
-	if not deadline.is_empty():
-		_append_section(lines, deadline)
-	_append_early_finish_bonus(lines)
+	_append_deadline_early_route_and_requirements(
+		lines,
+		entry,
+		-1.0,
+		true,
+		_passenger_requirement_lines(entry)
+	)
 
-	var suggested := _suggested_route_line(entry)
-	if not suggested.is_empty():
-		_append_section(lines, suggested)
-
-	var requirements := _passenger_requirement_lines(entry)
-	if not requirements.is_empty():
-		_append_section(lines, "Requirements")
-		for req_line in requirements:
-			lines.append(BULLET + req_line)
-
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		_append_section(lines, extra_trimmed)
-
+	_append_extra(lines, extra)
 	return "\n".join(lines)
 
 
-static func format_freight(
+static func _build_freight(
 	entry: Dictionary,
-	extra: String = "",
-	accepted_origin: String = "",
-	accepted_ship: String = ""
+	extra: String,
+	accepted_origin: String,
+	accepted_ship: String
 ) -> String:
 	var lines: PackedStringArray = PackedStringArray()
 
@@ -61,42 +140,30 @@ static func format_freight(
 	var description := str(entry.get("description", "")).strip_edges()
 	if not description.is_empty() and description != title:
 		_append_section(lines, description)
-	elif description.is_empty() and title.is_empty():
-		pass
 
 	var contract := _freight_contract_line(entry, accepted_origin, accepted_ship)
 	if not contract.is_empty():
 		_append_section(lines, contract)
 
-	var deadline := _deadline_line(entry)
-	if not deadline.is_empty():
-		_append_section(lines, deadline)
-	_append_early_finish_bonus(lines)
+	_append_deadline_early_route_and_requirements(
+		lines,
+		entry,
+		-1.0,
+		true,
+		_freight_requirement_lines(entry)
+	)
 
-	var suggested := _suggested_route_line(entry)
-	if not suggested.is_empty():
-		_append_section(lines, suggested)
-
-	var requirements := _freight_requirement_lines(entry)
-	if not requirements.is_empty():
-		_append_section(lines, "Requirements")
-		for req_line in requirements:
-			lines.append(BULLET + req_line)
-
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		_append_section(lines, extra_trimmed)
-
+	_append_extra(lines, extra)
 	return "\n".join(lines)
 
 
-static func format_scan(
+static func _build_scan(
 	entry: Dictionary,
-	extra: String = "",
-	accepted_origin: String = "",
-	accepted_ship: String = "",
-	reference_gst: float = -1.0,
-	catalog: Catalog = null
+	extra: String,
+	accepted_origin: String,
+	accepted_ship: String,
+	reference_gst: float,
+	catalog: Catalog
 ) -> String:
 	var lines: PackedStringArray = PackedStringArray()
 
@@ -118,33 +185,25 @@ static func format_scan(
 
 	_append_section(lines, "Fly to the site, active-scan the contracted contact, then dock back at origin.")
 
-	var deadline := _deadline_line(entry, reference_gst)
-	if not deadline.is_empty():
-		_append_section(lines, deadline)
-	_append_early_finish_bonus(lines)
+	_append_deadline_early_route_and_requirements(
+		lines,
+		entry,
+		reference_gst,
+		false,
+		_scan_requirement_lines(entry)
+	)
 
-	var requirements := _scan_requirement_lines(entry)
-	if not requirements.is_empty():
-		_append_section(lines, "Requirements")
-		for req_line in requirements:
-			lines.append(BULLET + req_line)
-
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		_append_section(lines, extra_trimmed)
-
+	_append_extra(lines, extra)
 	return "\n".join(lines)
 
 
-
-
-static func format_retrieval(
+static func _build_retrieval(
 	entry: Dictionary,
-	extra: String = "",
-	accepted_origin: String = "",
-	accepted_ship: String = "",
-	reference_gst: float = -1.0,
-	catalog: Catalog = null
+	extra: String,
+	accepted_origin: String,
+	accepted_ship: String,
+	reference_gst: float,
+	catalog: Catalog
 ) -> String:
 	var lines: PackedStringArray = PackedStringArray()
 
@@ -181,24 +240,17 @@ static func format_retrieval(
 	if min_reputation > 0:
 		lines.append(BULLET + "Reputation %d" % min_reputation)
 
-	var extra_trimmed := extra.strip_edges()
-	if not extra_trimmed.is_empty():
-		_append_section(lines, extra_trimmed)
-
+	_append_extra(lines, extra)
 	return "\n".join(lines)
 
 
-static func _retrieval_site_kind_line(entry: Dictionary) -> String:
-	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
-	return "Volatile retrieval site (temporary %s translation)." % n_label
-
-static func format_bounty(
+static func _build_bounty(
 	entry: Dictionary,
-	extra: String = "",
-	accepted_origin: String = "",
-	accepted_ship: String = "",
-	reference_gst: float = -1.0,
-	catalog: Catalog = null
+	extra: String,
+	accepted_origin: String,
+	accepted_ship: String,
+	reference_gst: float,
+	_catalog: Catalog
 ) -> String:
 	var lines: PackedStringArray = PackedStringArray()
 
@@ -231,11 +283,35 @@ static func format_bounty(
 		_append_section(lines, deadline)
 	_append_early_finish_bonus(lines)
 
+	_append_extra(lines, extra)
+	return "\n".join(lines)
+
+
+static func _append_deadline_early_route_and_requirements(
+	lines: PackedStringArray,
+	entry: Dictionary,
+	reference_gst: float,
+	include_suggested_route: bool,
+	requirements: PackedStringArray
+) -> void:
+	var deadline := _deadline_line(entry, reference_gst)
+	if not deadline.is_empty():
+		_append_section(lines, deadline)
+	_append_early_finish_bonus(lines)
+	if include_suggested_route:
+		var suggested := _suggested_route_line(entry)
+		if not suggested.is_empty():
+			_append_section(lines, suggested)
+	if not requirements.is_empty():
+		_append_section(lines, "Requirements")
+		for req_line in requirements:
+			lines.append(BULLET + req_line)
+
+
+static func _append_extra(lines: PackedStringArray, extra: String) -> void:
 	var extra_trimmed := extra.strip_edges()
 	if not extra_trimmed.is_empty():
 		_append_section(lines, extra_trimmed)
-
-	return "\n".join(lines)
 
 
 static func _append_early_finish_bonus(lines: PackedStringArray) -> void:
@@ -349,6 +425,11 @@ static func _scan_site_kind_line(entry: Dictionary, catalog: Catalog) -> String:
 		return ""
 	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
 	return "Volatile survey site (temporary %s translation)." % n_label
+
+
+static func _retrieval_site_kind_line(entry: Dictionary) -> String:
+	var n_label := VolatileTranslation.n_space_label(int(entry.get("volatile_n", 4)))
+	return "Volatile retrieval site (temporary %s translation)." % n_label
 
 
 static func _scan_requirement_lines(entry: Dictionary) -> PackedStringArray:

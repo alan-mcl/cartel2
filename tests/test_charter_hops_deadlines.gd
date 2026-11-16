@@ -376,6 +376,11 @@ static func _test_charter_tooltip_layout(runner: TestRunner, catalog: Catalog) -
 		"description": "Four tourists for Bela.",
 	}
 	var passenger_tooltip := CharterTooltipText.format_passenger(passenger)
+	runner.check_eq(
+		passenger_tooltip,
+		CharterTooltipText.format(CharterTooltipText.KIND_PASSENGER, passenger),
+		"charter tooltip: format() dispatch matches format_passenger"
+	)
 	runner.check(
 		passenger_tooltip.contains("\n\n"),
 		"charter tooltip: passenger sections separated by blank lines"

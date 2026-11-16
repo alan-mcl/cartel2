@@ -27,11 +27,10 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R2 and R3 (shared charter lifecycle is landed); R4 before F10; R5 before R6; R7 before R8. R9, R10, R12, and R13 can land any time.
+Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R3 (shared charter lifecycle is landed); R4 before F10; R5 before R6; R7 before R8. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R2|ui|high|Shared charter desk shell and tooltip dispatch|
 |R3|missions|high|Plotline gigs reachable from a desk, plus a charter-complete event. Unblocks F3|
 |R4|flight|high|Bounty escape and Unspace hull stress live in gameplay. Unblocks F10|
 |R5|world|high|Traffic and encounters query anchors without constructing WorldLoader|
@@ -45,14 +44,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 |R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
 |R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
 |R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
-
-### R2 — Charter desk shell
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `scripts/ui/passenger_charter_panel.gd`, `scripts/ui/freight_charter_panel.gd`, `scripts/ui/scan_charter_panel.gd`, `scripts/ui/charter_board.gd`, `scripts/ui/charter_tooltip_text.gd`, bar and terminal hosts
-- **Do not:** change offer generation or pay; redesign habitat layout; add a new charter kind
-- **Acceptance:** passenger, freight, and the scan/retrieval/bounty desk share one refresh and accept shell. Tooltip copy dispatches by kind instead of five parallel formatters that each rebuild the tile. Existing boards still show the same offers.
 
 ### R3 — Plotline desk hook
 

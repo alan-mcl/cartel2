@@ -1,37 +1,14 @@
-extends GameScreen
+extends CharterDeskPanel
 
 var _building_id: String = ""
-var _resolve_ship_id: Callable = Callable()
-var _board: CharterBoard
 
 
 func configure(building: Dictionary) -> void:
 	_building_id = str(building.get("id", ""))
 
 
-func set_ship_resolver(resolver: Callable) -> void:
-	_resolve_ship_id = resolver
-
-
-func refresh() -> void:
-	if not is_node_ready() or _context == null or _context.session == null or _context.catalog == null:
-		return
-	if _board == null or not is_instance_valid(_board):
-		_clear_children(self)
-		_board = CharterBoard.new()
-		_board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		_board.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_board.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		_board.resolve_ship_id = _resolve_ship_id
-		_board.rerender = Callable(self, "refresh")
-		_board.expand_plain_labels = true
-		add_child(_board)
-	var blocked := _blocked_text()
-	if blocked.is_empty():
-		var missions := _missions()
-		if missions != null:
-			missions.ensure_boards(_context.session, _context.catalog)
-	_board.present(_context, Callable(self, "_sections"), blocked)
+func _configure_board(board_node: CharterBoard) -> void:
+	board_node.expand_plain_labels = true
 
 
 func _blocked_text() -> String:
@@ -341,17 +318,6 @@ func _charter_timing_line(entry: Dictionary) -> String:
 		return ""
 	return "Within %d h" % hours
 
-
-func _missions() -> MissionSubsystem:
-	if _context == null or _context.simulation == null:
-		return null
-	return _context.simulation.get_subsystem("missions") as MissionSubsystem
-
-
-func _clear_children(node: Node) -> void:
-	for child in node.get_children():
-		node.remove_child(child)
-		child.queue_free()
 
 func _describe_retrieval_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 	var lines := _retrieval_offer_lines(offer)
