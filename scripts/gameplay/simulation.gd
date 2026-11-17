@@ -195,7 +195,10 @@ func apply_save(blob: Dictionary) -> void:
 			data = {}
 
 		var stored_version := int(section_dict.get("version", subsystem.save_version))
-		var payload: Dictionary = data
+		if stored_version > subsystem.save_version:
+			subsystem.from_dict({})
+			continue
+		var payload: Dictionary = data as Dictionary
 		if stored_version != subsystem.save_version:
 			payload = subsystem.migrate(payload, stored_version)
 		subsystem.from_dict(payload)

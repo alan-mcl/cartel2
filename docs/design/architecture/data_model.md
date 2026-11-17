@@ -287,23 +287,29 @@ Chassis is **fixed**; undock is allowed even with incomplete fits (no thrust wit
 
 ## Save files
 
-Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VERSION` = **2**.
+Three slots at `user://saves/slot_1.json` … `slot_3.json`. `SaveStore.SAVE_VERSION` = **3**.
 
 ```json
 {
-  "version": 2,
+  "version": 3,
   "game_version": "DEV",
   "saved_at": "2026-09-01T12:00:00Z",
   "player": { "name": "Jane Doe", "callsign": "Vixen" },
   "session": { /* GameSession.to_dict() - includes spare_parts */ },
   "ships": [ /* OwnedShip.to_dict() - modules, cargo, fuel, ammunition */ ],
-  "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 }
+  "flight": { "x": 0, "y": 0, "vx": 0, "vy": 0, "facing": -1.57 },
+  "subsystems": {
+    "economy": { "version": 1, "data": {} },
+    "missions": { "version": 8, "data": {} }
+  }
 }
 ```
 
-Version 1 saves are accepted; legacy `session.cargo` migrates onto `current_ship_id`.
+Each `subsystems` entry is subsystem id → `{ "version": <subsystem save_version>, "data": <subsystem.to_dict()> }`. [`Simulation.apply_save`](../../../scripts/gameplay/simulation.gd) migrates when the stored version is older than the code, loads as-is when equal, and discards the payload when the stored version is newer than the code (fail closed).
 
-**Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load).
+Versions **1** and **2** saves are still accepted; version 2 introduced per-ship fuel pools; version 3 adds the `subsystems` envelope. Legacy `session.cargo` migrates onto `current_ship_id` on load.
+
+**Not saved:** catalog data, derived `AssembledShip` / `ShipStats` (recomputed on load), or ephemeral Unspace flux, folds, shards, or ascidian hazards.
 
 ## In-system NPC traffic (3-space)
 
@@ -450,7 +456,7 @@ Other sector/world/interactable/habitat schemas unchanged - see setting docs.
 | Area | In the game today | Still outstanding |
 |------|------------------|-------------------|
 | Ship model | Chassis, modules, and mass, volume, power, compute, and fuel budgets. Hull damage and dock repair | Fitting depth in the setting that the catalogued mounts do not cover |
-| Modules | Every file under `data/catalog/modules/`: propulsion (including gravitic and integrated sail), power, computer, life support, sensors, navigation, weapons, armour, shields, point defence, cyber defence, cargo, fuel, ammunition, transponder, hyperdrive SKUs | Hyperdrive translation. Reactor fuel for power plants |
+| Modules | Every file under `data/catalog/modules/`: propulsion (including gravitic and integrated sail), power, computer, life support, sensors, navigation, weapons, armour, shields, point defence, cyber defence, cargo, fuel, ammunition, transponder, hyperdrive SKUs | Player hyperdrive spool and translation from deep orbit are implemented; NPC hyperdrive use is outstanding (F10). Reactor fuel for power plants |
 | Weapons | Lasers, mass drivers, rockets, mines, and guided weapons (homing while a target lock is held). Point defence, shields, and cyber defence run in `ShipCombat`. Debris is destructible. Provoked NPC combat. Player hull takes damage | Combat game-over screen |
 | Operating sim | Power, fuel, and compute in flight; weapon power draw while firing; live signature. NPCs share `ShipSimCore` at a lower cadence than the player | No separate heat budget |
 

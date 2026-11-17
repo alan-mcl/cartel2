@@ -256,7 +256,7 @@ HUD and **HabitatScreen** header show `GstClockLabel` at seconds resolution. `se
 4. Fly through transit field: irregular Delaunay topo mesh; **Fields** panel shows **Stability** for this jump. GST advances irregularly while in transit.
 5. `[E]` at **Exit Portal** → exit lump from the same stored translation → `session.arrive_from_unspace` (clears stability) → load destination sector orbit.
 
-Hyperdrive-equipped ships may later translate without a gate or from other 4-space regions - not implemented.
+Ships with a fitted hyperdrive module may spool a translation from deep orbit (**H** when undocked, beyond the jump-gate or translation-beacon radius): the hyperdrive overlay opens without pausing flight, **Routes** reuses the jump database, and **Compute solution** stores a private row after a GST loiter window driven by [`HyperdriveSolution.advance`](../../../scripts/gameplay/hyperdrive_solution.gd). Confirming uses the normal `enter_unspace` pipeline. NPC hyperdrive use remains outstanding ([backlog](backlog.md) F10).
 
 ### Volatile translations (off-network sites)
 

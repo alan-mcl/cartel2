@@ -537,7 +537,7 @@ At **habitat shipyards** (`kind: "workshop"`, one per orbital):
 - Refuel and rearm ships; inspect configuration and engineering budgets
 - Chassis is fixed per owned ship
 
-Homing missiles and scatter pellet fans are implemented in orbital flight; hyperdrive translation remains planned - see [architecture.md](../architecture/architecture.md). Dock resets hull and integrity.
+Homing missiles and scatter pellet fans are implemented in orbital flight. Player hyperdrive spool and translation from deep orbit are implemented (see the hyperdrive modules section above and [architecture.md](../architecture/architecture.md)); NPC hyperdrive use remains outstanding (backlog F10). Dock resets hull and integrity.
 
 ---
 

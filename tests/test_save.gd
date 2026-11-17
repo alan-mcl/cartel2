@@ -19,6 +19,8 @@ static func run(runner: TestRunner) -> void:
 	_test_validation(runner)
 	_test_legacy_cargo_migration(runner, catalog)
 	_test_subsystems_envelope(runner, catalog)
+	_test_mission_v6_migration_clears_offers(runner)
+	_test_subsystem_future_version_fails_closed(runner)
 	_test_baseline_v2_fixture(runner, catalog)
 	_test_reputation_starts_and_save(runner, catalog)
 	_test_file_round_trip(runner, catalog)
@@ -319,6 +321,60 @@ static func _test_subsystems_envelope(runner: TestRunner, catalog: Catalog) -> v
 	loaded_probe.tick_count = 99
 	loaded_simulation.apply_save({})
 	runner.check_eq(loaded_probe.tick_count, 0, "save: missing envelope resets subsystem state")
+
+
+static func _test_mission_v6_migration_clears_offers(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var missions := simulation.get_subsystem("missions") as MissionSubsystem
+	runner.check(missions != null, "save: default missions subsystem for v6 migrate test")
+	var legacy := {
+		"offers_by_habitat": {"proxima_habitat": [{"id": "offer_1", "title": "Stale"}]},
+		"accepted": [{"id": "charter_1", "title": "Kept"}],
+		"next_charter_id": 2,
+	}
+	simulation.apply_save({"missions": {"version": 6, "data": legacy}})
+	var saved := missions.to_dict()
+	var offers: Variant = saved.get("offers_by_habitat", {})
+	runner.check(
+		typeof(offers) == TYPE_DICTIONARY and (offers as Dictionary).is_empty(),
+		"save: mission v6 migrate clears passenger offer boards"
+	)
+	var accepted: Variant = saved.get("accepted", [])
+	runner.check(
+		typeof(accepted) == TYPE_ARRAY and (accepted as Array).size() == 1,
+		"save: mission v6 migrate keeps accepted passenger contracts"
+	)
+	runner.check_eq(str((accepted as Array)[0].get("id", "")), "charter_1", "save: accepted id survives")
+
+
+static func _test_subsystem_future_version_fails_closed(runner: TestRunner) -> void:
+	var simulation := Simulation.new()
+	var missions := simulation.get_subsystem("missions") as MissionSubsystem
+	runner.check(missions != null, "save: default missions subsystem for future-version test")
+	simulation.apply_save({
+		"missions": {
+			"version": missions.save_version,
+			"data": {"accepted": [{"id": "charter_keep", "title": "Baseline"}]},
+		},
+	})
+	var before := missions.to_dict()
+	runner.check(
+		(before.get("accepted", []) as Array).size() == 1,
+		"save: current mission version loads accepted contracts"
+	)
+	var future_version := missions.save_version + 1
+	simulation.apply_save({
+		"missions": {
+			"version": future_version,
+			"data": {"accepted": [{"id": "charter_fake", "title": "From the future"}]},
+		},
+	})
+	var after := missions.to_dict()
+	var accepted: Variant = after.get("accepted", [])
+	runner.check(
+		typeof(accepted) == TYPE_ARRAY and (accepted as Array).is_empty(),
+		"save: newer mission subsystem version does not apply payload"
+	)
 
 
 static func _test_baseline_v2_fixture(runner: TestRunner, catalog: Catalog) -> void:

@@ -29,17 +29,14 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent. R9, R10, R12, and R13 can land any time.
+Structural work only. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |R9|data|med|Schema checks for worlds, buildings, traffic, and interactables|
 |R10|data|med|One chassis source on AssembledShip; typed getters stop rebuilding dictionaries|
-|R11|save|med|Save doc matches version 3; mission migration is tested; future subsystem versions fail closed|
 |R12|ui|med|One soft-refresh helper for the dock desks|
 |R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
-|R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
-|R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
 
 ### R9 — Schema checks for large catalogs
 
@@ -57,14 +54,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 - **Do not:** type buildings, worlds, or missions (R9 covers validation only); change fitting rules
 - **Acceptance:** `AssembledShip` has one chassis source of truth. Gameplay reads `get_*_def` for types that already have a record. Dictionary copies happen at a library or UI boundary, not on every lookup. Assembler and catalog tests pass.
 
-### R11 — Save contract
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `docs/design/architecture/data_model.md`, `scripts/gameplay/simulation.gd`, `scripts/gameplay/mission_subsystem.gd` `migrate`, `tests/test_save.gd`
-- **Do not:** persist Unspace flux, folds, shards, or ascidian hazards; bump `SAVE_VERSION` unless the envelope shape changes; wipe accepted contracts
-- **Acceptance:** the data-model save section matches envelope version 3 and the `subsystems` blob. A test loads a mission section from an older `save_version` and asserts that offer boards clear when the migrate says they clear, and that accepted contracts remain. A subsystem `from_version` newer than the code fails closed.
-
 ### R12 — Shared dock soft-refresh
 
 - **Status:** Discuss
@@ -80,22 +69,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 - **Scope:** `scripts/dev/combat_sandbox.gd`, `scripts/dev/flight_sandbox_base.gd`, `scripts/dev/stealth_sandbox.gd`, `scripts/presentation/flight_loop_controller.gd`, `scripts/presentation/traffic_view.gd`
 - **Do not:** change detection, weapon, or traffic rules; spawn a second body for the same actor
 - **Acceptance:** the combat sandbox draws opponents through `TrafficView`. The stealth sandbox advances NPCs with `FlightLoopController.physics_tick`. A signature or weapon change on the director shows up in both drills.
-
-### R14 — Sensor catalog assertion
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `tests/test_sensors.gd` (exact `sensors.size() == 11`)
-- **Do not:** add or remove sensor SKUs; pin a new exact count
-- **Acceptance:** the suite uses a floor or another structural invariant, matching `tests/test_catalog.gd`. Adding a sensor SKU does not fail the test.
-
-### R15 — Hyperdrive docs match the player spool
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `docs/design/architecture/architecture.md` (gate-less hyperdrive “not implemented”), `docs/design/architecture/data_model.md` (hyperdrive translation still outstanding), `docs/design/content/equipment.md` (“hyperdrive translation remains planned”)
-- **Do not:** implement NPC hyperdrives (F10); edit frozen setting files
-- **Acceptance:** those passages describe the player spool, overlay, and `HyperdriveSolution.advance` as implemented. NPC use stays outstanding and points at F10.
 
 ## Addenda
 

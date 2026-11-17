@@ -223,7 +223,10 @@ static func _test_catalog_signatures(runner: TestRunner, catalog: Catalog) -> vo
 
 static func _test_catalog_sensor_skus(runner: TestRunner, catalog: Catalog) -> void:
 	var sensors: Array = catalog.list_modules("sensor")
-	runner.check_eq(sensors.size(), 11, "eleven sensor SKUs in catalog")
+	runner.check(
+		sensors.size() >= 11,
+		"sensor SKUs in catalog (expected >= 11, got %d)" % sensors.size()
+	)
 	var nav_caps := [
 		"local_sensor",
 		"local_system_waypoints",
