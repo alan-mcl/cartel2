@@ -28,11 +28,10 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R7 before R8. R9, R10, R12, and R13 can land any time.
+Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R8. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R7|session|high|Travel, dock, cargo, and trade move onto the state slices|
 |R8|session|high|Call sites use the slices; forwarding properties stay until that is done|
 |R9|data|med|Schema checks for worlds, buildings, traffic, and interactables|
 |R10|data|med|One chassis source on AssembledShip; typed getters stop rebuilding dictionaries|
@@ -41,14 +40,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 |R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
 |R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
 |R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
-
-### R7 — Session transitions on the state slices
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `scripts/gameplay/game_session.gd`, `scripts/gameplay/world_presence.gd`, `scripts/gameplay/player_state.gd`, fleet and wallet types, `tests/test_session.gd`, `tests/test_save.gd`
-- **Do not:** delete the forwarding properties (R8); change save JSON keys; change price, cargo, or travel rules
-- **Acceptance:** sector travel, Unspace enter and arrive, dock, undock, cargo checks, and commodity buy/sell are methods on the types that own the state. `GameSession` forwards to them. Round-trip saves and session tests pass without a version bump.
 
 ### R8 — Call sites use the slices
 

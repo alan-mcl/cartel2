@@ -76,6 +76,92 @@ func get_spawn_position(catalog: Catalog) -> Vector2:
 	return get_sector_spawn(catalog)
 
 
+func enter_sector(
+	catalog: Catalog,
+	new_sector_id: String,
+	player: PlayerState,
+	volatile_record: Dictionary,
+	emit_log: bool = true
+) -> bool:
+	if not volatile_record.is_empty():
+		sector_id = new_sector_id
+		_clear_unspace_fields()
+		location_name = str(volatile_record.get("label", new_sector_id))
+		player.objective = "Complete your assignment at %s." % str(
+			volatile_record.get("label", "the site")
+		)
+		if emit_log:
+			player.last_log = "Arrived at %s." % str(volatile_record.get("label", new_sector_id))
+		return true
+
+	var sector := catalog.get_sector_def(new_sector_id)
+	if sector == null:
+		return false
+
+	sector_id = new_sector_id
+	_clear_unspace_fields()
+	location_name = sector.orbit_name if sector.has_source_key("orbit_name") else new_sector_id
+	player.objective = sector.objective
+	if emit_log:
+		var sector_name := sector.name if sector.has_source_key("name") else new_sector_id
+		player.last_log = "Arrived in %s." % sector_name
+	return true
+
+
+func begin_unspace(
+	destination_id: String,
+	n: int,
+	unspace_world_id: String,
+	solution: int
+) -> void:
+	pending_destination_id = destination_id
+	in_unspace = true
+	unspace_n = n
+	self.unspace_world_id = unspace_world_id
+	unspace_solution = solution
+	location_name = "%d-space" % n
+
+
+## Returns destination sector id when leaving Unspace flight, or empty when not in flight.
+func take_pending_arrival() -> String:
+	if not in_unspace or pending_destination_id.is_empty():
+		return ""
+	var dest_id := pending_destination_id
+	_clear_unspace_fields()
+	return dest_id
+
+
+func apply_dock(
+	location_id: String,
+	habitat: Dictionary,
+	default_building_id: String,
+	default_building: Dictionary
+) -> void:
+	docked = true
+	habitat_id = location_id
+	building_id = default_building_id
+	location_name = "%s / %s" % [
+		str(habitat.get("name", location_id)),
+		str(default_building.get("name", default_building_id)),
+	]
+
+
+func apply_undock(orbit_label: String) -> void:
+	docked = false
+	habitat_id = ""
+	building_id = ""
+	location_name = orbit_label
+
+
+func _clear_unspace_fields() -> void:
+	in_unspace = false
+	unspace_n = 0
+	unspace_world_id = ""
+	unspace_solution = 0
+	translation_stability = -1.0
+	pending_destination_id = ""
+
+
 func get_market_sector_id(catalog: Catalog) -> String:
 	if not habitat_id.is_empty():
 		var habitat_sector := catalog.get_habitat_sector_id(habitat_id)

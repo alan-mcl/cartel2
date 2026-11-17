@@ -454,46 +454,17 @@ func enter_sector(catalog: Catalog, new_sector_id: String, emit_log: bool = true
 	var active_ship := fleet.get_current_owned_ship()
 	if active_ship != null:
 		DroneRuntime.recall_if_deployed(active_ship, catalog)
+	var volatile_record: Dictionary = {}
 	if VolatileTranslation.is_volatile_sector_id(new_sector_id):
-		var record := VolatileTranslation.find_by_sector_id(self, new_sector_id)
-		if record.is_empty():
+		volatile_record = VolatileTranslation.find_by_sector_id(self, new_sector_id)
+		if volatile_record.is_empty():
 			return false
-		world.sector_id = new_sector_id
-		world.in_unspace = false
-		world.unspace_n = 0
-		world.unspace_world_id = ""
-		world.unspace_solution = 0
-		world.translation_stability = -1.0
-		world.pending_destination_id = ""
-		world.location_name = str(record.get("label", new_sector_id))
-		player.objective = "Complete your assignment at %s." % str(record.get("label", "the site"))
-		if emit_log:
-			player.last_log = "Arrived at %s." % str(record.get("label", new_sector_id))
-		events.publish(SimEvent.sector_entered(world.sector_id))
-		changed.emit()
-		return true
-
-	var sector := catalog.get_sector_def(new_sector_id)
-	if sector == null:
+	if not world.enter_sector(catalog, new_sector_id, player, volatile_record, emit_log):
 		return false
-
-	world.sector_id = new_sector_id
-	world.in_unspace = false
-	world.unspace_n = 0
-	world.unspace_world_id = ""
-	world.unspace_solution = 0
-	world.translation_stability = -1.0
-	world.pending_destination_id = ""
-	world.location_name = sector.orbit_name if sector.has_source_key("orbit_name") else new_sector_id
-	player.objective = sector.objective
-
-	if emit_log:
-		var sector_name := sector.name if sector.has_source_key("name") else new_sector_id
-		player.last_log = "Arrived in %s." % sector_name
-
-	VolatileTranslation.on_catalog_sector_entered(self, new_sector_id)
+	if volatile_record.is_empty():
+		VolatileTranslation.on_catalog_sector_entered(self, new_sector_id)
 	events.publish(SimEvent.sector_entered(world.sector_id))
-	if _track_career_enabled():
+	if _track_career_enabled() and volatile_record.is_empty():
 		career.record_sector_visited(world.sector_id)
 	changed.emit()
 	return true
@@ -552,26 +523,23 @@ func enter_unspace(
 		if catalog.get_sector_def(destination_id) == null:
 			return false
 
+	_reset_unspace_hazards()
+	combat.init_hull_from_ship(assembled_ship)
+	var resolved_solution := int(mapping.get("solution", solution))
+	world.begin_unspace(destination_id, n, str(unspace.get("id", "")), resolved_solution)
+	if _track_career_enabled():
+		career.record_translation(n)
+	events.publish(SimEvent.unspace_entered(destination_id, n, resolved_solution))
+	changed.emit()
+	return true
+
+
+func _reset_unspace_hazards() -> void:
 	UnspaceFlux.reset(self)
 	UnspaceFold.reset(self)
 	UnspaceShards.reset(self)
 	UnspaceAscidianHazards.reset(self)
 	_hull_stress_next_log_below = -1.0
-	world.pending_destination_id = destination_id
-	world.in_unspace = true
-	world.unspace_n = n
-	world.unspace_world_id = str(unspace.get("id", ""))
-	world.unspace_solution = int(mapping.get("solution", solution))
-	combat.init_hull_from_ship(assembled_ship)
-
-	world.location_name = "%d-space" % n
-	if _track_career_enabled():
-		career.record_translation(n)
-	events.publish(
-		SimEvent.unspace_entered(destination_id, n, int(mapping.get("solution", solution)))
-	)
-	changed.emit()
-	return true
 
 
 func _library_mapping_for_solution(catalog: Catalog, solution: int) -> Dictionary:
@@ -590,24 +558,12 @@ func _library_mapping_for_solution(catalog: Catalog, solution: int) -> Dictionar
 
 
 func arrive_from_unspace(catalog: Catalog) -> bool:
-	if not world.in_unspace or world.pending_destination_id.is_empty():
+	var dest_id := world.take_pending_arrival()
+	if dest_id.is_empty():
 		return false
-
-	var dest_id := world.pending_destination_id
-	world.in_unspace = false
-	world.unspace_n = 0
-	world.unspace_world_id = ""
-	world.translation_stability = -1.0
-	world.pending_destination_id = ""
-	UnspaceFlux.reset(self)
-	UnspaceFold.reset(self)
-	UnspaceShards.reset(self)
-	UnspaceAscidianHazards.reset(self)
-	_hull_stress_next_log_below = -1.0
-
+	_reset_unspace_hazards()
 	if not enter_sector(catalog, dest_id, false):
 		return false
-
 	return true
 
 
@@ -896,14 +852,8 @@ func dock(catalog: Catalog, location_id: String) -> bool:
 	if default_building.is_empty():
 		return false
 
-	var current_ship := fleet.get_current_owned_ship()
-	if current_ship != null:
-		current_ship.location = location_id
-
-	world.docked = true
-	world.habitat_id = location_id
-	world.building_id = default_building_id
-	world.location_name = "%s / %s" % [str(habitat.get("name", location_id)), str(default_building.get("name", default_building_id))]
+	fleet.dock_current_ship_at(location_id)
+	world.apply_dock(location_id, habitat, default_building_id, default_building)
 	var docked_ship := fleet.get_current_owned_ship()
 	if docked_ship != null:
 		DroneRuntime.recall_if_deployed(docked_ship, catalog)
@@ -1017,17 +967,15 @@ func undock(catalog: Catalog, ship_id: String, missions: MissionSubsystem = null
 		persist_combat_to_ship(previous_id)
 	load_combat_from_owned_ship(catalog, ship_id)
 
-	ship.location = "aboard"
-	fleet.current_ship_id = ship_id
-	world.docked = false
-	world.habitat_id = ""
-	world.building_id = ""
+	ship = fleet.launch_ship_from_habitat(ship_id, world.habitat_id)
+	if ship == null:
+		return false
 
 	var sector := catalog.get_sector_def(world.sector_id)
 	var orbit := "High orbit"
 	if sector != null and sector.has_source_key("orbit_name") and not sector.orbit_name.is_empty():
 		orbit = sector.orbit_name
-	world.location_name = orbit
+	world.apply_undock(orbit)
 	player.last_log = "Launched %s. Propulsion online." % ship.name
 	events.publish(SimEvent.undocked(ship_id, world.sector_id))
 	changed.emit()
@@ -1076,16 +1024,11 @@ func get_cargo_count(ship: OwnedShip, commodity_id: String) -> int:
 
 
 func get_ship_cargo_mass(catalog: Catalog, ship: OwnedShip) -> float:
-	if ship == null:
-		return 0.0
-	return ShipOperations.get_cargo_mass(catalog, ship)
+	return fleet.get_ship_cargo_mass(catalog, ship)
 
 
 func get_ship_cargo_capacity(catalog: Catalog, ship: OwnedShip) -> float:
-	if ship == null:
-		return 0.0
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	return float(assembled.capacities.get("cargo_capacity", 0.0))
+	return fleet.get_ship_cargo_capacity(catalog, ship)
 
 
 func can_add_cargo(
@@ -1095,20 +1038,8 @@ func can_add_cargo(
 	amount: int,
 	missions: MissionSubsystem = null
 ) -> bool:
-	if ship == null or amount <= 0:
-		return false
-	var commodity := catalog.get_commodity_def(commodity_id)
-	if commodity == null:
-		return false
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	if not CargoRequirements.assembled_meets_commodity(assembled, commodity):
-		return false
-	var capacity := get_ship_cargo_capacity(catalog, ship)
-	var current_mass := get_ship_cargo_mass(catalog, ship)
-	current_mass += _freight_reserved_tonnes(missions, ship)
-	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
-	var added_mass := unit_mass * amount
-	return current_mass + added_mass <= capacity + 0.001
+	var book := missions if missions != null else bound_missions
+	return fleet.can_add_cargo(catalog, ship, commodity_id, amount, book)
 
 
 func cargo_carry_block_reason(
@@ -1118,34 +1049,8 @@ func cargo_carry_block_reason(
 	amount: int = 1,
 	missions: MissionSubsystem = null
 ) -> String:
-	if ship == null:
-		return "No ship selected for cargo."
-	if amount <= 0:
-		return "Invalid amount."
-	var commodity := catalog.get_commodity_def(commodity_id)
-	if commodity == null:
-		return "Unknown commodity."
-	var assembled := ShipAssembler.assemble_owned(catalog, ship)
-	var cap_reason := CargoRequirements.cannot_carry_reason(catalog, assembled, commodity)
-	if not cap_reason.is_empty():
-		return cap_reason
-	var capacity := get_ship_cargo_capacity(catalog, ship)
-	var current_mass := get_ship_cargo_mass(catalog, ship)
-	current_mass += _freight_reserved_tonnes(missions, ship)
-	var unit_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
-	var added_mass := unit_mass * amount
-	if current_mass + added_mass > capacity + 0.001:
-		return "Not enough cargo capacity on %s." % ship.name
-	return ""
-
-
-func _freight_reserved_tonnes(missions: MissionSubsystem, ship: OwnedShip) -> float:
-	if ship == null:
-		return 0.0
 	var book := missions if missions != null else bound_missions
-	if book == null:
-		return 0.0
-	return float(book.committed_freight_reserves_for_ship(ship.id).get("tonnes", 0.0))
+	return fleet.cargo_carry_block_reason(catalog, ship, commodity_id, amount, book)
 
 
 func get_spare_part_count(part_id: String) -> int:
@@ -1254,57 +1159,32 @@ func buy_commodity(
 	ship_id: String = "",
 	missions: MissionSubsystem = null
 ) -> bool:
-	if amount <= 0:
-		return false
-
 	var ship := get_cargo_ship(ship_id)
-	if ship == null:
-		return fail_action("No ship selected for cargo.")
-
-	var building := catalog.get_building(building_id)
-	if catalog.get_building_type(building) != "market":
-		return false
-
-	var listing := CommodityEconomy.quote_for_sector(
-		self,
-		catalog,
-		get_market_sector_id(catalog),
-		commodity_id
-	)
-	if listing.is_empty():
-		return false
-
-	var commodity := catalog.get_commodity_def(commodity_id)
-	if commodity == null:
-		return false
-
-	var block_reason := cargo_carry_block_reason(catalog, ship, commodity_id, amount, missions)
-	if not block_reason.is_empty():
-		return fail_action(block_reason)
-
-	var available := int(listing.get("quantity", 0))
-	if amount > available:
-		return fail_action("The exchange has only %d on the board." % available)
-
-	var price := int(listing.get("price", commodity.base_price))
-	var total_cost := price * amount
-	if not try_spend_credits(total_cost):
-		return false
-
-	ship.add_cargo(commodity_id, amount)
 	var market_sector_id := get_market_sector_id(catalog)
+	var listing := CommodityEconomy.quote_for_sector(
+		self, catalog, market_sector_id, commodity_id
+	)
+	var book := missions if missions != null else bound_missions
+	var result := wallet.buy_commodity(
+		catalog, building_id, commodity_id, amount, ship, player, fleet, listing, book
+	)
+	if not bool(result.get("ok", false)):
+		var err := str(result.get("error", ""))
+		if not err.is_empty():
+			return fail_action(err)
+		return false
+	var price := int(result.get("price", 0))
 	CommodityEconomy.commit_book(self, market_sector_id, commodity_id, amount, true)
-	var commodity_name := commodity_id
-	if commodity.has_source_key("name"):
-		commodity_name = commodity.name
-	player.last_log = "Bought %d x %s for d%d." % [amount, commodity_name, total_cost]
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, price, "buy")
 	)
 	if _track_career_enabled():
-		var buy_mass := commodity.mass if commodity.has_source_key("mass") else 0.0
+		var commodity: Variant = result.get("commodity")
+		var buy_mass := 0.0
+		if commodity is CommodityDef and (commodity as CommodityDef).has_source_key("mass"):
+			buy_mass = (commodity as CommodityDef).mass
 		var tonnes := buy_mass * float(amount)
-		career.record_commodity_buy(amount, tonnes, total_cost)
+		career.record_commodity_buy(amount, tonnes, int(result.get("total_cost", 0)))
 	changed.emit()
 	return true
 
@@ -1316,59 +1196,31 @@ func sell_commodity(
 	amount: int = 1,
 	ship_id: String = ""
 ) -> bool:
-	if amount <= 0:
-		return false
-
 	var ship := get_cargo_ship(ship_id)
-	if ship == null:
-		return fail_action("No ship selected for cargo.")
-
-	var building := catalog.get_building(building_id)
-	if catalog.get_building_type(building) != "market":
-		return false
-
-	var listing := CommodityEconomy.quote_for_sector(
-		self,
-		catalog,
-		get_market_sector_id(catalog),
-		commodity_id
-	)
-	if listing.is_empty():
-		return false
-
-	if get_cargo_count(ship, commodity_id) < amount:
-		return fail_action("Not enough cargo to sell.")
-
-	var available := int(listing.get("quantity", 0))
-	if amount > available:
-		return fail_action("The exchange has only %d on the board." % available)
-
-	var commodity := catalog.get_commodity_def(commodity_id)
-	var base_price := 0
-	if commodity != null:
-		base_price = int(commodity.base_price)
-	var price := int(listing.get("price", base_price))
-	var sell_price := CommodityEconomy.sell_price(price)
-	var total := sell_price * amount
-
-	if not ship.remove_cargo(commodity_id, amount):
-		return false
-
 	var market_sector_id := get_market_sector_id(catalog)
+	var listing := CommodityEconomy.quote_for_sector(
+		self, catalog, market_sector_id, commodity_id
+	)
+	var result := wallet.sell_commodity(
+		catalog, building_id, commodity_id, amount, ship, player, listing
+	)
+	if not bool(result.get("ok", false)):
+		var err := str(result.get("error", ""))
+		if not err.is_empty():
+			return fail_action(err)
+		return false
+	var sell_price := int(result.get("sell_price", 0))
+	var total := int(result.get("total", 0))
 	CommodityEconomy.commit_book(self, market_sector_id, commodity_id, amount, false)
-	wallet.apply(total)
-	var commodity_name := commodity_id
-	if commodity != null and commodity.has_source_key("name"):
-		commodity_name = commodity.name
-	player.last_log = "Sold %d x %s for d%d." % [amount, commodity_name, total]
 	events.publish(
 		SimEvent.commodity_traded(market_sector_id, commodity_id, amount, sell_price, "sell")
 	)
 	_publish_credits_changed(total)
 	if _track_career_enabled():
+		var commodity: Variant = result.get("commodity")
 		var sell_mass := 0.0
-		if commodity != null and commodity.has_source_key("mass"):
-			sell_mass = commodity.mass
+		if commodity is CommodityDef and (commodity as CommodityDef).has_source_key("mass"):
+			sell_mass = (commodity as CommodityDef).mass
 		var tonnes := sell_mass * float(amount)
 		career.record_commodity_sell(amount, tonnes, total)
 	changed.emit()
