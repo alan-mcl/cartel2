@@ -1,8 +1,9 @@
 {
-  "default_id": "tester",
+  "default_id": "trader",
   "backgrounds": [
     {
       "id": "tester",
+      "developer_only": true,
       "name": "Tester",
       "description": "Test kit with the full template fleet for shipyard testing.",
       "background": "You are a test pilot with every hull in the yard.",

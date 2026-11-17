@@ -30,7 +30,7 @@ var _embedded_panel_type: String = ""
 
 enum PilotMenuId { CAREER, LEADERBOARD, SAVE, QUIT }
 
-@onready var _pilot_menu_button: Button = (
+@onready var _pilot_menu_button: TextureButton = (
 	$Layout/Header/HeaderSplit/PilotColumn/PilotRow/PilotInfo/PilotMenuButton
 )
 @onready var _pilot_menu: PopupMenu = $PilotMenu

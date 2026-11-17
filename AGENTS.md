@@ -50,7 +50,9 @@ For the inner loop, `--fast` skips import, the parse sweep, and smokes (validato
 
 Optional advisory lint: set `CARTEL_GDLINT=1` so the parse sweep runs `gdlint` when installed (still non-blocking).
 
-Labelled source-tag releases (no exporter yet): bump `GameVersion.VERSION` and `project.godot` `config/version` together, follow [docs/design/architecture/release.md](docs/design/architecture/release.md), then run [`scripts/ci/release_check.sh`](scripts/ci/release_check.sh) on a clean tree. `TestGameVersion` keeps the two version strings aligned during ordinary checks.
+Labelled source-tag releases: bump `GameVersion.VERSION` and `project.godot` `config/version` together, follow [docs/design/architecture/release.md](docs/design/architecture/release.md), then run [`scripts/ci/release_check.sh`](scripts/ci/release_check.sh) on a clean tree. `TestGameVersion` keeps the two version strings aligned during ordinary checks.
+
+Optional export trial (not part of `check.sh`): [`scripts/ci/export.sh`](scripts/ci/export.sh) needs export templates in `~/.local/share/godot/export_templates/<engine stable version>/`. Web must be served (`./scripts/ci/serve_web.sh`); `file://` will not load WASM.
 
 ## Writing tests
 

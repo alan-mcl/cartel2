@@ -122,6 +122,44 @@ UNSPACE_INHABITANTS_KEYS = (
 )
 
 
+def check_portraits() -> list[str]:
+    errors: list[str] = []
+    path = CATALOG / "portraits.json"
+    portrait_dir = ROOT / "assets" / "ui" / "portraits"
+    if not path.is_file():
+        errors.append("portraits.json: missing")
+        return errors
+    doc = load_object(path)
+    entries = doc.get("portraits", [])
+    if not isinstance(entries, list):
+        errors.append("portraits.json: portraits must be an array")
+        return errors
+    listed = [str(entry).strip() for entry in entries if str(entry).strip()]
+    disk_res = {
+        f"res://assets/ui/portraits/{portrait.name}"
+        for portrait in portrait_dir.glob("p*.png")
+    }
+    listed_set = set(listed)
+    if listed_set != disk_res:
+        missing = sorted(disk_res - listed_set)
+        extra = sorted(listed_set - disk_res)
+        if missing:
+            errors.append(
+                f"portraits.json: missing {len(missing)} on-disk portrait(s), e.g. {missing[0]}"
+            )
+        if extra:
+            errors.append(
+                f"portraits.json: lists {len(extra)} absent file(s), e.g. {extra[0]}"
+            )
+    for res_path in listed:
+        rel = res_path.removeprefix("res://")
+        if not (ROOT / rel).is_file():
+            errors.append(f"portraits.json: file not found '{res_path}'")
+    if not listed:
+        errors.append("portraits.json: portraits array is empty")
+    return errors
+
+
 def check_unspace_completeness(unspaces: list) -> list[str]:
     errors: list[str] = []
     n_by_depth: dict[int, str] = {}
@@ -2466,6 +2504,21 @@ def main() -> int:
         errors.append(
             f"backgrounds.json: default_id '{default_background_id}' not found"
         )
+    if default_background_id:
+        default_entry = next(
+            (
+                bg
+                for bg in backgrounds
+                if isinstance(bg, dict) and str(bg.get("id", "")) == default_background_id
+            ),
+            None,
+        )
+        if isinstance(default_entry, dict) and default_entry.get("developer_only"):
+            errors.append(
+                "backgrounds.json: default_id cannot reference developer_only background"
+            )
+
+    errors.extend(check_portraits())
 
     modules = load_modules()
     modules_by_id = index_by_id(modules)

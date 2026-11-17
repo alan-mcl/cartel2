@@ -388,7 +388,7 @@ func _remap_tau_janus_catalog_ids_on_load() -> void:
 
 
 func from_save(catalog: Catalog, data: Dictionary) -> bool:
-	if not SaveStore.validate_save_data(data):
+	if not SaveStore.save_loadable_for_current_build(data):
 		return false
 
 	player.load_player_dict(data.get("player", {}))

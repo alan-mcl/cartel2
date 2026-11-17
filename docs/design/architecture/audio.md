@@ -66,7 +66,7 @@ Shipped audio is **OGG Vorbis** under `assets/audio/` (`music/`, `ambience/`, `s
 
 The stack uses Godot’s standard streams and buses only (no middleware). Browsers may block audio until the first user gesture; menu and sandbox buttons satisfy that. On application focus-in, bus volumes are reapplied.
 
-**Export verification:** headless CI does not listen to audio. Manual checks: run the audio sandbox on desktop; run a Web export if Godot export templates are installed locally and confirm the sandbox plays after a click. No export presets are committed in this repository; document local export results when you run them.
+**Export verification:** headless CI does not listen to audio. Manual checks: run the audio sandbox on desktop; after [`scripts/ci/export.sh`](../../../scripts/ci/export.sh) and [`serve_web.sh`](../../../scripts/ci/serve_web.sh), confirm audio works in the browser after a user click (localhost is a secure context). Export builds use the `release` feature tag and ship [`portraits.json`](../../../data/catalog/portraits.json) rather than scanning portrait directories at runtime.
 
 ## Tests
 

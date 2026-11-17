@@ -13,6 +13,7 @@ const UNSPACES_PATH := "res://data/catalog/unspaces.json"
 const WORLDS_PATH := "res://data/catalog/worlds.json"
 const PLAYER_PATH := "res://data/catalog/player.json"
 const BACKGROUNDS_PATH := "res://data/catalog/backgrounds.json"
+const PORTRAITS_PATH := "res://data/catalog/portraits.json"
 const COMMODITIES_PATH := "res://data/catalog/commodities.json"
 const FUELS_PATH := "res://data/catalog/fuels.json"
 const TRAFFIC_PATH := "res://data/catalog/traffic.json"
@@ -54,7 +55,8 @@ var fuels_by_id: Dictionary = {}
 var economies_by_id: Dictionary = {}
 var player_data: Dictionary = {}
 var backgrounds_by_id: Dictionary = {}
-var default_background_id: String = "tester"
+var default_background_id: String = "trader"
+var portrait_paths: PackedStringArray = PackedStringArray()
 var traffic_config: Dictionary = {}
 var corporations_by_id: Dictionary = {}
 var corporate_presence: Dictionary = {}
@@ -99,6 +101,7 @@ func load_all() -> void:
 	worlds_by_id = _load_json_object(WORLDS_PATH)
 	player_data = _load_json_object(PLAYER_PATH)
 	_load_backgrounds()
+	_load_portraits()
 	commodities_by_id = _load_indexed_records(COMMODITIES_PATH, CommodityDef)
 	fuels_by_id = _load_indexed_records(FUELS_PATH, FuelDef)
 	traffic_config = _load_json_object(TRAFFIC_PATH)
@@ -320,15 +323,46 @@ func get_background(id: String) -> Dictionary:
 func list_backgrounds() -> Array:
 	var backgrounds: Array = []
 	for background in backgrounds_by_id.values():
-		if typeof(background) == TYPE_DICTIONARY:
-			backgrounds.append(background)
+		if typeof(background) != TYPE_DICTIONARY:
+			continue
+		if _is_developer_background(background):
+			continue
+		backgrounds.append(background)
 	backgrounds.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
 		return str(left.get("name", "")) < str(right.get("name", ""))
 	)
 	return backgrounds
 
 
+func list_portrait_paths() -> PackedStringArray:
+	return portrait_paths.duplicate()
+
+
 func get_default_background_id() -> String:
+	if (
+		_is_release_build()
+		and bool(backgrounds_by_id.get(default_background_id, {}).get("developer_only", false))
+	):
+		return _fallback_background_id()
+	return default_background_id
+
+
+func _is_release_build() -> bool:
+	return OS.has_feature("release")
+
+
+func _is_developer_background(background: Dictionary) -> bool:
+	return _is_release_build() and bool(background.get("developer_only", false))
+
+
+func _fallback_background_id() -> String:
+	if not _is_developer_background(backgrounds_by_id.get(default_background_id, {})):
+		return default_background_id
+	if backgrounds_by_id.has("trader"):
+		return "trader"
+	for background in backgrounds_by_id.values():
+		if typeof(background) == TYPE_DICTIONARY and not _is_developer_background(background):
+			return str(background.get("id", ""))
 	return default_background_id
 
 
@@ -935,13 +969,13 @@ func _load_indexed_array(path: String) -> Dictionary:
 
 func _load_backgrounds() -> void:
 	backgrounds_by_id.clear()
-	default_background_id = "tester"
+	default_background_id = "trader"
 
 	var data := _load_json_object(BACKGROUNDS_PATH)
 	if data.is_empty():
 		return
 
-	default_background_id = str(data.get("default_id", "tester"))
+	default_background_id = str(data.get("default_id", "trader"))
 	var backgrounds: Variant = data.get("backgrounds", [])
 	if typeof(backgrounds) != TYPE_ARRAY:
 		push_error("backgrounds.json must contain a backgrounds array.")
@@ -957,6 +991,23 @@ func _load_backgrounds() -> void:
 		if backgrounds_by_id.has(background_id):
 			push_error("Duplicate background id '%s'." % background_id)
 		backgrounds_by_id[background_id] = entry
+
+
+func _load_portraits() -> void:
+	portrait_paths = PackedStringArray()
+	var data := _load_json_object(PORTRAITS_PATH)
+	if data.is_empty():
+		push_error("portraits.json missing or empty.")
+		return
+	var entries: Variant = data.get("portraits", [])
+	if typeof(entries) != TYPE_ARRAY:
+		push_error("portraits.json must contain a portraits array.")
+		return
+	for entry in entries:
+		var path := str(entry).strip_edges()
+		if path.is_empty():
+			continue
+		portrait_paths.append(path)
 
 
 func _load_sanctions() -> void:

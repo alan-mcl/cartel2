@@ -43,7 +43,7 @@ cd cartel2
 GODOT=/path/to/Godot --path . --editor   # or omit --editor and press F5 in the GUI
 ```
 
-On **New Game**, choose callsign, portrait, and starting background. The default **Tester** kit begins docked at **Proxima Habitat** with the template fleet.
+On **New Game**, choose callsign, portrait, and starting background. The default **Trader** kit begins docked at **Proxima Habitat** with a Pegasus P101.
 
 
 ## Repository layout
@@ -70,6 +70,8 @@ GODOT=/path/to/Godot ./scripts/ci/check.sh
 ```
 
 [`scripts/ci/check.sh`](scripts/ci/check.sh) runs validators, import, parse sweep, headless tests ([`tests/run.gd`](tests/run.gd)), and scene smokes. Use `./scripts/ci/check.sh --fast` for a quicker loop (validators + tests only). Run a single suite with `./scripts/ci/check.sh --suite TestCombat` (repeat the flag for more than one). Optional: `CARTEL_GDLINT=1` runs advisory `gdlint` during the parse sweep.
+
+Linux and Web trial exports (local only, not CI): `GODOT=/path/to/Godot ./scripts/ci/export.sh`, then `./scripts/ci/serve_web.sh` for the browser build. See [release](docs/design/architecture/release.md).
 
 **Useful commands** (from repo root, with `GODOT` set):
 

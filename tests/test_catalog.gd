@@ -98,7 +98,20 @@ static func run(runner: TestRunner) -> void:
 	_test_ui_ship_module_art(runner, catalog)
 	_validate_hull_descriptions(runner, catalog)
 
-	runner.check_eq(catalog.get_default_background_id(), "tester", "default background is tester")
+	runner.check_eq(catalog.get_default_background_id(), "trader", "default background is trader")
+	runner.check(catalog.list_portrait_paths().size() >= 10, "catalog lists player portraits")
+	var leaked := catalog.list_portrait_paths()
+	leaked.clear()
+	runner.check(
+		catalog.list_portrait_paths().size() >= 10,
+		"portrait list is not cleared when a caller mutates its copy"
+	)
+	var has_tester_in_catalog := false
+	for entry in catalog.backgrounds_by_id.values():
+		if typeof(entry) == TYPE_DICTIONARY and str(entry.get("id", "")) == "tester":
+			has_tester_in_catalog = true
+			break
+	runner.check(has_tester_in_catalog, "developer tester background present in catalog data")
 	runner.check(not catalog.get_background("trader").is_empty(), "trader background exists")
 	runner.check(not catalog.get_background("hotshot").is_empty(), "hotshot background exists")
 	runner.check(not catalog.get_background("entrepreneur").is_empty(), "entrepreneur background exists")

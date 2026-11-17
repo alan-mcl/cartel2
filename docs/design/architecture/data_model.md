@@ -17,7 +17,8 @@ All catalog arrays are indexed by string `id` at load time. Duplicate ids log er
 | `ammunition.json` | array | Ammunition type definitions (mass, cost) |
 | `ships.json` | array | Manufacturer templates (recommended module loadouts) |
 | `player.json` | object | New-game template: starting sector, credits, owned ship instances |
-| `backgrounds.json` | object | New-game kits: starting habitat, ships, reputation, sanctions |
+| `backgrounds.json` | object | New-game kits: starting habitat, ships, reputation, sanctions; optional `developer_only` hides a kit when export feature `release` is active |
+| `portraits.json` | object | Ordered `res://` paths for New Game portrait pickers (required for Web; kept in sync with `assets/ui/portraits/` by `validate_catalog_refs.py`) |
 | `habitats.json` | array | Orbital habitats and building lists |
 | `buildings.json` | array | Visit locations within habitats |
 | `sectors.json` | array | Sector identity, bounds, spawn (mappings synthesized from `routes.json`) |

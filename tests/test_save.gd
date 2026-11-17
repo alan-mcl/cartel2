@@ -211,6 +211,32 @@ static func _test_validation(runner: TestRunner) -> void:
 		),
 		"save: current version accepted"
 	)
+	var dev_save := {
+		"version": SaveStore.SAVE_VERSION,
+		"game_version": "DEV",
+		"session": {},
+		"ships": [],
+	}
+	runner.check(
+		SaveStore.save_loadable_for_build(dev_save, false),
+		"save: DEV game_version allowed in non-release build"
+	)
+	runner.check(
+		not SaveStore.save_loadable_for_build(dev_save, true),
+		"save: DEV game_version blocked in release build"
+	)
+	runner.check(
+		SaveStore.save_loadable_for_build(
+			{
+				"version": SaveStore.SAVE_VERSION,
+				"game_version": "1.0.0",
+				"session": {},
+				"ships": [],
+			},
+			true
+		),
+		"save: semver game_version allowed in release build"
+	)
 	runner.check(
 		SaveStore.validate_save_data(
 			{"version": SaveStore.LEGACY_SAVE_VERSION, "session": {}, "ships": []}

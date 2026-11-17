@@ -80,7 +80,15 @@ func close() -> void:
 
 
 func _scan_portraits() -> void:
-	_portrait_paths.clear()
+	_portrait_paths = PackedStringArray()
+	if _catalog != null:
+		_portrait_paths = _catalog.list_portrait_paths()
+	if not _portrait_paths.is_empty():
+		return
+	_scan_portraits_from_disk()
+
+
+func _scan_portraits_from_disk() -> void:
 	var dir := DirAccess.open(PORTRAITS_DIR)
 	if dir == null:
 		return

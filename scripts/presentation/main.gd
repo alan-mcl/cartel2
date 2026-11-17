@@ -35,6 +35,7 @@ var _exit_shutdown_done: bool = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_world_node.process_mode = Node.PROCESS_MODE_PAUSABLE
+	SaveStore.purge_dev_saves()
 
 	session.changed.connect(_on_session_changed)
 	_player.interaction_target_changed.connect(_on_interaction_target_changed)

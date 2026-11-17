@@ -6,7 +6,7 @@
 
 # Export
 export.cfg
-export_presets.cfg
+dist/
 
 # Mono
 .mono/
@@ -23,6 +23,7 @@ __pycache__/
 *.pyo
 .test_saves/
 .test_saves_runtime/
+.test_saves_career_death/
 
 # Mobile / IDE
 android/

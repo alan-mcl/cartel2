@@ -39,7 +39,7 @@ static func get_slot_info(slot_index: int) -> Dictionary:
 		return info
 
 	var data := read_slot(slot_index)
-	if data.is_empty():
+	if data.is_empty() or not save_loadable_for_current_build(data):
 		return info
 
 	var player: Dictionary = data.get("player", {})
@@ -154,6 +154,40 @@ static func delete_slots_for_career(career_id: String) -> void:
 			continue
 		if career_id_from_save(data) == career_id:
 			delete_slot(slot_index)
+
+
+static func save_loadable_for_current_build(data: Dictionary) -> bool:
+	return save_loadable_for_build(data, _is_release_build())
+
+
+static func save_loadable_for_build(data: Dictionary, release_build: bool) -> bool:
+	if not validate_save_data(data):
+		return false
+	if not release_build:
+		return true
+	var game_version := str(data.get("game_version", "")).strip_edges()
+	if game_version.is_empty() or game_version == "DEV":
+		push_error("Save was created in a DEV build and cannot load in a release build.")
+		return false
+	return true
+
+
+static func purge_dev_saves() -> void:
+	if not _is_release_build():
+		return
+	for slot_index in range(1, SLOT_COUNT + 1):
+		if not slot_exists(slot_index):
+			continue
+		var data := read_slot(slot_index)
+		if data.is_empty():
+			continue
+		var game_version := str(data.get("game_version", "")).strip_edges()
+		if game_version == "DEV":
+			delete_slot(slot_index)
+
+
+static func _is_release_build() -> bool:
+	return OS.has_feature("release")
 
 
 static func validate_save_data(data: Dictionary) -> bool:
