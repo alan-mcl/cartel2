@@ -52,7 +52,7 @@ func next_line(
 	if session == null or catalog == null or rng == null:
 		return {}
 	if channel == MessageChannels.HEADLINES:
-		note_headlines_sector(session.sector_id)
+		note_headlines_sector(session.world.sector_id)
 
 	var pushed := _dequeue_push(channel)
 	if not pushed.is_empty():

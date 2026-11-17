@@ -161,7 +161,7 @@ static func record_bounty_contact(
 		target_id,
 		kind,
 		sector_id,
-		maxf(float(session.gst_seconds), accepted_gst + 0.001)
+		maxf(float(session.world.gst_seconds), accepted_gst + 0.001)
 	)
 	session.changed.emit()
 
@@ -207,10 +207,10 @@ static func advance_pursuit_phase(
 	var phase := str(pursuit.get("phase", ""))
 	if phase != "unspace":
 		return pursuit
-	if session.in_unspace:
+	if session.world.in_unspace:
 		return pursuit
 	var origin := str(charter.get("origin_sector_id", ""))
-	if not origin.is_empty() and session.sector_id != origin:
+	if not origin.is_empty() and session.world.sector_id != origin:
 		return pursuit
 	pursuit["phase"] = "origin_dock"
 	pursuit["elapsed"] = 0.0

@@ -5,14 +5,14 @@ extends RefCounted
 
 
 static func index(session: GameSession) -> float:
-	if session == null or not session.in_unspace:
+	if session == null or not session.world.in_unspace:
 		return 0.0
-	var stability := session.translation_stability
+	var stability := session.world.translation_stability
 	if stability < 0.0:
 		stability = 50.0
 	var calm := clampf(stability / 100.0, 0.0, 1.0)
 	var base := 1.0 - calm
-	var depth := maxf(0.0, float(session.unspace_n - 4))
+	var depth := maxf(0.0, float(session.world.unspace_n - 4))
 	return clampf(base * (1.0 + 0.22 * depth), 0.0, 1.0)
 
 

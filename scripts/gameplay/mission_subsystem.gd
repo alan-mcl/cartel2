@@ -29,7 +29,7 @@ func on_hour(session: GameSession, catalog: Catalog, _hour: int) -> void:
 
 
 func on_tick(session: GameSession, catalog: Catalog, delta: float) -> void:
-	if session == null or session.docked or delta <= 0.0:
+	if session == null or session.world.docked or delta <= 0.0:
 		return
 	_tick_bounty_pursuits(session, catalog, delta)
 
@@ -51,10 +51,10 @@ func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 
 
 func ensure_boards(session: GameSession, catalog: Catalog) -> void:
-	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	var day := CommodityEconomy.gst_day(session.world.gst_seconds)
 	if generated_day != day:
 		_invalidate_boards(day)
-	var habitat_id := str(session.habitat_id)
+	var habitat_id := str(session.world.habitat_id)
 	if habitat_id.is_empty():
 		return
 	_ensure_habitat_boards(session, catalog, habitat_id, day)
@@ -76,10 +76,10 @@ func buy_bar_round(session: GameSession, catalog: Catalog, building_id: String) 
 	if session == null or catalog == null:
 		result["reason"] = "unavailable"
 		return result
-	if not session.docked:
+	if not session.world.docked:
 		result["reason"] = "not_docked"
 		return result
-	var habitat_id := str(session.habitat_id)
+	var habitat_id := str(session.world.habitat_id)
 	if habitat_id.is_empty():
 		result["reason"] = "no_habitat"
 		return result
@@ -93,20 +93,20 @@ func buy_bar_round(session: GameSession, catalog: Catalog, building_id: String) 
 	if not catalog.habitat_allows_building(catalog.get_habitat(habitat_id), building_id):
 		result["reason"] = "wrong_habitat"
 		return result
-	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	var day := CommodityEconomy.gst_day(session.world.gst_seconds)
 	if bar_round_used_today(building_id, day):
 		result["reason"] = "already_bought"
 		return result
 	var cost := bar_round_cost_for_habitat(catalog, habitat_id)
 	result["cost"] = cost
-	if session.credits < cost:
+	if session.wallet.credits < cost:
 		result["reason"] = "insufficient_credits"
 		return result
 	ensure_boards(session, catalog)
 	if not session.try_spend_credits(cost):
 		result["reason"] = "insufficient_credits"
 		return result
-	var round_seed := DeskCharterBoards.bar_round_run_seed(session.run_seed, building_id)
+	var round_seed := DeskCharterBoards.bar_round_run_seed(session.world.run_seed, building_id)
 	var start := DeskCharterBoards.BAR_ROUND_OFFER_INDEX_START
 	var slices := DeskCharterBoards.generate_bar_building(
 		catalog,
@@ -121,7 +121,7 @@ func buy_bar_round(session: GameSession, catalog: Catalog, building_id: String) 
 	)
 	_apply_bar_board_slices(habitat_id, building_id, slices)
 	bar_rounds_by_building[building_id] = day
-	session.last_log = "You bought a round for d%d. Fresh charters are on the board." % cost
+	session.player.last_log = "You bought a round for d%d. Fresh charters are on the board." % cost
 	session.changed.emit()
 	result["ok"] = true
 	return result
@@ -483,9 +483,9 @@ func _commit_accepted(
 	log_line: String
 ) -> void:
 	if not charter.has("accepted_gst"):
-		charter["accepted_gst"] = session.gst_seconds
+		charter["accepted_gst"] = session.world.gst_seconds
 	book.accepted.append(charter)
-	session.last_log = log_line
+	session.player.last_log = log_line
 	if not session.player.sandbox:
 		session.career.missions_accepted += 1
 	session.changed.emit()
@@ -530,7 +530,7 @@ func _accept_kind(
 	ensure_boards(session, catalog)
 	var check := _evaluate_for_kind(session, catalog, offer_id, ship_id, kind)
 	if not bool(check.get("ok", false)):
-		session.last_log = str(check.get("reason", kind.reject_reason_default()))
+		session.player.last_log = str(check.get("reason", kind.reject_reason_default()))
 		session.changed.emit()
 		return false
 	var book := kind.book_for(self)
@@ -541,7 +541,7 @@ func _accept_kind(
 	if not kind.prepare_accept(session, catalog, offer, charter, self):
 		var failure_log := kind.grant_failure_log()
 		if not failure_log.is_empty():
-			session.last_log = failure_log
+			session.player.last_log = failure_log
 			session.changed.emit()
 		return false
 	_commit_accepted(session, book, charter, kind.accept_log(offer))
@@ -558,7 +558,7 @@ func _cancel_kind(session: GameSession, catalog: Catalog, charter_id: String, ki
 	if charter.is_empty():
 		return false
 	if not kind.cancel_eligible(session, charter, Callable(self, "_cancel_at_origin")):
-		session.last_log = kind.cancel_blocked_log()
+		session.player.last_log = kind.cancel_blocked_log()
 		session.changed.emit()
 		return false
 	var penalty := kind.cancel_penalty(catalog, int(charter.get("reward", 0)))
@@ -616,12 +616,12 @@ func _enforce_late_origin_charters_at_dock(
 	catalog: Catalog,
 	kind: CharterKind
 ) -> void:
-	if not session.docked:
+	if not session.world.docked:
 		return
 	var ship := session.get_current_owned_ship()
 	if ship == null:
 		return
-	var habitat_id := session.habitat_id
+	var habitat_id := session.world.habitat_id
 	var book := kind.book_for(self)
 	var failed: Array = []
 	for entry_variant in book.accepted:
@@ -770,7 +770,7 @@ func cancel_retrieval_charter_eligible(session: GameSession, charter_id: String)
 func notify_retrieval_pickup(session: GameSession, contact_id: String) -> void:
 	if session == null or contact_id.is_empty():
 		return
-	var sector_id := session.sector_id
+	var sector_id := session.world.sector_id
 	var updated := false
 	for i in retrievals.accepted.size():
 		var entry_variant = retrievals.accepted[i]
@@ -786,7 +786,7 @@ func notify_retrieval_pickup(session: GameSession, contact_id: String) -> void:
 		entry["retrieved"] = true
 		retrievals.accepted[i] = entry
 		updated = true
-		session.last_log = "Specimen secured. Return to %s to collect payment." % str(
+		session.player.last_log = "Specimen secured. Return to %s to collect payment." % str(
 			entry.get("origin_habitat_id", "origin")
 		)
 	if updated:
@@ -885,7 +885,7 @@ func _ensure_habitat_boards(
 ) -> void:
 	if _habitat_boards_complete(habitat_id):
 		return
-	_populate_habitat_boards(catalog, habitat_id, day, session.run_seed)
+	_populate_habitat_boards(catalog, habitat_id, day, session.world.run_seed)
 
 
 func _habitat_boards_complete(habitat_id: String) -> bool:
@@ -913,7 +913,7 @@ func _apply_charter_deadline(session: GameSession, charter: Dictionary) -> void:
 	if hours <= 0:
 		return
 	charter["deadline_gst"] = (
-		session.gst_seconds + float(hours) * float(GalacticCalendar.SECONDS_PER_HOUR)
+		session.world.gst_seconds + float(hours) * float(GalacticCalendar.SECONDS_PER_HOUR)
 	)
 
 
@@ -922,12 +922,12 @@ func _charter_is_late(session: GameSession, charter: Dictionary) -> bool:
 
 
 func _enforce_late_passengers_at_dock(session: GameSession, catalog: Catalog) -> void:
-	if not session.docked:
+	if not session.world.docked:
 		return
 	var ship := session.get_current_owned_ship()
 	if ship == null:
 		return
-	var habitat_id := session.habitat_id
+	var habitat_id := session.world.habitat_id
 	var failed: Array = []
 	for entry_variant in passengers.accepted:
 		if typeof(entry_variant) != TYPE_DICTIONARY:
@@ -950,14 +950,14 @@ func _enforce_late_passengers_at_dock(session: GameSession, catalog: Catalog) ->
 
 
 func _charter_at_origin(session: GameSession, charter: Dictionary) -> bool:
-	if not session.docked:
+	if not session.world.docked:
 		return false
-	if str(charter.get("origin_habitat_id", "")) != session.habitat_id:
+	if str(charter.get("origin_habitat_id", "")) != session.world.habitat_id:
 		return false
 	var ship := session.get_owned_ship(str(charter.get("ship_id", "")))
 	if ship == null:
 		return false
-	return ship.location == session.habitat_id
+	return ship.location == session.world.habitat_id
 
 
 func _freight_charter_at_origin(session: GameSession, charter: Dictionary) -> bool:
@@ -1005,7 +1005,7 @@ func notify_bounty_ship_escaped(
 		return
 	charter["bounty_pursuit"] = BountyBehavior.start_pursuit(charter, flee_route)
 	_upsert_bounty_accepted(charter)
-	session.last_log = "Target is fleeing. Intercept before they reach dock."
+	session.player.last_log = "Target is fleeing. Intercept before they reach dock."
 	session.changed.emit()
 
 
@@ -1031,7 +1031,7 @@ func pursuit_charter_for_spawn(session: GameSession) -> Dictionary:
 			continue
 		if str(pursuit.get("phase", "")) != "origin_dock":
 			continue
-		if str(charter.get("origin_sector_id", "")) != session.sector_id:
+		if str(charter.get("origin_sector_id", "")) != session.world.sector_id:
 			continue
 		if str(charter.get("charter_id", "")) == _pursuit_spawned_charter_id:
 			return {}
@@ -1115,7 +1115,7 @@ func _fail_bounty_escape(
 	bounties.remove_accepted(charter_id)
 	if str(charter_id) == _pursuit_spawned_charter_id:
 		_pursuit_spawned_charter_id = ""
-	session.last_log = message
+	session.player.last_log = message
 	if not session.player.sandbox:
 		session.career.missions_cancelled += 1
 	session.changed.emit()

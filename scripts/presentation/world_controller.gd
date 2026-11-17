@@ -65,7 +65,7 @@ func clear_world() -> void:
 
 
 func load_current_space(place_player: bool = true) -> void:
-	if _main.session.in_unspace:
+	if _main.session.world.in_unspace:
 		load_unspace(place_player)
 	else:
 		load_current_sector(place_player)
@@ -74,7 +74,7 @@ func load_current_space(place_player: bool = true) -> void:
 func load_current_sector(place_player: bool = true, spawn_near: String = "") -> void:
 	_flight.clear_traffic()
 	_set_play_bounds(
-		_world_loader.load_sector(_world, _catalog, _main.session, _main.session.sector_id)
+		_world_loader.load_sector(_world, _catalog, _main.session, _main.session.world.sector_id)
 	)
 	if _starfield.has_method("set_unspace_mode"):
 		_starfield.set_unspace_mode(false)
@@ -86,7 +86,7 @@ func load_current_sector(place_player: bool = true, spawn_near: String = "") -> 
 func load_unspace(place_player: bool = true) -> void:
 	_flight.clear_traffic()
 	_set_play_bounds(
-		_world_loader.load_unspace(_world, _catalog, _main.session, _main.session.unspace_world_id)
+		_world_loader.load_unspace(_world, _catalog, _main.session, _main.session.world.unspace_world_id)
 	)
 	if _starfield.has_method("set_unspace_mode"):
 		_starfield.set_unspace_mode(true)
@@ -111,8 +111,8 @@ func capture_flight_state() -> Dictionary:
 
 func apply_flight_state(flight: Dictionary) -> void:
 	if typeof(flight) != TYPE_DICTIONARY or flight.is_empty():
-		if not _main.session.docked:
-			if _main.session.in_unspace:
+		if not _main.session.world.docked:
+			if _main.session.world.in_unspace:
 				_player.global_position = _main.session.get_spawn_position(_catalog)
 			else:
 				_player.global_position = _world_loader.get_habitat_launch_position()
@@ -130,7 +130,7 @@ func apply_flight_state(flight: Dictionary) -> void:
 	_player.motion.facing = float(flight.get("facing", -PI / 2.0))
 	_player.velocity = _player.motion.velocity
 
-	if _main.session.in_unspace and not _main.session.docked:
+	if _main.session.world.in_unspace and not _main.session.world.docked:
 		var field := _world_loader.get_nspace_field()
 		if field != null:
 			if field.apply_rim_fold_immediate_if_needed(
@@ -140,7 +140,7 @@ func apply_flight_state(flight: Dictionary) -> void:
 			):
 				UnspaceFold.begin_containment_cooldown(_main.session)
 
-	if _main.session.docked:
+	if _main.session.world.docked:
 		_player.freeze_motion()
 
 
@@ -152,7 +152,7 @@ func try_interact(target: Interactable) -> void:
 		InteractableDef.Kind.DOCK:
 			dock_at(target.definition.dock_location_id)
 		InteractableDef.Kind.TRANSLATE:
-			if not _main.session.in_unspace:
+			if not _main.session.world.in_unspace:
 				open_jump_overlay(target.get_title())
 		InteractableDef.Kind.ARRIVE:
 			arrive_from_unspace()
@@ -167,8 +167,8 @@ func try_interact(target: Interactable) -> void:
 
 func try_hyperdrive_spool() -> void:
 	if (
-		_main.session.docked
-		or _main.session.in_unspace
+		_main.session.world.docked
+		or _main.session.world.in_unspace
 		or _jump.visible
 		or (_hyperdrive != null and _hyperdrive.visible)
 	):
@@ -196,14 +196,14 @@ func try_hyperdrive_spool() -> void:
 	if not bool(result.get("ok", false)):
 		var message := str(result.get("message", ""))
 		if not message.is_empty():
-			_main.session.last_log = message
+			_main.session.player.last_log = message
 			_on_session_changed.call()
 		return
 	open_hyperdrive_overlay(str(result.get("title", "Hyperdrive")))
 
 
 func open_hyperdrive_overlay(module_title: String) -> void:
-	if _main.session.docked or _main.session.in_unspace:
+	if _main.session.world.docked or _main.session.world.in_unspace:
 		return
 	var module_def := Hyperdrive.fitted_module(_main.player_ship)
 	if module_def == null:
@@ -230,9 +230,9 @@ func on_hyperdrive_calculation_requested(target_sector_id: String, n: int) -> vo
 		module_def
 	)
 	if bool(result.get("ok", false)):
-		_main.session.last_log = str(result.get("message", ""))
+		_main.session.player.last_log = str(result.get("message", ""))
 	else:
-		_main.session.last_log = str(result.get("message", "Calculation refused."))
+		_main.session.player.last_log = str(result.get("message", "Calculation refused."))
 	_on_session_changed.call()
 
 
@@ -250,7 +250,7 @@ func on_hyperdrive_cancelled() -> void:
 
 
 func open_jump_overlay(gate_title: String) -> void:
-	if _main.session.docked or _main.session.in_unspace:
+	if _main.session.world.docked or _main.session.world.in_unspace:
 		return
 
 	_tree.paused = true
@@ -277,7 +277,7 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 		float(mapping.get("ease", 0.5))
 	)
 	var combat_state: ShipCombatState = _main.session.build_combat_state(_main.player_ship)
-	_main.session.translation_stability = TranslationNav.roll_stability(
+	_main.session.world.translation_stability = TranslationNav.roll_stability(
 		offer_accuracy,
 		n,
 		_player.operating_state,
@@ -286,17 +286,17 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 	)
 
 	if not _main.session.enter_unspace(_catalog, target_sector_id, n, _main.player_ship, solution):
-		_main.session.translation_stability = -1.0
+		_main.session.world.translation_stability = -1.0
 		return
 
 	var applied := _simulation.apply_mapping_lump(_main.session, mapping, "entry_seconds", _catalog)
 	if applied > 0.0:
-		_main.session.last_log = (
+		_main.session.player.last_log = (
 			"Translation complete. Entry lag %s. %s-space stability %d%%."
 			% [
 				GalacticCalendar.format_duration(applied),
 				n,
-				int(round(_main.session.translation_stability)),
+				int(round(_main.session.world.translation_stability)),
 			]
 		)
 	_simulation.reset_unspace_pulse()
@@ -312,13 +312,13 @@ func on_jump_requested(target_sector_id: String, n: int, solution: int) -> void:
 
 
 func arrive_from_unspace() -> void:
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		return
 
-	var origin_id: String = _main.session.sector_id
-	var dest_id: String = _main.session.pending_destination_id
-	var solution: int = _main.session.unspace_solution
-	var unspace_n: int = _main.session.unspace_n
+	var origin_id: String = _main.session.world.sector_id
+	var dest_id: String = _main.session.world.pending_destination_id
+	var solution: int = _main.session.world.unspace_solution
+	var unspace_n: int = _main.session.world.unspace_n
 	# Snapshot before arrival. Outbound marks the grant consumed on entry, and a
 	# successful return deletes the record inside arrive_from_unspace.
 	var mapping := _exit_mapping(origin_id, dest_id, unspace_n, solution)
@@ -337,7 +337,7 @@ func arrive_from_unspace() -> void:
 			sector_name = sector.name
 		else:
 			sector_name = dest_id
-	_main.session.last_log = (
+	_main.session.player.last_log = (
 		"Translation complete. Exit lag %s. Welcome to %s."
 		% [GalacticCalendar.format_duration(applied), sector_name]
 	)
@@ -369,7 +369,7 @@ func on_jump_cancelled() -> void:
 
 
 func dock_at(location_id: String) -> void:
-	if location_id.is_empty() or _main.session.docked:
+	if location_id.is_empty() or _main.session.world.docked:
 		return
 
 	if not _main.session.dock(_catalog, location_id):
@@ -388,10 +388,10 @@ func dock_at(location_id: String) -> void:
 
 
 func on_ui_undock_requested(ship_id: String) -> void:
-	if ship_id.is_empty() or not _main.session.docked:
+	if ship_id.is_empty() or not _main.session.world.docked:
 		return
 
-	var dock_location_id: String = _main.session.habitat_id
+	var dock_location_id: String = _main.session.world.habitat_id
 	var missions := _simulation.get_subsystem("missions") as MissionSubsystem
 	if not _main.session.undock(_catalog, ship_id, missions):
 		return
@@ -425,7 +425,7 @@ func on_ui_undock_requested(ship_id: String) -> void:
 
 
 func on_ui_ship_changed(ship_id: String) -> void:
-	if ship_id != _main.session.current_ship_id:
+	if ship_id != _main.session.fleet.current_ship_id:
 		return
 	_main.player_ship = assemble_current_ship()
 	_player.configure(
@@ -451,7 +451,7 @@ func _finalize_world_load(place_player: bool = true, spawn_near: String = "") ->
 		_player.register_world_interactables()
 
 	_flight.clear_traffic()
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		_flight.setup_traffic(_world, _simulation)
 	else:
 		var field := _world_loader.get_nspace_field()

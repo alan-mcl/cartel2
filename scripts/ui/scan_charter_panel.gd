@@ -22,7 +22,7 @@ func posted_scan_chits() -> Array:
 	if missions == null or _context == null or _context.session == null:
 		return []
 	return CharterChit.from_rows(
-		missions.list_scan_offers(_context.session.habitat_id, _building_id),
+		missions.list_scan_offers(_context.session.world.habitat_id, _building_id),
 		Callable(self, "_describe_scan_offer"),
 		Callable(self, "_accept_scan")
 	)
@@ -33,7 +33,7 @@ func posted_retrieval_chits() -> Array:
 	if missions == null or _context == null or _context.session == null:
 		return []
 	return CharterChit.from_rows(
-		missions.list_retrieval_offers(_context.session.habitat_id, _building_id),
+		missions.list_retrieval_offers(_context.session.world.habitat_id, _building_id),
 		Callable(self, "_describe_retrieval_offer"),
 		Callable(self, "_accept_retrieval")
 	)
@@ -44,7 +44,7 @@ func posted_bounty_chits() -> Array:
 	if missions == null or _context == null or _context.session == null:
 		return []
 	return CharterChit.from_rows(
-		missions.list_bounty_offers(_context.session.habitat_id, _building_id),
+		missions.list_bounty_offers(_context.session.world.habitat_id, _building_id),
 		Callable(self, "_describe_bounty_offer"),
 		Callable(self, "_accept_bounty")
 	)
@@ -126,7 +126,7 @@ func _describe_scan_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 			str(check.get("reason", "")),
 			"",
 			"",
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		),
 		"status": "",
@@ -156,7 +156,7 @@ func _describe_bounty_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 			str(check.get("reason", "")),
 			"",
 			"",
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		),
 		"status": "",
@@ -217,7 +217,7 @@ func _describe_accepted_contract(
 			status_line,
 			origin,
 			ship_name,
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		)
 	elif scan_tooltip:
@@ -226,7 +226,7 @@ func _describe_accepted_contract(
 			status_line,
 			origin,
 			ship_name,
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		)
 	else:
@@ -235,7 +235,7 @@ func _describe_accepted_contract(
 			status_line,
 			origin,
 			ship_name,
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		)
 	return {
@@ -309,7 +309,7 @@ func _accepted_meta_line(charter: Dictionary, origin: String, ship_name: String)
 
 func _charter_timing_line(entry: Dictionary) -> String:
 	if entry.has("deadline_gst"):
-		var remaining := float(entry.get("deadline_gst", 0.0)) - _context.session.gst_seconds
+		var remaining := float(entry.get("deadline_gst", 0.0)) - _context.session.world.gst_seconds
 		if remaining <= 0.0:
 			return "Past deadline"
 		return "%s remaining" % GalacticCalendar.format_duration(remaining)
@@ -338,7 +338,7 @@ func _describe_retrieval_offer(offer: Dictionary, ship_id: String) -> Dictionary
 			str(check.get("reason", "")),
 			"",
 			"",
-			_context.session.gst_seconds,
+			_context.session.world.gst_seconds,
 			_context.catalog
 		),
 		"status": "",

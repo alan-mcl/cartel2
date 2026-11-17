@@ -67,7 +67,7 @@ static func remote_quote_entry(
 
 
 static func _remote_sector_ids(session: GameSession, catalog: Catalog) -> Array[String]:
-	var current := session.sector_id
+	var current := session.world.sector_id
 	var remote: Array[String] = []
 	for sector_variant in catalog.list_sectors():
 		if typeof(sector_variant) != TYPE_DICTIONARY:

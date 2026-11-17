@@ -179,17 +179,17 @@ func _refresh_round_button() -> void:
 		return
 	var building_id := str(_building.get("id", ""))
 	if building_id.is_empty():
-		building_id = str(_context.session.building_id)
+		building_id = str(_context.session.world.building_id)
 	var missions := _missions()
-	var habitat_id := str(_context.session.habitat_id)
+	var habitat_id := str(_context.session.world.habitat_id)
 	var cost := 0
-	var day := CommodityEconomy.gst_day(_context.session.gst_seconds)
+	var day := CommodityEconomy.gst_day(_context.session.world.gst_seconds)
 	if missions != null:
 		cost = missions.bar_round_cost_for_habitat(_context.catalog, habitat_id)
 	if missions != null and missions.bar_round_used_today(building_id, day):
 		_round_button.disabled = true
 		_round_button.text = "Round bought today"
-	elif _context.session.credits < cost:
+	elif _context.session.wallet.credits < cost:
 		_round_button.disabled = true
 		_round_button.text = "Buy a round (d%d) — insufficient credits" % cost
 	else:
@@ -205,16 +205,16 @@ func _on_buy_round_pressed() -> void:
 		return
 	var building_id := str(_building.get("id", ""))
 	if building_id.is_empty():
-		building_id = str(_context.session.building_id)
+		building_id = str(_context.session.world.building_id)
 	var result := missions.buy_bar_round(_context.session, _context.catalog, building_id)
 	if not bool(result.get("ok", false)):
 		var reason := str(result.get("reason", ""))
 		if reason == "already_bought":
-			_context.session.last_log = "You have already bought a round here today."
+			_context.session.player.last_log = "You have already bought a round here today."
 		elif reason == "insufficient_credits":
-			_context.session.last_log = "Not enough credits for a round."
+			_context.session.player.last_log = "Not enough credits for a round."
 		else:
-			_context.session.last_log = "Could not buy a round."
+			_context.session.player.last_log = "Could not buy a round."
 		_context.session.changed.emit()
 
 
@@ -249,7 +249,7 @@ func _sections() -> Array:
 	var missions := _missions()
 	if missions != null and _context.session != null:
 		plot_gigs = missions.list_plot_gigs(
-			str(_context.session.habitat_id),
+			str(_context.session.world.habitat_id),
 			"bar",
 			_context.session,
 			_context.catalog
@@ -281,7 +281,7 @@ func _solution_chits() -> Array:
 		return []
 	var building_id := str(_building.get("id", ""))
 	if building_id.is_empty():
-		building_id = str(_context.session.building_id)
+		building_id = str(_context.session.world.building_id)
 	return TranslationSolutionChits.for_board(
 		_context.session,
 		_context.catalog,

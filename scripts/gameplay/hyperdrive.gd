@@ -44,18 +44,18 @@ static func spool_block(
 
 	if session == null:
 		return {"ok": false, "message": "Hyperdrive unavailable.", "title": ""}
-	if session.docked:
+	if session.world.docked:
 		return {"ok": false, "message": "Undock before spooling the hyperdrive.", "title": ""}
-	if session.in_unspace:
+	if session.world.in_unspace:
 		return {"ok": false, "message": "Hyperdrive spool is unavailable in Unspace.", "title": ""}
-	if VolatileTranslation.is_volatile_sector_id(session.sector_id):
+	if VolatileTranslation.is_volatile_sector_id(session.world.sector_id):
 		return {
 			"ok": false,
 			"message": "Use the return gate from this survey site.",
 			"title": "",
 		}
 
-	var min_dist := min_spool_distance(catalog, session.sector_id)
+	var min_dist := min_spool_distance(catalog, session.world.sector_id)
 	if position.length() < min_dist:
 		return {
 			"ok": false,

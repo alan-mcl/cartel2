@@ -151,12 +151,12 @@ static func _daily_stock_ids(
 		return PackedStringArray()
 
 	var building_id := str(building.get("id", ""))
-	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	var day := CommodityEconomy.gst_day(session.world.gst_seconds)
 	var pop := population_for_habitat(catalog, habitat_id)
 	var take := stock_count(pop, pool.size())
 
 	var rng := RandomNumberGenerator.new()
-	rng.seed = board_seed(day, habitat_id, building_id, session.run_seed)
+	rng.seed = board_seed(day, habitat_id, building_id, session.world.run_seed)
 
 	var shuffled: Array = pool.duplicate()
 	shuffled.sort()
@@ -209,9 +209,9 @@ static func advance_until_stock(
 	if building.is_empty() or stock_id.is_empty():
 		return false
 	var seconds_per_day := float(GalacticCalendar.SECONDS_PER_DAY)
-	var start_day := CommodityEconomy.gst_day(session.gst_seconds)
+	var start_day := CommodityEconomy.gst_day(session.world.gst_seconds)
 	for offset in max_days:
-		session.gst_seconds = float(start_day + offset) * seconds_per_day + 1.0
+		session.world.gst_seconds = float(start_day + offset) * seconds_per_day + 1.0
 		if has_stock_id(catalog, session, habitat_id, building, stock_id):
 			return true
 	return false

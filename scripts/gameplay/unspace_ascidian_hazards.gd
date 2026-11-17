@@ -39,7 +39,7 @@ static func react_to_scan(
 		"bolt_to": Vector2.ZERO,
 		"ascidian_index": ascidian_index,
 	}
-	if session == null or not session.in_unspace:
+	if session == null or not session.world.in_unspace:
 		return out
 
 	var instability := UnspaceInstability.index(session)
@@ -90,7 +90,7 @@ static func advance_armed_sting(
 	player_pos: Vector2,
 	delta: float
 ) -> Dictionary:
-	if session == null or not session.in_unspace or delta <= 0.0:
+	if session == null or not session.world.in_unspace or delta <= 0.0:
 		return {}
 	var state := _state(session)
 	var pending: Variant = state.get("pending_sting", {})
@@ -176,7 +176,7 @@ static func advance_ambient(
 		"fold_angle_rad": 0.0,
 		"log": "",
 	}
-	if session == null or delta <= 0.0 or not session.in_unspace or ascidian_positions.is_empty():
+	if session == null or delta <= 0.0 or not session.world.in_unspace or ascidian_positions.is_empty():
 		return out
 
 	var instability := UnspaceInstability.index(session)
@@ -209,7 +209,7 @@ static func advance_ambient(
 				var pick := int(randf() * ascidian_positions.size())
 				out["local_fold"] = true
 				out["fold_center"] = ascidian_positions[pick]
-				var n := maxi(session.unspace_n, 4)
+				var n := maxi(session.world.unspace_n, 4)
 				var k := randi_range(1, n - 1)
 				out["fold_angle_rad"] = float(k) * TAU / float(n) * randf_range(0.35, 1.0)
 		else:

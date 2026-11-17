@@ -302,9 +302,9 @@ static func start_calculation(
 		return {"ok": false, "message": "Hyperdrive unavailable."}
 	if is_active(session):
 		return {"ok": false, "message": "A solution calculation is already running."}
-	if session.in_unspace or session.docked:
+	if session.world.in_unspace or session.world.docked:
 		return {"ok": false, "message": "Cannot calculate a solution here."}
-	var source := session.sector_id
+	var source := session.world.sector_id
 	if target_sector_id.is_empty() or target_sector_id == source:
 		return {"ok": false, "message": "Pick a different destination."}
 	if catalog.get_sector_def(target_sector_id) == null:
@@ -363,16 +363,16 @@ static func cancel(session: GameSession, reason: String = "") -> void:
 		return
 	_calc(session).clear()
 	if session != null and not reason.is_empty():
-		session.last_log = reason
+		session.player.last_log = reason
 
 
 static func advance(session: GameSession, catalog: Catalog, gst_delta: float) -> void:
 	if session == null or not is_active(session) or gst_delta <= 0.0:
 		return
-	if session.in_unspace or session.docked:
+	if session.world.in_unspace or session.world.docked:
 		cancel(session, "Solution calculation aborted.")
 		return
-	if str(_calc(session).get("source", "")) != session.sector_id:
+	if str(_calc(session).get("source", "")) != session.world.sector_id:
 		cancel(session, "Solution calculation aborted — left the origin system.")
 		return
 	var remaining := float(_calc(session).get("remaining_seconds", 0.0))
@@ -415,14 +415,14 @@ static func _finish(
 		rng.seed = hash("%d:%d" % [solution, salt])
 		success = rng.randf() <= success_chance(nav_rating, skill, n)
 	if not success:
-		session.last_log = (
+		session.player.last_log = (
 			"Hyperdrive failed to converge a %d-space solution to %s."
 			% [n, TranslationNav.destination_display_label(catalog, target)]
 		)
 		session.changed.emit()
 		return
 	if _library_has_solution(session, source, solution):
-		session.last_log = "Hyperdrive solution collided with an existing record; try again."
+		session.player.last_log = "Hyperdrive solution collided with an existing record; try again."
 		session.changed.emit()
 		return
 	session.player.translation_library.append({
@@ -431,7 +431,7 @@ static func _finish(
 		"target": target,
 		"n": n,
 	})
-	session.last_log = (
+	session.player.last_log = (
 		"Stored private %d-space solution %d → %s."
 		% [n, solution, TranslationNav.destination_display_label(catalog, target)]
 	)

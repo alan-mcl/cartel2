@@ -241,8 +241,8 @@ static func grant(session: GameSession, catalog: Catalog, params: Dictionary) ->
 		return ""
 
 	var hour_seconds := float(GalacticCalendar.SECONDS_PER_HOUR)
-	var expires_gst := session.gst_seconds + float(duration_hours) * hour_seconds
-	var return_expires_gst := session.gst_seconds + float(return_hours) * hour_seconds
+	var expires_gst := session.world.gst_seconds + float(duration_hours) * hour_seconds
+	var return_expires_gst := session.world.gst_seconds + float(return_hours) * hour_seconds
 
 	var description := str(params.get("description", "")).strip_edges()
 
@@ -508,14 +508,14 @@ static func on_catalog_sector_entered(session: GameSession, arrived_sector_id: S
 
 
 static func announce_gate_collapsed_if_needed(session: GameSession) -> void:
-	if session == null or not is_volatile_sector_id(session.sector_id):
+	if session == null or not is_volatile_sector_id(session.world.sector_id):
 		return
-	var record := find_by_sector_id(session, session.sector_id)
+	var record := find_by_sector_id(session, session.world.sector_id)
 	if record.is_empty():
 		return
 	if bool(record.get("collapse_announced", false)):
 		return
-	if session.gst_seconds <= float(record.get("return_expires_gst", 0.0)):
+	if session.world.gst_seconds <= float(record.get("return_expires_gst", 0.0)):
 		return
 	record["collapse_announced"] = true
 	session.player.last_log = "The temporary return gate has collapsed."
@@ -600,35 +600,35 @@ static func from_save_array(value: Variant) -> Array:
 static func _outbound_usable(session: GameSession, record: Dictionary) -> bool:
 	if bool(record.get("consumed", false)):
 		return false
-	return session.gst_seconds <= float(record.get("expires_gst", 0.0))
+	return session.world.gst_seconds <= float(record.get("expires_gst", 0.0))
 
 
 static func _return_usable(session: GameSession, record: Dictionary) -> bool:
 	if not bool(record.get("consumed", false)):
 		return false
-	return session.gst_seconds <= float(record.get("return_expires_gst", 0.0))
+	return session.world.gst_seconds <= float(record.get("return_expires_gst", 0.0))
 
 
 static func _anchors_player(session: GameSession, record: Dictionary) -> bool:
 	var volatile_sector := sector_id_for(str(record.get("id", "")))
-	if session.sector_id == volatile_sector:
+	if session.world.sector_id == volatile_sector:
 		return true
-	if session.pending_destination_id == volatile_sector:
+	if session.world.pending_destination_id == volatile_sector:
 		return true
-	if session.in_unspace:
-		if session.sector_id == volatile_sector:
+	if session.world.in_unspace:
+		if session.world.sector_id == volatile_sector:
 			return true
-		if session.pending_destination_id == volatile_sector:
+		if session.world.pending_destination_id == volatile_sector:
 			return true
 	return false
 
 
 static func _should_remove_unanchored(session: GameSession, record: Dictionary) -> bool:
 	if not bool(record.get("consumed", false)):
-		return session.gst_seconds > float(record.get("expires_gst", 0.0))
+		return session.world.gst_seconds > float(record.get("expires_gst", 0.0))
 	return (
-		session.gst_seconds > float(record.get("return_expires_gst", 0.0))
-		and session.gst_seconds > float(record.get("expires_gst", 0.0))
+		session.world.gst_seconds > float(record.get("return_expires_gst", 0.0))
+		and session.world.gst_seconds > float(record.get("expires_gst", 0.0))
 	)
 
 
@@ -665,7 +665,7 @@ static func _star_pick_seed(
 ) -> String:
 	var run_seed := 0
 	if session != null:
-		run_seed = session.run_seed
+		run_seed = session.world.run_seed
 	return "%s:%d:%s:%s" % [
 		source_sector_id,
 		run_seed,

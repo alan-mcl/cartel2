@@ -25,12 +25,12 @@ func _refresh() -> void:
 		text = ""
 		return
 	if multiline_date_time:
-		var date_line := GalacticCalendar.format_date_only(_session.gst_seconds)
-		var time_line := GalacticCalendar.format_time_only(_session.gst_seconds)
+		var date_line := GalacticCalendar.format_date_only(_session.world.gst_seconds)
+		var time_line := GalacticCalendar.format_time_only(_session.world.gst_seconds)
 		if _session.career.time_limit_pending:
 			time_line = "%s — Time up" % time_line
 		else:
-			var remaining := _session.career.remaining_gst_seconds(_session.gst_seconds)
+			var remaining := _session.career.remaining_gst_seconds(_session.world.gst_seconds)
 			if remaining >= 0.0:
 				time_line = "%s — %s left" % [time_line, GalacticCalendar.format_duration(remaining)]
 		text = "%s\n%s" % [date_line, time_line]
@@ -39,7 +39,7 @@ func _refresh() -> void:
 		if _session.career.time_limit_pending:
 			text = "%s\nTime up" % stamp
 		else:
-			var remaining := _session.career.remaining_gst_seconds(_session.gst_seconds)
+			var remaining := _session.career.remaining_gst_seconds(_session.world.gst_seconds)
 			if remaining >= 0.0:
 				text = "%s\n%s left" % [stamp, GalacticCalendar.format_duration(remaining)]
 			else:

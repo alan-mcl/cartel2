@@ -75,7 +75,7 @@ static func _maybe_record_bounty_target_destroyed(session: GameSession, collider
 		target_id,
 		"bounty_target",
 		sector_id,
-		float(session.gst_seconds)
+		float(session.world.gst_seconds)
 	)
 	session.changed.emit()
 
@@ -110,7 +110,7 @@ static func _maybe_record_bounty_target_disabled(session: GameSession, collider:
 		target_id,
 		"bounty_disabled",
 		sector_id,
-		float(session.gst_seconds)
+		float(session.world.gst_seconds)
 	)
 	session.changed.emit()
 
@@ -119,9 +119,9 @@ static func _bounty_record_sector(session: GameSession, target_id: String) -> St
 	var contracted := session.player.bounty_contract_sector(target_id)
 	if not contracted.is_empty():
 		return contracted
-	if not VolatileTranslation.is_volatile_sector_id(session.sector_id):
+	if not VolatileTranslation.is_volatile_sector_id(session.world.sector_id):
 		return ""
-	var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
+	var record := VolatileTranslation.find_by_sector_id(session, session.world.sector_id)
 	if record.is_empty():
 		return ""
 	var setup: Variant = record.get("setup", {})
@@ -132,7 +132,7 @@ static func _bounty_record_sector(session: GameSession, target_id: String) -> St
 		return ""
 	if str(bounty_target.get("id", "")) != target_id:
 		return ""
-	return session.sector_id
+	return session.world.sector_id
 
 
 static func _bounty_actor_from_collider(collider: Object) -> Variant:

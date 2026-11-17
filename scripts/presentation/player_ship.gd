@@ -84,7 +84,7 @@ func set_nav_contacts(contacts: Array) -> void:
 func tick_deployed_drone(delta: float, traffic_director, contacts: Array) -> void:
 	if owned_ship == null or catalog == null or assembled_ship == null:
 		return
-	if session != null and session.docked:
+	if session != null and session.world.docked:
 		return
 	_nav_contacts = contacts
 	if not DroneRuntime.is_deployed(owned_ship):
@@ -191,9 +191,9 @@ func freeze_motion() -> void:
 
 
 func refresh_hull_destroyed_presentation() -> void:
-	if session == null or session.max_hull <= 0.0:
+	if session == null or session.combat.max_hull <= 0.0:
 		return
-	var health_ratio := session.hull / maxf(session.max_hull, 1.0)
+	var health_ratio := session.combat.hull / maxf(session.combat.max_hull, 1.0)
 	_apply_hull_damage_visual(health_ratio)
 	_maybe_play_hull_destroyed()
 
@@ -288,7 +288,7 @@ func _physics_process(delta: float) -> void:
 		var inputs := {
 			"thrust": bool(physics_inputs.get("thrust", false)),
 			"boost": bool(physics_inputs.get("boost", false)),
-			"in_flight": not session.docked,
+			"in_flight": not session.world.docked,
 			"fire": firing,
 			"active_weapon_slot": weapons.selected_slot if firing else "",
 			"hyperdrive_spool": false,
@@ -296,7 +296,7 @@ func _physics_process(delta: float) -> void:
 		_sim.step_operating(delta, inputs, 1, combat_state)
 		_sim.refresh_signature(delta)
 		_sim.refresh_stats(ShipSimCore.StatsCadence.EVERY_FRAME)
-		_apply_hull_damage_visual(session.hull / maxf(session.max_hull, 1.0))
+		_apply_hull_damage_visual(session.combat.hull / maxf(session.combat.max_hull, 1.0))
 		_maybe_play_hull_destroyed()
 		operating_state_changed.emit(operating_state)
 
@@ -529,7 +529,7 @@ func _input(event: InputEvent) -> void:
 func _weapon_select_input_allowed() -> bool:
 	return (
 		session != null
-		and not session.docked
+		and not session.world.docked
 		and not get_tree().paused
 		and assembled_ship != null
 	)
@@ -545,7 +545,7 @@ func select_weapon_hotkey_index(index: int) -> void:
 func _wants_to_fire() -> bool:
 	if not Input.is_action_pressed("fire"):
 		return false
-	if session == null or session.docked or get_tree().paused:
+	if session == null or session.world.docked or get_tree().paused:
 		return false
 	return true
 
@@ -592,9 +592,9 @@ func _reset_destroyed_presentation() -> void:
 
 
 func _maybe_play_hull_destroyed() -> void:
-	if session == null or session.max_hull <= 0.0:
+	if session == null or session.combat.max_hull <= 0.0:
 		return
-	if session.hull > 0.0:
+	if session.combat.hull > 0.0:
 		if _hull_destroyed_fx_played:
 			_reset_destroyed_presentation()
 		return

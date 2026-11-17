@@ -9,7 +9,7 @@ var session: GameSession = null
 func _process(_delta: float) -> void:
 	if get_tree().paused:
 		return
-	if session == null or session.docked or session.in_unspace:
+	if session == null or session.world.docked or session.world.in_unspace:
 		return
 
 	rotation = session.get_orbital_phase(sector_id)

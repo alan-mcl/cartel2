@@ -65,10 +65,10 @@ static func advance(session: GameSession, delta: float) -> Dictionary:
 		"delta_rad": 0.0,
 		"log": "",
 	}
-	if session == null or delta <= 0.0 or not session.in_unspace:
+	if session == null or delta <= 0.0 or not session.world.in_unspace:
 		return out
 
-	var n := maxi(session.unspace_n, 4)
+	var n := maxi(session.world.unspace_n, 4)
 	if n < 2:
 		return out
 
@@ -105,7 +105,7 @@ static func advance(session: GameSession, delta: float) -> Dictionary:
 static func apply_k_for_tests(session: GameSession, k: int) -> float:
 	if session == null:
 		return 0.0
-	var n := maxi(session.unspace_n, 4)
+	var n := maxi(session.world.unspace_n, 4)
 	k = clampi(k, 1, maxi(1, n - 1))
 	var delta_rad := float(k) * TAU / float(n)
 	var state := _state(session)

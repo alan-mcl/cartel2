@@ -95,7 +95,7 @@ static func evaluate_offer_for_ship(
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return {"ok": false, "reason": "Select a docked ship."}
-	if ship.location != session.habitat_id:
+	if ship.location != session.world.habitat_id:
 		return {"ok": false, "reason": "Ship must be docked here."}
 	var min_reputation := int(offer.get("min_reputation", 0))
 	if min_reputation > 0 and session.player.reputation < min_reputation:
@@ -115,16 +115,16 @@ static func bar_scan_section_visible(
 ) -> bool:
 	if missions == null or session == null or catalog == null or building_id.is_empty():
 		return false
-	if not is_bar_on_habitat(catalog, session.habitat_id, building_id):
+	if not is_bar_on_habitat(catalog, session.world.habitat_id, building_id):
 		return false
 	missions.ensure_boards(session, catalog)
-	if not missions.list_scan_offers(session.habitat_id, building_id).is_empty():
+	if not missions.list_scan_offers(session.world.habitat_id, building_id).is_empty():
 		return true
 	for entry_variant in missions.list_scan_accepted():
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
-		if str(entry.get("origin_habitat_id", "")) != session.habitat_id:
+		if str(entry.get("origin_habitat_id", "")) != session.world.habitat_id:
 			continue
 		if str(entry.get("building_id", "")) == building_id:
 			return true

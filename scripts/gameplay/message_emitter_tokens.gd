@@ -94,7 +94,7 @@ static func build_sector_bindings(
 	rng: RandomNumberGenerator,
 	dead_celebrity_ids: Array = []
 ) -> Dictionary:
-	var sector_id := session.sector_id
+	var sector_id := session.world.sector_id
 	var sector := catalog.get_sector_def(sector_id)
 	var planet := sector_display_label(catalog, sector_id)
 	var habitat_name := _pick_habitat_name(catalog, sector_id, rng, session)
@@ -201,10 +201,10 @@ static func assign_random_planetary_hub(session: GameSession, catalog: Catalog, 
 		return
 	var hubs := list_planetary_hub_sector_ids(catalog)
 	if hubs.is_empty():
-		session.sector_id = "proxima"
+		session.world.sector_id = "proxima"
 	else:
-		session.sector_id = hubs[rng.randi_range(0, hubs.size() - 1)]
-	session.docked = false
+		session.world.sector_id = hubs[rng.randi_range(0, hubs.size() - 1)]
+	session.world.docked = false
 
 
 static func pick_corp_brand(corp: Dictionary, rng: RandomNumberGenerator) -> String:
@@ -241,7 +241,7 @@ static func _merge_quoted_commodity_bindings(
 		var commodity_id := str(pick.get("id", ""))
 		if commodity_id.is_empty():
 			continue
-		var quote := CommodityEconomy.quote_for_sector(session, catalog, session.sector_id, commodity_id)
+		var quote := CommodityEconomy.quote_for_sector(session, catalog, session.world.sector_id, commodity_id)
 		var price := int(quote.get("price", 0))
 		if price < 1:
 			continue
@@ -440,8 +440,8 @@ static func _pick_habitat_name(
 	rng: RandomNumberGenerator,
 	session: GameSession = null
 ) -> String:
-	if session != null and session.docked:
-		var docked_habitat_id := str(session.habitat_id).strip_edges()
+	if session != null and session.world.docked:
+		var docked_habitat_id := str(session.world.habitat_id).strip_edges()
 		if not docked_habitat_id.is_empty():
 			var docked := catalog.get_habitat(docked_habitat_id)
 			if str(docked.get("sector_id", "")) == sector_id:

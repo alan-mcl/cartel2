@@ -88,14 +88,14 @@ func _refresh_routes_tab() -> void:
 	var library: Array = _session.player.translation_library if _session.player != null else []
 	var all_offers := TranslationNav.list_offered_translations(
 		_catalog,
-		_session.sector_id,
+		_session.world.sector_id,
 		_assembled_ship,
 		library,
 		_session
 	)
 	var partitioned := TranslationNav.partition_jump_offers(all_offers)
 	var grouped := TranslationNav.group_offered_translations(
-		_catalog, _session.sector_id, partitioned.get("public", [])
+		_catalog, _session.world.sector_id, partitioned.get("public", [])
 	)
 	_route_panel.populate(
 		grouped.get("local", []),
@@ -152,7 +152,7 @@ func _hide_active_calculation() -> void:
 func _build_destination_tree() -> void:
 	_dest_tree.clear()
 	var root := _dest_tree.create_item()
-	var source := _session.sector_id
+	var source := _session.world.sector_id
 	var rows := HyperdriveSolution.build_compute_spanning_tree(_catalog, source)
 	var items_by_id: Dictionary = {source: root}
 	var uncharted_root: TreeItem = null
@@ -215,7 +215,7 @@ func _refresh_depth_options() -> void:
 	if _selected_target_id.is_empty() or _assembled_ship == null:
 		return
 	var available := HyperdriveSolution.list_available_compute_n(
-		_session, _catalog, _assembled_ship, _session.sector_id, _selected_target_id
+		_session, _catalog, _assembled_ship, _session.world.sector_id, _selected_target_id
 	)
 	if available.is_empty():
 		return
@@ -246,14 +246,14 @@ func _refresh_compute_estimate() -> void:
 		_depth_option.select(depth_index)
 	var requested_n := _depth_values[depth_index]
 	var resolved_n := HyperdriveSolution.resolve_compute_n(
-		_session, _catalog, _assembled_ship, _session.sector_id, _selected_target_id, requested_n
+		_session, _catalog, _assembled_ship, _session.world.sector_id, _selected_target_id, requested_n
 	)
 	if resolved_n < 4:
 		_estimate.text = "No remaining depth to compute for that destination."
 		_compute_button.disabled = true
 		return
 	var friction := HyperdriveSolution.friction_for_compute(
-		_catalog, _session.sector_id, _selected_target_id
+		_catalog, _session.world.sector_id, _selected_target_id
 	)
 	var nav_rating := float(
 		TranslationNav.nav_stats_from_ship(_assembled_ship, _catalog).get("nav_rating", 0.0)

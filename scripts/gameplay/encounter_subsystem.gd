@@ -70,7 +70,7 @@ func grant_for_location(
 	if def.is_empty():
 		return false
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("grant:%s:%s:%d" % [location_key, id_key, session.run_seed])
+	rng.seed = hash("grant:%s:%s:%d" % [location_key, id_key, session.world.run_seed])
 	var plan := _resolve_encounter(session, catalog, def, location_key, location_class, rng)
 	if plan.is_empty():
 		return false
@@ -89,7 +89,7 @@ func grant_random_for_class(
 	if session == null or catalog == null:
 		return false
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("grant_random:%s:%s" % [location_key, session.run_seed])
+	rng.seed = hash("grant_random:%s:%s" % [location_key, session.world.run_seed])
 	var picked := _pick_encounter(session, catalog, location_class, rng)
 	if picked.is_empty():
 		return false
@@ -105,7 +105,7 @@ func grant_random_for_class(
 func try_arrival_roll(session: GameSession, catalog: Catalog) -> void:
 	if session == null or catalog == null:
 		return
-	if session.sandbox and session.harness_encounter_roll == "off":
+	if session.player.sandbox and session.harness_encounter_roll == "off":
 		return
 	_handle_arrival(session, catalog, {})
 
@@ -116,7 +116,7 @@ func on_event(session: GameSession, catalog: Catalog, evt: Dictionary) -> void:
 	var evt_type := str(evt.get("type", ""))
 	if evt_type != SimEvent.SECTOR_ENTERED and evt_type != SimEvent.UNSPACE_ENTERED:
 		return
-	if session.sandbox and session.harness_encounter_roll == "off":
+	if session.player.sandbox and session.harness_encounter_roll == "off":
 		return
 	try_arrival_roll(session, catalog)
 
@@ -147,13 +147,13 @@ func announce_if_needed(
 static func classify_location(catalog: Catalog, session: GameSession) -> Dictionary:
 	if session == null:
 		return {}
-	if session.in_unspace:
+	if session.world.in_unspace:
 		return {
 			"location_class": "unspace",
 			"location_key": "unspace:%d:%d"
-				% [session.unspace_n, session.unspace_solution],
+				% [session.world.unspace_n, session.world.unspace_solution],
 		}
-	var sector_id := session.sector_id
+	var sector_id := session.world.sector_id
 	if VolatileTranslation.is_volatile_sector_id(sector_id):
 		return {"location_class": "volatile", "location_key": sector_id}
 	if MessageEmitterTokens.is_planetary_hub(catalog, sector_id):
@@ -237,7 +237,7 @@ func _handle_arrival(session: GameSession, catalog: Catalog, evt: Dictionary) ->
 
 	_arrival_ordinal += 1
 	var roll_rng := RandomNumberGenerator.new()
-	roll_rng.seed = hash("%d:%s:%d" % [session.run_seed, location_key, _arrival_ordinal])
+	roll_rng.seed = hash("%d:%s:%d" % [session.world.run_seed, location_key, _arrival_ordinal])
 
 	var config := catalog.get_encounters_config()
 	var chance := float(config.get("chance", 0.0))
@@ -251,7 +251,7 @@ func _handle_arrival(session: GameSession, catalog: Catalog, evt: Dictionary) ->
 	var resolve_rng := RandomNumberGenerator.new()
 	resolve_rng.seed = hash(
 		"%d:%s:%d:%s" % [
-			session.run_seed,
+			session.world.run_seed,
 			location_key,
 			_arrival_ordinal,
 			str(picked.get("id", "")),
@@ -273,8 +273,8 @@ func _handle_arrival(session: GameSession, catalog: Catalog, evt: Dictionary) ->
 		SimEvent.encounter_started(
 			encounter_id,
 			location_class,
-			session.sector_id,
-			session.unspace_n if session.in_unspace else 0
+			session.world.sector_id,
+			session.world.unspace_n if session.world.in_unspace else 0
 		)
 	)
 
@@ -427,8 +427,8 @@ func _ascidian_cluster_record(
 	var extra := maxi(0, int(effect.get("extra_count", 0)))
 	var spread := float(effect.get("spread_fraction", 0.35))
 	var play_bounds := 8000.0
-	if catalog != null and session.in_unspace:
-		var unspace := catalog.get_unspace_for_n(session.unspace_n)
+	if catalog != null and session.world.in_unspace:
+		var unspace := catalog.get_unspace_for_n(session.world.unspace_n)
 		play_bounds = float(unspace.get("play_bounds", play_bounds))
 	var positions: Array = []
 	for _i in extra:
@@ -462,7 +462,7 @@ func _build_bindings(session: GameSession, catalog: Catalog, rng: RandomNumberGe
 			out["celebrity_pilot_id"] = str(pilot.get("id", ""))
 			out["celebrity_ship_name"] = str(ship.get("name", ""))
 			out["celebrity_loadout"] = CelebrityPilots.build_loadout_record(pilot, ship)
-	var sector_id := session.sector_id
+	var sector_id := session.world.sector_id
 	out["sector"] = MessageEmitterTokens.sector_display_label(catalog, sector_id)
 	return out
 

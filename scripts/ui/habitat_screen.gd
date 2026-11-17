@@ -97,9 +97,9 @@ func _sync_session_chrome(habitat: Dictionary = {}) -> void:
 		var habitat_desc := str(habitat.get("description", habitat.get("short_desc", "")))
 		_description.text = habitat_desc
 		_update_habitat_header(habitat)
-	_pilot.text = '"%s"' % _context.session.callsign
-	_update_portrait(_context.session.portrait_path)
-	_credits.text = "Coin d%d" % _context.session.credits
+	_pilot.text = '"%s"' % _context.session.player.callsign
+	_update_portrait(_context.session.player.portrait_path)
+	_credits.text = "Coin d%d" % _context.session.wallet.credits
 	_reputation.text = "Rep %d" % _context.session.player.reputation
 	var sanction_total := Sanctions.total_fine(_context.session.player.sanctions)
 	if sanction_total > 0:
@@ -145,7 +145,7 @@ func _rebuild_building_list(habitat: Dictionary) -> void:
 		var index := _building_item_list.add_item(str(row.get("name", building_id)))
 		_building_item_list.set_item_tooltip(index, str(row.get("short_desc", "")))
 
-	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
+	_select_item_by_id(_building_item_list, _building_ids, _context.session.world.building_id, "_suppress_building_select")
 
 
 func _on_building_item_selected(index: int) -> void:
@@ -162,7 +162,7 @@ func _select_building_at_index(index: int) -> void:
 	if index < 0 or index >= _building_ids.size():
 		return
 	var building_id := _building_ids[index]
-	if building_id == _context.session.building_id:
+	if building_id == _context.session.world.building_id:
 		return
 	var was_connected := _context.session.changed.is_connected(_on_session_changed)
 	if was_connected:
@@ -189,7 +189,7 @@ func _update_building_panels() -> void:
 	if habitat.is_empty():
 		return
 	_sync_log()
-	_select_item_by_id(_building_item_list, _building_ids, _context.session.building_id, "_suppress_building_select")
+	_select_item_by_id(_building_item_list, _building_ids, _context.session.world.building_id, "_suppress_building_select")
 	_update_building_header(habitat, building)
 	_show_building_content(habitat, building)
 
@@ -198,7 +198,7 @@ func _sync_log() -> void:
 	var bar := _message_bar()
 	if bar == null or _context == null or _context.session == null:
 		return
-	bar.play_line(_context.session.last_log)
+	bar.play_line(_context.session.player.last_log)
 
 
 func _message_bar() -> MessageBar:

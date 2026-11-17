@@ -15,6 +15,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B1|data|med|Double 'Janus' in the planets catalog|
 |B2|ui|med|'pay sanctions' button doesn't turn into 'launch' when you have no more sanctions until you change buildings away then back|
+|B3|missions|med|Could accept a 'biohazard' charter with a non-biohazard hold?|
 
 ## Features
 
@@ -28,11 +29,10 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R8. R9, R10, R12, and R13 can land any time.
+Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R8|session|high|Call sites use the slices; forwarding properties stay until that is done|
 |R9|data|med|Schema checks for worlds, buildings, traffic, and interactables|
 |R10|data|med|One chassis source on AssembledShip; typed getters stop rebuilding dictionaries|
 |R11|save|med|Save doc matches version 3; mission migration is tested; future subsystem versions fail closed|
@@ -40,14 +40,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 |R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
 |R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
 |R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
-
-### R8 — Call sites use the slices
-
-- **Status:** Discuss
-- **Depends on:** R7
-- **Scope:** facade reads and writes under `scripts/gameplay/`, then `scripts/presentation/`, then `scripts/ui/`
-- **Do not:** change behaviour; delete a forwarding property until gameplay, presentation, and UI no longer use it; mix this with rule changes
-- **Acceptance:** each batch is behaviour-neutral and leaves `./scripts/ci/check.sh` green. New call sites use `session.player`, `session.world`, `session.fleet`, `session.wallet`, or `session.combat`. Forwarding properties remain until a final batch finds no remaining readers.
 
 ### R9 — Schema checks for large catalogs
 

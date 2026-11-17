@@ -26,7 +26,7 @@ static func advance(session: GameSession, delta: float) -> Dictionary:
 		"flash": 0.0,
 		"log": "",
 	}
-	if session == null or delta <= 0.0 or not session.in_unspace:
+	if session == null or delta <= 0.0 or not session.world.in_unspace:
 		return out
 
 	var instability := UnspaceInstability.index(session)
@@ -65,7 +65,7 @@ static func force_start_for_tests(session: GameSession, instability: float = 0.7
 
 
 static func start_storm_from_external(session: GameSession, instability: float = -1.0) -> bool:
-	if session == null or not session.in_unspace:
+	if session == null or not session.world.in_unspace:
 		return false
 	if is_active(session):
 		return false

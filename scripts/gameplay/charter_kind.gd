@@ -255,7 +255,7 @@ func prepare_accept(
 	charter: Dictionary,
 	missions: MissionSubsystem
 ) -> bool:
-	charter["accepted_gst"] = session.gst_seconds
+	charter["accepted_gst"] = session.world.gst_seconds
 	match kind_type:
 		Type.PASSENGER, Type.FREIGHT:
 			missions._apply_charter_deadline(session, charter)

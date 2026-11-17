@@ -66,7 +66,7 @@ func _resolve_dealer_stock_ids() -> PackedStringArray:
 	return DealerStock.list_stock_ids(
 		_context.catalog,
 		_context.session,
-		_context.session.habitat_id,
+		_context.session.world.habitat_id,
 		_building
 	)
 

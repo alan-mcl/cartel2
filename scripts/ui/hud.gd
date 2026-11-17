@@ -531,7 +531,7 @@ func _refresh_identity() -> void:
 	var callsign := ""
 	var ship_name := ""
 	if _session != null:
-		callsign = _session.callsign.strip_edges()
+		callsign = _session.player.callsign.strip_edges()
 	if _assembled_ship != null:
 		ship_name = _assembled_ship.name.strip_edges()
 	if callsign.is_empty():
@@ -544,11 +544,11 @@ func _refresh_identity() -> void:
 func _refresh_hull() -> void:
 	if _hull == null or _session == null:
 		return
-	var max_hull := _session.max_hull
+	var max_hull := _session.combat.max_hull
 	if max_hull <= 0.0:
 		_hull.text = "Hull: -"
 	else:
-		_hull.text = "Hull: %.0f / %.0f" % [_session.hull, max_hull]
+		_hull.text = "Hull: %.0f / %.0f" % [_session.combat.hull, max_hull]
 
 
 func _refresh_capabilities() -> void:
@@ -637,7 +637,7 @@ func _sync_log() -> void:
 		return
 	if _message_bar == null or _session == null or not _has_capability("basic_hud"):
 		return
-	_message_bar.play_line(_session.last_log)
+	_message_bar.play_line(_session.player.last_log)
 
 
 func _wire_headlines_enabled() -> bool:
@@ -645,7 +645,7 @@ func _wire_headlines_enabled() -> bool:
 		return false
 	if _session.world.in_unspace:
 		return false
-	return ExchangePriceTape.is_planetary_hub(_catalog, _session.sector_id)
+	return ExchangePriceTape.is_planetary_hub(_catalog, _session.world.sector_id)
 
 
 func _messages_subsystem() -> MessageSubsystem:
@@ -666,7 +666,7 @@ func _sync_wire_tape_state() -> void:
 	var messages := _messages_subsystem()
 	var headlines_sector_changed := false
 	if messages != null:
-		headlines_sector_changed = messages.note_headlines_sector(_session.sector_id)
+		headlines_sector_changed = messages.note_headlines_sector(_session.world.sector_id)
 	if headlines_sector_changed and _wire_message_bar != null:
 		_wire_message_bar.clear_queued_lines()
 	if not _wire_started:

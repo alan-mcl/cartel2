@@ -83,7 +83,7 @@ func present(context: UiContext, build_sections: Callable, blocked_text: String 
 
 	var docked: Array[OwnedShip] = []
 	if include_ship_line:
-		docked = context.session.ships_at(context.session.habitat_id)
+		docked = context.session.ships_at(context.session.world.habitat_id)
 		_sync_ship(docked)
 	var sections: Array = []
 	if build_sections.is_valid():
@@ -131,7 +131,7 @@ func _sync_ship(docked: Array[OwnedShip]) -> void:
 
 
 func _best_ship_id(docked: Array[OwnedShip]) -> String:
-	var preferred := _context.session.current_ship_id
+	var preferred := _context.session.fleet.current_ship_id
 	for ship in docked:
 		if ship.id == preferred and _score(ship) > 0.0:
 			return ship.id

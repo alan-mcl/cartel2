@@ -110,7 +110,7 @@ static func _build_entry_from_session(
 ) -> Dictionary:
 	var entry := {
 		"career_id": session.career.career_id,
-		"callsign": session.callsign,
+		"callsign": session.player.callsign,
 		"time_mode": CareerTimeMode.normalise(board_mode),
 		"profit": session.career.nett_profit(),
 		"revenue": session.career.total_revenue(),
@@ -120,7 +120,7 @@ static func _build_entry_from_session(
 		"kills": session.career.kills,
 		"reputation": session.player.reputation,
 		"ships_owned": session.fleet.owned_ships.size(),
-		"career_time": session.career.elapsed_gst_seconds(session.gst_seconds),
+		"career_time": session.career.elapsed_gst_seconds(session.world.gst_seconds),
 		"career_time_gst": true,
 		"saved_at": saved_at,
 	}

@@ -36,18 +36,18 @@ func advance(
 	if frozen or session == null or delta <= 0.0:
 		return result
 
-	result["previous_day"] = CommodityEconomy.gst_day(session.gst_seconds)
-	result["previous_hour"] = gst_hour(session.gst_seconds)
-	var gst_before := session.gst_seconds
+	result["previous_day"] = CommodityEconomy.gst_day(session.world.gst_seconds)
+	result["previous_hour"] = gst_hour(session.world.gst_seconds)
+	var gst_before := session.world.gst_seconds
 
-	if session.in_unspace:
+	if session.world.in_unspace:
 		_tick_unspace(session, catalog, delta)
 	else:
-		session.gst_seconds += delta
+		session.world.gst_seconds += delta
 
-	result["gst_delta"] = session.gst_seconds - gst_before
-	result["current_day"] = CommodityEconomy.gst_day(session.gst_seconds)
-	result["current_hour"] = gst_hour(session.gst_seconds)
+	result["gst_delta"] = session.world.gst_seconds - gst_before
+	result["current_day"] = CommodityEconomy.gst_day(session.world.gst_seconds)
+	result["current_hour"] = gst_hour(session.world.gst_seconds)
 	result["advanced"] = true
 	result["day_crossed"] = result["current_day"] != result["previous_day"]
 	result["hour_crossed"] = result["current_hour"] != result["previous_hour"]
@@ -55,7 +55,7 @@ func advance(
 
 
 func _tick_unspace(session: GameSession, catalog: Catalog, delta: float) -> void:
-	var config := _get_unspace_gst_config(catalog, session.unspace_world_id)
+	var config := _get_unspace_gst_config(catalog, session.world.unspace_world_id)
 
 	_pulse_timer -= delta
 	var safety := 0
@@ -66,12 +66,12 @@ func _tick_unspace(session: GameSession, catalog: Catalog, delta: float) -> void
 
 		var stretch := gst_stretch_factor(config, randf())
 		var gst_chunk := _pulse_interval * stretch
-		session.gst_seconds += gst_chunk
+		session.world.gst_seconds += gst_chunk
 
 		if randf() < gst_slip_chance(config):
 			var slip_min := float(config.get("slip_min", 2.0))
 			var slip_max := float(config.get("slip_max", 18.0))
-			session.gst_seconds += randf_range(slip_min, slip_max)
+			session.world.gst_seconds += randf_range(slip_min, slip_max)
 
 		_schedule_next_pulse(config)
 

@@ -64,7 +64,7 @@ func clear_traffic() -> void:
 
 
 func setup_traffic(world: Node2D, simulation: Simulation = null) -> void:
-	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
+	if VolatileTranslation.is_volatile_sector_id(_main.session.world.sector_id):
 		_setup_volatile_site_traffic(world)
 		_apply_active_encounter_ships(world, simulation)
 		return
@@ -75,7 +75,7 @@ func setup_traffic(world: Node2D, simulation: Simulation = null) -> void:
 	_traffic_query = _world_loader.make_traffic_query(traffic_config)
 	_traffic_director.setup(
 		_catalog,
-		_main.session.sector_id,
+		_main.session.world.sector_id,
 		_traffic_query.envelope_radius,
 		_player.global_position,
 		_traffic_query
@@ -89,23 +89,23 @@ func setup_traffic(world: Node2D, simulation: Simulation = null) -> void:
 func physics_tick(delta: float, physics_frame: int) -> void:
 	if not _main.game_active:
 		return
-	if _main.session.docked or _overlay_blocks_flight() or _tree.paused:
-		if _main.session.docked:
+	if _main.session.world.docked or _overlay_blocks_flight() or _tree.paused:
+		if _main.session.world.docked:
 			if _player.has_method("clear_target_lock"):
 				_player.clear_target_lock()
 			if _player.has_method("reset_autopilot"):
 				_player.reset_autopilot()
-		if _main.session.docked or _overlay_blocks_flight():
+		if _main.session.world.docked or _overlay_blocks_flight():
 			_hud.set_surface_labels([], _camera)
 		_hud.set_star_lens_flare({}, _player.global_position, _player.motion.facing, _camera)
 		return
 
-	if VolatileTranslation.is_volatile_sector_id(_main.session.sector_id):
+	if VolatileTranslation.is_volatile_sector_id(_main.session.world.sector_id):
 		VolatileTranslation.announce_gate_collapsed_if_needed(_main.session)
 		_world_loader.refresh_volatile_return_gate(_main.session)
 		_tick_volatile_site_traffic(delta, physics_frame)
 
-	if _main.session.in_unspace:
+	if _main.session.world.in_unspace:
 		_tick_unspace_flux(delta)
 		_tick_unspace_fold(delta)
 		_tick_unspace_containment(delta)
@@ -116,8 +116,8 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 
 	# Display-rate cadence: HUD nav/signature and traffic tick every physics frame.
 	if (
-		not _main.session.in_unspace
-		and not VolatileTranslation.is_volatile_sector_id(_main.session.sector_id)
+		not _main.session.world.in_unspace
+		and not VolatileTranslation.is_volatile_sector_id(_main.session.world.sector_id)
 	):
 		_ensure_traffic_director()
 		if _traffic_director != null:
@@ -150,12 +150,12 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	if _player.has_method("tick_deployed_drone"):
 		_player.tick_deployed_drone(delta, _traffic_director, contacts)
 	var nav_radius: float = _main.play_bounds
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		nav_radius = _world_loader.get_content_radius()
 		if nav_radius <= 0.0:
 			nav_radius = _main.play_bounds
 	var star_display: Dictionary = {}
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		star_display = _world_loader.get_local_star_display()
 	present_flight_frame(contacts, nav_radius, star_display)
 
@@ -185,7 +185,7 @@ func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dict
 	var owned: OwnedShip = _main.session.get_current_owned_ship()
 	var player_broadcast: Dictionary = TransponderBroadcastScript.player_broadcast(
 		owned.registration if owned != null else "",
-		_main.session.callsign,
+		_main.session.player.callsign,
 		owned.name if owned != null else ""
 	)
 	_hud.set_nav_state(
@@ -225,19 +225,19 @@ func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dict
 		)
 		_hud.set_field_state(field_sample)
 	_hud.set_translation_stability(
-		_main.session.translation_stability,
-		_main.session.in_unspace
+		_main.session.world.translation_stability,
+		_main.session.world.in_unspace
 	)
 
 
 func _surface_labels() -> Array:
-	if _main.session.in_unspace:
+	if _main.session.world.in_unspace:
 		return []
 	return _world_loader.get_surface_labels()
 
 
 func can_toggle_active_sensors() -> bool:
-	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
+	if not _main.game_active or _main.session.world.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false
@@ -255,7 +255,7 @@ func toggle_active_sensors() -> void:
 
 
 func can_use_target_lock() -> bool:
-	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
+	if not _main.game_active or _main.session.world.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false
@@ -286,16 +286,16 @@ func request_target_scan() -> void:
 	if not can_use_target_lock():
 		return
 	if _player.locked_target_id.is_empty():
-		_main.session.last_log = "No target lock held."
+		_main.session.player.last_log = "No target lock held."
 		return
 	var contacts := _collect_nav_contacts()
 	var locked_contact := TargetLock.contact_for_id(contacts, _player.locked_target_id)
 	if locked_contact.is_empty():
-		_main.session.last_log = "No target lock held."
+		_main.session.player.last_log = "No target lock held."
 		return
 	var block := TargetScan.active_scan_block_reason(_player.assembled_ship, _player.operating_state)
 	if not block.is_empty():
-		_main.session.last_log = block
+		_main.session.player.last_log = block
 		return
 	var owned: OwnedShip = _main.session.get_current_owned_ship()
 	var active_sensors := owned.active_sensors_enabled if owned != null else true
@@ -308,24 +308,24 @@ func request_target_scan() -> void:
 		active_sensors
 	)
 	if not observers.is_empty() and not TargetLock.contact_in_lock_envelope(locked_contact, observers):
-		_main.session.last_log = "Target is outside sensor range."
+		_main.session.player.last_log = "Target is outside sensor range."
 		return
 	var beacon_destination := ""
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		beacon_destination = _world_loader.get_translation_beacon_destination(_catalog)
 	_main.session.player.record_target_scan(
 		str(locked_contact.get("id", "")),
 		str(locked_contact.get("contact_kind", "")),
-		_main.session.sector_id,
-		_main.session.gst_seconds
+		_main.session.world.sector_id,
+		_main.session.world.gst_seconds
 	)
-	if _main.session.in_unspace and str(locked_contact.get("contact_kind", "")) == "ascidian":
+	if _main.session.world.in_unspace and str(locked_contact.get("contact_kind", "")) == "ascidian":
 		_apply_ascidian_scan_reaction(locked_contact)
 	_hud.open_target_scan(locked_contact, _player.global_position, beacon_destination)
 
 
 func can_use_autopilot_hotkey(index: int) -> bool:
-	if not _main.game_active or _main.session.docked or _overlay_blocks_flight() or _ui_root.visible:
+	if not _main.game_active or _main.session.world.docked or _overlay_blocks_flight() or _ui_root.visible:
 		return false
 	if _tree.paused:
 		return false
@@ -344,16 +344,16 @@ func request_autopilot_hotkey(index: int) -> void:
 
 
 func _collect_nav_contacts() -> Array:
-	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.in_unspace)
+	var landmark_contacts := _world_loader.get_nav_contacts(_catalog, _main.session.world.in_unspace)
 	var contacts: Array = []
 	contacts.append_array(landmark_contacts)
-	if _main.session.in_unspace and _unspace_shards_on_radar():
+	if _main.session.world.in_unspace and _unspace_shards_on_radar():
 		for shard_variant in UnspaceShards.get_contacts(_main.session):
 			if typeof(shard_variant) == TYPE_DICTIONARY:
 				contacts.append(shard_variant)
-	if _main.session.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
+	if _main.session.world.in_unspace and not _main.player_ship.has_capability("4_space_topology"):
 		contacts = _filter_topology_contacts(contacts)
-	if not _main.session.in_unspace:
+	if not _main.session.world.in_unspace:
 		_ensure_traffic_director()
 		if _traffic_director != null:
 			contacts.append_array(_traffic_director.get_traffic_contacts())
@@ -382,7 +382,7 @@ func _setup_volatile_site_traffic(world: Node2D) -> void:
 	_ensure_traffic_director()
 	if _traffic_director == null:
 		return
-	var sector_id: String = _main.session.sector_id
+	var sector_id: String = _main.session.world.sector_id
 	var record := VolatileTranslation.find_by_sector_id(_main.session, sector_id)
 	if record.is_empty():
 		clear_traffic()
@@ -532,8 +532,8 @@ func _process_bounty_escapes() -> void:
 
 func _tick_bounty_pursuit_traffic(delta: float, physics_frame: int) -> void:
 	if (
-		_main.session.in_unspace
-		or VolatileTranslation.is_volatile_sector_id(_main.session.sector_id)
+		_main.session.world.in_unspace
+		or VolatileTranslation.is_volatile_sector_id(_main.session.world.sector_id)
 	):
 		return
 	_ensure_traffic_director()
@@ -561,7 +561,7 @@ func _spawn_bounty_pursuit_actor(charter: Dictionary, missions: MissionSubsystem
 		_catalog,
 		traffic_config,
 		record,
-		_main.session.sector_id
+		_main.session.world.sector_id
 	)
 	if actor == null:
 		return
@@ -690,7 +690,7 @@ func _tick_unspace_shards(delta: float) -> void:
 			if destroyed and _player.has_method("refresh_hull_destroyed_presentation"):
 				_player.refresh_hull_destroyed_presentation()
 			elif not destroyed:
-				_main.session.last_log = "N-space shard impact."
+				_main.session.player.last_log = "N-space shard impact."
 				_main.session.changed.emit()
 	_world_loader.sync_unspace_shards(_main.session, delta)
 
@@ -703,7 +703,7 @@ func _tick_unspace_fold(delta: float) -> void:
 		_world_loader.start_unspace_fold_animation(_player.global_position, delta_rad)
 	var fold_log := str(fold_result.get("log", ""))
 	if not fold_log.is_empty():
-		_main.session.last_log = fold_log
+		_main.session.player.last_log = fold_log
 
 
 func _tick_unspace_containment(delta: float) -> void:
@@ -722,10 +722,10 @@ func _tick_unspace_containment(delta: float) -> void:
 	if not bool(rim_result.get("started", false)):
 		return
 	var k := int(rim_result.get("k", 0))
-	var n := maxi(_main.session.unspace_n, 4)
+	var n := maxi(_main.session.world.unspace_n, 4)
 	UnspaceFold.begin_animation(_main.session)
 	UnspaceFold.begin_containment_cooldown(_main.session)
-	_main.session.last_log = "Unspace fold — field rotated %d×360/%d." % [k, n]
+	_main.session.player.last_log = "Unspace fold — field rotated %d×360/%d." % [k, n]
 	_main.session.changed.emit()
 
 
@@ -746,7 +746,7 @@ func _tick_unspace_flux(delta: float) -> void:
 		_player.set_unspace_flux_stress(storm_active, delta)
 	var log_msg := str(flux_result.get("log", ""))
 	if not log_msg.is_empty():
-		_main.session.last_log = log_msg
+		_main.session.player.last_log = log_msg
 		_main.session.changed.emit()
 
 
@@ -763,7 +763,7 @@ func _process_celebrity_deaths() -> void:
 		var pilot_name := encounters.mark_pilot_dead(pilot_id, _catalog)
 		if pilot_name.is_empty():
 			continue
-		_main.session.last_log = "%s reported down — celebrity circuit notes the loss." % pilot_name
+		_main.session.player.last_log = "%s reported down — celebrity circuit notes the loss." % pilot_name
 		_main.session.changed.emit()
 
 
@@ -776,7 +776,7 @@ func _encounter_has_ship_spawns() -> bool:
 
 
 func _apply_active_encounter_ships(world: Node2D, simulation: Simulation) -> void:
-	if _main == null or _main.session == null or _main.session.in_unspace:
+	if _main == null or _main.session == null or _main.session.world.in_unspace:
 		return
 	var encounters: EncounterSubsystem = _main.session.bound_encounters
 	if encounters == null and simulation != null:
@@ -793,7 +793,7 @@ func _apply_active_encounter_ships(world: Node2D, simulation: Simulation) -> voi
 		encounters,
 		_catalog,
 		traffic_config,
-		_main.session.sector_id,
+		_main.session.world.sector_id,
 		query,
 		_player.global_position
 	)

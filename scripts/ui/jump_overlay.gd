@@ -66,13 +66,13 @@ func _refresh() -> void:
 			% dest_label
 		)
 
-	var on_volatile_site := VolatileTranslation.is_volatile_sector_id(_session.sector_id)
+	var on_volatile_site := VolatileTranslation.is_volatile_sector_id(_session.world.sector_id)
 	var all_offers: Array = []
 	if on_volatile_site:
 		all_offers = TranslationNav.list_volatile_site_offers(
 			_session,
 			_catalog,
-			_session.sector_id,
+			_session.world.sector_id,
 			_assembled_ship
 		)
 		_description.text = (
@@ -82,7 +82,7 @@ func _refresh() -> void:
 		var library: Array = _session.player.translation_library if _session.player != null else []
 		all_offers = TranslationNav.list_offered_translations(
 			_catalog,
-			_session.sector_id,
+			_session.world.sector_id,
 			_assembled_ship,
 			library,
 			_session
@@ -91,7 +91,7 @@ func _refresh() -> void:
 	var partitioned := TranslationNav.partition_jump_offers(offers)
 	var public_offers: Array = partitioned.get("public", [])
 	var private_offers: Array = partitioned.get("private", [])
-	var grouped := TranslationNav.group_offered_translations(_catalog, _session.sector_id, public_offers)
+	var grouped := TranslationNav.group_offered_translations(_catalog, _session.world.sector_id, public_offers)
 	var local_rows: Array = grouped.get("local", [])
 	var other_rows: Array = grouped.get("other", [])
 	var volatile_rows: Array = grouped.get("volatile", [])
@@ -177,7 +177,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _translation_beacon_destination() -> String:
 	if _catalog == null or _session == null:
 		return ""
-	var world_data := _catalog.get_world(_session.sector_id)
+	var world_data := _catalog.get_world(_session.world.sector_id)
 	var beacon: Variant = world_data.get("translation_beacon", {})
 	if typeof(beacon) != TYPE_DICTIONARY or beacon.is_empty():
 		return ""

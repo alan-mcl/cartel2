@@ -3,11 +3,11 @@ extends RefCounted
 
 
 static func ensure_quotes(session: GameSession, catalog: Catalog) -> bool:
-	var day: int = CommodityEconomy.gst_day(session.gst_seconds)
-	if session.fuel_quotes_day == day and not session.fuel_quotes.is_empty():
+	var day: int = CommodityEconomy.gst_day(session.world.gst_seconds)
+	if session.world.fuel_quotes_day == day and not session.world.fuel_quotes.is_empty():
 		return false
-	session.fuel_quotes = compute_quotes(catalog, day)
-	session.fuel_quotes_day = day
+	session.world.fuel_quotes = compute_quotes(catalog, day)
+	session.world.fuel_quotes_day = day
 	return true
 
 
@@ -46,7 +46,7 @@ static func quote_for_sector(
 	fuel_id: String
 ) -> Dictionary:
 	ensure_quotes(session, catalog)
-	var sector_quotes: Variant = session.fuel_quotes.get(sector_id, {})
+	var sector_quotes: Variant = session.world.fuel_quotes.get(sector_id, {})
 	if typeof(sector_quotes) != TYPE_DICTIONARY:
 		return {}
 	var listing: Variant = sector_quotes.get(fuel_id, {})

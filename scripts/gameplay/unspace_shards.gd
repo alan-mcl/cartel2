@@ -18,7 +18,7 @@ static func reset(session: GameSession) -> void:
 
 static func get_contacts(session: GameSession) -> Array:
 	var contacts: Array = []
-	if session == null or not session.in_unspace:
+	if session == null or not session.world.in_unspace:
 		return contacts
 	for entry_variant in _entries(session):
 		if typeof(entry_variant) != TYPE_DICTIONARY:
@@ -47,11 +47,11 @@ static func advance(
 		"hits": [],
 		"log": "",
 	}
-	if session == null or delta <= 0.0 or not session.in_unspace or play_bounds <= 0.0:
+	if session == null or delta <= 0.0 or not session.world.in_unspace or play_bounds <= 0.0:
 		return out
 
 	var instability := UnspaceInstability.index(session)
-	var depth := maxf(0.0, float(session.unspace_n - 4))
+	var depth := maxf(0.0, float(session.world.unspace_n - 4))
 	var state := _state(session)
 	var entries: Array = _entries(session)
 
@@ -87,12 +87,12 @@ static func advance(
 
 
 static func spawn_burst(session: GameSession, origin: Vector2, count: int, speed: float) -> void:
-	if session == null or not session.in_unspace or count <= 0:
+	if session == null or not session.world.in_unspace or count <= 0:
 		return
 	var state := _state(session)
 	var entries: Array = _entries(session)
 	var instability := UnspaceInstability.index(session)
-	var depth := maxf(0.0, float(session.unspace_n - 4))
+	var depth := maxf(0.0, float(session.world.unspace_n - 4))
 	var max_count := clampi(
 		int(round(lerpf(1.0, 10.0, instability) * (1.0 + 0.18 * depth))),
 		1,
@@ -120,7 +120,7 @@ static func spawn_burst(session: GameSession, origin: Vector2, count: int, speed
 static func force_hit_for_tests(session: GameSession, instability: float = 0.7) -> Dictionary:
 	if session == null:
 		return {}
-	session.in_unspace = true
+	session.world.in_unspace = true
 	var hit := {
 		"kick": Vector2(40.0, 0.0),
 		"hull_stress": lerpf(STRESS_HIT_MIN, STRESS_HIT_MAX, instability),

@@ -165,7 +165,7 @@ func _can_soft_refresh() -> bool:
 
 
 func _soft_refresh() -> void:
-	_credits.text = "Credits: d%d" % _context.session.credits
+	_credits.text = "Credits: d%d" % _context.session.wallet.credits
 	_sync_log()
 	_sync_stock_spare_counts()
 	_rebuild_configuration()
@@ -182,7 +182,7 @@ func _full_refresh() -> void:
 	else:
 		_ship_name.text = ""
 
-	_credits.text = "Credits: d%d" % _context.session.credits
+	_credits.text = "Credits: d%d" % _context.session.wallet.credits
 	_sync_log()
 	_rebuild_configuration()
 	_rebuild_stock_tabs()
@@ -193,7 +193,7 @@ func _sync_log() -> void:
 	var bar := _log as MessageBar
 	if bar == null or _context == null or _context.session == null:
 		return
-	bar.play_line(_context.session.last_log)
+	bar.play_line(_context.session.player.last_log)
 
 
 func _sync_stock_spare_counts() -> void:

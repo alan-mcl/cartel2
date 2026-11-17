@@ -266,7 +266,7 @@ func _transition_matches(
 			if need_days < 0:
 				return false
 			var entered := float(instance.get("entered_gst", 0.0))
-			var elapsed_days := CommodityEconomy.gst_day(session.gst_seconds) - CommodityEconomy.gst_day(
+			var elapsed_days := CommodityEconomy.gst_day(session.world.gst_seconds) - CommodityEconomy.gst_day(
 				entered
 			)
 			return elapsed_days >= need_days
@@ -329,7 +329,7 @@ func _apply_transition(
 				flags[str(key_variant)] = str(set_flags[key_variant])
 			instance["flags"] = flags
 	instance["state"] = to_state
-	instance["entered_gst"] = session.gst_seconds
+	instance["entered_gst"] = session.world.gst_seconds
 	_instances[plotline_id] = instance
 
 
@@ -362,7 +362,7 @@ func _reconcile_instance(
 func _fresh_instance(session: GameSession, def: Dictionary) -> Dictionary:
 	return {
 		"state": str(def.get("initial", "")),
-		"entered_gst": session.gst_seconds if session != null else 0.0,
+		"entered_gst": session.world.gst_seconds if session != null else 0.0,
 		"flags": {},
 	}
 

@@ -133,7 +133,7 @@ func _build_content() -> void:
 	var is_station := (
 		_context.catalog != null
 		and _context.session != null
-		and _context.catalog.location_is_station(_context.session.habitat_id)
+		and _context.catalog.location_is_station(_context.session.world.habitat_id)
 	)
 	if not is_station:
 		var departures_tab := Button.new()
@@ -193,7 +193,7 @@ func _build_content() -> void:
 			charter_panel.refresh()
 		return
 
-	var ships := _context.session.ships_at(_context.session.habitat_id)
+	var ships := _context.session.ships_at(_context.session.world.habitat_id)
 
 	var columns := HBoxContainer.new()
 	_fill_remaining_area(columns)
@@ -294,14 +294,14 @@ func _on_terminal_ship_item_selected(index: int) -> void:
 
 func _sync_terminal_ship_selection() -> void:
 	if _terminal_ship_ids.is_empty():
-		for ship in _context.session.ships_at(_context.session.habitat_id):
+		for ship in _context.session.ships_at(_context.session.world.habitat_id):
 			_terminal_ship_ids.append(ship.id)
 	if _terminal_ship_ids.is_empty():
 		_selected_terminal_ship_id = ""
 		return
 	if _terminal_ship_ids.has(_selected_terminal_ship_id):
 		return
-	var preferred := _context.session.current_ship_id
+	var preferred := _context.session.fleet.current_ship_id
 	if _terminal_ship_ids.has(preferred):
 		_selected_terminal_ship_id = preferred
 	else:

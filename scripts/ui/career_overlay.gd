@@ -22,7 +22,7 @@ func open(session: GameSession, catalog: Catalog = null) -> void:
 	_session = session
 	_catalog = catalog
 	visible = true
-	_title.text = "Career - %s" % str(session.callsign) if session != null else "Career"
+	_title.text = "Career - %s" % str(session.player.callsign) if session != null else "Career"
 	_rebuild()
 
 
@@ -57,7 +57,7 @@ func _rebuild() -> void:
 	_add_row("N-space flight", CareerStatsFormat.format_gst_career_time(career.flight_gst_seconds_unspace))
 	_add_row(
 		"Total career time",
-		CareerStatsFormat.format_gst_career_time(career.elapsed_gst_seconds(_session.gst_seconds))
+		CareerStatsFormat.format_gst_career_time(career.elapsed_gst_seconds(_session.world.gst_seconds))
 	)
 
 	_add_section("Navigation")

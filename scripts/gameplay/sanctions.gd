@@ -83,11 +83,11 @@ static func record_player_weapon_hit(
 	collider: Variant,
 	result: Dictionary
 ) -> void:
-	if session == null or catalog == null or session.sandbox:
+	if session == null or catalog == null or session.player.sandbox:
 		return
-	if session.in_unspace:
+	if session.world.in_unspace:
 		return
-	if VolatileTranslation.is_volatile_sector_id(session.sector_id):
+	if VolatileTranslation.is_volatile_sector_id(session.world.sector_id):
 		return
 	if not player_shot:
 		return
@@ -97,7 +97,7 @@ static func record_player_weapon_hit(
 	if target_id.is_empty():
 		return
 
-	var recorded_gst := float(session.gst_seconds)
+	var recorded_gst := float(session.world.gst_seconds)
 	var added_fire := add_from_infraction(
 		session.player,
 		catalog,
@@ -138,7 +138,7 @@ static func record_player_weapon_hit(
 				int(destroy_def.get("fine", 0)),
 			]
 		)
-	session.last_log = "Sanction recorded: %s." % ", ".join(parts)
+	session.player.last_log = "Sanction recorded: %s." % ", ".join(parts)
 	session.changed.emit()
 
 

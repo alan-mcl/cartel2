@@ -108,7 +108,7 @@ func can_toggle_pause() -> bool:
 	if _main_menu.visible or _new_game.visible or _save_overlay.visible:
 		return false
 	if (
-		_main.session.docked
+		_main.session.world.docked
 		or _jump.visible
 		or (_hyperdrive != null and _hyperdrive.visible)
 		or _ui_root.visible
@@ -186,7 +186,7 @@ func show_main_menu() -> void:
 
 func start_game_from_session() -> void:
 	_main.player_ship = _world.assemble_current_ship()
-	if _main.player_ship.name.is_empty() and not _main.session.docked:
+	if _main.player_ship.name.is_empty() and not _main.session.world.docked:
 		push_error("Failed to assemble current player ship.")
 		return
 
@@ -205,7 +205,7 @@ func start_game_from_session() -> void:
 	_world.apply_salvage_visuals()
 	_on_session_changed.call()
 
-	if _main.session.docked:
+	if _main.session.world.docked:
 		_tree.paused = true
 		_pause.close()
 		_hud.visible = false
@@ -215,7 +215,7 @@ func start_game_from_session() -> void:
 		_tree.paused = false
 		_ui_root.close_ui()
 
-	if _main.session.in_unspace:
+	if _main.session.world.in_unspace:
 		_simulation.reset_unspace_pulse()
 
 	_sync_audio_context()
@@ -340,7 +340,7 @@ func save_to_slot(slot_index: int) -> bool:
 	LeaderboardStore.upsert_from_session(_main.session, str(save_data.get("saved_at", "")), _catalog)
 
 	_current_slot = slot_index
-	_main.session.last_log = "Game saved to slot %d." % slot_index
+	_main.session.player.last_log = "Game saved to slot %d." % slot_index
 	_main.session.changed.emit()
 	return true
 
@@ -407,7 +407,7 @@ func on_save_slot_chosen(slot_index: int) -> void:
 
 func on_save_overlay_cancelled() -> void:
 	_save_overlay.close()
-	if _save_overlay_source == "pause" and _main.game_active and not _main.session.docked:
+	if _save_overlay_source == "pause" and _main.game_active and not _main.session.world.docked:
 		_pause.open()
 	elif _save_overlay_source == "menu" and not _main.game_active:
 		_main_menu.open()
@@ -448,7 +448,7 @@ func open_career_overlay() -> void:
 	if not _main.game_active or _career == null:
 		return
 	_career.open(_main.session, _catalog)
-	if not _main.session.docked and not _pause.visible:
+	if not _main.session.world.docked and not _pause.visible:
 		_tree.paused = true
 
 
@@ -485,7 +485,7 @@ func _restore_pause_after_overlay() -> void:
 		return
 	if _pause.visible:
 		return
-	if _main.game_active and not _main.session.docked:
+	if _main.game_active and not _main.session.world.docked:
 		_tree.paused = false
 
 
@@ -610,8 +610,8 @@ func on_time_limit_continue_requested() -> void:
 		return
 	_main.session.career.continue_after_time_limit()
 	_time_limit.close()
-	_tree.paused = _main.session.docked
-	if _main.session.docked:
+	_tree.paused = _main.session.world.docked
+	if _main.session.world.docked:
 		_hud.visible = false
 		_ui_root.session = _main.session
 		if not _ui_root.visible:

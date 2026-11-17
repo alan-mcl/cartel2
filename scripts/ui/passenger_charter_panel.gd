@@ -23,7 +23,7 @@ func posted_chits() -> Array:
 	if missions == null or _context == null or _context.session == null:
 		return []
 	return CharterChit.from_rows(
-		missions.list_offers(_context.session.habitat_id, _passenger_board_key()),
+		missions.list_offers(_context.session.world.habitat_id, _passenger_board_key()),
 		Callable(self, "_describe_offer"),
 		Callable(self, "_accept_offer")
 	)

@@ -127,7 +127,7 @@ static func _mission_tooltip(
 		var ship := session.get_owned_ship(str(entry.get("ship_id", "")))
 		if ship != null:
 			ship_name = ship.name
-	var reference_gst := session.gst_seconds if session != null else -1.0
+	var reference_gst := session.world.gst_seconds if session != null else -1.0
 	match kind:
 		"passenger":
 			return CharterTooltipText.format_passenger(entry, "", origin, ship_name)
@@ -233,7 +233,7 @@ static func _freight_row(session: GameSession, catalog: Catalog, entry: Dictiona
 
 static func deadline_text(session: GameSession, entry: Dictionary) -> String:
 	if entry.has("deadline_gst"):
-		var remaining := float(entry.get("deadline_gst", 0.0)) - session.gst_seconds
+		var remaining := float(entry.get("deadline_gst", 0.0)) - session.world.gst_seconds
 		if remaining <= 0.0:
 			return "Past deadline"
 		return GalacticCalendar.format_countdown(remaining)

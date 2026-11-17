@@ -35,7 +35,7 @@ func open(session: GameSession, catalog: Catalog) -> void:
 			_title.text = "Year complete"
 		_:
 			_title.text = "Time complete"
-	_callsign.text = session.callsign
+	_callsign.text = session.player.callsign
 	_profit.text = "Nett profit: %s" % CareerStatsFormat.format_credits(session.career.nett_profit())
 	if catalog != null:
 		_worth.text = "Nett worth: %s" % CareerStatsFormat.format_credits(
@@ -45,7 +45,7 @@ func open(session: GameSession, catalog: Catalog) -> void:
 	else:
 		_worth.visible = false
 	_time.text = "Career time: %s" % CareerStatsFormat.format_gst_career_time(
-		session.career.elapsed_gst_seconds(session.gst_seconds)
+		session.career.elapsed_gst_seconds(session.world.gst_seconds)
 	)
 	var backdrop := _background.color
 	_background.color = Color(backdrop.r, backdrop.g, backdrop.b, 0.0)

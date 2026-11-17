@@ -214,7 +214,7 @@ static func _job_pool(
 	if missions == null:
 		return []
 	missions.ensure_boards(session, catalog)
-	var habitat_id := session.habitat_id
+	var habitat_id := session.world.habitat_id
 	var entries: Array = []
 	for offer_variant in missions.list_scan_offers(habitat_id, building_id):
 		if typeof(offer_variant) != TYPE_DICTIONARY:

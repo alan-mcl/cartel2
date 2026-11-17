@@ -156,7 +156,7 @@ func _load_volatile_sector(
 			render_data,
 			setup,
 			str(record.get("id", sector_id)),
-			session.run_seed
+			session.world.run_seed
 		)
 
 	if VolatileTranslation.return_gate_open(session, sector_id):

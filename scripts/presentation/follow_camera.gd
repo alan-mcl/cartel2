@@ -47,4 +47,4 @@ func _physics_process(_delta: float) -> void:
 func _is_in_unspace() -> bool:
 	if session == null:
 		return false
-	return session.in_unspace
+	return session.world.in_unspace

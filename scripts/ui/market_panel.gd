@@ -289,7 +289,7 @@ func _on_buy_commodity(commodity_id: String) -> void:
 	var ship_id := cargo_ship.id if cargo_ship != null else ""
 	_context.session.buy_commodity(
 		_context.catalog,
-		_context.session.building_id,
+		_context.session.world.building_id,
 		commodity_id,
 		1,
 		ship_id,
@@ -309,7 +309,7 @@ func _on_sell_commodity(commodity_id: String) -> void:
 	var ship_id := cargo_ship.id if cargo_ship != null else ""
 	_context.session.sell_commodity(
 		_context.catalog,
-		_context.session.building_id,
+		_context.session.world.building_id,
 		commodity_id,
 		1,
 		ship_id

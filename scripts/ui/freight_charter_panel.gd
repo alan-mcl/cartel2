@@ -23,9 +23,9 @@ func posted_chits() -> Array:
 		return []
 	var rows: Array = []
 	if _bar_building_id.is_empty():
-		rows = missions.list_freight_offers(_context.session.habitat_id)
+		rows = missions.list_freight_offers(_context.session.world.habitat_id)
 	else:
-		rows = missions.list_bar_freight_offers(_context.session.habitat_id, _bar_building_id)
+		rows = missions.list_bar_freight_offers(_context.session.world.habitat_id, _bar_building_id)
 	return CharterChit.from_rows(
 		rows,
 		Callable(self, "_describe_offer"),

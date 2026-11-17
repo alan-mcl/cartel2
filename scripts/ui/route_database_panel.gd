@@ -95,7 +95,7 @@ func _build_route_tables(local_rows: Array, other_rows: Array, volatile_rows: Ar
 	var sections: Array = []
 	if not local_rows.is_empty():
 		sections.append({
-			"title": TranslationNav.local_system_tab_title(_catalog, _session.sector_id),
+			"title": TranslationNav.local_system_tab_title(_catalog, _session.world.sector_id),
 			"rows": local_rows,
 		})
 	if not other_rows.is_empty():
@@ -280,17 +280,17 @@ static func format_selection_detail(
 	if bool(translation.get("volatile", false)):
 		detail += " %s" % TranslationNav.format_lag_pair(translation)
 	if bool(selected_offer.get("volatile", false)) and bool(translation.get("volatile", false)):
-		var record := VolatileTranslation.find_by_solution(session, session.sector_id, solution)
+		var record := VolatileTranslation.find_by_solution(session, session.world.sector_id, solution)
 		if not record.is_empty():
-			var remaining := float(record.get("expires_gst", 0.0)) - session.gst_seconds
+			var remaining := float(record.get("expires_gst", 0.0)) - session.world.gst_seconds
 			if remaining > 0.0:
 				detail += " Single-use; offer expires in %s." % GalacticCalendar.format_duration(remaining)
 			else:
 				detail += " Single-use."
 	elif bool(selected_offer.get("volatile_return", false)) and bool(translation.get("volatile", false)):
-		var record := VolatileTranslation.find_by_sector_id(session, session.sector_id)
+		var record := VolatileTranslation.find_by_sector_id(session, session.world.sector_id)
 		if not record.is_empty():
-			var remaining := float(record.get("return_expires_gst", 0.0)) - session.gst_seconds
+			var remaining := float(record.get("return_expires_gst", 0.0)) - session.world.gst_seconds
 			if remaining > 0.0:
 				detail += " Gate collapses in %s." % GalacticCalendar.format_duration(remaining)
 	return {

@@ -12,7 +12,7 @@ func sample(
 	if channel != MessageChannels.GOSSIP or simulation == null or session == null or catalog == null:
 		return _empty_sample()
 
-	var habitat_id := str(session.habitat_id).strip_edges()
+	var habitat_id := str(session.world.habitat_id).strip_edges()
 	if habitat_id.is_empty():
 		return _empty_sample()
 

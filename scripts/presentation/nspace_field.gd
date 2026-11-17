@@ -69,13 +69,13 @@ func configure(unspace: Dictionary, catalog: Catalog, session: GameSession, play
 	var solution := 0
 	var n := int(unspace.get("n", 4))
 	if session != null:
-		solution = session.unspace_solution
-		n = session.unspace_n
-		if solution == 0 and not session.pending_destination_id.is_empty():
+		solution = session.world.unspace_solution
+		n = session.world.unspace_n
+		if solution == 0 and not session.world.pending_destination_id.is_empty():
 			var mapping := catalog.get_mapping(
-				session.sector_id,
-				session.pending_destination_id,
-				session.unspace_n
+				session.world.sector_id,
+				session.world.pending_destination_id,
+				session.world.unspace_n
 			)
 			solution = int(mapping.get("solution", 0))
 
@@ -212,7 +212,7 @@ func try_start_rim_fold(
 		containment_cooldown
 	):
 		return out
-	var n := maxi(session.unspace_n, 4)
+	var n := maxi(session.world.unspace_n, 4)
 	var seed := _route_seed ^ int(ship_pos.x) ^ int(ship_pos.y)
 	var pick := UnspaceContainmentFold.pick_rim_fold_angle(
 		n, ship_pos, _mesh_center, velocity, seed
@@ -245,7 +245,7 @@ func apply_rim_fold_immediate_if_needed(
 		0.0
 	):
 		return false
-	var n := maxi(session.unspace_n, 4)
+	var n := maxi(session.world.unspace_n, 4)
 	var pick := UnspaceContainmentFold.pick_rim_fold_angle(
 		n, ship_pos, _mesh_center, velocity, _route_seed
 	)
@@ -442,7 +442,7 @@ func apply_local_fold(center_world: Vector2, radius: float, angle_rad: float) ->
 
 func tick_ascidian_hazards(session: GameSession, delta: float, player_pos: Vector2) -> Dictionary:
 	var out := {"log": ""}
-	if session == null or delta <= 0.0 or not session.in_unspace:
+	if session == null or delta <= 0.0 or not session.world.in_unspace:
 		return out
 
 	var positions: Array = []
@@ -1190,7 +1190,7 @@ func _clear_ascidians() -> void:
 
 func sync_shard_visuals(session: GameSession, delta: float) -> void:
 	_shard_sync_delta = delta
-	if session == null or not session.in_unspace:
+	if session == null or not session.world.in_unspace:
 		_clear_shard_visuals()
 		return
 

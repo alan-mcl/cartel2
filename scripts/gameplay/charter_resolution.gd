@@ -19,7 +19,7 @@ static func early_finish_bonus_amount(reward: int, session: GameSession, charter
 	if deadline <= accepted:
 		return 0
 	var midpoint := accepted + (deadline - accepted) * 0.5
-	if session.gst_seconds > midpoint:
+	if session.world.gst_seconds > midpoint:
 		return 0
 	return int(round(float(reward) * EARLY_FINISH_BONUS_FRACTION))
 
@@ -27,7 +27,7 @@ static func early_finish_bonus_amount(reward: int, session: GameSession, charter
 static func is_late(session: GameSession, charter: Dictionary) -> bool:
 	if session == null or not charter.has("deadline_gst"):
 		return false
-	return session.gst_seconds > float(charter.get("deadline_gst", 0.0))
+	return session.world.gst_seconds > float(charter.get("deadline_gst", 0.0))
 
 
 static func settle_on_dock(
@@ -79,8 +79,8 @@ static func fail_missed_deadline(session: GameSession, penalty: int, log_line: S
 static func log_with_reputation_delta(session: GameSession, delta: int, message: String) -> void:
 	var applied := session.player.adjust_reputation(delta)
 	if applied > 0:
-		session.last_log = "%s Reputation +%d." % [message, applied]
+		session.player.last_log = "%s Reputation +%d." % [message, applied]
 	elif applied < 0:
-		session.last_log = "%s Reputation %d." % [message, applied]
+		session.player.last_log = "%s Reputation %d." % [message, applied]
 	else:
-		session.last_log = message
+		session.player.last_log = message

@@ -52,13 +52,13 @@ func step(session: GameSession, catalog: Catalog, delta: float, frozen: bool) ->
 
 	if not session.player.sandbox:
 		session.career.record_played_seconds(delta)
-		if not session.docked:
+		if not session.world.docked:
 			var gst_delta := float(advance_result.get("gst_delta", 0.0))
-			session.career.record_flight_gst(gst_delta, session.in_unspace)
+			session.career.record_flight_gst(gst_delta, session.world.in_unspace)
 
 	session.advance_orbital_phase(catalog, delta)
 	VolatileTranslation.sweep(session)
-	if not session.docked and not session.in_unspace:
+	if not session.world.docked and not session.world.in_unspace:
 		HyperdriveSolution.advance(session, catalog, float(advance_result.get("gst_delta", 0.0)))
 
 	for subsystem_variant in _subsystems.values():
@@ -96,13 +96,13 @@ func apply_mapping_lump(
 	if jitter > 0.0:
 		applied *= 1.0 + randf_range(-jitter, jitter)
 
-	var previous_day := CommodityEconomy.gst_day(session.gst_seconds)
-	var previous_hour := SimClock.gst_hour(session.gst_seconds)
+	var previous_day := CommodityEconomy.gst_day(session.world.gst_seconds)
+	var previous_hour := SimClock.gst_hour(session.world.gst_seconds)
 	session.advance_gst(applied)
 	if not session.player.sandbox:
-		session.career.record_flight_gst(applied, session.in_unspace)
-	var current_day := CommodityEconomy.gst_day(session.gst_seconds)
-	var current_hour := SimClock.gst_hour(session.gst_seconds)
+		session.career.record_flight_gst(applied, session.world.in_unspace)
+	var current_day := CommodityEconomy.gst_day(session.world.gst_seconds)
+	var current_hour := SimClock.gst_hour(session.world.gst_seconds)
 
 	if catalog == null:
 		return applied

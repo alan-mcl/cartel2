@@ -181,7 +181,7 @@ static func buy_part(session: GameSession, catalog: Catalog, part_id: String) ->
 		return false
 
 	session.add_spare_part(part_id, 1)
-	session.last_log = "Purchased %s for d%d." % [_part_name(part, part_id), cost]
+	session.player.last_log = "Purchased %s for d%d." % [_part_name(part, part_id), cost]
 	if not session.player.sandbox:
 		session.career.record_part_purchase(cost)
 	session.changed.emit()
@@ -194,7 +194,7 @@ static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -
 		return false
 
 	if session.get_spare_part_count(part_id) <= 0:
-		session.last_log = "No spare %s in inventory." % _part_name(part, part_id)
+		session.player.last_log = "No spare %s in inventory." % _part_name(part, part_id)
 		session.changed.emit()
 		return false
 
@@ -202,7 +202,7 @@ static func sell_part(session: GameSession, catalog: Catalog, part_id: String) -
 	var sell_price := maxi(1, int(cost * 0.6))
 	session.remove_spare_part(part_id, 1)
 	session.apply_credits_delta(sell_price)
-	session.last_log = "Sold %s for d%d." % [_part_name(part, part_id), sell_price]
+	session.player.last_log = "Sold %s for d%d." % [_part_name(part, part_id), sell_price]
 	if not session.player.sandbox:
 		session.career.record_part_sale(sell_price)
 	session.changed.emit()
@@ -220,19 +220,19 @@ static func install_module(
 	if ship == null:
 		return false
 
-	if ship.location != session.habitat_id:
-		session.last_log = "Ship must be docked at this habitat."
+	if ship.location != session.world.habitat_id:
+		session.player.last_log = "Ship must be docked at this habitat."
 		session.changed.emit()
 		return false
 
-	if not session.sandbox and session.get_spare_part_count(part_id) <= 0:
-		session.last_log = "No spare part available to install."
+	if not session.player.sandbox and session.get_spare_part_count(part_id) <= 0:
+		session.player.last_log = "No spare part available to install."
 		session.changed.emit()
 		return false
 
 	var validation := ShipAssembler.validate_install(catalog, ship, slot, part_id)
 	if not bool(validation.get("ok", false)):
-		session.last_log = str(validation.get("reason", "Cannot install module."))
+		session.player.last_log = str(validation.get("reason", "Cannot install module."))
 		session.changed.emit()
 		return false
 
@@ -240,7 +240,7 @@ static func install_module(
 	if part == null:
 		return false
 
-	if not session.sandbox:
+	if not session.player.sandbox:
 		if not session.remove_spare_part(part_id, 1):
 			return false
 
@@ -249,19 +249,19 @@ static func install_module(
 	trial.set_module(slot, part_id)
 	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
 	if not cargo_block.is_empty():
-		session.last_log = cargo_block
+		session.player.last_log = cargo_block
 		session.changed.emit()
 		return false
 
 	var previous := ship.remove_module(slot)
-	if not session.sandbox and not previous.is_empty():
+	if not session.player.sandbox and not previous.is_empty():
 		session.add_spare_part(previous, 1)
 
 	ship.set_module(slot, part_id)
 	var vented := ShipFuel.reconcile_after_fit(catalog, ship)
-	session.last_log = "Installed %s on %s." % [_part_name(part, part_id), ship.name]
+	session.player.last_log = "Installed %s on %s." % [_part_name(part, part_id), ship.name]
 	if vented:
-		session.last_log += " Previous propulsion fuel vented."
+		session.player.last_log += " Previous propulsion fuel vented."
 	session.events.publish(SimEvent.module_installed(ship_id, slot, part_id))
 	session.changed.emit()
 	return true
@@ -281,14 +281,14 @@ static func relocate_module(
 	if ship == null:
 		return false
 
-	if ship.location != session.habitat_id:
-		session.last_log = "Ship must be docked at this habitat."
+	if ship.location != session.world.habitat_id:
+		session.player.last_log = "Ship must be docked at this habitat."
 		session.changed.emit()
 		return false
 
 	var moving := ship.get_module_id(from_slot)
 	if moving.is_empty():
-		session.last_log = "No module installed in that slot."
+		session.player.last_log = "No module installed in that slot."
 		session.changed.emit()
 		return false
 
@@ -300,7 +300,7 @@ static func relocate_module(
 
 	var first_validation := ShipAssembler.validate_install(catalog, trial, to_slot, moving)
 	if not bool(first_validation.get("ok", false)):
-		session.last_log = str(first_validation.get("reason", "Cannot move module."))
+		session.player.last_log = str(first_validation.get("reason", "Cannot move module."))
 		session.changed.emit()
 		return false
 
@@ -308,7 +308,7 @@ static func relocate_module(
 		trial.set_module(to_slot, moving)
 		var second_validation := ShipAssembler.validate_install(catalog, trial, from_slot, target)
 		if not bool(second_validation.get("ok", false)):
-			session.last_log = str(second_validation.get("reason", "Cannot swap modules."))
+			session.player.last_log = str(second_validation.get("reason", "Cannot swap modules."))
 			session.changed.emit()
 			return false
 		trial.set_module(from_slot, target)
@@ -317,7 +317,7 @@ static func relocate_module(
 
 	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
 	if not cargo_block.is_empty():
-		session.last_log = cargo_block
+		session.player.last_log = cargo_block
 		session.changed.emit()
 		return false
 
@@ -332,10 +332,10 @@ static func relocate_module(
 
 	var part := catalog.get_module_def(moving)
 	if target.is_empty():
-		session.last_log = "Moved %s to %s." % [_part_name(part, moving), to_slot]
+		session.player.last_log = "Moved %s to %s." % [_part_name(part, moving), to_slot]
 	else:
 		var other := catalog.get_module_def(target)
-		session.last_log = "Swapped %s and %s." % [
+		session.player.last_log = "Swapped %s and %s." % [
 			_part_name(part, moving),
 			_part_name(other, target),
 		]
@@ -348,14 +348,14 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 	if ship == null:
 		return false
 
-	if ship.location != session.habitat_id:
-		session.last_log = "Ship must be docked at this habitat."
+	if ship.location != session.world.habitat_id:
+		session.player.last_log = "Ship must be docked at this habitat."
 		session.changed.emit()
 		return false
 
 	var previous := ship.get_module_id(slot)
 	if previous.is_empty():
-		session.last_log = "No module installed in that slot."
+		session.player.last_log = "No module installed in that slot."
 		session.changed.emit()
 		return false
 
@@ -363,16 +363,16 @@ static func remove_module(session: GameSession, catalog: Catalog, ship_id: Strin
 	trial.remove_module(slot)
 	var cargo_block := CargoRequirements.cargo_aboard_violation_reason(catalog, trial)
 	if not cargo_block.is_empty():
-		session.last_log = cargo_block
+		session.player.last_log = cargo_block
 		session.changed.emit()
 		return false
 
 	ship.remove_module(slot)
 	ShipFuel.reconcile_after_fit(catalog, ship)
-	if not session.sandbox:
+	if not session.player.sandbox:
 		session.add_spare_part(previous, 1)
 	var part := catalog.get_module_def(previous)
-	session.last_log = "Removed %s from %s." % [_part_name(part, previous), ship.name]
+	session.player.last_log = "Removed %s from %s." % [_part_name(part, previous), ship.name]
 	session.changed.emit()
 	return true
 
@@ -397,7 +397,7 @@ static func refuel_quote(
 		result["log_reason"] = "No ship selected."
 		return result
 
-	if ship.location != session.habitat_id:
+	if ship.location != session.world.habitat_id:
 		result["log_reason"] = "Ship must be docked at this habitat."
 		return result
 
@@ -418,7 +418,7 @@ static func refuel_quote(
 	for row in quote_lines:
 		cost += int(row.get("cost", 0))
 
-	if session.sandbox:
+	if session.player.sandbox:
 		result["enabled"] = true
 		result["cost"] = 0
 		result["button_text"] = "Refuel"
@@ -445,7 +445,7 @@ static func refuel_ship(
 			return false
 		if reason.begins_with("Insufficient credits"):
 			return session.fail_action(reason)
-		session.last_log = reason
+		session.player.last_log = reason
 		session.changed.emit()
 		return false
 
@@ -461,16 +461,16 @@ static func refuel_ship(
 	ShipFuel.fill_to_ratio(catalog, ship, ratio)
 	if cost > 0:
 		if ratio < 0.999:
-			session.last_log = "Refuelled %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+			session.player.last_log = "Refuelled %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
 		else:
-			session.last_log = "Refuelled %s for d%d." % [ship.name, cost]
+			session.player.last_log = "Refuelled %s for d%d." % [ship.name, cost]
 		if not session.player.sandbox:
 			session.career.record_fuel_spend(cost)
 	else:
 		if ratio < 0.999:
-			session.last_log = "Refuelled %s to %.0f%%." % [ship.name, ratio * 100.0]
+			session.player.last_log = "Refuelled %s to %.0f%%." % [ship.name, ratio * 100.0]
 		else:
-			session.last_log = "Refuelled %s." % ship.name
+			session.player.last_log = "Refuelled %s." % ship.name
 	session.changed.emit()
 	return true
 
@@ -508,7 +508,7 @@ static func rearm_quote(
 	if ship == null:
 		result["log_reason"] = "No ship selected."
 		return result
-	if ship.location != session.habitat_id:
+	if ship.location != session.world.habitat_id:
 		result["log_reason"] = "Ship must be docked at this habitat."
 		return result
 
@@ -533,7 +533,7 @@ static func rearm_quote(
 
 	result["has_shortfall"] = true
 	result["shortfall"] = shortfall
-	if session.sandbox:
+	if session.player.sandbox:
 		result["enabled"] = true
 		result["cost"] = 0
 		result["button_text"] = "Rearm"
@@ -573,7 +573,7 @@ static func rearm_ship(
 			return false
 		if reason.begins_with("Insufficient credits"):
 			return session.fail_action(reason)
-		session.last_log = reason
+		session.player.last_log = reason
 		session.changed.emit()
 		return false
 
@@ -591,16 +591,16 @@ static func rearm_ship(
 	var ratio := clampf(fill_ratio, 0.0, 1.0)
 	if cost > 0:
 		if ratio < 0.999:
-			session.last_log = "Rearmed %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+			session.player.last_log = "Rearmed %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
 		else:
-			session.last_log = "Rearmed %s for d%d." % [ship.name, cost]
-		if not session.sandbox:
+			session.player.last_log = "Rearmed %s for d%d." % [ship.name, cost]
+		if not session.player.sandbox:
 			session.career.record_ammunition_spend(cost)
 	else:
 		if ratio < 0.999:
-			session.last_log = "Rearmed %s to %.0f%%." % [ship.name, ratio * 100.0]
+			session.player.last_log = "Rearmed %s to %.0f%%." % [ship.name, ratio * 100.0]
 		else:
-			session.last_log = "Rearmed %s." % ship.name
+			session.player.last_log = "Rearmed %s." % ship.name
 	session.changed.emit()
 	return true
 
@@ -645,7 +645,7 @@ static func repair_quote(
 	if ship == null:
 		result["log_reason"] = "No ship selected."
 		return result
-	if ship.location != session.habitat_id:
+	if ship.location != session.world.habitat_id:
 		result["log_reason"] = "Ship must be docked at this habitat."
 		return result
 
@@ -661,7 +661,7 @@ static func repair_quote(
 	result["has_shortfall"] = true
 	var ratio := clampf(fill_ratio, 0.0, 1.0)
 
-	if session.sandbox:
+	if session.player.sandbox:
 		result["enabled"] = true
 		result["cost"] = 0
 		result["button_text"] = "Repair"
@@ -704,7 +704,7 @@ static func repair_ship(
 			return false
 		if reason.begins_with("Insufficient credits"):
 			return session.fail_action(reason)
-		session.last_log = reason
+		session.player.last_log = reason
 		session.changed.emit()
 		return false
 
@@ -724,16 +724,16 @@ static func repair_ship(
 
 	if cost > 0:
 		if ratio < 0.999:
-			session.last_log = "Repaired %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
+			session.player.last_log = "Repaired %s to %.0f%% for d%d." % [ship.name, ratio * 100.0, cost]
 		else:
-			session.last_log = "Repaired %s for d%d." % [ship.name, cost]
-		if not session.sandbox:
+			session.player.last_log = "Repaired %s for d%d." % [ship.name, cost]
+		if not session.player.sandbox:
 			session.career.record_repair_spend(cost)
 	else:
 		if ratio < 0.999:
-			session.last_log = "Repaired %s to %.0f%%." % [ship.name, ratio * 100.0]
+			session.player.last_log = "Repaired %s to %.0f%%." % [ship.name, ratio * 100.0]
 		else:
-			session.last_log = "Repaired %s." % ship.name
+			session.player.last_log = "Repaired %s." % ship.name
 	session.changed.emit()
 	return true
 

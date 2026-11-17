@@ -117,7 +117,7 @@ func buy_offer(
 	if session == null or catalog == null or session.player == null:
 		result["reason"] = "unavailable"
 		return result
-	if not session.docked:
+	if not session.world.docked:
 		result["reason"] = "not_docked"
 		return result
 	ensure(session, catalog, building_id)
@@ -127,7 +127,7 @@ func buy_offer(
 		result["reason"] = "not_listed"
 		return result
 	var offer: Dictionary = offers[index]
-	if str(offer.get("habitat_id", "")) != str(session.habitat_id):
+	if str(offer.get("habitat_id", "")) != str(session.world.habitat_id):
 		result["reason"] = "wrong_habitat"
 		return result
 	var price := int(offer.get("price", 0))
@@ -158,7 +158,7 @@ func buy_offer(
 		offers_by_building[building_id] = offers
 		result["reason"] = "insufficient_credits"
 		return result
-	session.last_log = "Bought a private %d-space solution %d from %s to %s." % [
+	session.player.last_log = "Bought a private %d-space solution %d from %s to %s." % [
 		n,
 		solution,
 		TranslationNav.destination_display_label(catalog, source),
@@ -172,14 +172,14 @@ func buy_offer(
 func ensure(session: GameSession, catalog: Catalog, building_id: String) -> void:
 	if session == null or catalog == null or building_id.is_empty():
 		return
-	var day := CommodityEconomy.gst_day(session.gst_seconds)
+	var day := CommodityEconomy.gst_day(session.world.gst_seconds)
 	if generated_day != day:
 		offers_by_building.clear()
 		generated_day = day
 	if offers_by_building.has(building_id):
 		return
 	var building := catalog.get_building(building_id)
-	if not catalog.habitat_allows_building(catalog.get_habitat(session.habitat_id), building_id):
+	if not catalog.habitat_allows_building(catalog.get_habitat(session.world.habitat_id), building_id):
 		return
 	var channel := _channel_for(catalog, building)
 	if channel.is_empty():
@@ -227,7 +227,7 @@ func _generate(
 	day: int
 ) -> Array:
 	var building_id := str(building.get("id", ""))
-	var habitat_id := str(session.habitat_id)
+	var habitat_id := str(session.world.habitat_id)
 	var population := DealerStock.population_for_habitat(catalog, habitat_id)
 	var bar := channel == "bar"
 	var max_n := bar_max_n(population)
@@ -242,7 +242,7 @@ func _generate(
 	if sectors.size() < 2:
 		return []
 	var rng := RandomNumberGenerator.new()
-	rng.seed = int(hash("%d:%d:%s:%s:translation" % [session.run_seed, day, habitat_id, building_id]))
+	rng.seed = int(hash("%d:%d:%s:%s:translation" % [session.world.run_seed, day, habitat_id, building_id]))
 	var offers: Array = []
 	var seen: Dictionary = {}
 	var attempts := 0
@@ -285,7 +285,7 @@ func _bar_count(
 	population: float
 ) -> int:
 	var rng := RandomNumberGenerator.new()
-	rng.seed = int(hash("%d:%d:%s:%s:translation-bar" % [session.run_seed, day, habitat_id, building_id]))
+	rng.seed = int(hash("%d:%d:%s:%s:translation-bar" % [session.world.run_seed, day, habitat_id, building_id]))
 	if rng.randi() % 100 >= BAR_POST_CHANCE:
 		return 0
 	if population >= BAR_DEEP_POPULATION and rng.randi() % 100 < BAR_SECOND_CHANCE:

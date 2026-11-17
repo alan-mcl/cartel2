@@ -78,7 +78,7 @@ static func evaluate_offer_for_ship(
 	var ship := session.get_owned_ship(ship_id)
 	if ship == null:
 		return {"ok": false, "reason": "Select a docked ship."}
-	if ship.location != session.habitat_id:
+	if ship.location != session.world.habitat_id:
 		return {"ok": false, "reason": "Ship must be docked here."}
 	if not ship_has_retrieval_drone(catalog, ship):
 		return {"ok": false, "reason": "Requires a retrieval drone."}

@@ -33,15 +33,15 @@ static func gst_day(gst_seconds: float) -> int:
 
 
 static func ensure_quotes(session: GameSession, catalog: Catalog) -> bool:
-	var day: int = gst_day(session.gst_seconds)
+	var day: int = gst_day(session.world.gst_seconds)
 	_decay_pressure(session, day)
-	if session.market_quotes_day == day and not session.market_quotes.is_empty():
+	if session.world.market_quotes_day == day and not session.world.market_quotes.is_empty():
 		FuelEconomy.ensure_quotes(session, catalog)
 		return false
-	var quotes := compute_quotes(catalog, day, session.route_friction_delta)
+	var quotes := compute_quotes(catalog, day, session.world.route_friction_delta)
 	_overlay_pressure(session, quotes)
-	session.market_quotes = quotes
-	session.market_quotes_day = day
+	session.world.market_quotes = quotes
+	session.world.market_quotes_day = day
 	FuelEconomy.ensure_quotes(session, catalog)
 	return true
 
@@ -116,7 +116,7 @@ static func compute_quotes(catalog: Catalog, day: int, friction_delta: Dictionar
 
 static func quote_for_sector(session: GameSession, catalog: Catalog, sector_id: String, commodity_id: String) -> Dictionary:
 	ensure_quotes(session, catalog)
-	var sector_quotes: Variant = session.market_quotes.get(sector_id, {})
+	var sector_quotes: Variant = session.world.market_quotes.get(sector_id, {})
 	if typeof(sector_quotes) != TYPE_DICTIONARY:
 		return {}
 	var listing: Variant = sector_quotes.get(commodity_id, {})
@@ -304,7 +304,7 @@ static func _overlay_pressure(session: GameSession, quotes: Dictionary) -> void:
 
 
 static func _repost_listing(session: GameSession, sector_id: String, commodity_id: String) -> void:
-	var sector_quotes: Variant = session.market_quotes.get(sector_id, {})
+	var sector_quotes: Variant = session.world.market_quotes.get(sector_id, {})
 	if typeof(sector_quotes) != TYPE_DICTIONARY:
 		return
 	var listing: Variant = (sector_quotes as Dictionary).get(commodity_id, {})
@@ -329,7 +329,7 @@ static func _pressure_units(session: GameSession, sector_id: String, commodity_i
 static func _set_pressure(session: GameSession, sector_id: String, commodity_id: String, units: float) -> void:
 	var world := session.world
 	if world.market_pressure_day < 0:
-		world.market_pressure_day = gst_day(session.gst_seconds)
+		world.market_pressure_day = gst_day(session.world.gst_seconds)
 	var book: Variant = world.market_pressure.get(sector_id, {})
 	var next: Dictionary = {} if typeof(book) != TYPE_DICTIONARY else (book as Dictionary).duplicate()
 	if absf(units) < 0.05:
