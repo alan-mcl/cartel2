@@ -378,33 +378,20 @@ func _build_volatile_prop_contacts(loader: WorldLoader) -> Array:
 		surviving[entity_id] = meta
 		var prop_node := node as Node2D
 		var kind := str(meta.get("kind", ""))
-		var label := str(meta.get("label", kind.capitalize()))
+		if WorldEntityRegistry.volatile_contact_profile(kind).is_empty():
+			continue
 		var sprite_path := str(meta.get("sprite", ""))
-		var contact := {
-			"id": entity_id,
-			"name": label,
-			"short_label": "",
-			"position": prop_node.global_position,
-			"velocity": Vector2.ZERO,
-			"heading_rad": prop_node.global_rotation - PI * 0.5,
-		}
-		match kind:
-			"derelict", "cargo":
-				contact["contact_kind"] = "debris"
-				var health_ratio := 1.0
-				if prop_node.has_method("health_ratio"):
-					health_ratio = float(prop_node.call("health_ratio"))
-				contact["debris_health_ratio"] = health_ratio
-				_merge_lock_display_fields(loader, contact, sprite_path)
-			"marker":
-				contact["contact_kind"] = "landmark"
-				_merge_lock_display_fields(loader, contact, sprite_path, 40.0)
-			"mine":
-				contact["contact_kind"] = "landmark"
-				contact["name"] = "Mine"
-				_merge_lock_display_fields(loader, contact, sprite_path, 36.0)
-			_:
-				continue
+		var contact := WorldEntityRegistry.build_volatile_prop_contact(
+			kind, entity_id, meta, prop_node
+		)
+		if contact.is_empty():
+			continue
+		_merge_lock_display_fields(
+			loader,
+			contact,
+			sprite_path,
+			WorldEntityRegistry.volatile_lock_sprite_radius(kind)
+		)
 		contacts.append(contact)
 	loader._volatile_entity_contact_meta = surviving
 	return contacts

@@ -6,7 +6,7 @@ What the code does today: [architecture.md](architecture.md). What is explicitly
 
 Implemented N-space transit, hazards, and per-N backdrops are documented in [n-space.md](../content/n-space.md) (flux, folds, shards, ascidian scan/sting/shed/fold/terrain flow). Do not edit frozen setting files for backlog items unless the request explicitly asks for setting-doc changes.
 
-**Refactoring** items (R2–R15) are structural debt from the November 2026 review. Pick one id at a time. Read **Depends on** and **Do not** before editing. Content features F3, F10, and F2 stay in the feature table; their structural prerequisites are R5 and R6 (F3 desk and F10 escape-hook wiring are landed).
+**Refactoring** items (R2–R15) are structural debt from the November 2026 review. Pick one id at a time. Read **Depends on** and **Do not** before editing. Content features F3, F10, and F2 stay in the feature table; entity spawn registration and the traffic query split are landed (F3 desk and F10 escape-hook wiring are landed).
 
 ## Bugs
 
@@ -14,6 +14,7 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B1|data|med|Double 'Janus' in the planets catalog|
+|B2|ui|med|'pay sanctions' button doesn't turn into 'launch' when you have no more sanctions until you change buildings away then back|
 
 ## Features
 
@@ -23,15 +24,14 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 |F10|npc|med|NPC pilots to use hyperdrives if equipped (escape notification is in gameplay)|
 |F1|art|low|irregularly shaped planet renderer (for comets, KBOs, etc)|
-|F2|systems|med|asteroid/debris placement around maps and vectors. Spawn registration is R6 (world query split is landed)|
+|F2|systems|med|asteroid/debris placement around maps and vectors (entity spawn registration is landed)|
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R6; R7 before R8. R9, R10, R12, and R13 can land any time.
+Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R7 before R8. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R6|world|high|Register entity kinds instead of private spawn branches. Unblocks F2|
 |R7|session|high|Travel, dock, cargo, and trade move onto the state slices|
 |R8|session|high|Call sites use the slices; forwarding properties stay until that is done|
 |R9|data|med|Schema checks for worlds, buildings, traffic, and interactables|
@@ -41,15 +41,6 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 |R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
 |R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
 |R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
-
-### R6 — Entity spawn registration
-
-- **Status:** Discuss
-- **Depends on:** — (traffic query split is landed)
-- **Unblocks:** F2
-- **Scope:** `scripts/presentation/world_loader.gd`, `scripts/presentation/world_nav.gd`, `scenes/world/`
-- **Do not:** place asteroid belts or vectors (F2); fold planets, local stars, or sky parent bodies into the entity registry; split `nspace_field.gd`
-- **Acceptance:** a new `entities[]` kind is a scene plus a registry entry, and sensor contacts for that kind are registered beside it. `load_sector` no longer grows a private branch for that kind. Existing habitats, gates, debris, orbitals, derelicts, cargo, markers, and mines still spawn.
 
 ### R7 — Session transitions on the state slices
 

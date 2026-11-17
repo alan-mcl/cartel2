@@ -12,17 +12,6 @@ const STAR_MAX_RADIUS := 12000.0
 const STAR_GATE_CLEARANCE := 800.0
 const STAR_HABITAT_ALIGN_MAX := 0.35
 
-const SCENES := {
-	"habitat": "res://scenes/world/habitat.tscn",
-	"jump_gate": "res://scenes/world/jump_gate.tscn",
-	"debris": "res://scenes/world/debris_rock.tscn",
-	"orbital": "res://scenes/world/orbital.tscn",
-	"derelict": "res://scenes/world/volatile_static.tscn",
-	"cargo": "res://scenes/world/volatile_static.tscn",
-	"marker": "res://scenes/world/volatile_static.tscn",
-	"mine": "res://scenes/world/proximity_mine.tscn",
-}
-
 const LAUNCH_OFFSET := 220.0
 const GATE_APPROACH_OFFSET := 280.0
 const UNDOCK_LAUNCH_SPEED := 140.0
@@ -192,7 +181,7 @@ func _load_volatile_sector(
 			var entity_kind := str(entity.get("kind", ""))
 			if entity_kind == "orbital" and not entity_id.is_empty():
 				_volatile_orbital_entity_ids.append(entity_id)
-			elif entity_kind in ["derelict", "cargo", "marker", "mine"] and not entity_id.is_empty():
+			elif WorldEntityRegistry.tracks_volatile_meta(entity_kind) and not entity_id.is_empty():
 				_volatile_entity_contact_meta[entity_id] = entity.duplicate(true)
 
 	var scan_contact: Variant = setup.get("scan_contact", {})
@@ -1006,7 +995,7 @@ func _spawn_orbital_instance(
 	var scene_kind := kind
 	if kind == "orbital" and not str(orbital_def.get("interactable", "")).is_empty():
 		scene_kind = "habitat"
-	var scene_path: String = SCENES.get(scene_kind, "")
+	var scene_path := WorldEntityRegistry.scene_path_for(scene_kind, orbital_def)
 	if scene_path.is_empty():
 		push_error("Unknown orbital kind: %s" % kind)
 		return null
@@ -1150,7 +1139,12 @@ func _spawn_entity(
 	var kind := str(entity.get("kind", ""))
 	var entity_id := str(entity.get("id", ""))
 
-	var scene_path: String = SCENES.get(kind, "")
+	var entity_def := WorldEntityRegistry.definition(kind)
+	if entity_def.is_empty():
+		push_error("Unknown world entity kind: %s" % kind)
+		return null
+
+	var scene_path := WorldEntityRegistry.scene_path_for(kind, entity)
 	if scene_path.is_empty():
 		push_error("Unknown world entity kind: %s" % kind)
 		return null
@@ -1165,37 +1159,11 @@ func _spawn_entity(
 
 	if not entity_id.is_empty():
 		spawned_by_id[entity_id] = instance
-		if kind == "debris":
+		if bool(entity_def.get("track_debris", false)):
 			_debris_entity_ids.append(entity_id)
-			if not entity_id.is_empty():
-				_debris_entity_contact_meta[entity_id] = entity.duplicate(true)
+			_debris_entity_contact_meta[entity_id] = entity.duplicate(true)
 
-	if kind == "debris":
-		_configure_debris(instance, entity)
-		_try_apply_star_light_to_debris_node(instance)
-	elif kind in ["derelict", "cargo", "marker"]:
-		if instance.has_method("configure"):
-			instance.call("configure", entity)
-	elif kind == "mine":
-		if instance.has_method("configure"):
-			instance.call("configure", entity)
-	else:
-		if instance is Node2D and entity.has("position"):
-			var pos: Dictionary = entity.get("position", {})
-			(instance as Node2D).position = Vector2(
-				float(pos.get("x", 0.0)),
-				float(pos.get("y", 0.0))
-			)
-		if instance is WorldObject:
-			instance.configure(entity, catalog, session)
-		elif instance is Node2D:
-			_configure_orbital_instance(instance as Node2D, entity, catalog, session)
-		elif instance.has_method("configure"):
-			var arg_count := instance.get_method_argument_count("configure")
-			if arg_count == 1:
-				instance.call("configure", entity)
-			else:
-				instance.call("configure", entity, catalog, session)
+	WorldEntityRegistry.apply_post_spawn(self, kind, instance, entity, catalog, session)
 
 	return instance
 

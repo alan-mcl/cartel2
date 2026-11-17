@@ -135,6 +135,7 @@ func _suite_entries(runner: TestRunner) -> Array:
 		{"name": "TestFlightRules", "run": func() -> void: TestFlightRules.run(runner)},
 		{"name": "TestBalanceMetrics", "run": func() -> void: TestBalanceMetrics.run(runner)},
 		{"name": "TestWeaponMountBands", "run": func() -> void: TestWeaponMountBands.run(runner)},
+		{"name": "TestWorldEntityRegistry", "run": func() -> void: TestWorldEntityRegistry.run(runner)},
 		{"name": "TestTemplatePower", "run": func() -> void: TestTemplatePower.run(runner)},
 		{"name": "TestModuleDominance", "run": func() -> void: TestModuleDominance.run(runner)},
 	]
