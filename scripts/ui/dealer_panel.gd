@@ -15,10 +15,15 @@ func configure(building: Dictionary) -> void:
 func session_changed() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
-	if _can_soft_refresh() and not _dealer_stock_ids_changed():
-		_soft_refresh()
-		return
-	refresh()
+	UiPatterns.refresh_soft_or_full(
+		Callable(self, "_can_soft_refresh_session"),
+		Callable(self, "_soft_refresh"),
+		Callable(self, "refresh")
+	)
+
+
+func _can_soft_refresh_session() -> bool:
+	return _can_soft_refresh() and not _dealer_stock_ids_changed()
 
 
 func refresh() -> void:
@@ -40,7 +45,7 @@ func _can_soft_refresh() -> bool:
 
 
 func _soft_refresh() -> void:
-	var detail := _find_meta_host("dealer_detail_host")
+	var detail := UiPatterns.find_meta_host(self, "dealer_detail_host")
 	if detail == null:
 		return
 	var building_type := _context.catalog.get_building_type(_building)
@@ -179,12 +184,7 @@ func _sync_dealer_selection(detail: VBoxContainer) -> void:
 	elif not _dealer_stock_ids.has(_selected_dealer_stock_id):
 		_selected_dealer_stock_id = _dealer_stock_ids[0] if not _dealer_stock_ids.is_empty() else ""
 
-	_select_item_by_id(
-		_dealer_item_list,
-		_dealer_stock_ids,
-		_selected_dealer_stock_id,
-		"_suppress_dealer_select"
-	)
+	_select_item_by_id(_dealer_item_list, _dealer_stock_ids, _selected_dealer_stock_id)
 
 
 func _on_dealer_item_selected(index: int) -> void:
@@ -193,7 +193,7 @@ func _on_dealer_item_selected(index: int) -> void:
 	if index < 0 or index >= _dealer_stock_ids.size():
 		return
 	_selected_dealer_stock_id = _dealer_stock_ids[index]
-	var detail := _find_meta_host("dealer_detail_host")
+	var detail := UiPatterns.find_meta_host(self, "dealer_detail_host")
 	if detail == null:
 		return
 	var building_type := _context.catalog.get_building_type(_building)
@@ -319,39 +319,20 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 	return body
 
 
-func _find_meta_host(meta_name: String) -> VBoxContainer:
-	return _find_meta_host_in(self, meta_name)
-
-
-func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
-	if node is VBoxContainer and node.has_meta(meta_name):
-		return node as VBoxContainer
-	for child in node.get_children():
-		var found := _find_meta_host_in(child, meta_name)
-		if found != null:
-			return found
-	return null
-
-
 func _clear_children(node: Node) -> void:
 	for child in node.get_children():
 		node.remove_child(child)
 		child.queue_free()
 
 
-func _select_item_by_id(
-	list: ItemList,
-	ids: PackedStringArray,
-	target_id: String,
-	suppress_flag_name: String
-) -> void:
-	set(suppress_flag_name, true)
-	var index := ids.find(target_id)
-	if index >= 0:
-		list.select(index)
-	else:
-		list.deselect_all()
-	set(suppress_flag_name, false)
+func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
+	UiPatterns.select_item_by_id(
+		list,
+		ids,
+		target_id,
+		func() -> void: _suppress_dealer_select = true,
+		func() -> void: _suppress_dealer_select = false
+	)
 
 
 func _add_description_label(parent: VBoxContainer, text: String) -> void:

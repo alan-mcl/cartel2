@@ -60,10 +60,11 @@ func _top_up_tape() -> void:
 func session_changed() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
-	if _can_soft_refresh():
-		_soft_refresh()
-		return
-	refresh()
+	UiPatterns.refresh_soft_or_full(
+		Callable(self, "_can_soft_refresh"),
+		Callable(self, "_soft_refresh"),
+		Callable(self, "refresh")
+	)
 
 
 func refresh() -> void:
@@ -103,7 +104,7 @@ func _soft_refresh() -> void:
 		if commodity.has_source_key("name"):
 			commodity_label = commodity.name
 		_commodity_item_list.set_item_text(i, "%s · d%d" % [commodity_label, price])
-	var detail := _find_meta_host("detail_host")
+	var detail := _meta_host("detail_host")
 	if detail != null:
 		_rebuild_commodity_detail(detail)
 
@@ -179,12 +180,7 @@ func _build_content() -> void:
 	elif not _market_commodity_ids.has(_selected_commodity_id):
 		_selected_commodity_id = _market_commodity_ids[0] if not _market_commodity_ids.is_empty() else ""
 
-	_select_item_by_id(
-		_commodity_item_list,
-		_market_commodity_ids,
-		_selected_commodity_id,
-		"_suppress_commodity_select"
-	)
+	_select_item_by_id(_commodity_item_list, _market_commodity_ids, _selected_commodity_id)
 	_rebuild_commodity_detail(detail)
 
 
@@ -194,7 +190,7 @@ func _on_commodity_item_selected(index: int) -> void:
 	if index < 0 or index >= _market_commodity_ids.size():
 		return
 	_selected_commodity_id = _market_commodity_ids[index]
-	var detail := _find_meta_host("detail_host")
+	var detail := _meta_host("detail_host")
 	if detail != null:
 		_rebuild_commodity_detail(detail)
 
@@ -331,20 +327,9 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 	return body
 
 
-func _find_meta_host(meta_name: String) -> VBoxContainer:
-	if _listings_host != null:
-		return _find_meta_host_in(_listings_host, meta_name)
-	return _find_meta_host_in(self, meta_name)
-
-
-func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
-	if node is VBoxContainer and node.has_meta(meta_name):
-		return node as VBoxContainer
-	for child in node.get_children():
-		var found := _find_meta_host_in(child, meta_name)
-		if found != null:
-			return found
-	return null
+func _meta_host(meta_name: String) -> VBoxContainer:
+	var root: Node = _listings_host if _listings_host != null else self
+	return UiPatterns.find_meta_host(root, meta_name)
 
 
 func _clear_children(node: Node) -> void:
@@ -353,19 +338,22 @@ func _clear_children(node: Node) -> void:
 		child.queue_free()
 
 
-func _select_item_by_id(
-	list: ItemList,
-	ids: PackedStringArray,
-	target_id: String,
-	suppress_flag_name: String
-) -> void:
-	set(suppress_flag_name, true)
-	var index := ids.find(target_id)
-	if index >= 0:
-		list.select(index)
-	else:
-		list.deselect_all()
-	set(suppress_flag_name, false)
+func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
+	UiPatterns.select_item_by_id(
+		list,
+		ids,
+		target_id,
+		Callable(self, "_on_commodity_select_suppress_on"),
+		Callable(self, "_on_commodity_select_suppress_off")
+	)
+
+
+func _on_commodity_select_suppress_on() -> void:
+	_suppress_commodity_select = true
+
+
+func _on_commodity_select_suppress_off() -> void:
+	_suppress_commodity_select = false
 
 
 func _section_label(text: String) -> Label:

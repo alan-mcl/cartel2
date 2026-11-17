@@ -54,16 +54,25 @@ func _apply_tape_tag() -> void:
 func session_changed() -> void:
 	if not is_node_ready() or _context == null:
 		return
-	if _can_soft_refresh() and _selling() == _built_selling:
-		_top_up_tape()
-		_apply_tab_titles()
-		if _scan_panel != null and _scan_panel.has_method("session_changed"):
-			_scan_panel.session_changed()
-		elif _scan_panel != null and _scan_panel.has_method("refresh"):
-			_scan_panel.refresh()
-		_present_solutions()
-		return
-	refresh()
+	UiPatterns.refresh_soft_or_full(
+		Callable(self, "_can_soft_refresh_session"),
+		Callable(self, "_soft_refresh_session"),
+		Callable(self, "refresh")
+	)
+
+
+func _can_soft_refresh_session() -> bool:
+	return _can_soft_refresh() and _selling() == _built_selling
+
+
+func _soft_refresh_session() -> void:
+	_top_up_tape()
+	_apply_tab_titles()
+	if _scan_panel != null and _scan_panel.has_method("session_changed"):
+		_scan_panel.session_changed()
+	elif _scan_panel != null and _scan_panel.has_method("refresh"):
+		_scan_panel.refresh()
+	_present_solutions()
 
 
 func refresh() -> void:

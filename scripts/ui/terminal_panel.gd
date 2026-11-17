@@ -60,10 +60,11 @@ func _process(_delta: float) -> void:
 func session_changed() -> void:
 	if not is_node_ready() or _context == null or _context.session == null:
 		return
-	if _can_soft_refresh_docking_bay():
-		_soft_refresh_docking_bay()
-		return
-	_full_rebuild()
+	UiPatterns.refresh_soft_or_full(
+		Callable(self, "_can_soft_refresh_docking_bay"),
+		Callable(self, "_soft_refresh_docking_bay"),
+		Callable(self, "_full_rebuild")
+	)
 
 
 func refresh() -> void:
@@ -81,10 +82,10 @@ func _can_soft_refresh_docking_bay() -> bool:
 
 func _soft_refresh_docking_bay() -> void:
 	_sync_docked_ship_list_labels()
-	var detail := _find_meta_host("terminal_detail_host")
+	var detail := UiPatterns.find_meta_host(self, "terminal_detail_host")
 	if detail != null:
 		_rebuild_terminal_ship_detail(detail)
-	var admin := _find_meta_host("terminal_admin_host")
+	var admin := UiPatterns.find_meta_host(self, "terminal_admin_host")
 	if admin != null:
 		_refresh_terminal_dock_service_quotes(admin)
 
@@ -268,12 +269,7 @@ func _build_content() -> void:
 
 	_sync_terminal_ship_selection()
 
-	_select_item_by_id(
-		_terminal_ship_item_list,
-		_terminal_ship_ids,
-		_selected_terminal_ship_id,
-		"_suppress_terminal_ship_select"
-	)
+	_select_item_by_id(_terminal_ship_item_list, _terminal_ship_ids, _selected_terminal_ship_id)
 	_rebuild_terminal_ship_panels()
 
 
@@ -311,8 +307,8 @@ func _sync_terminal_ship_selection() -> void:
 
 
 func _rebuild_terminal_ship_panels() -> void:
-	var detail := _find_meta_host("terminal_detail_host")
-	var admin := _find_meta_host("terminal_admin_host")
+	var detail := UiPatterns.find_meta_host(self, "terminal_detail_host")
+	var admin := UiPatterns.find_meta_host(self, "terminal_admin_host")
 	if detail != null:
 		_rebuild_terminal_ship_detail(detail)
 	if admin != null:
@@ -483,7 +479,7 @@ func _on_rename_ship_pressed() -> void:
 
 
 func _refresh_terminal_admin_panel() -> void:
-	var admin := _find_meta_host("terminal_admin_host")
+	var admin := UiPatterns.find_meta_host(self, "terminal_admin_host")
 	if admin != null:
 		_rebuild_terminal_admin_panel(admin)
 
@@ -595,20 +591,6 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 	return body
 
 
-func _find_meta_host(meta_name: String) -> VBoxContainer:
-	return _find_meta_host_in(self, meta_name)
-
-
-func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
-	if node is VBoxContainer and node.has_meta(meta_name):
-		return node as VBoxContainer
-	for child in node.get_children():
-		var found := _find_meta_host_in(child, meta_name)
-		if found != null:
-			return found
-	return null
-
-
 func _fill_remaining_area(control: Control) -> void:
 	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	control.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -628,16 +610,11 @@ func _clear_children(node: Node) -> void:
 		child.queue_free()
 
 
-func _select_item_by_id(
-	list: ItemList,
-	ids: PackedStringArray,
-	target_id: String,
-	suppress_flag_name: String
-) -> void:
-	set(suppress_flag_name, true)
-	var index := ids.find(target_id)
-	if index >= 0:
-		list.select(index)
-	else:
-		list.deselect_all()
-	set(suppress_flag_name, false)
+func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
+	UiPatterns.select_item_by_id(
+		list,
+		ids,
+		target_id,
+		func() -> void: _suppress_terminal_ship_select = true,
+		func() -> void: _suppress_terminal_ship_select = false
+	)

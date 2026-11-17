@@ -31,7 +31,20 @@ static func run(runner: TestRunner) -> void:
 
 static func _assembled_with_modules(modules: Array, chassis_mass: float = 3.2) -> AssembledShip:
 	var assembled := AssembledShip.new()
-	assembled.chassis = {"mass": chassis_mass}
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "test",
+			"name": "Test",
+			"maker": "Test",
+			"description": "",
+			"mass": chassis_mass,
+			"hits": 1.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	assembled.envelope = {"dry_mass": chassis_mass}
 	assembled.installed_modules = modules.duplicate(true)
 	return assembled

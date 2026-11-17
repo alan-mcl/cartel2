@@ -145,7 +145,7 @@ func _rebuild_building_list(habitat: Dictionary) -> void:
 		var index := _building_item_list.add_item(str(row.get("name", building_id)))
 		_building_item_list.set_item_tooltip(index, str(row.get("short_desc", "")))
 
-	_select_item_by_id(_building_item_list, _building_ids, _context.session.world.building_id, "_suppress_building_select")
+	_select_building_by_id(_context.session.world.building_id)
 
 
 func _on_building_item_selected(index: int) -> void:
@@ -189,7 +189,7 @@ func _update_building_panels() -> void:
 	if habitat.is_empty():
 		return
 	_sync_log()
-	_select_item_by_id(_building_item_list, _building_ids, _context.session.world.building_id, "_suppress_building_select")
+	_select_building_by_id(_context.session.world.building_id)
 	_update_building_header(habitat, building)
 	_show_building_content(habitat, building)
 
@@ -288,6 +288,7 @@ func _show_embed_panel(building_type: String, building: Dictionary) -> void:
 	):
 		if building_type == "shipyard" and _embedded_panel.has_method("configure_embedded"):
 			_embedded_panel.configure_embedded(true)
+		_mark_embed_session_forwarded(_embedded_panel)
 		if _embedded_panel.has_method("configure"):
 			_embedded_panel.configure(building)
 		if _embedded_panel.has_method("refresh"):
@@ -308,6 +309,7 @@ func _show_embed_panel(building_type: String, building: Dictionary) -> void:
 
 	if panel.has_method("bind"):
 		panel.bind(_context)
+	_mark_embed_session_forwarded(panel)
 	if building_type == "shipyard" and panel.has_method("configure_embedded"):
 		panel.configure_embedded(true)
 	if panel.has_method("configure"):
@@ -404,19 +406,19 @@ func _on_quit_confirmed() -> void:
 		_context.on_quit_to_menu_requested.call()
 
 
-func _select_item_by_id(
-	list: ItemList,
-	ids: PackedStringArray,
-	target_id: String,
-	suppress_flag_name: String
-) -> void:
-	set(suppress_flag_name, true)
-	var index := ids.find(target_id)
-	if index >= 0:
-		list.select(index)
-	else:
-		list.deselect_all()
-	set(suppress_flag_name, false)
+func _select_building_by_id(target_id: String) -> void:
+	UiPatterns.select_item_by_id(
+		_building_item_list,
+		_building_ids,
+		target_id,
+		func() -> void: _suppress_building_select = true,
+		func() -> void: _suppress_building_select = false
+	)
+
+
+func _mark_embed_session_forwarded(panel: Control) -> void:
+	if panel is GameScreen:
+		(panel as GameScreen).set_session_forwarded(true)
 
 
 func _unhandled_input(event: InputEvent) -> void:

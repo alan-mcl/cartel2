@@ -312,14 +312,17 @@ static func _corporation_detail(catalog: Catalog, corp_id: String) -> String:
 
 
 static func _module_detail(catalog: Catalog, module_id: String) -> String:
-	var module_def := catalog.get_module(module_id)
-	if module_def.is_empty():
+	var module_def := catalog.get_module_def(module_id)
+	if module_def == null:
 		return ""
-	return ModuleSpecText.format_tooltip(module_def)
+	return ModuleSpecText.format_tooltip(module_def.to_dict())
 
 
 static func _hull_detail(catalog: Catalog, chassis_id: String) -> String:
-	var chassis := catalog.get_chassis(chassis_id)
+	var chassis_def := catalog.get_chassis_def(chassis_id)
+	if chassis_def == null:
+		return ""
+	var chassis := chassis_def.to_dict()
 	if chassis.is_empty():
 		return ""
 	var lines: PackedStringArray = PackedStringArray()

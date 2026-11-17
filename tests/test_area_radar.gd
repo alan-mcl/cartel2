@@ -14,7 +14,20 @@ static func run(runner: TestRunner) -> void:
 
 static func _assembled_with_sensors(modules: Array) -> AssembledShip:
 	var assembled := AssembledShip.new()
-	assembled.chassis = {"mass": 3.2}
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "test",
+			"name": "Test",
+			"maker": "Test",
+			"description": "",
+			"mass": 3.2,
+			"hits": 1.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	assembled.envelope = {"dry_mass": 3.2}
 	assembled.capabilities = {"local_sensor": true}
 	assembled.installed_modules = modules.duplicate(true)

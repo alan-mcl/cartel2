@@ -208,7 +208,7 @@ static func validate_install(
 
 static func derive_stats(assembled: AssembledShip, loaded_mass: float) -> ShipStats:
 	var stats := ShipStats.new()
-	if assembled.chassis.is_empty():
+	if not assembled.has_chassis():
 		return stats
 
 	var engine := assembled.get_propulsion_module_def()
@@ -269,7 +269,7 @@ static func ammunition_unit_mass(catalog: Catalog, ammo_id: String) -> float:
 
 static func get_stat_block(catalog: Catalog, owned: OwnedShip) -> Dictionary:
 	var assembled := assemble_owned(catalog, owned)
-	if assembled.chassis.is_empty():
+	if not assembled.has_chassis():
 		return {}
 
 	var loaded_mass := calculate_loaded_mass(catalog, owned, assembled)

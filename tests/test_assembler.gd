@@ -48,38 +48,49 @@ static func _test_cargo_capabilities(runner: TestRunner, catalog: Catalog) -> vo
 static func _test_chassis_def_keeps_dictionary(runner: TestRunner, catalog: Catalog) -> void:
 	var assembled := ShipAssembler.assemble(catalog, "flare_on_ss")
 	runner.check(assembled.chassis_def != null, "assembler: chassis def is stored")
-	runner.check_eq(
-		assembled.chassis_def.id,
-		str(assembled.chassis.get("id", "")),
-		"assembler: chassis dictionary matches the def"
-	)
 	runner.check(
-		not str(assembled.chassis.get("sprite", "")).is_empty(),
-		"assembler: chassis dictionary keeps the sprite"
+		not assembled.chassis_sprite().is_empty(),
+		"assembler: assembled ship exposes chassis sprite from the def"
 	)
-	assembled.chassis = {"maneuver": "low", "hits": 4, "sprite": "res://stub.svg", "id": "stub_id", "header": "STUB"}
-	runner.check(assembled.chassis_def == null, "assembler: replacing the chassis dictionary drops the def")
-	runner.check_eq(assembled.chassis_maneuver(), "low", "assembler: a chassis stub supplies maneuver")
-	runner.check_eq(assembled.chassis_hits(), 4, "assembler: a chassis stub supplies hits")
-	runner.check_eq(assembled.chassis_sprite(), "res://stub.svg", "assembler: a chassis stub supplies the sprite")
-	assembled.chassis_def = ChassisDef.from_dict({
-		"id": "typed",
-		"name": "Typed",
-		"maker": "Test",
-		"description": "Typed chassis",
-		"mass": 1.0,
-		"hits": 9.0,
-		"mass_limit": 2.0,
-		"volume": 1.0,
-		"maneuver": "high",
-		"sprite": "res://typed.svg",
-		"header": "TYPED",
-		"mounts": {},
-	})
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "stub_id",
+			"name": "Stub",
+			"maker": "Test",
+			"description": "",
+			"maneuver": "low",
+			"hits": 4.0,
+			"sprite": "res://stub.svg",
+			"header": "STUB",
+			"mass": 1.0,
+			"mass_limit": 2.0,
+			"volume": 1.0,
+			"mounts": {},
+		})
+	)
+	runner.check_eq(assembled.chassis_maneuver(), "low", "assembler: chassis stub supplies maneuver")
+	runner.check_eq(assembled.chassis_hits(), 4, "assembler: chassis stub supplies hits")
+	runner.check_eq(assembled.chassis_sprite(), "res://stub.svg", "assembler: chassis stub supplies the sprite")
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "typed",
+			"name": "Typed",
+			"maker": "Test",
+			"description": "Typed chassis",
+			"mass": 1.0,
+			"hits": 9.0,
+			"mass_limit": 2.0,
+			"volume": 1.0,
+			"maneuver": "high",
+			"sprite": "res://typed.svg",
+			"header": "TYPED",
+			"mounts": {},
+		})
+	)
 	runner.check(assembled.has_chassis(), "assembler: a chassis def counts as present")
-	runner.check_eq(assembled.chassis_sprite(), "res://typed.svg", "assembler: chassis sprite prefers the def")
-	runner.check_eq(assembled.chassis_id(), "typed", "assembler: chassis id prefers the def")
-	runner.check_eq(assembled.chassis_header(), "TYPED", "assembler: chassis header prefers the def")
+	runner.check_eq(assembled.chassis_sprite(), "res://typed.svg", "assembler: chassis sprite from the def")
+	runner.check_eq(assembled.chassis_id(), "typed", "assembler: chassis id from the def")
+	runner.check_eq(assembled.chassis_header(), "TYPED", "assembler: chassis header from the def")
 
 
 static func _test_stock_list_meta(runner: TestRunner, catalog: Catalog) -> void:

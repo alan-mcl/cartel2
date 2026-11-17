@@ -159,9 +159,35 @@ static func _test_retain_drops_invalid(runner: TestRunner) -> void:
 
 static func _test_hull_radius_scales_with_mass(runner: TestRunner) -> void:
 	var small := AssembledShip.new()
-	small.chassis = {"mass": 3.2}
+	small.set_chassis(
+		ChassisDef.from_dict({
+			"id": "small",
+			"name": "Small",
+			"maker": "Test",
+			"description": "",
+			"mass": 3.2,
+			"hits": 1.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	var large := AssembledShip.new()
-	large.chassis = {"mass": 10.0}
+	large.set_chassis(
+		ChassisDef.from_dict({
+			"id": "large",
+			"name": "Large",
+			"maker": "Test",
+			"description": "",
+			"mass": 10.0,
+			"hits": 1.0,
+			"mass_limit": 20.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	var small_r := TargetLock.hull_radius_world(small, false)
 	var large_r := TargetLock.hull_radius_world(large, false)
 	runner.check(large_r > small_r, "hull lock radius increases with mass")

@@ -47,7 +47,20 @@ static func _test_active_scan_block_reason(runner: TestRunner) -> void:
 static func _assembled_with_sensor_module(catalog: Catalog, module_id: String) -> AssembledShip:
 	var module_def := catalog.get_module_def(module_id)
 	var assembled := AssembledShip.new()
-	assembled.chassis = {"mass": 3.2}
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "test",
+			"name": "Test",
+			"maker": "Test",
+			"description": "",
+			"mass": 3.2,
+			"hits": 1.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	assembled.envelope = {"dry_mass": 3.2}
 	assembled.installed_modules = [
 		{"slot": "sensor", "module_id": module_id, "data": module_def},

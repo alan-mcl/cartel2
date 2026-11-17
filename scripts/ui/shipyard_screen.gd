@@ -59,10 +59,7 @@ func _process(_delta: float) -> void:
 
 func configure_embedded(enabled: bool) -> void:
 	_embedded = enabled
-	if enabled:
-		_disconnect_session_changed()
-	elif _context != null:
-		_connect_session_changed()
+	set_session_forwarded(enabled)
 
 
 func bind(context: UiContext) -> void:
@@ -88,10 +85,11 @@ func _run_deferred_refresh() -> void:
 func refresh() -> void:
 	if not is_node_ready() or _context == null:
 		return
-	if _can_soft_refresh():
-		_soft_refresh()
-		return
-	_full_refresh()
+	UiPatterns.refresh_soft_or_full(
+		Callable(self, "_can_soft_refresh"),
+		Callable(self, "_soft_refresh"),
+		Callable(self, "_full_refresh")
+	)
 
 
 func _can_soft_refresh() -> bool:
@@ -105,10 +103,10 @@ func _can_soft_refresh() -> bool:
 
 func _soft_refresh() -> void:
 	_sync_ship_list_labels()
-	var detail := _find_meta_host("yard_detail_host")
+	var detail := UiPatterns.find_meta_host(self, "yard_detail_host")
 	if detail != null:
 		_rebuild_ship_detail(detail)
-	var admin := _find_meta_host("yard_admin_host")
+	var admin := UiPatterns.find_meta_host(self, "yard_admin_host")
 	if admin != null:
 		_refresh_yard_dock_service_quotes(admin)
 
@@ -246,8 +244,8 @@ func _sync_ship_selection() -> void:
 
 
 func _rebuild_ship_panels() -> void:
-	var detail := _find_meta_host("yard_detail_host")
-	var admin := _find_meta_host("yard_admin_host")
+	var detail := UiPatterns.find_meta_host(self, "yard_detail_host")
+	var admin := UiPatterns.find_meta_host(self, "yard_admin_host")
 	if detail != null:
 		_rebuild_ship_detail(detail)
 	if admin != null:
@@ -353,13 +351,13 @@ func _sync_ship_list_labels() -> void:
 
 
 func _select_item_by_id(list: ItemList, ids: PackedStringArray, target_id: String) -> void:
-	_suppress_ship_select = true
-	var index := ids.find(target_id)
-	if index >= 0:
-		list.select(index)
-	else:
-		list.deselect_all()
-	_suppress_ship_select = false
+	UiPatterns.select_item_by_id(
+		list,
+		ids,
+		target_id,
+		func() -> void: _suppress_ship_select = true,
+		func() -> void: _suppress_ship_select = false
+	)
 
 
 func _refresh_yard_dock_service_quotes(admin: VBoxContainer) -> void:
@@ -455,18 +453,6 @@ func _add_scroll_pane(parent: Node, meta_name: String) -> VBoxContainer:
 	return body
 
 
-func _find_meta_host(meta_name: String) -> VBoxContainer:
-	return _find_meta_host_in(self, meta_name)
-
-
-func _find_meta_host_in(node: Node, meta_name: String) -> VBoxContainer:
-	if node is VBoxContainer and node.has_meta(meta_name):
-		return node as VBoxContainer
-	for child in node.get_children():
-		var found := _find_meta_host_in(child, meta_name)
-		if found != null:
-			return found
-	return null
 
 
 func _fill_remaining_area(control: Control) -> void:

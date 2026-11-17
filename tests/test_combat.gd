@@ -53,7 +53,20 @@ static func _module_entry(slot: String, module_id: String, module_data: Dictiona
 
 static func _assembled_with_modules(modules: Array, armour: Dictionary = {}) -> AssembledShip:
 	var assembled := AssembledShip.new()
-	assembled.chassis = {"hits": 18}
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "test",
+			"name": "Test",
+			"maker": "Test",
+			"description": "",
+			"mass": 3.2,
+			"hits": 18.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "medium",
+			"mounts": {},
+		})
+	)
 	assembled.capacities = {"hull_hits": 18, "power_generation": 40.0, "compute_capacity": 20.0}
 	var converted: Array = []
 	for entry in modules:
@@ -240,7 +253,20 @@ static func _make_armed_actor(hull_ratio: float):
 	var actor = TrafficActorScript.new()
 	actor.owned_ship = OwnedShip.new()
 	actor.assembled_ship = AssembledShip.new()
-	actor.assembled_ship.chassis = {"maneuver": "low"}
+	actor.assembled_ship.set_chassis(
+		ChassisDef.from_dict({
+			"id": "armed",
+			"name": "Armed",
+			"maker": "Test",
+			"description": "",
+			"mass": 3.2,
+			"hits": 28.0,
+			"mass_limit": 10.0,
+			"volume": 1.0,
+			"maneuver": "low",
+			"mounts": {},
+		})
+	)
 	actor.assembled_ship.capacities = {"hull_hits": 28.0}
 	actor.assembled_ship.installed_modules = [
 		_module_entry("weapon_1", "test_laser", {
@@ -259,28 +285,58 @@ static func _make_armed_actor(hull_ratio: float):
 
 static func _test_typed_chassis_beats_stub(runner: TestRunner) -> void:
 	var assembled := AssembledShip.new()
-	assembled.chassis = {"maneuver": "low", "hits": 4}
-	assembled.chassis_def = ChassisDef.from_dict({
-		"id": "stub",
-		"name": "Stub",
-		"maker": "Test",
-		"description": "Stub chassis",
-		"mass": 1.0,
-		"hits": 9.0,
-		"mass_limit": 2.0,
-		"volume": 1.0,
-		"maneuver": "high",
-		"mounts": {},
-	})
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "stub",
+			"name": "Stub",
+			"maker": "Test",
+			"description": "Stub chassis",
+			"mass": 1.0,
+			"hits": 4.0,
+			"mass_limit": 2.0,
+			"volume": 1.0,
+			"maneuver": "low",
+			"mounts": {},
+		})
+	)
 	var state := ShipCombatState.from_assembled(assembled)
-	runner.check(is_equal_approx(state.hull_max, 9.0), "combat state prefers chassis def hits")
+	runner.check(is_equal_approx(state.hull_max, 4.0), "combat state uses chassis hits")
+
+	assembled.set_chassis(
+		ChassisDef.from_dict({
+			"id": "typed",
+			"name": "Typed",
+			"maker": "Test",
+			"description": "Typed chassis",
+			"mass": 1.0,
+			"hits": 9.0,
+			"mass_limit": 2.0,
+			"volume": 1.0,
+			"maneuver": "high",
+			"mounts": {},
+		})
+	)
+	state = ShipCombatState.from_assembled(assembled)
+	runner.check(is_equal_approx(state.hull_max, 9.0), "combat state picks up chassis def hits")
 
 	var actor = _make_armed_actor(0.45)
-	actor.assembled_ship.chassis = {"maneuver": "low", "hits": 4}
-	actor.assembled_ship.chassis_def = assembled.chassis_def
+	actor.assembled_ship.set_chassis(assembled.chassis_def)
 	runner.check(actor.should_engage(_traffic_config()), "traffic engage uses chassis def maneuver")
-	actor.assembled_ship.chassis_def = null
-	runner.check(not actor.should_engage(_traffic_config()), "traffic engage falls back to the chassis stub")
+	actor.assembled_ship.set_chassis(
+		ChassisDef.from_dict({
+			"id": "low",
+			"name": "Low",
+			"maker": "Test",
+			"description": "",
+			"mass": 1.0,
+			"hits": 28.0,
+			"mass_limit": 2.0,
+			"volume": 1.0,
+			"maneuver": "low",
+			"mounts": {},
+		})
+	)
+	runner.check(not actor.should_engage(_traffic_config()), "traffic engage uses low maneuver threshold")
 
 
 static func _test_fight_to_death_attitude(runner: TestRunner) -> void:

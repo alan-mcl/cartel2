@@ -10,7 +10,7 @@ var shield_charges: Dictionary = {}
 
 static func from_assembled(assembled: AssembledShip) -> ShipCombatState:
 	var state := ShipCombatState.new()
-	if assembled == null or (assembled.chassis.is_empty() and assembled.chassis_def == null):
+	if assembled == null or not assembled.has_chassis():
 		state.hull_max = 18.0
 		state.hull_current = state.hull_max
 		return state
@@ -39,7 +39,7 @@ static func from_dict(data: Dictionary, assembled: AssembledShip) -> ShipCombatS
 
 
 func reset_to_full(assembled: AssembledShip) -> void:
-	if assembled != null and (not assembled.chassis.is_empty() or assembled.chassis_def != null):
+	if assembled != null and assembled.has_chassis():
 		hull_max = _hull_max_from(assembled)
 	hull_current = hull_max
 	power_integrity_lost = 0.0
@@ -67,4 +67,4 @@ static func _hull_max_from(assembled: AssembledShip) -> float:
 		return float(assembled.capacities["hull_hits"])
 	if assembled.chassis_def != null and assembled.chassis_def.has_source_key("hits"):
 		return float(assembled.chassis_def.hits)
-	return float(assembled.chassis.get("hits", 18.0))
+	return float(assembled.chassis_hits()) if assembled.chassis_hits() > 0 else 18.0

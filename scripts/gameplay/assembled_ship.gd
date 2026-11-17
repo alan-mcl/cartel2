@@ -4,12 +4,7 @@ extends RefCounted
 var id: String = ""
 var name: String = ""
 var maker: String = ""
-## Typed chassis from assembly. Cleared when `chassis` is assigned directly, so a test stub wins.
 var chassis_def: ChassisDef = null
-var chassis: Dictionary = {}:
-	set(value):
-		chassis = value
-		chassis_def = null
 var installed_modules: Array = []
 var mounts: Dictionary = {}
 var capacities: Dictionary = {}
@@ -29,61 +24,62 @@ var armour_module: ModuleDef = null
 
 
 func set_chassis(def: ChassisDef) -> void:
-	if def == null:
-		chassis = {}
-		return
-	chassis = def.to_dict()
 	chassis_def = def
 
 
 func has_chassis() -> bool:
-	return chassis_def != null or not chassis.is_empty()
+	return chassis_def != null
 
 
 func chassis_id() -> String:
-	if chassis_def != null and (chassis_def.has_source_key("id") or not chassis_def.id.is_empty()):
+	if chassis_def == null:
+		return ""
+	if chassis_def.has_source_key("id") or not chassis_def.id.is_empty():
 		return chassis_def.id
-	return str(chassis.get("id", ""))
+	return ""
 
 
 func chassis_sprite() -> String:
-	if chassis_def != null and (chassis_def.has_source_key("sprite") or not chassis_def.sprite.is_empty()):
+	if chassis_def == null:
+		return ""
+	if chassis_def.has_source_key("sprite") or not chassis_def.sprite.is_empty():
 		return chassis_def.sprite
-	return str(chassis.get("sprite", ""))
+	return ""
 
 
 func chassis_header() -> String:
-	if chassis_def != null and (chassis_def.has_source_key("header") or not chassis_def.header.is_empty()):
+	if chassis_def == null:
+		return ""
+	if chassis_def.has_source_key("header") or not chassis_def.header.is_empty():
 		return chassis_def.header
-	return str(chassis.get("header", ""))
+	return ""
 
 
 func chassis_name() -> String:
-	if chassis_def != null and not chassis_def.name.is_empty():
+	if chassis_def == null:
+		return ""
+	if not chassis_def.name.is_empty():
 		return chassis_def.name
-	return str(chassis.get("name", ""))
+	return ""
 
 
 func chassis_maneuver() -> String:
-	if chassis_def != null and not chassis_def.maneuver.is_empty():
-		return chassis_def.maneuver
-	var labeled := str(chassis.get("maneuver", "")).strip_edges()
-	if labeled.is_empty():
+	if chassis_def == null:
 		return "medium"
-	return labeled
+	if not chassis_def.maneuver.is_empty():
+		return chassis_def.maneuver
+	return "medium"
 
 
 func chassis_hits() -> int:
-	if chassis_def != null:
-		return int(chassis_def.hits)
-	return int(chassis.get("hits", 0))
+	if chassis_def == null:
+		return 0
+	return int(chassis_def.hits)
 
 
 func chassis_mass() -> float:
 	if chassis_def != null and chassis_def.has_source_key("mass"):
 		return chassis_def.mass
-	if chassis.has("mass"):
-		return float(chassis["mass"])
 	return 0.0
 
 
@@ -91,30 +87,25 @@ func chassis_mass() -> float:
 func chassis_mass_or(fallback: float) -> float:
 	if chassis_def != null and chassis_def.has_source_key("mass"):
 		return chassis_def.mass
-	if chassis.has("mass"):
-		return float(chassis["mass"])
 	return fallback
 
 
 func chassis_mass_limit(fallback: float) -> float:
 	if chassis_def != null and chassis_def.has_source_key("mass_limit"):
 		return chassis_def.mass_limit
-	return float(chassis.get("mass_limit", fallback))
+	return fallback
 
 
 func chassis_volume(fallback: float) -> float:
 	if chassis_def != null and chassis_def.has_source_key("volume"):
 		return chassis_def.volume
-	return float(chassis.get("volume", fallback))
+	return fallback
 
 
 func chassis_mounts() -> Dictionary:
-	if chassis_def != null:
-		return chassis_def.mounts
-	var mounts: Variant = chassis.get("mounts", {})
-	if typeof(mounts) != TYPE_DICTIONARY:
+	if chassis_def == null:
 		return {}
-	return mounts
+	return chassis_def.mounts
 
 
 func has_capability(id: String) -> bool:
