@@ -34,6 +34,7 @@ var _rearm_fill_ratio: float = 1.0
 var _repair_fill_ratio: float = 1.0
 
 const _FUEL_TAPE_TOP_UP_MAX_TRIES := 12
+const META_TERMINAL_LAUNCH_STATUS := "terminal_launch_status_host"
 
 var _fuel_tape_bar: MessageBar
 var _fuel_tape := FuelPriceTape.new()
@@ -88,6 +89,9 @@ func _soft_refresh_docking_bay() -> void:
 	var admin := UiPatterns.find_meta_host(self, "terminal_admin_host")
 	if admin != null:
 		_refresh_terminal_dock_service_quotes(admin)
+		var launch_host := UiPatterns.find_meta_host(admin, META_TERMINAL_LAUNCH_STATUS)
+		if launch_host != null:
+			_rebuild_terminal_launch_status(launch_host)
 
 
 func _sync_docked_ship_list_labels() -> void:
@@ -350,59 +354,12 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 	if ship == null:
 		return
 
-	admin.add_child(_section_label("LAUNCH STATUS"))
-
-	var occupant_count := 1
-	var freight_power := 0.0
-	var freight_compute := 0.0
-	var freight_tonnes := 0.0
-	if _context.simulation != null:
-		var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
-		if missions != null:
-			occupant_count = missions.launch_occupant_count(ship.id)
-			var reserves := missions.committed_freight_reserves_for_ship(ship.id)
-			freight_power = float(reserves.get("power", 0.0))
-			freight_compute = float(reserves.get("compute", 0.0))
-			freight_tonnes = float(reserves.get("tonnes", 0.0))
-	var sanction_total := Sanctions.total_fine(_context.session.player.sanctions)
-	if sanction_total > 0:
-		for entry_variant in _context.session.player.sanctions:
-			if typeof(entry_variant) != TYPE_DICTIONARY:
-				continue
-			var entry: Dictionary = entry_variant
-			var line := Label.new()
-			line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			line.text = Sanctions.format_terminal_line(_context.catalog, entry)
-			admin.add_child(line)
-		var pay := Button.new()
-		pay.text = "Pay sanctions (d%d)" % sanction_total
-		pay.pressed.connect(_on_pay_sanctions_pressed)
-		admin.add_child(pay)
-	else:
-		var blockers := ShipAssembly.undock_blockers(
-			_context.catalog,
-			ship,
-			occupant_count,
-			freight_power,
-			freight_compute,
-			freight_tonnes
-		)
-		if blockers.is_empty():
-			var cleared := Label.new()
-			cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			cleared.text = "All checks green - cleared for launch."
-			admin.add_child(cleared)
-
-			var launch := Button.new()
-			launch.text = "Launch"
-			launch.pressed.connect(_on_undock_ship.bind(ship.id))
-			admin.add_child(launch)
-		else:
-			for reason in blockers:
-				var hint := Label.new()
-				hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				hint.text = reason
-				admin.add_child(hint)
+	var launch_host := VBoxContainer.new()
+	launch_host.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	launch_host.add_theme_constant_override("separation", 8)
+	launch_host.set_meta(META_TERMINAL_LAUNCH_STATUS, true)
+	admin.add_child(launch_host)
+	_rebuild_terminal_launch_status(launch_host)
 
 	var refuel_quote := ShipAssembly.refuel_quote(
 		_context.session, _context.catalog, ship.id, _refuel_fill_ratio
@@ -471,6 +428,71 @@ func _rebuild_terminal_admin_panel(admin: VBoxContainer) -> void:
 			_on_rename_ship_submitted(field.text)
 		)
 		rename_row.add_child(confirm)
+
+
+func _rebuild_terminal_launch_status(launch_host: VBoxContainer) -> void:
+	_clear_children(launch_host)
+	if _context == null or _context.session == null or _context.catalog == null:
+		return
+	if _selected_terminal_ship_id.is_empty():
+		return
+	var ship := _context.session.get_owned_ship(_selected_terminal_ship_id)
+	if ship == null:
+		return
+
+	launch_host.add_child(_section_label("LAUNCH STATUS"))
+
+	var occupant_count := 1
+	var freight_power := 0.0
+	var freight_compute := 0.0
+	var freight_tonnes := 0.0
+	if _context.simulation != null:
+		var missions := _context.simulation.get_subsystem("missions") as MissionSubsystem
+		if missions != null:
+			occupant_count = missions.launch_occupant_count(ship.id)
+			var reserves := missions.committed_freight_reserves_for_ship(ship.id)
+			freight_power = float(reserves.get("power", 0.0))
+			freight_compute = float(reserves.get("compute", 0.0))
+			freight_tonnes = float(reserves.get("tonnes", 0.0))
+	var sanction_total := Sanctions.total_fine(_context.session.player.sanctions)
+	if sanction_total > 0:
+		for entry_variant in _context.session.player.sanctions:
+			if typeof(entry_variant) != TYPE_DICTIONARY:
+				continue
+			var entry: Dictionary = entry_variant
+			var line := Label.new()
+			line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			line.text = Sanctions.format_terminal_line(_context.catalog, entry)
+			launch_host.add_child(line)
+		var pay := Button.new()
+		pay.text = "Pay sanctions (d%d)" % sanction_total
+		pay.pressed.connect(_on_pay_sanctions_pressed)
+		launch_host.add_child(pay)
+	else:
+		var blockers := ShipAssembly.undock_blockers(
+			_context.catalog,
+			ship,
+			occupant_count,
+			freight_power,
+			freight_compute,
+			freight_tonnes
+		)
+		if blockers.is_empty():
+			var cleared := Label.new()
+			cleared.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			cleared.text = "All checks green - cleared for launch."
+			launch_host.add_child(cleared)
+
+			var launch := Button.new()
+			launch.text = "Launch"
+			launch.pressed.connect(_on_undock_ship.bind(ship.id))
+			launch_host.add_child(launch)
+		else:
+			for reason in blockers:
+				var hint := Label.new()
+				hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				hint.text = reason
+				launch_host.add_child(hint)
 
 
 func _on_rename_ship_pressed() -> void:

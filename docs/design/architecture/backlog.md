@@ -14,7 +14,6 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B1|data|med|Double 'Janus' in the planets catalog|
-|B2|ui|med|'pay sanctions' button doesn't turn into 'launch' when you have no more sanctions until you change buildings away then back|
 |B3|missions|med|Could accept a 'biohazard' charter with a non-biohazard hold?|
 
 ## Features
@@ -45,4 +44,5 @@ No Future
 Unfinished Business
 Kodak Moment
 Glory to Arstotzka
+Tannhäuser Gate
 
