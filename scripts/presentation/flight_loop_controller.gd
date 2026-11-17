@@ -160,7 +160,12 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 	present_flight_frame(contacts, nav_radius, star_display)
 
 
-func install_scripted_roster(roster: Array, sector_id: String, envelope: float) -> void:
+func install_scripted_roster(
+	roster: Array,
+	sector_id: String,
+	envelope: float,
+	world_root: Node2D = null
+) -> void:
 	_ensure_traffic_director()
 	if _traffic_director == null:
 		return
@@ -171,6 +176,21 @@ func install_scripted_roster(roster: Array, sector_id: String, envelope: float) 
 		_player.global_position,
 		roster
 	)
+	var world: Node2D = world_root
+	if world == null and _main != null:
+		world = _main.get_node_or_null("World") as Node2D
+	if world == null:
+		return
+	if _traffic_view == null:
+		_traffic_view = TrafficViewScript.new()
+	_traffic_view.setup(world)
+	_traffic_view.sync(_traffic_director.actors, _catalog)
+
+
+func get_traffic_ship_node(actor_id: String) -> Node2D:
+	if _traffic_view == null:
+		return null
+	return _traffic_view.get_ship_node(actor_id)
 
 
 func present_flight_frame(contacts: Array, nav_radius: float, star_display: Dictionary = {}) -> void:

@@ -151,9 +151,10 @@ func _smoke_combat_motion() -> void:
 			opponent.position.distance_to(start) > 0.01,
 			"combat sandbox opponent simulation advances"
 		)
+		var ship_node: Node2D = sandbox._flight.get_traffic_ship_node(opponent.id)
 		_check(
-			sandbox._opponent_node != null
-			and sandbox._opponent_node.global_position.distance_to(opponent.position) < 1.0,
+			ship_node != null
+			and ship_node.global_position.distance_to(opponent.position) < 1.0,
 			"combat sandbox opponent visual follows simulation"
 		)
 	paused = false

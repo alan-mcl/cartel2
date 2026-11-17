@@ -29,29 +29,28 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 
 ## Refactoring
 
-Structural work only. R9, R10, R12, and R13 can land any time.
+Structural work only. R9, R10, and R12 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R9|data|med|Schema checks for worlds, buildings, traffic, and interactables|
+|R9|data|med|Hand-authored catalog content stays CI-safe|
 |R10|data|med|One chassis source on AssembledShip; typed getters stop rebuilding dictionaries|
 |R12|ui|med|One soft-refresh helper for the dock desks|
-|R13|dev|med|Combat and stealth sandboxes run the production NPC loop|
 
-### R9 — Schema checks for large catalogs
+### R9 — Hand-authored catalog content stays CI-safe
 
 - **Status:** Discuss
 - **Depends on:** —
-- **Scope:** `scripts/tools/validate_catalog_refs.py` and, if a generated schema is the smaller path, `data/catalog/schema/` plus `scripts/tools/generate_catalog_records.py`. Targets: `worlds.json`, `buildings.json`, `traffic.json`, `interactables.json`
-- **Do not:** generate `*Def` classes for missions, plotlines, or encounters; convert gameplay readers off dictionaries; invent fields the JSON does not already use
-- **Acceptance:** an unknown key or a broken reference in those four files fails CI. `traffic.json` is checked for more than affiliation kind. Existing catalogs pass.
+- **Scope:** `scripts/tools/validate_catalog_refs.py` and any follow-on catalog tooling. Targets: `worlds.json`, `buildings.json`, `traffic.json`, `interactables.json`
+- **Do not:** add unknown-key allowlists, `additionalProperties` schemas, or new broken-reference failures that reject a new field, record, or in-progress id in those four files; generate `*Def` classes for missions, plotlines, or encounters; convert gameplay readers off dictionaries
+- **Acceptance:** those four files remain open for hand-edited content. CI must not fail solely because a new key, record, or unwired id appears. Existing validators stay; this item does not add stricter gates.
 
 ### R10 — Typed chassis access
 
 - **Status:** Discuss
 - **Depends on:** —
 - **Scope:** `scripts/gameplay/catalog.gd` dictionary getters that `to_dict()` a record, `scripts/gameplay/assembled_ship.gd`
-- **Do not:** type buildings, worlds, or missions (R9 covers validation only); change fitting rules
+- **Do not:** type buildings, worlds, or missions; change fitting rules
 - **Acceptance:** `AssembledShip` has one chassis source of truth. Gameplay reads `get_*_def` for types that already have a record. Dictionary copies happen at a library or UI boundary, not on every lookup. Assembler and catalog tests pass.
 
 ### R12 — Shared dock soft-refresh
@@ -61,14 +60,6 @@ Structural work only. R9, R10, R12, and R13 can land any time.
 - **Scope:** `scripts/ui/market_panel.gd`, `scripts/ui/dealer_panel.gd`, `scripts/ui/terminal_panel.gd`, `scripts/ui/shipyard_screen.gd`, `scripts/ui/corporate_office_panel.gd`, `scripts/ui/habitat_screen.gd`, `scripts/ui/ui_patterns.gd` or a neighbour
 - **Do not:** redesign the desks; change prices, fitting, or charter acceptance
 - **Acceptance:** soft refresh, meta-host lookup, and select-by-id live in one helper used by those desks. One `session.changed` refreshes an embedded habitat panel once. The `session.visit` re-entry guard still prevents a recursive rebuild.
-
-### R13 — Sandboxes use the production NPC loop
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `scripts/dev/combat_sandbox.gd`, `scripts/dev/flight_sandbox_base.gd`, `scripts/dev/stealth_sandbox.gd`, `scripts/presentation/flight_loop_controller.gd`, `scripts/presentation/traffic_view.gd`
-- **Do not:** change detection, weapon, or traffic rules; spawn a second body for the same actor
-- **Acceptance:** the combat sandbox draws opponents through `TrafficView`. The stealth sandbox advances NPCs with `FlightLoopController.physics_tick`. A signature or weapon change on the director shows up in both drills.
 
 ## Addenda
 

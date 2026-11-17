@@ -1,7 +1,6 @@
 extends FlightSandboxBase
 
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
-const TrafficViewScript := preload("res://scripts/presentation/traffic_view.gd")
 
 const SPAWN_RING_FRACTION := 0.9
 const DEFAULT_OPPONENT_COUNT := 4
@@ -11,11 +10,10 @@ const MAX_OPPONENT_COUNT := 12
 enum DrillState { SETUP, ACTIVE }
 
 var _drill_state: DrillState = DrillState.SETUP
-var _opponents: Array = []
-var _detection_opacity_by_id: Dictionary = {}
 var _nav_radius: float = 15000.0
 var _current_pilot_skill: int = -1
 var _count_spin: SpinBox
+var _drill_actors: Array = []
 
 
 func _sandbox_callsign() -> String:
@@ -47,12 +45,11 @@ func _nav_radius_for_hud() -> float:
 
 func _collect_nav_contacts() -> Array:
 	var contacts: Array = []
-	for entry_variant in _opponents:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
+	for actor_variant in _drill_actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
 			continue
-		var entry: Dictionary = entry_variant
-		var actor = entry.get("actor")
-		if actor == null or not actor.is_active():
+		var actor = actor_variant
+		if not actor.is_active():
 			continue
 		var contact: Dictionary = actor.get_cached_player_contact()
 		if not contact.is_empty():
@@ -108,25 +105,21 @@ func _begin_drill(
 	_nav_radius = _sensor_range(player_assembled)
 	_current_pilot_skill = pilot_skill
 
-	_spawn_opponents(
-		opponent_template_id,
-		opponent_count,
-		_nav_radius * SPAWN_RING_FRACTION,
-		attitude_index
-	)
+	_build_opponent_roster(opponent_template_id, opponent_count, _nav_radius * SPAWN_RING_FRACTION, attitude_index)
+	_flight.install_scripted_roster(_drill_actors, "proxima", _nav_radius, _world)
 
 	_enter_run_ui(player_assembled)
 	_drill_state = DrillState.ACTIVE
 
 
-func _spawn_opponents(
+func _build_opponent_roster(
 	template_id: String,
 	count: int,
 	separation: float,
 	attitude_index: int
 ) -> void:
+	_drill_actors.clear()
 	var traffic_config := catalog.get_traffic_config()
-	_traffic_root = _ensure_traffic_root()
 
 	for i in range(count):
 		var angle := TAU * float(i) / float(count) + randf_range(-0.08, 0.08)
@@ -157,130 +150,26 @@ func _spawn_opponents(
 		else:
 			actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 
-		var node: Node2D = _spawn_bound_npc(actor, spawn_pos)
-		_detection_opacity_by_id[actor.id] = 0.0
-		TrafficViewScript.apply_detection_opacity(node, 0.0)
-
-		_opponents.append({
-			"actor": actor,
-			"node": node,
-			"destroyed_pending": false,
-		})
+		_drill_actors.append(actor)
 
 
 func _physics_process(delta: float) -> void:
 	if _drill_state != DrillState.ACTIVE:
 		return
 
-	var traffic_config := catalog.get_traffic_config()
-	var anchors: Array = []
-	var observer_profile := SensorSystem.tick_observer_profile(
-		_player.assembled_ship,
-		SensorSystem.sensor_effectiveness(_player.assembled_ship, _player.operating_state),
-		bool(_player.operating_state.active_systems.get("active_sensors", true))
-	)
-	var player_signature := SensorSystem.live_signature(
-		_player.assembled_ship,
-		_player.operating_state
-	)
-	var player_broadcasting: bool = _player.operating_state.transponder_broadcasting
-	var player_reads_beacons: bool = _player.assembled_ship.has_capability("sensor_read_beacons")
-
-	for entry_variant in _opponents:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
-			continue
-		var entry: Dictionary = entry_variant
-		var actor = entry.get("actor")
-		var node: Node2D = entry.get("node")
-		if actor == null:
-			continue
-
-		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-			if not bool(entry.get("destroyed_pending", false)):
-				entry["destroyed_pending"] = true
-				_play_destroyed_or_free(node)
-				entry["node"] = null
-			continue
-
-		actor.refresh_player_detection(
-			_player.global_position,
-			observer_profile,
-			player_signature,
-			player_broadcasting,
-			traffic_config,
-			player_reads_beacons
-		)
-		_try_npc_acquire(actor, traffic_config, player_signature, player_broadcasting)
-		_apply_detection_visibility(actor, node, delta)
-
-		actor.tick(
-			catalog,
-			traffic_config,
-			delta,
-			_player.global_position,
-			anchors,
-			0.0,
-			null,
-			_player.motion.velocity,
-			_player.motion.facing,
-			_player.motion.is_thrusting()
-		)
-
-		_sync_npc_node(node, actor)
-
-	_update_hud_nav()
+	_flight.physics_tick(delta, Engine.get_physics_frames())
+	_apply_pilot_skill_to_engaged_opponents()
 
 
-func _try_npc_acquire(
-	actor,
-	traffic_config: Dictionary,
-	player_signature: Dictionary,
-	player_broadcasting: bool
-) -> void:
-	if actor.ai_state != TrafficActorScript.AiState.TRAFFIC:
+func _apply_pilot_skill_to_engaged_opponents() -> void:
+	if _current_pilot_skill < 0:
 		return
-
-	var visual_radius := float(traffic_config.get("visual_contact_radius", 250.0))
-	var distance: float = actor.position.distance_to(_player.global_position)
-	var npc_effectiveness := SensorSystem.sensor_effectiveness(actor.assembled_ship, actor.operating_state)
-	var npc_profile := SensorSystem.tick_observer_profile(actor.assembled_ship, npc_effectiveness)
-	if not SensorSystem.is_detected(
-		distance,
-		player_signature,
-		player_broadcasting,
-		npc_profile,
-		visual_radius
-	):
-		return
-
-	actor.has_player_contact = true
-	actor.last_known_player_pos = _player.global_position
-
-	if (
-		actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH
-		or actor.should_engage(traffic_config)
-	):
-		actor.ai_state = TrafficActorScript.STATE_ENGAGE
-		if actor.combat_attitude == TrafficActorScript.CombatAttitude.FIGHT_TO_DEATH:
-			actor.engage_timer = 9999.0
-		else:
-			actor.engage_timer = float(traffic_config.get("engage_timeout_seconds", 45.0))
-		actor.begin_combat_pilot()
-		_apply_pilot_skill(actor, _current_pilot_skill)
-	else:
-		actor.begin_flee(traffic_config)
-
-
-func _apply_detection_visibility(actor, node: Node2D, delta: float) -> void:
-	if node == null or not is_instance_valid(node):
-		return
-	var opacity := TrafficViewScript.advance_detection_opacity(
-		_detection_opacity_by_id,
-		actor.id,
-		bool(actor.player_detected),
-		delta
-	)
-	TrafficViewScript.apply_detection_opacity(node, opacity)
+	for actor_variant in _drill_actors:
+		if typeof(actor_variant) != TYPE_OBJECT:
+			continue
+		var actor = actor_variant
+		if actor.ai_state == TrafficActorScript.STATE_ENGAGE:
+			_apply_pilot_skill(actor, _current_pilot_skill)
 
 
 func _end_drill() -> void:
@@ -290,18 +179,6 @@ func _end_drill() -> void:
 
 
 func _clear_drill() -> void:
-	_clear_opponents()
+	_flight.clear_traffic()
+	_drill_actors.clear()
 	_clear_projectiles([])
-
-
-func _clear_opponents() -> void:
-	_detection_opacity_by_id.clear()
-	for entry_variant in _opponents:
-		if typeof(entry_variant) != TYPE_DICTIONARY:
-			continue
-		var entry: Dictionary = entry_variant
-		var node: Node2D = entry.get("node")
-		if node != null and is_instance_valid(node):
-			node.queue_free()
-	_opponents.clear()
-	_clear_traffic_root()

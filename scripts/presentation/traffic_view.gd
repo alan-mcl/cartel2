@@ -77,6 +77,10 @@ func clear() -> void:
 	_traffic_root = null
 
 
+func get_ship_node(actor_id: String) -> Node2D:
+	return _nodes_by_id.get(actor_id) as Node2D
+
+
 func sync(actors: Array, catalog: Catalog, delta: float = 0.0) -> void:
 	if _traffic_root == null or not is_instance_valid(_traffic_root):
 		return

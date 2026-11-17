@@ -10,8 +10,6 @@ enum BoutState { SETUP, FIGHTING }
 
 var _bout_state: BoutState = BoutState.SETUP
 var _opponent_actor = null
-var _opponent_node: Node2D = null
-var _destroyed_pending: bool = false
 
 
 func _sandbox_callsign() -> String:
@@ -96,7 +94,6 @@ func _begin_bout(
 
 	_enter_run_ui(player_assembled)
 	_bout_state = BoutState.FIGHTING
-	_destroyed_pending = false
 
 
 func _spawn_opponent(
@@ -139,8 +136,7 @@ func _spawn_opponent(
 		_opponent_actor.combat_attitude = TrafficActorScript.CombatAttitude.STANDARD
 		_opponent_actor.ai_state = TrafficActorScript.AiState.TRAFFIC
 
-	_flight.install_scripted_roster([_opponent_actor], "proxima", NAV_RADIUS)
-	_opponent_node = _spawn_bound_npc(_opponent_actor, spawn_pos)
+	_flight.install_scripted_roster([_opponent_actor], "proxima", NAV_RADIUS, _world)
 
 
 func _physics_process(delta: float) -> void:
@@ -148,19 +144,6 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_flight.physics_tick(delta, Engine.get_physics_frames())
-	_sync_opponent_presentation()
-
-
-func _sync_opponent_presentation() -> void:
-	if _opponent_actor == null:
-		return
-	if _opponent_actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-		if not _destroyed_pending:
-			_destroyed_pending = true
-			_play_destroyed_or_free(_opponent_node)
-			_opponent_node = null
-		return
-	_sync_npc_node(_opponent_node, _opponent_actor)
 
 
 func _end_bout() -> void:
@@ -170,14 +153,5 @@ func _end_bout() -> void:
 
 
 func _clear_bout() -> void:
-	_clear_opponent()
-	_clear_projectiles([_opponent_node] if _opponent_node != null else [])
-	_destroyed_pending = false
-
-
-func _clear_opponent() -> void:
-	if _opponent_node != null and is_instance_valid(_opponent_node):
-		_opponent_node.free()
-	_opponent_node = null
+	_flight.clear_traffic()
 	_opponent_actor = null
-	_clear_traffic_root()
