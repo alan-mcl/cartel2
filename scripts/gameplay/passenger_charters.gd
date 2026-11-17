@@ -539,7 +539,7 @@ static func generate_offers(
 			str(role.get("id", "")),
 			rng
 		)
-		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))
+		var destination_label := str(dest.get("habitat_name", ""))
 		var description := format_description(
 			desc_template,
 			quantity,

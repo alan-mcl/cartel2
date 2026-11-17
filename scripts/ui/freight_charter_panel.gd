@@ -130,7 +130,7 @@ func _cancel_charter(charter: Dictionary, _ship_id: String) -> bool:
 
 
 func _destination_label(entry: Dictionary) -> String:
-	return str(entry.get("destination_name", "")) + str(entry.get("via_label", ""))
+	return str(entry.get("destination_name", ""))
 
 
 func _charter_timing_line(entry: Dictionary) -> String:

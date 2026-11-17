@@ -7,6 +7,7 @@ static func run(runner: TestRunner) -> void:
 	_test_two_hop_destination_exists(runner, catalog)
 	_test_two_hop_pay_uses_path_friction(runner, catalog)
 	_test_multihop_passenger_requires_habitat_ls(runner, catalog)
+	_test_multihop_direct_jump_completes(runner, catalog)
 	_test_on_time_destination_pays(runner, catalog)
 	_test_late_destination_charges_cancel_fee(runner, catalog)
 	_test_penalty_can_overdraw(runner, catalog)
@@ -159,6 +160,47 @@ static func _test_multihop_passenger_requires_habitat_ls(runner: TestRunner, cat
 	ship.set_module("system_2", "gi_ls_4")
 	check = missions.evaluate_offer(session, catalog, offer.id, ship.id)
 	runner.check(bool(check.get("ok", false)), "charter hops: habitat LS allows multi-hop accept eval")
+
+
+static func _test_multihop_direct_jump_completes(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "CH-SKIP")
+	_wire_events(session, catalog, simulation)
+	var dest := _two_hop_dest(catalog, "proxima_habitat")
+	if dest.is_empty():
+		runner.check(false, "charter hops: direct jump test needs two-hop destination")
+		return
+	var ship := session.get_owned_ship("flare_on_ss_1")
+	if ship == null:
+		runner.check(false, "charter hops: flare needed for direct jump test")
+		return
+	session.fleet.current_ship_id = ship.id
+	ship.set_module("system_2", "gi_ls_4")
+	var offer := _passenger_offer(catalog, "proxima_habitat", dest, "skip_vias", 2)
+	_inject_passenger_offer(missions, session, offer)
+	runner.check(
+		missions.accept_offer(session, catalog, offer.id, ship.id),
+		"charter hops: accept direct jump test"
+	)
+	var reward := int(offer.get("reward", 0))
+	var credits_before := session.credits
+	runner.check(session.undock(catalog, ship.id, missions), "charter hops: undock direct jump")
+	var dest_sector := str(dest.get("sector_id", ""))
+	runner.check(
+		session.enter_sector(catalog, dest_sector, false),
+		"charter hops: jump direct to destination sector"
+	)
+	runner.check(
+		session.dock(catalog, str(dest.get("habitat_id", ""))),
+		"charter hops: dock destination without intermediate stop"
+	)
+	runner.check(missions.list_accepted().is_empty(), "charter hops: direct jump clears charter")
+	var bonus := int(round(float(reward) * CharterResolution.EARLY_FINISH_BONUS_FRACTION))
+	runner.check(
+		session.credits >= credits_before + reward + bonus,
+		"charter hops: direct jump pays like gate route"
+	)
 
 
 static func _test_on_time_destination_pays(runner: TestRunner, catalog: Catalog) -> void:

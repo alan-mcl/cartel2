@@ -225,7 +225,7 @@ static func generate_offers(
 				commodity_name = commodity_id
 
 		var desc_template := pick_description_from_index(desc_by_cargo, cargo_id, rng)
-		var destination_label := str(dest.get("habitat_name", "")) + str(dest.get("via_label", ""))
+		var destination_label := str(dest.get("habitat_name", ""))
 		var description := format_description(
 			desc_template,
 			quantity,

@@ -372,7 +372,7 @@ After adding a corporation, run `python3 scripts/tools/generate_corporate_presen
 
 ### Passenger charters (`passenger_missions.json`, `MissionSubsystem`)
 
-Daily offers are generated per habitat (terminal board; bar board where a `bar` building exists). Each role and description lists which `boards` it applies to (`terminal` vs `bar`); bar fares stay one hop. Terminal boards may roll multi-hop destinations on `routes.json` (BFS up to `max_hops`); pay and deadlines use **summed path friction**. Offers store `hops`, `deadline_hours`, and `deadline_gst` on accept. Multi-hop passengers require `ls_habitat`. Late completion withholds pay and charges `cancel_penalty_fraction` via `GameSession.assess_penalty_credits` (may overdraw); only penalties may leave credits negative.
+Daily offers are generated per habitat (terminal board; bar board where a `bar` building exists). Each role and description lists which `boards` it applies to (`terminal` vs `bar`); bar fares stay one hop. Terminal boards may roll multi-hop destinations on `routes.json` (BFS up to `max_hops`); pay and deadlines use **summed path friction** from that suggested path only—`via_label` and `path_sectors` do not gate completion. Docking the **destination habitat** on the contracted ship settles the charter on time (direct translation or hyperdrive included). Offers store `hops`, `deadline_hours`, and `deadline_gst` on accept. Multi-hop passengers require `ls_habitat`. Late completion withholds pay and charges `cancel_penalty_fraction` via `GameSession.assess_penalty_credits` (may overdraw); only penalties may leave credits negative.
 
 | Field | Description |
 |-------|-------------|

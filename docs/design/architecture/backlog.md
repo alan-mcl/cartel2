@@ -35,6 +35,8 @@ Public Enemy
 Xenocyte
 Marty - Easy Street
 Sledge
+Lunchbox
+Zenith
 
 Ladbroke Grove
 Long On Gravitas
@@ -45,4 +47,18 @@ Unfinished Business
 Kodak Moment
 Glory to Arstotzka
 Tannhäuser Gate
+Nothing Personal
+Terms and Conditions
+Unscheduled Maintenance
+No Fixed Solution
+End All Wars
+A Distant Memory
+No Quarter
+Second Chance
+Bad Habit
+One More Time
+Critical Path
+Zero Defects
+Southern Cross
+
 

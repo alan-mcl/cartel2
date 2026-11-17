@@ -253,7 +253,7 @@ static func _habitat_name(catalog: Catalog, habitat_id: String) -> String:
 
 
 static func _destination_label(entry: Dictionary) -> String:
-	return str(entry.get("destination_name", "")) + str(entry.get("via_label", ""))
+	return str(entry.get("destination_name", ""))
 
 
 static func _freight_title(entry: Dictionary) -> String:
