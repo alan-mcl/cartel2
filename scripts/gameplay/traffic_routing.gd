@@ -361,12 +361,12 @@ static func steer_toward(actor, target: Vector2, use_thrust: bool, use_boost: bo
 static func check_route_arrival(
 	actor,
 	traffic_config: Dictionary,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	prev_position: Vector2,
 	anchors: Array,
 	traffic_envelope: float
 ) -> void:
-	if world_loader == null:
+	if world_query == null:
 		return
 
 	if actor.ai_state == TrafficActorScript.AiState.FLEE:
@@ -374,7 +374,7 @@ static func check_route_arrival(
 			return
 		if actor.flee_anchor_id.is_empty():
 			return
-		if not world_loader.is_traffic_route_arrived(
+		if not world_query.is_route_arrived(
 			prev_position, actor.position, actor.flee_anchor_id, traffic_config
 		):
 			return
@@ -386,13 +386,13 @@ static func check_route_arrival(
 
 	if actor.role == "runabout":
 		check_runabout_arrival(
-			actor, traffic_config, world_loader, prev_position, anchors, traffic_envelope
+			actor, traffic_config, world_query, prev_position, anchors, traffic_envelope
 		)
 		return
 
 	if actor.route_to_id.is_empty():
 		return
-	if not world_loader.is_traffic_route_arrived(
+	if not world_query.is_route_arrived(
 		prev_position, actor.position, actor.route_to_id, traffic_config
 	):
 		return
@@ -407,7 +407,7 @@ static func check_route_arrival(
 static func check_runabout_arrival(
 	actor,
 	traffic_config: Dictionary,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	prev_position: Vector2,
 	anchors: Array,
 	traffic_envelope: float
@@ -417,7 +417,7 @@ static func check_runabout_arrival(
 
 	var arrived := false
 	if not actor.wander_target_id.is_empty():
-		arrived = world_loader.is_traffic_route_arrived(
+		arrived = world_query.is_route_arrived(
 			prev_position, actor.position, actor.wander_target_id, traffic_config
 		)
 	else:

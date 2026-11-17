@@ -896,6 +896,16 @@ func get_traffic_anchors() -> Array:
 	return _nav.get_traffic_anchors(self)
 
 
+func make_traffic_query(traffic_config: Dictionary = {}) -> SectorTrafficQuery:
+	var query := SectorTrafficQuery.new()
+	query.anchors = _nav.get_traffic_anchors(self)
+	query.habitat_launch = get_habitat_launch_position()
+	query.gate_approach = get_jump_gate_approach_position()
+	query.envelope_radius = get_traffic_envelope_radius()
+	query.load_arrivals(_nav.build_traffic_arrival_circles(self, traffic_config))
+	return query
+
+
 func is_traffic_at_destination(world_pos: Vector2, destination_id: String, traffic_config: Dictionary = {}) -> bool:
 	return _nav.is_traffic_at_destination(self, world_pos, destination_id, traffic_config)
 

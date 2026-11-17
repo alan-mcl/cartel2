@@ -409,6 +409,48 @@ func _build_volatile_prop_contacts(loader: WorldLoader) -> Array:
 	loader._volatile_entity_contact_meta = surviving
 	return contacts
 
+func build_traffic_arrival_circles(loader: WorldLoader, traffic_config: Dictionary = {}) -> Dictionary:
+	var out: Dictionary = {}
+	if loader == null:
+		return out
+	var fallback_radius := float(traffic_config.get("orbital_arrival_radius", 90.0))
+	_collect_arrival_circle(loader, "habitat", fallback_radius, out)
+	_collect_arrival_circle(loader, "jump_gate", fallback_radius, out)
+	for entry_variant in loader._orbital_entries:
+		if typeof(entry_variant) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_variant
+		var orbital_id := str(entry.get("id", ""))
+		if orbital_id.is_empty():
+			continue
+		_collect_arrival_circle(loader, orbital_id, fallback_radius, out)
+	return out
+
+
+func _collect_arrival_circle(
+	loader: WorldLoader,
+	destination_id: String,
+	fallback_radius: float,
+	out: Dictionary
+) -> void:
+	var node := _destination_node(loader, destination_id)
+	if node == null or not is_instance_valid(node):
+		return
+	var interactable := node.get_node_or_null("Interactable") as Area2D
+	if interactable != null and is_instance_valid(interactable):
+		var collision := interactable.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collision != null and collision.shape is CircleShape2D:
+			var circle := collision.shape as CircleShape2D
+			var center := collision.global_transform.origin
+			var scale := maxf(collision.global_scale.x, collision.global_scale.y)
+			out[destination_id] = {"center": center, "radius": circle.radius * scale}
+			return
+	var anchor_pos := _destination_world_position(loader, node, destination_id)
+	if anchor_pos.length_squared() < 1.0:
+		return
+	out[destination_id] = {"center": anchor_pos, "radius": fallback_radius}
+
+
 func get_traffic_anchors(loader: WorldLoader) -> Array:
 	var anchors: Array = []
 	if loader._habitat_node != null:

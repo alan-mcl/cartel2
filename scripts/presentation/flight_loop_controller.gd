@@ -10,6 +10,7 @@ const EncounterMaterializeScript := preload("res://scripts/gameplay/encounter_ma
 var _traffic_director = null
 var _traffic_view = null
 var _world_loader: WorldLoader
+var _traffic_query: SectorTrafficQuery
 var _catalog: Catalog
 var _main: Node2D
 var _player: CharacterBody2D
@@ -70,12 +71,14 @@ func setup_traffic(world: Node2D, simulation: Simulation = null) -> void:
 	_ensure_traffic_director()
 	if _traffic_director == null:
 		return
+	var traffic_config := _catalog.get_traffic_config()
+	_traffic_query = _world_loader.make_traffic_query(traffic_config)
 	_traffic_director.setup(
 		_catalog,
 		_main.session.sector_id,
-		_world_loader.get_traffic_envelope_radius(),
+		_traffic_query.envelope_radius,
 		_player.global_position,
-		_world_loader
+		_traffic_query
 	)
 	_apply_active_encounter_ships(world, simulation)
 	if _traffic_view != null:
@@ -123,10 +126,11 @@ func physics_tick(delta: float, physics_frame: int) -> void:
 				if _player.assembled_ship != null
 				else false
 			)
+			_traffic_query = _world_loader.make_traffic_query(_catalog.get_traffic_config())
 			_traffic_director.tick(
 				delta,
 				_player.global_position,
-				_world_loader,
+				_traffic_query,
 				physics_frame,
 				_player.motion.velocity,
 				_player.motion.facing,
@@ -455,10 +459,11 @@ func _tick_volatile_site_traffic(delta: float, physics_frame: int) -> void:
 		if _player.assembled_ship != null
 		else false
 	)
+	_traffic_query = _world_loader.make_traffic_query(_catalog.get_traffic_config())
 	_traffic_director.tick(
 		delta,
 		_player.global_position,
-		_world_loader,
+		_traffic_query,
 		physics_frame,
 		_player.motion.velocity,
 		_player.motion.facing,
@@ -781,12 +786,15 @@ func _apply_active_encounter_ships(world: Node2D, simulation: Simulation) -> voi
 	if encounters.get_active_plan().is_empty():
 		return
 	var traffic_config := _catalog.get_traffic_config()
+	var query := _traffic_query
+	if query == null:
+		query = _world_loader.make_traffic_query(traffic_config)
 	var extras := EncounterMaterializeScript.spawn_actors_for_plan(
 		encounters,
 		_catalog,
 		traffic_config,
 		_main.session.sector_id,
-		_world_loader,
+		query,
 		_player.global_position
 	)
 	if extras.is_empty():

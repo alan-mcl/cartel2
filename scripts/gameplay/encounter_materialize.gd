@@ -13,7 +13,7 @@ static func spawn_actors_for_plan(
 	catalog: Catalog,
 	traffic_config: Dictionary,
 	sector_id: String,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	player_pos: Vector2
 ) -> Array:
 	if subsystem == null or catalog == null:
@@ -27,7 +27,7 @@ static func spawn_actors_for_plan(
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(plan.get("seed", 1))
-	var anchors := world_loader.get_traffic_anchors() if world_loader != null else []
+	var anchors := world_query.anchors if world_query != null else []
 	var slot_to_actor_id: Dictionary = {}
 	var roster: Array = []
 
@@ -51,7 +51,7 @@ static func spawn_actors_for_plan(
 			if template_id.is_empty() or catalog.get_ship_def(template_id) == null:
 				continue
 
-		var spawn_pos := _resolve_spawn_position(entry, rng, player_pos, anchors, world_loader)
+		var spawn_pos := _resolve_spawn_position(entry, rng, player_pos, anchors, world_query)
 		entry["position"] = {"x": spawn_pos.x, "y": spawn_pos.y}
 		if not entry.has("heading_rad"):
 			entry["heading_rad"] = rng.randf() * TAU
@@ -94,7 +94,7 @@ static func _resolve_spawn_position(
 	rng: RandomNumberGenerator,
 	player_pos: Vector2,
 	anchors: Array,
-	world_loader: WorldLoader
+	world_query: SectorTrafficQuery
 ) -> Vector2:
 	var pos_dict: Variant = entry.get("position", {})
 	if typeof(pos_dict) == TYPE_DICTIONARY and pos_dict.has("x") and pos_dict.has("y"):
@@ -109,8 +109,8 @@ static func _resolve_spawn_position(
 			var anchor: Dictionary = anchor_variant
 			if str(anchor.get("id", "")) == anchor_id:
 				return anchor.get("position", Vector2.ZERO) + offset
-	if world_loader != null:
-		var envelope := world_loader.get_traffic_envelope_radius()
+	if world_query != null:
+		var envelope := float(world_query.envelope_radius)
 		offset = Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(envelope * 0.15, envelope * 0.35)
 	return player_pos + offset
 

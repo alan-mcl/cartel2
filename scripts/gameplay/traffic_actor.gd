@@ -309,7 +309,7 @@ func tick(
 	player_pos: Vector2,
 	anchors: Array,
 	traffic_envelope: float,
-	world_loader: WorldLoader = null,
+	world_query: SectorTrafficQuery = null,
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
 	player_thrusting: bool = false,
@@ -342,7 +342,7 @@ func tick(
 			anchors,
 			traffic_config,
 			traffic_envelope,
-			world_loader,
+			world_query,
 			prev_position,
 			world
 		)
@@ -360,7 +360,7 @@ func tick(
 			player_thrusting,
 			anchors,
 			traffic_envelope,
-			world_loader,
+			world_query,
 			prev_position,
 			world,
 			drone_contacts
@@ -376,7 +376,7 @@ func tick(
 			anchors,
 			traffic_config,
 			traffic_envelope,
-			world_loader,
+			world_query,
 			prev_position,
 			world
 		)
@@ -403,7 +403,7 @@ func _tick_full_sim(
 	player_thrusting: bool,
 	anchors: Array,
 	traffic_envelope: float,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	prev_position: Vector2,
 	world: WorldPresence = null,
 	drone_contacts: Array = []
@@ -484,7 +484,7 @@ func _tick_full_sim(
 		if hull_ratio <= 0.45:
 			begin_bounty_flee(traffic_config)
 	TrafficRouting.check_route_arrival(
-		self, traffic_config, world_loader, prev_position, anchors, traffic_envelope
+		self, traffic_config, world_query, prev_position, anchors, traffic_envelope
 	)
 	TrafficRouting.check_traffic_envelope(self, traffic_envelope)
 	_check_fuel_exhaustion()
@@ -504,7 +504,7 @@ func _tick_kinematic(
 	anchors: Array,
 	traffic_config: Dictionary,
 	traffic_envelope: float,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	prev_position: Vector2,
 	world: WorldPresence = null
 ) -> void:
@@ -575,7 +575,7 @@ func _tick_kinematic(
 
 	_handle_combat_timeout(delta, player_pos, traffic_config)
 	TrafficRouting.check_route_arrival(
-		self, traffic_config, world_loader, prev_position, anchors, traffic_envelope
+		self, traffic_config, world_query, prev_position, anchors, traffic_envelope
 	)
 	TrafficRouting.check_traffic_envelope(self, traffic_envelope)
 

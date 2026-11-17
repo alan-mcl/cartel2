@@ -24,7 +24,7 @@ func setup(
 	sector_id: String,
 	traffic_envelope: float,
 	player_pos: Vector2,
-	world_loader: WorldLoader
+	world_query: SectorTrafficQuery
 ) -> void:
 	clear()
 	_lone_actor_mode = false
@@ -36,7 +36,7 @@ func setup(
 
 	var counts := _population_counts(catalog.get_sector_def(sector_id))
 	_target_fleet_size = counts.near + counts.far
-	_spawn_initial_fleet(_target_fleet_size, player_pos, world_loader)
+	_spawn_initial_fleet(_target_fleet_size, player_pos, world_query)
 	_assign_sim_slots(player_pos)
 	_sim_slot_assign_counter = 0
 
@@ -110,7 +110,7 @@ func setup_scripted_volatile_roster(
 func tick(
 	delta: float,
 	player_pos: Vector2,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	physics_frame: int,
 	player_vel: Vector2 = Vector2.ZERO,
 	player_facing: float = 0.0,
@@ -127,7 +127,7 @@ func tick(
 	var drone_contacts: Array = []
 	DroneRuntime.append_deployed_contacts(drone_contacts, _catalog, player_owned, actors)
 
-	var anchors := world_loader.get_traffic_anchors()
+	var anchors := world_query.anchors if world_query != null else []
 	var cycle_queue: Array = []
 	var visual_radius := float(_traffic_config.get("visual_contact_radius", 250.0))
 	var player_effectiveness := SensorSystem.sensor_effectiveness(player_assembled, player_operating)
@@ -162,7 +162,7 @@ func tick(
 		_refresh_encounter_peer_lock(actor)
 
 		if actor.ai_state == TrafficActorScript.STATE_DESTROYED:
-			if _handle_destroyed(actor, delta, player_pos, anchors, world_loader):
+			if _handle_destroyed(actor, delta, player_pos, anchors, world_query):
 				continue
 			else:
 				continue
@@ -199,7 +199,7 @@ func tick(
 			player_pos,
 			anchors,
 			_traffic_envelope,
-			world_loader,
+			world_query,
 			player_vel,
 			player_facing,
 			player_thrusting,
@@ -219,9 +219,9 @@ func tick(
 		if typeof(entry_variant) != TYPE_DICTIONARY:
 			continue
 		var entry: Dictionary = entry_variant
-		_retire_and_replace(entry.get("actor"), entry.get("hint", {}), player_pos, anchors, world_loader)
+		_retire_and_replace(entry.get("actor"), entry.get("hint", {}), player_pos, anchors, world_query)
 
-	_maintain_fleet_size(player_pos, anchors, world_loader)
+	_maintain_fleet_size(player_pos, anchors, world_query)
 
 
 func get_traffic_contacts() -> Array:
@@ -281,13 +281,13 @@ func _population_counts(sector: SectorDef) -> Dictionary:
 	}
 
 
-func _spawn_initial_fleet(total: int, player_pos: Vector2, world_loader: WorldLoader) -> void:
-	var anchors := world_loader.get_traffic_anchors() if world_loader != null else []
+func _spawn_initial_fleet(total: int, player_pos: Vector2, world_query: SectorTrafficQuery) -> void:
+	var anchors := world_query.anchors if world_query != null else []
 	for i in range(total):
 		var role := _pick_role()
 		var template := TrafficActorScript.pick_template_for_role(_traffic_config, role)
 		var trip := _pick_trip_for_role(role, anchors)
-		var spawn_pose := _pick_initial_spawn_pose(role, player_pos, world_loader, anchors, trip)
+		var spawn_pose := _pick_initial_spawn_pose(role, player_pos, world_query, anchors, trip)
 		var actor := TrafficActorScript.create(
 			_catalog,
 			_traffic_config,
@@ -302,11 +302,11 @@ func _spawn_initial_fleet(total: int, player_pos: Vector2, world_loader: WorldLo
 		actors.append(actor)
 
 
-func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, world_loader: WorldLoader):
+func _spawn_replacement(hint: Dictionary, player_pos: Vector2, anchors: Array, world_query: SectorTrafficQuery):
 	var role := _pick_role()
 	var template := TrafficActorScript.pick_template_for_role(_traffic_config, role)
 	var trip := _pick_trip_for_role(role, anchors)
-	var spawn_pose := _pick_cycle_spawn_pose(hint, player_pos, anchors, world_loader, role, trip)
+	var spawn_pose := _pick_cycle_spawn_pose(hint, player_pos, anchors, world_query, role, trip)
 	var actor := TrafficActorScript.create(
 		_catalog,
 		_traffic_config,
@@ -440,7 +440,7 @@ func _retire_and_replace(
 	hint: Dictionary,
 	player_pos: Vector2,
 	anchors: Array,
-	world_loader: WorldLoader
+	world_query: SectorTrafficQuery
 ) -> void:
 	if actor == null:
 		return
@@ -450,10 +450,10 @@ func _retire_and_replace(
 	_destroyed_timers.erase(actor.id)
 	if actor.encounter_pinned or _lone_actor_mode:
 		return
-	_spawn_replacement(hint, player_pos, anchors, world_loader)
+	_spawn_replacement(hint, player_pos, anchors, world_query)
 
 
-func _maintain_fleet_size(player_pos: Vector2, anchors: Array, world_loader: WorldLoader) -> void:
+func _maintain_fleet_size(player_pos: Vector2, anchors: Array, world_query: SectorTrafficQuery) -> void:
 	if _lone_actor_mode:
 		return
 	var ambient_count := 0
@@ -464,7 +464,7 @@ func _maintain_fleet_size(player_pos: Vector2, anchors: Array, world_loader: Wor
 		if not actor.encounter_pinned:
 			ambient_count += 1
 	while ambient_count < _target_fleet_size:
-		_spawn_replacement({}, player_pos, anchors, world_loader)
+		_spawn_replacement({}, player_pos, anchors, world_query)
 		ambient_count += 1
 
 
@@ -473,7 +473,7 @@ func _handle_destroyed(
 	delta: float,
 	player_pos: Vector2,
 	anchors: Array,
-	world_loader: WorldLoader
+	world_query: SectorTrafficQuery
 ) -> bool:
 	if not _destroyed_timers.has(actor.id):
 		_begin_destroyed_timer(actor)
@@ -495,7 +495,7 @@ func _handle_destroyed(
 			actors.remove_at(index)
 		_destroyed_timers.erase(actor.id)
 		return true
-	_retire_and_replace(actor, {"reason": "destroyed"}, player_pos, anchors, world_loader)
+	_retire_and_replace(actor, {"reason": "destroyed"}, player_pos, anchors, world_query)
 	return true
 
 
@@ -550,7 +550,7 @@ func _pick_spawn_position(player_pos: Vector2) -> Vector2:
 func _pick_initial_spawn_pose(
 	role: String,
 	player_pos: Vector2,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	anchors: Array,
 	trip: Dictionary
 ) -> Dictionary:
@@ -558,13 +558,13 @@ func _pick_initial_spawn_pose(
 		return _spawn_pose_at_waypoint(
 			str(trip.get("from", "")),
 			anchors,
-			world_loader,
+			world_query,
 			str(trip.get("to", ""))
 		)
 	if role in ["loiter", "runabout"]:
 		var waypoint_id := TrafficActorScript.pick_weighted_gate_orbital(anchors, _traffic_config)
 		var face_toward := "jump_gate" if role == "loiter" else "habitat"
-		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, face_toward)
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_query, face_toward)
 	var pos := _pick_spawn_position(player_pos)
 	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
 
@@ -573,7 +573,7 @@ func _pick_cycle_spawn_pose(
 	hint: Dictionary,
 	player_pos: Vector2,
 	anchors: Array,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	role: String,
 	trip: Dictionary
 ) -> Dictionary:
@@ -583,18 +583,18 @@ func _pick_cycle_spawn_pose(
 		return _spawn_pose_at_waypoint(
 			str(trip.get("from", "")),
 			anchors,
-			world_loader,
+			world_query,
 			str(trip.get("to", ""))
 		)
 
 	if reason == "destroyed" or reason == "out_of_bounds" or reason == "fuel_empty":
 		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
-		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, "habitat")
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_query, "habitat")
 
 	if role in ["loiter", "runabout"]:
 		var waypoint_id := TrafficActorScript.pick_weighted_waypoint(anchors, _traffic_config, "")
 		var face_toward := "jump_gate" if role == "loiter" else "habitat"
-		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_loader, face_toward)
+		return _spawn_pose_at_waypoint(waypoint_id, anchors, world_query, face_toward)
 
 	var pos := _pick_spawn_position(player_pos)
 	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
@@ -603,7 +603,7 @@ func _pick_cycle_spawn_pose(
 func _spawn_pose_at_waypoint(
 	waypoint_id: String,
 	anchors: Array,
-	world_loader: WorldLoader,
+	world_query: SectorTrafficQuery,
 	face_toward_id: String = ""
 ) -> Dictionary:
 	if waypoint_id.is_empty():
@@ -612,16 +612,16 @@ func _spawn_pose_at_waypoint(
 
 	match waypoint_id:
 		"habitat":
-			if world_loader != null:
+			if world_query != null:
 				return _spawn_pose_at_habitat(
-					world_loader,
+					world_query,
 					anchors,
 					face_toward_id if not face_toward_id.is_empty() else "jump_gate"
 				)
 		"jump_gate":
-			if world_loader != null:
+			if world_query != null:
 				return _spawn_pose_at_gate(
-					world_loader,
+					world_query,
 					anchors,
 					face_toward_id if not face_toward_id.is_empty() else "habitat"
 				)
@@ -633,15 +633,15 @@ func _spawn_pose_at_waypoint(
 	return {"position": pos, "facing": _rng.randf_range(-PI, PI)}
 
 
-func _spawn_pose_at_habitat(world_loader: WorldLoader, anchors: Array, face_toward_id: String = "jump_gate") -> Dictionary:
-	var launch_pos := world_loader.get_habitat_launch_position()
+func _spawn_pose_at_habitat(world_query: SectorTrafficQuery, anchors: Array, face_toward_id: String = "jump_gate") -> Dictionary:
+	var launch_pos := world_query.habitat_launch if world_query != null else Vector2.ZERO
 	var face_pos := _find_anchor_position(anchors, face_toward_id)
 	var facing := (face_pos - launch_pos).angle() if face_pos.length_squared() > 1.0 else _rng.randf_range(-PI, PI)
 	return {"position": launch_pos, "facing": facing}
 
 
-func _spawn_pose_at_gate(world_loader: WorldLoader, anchors: Array, face_toward_id: String = "habitat") -> Dictionary:
-	var spawn_pos := world_loader.get_jump_gate_approach_position()
+func _spawn_pose_at_gate(world_query: SectorTrafficQuery, anchors: Array, face_toward_id: String = "habitat") -> Dictionary:
+	var spawn_pos := world_query.gate_approach if world_query != null else Vector2.ZERO
 	var face_pos := _find_anchor_position(anchors, face_toward_id)
 	var facing := (face_pos - spawn_pos).angle() if face_pos.length_squared() > 1.0 else _rng.randf_range(-PI, PI)
 	return {"position": spawn_pos, "facing": facing}

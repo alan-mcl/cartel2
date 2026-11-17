@@ -8,7 +8,6 @@ const TrafficSpawnScript := preload("res://scripts/gameplay/traffic_spawn.gd")
 
 static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	var catalog := Catalog.load_default()
-	_test_sector_nav_adapter(runner, catalog, tree)
 	_test_setup_fleet_size(runner, catalog)
 	_test_sim_slot_cap(runner, catalog)
 	_test_near_lod_tracks_sim_slot(runner, catalog)
@@ -21,46 +20,26 @@ static func run(runner: TestRunner, tree: SceneTree = null) -> void:
 	_test_scripted_roster_stays_lone(runner, catalog)
 
 
-static func _test_sector_nav_adapter(runner: TestRunner, catalog: Catalog, tree: SceneTree) -> void:
-	if tree == null:
-		tree = Engine.get_main_loop() as SceneTree
-	if tree == null or tree.root == null:
-		runner.check(false, "world nav: SceneTree available")
-		return
-	var host := Node2D.new()
-	tree.root.add_child(host)
-	var session := GameSession.new()
-	runner.check(session.start_new_game(catalog, "NAV-1", "tester"), "world nav: session starts")
-	var loader := WorldLoader.new()
-	loader.load_sector(host, catalog, session, "proxima")
-	var ids: Array[String] = []
-	for entry in loader.get_nav_contacts(catalog, false):
-		if typeof(entry) == TYPE_DICTIONARY:
-			ids.append(str(entry.get("id", "")))
-	runner.check("habitat" in ids, "world nav: proxima habitat contact")
-	runner.check("planet" in ids, "world nav: proxima planet contact")
-	runner.check(not loader.get_traffic_anchors().is_empty(), "world nav: traffic anchors")
-	runner.check(
-		not loader.is_traffic_route_arrived(
-			Vector2(80000, 80000), Vector2(80000, 80000), "habitat", {}
-		),
-		"world nav: far from habitat is not arrived"
-	)
-	host.free()
+static func _minimal_query(catalog: Catalog) -> SectorTrafficQuery:
+	return SectorTrafficQuery.minimal(5000.0)
+
+
+static func _proxima_query(catalog: Catalog) -> SectorTrafficQuery:
+	return SectorTrafficQuery.synthetic_proxima(catalog)
 
 
 static func _test_setup_fleet_size(runner: TestRunner, catalog: Catalog) -> void:
 	var director := TrafficDirectorScript.new()
-	var world_loader := WorldLoader.new()
+	var query := _proxima_query(catalog)
 	var traffic_config := catalog.get_traffic_config()
 	var sector := catalog.get_sector("proxima")
 
 	director.setup(
 		catalog,
 		"proxima",
-		world_loader.get_traffic_envelope_radius(),
+		query.envelope_radius,
 		Vector2.ZERO,
-		world_loader
+		query
 	)
 
 	var near_min := int(traffic_config.get("near_count_min", 9))
@@ -81,16 +60,16 @@ static func _test_setup_fleet_size(runner: TestRunner, catalog: Catalog) -> void
 
 static func _test_sim_slot_cap(runner: TestRunner, catalog: Catalog) -> void:
 	var director := TrafficDirectorScript.new()
-	var world_loader := WorldLoader.new()
+	var query := _minimal_query(catalog)
 	var traffic_config := catalog.get_traffic_config()
 	var sim_max := int(traffic_config.get("sim_slot_max", 20))
 
 	director.setup(
 		catalog,
 		"proxima",
-		world_loader.get_traffic_envelope_radius(),
+		query.envelope_radius,
 		Vector2.ZERO,
-		world_loader
+		query
 	)
 
 	var slotted := 0
@@ -107,8 +86,7 @@ static func _test_sim_slot_cap(runner: TestRunner, catalog: Catalog) -> void:
 
 static func _test_slotted_peaceful_kinematic(runner: TestRunner, catalog: Catalog) -> void:
 	var traffic_config := catalog.get_traffic_config()
-	var world_loader := WorldLoader.new()
-	var envelope := world_loader.get_traffic_envelope_radius()
+	var query := _minimal_query(catalog)
 	var actor = TrafficActorScript.create(
 		catalog,
 		traffic_config,
@@ -127,16 +105,15 @@ static func _test_slotted_peaceful_kinematic(runner: TestRunner, catalog: Catalo
 			1.0 / 60.0,
 			Vector2.ZERO,
 			[],
-			envelope,
-			world_loader
+			query.envelope_radius,
+			query
 		)
 	runner.check(actor.pending_weapon_orders.is_empty(), "slotted peaceful traffic emits no weapon orders")
 
 
 static func _test_slotted_engage_weapon_orders(runner: TestRunner, catalog: Catalog) -> void:
 	var traffic_config := catalog.get_traffic_config()
-	var world_loader := WorldLoader.new()
-	var envelope := world_loader.get_traffic_envelope_radius()
+	var query := _minimal_query(catalog)
 	var actor = TrafficActorScript.create(
 		catalog,
 		traffic_config,
@@ -157,8 +134,8 @@ static func _test_slotted_engage_weapon_orders(runner: TestRunner, catalog: Cata
 			1.0 / 60.0,
 			Vector2.ZERO,
 			[],
-			envelope,
-			world_loader
+			query.envelope_radius,
+			query
 		)
 		if not actor.pending_weapon_orders.is_empty():
 			got_orders = true
@@ -168,20 +145,20 @@ static func _test_slotted_engage_weapon_orders(runner: TestRunner, catalog: Cata
 
 static func _test_near_lod_tracks_sim_slot(runner: TestRunner, catalog: Catalog) -> void:
 	var director := TrafficDirectorScript.new()
-	var world_loader := WorldLoader.new()
+	var query := _proxima_query(catalog)
 
 	director.setup(
 		catalog,
 		"proxima",
-		world_loader.get_traffic_envelope_radius(),
+		query.envelope_radius,
 		Vector2(100.0, 50.0),
-		world_loader
+		query
 	)
 
 	director.tick(
 		1.0 / 60.0,
 		Vector2(100.0, 50.0),
-		world_loader,
+		query,
 		42,
 		Vector2.ZERO,
 		0.0,
@@ -295,14 +272,14 @@ static func _refresh_count(actor, observer: Vector2, radius: float, window: int)
 
 static func _test_clear_drops_fleet(runner: TestRunner, catalog: Catalog) -> void:
 	var director := TrafficDirectorScript.new()
-	var world_loader := WorldLoader.new()
+	var query := _minimal_query(catalog)
 
 	director.setup(
 		catalog,
 		"proxima",
-		world_loader.get_traffic_envelope_radius(),
+		query.envelope_radius,
 		Vector2.ZERO,
-		world_loader
+		query
 	)
 	runner.check(director.actors.size() > 0, "clear test starts with fleet")
 
@@ -312,7 +289,7 @@ static func _test_clear_drops_fleet(runner: TestRunner, catalog: Catalog) -> voi
 
 static func _test_scripted_roster_stays_lone(runner: TestRunner, catalog: Catalog) -> void:
 	var director := TrafficDirectorScript.new()
-	var world_loader := WorldLoader.new()
+	var query := _minimal_query(catalog)
 	var traffic_config := catalog.get_traffic_config()
 	var actor = TrafficActorScript.create(
 		catalog,
@@ -328,11 +305,11 @@ static func _test_scripted_roster_stays_lone(runner: TestRunner, catalog: Catalo
 		return
 	director.setup_scripted_volatile_roster(catalog, "proxima", 3000.0, Vector2.ZERO, [actor])
 	for frame in range(12):
-		director.tick(0.1, Vector2.ZERO, world_loader, frame)
+		director.tick(0.1, Vector2.ZERO, query, frame)
 	runner.check_eq(director.actors.size(), 1, "scripted roster does not fill a sector fleet")
 	actor.ai_state = TrafficActorScript.STATE_DESTROYED
-	director.tick(0.1, Vector2.ZERO, world_loader, 13)
-	director.tick(30.0, Vector2.ZERO, world_loader, 14)
+	director.tick(0.1, Vector2.ZERO, query, 13)
+	director.tick(30.0, Vector2.ZERO, query, 14)
 	runner.check_eq(director.actors.size(), 0, "scripted roster does not replace a destroyed ship")
 
 

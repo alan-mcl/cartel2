@@ -23,15 +23,14 @@ Implemented N-space transit, hazards, and per-N backdrops are documented in [n-s
 |F9|modules|med|Scatter cannon: tighten the spread and increase the range a bit|
 |F10|npc|med|NPC pilots to use hyperdrives if equipped (escape notification is in gameplay)|
 |F1|art|low|irregularly shaped planet renderer (for comets, KBOs, etc)|
-|F2|systems|med|asteroid/debris placement around maps and vectors. Spawn registration is R6|
+|F2|systems|med|asteroid/debris placement around maps and vectors. Spawn registration is R6 (world query split is landed)|
 
 ## Refactoring
 
-Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R5 before R6; R7 before R8. R9, R10, R12, and R13 can land any time.
+Structural work only. Suggested order when nothing else forces a choice: R14, R15, and R11 are small and independent; then R6; R7 before R8. R9, R10, R12, and R13 can land any time.
 
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
-|R5|world|high|Traffic and encounters query anchors without constructing WorldLoader|
 |R6|world|high|Register entity kinds instead of private spawn branches. Unblocks F2|
 |R7|session|high|Travel, dock, cargo, and trade move onto the state slices|
 |R8|session|high|Call sites use the slices; forwarding properties stay until that is done|
@@ -43,18 +42,10 @@ Structural work only. Suggested order when nothing else forces a choice: R14, R1
 |R14|tests|med|Sensor suite stops requiring exactly 11 SKUs|
 |R15|docs|med|Player hyperdrive is documented as implemented; NPC use stays F10|
 
-### R5 — World queries without WorldLoader
-
-- **Status:** Discuss
-- **Depends on:** —
-- **Scope:** `scripts/gameplay/traffic_director.gd`, `scripts/gameplay/traffic_actor.gd`, `scripts/gameplay/traffic_routing.gd`, `scripts/gameplay/encounter_materialize.gd`, `scripts/presentation/world_loader.gd`, `tests/test_traffic.gd`
-- **Do not:** move planet, star, or sky rendering into gameplay; change anchor positions or spawn counts
-- **Acceptance:** gameplay takes a small `RefCounted` query (anchors, launch position, gate approach, arrival, envelope radius) instead of `WorldLoader`. `TestTraffic` does not construct `WorldLoader`. Rendering stays in presentation.
-
 ### R6 — Entity spawn registration
 
 - **Status:** Discuss
-- **Depends on:** R5
+- **Depends on:** — (traffic query split is landed)
 - **Unblocks:** F2
 - **Scope:** `scripts/presentation/world_loader.gd`, `scripts/presentation/world_nav.gd`, `scenes/world/`
 - **Do not:** place asteroid belts or vectors (F2); fold planets, local stars, or sky parent bodies into the entity registry; split `nspace_field.gd`

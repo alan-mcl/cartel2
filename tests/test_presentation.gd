@@ -8,12 +8,42 @@ extends RefCounted
 const TrafficActorScript := preload("res://scripts/gameplay/traffic_actor.gd")
 
 
-static func run(runner: TestRunner) -> void:
+static func run(runner: TestRunner, tree: SceneTree = null) -> void:
+	if tree == null:
+		tree = Engine.get_main_loop() as SceneTree
+	_test_sector_nav_adapter(runner, tree)
 	_test_node_pool_reparents_and_clears(runner)
 	_test_traffic_view_lifecycle(runner)
 	_test_traffic_destroy_breakup(runner)
 	_test_npc_play_destroyed_breakup(runner)
 	_test_traffic_detection_fade(runner)
+
+
+static func _test_sector_nav_adapter(runner: TestRunner, tree: SceneTree) -> void:
+	if tree == null or tree.root == null:
+		runner.check(false, "world nav: SceneTree available")
+		return
+	var host := Node2D.new()
+	tree.root.add_child(host)
+	var catalog := Catalog.load_default()
+	var session := GameSession.new()
+	runner.check(session.start_new_game(catalog, "NAV-1", "tester"), "world nav: session starts")
+	var loader := WorldLoader.new()
+	loader.load_sector(host, catalog, session, "proxima")
+	var ids: Array[String] = []
+	for entry in loader.get_nav_contacts(catalog, false):
+		if typeof(entry) == TYPE_DICTIONARY:
+			ids.append(str(entry.get("id", "")))
+	runner.check("habitat" in ids, "world nav: proxima habitat contact")
+	runner.check("planet" in ids, "world nav: proxima planet contact")
+	var traffic_config := catalog.get_traffic_config()
+	var query := loader.make_traffic_query(traffic_config)
+	runner.check(not query.anchors.is_empty(), "world nav: traffic anchors on query")
+	runner.check(
+		not query.is_route_arrived(Vector2(80000, 80000), Vector2(80000, 80000), "habitat", traffic_config),
+		"world nav: far from habitat is not arrived"
+	)
+	host.free()
 
 
 static func _test_node_pool_reparents_and_clears(runner: TestRunner) -> void:
