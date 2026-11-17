@@ -119,6 +119,7 @@ Player portraits: **120×160** PNG (3:4) as `p1.png`, `p2.png`, … in `assets/u
 - [audio](docs/design/architecture/audio.md) - buses, logical ids, settings, sandbox
 - [asset backlog](docs/design/architecture/asset_backlog.md) - art and audio still to supply
 - [backlog](docs/design/architecture/backlog.md) - open work
+- [release](docs/design/architecture/release.md) - source-tag GA process and gate
 
 **Content** (playable rules and rosters):
 

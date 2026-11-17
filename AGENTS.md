@@ -50,6 +50,8 @@ For the inner loop, `--fast` skips import, the parse sweep, and smokes (validato
 
 Optional advisory lint: set `CARTEL_GDLINT=1` so the parse sweep runs `gdlint` when installed (still non-blocking).
 
+Labelled source-tag releases (no exporter yet): bump `GameVersion.VERSION` and `project.godot` `config/version` together, follow [docs/design/architecture/release.md](docs/design/architecture/release.md), then run [`scripts/ci/release_check.sh`](scripts/ci/release_check.sh) on a clean tree. `TestGameVersion` keeps the two version strings aligned during ordinary checks.
+
 ## Writing tests
 
 Gameplay is `RefCounted` with no scene-tree dependency, so it is testable headlessly without booting the game. Prefer adding a test over manual verification.
