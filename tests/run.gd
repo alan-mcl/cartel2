@@ -132,6 +132,7 @@ func _suite_entries(runner: TestRunner) -> Array:
 		{"name": "TestExchangePriceTape", "run": func() -> void: TestExchangePriceTape.run(runner)},
 		{"name": "TestFuel", "run": func() -> void: TestFuel.run(runner)},
 		{"name": "TestFlightManifest", "run": func() -> void: TestFlightManifest.run(runner)},
+		{"name": "TestFlightRules", "run": func() -> void: TestFlightRules.run(runner)},
 		{"name": "TestBalanceMetrics", "run": func() -> void: TestBalanceMetrics.run(runner)},
 		{"name": "TestWeaponMountBands", "run": func() -> void: TestWeaponMountBands.run(runner)},
 		{"name": "TestTemplatePower", "run": func() -> void: TestTemplatePower.run(runner)},

@@ -220,7 +220,7 @@ Accepting grants a volatile site with randomised `setup.entry_position` (tempora
 records; board copy does not reveal them. Escort groups use matched, bodyguard, ambush, or decoy mixes.
 `FlightLoopController` spawns bounty ships with [`TrafficSpawn.create_from_bounty_target`](../../../scripts/gameplay/traffic_spawn.gd);
 fight resolves to fight-to-death, flee breaks toward deep space, the entry beacon, or a hyperdrive
-rim run. Named targets that escape may enter [`bounty_pursuit`](../../../scripts/gameplay/bounty_behavior.gd)
+rim run. Each frame it batches [`TrafficActor.take_pending_escape`](../../../scripts/gameplay/traffic_actor.gd) payloads into [`MissionSubsystem.notify_pending_bounty_escapes`](../../../scripts/gameplay/mission_subsystem.gd); pursuit spawn and habitat arrival stay on the same loop but contract writes live in gameplay. Named targets that escape may enter [`bounty_pursuit`](../../../scripts/gameplay/bounty_behavior.gd)
 (Unspace then origin dock timers); kills during pursuit credit against the contract volatile sector.
 Only the named target completes the contract. Destroy, intercept, and eliminate contracts record
 `bounty_target` when the hull is destroyed; **disable** records `bounty_disabled` when effective

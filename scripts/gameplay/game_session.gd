@@ -692,6 +692,18 @@ func apply_hull_stress(amount: float, delta: float, assembled_ship: AssembledShi
 	changed.emit()
 
 
+## Unspace hazard lump stress (flux, shards, ascidian sting). Returns true when hull is destroyed.
+func apply_unspace_hazard_hull_stress(
+	amount: float,
+	delta: float,
+	assembled_ship: AssembledShip = null
+) -> bool:
+	if amount <= 0.0:
+		return combat.hull <= 0.0
+	apply_hull_stress(amount, delta, assembled_ship)
+	return combat.hull <= 0.0
+
+
 func _consume_hull_stress_log_threshold() -> bool:
 	if _hull_stress_next_log_below < 0.0:
 		_hull_stress_next_log_below = combat.hull - HULL_STRESS_LOG_STEP

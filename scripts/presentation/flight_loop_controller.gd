@@ -508,24 +508,20 @@ func _process_bounty_escapes() -> void:
 	var missions := _missions()
 	if missions == null:
 		return
+	var escapes: Array = []
 	var kept: Array = []
 	for actor_variant in _traffic_director.actors:
 		if typeof(actor_variant) != TYPE_OBJECT:
 			continue
 		var actor = actor_variant
-		if not actor.bounty_pending_escape.is_empty():
-			missions.notify_bounty_ship_escaped(
-				_main.session,
-				_catalog,
-				str(actor.id),
-				bool(actor.bounty_is_named_target),
-				str(actor.bounty_pending_escape)
-			)
-			actor.bounty_pending_escape = ""
-			actor.bounty_remove_after_tick = true
+		var pending: Dictionary = actor.take_pending_escape()
+		if not pending.is_empty():
+			escapes.append(pending)
 		if actor.bounty_remove_after_tick:
 			continue
 		kept.append(actor)
+	if not escapes.is_empty():
+		missions.notify_pending_bounty_escapes(_main.session, _catalog, escapes)
 	_traffic_director.actors = kept
 
 
@@ -641,13 +637,10 @@ func _deliver_ascidian_sting(reaction: Dictionary, field: NspaceField) -> void:
 		_player.apply_weapon_impulse(kick)
 	var stress := float(reaction.get("hull_stress", 0.0))
 	if stress > 0.0:
-		_main.session.apply_hull_stress(
-			stress,
-			0.5,
-			_player.assembled_ship if _player != null else null
-		)
-		if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
-			_player.refresh_hull_destroyed_presentation()
+		var assembled: AssembledShip = _player.assembled_ship if _player != null else null
+		if _main.session.apply_unspace_hazard_hull_stress(stress, 0.5, assembled):
+			if _player.has_method("refresh_hull_destroyed_presentation"):
+				_player.refresh_hull_destroyed_presentation()
 	if _player.has_method("pulse_unspace_sting_hull"):
 		_player.pulse_unspace_sting_hull()
 	if field != null:
@@ -687,14 +680,11 @@ func _tick_unspace_shards(delta: float) -> void:
 			_player.apply_weapon_impulse(kick)
 		var stress := float(hit.get("hull_stress", 0.0))
 		if stress > 0.0:
-			_main.session.apply_hull_stress(
-				stress,
-				0.5,
-				_player.assembled_ship if _player != null else null
-			)
-			if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
+			var assembled: AssembledShip = _player.assembled_ship if _player != null else null
+			var destroyed: bool = _main.session.apply_unspace_hazard_hull_stress(stress, 0.5, assembled)
+			if destroyed and _player.has_method("refresh_hull_destroyed_presentation"):
 				_player.refresh_hull_destroyed_presentation()
-			elif stress > 0.0:
+			elif not destroyed:
 				_main.session.last_log = "N-space shard impact."
 				_main.session.changed.emit()
 	_world_loader.sync_unspace_shards(_main.session, delta)
@@ -741,13 +731,10 @@ func _tick_unspace_flux(delta: float) -> void:
 		_player.apply_weapon_impulse(kick)
 	var stress := float(flux_result.get("hull_stress", 0.0))
 	if stress > 0.0:
-		_main.session.apply_hull_stress(
-			stress,
-			delta,
-			_player.assembled_ship if _player != null else null
-		)
-		if _main.session.hull <= 0.0 and _player.has_method("refresh_hull_destroyed_presentation"):
-			_player.refresh_hull_destroyed_presentation()
+		var assembled: AssembledShip = _player.assembled_ship if _player != null else null
+		if _main.session.apply_unspace_hazard_hull_stress(stress, delta, assembled):
+			if _player.has_method("refresh_hull_destroyed_presentation"):
+				_player.refresh_hull_destroyed_presentation()
 	var storm_active := UnspaceFlux.is_active(_main.session)
 	_world_loader.set_unspace_flux_storm(storm_active)
 	if _player.has_method("set_unspace_flux_stress"):

@@ -964,6 +964,24 @@ func _freight_charter_at_origin(session: GameSession, charter: Dictionary) -> bo
 	return _charter_at_origin(session, charter)
 
 
+func notify_pending_bounty_escapes(
+	session: GameSession,
+	catalog: Catalog,
+	escapes: Array
+) -> void:
+	for escape_variant in escapes:
+		if typeof(escape_variant) != TYPE_DICTIONARY:
+			continue
+		var escape: Dictionary = escape_variant
+		notify_bounty_ship_escaped(
+			session,
+			catalog,
+			str(escape.get("actor_id", "")),
+			bool(escape.get("named_target", false)),
+			str(escape.get("route", ""))
+		)
+
+
 func notify_bounty_ship_escaped(
 	session: GameSession,
 	catalog: Catalog,
