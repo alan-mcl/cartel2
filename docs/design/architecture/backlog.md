@@ -14,7 +14,6 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B1|data|med|Double 'Janus' in the planets catalog|
-|B3|missions|med|Could accept a 'biohazard' charter with a non-biohazard hold?|
 
 ## Features
 
@@ -35,6 +34,7 @@ The Accountant
 Public Enemy
 Xenocyte
 Marty - Easy Street
+Sledge
 
 Ladbroke Grove
 Long On Gravitas

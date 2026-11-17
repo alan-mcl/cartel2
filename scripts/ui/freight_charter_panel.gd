@@ -79,7 +79,7 @@ func _describe_offer(offer: Dictionary, ship_id: String) -> Dictionary:
 		"lines": lines,
 		"button_text": "Accept",
 		"button_enabled": bool(check.get("ok", false)),
-		"tooltip": CharterTooltipText.format_freight(offer, str(check.get("reason", ""))),
+		"tooltip": CharterTooltipText.format_freight(offer),
 		"status": "",
 	}
 

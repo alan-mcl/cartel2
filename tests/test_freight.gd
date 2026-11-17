@@ -11,6 +11,8 @@ static func run(runner: TestRunner) -> void:
 	_test_livestock_requires_lss_hold(runner, catalog)
 	_test_livestock_lss_with_passengers(runner, catalog)
 	_test_cognition_compute_cap(runner, catalog)
+	_test_transplant_unions_hold_caps(runner, catalog)
+	_test_biohazard_only_blocks_cold_transplant(runner, catalog)
 	_test_cancel_at_origin(runner, catalog)
 	_test_dock_pays_and_clears(runner, catalog)
 	_test_reputation_gate(runner, catalog)
@@ -283,6 +285,73 @@ static func _test_cognition_compute_cap(runner: TestRunner, catalog: Catalog) ->
 	_inject_freight_offer(missions, session, catalog, offer)
 	var check := missions.evaluate_freight_offer(session, catalog, offer.id, ship.id)
 	runner.check(not bool(check.get("ok", false)), "freight: cognition lot exceeds spare compute")
+
+
+static func _test_transplant_unions_hold_caps(runner: TestRunner, catalog: Catalog) -> void:
+	var cfg := FreightCharters.config(catalog)
+	var cargo := FreightCharters.find_cargo(cfg, "freight_transplant")
+	runner.check(not cargo.is_empty(), "freight: transplant cargo profile exists")
+	var resolved := FreightCharters.resolve_cargo(catalog, cargo)
+	var caps: Array = resolved.get("requires_capabilities", [])
+	runner.check(caps.has("refrigerated"), "freight: transplant needs refrigerated from cargo row")
+	runner.check(caps.has("biohazard"), "freight: transplant needs biohazard from commodity")
+
+
+static func _test_biohazard_only_blocks_cold_transplant(runner: TestRunner, catalog: Catalog) -> void:
+	var simulation := _simulation()
+	var missions := _missions(simulation)
+	var session := _session(runner, catalog, "FRT-TRANSPLANT")
+	var ship := session.get_cargo_ship()
+	if ship == null:
+		runner.check(false, "freight: transplant gate needs cargo ship")
+		return
+	ship.set_module(_cargo_slot(ship), "gi_chemlock_10")
+	var offer := _transplant_offer(catalog, "proxima_habitat", "irasia_habitat", "freight_transplant_gate")
+	_inject_freight_offer(missions, session, catalog, offer)
+	var check := missions.evaluate_freight_offer(session, catalog, offer.id, ship.id)
+	runner.check(not bool(check.get("ok", false)), "freight: biohazard-only hold blocks cold-chain transplant")
+
+
+static func _transplant_offer(
+	catalog: Catalog,
+	origin_habitat_id: String,
+	destination_habitat_id: String,
+	offer_id: String
+) -> Dictionary:
+	var dest := catalog.get_habitat(destination_habitat_id)
+	var friction := PassengerCharters.friction_between(
+		catalog,
+		str(catalog.get_habitat(origin_habitat_id).get("sector_id", "")),
+		str(dest.get("sector_id", ""))
+	)
+	var cfg := FreightCharters.config(catalog)
+	var cargo := FreightCharters.find_cargo(cfg, "freight_transplant")
+	var resolved := FreightCharters.resolve_cargo(catalog, cargo)
+	var quantity := 1
+	var mass := float(resolved.get("mass_per_unit", 0.0))
+	var pay_multiplier := float(cargo.get("pay_multiplier", 1.0))
+	var reward := FreightCharters.compute_reward(cfg, quantity, mass, pay_multiplier, friction)
+	var caps: Array = resolved.get("requires_capabilities", [])
+	return {
+		"id": offer_id,
+		"origin_habitat_id": origin_habitat_id,
+		"destination_habitat_id": destination_habitat_id,
+		"destination_name": str(dest.get("name", destination_habitat_id)),
+		"destination_sector_id": str(dest.get("sector_id", "")),
+		"friction": friction,
+		"cargo_id": "freight_transplant",
+		"commodity_id": str(resolved.get("commodity_id", "")),
+		"quantity": quantity,
+		"mass_per_unit": mass,
+		"tonnes": float(quantity) * mass,
+		"requires_capabilities": caps.duplicate(),
+		"life_support_seats": 0,
+		"compute_demand": 0.0,
+		"power_demand": 0.0,
+		"description": "Transplant tissue for %s." % dest.get("name", ""),
+		"hold_label": FreightCharters.hold_requirement_phrase(caps),
+		"reward": reward,
+	}
 
 
 static func _test_cancel_at_origin(runner: TestRunner, catalog: Catalog) -> void:

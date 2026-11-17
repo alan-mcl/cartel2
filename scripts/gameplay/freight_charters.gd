@@ -28,7 +28,10 @@ static func resolve_cargo(catalog: Catalog, cargo: Dictionary) -> Dictionary:
 		var commodity := catalog.get_commodity_def(commodity_id)
 		if commodity != null and commodity.has_source_key("mass"):
 			mass_per_unit = commodity.mass
-		caps = _capability_array([] if commodity == null else commodity.requires_capabilities)
+		var commodity_caps: Array = []
+		if commodity != null:
+			commodity_caps = commodity.requires_capabilities
+		caps = _union_capability_arrays(commodity_caps, cargo.get("requires_capabilities", []))
 	else:
 		caps = _capability_array(cargo.get("requires_capabilities", []))
 	return {
@@ -354,5 +357,20 @@ static func _capability_array(raw: Variant) -> Array:
 	for cap_variant in raw:
 		var cap_id := str(cap_variant)
 		if not cap_id.is_empty():
+			out.append(cap_id)
+	return out
+
+
+static func _union_capability_arrays(primary: Variant, secondary: Variant) -> Array:
+	var out: Array = []
+	var seen: Dictionary = {}
+	for raw in [primary, secondary]:
+		if typeof(raw) != TYPE_ARRAY:
+			continue
+		for cap_variant in raw:
+			var cap_id := str(cap_variant).strip_edges()
+			if cap_id.is_empty() or seen.has(cap_id):
+				continue
+			seen[cap_id] = true
 			out.append(cap_id)
 	return out
