@@ -21,6 +21,12 @@ var bound_encounters: EncounterSubsystem = null
 var harness_encounter_roll: String = "default"
 
 const HULL_STRESS_LOG_STEP := 10.0
+const LEGACY_TAU_JANUS_IDS: Dictionary = {
+	"janus": "cocytus",
+	"janus_habitat": "cocytus_habitat",
+	"janus_terminal": "cocytus_terminal",
+	"janus_exchange": "cocytus_exchange",
+}
 var _hull_stress_next_log_below: float = -1.0
 
 
@@ -355,6 +361,32 @@ func ships_to_array() -> Array:
 	return fleet.ships_to_array()
 
 
+func _remap_legacy_tau_janus_id(id: String) -> String:
+	return LEGACY_TAU_JANUS_IDS.get(id, id)
+
+
+func _remap_tau_janus_catalog_ids_on_load() -> void:
+	world.sector_id = _remap_legacy_tau_janus_id(world.sector_id)
+	world.habitat_id = _remap_legacy_tau_janus_id(world.habitat_id)
+	world.building_id = _remap_legacy_tau_janus_id(world.building_id)
+	world.pending_destination_id = _remap_legacy_tau_janus_id(world.pending_destination_id)
+
+	if world.orbital_phase_by_sector.has("janus"):
+		world.orbital_phase_by_sector["cocytus"] = world.orbital_phase_by_sector["janus"]
+		world.orbital_phase_by_sector.erase("janus")
+
+	if world.market_pressure.has("janus"):
+		world.market_pressure["cocytus"] = world.market_pressure["janus"]
+		world.market_pressure.erase("janus")
+
+	if world.route_friction_delta.has("fortuna_janus"):
+		world.route_friction_delta["fortuna_cocytus"] = world.route_friction_delta["fortuna_janus"]
+		world.route_friction_delta.erase("fortuna_janus")
+
+	for ship in fleet.owned_ships:
+		ship.location = _remap_legacy_tau_janus_id(ship.location)
+
+
 func from_save(catalog: Catalog, data: Dictionary) -> bool:
 	if not SaveStore.validate_save_data(data):
 		return false
@@ -394,6 +426,7 @@ func from_save(catalog: Catalog, data: Dictionary) -> bool:
 				aboard_ship.add_cargo(str(commodity_id), int(legacy_cargo[commodity_id]))
 
 	fleet.prune_unknown_cargo(catalog)
+	_remap_tau_janus_catalog_ids_on_load()
 
 	if fleet.owned_ships.is_empty():
 		if not world.docked:

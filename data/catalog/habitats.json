@@ -962,17 +962,17 @@
 		"population_billions": 0.07
 	},
 	{
-		"art": "res://assets/ui/locations/janus_habitat.png",
+		"art": "res://assets/ui/locations/cocytus_habitat.png",
 		"buildings": [
-			"janus_terminal",
-			"janus_exchange"
+			"cocytus_terminal",
+			"cocytus_exchange"
 		],
-		"default_building": "janus_terminal",
-		"description": "Orbitals above frozen Janus. Ice-bound mining convoys share the ring with assay traffic that rarely pays for the gravity tax.",
-		"id": "janus_habitat",
-		"name": "Janus",
-		"sector_id": "janus",
-		"short_desc": "Ice mining orbitals at Janus.",
+		"default_building": "cocytus_terminal",
+		"description": "Orbitals above frozen Cocytus. Ice-bound mining convoys share the ring with assay traffic that rarely pays for the gravity tax.",
+		"id": "cocytus_habitat",
+		"name": "Cocytus",
+		"sector_id": "cocytus",
+		"short_desc": "Ice mining orbitals at Cocytus.",
 		"type": "habitat",
 		"population_billions": 0.11
 	},

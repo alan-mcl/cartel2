@@ -276,7 +276,7 @@ Fortuna is a wealthy and densely populated world whose prosperity was built on f
 Fortuna is Tau Ceti's second planet, orbiting 0.7 AU from its dim parent star. The system of six planets is surrounded by a notable debris disc spanning the orbits from 11 to 50 AU. It's unclear why there is an unusually large surviving reservoir of planetesimals and debris.
 
 Planets and moons:
- - Janus (1.5 AU, 3rd planet): A frozen rocky world lacking a magnetic field, and with the barest traces of atmosphere. Resource extraction on Janus is possible but often not very profitable due to the harsh conditions, high gravity and thick ice sheets.
+ - Cocytus (1.5 AU, 3rd planet): A frozen rocky world lacking a magnetic field, and with the barest traces of atmosphere. Resource extraction on Cocytus is possible but often not very profitable due to the harsh conditions, high gravity and thick ice sheets.
  - Sapphire XVI (6.1 AU, 16th moon of the 5th planet): This moon's surface is heaped with frozen methane and other chemical resources. Its gas giant parent is so called for its unusual blueish bands.
  - Vesuvius V (8 AU, 5th moon of 6th planet): Vesuvius is the system's signature gas giant, notably for its extremely colourful and turbulent atmosphere. The 5th moon is rich in valuable minerals.
 

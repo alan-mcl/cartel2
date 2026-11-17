@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://udo887fbe7q8"
-path="res://.godot/imported/janus_albedo.png-e2c74797ae07aa7f1d67b31898a786f1.ctex"
+uid="uid://onb4iq2fr5py"
+path="res://.godot/imported/cocytus_habitat.png-7ab8ae66e4be3c50c2e08deb05a0c2ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/world/planets/janus_albedo.png"
-dest_files=["res://.godot/imported/janus_albedo.png-e2c74797ae07aa7f1d67b31898a786f1.ctex"]
+source_file="res://assets/ui/locations/cocytus_habitat.png"
+dest_files=["res://.godot/imported/cocytus_habitat.png-7ab8ae66e4be3c50c2e08deb05a0c2ce.ctex"]
 
 [params]
 

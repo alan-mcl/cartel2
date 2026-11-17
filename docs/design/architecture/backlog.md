@@ -13,7 +13,7 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 | ID | Area | Sev | Desc |
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
-|B1|data|med|Double 'Janus' in the planets catalog|
+|B2|systems|med|Titania needs rings per the habitat lore|
 
 ## Features
 
@@ -60,5 +60,7 @@ One More Time
 Critical Path
 Zero Defects
 Southern Cross
+Floating Capital
+Cash Position
 
 

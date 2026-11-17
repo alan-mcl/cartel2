@@ -25,6 +25,7 @@ static func run(runner: TestRunner) -> void:
 	_test_reputation_starts_and_save(runner, catalog)
 	_test_file_round_trip(runner, catalog)
 	_test_legacy_habitat_workshop_building(runner, catalog)
+	_test_legacy_janus_to_cocytus_ids(runner, catalog)
 
 
 static func _build_save(session: GameSession, subsystems: Dictionary = {}) -> Dictionary:
@@ -469,3 +470,36 @@ static func _test_legacy_habitat_workshop_building(runner: TestRunner, catalog: 
 		"fortuna_shipyard",
 		"legacy yard: habitat_workshop remapped to local shipyard"
 	)
+
+
+static func _test_legacy_janus_to_cocytus_ids(runner: TestRunner, catalog: Catalog) -> void:
+	var session := GameSession.new()
+	if not session.start_new_game(catalog, "LEG-JANUS", "entrepreneur"):
+		runner.check(false, "legacy janus: session starts")
+		return
+	var data := SaveStore.build_save_data(
+		session.player_to_dict(),
+		session.to_dict(),
+		session.ships_to_array(),
+		{},
+		{}
+	)
+	var session_dict: Dictionary = data["session"]
+	session_dict["sector_id"] = "janus"
+	session_dict["habitat_id"] = "janus_habitat"
+	session_dict["building_id"] = "janus_terminal"
+	data["session"] = session_dict
+	var ships: Array = data.get("ships", [])
+	if not ships.is_empty() and typeof(ships[0]) == TYPE_DICTIONARY:
+		ships[0]["location"] = "janus_habitat"
+	var loaded := GameSession.new()
+	runner.check(loaded.from_save(catalog, data), "legacy janus: save with janus ids loads")
+	runner.check_eq(loaded.sector_id, "cocytus", "legacy janus: sector remapped")
+	runner.check_eq(loaded.habitat_id, "cocytus_habitat", "legacy janus: habitat remapped")
+	runner.check_eq(loaded.building_id, "cocytus_terminal", "legacy janus: building remapped")
+	if not loaded.fleet.owned_ships.is_empty():
+		runner.check_eq(
+			loaded.fleet.owned_ships[0].location,
+			"cocytus_habitat",
+			"legacy janus: ship location remapped"
+		)

@@ -24,7 +24,7 @@ SURFACE_FIXED: dict[str, float] = {
     "ursa_xvi": 0.01,
     "titania_ixx": 0.01,
     "nightjar": 0.01,
-    "janus": 0.01,
+    "cocytus": 0.01,
     "titania_v": 0.0,
 }
 
@@ -41,7 +41,7 @@ SURFACE_CAMP: dict[str, str] = {
     "ursa_xvi": "Ursa Camp",
     "titania_ixx": "Titania Camp",
     "nightjar": "Nightjar Camp",
-    "janus": "Janus Camp",
+    "cocytus": "Cocytus Camp",
 }
 
 

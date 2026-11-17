@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://onb4iq2fr5py"
-path="res://.godot/imported/janus_habitat.png-481627e4efd8dddd4cc9f42257cb0562.ctex"
+uid="uid://1ys0xlblqsra"
+path="res://.godot/imported/cocytus_exchange.png-45a0ae4119e97d6849b813e6c0f0c225.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/locations/janus_habitat.png"
-dest_files=["res://.godot/imported/janus_habitat.png-481627e4efd8dddd4cc9f42257cb0562.ctex"]
+source_file="res://assets/ui/locations/cocytus_exchange.png"
+dest_files=["res://.godot/imported/cocytus_exchange.png-45a0ae4119e97d6849b813e6c0f0c225.ctex"]
 
 [params]
 

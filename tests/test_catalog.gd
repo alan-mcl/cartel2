@@ -659,7 +659,7 @@ static func _test_neighbourhood_beacon_sectors(runner: TestRunner, catalog: Cata
 	for sector_id in fennet_sites:
 		_test_beacon_outpost_route(runner, catalog, sector_id, "fennet")
 	var fortuna_sites: Array[String] = [
-		"janus",
+		"cocytus",
 		"sapphire_xvi",
 		"vesuvius_v",
 		"tc_inner_disc",

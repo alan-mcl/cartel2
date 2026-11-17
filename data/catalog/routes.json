@@ -843,9 +843,9 @@
 		]
 	},
 	{
-		"id": "fortuna_janus",
+		"id": "fortuna_cocytus",
 		"a": "fortuna",
-		"b": "janus",
+		"b": "cocytus",
 		"friction": 4,
 		"translations": [
 			{

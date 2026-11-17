@@ -14,7 +14,7 @@ const ALLOWED_OUTLYING_SURFACE: Array = [
 	"ursa_xvi",
 	"titania_ixx",
 	"nightjar",
-	"janus",
+	"cocytus",
 ]
 
 const SPLIT_TOLERANCE := 0.001

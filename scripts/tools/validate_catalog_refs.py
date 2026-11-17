@@ -1650,7 +1650,7 @@ ALLOWED_OUTLYING_SURFACE_SECTOR_IDS = frozenset(
         "ursa_xvi",
         "titania_ixx",
         "nightjar",
-        "janus",
+        "cocytus",
     }
 )
 

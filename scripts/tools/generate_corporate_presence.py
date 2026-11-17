@@ -266,7 +266,7 @@ SECTOR_ANCHORS: dict[str, dict[str, float]] = {
         "universal_house": 5.0,
         "praetorium": 4.0,
     },
-    "janus": {
+    "cocytus": {
         "atlas_concern": 7.0,
         "deepspace": 6.0,
         "oklahoma_combine": 5.0,

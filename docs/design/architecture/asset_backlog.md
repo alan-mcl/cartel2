@@ -78,7 +78,7 @@ Each hub uses **2048×1024** (2:1) equirectangular albedo and matching night-lig
 | 61 Ursae Majoris | `long_drift`, `scoria`, `ursa_xvi`, `ursa_xxix` |
 | 61 Cygni | `byrsa`, `nightjar`, `tanit_xx` |
 | Delta Pavonis | `aurelia`, `boreas`, `calypso_vi`, `hesper`, `kestrel` |
-| Tau Ceti | `janus`, `sapphire_xvi`, `vesuvius_v` |
+| Tau Ceti | `cocytus`, `sapphire_xvi`, `vesuvius_v` |
 | Regulus | `denarius_ii`, `typhon_xvi`, `vulcan_research` |
 | Epsilon Eridani | `cueball`, `nocturn` |
 | Epsilon Reticuli | `titania_v`, `titania_ixx` |

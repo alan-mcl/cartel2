@@ -2174,21 +2174,21 @@
 		"type": "market"
 	},
 	{
-		"art": "res://assets/ui/locations/janus_terminal.png",
-		"description": "Customs for Janus ice and mineral traffic. High-gravity surface runs make every manifest interesting.",
-		"id": "janus_terminal",
+		"art": "res://assets/ui/locations/cocytus_terminal.png",
+		"description": "Customs for Cocytus ice and mineral traffic. High-gravity surface runs make every manifest interesting.",
+		"id": "cocytus_terminal",
 		"kind": "terminal",
-		"name": "Janus Terminal",
-		"short_desc": "Terminal for Janus traffic.",
+		"name": "Cocytus Terminal",
+		"short_desc": "Terminal for Cocytus traffic.",
 		"type": "terminal"
 	},
 	{
-		"art": "res://assets/ui/locations/janus_exchange.png",
-		"description": "Commodity exchange for Janus ice and ore contracts.",
-		"id": "janus_exchange",
+		"art": "res://assets/ui/locations/cocytus_exchange.png",
+		"description": "Commodity exchange for Cocytus ice and ore contracts.",
+		"id": "cocytus_exchange",
 		"kind": "merchant",
-		"name": "Janus Exchange",
-		"short_desc": "Exchange at Janus.",
+		"name": "Cocytus Exchange",
+		"short_desc": "Exchange at Cocytus.",
 		"type": "market"
 	},
 	{

@@ -4137,47 +4137,47 @@
 			"luminosity": 1.0
 		}
 	},
-	"janus": {
+	"cocytus": {
 		"orbital_ring": {
 			"radius": 1600,
 			"period_seconds": 720,
 			"orbitals": [
 				{
-					"id": "janus_habitat_obj",
+					"id": "cocytus_habitat_obj",
 					"kind": "habitat",
-					"label": "Janus",
-					"interactable": "janus_habitat",
+					"label": "Cocytus",
+					"interactable": "cocytus_habitat",
 					"sprite": "res://assets/world/habitats/sphere_m_3.png"
 				},
 				{
-					"id": "janus_orbital_1",
+					"id": "cocytus_orbital_1",
 					"kind": "orbital",
 					"sprite": "res://assets/world/orbitals/processing_complex_7_l.png"
 				},
 				{
-					"id": "janus_orbital_2",
+					"id": "cocytus_orbital_2",
 					"kind": "orbital",
 					"sprite": "res://assets/world/orbitals/processing_complex_8_l.png"
 				}
 			]
 		},
 		"translation_beacon": {
-			"id": "janus_beacon_obj",
-			"label": "Janus Translation Beacon",
-			"interactable": "janus_jump_gate",
+			"id": "cocytus_beacon_obj",
+			"label": "Cocytus Translation Beacon",
+			"interactable": "cocytus_jump_gate",
 			"destination": "fortuna",
 			"radius": 5400
 		},
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
-			"albedo": "res://assets/world/planets/janus_albedo.png",
+			"albedo": "res://assets/world/planets/cocytus_albedo.png",
 			"diameter": 1700,
 			"modulate": "#c8d8e8",
 			"atmosphere_strength": 0
 		},
 		"entities": [
 			{
-				"id": "janus_debris_1",
+				"id": "cocytus_debris_1",
 				"kind": "debris",
 				"position": {
 					"x": 2380,
@@ -4186,7 +4186,7 @@
 				"rotation": -0.3
 			},
 			{
-				"id": "janus_debris_2",
+				"id": "cocytus_debris_2",
 				"kind": "debris",
 				"position": {
 					"x": 2660,

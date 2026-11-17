@@ -662,15 +662,15 @@
 		"kind": "translate"
 	},
 	{
-		"id": "janus_habitat",
-		"title": "Janus",
-		"inspect_text": "Docking at Janus. Ice and mining convoys use the outer lanes.",
+		"id": "cocytus_habitat",
+		"title": "Cocytus",
+		"inspect_text": "Docking at Cocytus. Ice and mining convoys use the outer lanes.",
 		"kind": "dock",
-		"dock_location_id": "janus_habitat"
+		"dock_location_id": "cocytus_habitat"
 	},
 	{
-		"id": "janus_jump_gate",
-		"title": "Janus Translation Beacon",
+		"id": "cocytus_jump_gate",
+		"title": "Cocytus Translation Beacon",
 		"inspect_text": "Compact translation beacon tuned to Fortuna near orbit. Only the public hop back to Fortuna is available here.",
 		"kind": "translate"
 	},

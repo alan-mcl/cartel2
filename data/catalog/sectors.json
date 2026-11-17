@@ -1265,16 +1265,16 @@
 		"surface_population_billions": 0.0
 	},
 	{
-		"id": "janus",
-		"name": "Janus Sector",
-		"orbit_name": "Janus near orbit",
-		"planet_name": "Janus",
+		"id": "cocytus",
+		"name": "Cocytus Sector",
+		"orbit_name": "Cocytus near orbit",
+		"planet_name": "Cocytus",
 		"star_system": "Tau Ceti",
 		"description": "Frozen rocky third planet lacking a magnetic field, with the barest trace of atmosphere. Resource extraction is possible but often unprofitable under harsh conditions, high gravity, and thick ice sheets.",
 		"gravity": 1.18,
 		"population_billions": 0.12,
 		"play_bounds": 8000,
-		"objective": "Explore Janus near orbit",
+		"objective": "Explore Cocytus near orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -1287,7 +1287,7 @@
 		"star_distance_au": 1.5,
 		"surface_population_billions": 0.01,
 		"city_malls": [
-			"Janus Camp"
+			"Cocytus Camp"
 		]
 	},
 	{
