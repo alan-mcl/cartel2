@@ -15,6 +15,8 @@ Proxima's skies are busy: Alpha Centauri B appears bright enough to be visible e
 
 The Proxima Peaceforce is responsible for maintaining order in the shared commercial environment.
 
+Flavour Touchstone: "old money" / London 1910
+
 ### Planet Surface
 
  - City Malls: Concord, New Atlanta, Loch Grumman, Greenfields CM, Century CM, Safeharbour CM, Grand Central, New London, Westhaven CM, Alexandria CM, Prospect CM, Federation CM, Garden CM, Port Victoria, Northstar CM, New Mumbai, Liberty CM, Union CM, Commonwealth CM, New Rotterdam, Hamilton CM, Providence CM, Highgate Stack, Parkside Arc.
@@ -63,6 +65,8 @@ Although on paper Tycho seems a tame world, the reality is quite different. Tych
 
 Tycho's skies are famously chaotic. The blazing blue oval Regulus and its often-visible white companion dominate the day. They are often eclipsed by one of the inner giants, Denarius in particular often being visible in the dayside sky. At night the two inner gas giants are prominently visible and their distant relatives march across the skies on various trajectories. The distant stellar companions Regulus BC are the brightest stars in the night sky.
 
+Flavour touchstone: "boomtown exuberance" / San Francisco 1850
+
 ### Planet Surface
 
  - City Malls: Ozero CM, Redoubt, Zarya CM, Vostok CM, Hammerfest Stack, Magnetite CM, Mercury CM, Kandara CM.
@@ -104,6 +108,8 @@ Other:
 
 La Bella Vista, often called Bela, is a water world with only one continental land mass, orbiting a quiet G-type star. It is the most popular holiday resort in the galaxy. All year round the rich and idle flock to the idyllic atolls of Bela, or visit its mega-casinos and orbital hotels.
 
+Flavour touchstone: "conspicuous leisure", Monaco 1975
+
 ### Planet Surface
 
  - City Malls: Oberon CM, Santa Margarita, Coral Bay CM, Paradise CM, Marina CM, Bellevue CM, Laguna Arc, Côte d'Azur, Marbella CM, Capri CM, Valencia Arc, Zaytun CM, Sapphire CM, Nimitz Stack
@@ -142,6 +148,8 @@ Others:
  - **Climate:** Temperate
 
 Irasia is a prosperous and heavily industrialised world, with enormous coastal cities and extensive manufacturing districts. Its temperate climate and abundant oceans support a large population, while its position on major trade routes has made it one of the galaxy’s principal centres of commerce.
+
+Flavour touchstone: "neon industry" / Tokyo 1980
 
 ### Planet Surface
 
@@ -183,6 +191,8 @@ Other:
 
 Tokirev is a large, cold industrial world dominated by manufacturing and heavy industry. Its deep oceans and mineral resources support sprawling urban centres, orbital infrastructure and enormous automated factories. Despite its utilitarian reputation, Tokirev is a wealthy and highly developed planet.
 
+Flavour touchstone: "crossroads hustle" / Instanbul 1975
+
 ### Planet Surface
 
  - City Malls: Kaliningrad CM, Severin CM, Yamal CM, Taiga Stack, Winterhold CM, Steelworks CM, Aurora CM, Permafrost Stack, Varyag Stack, New Haven CM, New Brighton CM, New Ulaanbaatar, Tashkent Arc, New Pune, Dragon Gate CM, Eastgate CM, Blackpool CM, Kanazawa CM, New Lhasa Stack, Vanilla CM, Syrah CM, Dalian Stack, Yukon CM
@@ -222,6 +232,8 @@ Other
 
 Fennet is a populous, temperate world that has grown from a once-isolated frontier settlement into an important regional centre. Its calm oceans and mild climate support large agricultural and urban areas, while its position on the rim gives it a distinctive mixture of established industry and newer development.
 
+Flavour touchstone: "frontier ambition" / Hong Kong 1970
+
 ### Planet Surface
 
 City Malls: New Belfast, Pioneer CM, Homestead CM, Greenbelt CM, Ash Stack, New Dunedin, Larkspur CM, Settlers CM, Stirling CM, Penang CM, New Eden Arc, Fairmead Arc, Bitters Stack, Kirkland CM, New Benoni, Table CM, Busan CM, Valhalla CM
@@ -259,6 +271,8 @@ Other:
  - **Climate:** Temperate
 
 Fortuna is a wealthy and densely populated world whose prosperity was built on finance, trade and speculation. Its cities are filled with banks, exchanges, corporate headquarters and luxury developments, while enormous agricultural regions provide food for its population. The planet is known for its comfortable standard of living and its unusually active commercial culture.
+
+Flavour touchstone: "new money" / Dubai 2019
 
 ### Planet Surface
 
@@ -301,6 +315,8 @@ Other:
 
 New Carthage is a largely oceanic world whose major population centres developed around a network of artificial islands and enormous coastal cities. Originally settled as a trading colony, it became a major shipping and financial hub. Much of the planet's culture remains shaped by commerce, with old mercantile institutions sitting alongside vast modern corporate developments.
 
+Flavour touchstone: "connections and commerce" / Venice 1850
+
 ### Planet Surface
 
  - City Malls: Carthage CM, New Tyre, Leptis CM, Utica Arc, Alexandria Arc, New Malta, New Tangier Stack, Hormuz CM, Admiralty CM, Ocean Gate CM, Saffron City CM, Mercantile CM, Port Said, Cadiz CM, Mariners Arc, New Berbera, Mombasa Arc, Arc Banff
@@ -338,6 +354,8 @@ Other:
  - **Climate:** Temperate
 
 Horizon is one of the galaxy's great population centres, with many urban developments across its single equatorial continent. Famous for its fast-paced lifestyle, its economy encompasses manufacturing, agriculture, finance and consumer services. Despite its enormous population, the planet remains relatively spacious, with extensive green belts, planned suburbs and productive rural regions between the major cities.
+
+Flavour touchstone: "fast paced" / New York 1995
 
 ### Planet Surface
 
@@ -377,6 +395,8 @@ Other
 
 The ninth moon of the gas giant Titania in the Epsilon Reticuli system is an E class world with extensive oceans punctuated by rugged tracts of land. It sits on the outer edge of the habitable zone around a quiet orange subgiant, so the climate is cold despite liquid seas. Most of its population lives in large coastal metropolitan regions. Its low gravity, spectacular skies and winter sports events have made it a popular destination for tourism and residential development.
 
+Flavour touchstone: "outpost diversity" / McMurdo Station 2015
+
 ### Planet Surface
 
  - City Malls: Titania Central, Skygarden CM, Summit CM, Icebridge Arc, Winter Palace CM, Borealis CM, Lumen CM, Edelweiss CM, New Queenstown, New Reykjavik Stack
@@ -412,6 +432,8 @@ Planets and moons:
  - **Climate:** Arid
 
 Pelagos is a prosperous world orbiting two suns, with enormous coastal cities and extensive mineral resources. The binary system gives the planet unusually complex seasonal and daylight cycles, but its inhabitants have long since adapted. Pelagos Habitat is a major centre of commerce and manufacturing, with a reputation for innovation and enterprise.
+
+Flavour touchstone: "work hard play hard" / Marseille 1930
 
 ### Planet Surface
 
