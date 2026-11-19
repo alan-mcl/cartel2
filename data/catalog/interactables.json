@@ -229,7 +229,7 @@
 	{
 		"id": "regulus_belt_habitat",
 		"title": "Regulus Belt Station",
-		"inspect_text": "Docking at Regulus Belt Station. Supply and ore traffic uses the outer lanes.",
+		"inspect_text": "Docking at Regulus Belt Station. Civilian traffic to Terminal F.",
 		"kind": "dock",
 		"dock_location_id": "regulus_belt_habitat"
 	},
@@ -254,8 +254,8 @@
 	},
 	{
 		"id": "typhon_xvi_habitat",
-		"title": "Typhon XVI",
-		"inspect_text": "Docking at Typhon XVI. Supply and ore traffic uses the outer lanes.",
+		"title": "Typhon XVI Habitat",
+		"inspect_text": "Docking at Typhon XVI Habitat, mind the gap.",
 		"kind": "dock",
 		"dock_location_id": "typhon_xvi_habitat"
 	},
@@ -404,7 +404,7 @@
 	{
 		"id": "calypso_vi_habitat",
 		"title": "Calypso VI",
-		"inspect_text": "Docking at Calypso VI. Resort shuttles use the outer lanes.",
+		"inspect_text": "Docking at Calypso VI.  No jumping the docking queue.",
 		"kind": "dock",
 		"dock_location_id": "calypso_vi_habitat"
 	},

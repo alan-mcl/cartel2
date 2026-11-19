@@ -384,10 +384,11 @@
 		"buildings": [
 			"regulus_belt_terminal",
 			"regulus_belt_exchange",
-			"corp_hq_atlas_concern_regulus_belt"
+			"corp_hq_atlas_concern_regulus_belt",
+			"regulus_belt_bar"
 		],
 		"default_building": "regulus_belt_terminal",
-		"description": "Central habitat for the asteroid belt beyond Tycho. Mining convoys and Tycho supply shuttles share the lanes.",
+		"description": "Home to a industrial workforce, commercial operators and corporate personnel, this large habitat serves as the hub for mining operations in the asteroid belt beyond Tycho. The vast docking concourses echo with the constant movement of large freighters and transports.",
 		"id": "regulus_belt_habitat",
 		"name": "Regulus Belt Station",
 		"sector_id": "regulus_belt",
@@ -415,14 +416,15 @@
 		"art": "res://assets/ui/locations/typhon_xvi_habitat.png",
 		"buildings": [
 			"typhon_xvi_terminal",
-			"typhon_xvi_exchange"
+			"typhon_xvi_exchange",
+			"typhon_xvi_bar"
 		],
 		"default_building": "typhon_xvi_terminal",
-		"description": "Unstable rocky moon of Typhon with surface and orbital mining. Tremor warnings are routine in the docking briefing.",
+		"description": "The main orbital settlement serving the geologically unstable sixteenth moon of Typhon XVI. The spectacular rings of the giant Typhon dominate the viewports, while the constant rumble of mining traffic and roar of departing freighters fills the air.",
 		"id": "typhon_xvi_habitat",
-		"name": "Typhon XVI",
+		"name": "Typhon XVI Habitat",
 		"sector_id": "typhon_xvi",
-		"short_desc": "Mining orbitals at Typhon XVI.",
+		"short_desc": "Mining orbital habitat at Typhon XVI.",
 		"type": "habitat",
 		"population_billions": 0.17
 	},
