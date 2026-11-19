@@ -661,21 +661,30 @@
 	},
 	{
 		"art": "res://assets/ui/locations/centauri_a_beltworks_terminal.png",
-		"description": "Customs and convoy scheduling for the Alpha Centauri A belt. Dust-scoured observation decks look out over the mining lanes.",
+		"description": "Beltworks A Habitat is a busy transport hub handling a constant flow of ore carriers, industrial freighters, shipyard traffic and visiting commercial vessels. Cargo and maintenance facilities cater to the surrounding belt industria, while passenger concourses serve the habitat's large workforce.",
 		"id": "centauri_a_beltworks_terminal",
 		"kind": "terminal",
-		"name": "Beltworks Terminal",
+		"name": "Beltworks A Main Terminal",
 		"short_desc": "Terminal for belt mining traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/centauri_a_beltworks_exchange.png",
-		"description": "Commodity exchange for belt ore contracts and Proxima supply runs.",
+		"description": "This substantial trading centre specialises in raw ores, refined metals, industrial components and manufactured goods. It's a vital link between the asteroid belt resource operations and the wider Alpha Centauri economy.",
 		"id": "centauri_a_beltworks_exchange",
 		"kind": "merchant",
-		"name": "Beltworks Exchange",
+		"name": "Beltworks A Central Exchange",
 		"short_desc": "Exchange for belt ore and supply contracts.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "Once a fashionable haunt for pilots and travellers, this café and dance club has acquired a faded, slightly shabby atmosphere. Its reputation and central location keep people coming despite the worn furnishings, cheap drinks and décor that hasn't been updated in decades.",
+		"id": "centauri_a_beltworks_bar",
+		"kind": "landmark",
+		"name": "Zero-G",
+		"short_desc": "The established pilots' bar at Beltworks A Habitat.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/acb1_terminal.png",
@@ -706,57 +715,84 @@
 	},
 	{
 		"art": "res://assets/ui/locations/acb2_terminal.png",
-		"description": "Customs and convoy scheduling for Scar.",
+		"description": "The terminal and docking facilities at Scar Station handle a steady flow of mining transports, bulk freighters and visiting commercial vessels. The drone of automated cargo handling systems is audible throughout the dusty main concourse.",
 		"id": "acb2_terminal",
 		"kind": "terminal",
-		"name": "Scar Terminal",
+		"name": "Scar Terminal 1",
 		"short_desc": "Terminal for Scar traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/acb2_exchange.png",
-		"description": "Commodity exchange for Scar contracts and hub supply runs.",
+		"description": "The small commodities exchange at Scar Station specialises in the trade of raw minerals, metals and other materials extracted from the planet below. Mining operators, independent prospectors and freight brokers use it to arrange sales and shipments.",
 		"id": "acb2_exchange",
 		"kind": "merchant",
-		"name": "Scar Exchange",
+		"name": "Scar Commodity Exchange",
 		"short_desc": "Exchange at Scar.",
 		"type": "market"
 	},
 	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "This popular watering hole is named after the hardy insectiles that survive the harsh environment of the planet below. The no-frills atmosphere serves a clientele full of local knowledge. Try the scarab-shell mocktail.",
+		"id": "acb2_bar",
+		"kind": "landmark",
+		"name": "The Scarab",
+		"short_desc": "Local watering hole at Scar Station.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/acb3_terminal.png",
-		"description": "Customs and convoy scheduling for ACB3.",
+		"description": "The main terminal at ACB3 Outpost handles a modest flow of supply ships, ice haulers and occasional visiting vessels. Its compact docking facilities and basic passenger services cater to the needs of the outpost's mining and research communities.",
 		"id": "acb3_terminal",
 		"kind": "terminal",
-		"name": "ACB3 Terminal",
-		"short_desc": "Terminal for ACB3 traffic.",
+		"name": "ACB3 Outpost Terminal",
+		"short_desc": "Customs and convoy scheduling for ACB3.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/acb3_exchange.png",
-		"description": "Commodity exchange for ACB3 contracts and hub supply runs.",
+		"description": "The small exchange at ACB3 Outpost handles trade in ice, extracted minerals and other locally sourced resources. Used by mining operators, research teams and independent traders, it provides a modest marketplace for arranging shipments and securing supplies for the outpost's remote operations.",
 		"id": "acb3_exchange",
 		"kind": "merchant",
-		"name": "ACB3 Exchange",
-		"short_desc": "Exchange at ACB3.",
+		"name": "ACB3 Exchange Services",
+		"short_desc": "Commodity exchange for ACB3 contracts and hub supply runs.",
 		"type": "market"
 	},
 	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "This is a lively little watering hole popular with ice haulers, research crews and independent operators passing through ACB3 Outpost. The carpet-walled booths and low cushions hold a colourful crowd enjoying hot spiced wine telling tall tales from the outer system.",
+		"id": "acb3_bar",
+		"kind": "landmark",
+		"name": "Whiteout",
+		"short_desc": "ACB3 Output pilots' bar.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/terminus_terminal.png",
-		"description": "Customs and convoy scheduling for Terminus.",
+		"description": "The brightly lit docking facilities at Terminus Habitat handle an important flow of supply vessels, research craft and prospecting ships. Skeleton staff oversee largely automated systems.",
 		"id": "terminus_terminal",
 		"kind": "terminal",
-		"name": "Terminus Terminal",
+		"name": "Terminus Docks",
 		"short_desc": "Terminal for Terminus traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/terminus_exchange.png",
-		"description": "Commodity exchange for Terminus contracts and hub supply runs.",
+		"description": "Terminus Habitat handles trade in ice, mineral samples and other resources gathered from the frozen planet below. With limited local production and infrequent commercial traffic, most transactions involve specialist prospectors, research organisations and supply operators serving the remote outpost.",
 		"id": "terminus_exchange",
 		"kind": "merchant",
 		"name": "Terminus Exchange",
 		"short_desc": "Exchange at Terminus.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "Bland signage and a drab exterior hide a surprisingly vibrant establishment. Soft lighting, comfortable seating and live jazz recordings from Old Earth draw a diverse crowd, while the well-stocked kitchen and bar keep the regulars happy.",
+		"id": "terminus_bar",
+		"kind": "landmark",
+		"name": "Jazz Café",
+		"short_desc": "ACB3 Output pilots' bar.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/vulcan_research_terminal.png",

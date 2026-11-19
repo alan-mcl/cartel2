@@ -176,7 +176,7 @@
 	},
 	{
 		"id": "acb2_habitat",
-		"title": "Scar",
+		"title": "Scar Station",
 		"inspect_text": "Docking at Scar. Supply and ore traffic uses the outer lanes.",
 		"kind": "dock",
 		"dock_location_id": "acb2_habitat"
@@ -189,8 +189,8 @@
 	},
 	{
 		"id": "acb3_habitat",
-		"title": "ACB3",
-		"inspect_text": "Docking at ACB3. Supply and ore traffic uses the outer lanes.",
+		"title": "ACB3 Outpost",
+		"inspect_text": "Docking at ACB3. Supply and cargo traffic uses the outer lanes.",
 		"kind": "dock",
 		"dock_location_id": "acb3_habitat"
 	},
@@ -202,8 +202,8 @@
 	},
 	{
 		"id": "terminus_habitat",
-		"title": "Terminus",
-		"inspect_text": "Docking at Terminus. Supply and ore traffic uses the outer lanes.",
+		"title": "Terminus Habitat",
+		"inspect_text": "Docking at Terminus. Use channel 7 for emergencies.",
 		"kind": "dock",
 		"dock_location_id": "terminus_habitat"
 	},

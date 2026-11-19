@@ -287,12 +287,13 @@
 		"art": "res://assets/ui/locations/centauri_a_beltworks_habitat.png",
 		"buildings": [
 			"centauri_a_beltworks_terminal",
-			"centauri_a_beltworks_exchange"
+			"centauri_a_beltworks_exchange",
+			"centauri_a_beltworks_bar"
 		],
 		"default_building": "centauri_a_beltworks_terminal",
-		"description": "Central mining habitat in the Alpha Centauri A asteroid belt. Ore convoys and refinery traffic share the lanes with Proxima-bound shuttles.",
+		"description": "This large habitat serves the extensive asteroid belt orbiting Alpha Centauri A. Its extensive industrial facilities and busy commercial districts make it one of the system's principal industrial hubs.",
 		"id": "centauri_a_beltworks_habitat",
-		"name": "Centauri A Beltworks",
+		"name": "Beltworks A Habitat",
 		"sector_id": "centauri_a_beltworks",
 		"short_desc": "Mining habitat in the Alpha Centauri A belt.",
 		"type": "habitat",
@@ -318,10 +319,11 @@
 		"art": "res://assets/ui/locations/acb2_habitat.png",
 		"buildings": [
 			"acb2_terminal",
-			"acb2_exchange"
+			"acb2_exchange",
+			"acb2_bar"
 		],
 		"default_building": "acb2_terminal",
-		"description": "Scar Station orbits the barren ACB2, also known as Scar, serving as the principal hub for the planet's extensive mineral extraction operations. Its population of miners, engineers and industrial workers busy themselves with mining, cargo handling and the distribution of raw materials.",
+		"description": "Scar Station orbits the barren ACB2, also known as Scar, serving as the principal hub for the planet's extensive mineral extraction operations. Its population of miners, engineers and industrial workers and their families are busy often transient.",
 		"id": "acb2_habitat",
 		"name": "Scar Station",
 		"sector_id": "acb2",
@@ -333,7 +335,8 @@
 		"art": "res://assets/ui/locations/acb3_habitat.png",
 		"buildings": [
 			"acb3_terminal",
-			"acb3_exchange"
+			"acb3_exchange",
+			"acb3_bar"
 		],
 		"default_building": "acb3_terminal",
 		"description": "This is a small orbital settlement serving the remote ice-covered planet near the outer reaches of the Alpha Centauri B system. Its economy centres on the extraction of ice and mineral resources, supported by a modest industrial and scientific presence.",
@@ -348,12 +351,13 @@
 		"art": "res://assets/ui/locations/terminus_habitat.png",
 		"buildings": [
 			"terminus_terminal",
-			"terminus_exchange"
+			"terminus_exchange",
+			"terminus_bar"
 		],
 		"default_building": "terminus_terminal",
 		"description": "Terminus is a remote frozen world on a distant circumbinary orbit around Alpha Centauri A and B. Its small orbital settlement supports scientific research, prospecting and occasional commercial traffic.",
 		"id": "terminus_habitat",
-		"name": "Terminus",
+		"name": "Terminus Habitat",
 		"sector_id": "terminus",
 		"short_desc": "Circumbinary ice-world station.",
 		"type": "habitat",
