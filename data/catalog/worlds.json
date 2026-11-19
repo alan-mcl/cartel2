@@ -931,7 +931,7 @@
 				{
 					"id": "acb1_habitat_obj",
 					"kind": "habitat",
-					"label": "ACB1",
+					"label": "ACB1 Station",
 					"interactable": "acb1_habitat",
 					"sprite": "res://assets/world/habitats/ring_m_1.png"
 				},

@@ -302,12 +302,13 @@
 		"art": "res://assets/ui/locations/acb1_habitat.png",
 		"buildings": [
 			"acb1_terminal",
-			"acb1_exchange"
+			"acb1_exchange",
+			"acb1_bar"
 		],
 		"default_building": "acb1_terminal",
-		"description": "Orbital support for magma-side surveys on Alpha Centauri B's inner world. Heat-shielded docks see constant ore assay traffic.",
+		"description": "This is a substantial industrial settlement orbiting the volcanic inner planet of Alpha Centauri B. Functional and rather run down, the station is still an important centre of mineral extraction and processing in the Alpha Centauri system.",
 		"id": "acb1_habitat",
-		"name": "ACB1",
+		"name": "ACB1 Station",
 		"sector_id": "acb1",
 		"short_desc": "Volcanic inner-world mining orbitals.",
 		"type": "habitat",
@@ -320,9 +321,9 @@
 			"acb2_exchange"
 		],
 		"default_building": "acb2_terminal",
-		"description": "Surface and orbital mining around Scar, the airless inner world of Alpha Centauri B. Convoys feed Proxima refineries.",
+		"description": "Scar Station orbits the barren ACB2, also known as Scar, serving as the principal hub for the planet's extensive mineral extraction operations. Its population of miners, engineers and industrial workers busy themselves with mining, cargo handling and the distribution of raw materials.",
 		"id": "acb2_habitat",
-		"name": "Scar",
+		"name": "Scar Station",
 		"sector_id": "acb2",
 		"short_desc": "Mining orbitals at Scar.",
 		"type": "habitat",
@@ -335,9 +336,9 @@
 			"acb3_exchange"
 		],
 		"default_building": "acb3_terminal",
-		"description": "Ice-harvest and assay habitat at the outer edge of Alpha Centauri B's planetary zone.",
+		"description": "This is a small orbital settlement serving the remote ice-covered planet near the outer reaches of the Alpha Centauri B system. Its economy centres on the extraction of ice and mineral resources, supported by a modest industrial and scientific presence.",
 		"id": "acb3_habitat",
-		"name": "ACB3",
+		"name": "ACB3 Outpost",
 		"sector_id": "acb3",
 		"short_desc": "Ice-world mining habitat.",
 		"type": "habitat",
@@ -350,7 +351,7 @@
 			"terminus_exchange"
 		],
 		"default_building": "terminus_terminal",
-		"description": "Circumbinary outpost on the frozen giant Terminus. Supply runs from Proxima keep the deep-cold refineries fed.",
+		"description": "Terminus is a remote frozen world on a distant circumbinary orbit around Alpha Centauri A and B. Its small orbital settlement supports scientific research, prospecting and occasional commercial traffic.",
 		"id": "terminus_habitat",
 		"name": "Terminus",
 		"sector_id": "terminus",

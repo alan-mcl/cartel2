@@ -14,6 +14,10 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |----|------|-----|------|
 |B6 | missions | med | bounty target "run away" behaviour isn't fun, should be reworked |
 |B2|systems|med|Titania needs rings per the habitat lore|
+|B1|sound|high|missing unspace3.ogg|
+|B3|missions|high|volatile translations picked up in the sector should be available at the translation beacon|
+|B4|catalog|med|Redundancy in labels/name/etc across habitats, interactables, worlds. (e.g. "label": "ACB1 Station",)|
+|B5|tools|med|bgremove tool: use APIs which work better, also include an XCF layer with the original size image|
 
 ## Features
 
@@ -24,6 +28,10 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |F10|npc|med|NPC pilots to use hyperdrives if equipped (escape notification is in gameplay)|
 |F1|art|low|irregularly shaped planet renderer (for comets, KBOs, etc)|
 |F2|systems|med|asteroid/debris placement around maps and vectors (entity spawn registration is landed)|
+|F4|gameplay|med|In-system interactables: always draw the octagon when in interactable range|
+|F5|ui|med|ship info dialog ('i' hotkey) is unusable|
+|F6|ui|low|Achievements (e.g. buy a round in every bar)|
+
 
 ## Addenda
 

@@ -163,7 +163,7 @@
 	},
 	{
 		"id": "acb1_habitat",
-		"title": "ACB1",
+		"title": "ACB1 Station",
 		"inspect_text": "Docking at ACB1. Supply and ore traffic uses the outer lanes.",
 		"kind": "dock",
 		"dock_location_id": "acb1_habitat"

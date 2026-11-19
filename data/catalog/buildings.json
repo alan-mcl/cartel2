@@ -679,21 +679,30 @@
 	},
 	{
 		"art": "res://assets/ui/locations/acb1_terminal.png",
-		"description": "Customs and convoy scheduling for ACB1.",
+		"description": "The terminal at ACB1 Station is a busy concourse handling the steady flow of commercial vessels and mineral transports. The grimy docking bays are surrounded by cargo facilities and maintenance services. Passenger amenities are inconveniently located further away.",
 		"id": "acb1_terminal",
 		"kind": "terminal",
-		"name": "ACB1 Terminal",
+		"name": "ACB1 Docks",
 		"short_desc": "Terminal for ACB1 traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/acb1_exchange.png",
-		"description": "Commodity exchange for ACB1 contracts and hub supply runs.",
+		"description": "The small exchange at ACB1 Station specialises in resources extracted from the planet below. Mining companies, independent traders and commercial shipping agents negotiate contracts and arrange shipments here.",
 		"id": "acb1_exchange",
 		"kind": "merchant",
-		"name": "ACB1 Exchange",
+		"name": "ACB1 Minerals Desk",
 		"short_desc": "Exchange at ACB1.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "The Hot Rock Cafe is a popular watering hole at ACB1 Station, frequented by mining crews, industrial workers and independent pilots. Known for its lively atmosphere, strong drinks and no-nonsense hospitality.",
+		"id": "acb1_bar",
+		"kind": "landmark",
+		"name": "The Hot Rock Cafe",
+		"short_desc": "Pilots bar at ACB1 Station.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/acb2_terminal.png",
