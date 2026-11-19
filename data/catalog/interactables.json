@@ -216,7 +216,7 @@
 	{
 		"id": "vulcan_research_habitat",
 		"title": "Vulcan Research Station",
-		"inspect_text": "Docking at Vulcan Research Station. Supply and ore traffic uses the outer lanes.",
+		"inspect_text": "Docking at Vulcan Research Station. Days without a solar flare: 0.",
 		"kind": "dock",
 		"dock_location_id": "vulcan_research_habitat"
 	},
@@ -241,8 +241,8 @@
 	},
 	{
 		"id": "denarius_ii_habitat",
-		"title": "Denarius II",
-		"inspect_text": "Docking at Denarius II. Supply and ore traffic uses the outer lanes.",
+		"title": "Denarius II Habitat",
+		"inspect_text": "Docking at Denarius II. Civilian traffic in lane 9.",
 		"kind": "dock",
 		"dock_location_id": "denarius_ii_habitat"
 	},

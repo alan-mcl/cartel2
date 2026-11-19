@@ -796,21 +796,30 @@
 	},
 	{
 		"art": "res://assets/ui/locations/vulcan_research_terminal.png",
-		"description": "Customs and convoy scheduling for Vulcan Research Station.",
+		"description": "Still named for the original settlement here, the main docking and passenger facility at Vulcan Research Station handles a steady flow of scientific vessels, research crews and specialist supply ships. Articulated flare shielding and hardened compute cages give it an ominous, cavernous look.",
 		"id": "vulcan_research_terminal",
 		"kind": "terminal",
-		"name": "Vulcan Research Station Terminal",
+		"name": "Vulcan Observatory Terminal",
 		"short_desc": "Terminal for Vulcan Research Station traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/vulcan_research_exchange.png",
-		"description": "Commodity exchange for Vulcan Research Station contracts and hub supply runs.",
+		"description": "The research hub depot handles the trade of scientific equipment, advanced materials and supplies required by the research operations around Vulcan. Research organisations, equipment manufacturers and specialist contractors negotiate procurement and delivery contracts here.",
 		"id": "vulcan_research_exchange",
 		"kind": "merchant",
-		"name": "Vulcan Research Station Exchange",
+		"name": "Vulcan Depot",
 		"short_desc": "Exchange at Vulcan Research Station.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "A popular watering hole at Vulcan Research Station. Observation crews and scientific staff mingle with visiting pilots in a no-nonsense spaceport canteen. There's strong coffee and a 24/7 buffet from the kitchen, and locally distilled spirits from the lab.",
+		"id": "vulcan_bar",
+		"kind": "landmark",
+		"name": "Faraday Cage",
+		"short_desc": "Vulcan Station pilots' bar.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/regulus_belt_terminal.png",
@@ -832,7 +841,7 @@
 	},
 	{
 		"art": "res://assets/ui/locations/denarius_ii_terminal.png",
-		"description": "Customs and convoy scheduling for Denarius II.",
+		"description": "The main terminal at Denarius II Habitat handles a busy flow of mining transports, ore carriers and commercial vessels. The gloomy concourse is filled with the rumble of cargo machinery, the clatter of heavy boots and the constant smell of industrial lubricant.",
 		"id": "denarius_ii_terminal",
 		"kind": "terminal",
 		"name": "Denarius II Terminal",
@@ -841,12 +850,21 @@
 	},
 	{
 		"art": "res://assets/ui/locations/denarius_ii_exchange.png",
-		"description": "Commodity exchange for Denarius II contracts and hub supply runs.",
+		"description": "The exchange handles trade in raw ores, refined metals and other materials extracted from the rocky moon and its surrounding asteroids. The trading floor is a cacophony of auction calls, transaction alerts and the clatter of automated cargo terminals, with the faint metallic tang of freshly processed ore lingering in the air.",
 		"id": "denarius_ii_exchange",
 		"kind": "merchant",
-		"name": "Denarius II Exchange",
+		"name": "Denarius II Commodities Exchange",
 		"short_desc": "Exchange at Denarius II.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "This popular watering hole is well known with independent operators. Mining crews, ore haulers and independent prospectors mingle with visiting pilots over hearty drinks and cheap food. The walls are decorated with battered mining equipment and old lunar maps, and there's always a lively debate about the latest deal.",
+		"id": "denarius_ii_bar",
+		"kind": "landmark",
+		"name": "The Silver Dollar",
+		"short_desc": "Well known pilots' bar at Denarius II.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/typhon_xvi_terminal.png",

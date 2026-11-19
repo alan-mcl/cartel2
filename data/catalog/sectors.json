@@ -2,7 +2,7 @@
 	{
 		"id": "proxima",
 		"name": "Proxima Sector",
-		"orbit_name": "Proxima near orbit",
+		"orbit_name": "Proxima high orbit",
 		"planet_name": "Proxima",
 		"star": "Alpha Centauri A",
 		"star_system": "Alpha Centauri",
@@ -39,7 +39,7 @@
 			"Parkside Arc"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Proxima near orbit",
+		"objective": "Explore Proxima high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -55,7 +55,7 @@
 	{
 		"id": "tycho",
 		"name": "Tycho Sector",
-		"orbit_name": "Tycho near orbit",
+		"orbit_name": "Tycho high orbit",
 		"planet_name": "Tycho",
 		"star": "Regulus A",
 		"star_system": "Regulus",
@@ -76,7 +76,7 @@
 			"Kandara CM"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Tycho near orbit",
+		"objective": "Explore Tycho high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.7,
@@ -92,7 +92,7 @@
 	{
 		"id": "bela",
 		"name": "La Bella Vista Sector",
-		"orbit_name": "La Bella Vista near orbit",
+		"orbit_name": "La Bella Vista high orbit",
 		"planet_name": "La Bella Vista",
 		"star_system": "Delta Pavonis",
 		"description": "Warm water world and the galaxy's most popular holiday resort.",
@@ -118,7 +118,7 @@
 			"Nimitz Stack"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore La Bella Vista near orbit",
+		"objective": "Explore La Bella Vista high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.8,
@@ -134,7 +134,7 @@
 	{
 		"id": "irasia",
 		"name": "Irasia Sector",
-		"orbit_name": "Irasia near orbit",
+		"orbit_name": "Irasia high orbit",
 		"planet_name": "Irasia",
 		"star_system": "61 Virginis",
 		"description": "Temperate industrial world and a principal centre of commerce.",
@@ -168,7 +168,7 @@
 			"Syracuse CM"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Irasia near orbit",
+		"objective": "Explore Irasia high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.05,
@@ -184,7 +184,7 @@
 	{
 		"id": "tokirev",
 		"name": "Tokirev Sector",
-		"orbit_name": "Tokirev near orbit",
+		"orbit_name": "Tokirev high orbit",
 		"planet_name": "Tokirev",
 		"star_system": "61 Ursae Majoris",
 		"description": "Cold industrial world of deep oceans, minerals, and enormous automated factories.",
@@ -219,7 +219,7 @@
 			"Yukon CM"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Tokirev near orbit",
+		"objective": "Explore Tokirev high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.15,
@@ -235,7 +235,7 @@
 	{
 		"id": "fennet",
 		"name": "Fennet Sector",
-		"orbit_name": "Fennet near orbit",
+		"orbit_name": "Fennet high orbit",
 		"planet_name": "Fennet",
 		"star_system": "18 Scorpii",
 		"description": "Temperate regional centre, with calm oceans and a mix of established industry and newer development.",
@@ -265,7 +265,7 @@
 			"Valhalla CM"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Fennet near orbit",
+		"objective": "Explore Fennet high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -281,7 +281,7 @@
 	{
 		"id": "fortuna",
 		"name": "Fortuna Sector",
-		"orbit_name": "Fortuna near orbit",
+		"orbit_name": "Fortuna high orbit",
 		"planet_name": "Fortuna",
 		"star_system": "Tau Ceti",
 		"description": "Wealthy temperate world built on finance, trade, and speculation.",
@@ -312,7 +312,7 @@
 			"Founders Arc"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Fortuna near orbit",
+		"objective": "Explore Fortuna high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -328,7 +328,7 @@
 	{
 		"id": "new_carthage",
 		"name": "New Carthage Sector",
-		"orbit_name": "New Carthage near orbit",
+		"orbit_name": "New Carthage high orbit",
 		"planet_name": "New Carthage",
 		"star": "61 Cygni A",
 		"star_system": "61 Cygni",
@@ -359,7 +359,7 @@
 			"Arc Banff"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore New Carthage near orbit",
+		"objective": "Explore New Carthage high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.9,
@@ -375,7 +375,7 @@
 	{
 		"id": "horizon",
 		"name": "Horizon Sector",
-		"orbit_name": "Horizon near orbit",
+		"orbit_name": "Horizon high orbit",
 		"planet_name": "Horizon",
 		"star_system": "Epsilon Eridani",
 		"description": "Temperate population centre across one equatorial continent, spanning manufacture, agriculture, and finance.",
@@ -408,7 +408,7 @@
 			"Heartland Arc"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Horizon near orbit",
+		"objective": "Explore Horizon high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -424,7 +424,7 @@
 	{
 		"id": "titania",
 		"name": "Titania IX Sector",
-		"orbit_name": "Titania IX near orbit",
+		"orbit_name": "Titania IX high orbit",
 		"planet_name": "Titania IX",
 		"star_system": "Epsilon Reticuli",
 		"description": "Cold ocean moon of the gas giant Titania, known for tourism and winter sports.",
@@ -446,7 +446,7 @@
 			"New Reykjavik Stack"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Titania IX near orbit",
+		"objective": "Explore Titania IX high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -462,7 +462,7 @@
 	{
 		"id": "pelagos",
 		"name": "Pelagos Sector",
-		"orbit_name": "Pelagos near orbit",
+		"orbit_name": "Pelagos high orbit",
 		"planet_name": "Pelagos",
 		"star_system": "Kepler-35",
 		"description": "Arid world of two suns, with coastal cities, mineral wealth, and manufacturing.",
@@ -491,7 +491,7 @@
 			"Lincoln CM"
 		],
 		"play_bounds": 8000,
-		"objective": "Explore Pelagos near orbit",
+		"objective": "Explore Pelagos high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -507,14 +507,14 @@
 	{
 		"id": "centauri_a_beltworks",
 		"name": "Centauri A Beltworks Sector",
-		"orbit_name": "Centauri A Beltworks near orbit",
+		"orbit_name": "Centauri A Beltworks high orbit",
 		"star": "Alpha Centauri A",
 		"star_system": "Alpha Centauri",
 		"description": "Central habitat for mining operations in the Alpha Centauri A asteroid belt.",
 		"gravity": 0.2,
 		"population_billions": 0.5,
 		"play_bounds": 8000,
-		"objective": "Explore Centauri A Beltworks near orbit",
+		"objective": "Explore Centauri A Beltworks high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.7,
@@ -530,7 +530,7 @@
 	{
 		"id": "acb1",
 		"name": "ACB1 Sector",
-		"orbit_name": "ACB1 near orbit",
+		"orbit_name": "ACB1 high orbit",
 		"planet_name": "ACB1",
 		"star": "Alpha Centauri B",
 		"star_system": "Alpha Centauri",
@@ -538,7 +538,7 @@
 		"gravity": 0.35,
 		"population_billions": 0.15,
 		"play_bounds": 8000,
-		"objective": "Explore ACB1 near orbit",
+		"objective": "Explore ACB1 high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.85,
@@ -554,15 +554,15 @@
 	{
 		"id": "acb2",
 		"name": "Scar Sector",
-		"orbit_name": "Scar near orbit",
-		"planet_name": "Scar",
+		"orbit_name": "Scar high orbit",
+		"planet_name": "ACB2 / Scar",
 		"star": "Alpha Centauri B",
 		"star_system": "Alpha Centauri",
 		"description": "Airless rocky planet of Alpha Centauri B, with surface mining and orbital support.",
 		"gravity": 0.28,
 		"population_billions": 0.35,
 		"play_bounds": 8000,
-		"objective": "Explore Scar near orbit",
+		"objective": "Explore Scar high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.75,
@@ -581,7 +581,7 @@
 	{
 		"id": "acb3",
 		"name": "ACB3 Sector",
-		"orbit_name": "ACB3 near orbit",
+		"orbit_name": "ACB3 high orbit",
 		"planet_name": "ACB3",
 		"star": "Alpha Centauri B",
 		"star_system": "Alpha Centauri",
@@ -589,7 +589,7 @@
 		"gravity": 0.22,
 		"population_billions": 0.12,
 		"play_bounds": 8000,
-		"objective": "Explore ACB3 near orbit",
+		"objective": "Explore ACB3 high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.7,
@@ -605,14 +605,14 @@
 	{
 		"id": "terminus",
 		"name": "Terminus Sector",
-		"orbit_name": "Terminus near orbit",
+		"orbit_name": "Terminus high orbit",
 		"planet_name": "Terminus",
 		"star_system": "Alpha Centauri",
 		"description": "Large frozen planet on a distant circumbinary orbit.",
 		"gravity": 0.4,
 		"population_billions": 0.08,
 		"play_bounds": 8000,
-		"objective": "Explore Terminus near orbit",
+		"objective": "Explore Terminus high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.55,
@@ -627,15 +627,16 @@
 	},
 	{
 		"id": "vulcan_research",
-		"name": "Vulcan Research Station Sector",
-		"orbit_name": "Vulcan Research Station near orbit",
+		"name": "Vulcan Sector",
+		"orbit_name": "Vulcan high orbit",
+		"planet_name": "Vulcan",
 		"star": "Regulus A",
 		"star_system": "Regulus",
 		"description": "Shielded scientific habitat in orbit of Vulcan, Regulus's innermost hot gas giant.",
 		"gravity": 0.15,
 		"population_billions": 0.06,
 		"play_bounds": 8000,
-		"objective": "Explore Vulcan Research Station near orbit",
+		"objective": "Explore Vulcan high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 2.0,
@@ -651,14 +652,14 @@
 	{
 		"id": "regulus_belt",
 		"name": "Regulus Belt Station Sector",
-		"orbit_name": "Regulus Belt Station near orbit",
+		"orbit_name": "Regulus Belt Station high orbit",
 		"star": "Regulus A",
 		"star_system": "Regulus",
 		"description": "Habitat at the centre of mining in the asteroid belt beyond Tycho.",
 		"gravity": 0.18,
 		"population_billions": 0.4,
 		"play_bounds": 8000,
-		"objective": "Explore Regulus Belt Station near orbit",
+		"objective": "Explore Regulus Belt Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.2,
@@ -674,7 +675,7 @@
 	{
 		"id": "denarius_ii",
 		"name": "Denarius II Sector",
-		"orbit_name": "Denarius II near orbit",
+		"orbit_name": "Denarius II high orbit",
 		"planet_name": "Denarius II",
 		"star": "Regulus A",
 		"star_system": "Regulus",
@@ -682,7 +683,7 @@
 		"gravity": 0.25,
 		"population_billions": 0.22,
 		"play_bounds": 8000,
-		"objective": "Explore Denarius II near orbit",
+		"objective": "Explore Denarius II high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.5,
@@ -701,7 +702,7 @@
 	{
 		"id": "typhon_xvi",
 		"name": "Typhon XVI Sector",
-		"orbit_name": "Typhon XVI near orbit",
+		"orbit_name": "Typhon XVI high orbit",
 		"planet_name": "Typhon XVI",
 		"star": "Regulus A",
 		"star_system": "Regulus",
@@ -709,7 +710,7 @@
 		"gravity": 0.3,
 		"population_billions": 0.18,
 		"play_bounds": 8000,
-		"objective": "Explore Typhon XVI near orbit",
+		"objective": "Explore Typhon XVI high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.45,
@@ -728,13 +729,13 @@
 	{
 		"id": "pelagos_belt",
 		"name": "Pelagos Belt Station Sector",
-		"orbit_name": "Pelagos Belt Station near orbit",
+		"orbit_name": "Pelagos Belt Station high orbit",
 		"star_system": "Kepler-35",
 		"description": "Asteroid belt in the Kepler-35 system after Caldera. Mining convoys and cooperative haulage share the lanes.",
 		"gravity": 0.18,
 		"population_billions": 0.35,
 		"play_bounds": 8000,
-		"objective": "Explore Pelagos Belt Station near orbit",
+		"objective": "Explore Pelagos Belt Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -750,14 +751,14 @@
 	{
 		"id": "aurelia",
 		"name": "Aurelia Sector",
-		"orbit_name": "Aurelia near orbit",
+		"orbit_name": "Aurelia high orbit",
 		"planet_name": "Aurelia",
 		"star_system": "Delta Pavonis",
 		"description": "Dry inner world of Delta Pavonis, with mining, research, and low-G hab-suit tourism.",
 		"gravity": 0.42,
 		"population_billions": 0.25,
 		"play_bounds": 8000,
-		"objective": "Explore Aurelia near orbit",
+		"objective": "Explore Aurelia high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.5,
@@ -776,14 +777,14 @@
 	{
 		"id": "boreas",
 		"name": "Boreas Sector",
-		"orbit_name": "Boreas near orbit",
+		"orbit_name": "Boreas high orbit",
 		"planet_name": "Boreas",
 		"star_system": "Delta Pavonis",
 		"description": "Icy super-Earth beyond La Bella Vista. Mineral-rich, and unpopular with tourists because of its high gravity.",
 		"gravity": 1.8,
 		"population_billions": 0.12,
 		"play_bounds": 8000,
-		"objective": "Explore Boreas near orbit",
+		"objective": "Explore Boreas high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.1,
@@ -799,14 +800,14 @@
 	{
 		"id": "calypso_vi",
 		"name": "Calypso VI Sector",
-		"orbit_name": "Calypso VI near orbit",
+		"orbit_name": "Calypso VI high orbit",
 		"planet_name": "Calypso VI",
 		"star_system": "Delta Pavonis",
 		"description": "Resort on the sixth moon of Calypso, with views of the parent giant's rings.",
 		"gravity": 0.28,
 		"population_billions": 0.2,
 		"play_bounds": 8000,
-		"objective": "Explore Calypso VI near orbit",
+		"objective": "Explore Calypso VI high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.4,
@@ -822,14 +823,14 @@
 	{
 		"id": "hesper",
 		"name": "Hesper Sector",
-		"orbit_name": "Hesper near orbit",
+		"orbit_name": "Hesper high orbit",
 		"planet_name": "Hesper",
 		"star_system": "Delta Pavonis",
 		"description": "Remote ice giant of Delta Pavonis, with an unusually strong magnetic field.",
 		"gravity": 0.2,
 		"population_billions": 0.04,
 		"play_bounds": 8000,
-		"objective": "Explore Hesper near orbit",
+		"objective": "Explore Hesper high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 4.0,
@@ -845,14 +846,14 @@
 	{
 		"id": "kestrel",
 		"name": "Kestrel Sector",
-		"orbit_name": "Kestrel near orbit",
+		"orbit_name": "Kestrel high orbit",
 		"planet_name": "Kestrel",
 		"star_system": "Delta Pavonis",
 		"description": "Resort habitat orbiting the long-period comet Kestrel.",
 		"gravity": 0.08,
 		"population_billions": 0.08,
 		"play_bounds": 8000,
-		"objective": "Explore Kestrel near orbit",
+		"objective": "Explore Kestrel high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -868,14 +869,14 @@
 	{
 		"id": "alecto",
 		"name": "Alecto Sector",
-		"orbit_name": "Alecto near orbit",
+		"orbit_name": "Alecto high orbit",
 		"planet_name": "Alecto",
 		"star_system": "61 Virginis",
 		"description": "Tidally locked inner world of 61 Virginis. Scorched dayside; automated mining on the darkside.",
 		"gravity": 1.15,
 		"population_billions": 0.12,
 		"play_bounds": 8000,
-		"objective": "Explore Alecto near orbit",
+		"objective": "Explore Alecto high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.85,
@@ -891,14 +892,14 @@
 	{
 		"id": "new_ceres",
 		"name": "New Ceres Sector",
-		"orbit_name": "New Ceres near orbit",
+		"orbit_name": "New Ceres high orbit",
 		"planet_name": "New Ceres",
 		"star_system": "61 Virginis",
 		"description": "Dense super-Earth with a thick toxic greenhouse atmosphere. Unbreathable, but extensive agriculture operates under sealed domes.",
 		"gravity": 2.3,
 		"population_billions": 0.45,
 		"play_bounds": 8000,
-		"objective": "Explore New Ceres near orbit",
+		"objective": "Explore New Ceres high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.25,
@@ -917,13 +918,13 @@
 	{
 		"id": "virginis_belt",
 		"name": "Virginis Asteroid Station Sector",
-		"orbit_name": "Virginis Asteroid Station near orbit",
+		"orbit_name": "Virginis Asteroid Station high orbit",
 		"star_system": "61 Virginis",
 		"description": "Central habitat for mining the asteroid belt beyond New Ceres. Rich in exotic minerals, crystals, and chemicals.",
 		"gravity": 0.18,
 		"population_billions": 0.38,
 		"play_bounds": 8000,
-		"objective": "Explore Virginis Asteroid Station near orbit",
+		"objective": "Explore Virginis Asteroid Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.7,
@@ -939,14 +940,14 @@
 	{
 		"id": "varda_iii",
 		"name": "Varda III Sector",
-		"orbit_name": "Varda III near orbit",
+		"orbit_name": "Varda III high orbit",
 		"planet_name": "Varda III",
 		"star_system": "61 Virginis",
 		"description": "Icy third moon of the gas giant Varda. Resource extraction from the subsurface ocean beneath the ice.",
 		"gravity": 0.26,
 		"population_billions": 0.2,
 		"play_bounds": 8000,
-		"objective": "Explore Varda III near orbit",
+		"objective": "Explore Varda III high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.6,
@@ -962,13 +963,13 @@
 	{
 		"id": "varda_belt",
 		"name": "Varda Asteroid Station Sector",
-		"orbit_name": "Varda Asteroid Station near orbit",
+		"orbit_name": "Varda Asteroid Station high orbit",
 		"star_system": "61 Virginis",
 		"description": "Habitat at a sparser asteroid belt beyond Varda. Resource extraction and ore convoys share the lanes.",
 		"gravity": 0.16,
 		"population_billions": 0.28,
 		"play_bounds": 8000,
-		"objective": "Explore Varda Asteroid Station near orbit",
+		"objective": "Explore Varda Asteroid Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.65,
@@ -984,14 +985,14 @@
 	{
 		"id": "cressida",
 		"name": "Cressida Sector",
-		"orbit_name": "Cressida near orbit",
+		"orbit_name": "Cressida high orbit",
 		"planet_name": "Cressida",
 		"star_system": "61 Virginis",
 		"description": "Outermost world of 61 Virginis on an inclined orbit. Cold, with active cryovulcanism and a lonely research station.",
 		"gravity": 0.32,
 		"population_billions": 0.05,
 		"play_bounds": 8000,
-		"objective": "Explore Cressida near orbit",
+		"objective": "Explore Cressida high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.55,
@@ -1007,14 +1008,14 @@
 	{
 		"id": "scoria",
 		"name": "Scoria Sector",
-		"orbit_name": "Scoria near orbit",
+		"orbit_name": "Scoria high orbit",
 		"planet_name": "Scoria",
 		"star_system": "61 Ursae Majoris",
 		"description": "Barren third planet of 61 Ursae Majoris. Dark volcanic rock, vestigial atmosphere, and surface mining with multiple orbitals.",
 		"gravity": 0.85,
 		"population_billions": 0.22,
 		"play_bounds": 8000,
-		"objective": "Explore Scoria near orbit",
+		"objective": "Explore Scoria high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -1033,13 +1034,13 @@
 	{
 		"id": "ursa_belt",
 		"name": "Ursa Belt Bases Sector",
-		"orbit_name": "Ursa Belt Bases near orbit",
+		"orbit_name": "Ursa Belt Bases high orbit",
 		"star_system": "61 Ursae Majoris",
 		"description": "Dense asteroid belt between Scoria and the gas giant Ursa. Extensive resource extraction and ore convoys.",
 		"gravity": 0.18,
 		"population_billions": 0.42,
 		"play_bounds": 8000,
-		"objective": "Explore Ursa Belt Bases near orbit",
+		"objective": "Explore Ursa Belt Bases high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.12,
@@ -1055,13 +1056,13 @@
 	{
 		"id": "ursa_belt_shipyard",
 		"name": "Ursa Belt Shipyard Sector",
-		"orbit_name": "Ursa Belt Shipyard near orbit",
+		"orbit_name": "Ursa Belt Shipyard high orbit",
 		"star_system": "61 Ursae Majoris",
 		"description": "Ship construction and testing facility in the Ursa asteroid belt.",
 		"gravity": 0.16,
 		"population_billions": 0.35,
 		"play_bounds": 8000,
-		"objective": "Explore Ursa Belt Shipyard near orbit",
+		"objective": "Explore Ursa Belt Shipyard high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.12,
@@ -1077,14 +1078,14 @@
 	{
 		"id": "ursa_xvi",
 		"name": "Ursa XVI Sector",
-		"orbit_name": "Ursa XVI near orbit",
+		"orbit_name": "Ursa XVI high orbit",
 		"planet_name": "Ursa XVI",
 		"star_system": "61 Ursae Majoris",
 		"description": "Rocky sixteenth moon of the banded gas giant Ursa. Surface resource extraction with orbital support.",
 		"gravity": 0.28,
 		"population_billions": 0.18,
 		"play_bounds": 8000,
-		"objective": "Explore Ursa XVI near orbit",
+		"objective": "Explore Ursa XVI high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.18,
@@ -1103,14 +1104,14 @@
 	{
 		"id": "ursa_xxix",
 		"name": "Ursa XXIX Sector",
-		"orbit_name": "Ursa XXIX near orbit",
+		"orbit_name": "Ursa XXIX high orbit",
 		"planet_name": "Ursa XXIX",
 		"star_system": "61 Ursae Majoris",
 		"description": "Twenty-ninth moon of Ursa, covered with methane oceans. Chemical extraction and sealed traffic share the orbitals.",
 		"gravity": 0.24,
 		"population_billions": 0.14,
 		"play_bounds": 8000,
-		"objective": "Explore Ursa XXIX near orbit",
+		"objective": "Explore Ursa XXIX high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.15,
@@ -1126,14 +1127,14 @@
 	{
 		"id": "long_drift",
 		"name": "Long Drift Observatory Sector",
-		"orbit_name": "Long Drift Observatory near orbit",
+		"orbit_name": "Long Drift Observatory high orbit",
 		"planet_name": "Long Drift",
 		"star_system": "61 Ursae Majoris",
 		"description": "Scientific base orbiting an icy Kuiper-belt object far from the inner system.",
 		"gravity": 0.08,
 		"population_billions": 0.04,
 		"play_bounds": 8000,
-		"objective": "Explore Long Drift Observatory near orbit",
+		"objective": "Explore Long Drift Observatory high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.5,
@@ -1149,14 +1150,14 @@
 	{
 		"id": "junkers_world",
 		"name": "Junker's World Sector",
-		"orbit_name": "Junker's World near orbit",
+		"orbit_name": "Junker's World high orbit",
 		"planet_name": "Junker's World",
 		"star_system": "18 Scorpii",
 		"description": "Rocky wasteland with a dense nitrogen atmosphere. Surface mineral extraction includes the renowned Junkers Emeralds.",
 		"gravity": 0.88,
 		"population_billions": 0.28,
 		"play_bounds": 8000,
-		"objective": "Explore Junker's World near orbit",
+		"objective": "Explore Junker's World high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 1.0,
@@ -1175,14 +1176,14 @@
 	{
 		"id": "swan",
 		"name": "Swan Sector",
-		"orbit_name": "Swan near orbit",
+		"orbit_name": "Swan high orbit",
 		"planet_name": "Swan",
 		"star_system": "18 Scorpii",
 		"description": "Short-period high-albedo comet with opposed polar outgassing. A small orbital supports rare mineral extraction and research.",
 		"gravity": 0.06,
 		"population_billions": 0.06,
 		"play_bounds": 8000,
-		"objective": "Explore Swan near orbit",
+		"objective": "Explore Swan high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1198,14 +1199,14 @@
 	{
 		"id": "freediver",
 		"name": "Freediver Sector",
-		"orbit_name": "Freediver near orbit",
+		"orbit_name": "Freediver high orbit",
 		"planet_name": "Freediver",
 		"star_system": "18 Scorpii",
 		"description": "Highly eccentric comet that approaches close to 18 Scorpii. Chemical and energy extraction from its core runs on largely automated infrastructure.",
 		"gravity": 0.05,
 		"population_billions": 0.08,
 		"play_bounds": 8000,
-		"objective": "Explore Freediver near orbit",
+		"objective": "Explore Freediver high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1221,14 +1222,14 @@
 	{
 		"id": "nostromo",
 		"name": "Nostromo Sector",
-		"orbit_name": "Nostromo near orbit",
+		"orbit_name": "Nostromo high orbit",
 		"planet_name": "Nostromo",
 		"star_system": "18 Scorpii",
 		"description": "Ice-covered comet with an unusual radioactive core. A research station orbits the nucleus.",
 		"gravity": 0.07,
 		"population_billions": 0.05,
 		"play_bounds": 8000,
-		"objective": "Explore Nostromo near orbit",
+		"objective": "Explore Nostromo high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.12,
@@ -1244,14 +1245,14 @@
 	{
 		"id": "eternum",
 		"name": "Eternum Sector",
-		"orbit_name": "Eternum near orbit",
+		"orbit_name": "Eternum high orbit",
 		"planet_name": "Eternum",
 		"star_system": "18 Scorpii",
 		"description": "Very long-period icy comet. A small resort habitat serves adventure tourists on rare visits to the inner system.",
 		"gravity": 0.06,
 		"population_billions": 0.07,
 		"play_bounds": 8000,
-		"objective": "Explore Eternum near orbit",
+		"objective": "Explore Eternum high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1267,14 +1268,14 @@
 	{
 		"id": "cocytus",
 		"name": "Cocytus Sector",
-		"orbit_name": "Cocytus near orbit",
+		"orbit_name": "Cocytus high orbit",
 		"planet_name": "Cocytus",
 		"star_system": "Tau Ceti",
 		"description": "Frozen rocky third planet lacking a magnetic field, with the barest trace of atmosphere. Resource extraction is possible but often unprofitable under harsh conditions, high gravity, and thick ice sheets.",
 		"gravity": 1.18,
 		"population_billions": 0.12,
 		"play_bounds": 8000,
-		"objective": "Explore Cocytus near orbit",
+		"objective": "Explore Cocytus high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -1293,14 +1294,14 @@
 	{
 		"id": "sapphire_xvi",
 		"name": "Sapphire XVI Sector",
-		"orbit_name": "Sapphire XVI near orbit",
+		"orbit_name": "Sapphire XVI high orbit",
 		"planet_name": "Sapphire XVI",
 		"star_system": "Tau Ceti",
 		"description": "Sixteenth moon of Tau Ceti's fifth planet. The surface is heaped with frozen methane and other chemical resources; the parent gas giant is noted for its unusual bluish bands.",
 		"gravity": 0.11,
 		"population_billions": 0.09,
 		"play_bounds": 8000,
-		"objective": "Explore Sapphire XVI near orbit",
+		"objective": "Explore Sapphire XVI high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1316,14 +1317,14 @@
 	{
 		"id": "vesuvius_v",
 		"name": "Vesuvius V Sector",
-		"orbit_name": "Vesuvius V near orbit",
+		"orbit_name": "Vesuvius V high orbit",
 		"planet_name": "Vesuvius V",
 		"star_system": "Tau Ceti",
 		"description": "Fifth moon of the colourful gas giant Vesuvius. The moon is rich in valuable minerals; the turbulent parent planet is a signature sight in the outer system.",
 		"gravity": 0.14,
 		"population_billions": 0.15,
 		"play_bounds": 8000,
-		"objective": "Explore Vesuvius V near orbit",
+		"objective": "Explore Vesuvius V high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.12,
@@ -1339,13 +1340,13 @@
 	{
 		"id": "tc_inner_disc",
 		"name": "TC Inner Disc Station Sector",
-		"orbit_name": "TC Inner Disc Station near orbit",
+		"orbit_name": "TC Inner Disc Station high orbit",
 		"star_system": "Tau Ceti",
 		"description": "Hub for resource extraction in the dense inner debris disc between 11 and 19 AU. Convoys and assay traffic tie the belt to Fortuna's markets.",
 		"gravity": 0.16,
 		"population_billions": 0.38,
 		"play_bounds": 8000,
-		"objective": "Explore TC Inner Disc Station near orbit",
+		"objective": "Explore TC Inner Disc Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.18,
@@ -1361,13 +1362,13 @@
 	{
 		"id": "tc_outer_disc",
 		"name": "TC Outer Disc Station Sector",
-		"orbit_name": "TC Outer Disc Station near orbit",
+		"orbit_name": "TC Outer Disc Station high orbit",
 		"star_system": "Tau Ceti",
 		"description": "Hub for the sparser outer debris disc. Extraction runs at lower density than the inner band but still feeds Fortuna's industrial appetite.",
 		"gravity": 0.14,
 		"population_billions": 0.22,
 		"play_bounds": 8000,
-		"objective": "Explore TC Outer Disc Station near orbit",
+		"objective": "Explore TC Outer Disc Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1383,13 +1384,13 @@
 	{
 		"id": "terminary",
 		"name": "Terminary Research Station Sector",
-		"orbit_name": "Terminary Research Station near orbit",
+		"orbit_name": "Terminary Research Station high orbit",
 		"star_system": "Tau Ceti",
 		"description": "Isolated research station just beyond the debris disc. Survey teams and supply runs are the only regular traffic.",
 		"gravity": 0.08,
 		"population_billions": 0.04,
 		"play_bounds": 8000,
-		"objective": "Explore Terminary Research Station near orbit",
+		"objective": "Explore Terminary Research Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1405,7 +1406,7 @@
 	{
 		"id": "byrsa",
 		"name": "Byrsa Sector",
-		"orbit_name": "Byrsa near orbit",
+		"orbit_name": "Byrsa high orbit",
 		"planet_name": "Byrsa",
 		"star": "61 Cygni A",
 		"star_system": "61 Cygni",
@@ -1413,7 +1414,7 @@
 		"gravity": 0.42,
 		"population_billions": 0.85,
 		"play_bounds": 8000,
-		"objective": "Explore Byrsa near orbit",
+		"objective": "Explore Byrsa high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.25,
@@ -1432,14 +1433,14 @@
 	{
 		"id": "depot_61c",
 		"name": "Depot 61C Sector",
-		"orbit_name": "Depot 61C near orbit",
+		"orbit_name": "Depot 61C high orbit",
 		"star": "61 Cygni A",
 		"star_system": "61 Cygni",
 		"description": "Populated hub in the 61 Cygni A asteroid belt between the third and fourth planets. Ore convoys and assay traffic feed New Carthage's yards.",
 		"gravity": 0.16,
 		"population_billions": 0.35,
 		"play_bounds": 8000,
-		"objective": "Explore Depot 61C near orbit",
+		"objective": "Explore Depot 61C high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.18,
@@ -1455,7 +1456,7 @@
 	{
 		"id": "tanit_xx",
 		"name": "Tanit XX Sector",
-		"orbit_name": "Tanit XX near orbit",
+		"orbit_name": "Tanit XX high orbit",
 		"planet_name": "Tanit XX",
 		"star": "61 Cygni A",
 		"star_system": "61 Cygni",
@@ -1463,7 +1464,7 @@
 		"gravity": 0.16,
 		"population_billions": 0.18,
 		"play_bounds": 8000,
-		"objective": "Explore Tanit XX near orbit",
+		"objective": "Explore Tanit XX high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1479,7 +1480,7 @@
 	{
 		"id": "nightjar",
 		"name": "Nightjar Sector",
-		"orbit_name": "Nightjar near orbit",
+		"orbit_name": "Nightjar high orbit",
 		"planet_name": "Nightjar",
 		"star": "61 Cygni B",
 		"star_system": "61 Cygni",
@@ -1487,7 +1488,7 @@
 		"gravity": 0.72,
 		"population_billions": 0.14,
 		"play_bounds": 8000,
-		"objective": "Explore Nightjar near orbit",
+		"objective": "Explore Nightjar high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.2,
@@ -1506,13 +1507,13 @@
 	{
 		"id": "alpha_disc",
 		"name": "Alpha Disc Hub Sector",
-		"orbit_name": "Alpha Disc Hub near orbit",
+		"orbit_name": "Alpha Disc Hub high orbit",
 		"star_system": "Epsilon Eridani",
 		"description": "Populated hub for resource extraction and industrial processing in the warm debris disc between Horizon and the gas giant B.",
 		"gravity": 0.17,
 		"population_billions": 0.41,
 		"play_bounds": 8000,
-		"objective": "Explore Alpha Disc Hub near orbit",
+		"objective": "Explore Alpha Disc Hub high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.18,
@@ -1528,14 +1529,14 @@
 	{
 		"id": "cueball",
 		"name": "The Cueball Sector",
-		"orbit_name": "The Cueball near orbit",
+		"orbit_name": "The Cueball high orbit",
 		"planet_name": "The Cueball",
 		"star_system": "Epsilon Eridani",
 		"description": "Colloquial name for moon B III at 3.5 AU. A smooth ice-covered world with orbital infrastructure for extraction, processing, manufacturing, and tourism.",
 		"gravity": 0.22,
 		"population_billions": 0.52,
 		"play_bounds": 8000,
-		"objective": "Explore The Cueball near orbit",
+		"objective": "Explore The Cueball high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.12,
@@ -1551,13 +1552,13 @@
 	{
 		"id": "halo_station",
 		"name": "Halo Station Sector",
-		"orbit_name": "Halo Station near orbit",
+		"orbit_name": "Halo Station high orbit",
 		"star_system": "Epsilon Eridani",
 		"description": "Research and tourism station in a relatively clear gap in the dusty rings of gas giant B.",
 		"gravity": 0.1,
 		"population_billions": 0.19,
 		"play_bounds": 8000,
-		"objective": "Explore Halo Station near orbit",
+		"objective": "Explore Halo Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1573,13 +1574,13 @@
 	{
 		"id": "kb_station_i",
 		"name": "KB Station I Sector",
-		"orbit_name": "KB Station I near orbit",
+		"orbit_name": "KB Station I high orbit",
 		"star_system": "Epsilon Eridani",
 		"description": "Extraction and processing hub in the distant outer planetesimal belt.",
 		"gravity": 0.12,
 		"population_billions": 0.11,
 		"play_bounds": 8000,
-		"objective": "Explore KB Station I near orbit",
+		"objective": "Explore KB Station I high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1595,13 +1596,13 @@
 	{
 		"id": "kb_station_ii",
 		"name": "KB Station II Sector",
-		"orbit_name": "KB Station II near orbit",
+		"orbit_name": "KB Station II high orbit",
 		"star_system": "Epsilon Eridani",
 		"description": "Second extraction hub in the cold outer belt, farther from the inner system than KB Station I.",
 		"gravity": 0.11,
 		"population_billions": 0.08,
 		"play_bounds": 8000,
-		"objective": "Explore KB Station II near orbit",
+		"objective": "Explore KB Station II high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1617,13 +1618,13 @@
 	{
 		"id": "kb_station_iii",
 		"name": "KB Station III Sector",
-		"orbit_name": "KB Station III near orbit",
+		"orbit_name": "KB Station III high orbit",
 		"star_system": "Epsilon Eridani",
 		"description": "Outermost of the three Kuiper-belt extraction hubs, on the edge of the 50–90 AU planetesimal swarm.",
 		"gravity": 0.1,
 		"population_billions": 0.06,
 		"play_bounds": 8000,
-		"objective": "Explore KB Station III near orbit",
+		"objective": "Explore KB Station III high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1639,14 +1640,14 @@
 	{
 		"id": "nocturn",
 		"name": "Nocturn Research Lab Sector",
-		"orbit_name": "Nocturn Research Lab near orbit",
+		"orbit_name": "Nocturn Research Lab high orbit",
 		"planet_name": "Nocturn",
 		"star_system": "Epsilon Eridani",
 		"description": "Research laboratory orbiting one of the larger planetesimals in the outer belt.",
 		"gravity": 0.08,
 		"population_billions": 0.04,
 		"play_bounds": 8000,
-		"objective": "Explore Nocturn Research Lab near orbit",
+		"objective": "Explore Nocturn Research Lab high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.12,
@@ -1662,14 +1663,14 @@
 	{
 		"id": "titania_v",
 		"name": "Titania V Sector",
-		"orbit_name": "Titania V near orbit",
+		"orbit_name": "Titania V high orbit",
 		"planet_name": "Titania V",
 		"star_system": "Epsilon Reticuli",
 		"description": "Large rocky high-G moon of the gas giant Titania. The surface is uninhabitable, but strong tidal influence on nearby moons supports extensive orbital infrastructure.",
 		"gravity": 1.7,
 		"population_billions": 0.22,
 		"play_bounds": 8000,
-		"objective": "Explore Titania V near orbit",
+		"objective": "Explore Titania V high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -1685,14 +1686,14 @@
 	{
 		"id": "titania_ixx",
 		"name": "Titania IXX Sector",
-		"orbit_name": "Titania IXX near orbit",
+		"orbit_name": "Titania IXX high orbit",
 		"planet_name": "Titania IXX",
 		"star_system": "Epsilon Reticuli",
 		"description": "Frozen moon of Titania, the furthest out on a non-inclined orbit. Surface resource extraction is supported by orbital manufacturing infrastructure.",
 		"gravity": 0.2,
 		"population_billions": 0.09,
 		"play_bounds": 8000,
-		"objective": "Explore Titania IXX near orbit",
+		"objective": "Explore Titania IXX high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.0,
@@ -1711,13 +1712,13 @@
 	{
 		"id": "tartarus",
 		"name": "Tartarus Research Station Sector",
-		"orbit_name": "Tartarus Research Station near orbit",
+		"orbit_name": "Tartarus Research Station high orbit",
 		"star_system": "Epsilon Reticuli",
 		"description": "Well-known research station orbiting Tartarus, the outermost sub-giant in the Epsilon Reticuli system, where the orange primary is a small distant disc.",
 		"gravity": 0.1,
 		"population_billions": 0.05,
 		"play_bounds": 8000,
-		"objective": "Explore Tartarus Research Station near orbit",
+		"objective": "Explore Tartarus Research Station high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,
@@ -1733,14 +1734,14 @@
 	{
 		"id": "janus_ii",
 		"name": "Janus II Sector",
-		"orbit_name": "Janus II near orbit",
+		"orbit_name": "Janus II high orbit",
 		"planet_name": "Janus II",
 		"star_system": "Kepler-35",
 		"description": "Small, fast-orbiting moon of the inner gas giant Janus. Ancient vulcanism has left significant mineral resources on this hot, barren world.",
 		"gravity": 0.14,
 		"population_billions": 0.08,
 		"play_bounds": 8000,
-		"objective": "Explore Janus II near orbit",
+		"objective": "Explore Janus II high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.15,
@@ -1756,14 +1757,14 @@
 	{
 		"id": "caldera",
 		"name": "Caldera Sector",
-		"orbit_name": "Caldera near orbit",
+		"orbit_name": "Caldera high orbit",
 		"planet_name": "Caldera",
 		"star_system": "Kepler-35",
 		"description": "Dry, geologically active world with a thin dusty inert atmosphere. Resource extraction and manufacturing rely on extensive orbital infrastructure.",
 		"gravity": 0.88,
 		"population_billions": 0.31,
 		"play_bounds": 8000,
-		"objective": "Explore Caldera near orbit",
+		"objective": "Explore Caldera high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.5,
@@ -1782,14 +1783,14 @@
 	{
 		"id": "tulima",
 		"name": "Tulima Sector",
-		"orbit_name": "Tulima near orbit",
+		"orbit_name": "Tulima high orbit",
 		"planet_name": "Tulima",
 		"star_system": "Kepler-35",
 		"description": "Isolated airless world covered with frozen volatiles. An orbital station supports mining and research.",
 		"gravity": 0.25,
 		"population_billions": 0.06,
 		"play_bounds": 8000,
-		"objective": "Explore Tulima near orbit",
+		"objective": "Explore Tulima high orbit",
 		"mappings": [],
 		"neighborhood": {
 			"magnetic_surface": 0.1,

@@ -367,10 +367,11 @@
 		"art": "res://assets/ui/locations/vulcan_research_habitat.png",
 		"buildings": [
 			"vulcan_research_terminal",
-			"vulcan_research_exchange"
+			"vulcan_research_exchange",
+			"vulcan_bar"
 		],
 		"default_building": "vulcan_research_terminal",
-		"description": "Heavily shielded observation habitat in orbit around the inner gas giant Vulcan. Instrument traffic only; no shipyard.",
+		"description": "This heavily shielded scientific habitat occupies a high orbit above the gas giant Vulcan. Significant research installations are dedicated to study of both the turbulent Vulcan, and the volatile nearby star Regulus A.",
 		"id": "vulcan_research_habitat",
 		"name": "Vulcan Research Station",
 		"sector_id": "vulcan_research",
@@ -398,12 +399,13 @@
 		"art": "res://assets/ui/locations/denarius_ii_habitat.png",
 		"buildings": [
 			"denarius_ii_terminal",
-			"denarius_ii_exchange"
+			"denarius_ii_exchange",
+			"denarius_ii_bar"
 		],
 		"default_building": "denarius_ii_terminal",
-		"description": "Surface and orbital mining infrastructure on Denarius II, moon of the inner giant Denarius.",
+		"description": "The principal settlement of the rocky moon of Denarius II, this habitat supports extensive surface and orbital mining operations. It's a busy centre for resource processing and cargo transport.",
 		"id": "denarius_ii_habitat",
-		"name": "Denarius II",
+		"name": "Denarius II Habitat",
 		"sector_id": "denarius_ii",
 		"short_desc": "Mining moon orbitals at Denarius II.",
 		"type": "habitat",

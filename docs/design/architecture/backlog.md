@@ -18,6 +18,8 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |B3|missions|high|volatile translations picked up in the sector should be available at the translation beacon|
 |B4|catalog|med|Redundancy in labels/name/etc across habitats, interactables, worlds. (e.g. "label": "ACB1 Station",)|
 |B5|tools|med|bgremove tool: use APIs which work better, also include an XCF layer with the original size image|
+|B7|system|med|remove the all-system-hex boundary thingy|
+|B8|unspace|med|shards hitting the ship have no impact or no animation/sound effect|
 
 ## Features
 
@@ -31,6 +33,8 @@ Content features F3, F10, and F2 stay in the feature table; entity spawn registr
 |F4|gameplay|med|In-system interactables: always draw the octagon when in interactable range|
 |F5|ui|med|ship info dialog ('i' hotkey) is unusable|
 |F6|ui|low|Achievements (e.g. buy a round in every bar)|
+|F7|systems|med|procedural starfield background|
+|F8|ui|low|display habitat population in the header bar|
 
 
 ## Addenda
