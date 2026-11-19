@@ -2240,7 +2240,7 @@
 		"planet": {
 			"sprite": "res://assets/world/planet.png",
 			"albedo": "res://assets/world/planets/calypso_vi_albedo.png",
-			"diameter": 1200,
+			"diameter": 2250,
 			"modulate": "#8a9aaa",
 			"atmosphere_strength": 0
 		},

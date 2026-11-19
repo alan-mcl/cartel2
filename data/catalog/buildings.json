@@ -1847,57 +1847,84 @@
 	},
 	{
 		"art": "res://assets/ui/locations/aurelia_terminal.png",
-		"description": "Customs for assay convoys and hab-suit excursion traffic at Aurelia.",
+		"description": "Alongside the usual cargo and maintenance services, dedicated passenger facilities at this small terminal cater to mountaineering expeditions and adventure-tour operators heading down to the planet. The concourse is livelier than most industrial outposts, with expedition gear, climbing suits and colourful adventure advertisements everywhere.",
 		"id": "aurelia_terminal",
 		"kind": "terminal",
-		"name": "Aurelia Terminal",
+		"name": "Aurelia Arrivals Terminal",
 		"short_desc": "Terminal for Aurelia traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/aurelia_exchange.png",
-		"description": "Commodity exchange for Aurelia ore contracts and resort supply runs.",
+		"description": "The exchange handles trade in locally extracted minerals, industrial materials and specialist research equipment, alongside supplies for the planet's growing adventure-tourism industry. Its busy trading floor has an unusual mix of industrial brokers and expedition outfitters, with hab-suit gear and low-G promotional displays competing for attention.",
 		"id": "aurelia_exchange",
 		"kind": "merchant",
-		"name": "Aurelia Exchange",
+		"name": "Aurelia Trading Floor",
 		"short_desc": "Exchange at Aurelia.",
 		"type": "market"
 	},
 	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "This popular pub and hostel serves as the unofficial center of the planet's adventuring community. Pilots are a minority amongst the visiting jumpers, climbing guides and adventurous tourists who gather to exchange route information, check conditions and share stories. The walls are covered in jump photographs, expedition maps and way too many memorials.",
+		"id": "aurelia_bar",
+		"kind": "landmark",
+		"name": "Exit Point",
+		"short_desc": "Tourist hostel and bar, also popular with pilots.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/boreas_terminal.png",
-		"description": "Customs and convoy scheduling for high-gravity mining at Boreas.",
+		"description": "A steady flow of mineral carriers, industrial freighters and supply ships pass through Boreas Terminal. The concourse is practical rather than glamorous, with heavy-duty cargo equipment, automated mineral processing and the constant low rumble of docking machinery.",
 		"id": "boreas_terminal",
 		"kind": "terminal",
-		"name": "Boreas Terminal",
+		"name": "Boreas Orbital Terminal",
 		"short_desc": "Terminal for Boreas traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/boreas_exchange.png",
-		"description": "Commodity exchange for Boreas ore and ice contracts.",
+		"description": "The exchange handles the trade in Boreas' mineral wealth, from raw ores and processed metals to specialist industrial materials. Business here is largely practical rather than speculative. Screens display prices and shipment schedules, while the air carries a faint metallic tang from nearby processing facilities.",
 		"id": "boreas_exchange",
 		"kind": "merchant",
-		"name": "Boreas Exchange",
+		"name": "Boreas Mineral Exchange",
 		"short_desc": "Exchange at Boreas.",
 		"type": "market"
 	},
 	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "This quiet, well-established pilots' bar is tucked away from the busy mining concourses of Boreas Habitat. The regulars prefer a relaxed drink and spacer talk to the rowdier atmosphere elsewhere on the station. Old Earth nautical charts, archaic flight instruments and sailing ship models in glass bottles cover the walls.",
+		"id": "boreas_bar",
+		"kind": "landmark",
+		"name": "Dead Reckoning",
+		"short_desc": "Quiet pilots' bar away from the mining crowd pubs and clubs.",
+		"type": "bar"
+	},
+	{
 		"art": "res://assets/ui/locations/calypso_vi_terminal.png",
-		"description": "Arrival terminal for the Calypso VI resort. Charter yachts mix with supply shuttles from La Bella Vista.",
+		"description": "The terminal caters to a steady stream of passenger liners, private yachts and tourist shuttles arriving from across the systems. Hotel representatives, tour operators and resort staff greet visitors beneath enormous displays showcasing the planet's spectacular rings. The arrival lounges are rarely short of excited first-time visitors.",
 		"id": "calypso_vi_terminal",
 		"kind": "terminal",
-		"name": "Calypso VI Terminal",
+		"name": "Calypso VI Terminal 1",
 		"short_desc": "Terminal for Calypso VI traffic.",
 		"type": "terminal"
 	},
 	{
 		"art": "res://assets/ui/locations/calypso_vi_exchange.png",
-		"description": "Commodity exchange for resort supply and luxury contracts at Calypso VI.",
+		"description": "This relatively understated commercial hub handles the supply contracts, luxury goods, foodstuffs and specialist equipment needed to keep the resort running. Brokers, resort procurement staff and independent traders conduct business beneath large displays of market prices and shipping schedules, with panoramic windows offering a spectacular view of the rings beyond.",
 		"id": "calypso_vi_exchange",
 		"kind": "merchant",
 		"name": "Calypso VI Exchange",
 		"short_desc": "Exchange at Calypso VI.",
 		"type": "market"
+	},
+	{
+		"art": "res://assets/ui/locations/davidsons.png",
+		"description": "A relaxed, upmarket pilots' bar with panoramic windows overlooking Calypso's rings. Popular with passing pilots, it's a good spot to unwind and mingle away from tourists. The drinks aren't cheap, but the views are hard to beat.",
+		"id": "calypso_vi_bar",
+		"kind": "landmark",
+		"name": "The Observatory",
+		"short_desc": "Upmarket pilots' bar away from the tourist traps.",
+		"type": "bar"
 	},
 	{
 		"art": "res://assets/ui/locations/hesper_terminal.png",

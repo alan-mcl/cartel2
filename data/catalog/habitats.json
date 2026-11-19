@@ -643,12 +643,13 @@
 		"art": "res://assets/ui/locations/aurelia_habitat.png",
 		"buildings": [
 			"aurelia_terminal",
-			"aurelia_exchange"
+			"aurelia_exchange",
+			"aurelia_bar"
 		],
 		"default_building": "aurelia_terminal",
-		"description": "Orbital docks above a dry inner world. Assay crews share the ring with hab-suit climbers heading for the low-G ranges.",
+		"description": "This habitat supports the mining and scientific operations on Aurelia as well as a growing tourism industry. Adventurous visitors pass through on the way to climbing, mountaineering and base-jumping destinations. Its concourses have a cosmopolitan feel, with expedition outfitters and adventure-tour operators alongside the usual industrial services.",
 		"id": "aurelia_habitat",
-		"name": "Aurelia",
+		"name": "Aurelia Heights",
 		"sector_id": "aurelia",
 		"short_desc": "Mining and hab-suit tourism at Aurelia.",
 		"type": "habitat",
@@ -658,12 +659,13 @@
 		"art": "res://assets/ui/locations/boreas_habitat.png",
 		"buildings": [
 			"boreas_terminal",
-			"boreas_exchange"
+			"boreas_exchange",
+			"boreas_bar"
 		],
 		"default_building": "boreas_terminal",
-		"description": "High-gravity mining orbitals above an icy super-Earth. Tourist traffic is scarce; ore convoys are not.",
+		"description": "Boreas is a mineral-rich icy super-E, but its high gravity and marginal atmosphere make surface operations difficult and tourism unattractive. Activity is centred on the orbital habitat, a modest settlement supporting mining operations, mineral processing and the transport trade.",
 		"id": "boreas_habitat",
-		"name": "Boreas",
+		"name": "Boreas Habitat",
 		"sector_id": "boreas",
 		"short_desc": "High-gravity mining orbitals at Boreas.",
 		"type": "habitat",
@@ -673,12 +675,13 @@
 		"art": "res://assets/ui/locations/calypso_vi_habitat.png",
 		"buildings": [
 			"calypso_vi_terminal",
-			"calypso_vi_exchange"
+			"calypso_vi_exchange",
+			"calypso_vi_bar"
 		],
 		"default_building": "calypso_vi_terminal",
-		"description": "Moon-orbiting resort beneath Calypso's rings. The parent giant fills the viewports.",
+		"description": "This orbital resort caters to wealthy tourists, honeymooners and curious visitors drawn by the spectacular views of the gas giant's vast ring system. Numerous restaurants and promenades are scattered between panoramic observation decks, luxury hotels and a lively if small commercial district.",
 		"id": "calypso_vi_habitat",
-		"name": "Calypso VI",
+		"name": "Calypso VI Resort",
 		"sector_id": "calypso_vi",
 		"short_desc": "Ring-view resort on Calypso VI.",
 		"type": "habitat",

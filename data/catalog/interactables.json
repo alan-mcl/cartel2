@@ -377,8 +377,8 @@
 	},
 	{
 		"id": "aurelia_habitat",
-		"title": "Aurelia",
-		"inspect_text": "Docking at Aurelia. Assay convoys and hab-suit excursion traffic use the outer lanes.",
+		"title": "Aurelia Heights",
+		"inspect_text": "Docking at Aurelia. Tourist traffic to the outer lanes.",
 		"kind": "dock",
 		"dock_location_id": "aurelia_habitat"
 	},
@@ -390,8 +390,8 @@
 	},
 	{
 		"id": "boreas_habitat",
-		"title": "Boreas",
-		"inspect_text": "Docking at Boreas. High-gravity ore traffic uses the outer lanes.",
+		"title": "Boreas Habitat",
+		"inspect_text": "Docking at Boreas. Prioritisation is algorithmically determined.",
 		"kind": "dock",
 		"dock_location_id": "boreas_habitat"
 	},
@@ -403,7 +403,7 @@
 	},
 	{
 		"id": "calypso_vi_habitat",
-		"title": "Calypso VI",
+		"title": "Calypso VI Resort",
 		"inspect_text": "Docking at Calypso VI.  No jumping the docking queue.",
 		"kind": "dock",
 		"dock_location_id": "calypso_vi_habitat"
